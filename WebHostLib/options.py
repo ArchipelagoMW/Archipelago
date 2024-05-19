@@ -1,33 +1,33 @@
 import collections.abc
-import os
-import yaml
-import requests
 import json
-import flask
+import os
+from textwrap import dedent
+from typing import Dict, Union
+
+import yaml
+from flask import redirect, render_template, request, Response
 
 import Options
-from Options import Visibility
-from flask import redirect, render_template, request, Response
-from worlds.AutoWorld import AutoWorldRegister
 from Utils import local_path
-from textwrap import dedent
+from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 
 
-def create():
+def create() -> None:
     target_folder = local_path("WebHostLib", "static", "generated")
     yaml_folder = os.path.join(target_folder, "configs")
 
     Options.generate_yaml_templates(yaml_folder)
 
 
-def get_world_theme(game_name: str):
+def get_world_theme(game_name: str) -> str:
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
 
 
-def render_options_page(template: str, world_name: str, is_complex: bool = False):
+def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:
+    visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
     world = AutoWorldRegister.world_types[world_name]
     if world.hidden or world.web.options_page is False:
         return redirect("games")
@@ -39,13 +39,8 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
     grouped_options = {group: {} for group in ordered_groups}
     for option_name, option in world.options_dataclass.type_hints.items():
         # Exclude settings from options pages if their visibility is disabled
-        if not is_complex and option.visibility < Visibility.simple_ui:
-            continue
-
-        if is_complex and option.visibility < Visibility.complex_ui:
-            continue
-
-        grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+        if visibility_flag in option.visibility:
+            grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
     return render_template(
         template,
@@ -58,26 +53,12 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
     )
 
 
-def generate_game(player_name: str, formatted_options: dict):
-    payload = {
-        "race": 0,
-        "hint_cost": 10,
-        "forfeit_mode": "auto",
-        "remaining_mode": "disabled",
-        "collect_mode": "goal",
-        "weights": {
-            player_name: formatted_options,
-        },
-    }
-    r = requests.post("https://archipelago.gg/api/generate", json=payload)
-    if 200 <= r.status_code <= 299:
-        response_data = r.json()
-        return redirect(response_data["url"])
-    else:
-        return r.text
+def generate_game(options: Dict[str, Union[dict, str]]) -> Union[Response, str]:
+    from .generate import start_generation
+    return start_generation(options, {"plando_options": ["items", "connections", "texts", "bosses"]})
 
 
-def send_yaml(player_name: str, formatted_options: dict):
+def send_yaml(player_name: str, formatted_options: dict) -> Response:
     response = Response(yaml.dump(formatted_options, sort_keys=False))
     response.headers["Content-Type"] = "text/yaml"
     response.headers["Content-Disposition"] = f"attachment; filename={player_name}.yaml"
@@ -85,7 +66,7 @@ def send_yaml(player_name: str, formatted_options: dict):
 
 
 @app.template_filter("dedent")
-def filter_dedent(text: str):
+def filter_dedent(text: str) -> str:
     return dedent(text).strip("\n ")
 
 
@@ -111,7 +92,7 @@ def option_presets(game: str) -> Response:
             return json.JSONEncoder.default(self, obj)
 
     json_data = json.dumps(presets, cls=SetEncoder)
-    response = flask.Response(json_data)
+    response = Response(json_data)
     response.headers["Content-Type"] = "application/json"
     return response
 
@@ -169,7 +150,7 @@ def generate_weighted_yaml(game: str):
         }
 
         if intent_generate:
-            return generate_game(player_name, formatted_options)
+            return generate_game({player_name: formatted_options})
 
         else:
             return send_yaml(player_name, formatted_options)
@@ -243,7 +224,7 @@ def generate_yaml(game: str):
         }
 
         if intent_generate:
-            return generate_game(player_name, formatted_options)
+            return generate_game({player_name: formatted_options})
 
         else:
             return send_yaml(player_name, formatted_options)
