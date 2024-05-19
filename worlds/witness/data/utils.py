@@ -2,7 +2,7 @@ from functools import lru_cache
 from math import floor
 from pkgutil import get_data
 from random import random
-from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple, Iterable
+from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple
 
 # A WitnessRule is just an or-chain of and-conditions.
 # It represents the set of all options that could fulfill this requirement.
