@@ -88,7 +88,7 @@ boss_hp_caps_offsets = {
     "D-Rex": 0x440FD,
     "Velguarder": 0x148DF,
     "Sigma": 0x4467B,
-    "Wolf Sigma": 0x44B79,
+    "Wolf Sigma": 0x44B78,
 }
 
 class MMXProcedurePatch(APProcedurePatch, APTokenMixin):
