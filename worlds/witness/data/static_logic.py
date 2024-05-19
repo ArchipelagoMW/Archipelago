@@ -1,6 +1,6 @@
 from collections import defaultdict
 from functools import lru_cache
-from typing import Dict, List
+from typing import Dict, List, FrozenSet, Tuple, Set
 
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
@@ -153,19 +153,25 @@ class StaticWitnessLogicObj:
             current_region["entities"].append(entity_hex)
             current_region["physical_entities"].append(entity_hex)
 
+    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[FrozenSet[FrozenSet[str]]]]):
+        target = connection[0]
+        traversal_options = connection[1]
+
+        for requirement in traversal_options:
+            remaining_options = set()
+            for option in requirement:
+                if not any(req == "TrueOneWay" for req in option):
+                    remaining_options.add(option)
+
+            if remaining_options:
+                self.CONNECTIONS_WITH_DUPLICATES[target][source_region].add(frozenset(remaining_options))
+
     def reverse_connections(self):
         # Iterate all connections
         for region_name, connections in list(self.CONNECTIONS_WITH_DUPLICATES.items()):
-            for target, requirement_set in connections.items():
+            for connection in connections.items():
                 # Reverse this connection with all its possibilities, except the ones marked as "OneWay".
-                for requirement in requirement_set:
-                    remaining_options = set()
-                    for option in requirement:
-                        if not any(req == "TrueOneWay" for req in option):
-                            remaining_options.add(option)
-
-                    if remaining_options:
-                        self.CONNECTIONS_WITH_DUPLICATES[target][region_name].add(frozenset(remaining_options))
+                self.reverse_connection(region_name, connection)
 
     def combine_connections(self):
         # All regions need to be present, and this dict is copied later - Thus, defaultdict is not the correct choice.
