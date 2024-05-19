@@ -618,6 +618,9 @@ class WitnessPlayerLogic:
 
             # Disable the newly determined unreachable entities.
             self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
+
+            # If we didn't find any new unreachable regions or entities this cycle, we are done.
+            # If we did, we need to do another cycle to see if even more regions or entities became unreachable.
             if not new_unreachable_regions and not newly_discovered_disabled_entities:
                 return
 
