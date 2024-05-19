@@ -32,8 +32,8 @@ def get_misc_spoiler_log(generated_misc, write):
     for y in range(0, 10):
         ecruteak_map.append(["  " if x in [1, 2, 3, 4] and y in [3, 5, 7, 9] else "██" for x in range(0, 6)])
 
-    clear_tiles = [generated_misc.ec[0][1], generated_misc.ec[1][3], generated_misc.ec[2][3],
-                   generated_misc.ec[2][4], generated_misc.ec[3][2], [5, 4], [6, 4], [5, 5], [6, 5]]
+    clear_tiles = [generated_misc.ec[0][-1], generated_misc.ec[1][-1], generated_misc.ec[2][-2],
+                   generated_misc.ec[2][-1], generated_misc.ec[3][-1], [5, 4], [6, 4], [5, 5], [6, 5]]
 
     for coords in clear_tiles:
         if coords[0] != 2:  # dont show left-side clear spots

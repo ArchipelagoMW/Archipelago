@@ -154,7 +154,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 random_poke = get_random_pokemon_id(random)
                 write_bytes(patched_rom, [random_poke], address)
                 address += 3
-                
+
     if world.options.normalize_encounter_rates:
         write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
                     data.rom_addresses["AP_Prob_GrassMon"])
@@ -227,12 +227,14 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             ids = [world.generated_misc.sa.warps[warp].id for warp in pair]
             write_bytes(patched_rom, [ids[1]], addresses[0])  # reverse ids
             write_bytes(patched_rom, [ids[0]], addresses[1])
-        eg_warp_counts = [1, 3, 3, 3]
+        eg_warp_counts = [1, 3, 3, 2]
         for i in range(0, 4):
             address = data.rom_addresses["AP_Misc_EG_" + str(i + 1)]
-            for j in range(0, eg_warp_counts[i]):
-                warp = world.generated_misc.ec[i][j]
-                write_bytes(patched_rom, [warp[0], warp[1]], address)
+            warp_count = eg_warp_counts[i]
+            line_warps = world.generated_misc.ec[i][:warp_count]
+            line_warps.sort(key=lambda warp: warp[0])
+            for warp in line_warps:
+                write_bytes(patched_rom, [warp[1], warp[0]], address)
                 address += 5
         for i in range(0, 3):
             address = data.rom_addresses["AP_Misc_OK_" + str(i + 1)] + 4

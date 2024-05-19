@@ -157,7 +157,7 @@ class PokemonCrystalClient(BizHawkClient):
                 next_item = next_item if next_item < 256 else next_item - 256
                 await bizhawk.write(ctx.bizhawk_ctx, [
                     (data.ram_addresses["wArchipelagoItemReceived"],
-                     (next_item.item - BASE_OFFSET).to_bytes(1, "little"), "WRAM")
+                     next_item.to_bytes(1, "little"), "WRAM")
                 ])
 
             read_result = await bizhawk.guarded_read(
