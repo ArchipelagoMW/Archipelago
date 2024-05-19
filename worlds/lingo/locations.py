@@ -10,6 +10,7 @@ class LocationClassification(Flag):
     normal = auto()
     reduced = auto()
     insanity = auto()
+    small_sphere_one = auto()
 
 
 class LocationData(NamedTuple):
@@ -46,6 +47,9 @@ def load_location_data():
 
                 if not panel.exclude_reduce:
                     classification |= LocationClassification.reduced
+
+            if room_name == "Starting Room":
+                classification |= LocationClassification.small_sphere_one
 
             ALL_LOCATION_TABLE[location_name] = \
                 LocationData(get_panel_location_id(room_name, panel_name), room_name,
