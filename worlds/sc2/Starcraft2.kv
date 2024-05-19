@@ -2,6 +2,21 @@
     scroll_type: ["content", "bars"]
     bar_width: dp(12)
     effect_cls: "ScrollEffect"
+    canvas.after:
+        Color:
+            rgba: (0.82, 0.2, 0, root.border_on)
+        Line:
+            width: 1.5
+            rectangle: self.x+1, self.y+1, self.width-1, self.height-1
+
+<DownloadDataWarningMessage>
+    color: (1, 1, 1, 1)
+    canvas.before:
+        Color:
+            rgba: (0xd2/0xff, 0x33/0xff, 0, 1)
+        Rectangle: 
+            pos: (self.x - 8, self.y - 8)
+            size: (self.width + 30, self.height + 16)
 
 <MultiCampaignLayout>
     cols: 1

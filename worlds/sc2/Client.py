@@ -464,11 +464,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
         Archipelago. Will overwrite existing files."""
-        pool.submit(self._download_data)
+        pool.submit(self._download_data, self.ctx)
         return True
 
     @staticmethod
-    def _download_data() -> bool:
+    def _download_data(ctx: SC2Context) -> bool:
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -493,6 +493,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             sc2_logger.warning("Download aborted/failed. Read the log for more information.")
             return False
+        ctx.data_out_of_date = False
         return True
 
 
@@ -523,6 +524,7 @@ class SC2Context(CommonContext):
         super(SC2Context, self).__init__(*args, **kwargs)
         self.raw_text_parser = SC2JSONtoTextParser(self)
 
+        self.data_out_of_date: bool = False
         self.difficulty = -1
         self.game_speed = -1
         self.disable_forced_camera = 0
@@ -669,10 +671,20 @@ class SC2Context(CommonContext):
                     current_ver = f.read()
                     sc2_logger.debug(f"Current version: {current_ver}")
                 if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, current_ver):
-                    sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
+                    (
+                        ColouredMessage().coloured("NOTICE: Update for required files found. ", colour="red")
+                        ("Run ").coloured("/download_data", colour="slateblue")
+                        (" to install.")
+                    ).send(self)
+                    self.data_out_of_date = True
             elif maps_present:
-                sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
-                                   "Run /download_data to update them.")
+                (
+                    ColouredMessage()
+                    .coloured("NOTICE: Your map files may be outdated (version number not found). ", colour="red")
+                    ("Run ").coloured("/download_data", colour="slateblue")
+                    (" to install.")
+                ).send(self)
+                self.data_out_of_date = True
 
     @staticmethod
     def parse_mission_info(mission_info: dict[str, typing.Any]) -> MissionInfo:
@@ -1527,12 +1539,12 @@ def is_mod_installed_correctly() -> bool:
         sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
         needs_files = True
     else:  # Must be no maps missing
-        sc2_logger.info(f"All maps found in {mapdir}.")
+        sc2_logger.debug(f"All maps found in {mapdir}.")
 
     # Check for mods.
     for modfile in modfiles:
         if os.path.isfile(modfile) or os.path.isdir(modfile):
-            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+            sc2_logger.debug(f"Archipelago mod found at {modfile}.")
         else:
             sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
             needs_files = True
