@@ -2,8 +2,7 @@ from typing import List, TYPE_CHECKING, Dict, Any
 from schema import Schema, Optional
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle
-from BaseClasses import OptionGroup
+from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle, OptionGroup
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
