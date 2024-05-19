@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
-from BaseClasses import OptionGroup
-from Options import Choice, Range, Toggle, DeathLink, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, OptionGroup, PerGameCommonOptions
 
 
 class DeathLinkAmnesty(Range):
