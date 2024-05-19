@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle, OptionGroup
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -332,3 +332,45 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+
+
+witness_option_groups = [
+    OptionGroup("Puzzles & Goal", [
+        PuzzleRandomization,
+        VictoryCondition,
+        MountainLasers,
+        ChallengeLasers,
+    ]),
+    OptionGroup("Locations", [
+        ShuffleDiscardedPanels,
+        ShuffleVaultBoxes,
+        ShuffleEnvironmentalPuzzles,
+        EnvironmentalPuzzlesDifficulty,
+        ShufflePostgame,
+        DisableNonRandomizedPuzzles,
+    ]),
+    OptionGroup("Progression Items", [
+        ShuffleSymbols,
+        ShuffleDoors,
+        DoorGroupings,
+        ShuffleLasers,
+        ShuffleBoat,
+        ObeliskKeys,
+    ]),
+    OptionGroup("Filler Items", [
+        PuzzleSkipAmount,
+        TrapPercentage,
+        TrapWeights
+    ]),
+    OptionGroup("Hints", [
+        HintAmount,
+        AreaHintPercentage,
+        LaserHints
+    ]),
+    OptionGroup("Misc", [
+        EarlyCaves,
+        ElevatorsComeToYou,
+        DeathLink,
+        DeathLinkAmnesty,
+    ])
+]
