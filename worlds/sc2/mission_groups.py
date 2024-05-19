@@ -1,8 +1,8 @@
 """
 Mission group aliases for use in yaml options.
 """
-from typing import Dict, List
-from .MissionTables import SC2Mission, MissionFlag, SC2Campaign, SC2Race
+from typing import Dict, List, Set
+from .MissionTables import SC2Mission, MissionFlag, SC2Campaign
 
 
 class MissionGroupNames:
@@ -65,6 +65,14 @@ class MissionGroupNames:
     NCO_MISSION_PACK_1 = "NCO Mission Pack 1"
     NCO_MISSION_PACK_2 = "NCO Mission Pack 2"
     NCO_MISSION_PACK_3 = "NCO Mission Pack 3"
+
+    @classmethod
+    def get_all_group_names(cls) -> Set[str]:
+        return {
+            name for identifier, name in cls.__dict__.items()
+            if not identifier.startswith('_')
+            and not identifier.startswith('get_')
+        }
 
 
 mission_groups: Dict[str, List[str]] = {}
