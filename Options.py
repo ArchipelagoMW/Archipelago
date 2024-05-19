@@ -1123,6 +1123,14 @@ class DeathLinkMixin:
     death_link: DeathLink
 
 
+class OptionGroup(typing.NamedTuple):
+    """Define a grouping of options."""
+    name: str
+    """Name of the group to categorize these options in for display on the WebHost and in generated YAMLS."""
+    options: typing.List[typing.Type[Option[typing.Any]]]
+    """Options to be in the defined group."""
+
+
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
     import os
 
