@@ -83,9 +83,7 @@ def autohost(config: dict):
                     hosters.append(hoster)
                     hoster.start()
 
-                while 1:
-                    if stop_event.wait(0.1):
-                        break
+                while not stop_event.wait(0.1):
                     with db_session:
                         rooms = select(
                             room for room in Room if
@@ -124,9 +122,7 @@ def autogen(config: dict):
                             commit()
                         select(generation for generation in Generation if generation.state == STATE_ERROR).delete()
 
-                    while 1:
-                        if stop_event.wait(0.1):
-                            break
+                    while not stop_event.wait(0.1):
                         with db_session:
                             # for update locks the database row(s) during transaction, preventing writes from elsewhere
                             to_start = select(
