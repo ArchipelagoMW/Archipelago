@@ -41,7 +41,7 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
         if not is_complex and option.visibility & Options.Visibility.simple_ui:
             continue
 
-        if is_complex and option.visibility < Options.Visibility.complex_ui:
+        if is_complex and option.visibility & Options.Visibility.complex_ui:
             continue
 
         grouped_options[option_groups.get(option, "Game Options")][option_name] = option
