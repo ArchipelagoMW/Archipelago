@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, List, Tuple
+from typing import Dict, NamedTuple, List
 from enum import IntEnum
 
 
@@ -432,6 +432,9 @@ portal_mapping: List[Portal] = [
            destination="ziggurat2020_2", tag="_"),
     Portal(name="Ziggurat Portal Room Entrance", region="Rooted Ziggurat Portal Room Entrance",
            destination="ziggurat2020_FTRoom", tag="_"),
+    # only if fixed shop is on, removed otherwise
+    Portal(name="Ziggurat Lower Falling Entrance", region="Zig Skip Exit",
+           destination="ziggurat2020_1", tag="_zig2_skip"),
     
     Portal(name="Ziggurat Portal Room Exit", region="Rooted Ziggurat Portal Room Exit",
            destination="ziggurat2020_3", tag="_"),
@@ -514,13 +517,13 @@ portal_mapping: List[Portal] = [
 class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
-    hint: int = 0  # what kind of hint text you should have
 
 
 class DeadEnd(IntEnum):
     free = 0  # not a dead end
     all_cats = 1  # dead end in every logic category
     restricted = 2  # dead end only in restricted
+    special = 3  # special handling for secret gathering place and zig skip exit
     # there's no dead ends that are only in unrestricted
 
 
@@ -567,7 +570,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Furnace Fuse": RegionInfo("Furnace"),  # top of the furnace
     "Furnace Ladder Area": RegionInfo("Furnace"),  # the two portals accessible by the ladder
     "Furnace Walking Path": RegionInfo("Furnace"),  # dark tomb to west garden
-    "Secret Gathering Place": RegionInfo("Waterfall", dead_end=DeadEnd.all_cats),
+    "Secret Gathering Place": RegionInfo("Waterfall", dead_end=DeadEnd.special),
     "Changing Room": RegionInfo("Changing Room", dead_end=DeadEnd.all_cats),
     "Patrol Cave": RegionInfo("PatrolCave", dead_end=DeadEnd.all_cats),
     "Ruined Shop": RegionInfo("Ruined Shop", dead_end=DeadEnd.all_cats),
@@ -650,7 +653,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Fortress Courtyard": RegionInfo("Fortress Courtyard"),
     "Fortress Courtyard Upper": RegionInfo("Fortress Courtyard"),
     "Beneath the Vault Ladder Exit": RegionInfo("Fortress Basement"),
-    "Beneath the Vault Front": RegionInfo("Fortress Basement"),  # the vanilla entry point
+    "Beneath the Vault Main": RegionInfo("Fortress Basement"),  # the vanilla entry point
     "Beneath the Vault Back": RegionInfo("Fortress Basement"),  # the vanilla exit point
     "Eastern Vault Fortress": RegionInfo("Fortress Main"),
     "Eastern Vault Fortress Gold Door": RegionInfo("Fortress Main"),
@@ -687,6 +690,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Middle Bottom": RegionInfo("ziggurat2020_2"),
     "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the vanilla entry point side
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
+    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special),  # the exit from zig skip, for use with fixed shop on
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
     "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom"),
     "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom"),
@@ -723,357 +727,812 @@ tunic_er_regions: Dict[str, RegionInfo] = {
 }
 
 
-# the key is the region you have, the value is the regions you get for having that region
-# this is mostly so we don't have to do something overly complex to get this information
-# really want to get rid of this, but waiting on item plando being workable with ER
-dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
-    ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
-     "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
-     "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-     "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld", "Upper Overworld",
-     "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
-     "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
-     "Overworld to Atoll Upper", "Overworld above Quarry Entrance", "Overworld after Envoy", "Overworld Tunnel Turret"):
-         ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
-          "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door",
-          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
-          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-          "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld",
-          "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
-          "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
-          "Overworld to Atoll Upper", "Overworld Temple Door", "Overworld above Quarry Entrance",
-          "Overworld after Envoy", "Overworld Tunnel Turret"],
-    ("Hourglass Cave",):
-        ["Hourglass Cave", "Hourglass Cave Tower"],
-    ("Old House Front",):
-        ["Old House Front", "Old House Back"],
-    ("Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"):
-        ["Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"],
-    ("Sealed Temple", "Sealed Temple Rafters"): ["Sealed Temple", "Sealed Temple Rafters"],
-    ("Forest Belltower Upper",):
-        ["Forest Belltower Upper", "Forest Belltower Main", "Forest Belltower Lower"],
-    ("Forest Belltower Main",):
-        ["Forest Belltower Main", "Forest Belltower Lower"],
-    ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal", "Lower Forest"):
-        ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal", "Lower Forest"],
-    ("Guard House 1 East", "Guard House 1 West"):
-        ["Guard House 1 East", "Guard House 1 West"],
-    ("Guard House 2 Upper", "Guard House 2 Lower"):
-        ["Guard House 2 Upper", "Guard House 2 Lower"],
-    ("Forest Grave Path Main", "Forest Grave Path Upper"):
-        ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Forest Grave Path by Grave", "Forest Hero's Grave"):
-        ["Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back", "Beneath the Well Ladder Exit"):
-        ["Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back", "Beneath the Well Ladder Exit"],
-    ("Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit", "Dark Tomb Upper"):
-        ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit", "Dark Tomb Upper"],
-    ("Well Boss",):
-        ["Dark Tomb Checkpoint", "Well Boss"],
-    ("West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region"):
-        ["West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region"],
-    ("West Garden Portal", "West Garden Portal Item"): ["West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
-    ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
-        ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
-    ("Frog's Domain", "Frog's Domain Entry"):
-        ["Frog's Domain", "Frog's Domain Back", "Frog's Domain Entry"],
-    ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
-        ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
-    ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
-        ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
-    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"):
-        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"],
-    ("Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"):
-        ["Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"],
-    ("Fortress Courtyard Upper",):
-        ["Fortress Courtyard Upper", "Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard"],
-    ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-     "Fortress Exterior near cave", "Fortress Courtyard", "Beneath the Vault Entry"):
-        ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard", "Beneath the Vault Entry"],
-    ("Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"):
-        ["Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"],
-    ("Fortress East Shortcut Upper",):
-        ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
-    ("Eastern Vault Fortress",):
-        ["Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"],
-    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"):
-        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"],
-    ("Fortress Arena", "Fortress Arena Portal"):
-        ["Fortress Arena", "Fortress Arena Portal"],
-    ("Lower Mountain", "Lower Mountain Stairs"):
-        ["Lower Mountain", "Lower Mountain Stairs"],
-    ("Monastery Front",):
-        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
-    ("Monastery Back", "Monastery Hero's Grave Region"):
-        ["Monastery Back", "Monastery Hero's Grave Region"],
-    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-     "Even Lower Quarry"):
-        ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-         "Lower Quarry Zig Door", "Even Lower Quarry"],
-    ("Monastery Rope",): ["Monastery Rope", "Quarry", "Quarry Entry", "Quarry Back", "Quarry Portal", "Lower Quarry",
-                          "Lower Quarry Zig Door", "Even Lower Quarry"],
-    ("Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front"):
-        ["Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front", "Rooted Ziggurat Upper Back"],
-    ("Rooted Ziggurat Middle Top",):
-        ["Rooted Ziggurat Middle Top", "Rooted Ziggurat Middle Bottom"],
-    ("Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"):
-        ["Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"],
-    ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
-        ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
-    ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp Ledge under Cathedral Door"):
-        ["Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region",
-         "Swamp Ledge under Cathedral Door"],
-    ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"):
-        ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"],
-    ("Cathedral Gauntlet Checkpoint",):
-        ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Cathedral Gauntlet Exit",):
-        ["Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
-     "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"):
-        ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
-         "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
-}
+traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
+    "Overworld": {
+        "Overworld Beach":
+            [],
+        "Overworld to Atoll Upper":
+            [["Hyperdash"]],
+        "Overworld Belltower":
+            [["Hyperdash"], ["UR"]],
+        "Overworld Swamp Upper Entry":
+            [["Hyperdash"], ["UR"]],
+        "Overworld Swamp Lower Entry":
+            [],
+        "Overworld Special Shop Entry":
+            [["Hyperdash"], ["UR"]],
+        "Overworld Well Ladder":
+            [],
+        "Overworld Ruined Passage Door":
+            [],
+        "After Ruined Passage":
+            [],
+        "Above Ruined Passage":
+            [],
+        "East Overworld":
+            [],
+        "Overworld above Patrol Cave":
+            [],
+        "Overworld above Quarry Entrance":
+            [],
+        "Overworld after Envoy":
+            [],
+        "Overworld Quarry Entry":
+            [["NMG"]],
+        "Overworld Tunnel Turret":
+            [["NMG"], ["Hyperdash"]],
+        "Overworld Temple Door":
+            [["NMG"], ["Forest Belltower Upper", "Overworld Belltower"]],
+        "Overworld Southeast Cross Door":
+            [],
+        "Overworld Fountain Cross Door":
+            [], 
+        "Overworld Town Portal":
+            [],
+        "Overworld Spawn Portal":
+            [],
+        "Overworld Well to Furnace Rail":
+            [["UR"]], 
+        "Overworld Old House Door":
+            [],
+    },
+    "East Overworld": {
+        "Above Ruined Passage":
+            [],
+        "After Ruined Passage":
+            [["NMG"]],
+        "Overworld":
+            [],
+        "Overworld at Patrol Cave":
+            [],
+        "Overworld above Patrol Cave":
+            [],
+        "Overworld Special Shop Entry":
+            [["Hyperdash"], ["UR"]]
+    },
+    "Overworld Special Shop Entry": {
+        "East Overworld":
+            [["Hyperdash"]]
+    },
+    "Overworld Belltower": {
+        "Overworld Belltower at Bell":
+            [],
+        "Overworld":
+            [],
+        "Overworld to West Garden Upper":
+            [],
+    },
+    "Overworld to West Garden Upper": {
+        "Overworld Belltower":
+            [],
+    },
+    "Overworld Swamp Upper Entry": {
+        "Overworld":
+            [],
+    },
+    "Overworld Swamp Lower Entry": {
+        "Overworld":
+            [],
+    },
+    "Overworld Beach": {
+        "Overworld":
+            [],
+        "Overworld West Garden Laurels Entry":
+            [["Hyperdash"]],
+        "Overworld to Atoll Upper":
+            [],
+        "Overworld Tunnel Turret":
+            [],
+    },
+    "Overworld West Garden Laurels Entry": {
+        "Overworld Beach":
+            [["Hyperdash"]],
+    },
+    "Overworld to Atoll Upper": {
+        "Overworld":
+            [],
+        "Overworld Beach":
+            [],
+    },
+    "Overworld Tunnel Turret": {
+        "Overworld":
+            [],
+        "Overworld Beach":
+            [],
+    },
+    "Overworld Well Ladder": {
+        "Overworld":
+            [],
+    },
+    "Overworld at Patrol Cave": {
+        "East Overworld":
+            [["Hyperdash"]],
+        "Overworld above Patrol Cave":
+            [],
+    },
+    "Overworld above Patrol Cave": {
+        "Overworld":
+            [],
+        "East Overworld":
+            [],
+        "Upper Overworld":
+            [],
+        "Overworld at Patrol Cave":
+            [],
+        "Overworld Belltower at Bell":
+            [["NMG"]],
+    },
+    "Upper Overworld": {
+        "Overworld above Patrol Cave":
+            [],
+        "Overworld above Quarry Entrance":
+            [],
+        "Overworld after Temple Rafters":
+            [],
+    },
+    "Overworld after Temple Rafters": {
+        "Upper Overworld":
+            [],
+    },
+    "Overworld above Quarry Entrance": {
+        "Overworld":
+            [],
+        "Upper Overworld":
+            [],
+    },
+    "Overworld Quarry Entry": {
+        "Overworld after Envoy":
+            [],
+        "Overworld":
+            [["NMG"]],
+    },
+    "Overworld after Envoy": {
+        "Overworld":
+            [],
+        "Overworld Quarry Entry":
+            [],
+    },
+    "After Ruined Passage": {
+        "Overworld":
+            [],
+        "Above Ruined Passage":
+            [],
+        "East Overworld":
+            [["NMG"]],
+    },
+    "Above Ruined Passage": {
+        "Overworld":
+            [],
+        "After Ruined Passage":
+            [],
+        "East Overworld":
+            [],
+    },
+    "Overworld Ruined Passage Door": {
+        "Overworld":
+            [["Hyperdash", "NMG"]],
+    },
+    "Overworld Town Portal": {
+        "Overworld":
+            [],
+    },
+    "Overworld Spawn Portal": {
+        "Overworld":
+            [],
+    },
+    "Old House Front": {
+        "Old House Back":
+            [],
+    },
+    "Old House Back": {
+        "Old House Front":
+            [["Hyperdash", "NMG"]],
+    },
+    "Furnace Fuse": {
+        "Furnace Ladder Area":
+            [["Hyperdash"]],
+    },
+    "Furnace Ladder Area": {
+        "Furnace Fuse":
+            [["Hyperdash"], ["UR"]],
+        "Furnace Walking Path":
+            [["Hyperdash"], ["UR"]],
+    },
+    "Furnace Walking Path": {
+        "Furnace Ladder Area":
+            [["Hyperdash"]],
+    },
+    "Sealed Temple": {
+        "Sealed Temple Rafters":
+            [],
+    },
+    "Sealed Temple Rafters": {
+        "Sealed Temple":
+            [["Hyperdash"]],
+    },
+    "Hourglass Cave": {
+        "Hourglass Cave Tower":
+            [],
+    },
+    "Forest Belltower Upper": {
+        "Forest Belltower Main":
+            [],
+    },
+    "Forest Belltower Main": {
+        "Forest Belltower Lower":
+            [],
+    },
+    "East Forest": {
+        "East Forest Dance Fox Spot":
+            [["Hyperdash"], ["NMG"]],
+        "East Forest Portal":
+            [],
+        "Lower Forest":
+            [],
+    },
+    "East Forest Dance Fox Spot": {
+        "East Forest":
+            [["Hyperdash"], ["NMG"]],
+    },
+    "East Forest Portal": {
+        "East Forest":
+            [],
+    },
+    "Lower Forest": {
+        "East Forest":
+            [],
+    },
+    "Guard House 1 East": {
+        "Guard House 1 West":
+            [],
+    },
+    "Guard House 1 West": {
+        "Guard House 1 East":
+            [["Hyperdash"], ["UR"]],
+    },
+    "Guard House 2 Upper": {
+        "Guard House 2 Lower":
+            [],
+    },
+    "Guard House 2 Lower": {
+        "Guard House 2 Upper":
+            [],
+    },
+    "Forest Grave Path Main": {
+        "Forest Grave Path Upper":
+            [["Hyperdash"], ["UR"]],
+        "Forest Grave Path by Grave":
+            [],
+    },
+    "Forest Grave Path Upper": {
+        "Forest Grave Path Main":
+            [["Hyperdash"], ["NMG"]],
+    },
+    "Forest Grave Path by Grave": {
+        "Forest Hero's Grave":
+            [], 
+        "Forest Grave Path Main":
+            [["NMG"]],
+    },
+    "Forest Hero's Grave": {
+        "Forest Grave Path by Grave":
+            [],
+    },
+    "Beneath the Well Ladder Exit": {
+        "Beneath the Well Front":
+            [],
+    },
+    "Beneath the Well Front": {
+        "Beneath the Well Ladder Exit":
+            [],
+        "Beneath the Well Main":
+            [],
+    },
+    "Beneath the Well Main": {
+        "Beneath the Well Front":
+            [],
+        "Beneath the Well Back":
+            [],
+    },
+    "Beneath the Well Back": {
+        "Beneath the Well Main":
+            [],
+    },
+    "Well Boss": {
+        "Dark Tomb Checkpoint":
+            [],
+    },
+    "Dark Tomb Checkpoint": {
+        "Well Boss":
+            [["Hyperdash", "NMG"]],
+    },
+    "Dark Tomb Entry Point": {
+        "Dark Tomb Upper":
+            [],
+    },
+    "Dark Tomb Upper": {
+        "Dark Tomb Entry Point":
+            [],
+        "Dark Tomb Main":
+            [],
+    },
+    "Dark Tomb Main": {
+        "Dark Tomb Upper":
+            [],
+        "Dark Tomb Dark Exit":
+            [],
+    },
+    "Dark Tomb Dark Exit": {
+        "Dark Tomb Main":
+            [],
+    },
+    "West Garden": {
+        "West Garden Laurels Exit Region":
+            [["Hyperdash"], ["UR"]],
+        "West Garden after Boss":
+            [], 
+        "West Garden Hero's Grave Region":
+            [],
+        "West Garden Portal Item":
+            [["NMG"]],
+    },
+    "West Garden Laurels Exit Region": {
+        "West Garden":
+            [["Hyperdash"]],
+    },
+    "West Garden after Boss": {
+        "West Garden":
+            [["Hyperdash"]],
+    },
+    "West Garden Portal Item": {
+        "West Garden":
+            [["NMG"]], 
+        "West Garden Portal":
+            [["Hyperdash", "West Garden"]],
+    },
+    "West Garden Portal": {
+        "West Garden Portal Item":
+            [["Hyperdash"]],
+    },
+    "West Garden Hero's Grave Region": {
+        "West Garden":
+            [],
+    },
+    "Ruined Atoll": {
+        "Ruined Atoll Lower Entry Area":
+            [["Hyperdash"], ["UR"]],
+        "Ruined Atoll Ladder Tops":
+            [],
+        "Ruined Atoll Frog Mouth":
+            [],
+        "Ruined Atoll Frog Eye":
+            [],
+        "Ruined Atoll Portal":
+            [],
+        "Ruined Atoll Statue":
+            [],
+    },
+    "Ruined Atoll Lower Entry Area": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Ladder Tops": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Frog Mouth": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Frog Eye": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Portal": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Statue": {
+        "Ruined Atoll":
+            [],
+    },
+    "Frog Stairs Eye Exit": {
+        "Frog Stairs Upper":
+            [],
+    },
+    "Frog Stairs Upper": {
+        "Frog Stairs Eye Exit":
+            [],
+        "Frog Stairs Lower":
+            [],
+    },
+    "Frog Stairs Lower": {
+        "Frog Stairs Upper":
+            [],
+        "Frog Stairs to Frog's Domain":
+            [],
+    },
+    "Frog Stairs to Frog's Domain": {
+        "Frog Stairs Lower":
+            [],
+    },
+    "Frog's Domain Entry": {
+        "Frog's Domain":
+            [],
+    },
+    "Frog's Domain": {
+        "Frog's Domain Entry":
+            [],
+        "Frog's Domain Back":
+            [],
+    },
+    "Library Exterior Ladder Region": {
+        "Library Exterior Tree Region":
+            [],
+    },
+    "Library Exterior Tree Region": {
+        "Library Exterior Ladder Region":
+            [],
+    },
+    "Library Hall Bookshelf": {
+        "Library Hall":
+            [],
+    },
+    "Library Hall": {
+        "Library Hall Bookshelf":
+            [],
+        "Library Hero's Grave Region":
+            [],
+    },
+    "Library Hero's Grave Region": {
+        "Library Hall":
+            [],
+    },
+    "Library Hall to Rotunda": {
+        "Library Hall":
+            [],
+    },
+    "Library Rotunda to Hall": {
+        "Library Rotunda":
+            [],
+    },
+    "Library Rotunda": {
+        "Library Rotunda to Hall":
+            [],
+        "Library Rotunda to Lab":
+            [],
+    },
+    "Library Rotunda to Lab": {
+        "Library Rotunda":
+            [],
+    },
 
-
-dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
-    ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
-     "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
-     "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-     "Overworld Ruined Passage Door", "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage",
-     "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
-     "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
-     "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance",
-     "Overworld after Envoy", "Overworld Tunnel Turret"):
-         ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
-          "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door",
-          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
-          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-          "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld",
-          "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
-          "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
-          "Overworld to Atoll Upper", "Overworld above Quarry Entrance", "Overworld after Envoy",
-          "Overworld Tunnel Turret"],
-    # can laurels through the gate
-    ("Old House Front", "Old House Back"):
-        ["Old House Front", "Old House Back"],
-    ("Hourglass Cave",):
-        ["Hourglass Cave", "Hourglass Cave Tower"],
-    ("Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"):
-        ["Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"],
-    ("Sealed Temple", "Sealed Temple Rafters"): ["Sealed Temple", "Sealed Temple Rafters"],
-    ("Forest Belltower Upper",):
-        ["Forest Belltower Upper", "Forest Belltower Main", "Forest Belltower Lower"],
-    ("Forest Belltower Main",):
-        ["Forest Belltower Main", "Forest Belltower Lower"],
-    ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal", "Lower Forest"):
-        ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal", "Lower Forest"],
-    ("Guard House 1 East", "Guard House 1 West"):
-        ["Guard House 1 East", "Guard House 1 West"],
-    ("Guard House 2 Upper", "Guard House 2 Lower"):
-        ["Guard House 2 Upper", "Guard House 2 Lower"],
-    ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
-        ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back", "Beneath the Well Ladder Exit"):
-        ["Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back", "Beneath the Well Ladder Exit"],
-    ("Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit", "Dark Tomb Upper"):
-        ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit", "Dark Tomb Upper"],
-    ("Dark Tomb Checkpoint", "Well Boss"):
-        ["Dark Tomb Checkpoint", "Well Boss"],
-    ("West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
-     "West Garden Portal", "West Garden Portal Item"):
-        ["West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
-         "West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
-    ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
-        ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
-    ("Frog's Domain", "Frog's Domain Entry"):
-        ["Frog's Domain", "Frog's Domain Back", "Frog's Domain Entry"],
-    ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
-        ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
-    ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
-        ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
-    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"):
-        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"],
-    ("Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"):
-        ["Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"],
-    ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-     "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"):
-        ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"],
-    ("Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"):
-        ["Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"],
-    ("Fortress East Shortcut Upper", "Fortress East Shortcut Lower"):
-        ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
-    ("Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"):
-        ["Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"],
-    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"):
-        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"],
-    ("Fortress Grave Path Upper",):
-        ["Fortress Grave Path Upper", "Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region",
-         "Fortress Hero's Grave Region"],
-    ("Fortress Arena", "Fortress Arena Portal"):
-        ["Fortress Arena", "Fortress Arena Portal"],
-    ("Lower Mountain", "Lower Mountain Stairs"):
-        ["Lower Mountain", "Lower Mountain Stairs"],
-    ("Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"):
-        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
-    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-     "Even Lower Quarry"):
-        ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-         "Lower Quarry Zig Door", "Even Lower Quarry"],
-    ("Monastery Rope",): ["Monastery Rope", "Quarry", "Quarry Entry", "Quarry Back", "Quarry Portal", "Lower Quarry",
-                          "Lower Quarry Zig Door", "Even Lower Quarry"],
-    ("Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front"):
-        ["Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front", "Rooted Ziggurat Upper Back"],
-    ("Rooted Ziggurat Middle Top",):
-        ["Rooted Ziggurat Middle Top", "Rooted Ziggurat Middle Bottom"],
-    ("Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"):
-        ["Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"],
-    ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
-        ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
-    ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region",
-     "Swamp Ledge under Cathedral Door"):
-        ["Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region",
-         "Swamp Ledge under Cathedral Door"],
-    ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"):
-        ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region", "Swamp Front", "Swamp Mid",
-         "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region",
-         "Swamp Ledge under Cathedral Door"],
-    ("Cathedral Gauntlet Checkpoint",):
-        ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Cathedral Gauntlet Exit",):
-        ["Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
-     "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"):
-        ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
-         "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
-}
-
-
-dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
-    # can use ladder storage to get to the well rail
-    ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
-     "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
-     "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-     "Overworld Ruined Passage Door", "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage",
-     "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
-     "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
-     "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance",
-     "Overworld after Envoy", "Overworld Tunnel Turret"):
-         ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
-          "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
-          "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-          "Overworld Ruined Passage Door", "Overworld Swamp Lower Entry", "After Ruined Passage",
-          "Above Ruined Passage", "East Overworld", "Upper Overworld", "Overworld after Temple Rafters",
-          "Overworld Quarry Entry", "Overworld above Patrol Cave", "Overworld at Patrol Cave",
-          "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper",
-          "Overworld above Quarry Entrance", "Overworld after Envoy", "Overworld Tunnel Turret"],
-    # can laurels through the gate
-    ("Old House Front", "Old House Back"):
-        ["Old House Front", "Old House Back"],
-    ("Hourglass Cave",):
-        ["Hourglass Cave", "Hourglass Cave Tower"],
-    ("Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"):
-        ["Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"],
-    ("Sealed Temple", "Sealed Temple Rafters"): ["Sealed Temple", "Sealed Temple Rafters"],
-    ("Forest Belltower Upper",):
-        ["Forest Belltower Upper", "Forest Belltower Main", "Forest Belltower Lower"],
-    ("Forest Belltower Main",):
-        ["Forest Belltower Main", "Forest Belltower Lower"],
-    ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal", "Lower Forest"):
-        ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal", "Lower Forest"],
-    ("Guard House 1 East", "Guard House 1 West"):
-        ["Guard House 1 East", "Guard House 1 West"],
-    ("Guard House 2 Upper", "Guard House 2 Lower"):
-        ["Guard House 2 Upper", "Guard House 2 Lower"],
-    # can use laurels, ice grapple, or ladder storage to traverse
-    ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
-        ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back", "Beneath the Well Ladder Exit"):
-        ["Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back", "Beneath the Well Ladder Exit"],
-    ("Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit", "Dark Tomb Upper"):
-        ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit", "Dark Tomb Upper"],
-    ("Dark Tomb Checkpoint", "Well Boss"):
-        ["Dark Tomb Checkpoint", "Well Boss"],
-    # can ice grapple from portal area to the rest, and vice versa
-    ("West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
-     "West Garden Portal", "West Garden Portal Item"):
-        ["West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
-         "West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
-    ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
-        ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
-    ("Frog's Domain", "Frog's Domain Entry"):
-        ["Frog's Domain", "Frog's Domain Back", "Frog's Domain Entry"],
-    ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
-        ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
-    ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
-        ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
-    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"):
-        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"],
-    ("Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"):
-        ["Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"],
-    # can use ice grapple or ladder storage to get from any ladder to upper
-    ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-     "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"):
-        ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"],
-    ("Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"):
-        ["Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"],
-    # can ice grapple up
-    ("Fortress East Shortcut Upper", "Fortress East Shortcut Lower"):
-        ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
-    ("Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"):
-        ["Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"],
-    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"):
-        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"],
-    # can ice grapple down
-    ("Fortress Grave Path Upper",):
-        ["Fortress Grave Path Upper", "Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region",
-         "Fortress Hero's Grave Region"],
-    ("Fortress Arena", "Fortress Arena Portal"):
-        ["Fortress Arena", "Fortress Arena Portal"],
-    ("Lower Mountain", "Lower Mountain Stairs"):
-        ["Lower Mountain", "Lower Mountain Stairs"],
-    ("Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"):
-        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
-    # can use ladder storage at any of the Quarry ladders to get to Monastery Rope
-    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-     "Monastery Rope", "Even Lower Quarry"):
-        ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-         "Monastery Rope", "Lower Quarry Zig Door", "Even Lower Quarry"],
-    ("Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front"):
-        ["Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front", "Rooted Ziggurat Upper Back"],
-    ("Rooted Ziggurat Middle Top",):
-        ["Rooted Ziggurat Middle Top", "Rooted Ziggurat Middle Bottom"],
-    ("Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"):
-        ["Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"],
-    ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
-        ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
-    ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region",
-     "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region", "Swamp Ledge under Cathedral Door"):
-        ["Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region",
-         "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region",
-         "Swamp Ledge under Cathedral Door"],
-    ("Cathedral Gauntlet Checkpoint",):
-        ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Cathedral Gauntlet Exit",):
-        ["Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
-     "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"):
-        ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
-         "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
+    "Library Lab Lower": {
+        "Library Lab":
+            [],
+    },
+    "Library Lab": {
+        "Library Lab Lower":
+            [["Hyperdash"]],
+        "Library Portal":
+            [],
+        "Library Lab to Librarian":
+            [],
+    },
+    "Library Portal": {
+        "Library Lab":
+            [],
+    },
+    "Library Lab to Librarian": {
+        "Library Lab":
+            [],
+    },
+    "Fortress Exterior from East Forest": {
+        "Fortress Exterior from Overworld":
+            [], 
+        "Fortress Courtyard Upper":
+            [["UR"]], 
+        "Fortress Exterior near cave":
+            [["UR"]],
+        "Fortress Courtyard":
+            [["UR"]],
+    },
+    "Fortress Exterior from Overworld": {
+        "Fortress Exterior from East Forest":
+            [["Hyperdash"]], 
+        "Fortress Exterior near cave":
+            [], 
+        "Fortress Courtyard":
+            [["Hyperdash"], ["NMG"]],
+    },
+    "Fortress Exterior near cave": {
+        "Fortress Exterior from Overworld":
+            [["Hyperdash"], ["UR"]], 
+        "Fortress Courtyard":
+            [["UR"]], 
+        "Fortress Courtyard Upper":
+            [["UR"]],
+        "Beneath the Vault Entry":
+            [],
+    },
+    "Beneath the Vault Entry": {
+        "Fortress Exterior near cave":
+            [],
+    },
+    "Fortress Courtyard": {
+        "Fortress Courtyard Upper":
+            [["NMG"]],
+        "Fortress Exterior from Overworld":
+            [["Hyperdash"]],
+    },
+    "Fortress Courtyard Upper": {
+        "Fortress Courtyard":
+            [],
+    },
+    "Beneath the Vault Ladder Exit": {
+        "Beneath the Vault Main":
+            [],
+    },
+    "Beneath the Vault Main": {
+        "Beneath the Vault Ladder Exit":
+            [],
+        "Beneath the Vault Back":
+            [],
+    },
+    "Beneath the Vault Back": {
+        "Beneath the Vault Main":
+            [],
+        "Beneath the Vault Ladder Exit":
+            [],
+    },
+    "Fortress East Shortcut Lower": {
+        "Fortress East Shortcut Upper":
+            [["NMG"]],
+    },
+    "Fortress East Shortcut Upper": {
+        "Fortress East Shortcut Lower":
+            [],
+    },
+    "Eastern Vault Fortress": {
+        "Eastern Vault Fortress Gold Door":
+            [["NMG"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
+    },
+    "Eastern Vault Fortress Gold Door": {
+        "Eastern Vault Fortress":
+            [["NMG"]],
+    },
+    "Fortress Grave Path": {
+        "Fortress Hero's Grave Region":
+            [], 
+        "Fortress Grave Path Dusty Entrance Region":
+            [["Hyperdash"]],
+    },
+    "Fortress Grave Path Upper": {
+        "Fortress Grave Path":
+            [["NMG"]],
+    },
+    "Fortress Grave Path Dusty Entrance Region": {
+        "Fortress Grave Path":
+            [["Hyperdash"]],
+    },
+    "Fortress Hero's Grave Region": {
+        "Fortress Grave Path":
+            [],
+    },
+    "Fortress Arena": {
+        "Fortress Arena Portal":
+            [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
+    },
+    "Fortress Arena Portal": {
+        "Fortress Arena":
+            [],
+    },
+    "Lower Mountain": {
+        "Lower Mountain Stairs":
+            [],
+    },
+    "Lower Mountain Stairs": {
+        "Lower Mountain":
+            [],
+    },
+    "Monastery Back": {
+        "Monastery Front":
+            [["Hyperdash", "NMG"]], 
+        "Monastery Hero's Grave Region":
+            [],
+    },
+    "Monastery Hero's Grave Region": {
+        "Monastery Back":
+            [],
+    },
+    "Monastery Front": {
+        "Monastery Back":
+            [],
+    },
+    "Quarry Entry": {
+        "Quarry Portal":
+            [["Quarry Connector"]],
+        "Quarry":
+            [],
+    },
+    "Quarry Portal": {
+        "Quarry Entry":
+            [],
+    },
+    "Quarry Monastery Entry": {
+        "Quarry":
+            [],
+        "Quarry Back":
+            [["Hyperdash"]],
+        "Monastery Rope":
+            [["UR"]],
+    },
+    "Quarry Back": {
+        "Quarry":
+            [],
+        "Quarry Monastery Entry":
+            [["Hyperdash"]],
+    },
+    "Quarry": {
+        "Lower Quarry":
+            [],
+        "Quarry Entry":
+            [],
+        "Quarry Back":
+            [],
+        "Quarry Monastery Entry":
+            [],
+        "Lower Quarry Zig Door":
+            [["NMG"]],
+    },
+    "Lower Quarry": {
+        "Even Lower Quarry":
+            [],
+    },
+    "Even Lower Quarry": {
+        "Lower Quarry":
+            [],
+        "Lower Quarry Zig Door":
+            [["Quarry", "Quarry Connector"], ["NMG"]],
+    },
+    "Monastery Rope": {
+        "Quarry Back":
+            [],
+    },
+    "Rooted Ziggurat Upper Entry": {
+        "Rooted Ziggurat Upper Front":
+            [],
+    },
+    "Rooted Ziggurat Upper Front": {
+        "Rooted Ziggurat Upper Back":
+            [],
+    },
+    "Rooted Ziggurat Upper Back": {
+        "Rooted Ziggurat Upper Front":
+            [["Hyperdash"]],
+    },
+    "Rooted Ziggurat Middle Top": {
+        "Rooted Ziggurat Middle Bottom":
+            [],
+    },
+    "Rooted Ziggurat Lower Front": {
+        "Rooted Ziggurat Lower Back":
+            [],
+    },
+    "Rooted Ziggurat Lower Back": {
+        "Rooted Ziggurat Lower Front":
+            [["Hyperdash"], ["UR"]],
+        "Rooted Ziggurat Portal Room Entrance":
+            [],
+    },
+    "Zig Skip Exit": {
+        "Rooted Ziggurat Lower Front":
+            [],
+    },
+    "Rooted Ziggurat Portal Room Entrance": {
+        "Rooted Ziggurat Lower Back":
+            [],
+    },
+    "Rooted Ziggurat Portal Room Exit": {
+        "Rooted Ziggurat Portal":
+            [],
+    },
+    "Rooted Ziggurat Portal": {
+        "Rooted Ziggurat Portal Room Exit":
+            [["Rooted Ziggurat Lower Back"]],
+    },
+    "Swamp Front": {
+        "Swamp Mid":
+            [],
+    },
+    "Swamp Mid": {
+        "Swamp Front":
+            [],
+        "Swamp to Cathedral Main Entrance Region":
+            [["Hyperdash"], ["NMG"]],
+        "Swamp Ledge under Cathedral Door":
+            [],
+        "Back of Swamp":
+            [["UR"]],
+    },
+    "Swamp Ledge under Cathedral Door": {
+        "Swamp Mid":
+            [],
+        "Swamp to Cathedral Treasure Room":
+            [],
+    },
+    "Swamp to Cathedral Treasure Room": {
+        "Swamp Ledge under Cathedral Door":
+            [],
+    },
+    "Swamp to Cathedral Main Entrance Region": {
+        "Swamp Mid":
+            [["NMG"]],
+    },
+    "Back of Swamp": {
+        "Back of Swamp Laurels Area":
+            [["Hyperdash"], ["UR"]],
+        "Swamp Hero's Grave Region":
+            [],
+    },
+    "Back of Swamp Laurels Area": {
+        "Back of Swamp":
+            [["Hyperdash"]],
+        "Swamp Mid":
+            [["NMG", "Hyperdash"]],
+    },
+    "Swamp Hero's Grave Region": {
+        "Back of Swamp":
+            [],
+    },
+    "Cathedral Gauntlet Checkpoint": {
+        "Cathedral Gauntlet":
+            [],
+    },
+    "Cathedral Gauntlet": {
+        "Cathedral Gauntlet Exit":
+            [["Hyperdash"]],
+    },
+    "Cathedral Gauntlet Exit": {
+        "Cathedral Gauntlet":
+            [["Hyperdash"]],
+    },
+    "Far Shore": {
+        "Far Shore to Spawn Region":
+            [["Hyperdash"]],
+        "Far Shore to East Forest Region":
+            [["Hyperdash"]],
+        "Far Shore to Quarry Region":
+            [["Quarry Connector", "Quarry"]],
+        "Far Shore to Library Region":
+            [["Library Lab"]],
+        "Far Shore to West Garden Region":
+            [["West Garden"]],
+        "Far Shore to Fortress Region":
+            [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
+    },
+    "Far Shore to Spawn Region": {
+        "Far Shore":
+            [["Hyperdash"]],
+    },
+    "Far Shore to East Forest Region": {
+        "Far Shore":
+            [["Hyperdash"]],
+    },
+    "Far Shore to Quarry Region": {
+        "Far Shore":
+            [],
+    },
+    "Far Shore to Library Region": {
+        "Far Shore":
+            [],
+    },
+    "Far Shore to West Garden Region": {
+        "Far Shore":
+            [],
+    },
+    "Far Shore to Fortress Region": {
+        "Far Shore":
+            [],
+    },
 }
