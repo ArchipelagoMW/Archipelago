@@ -242,7 +242,7 @@ def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRu
             for option2 in next_dnf_requirement:
                 new_requirement.add(option1 | option2)
 
-        current_overall_requirement |= frozenset(new_requirement)
+        current_overall_requirement = frozenset(new_requirement)
 
     return optimize_witness_rule(current_overall_requirement)
 
