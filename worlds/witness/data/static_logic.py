@@ -18,7 +18,7 @@ from .utils import (
     get_sigma_normal_logic,
     get_vanilla_logic,
     optimize_witness_rule,
-    parse_lambda,
+    parse_lambda, logical_or_witness_rules,
 )
 
 
@@ -180,7 +180,7 @@ class StaticWitnessLogicObj:
 
         for source, connections in self.CONNECTIONS_WITH_DUPLICATES.items():
             for target, requirement in connections.items():
-                combined_req = optimize_witness_rule(frozenset().union(*requirement))
+                combined_req = logical_or_witness_rules(requirement)
                 self.STATIC_CONNECTIONS_BY_REGION_NAME[source].add((target, combined_req))
 
     def __init__(self, lines=None) -> None:

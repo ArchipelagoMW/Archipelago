@@ -2,7 +2,7 @@ from functools import lru_cache
 from math import floor
 from pkgutil import get_data
 from random import random
-from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple
+from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple, Iterable
 
 # A WitnessRule is just an or-chain of and-conditions.
 # It represents the set of all options that could fulfill this requirement.
@@ -227,7 +227,7 @@ def optimize_witness_rule(witness_rule: WitnessRule) -> WitnessRule:
     return witness_rule - to_remove
 
 
-def logical_and_witness_rules(witness_rules: List[WitnessRule]) -> WitnessRule:
+def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
     """
     performs the "and" operator on a list of logical formula in disjunctive normal form, represented as a set of sets.
     A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
@@ -247,5 +247,5 @@ def logical_and_witness_rules(witness_rules: List[WitnessRule]) -> WitnessRule:
     return optimize_witness_rule(current_overall_requirement)
 
 
-def logical_or_witness_rules(witness_rules: List[WitnessRule]) -> WitnessRule:
+def logical_or_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
     return optimize_witness_rule(frozenset.union(*witness_rules))
