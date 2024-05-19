@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 import typing
 
-from BaseClasses import OptionGroup
-from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions
 
 
 class Goal(Choice):
