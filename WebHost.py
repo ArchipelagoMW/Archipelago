@@ -140,6 +140,9 @@ if __name__ == "__main__":
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
     else:
         from time import sleep
-        while True:
-            sleep(1)  # wait for process to be killed
+        try:
+            while True:
+                sleep(1)  # wait for process to be killed
+        except (SystemExit, KeyboardInterrupt):
+            pass
     stop()  # stop worker threads
