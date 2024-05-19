@@ -193,7 +193,7 @@ class Yugioh06World(World):
         self.multiworld.push_precollected(self.create_item(Banlist_Items[banlist]))
 
         if not self.removed_challenges:
-            challenge = list((Limited_Duels | Theme_Duels).keys())
+            challenge = list(({**Limited_Duels, **Theme_Duels}).keys())
             noc = len(challenge) - max(
                 self.options.third_tier_5_campaign_boss_challenges.value
                 if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges"
@@ -238,9 +238,9 @@ class Yugioh06World(World):
         structure_deck = self.options.structure_deck.current_key
         self.multiworld.regions += [
             self.create_region("Menu", None, ["to Deck Edit", "to Campaign", "to Challenges", "to Card Shop"]),
-            self.create_region("Campaign", Bonuses | Campaign_Opponents),
+            self.create_region("Campaign", {**Bonuses,  **Campaign_Opponents}),
             self.create_region("Challenges"),
-            self.create_region("Card Shop", Required_Cards | collection_events),
+            self.create_region("Card Shop", {**Required_Cards, **collection_events}),
             self.create_region("Structure Deck", get_deck_content_locations(structure_deck)),
         ]
 
@@ -308,7 +308,7 @@ class Yugioh06World(World):
 
         challenge_region = self.get_region("Challenges")
         # Challenges
-        for challenge, lid in (Limited_Duels | Theme_Duels).items():
+        for challenge, lid in ({**Limited_Duels, **Theme_Duels}).items():
             if challenge in self.removed_challenges:
                 continue
             region = self.create_region(challenge, {challenge: lid, challenge + " Complete": None})
