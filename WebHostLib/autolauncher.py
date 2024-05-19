@@ -3,15 +3,25 @@ from __future__ import annotations
 import json
 import logging
 import multiprocessing
-import time
 import typing
-from uuid import UUID
 from datetime import timedelta, datetime
+from threading import Event, Thread
+from uuid import UUID
 
 from pony.orm import db_session, select, commit
 
 from Utils import restricted_loads
 from .locker import Locker, AlreadyRunningException
+
+_stop_event = Event()
+
+
+def stop():
+    """Stops previously launched threads"""
+    global _stop_event
+    stop_event = _stop_event
+    _stop_event = Event()  # new event for new threads
+    stop_event.set()
 
 
 def handle_generation_success(seed_id):
@@ -63,6 +73,7 @@ def cleanup():
 
 def autohost(config: dict):
     def keep_running():
+        stop_event = _stop_event
         try:
             with Locker("autohost"):
                 cleanup()
@@ -72,8 +83,7 @@ def autohost(config: dict):
                     hosters.append(hoster)
                     hoster.start()
 
-                while 1:
-                    time.sleep(0.1)
+                while not stop_event.wait(0.1):
                     with db_session:
                         rooms = select(
                             room for room in Room if
@@ -86,12 +96,12 @@ def autohost(config: dict):
         except AlreadyRunningException:
             logging.info("Autohost reports as already running, not starting another.")
 
-    import threading
-    threading.Thread(target=keep_running, name="AP_Autohost").start()
+    Thread(target=keep_running, name="AP_Autohost").start()
 
 
 def autogen(config: dict):
     def keep_running():
+        stop_event = _stop_event
         try:
             with Locker("autogen"):
 
@@ -112,8 +122,7 @@ def autogen(config: dict):
                             commit()
                         select(generation for generation in Generation if generation.state == STATE_ERROR).delete()
 
-                    while 1:
-                        time.sleep(0.1)
+                    while not stop_event.wait(0.1):
                         with db_session:
                             # for update locks the database row(s) during transaction, preventing writes from elsewhere
                             to_start = select(
@@ -124,8 +133,7 @@ def autogen(config: dict):
         except AlreadyRunningException:
             logging.info("Autogen reports as already running, not starting another.")
 
-    import threading
-    threading.Thread(target=keep_running, name="AP_Autogen").start()
+    Thread(target=keep_running, name="AP_Autogen").start()
 
 
 multiworlds: typing.Dict[type(Room.id), MultiworldInstance] = {}
