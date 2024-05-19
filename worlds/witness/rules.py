@@ -31,8 +31,7 @@ laser_hexes = [
 ]
 
 
-def _has_laser(laser_hex: str, world: "WitnessWorld", player: int,
-               redirect_required: bool) -> CollectionRule:
+def _has_laser(laser_hex: str, world: "WitnessWorld", player: int, redirect_required: bool) -> CollectionRule:
     if laser_hex == "0x012FB" and redirect_required:
         return lambda state: (
             _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)(state)
