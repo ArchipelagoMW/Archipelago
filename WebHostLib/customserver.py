@@ -73,6 +73,7 @@ class WebHostContext(Context):
 
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
+            # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
             setattr(self, key, value)
         self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
@@ -100,18 +101,37 @@ class WebHostContext(Context):
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
+
+        static_gamespackage = self.gamespackage  # this is shared across all rooms
+        static_item_name_groups = self.item_name_groups
+        static_location_name_groups = self.location_name_groups
+        self.gamespackage = {}  # this may be modified by _load
+        self.item_name_groups = {}
+        self.location_name_groups = {}
+
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
-                if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
-                    # non-custom. remove from multidata
+                if static_gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata and use static data
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
                         game_data_packages[game] = Utils.restricted_loads(row.data)
+                        continue
+                    else:
+                        self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
+            self.gamespackage[game] = static_gamespackage.get(game, {})
+            self.item_name_groups[game] = static_item_name_groups.get(game, {})
+            self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
+        if not game_data_packages:
+            # all static -> use the static dicts directly
+            self.gamespackage = static_gamespackage
+            self.item_name_groups = static_item_name_groups
+            self.location_name_groups = static_location_name_groups
         return self._load(multidata, game_data_packages, True)
 
     @db_session
