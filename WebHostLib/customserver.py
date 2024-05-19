@@ -253,12 +253,14 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 room.last_port = -1
             raise
         finally:
-            with db_session:
-                # ensure the Room does not spin up again on its own, minute of safety buffer
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
-            logging.info(f"Shutting down room {room_id} on {name}.")
-            await asyncio.sleep(5)
-            rooms_shutting_down.put(room_id)
+            try:
+                with db_session:
+                    # ensure the Room does not spin up again on its own, minute of safety buffer
+                    room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
+                logging.info(f"Shutting down room {room_id} on {name}.")
+            finally:
+                await asyncio.sleep(5)
+                rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
         def run(self):
