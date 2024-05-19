@@ -508,7 +508,7 @@ class Context:
                 self.logger.exception(e)
             self._start_async_saving()
 
-    def _start_async_saving(self):
+    def _start_async_saving(self, atexit_save: bool = True):
         if not self.auto_saver_thread:
             def save_regularly():
                 # time.time() is platform dependent, so using the expensive datetime method instead
@@ -532,8 +532,9 @@ class Context:
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
-            import atexit
-            atexit.register(self._save, True)  # make sure we save on exit too
+            if atexit_save:
+                import atexit
+                atexit.register(self._save, True)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         self.recheck_hints()
