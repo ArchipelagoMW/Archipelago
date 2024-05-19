@@ -281,7 +281,7 @@ class LingoPlayerLogic:
         elif location_checks == LocationChecks.option_insanity:
             location_classification = LocationClassification.insanity
 
-        if door_shuffle != ShuffleDoors.option_none and not early_color_hallways:
+        if door_shuffle == ShuffleDoors.option_doors and not early_color_hallways:
             location_classification |= LocationClassification.small_sphere_one
 
         for location_name, location_data in ALL_LOCATION_TABLE.items():
