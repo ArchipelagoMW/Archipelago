@@ -24,7 +24,7 @@ weapon_rom_data = {
     STARTING_ID + 0x000C: [0x1F92, 0xFF],
     STARTING_ID + 0x000F: [0x1F94, 0xFF],
     STARTING_ID + 0x000B: [0x1F96, 0xFF],
-    #STARTING_ID + 0x001A: [0x1F7E, 0x80],
+    STARTING_ID + 0x001A: [0x1F7E, 0x80],
 }
 
 upgrades_rom_data = {
@@ -185,6 +185,7 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
         adjust_boss_hp(world, patch)
 
     patch.write_byte(0x014FF, world.options.starting_hp.value)
+    patch.write_byte(0x01DDC, 0x7F)
 
     # Edit the ROM header
     from Utils import __version__
@@ -209,6 +210,7 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x17FFED, world.options.starting_hp.value)
     patch.write_byte(0x17FFEE, world.options.heart_tank_effectiveness.value)
     patch.write_byte(0x17FFEF, world.options.sigma_all_levels.value)
+    patch.write_byte(0x17FFF0, world.options.boss_weakness_strictness.value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
