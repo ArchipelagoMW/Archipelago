@@ -819,13 +819,13 @@ class Entrance:
     hide_path: bool = False
     player: int
     name: str
-    parent_region: Optional[Region]
+    parent_region: Region
     connected_region: Optional[Region] = None
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
-    def __init__(self, player: int, name: str = '', parent: Region = None):
+    def __init__(self, player: int, name: str, parent: Region):
         self.name = name
         self.parent_region = parent
         self.player = player
