@@ -169,54 +169,37 @@ boss_weakness_data = {
 
 boss_excluded_weapons = {
     "Sting Chameleon": [
-        "Charged Fire Wave",
     ],
     "Storm Eagle": [
-        "Charged Fire Wave",
     ],
     "Flame Mammoth": [
-        "Charged Fire Wave",
     ],
     "Chill Penguin": [
-        "Charged Fire Wave",
     ],
     "Spark Mandrill": [
-        "Charged Fire Wave",
     ],
     "Armored Armadillo": [
-        "Charged Fire Wave",
     ],
     "Launch Octopus": [
         "Fire Wave",
-        "Charged Fire Wave",
     ],
     "Boomer Kuwanger": [
-        "Charged Fire Wave",
     ],
     "Thunder Slimer": [
-        "Charged Fire Wave",
     ],
     "Vile": [
-        "Charged Fire Wave",
     ],
     "Bospider": [
-        "Charged Fire Wave",
     ],
     "Rangda Bangda": [
-        "Charged Fire Wave",
     ],
     "D-Rex": [
-        "Charged Fire Wave",
     ],
     "Velguarder": [
-        "Charged Fire Wave",
     ],
     "Sigma": [
-        "Lemon (Dash)",
-        "Charged Fire Wave",
     ],
     "Wolf Sigma": [
-        "Charged Fire Wave",
     ],
 }
 
@@ -237,11 +220,11 @@ weapons = {
     ],
     "Rolling Shield": [
         [[ItemName.rolling_shield], 0x09, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+1],
+        [[ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+2],
     ],
     "Fire Wave": [
         [[ItemName.fire_wave], 0x0A, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.fire_wave], 0x13, WEAKNESS_CHARGED_DMG+4],
+        [[ItemName.fire_wave], 0x13, WEAKNESS_CHARGED_DMG+3],
     ],
     "Storm Tornado": [
         [[ItemName.storm_tornado], 0x0B, WEAKNESS_UNCHARGED_DMG],
@@ -257,7 +240,7 @@ weapons = {
     ],
     "Shotgun Ice": [
         [[ItemName.shotgun_ice], 0x0E, WEAKNESS_CHARGED_DMG],
-        [[ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG],
+        [[ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG+3],
     ],
 }
 
@@ -291,13 +274,11 @@ weapons_chaotic = {
         [[ItemName.rolling_shield], 0x09, WEAKNESS_UNCHARGED_DMG+1],
     ],
     "Charged Rolling Shield": [
-        [["Check Charge 2", ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+2],
     ],
     "Fire Wave": [
         [[ItemName.fire_wave], 0x0A, WEAKNESS_UNCHARGED_DMG],
-    ],
-    "Charged Fire Wave": [
-        [["Check Charge 2", ItemName.fire_wave], 0x13, WEAKNESS_CHARGED_DMG+4],
+        [[ItemName.fire_wave], 0x13, WEAKNESS_CHARGED_DMG+3],
     ],
     "Storm Tornado": [
         [[ItemName.storm_tornado], 0x0B, WEAKNESS_UNCHARGED_DMG],
@@ -321,7 +302,7 @@ weapons_chaotic = {
         [[ItemName.shotgun_ice], 0x0E, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Shotgun Ice": [
-        [["Check Charge 2", ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG+3],
     ],
 }
 
