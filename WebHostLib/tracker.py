@@ -2396,3 +2396,116 @@ if "Starcraft 2" in network_data_package["games"]:
         )
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
+
+if "Final Fantasy Mystic Quest" in network_data_package["games"]:
+    # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_items = {
+        "Steel Helm":   ("Progressive Helm",  1),
+        "Moon Helm":    ("Progressive Helm",  2),
+        "Apollo Helm":  ("Progressive Helm",  3),
+
+        "Noble Armor":  ("Progressive Armor", 1),
+        "Gaia's Armor": ("Progressive Armor", 2),
+
+        "Steel Shield": ("Progressive Shield", 1),
+        "Venus Shield": ("Progressive Shield", 2),
+        "Aegis Shield": ("Progressive Shield", 3),
+
+        "Charm":        ("Progressive Accessory", 1),
+        "Magic Ring":   ("Progressive Accessory", 2),
+        "Cupid Locket": ("Progressive Accessory", 3),
+
+        "Axe":          ("Progressive Axe", 1),
+        "Battle Axe":   ("Progressive Axe", 2),
+        "Giant's Axe":  ("Progressive Axe", 3),
+
+        "Bomb":         ("Progressive Bomb", 1),
+        "Jumbo Bomb":   ("Progressive Bomb", 2),
+        "Mega Grenade": ("Progressive Bomb", 3),
+
+        "Cat Claw":     ("Progressive Claw", 1),
+        "Charm Claw":   ("Progressive Claw", 2),
+        "Dragon Claw":  ("Progressive Claw", 3),
+
+        "Steel Sword":  ("Progressive Sword", 1),
+        "Knight Sword": ("Progressive Sword", 2),
+        "Excalibur":    ("Progressive Sword", 3)
+    }
+
+    progressive_item_max = {
+        "Progressive Helm":         3,
+        "Progressive Armor":        2,
+        "Progressive Shield":       3,
+        "Progressive Accessory":    3,
+        "Progressive Axe":          3,
+        "Progressive Bomb":         3,
+        "Progressive Claw":         3,
+        "Progressive Sword":        3
+    }
+
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        # Completed item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["Completed"] = 1
+
+    def render_FFMQ_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
+            (team, player): collections.Counter({
+                tracker_data.item_id_to_name["Final Fantasy Mystic Quest"][code]: count
+                for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+            })
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "Final Fantasy Mystic Quest"
+        }
+
+        # Translate non-progression items to progression items for tracker simplicity.
+        for (team, player), inventory in inventories.items():
+            prepare_inventories(team, player, inventory, tracker_data)
+
+        return render_template(
+            "multitracker__FFMQ.html",
+            enabled_trackers=enabled_trackers,
+            current_tracker="Final Fantasy Mystic Quest",
+            room=tracker_data.room,
+            all_slots=tracker_data.get_all_slots(),
+            room_players=tracker_data.get_all_players(),
+            locations=tracker_data.get_room_locations(),
+            locations_complete=tracker_data.get_room_locations_complete(),
+            total_team_locations=tracker_data.get_team_locations_total_count(),
+            total_team_locations_complete=tracker_data.get_team_locations_checked_count(),
+            player_names_with_alias=tracker_data.get_room_long_player_names(),
+            completed_worlds=tracker_data.get_team_completed_worlds_count(),
+            games=tracker_data.get_room_games(),
+            states=tracker_data.get_room_client_statuses(),
+            hints=tracker_data.get_team_hints(),
+            activity_timers=tracker_data.get_room_last_activity(),
+            videos=tracker_data.get_room_videos(),
+            item_id_to_name=tracker_data.item_id_to_name,
+            location_id_to_name=tracker_data.location_id_to_name,
+            inventories=inventories
+        )
+
+    def render_FFMQ_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["Final Fantasy Mystic Quest"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
+        
+        # Translate non-progression items to progression items for tracker simplicity.
+        prepare_inventories(team, player, inventory, tracker_data)
+
+        return render_template(
+            template_name_or_list="tracker__FFMQ.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            inventory=inventory,
+            player_name=tracker_data.get_player_name(team, player)
+        )
+
+    _multiworld_trackers["Final Fantasy Mystic Quest"] = render_FFMQ_multiworld_tracker
+    _player_trackers["Final Fantasy Mystic Quest"] = render_FFMQ_tracker

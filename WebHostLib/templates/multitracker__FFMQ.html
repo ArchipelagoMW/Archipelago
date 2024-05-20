@@ -1,0 +1,100 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
+{% endblock %}
+
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Exit Book":        "https://static.wikia.nocookie.net/finalfantasy/images/5/51/MQExitIcon.PNG",
+    "Cure Book":        "https://static.wikia.nocookie.net/finalfantasy/images/2/28/MQCureIcon.PNG",
+    "Heal Book":        "https://static.wikia.nocookie.net/finalfantasy/images/4/48/MQHealIcon.PNG",
+    "Life Book":        "https://static.wikia.nocookie.net/finalfantasy/images/5/5c/MQLifeIcon.PNG",
+
+    "Quake Book":       "https://static.wikia.nocookie.net/finalfantasy/images/2/2b/MQQuakeIcon.PNG",
+    "Blizzard Book":    "https://static.wikia.nocookie.net/finalfantasy/images/8/8d/MQBlizzardIcon.PNG",
+    "Fire Book":        "https://static.wikia.nocookie.net/finalfantasy/images/e/ea/MQFireIcon.PNG",
+    "Aero Book":        "https://static.wikia.nocookie.net/finalfantasy/images/8/82/MQAeroIcon.PNG",
+
+    "Thunder Seal":     "https://static.wikia.nocookie.net/finalfantasy/images/6/6f/MQFlareIcon.PNG",
+    "White Seal":       "https://static.wikia.nocookie.net/finalfantasy/images/6/68/MQWhiteIcon.PNG",
+    "Meteor Seal":      "https://static.wikia.nocookie.net/finalfantasy/images/c/c2/MQMeteorIcon.PNG",
+    "Flare Seal":       "https://static.wikia.nocookie.net/finalfantasy/images/7/77/MQThunderIcon.PNG",
+
+    "Captain's Cap":            "https://static.wikia.nocookie.net/finalfantasy/images/2/2f/MQCaptainCap.PNG",
+    "Thunder Rock":             "https://static.wikia.nocookie.net/finalfantasy/images/b/ba/MQThunderRock.PNG",
+    
+    "Libra Crest":              "https://static.wikia.nocookie.net/finalfantasy/images/8/88/MQLibraCrest.PNG",
+    "Gemini Crest":             "https://static.wikia.nocookie.net/finalfantasy/images/5/52/MQGeminiCrest.PNG",
+    "Mobius Crest":             "https://static.wikia.nocookie.net/finalfantasy/images/6/65/MQMobiusCrest.PNG",
+
+    "Sand Coin":                "https://static.wikia.nocookie.net/finalfantasy/images/f/f8/MQSandCoin.PNG",
+    "River Coin":               "https://static.wikia.nocookie.net/finalfantasy/images/2/24/MQRiverCoin.PNG",
+    "Sun Coin":                 "https://static.wikia.nocookie.net/finalfantasy/images/a/a9/MQSunCoin.PNG",
+    "Sky Coin":                 "https://static.wikia.nocookie.net/finalfantasy/images/0/0c/MQSkyCoin.PNG",
+    "Sky Fragment":                 "https://static.wikia.nocookie.net/finalfantasy/images/0/0c/MQSkyCoin.PNG",
+
+    "Progressive Axe":          "https://static.wikia.nocookie.net/finalfantasy/images/5/57/MQGiantAxe.PNG",
+    "Progressive Bomb":         "https://static.wikia.nocookie.net/finalfantasy/images/5/5f/MQMegaGrenade.PNG",
+    "Progressive Claw":         "https://static.wikia.nocookie.net/finalfantasy/images/b/b4/MQDragonClaw.PNG",
+    "Progressive Sword":        "https://static.wikia.nocookie.net/finalfantasy/images/a/ac/MQExcalibur.PNG",
+
+    "Completed":                   "https://static.wikia.nocookie.net/finalfantasy/images/9/9e/FFMQ_Warrior_Statue.png"
+} %}
+
+{% set inventory_order = [
+    "Progressive Sword",
+    "Progressive Axe",
+    "Progressive Claw",
+    "Progressive Bomb",
+    "Thunder Rock",
+    "Mobius Crest",
+    "Captain's Cap",
+    "Sky Coin",
+    "Sky Fragment",
+    "Completed"
+] %}
+
+{% set multi_items = [
+    "Progressive Sword",
+    "Progressive Axe",
+    "Progressive Claw",
+    "Progressive Bomb",
+    "Sky Fragment"
+] %}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        {%- if item in icons -%}
+            <th class="center-column">
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}">
+            </th>
+        {%- endif %}
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {{ inventories[(team, player)][item] }}
+                {% else %}
+                    ✔️
+                {% endif %}
+            </td>
+        {%- else -%}
+            <td></td>
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
