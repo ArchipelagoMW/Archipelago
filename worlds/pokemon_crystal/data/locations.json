@@ -3248,7 +3248,7 @@
 		"script": "AP_Trainer_KIMONO_GIRL_MIKI"
 	},
 	"ITEM_FROM_COOLTRAINERM_DARIN": {
-		"label": "Dragons Den B1F - Cool Trainer Darin",
+		"label": "Dragon's Den B1F - Cool Trainer Darin",
 		"flag": "EVENT_ITEM_FROM_COOLTRAINERM_DARIN",
 		"type": "trainer",
 		"tags": [
@@ -3258,7 +3258,7 @@
 		"script": "AP_Trainer_COOLTRAINERM_DARIN"
 	},
 	"ITEM_FROM_COOLTRAINERF_CARA": {
-		"label": "Dragons Den B1F - Cool Trainer Cara",
+		"label": "Dragon's Den B1F - Cool Trainer Cara",
 		"flag": "EVENT_ITEM_FROM_COOLTRAINERF_CARA",
 		"type": "trainer",
 		"tags": [
@@ -3268,7 +3268,7 @@
 		"script": "AP_Trainer_COOLTRAINERF_CARA"
 	},
 	"ITEM_FROM_TWINS_LEA_AND_PIA": {
-		"label": "Dragons Den B1F - Twins Lea & Pia",
+		"label": "Dragon's Den B1F - Twins Lea & Pia",
 		"flag": "EVENT_ITEM_FROM_TWINS_LEA_AND_PIA",
 		"type": "trainer",
 		"tags": [

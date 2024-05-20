@@ -48,21 +48,21 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     def can_whirlpool(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM06 Whirlpool", world.player) and has_badge(state, "glacier")
+            return state.has("HM06 Whirlpool", world.player) and has_badge(state, "glacier") and can_surf(state)
         elif world.options.hm_badge_requirements == 1:
-            return state.has("HM06 Whirlpool", world.player)
+            return state.has("HM06 Whirlpool", world.player) and can_surf(state)
         else:
             return state.has("HM06 Whirlpool", world.player) and (
-                    has_badge(state, "glacier") or has_badge(state, "volcano"))
+                    has_badge(state, "glacier") or has_badge(state, "volcano")) and can_surf(state)
 
     def can_waterfall(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM07 Waterfall", world.player) and has_badge(state, "rising")
+            return state.has("HM07 Waterfall", world.player) and has_badge(state, "rising") and can_surf(state)
         elif world.options.hm_badge_requirements == 1:
-            return state.has("HM07 Waterfall", world.player)
+            return state.has("HM07 Waterfall", world.player) and can_surf(state)
         else:
             return state.has("HM07 Waterfall", world.player) and (
-                    has_badge(state, "rising") or has_badge(state, "earth"))
+                    has_badge(state, "rising") or has_badge(state, "earth")) and can_surf(state)
 
     def can_rocksmash(state: CollectionState):
         return state.has("TM08 Rock Smash", world.player)
@@ -456,22 +456,24 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_BLACKTHORN_GYM_1F"),
              lambda state: state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
 
-    set_rule(get_entrance("REGION_BLACKTHORN_GYM_2F -> REGION_BLACKTHORN_GYM_1F:STRENGTH"),
-             can_strength)
+    set_rule(get_entrance("REGION_BLACKTHORN_GYM_2F -> REGION_BLACKTHORN_GYM_1F:STRENGTH"), can_strength)
 
     set_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"),
              lambda state: state.has("EVENT_BEAT_CLAIR", world.player))
 
-    add_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"), can_surf)
-
     # Dragons Den
+    # set_rule(get_location("Dragon's Den B1F - Item 1"), can_surf)
     set_rule(get_location("Dragon's Den B1F - Item 2"), can_whirlpool)
+    set_rule(get_location("Dragon's Den B1F - Item 3"), can_surf)
 
     if hidden():
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 1"),
-                 can_whirlpool)
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in SE Corner"),
-                 can_whirlpool)
+        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 1"), can_whirlpool)
+        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 2"), can_surf)
+        set_rule(get_location("Dragon's Den B1F - Hidden Item in SE Corner"), can_whirlpool)
+
+    if trainersanity():
+        set_rule(get_location("Dragon's Den B1F - Cool Trainer Cara"), can_surf)
+        set_rule(get_location("Dragon's Den B1F - Twins Lea & Pia"), can_surf)
 
     # Route 45
 
