@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict, \
+    OptionGroup
 from .items import TRAP_ITEMS
 
 
@@ -169,6 +170,26 @@ class PuzzleSkipPercentage(Range):
 class DeathLink(Toggle):
     """If on: Whenever another player on death link dies, you will be returned to the starting room."""
     display_name = "Death Link"
+
+
+lingo_option_groups = [
+    OptionGroup("Pilgrimage", [
+        EnablePilgrimage,
+        PilgrimageAllowsRoofAccess,
+        PilgrimageAllowsPaintings,
+        SunwarpAccess,
+        ShuffleSunwarps,
+    ]),
+    OptionGroup("Fine-tuning", [
+        ProgressiveOrangeTower,
+        ProgressiveColorful,
+        MasteryAchievements,
+        Level2Requirement,
+        TrapPercentage,
+        TrapWeights,
+        PuzzleSkipPercentage,
+    ])
+]
 
 
 @dataclass
