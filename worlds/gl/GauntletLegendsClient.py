@@ -11,7 +11,7 @@ from typing import List
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.gl.Arrays import inv_dict, timers, base_count, castle_id, level_locations, \
-    difficulty_convert, spawners, mirror_levels, characters
+    difficulty_convert, spawners, mirror_levels, characters, boss_level
 from worlds.gl.Items import items_by_id, ItemData
 from worlds.gl.Locations import LocationData
 
@@ -29,7 +29,9 @@ PLAYER_COUNT = 0x127764
 PLAYER_LEVEL = 0xFD31B
 PLAYER_ALIVE = 0xFD2EB
 PLAYER_PORTAL = 0x64A50
+PLAYER_BOSSING = 0x64A54
 PLAYER_MOVEMENT = 0xFD307
+BOSS_ADDR = 0x289C08
 TIME = 0xC5B1C
 INPUT = 0xC5BCD
 
@@ -436,6 +438,9 @@ class GauntletLegendsContext(CommonContext):
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         level = self.read_level()
+        if level in boss_level:
+            for i in range(4):
+                self.socket.write(MessageFormat(WRITE, ParamFormat(BOSS_ADDR, bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]))))
         if self.movement is not 0x12:
             level = [0x1, 0xF]
         self.current_level = level
@@ -495,15 +500,19 @@ class GauntletLegendsContext(CommonContext):
     def dead(self) -> bool:
         return self.socket.read(MessageFormat(READ, f"0x{format(PLAYER_ALIVE, 'x')} 1"))[0] == 0x0
 
+    def boss(self) -> int:
+        return self.socket.read(MessageFormat(READ, f"0x{format(PLAYER_BOSSING, 'x')} 1"))[0]
+
     async def level_status(self, ctx: "GauntletLegendsContext") -> bool:
         portaling = self.portaling()
         dead = self.dead()
-        if portaling or dead:
+        boss = self.boss()
+        if portaling or dead or (self.current_level in boss_level and boss == 0):
             if self.in_game:
-                if portaling:
+                if portaling or (self.current_level in boss_level and boss == 0):
                     self.clear_counts[str(self.current_level)] = self.clear_counts.get(str(self.current_level), 0) + 1
-                    if self.current_level[1] << 4 + self.current_level[0] in mirror_levels:
-                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location.id for location in level_locations[self.current_level[1] << 4 + self.current_level[0]] if "Mirror" in location.name]}])
+                    if (self.current_level[1] << 4) + self.current_level[0] in mirror_levels:
+                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location.id for location in level_locations[(self.current_level[1] << 4) + self.current_level[0]] if "Mirror" in location.name]}])
                 if dead:
                     if self.current_level == bytes([0x2, 0xF]):
                         self.clear_counts[str([0x1, 0xF])] = max(self.clear_counts.get(str([0x1, 0xF]), 0) - 1, 0)
@@ -525,7 +534,6 @@ class GauntletLegendsContext(CommonContext):
         return False
 
     async def load_objects(self, ctx: "GauntletLegendsContext"):
-
         await self.scout_locations(ctx)
         await self.obj_read()
         await self.obj_read(1)

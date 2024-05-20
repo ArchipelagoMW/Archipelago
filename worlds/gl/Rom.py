@@ -101,14 +101,12 @@ class GLPatchExtension(APPatchExtension):
     def patch_items(caller: APProcedurePatch, rom: bytes):
         stream = io.BytesIO(rom)
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
-        shard_values = json.loads(caller.get_file(f"shard_values.json").decode("utf-8"))
         for i in range(len(level_locations)):
             level: Dict[str, Tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
             stream, data = get_level_data(stream, level_size[i])
             for j, (location_name, item) in enumerate(level.items()):
                 if "Mirror" in location_name:
-                    shard_values[i // 7] = item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4]
                     continue
                 if "Obelisk" in location_name:
                     try:
@@ -180,7 +178,6 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
         "player": world.player,
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
-    patch.write_file("shard_values.json", json.dumps(world.shard_values).encode("UTF-8"))
     for i, level in enumerate(level_locations.values()):
         locations: List[Location] = []
         for location in level:

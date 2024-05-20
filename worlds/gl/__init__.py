@@ -4,6 +4,7 @@ import typing
 
 import settings
 from BaseClasses import Tutorial, ItemClassification
+from .Arrays import item_dict
 from .Options import GLOptions
 from worlds.AutoWorld import WebWorld, World
 from .Locations import all_locations, location_table, LocationData
@@ -54,16 +55,13 @@ class GauntletLegendsWorld(World):
     """
     game = "Gauntlet Legends"
     web = GauntletLegendsWebWorld()
-    data_version = 1
     options_dataclass = GLOptions
     options: GLOptions
     settings: typing.ClassVar[GLSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 4, 4)
+    required_client_version = (0, 4, 6)
     crc32: str = None
-    shard_values: typing.List[bytes] = [[0x2B, 0x3], [0x2B, 0x1], [0x2B, 0x4], [0x2B, 0x2]]
-    output_complete: threading.Event = threading.Event()
 
     disabled_locations: typing.List[LocationData]
 
@@ -108,10 +106,18 @@ class GauntletLegendsWorld(World):
 
 
     def fill_slot_data(self) -> dict:
+        dshard = self.get_location("Dragon's Lair - Dragon Mirror Shard").item
+        yshard = self.get_location("Yeti's Cavern - Yeti Mirror Shard").item
+        cshard = self.get_location("Chimera's Keep - Chimera Mirror Shard").item
+        fshard = self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard").item
+        shard_values = [item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
+                        item_dict[yshard.code] if yshard.player == self.player else [0x27, 0x4],
+                        item_dict[cshard.code] if cshard.player == self.player else [0x27, 0x4],
+                        item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4]]
         return {
             "player": self.player,
             "scale": 0,
-            "shards": self.shard_values,
+            "shards": shard_values,
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "character": self.options.unlock_character.value
