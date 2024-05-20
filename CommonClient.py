@@ -8,6 +8,7 @@ import sys
 import typing
 import time
 import functools
+from collections.abc import MutableMapping
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -23,7 +24,7 @@ from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
 from Utils import Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister
+from worlds import network_data_package, AutoWorldRegister, DataPackage
 import os
 import ssl
 
@@ -173,10 +174,51 @@ class CommonContext:
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
+    # TODO: Remove this fallback helper class in 0.6 and just force clients accessing with 'game'?
+    class NameLookupDict(MutableMapping):
+        def __init__(self, lookup_type: str, *args, **kwargs):
+            self.lookup_type = lookup_type
+            self.flattened_lookup = Utils.KeyedDefaultDict(lambda key: f"Unknown {self.lookup_type} (ID: {key})")
+            self.store = dict()
+            self.update(dict(*args, **kwargs))
+
+        def __getitem__(self, key: typing.Union[int, str]) -> str:
+            if isinstance(key, str):
+                return self.store[key]
+
+            name = self.flattened_lookup[key]
+            return name if name is not None else f"Ambiguous {self.lookup_type} (ID: {key})"
+
+        def __setitem__(self, key, value):
+            raise TypeError("NameLookupDict cannot be mutated at runtime, outside of update_game.")
+
+        def __delitem__(self, key):
+            raise TypeError("NameLookupDict cannot be mutated at runtime, outside of update_game.")
+
+        def __len__(self):
+            return len(self.store)
+
+        def __iter__(self):
+            return iter(self.store)
+
+        def update_game(self, lookup_package: typing.Dict[str, int], game: str):
+            lookup_table = Utils.KeyedDefaultDict(lambda key: f"Unknown {self.lookup_type} (ID: {key})")
+            for name, code in lookup_package.items():
+                lookup_table[code] = name
+                if code in self.flattened_lookup:
+                    # A 'None' value signifies a duplicate key with the same id. If anyone is trying to lookup without
+                    # providing a game name first, we can't be sure which game it is, so this will cause 'Ambiguous' to
+                    # be returned instead.
+                    self.flattened_lookup[code] = None
+                else:
+                    self.flattened_lookup[code] = name
+
+            self.store[game] = lookup_table
+
     # data package
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
-    item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
-    location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
+    item_names = NameLookupDict("Item")
+    location_names = NameLookupDict("Location")
 
     # defaults
     starting_reconnect_delay: int = 5
@@ -486,19 +528,17 @@ class CommonContext:
                         or remote_checksum != cache_checksum:
                     needed_updates.add(game)
                 else:
-                    self.update_game(cached_game)
+                    self.update_game(cached_game, game)
         if needed_updates:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
-    def update_game(self, game_package: dict):
-        for item_name, item_id in game_package["item_name_to_id"].items():
-            self.item_names[item_id] = item_name
-        for location_name, location_id in game_package["location_name_to_id"].items():
-            self.location_names[location_id] = location_name
+    def update_game(self, game_package: dict, game: str):
+        self.item_names.update_game(game_package["item_name_to_id"], game)
+        self.location_names.update_game(game_package["location_name_to_id"], game)
 
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():
-            self.update_game(game_data)
+            self.update_game(game_data, game)
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
