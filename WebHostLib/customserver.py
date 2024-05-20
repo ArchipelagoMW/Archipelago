@@ -74,6 +74,7 @@ class WebHostContext(Context):
 
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
+            # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
             setattr(self, key, value)
         self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
@@ -101,18 +102,37 @@ class WebHostContext(Context):
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
+
+        static_gamespackage = self.gamespackage  # this is shared across all rooms
+        static_item_name_groups = self.item_name_groups
+        static_location_name_groups = self.location_name_groups
+        self.gamespackage = {"Archipelago": static_gamespackage["Archipelago"]}  # this may be modified by _load
+        self.item_name_groups = {}
+        self.location_name_groups = {}
+
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
-                if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
-                    # non-custom. remove from multidata
+                if static_gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata and use static data
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
                         game_data_packages[game] = Utils.restricted_loads(row.data)
+                        continue
+                    else:
+                        self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
+            self.gamespackage[game] = static_gamespackage.get(game, {})
+            self.item_name_groups[game] = static_item_name_groups.get(game, {})
+            self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
+        if not game_data_packages:
+            # all static -> use the static dicts directly
+            self.gamespackage = static_gamespackage
+            self.item_name_groups = static_item_name_groups
+            self.location_name_groups = static_location_name_groups
         return self._load(multidata, game_data_packages, True)
 
     @db_session
@@ -122,7 +142,7 @@ class WebHostContext(Context):
             savegame_data = Room.get(id=self.room_id).multisave
             if savegame_data:
                 self.set_save(restricted_loads(Room.get(id=self.room_id).multisave))
-            self._start_async_saving()
+            self._start_async_saving(atexit_save=False)
         threading.Thread(target=self.listen_to_db_commands, daemon=True).start()
 
     @db_session
@@ -212,59 +232,62 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
     loop = asyncio.get_event_loop()
 
     async def start_room(room_id):
-        try:
-            logger = set_up_logging(room_id)
-            ctx = WebHostContext(static_server_data, logger)
-            ctx.load(room_id)
-            ctx.init_save()
+        with Locker(f"RoomLocker {room_id}"):
             try:
-                ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
+                logger = set_up_logging(room_id)
+                ctx = WebHostContext(static_server_data, logger)
+                ctx.load(room_id)
+                ctx.init_save()
+                try:
+                    ctx.server = websockets.serve(
+                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
-                await ctx.server
-            except OSError:  # likely port in use
-                ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
+                    await ctx.server
+                except OSError:  # likely port in use
+                    ctx.server = websockets.serve(
+                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
-                await ctx.server
-            port = 0
-            for wssocket in ctx.server.ws_server.sockets:
-                socketname = wssocket.getsockname()
-                if wssocket.family == socket.AF_INET6:
-                    # Prefer IPv4, as most users seem to not have working ipv6 support
-                    if not port:
+                    await ctx.server
+                port = 0
+                for wssocket in ctx.server.ws_server.sockets:
+                    socketname = wssocket.getsockname()
+                    if wssocket.family == socket.AF_INET6:
+                        # Prefer IPv4, as most users seem to not have working ipv6 support
+                        if not port:
+                            port = socketname[1]
+                    elif wssocket.family == socket.AF_INET:
                         port = socketname[1]
-                elif wssocket.family == socket.AF_INET:
-                    port = socketname[1]
-            if port:
-                ctx.logger.info(f'Hosting game at {host}:{port}')
+                if port:
+                    ctx.logger.info(f'Hosting game at {host}:{port}')
+                    with db_session:
+                        room = Room.get(id=ctx.room_id)
+                        room.last_port = port
+                else:
+                    ctx.logger.exception("Could not determine port. Likely hosting failure.")
                 with db_session:
-                    room = Room.get(id=ctx.room_id)
-                    room.last_port = port
-            else:
-                ctx.logger.exception("Could not determine port. Likely hosting failure.")
-            with db_session:
-                ctx.auto_shutdown = Room.get(id=room_id).timeout
-            ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
-            await ctx.shutdown_task
+                    ctx.auto_shutdown = Room.get(id=room_id).timeout
+                ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
+                await ctx.shutdown_task
 
-            # ensure auto launch is on the same page in regard to room activity.
-            with db_session:
-                room: Room = Room.get(id=ctx.room_id)
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
-
-        except (KeyboardInterrupt, SystemExit):
-            with db_session:
-                room = Room.get(id=room_id)
-                # ensure the Room does not spin up again on its own, minute of safety buffer
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
-        except Exception:
-            with db_session:
-                room = Room.get(id=room_id)
-                room.last_port = -1
-                # ensure the Room does not spin up again on its own, minute of safety buffer
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
-            raise
-        finally:
-            rooms_shutting_down.put(room_id)
+            except (KeyboardInterrupt, SystemExit):
+                pass
+            except Exception:
+                with db_session:
+                    room = Room.get(id=room_id)
+                    room.last_port = -1
+                raise
+            finally:
+                try:
+                    ctx._save()
+                    with (db_session):
+                        # ensure the Room does not spin up again on its own, minute of safety buffer
+                        room = Room.get(id=room_id)
+                        room.last_activity = datetime.datetime.utcnow() - \
+                                             datetime.timedelta(minutes=1, seconds=room.timeout)
+                    logging.info(f"Shutting down room {room_id} on {name}.")
+                finally:
+                    await asyncio.sleep(5)
+                    rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
         def run(self):
