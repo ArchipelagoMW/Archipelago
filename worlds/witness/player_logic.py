@@ -444,7 +444,7 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order += self.handle_regular_postgame(world)
 
         # Exclude panels from the post-game if shuffle_postgame is false.
-        if not world.options.panel_hunt_postgame:
+        if world.options.panel_hunt_postgame:
             adjustment_linesets_in_order += self.handle_panelhunt_postgame(world)
 
         # Exclude Discards / Vaults

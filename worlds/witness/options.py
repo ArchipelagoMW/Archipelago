@@ -212,7 +212,7 @@ class PanelHuntPostgame(Choice):
 
     display_name = "Force postgame in Panel Hunt"
 
-    option_off = 0
+    option_everything_is_eligible = 0
     option_disable_mountain_lasers_locations = 1
     option_disable_challenge_lasers_locations = 2
     option_disable_anything_locked_by_lasers = 3
