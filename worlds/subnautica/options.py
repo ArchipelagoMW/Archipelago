@@ -120,7 +120,7 @@ class FillerItemsDistribution(ItemDict):
     """Random chance weights of various filler resources that can be obtained.
     Available items: """
     __doc__ += ", ".join(f"\"{item_name}\"" for item_name in item_names_by_type[ItemType.resource])
-    _valid_keys = frozenset(item_names_by_type[ItemType.resource])
+    valid_keys = sorted(item_names_by_type[ItemType.resource])
     default = {item_name: 1 for item_name in item_names_by_type[ItemType.resource]}
     display_name = "Filler Items Distribution"
 
