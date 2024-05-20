@@ -14,6 +14,8 @@ class ShuffleDoors(Choice):
     option_none = 0
     option_panels = 1
     option_doors = 2
+    alias_simple = 2
+    alias_complex = 2
 
 
 class GroupDoors(Toggle):
