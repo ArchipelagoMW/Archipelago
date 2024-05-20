@@ -114,7 +114,7 @@
 {% macro ItemDict(option_name, option, world) %}
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
-        {% for item_name in world.item_names|sort %}
+        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
             <div class="option-entry">
                 <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
                 <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}||{{ item_name }}||qty" value="{{ option.default[item_name]|default("0") }}" data-option-name="{{ option_name }}" data-item-name="{{ item_name }}" />
@@ -149,7 +149,7 @@
         {% if world.location_name_groups.keys()|length > 1 %}
             <div class="option-divider">&nbsp;</div>
         {% endif %}
-        {% for location_name in world.location_names|sort %}
+        {% for location_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.location_names|sort) %}
             <div class="option-entry">
                 <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}" value="{{ location_name }}" {{ "checked" if location_name in option.default }} />
                 <label for="{{ option_name }}-{{ location_name }}">{{ location_name }}</label>
@@ -172,7 +172,7 @@
         {% if world.item_name_groups.keys()|length > 1 %}
             <div class="option-divider">&nbsp;</div>
         {% endif %}
-        {% for item_name in world.item_names|sort %}
+        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
             <div class="option-entry">
                 <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}" value="{{ item_name }}" {{ "checked" if item_name in option.default }} />
                 <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
