@@ -10,7 +10,7 @@ from .phone_data import phone_scripts
 
 from .items import reverse_offset_item_value, item_const_name_to_id
 from .data import data
-from .utils import get_random_pokemon_id, convert_to_ingame_text
+from .utils import get_random_pokemon_id, convert_to_ingame_text, get_random_filler_item
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
@@ -90,9 +90,9 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             write_bytes(patched_rom, [totodile_mon], totodile_address)
             write_bytes(patched_rom, [chikorita_mon], chikorita_address)
             if i == 4:
-                write_bytes(patched_rom, [get_random_helditem(random)], cyndaquil_address + 2)
-                write_bytes(patched_rom, [get_random_helditem(random)], totodile_address + 2)
-                write_bytes(patched_rom, [get_random_helditem(random)], chikorita_address + 2)
+                write_bytes(patched_rom, [item_const_name_to_id(get_random_filler_item(random))], cyndaquil_address + 2)
+                write_bytes(patched_rom, [item_const_name_to_id(get_random_filler_item(random))], totodile_address + 2)
+                write_bytes(patched_rom, [item_const_name_to_id(get_random_filler_item(random))], chikorita_address + 2)
 
     if world.options.randomize_wilds:
         for address_name, address in data.rom_addresses.items():
@@ -238,8 +238,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 address += 5
         for i in range(0, 3):
             address = data.rom_addresses["AP_Misc_OK_" + str(i + 1)]
-            write_bytes(patched_rom, [0x65], address + 1)
-            write_bytes(patched_rom, [0xB4], address + 2)
+            write_bytes(patched_rom, [0x65, 0xFF], address + 1)
             write_bytes(patched_rom, [0xFF], address + 4)
         for i in range(0, 5):
             answer = world.generated_misc.ra[i]

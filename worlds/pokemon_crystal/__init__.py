@@ -184,7 +184,7 @@ class PokemonCrystalWorld(World):
                 move_pool = [move_name for move_name in move_pool if crystal_data.moves[move_name].power > 0]
             if self.options.enable_mischief.value:
                 lmao = ["GUILLOTINE", "HORN_DRILL", "FISSURE"]
-                move_pool += [lm for lm in lmao if lm in move_pool] * 3
+                move_pool += [lm for lm in lmao if lm in move_pool]
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):

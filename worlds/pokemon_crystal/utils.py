@@ -53,7 +53,6 @@ def get_random_filler_item(random):
                      ["Heal Powder", "Burn Heal", "Parlyz Heal", "Ice Heal", "Antidote", "Awakening", "Full Heal"] * 5]
     group = random.choice(weighted_pool)
     return random.choice(group)
-    return random.choice(helditems) + BASE_OFFSET
 
 
 def get_random_pokemon_id(random):

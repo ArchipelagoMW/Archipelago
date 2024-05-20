@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
-EXPECTED_ROM_VERSION = 2
+EXPECTED_ROM_VERSION = 3
 
 TRACKER_EVENT_FLAGS = [
     "EVENT_GOT_KENYA",
@@ -128,6 +128,7 @@ class PokemonCrystalClient(BizHawkClient):
 
             num_received_items = int.from_bytes([read_result[0][1], read_result[0][2]], "little")
             received_item_is_empty = read_result[0][0] == 0
+            phone_trap_index = read_result[0][4]
 
             if num_received_items < len(ctx.items_received) and received_item_is_empty:
                 next_item = ctx.items_received[num_received_items].item - BASE_OFFSET
@@ -199,7 +200,6 @@ class PokemonCrystalClient(BizHawkClient):
                         read_locations.append(loc)
                     self.phone_trap_locations = read_locations
             else:
-                phone_trap_index = read_result[0][4]
                 hint_locations = [location for location in self.phone_trap_locations[:phone_trap_index] if
                                   location != 0 and location not in local_checked_locations]
                 if len(hint_locations):
