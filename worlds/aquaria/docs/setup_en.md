@@ -2,9 +2,12 @@
 
 ## Required Software
 
-- The original Aquaria Game (buyable from a lot of online game seller);
+- The original Aquaria Game (purchasable from most online game stores)
 - The [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases)
-- Optional, for sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
+
+## Optional Software
+ 
+- For sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Installation and execution Procedures
 
@@ -13,10 +16,9 @@
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that
 the original game will stop working. Copying the folder will guarantee that the original game keeps on working.
 Also, in Windows, the save files are stored in the Aquaria folder. So copying the Aquaria folder for every Multiworld
-game you play will make sure that every game has their own save game.
+game you play will make sure that every game has its own save game.
 
-Unzip the Aquaria randomizer release and copy all unzipped files in the Aquaria game folder. The unzipped files
-are those:
+Unzip the Aquaria randomizer release and copy all unzipped files in the Aquaria game folder. The unzipped files are:
 - aquaria_randomizer.exe
 - OpenAL32.dll
 - override (directory)
@@ -25,11 +27,11 @@ are those:
 - wrap_oal.dll
 - cacert.pem
 
-If there is a conflict between file in the original game folder and the unzipped files, you should override
-the original files with the one of the unzipped randomizer.
+If there is a conflict between files in the original game folder and the unzipped files, you should overwrite
+the original files with the ones from the unzipped randomizer.
 
 Finally, to launch the randomizer, you must use the command line interface (you can open the command line interface
-by writing `cmd` in the address bar of the Windows file explorer). Here is the command line to use to start the
+by typing `cmd` in the address bar of the Windows File Explorer). Here is the command line used to start the
 randomizer:
 
 ```bash
@@ -44,8 +46,8 @@ aquaria_randomizer.exe  --name YourName --server theServer:thePort --password th
 
 ### Linux when using the AppImage
 
-If you use the AppImage, just copy it in the Aquaria game folder. You then have to make it executable. You
-can do that from command line by using 
+If you use the AppImage, just copy it into the Aquaria game folder. You then have to make it executable. You
+can do that from command line by using:
 
 ```bash
 chmod +x Aquaria_Randomizer-*.AppImage
@@ -65,7 +67,7 @@ or, if the room has a password:
 ./Aquaria_Randomizer-*.AppImage --name YourName --server theServer:thePort --password thePassword
 ```
 
-Note that you should not have multiple Aquaria_Randomizer AppImage file in the same folder. If this situation occurred,
+Note that you should not have multiple Aquaria_Randomizer AppImage file in the same folder. If this situation occurs,
 the preceding commands will launch the game multiple times.
 
 ### Linux when using the tar file
@@ -73,24 +75,23 @@ the preceding commands will launch the game multiple times.
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that
 the original game will stop working. Copying the folder will guarantee that the original game keeps on working.
 
-Untar the Aquaria randomizer release and copy all extracted files in the Aquaria game folder. The extracted
-files are those:
+Untar the Aquaria randomizer release and copy all extracted files in the Aquaria game folder. The extracted files are:
 - aquaria_randomizer
 - override (directory)
 - usersettings.xml
 - cacert.pem
 
-If there is a conflict between file in the original game folder and the extracted files, you should override
-the original files with the one of the extracted randomizer files.
+If there is a conflict between files in the original game folder and the extracted files, you should overwrite
+the original files with the ones from the extracted randomizer files.
 
-Then, you should use your system package manager to install liblua5, libogg, libvorbis, libopenal and libsdl2.
+Then, you should use your system package manager to install `liblua5`, `libogg`, `libvorbis`, `libopenal` and `libsdl2`.
 On Debian base system (like Ubuntu), you can use the following command:
 
 ```bash
 sudo apt install liblua5.1-0-dev libogg-dev libvorbis-dev libopenal-dev libsdl2-dev
 ```
 
-Also, if there is some `.so` files in the Aquaria original game folder (`libgcc_s.so.1`, `libopenal.so.1`,
+Also, if there are certain `.so` files in the original Aquaria game folder (`libgcc_s.so.1`, `libopenal.so.1`,
 `libSDL-1.2.so.0` and `libstdc++.so.6`), you should remove them from the Aquaria Randomizer game folder. Those are
 old libraries that will not work on the recent build of the randomizer.
 
@@ -106,7 +107,7 @@ or, if the room has a password:
 ./aquaria_randomizer --name YourName --server theServer:thePort --password thePassword
 ```
 
-Note: If you have a permission denied error when using the command line, you can use this command line to be
+Note: If you get a permission denied error when using the command line, you can use this command to be
 sure that your executable has executable permission:
 
 ```bash

@@ -41,7 +41,7 @@ class NatureFormAccessTest(AquariaTestBase):
             "The body main area, bulb on the main path blocking tube",
             "The body left area, first bulb in the top face room",
             "The body left area, second bulb in the top face room",
-            "The body left area, bulb bellow the water stream",
+            "The body left area, bulb below the water stream",
             "The body left area, bulb in the top path to the top face room",
             "The body left area, bulb in the bottom face room",
             "The body right area, bulb in the top face room",

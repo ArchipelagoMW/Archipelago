@@ -8,13 +8,15 @@ from typing import Optional
 from enum import Enum
 from BaseClasses import Item, ItemClassification
 
+
 class ItemType(Enum):
     """
-    Used to indicate to the multi-world if an item is usefull or not
+    Used to indicate to the multi-world if an item is useful or not
     """
     NORMAL = 0
     PROGRESSION = 1
     JUNK = 2
+
 
 class ItemGroup(Enum):
     """
@@ -28,6 +30,7 @@ class ItemGroup(Enum):
     SONG = 5
     TURTLE = 6
 
+
 class AquariaItem(Item):
     """
     A single item in the Aquaria game.
@@ -40,22 +43,23 @@ class AquariaItem(Item):
         """
         Initialisation of the Item
         :param name: The name of the item
-        :param classification: If the item is usefull or not
+        :param classification: If the item is useful or not
         :param code: The ID of the item (if None, it is an event)
         :param player: The ID of the player in the multiworld
         """
         super().__init__(name, classification, code, player)
 
+
 class ItemData:
     """
     Data of an item.
     """
-    id:int
-    count:int
-    type:ItemType
-    group:ItemGroup
+    id: int
+    count: int
+    type: ItemType
+    group: ItemGroup
 
-    def __init__(self, id:int, count:int, type:ItemType, group:ItemGroup):
+    def __init__(self, id: int, count: int, type: ItemType, group: ItemGroup):
         """
         Initialisation of the item data
         @param id: The item ID
@@ -67,6 +71,7 @@ class ItemData:
         self.count = count
         self.type = type
         self.group = group
+
 
 """Information data for every (not event) item."""
 item_table = {
@@ -207,4 +212,3 @@ item_table = {
     "Transturtle Simon says": ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
     "Transturtle Arnassi ruins": ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
 }
-

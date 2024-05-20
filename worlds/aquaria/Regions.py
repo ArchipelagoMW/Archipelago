@@ -5,7 +5,7 @@ Description: Used to manage Regions in the Aquaria game multiworld randomizer
 """
 
 from typing import Dict, Optional
-from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, LocationProgressType, CollectionState
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, CollectionState
 from .Items import AquariaItem
 from .Locations import AquariaLocations, AquariaLocation
 from .Options import AquariaOptions
@@ -222,8 +222,6 @@ class AquariaRegions:
         if locations is not None:
             region.add_locations(locations, AquariaLocation)
         return region
-
-
 
     def __create_home_water_area(self) -> None:
         """
@@ -941,7 +939,7 @@ class AquariaRegions:
         """
         Add secrets events to the `world`
         """
-        self.__add_event_location(self.first_secret, # Doit ajouter une région pour le "first secret"
+        self.__add_event_location(self.first_secret,  # Doit ajouter une région pour le "first secret"
                                   "First secret",
                                   "First secret obtained")
         self.__add_event_location(self.mithalas_city,
@@ -1095,12 +1093,10 @@ class AquariaRegions:
         add_rule(self.multiworld.get_entrance("Veil left of sun temple to Sun temple left area", self.player),
                  lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
 
-
-
     def __adjusting_manual_rules(self) -> None:
         add_rule(self.multiworld.get_location("Mithalas cathedral, Mithalan Dress", self.player),
                  lambda state: _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
+        add_rule(self.multiworld.get_location("Open water bottom left area, bulb inside the lowest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
         add_rule(self.multiworld.get_location("Kelp forest bottom left area, Walker baby", self.player),
                  lambda state: _has_spirit_form(state, self.player))
@@ -1122,7 +1118,7 @@ class AquariaRegions:
                                          self.player), lambda state: _has_energy_form(state, self.player))
         add_rule(self.multiworld.get_location("Home water, bulb in the bottom left room", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Home water, bulb in the path bellow Nautilus Prime", self.player),
+        add_rule(self.multiworld.get_location("Home water, bulb in the path below Nautilus Prime", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Naija's home, bulb after the energy door", self.player),
                  lambda state: _has_energy_form(state, self.player))
@@ -1132,9 +1128,6 @@ class AquariaRegions:
         add_rule(self.multiworld.get_location("Arnassi ruins, Arnassi Armor", self.player),
                  lambda state: _has_fish_form(state, self.player) and
                                _has_spirit_form(state, self.player))
-
-
-
 
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy temple boss area, Fallen god tooth",
@@ -1242,11 +1235,7 @@ class AquariaRegions:
             add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
                      lambda state: _has_bind_song(state, self.player) and _has_energy_form(state, self.player))
         if options.early_energy_form:
-            add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
-                     lambda state: _has_energy_form(state, self.player))
-        if options.early_energy_form:
-            add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
-                     lambda state: _has_energy_form(state, self.player))
+            self.multiworld.early_items[self.player]["Energy form"] = 1
 
         if options.no_progression_hard_or_hidden_locations:
             self.__no_progression_hard_or_hidden_location()

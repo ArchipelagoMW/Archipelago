@@ -21,7 +21,7 @@ class FishFormAccessTest(AquariaTestBase):
             "Mithalas city, urn inside a home fish pass",
             "Kelp Forest top right area, bulb in the top fish pass",
             "The veil bottom area, Verse egg",
-            "Open water bottom left area, bulb inside the downest fish pass",
+            "Open water bottom left area, bulb inside the lowest fish pass",
             "Kelp Forest top left area, bulb close to the Verse egg",
             "Kelp forest top left area, Verse egg",
             "Mermog cave, bulb in the left part of the cave",

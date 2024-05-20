@@ -5,7 +5,7 @@ Description: Main module for Aquaria game multiworld randomizer
 """
 
 from typing import List, Dict, ClassVar, Any
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification
 from .Items import item_table, AquariaItem, ItemType, ItemGroup
 from .Locations import location_table
@@ -114,7 +114,7 @@ class AquariaWorld(World):
 
     def create_item(self, name: str) -> AquariaItem:
         """
-        Create an AquariaItem using `name' as item name.
+        Create an AquariaItem using 'name' as item name.
         """
         result: AquariaItem
         try:

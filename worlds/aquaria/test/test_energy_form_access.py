@@ -39,7 +39,7 @@ class EnergyFormAccessTest(AquariaTestBase):
             "Mithalas cathedral, third urn in the path behind the flesh vein",
             "Mithalas cathedral, one of the urns in the top right room",
             "Mithalas cathedral, Mithalan Dress",
-            "Mithalas cathedral right area, urn bellow the left entrance",
+            "Mithalas cathedral right area, urn below the left entrance",
             "Cathedral boss area, beating Mithalan God",
             "Kelp Forest top left area, bulb close to the Verse egg",
             "Kelp forest top left area, Verse egg",
@@ -67,7 +67,6 @@ class EnergyFormAccessTest(AquariaTestBase):
             "First secret",
             "Sunken City cleared",
             "Objective complete",
-
         ]
         items = [["Energy form"]]
         self.assertAccessDependency(locations, items)
