@@ -399,8 +399,8 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
     if not multiworld.small_key_shuffle[player] and multiworld.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         forbid_item(multiworld.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
-    set_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    set_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     if multiworld.pot_shuffle[player]:
         # key can (and probably will) be moved behind bombable wall
         set_rule(multiworld.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
