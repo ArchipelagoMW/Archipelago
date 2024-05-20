@@ -43,7 +43,7 @@ allsanity = {
     "bonus_block_checks": True,
     "blocksanity": True,
     "level_shuffle": True,
-    "boss_shuffle": True,
+    "boss_shuffle": "full",
     "music_shuffle": "full",
     "sfx_shuffle": "full",
     "mario_palette": "random",
