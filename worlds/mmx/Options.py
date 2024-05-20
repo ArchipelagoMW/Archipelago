@@ -103,6 +103,25 @@ class JammedBuster(Toggle):
     """
     display_name = "Jammed Buster"
 
+class HadoukenInPool(DefaultOnToggle):
+    """
+    Adds Hadouken to the item pool.
+    Hadouken will deal the current HP as damage and half the current HP on strict weakness settings.
+    """
+    display_name = "Hadouken In Pool"
+
+class EarlyLegs(Toggle):
+    """
+    Places the Legs Upgrade item in sphere 1.
+    """
+    display_name = "Early Legs"
+
+class PickupSanity(Toggle):
+    """
+    Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
+    """
+    display_name = "Pickupsanity"
+
 class LogicBossWeakness(DefaultOnToggle):
     """
     Every main boss will logically expect you to have its weakness.
@@ -120,18 +139,6 @@ class LogicChargedShotgunIce(Toggle):
     Adds Charged Shotgun Ice as logic to some locations. Some of those may be hard to execute.
     """
     display_name = "Charged Shotgun Ice Logic"
-
-class EarlyLegs(Toggle):
-    """
-    Places the Legs Upgrade item in sphere 1.
-    """
-    display_name = "Early Legs"
-
-class PickupSanity(Toggle):
-    """
-    Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
-    """
-    display_name = "Pickupsanity"
 
 class FortressBundleUnlock(Toggle):
     """
@@ -222,11 +229,12 @@ class MMXOptions(PerGameCommonOptions):
     boss_weakness_strictness: BossWeaknessStrictness
     boss_randomize_hp: BossRandomizedHP
     jammed_buster: JammedBuster
+    hadouken_in_pool: HadoukenInPool
     pickupsanity: PickupSanity
+    early_legs: EarlyLegs
     logic_boss_weakness: LogicBossWeakness
     logic_leg_sigma: LogicLegSigma
     logic_charged_shotgun_ice: LogicChargedShotgunIce
-    early_legs: EarlyLegs
     sigma_all_levels: FortressBundleUnlock
     sigma_open: SigmaOpen
     sigma_medal_count: SigmaMedalCount

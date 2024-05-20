@@ -1,8 +1,8 @@
 import typing
 
 from BaseClasses import Item, ItemClassification
+from worlds.AutoWorld import World
 from .Names import ItemName
-
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
@@ -42,7 +42,10 @@ weapons = {
     ItemName.chameleon_sting:   ItemData(STARTING_ID + 0x0010, True),
     ItemName.storm_tornado:     ItemData(STARTING_ID + 0x0011, True),
     ItemName.fire_wave:         ItemData(STARTING_ID + 0x0012, True),
-    #ItemName.hadouken:          ItemData(STARTING_ID + 0x001A, True)
+}
+
+special_weapons = {
+    ItemName.hadouken:          ItemData(STARTING_ID + 0x001A, True)
 }
 
 tanks_table = {
@@ -93,7 +96,6 @@ item_groups = {
     }
 }
 
-# Complete item table.
 item_table = {
     **event_table,
     **access_codes_table,
@@ -101,6 +103,7 @@ item_table = {
     **upgrade_table,
     **tanks_table,
     **junk_table,
+    **special_weapons,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

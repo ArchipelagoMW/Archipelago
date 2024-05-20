@@ -139,6 +139,9 @@ class MMXWorld(World):
         itempool += [self.create_item(ItemName.fire_wave)]
         itempool += [self.create_item(ItemName.boomerang_cutter)]
 
+        if self.options.hadouken_in_pool:
+            itempool += [self.create_item(ItemName.hadouken, ItemClassification.useful)]
+
         # Add upgrades into the pool
         if self.options.sigma_open == "armor_upgrades" or (self.options.sigma_open == "all" and self.options.sigma_upgrade_count.value > 0):
             itempool += [self.create_item(ItemName.body)]
