@@ -109,12 +109,20 @@ def set_rules(world: MMXWorld):
         add_rule(entrance, lambda state: state.has(ItemName.legs, player))
 
     # Sigma Fortress level rules
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_1_boss} -> {RegionName.sigma_fortress_2}", player),
-             lambda state: state.has(EventName.sigma_fortress_1_clear, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_2_boss} -> {RegionName.sigma_fortress_3}", player),
-             lambda state: state.has(EventName.sigma_fortress_2_clear, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_boss} -> {RegionName.sigma_fortress_4}", player),
-             lambda state: state.has(EventName.sigma_fortress_3_clear, player))
+    if world.options.sigma_all_levels:
+        set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_boss} -> {RegionName.sigma_fortress_4}", player),
+                 lambda state: (
+                     state.has(EventName.sigma_fortress_1_clear, player) and 
+                     state.has(EventName.sigma_fortress_2_clear, player) and 
+                     state.has(EventName.sigma_fortress_3_clear, player)
+                    ))
+    else:
+        set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_1_boss} -> {RegionName.sigma_fortress_2}", player),
+                lambda state: state.has(EventName.sigma_fortress_1_clear, player))
+        set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_2_boss} -> {RegionName.sigma_fortress_3}", player),
+                lambda state: state.has(EventName.sigma_fortress_2_clear, player))
+        set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_boss} -> {RegionName.sigma_fortress_4}", player),
+                lambda state: state.has(EventName.sigma_fortress_3_clear, player))
     
     # Sigma rules
     add_rule(multiworld.get_location(LocationName.sigma_fortress_4_sigma, player),

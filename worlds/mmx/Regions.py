@@ -376,14 +376,12 @@ def connect_regions(world: World):
     connect(world, RegionName.sigma_fortress_1_vertical, RegionName.sigma_fortress_1_rematch_1)
     connect(world, RegionName.sigma_fortress_1_rematch_1, RegionName.sigma_fortress_1_boss)
 
-    connect(world, RegionName.sigma_fortress_1_boss, RegionName.sigma_fortress_2)
     connect(world, RegionName.sigma_fortress_2, RegionName.sigma_fortress_2_start)
     connect(world, RegionName.sigma_fortress_2_start, RegionName.sigma_fortress_2_rematch_1)
     connect(world, RegionName.sigma_fortress_2_rematch_1, RegionName.sigma_fortress_2_ride)
     connect(world, RegionName.sigma_fortress_2_ride, RegionName.sigma_fortress_2_rematch_2)
     connect(world, RegionName.sigma_fortress_2_rematch_2, RegionName.sigma_fortress_2_boss)
 
-    connect(world, RegionName.sigma_fortress_2_boss, RegionName.sigma_fortress_3)
     connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_rematch_1)
     connect(world, RegionName.sigma_fortress_3_rematch_1, RegionName.sigma_fortress_3_rematch_2)
     connect(world, RegionName.sigma_fortress_3_rematch_2, RegionName.sigma_fortress_3_rematch_3)
@@ -394,6 +392,14 @@ def connect_regions(world: World):
     connect(world, RegionName.sigma_fortress_3_boss, RegionName.sigma_fortress_4)
     connect(world, RegionName.sigma_fortress_4, RegionName.sigma_fortress_4_dog)
     connect(world, RegionName.sigma_fortress_4_dog, RegionName.sigma_fortress_4_sigma)
+    
+    if world.options.sigma_all_levels:
+        connect(world, RegionName.sigma_fortress, RegionName.sigma_fortress_2)
+        connect(world, RegionName.sigma_fortress, RegionName.sigma_fortress_3)
+    else:
+        connect(world, RegionName.sigma_fortress_1_boss, RegionName.sigma_fortress_2)
+        connect(world, RegionName.sigma_fortress_2_boss, RegionName.sigma_fortress_3)
+
     
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
