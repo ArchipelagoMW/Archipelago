@@ -845,9 +845,9 @@ class WitnessPlayerLogic:
         }
 
         # In panel hunt, all panels are game, so all panels need to be reachable (unless disabled)
-        if world.options.victory_condition == "panel_hunt":
+        if goal == "panel_hunt":
             for entity_hex in is_item_required_dict:
-                if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "panel":
+                if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Panel":
                     is_item_required_dict[entity_hex] = True
 
         # Now, return the keys of the dict entries where the result is False to get unrequired major items
