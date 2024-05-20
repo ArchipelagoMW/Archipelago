@@ -9,7 +9,11 @@ if TYPE_CHECKING:
     from . import LingoWorld
 
 
-def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, world: "LingoWorld"):
+def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, victory_wall: bool,
+                           world: "LingoWorld"):
+    if victory_wall and state.has("Prevent Victory", world.player):
+        return False
+
     if door is None:
         return True
 
@@ -64,6 +68,9 @@ def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequir
         for color in access.colors:
             if not state.has(color.capitalize(), world.player):
                 return False
+
+    if access.postgame and state.has("Prevent Victory", world.player):
+        return False
 
     return True
 

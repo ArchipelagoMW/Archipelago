@@ -3,7 +3,7 @@ Archipelago init file for Lingo
 """
 from logging import warning
 
-from BaseClasses import Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from .datatypes import Room, RoomEntrance
@@ -66,6 +66,30 @@ class LingoWorld(World):
 
     def create_regions(self):
         create_regions(self)
+
+        if not self.options.shuffle_postgame:
+            state = CollectionState(self.multiworld)
+            state.collect(LingoItem("Prevent Victory", ItemClassification.progression, None, self.player), True)
+
+            for item in self.player_logic.real_items:
+                state.collect(self.create_item(item), True)
+
+            state.sweep_for_events()
+
+            unreachable_locations = [location for location in self.multiworld.get_locations(self.player)
+                                     if not state.can_reach_location(location.name, self.player)]
+
+            for location in unreachable_locations:
+                if location.name in self.player_logic.event_loc_to_item.keys():
+                    continue
+
+                self.player_logic.real_locations.remove(location.name)
+                location.parent_region.locations.remove(location)
+
+            if len(self.player_logic.real_items) > len(self.player_logic.real_locations):
+                raise OptionError("There are not enough locations in the world to fit the number of required items "
+                                  "without shuffling the postgame. Either enable postgame shuffling, or choose "
+                                  "different options.")
 
     def create_items(self):
         pool = [self.create_item(name) for name in self.player_logic.real_items]
