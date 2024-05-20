@@ -4,6 +4,7 @@ class Quest:
     getting_started = "Getting Started"
     to_the_beach = "To The Beach"
     raising_animals = "Raising Animals"
+    feeding_animals = "Feeding Animals"
     advancement = "Advancement"
     archaeology = "Archaeology"
     rat_problem = "Rat Problem"

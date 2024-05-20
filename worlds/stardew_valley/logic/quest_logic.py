@@ -53,6 +53,7 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.getting_started: self.logic.has(Vegetable.parsnip),
             Quest.to_the_beach: self.logic.region.can_reach(Region.beach),
             Quest.raising_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.coop),
+            Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
             Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.skill.can_fish(),
             Quest.rat_problem: self.logic.region.can_reach_all((Region.town, Region.community_center)),

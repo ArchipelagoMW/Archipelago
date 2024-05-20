@@ -10,11 +10,13 @@ from .content.game_content import StardewContent
 from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, FestivalLocations, \
-    SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, Booksanity
+from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
+    FestivalLocations, \
+    SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, Booksanity, \
+    FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
-from .strings.quest_names import ModQuest
+from .strings.quest_names import ModQuest, Quest
 from .strings.region_names import Region, LogicRegion
 from .strings.villager_names import NPC
 
@@ -503,6 +505,14 @@ def create_locations(location_collector: StardewLocationCollector,
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
+def filter_farm_type(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    # On Meadowlands, "Feeding Animals" replaces "Raising Animals"
+    if options.farm_type == FarmType.option_meadowlands:
+        return (location for location in locations if location.name != Quest.raising_animals)
+    else:
+        return (location for location in locations if location.name != Quest.feeding_animals)
+
+
 def filter_ginger_island(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
     return (location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags)
@@ -523,7 +533,8 @@ def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[L
 
 
 def filter_disabled_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    locations_island_filter = filter_ginger_island(options, locations)
+    locations_farm_filter = filter_farm_type(options, locations)
+    locations_island_filter = filter_ginger_island(options, locations_farm_filter)
     locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
     locations_masteries_filter = filter_masteries_locations(options, locations_qi_filter)
     locations_mod_filter = filter_modded_locations(options, locations_masteries_filter)
