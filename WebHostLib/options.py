@@ -79,10 +79,6 @@ def test_ordered(obj):
 @cache.cached()
 def option_presets(game: str) -> Response:
     world = AutoWorldRegister.world_types[game]
-    presets = {}
-
-    if world.web.options_presets:
-        presets = presets | world.web.options_presets
 
     class SetEncoder(json.JSONEncoder):
         def default(self, obj):
@@ -91,7 +87,7 @@ def option_presets(game: str) -> Response:
                 return list(obj)
             return json.JSONEncoder.default(self, obj)
 
-    json_data = json.dumps(presets, cls=SetEncoder)
+    json_data = json.dumps(world.web.options_presets, cls=SetEncoder)
     response = Response(json_data)
     response.headers["Content-Type"] = "application/json"
     return response
