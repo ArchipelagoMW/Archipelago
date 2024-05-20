@@ -32,7 +32,7 @@ class AbilityShuffling(Toggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
-    *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
+    * Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
     internal_name = "ability_shuffling"
     display_name = "Shuffle Abilities"
@@ -148,8 +148,10 @@ class FixedShop(Toggle):
 
 
 class LaurelsLocation(Choice):
-    """Force the Hero's Laurels to be placed at a location in your world.
-    For if you want to avoid or specify early or late Laurels."""
+    """
+    Force the Hero's Laurels to be placed at a location in your world.
+    For if you want to avoid or specify early or late Laurels.
+    """
     internal_name = "laurels_location"
     display_name = "Laurels Location"
     option_anywhere = 0
