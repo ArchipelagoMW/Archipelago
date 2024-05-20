@@ -27,6 +27,7 @@ class ArtisanGood:
     raisins = "Raisins"
     stardrop_tea = "Stardrop Tea"
     smoked_fish = "Smoked Fish"
+    targeted_bait = "Targeted Bait"
 
     @classmethod
     def specific_wine(cls, fruit: str) -> str:

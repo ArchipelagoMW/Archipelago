@@ -46,6 +46,9 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
     def has_smoked_fish(self) -> StardewRule:
         return self.logic.artisan.can_smoke(Fish.any)
 
+    def has_targeted_bait(self) -> StardewRule:
+        return self.logic.artisan.can_bait(Fish.any)
+
     def has_dried_fruits(self) -> StardewRule:
         return self.logic.artisan.can_dehydrate(Fruit.any)
 
@@ -83,6 +86,10 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
 
     def can_smoke(self, item: str) -> StardewRule:
         machine_rule = self.logic.has(Machine.fish_smoker)
+        return machine_rule & self.logic.has(item)
+
+    def can_bait(self, item: str) -> StardewRule:
+        machine_rule = self.logic.has(Machine.bait_maker)
         return machine_rule & self.logic.has(item)
 
     def can_dehydrate(self, item: str) -> StardewRule:
