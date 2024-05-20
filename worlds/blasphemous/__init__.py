@@ -40,7 +40,7 @@ class BlasphemousWorld(World):
     options_dataclass = BlasphemousOptions
     options: BlasphemousOptions
 
-    required_client_version = (0, 4, 2)
+    required_client_version = (0, 4, 7)
 
 
     def __init__(self, multiworld, player):
