@@ -1,4 +1,4 @@
-from typing import List, Dict, TypedDict
+from typing import Dict
 
 
 location_names: Dict[str, str] = {

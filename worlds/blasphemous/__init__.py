@@ -1,11 +1,11 @@
-from typing import Dict, List, Set, Any, Callable
+from typing import Dict, List, Set, Any
 from collections import Counter
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, CollectionState
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table, tears_set, reliquary_set
 from .Locations import location_names
 from .Rules import BlasRules
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import set_rule
 from .Options import BlasphemousOptions
 from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
 from .region_data import regions, locations, transitions
