@@ -181,7 +181,8 @@ class TestAnimalShuffle(KDL3TestBase):
             placed_names = set([item.name for item in placed])
             self.assertEqual(len(placed), len(placed_names),
                              f"Duplicate animal placed in problematic locations:"
-                             f" {[spawn.location for spawn in placed]}")
+                             f" {[spawn.location for spawn in placed]}, "
+                             f"Seed: {self.multiworld.seed}")
 
 
 class TestAllShuffle(KDL3TestBase):
@@ -253,7 +254,8 @@ class TestAllShuffle(KDL3TestBase):
             placed_names = set([item.name for item in placed])
             self.assertEqual(len(placed), len(placed_names),
                              f"Duplicate animal placed in problematic locations:"
-                             f" {[spawn.location for spawn in placed]}")
+                             f" {[spawn.location for spawn in placed]}, "
+                             f"Seed: {self.multiworld.seed}")
 
     def test_cutter_and_burning_reachable(self) -> None:
         rooms = self.multiworld.worlds[1].rooms
