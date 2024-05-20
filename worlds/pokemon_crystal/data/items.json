@@ -158,7 +158,7 @@
 	"GS_BALL": {"name": "Gs Ball", "classification": "FILLER", "tags": ["INVALID"]},
 	"BLUE_CARD": {
 		"name": "Blue Card",
-		"classification": "PROGRESSION",
+		"classification": "USEFUL",
 		"tags": ["KeyItem", "Unique"]
 	},
 	"MIRACLE_SEED": {"name": "Miracle Seed", "classification": "FILLER", "tags": []},

@@ -126,29 +126,6 @@ class PokemonCrystalClient(BizHawkClient):
             if read_result is None:  # Not in overworld
                 return
 
-            if not len(self.phone_trap_locations):
-                phone_result = await bizhawk.guarded_read(
-                    ctx.bizhawk_ctx,
-                    [(data.rom_addresses["AP_Setting_Phone_Trap_Locations"], 0x40, "ROM")],  # Flags
-                    [overworld_guard]
-                )
-                if phone_result is not None:
-                    read_locations = []
-                    for i in range(0, 16):
-                        loc = int.from_bytes(phone_result[0][i * 4:(i + 1) * 4], "little")
-                        read_locations.append(loc)
-                    self.phone_trap_locations = read_locations
-            else:
-                phone_trap_index = read_result[0][4]
-                hint_locations = [location for location in self.phone_trap_locations[:phone_trap_index] if
-                                  location != 0]
-                if len(hint_locations):
-                    await ctx.send_msgs([{
-                        "cmd": "LocationScouts",
-                        "locations": hint_locations,
-                        "create_as_hint": 2
-                    }])
-
             num_received_items = int.from_bytes([read_result[0][1], read_result[0][2]], "little")
             received_item_is_empty = read_result[0][0] == 0
 
@@ -208,6 +185,29 @@ class PokemonCrystalClient(BizHawkClient):
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL
                 }])
+
+            if not len(self.phone_trap_locations):
+                phone_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx,
+                    [(data.rom_addresses["AP_Setting_Phone_Trap_Locations"], 0x40, "ROM")],  # Flags
+                    [overworld_guard]
+                )
+                if phone_result is not None:
+                    read_locations = []
+                    for i in range(0, 16):
+                        loc = int.from_bytes(phone_result[0][i * 4:(i + 1) * 4], "little")
+                        read_locations.append(loc)
+                    self.phone_trap_locations = read_locations
+            else:
+                phone_trap_index = read_result[0][4]
+                hint_locations = [location for location in self.phone_trap_locations[:phone_trap_index] if
+                                  location != 0 and location not in local_checked_locations]
+                if len(hint_locations):
+                    await ctx.send_msgs([{
+                        "cmd": "LocationScouts",
+                        "locations": hint_locations,
+                        "create_as_hint": 2
+                    }])
 
             if local_set_events != self.local_set_events and ctx.slot is not None:
                 event_bitfield = 0

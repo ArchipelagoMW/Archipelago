@@ -243,11 +243,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_RUINS_OF_ALPH_AERODACTYL_CHAMBER -> REGION_RUINS_OF_ALPH_AERODACTYL_ITEM_ROOM"),
              lambda state: can_surf(state) and can_flash(state))
 
-    set_rule(get_entrance("REGION_RUINS_OF_ALPH_HO_OH_CHAMBER -> REGION_RUINS_OF_ALPH_HO_OH_ITEM_ROOM"),
-             can_surf)
+    # set_rule(get_entrance("REGION_RUINS_OF_ALPH_HO_OH_CHAMBER -> REGION_RUINS_OF_ALPH_HO_OH_ITEM_ROOM"),
+    #          can_surf)
 
     set_rule(get_entrance("REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER -> REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM"),
              lambda state: can_surf(state) and can_strength(state))
+
+    set_rule(get_entrance("REGION_UNION_CAVE_B1F -> REGION_RUINS_OF_ALPH_OUTSIDE"), can_surf)
 
     # Route 32
     set_rule(get_location("Route 32 - Miracle Seed from Man in North"), lambda state: has_badge(state, "zephyr"))
@@ -646,10 +648,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         # Route 15
         set_rule(get_location("Route 15 - Item"), can_cut)
 
-        set_rule(get_entrance("REGION_ROUTE_19_FUCHSIA_GATE -> REGION_ROUTE_19"), can_surf)
-        # Route 20
-        set_rule(get_entrance("REGION_ROUTE_19 -> REGION_ROUTE_20"),
-                 lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player))
+        set_rule(get_entrance("REGION_ROUTE_19_FUCHSIA_GATE -> REGION_ROUTE_19"),
+                 lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player) and can_surf(state))
 
         set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_20"), can_surf)
 

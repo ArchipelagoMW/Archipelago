@@ -182,6 +182,9 @@ class PokemonCrystalWorld(World):
                                  "STRUGGLE", "BEAT_UP"]]
             if attacking is not None:
                 move_pool = [move_name for move_name in move_pool if crystal_data.moves[move_name].power > 0]
+            if self.options.enable_mischief.value:
+                lmao = ["GUILLOTINE", "HORN_DRILL", "FISSURE"]
+                move_pool += [lm for lm in lmao if lm in move_pool] * 3
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):
@@ -219,7 +222,8 @@ class PokemonCrystalWorld(World):
                 new_types = get_random_types(self.random)
                 pkmn_list = [pkmn_name]
                 if self.options.randomize_types.value == 1:
-                    if not pkmn_data.is_base:
+                    if not pkmn_data.is_base and pkmn_name not in ["FLAREON", "JOLTEON", "VAPOREON", "ESPEON",
+                                                                   "UMBREON"]:
                         continue
                     for evo in pkmn_data.evolutions:
                         pkmn_list.append(evo[-1])
