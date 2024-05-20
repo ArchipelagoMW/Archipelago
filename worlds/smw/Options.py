@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -357,6 +357,52 @@ class StartingLifeCount(Range):
     range_start = 1
     range_end = 99
     default = 5
+
+
+smw_option_groups = [
+    OptionGroup("Goal Options", [
+        Goal,
+        BossesRequired,
+        NumberOfYoshiEggs,
+        PercentageOfYoshiEggs,
+    ]),
+    OptionGroup("Sanity Options", [
+        DragonCoinChecks,
+        MoonChecks,
+        Hidden1UpChecks,
+        BonusBlockChecks,
+        Blocksanity,
+    ]),
+    OptionGroup("Level Shuffling", [
+        LevelShuffle,
+        ExcludeSpecialZone,
+        BowserCastleDoors,
+        BowserCastleRooms,
+        BossShuffle,
+        SwapDonutGhostHouseExits,
+    ]),
+    OptionGroup("Junk and Traps", [
+        JunkFillPercentage,
+        TrapFillPercentage,
+        IceTrapWeight,
+        StunTrapWeight,
+        LiteratureTrapWeight,
+        TimerTrapWeight,
+        ReverseTrapWeight,
+        ThwimpTrapWeight,
+    ]),
+    OptionGroup("Aesthetics", [
+        DisplayReceivedItemPopups,
+        Autosave,
+        OverworldSpeed,
+        MusicShuffle,
+        SFXShuffle,
+        MarioPalette,
+        LevelPaletteShuffle,
+        OverworldPaletteShuffle,
+        StartingLifeCount,
+    ]),
+]
 
 
 @dataclass
