@@ -29,7 +29,7 @@ class TestPostgameComplexDoorsTheEnd(LingoTestBase):
 
         self.assertTrue("The End (Solved)" in location_names)
         self.assertFalse("Orange Tower Seventh Floor - THE MASTER" in location_names)
-        self.assertFalse("The Red - Achievement" in location_names)
+        self.assertTrue("The Red - Achievement" in location_names)
 
 
 class TestPostgameLateColorHunt(LingoTestBase):
