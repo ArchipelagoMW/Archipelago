@@ -103,8 +103,10 @@ class ExtraHexagonPercentage(Range):
 class EntranceRando(TextChoice):
     """
     Randomize the connections between scenes.
-    If you set this to a value besides true or false, that value will be used as a custom seed.
     A small, very lost fox on a big adventure.
+    
+    If you set this option's value to a string, it will be used as a custom seed.
+    Every player who uses the same custom seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.
     """
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
@@ -116,7 +118,8 @@ class EntranceRando(TextChoice):
 
 
 class FixedShop(Toggle):
-    """Forces the Windmill entrance to lead to a shop, and places only one other shop in the pool.
+    """Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
+    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
     Has no effect if Entrance Rando is not enabled."""
     internal_name = "fixed_shop"
     display_name = "Fewer Shops in Entrance Rando"
@@ -124,8 +127,7 @@ class FixedShop(Toggle):
 
 class LaurelsLocation(Choice):
     """Force the Hero's Laurels to be placed at a location in your world.
-    For if you want to avoid or specify early or late Laurels.
-    If you use the 10 Fairies option in Entrance Rando, Secret Gathering Place will be at its vanilla entrance."""
+    For if you want to avoid or specify early or late Laurels."""
     internal_name = "laurels_location"
     display_name = "Laurels Location"
     option_anywhere = 0
@@ -145,6 +147,7 @@ class ShuffleLadders(Toggle):
 
 @dataclass
 class TunicOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
@@ -160,4 +163,3 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
-    start_inventory_from_pool: StartInventoryPool
