@@ -45,11 +45,13 @@ MMX_RECV_INDEX          = WRAM_START + 0x1EE00
 MMX_ENERGY_LINK_PACKET  = WRAM_START + 0x1EE09
 MMX_VALIDATION_CHECK    = WRAM_START + 0x1EE13
 
-MMX_RECEIVING_ITEM      = WRAM_START + 0x1EE15
-MMX_ENABLE_HEART_TANK   = WRAM_START + 0x1EE0B
-MMX_ENABLE_HP_REFILL    = WRAM_START + 0x1EE0F
-MMX_HP_REFILL_AMOUNT    = WRAM_START + 0x1EE10
-MMX_ENABLE_GIVE_1UP     = WRAM_START + 0x1EE12
+MMX_RECEIVING_ITEM          = WRAM_START + 0x1EE15
+MMX_ENABLE_HEART_TANK       = WRAM_START + 0x1EE0B
+MMX_ENABLE_HP_REFILL        = WRAM_START + 0x1EE0F
+MMX_HP_REFILL_AMOUNT        = WRAM_START + 0x1EE10
+MMX_ENABLE_GIVE_1UP         = WRAM_START + 0x1EE12
+MMX_ENABLE_WEAPON_REFILL    = WRAM_START + 0x1EE1A
+MMX_WEAPON_REFILL_AMOUNT    = WRAM_START + 0x1EE1B
 
 MMX_PAUSE_STATE        = WRAM_START + 0x01F24
 MMX_CAN_MOVE           = WRAM_START + 0x01F13
@@ -59,20 +61,14 @@ MMX_ENERGY_LINK_ENABLED    = ROM_START + 0x17FFE8
 MMX_DEATH_LINK_ACTIVE      = ROM_START + 0x17FFE9
 MMX_JAMMED_BUSTER_ACTIVE   = ROM_START + 0x17FFEA
 
-HP_EXCHANGE_RATE = 500000000
+EXCHANGE_RATE = 500000000
 
 STARTING_ID = 0xBE0800
 
 MMX_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
 
-PICKUP_ITEMS = ["small hp refill", "large hp refill", "1up", "hp refill"]
-HP_REFILLS = ["small hp refill", "large hp refill", "hp refill"]
-BOSS_MEDAL = [0xFF, 0xFF, 0x02, 0xFF, 0x0C, 0x0A, 0x00, 0xFF,
-              0x04, 0x06, 0x0E, 0xFF, 0x08, 0xFF, 0xFF, 0xFF,
-              0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-              0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-             ]
+PICKUP_ITEMS = ["1up", "hp refill", "weapon refill"]
 
 class MMXSNIClient(SNIClient):
     game = "Mega Man X"
@@ -85,6 +81,8 @@ class MMXSNIClient(SNIClient):
         self.auto_heal = False
         self.energy_link_enabled = False
         self.heal_request_command = None
+        self.weapon_refill_request_command = None
+        self.trade_request = None
         self.item_queue = []
 
 
@@ -129,6 +127,8 @@ class MMXSNIClient(SNIClient):
                 ctx.command_processor.commands.pop("pool")
             if "autoheal" in ctx.command_processor.commands:
                 ctx.command_processor.commands.pop("autoheal")
+            if "heal" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("heal")
             if "refill" in ctx.command_processor.commands:
                 ctx.command_processor.commands.pop("refill")
             return False
@@ -144,7 +144,11 @@ class MMXSNIClient(SNIClient):
             if "autoheal" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["autoheal"] = cmd_autoheal
             if "refill" not in ctx.command_processor.commands:
+                ctx.command_processor.commands["heal"] = cmd_heal
+            if "refill" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["refill"] = cmd_refill
+        if "trade" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["trade"] = cmd_trade
 
         death_link = await snes_read(ctx, MMX_DEATH_LINK_ACTIVE, 1)
         if death_link[0]:
@@ -153,8 +157,51 @@ class MMXSNIClient(SNIClient):
         ctx.rom = rom_name
 
         return True
-    
-            
+     
+    async def handle_hp_trade(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+
+        validation = await snes_read(ctx, MMX_VALIDATION_CHECK, 0x2)
+        if validation is None:
+            return
+        validation = validation[0] | (validation[1] << 8)
+        if validation != 0xDEAD:
+            return
+
+        # Can only process trades during the pause state
+        receiving_item = await snes_read(ctx, MMX_RECEIVING_ITEM, 0x1)
+        menu_state = await snes_read(ctx, MMX_MENU_STATE, 0x1)
+        gameplay_state = await snes_read(ctx, MMX_GAMEPLAY_STATE, 0x1)
+        if menu_state[0] != 0x04 or \
+            gameplay_state[0] != 0x04 or \
+            receiving_item[0] != 0x00:
+            return
+        
+        pause_state = await snes_read(ctx, MMX_PAUSE_STATE, 0x1)
+        if pause_state[0] == 0x00:
+            return
+
+        for item in self.item_queue:
+            if item[0] == "weapon refill":
+                self.trade_request = None
+                logger.info(f"You already have a Weapon Energy request pending to be received.")
+                return
+
+        # Can trade HP -> WPN if HP is above 1
+        current_hp = await snes_read(ctx, MMX_CURRENT_HP, 0x1)
+        if current_hp[0] > 0x01:
+            max_trade = current_hp[0] - 1
+            set_trade = self.trade_request if self.trade_request <= max_trade else max_trade
+            self.add_item_to_queue("weapon refill", None, set_trade)
+            new_hp = current_hp[0] - set_trade
+            snes_buffered_write(ctx, MMX_CURRENT_HP, bytearray([new_hp]))
+            await snes_flush_writes(ctx)
+            self.trade_request = None
+            logger.info(f"Traded {set_trade} HP for {set_trade} Weapon Energy.")
+        else:
+            logger.info("Couldn't process trade. HP is too low.")
+
+
     async def handle_energy_link(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
@@ -163,15 +210,15 @@ class MMXSNIClient(SNIClient):
         if energy_packet is None:
             return
         energy_packet_raw = energy_packet[0] | (energy_packet[1] << 8)
-        energy_packet = (energy_packet_raw * HP_EXCHANGE_RATE) >> 4
+        energy_packet = (energy_packet_raw * EXCHANGE_RATE) >> 4
         if energy_packet != 0:
             await ctx.send_msgs([{
                 "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
                     [{"operation": "add", "value": energy_packet},
                     {"operation": "max", "value": 0}],
             }])
-            pool = ((ctx.stored_data[f'EnergyLink{ctx.team}'] or 0) / HP_EXCHANGE_RATE) + (energy_packet_raw / 16)
-            logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the healing pool. Healing available: {pool:.2f}")
+            pool = ((ctx.stored_data[f'EnergyLink{ctx.team}'] or 0) / EXCHANGE_RATE) + (energy_packet_raw / 16)
+            logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the energy pool. Energy available: {pool:.2f}")
             snes_buffered_write(ctx, MMX_ENERGY_LINK_PACKET, bytearray([0x00, 0x00]))
             await snes_flush_writes(ctx)
 
@@ -198,43 +245,71 @@ class MMXSNIClient(SNIClient):
                 can_move != b'\x00\x00\x00\x00\x00\x00\x00' or \
                 receiving_item[0] != 0x00:
                 return
-                        
+            
+            skip_hp = False
+            skip_weapon = False
             for item in self.item_queue:
                 if item[0] == "hp refill":
+                    skip_hp = True
                     self.heal_request_command = None
-                    return
+                elif item[0] == "weapon refill":
+                    skip_weapon = True
+                    self.weapon_refill_request_command = None
             
             pool = ctx.stored_data[f'EnergyLink{ctx.team}'] or 0
-            # Perform auto heals
-            if self.auto_heal:
-                if self.heal_request_command is None:
-                    if pool < HP_EXCHANGE_RATE:
-                        return
-                    current_hp = await snes_read(ctx, MMX_CURRENT_HP, 0x1)
-                    max_hp = await snes_read(ctx, MMX_MAX_HP, 0x1)
-                    if max_hp[0] > current_hp[0]:
-                        self.heal_request_command = max_hp[0] - current_hp[0]
+            if not skip_hp:
+                # Perform auto heals
+                if self.auto_heal:
+                    if self.heal_request_command is None:
+                        if pool < EXCHANGE_RATE:
+                            return
+                        current_hp = await snes_read(ctx, MMX_CURRENT_HP, 0x1)
+                        max_hp = await snes_read(ctx, MMX_MAX_HP, 0x1)
+                        if max_hp[0] > current_hp[0]:
+                            self.heal_request_command = max_hp[0] - current_hp[0]
 
-            # Handle manual heal requests
-            if self.heal_request_command:
-                heal_needed = self.heal_request_command
-                heal_needed_rate = heal_needed * HP_EXCHANGE_RATE
-                if pool < HP_EXCHANGE_RATE:
-                    logger.info(f"There's not enough healing for your request ({heal_needed}). Healing available: {pool / HP_EXCHANGE_RATE:.2f}")
+                # Handle heal requests
+                if self.heal_request_command:
+                    heal_needed = self.heal_request_command
+                    heal_needed_rate = heal_needed * EXCHANGE_RATE
+                    if pool < EXCHANGE_RATE:
+                        logger.info(f"There's not enough Energy for your request ({heal_needed}). Energy available: {pool / EXCHANGE_RATE:.2f}")
+                        self.heal_request_command = None
+                        return
+                    elif pool < heal_needed_rate:
+                        heal_needed = int(pool / EXCHANGE_RATE)
+                        heal_needed_rate = heal_needed * EXCHANGE_RATE
+                    await ctx.send_msgs([{
+                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                            [{"operation": "add", "value": -heal_needed_rate},
+                            {"operation": "max", "value": 0}],
+                    }])
+                    self.add_item_to_queue("hp refill", None, self.heal_request_command)
+                    pool = (pool / EXCHANGE_RATE) - heal_needed
+                    logger.info(f"Healed by {heal_needed}. Energy available: {pool:.2f}")
                     self.heal_request_command = None
-                    return
-                elif pool < heal_needed_rate:
-                    heal_needed = int(pool / HP_EXCHANGE_RATE)
-                    heal_needed_rate = heal_needed * HP_EXCHANGE_RATE
-                await ctx.send_msgs([{
-                    "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
-                        [{"operation": "add", "value": -heal_needed_rate},
-                        {"operation": "max", "value": 0}],
-                }])
-                self.add_item_to_queue("hp refill", None, self.heal_request_command)
-                pool = (pool / HP_EXCHANGE_RATE) - heal_needed
-                logger.info(f"Healed by {heal_needed}. Healing available: {pool:.2f}")
-                self.heal_request_command = None
+
+            if not skip_weapon:
+                # Handle weapon refill requests
+                if self.weapon_refill_request_command:
+                    heal_needed = self.weapon_refill_request_command
+                    heal_needed_rate = heal_needed * EXCHANGE_RATE
+                    if pool < EXCHANGE_RATE:
+                        logger.info(f"There's not enough Energy for your request ({heal_needed}). Energy available: {pool / EXCHANGE_RATE:.2f}")
+                        self.weapon_refill_request_command = None
+                        return
+                    elif pool < heal_needed_rate:
+                        heal_needed = int(pool / EXCHANGE_RATE)
+                        heal_needed_rate = heal_needed * EXCHANGE_RATE
+                    await ctx.send_msgs([{
+                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                            [{"operation": "add", "value": -heal_needed_rate},
+                            {"operation": "max", "value": 0}],
+                    }])
+                    self.add_item_to_queue("weapon refill", None, self.weapon_refill_request_command)
+                    pool = (pool / EXCHANGE_RATE) - heal_needed
+                    logger.info(f"Refilled current weapon by {heal_needed}. Energy available: {pool:.2f}")
+                    self.weapon_refill_request_command = None
 
 
     def add_item_to_queue(self, item_type, item_id, item_additional = None):
@@ -295,6 +370,11 @@ class MMXSNIClient(SNIClient):
                 else:
                     # TODO: Sub Tank logic
                     self.item_queue.append(backup_item)
+
+            elif next_item[0] == "weapon refill":
+                snes_buffered_write(ctx, MMX_ENABLE_WEAPON_REFILL, bytearray([0x02]))
+                snes_buffered_write(ctx, MMX_WEAPON_REFILL_AMOUNT, bytearray([next_item[2]]))
+                snes_buffered_write(ctx, MMX_RECEIVING_ITEM, bytearray([0x01]))
 
             elif next_item[0] == "1up":
                 life_count = await snes_read(ctx, MMX_LIFE_COUNT, 0x1)
@@ -421,6 +501,9 @@ class MMXSNIClient(SNIClient):
             currently_dead = gameplay_state[0] == 0x06
             await ctx.handle_deathlink_state(currently_dead)
             
+        if self.trade_request is not None:
+            await self.handle_hp_trade(ctx)
+
         await self.handle_item_queue(ctx)
 
         # This is going to be rewritten whenever SNIClient supports on_package
@@ -645,62 +728,69 @@ class MMXSNIClient(SNIClient):
 
 def cmd_pool(self):
     """
-    Check how much healing is in the pool.
-    """
-    if self.ctx.game != "Mega Man X":
-        logger.warning("This command can only be used while playing Mega Man X3")
-    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
-        logger.info(f"Must be connected to server and in game.")
-    else:
-        pool = (self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] or 0) / HP_EXCHANGE_RATE
-        logger.info(f"Healing available: {pool:.2f}")
-
-
-def cmd_refill(self, refill_type: str = "", amount: str = ""):
-    """
-    Request healing or weapon energy from EnergyLink.
+    Check how much energy is in the pool.
     """
     if self.ctx.game != "Mega Man X":
         logger.warning("This command can only be used while playing Mega Man X")
     if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
         logger.info(f"Must be connected to server and in game.")
     else:
-        refill_type = refill_type.lower()
-        if refill_type == "hp":
-            if self.ctx.client_handler.heal_request_command is not None:
-                logger.info(f"You already placed a healing request.")
-                return
-            if amount:
-                try:
-                    amount = int(amount)
-                except:
-                    logger.info(f"You need to specify how much HP you will recover.")
-                    return
-                if amount <= 0:
-                    logger.info(f"You need to specify how much HP you will recover.")
-                    return
-                self.ctx.client_handler.heal_request_command = amount
-                logger.info(f"Requested {amount} HP from the energy pool.")
-            else:
-                logger.info(f"You need to specify how much HP you will request.")
-        elif refill_type == "weapon" or refill_type == "wpn":
-            if self.ctx.client_handler.heal_request_command is not None:
-                logger.info(f"You already placed a weapon refill request.")
-                return
-            if amount:
-                try:
-                    amount = int(amount)
-                except:
-                    logger.info(f"You need to specify how much Weapon Energy you will recover.")
-                    return
-                if amount <= 0:
-                    logger.info(f"You need to specify how much HP you will recover.")
-                    return
-                self.ctx.client_handler.weapon_refill_request_command = amount
-                logger.info(f"Requested {amount} Weapon Energy from the energy pool.")
-            else:
-                logger.info(f"You need to specify how much Weapon Energy you will request.")
+        pool = (self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] or 0) / EXCHANGE_RATE
+        logger.info(f"Energy available: {pool:.2f}")
 
+
+def cmd_heal(self, amount: str = ""):
+    """
+    Request healing from EnergyLink.
+    """
+    if self.ctx.game != "Mega Man X":
+        logger.warning("This command can only be used while playing Mega Man X")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.heal_request_command is not None:
+            logger.info(f"You already placed a healing request.")
+            return
+        if amount:
+            try:
+                amount = int(amount)
+            except:
+                logger.info(f"You need to specify how much HP you will recover.")
+                return
+            if amount <= 0:
+                logger.info(f"You need to specify how much HP you will recover.")
+                return
+            self.ctx.client_handler.heal_request_command = amount
+            logger.info(f"Requested {amount} HP from the energy pool.")
+        else:
+            logger.info(f"You need to specify how much HP you will request.")
+
+
+def cmd_refill(self, amount: str = ""):
+    """
+    Request weapon energy from EnergyLink.
+    """
+    if self.ctx.game != "Mega Man X":
+        logger.warning("This command can only be used while playing Mega Man X")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.weapon_refill_request_command is not None:
+            logger.info(f"You already placed a weapon refill request.")
+            return
+        if amount:
+            try:
+                amount = int(amount)
+            except:
+                logger.info(f"You need to specify how much Weapon Energy you will recover.")
+                return
+            if amount <= 0:
+                logger.info(f"You need to specify how much Weapon Energy you will recover.")
+                return
+            self.ctx.client_handler.weapon_refill_request_command = amount
+            logger.info(f"Requested {amount} Weapon Energy from the energy pool.")
+        else:
+            logger.info(f"You need to specify how much Weapon Energy you will request.")
 
 
 def cmd_autoheal(self):
@@ -708,7 +798,7 @@ def cmd_autoheal(self):
     Enable auto heal from EnergyLink.
     """
     if self.ctx.game != "Mega Man X":
-        logger.warning("This command can only be used while playing Mega Man X3")
+        logger.warning("This command can only be used while playing Mega Man X")
     if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
         logger.info(f"Must be connected to server and in game.")
     else:
@@ -718,3 +808,30 @@ def cmd_autoheal(self):
         else:
             self.ctx.client_handler.auto_heal = True
             logger.info(f"Auto healing enabled.")
+
+
+def cmd_trade(self, amount: str = ""):
+    """
+    Trades HP to Weapon Energy. 1:1 ratio.
+    """
+    if self.ctx.game != "Mega Man X":
+        logger.warning("This command can only be used while playing Mega Man X")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.trade_request is not None:
+            logger.info(f"You already placed a weapon refill request.")
+            return
+        if amount:
+            try:
+                amount = int(amount)
+            except:
+                logger.info(f"You need to specify how much Weapon Energy you will recover.")
+                return
+            if amount <= 0:
+                logger.info(f"You need to specify how much Weapon Energy you will recover.")
+                return
+            self.ctx.client_handler.trade_request = amount
+            logger.info(f"Set up trade for {amount} Weapon Energy. Pause the game to process the trade.")
+        else:
+            logger.info(f"You need to specify how much Weapon Energy you will request.")
