@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, NamedRange
 from dataclasses import dataclass
 
 
@@ -118,7 +118,7 @@ class RandomizeTMMoves(Toggle):
     default = 0
 
 
-class TMCompatibility(Range):
+class TMCompatibility(NamedRange):
     """Percent chance for Pokemon to be compatible with a TM"""
     display_name = "TM Compatibility"
     default = 0
@@ -130,7 +130,7 @@ class TMCompatibility(Range):
     }
 
 
-class HMCompatibility(Range):
+class HMCompatibility(NamedRange):
     """Percent chance for Pokemon to be compatible with a HM"""
     display_name = "HM Compatibility"
     default = 0
