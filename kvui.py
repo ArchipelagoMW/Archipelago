@@ -705,6 +705,12 @@ class HintLog(RecycleView):
     def hint_sorter(element: dict) -> str:
         return ""
 
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            max_height = max(child.texture_size[1] for child in element.children)
+            element.height = max_height
+
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")
@@ -734,15 +740,17 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 
     def _handle_item_name(self, node: JSONMessagePart):
         flags = node.get("flags", 0)
+        item_types = []
         if flags & 0b001:  # advancement
-            itemtype = "progression"
-        elif flags & 0b010:  # useful
-            itemtype = "useful"
-        elif flags & 0b100:  # trap
-            itemtype = "trap"
-        else:
-            itemtype = "normal"
-        node.setdefault("refs", []).append("Item Class: " + itemtype)
+            item_types.append("progression")
+        if flags & 0b010:  # useful
+            item_types.append("useful")
+        if flags & 0b100:  # trap
+            item_types.append("trap")
+        if not item_types:
+            item_types.append("normal")
+
+        node.setdefault("refs", []).append("Item Class: " + ", ".join(item_types))
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
     def _handle_player_id(self, node: JSONMessagePart):

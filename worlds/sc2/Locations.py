@@ -1368,9 +1368,9 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
                      lambda state: logic.templars_charge_requirement(state)),
         LocationData("Templar's Charge", "Templar's Charge: Southeast Power Core", SC2LOTV_LOC_ID_OFFSET + 1903, LocationType.EXTRA,
                      lambda state: logic.templars_charge_requirement(state)),
-        LocationData("Templar's Charge", "Templar's Charge: West Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
+        LocationData("Templar's Charge", "Templar's Charge: West Hybrid Stasis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
                      lambda state: logic.templars_charge_requirement(state)),
-        LocationData("Templar's Charge", "Templar's Charge: Southeast Hybrid Statis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
+        LocationData("Templar's Charge", "Templar's Charge: Southeast Hybrid Stasis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
                      lambda state: logic.protoss_fleet(state)),
         LocationData("Templar's Return", "Templar's Return: Victory", SC2LOTV_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
                      lambda state: logic.templars_return_requirement(state)),
@@ -1620,7 +1620,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
         plando_locations = get_plando_locations(world)
         exclude_locations = get_option_value(world, "exclude_locations")
         location_table = [location for location in location_table
-                          if (LocationType is LocationType.VICTORY or location.name not in exclude_locations)
+                          if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
                           and location.type not in excluded_location_types
                           or location.name in plando_locations]
     for i, location_data in enumerate(location_table):

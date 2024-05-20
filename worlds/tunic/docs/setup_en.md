@@ -54,7 +54,7 @@ Launch the game, and if everything was installed correctly you should see `Rando
 
 ### Configure Your YAML File
 
-Visit the [TUNIC options page](/games/Tunic/player-options) to generate a YAML with your selected options.
+Visit the [TUNIC options page](/games/TUNIC/player-options) to generate a YAML with your selected options.
 
 ### Configure Your Mod Settings
 Launch the game, and using the menu on the Title Screen select `Archipelago` under `Randomizer Mode`. 

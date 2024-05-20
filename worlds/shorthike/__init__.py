@@ -41,11 +41,8 @@ class ShortHikeWorld(World):
 
     required_client_version = (0, 4, 4)
 
-    def __init__(self, multiworld, player):
-        super(ShortHikeWorld, self).__init__(multiworld, player)
-
     def get_filler_item_name(self) -> str:
-        return "13 Coins"
+        return self.options.filler_coin_amount.current_option_name
 
     def create_item(self, name: str) -> "ShortHikeItem":
         item_id: int = self.item_name_to_id[name]
