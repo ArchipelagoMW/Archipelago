@@ -1,5 +1,20 @@
-from Options import StartInventoryPool, PerGameCommonOptions, Choice
+from Options import StartInventoryPool, PerGameCommonOptions, Choice, Toggle
 from dataclasses import dataclass
+
+
+class PermaSpeed(Toggle):
+    """
+    You will be given speed boots with a permanent duration.
+    """
+    display_name = "Permanent Speed Boots"
+
+
+class InfiniteKeys(Toggle):
+    """
+    You will be given an absurd amount of keys.
+    """
+    display_name = "Infinite Keys"
+
 
 class ChestBarrels(Choice):
     """
@@ -38,9 +53,26 @@ class MirrorShards(Choice):
     default = 1
 
 
+class UnlockCharacter(Choice):
+    """
+    Unlock a secret character from the start.
+    None: No secret characters will be unlocked.
+    Chosen Character: The selected character will be available from a new save.
+    """
+    option_none = 0
+    option_minotaur = 1
+    option_falconess = 2
+    option_tigress = 3
+    option_jackal = 4
+    option_sumner = 5
+    default = 0
+
 @dataclass
 class GLOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+    infinite_keys: InfiniteKeys
+    permanent_speed: PermaSpeed
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards
+    unlock_character: UnlockCharacter

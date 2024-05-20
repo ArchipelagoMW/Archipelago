@@ -11,7 +11,7 @@ from typing import List
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.gl.Arrays import inv_dict, timers, base_count, castle_id, level_locations, \
-    difficulty_convert, spawners, mirror_levels
+    difficulty_convert, spawners, mirror_levels, characters
 from worlds.gl.Items import items_by_id, ItemData
 from worlds.gl.Locations import LocationData
 
@@ -189,6 +189,7 @@ class GauntletLegendsContext(CommonContext):
         self.movement: int = 0
         self.init_refactor: bool = False
         self.location_scouts: list[NetworkItem] = []
+        self.character_loaded: bool = False
 
     def inv_count(self):
         return len(self.inventory)
@@ -381,6 +382,13 @@ class GauntletLegendsContext(CommonContext):
     def handle_items(self):
         item = self.item_from_name("Compass")
         if item is not None:
+            if self.glslotdata["character"] != 0:
+                if self.item_from_name(characters[self.glslotdata["character"] - 1]) is None:
+                    self.inv_add(characters[self.glslotdata["character"] - 1], 50)
+            if self.item_from_name("Key") is None and self.glslotdata["keys"]:
+                self.inv_add("Key", 9000)
+            if self.item_from_name("Speed Boots") is None and self.glslotdata["speed"]:
+                self.inv_add("Speed Boots", 20000)
             i = item.count
             if i - 1 != len(self.items_received):
                 for index in range(i - 1, len(self.items_received)):

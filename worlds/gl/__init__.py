@@ -111,7 +111,10 @@ class GauntletLegendsWorld(World):
         return {
             "player": self.player,
             "scale": 0,
-            "shards": self.shard_values
+            "shards": self.shard_values,
+            "speed": self.options.permanent_speed.value,
+            "keys": self.options.infinite_keys.value,
+            "character": self.options.unlock_character.value
         }
 
 

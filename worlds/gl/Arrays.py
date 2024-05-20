@@ -59,8 +59,15 @@ inv_dict: Dict[Tuple, str] = {
     (0x0, 0xDA, 0x80): "Battlefield",
     (0x0, 0xEA, 0x80): "Skorne",
     (0x0, 0xFA, 0x80): "Secret",  # I have no clue if this is correct
-    (0x0, 0xC, 0x80): "Obelisk"
+    (0x0, 0xC, 0x80): "Obelisk",
+    (0x0, 0xA1, 0x1): "Minotaur",
+    (0x0, 0xA2, 0x1): "Falconess",
+    (0x0, 0xA3, 0x1): "Jackal",
+    (0x0, 0xA4, 0x1): "Tigress",
+    (0x0, 0xA5, 0x1): "Sumner",
 }
+
+characters = ["Minotaur", "Facloness", "Tigress", "Jackal", "Sumner"]
 
 item_dict: Dict[int, bytes] = {
     77780000: [0x0, 0x0],
@@ -330,19 +337,19 @@ difficulty_convert: Dict[int, int] = {
     0x1: 10,
     0x7: 20,
     0x9: 30,
-    0xF: 30,
-    0x11: 45,
-    0x8: 30
+    0xF: 35,
+    0x11: 40,
+    0x8: 45
 }
 
 difficulty_lambda: Dict[int, List[int]] = {
-    0x2: [0, 1, 2, 3],
-    0x1: [0, 3, 4, 5],
-    0x7: [0, 5, 6, 7],  # No items required for Mountain (Difficulty 1 not included)
-    0x9: [0, 8, 9, 10],
-    0xF: [0, 8, 9, 10],
-    0x11: [0, 19, 20, 21],
-    0x8: [0, 8, 9, 10]
+    0x2: [0, 0, 1, 2],
+    0x1: [0, 2, 3, 4],
+    0x7: [0, 4, 5, 6],
+    0x9: [0, 6, 7, 8],
+    0xF: [0, 7, 8, 9],
+    0x11: [0, 9, 10, 11],
+    0x8: [0, 13, 13, 13]
 }
 
 boss_realm = [2, 1, 7, 9]

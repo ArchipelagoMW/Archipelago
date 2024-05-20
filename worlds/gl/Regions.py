@@ -7,8 +7,7 @@ from .Locations import GLLocation, valleyOfFire, daggerPeak, cliffsOfDesolation,
     , venomousSpire, toxicAirShip, arcticDocks, frozenCamp \
     , crystalMine, eruptingFissure, desecratedTemple \
     , battleTrenches, battleTowers, infernalFortress \
-    , gatesOfTheUnderworld, plagueFiend, yeti, all_locations \
-    , LocationData
+    , gatesOfTheUnderworld, plagueFiend, yeti
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -112,7 +111,7 @@ def create_region(world: "GauntletLegendsWorld", name, locations):
     reg = Region(name, world.player, world.multiworld)
     for location in locations:
         if location.name not in world.disabled_locations:
-            loc = GLLocation(world.player, name_convert(location), location.id, reg)
+            loc = GLLocation(world.player, location.name, location.id, reg)
             reg.locations.append(loc)
     world.multiworld.regions.append(reg)
 
@@ -136,6 +135,3 @@ def connect(world: "GauntletLegendsWorld", used_names: typing.Dict[str, int], so
 
     source_region.exits.append(connection)
     connection.connect(target_region)
-
-def name_convert(location: "LocationData") -> str:
-    return location.name + (f" {sum(1 for l in all_locations[:all_locations.index(location) + 1] if l.name == location.name)}" if "Chest" in location.name or "Barrel" in location.name else "") + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")

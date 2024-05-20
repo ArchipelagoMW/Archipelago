@@ -12,7 +12,6 @@ from settings import get_settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 from .Arrays import level_locations, level_size, level_address, item_dict, level_header
 from .Items import items_by_id
-from .Rules import name_convert
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -63,14 +62,13 @@ class LevelData:
 class GLPatchExtension(APPatchExtension):
     game = "Gauntlet Legends"
 
-
     @staticmethod
     def patch_counts(caller: APProcedurePatch, rom: bytes) -> bytes:
         stream = io.BytesIO(rom)
         stream.seek(0x67E7E0)
         data = io.BytesIO(zdec(stream.read(0x380)))
-        data.seek(0x1B, 0)
-        data.write(bytes([0xFF]))
+        data.seek(0x1A, 0)
+        data.write(bytes([0xFF, 0xFF]))
         data.seek(0x37, 0)
         data.write(bytes([0xFF]))
         data.seek(0xDF, 0)
@@ -81,7 +79,17 @@ class GLPatchExtension(APPatchExtension):
         data.write(bytes([0xFF]))
         data.seek(0x133, 0)
         data.write(bytes([0xFF]))
+        data.seek(0x210, 0)
+        data.write(bytes([0xFF, 0xFF, 0xFF, 0xFF]))
         data.seek(0x53E, 0)
+        data.write(bytes([0xFF, 0xFF]))
+        data.seek(0x55A, 0)
+        data.write(bytes([0xFF, 0xFF]))
+        data.seek(0x576, 0)
+        data.write(bytes([0xFF, 0xFF]))
+        data.seek(0x506, 0)
+        data.write(bytes([0xFF, 0xFF]))
+        data.seek(0x522, 0)
         data.write(bytes([0xFF, 0xFF]))
         data.seek(0x96C, 0)
         data.write(bytes([0x4, 0x3]))
@@ -132,7 +140,8 @@ class GLPatchExtension(APPatchExtension):
                         del data.items[j - data.obelisk]
                         data.obelisk += 1
                     else:
-                        if "Chest" in location_name or ("Barrel" in location_name and "Barrel of Gold" not in location_name):
+                        if "Chest" in location_name or (
+                                "Barrel" in location_name and "Barrel of Gold" not in location_name):
                             data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[item[0]][0]
                             data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[item[0]][1]
                         else:
@@ -147,7 +156,6 @@ class GLPatchExtension(APPatchExtension):
             stream.seek(write_pos, 0)
             stream.write(compressed)
         return stream.getvalue()
-
 
 
 class GLProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -174,10 +182,10 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
     patch.write_file("shard_values.json", json.dumps(world.shard_values).encode("UTF-8"))
     for i, level in enumerate(level_locations.values()):
-        locations = []
+        locations: List[Location] = []
         for location in level:
             if location.name not in world.disabled_locations:
-                locations += [world.get_location(name_convert(location))]
+                locations += [world.get_location(location.name)]
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
 
 
