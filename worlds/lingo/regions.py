@@ -4,7 +4,7 @@ from BaseClasses import Entrance, ItemClassification, Region
 from .datatypes import EntranceType, Room, RoomAndDoor
 from .items import LingoItem
 from .locations import LingoLocation
-from .options import SunwarpAccess, VictoryCondition
+from .options import ShuffleDoors, SunwarpAccess, VictoryCondition
 from .rules import lingo_can_do_pilgrimage, lingo_can_use_entrance, make_location_lambda
 from .static_logic import ALL_ROOMS, PAINTINGS
 
@@ -40,8 +40,13 @@ def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "Lingo
 
 def connect_entrance(regions: Dict[str, Region], source_region: Region, target_region: Region, description: str,
                      door: Optional[RoomAndDoor], entrance_type: EntranceType, pilgrimage: bool, world: "LingoWorld"):
-    victory_wall = world.options.victory_condition == VictoryCondition.option_the_end\
-                   and target_region.name in ["Orange Tower Seventh Floor", "Roof"]
+    if world.options.victory_condition == VictoryCondition.option_the_end:
+        if world.options.shuffle_doors == ShuffleDoors.option_none:
+            victory_wall = target_region.name in ["Orange Tower Seventh Floor", "Roof"]
+        else:
+            victory_wall = target_region.name == "Orange Tower Seventh Floor"
+    else:
+        victory_wall = False
 
     connection = Entrance(world.player, description, source_region)
     connection.access_rule = lambda state: lingo_can_use_entrance(state, target_region.name, door, victory_wall, world)
