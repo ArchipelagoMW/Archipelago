@@ -106,7 +106,7 @@ class WebHostContext(Context):
         static_gamespackage = self.gamespackage  # this is shared across all rooms
         static_item_name_groups = self.item_name_groups
         static_location_name_groups = self.location_name_groups
-        self.gamespackage = {}  # this may be modified by _load
+        self.gamespackage = {"Archipelago": static_gamespackage["Archipelago"]}  # this may be modified by _load
         self.item_name_groups = {}
         self.location_name_groups = {}
 
