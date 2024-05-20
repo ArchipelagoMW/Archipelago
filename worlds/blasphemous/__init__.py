@@ -49,10 +49,6 @@ class BlasphemousWorld(World):
         self.door_connections: Dict[str, str] = {}
 
 
-    #def set_rules(self):
-        #rules(self, self.door_connections)
-
-
     def create_item(self, name: str) -> "BlasphemousItem":
         item_id: int = self.item_name_to_id[name]
         id = item_id - base_id
@@ -74,17 +70,17 @@ class BlasphemousWorld(World):
 
         if not self.options.starting_location.randomized:
             if self.options.starting_location == 6 and self.options.difficulty < 2:
-                raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] {self.options.starting_location}"
-                                " cannot be chosen if Difficulty is lower than Hard.")
+                raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] "
+                                f"{self.options.starting_location} cannot be chosen if Difficulty is lower than Hard.")
 
             if (self.options.starting_location == 0 or self.options.starting_location == 6) \
                 and self.options.dash_shuffle:
-                    raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] {self.options.starting_location}"
-                                    " cannot be chosen if Shuffle Dash is enabled.")
+                    raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] "
+                                    f"{self.options.starting_location} cannot be chosen if Shuffle Dash is enabled.")
             
             if self.options.starting_location == 3 and self.options.wall_climb_shuffle:
-                raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] {self.options.starting_location}"
-                                " cannot be chosen if Shuffle Wall Climb is enabled.")
+                raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] "
+                                f"{self.options.starting_location} cannot be chosen if Shuffle Wall Climb is enabled.")
         else:
             locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
             invalid: bool = False
@@ -138,9 +134,6 @@ class BlasphemousWorld(World):
 
 
     def create_items(self):
-        world = self.multiworld
-        player = self.player
-
         removed: int = 0
         to_remove: List[str] = [
             "Tears of Atonement (250)",
@@ -211,7 +204,7 @@ class BlasphemousWorld(World):
         for _ in range(junk):
             pool.append(self.create_item(self.get_filler_item_name()))
 
-        world.itempool += pool
+        self.multiworld.itempool += pool
 
 
     def pre_fill(self):
@@ -303,14 +296,6 @@ class BlasphemousWorld(World):
                 state.has("Holy Wound of Abnegation", player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Victory", player)
-        
-
-    def get_room_from_door(self, door: str) -> Region:
-        return self.multiworld.get_region(door.split("[")[0], self.player)
-
-    
-    def get_connected_door(self, door: str) -> Entrance:
-        return self.multiworld.get_entrance(self.door_connections[door], self.player)
     
     
     def fill_slot_data(self) -> Dict[str, Any]:
