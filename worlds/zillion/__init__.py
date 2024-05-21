@@ -14,7 +14,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
 from .gen_data import GenData
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import ZillionOptions, validate
+from .options import ZillionOptions, validate, z_option_groups
 from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -61,6 +61,8 @@ class ZillionWebWorld(WebWorld):
         "setup/en",
         ["beauxq"]
     )]
+
+    option_groups = z_option_groups
 
 
 class ZillionWorld(World):
