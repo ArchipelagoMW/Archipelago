@@ -333,7 +333,7 @@ class MarioLand2World(World):
         for location in self.multiworld.get_locations(self.player):
             if location.name in location_rules:
                 location.access_rule = location_rules[location.name]
-            elif location.name.endswith("Coins"):
+            elif location.name.endswith(("Coins", "Coin")):
                 rule = getattr(logic, location.parent_region.name.lower().replace(" ", "_") + "_coins", None)
                 if rule:
                     coins = int(location.name.split(" ")[-2])
