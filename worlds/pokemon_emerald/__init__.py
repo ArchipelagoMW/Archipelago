@@ -5,11 +5,12 @@ from collections import Counter
 import copy
 import logging
 import os
+import pkgutil
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Union
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Fill import FillError, fill_restrictive
-from Options import Toggle
+from Options import OptionError, Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
 
@@ -25,7 +26,7 @@ from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType,
 from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilities, randomize_learnsets,
                       randomize_legendary_encounters, randomize_misc_pokemon, randomize_starters,
                       randomize_tm_hm_compatibility,randomize_types, randomize_wild_encounters)
-from .rom import PokemonEmeraldDeltaPatch, create_patch 
+from .rom import PokemonEmeraldProcedurePatch, write_tokens 
 
 
 class PokemonEmeraldWebWorld(WebWorld):
@@ -60,7 +61,7 @@ class PokemonEmeraldSettings(settings.Group):
         """File name of your English Pokemon Emerald ROM"""
         description = "Pokemon Emerald ROM File"
         copy_to = "Pokemon - Emerald Version (USA, Europe).gba"
-        md5s = [PokemonEmeraldDeltaPatch.hash]
+        md5s = [PokemonEmeraldProcedurePatch.hash]
 
     rom_file: PokemonEmeraldRomFile = PokemonEmeraldRomFile(PokemonEmeraldRomFile.copy_to)
 
@@ -126,9 +127,6 @@ class PokemonEmeraldWorld(World):
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         from .sanity_check import validate_regions
 
-        if not os.path.exists(cls.settings.rom_file):
-            raise FileNotFoundError(cls.settings.rom_file)
-
         assert validate_regions()
 
     def get_filler_item_name(self) -> str:
@@ -183,8 +181,8 @@ class PokemonEmeraldWorld(World):
         if self.options.goal == Goal.option_legendary_hunt:
             # Prevent turning off all legendary encounters
             if len(self.options.allowed_legendary_hunt_encounters.value) == 0:
-                raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) "
-                                 "needs to allow at least one legendary encounter when goal is legendary hunt.")
+                raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) "
+                                  "needs to allow at least one legendary encounter when goal is legendary hunt.")
 
             # Prevent setting the number of required legendaries higher than the number of enabled legendaries
             if self.options.legendary_hunt_count.value > len(self.options.allowed_legendary_hunt_encounters.value):
@@ -195,8 +193,8 @@ class PokemonEmeraldWorld(World):
 
         # Require random wild encounters if dexsanity is enabled
         if self.options.dexsanity and self.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
-            raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
-                             "not leave wild encounters vanilla if enabling dexsanity.")
+            raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
+                              "not leave wild encounters vanilla if enabling dexsanity.")
 
         # If badges or HMs are vanilla, Norman locks you from using Surf,
         # which means you're not guaranteed to be able to reach Fortree Gym,
@@ -591,7 +589,9 @@ class PokemonEmeraldWorld(World):
         randomize_opponent_parties(self)
         randomize_starters(self)
 
-        create_patch(self, output_directory)
+        patch = PokemonEmeraldProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "data/base_patch.bsdiff4"))
+        write_tokens(self, patch)
 
         del self.modified_trainers
         del self.modified_tmhm_moves
@@ -599,6 +599,10 @@ class PokemonEmeraldWorld(World):
         del self.modified_misc_pokemon
         del self.modified_starters
         del self.modified_species
+
+        # Write Output
+        out_file_name = self.multiworld.get_out_file_name_base(self.player)
+        patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
     def write_spoiler(self, spoiler_handle: TextIO):
         if self.options.dexsanity:

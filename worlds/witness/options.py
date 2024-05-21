@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -61,9 +61,9 @@ class ShuffleLasers(Choice):
 class ShuffleDoors(Choice):
     """
     If on, opening doors, moving bridges etc. will require a "key".
-    If set to "panels", the panel on the door will be locked until receiving its corresponding key.
-    If set to "doors", the door will open immediately upon receiving its key. Door panels are added as location checks.
-    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels".
+    - Panels: The panel on the door will be locked until receiving its corresponding key.
+    - Doors: The door will open immediately upon receiving its key. Door panels are added as location checks.
+    - Mixed: Includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels".
     """
     display_name = "Shuffle Doors"
     option_off = 0
@@ -74,8 +74,10 @@ class ShuffleDoors(Choice):
 
 class DoorGroupings(Choice):
     """
-    If set to "none", there will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
-    If set to "regional", all doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
+    Controls how door items are grouped.
+
+    - None: There will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
+    - Regional: - All doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
     """
     display_name = "Door Groupings"
     option_off = 0
@@ -108,8 +110,8 @@ class ShuffleVaultBoxes(Toggle):
 class ShuffleEnvironmentalPuzzles(Choice):
     """
     Adds Environmental/Obelisk Puzzles into the location pool.
-    If set to "individual", every Environmental Puzzle sends an item.
-    If set to "Obelisk Sides", completing every puzzle on one side of an Obelisk sends an item.
+    - Individual: Every Environmental Puzzle sends an item.
+    - Obelisk Sides: Completing every puzzle on one side of an Obelisk sends an item.
 
     Note: In Obelisk Sides, any EPs excluded through another option will be pre-completed on their Obelisk.
     """
@@ -129,9 +131,9 @@ class ShuffleDog(Toggle):
 class EnvironmentalPuzzlesDifficulty(Choice):
     """
     When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
-    If set to "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
-    If set to "tedious", Theater Eclipse EP is excluded from the location pool.
-    If set to "normal", several other difficult or long EPs are excluded as well.
+    - Eclipse: Every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
+    - Tedious Theater Eclipse EP is excluded from the location pool.
+    - Normal: several other difficult or long EPs are excluded as well.
     """
     display_name = "Environmental Puzzles Difficulty"
     option_normal = 0
@@ -159,10 +161,10 @@ class ShufflePostgame(Toggle):
 class VictoryCondition(Choice):
     """
     Set the victory condition for this world.
-    Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
-    Challenge: Beat the secret Challenge (requires Challenge Lasers).
-    Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
-    Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+    - Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
+    - Challenge: Beat the secret Challenge (requires Challenge Lasers).
+    - Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
+    - Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
 
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
     to count, the laser locks on the Elevator and Challenge Timer panels do not.
@@ -332,3 +334,45 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+
+
+witness_option_groups = [
+    OptionGroup("Puzzles & Goal", [
+        PuzzleRandomization,
+        VictoryCondition,
+        MountainLasers,
+        ChallengeLasers,
+    ]),
+    OptionGroup("Locations", [
+        ShuffleDiscardedPanels,
+        ShuffleVaultBoxes,
+        ShuffleEnvironmentalPuzzles,
+        EnvironmentalPuzzlesDifficulty,
+        ShufflePostgame,
+        DisableNonRandomizedPuzzles,
+    ]),
+    OptionGroup("Progression Items", [
+        ShuffleSymbols,
+        ShuffleDoors,
+        DoorGroupings,
+        ShuffleLasers,
+        ShuffleBoat,
+        ObeliskKeys,
+    ]),
+    OptionGroup("Filler Items", [
+        PuzzleSkipAmount,
+        TrapPercentage,
+        TrapWeights
+    ]),
+    OptionGroup("Hints", [
+        HintAmount,
+        AreaHintPercentage,
+        LaserHints
+    ]),
+    OptionGroup("Misc", [
+        EarlyCaves,
+        ElevatorsComeToYou,
+        DeathLink,
+        DeathLinkAmnesty,
+    ])
+]
