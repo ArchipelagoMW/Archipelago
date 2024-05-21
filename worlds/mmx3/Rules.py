@@ -2,7 +2,6 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from . import MMX3World, item_groups
 from .Names import LocationName, ItemName, RegionName, EventName
-from .Weaknesses import boss_weaknesses
 
 mavericks = [
     "Blizzard Buffalo",
@@ -100,7 +99,7 @@ bosses = {
         f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}"
     ]
 }
-        
+
 
 def set_rules(world: MMX3World):
     player = world.player
@@ -340,7 +339,7 @@ def add_boss_weakness_logic(world):
             bosses[boss].pop()
 
     for boss, regions in bosses.items():
-        weaknesses = boss_weaknesses[boss]
+        weaknesses = world.boss_weaknesses[boss]
         for weakness in weaknesses:
             weakness = weakness[0]
             if weakness is not None:
