@@ -147,8 +147,6 @@ class MMX3SNIClient(SNIClient):
                 ctx.command_processor.commands.pop("heal")
             if "refill" in ctx.command_processor.commands:
                 ctx.command_processor.commands.pop("refill")
-            if "trade" in ctx.command_processor.commands:
-                ctx.command_processor.commands.pop("trade")
             return False
         
         ctx.game = self.game
@@ -165,8 +163,8 @@ class MMX3SNIClient(SNIClient):
                 ctx.command_processor.commands["heal"] = cmd_heal
             if "refill" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["refill"] = cmd_refill
-            if "trade" not in ctx.command_processor.commands:
-                ctx.command_processor.commands["trade"] = cmd_trade
+        if "trade" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["trade"] = cmd_trade
 
         death_link = await snes_read(ctx, MMX3_DEATH_LINK_ACTIVE, 1)
         if death_link[0]:
@@ -191,12 +189,12 @@ class MMX3SNIClient(SNIClient):
         menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
         gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
         can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
-        pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
         if menu_state[0] != 0x04 or \
             gameplay_state[0] != 0x04 or \
             can_move[0] != 0x00:
             return
         
+        pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
         if pause_state[0] == 0x00:
             return
 
@@ -871,7 +869,7 @@ class MMX3SNIClient(SNIClient):
 
 def cmd_pool(self):
     """
-    Check how much healing is in the pool.
+    Check how much energy is in the pool.
     """
     if self.ctx.game != "Mega Man X3":
         logger.warning("This command can only be used while playing Mega Man X3")
@@ -879,7 +877,7 @@ def cmd_pool(self):
         logger.info(f"Must be connected to server and in game.")
     else:
         pool = (self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] or 0) / EXCHANGE_RATE
-        logger.info(f"Healing available: {pool:.2f}")
+        logger.info(f"Energy available: {pool:.2f}")
 
 
 def cmd_heal(self, amount: str = ""):
