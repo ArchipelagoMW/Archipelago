@@ -16,6 +16,7 @@ from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import MMX3Options
 from .Client import MMX3SNIClient
+from .Levels import location_id_to_level_id
 from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
 from .Rom import patch_rom, MMX3ProcedurePatch, HASH_US, HASH_LEGACY
 
@@ -84,7 +85,7 @@ class MMX3World(World):
         # Setup item pool
 
         # Add levels into the pool
-        start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+        start_inventory = self.options.start_inventory.value.copy()
         stage_list = [
             ItemName.stage_toxic_seahorse,
             ItemName.stage_volt_catfish,
@@ -229,10 +230,12 @@ class MMX3World(World):
 
         return created_item
 
+
     def set_rules(self):
         from .Rules import set_rules
         set_rules(self)
     
+
     def fill_slot_data(self):
         slot_data = {}
         slot_data["Doppler Open"] = self.options.doppler_open.value
@@ -244,8 +247,8 @@ class MMX3World(World):
             for i in range(len(data)):
                 slot_data["Boss Weaknesses"][boss].append(data[i][1])
         return slot_data
-    
-    
+
+
     def generate_early(self):
         if self.options.boss_weakness_rando != "vanilla":
             self.boss_weaknesses = {}
@@ -265,6 +268,71 @@ class MMX3World(World):
                     weaknesses += f"{weapon_id[data[i][1]]}, "
                 weaknesses = weaknesses[:-2]
                 spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
+
+
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        if not self.options.boss_weakness_rando:
+            return
+        
+        boss_to_id = {
+            0x202: "Blast Hornet",
+            0x203: "Shurikein",
+            0x204: "Blizzard Buffalo",
+            0x205: "Gravity Beetle",
+            0x206: "Toxic Seahorse",
+            0x207: "Hotareeca",
+            0x208: "Volt Catfish",
+            0x209: "Crush Crawfish",
+            0x20A: "Tunnel Rhino",
+            0x20B: "Hell Crusher",
+            0x20C: "Neon Tiger",
+            0x20D: "Worm Seeker-R",
+            0x009: "Vile",
+            0x20E: "Godkarmachine",
+            0x210: "Dr. Doppler's Lab 2 Boss",
+            0x212: "Doppler",
+            0x21A: "Blast Hornet",
+            0x213: "Blizzard Buffalo",
+            0x219: "Gravity Beetle",
+            0x214: "Toxic Seahorse",
+            0x216: "Volt Catfish",
+            0x217: "Crush Crawfish",
+            0x215: "Tunnel Rhino",
+            0x218: "Neon Tiger",
+            0x00B: "Bit",
+            0x00A: "Byte",
+            0x00E: "Sigma",
+        }
+        boss_weakness_hint_data = {}
+        for loc_name, level_data in location_id_to_level_id.items():
+            boss_id = level_data[1]
+            if boss_id not in boss_to_id.keys():
+                continue
+
+            boss = boss_to_id[boss_id]
+            data = self.boss_weaknesses[boss]
+            weaknesses = ""
+            for i in range(len(data)):
+                weaknesses += f"{weapon_id[data[i][1]]}, "
+            weaknesses = weaknesses[:-2]
+
+            if boss == "Sigma":
+                data = self.boss_weaknesses["Kaiser Sigma"]
+                weaknesses += ". Kaiser Sigma: "
+                for i in range(len(data)):
+                    weaknesses += f"{weapon_id[data[i][1]]}, "
+                weaknesses = weaknesses[:-2]
+            elif boss == "Godkarmachine":
+                data = self.boss_weaknesses["Press Disposer"]
+                weaknesses += ". Press Disposer: "
+                for i in range(len(data)):
+                    weaknesses += f"{weapon_id[data[i][1]]}, "
+                weaknesses = weaknesses[:-2]
+
+            location = self.multiworld.get_location(loc_name, self.player)
+            boss_weakness_hint_data[location.address] = weaknesses
+
+        hint_data[self.player] = boss_weakness_hint_data
 
 
     def get_filler_item_name(self) -> str:
