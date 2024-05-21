@@ -89,15 +89,13 @@ class StartStyle(Choice):
 
 class LimitedGraffiti(Toggle):
     """Each graffiti design can only be used a limited number of times before being removed from your inventory.
-    In some cases, such as completing a dream, using graffiti to defeat enemies, or spraying over your own graffiti, 
-    uses will not be counted.
+    In some cases, such as completing a dream, using graffiti to defeat enemies, or spraying over your own graffiti, uses will not be counted.
     If enabled, doing graffiti is disabled during crew battles, to prevent softlocking."""
     display_name = "Limited Graffiti"
 
 
 class SGraffiti(Choice):
-    """Choose if small graffiti should be separate, meaning that you will need to switch characters every time you run 
-    out, or combined, meaning that unlocking new characters will add 5 uses that any character can use.
+    """Choose if small graffiti should be separate, meaning that you will need to switch characters every time you run out, or combined, meaning that unlocking new characters will add 5 uses that any character can use.
     Has no effect if Limited Graffiti is disabled."""
     display_name = "Small Graffiti Uses"
     option_separate = 0
