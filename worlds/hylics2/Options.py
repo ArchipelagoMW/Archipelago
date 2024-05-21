@@ -4,7 +4,7 @@ from Options import Choice, Removed, Toggle, DefaultOnToggle, DeathLink, PerGame
 
 class PartyShuffle(Toggle):
     """
-    Shuffles party members into the pool.
+    Shuffles party members into the item pool.
     
     Note that enabling this can significantly increase both the difficulty and length of a run.
     """
@@ -24,7 +24,7 @@ class GestureShuffle(Choice):
 
 class MedallionShuffle(Toggle):
     """
-    Shuffles red medallions into the pool.
+    Shuffles red medallions into the item pool.
     """
     display_name = "Shuffle Red Medallions"
 
