@@ -35,7 +35,6 @@ class BombRushCyberfunkWorld(World):
     options_dataclass = BombRushCyberfunkOptions
     options: BombRushCyberfunkOptions
 
-
     def __init__(self, multiworld: MultiWorld, player: int):
         super(BombRushCyberfunkWorld, self).__init__(multiworld, player)
         self.item_classification: Dict[BRCType, ItemClassification] = {
@@ -49,14 +48,12 @@ class BombRushCyberfunkWorld(World):
             BRCType.Camera: ItemClassification.progression
         }
 
-
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "REP" in item.name:
             rep: int = int(item.name[0:len(item.name)-4])
             state.prog_items[item.player]["rep"] += rep
         return change
-    
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
@@ -65,10 +62,8 @@ class BombRushCyberfunkWorld(World):
             state.prog_items[item.player]["rep"] -= rep
         return change
 
-
     def set_rules(self):
         rules(self)
-
 
     def get_item_classification(self, item_type: BRCType) -> ItemClassification:
         classification = ItemClassification.filler
@@ -77,7 +72,6 @@ class BombRushCyberfunkWorld(World):
 
         return classification
 
-
     def create_item(self, name: str) -> "BombRushCyberfunkItem":
         item_id: int = self.item_name_to_id[name]
         item_type: BRCType = self.item_name_to_type[name]
@@ -85,10 +79,8 @@ class BombRushCyberfunkWorld(World):
 
         return BombRushCyberfunkItem(name, classification, item_id, self.player)
 
-
     def create_event(self, event: str) -> "BombRushCyberfunkItem":
         return BombRushCyberfunkItem(event, ItemClassification.progression_skip_balancing, None, self.player)
-    
 
     def get_filler_item_name(self) -> str:
         item = self.random.choice(item_table)
@@ -97,7 +89,6 @@ class BombRushCyberfunkWorld(World):
             item = self.random.choice(item_table)
 
         return item["name"]
-
 
     def generate_early(self):
         if self.options.starting_movestyle == StartStyle.option_skateboard:
@@ -114,7 +105,6 @@ class BombRushCyberfunkWorld(World):
             self.item_classification[BRCType.BMX] = ItemClassification.filler
         else:
             self.item_classification[BRCType.BMX] = ItemClassification.progression
-
 
     def create_items(self):
         rep_locations: int = 87
@@ -150,7 +140,6 @@ class BombRushCyberfunkWorld(World):
                 pool.append(self.create_item(item["name"]))
 
         self.multiworld.itempool += pool
-
 
     def create_regions(self):
         multiworld = self.multiworld
