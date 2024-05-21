@@ -397,8 +397,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["East Forest"].connect(
         connecting_region=regions["Lower Forest"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, player)
-        or (state.has_all({grapple, fire_wand, ice_dagger}, player)  # do ice slime, then go to the lower hook
-            and has_ability(icebolt, state, player)))
+        or (state.has_all({grapple, fire_wand, ice_dagger}, player) and has_ability(icebolt, state, player)))
     regions["Lower Forest"].connect(
         connecting_region=regions["East Forest"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, player))
@@ -440,7 +439,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Forest Grave Path by Grave"])
 
     # Beneath the Well and Dark Tomb
-    # don't need the ladder when entering at the ladder spot
     regions["Beneath the Well Ladder Exit"].connect(
         connecting_region=regions["Beneath the Well Front"],
         rule=lambda state: has_ladder("Ladders in Well", state, player))
@@ -603,8 +601,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Library Exterior Ladder Region"].connect(
         connecting_region=regions["Library Exterior Tree Region"],
         rule=lambda state: has_ability(prayer, state, player)
-        and (state.has(grapple, player) or (state.has(laurels, player)
-                                            and has_ladder("Ladders in Library", state, player))))
+        and ((state.has(laurels, player) and has_ladder("Ladders in Library", state, player))
+             or state.has(grapple, player)))
 
     regions["Library Hall Bookshelf"].connect(
         connecting_region=regions["Library Hall"],
@@ -822,8 +820,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask only with ER on
     regions["Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
-        rule=lambda state: has_ice_grapple_logic(True, state, player)
-        and options.entrance_rando)
+        rule=lambda state: has_ice_grapple_logic(True, state, player) and options.entrance_rando)
 
     regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
@@ -860,8 +857,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # nmg: can ice grapple on the voidlings to the double admin fight, still need to pray at the fuse
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Front"],
-        rule=lambda state: ((state.has(laurels, player) 
-                             or has_ice_grapple_logic(True, state, player)) 
+        rule=lambda state: ((state.has(laurels, player) or has_ice_grapple_logic(True, state, player))
                             and has_ability(prayer, state, player)
                             and has_sword(state, player))
         or can_ladder_storage(state, player))
@@ -897,8 +893,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # nmg: ice grapple through cathedral door, can do it both ways
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: (has_ability(prayer, state, player) 
-                            and state.has(laurels, player))
+        rule=lambda state: (has_ability(prayer, state, player) and state.has(laurels, player))
         or has_ice_grapple_logic(False, state, player))
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
@@ -1252,8 +1247,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
+                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
                     and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
             # soft locked if you can't get past garden knight backwards or up the belltower ladders
             elif portal_name == "West Garden Entrance near Belltower" and not options.entrance_rando:
@@ -1267,23 +1261,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has("Ladder to Beneath the Vault", player)
+                    rule=lambda state: has_stick(state, player) and state.has("Ladder to Beneath the Vault", player)
                     and has_lantern(state, player))
             elif portal_name == "Atoll Lower Entrance" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
+                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
                     and (state.has_any({"Ladders in Overworld Town", grapple}, player)
                          or has_ice_grapple_logic(True, state, player)))
             elif portal_name == "Atoll Upper Entrance" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
+                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
                     and state.has(grapple, player) or has_ability(prayer, state, player))
             # soft lock potential
             elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain", "Swamp Upper Entrance",
@@ -1316,15 +1307,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has(ladder, player))
+                    rule=lambda state: has_stick(state, player) and state.has(ladder, player))
             # if multiple ladders can be used
             else:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player))
+                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
@@ -1407,8 +1396,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(fairies, player, 10))
     set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
              lambda state: state.has(fairies, player, 20))
-    set_rule(multiworld.get_location("Coins in the Well - 3 Coins", player), lambda state: state.has(coins, player, 3))
-    set_rule(multiworld.get_location("Coins in the Well - 6 Coins", player), lambda state: state.has(coins, player, 6))
+    set_rule(multiworld.get_location("Coins in the Well - 3 Coins", player),
+             lambda state: state.has(coins, player, 3))
+    set_rule(multiworld.get_location("Coins in the Well - 6 Coins", player),
+             lambda state: state.has(coins, player, 6))
     set_rule(multiworld.get_location("Coins in the Well - 10 Coins", player),
              lambda state: state.has(coins, player, 10))
     set_rule(multiworld.get_location("Coins in the Well - 15 Coins", player),
@@ -1420,8 +1411,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(multiworld.get_location("East Forest - Lower Dash Chest", player),
              lambda state: state.has_all({grapple, laurels}, player))
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
-            state.has_all({grapple, ice_dagger, fire_wand}, player) and
-            has_ability(icebolt, state, player)))
+            state.has_all({grapple, ice_dagger, fire_wand}, player) and has_ability(icebolt, state, player)))
 
     # West Garden
     set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),
