@@ -118,10 +118,11 @@ class L2ACSNIClient(SNIClient):
             snes_buffered_write(ctx, L2AC_TX_ADDR + 8, total_blue_chests_checked.to_bytes(2, "little"))
             location_ids: List[int] = [locations_start_id + i for i in range(total_blue_chests_checked)]
 
-            loc_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR + 32, snes_other_locations_checked * 2)
-            if loc_data is not None:
-                location_ids.extend(locations_start_id + int.from_bytes(loc_data[2 * i:2 * i + 2], "little")
-                                    for i in range(snes_other_locations_checked))
+            if snes_other_locations_checked:
+                loc_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR + 32, snes_other_locations_checked * 2)
+                if loc_data is not None:
+                    location_ids.extend(locations_start_id + int.from_bytes(loc_data[2 * i:2 * i + 2], "little")
+                                        for i in range(snes_other_locations_checked))
 
             if new_location_ids := [loc_id for loc_id in location_ids if loc_id not in ctx.locations_checked]:
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_location_ids}])

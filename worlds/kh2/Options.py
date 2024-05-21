@@ -306,7 +306,7 @@ class CorSkipToggle(Toggle):
 
     Toggle does not negate fight logic but is an alternative.
 
-    Final Chest is also can be put into logic with this skip.
+    Full Cor Skip is also affected by this Toggle.
     """
     display_name = "CoR Skip Toggle."
     default = False

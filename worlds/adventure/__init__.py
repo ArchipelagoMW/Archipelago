@@ -371,8 +371,9 @@ class AdventureWorld(World):
                 if location.item.player == self.player and \
                         location.item.name == "nothing":
                     location_data = location_table[location.name]
+                    room_id = location_data.get_random_room_id(self.random)
                     auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
-                                                                               location_data.room_id))
+                                                                               room_id))
                 # standard Adventure items, which are placed in the rom
                 elif location.item.player == self.player and \
                         location.item.name != "nothing" and \
@@ -383,14 +384,18 @@ class AdventureWorld(World):
                     item_ram_address = item_ram_addresses[item_table[location.item.name].table_index]
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
-                    room_x, room_y = location_data.get_position(self.multiworld.per_slot_randoms[self.player])
+                    (room_id, room_x, room_y) = \
+                        location_data.get_random_position(self.random)
                     if location_data.needs_bat_logic and bat_logic == 0x0:
                         copied_location = copy.copy(location_data)
                         copied_location.local_item = item_ram_address
+                        copied_location.room_id = room_id
+                        copied_location.room_x = room_x
+                        copied_location.room_y = room_y
                         bat_no_touch_locs.append(copied_location)
                     del unplaced_local_items[location.item.name]
 
-                    rom_deltas[item_position_data_start] = location_data.room_id
+                    rom_deltas[item_position_data_start] = room_id
                     rom_deltas[item_position_data_start + 1] = room_x
                     rom_deltas[item_position_data_start + 2] = room_y
                     local_item_to_location[item_table_offset] = self.location_name_to_id[location.name] \
@@ -398,14 +403,20 @@ class AdventureWorld(World):
                 # items from other worlds, and non-standard Adventure items handled by script, like difficulty switches
                 elif location.item.code is not None:
                     if location.item.code != nothing_item_id:
-                        location_data = location_table[location.name]
+                        location_data = copy.copy(location_table[location.name])
+                        (room_id, room_x, room_y) = \
+                            location_data.get_random_position(self.random)
+                        location_data.room_id = room_id
+                        location_data.room_x = room_x
+                        location_data.room_y = room_y
                         foreign_item_locations.append(location_data)
                         if location_data.needs_bat_logic and bat_logic == 0x0:
                             bat_no_touch_locs.append(location_data)
                     else:
                         location_data = location_table[location.name]
+                        room_id = location_data.get_random_room_id(self.random)
                         auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
-                                                                                   location_data.room_id))
+                                                                                   room_id))
             # Adventure items that are in another world get put in an invalid room until needed
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
                 item_position_data_start = get_item_position_data_start(unplaced_item.table_index)
