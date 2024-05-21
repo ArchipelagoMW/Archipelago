@@ -200,7 +200,7 @@ class Group:
     def _dump_value(cls, value: Any, f: TextIO, indent: str) -> None:
         """Write a single yaml line to f"""
         from Utils import dump, Dumper as BaseDumper
-        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper), width=2**31-1)
         assert yaml_line.count("\n") == 1, f"Unexpected input for yaml dumper: {value}"
         f.write(f"{indent}{yaml_line}")
 
@@ -671,7 +671,6 @@ class GeneratorOptions(Group):
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)
-    glitch_triforce_room: GlitchTriforceRoom = GlitchTriforceRoom(1)  # why is this here?
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
 

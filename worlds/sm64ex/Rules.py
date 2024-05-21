@@ -119,14 +119,14 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf.assign_rule("BoB: Mario Wings to the Sky",  "CANN & WC | CAPLESS & CANN")
     rf.assign_rule("BoB: Behind Chain Chomp's Gate", "GP | MOVELESS")
     # Whomp's Fortress
-    rf.assign_rule("WF: Tower", "{{WF: Chip Off Whomp's Block}}")
+    rf.assign_rule("WF: Tower", "GP")
     rf.assign_rule("WF: Chip Off Whomp's Block", "GP")
     rf.assign_rule("WF: Shoot into the Wild Blue", "WK & TJ/SF | CANN")
     rf.assign_rule("WF: Fall onto the Caged Island", "CL & {WF: Tower} | MOVELESS & TJ | MOVELESS & LJ | MOVELESS & CANN")
     rf.assign_rule("WF: Blast Away the Wall", "CANN | CANNLESS & LG")
     # Jolly Roger Bay
     rf.assign_rule("JRB: Upper", "TJ/BF/SF/WK | MOVELESS & LG")
-    rf.assign_rule("JRB: Red Coins on the Ship Afloat", "CL/CANN/TJ/BF/WK")
+    rf.assign_rule("JRB: Red Coins on the Ship Afloat", "CL/CANN/TJ | MOVELESS & BF/WK")
     rf.assign_rule("JRB: Blast to the Stone Pillar", "CANN+CL | CANNLESS & MOVELESS | CANN & MOVELESS")
     rf.assign_rule("JRB: Through the Jet Stream", "MC | CAPLESS")
     # Cool, Cool Mountain
@@ -147,9 +147,10 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf.assign_rule("LLL: Upper Volcano", "CL")
     # Shifting Sand Land
     rf.assign_rule("SSL: Upper Pyramid", "CL & TJ/BF/SF/LG | MOVELESS")
-    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS & CAPLESS")
+    rf.assign_rule("SSL: Stand Tall on the Four Pillars", "TJ+WC+GP | CANN+WC+GP | TJ/SF/BF & CAPLESS | MOVELESS")
+    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ+WC | CANN+WC | TJ/SF/BF & CAPLESS | MOVELESS & CAPLESS")
     # Dire, Dire Docks
-    rf.assign_rule("DDD: Moving Poles", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
+    rf.assign_rule("DDD: Pole-Jumping for Red Coins", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
     rf.assign_rule("DDD: Through the Jet Stream", "MC | CAPLESS")
     rf.assign_rule("DDD: Collect the Caps...", "VC+MC | CAPLESS & VC")
     # Snowman's Land
@@ -173,15 +174,14 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf.assign_rule("THI: Make Wiggler Squirm", "GP | MOVELESS & DV")
     # Tick Tock Clock
     rf.assign_rule("TTC: Lower", "LG/TJ/SF/BF/WK")
-    rf.assign_rule("TTC: Upper", "CL | SF+WK")
-    rf.assign_rule("TTC: Top", "CL | SF+WK")
-    rf.assign_rule("TTC: Stomp on the Thwomp", "LG & TJ/SF/BF")
+    rf.assign_rule("TTC: Upper", "CL | MOVELESS & WK")
+    rf.assign_rule("TTC: Top", "TJ+LG | MOVELESS & WK/TJ")
     rf.assign_rule("TTC: Stop Time for Red Coins", "NAR | {TTC: Lower}")
     # Rainbow Ride
     rf.assign_rule("RR: Maze", "WK | LJ & SF/BF/TJ | MOVELESS & LG/TJ")
     rf.assign_rule("RR: Bob-omb Buddy", "WK | MOVELESS & LG")
-    rf.assign_rule("RR: Swingin' in the Breeze", "LG/TJ/BF/SF")
-    rf.assign_rule("RR: Tricky Triangles!", "LG/TJ/BF/SF")
+    rf.assign_rule("RR: Swingin' in the Breeze", "LG/TJ/BF/SF | MOVELESS")
+    rf.assign_rule("RR: Tricky Triangles!", "LG/TJ/BF/SF | MOVELESS")
     rf.assign_rule("RR: Cruiser", "WK/SF/BF/LG/TJ")
     rf.assign_rule("RR: House", "TJ/SF/BF/LG")
     rf.assign_rule("RR: Somewhere Over the Rainbow", "CANN")
@@ -206,8 +206,8 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         rf.assign_rule("JRB: 100 Coins", "GP & {JRB: Upper}")
         rf.assign_rule("HMC: 100 Coins", "GP")
         rf.assign_rule("SSL: 100 Coins", "{SSL: Upper Pyramid} | GP")
-        rf.assign_rule("DDD: 100 Coins", "GP")
-        rf.assign_rule("SL: 100 Coins", "VC | MOVELESS")
+        rf.assign_rule("DDD: 100 Coins", "GP & {{DDD: Pole-Jumping for Red Coins}}")
+        rf.assign_rule("SL: 100 Coins", "VC | CAPLESS")
         rf.assign_rule("WDW: 100 Coins", "GP | {WDW: Downtown}")
         rf.assign_rule("TTC: 100 Coins", "GP")
         rf.assign_rule("THI: 100 Coins", "GP")
@@ -246,6 +246,7 @@ class RuleFactory:
 
     token_table = {
         "TJ": "Triple Jump",
+        "DJ": "Triple Jump",
         "LJ": "Long Jump",
         "BF": "Backflip",
         "SF": "Side Flip",
@@ -270,7 +271,7 @@ class RuleFactory:
         self.area_randomizer = options.area_rando > 0
         self.capless = not options.strict_cap_requirements
         self.cannonless = not options.strict_cannon_requirements
-        self.moveless = not options.strict_move_requirements or not move_rando_bitvec > 0
+        self.moveless = not options.strict_move_requirements
 
     def assign_rule(self, target_name: str, rule_expr: str):
         target = self.world.get_location(target_name, self.player) if target_name in location_table else self.world.get_entrance(target_name, self.player)

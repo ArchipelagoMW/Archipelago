@@ -22,8 +22,8 @@ Once BizHawk has been installed, open EmuHawk and change the following settings:
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
 EmuHawk is running in the background.
 
-It is strongly recommended to associate GB rom extensions (\*.gb) to the EmuHawk we've just installed.
-To do so, we simply have to search any Gameboy rom we happened to own, right click and select "Open with...", unfold
+It is strongly recommended to associate Game Boy ROM extensions (\*.gb) to the EmuHawk we've just installed.
+To do so, we simply have to search any Game Boy ROM we happened to own, right click and select "Open with...", unfold
 the list that appears and select the bottom option "Look for another application", then browse to the BizHawk folder
 and select EmuHawk.exe.
 
