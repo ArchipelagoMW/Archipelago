@@ -65,6 +65,11 @@ Currently, the following games are supported:
 * Castlevania 64
 * A Short Hike
 * Yoshi's Island
+* Mario & Luigi: Superstar Saga
+* Bomb Rush Cyberfunk
+* Aquaria
+* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
+* A Hat in Time
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

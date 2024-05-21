@@ -15,14 +15,14 @@ def create_locations(world: "NoitaWorld", region: Region) -> None:
         location_type = location_data.ltype
         flag = location_data.flag
 
-        is_orb_allowed = location_type == "orb" and flag <= world.options.orbs_as_checks
-        is_boss_allowed = location_type == "boss" and flag <= world.options.bosses_as_checks
+        is_orb_allowed = location_type == "Orb" and flag <= world.options.orbs_as_checks
+        is_boss_allowed = location_type == "Boss" and flag <= world.options.bosses_as_checks
         amount = 0
         if flag == locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
             amount = 1
-        elif location_type == "chest" and flag <= world.options.path_option:
+        elif location_type == "Chest" and flag <= world.options.path_option:
             amount = world.options.hidden_chests.value
-        elif location_type == "pedestal" and flag <= world.options.path_option:
+        elif location_type == "Pedestal" and flag <= world.options.path_option:
             amount = world.options.pedestal_checks.value
 
         region.add_locations(locations.make_location_range(location_name, location_data.id, amount),

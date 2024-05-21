@@ -117,7 +117,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
     from WebHostLib.lttpsprites import update_sprites_lttp
-    from WebHostLib.autolauncher import autohost, autogen
+    from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
 
     try:
@@ -138,3 +138,11 @@ if __name__ == "__main__":
         else:
             from waitress import serve
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
+    else:
+        from time import sleep
+        try:
+            while True:
+                sleep(1)  # wait for process to be killed
+        except (SystemExit, KeyboardInterrupt):
+            pass
+    stop()  # stop worker threads

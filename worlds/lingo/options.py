@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from schema import And, Schema
 
 from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict
-from worlds.lingo.items import TRAP_ITEMS
+from .items import TRAP_ITEMS
 
 
 class ShuffleDoors(Choice):
