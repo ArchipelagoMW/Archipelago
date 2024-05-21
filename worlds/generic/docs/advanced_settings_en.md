@@ -3,13 +3,12 @@ This guide covers more the more advanced options available in YAML files. This g
 to edit their YAML file manually. This guide should take about 10 minutes to read.
 
 If you would like to generate a basic, fully playable YAML without editing a file, then visit the options page for the
-game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
+game you intend to play.
 
 The options page can be found on the supported games page, just click the "Options Page" link under the name of the
 game you would like.
 
 * Supported games page: [Archipelago Games List](/games)
-* Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
 Clicking on the "Export Options" button at the bottom-left will provide you with a pre-filled YAML with your options.
 The player options page also has a link to download a full template file for that game which will have every option
@@ -132,9 +131,10 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   the location without using any hint points.
 * `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained
   there without using any hint points.
-* `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
-  item which isn't necessary for progression to go in these locations.
-* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations.
+* `exclude_locations` lets you define any locations that you don't want to do and forces a filler or trap item which
+  isn't necessary for progression into these locations.
+* `priority_locations` lets you define any locations that you want to do and forces a progression item into these
+  locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
   can also have local and non local items, forcing the items to either be placed within the worlds of the group or in

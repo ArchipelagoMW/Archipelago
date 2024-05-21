@@ -85,6 +85,25 @@ class ExampleWorld(World):
     options: ExampleGameOptions
 ```
 
+### Option Groups
+Options may be categorized into groups for display on the WebHost. Option groups are displayed alphabetically on the
+player-options and weighted-options pages. Options without a group name are categorized into a generic "Game Options"
+group.
+
+```python
+from worlds.AutoWorld import WebWorld
+from Options import OptionGroup
+
+class MyWorldWeb(WebWorld):
+    option_groups = [
+        OptionGroup('Color Options', [
+            Options.ColorblindMode,
+            Options.FlashReduction,
+            Options.UIColors,
+        ]),
+    ]
+```
+
 ### Option Checking
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
@@ -155,10 +174,12 @@ Gives the player starting hints for where the items defined here are.
 Gives the player starting hints for the items on locations defined here.
 
 ### ExcludeLocations
-Marks locations given here as `LocationProgressType.Excluded` so that progression items can't be placed on them.
+Marks locations given here as `LocationProgressType.Excluded` so that neither progression nor useful items can be
+placed on them.
 
 ### PriorityLocations
-Marks locations given here as `LocationProgressType.Priority` forcing progression items on them.
+Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
+the pool.
 
 ### ItemLinks
 Allows users to share their item pool with other players. Currently item links are per game. A link of one game between

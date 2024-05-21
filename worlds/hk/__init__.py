@@ -199,8 +199,14 @@ class HKWorld(World):
         self.multiworld.regions.append(menu_region)
         # wp_exclusions = self.white_palace_exclusions()
 
+        # check for any goal that godhome events are relevant to
+        all_event_names = event_names.copy()
+        if self.multiworld.Goal[self.player] in [Goal.option_godhome, Goal.option_godhome_flower]:
+            from .GodhomeData import godhome_event_names
+            all_event_names.update(set(godhome_event_names))
+
         # Link regions
-        for event_name in event_names:
+        for event_name in all_event_names:
             #if event_name in wp_exclusions:
             #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
@@ -306,12 +312,6 @@ class HKWorld(World):
         if self.multiworld.RandomizeElevatorPass[self.player]:
             randomized = True
             _add("Elevator_Pass", "Elevator_Pass", randomized)
-
-        # check for any goal that godhome events are relevant to
-        if self.multiworld.Goal[self.player] in [Goal.option_godhome, Goal.option_godhome_flower]:
-            from .GodhomeData import godhome_event_names
-            for item_name in godhome_event_names:
-                _add(item_name, item_name, False)
 
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.multiworld, shop_to_option[shop])[self.player].value):
