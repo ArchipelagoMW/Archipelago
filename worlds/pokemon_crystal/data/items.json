@@ -8,7 +8,7 @@
 	"BICYCLE": {
 		"name": "Bicycle",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"MOON_STONE": {"name": "Moon Stone", "classification": "USEFUL", "tags": []},
 	"ANTIDOTE": {"name": "Antidote", "classification": "FILLER", "tags": []},
@@ -57,7 +57,7 @@
 	"ITEMFINDER": {
 		"name": "Itemfinder",
 		"classification": "PROGRESSION",
-		"tags": ["Unique"]
+		"tags": ["Unique", "Tracker"]
 	},
 	"EXP_SHARE": {"name": "Exp Share", "classification": "FILLER", "tags": []},
 	"OLD_ROD": {
@@ -87,27 +87,27 @@
 	"RED_SCALE": {
 		"name": "Red Scale",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"SECRETPOTION": {
 		"name": "Secretpotion",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"S_S_TICKET": {
 		"name": "S.S. Ticket",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"MYSTERY_EGG": {
 		"name": "Mystery Egg",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"CLEAR_BELL": {
 		"name": "Clear Bell",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"SILVER_WING": {
 		"name": "Silver Wing",
@@ -173,12 +173,12 @@
 	"CARD_KEY": {
 		"name": "Card Key",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"MACHINE_PART": {
 		"name": "Machine Part",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"EGG_TICKET": {
 		"name": "Egg Ticket",
@@ -188,14 +188,14 @@
 	"LOST_ITEM": {
 		"name": "Lost Item",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"STARDUST": {"name": "Stardust", "classification": "FILLER", "tags": []},
 	"STAR_PIECE": {"name": "Star Piece", "classification": "FILLER", "tags": []},
 	"BASEMENT_KEY": {
 		"name": "Basement Key",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"PASS": {"name": "Pass", "classification": "PROGRESSION", "tags": ["KeyItem", "Unique"]},
 	"CHARCOAL": {"name": "Charcoal", "classification": "FILLER", "tags": []},
@@ -227,7 +227,7 @@
 	"SQUIRTBOTTLE": {
 		"name": "Squirtbottle",
 		"classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"PARK_BALL": {"name": "Park Ball", "classification": "FILLER", "tags": []},
 	"RAINBOW_WING": {
@@ -248,86 +248,86 @@
 	"ZEPHYR_BADGE": {
 		"name": "Zephyr Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"HIVE_BADGE": {
 		"name": "Hive Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"PLAIN_BADGE": {
 		"name": "Plain Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"FOG_BADGE": {
 		"name": "Fog Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"MINERAL_BADGE": {
 		"name": "Mineral Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"STORM_BADGE": {
 		"name": "Storm Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"GLACIER_BADGE": {
 		"name": "Glacier Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"RISING_BADGE": {
 		"name": "Rising Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "Tracker"]
 	},
 	"BOULDER_BADGE": {
 		"name": "Boulder Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"CASCADE_BADGE": {
 		"name": "Cascade Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"THUNDER_BADGE": {
 		"name": "Thunder Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"RAINBOW_BADGE": {
 		"name": "Rainbow Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"SOUL_BADGE": {
 		"name": "Soul Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"MARSH_BADGE": {
 		"name": "Marsh Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"VOLCANO_BADGE": {
 		"name": "Volcano Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"EARTH_BADGE": {
 		"name": "Earth Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique", "KantoBadge"]
+		"tags": ["Badge", "Unique", "KantoBadge", "Tracker"]
 	},
 	"RADIO_CARD": {
 		"name": "Radio Card", "classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"MAP_CARD": {
 		"name": "Map Card", "classification": "FILLER",
@@ -339,11 +339,11 @@
 	},
 	"EXPN_CARD": {
 		"name": "EXPN Card", "classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"POKE_GEAR": {
 		"name": "Pokegear", "classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"POKE_DEX": {
 		"name": "Pokedex", "classification": "PROGRESSION",
@@ -479,36 +479,36 @@
 	"HM_CUT": {
 		"name": "HM01 Cut",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	},
 	"HM_FLY": {
 		"name": "HM02 Fly",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	},
 	"HM_SURF": {
 		"name": "HM03 Surf",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	},
 	"HM_STRENGTH": {
 		"name": "HM04 Strength",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	},
 	"HM_FLASH": {
 		"name": "HM05 Flash",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	},
 	"HM_WHIRLPOOL": {
 		"name": "HM06 Whirlpool",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	},
 	"HM_WATERFALL": {
 		"name": "HM07 Waterfall",
 		"classification": "PROGRESSION",
-		"tags": ["HM", "Unique"]
+		"tags": ["HM", "Unique", "Tracker"]
 	}
 }
