@@ -265,7 +265,6 @@ class PokemonRedBlueWorld(World):
                         state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
                     if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
                         multiworld.push_item(loc, item, False)
-                        loc.event = item.advancement
                         fill_locations.remove(loc)
                         break
                     else:

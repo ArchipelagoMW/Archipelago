@@ -1,8 +1,8 @@
 import orjson
 import os
-import typing
 from pkgutil import get_data
 
+from typing import TYPE_CHECKING, List, Dict, Optional, Union
 from BaseClasses import Region
 from worlds.generic.Rules import add_item_rule
 from .Locations import KDL3Location
@@ -10,7 +10,7 @@ from .Names import LocationName
 from .Options import BossShuffle
 from .Room import KDL3Room
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from . import KDL3World
 
 default_levels = {
@@ -39,22 +39,24 @@ first_world_limit = {
 }
 
 
-def generate_valid_level(world: "KDL3World", level, stage, possible_stages, placed_stages):
+def generate_valid_level(world: "KDL3World", level: int, stage: int,
+                         possible_stages: List[int], placed_stages: List[int]):
     new_stage = world.random.choice(possible_stages)
     if level == 1:
         if stage == 0 and new_stage in first_stage_blacklist:
             return generate_valid_level(world, level, stage, possible_stages, placed_stages)
-        elif not (world.multiworld.players > 1 or world.options.consumables or world.options.starsanity) and \
-                new_stage in first_world_limit and \
-                sum(p_stage in first_world_limit for p_stage in placed_stages) >= 2:
+        elif (not (world.multiworld.players > 1 or world.options.consumables or world.options.starsanity) and
+                new_stage in first_world_limit and
+                sum(p_stage in first_world_limit for p_stage in placed_stages)
+              >= (2 if world.options.open_world else 1)):
             return generate_valid_level(world, level, stage, possible_stages, placed_stages)
     return new_stage
 
 
-def generate_rooms(world: "KDL3World", level_regions: typing.Dict[int, Region]):
+def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]):
     level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
     room_data = orjson.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
-    rooms: typing.Dict[str, KDL3Room] = dict()
+    rooms: Dict[str, KDL3Room] = dict()
     for room_entry in room_data:
         room = KDL3Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"],
                         room_entry["stage"], room_entry["room"], room_entry["pointer"], room_entry["music"],
@@ -75,7 +77,7 @@ def generate_rooms(world: "KDL3World", level_regions: typing.Dict[int, Region]):
     world.rooms = list(rooms.values())
     world.multiworld.regions.extend(world.rooms)
 
-    first_rooms: typing.Dict[int, KDL3Room] = dict()
+    first_rooms: Dict[int, KDL3Room] = dict()
     for name, room in rooms.items():
         if room.room == 0:
             if room.stage == 7:
@@ -118,7 +120,7 @@ def generate_rooms(world: "KDL3World", level_regions: typing.Dict[int, Region]):
 
 
 def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_pattern: bool) -> dict:
-    levels: typing.Dict[int, typing.List[typing.Optional[int]]] = {
+    levels: Dict[int, List[Optional[int]]] = {
         1: [None] * 7,
         2: [None] * 7,
         3: [None] * 7,
@@ -158,7 +160,7 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
                 raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
 
     # now handle bosses
-    boss_shuffle: typing.Union[int, str] = world.options.boss_shuffle.value
+    boss_shuffle: Union[int, str] = world.options.boss_shuffle.value
     plando_bosses = []
     if isinstance(boss_shuffle, str):
         # boss plando

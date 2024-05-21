@@ -1,4 +1,4 @@
-# StarCraft 2 Wings of Liberty Randomizer Setup Guide
+# StarCraft 2 Randomizer Setup Guide
 
 This guide contains instructions on how to install and troubleshoot the StarCraft 2 Archipelago client, as well as where
 to obtain a config file for StarCraft 2.
@@ -28,8 +28,6 @@ There are three basic ways to get a yaml:
 * You can ask someone else to share their yaml to use it for yourself or adjust it as you wish.
 
 Remember the name you enter in the options page or in the yaml file, you'll need it to connect later!
-
-Note that the basic Player Options page doesn't allow you to change all advanced options, such as excluding particular units or upgrades. Go through the [Weighted Options](https://archipelago.gg/weighted-options) page for that.
 
 Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
 
