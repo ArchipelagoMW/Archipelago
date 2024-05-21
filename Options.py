@@ -746,6 +746,7 @@ class NamedRange(Range):
 
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
+        assert not "_valid_keys" in attrs, "'_valid_keys' gets set by FreezeValidKeys, define 'valid_keys' instead."
         if "valid_keys" in attrs:
             attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
         return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
@@ -1121,6 +1122,14 @@ class PerGameCommonOptions(CommonOptions):
 @dataclass
 class DeathLinkMixin:
     death_link: DeathLink
+
+
+class OptionGroup(typing.NamedTuple):
+    """Define a grouping of options."""
+    name: str
+    """Name of the group to categorize these options in for display on the WebHost and in generated YAMLS."""
+    options: typing.List[typing.Type[Option[typing.Any]]]
+    """Options to be in the defined group."""
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
