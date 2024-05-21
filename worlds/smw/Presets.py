@@ -1,0 +1,57 @@
+from typing import Dict, Any
+
+all_random = {
+    "goal": "random",
+    "bosses_required": "random",
+    "max_yoshi_egg_cap": "random",
+    "percentage_of_yoshi_eggs": "random",
+    "dragon_coin_checks": "random",
+    "moon_checks": "random",
+    "hidden_1up_checks": "random",
+    "bonus_block_checks": "random",
+    "blocksanity": "random",
+    "bowser_castle_doors": "random",
+    "bowser_castle_rooms": "random",
+    "level_shuffle": "random",
+    "exclude_special_zone": "random",
+    "boss_shuffle": "random",
+    "swap_donut_gh_exits": "random",
+    "display_received_item_popups": "random",
+    "junk_fill_percentage": "random",
+    "trap_fill_percentage": "random",
+    "ice_trap_weight": "random",
+    "stun_trap_weight": "random",
+    "literature_trap_weight": "random",
+    "timer_trap_weight": "random",
+    "reverse_trap_weight": "random",
+    "thwimp_trap_weight": "random",
+    "autosave": "random",
+    "early_climb": "random",
+    "overworld_speed": "random",
+    "music_shuffle": "random",
+    "sfx_shuffle": "random",
+    "mario_palette": "random",
+    "level_palette_shuffle": "random",
+    "overworld_palette_shuffle": "random",
+    "starting_life_count": "random",
+}
+
+allsanity = {
+    "dragon_coin_checks": True,
+    "moon_checks": True,
+    "hidden_1up_checks": True,
+    "bonus_block_checks": True,
+    "blocksanity": True,
+    "level_shuffle": True,
+    "boss_shuffle": "full",
+    "music_shuffle": "full",
+    "sfx_shuffle": "full",
+    "mario_palette": "random",
+    "level_palette_shuffle": "on_curated",
+    "overworld_palette_shuffle": "on_curated",
+}
+
+smw_options_presets: Dict[str, Dict[str, Any]] = {
+    "All Random": all_random,
+    "Allsanity": allsanity,
+}
