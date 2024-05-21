@@ -107,7 +107,7 @@ class BlasphemousWorld(World):
                 invalid = True
 
             if invalid:
-                self.options.starting_location.value = multiworld.random.choice(locations)
+                self.options.starting_location.value = self.random.choice(locations)
             
         
         if not self.options.dash_shuffle:
@@ -118,7 +118,7 @@ class BlasphemousWorld(World):
 
         if self.options.skip_long_quests:
             for loc in junk_locations:
-                multiworld.exclude_locations[player].value.add(loc)
+                self.options.exclude_locations.value.add(loc)
 
         start_rooms: Dict[int, str] = {
             0: "D17Z01S01",

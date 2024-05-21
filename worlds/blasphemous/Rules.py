@@ -1012,12 +1012,18 @@ class BlasRules:
 
 
     def has_boss_strength(self, state: CollectionState, boss: str) -> bool:
+        life: int = state.count("Life Upgrade", self.player)
+        sword: int = state.count("Mea Culpa Upgrade", self.player)
+        fervour: int = state.count("Fervour Upgrade", self.player)
+        flasks: int = self.flasks(state)
+        quicksilver: int = self.quicksilver(state)
+
         player_strength: float = (
-            state.count("Life Upgrade", self.player) * 0.25 / 6
-            + state.count("Mea Culpa Upgrade", self.player) * 0.25 / 7
-            + state.count("Fervour Upgrade", self.player) * 0.20 / 6
-            + self.flasks(state) * 0.15 / 8
-            + self.quicksilver(state) * 0.15 / 5
+            (6 if life > 6 else life) * 0.25 / 6
+            + (7 if sword > 7 else sword) * 0.25 / 7
+            + (6 if fervour > 6 else fervour) * 0.20 / 6
+            + (8 if flasks > 8 else flasks) * 0.15 / 8
+            + (5 if quicksilver > 5 else quicksilver) * 0.15 / 5
         )
 
         bosses: Dict[str, float] = {
