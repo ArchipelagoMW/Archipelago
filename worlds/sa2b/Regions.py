@@ -188,6 +188,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.city_escape_itembox_7,
         LocationName.city_escape_itembox_8,
         LocationName.city_escape_itembox_9,
+        LocationName.city_escape_big,
         LocationName.city_escape_upgrade,
     ]
     city_escape_region = create_region(multiworld, player, active_locations, LocationName.city_escape_region,
@@ -231,6 +232,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.metal_harbor_itembox_3,
         LocationName.metal_harbor_itembox_4,
         LocationName.metal_harbor_itembox_5,
+        LocationName.metal_harbor_big,
         LocationName.metal_harbor_upgrade,
     ]
     metal_harbor_region = create_region(multiworld, player, active_locations, LocationName.metal_harbor_region,
@@ -287,6 +289,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.green_forest_itembox_11,
         LocationName.green_forest_itembox_12,
         LocationName.green_forest_itembox_13,
+        LocationName.green_forest_big,
         LocationName.green_forest_upgrade,
     ]
     green_forest_region = create_region(multiworld, player, active_locations, LocationName.green_forest_region,
@@ -351,6 +354,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.pyramid_cave_itembox_13,
         LocationName.pyramid_cave_itembox_14,
         LocationName.pyramid_cave_itembox_15,
+        LocationName.pyramid_cave_big,
         LocationName.pyramid_cave_upgrade,
     ]
     pyramid_cave_region = create_region(multiworld, player, active_locations, LocationName.pyramid_cave_region,
@@ -418,6 +422,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.crazy_gadget_itembox_12,
         LocationName.crazy_gadget_itembox_13,
         LocationName.crazy_gadget_itembox_14,
+        LocationName.crazy_gadget_big,
         LocationName.crazy_gadget_upgrade,
     ]
     crazy_gadget_region = create_region(multiworld, player, active_locations, LocationName.crazy_gadget_region,
@@ -507,6 +512,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.final_rush_itembox_38,
         LocationName.final_rush_itembox_39,
         LocationName.final_rush_itembox_40,
+        LocationName.final_rush_big,
         LocationName.final_rush_upgrade,
     ]
     final_rush_region = create_region(multiworld, player, active_locations, LocationName.final_rush_region,
@@ -561,6 +567,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.prison_lane_itembox_4,
         LocationName.prison_lane_itembox_5,
         LocationName.prison_lane_itembox_6,
+        LocationName.prison_lane_big,
         LocationName.prison_lane_upgrade,
     ]
     prison_lane_region = create_region(multiworld, player, active_locations, LocationName.prison_lane_region,
@@ -615,6 +622,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.mission_street_itembox_4,
         LocationName.mission_street_itembox_5,
         LocationName.mission_street_itembox_6,
+        LocationName.mission_street_big,
         LocationName.mission_street_upgrade,
     ]
     mission_street_region = create_region(multiworld, player, active_locations, LocationName.mission_street_region,
@@ -669,6 +677,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.hidden_base_itembox_3,
         LocationName.hidden_base_itembox_4,
         LocationName.hidden_base_itembox_5,
+        LocationName.hidden_base_big,
         LocationName.hidden_base_upgrade,
     ]
     hidden_base_region = create_region(multiworld, player, active_locations, LocationName.hidden_base_region,
@@ -732,6 +741,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.eternal_engine_itembox_12,
         LocationName.eternal_engine_itembox_13,
         LocationName.eternal_engine_itembox_14,
+        LocationName.eternal_engine_big,
         LocationName.eternal_engine_upgrade,
     ]
     eternal_engine_region = create_region(multiworld, player, active_locations, LocationName.eternal_engine_region,
@@ -829,6 +839,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.pumpkin_hill_itembox_8, 
         LocationName.pumpkin_hill_itembox_9, 
         LocationName.pumpkin_hill_itembox_10,
+        LocationName.pumpkin_hill_big,
         LocationName.pumpkin_hill_upgrade,
     ]
     pumpkin_hill_region = create_region(multiworld, player, active_locations, LocationName.pumpkin_hill_region,
@@ -871,6 +882,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.aquatic_mine_itembox_4,
         LocationName.aquatic_mine_itembox_5,
         LocationName.aquatic_mine_itembox_6,
+        LocationName.aquatic_mine_big,
         LocationName.aquatic_mine_upgrade,
     ]
     aquatic_mine_region = create_region(multiworld, player, active_locations, LocationName.aquatic_mine_region,
@@ -921,6 +933,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.death_chamber_itembox_8, 
         LocationName.death_chamber_itembox_9, 
         LocationName.death_chamber_itembox_10,
+        LocationName.death_chamber_big,
         LocationName.death_chamber_upgrade,
     ]
     death_chamber_region = create_region(multiworld, player, active_locations, LocationName.death_chamber_region,
@@ -970,6 +983,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.meteor_herd_itembox_10,
         LocationName.meteor_herd_itembox_11,
         LocationName.meteor_herd_itembox_12,
+        LocationName.meteor_herd_big,
         LocationName.meteor_herd_upgrade,
     ]
     meteor_herd_region = create_region(multiworld, player, active_locations, LocationName.meteor_herd_region,
@@ -1028,6 +1042,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.radical_highway_itembox_5,
         LocationName.radical_highway_itembox_6,
         LocationName.radical_highway_itembox_7,
+        LocationName.radical_highway_big,
         LocationName.radical_highway_upgrade,
     ]
     radical_highway_region = create_region(multiworld, player, active_locations, LocationName.radical_highway_region,
@@ -1081,6 +1096,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.white_jungle_itembox_6,
         LocationName.white_jungle_itembox_7,
         LocationName.white_jungle_itembox_8,
+        LocationName.white_jungle_big,
         LocationName.white_jungle_upgrade,
     ]
     white_jungle_region = create_region(multiworld, player, active_locations, LocationName.white_jungle_region,
@@ -1154,6 +1170,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.sky_rail_itembox_21,
         LocationName.sky_rail_itembox_22,
         LocationName.sky_rail_itembox_23,
+        LocationName.sky_rail_big,
         LocationName.sky_rail_upgrade,
     ]
     sky_rail_region = create_region(multiworld, player, active_locations, LocationName.sky_rail_region,
@@ -1234,6 +1251,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.final_chase_itembox_33,
         LocationName.final_chase_itembox_34,
         LocationName.final_chase_itembox_35,
+        LocationName.final_chase_big,
         LocationName.final_chase_upgrade,
     ]
     final_chase_region = create_region(multiworld, player, active_locations, LocationName.final_chase_region,
@@ -1295,6 +1313,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.iron_gate_itembox_14,
         LocationName.iron_gate_itembox_15,
         LocationName.iron_gate_itembox_16,
+        LocationName.iron_gate_big,
         LocationName.iron_gate_upgrade,
     ]
     iron_gate_region = create_region(multiworld, player, active_locations, LocationName.iron_gate_region,
@@ -1345,6 +1364,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.sand_ocean_itembox_8, 
         LocationName.sand_ocean_itembox_9, 
         LocationName.sand_ocean_itembox_10,
+        LocationName.sand_ocean_big,
         LocationName.sand_ocean_upgrade,
     ]
     sand_ocean_region = create_region(multiworld, player, active_locations, LocationName.sand_ocean_region,
@@ -1395,6 +1415,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.lost_colony_itembox_7,
         LocationName.lost_colony_itembox_8,
         LocationName.lost_colony_itembox_9,
+        LocationName.lost_colony_big,
         LocationName.lost_colony_upgrade,
     ]
     lost_colony_region = create_region(multiworld, player, active_locations, LocationName.lost_colony_region,
@@ -1440,6 +1461,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.weapons_bed_itembox_5,
         LocationName.weapons_bed_itembox_6,
         LocationName.weapons_bed_itembox_7,
+        LocationName.weapons_bed_big,
         LocationName.weapons_bed_upgrade,
     ]
     weapons_bed_region = create_region(multiworld, player, active_locations, LocationName.weapons_bed_region,
@@ -1503,6 +1525,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.cosmic_wall_itembox_25,
         LocationName.cosmic_wall_itembox_26,
         LocationName.cosmic_wall_itembox_27,
+        LocationName.cosmic_wall_big,
         LocationName.cosmic_wall_upgrade,
     ]
     cosmic_wall_region = create_region(multiworld, player, active_locations, LocationName.cosmic_wall_region,
@@ -1554,6 +1577,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.dry_lagoon_itembox_4,
         LocationName.dry_lagoon_itembox_5,
         LocationName.dry_lagoon_itembox_6,
+        LocationName.dry_lagoon_big,
         LocationName.dry_lagoon_upgrade,
     ]
     dry_lagoon_region = create_region(multiworld, player, active_locations, LocationName.dry_lagoon_region,
@@ -1603,6 +1627,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.egg_quarters_itembox_9,
         LocationName.egg_quarters_itembox_10,
         LocationName.egg_quarters_itembox_11,
+        LocationName.egg_quarters_big,
         LocationName.egg_quarters_upgrade,
     ]
     egg_quarters_region = create_region(multiworld, player, active_locations, LocationName.egg_quarters_region,
@@ -1665,6 +1690,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.security_hall_itembox_22,
         LocationName.security_hall_itembox_23,
         LocationName.security_hall_itembox_24,
+        LocationName.security_hall_big,
         LocationName.security_hall_upgrade,
     ]
     security_hall_region = create_region(multiworld, player, active_locations, LocationName.security_hall_region,
@@ -1733,6 +1759,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.mad_space_itembox_18,
         LocationName.mad_space_itembox_19,
         LocationName.mad_space_itembox_20,
+        LocationName.mad_space_big,
         LocationName.mad_space_upgrade,
     ]
     mad_space_region = create_region(multiworld, player, active_locations, LocationName.mad_space_region,
@@ -1795,6 +1822,11 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.cannon_core_itembox_11,
         LocationName.cannon_core_itembox_12,
         LocationName.cannon_core_beetle,
+        LocationName.cannon_core_big_1,
+        LocationName.cannon_core_big_2,
+        LocationName.cannon_core_big_3,
+        LocationName.cannon_core_big_4,
+        LocationName.cannon_core_big_5,
     ]
     cannon_core_region = create_region(multiworld, player, active_locations, LocationName.cannon_core_region,
                                        cannon_core_region_locations)

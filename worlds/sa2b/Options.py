@@ -271,7 +271,7 @@ class Animalsanity(Toggle):
     """
     Determines whether unique counts of animals grant checks.
     ALL animals must be collected in a single run of a mission to get all checks.
-    (421 Locations)
+    (422 Locations)
     """
     display_name = "Animalsanity"
 
@@ -288,6 +288,14 @@ class ItemBoxsanity(Choice):
     option_extra_lives = 1
     option_all = 2
     default = 0
+
+
+class Bigsanity(Toggle):
+    """
+    Determines whether helping Big fish grants checks.
+    (32 Locations)
+    """
+    display_name = "Bigsanity"
 
 
 class KartRaceChecks(Choice):
@@ -846,6 +854,7 @@ class SA2BOptions(PerGameCommonOptions):
     omosanity: Omosanity
     animalsanity: Animalsanity
     itemboxsanity: ItemBoxsanity
+    bigsanity: Bigsanity
     kart_race_checks: KartRaceChecks
 
     logic_difficulty: LogicDifficulty

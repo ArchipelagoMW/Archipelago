@@ -819,11 +819,9 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.white_jungle_beetle, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player))
         add_rule(multiworld.get_location(LocationName.mad_space_beetle, player),
-                 lambda state: state.has(ItemName.rouge_mystic_melody, player) and
-                               state.has(ItemName.rouge_iron_boots, player))
+                 lambda state: state.has(ItemName.rouge_iron_boots, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_beetle, player),
-                 lambda state: state.has(ItemName.eggman_mystic_melody, player) and
-                               state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
 
         add_rule(multiworld.get_location(LocationName.cannon_core_beetle, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
@@ -2016,6 +2014,55 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.final_rush_itembox_40, player),
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
+    # Big Upgrade Requirements
+    if world.options.bigsanity:
+        add_rule(multiworld.get_location(LocationName.mission_street_big, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.hidden_base_big, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.pyramid_cave_big, player),
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
+        add_rule(multiworld.get_location(LocationName.death_chamber_big, player),
+                 lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
+        add_rule(multiworld.get_location(LocationName.eternal_engine_big, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.tails_bazooka, player))
+        add_rule(multiworld.get_location(LocationName.crazy_gadget_big, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
+                               state.has(ItemName.sonic_bounce_bracelet, player) and
+                               state.has(ItemName.sonic_flame_ring, player))
+
+        add_rule(multiworld.get_location(LocationName.iron_gate_big, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+        add_rule(multiworld.get_location(LocationName.lost_colony_big, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+        add_rule(multiworld.get_location(LocationName.white_jungle_big, player),
+                 lambda state: state.has(ItemName.shadow_air_shoes, player))
+        add_rule(multiworld.get_location(LocationName.mad_space_big, player),
+                 lambda state: state.has(ItemName.rouge_iron_boots, player))
+        add_rule(multiworld.get_location(LocationName.cosmic_wall_big, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_1, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_2, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.eggman_jet_engine, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_3, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.eggman_jet_engine, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_4, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player) and
+                               state.has(ItemName.knuckles_air_necklace, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_5, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player) and
+                               state.has(ItemName.knuckles_air_necklace, player) and
+                               state.has(ItemName.sonic_bounce_bracelet, player))
+
 
 def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player: int):
     # Mission 1 Upgrade Requirements
@@ -2537,8 +2584,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
         add_rule(multiworld.get_location(LocationName.lost_colony_beetle, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_beetle, player),
-                 lambda state: state.has(ItemName.eggman_mystic_melody, player) and
-                               state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
 
         add_rule(multiworld.get_location(LocationName.cannon_core_beetle, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
@@ -3375,6 +3421,39 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
 
         add_rule(multiworld.get_location(LocationName.final_rush_itembox_40, player),
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
+
+    # Big Upgrade Requirements
+    if world.options.bigsanity:
+        add_rule(multiworld.get_location(LocationName.mission_street_big, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.hidden_base_big, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.death_chamber_big, player),
+                 lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
+        add_rule(multiworld.get_location(LocationName.eternal_engine_big, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.tails_bazooka, player))
+        add_rule(multiworld.get_location(LocationName.crazy_gadget_big, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player) and
+                               state.has(ItemName.sonic_flame_ring, player))
+
+        add_rule(multiworld.get_location(LocationName.iron_gate_big, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+        add_rule(multiworld.get_location(LocationName.lost_colony_big, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+        add_rule(multiworld.get_location(LocationName.cosmic_wall_big, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_2, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_3, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_4, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player))
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_5, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player))
 
 
 def set_boss_gate_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]):

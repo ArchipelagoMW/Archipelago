@@ -18,6 +18,8 @@
 - Prevent changing Chao Timescale while paused
 - Logic Fixes:
 	- `Lost Colony - Hidden 1` (Standard Logic) now requires `Eggman - Jet Engine`
+	- `Mad Space - Gold Beetle` (Standard Logic) now only requires `Rouge - Iron Boots`
+	- `Cosmic Wall - Gold Beetle` (Standard and Hard Logic) now only requires `Eggman - Jet Engine`
 
 
 ## v2.3 - The Chao Update

@@ -1823,6 +1823,43 @@ itembox_location_table = {
     LocationName.final_rush_itembox_40: 0xFF1AEF,
 }
 
+big_location_table = {
+    LocationName.city_escape_big: 0xFF1B00,
+    LocationName.prison_lane_big: 0xFF1B02,
+    LocationName.metal_harbor_big: 0xFF1B03,
+    LocationName.green_forest_big: 0xFF1B04,
+    LocationName.pumpkin_hill_big: 0xFF1B05,
+    LocationName.mission_street_big: 0xFF1B06,
+    LocationName.aquatic_mine_big: 0xFF1B07,
+    LocationName.hidden_base_big: 0xFF1B09,
+    LocationName.pyramid_cave_big: 0xFF1B0A,
+    LocationName.death_chamber_big: 0xFF1B0B,
+    LocationName.eternal_engine_big: 0xFF1B0C,
+    LocationName.meteor_herd_big: 0xFF1B0D,
+    LocationName.crazy_gadget_big: 0xFF1B0E,
+    LocationName.final_rush_big: 0xFF1B0F,
+
+    LocationName.iron_gate_big: 0xFF1B10,
+    LocationName.dry_lagoon_big: 0xFF1B11,
+    LocationName.sand_ocean_big: 0xFF1B12,
+    LocationName.radical_highway_big: 0xFF1B13,
+    LocationName.egg_quarters_big: 0xFF1B14,
+    LocationName.lost_colony_big: 0xFF1B15,
+    LocationName.weapons_bed_big: 0xFF1B16,
+    LocationName.security_hall_big: 0xFF1B17,
+    LocationName.white_jungle_big: 0xFF1B18,
+    LocationName.sky_rail_big: 0xFF1B1A,
+    LocationName.mad_space_big: 0xFF1B1B,
+    LocationName.cosmic_wall_big: 0xFF1B1C,
+    LocationName.final_chase_big: 0xFF1B1D,
+
+    LocationName.cannon_core_big_1: 0xFF1B1E,
+    LocationName.cannon_core_big_2: 0xFF1B3E,
+    LocationName.cannon_core_big_3: 0xFF1B5E,
+    LocationName.cannon_core_big_4: 0xFF1B7E,
+    LocationName.cannon_core_big_5: 0xFF1B9E,
+}
+
 boss_gate_location_table = {
     LocationName.gate_1_boss: 0xFF0100,
     LocationName.gate_2_boss: 0xFF0101,
@@ -2189,6 +2226,7 @@ all_locations = {
     **animal_location_table,
     **lifebox_location_table,
     **itembox_location_table,
+    **big_location_table,
     **chao_race_beginner_location_table,
     **chao_karate_beginner_location_table,
     **chao_race_intermediate_location_table,
@@ -2307,6 +2345,9 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
         elif world.options.itemboxsanity.value == 2:
             location_table.update({**lifebox_location_table})
             location_table.update({**itembox_location_table})
+
+        if world.options.bigsanity:
+            location_table.update({**big_location_table})
 
         if world.options.kart_race_checks == 2:
             location_table.update({**kart_race_beginner_location_table})
