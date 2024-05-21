@@ -78,7 +78,7 @@ class PokemonCrystalClient(BizHawkClient):
         try:
             # Check ROM name/patch version
             rom_info = ((await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["AP_ROM_Header"], 11, "ROM"),
-                                                              (data.rom_addresses["AP_ROM_Version"], 1, "ROM")])))
+                                                              (data.rom_addresses["AP_ROM_Version"], 2, "ROM")])))
 
             rom_name = bytes([byte for byte in rom_info[0] if byte != 0]).decode("ascii")
             rom_version = int.from_bytes(rom_info[1], "little")
@@ -90,10 +90,13 @@ class PokemonCrystalClient(BizHawkClient):
                 return False
             if rom_name != "AP_CRYSTAL":
                 return False
-            if rom_version != EXPECTED_ROM_VERSION:
+            if rom_version != data.rom_version:
+                generator_version = "{0:x}".format(rom_version)
+                client_version = "{0:x}".format(data.rom_version)
                 logger.info("ERROR: The patch file used to create this ROM is not compatible with "
                             "this client. Double check your client version against the version being "
                             "used by the generator.")
+                logger.info(f"Client checksum: {client_version}, Generator checksum: {generator_version}")
                 return False
         except UnicodeDecodeError:
             return False

@@ -111,6 +111,7 @@ class MiscData(NamedTuple):
 
 
 class PokemonCrystalData:
+    rom_version: int
     rom_addresses: Dict[str, int]
     ram_addresses: Dict[str, int]
     event_flags: Dict[str, int]
@@ -167,6 +168,8 @@ def _init() -> None:
     sa_data = data_json["misc"]["sa"]
     ec_data = data_json["misc"]["ec"]
     tmhm_data = data_json["tmhm"]
+
+    data.rom_version = data_json["rom_version"]
 
     claimed_locations: Set[str] = set()
 
