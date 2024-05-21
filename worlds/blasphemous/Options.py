@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, OptionGroup
 import random
 
 
@@ -36,8 +36,7 @@ class CorpseHints(DefaultOnToggle):
 
 
 class Difficulty(Choice):
-    """Adjusts the overall difficulty of the randomizer, including upgrades required to defeat bosses 
-    and advanced movement tricks or glitches."""
+    """Adjusts the overall difficulty of the randomizer, including upgrades required to defeat bosses and advanced movement tricks or glitches."""
     display_name = "Difficulty"
     option_easy = 0
     option_normal = 1
@@ -51,10 +50,8 @@ class Penitence(Toggle):
 
 
 class StartingLocation(ChoiceIsRandom):
-    """Choose where to start the randomizer. Note that some starting locations cannot be chosen with certain 
-    other options.
-    Specifically, Brotherhood and Mourning And Havoc cannot be chosen if Shuffle Dash is enabled, and Grievance Ascends 
-    cannot be chosen if Shuffle Wall Climb is enabled."""
+    """Choose where to start the randomizer. Note that some starting locations cannot be chosen with certain other options.
+    Specifically, Brotherhood and Mourning And Havoc cannot be chosen if Shuffle Dash is enabled, and Grievance Ascends cannot be chosen if Shuffle Wall Climb is enabled."""
     display_name = "Starting Location"
     option_brotherhood = 0
     option_albero = 1
@@ -80,8 +77,7 @@ class Ending(Choice):
 
 class SkipLongQuests(Toggle):
     """Ensures that the rewards for long quests will be filler items.
-    Affected locations: \"Albero: Donate 50000 Tears\", \"Ossuary: 11th reward\", \"AtTotS: Miriam's gift\", 
-    \"TSC: Jocinero's final reward\""""
+    Affected locations: \"Albero: Donate 50000 Tears\", \"Ossuary: 11th reward\", \"AtTotS: Miriam's gift\", \"TSC: Jocinero's final reward\""""
     display_name = "Skip Long Quests"
 
 
@@ -110,16 +106,14 @@ class ReliquaryShuffle(DefaultOnToggle):
 
 
 class CustomItem1(Toggle):
-    """Adds the custom relic Boots of Pleading into the item pool, which grants the ability to fall onto spikes 
-    and survive.
-    Must have the \"Blasphemous-Boots-of-Pleading\" mod installed to connect to a multiworld."""
+    """Adds the custom relic Boots of Pleading into the item pool, which grants the ability to fall onto spikes and survive.
+    Must have the \"Boots of Pleading\" mod installed to connect to a multiworld."""
     display_name = "Boots of Pleading"
 
 
 class CustomItem2(Toggle):
-    """Adds the custom relic Purified Hand of the Nun into the item pool, which grants the ability to jump 
-    a second time in mid-air.
-    Must have the \"Blasphemous-Double-Jump\" mod installed to connect to a multiworld."""
+    """Adds the custom relic Purified Hand of the Nun into the item pool, which grants the ability to jump a second time in mid-air.
+    Must have the \"Double Jump\" mod installed to connect to a multiworld."""
     display_name = "Purified Hand of the Nun"
 
 
@@ -135,8 +129,7 @@ class SkillRando(Toggle):
 
 class EnemyRando(Choice):
     """Randomizes the enemies that appear in each room.
-    Shuffled: Enemies will be shuffled amongst each other, but can only appear as many times as they do in 
-    a standard game.
+    Shuffled: Enemies will be shuffled amongst each other, but can only appear as many times as they do in a standard game.
     Randomized: Every enemy is completely random, and can appear any number of times.
     Some enemies will never be randomized."""
     display_name = "Enemy Randomizer"
@@ -147,7 +140,7 @@ class EnemyRando(Choice):
 
 
 class EnemyGroups(DefaultOnToggle):
-    """Randomized enemies will chosen from sets of specific groups. 
+    """Randomized enemies will be chosen from sets of specific groups. 
     (Weak, normal, large, flying)
     Has no effect if Enemy Randomizer is disabled."""
     display_name = "Enemy Groups"
@@ -186,3 +179,26 @@ class BlasphemousOptions(PerGameCommonOptions):
     enemy_groups: EnemyGroups
     enemy_scaling: EnemyScaling
     death_link: BlasphemousDeathLink
+
+
+blas_option_groups = [
+    OptionGroup("Quality of Life",  [
+        PrieDieuWarp,
+        SkipCutscenes,
+        CorpseHints,
+        SkipLongQuests,
+        StartWheel
+    ]),
+    OptionGroup("Moveset", [
+        DashShuffle,
+        WallClimbShuffle,
+        SkillRando,
+        CustomItem1,
+        CustomItem2
+    ]),
+    OptionGroup("Enemy Randomizer", [
+        EnemyRando,
+        EnemyGroups,
+        EnemyScaling
+    ])
+]

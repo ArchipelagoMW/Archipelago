@@ -6,7 +6,7 @@ from .Items import base_id, item_table, group_table, tears_set, reliquary_set
 from .Locations import location_names
 from .Rules import BlasRules
 from worlds.generic.Rules import set_rule
-from .Options import BlasphemousOptions
+from .Options import BlasphemousOptions, blas_option_groups
 from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
 from .region_data import regions, locations, transitions
 
@@ -20,6 +20,7 @@ class BlasphemousWeb(WebWorld):
         "setup/en",
         ["TRPG"]
     )]
+    option_groups = blas_option_groups
 
 
 class BlasphemousWorld(World):
