@@ -337,7 +337,7 @@ def space_zone_2_coins(state, player, coins):
     return coins <= reachable_coins
 
 
-def space_zone_secret_coins(state, player, coins):
+def space_zone_secret_course_coins(state, player, coins):
     return coins <= 96 or not is_auto_scroll(state, player, "Space Zone Secret Course")
 
 
