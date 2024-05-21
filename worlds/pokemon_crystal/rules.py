@@ -249,16 +249,15 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER -> REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM"),
              lambda state: can_surf(state) and can_strength(state))
 
-    set_rule(get_entrance("REGION_UNION_CAVE_B1F -> REGION_RUINS_OF_ALPH_OUTSIDE:TRAINER"), can_surf)
-
     # Route 32
     set_rule(get_location("Route 32 - Miracle Seed from Man in North"), lambda state: has_badge(state, "zephyr"))
 
     set_rule(get_location("Route 32 - TM05 from Roar Guy"), can_cut)
 
     # Union Cave
-
-    set_rule(get_entrance("REGION_UNION_CAVE_B1F -> REGION_UNION_CAVE_B2F"), can_surf)
+    set_rule(get_entrance("REGION_UNION_CAVE_1F -> REGION_UNION_CAVE_B1F:SOUTH"), can_surf)
+    set_rule(get_entrance("REGION_UNION_CAVE_B1F -> REGION_UNION_CAVE_B1F:NORTH"), can_surf)
+    set_rule(get_entrance("REGION_UNION_CAVE_B1F:SOUTH -> REGION_UNION_CAVE_B2F"), can_surf)
 
     # Azalea Town
     set_rule(get_location("Slowpoke Well B2F - Kings Rock from Man"),

@@ -4638,6 +4638,7 @@
 	"REGION_UNION_CAVE_1F": {
 		"johto": true,
 		"exits": [
+			"REGION_UNION_CAVE_B1F:SOUTH",
 			"REGION_UNION_CAVE_B1F",
 			"REGION_ROUTE_33",
 			"REGION_ROUTE_32"
@@ -4658,18 +4659,38 @@
 	"REGION_UNION_CAVE_B1F": {
 		"johto": true,
 		"exits": [
+			"REGION_UNION_CAVE_B1F:NORTH",
 			"REGION_RUINS_OF_ALPH_OUTSIDE",
-			"REGION_RUINS_OF_ALPH_OUTSIDE:TRAINER",
 			"REGION_UNION_CAVE_1F",
 			"REGION_UNION_CAVE_B2F"
 		],
 		"locations": [
 			"UNION_CAVE_B1F_TM_SWIFT",
-			"UNION_CAVE_B1F_X_DEFEND",
-			"ITEM_FROM_POKEMANIAC_ANDREW",
-			"ITEM_FROM_POKEMANIAC_CALVIN",
+			"UNION_CAVE_B1F_X_DEFEND"
+		],
+		"events": []
+	},
+	"REGION_UNION_CAVE_B1F:NORTH": {
+		"johto": true,
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE:TRAINER",
+			"REGION_UNION_CAVE_1F"
+		],
+		"locations": [
 			"ITEM_FROM_HIKER_PHILLIP",
 			"ITEM_FROM_HIKER_LEONARD"
+		],
+		"events": []
+	},
+	"REGION_UNION_CAVE_B1F:SOUTH": {
+		"johto": true,
+		"exits": [
+			"REGION_UNION_CAVE_1F",
+			"REGION_UNION_CAVE_B2F"
+		],
+		"locations": [
+			"ITEM_FROM_POKEMANIAC_ANDREW",
+			"ITEM_FROM_POKEMANIAC_CALVIN"
 		],
 		"events": []
 	},
