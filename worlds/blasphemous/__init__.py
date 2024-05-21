@@ -300,29 +300,11 @@ class BlasphemousWorld(World):
     
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
-        locations = []
         doors: Dict[str, str] = {}
-
-        multiworld = self.multiworld
-        player = self.player
         thorns: bool = True
 
         if self.options.thorn_shuffle == 2:
             thorns = False
-
-        for loc in multiworld.get_filled_locations(player):
-            if loc.item.code == None:
-                continue
-            else:
-                data = {
-                    "id": [i for i in location_names if location_names[i] == loc.name][0],
-                    "ap_id": loc.address,
-                    "name": loc.item.name,
-                    "player_name": multiworld.player_name[loc.item.player],
-                    "type": int(loc.item.classification)
-                }
-
-                locations.append(data)
 
         config = {
             "LogicDifficulty": self.options.difficulty.value,
@@ -353,7 +335,7 @@ class BlasphemousWorld(World):
         }
     
         slot_data = {
-            "locations": locations,
+            "locations": [[loc, (base_id + index)] for index, loc in enumerate(location_names)],
             "doors": doors,
             "cfg": config,
             "ending": self.options.ending.value,
