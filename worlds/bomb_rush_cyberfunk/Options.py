@@ -9,7 +9,9 @@ else:
 
 
 class Logic(Choice):
-    """Choose the logic used by the randomizer."""
+    """
+    Choose the logic used by the randomizer.
+    """
     display_name = "Logic"
     option_glitchless = 0
     option_glitched = 1
@@ -17,26 +19,38 @@ class Logic(Choice):
 
 
 class SkipIntro(DefaultOnToggle):
-    """Skips escaping the police station.
-    Graffiti spots tagged during the intro will not unlock items."""
+    """
+    Skips escaping the police station.
+
+    Graffiti spots tagged during the intro will not unlock items.
+    """
     display_name = "Skip Intro"
 
 
 class SkipDreams(Toggle):
-    """Skips the dream sequences at the end of each chapter.
-    This can be changed later in the options menu inside the Archipelago phone app."""
+    """
+    Skips the dream sequences at the end of each chapter.
+
+    This can be changed later in the options menu inside the Archipelago phone app.
+    """
     display_name = "Skip Dreams"
 
 
 class SkipHands(Toggle):
-    """Skips spraying the lion statue hands after the dream in Chapter 5."""
+    """
+    Skips spraying the lion statue hands after the dream in Chapter 5.
+    """
     display_name = "Skip Statue Hands"
 
 
 class TotalRep(Range):
-    """Change the total amount of REP in your world.
+    """
+    Change the total amount of REP in your world.
+    
     At least 960 REP is needed to finish the game.
-    Will be rounded to the nearest number divisible by 8."""
+    
+    Will be rounded to the nearest number divisible by 8.
+    """
     display_name = "Total REP"
     range_start = 1000
     range_end = 2000
@@ -74,12 +88,16 @@ class TotalRep(Range):
     
 
 class EndingREP(Toggle):
-    """Changes the final boss to require 1000 REP instead of 960 REP to start."""
+    """
+    Changes the final boss to require 1000 REP instead of 960 REP to start.
+    """
     display_name = "Extra REP Required"
 
 
 class StartStyle(Choice):
-    """Choose which movestyle to start with."""
+    """
+    Choose which movestyle to start with.
+    """
     display_name = "Starting Movestyle"
     option_skateboard = 2
     option_inline_skates = 3
@@ -88,17 +106,22 @@ class StartStyle(Choice):
 
 
 class LimitedGraffiti(Toggle):
-    """Each graffiti design can only be used a limited number of times before being removed from your inventory.
-    In some cases, such as completing a dream, using graffiti to defeat enemies, or spraying over your own graffiti, 
-    uses will not be counted.
-    If enabled, doing graffiti is disabled during crew battles, to prevent softlocking."""
+    """
+    Each graffiti design can only be used a limited number of times before being removed from your inventory.
+    
+    In some cases, such as completing a dream, using graffiti to defeat enemies, or spraying over your own graffiti, uses will not be counted.
+    
+    If enabled, doing graffiti is disabled during crew battles, to prevent softlocking.
+    """
     display_name = "Limited Graffiti"
 
 
 class SGraffiti(Choice):
-    """Choose if small graffiti should be separate, meaning that you will need to switch characters every time you run 
-    out, or combined, meaning that unlocking new characters will add 5 uses that any character can use.
-    Has no effect if Limited Graffiti is disabled."""
+    """
+    Choose if small graffiti should be separate, meaning that you will need to switch characters every time you run out, or combined, meaning that unlocking new characters will add 5 uses that any character can use.
+    
+    Has no effect if Limited Graffiti is disabled.
+    """
     display_name = "Small Graffiti Uses"
     option_separate = 0
     option_combined = 1
@@ -106,19 +129,27 @@ class SGraffiti(Choice):
 
 
 class JunkPhotos(Toggle):
-    """Skip taking pictures of Polo for items."""
+    """
+    Skip taking pictures of Polo for items.
+    """
     display_name = "Skip Polo Photos"
 
 
 class DontSavePhotos(Toggle):
-    """Photos taken with the Camera app will not be saved.
-    This can be changed later in the options menu inside the Archipelago phone app."""
+    """
+    Photos taken with the Camera app will not be saved.
+
+    This can be changed later in the options menu inside the Archipelago phone app.
+    """
     display_name = "Don't Save Photos"
 
 
 class ScoreDifficulty(Choice):
-    """Alters the score required to win score challenges and crew battles.
-    This can be changed later in the options menu inside the Archipelago phone app."""
+    """
+    Alters the score required to win score challenges and crew battles.
+
+    This can be changed later in the options menu inside the Archipelago phone app.
+    """
     display_name = "Score Difficulty"
     option_normal = 0
     option_medium = 1
@@ -129,10 +160,14 @@ class ScoreDifficulty(Choice):
 
 
 class DamageMultiplier(Range):
-    """Multiplies all damage received. 
+    """
+    Multiplies all damage received.
+
     At 3x, most damage will OHKO the player, including falling into pits.
     At 6x, all damage will OHKO the player.
-    This can be changed later in the options menu inside the Archipelago phone app."""
+
+    This can be changed later in the options menu inside the Archipelago phone app.
+    """
     display_name = "Damage Multiplier"
     range_start = 1
     range_end = 6
@@ -140,8 +175,11 @@ class DamageMultiplier(Range):
 
 
 class BRCDeathLink(DeathLink):
-    """When you die, everyone dies. The reverse is also true.
-    This can be changed later in the options menu inside the Archipelago phone app."""
+    """
+    When you die, everyone dies. The reverse is also true.
+    
+    This can be changed later in the options menu inside the Archipelago phone app.
+    """
 
 
 @dataclass
