@@ -56,7 +56,14 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         if self.options.tool_progression & ToolProgression.option_progressive:
             return self.logic.received(f"Progressive {tool}", tool_materials[material])
 
-        return self.logic.has(f"{material} Bar") & self.logic.money.can_spend_at(Region.blacksmith, tool_upgrade_prices[material])
+        can_upgrade_rule = self.logic.has(f"{material} Bar") & self.logic.money.can_spend_at(Region.blacksmith, tool_upgrade_prices[material])
+        if tool == Tool.pan:
+            has_base_pan = self.logic.received("Glittering Boulder Removed") & self.logic.region.can_reach(Region.mountain)
+            if material == ToolMaterial.copper:
+                return has_base_pan
+            return has_base_pan & can_upgrade_rule
+
+        return can_upgrade_rule
 
     def can_use_tool_at(self, tool: str, material: str, region: str) -> StardewRule:
         return self.has_tool(tool, material) & self.logic.region.can_reach(region)

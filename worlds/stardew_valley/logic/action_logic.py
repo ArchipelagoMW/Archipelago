@@ -28,13 +28,8 @@ class ActionLogic(BaseLogic[Union[ActionLogicMixin, RegionLogicMixin, ReceivedLo
             return tv_rule
         return self.logic.received(channel) & tv_rule
 
-    def can_pan(self) -> StardewRule:
-        if self.options.tool_progression & ToolProgression.option_progressive:
-            return self.logic.tool.has_tool(Tool.pan)
-        return self.logic.received("Glittering Boulder Removed") & self.logic.region.can_reach(Region.mountain)
-
-    def can_pan_at(self, region: str) -> StardewRule:
-        return self.logic.region.can_reach(region) & self.logic.action.can_pan()
+    def can_pan_at(self, region: str, material: str) -> StardewRule:
+        return self.logic.region.can_reach(region) & self.logic.tool.has_tool(Tool.pan, material)
 
     @cache_self1
     def can_open_geode(self, geode: str) -> StardewRule:
