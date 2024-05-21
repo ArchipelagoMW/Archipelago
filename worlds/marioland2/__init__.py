@@ -239,7 +239,7 @@ class MarioLand2World(World):
                 ].count(True) >= self.options.required_golden_coins)
 
         location_rules = {
-            "Hippo Zone - Normal or Secret Exit": lambda state: (state.has_any(["Hippo Bubble", "Swim"], self.player)
+            "Hippo Zone - Normal or Secret Exit": lambda state: (state.has_any(["Hippo Bubble", "Water Physics"], self.player)
                 or (state.has("Carrot", self.player) and not is_auto_scroll(state, self.player, "Hippo Zone"))),
             # It is possible, however tricky, to beat the Moon Stage without Carrot or Space Physics.
             # However, it requires somewhat precisely jumping off enemies. Enemy shuffle may make this impossible.
@@ -276,10 +276,10 @@ class MarioLand2World(World):
                 and state.has("Fire Flower", self.player) and has_pipe_up(state, self.player),
             "Macro Zone 2 - Normal Exit": lambda state: (has_pipe_down(state, self.player) or state.has(
                 "Macro Zone 2 Midway Bell", self.player))
-                and state.has("Swim", self.player) and has_pipe_up(state,
+                and state.has("Water Physics", self.player) and has_pipe_up(state,
                 self.player) and not is_auto_scroll(state, self.player, "Macro Zone 2"),
             "Macro Zone 2 - Midway Bell": lambda state: (has_pipe_down(
-                state, self.player) and state.has("Swim", self.player)) or state.has(
+                state, self.player) and state.has("Water Physics", self.player)) or state.has(
                 "Macro Zone 2 Midway Bell", self.player),
             "Macro Zone 3 - Normal Exit": lambda state: (has_pipe_down(state, self.player)
                 and has_pipe_down(state, self.player)) or state.has("Macro Zone 3 Midway Bell", self.player),
@@ -293,11 +293,11 @@ class MarioLand2World(World):
                  and not is_auto_scroll(state, self.player, "Pumpkin Zone 1")) or state.has(
                 "Pumpkin Zone 1 Midway Bell", self.player),
             "Pumpkin Zone 2 - Normal Exit": lambda state: has_pipe_down(state, self.player) and has_pipe_up(
-                state, self.player) and has_pipe_right(state, self.player) and state.has("Swim",
+                state, self.player) and has_pipe_right(state, self.player) and state.has("Water Physics",
                 self.player) and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
             "Pumpkin Zone 2 - Secret Exit": lambda state: has_pipe_down(
                 state, self.player) and has_pipe_up(state, self.player) and has_pipe_right(
-                state, self.player) and state.has("Swim", self.player) and state.has_any(
+                state, self.player) and state.has("Water Physics", self.player) and state.has_any(
                 ["Mushroom", "Fire Flower"], self.player) and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
             "Pumpkin Zone 3 - Secret Exit": lambda state: state.has("Carrot", self.player),
             "Pumpkin Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
@@ -311,13 +311,13 @@ class MarioLand2World(World):
             "Mario Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
             "Turtle Zone 2 - Normal Exit": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
                 state, self.player) and has_pipe_right(state, self.player) and has_pipe_left(state, self.player)
-                and state.has("Swim", self.player) and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
+                and state.has("Water Physics", self.player) and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
             "Turtle Zone 2 - Midway Bell": lambda state: state.has_any(
-                ["Swim", "Turtle Zone 2 Midway Bell"], self.player) and not is_auto_scroll(state,
+                ["Water Physics", "Turtle Zone 2 Midway Bell"], self.player) and not is_auto_scroll(state,
                 self.player, "Turtle Zone 2"),
             "Turtle Zone 2 - Secret Exit": lambda state: has_pipe_up(
-                state, self.player) and state.has("Swim", self.player) and not is_auto_scroll(state,
-                self.player, "Turtle Zone 2"), #state.has_any(["Swim", "Turtle Zone 2  Midway Bell"], self.player),  # hard logic option?
+                state, self.player) and state.has("Water Physics", self.player) and not is_auto_scroll(state,
+                self.player, "Turtle Zone 2"), #state.has_any(["Water Physics", "Turtle Zone 2  Midway Bell"], self.player),  # hard logic option?
             "Turtle Zone Secret Course - Normal Exit": lambda state: state.has_any(["Fire Flower", "Carrot"],
                                                                                    self.player),
             "Turtle Zone 3 - Boss": lambda state: has_pipe_right(state, self.player),
@@ -361,7 +361,7 @@ class MarioLand2World(World):
             "Carrot": 1,
             "Space Physics": 1,
             "Hippo Bubble": 1,
-            "Swim": 1,
+            "Water Physics": 1,
             "Super Star Duration Increase": 2,
             "Mario Coin Fragment": 0,
         }

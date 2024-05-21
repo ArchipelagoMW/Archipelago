@@ -25,8 +25,8 @@ Besides the zone progression unlocks, the following items are always shuffled:
 Mushroom, you will drop straight down to Small Mario.
 - Fire Flower: required to become Fire Mario.
 - Carrot: required to become Bunny Mario.
-- Swim: Mario will fall through water as though it is air until this is obtained.
 - Hippo Bubble: required to use the bubbles in Hippo Zone to fly.
+- Water Physics: Mario will fall through water as though it is air until this is obtained.
 - Space Physics: the Space Zone levels will have normal gravity until this is obtained.
 - Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
 increase it.

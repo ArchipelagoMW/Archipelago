@@ -130,14 +130,14 @@ def hippo_zone_coins(state, player, coins):
             reachable_coins = 160
         elif state.has("Carrot", player):
             reachable_coins = 90
-        elif state.has("Swim", player):
+        elif state.has("Water Physics", player):
             reachable_coins = 28
     else:
-        if state.has_any(["Swim", "Hippo Bubble", "Carrot"], player):
+        if state.has_any(["Water Physics", "Hippo Bubble", "Carrot"], player):
             reachable_coins += 108
             if state.has_any(["Mushroom", "Fire Flower", "Hippo Bubble"], player):
                 reachable_coins += 6
-        if state.has_all(["Fire Flower", "Swim"], player):
+        if state.has_all(["Fire Flower", "Water Physics"], player):
             reachable_coins += 1
         if state.has("Hippo Bubble", player):
             reachable_coins += 52
@@ -162,7 +162,7 @@ def pumpkin_zone_2_coins(state, player, coins):
     if has_pipe_down(state, player):
         if not auto_scroll:
             reachable_coins += 7
-        if (has_pipe_up(state, player) or auto_scroll) and state.has("Swim", player):
+        if (has_pipe_up(state, player) or auto_scroll) and state.has("Water Physics", player):
             reachable_coins += 6
             if has_pipe_right(state, player) and not auto_scroll:
                 reachable_coins += 1
@@ -249,7 +249,7 @@ def turtle_zone_1_coins(state, player, coins):
     reachable_coins = 37
     if auto_scroll:
         reachable_coins -= 1
-    if state.has("Swim", player):
+    if state.has("Water Physics", player):
         reachable_coins += 16
     if state.has("Carrot", player):
         reachable_coins += 24
@@ -262,20 +262,20 @@ def turtle_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Turtle Zone 2")
     reachable_coins = 1
     if auto_scroll:
-        if state.has("Swim", player):
+        if state.has("Water Physics", player):
             reachable_coins += 7
     else:
         reachable_coins += 3
-        if state.has("Swim", player):
+        if state.has("Water Physics", player):
             reachable_coins += 20
         elif state.has("Turtle Zone 2 Midway Bell", player):
             reachable_coins += 4
         if (has_pipe_right(state, player) and has_pipe_down(state, player)
-                and state.has_any(["Swim", "Turtle Zone 2 Midway Bell"], player)):
+                and state.has_any(["Water Physics", "Turtle Zone 2 Midway Bell"], player)):
             reachable_coins += 1
             if has_pipe_left(state, player) and has_pipe_up(state, player):
                 reachable_coins += 1
-                if state.has("Swim", player):
+                if state.has("Water Physics", player):
                     reachable_coins += 1
     return coins <= reachable_coins
 
@@ -371,7 +371,7 @@ def macro_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 2")
     if coins <= 27:
         return True
-    if has_pipe_up(state, player) and state.has("Swim", player) and not auto_scroll:
+    if has_pipe_up(state, player) and state.has("Water Physics", player) and not auto_scroll:
         if has_pipe_down(state, player):
             return True
         if state.has("Macro Zone 2 Midway Bell", player):

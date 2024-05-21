@@ -32,7 +32,7 @@ items = {
     "Carrot": ItemClassification.progression,
     "Space Physics": ItemClassification.progression_skip_balancing,
     "Hippo Bubble": ItemClassification.progression_skip_balancing,
-    "Swim": ItemClassification.progression,
+    "Water Physics": ItemClassification.progression,
     "Pipe Traversal":  ItemClassification.progression,
     "Pipe Traversal - Down":  ItemClassification.progression,
     "Pipe Traversal - Up":  ItemClassification.progression,
