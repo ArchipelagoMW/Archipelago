@@ -17,7 +17,6 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from functools import lru_cache
 from logging import warning
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
@@ -59,8 +58,7 @@ if TYPE_CHECKING:
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
-    @lru_cache(maxsize=None)
-    def reduce_req_within_region(self, entity_hex: str, allow_victory: bool) -> WitnessRule:
+    def reduce_req_within_region(self, entity_hex: str) -> WitnessRule:
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -70,9 +68,6 @@ class WitnessPlayerLogic:
         """
 
         if self.is_disabled(entity_hex):
-            return frozenset()
-
-        if entity_hex == self.VICTORY_LOCATION and not allow_victory:
             return frozenset()
 
         entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
@@ -141,8 +136,10 @@ class WitnessPlayerLogic:
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
+                elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
+                    new_items = frozenset()
                 else:
-                    theoretical_new_items = self.reduce_req_within_region(option_entity, allow_victory)
+                    theoretical_new_items = self.get_entity_requirement(option_entity)
 
                     if not theoretical_new_items:
                         # If the dependent entity is unsolvable & it is an EP, the current entity is an Obelisk Side.
@@ -173,6 +170,19 @@ class WitnessPlayerLogic:
 
         # or-chain all separate dependent entity options.
         return logical_or_witness_rules(all_options)
+
+    def get_entity_requirement(self, entity_hex: str) -> WitnessRule:
+        """
+        Get requirement of entity by its hex code.
+        These requirements are cached, with the actual function calculating them being reduce_req_within_region.
+        """
+        requirement = self.REQUIREMENTS_BY_HEX.get(entity_hex)
+
+        if requirement is None:
+            requirement = self.reduce_req_within_region(entity_hex)
+            self.REQUIREMENTS_BY_HEX[entity_hex] = requirement
+
+        return requirement
 
     def make_single_adjustment(self, adj_type: str, line: str) -> None:
         from .data import static_items as static_witness_items
@@ -302,8 +312,7 @@ class WitnessPlayerLogic:
                 line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    @staticmethod
-    def handle_postgame(world: "WitnessWorld") -> List[List[str]]:
+    def handle_postgame(self, world: "WitnessWorld") -> List[List[str]]:
         """
             In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
             This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
@@ -327,6 +336,9 @@ class WitnessPlayerLogic:
 
         # ||| Section 1: Proper postgame cases |||
         # When something only comes into logic after the goal, e.g. "longbox is postgame if the goal is shortbox".
+
+        # Disable anything directly locked by the victory panel
+        self.DISABLE_EVERYTHING_BEHIND.add(self.VICTORY_LOCATION)
 
         # If we have a long box goal, Challenge is behind the amount of lasers required to just win.
         # This is technically slightly incorrect as the Challenge Vault Box could contain a *symbol* that is required
@@ -567,14 +579,11 @@ class WitnessPlayerLogic:
         We will determine these automatically and disable them as well.
         """
 
-        # if "shuffle_postgame", consider the victory location "disabled".
-        postgame_included = bool(world.options.shuffle_postgame)
-
         all_regions = set(self.CONNECTIONS_BY_REGION_NAME_THEORETICAL)
 
         while True:
             # Re-make the dependency reduced entity requirements dict, which depends on currently
-            self.make_dependency_reduced_checklist(postgame_included)
+            self.make_dependency_reduced_checklist()
 
             # Discover currently reachable regions.
             reachable_regions = self.discover_reachable_regions()
@@ -624,7 +633,7 @@ class WitnessPlayerLogic:
             if not new_unreachable_regions and not newly_discovered_disabled_entities:
                 return
 
-    def reduce_connection_requirement(self, connection: Tuple[str, WitnessRule], allow_victory: bool) -> WitnessRule:
+    def reduce_connection_requirement(self, connection: Tuple[str, WitnessRule]) -> WitnessRule:
         all_possibilities = []
 
         # Check each traversal option individually
@@ -632,7 +641,7 @@ class WitnessPlayerLogic:
             individual_entity_requirements = []
             for entity in option:
                 # If a connection requires solving a disabled entity, it is not valid.
-                if not self.solvability_guaranteed(entity):
+                if not self.solvability_guaranteed(entity) or entity in self.DISABLE_EVERYTHING_BEHIND:
                     individual_entity_requirements.append(frozenset())
                 # If a connection requires acquiring an event, add that event to its requirements.
                 elif (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
@@ -640,7 +649,7 @@ class WitnessPlayerLogic:
                     individual_entity_requirements.append(frozenset({frozenset({entity})}))
                 # If a connection requires entities, use their newly calculated independent requirements.
                 else:
-                    entity_req = self.reduce_req_within_region(entity, allow_victory)
+                    entity_req = self.get_entity_requirement(entity)
 
                     if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
                         region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
@@ -653,7 +662,7 @@ class WitnessPlayerLogic:
 
         return logical_or_witness_rules(all_possibilities)
 
-    def make_dependency_reduced_checklist(self, allow_victory: bool):
+    def make_dependency_reduced_checklist(self):
         """
         Every entity has a requirement. This requirement may involve other entities.
         Example: Solving a panel powers a cable, and that cable turns on the next panel.
@@ -668,7 +677,7 @@ class WitnessPlayerLogic:
 
         # Requirements are cached per entity. However, we might redo the whole reduction process multiple times.
         # So, we first clear this cache.
-        self.reduce_req_within_region.cache_clear()
+        self.REQUIREMENTS_BY_HEX = dict()
 
         # We also clear any data structures that we might have filled in a previous dependency reduction
         self.REQUIREMENTS_BY_HEX = dict()
@@ -678,7 +687,7 @@ class WitnessPlayerLogic:
 
         # Make independent requirements for entities
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
-            indep_requirement = self.reduce_req_within_region(entity_hex, allow_victory)
+            indep_requirement = self.get_entity_requirement(entity_hex)
 
             self.REQUIREMENTS_BY_HEX[entity_hex] = indep_requirement
 
@@ -689,7 +698,7 @@ class WitnessPlayerLogic:
             new_connections = []
 
             for connection in connections:
-                overall_requirement = self.reduce_connection_requirement(connection, allow_victory)
+                overall_requirement = self.reduce_connection_requirement(connection)
 
                 # If there is a way to use this connection, add it.
                 if overall_requirement:
@@ -858,6 +867,7 @@ class WitnessPlayerLogic:
 
         self.EVENT_ITEM_PAIRS = dict()
         self.COMPLETELY_DISABLED_ENTITIES = set()
+        self.DISABLE_EVERYTHING_BEHIND = set()
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
@@ -891,7 +901,7 @@ class WitnessPlayerLogic:
 
         # After we have adjusted the raw requirements, we perform a dependency reduction for the entity requirements.
         # This will make the access conditions way faster, instead of recursively checking dependent entities each time.
-        self.make_dependency_reduced_checklist(True)
+        self.make_dependency_reduced_checklist()
 
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()
