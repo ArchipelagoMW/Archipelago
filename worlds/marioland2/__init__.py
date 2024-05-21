@@ -317,7 +317,7 @@ class MarioLand2World(World):
                 self.player, "Turtle Zone 2"),
             "Turtle Zone 2 - Secret Exit": lambda state: has_pipe_up(
                 state, self.player) and state.has("Water Physics", self.player) and not is_auto_scroll(state,
-                self.player, "Turtle Zone 2"), #state.has_any(["Water Physics", "Turtle Zone 2  Midway Bell"], self.player),  # hard logic option?
+                self.player, "Turtle Zone 2"),
             "Turtle Zone Secret Course - Normal Exit": lambda state: state.has_any(["Fire Flower", "Carrot"],
                                                                                    self.player),
             "Turtle Zone 3 - Boss": lambda state: has_pipe_right(state, self.player),
