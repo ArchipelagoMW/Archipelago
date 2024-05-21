@@ -1,5 +1,6 @@
 import typing
 import math
+import logging
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
