@@ -12,9 +12,6 @@ def randomize_enemies(sprite_data, random):
             shuffle = ("Money Bag/Bopping Toady", "Ragumo/Aqua Kuribo", "Pencil/Spikey", "Kyotonbo")
         elif level == "Tree Zone 2":
             shuffle = ("Noko Bombette/Bear", "No 48/Mogyo")
-        elif level == "Tree Zone 4":
-            shuffle = ("Runaway Heart Block/Bibi", "Neiji/Buichi", "Piranha Plant (Downward)/Grubby",
-                       "Spinning Platform (Horizontal)/Skeleton Bee", "Spinning Spike (Horizontal)/Unera")
         elif level == "Tree Zone 3":
             shuffle = ("Battle Beetle", "Be", "Ant")
         elif level == "Tree Zone 5":
@@ -66,8 +63,10 @@ def randomize_enemies(sprite_data, random):
                 if sprite["sprite"] == "Claw Grabber":
                     shuffle = ("Koopa Troopa", "Diagonal Ball on Chain", "Kiddokatto", "Claw Grabber",
                                "Masked Ghoul/Bullet Bill")
-                else:
+                elif sprite["sprite"] in ("Koopa Troopa", "Diagonal Ball on Chain", "Kiddokatto"):
                     shuffle = ("Koopa Troopa", "Diagonal Ball on Chain", "Kiddokatto", "Masked Ghoul/Bullet Bill")
+                else:
+                    shuffle = ()
             elif level == "Mario Zone 4":
                 if sprite["sprite"] == "Spinning Spike/Tamara":
                     shuffle = ("Goomba", "Spinning Spike/Tamara", "Boo/Bomubomu", "Masked Ghoul/Bullet Bill")
@@ -92,8 +91,23 @@ def randomize_enemies(sprite_data, random):
                     shuffle = ("Fire Pakkun Zo (Large)", "Fire Pakkun Zo (Left)")
                 else:
                     shuffle = ("Spike Ball (Large)", "Spike Ball (Small)")
+            elif level == "Tree Zone 4":
+                # Deviation from SML2R: No Buichis placed into non-Buichi locations, as they can place under the
+                # underground question mark blocks. Potentially could make a list of which ones are allowed to become
+                # Buichis?
+                if sprite["sprite"] in ("Runaway Heart Block/Bibi", "Piranha Plant (Downward)/Grubby",
+                                        "Spinning Platform (Horizontal)/Skeleton Bee",
+                                        "Spinning Spike (Horizontal)/Unera"):
+                    shuffle = ("Runaway Heart Block/Bibi", "Piranha Plant (Downward)/Grubby",
+                               "Spinning Platform (Horizontal)/Skeleton Bee", "Spinning Spike (Horizontal)/Unera")
+                elif sprite["sprite"] == "Neiji/Buichi":
+                    shuffle = ("Runaway Heart Block/Bibi", "Neiji/Buichi", "Piranha Plant (Downward)/Grubby",
+                               "Spinning Platform (Horizontal)/Skeleton Bee", "Spinning Spike (Horizontal)/Unera")
+                else:
+                    shuffle = ()
             if sprite["sprite"] in ("Piranha Plant", "Fire Piranha Plant"):
-                shuffle = ("Piranha Plant", "Fire Piranha Plant")
+                if level not in ("Pumpkin Zone 2", "Pumpkin Zone 4", "Macro Zone 3"):
+                    shuffle = ("Piranha Plant", "Fire Piranha Plant")
             if sprite["sprite"] in shuffle:
                 sprite["sprite"] = random.choice(shuffle)
             elif level == "Mario's Castle" and sprite["sprite"] == "Karamenbo" and not random.randint(0, 9):
