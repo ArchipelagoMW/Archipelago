@@ -27,7 +27,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM03 Surf", world.player)
         else:
-            return state.has("HM03 Surf", world.player) and (has_badge(state, "fog") or has_badge(state, "thunder"))
+            return state.has("HM03 Surf", world.player) and (has_badge(state, "fog") or has_badge(state, "soul"))
 
     def can_strength(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
