@@ -12,7 +12,8 @@ class IxupiCapturesNeeded(Range):
     default = 10
 
 class LobbyAccess(Choice):
-    """Chooses how keys needed to reach the lobby are placed.
+    """
+    Chooses how keys needed to reach the lobby are placed.
     - Normal: Keys are placed anywhere
     - Early: Keys are placed early 
     - Local: Keys are placed locally
@@ -25,9 +26,11 @@ class LobbyAccess(Choice):
 
 class PuzzleHintsRequired(DefaultOnToggle):
     """
-    If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Shaman
-    Drums puzzle will be placed after access to the security cameras which give you the solution. Turning this off
-    allows for greater randomization.
+    If turned on puzzle hints/solutions will be available before the corresponding puzzle is required.
+
+    For example: The Red Door puzzle will be logically required only after access to the Beth's Address Book which gives you the solution.
+
+    Turning this off allows for greater randomization.
     """
     display_name = "Puzzle Hints Required"
 
