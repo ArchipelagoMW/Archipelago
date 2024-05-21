@@ -459,21 +459,14 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_BLACKTHORN_GYM_2F -> REGION_BLACKTHORN_GYM_1F:STRENGTH"), can_strength)
 
     set_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"),
-             lambda state: state.has("EVENT_BEAT_CLAIR", world.player))
+             lambda state: state.has("EVENT_BEAT_CLAIR", world.player) and can_surf(state))
 
     # Dragons Den
-    # set_rule(get_location("Dragon's Den B1F - Item 1"), can_surf)
     set_rule(get_location("Dragon's Den B1F - Item 2"), can_whirlpool)
-    set_rule(get_location("Dragon's Den B1F - Item 3"), can_surf)
 
     if hidden():
         set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 1"), can_whirlpool)
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 2"), can_surf)
         set_rule(get_location("Dragon's Den B1F - Hidden Item in SE Corner"), can_whirlpool)
-
-    if trainersanity():
-        set_rule(get_location("Dragon's Den B1F - Cool Trainer Cara"), can_surf)
-        set_rule(get_location("Dragon's Den B1F - Twins Lea & Pia"), can_surf)
 
     # Route 45
 
