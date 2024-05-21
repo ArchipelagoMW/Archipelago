@@ -264,8 +264,13 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     if world.options.reduce_flashing:
         if world.options.reduce_flashing.value == world.options.reduce_flashing.option_virtual_console:
             color = 0x2D  # Dark Gray
+            speed = -1
+        elif world.options.reduce_flashing.value == world.options.reduce_flashing.option_minor:
+            color = 0x2D
+            speed = 0x08
         else:
             color = 0x0F
+            speed = 0x00
         patch.write_byte(0x2D1B0, color)  # Change white to a dark gray, Mecha Dragon
         patch.write_byte(0x2D397, 0x0F)  # Longer flash time, Mecha Dragon kill
         patch.write_byte(0x2D3A0, color)  # Change white to a dark gray, Picopico-kun/Boobeam Trap
@@ -288,6 +293,10 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
                                         0x0F, 0x10, 0x2D, 0x00])
             # remove wily castle flash
             patch.write_byte(0x3596D, 0x0F)
+
+        if speed != -1:
+            patch.write_byte(0xFE01, speed)  # Bubble Man Stage
+            patch.write_byte(0x1BE01, speed)  # Metal Man Stage
 
     from Utils import __version__
     patch.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',

@@ -179,11 +179,16 @@ class WeaknessPlando(OptionDict):
 class ReduceFlashing(Choice):
     """
     Reduce flashing seen in gameplay, such as the stage select and when defeating a Wily boss.
+    Virtual Console: increases length of most flashes, changes some flashes from white to a dark gray.
+    Minor: VC changes + decreasing the speed of Bubble/Metal Man stage animations.
+    Full: VC changes + further decreasing the brightness of most flashes and
+    disables stage animations for Metal/Bubble Man stages.
     """
     display_name = "Reduce Flashing"
     option_none = 0
     option_virtual_console = 1
-    option_full = 2
+    option_minor = 2
+    option_full = 3
     default = 1
 
 
