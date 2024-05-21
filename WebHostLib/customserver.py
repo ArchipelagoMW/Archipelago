@@ -270,15 +270,19 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 await ctx.shutdown_task
 
             except (KeyboardInterrupt, SystemExit):
-                pass
-            except Exception:
+                if ctx.saving:
+                    ctx._save()
+            except Exception as e:
                 with db_session:
                     room = Room.get(id=room_id)
                     room.last_port = -1
+                logger.exception(e)
                 raise
+            else:
+                if ctx.saving:
+                    ctx._save()
             finally:
                 try:
-                    ctx._save()
                     with (db_session):
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
