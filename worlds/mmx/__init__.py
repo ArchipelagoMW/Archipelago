@@ -16,6 +16,7 @@ from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import MMXOptions
 from .Client import MMXSNIClient
+from .Levels import location_id_to_level_id
 from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
 from .Rom import patch_rom, MMXProcedurePatch, HASH_US, HASH_LEGACY
 
@@ -262,6 +263,58 @@ class MMXWorld(World):
                     weaknesses += f"{weapon_id[data[i][1]]}, "
                 weaknesses = weaknesses[:-2]
                 spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
+
+
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        if not self.options.boss_weakness_rando:
+            return
+        
+        boss_to_id = {
+            0x00: "Armored Armadillo",
+            0x01: "Chill Penguin",
+            0x02: "Spark Mandrill",
+            0x03: "Launch Octopus",
+            0x04: "Boomer Kuwanger",
+            0x05: "Sting Chameleon",
+            0x06: "Storm Eagle",
+            0x07: "Flame Mammoth",
+            0x08: "Bospider",
+            0x09: "Vile",
+            0x0A: "Boomer Kuwanger",
+            0x0B: "Chill Penguin",
+            0x0C: "Storm Eagle",
+            0x0D: "Rangda Bangda",
+            0x0E: "Armored Armadillo",
+            0x0F: "Sting Chameleon",
+            0x10: "Spark Mandrill",
+            0x11: "Launch Octopus",
+            0x12: "Flame Mammoth",
+            0x1E: "D-Rex",
+            0x13: "Velguarder",
+            0x1F: "Sigma",
+        }
+        boss_weakness_hint_data = {}
+        for loc_name, level_data in location_id_to_level_id.items():
+            if level_data[1] == 0x000:
+                boss_id = level_data[2]
+                if boss_id not in boss_to_id.keys():
+                    continue
+                boss = boss_to_id[boss_id]
+                data = self.boss_weaknesses[boss]
+                weaknesses = ""
+                for i in range(len(data)):
+                    weaknesses += f"{weapon_id[data[i][1]]}, "
+                weaknesses = weaknesses[:-2]
+                if boss == "Sigma":
+                    data = self.boss_weaknesses["Wolf Sigma"]
+                    weaknesses += ". Wolf Sigma: "
+                    for i in range(len(data)):
+                        weaknesses += f"{weapon_id[data[i][1]]}, "
+                    weaknesses = weaknesses[:-2]
+                location = self.multiworld.get_location(loc_name, self.player)
+                boss_weakness_hint_data[location.address] = weaknesses
+
+        hint_data[self.player] = boss_weakness_hint_data
 
 
     def get_filler_item_name(self) -> str:
