@@ -261,6 +261,10 @@ class ALTTPWorld(World):
         self.dungeons = {}
         self.waterfall_fairy_bottle_fill = "Bottle"
         self.pyramid_fairy_bottle_fill = "Bottle"
+        self.fix_trock_doors = None
+        self.fix_skullwoods_exit = None
+        self.fix_palaceofdarkness_exit = None
+        self.fix_trock_exit = None
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -279,6 +283,15 @@ class ALTTPWorld(World):
 
         player = self.player
         multiworld = self.multiworld
+
+        self.fix_trock_doors = (multiworld.entrance_shuffle[player] != 'vanilla'
+                                or multiworld.mode[player] == 'inverted')
+        self.fix_skullwoods_exit = multiworld.entrance_shuffle[player] not in ['vanilla', 'simple', 'restricted',
+                                                                               'dungeons_simple']
+        self.fix_palaceofdarkness_exit = multiworld.entrance_shuffle[player] not in ['dungeons_simple', 'vanilla',
+                                                                                     'simple', 'restricted']
+        self.fix_trock_exit = multiworld.entrance_shuffle[player] not in ['vanilla', 'simple', 'restricted',
+                                                                          'dungeons_simple']
 
         # fairy bottle fills
         bottle_options = [
@@ -345,42 +358,43 @@ class ALTTPWorld(World):
 
     def create_regions(self):
         player = self.player
-        world = self.multiworld
+        multiworld = self.multiworld
 
-        if world.mode[player] != 'inverted':
-            create_regions(world, player)
+        if multiworld.mode[player] != 'inverted':
+            create_regions(multiworld, player)
         else:
-            create_inverted_regions(world, player)
-        create_shops(world, player)
+            create_inverted_regions(multiworld, player)
+        create_shops(multiworld, player)
         self.create_dungeons()
 
-        if world.glitches_required[player] not in ["no_glitches", "minor_glitches"] and world.entrance_shuffle[player] in \
-                {"vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"}:
-            world.fix_fake_world[player] = False
+        if (multiworld.glitches_required[player] not in ["no_glitches", "minor_glitches"] and
+                multiworld.entrance_shuffle[player] in [
+                    "vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"]):
+            multiworld.fix_fake_world[player] = False
 
         # seeded entrance shuffle
-        old_random = world.random
-        world.random = random.Random(self.er_seed)
+        old_random = multiworld.random
+        multiworld.random = random.Random(self.er_seed)
 
-        if world.mode[player] != 'inverted':
-            link_entrances(world, player)
-            mark_light_world_regions(world, player)
+        if multiworld.mode[player] != 'inverted':
+            link_entrances(multiworld, player)
+            mark_light_world_regions(multiworld, player)
             for region_name, entrance_name in indirect_connections_not_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
+                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                                  multiworld.get_entrance(entrance_name, player))
         else:
-            link_inverted_entrances(world, player)
-            mark_dark_world_regions(world, player)
+            link_inverted_entrances(multiworld, player)
+            mark_dark_world_regions(multiworld, player)
             for region_name, entrance_name in indirect_connections_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
+                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                                  multiworld.get_entrance(entrance_name, player))
 
-        world.random = old_random
-        plando_connect(world, player)
+        multiworld.random = old_random
+        plando_connect(multiworld, player)
 
         for region_name, entrance_name in indirect_connections.items():
-            world.register_indirect_condition(world.get_region(region_name, player),
-                                              world.get_entrance(entrance_name, player))
+            multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                              multiworld.get_entrance(entrance_name, player))
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -649,7 +663,7 @@ class ALTTPWorld(World):
             if not multiworld.ganonstower_vanilla[player] or \
                     world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
-            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or world.players == 1):
+            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or multiworld.players == 1):
                 trash_counts[player] = multiworld.random.randint(world.options.crystals_needed_for_gt * 2,
                                                             world.options.crystals_needed_for_gt * 4)
             else:

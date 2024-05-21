@@ -87,7 +87,7 @@ class PokemonEmeraldWorld(World):
     location_name_groups = LOCATION_GROUPS
 
     data_version = 2
-    required_client_version = (0, 4, 3)
+    required_client_version = (0, 4, 5)
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
@@ -300,6 +300,7 @@ class PokemonEmeraldWorld(World):
 
             # Locations which are directly unlocked by defeating Norman.
             exclude_locations([
+                "Petalburg Gym - Leader Norman",
                 "Petalburg Gym - Balance Badge",
                 "Petalburg Gym - TM42 from Norman",
                 "Petalburg City - HM03 from Wally's Uncle",
@@ -568,14 +569,6 @@ class PokemonEmeraldWorld(World):
         self.modified_misc_pokemon = copy.deepcopy(emerald_data.misc_pokemon)
         self.modified_starters = copy.deepcopy(emerald_data.starters)
 
-        randomize_abilities(self)
-        randomize_learnsets(self)
-        randomize_tm_hm_compatibility(self)
-        randomize_legendary_encounters(self)
-        randomize_misc_pokemon(self)
-        randomize_opponent_parties(self)
-        randomize_starters(self)
-
         # Modify catch rate
         min_catch_rate = min(self.options.min_catch_rate.value, 255)
         for species in self.modified_species.values():
@@ -589,6 +582,14 @@ class PokemonEmeraldWorld(World):
                 new_move = get_random_move(self.random, new_moves | self.blacklisted_moves)
                 new_moves.add(new_move)
                 self.modified_tmhm_moves[i] = new_move
+
+        randomize_abilities(self)
+        randomize_learnsets(self)
+        randomize_tm_hm_compatibility(self)
+        randomize_legendary_encounters(self)
+        randomize_misc_pokemon(self)
+        randomize_opponent_parties(self)
+        randomize_starters(self)
 
         create_patch(self, output_directory)
 

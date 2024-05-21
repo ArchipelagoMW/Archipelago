@@ -1,26 +1,31 @@
 from dataclasses import dataclass
 
-from schema import Schema, And, Optional
+from schema import And, Schema
 
-from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle
 
-from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
+from .data import static_logic as static_witness_logic
+from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
 
 
 class DisableNonRandomizedPuzzles(Toggle):
-    """Disables puzzles that cannot be randomized.
+    """
+    Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
+
     The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
-    Additionally, the panels activating Monastery Laser and Jungle Popup Wall will be on from the start."""
+    Additionally, the panel activating the Jungle Popup Wall will be on from the start.
+    """
     display_name = "Disable non randomized puzzles"
 
 
 class EarlyCaves(Choice):
-    """Adds an item that opens the Caves Shortcuts to Swamp and Mountain,
-    allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
-    You can either add this item to the pool to be found on one of your randomized checks,
-    or you can outright start with it and have immediate access to the Caves.
-    If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing."""
+    """
+    Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
+    You can either add this item to the pool to be found in the multiworld, or you can outright start with it and have immediate access to the Caves.
+
+    If you choose "Add To Pool" and you are already playing a remote Door Shuffle mode, this option will do nothing.
+    """
     display_name = "Early Caves"
     option_off = 0
     alias_false = 0
@@ -31,15 +36,19 @@ class EarlyCaves(Choice):
 
 
 class ShuffleSymbols(DefaultOnToggle):
-    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
-    If you turn this off, there will be no progression items in the game unless you turn on door shuffle."""
+    """
+    If on, you will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
+
+    Please note that there is no minimum set of progression items in this randomizer.
+    If you turn this option off and don't turn on door shuffle or obelisk keys, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
+    """
     display_name = "Shuffle Symbols"
 
 
 class ShuffleLasers(Choice):
-    """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
-    Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still
-    be redirected as normal, for both applications of redirection."""
+    """
+    If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
+    """
     display_name = "Shuffle Lasers"
     option_off = 0
     alias_false = 0
@@ -50,10 +59,12 @@ class ShuffleLasers(Choice):
 
 
 class ShuffleDoors(Choice):
-    """If on, opening doors, moving bridges etc. will require a "key".
+    """
+    If on, opening doors, moving bridges etc. will require a "key".
     If set to "panels", the panel on the door will be locked until receiving its corresponding key.
     If set to "doors", the door will open immediately upon receiving its key. Door panels are added as location checks.
-    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels"."""
+    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels".
+    """
     display_name = "Shuffle Doors"
     option_off = 0
     option_panels = 1
@@ -62,38 +73,45 @@ class ShuffleDoors(Choice):
 
 
 class DoorGroupings(Choice):
-    """If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
-    If set to "regional", all doors in the same general region will open at once with a single key,
-    reducing the amount of door items and complexity."""
+    """
+    If set to "none", there will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
+    If set to "regional", all doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
+    """
     display_name = "Door Groupings"
     option_off = 0
     option_regional = 1
 
 
 class ShuffleBoat(DefaultOnToggle):
-    """If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat."""
+    """
+    If on, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
+    """
     display_name = "Shuffle Boat"
 
 
 class ShuffleDiscardedPanels(Toggle):
-    """Add Discarded Panels into the location pool.
-    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example
-    of this being the alternate activation triggers in disable_non_randomized."""
+    """
+    Adds Discarded Panels into the location pool.
 
+    Even if this is off, solving certain Discarded Panels may still be necessary to beat the game - The main example of this being the alternate activation triggers in "Disable non randomized puzzles".
+    """
     display_name = "Shuffle Discarded Panels"
 
 
 class ShuffleVaultBoxes(Toggle):
-    """Add Vault Boxes to the location pool."""
+    """
+    Adds Vault Boxes to the location pool.
+    """
     display_name = "Shuffle Vault Boxes"
 
 
 class ShuffleEnvironmentalPuzzles(Choice):
     """
-    Add Environmental/Obelisk Puzzles into the location pool.
-    In "individual", every Environmental Puzzle sends an item.
-    In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
-    Note: In Obelisk Sides, any EPs excluded through another setting will be counted as pre-completed on their Obelisk.
+    Adds Environmental/Obelisk Puzzles into the location pool.
+    If set to "individual", every Environmental Puzzle sends an item.
+    If set to "Obelisk Sides", completing every puzzle on one side of an Obelisk sends an item.
+
+    Note: In Obelisk Sides, any EPs excluded through another option will be pre-completed on their Obelisk.
     """
     display_name = "Shuffle Environmental Puzzles"
     option_off = 0
@@ -102,17 +120,18 @@ class ShuffleEnvironmentalPuzzles(Choice):
 
 
 class ShuffleDog(Toggle):
-    """Add petting the Town dog into the location pool."""
-
+    """
+    Adds petting the Town dog into the location pool.
+    """
     display_name = "Pet the Dog"
 
 
 class EnvironmentalPuzzlesDifficulty(Choice):
     """
     When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
-    On "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
-    On "tedious", Theater Eclipse EP is excluded from the location pool.
-    On "normal", several other difficult or long EPs are excluded as well.
+    If set to "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
+    If set to "tedious", Theater Eclipse EP is excluded from the location pool.
+    If set to "normal", several other difficult or long EPs are excluded as well.
     """
     display_name = "Environmental Puzzles Difficulty"
     option_normal = 0
@@ -123,26 +142,31 @@ class EnvironmentalPuzzlesDifficulty(Choice):
 class ObeliskKeys(DefaultOnToggle):
     """
     Add one Obelisk Key item per Obelisk, locking you out of solving any of the associated Environmental Puzzles.
+
     Does nothing if "Shuffle Environmental Puzzles" is set to "off".
     """
     display_name = "Obelisk Keys"
 
 
 class ShufflePostgame(Toggle):
-    """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
-    Use this if you don't play with release on victory. IMPORTANT NOTE: The possibility of your second
-    "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
+    """
+    Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
+    Use this if you don't play with release on victory.
+    """
     display_name = "Shuffle Postgame"
 
 
 class VictoryCondition(Choice):
-    """Set the victory condition for this world.
+    """
+    Set the victory condition for this world.
     Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
     Challenge: Beat the secret Challenge (requires Challenge Lasers).
     Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
     Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
-    to count, the laser locks on the Elevator and Challenge Timer panels do not."""
+    to count, the laser locks on the Elevator and Challenge Timer panels do not.
+    """
     display_name = "Victory Condition"
     option_elevator = 0
     option_challenge = 1
@@ -151,7 +175,9 @@ class VictoryCondition(Choice):
 
 
 class PuzzleRandomization(Choice):
-    """Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles."""
+    """
+    Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
+    """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
@@ -159,10 +185,11 @@ class PuzzleRandomization(Choice):
 
 
 class MountainLasers(Range):
-    """Sets the amount of lasers required to enter the Mountain.
-    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without
-    the hatch being opened.
-    This change will also be applied logically to the long solution ("Challenge Lasers" setting)."""
+    """
+    Sets the number of lasers required to enter the Mountain.
+    If set to a higher number than 7, the mountaintop box will be slightly rotated to make it possible to solve without the hatch being opened.
+    This change will also be applied logically to the long solution ("Challenge Lasers" option).
+    """
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
     range_end = 11
@@ -170,7 +197,9 @@ class MountainLasers(Range):
 
 
 class ChallengeLasers(Range):
-    """Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard."""
+    """
+    Sets the number of lasers required to enter the Caves through the Mountain Bottom Floor Discard and to unlock the Challenge Timer Panel.
+    """
     display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
@@ -178,13 +207,17 @@ class ChallengeLasers(Range):
 
 
 class ElevatorsComeToYou(Toggle):
-    """If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
-    This does actually affect logic as it allows unintended backwards / early access into these areas."""
+    """
+    If on, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
+    This does actually affect logic as it allows unintended backwards / early access into these areas.
+    """
     display_name = "All Bridges & Elevators come to you"
 
 
 class TrapPercentage(Range):
-    """Replaces junk items with traps, at the specified rate."""
+    """
+    Replaces junk items with traps, at the specified rate.
+    """
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
@@ -192,26 +225,28 @@ class TrapPercentage(Range):
 
 
 class TrapWeights(OptionDict):
-    """Specify the weights determining how many copies of each trap item will be in your itempool.
+    """
+    Specify the weights determining how many copies of each trap item will be in your itempool.
     If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
-    If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option."""
-
+    If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
+    """
     display_name = "Trap Weights"
     schema = Schema({
         trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     })
     default = {
         trap_name: item_definition.weight
-        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     }
 
 
 class PuzzleSkipAmount(Range):
-    """Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
-    Works on most panels in the game - The only big exception is The Challenge."""
+    """
+    Adds this many Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
+    """
     display_name = "Puzzle Skips"
     range_start = 0
     range_end = 30
@@ -219,8 +254,10 @@ class PuzzleSkipAmount(Range):
 
 
 class HintAmount(Range):
-    """Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
-    Remaining Audio Logs will have junk hints."""
+    """
+    Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
+    Remaining Audio Logs will have junk hints.
+    """
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
@@ -228,11 +265,12 @@ class HintAmount(Range):
 
 
 class AreaHintPercentage(Range):
-    """There are two types of hints for The Witness.
-    "Location hints" hint one location in your world / containing an item for your world.
-    "Area hints" will tell you some general info about the items you can find in one of the
-    main geographic areas on the island.
-    Use this option to specify how many of your hints you want to be area hints. The rest will be location hints."""
+    """
+    There are two types of hints for The Witness.
+    "Location hints" hint one location in your world or one location containing an item for your world.
+    "Area hints" tell you some general info about the items you can find in one of the main geographic areas on the island.
+    Use this option to specify how many of your hints you want to be area hints. The rest will be location hints.
+    """
     display_name = "Area Hint Percentage"
     range_start = 0
     range_end = 100
@@ -240,20 +278,26 @@ class AreaHintPercentage(Range):
 
 
 class LaserHints(Toggle):
-    """If on, lasers will tell you where their items are if you walk close to them in-game.
-    Only applies if laser shuffle is enabled."""
+    """
+    If on, lasers will tell you where their items are if you walk close to them in-game.
+    Only applies if Laser Shuffle is enabled.
+    """
     display_name = "Laser Hints"
 
 
 class DeathLink(Toggle):
-    """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
-    The effect of a "death" in The Witness is a Bonk Trap."""
+    """
+    If on, whenever you fail a puzzle (with some exceptions), you and everyone who is also on Death Link dies.
+    The effect of a "death" in The Witness is a Bonk Trap.
+    """
     display_name = "Death Link"
 
 
 class DeathLinkAmnesty(Range):
-    """Number of panel fails to allow before sending a death through Death Link.
-    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc."""
+    """
+    The number of panel fails to allow before sending a death through Death Link.
+    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc.
+    """
     display_name = "Death Link Amnesty"
     range_start = 0
     range_end = 5
@@ -272,7 +316,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     shuffle_discarded_panels: ShuffleDiscardedPanels
     shuffle_vault_boxes: ShuffleVaultBoxes
     obelisk_keys: ObeliskKeys
-    shuffle_EPs: ShuffleEnvironmentalPuzzles
+    shuffle_EPs: ShuffleEnvironmentalPuzzles  # noqa: N815
     EP_difficulty: EnvironmentalPuzzlesDifficulty
     shuffle_postgame: ShufflePostgame
     victory_condition: VictoryCondition

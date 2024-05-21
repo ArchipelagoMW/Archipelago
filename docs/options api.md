@@ -10,10 +10,9 @@ Archipelago will be abbreviated as "AP" from now on.
 ## Option Definitions
 Option parsing in AP is done using different Option classes. For each option you would like to have in your game, you
 need to create:
-- A new option class with a docstring detailing what the option will do to your user.
-- A `display_name` to be displayed on the webhost.
-- A new entry in the `option_definitions` dict for your World.
-By style and convention, the internal names should be snake_case.
+- A new option class, with a docstring detailing what the option does, to be exposed to the user.
+- A new entry in the `options_dataclass` definition for your World.
+By style and convention, the dataclass attributes should be `snake_case`.
 
 ### Option Creation
 - If the option supports having multiple sub_options, such as Choice options, these can be defined with
@@ -43,7 +42,7 @@ from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 class StartingSword(Toggle):
     """Adds a sword to your starting inventory."""
-    display_name = "Start With Sword"
+    display_name = "Start With Sword"  # this is the option name as it's displayed to the user on the webhost and in the spoiler log
 
 
 class Difficulty(Choice):
@@ -204,7 +203,7 @@ For example:
 ```python
 range_start = 1
 range_end = 99
-special_range_names: {
+special_range_names = {
     "normal": 20,
     "extreme": 99,
     "unlimited": -1,

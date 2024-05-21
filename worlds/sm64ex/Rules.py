@@ -3,6 +3,7 @@ from typing import Callable, Union, Dict, Set
 from BaseClasses import MultiWorld
 from ..generic.Rules import add_rule, set_rule
 from .Locations import location_table
+from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
 from .Items import action_item_table
@@ -24,7 +25,7 @@ def fix_reg(entrance_map: Dict[SM64Levels, str], entrance: SM64Levels, invalid_r
         swapdict[entrance], swapdict[rand_entrance] = rand_region, old_dest
     swapdict.pop(entrance)
 
-def set_rules(world, player: int, area_connections: dict, star_costs: dict, move_rando_bitvec: int):
+def set_rules(world, options: SM64Options, player: int, area_connections: dict, star_costs: dict, move_rando_bitvec: int):
     randomized_level_to_paintings = sm64_level_to_paintings.copy()
     randomized_level_to_secrets = sm64_level_to_secrets.copy()
     valid_move_randomizer_start_courses = [
@@ -32,19 +33,19 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
         "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
         "Dire, Dire Docks", "Snowman's Land"
     ]  # Excluding WF, HMC, WDW, TTM, THI, TTC, and RR
-    if world.AreaRandomizer[player].value >= 1:  # Some randomization is happening, randomize Courses
+    if options.area_rando >= 1:  # Some randomization is happening, randomize Courses
         randomized_level_to_paintings = shuffle_dict_keys(world,sm64_level_to_paintings)
         # If not shuffling later, ensure a valid start course on move randomizer
-        if world.AreaRandomizer[player].value < 3 and move_rando_bitvec > 0:
+        if options.area_rando < 3 and move_rando_bitvec > 0:
             swapdict = randomized_level_to_paintings.copy()
             invalid_start_courses = {course for course in randomized_level_to_paintings.values() if course not in valid_move_randomizer_start_courses}
             fix_reg(randomized_level_to_paintings, SM64Levels.BOB_OMB_BATTLEFIELD, invalid_start_courses, swapdict, world)
             fix_reg(randomized_level_to_paintings, SM64Levels.WHOMPS_FORTRESS, invalid_start_courses, swapdict, world)
 
-    if world.AreaRandomizer[player].value == 2:  # Randomize Secrets as well
+    if options.area_rando == 2:  # Randomize Secrets as well
         randomized_level_to_secrets = shuffle_dict_keys(world,sm64_level_to_secrets)
     randomized_entrances = {**randomized_level_to_paintings, **randomized_level_to_secrets}
-    if world.AreaRandomizer[player].value == 3:  # Randomize Courses and Secrets in one pool
+    if options.area_rando == 3:  # Randomize Courses and Secrets in one pool
         randomized_entrances = shuffle_dict_keys(world, randomized_entrances)
         # Guarantee first entrance is a course
         swapdict = randomized_entrances.copy()
@@ -67,7 +68,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     area_connections.update({int(entrance_lvl): int(sm64_entrances_to_level[destination]) for (entrance_lvl,destination) in randomized_entrances.items()})
     randomized_entrances_s = {sm64_level_to_entrances[entrance_lvl]: destination for (entrance_lvl,destination) in randomized_entrances.items()}
 
-    rf = RuleFactory(world, player, move_rando_bitvec)
+    rf = RuleFactory(world, options, player, move_rando_bitvec)
 
     connect_regions(world, player, "Menu", randomized_entrances_s["Bob-omb Battlefield"])
     connect_regions(world, player, "Menu", randomized_entrances_s["Whomp's Fortress"], lambda state: state.has("Power Star", player, 1))
@@ -107,9 +108,9 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
 
     connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, star_costs["SecondFloorDoorCost"]))
 
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"])
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Rainbow Ride"])
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"])
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"], rf.build_rule("LG/TJ/SF/BF/WK"))
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Rainbow Ride"], rf.build_rule("TJ/SF/BF"))
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"], rf.build_rule("TJ/SF/BF"))
     connect_regions(world, player, "Third Floor", "Bowser in the Sky", lambda state: state.has("Power Star", player, star_costs["StarsToFinish"]))
 
     # Course Rules
@@ -146,7 +147,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     rf.assign_rule("LLL: Upper Volcano", "CL")
     # Shifting Sand Land
     rf.assign_rule("SSL: Upper Pyramid", "CL & TJ/BF/SF/LG | MOVELESS")
-    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS")
+    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS & CAPLESS")
     # Dire, Dire Docks
     rf.assign_rule("DDD: Moving Poles", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
     rf.assign_rule("DDD: Through the Jet Stream", "MC | CAPLESS")
@@ -165,6 +166,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     rf.assign_rule("TTM: Top", "MOVELESS & TJ | LJ/DV & LG/KK | MOVELESS & WK & SF/LG | MOVELESS & KK/DV")
     rf.assign_rule("TTM: Blast to the Lonely Mushroom", "CANN | CANNLESS & LJ | MOVELESS & CANNLESS")
     # Tiny-Huge Island
+    rf.assign_rule("THI: 1Up Block THI Small near Start", "NAR | {THI: Pipes}")
     rf.assign_rule("THI: Pipes", "NAR | LJ/TJ/DV/LG | MOVELESS & BF/SF/KK")
     rf.assign_rule("THI: Large Top", "NAR | LJ/TJ/DV | MOVELESS")
     rf.assign_rule("THI: Wiggler's Red Coins", "WK")
@@ -198,7 +200,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     # Bowser in the Sky
     rf.assign_rule("BitS: Top", "CL+TJ | CL+SF+LG | MOVELESS & TJ+WK+LG")
     # 100 Coin Stars
-    if world.EnableCoinStars[player]:
+    if options.enable_coin_stars:
         rf.assign_rule("BoB: 100 Coins", "CANN & WC | CANNLESS & WC & TJ")
         rf.assign_rule("WF: 100 Coins", "GP | MOVELESS")
         rf.assign_rule("JRB: 100 Coins", "GP & {JRB: Upper}")
@@ -224,12 +226,12 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
 
     world.completion_condition[player] = lambda state: state.can_reach("BitS: Top", 'Region', player)
 
-    if world.CompletionType[player] == "last_bowser_stage":
-        world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Sky", 'Region', player)
-    elif world.CompletionType[player] == "all_bowser_stages":
+    if options.completion_type == "last_bowser_stage":
+        world.completion_condition[player] = lambda state: state.can_reach("BitS: Top", 'Region', player)
+    elif options.completion_type == "all_bowser_stages":
         world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Dark World", 'Region', player) and \
-                                                           state.can_reach("Bowser in the Fire Sea", 'Region', player) and \
-                                                           state.can_reach("Bowser in the Sky", 'Region', player)
+                                                           state.can_reach("BitFS: Upper", 'Region', player) and \
+                                                           state.can_reach("BitS: Top", 'Region', player)
 
 
 class RuleFactory:
@@ -261,14 +263,14 @@ class RuleFactory:
     class SM64LogicException(Exception):
         pass
 
-    def __init__(self, world, player, move_rando_bitvec):
+    def __init__(self, world, options: SM64Options, player: int, move_rando_bitvec: int):
         self.world = world
         self.player = player
         self.move_rando_bitvec = move_rando_bitvec
-        self.area_randomizer = world.AreaRandomizer[player].value > 0
-        self.capless = not world.StrictCapRequirements[player]
-        self.cannonless = not world.StrictCannonRequirements[player]
-        self.moveless = not world.StrictMoveRequirements[player] or not move_rando_bitvec > 0
+        self.area_randomizer = options.area_rando > 0
+        self.capless = not options.strict_cap_requirements
+        self.cannonless = not options.strict_cannon_requirements
+        self.moveless = not options.strict_move_requirements or not move_rando_bitvec > 0
 
     def assign_rule(self, target_name: str, rule_expr: str):
         target = self.world.get_location(target_name, self.player) if target_name in location_table else self.world.get_entrance(target_name, self.player)

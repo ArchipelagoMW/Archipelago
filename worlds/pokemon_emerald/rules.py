@@ -56,7 +56,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "Registeel": "REGISTEEL",
             "Mew": "MEW",
             "Deoxys": "DEOXYS",
-            "Ho-oh": "HO_OH",
+            "Ho-Oh": "HO_OH",
             "Lugia": "LUGIA",
         }.items()
         if name in world.options.allowed_legendary_hunt_encounters.value

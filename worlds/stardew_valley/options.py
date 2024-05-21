@@ -197,7 +197,7 @@ class Cropsanity(Choice):
     """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
     Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
-    Shuffled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
+    Enabled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
     """
     internal_name = "cropsanity"
     display_name = "Cropsanity"
@@ -268,7 +268,6 @@ class BuildingProgression(Choice):
     Vanilla: You can buy each building normally.
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-    Progressive early shipping bin: Same as Progressive, but the shipping bin will be placed early in the multiworld.
     Cheap: Buildings will cost half as much
     Very Cheap: Buildings will cost 1/5th as much
     """
@@ -356,7 +355,7 @@ class QuestLocations(NamedRange):
 class Fishsanity(Choice):
     """Locations for catching a fish the first time?
     None: There are no locations for catching fish
-    Legendaries: Each of the 5 legendary fish are checks
+    Legendaries: Each of the 5 legendary fish are checks, plus the extended family if qi board is turned on
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
     All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal

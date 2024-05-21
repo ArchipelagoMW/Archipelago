@@ -41,7 +41,7 @@ def create_regions(world: "NoitaWorld") -> Dict[str, Region]:
 
 
 # An "Entrance" is really just a connection between two regions
-def create_entrance(player: int, source: str, destination: str, regions: Dict[str, Region]):
+def create_entrance(player: int, source: str, destination: str, regions: Dict[str, Region]) -> Entrance:
     entrance = Entrance(player, f"From {source} To {destination}", regions[source])
     entrance.connect(regions[destination])
     return entrance

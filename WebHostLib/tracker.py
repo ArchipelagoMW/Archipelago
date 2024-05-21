@@ -124,10 +124,13 @@ class TrackerData:
     @_cache_results
     def get_player_inventory_counts(self, team: int, player: int) -> collections.Counter:
         """Retrieves a dictionary of all items received by their id and their received count."""
-        items = self.get_player_received_items(team, player)
+        received_items = self.get_player_received_items(team, player)
+        starting_items = self.get_player_starting_inventory(team, player)
         inventory = collections.Counter()
-        for item in items:
+        for item in received_items:
             inventory[item.item] += 1
+        for item in starting_items:
+            inventory[item] += 1
 
         return inventory
 
@@ -358,10 +361,13 @@ def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
 def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
     game = tracker_data.get_player_game(team, player)
 
-    # Add received index to all received items, excluding starting inventory.
     received_items_in_order = {}
-    for received_index, network_item in enumerate(tracker_data.get_player_received_items(team, player), start=1):
-        received_items_in_order[network_item.item] = received_index
+    starting_inventory = tracker_data.get_player_starting_inventory(team, player)
+    for index, item in enumerate(starting_inventory):
+        received_items_in_order[item] = index
+    for index, network_item in enumerate(tracker_data.get_player_received_items(team, player),
+                                         start=len(starting_inventory)):
+        received_items_in_order[network_item.item] = index
 
     return render_template(
         template_name_or_list="genericTracker.html",
@@ -1606,6 +1612,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Hellstorm Batteries (Missile Turret)":        github_icon_base_url + "blizzard/btn-ability-stetmann-corruptormissilebarrage.png",
             "Advanced Construction (SCV)":                 github_icon_base_url + "blizzard/btn-ability-mengsk-trooper-advancedconstruction.png",
             "Dual-Fusion Welders (SCV)":                   github_icon_base_url + "blizzard/btn-upgrade-swann-scvdoublerepair.png",
+            "Hostile Environment Adaptation (SCV)":        github_icon_base_url + "blizzard/btn-upgrade-swann-hellarmor.png",
             "Fire-Suppression System Level 1":             organics_icon_base_url + "Fire-SuppressionSystem.png",
             "Fire-Suppression System Level 2":             github_icon_base_url + "blizzard/btn-upgrade-swann-firesuppressionsystem.png",
 
@@ -1673,6 +1680,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Resource Efficiency (Spectre)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
             "Juggernaut Plating (HERC)":                   organics_icon_base_url + "JuggernautPlating.png",
             "Kinetic Foam (HERC)":                         organics_icon_base_url + "KineticFoam.png",
+            "Resource Efficiency (HERC)":                  github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
 
             "Hellion":                                     "https://static.wikia.nocookie.net/starcraft/images/5/56/Hellion_SC2_Icon1.jpg",
             "Vulture":                                     github_icon_base_url + "blizzard/btn-unit-terran-vulture.png",
@@ -2333,12 +2341,12 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Zerg Armor Upgrade":           106 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Ground Upgrade":          107 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Flyer Upgrade":           108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon Upgrade":       105 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Armor Upgrade":        106 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Upgrade":       107 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Upgrade":          108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2HOTS_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon Upgrade":       105 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Armor Upgrade":        106 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Ground Upgrade":       107 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Air Upgrade":          108 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2LOTV_ITEM_ID_OFFSET,
         }
         grouped_item_replacements = {
             "Progressive Terran Weapon Upgrade":   ["Progressive Terran Infantry Weapon",

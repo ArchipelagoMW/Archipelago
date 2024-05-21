@@ -3,10 +3,10 @@ import os
 import json
 from .Items import item_table, action_item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
-from .Options import sm64_options
+from .Options import SM64Options
 from .Rules import set_rules
-from .Regions import create_regions, sm64_level_to_entrances
-from BaseClasses import Item, Tutorial, ItemClassification
+from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
+from BaseClasses import Item, Tutorial, ItemClassification, Region
 from ..AutoWorld import World, WebWorld
 
 
@@ -40,7 +40,7 @@ class SM64World(World):
 
     area_connections: typing.Dict[int, int]
 
-    option_definitions = sm64_options
+    options_dataclass = SM64Options
 
     number_of_stars: int
     move_rando_bitvec: int
@@ -49,38 +49,36 @@ class SM64World(World):
 
     def generate_early(self):
         max_stars = 120
-        if (not self.multiworld.EnableCoinStars[self.player].value):
+        if (not self.options.enable_coin_stars):
             max_stars -= 15
         self.move_rando_bitvec = 0
-        for action, itemid in action_item_table.items():
-            # HACK: Disable randomization of double jump
-            if action == 'Double Jump': continue
-            if getattr(self.multiworld, f"MoveRandomizer{action.replace(' ','')}")[self.player].value:
+        if self.options.enable_move_rando:
+            for action in self.options.move_rando_actions.value:
                 max_stars -= 1
-                self.move_rando_bitvec |= (1 << (itemid - action_item_table['Double Jump']))
-        if (self.multiworld.ExclamationBoxes[self.player].value > 0):
+                self.move_rando_bitvec |= (1 << (action_item_table[action] - action_item_table['Double Jump']))
+        if (self.options.exclamation_boxes > 0):
             max_stars += 29
-        self.number_of_stars = min(self.multiworld.AmountOfStars[self.player].value, max_stars)
+        self.number_of_stars = min(self.options.amount_of_stars, max_stars)
         self.filler_count = max_stars - self.number_of_stars
         self.star_costs = {
-            'FirstBowserDoorCost': round(self.multiworld.FirstBowserStarDoorCost[self.player].value * self.number_of_stars / 100),
-            'BasementDoorCost': round(self.multiworld.BasementStarDoorCost[self.player].value * self.number_of_stars / 100),
-            'SecondFloorDoorCost': round(self.multiworld.SecondFloorStarDoorCost[self.player].value * self.number_of_stars / 100),
-            'MIPS1Cost': round(self.multiworld.MIPS1Cost[self.player].value * self.number_of_stars / 100),
-            'MIPS2Cost': round(self.multiworld.MIPS2Cost[self.player].value * self.number_of_stars / 100),
-            'StarsToFinish': round(self.multiworld.StarsToFinish[self.player].value * self.number_of_stars / 100)
+            'FirstBowserDoorCost': round(self.options.first_bowser_star_door_cost * self.number_of_stars / 100),
+            'BasementDoorCost': round(self.options.basement_star_door_cost * self.number_of_stars / 100),
+            'SecondFloorDoorCost': round(self.options.second_floor_star_door_cost * self.number_of_stars / 100),
+            'MIPS1Cost': round(self.options.mips1_cost * self.number_of_stars / 100),
+            'MIPS2Cost': round(self.options.mips2_cost * self.number_of_stars / 100),
+            'StarsToFinish': round(self.options.stars_to_finish * self.number_of_stars / 100)
         }
         # Nudge MIPS 1 to match vanilla on default percentage
-        if self.number_of_stars == 120 and self.multiworld.MIPS1Cost[self.player].value == 12:
+        if self.number_of_stars == 120 and self.options.mips1_cost == 12:
             self.star_costs['MIPS1Cost'] = 15
-        self.topology_present = self.multiworld.AreaRandomizer[self.player].value
+        self.topology_present = self.options.area_rando
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player)
+        create_regions(self.multiworld, self.options, self.player)
 
     def set_rules(self):
         self.area_connections = {}
-        set_rules(self.multiworld, self.player, self.area_connections, self.star_costs, self.move_rando_bitvec)
+        set_rules(self.multiworld, self.options, self.player, self.area_connections, self.star_costs, self.move_rando_bitvec)
         if self.topology_present:
             # Write area_connections to spoiler log
             for entrance, destination in self.area_connections.items():
@@ -107,7 +105,7 @@ class SM64World(World):
         # Power Stars
         self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,self.number_of_stars)]
         # Keys
-        if (not self.multiworld.ProgressiveKeys[self.player].value):
+        if (not self.options.progressive_keys):
             key1 = self.create_item("Basement Key")
             key2 = self.create_item("Second Floor Key")
             self.multiworld.itempool += [key1, key2]
@@ -116,7 +114,7 @@ class SM64World(World):
         # Caps
         self.multiworld.itempool += [self.create_item(cap_name) for cap_name in ["Wing Cap", "Metal Cap", "Vanish Cap"]]
         # Cannons
-        if (self.multiworld.BuddyChecks[self.player].value):
+        if (self.options.buddy_checks):
             self.multiworld.itempool += [self.create_item(name) for name, id in cannon_item_table.items()]
         # Moves
         self.multiworld.itempool += [self.create_item(action)
@@ -124,7 +122,7 @@ class SM64World(World):
                                      if self.move_rando_bitvec & (1 << itemid - action_item_table['Double Jump'])]
 
     def generate_basic(self):
-        if not (self.multiworld.BuddyChecks[self.player].value):
+        if not (self.options.buddy_checks):
             self.multiworld.get_location("BoB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock BoB"))
             self.multiworld.get_location("WF: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WF"))
             self.multiworld.get_location("JRB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock JRB"))
@@ -136,7 +134,7 @@ class SM64World(World):
             self.multiworld.get_location("THI: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock THI"))
             self.multiworld.get_location("RR: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock RR"))
 
-        if (self.multiworld.ExclamationBoxes[self.player].value == 0):
+        if (self.options.exclamation_boxes == 0):
             self.multiworld.get_location("CCM: 1Up Block Near Snowman", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("CCM: 1Up Block Ice Pillar", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("CCM: 1Up Block Secret Slide", self.player).place_locked_item(self.create_item("1Up Mushroom"))
@@ -174,8 +172,8 @@ class SM64World(World):
         return {
             "AreaRando": self.area_connections,
             "MoveRandoVec": self.move_rando_bitvec,
-            "DeathLink": self.multiworld.death_link[self.player].value,
-            "CompletionType": self.multiworld.CompletionType[self.player].value,
+            "DeathLink": self.options.death_link.value,
+            "CompletionType": self.options.completion_type.value,
             **self.star_costs
         }
 
@@ -200,11 +198,21 @@ class SM64World(World):
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)
 
-    def modify_multidata(self, multidata):
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
             er_hint_data = {}
             for entrance, destination in self.area_connections.items():
-                region = self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)
-                for location in region.locations:
-                    er_hint_data[location.address] = sm64_level_to_entrances[entrance]
-            multidata['er_hint_data'][self.player] = er_hint_data
+                regions = [self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)]
+                if regions[0].name == "Tiny-Huge Island (Huge)":
+                    # Special rules for Tiny-Huge Island's dual entrances
+                    reverse_area_connections = {destination: entrance for entrance, destination in self.area_connections.items()}
+                    entrance_name = sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_HUGE]] \
+                                    + ' or ' + sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
+                    regions[0] = self.multiworld.get_region("Tiny-Huge Island", self.player)
+                else:
+                    entrance_name = sm64_level_to_entrances[entrance]
+                regions += regions[0].subregions
+                for region in regions:
+                    for location in region.locations:
+                        er_hint_data[location.address] = entrance_name
+            hint_data[self.player] = er_hint_data

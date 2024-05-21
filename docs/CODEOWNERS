@@ -28,6 +28,9 @@
 # Bumper Stickers
 /worlds/bumpstik/ @FelicitusNeko
 
+# Castlevania 64
+/worlds/cv64/ @LiquidCat64
+
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
@@ -131,6 +134,9 @@
 # Shivers
 /worlds/shivers/ @GodlFire
 
+# A Short Hike
+/worlds/shorthike/ @chandler05
+
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
@@ -174,7 +180,7 @@
 /worlds/tloz/ @Rosalie-A @t3hf1gm3nt
 
 # TUNIC
-/worlds/tunic/ @silent-destroyer
+/worlds/tunic/ @silent-destroyer @ScipioWright
 
 # Undertale
 /worlds/undertale/ @jonloveslegos
@@ -187,6 +193,9 @@
 
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
+
+# Yoshi's Island
+/worlds/yoshisisland/ @PinkSwitch
 
 # Zillion
 /worlds/zillion/ @beauxq

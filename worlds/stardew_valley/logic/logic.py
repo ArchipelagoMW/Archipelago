@@ -546,6 +546,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return True_()
+        
         animal_rule = self.animal.has_animal(Generic.any)
         artisan_rule = self.artisan.can_keg(Generic.any) | self.artisan.can_preserves_jar(Generic.any)
         cooking_rule = self.money.can_spend_at(Region.saloon, 220)  # Salads at the bar are good enough

@@ -1,7 +1,7 @@
 # Raft
 
-## Where is the settings page?
-The player settings page for this game is located <a href="../player-settings">here</a>. It contains all the options
+## Where is the options page?
+The player options page for this game is located <a href="../player-options">here</a>. It contains all the options
 you need to configure and export a config file.
 
 ## What does randomization do to this game?
