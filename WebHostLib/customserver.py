@@ -270,7 +270,8 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 await ctx.shutdown_task
 
             except (KeyboardInterrupt, SystemExit):
-                ctx._save()
+                if ctx.saving:
+                    ctx._save()
             except Exception as e:
                 with db_session:
                     room = Room.get(id=room_id)
@@ -278,7 +279,8 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 logger.exception(e)
                 raise
             else:
-                ctx._save()
+                if ctx.saving:
+                    ctx._save()
             finally:
                 try:
                     with (db_session):
