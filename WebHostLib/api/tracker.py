@@ -5,7 +5,7 @@ from uuid import UUID
 from flask import abort, jsonify
 
 from MultiServer import Context
-from NetUtils import NetworkItem, SlotType
+from NetUtils import NetworkItem, SlotType, encode
 from Utils import restricted_loads
 from WebHostLib import cache
 from WebHostLib.api import api_endpoints
@@ -154,7 +154,7 @@ def tracker_data(tracker: UUID):
             "activity_timers": activity_timers,
             "connection_timers": connection_timers,
             "player_status": player_status,
-            "slot_data": slot_data,
+            "slot_data": encode(slot_data),
             "datapackage": tracker_data._multidata["datapackage"],
         })
 
