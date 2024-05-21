@@ -102,7 +102,7 @@ class ShuffleDiscardedPanels(Toggle):
 
 class ShuffleVaultBoxes(Toggle):
     """
-Adds Vault Boxes to the location pool.
+    Adds Vault Boxes to the location pool.
     """
     display_name = "Shuffle Vault Boxes"
 
@@ -178,7 +178,7 @@ class VictoryCondition(Choice):
 
 class PuzzleRandomization(Choice):
     """
-Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
+    Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
