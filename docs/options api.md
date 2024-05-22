@@ -74,7 +74,6 @@ class ExampleGameOptions(PerGameCommonOptions):
 To then submit this to the multiworld, we add it to our world's `__init__.py`:
 
 ```python
-# __init__.py
 from worlds.AutoWorld import World
 from .Options import ExampleGameOptions
 
