@@ -9,7 +9,7 @@ from .items import CVCotMItem, filler_item_names, action_cards, attribute_cards,
     get_item_names_to_ids, get_item_counts
 from .locations import CVCotMLocation, get_location_names_to_ids, base_id, get_named_locations_data, \
     get_locations_by_area
-from .options import CVCotMOptions, SubWeaponShuffle
+from .options import cvcotm_option_groups, CVCotMOptions, SubWeaponShuffle
 from .regions import get_region_info, get_all_region_names, get_named_entrances_data
 from .rules import CVCotMRules
 from .data import iname, lname
@@ -45,6 +45,8 @@ class CVCotMWeb(WebWorld):
         "setup/en",
         ["Liquid Cat"]
     )]
+
+    option_groups = cvcotm_option_groups
 
 
 class CVCotMWorld(World):
