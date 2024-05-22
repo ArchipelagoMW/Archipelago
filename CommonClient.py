@@ -228,7 +228,7 @@ class CommonContext:
 
     # data package
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
-    item_names = ImplicitNameLookupDict("item")
+    item_names: ImplicitNameLookupDict
     """A dictionary lookup of id -> name for items and updates automatically when a new data package arrives. If game 
     name is omitted, it will attempt a lookup in all game packages.
     
@@ -239,7 +239,7 @@ class CommonContext:
         name = item_names[game][id]  # Explicit id lookup with game name.
         name = item_names[id]        # Implicit id lookup. May return "Ambiguous Item" if duplicate ids exist.
     """
-    location_names = ImplicitNameLookupDict("location")
+    location_names: ImplicitNameLookupDict
     """A dictionary lookup of id -> name for locations and updates automatically when a new data package arrives. If 
     game name is omitted, it will attempt a lookup in all game packages.
 
@@ -343,6 +343,9 @@ class CommonContext:
         self.player_names = {0: "Archipelago"}
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
+
+        self.item_names = self.ImplicitNameLookupDict("item")
+        self.location_names = self.ImplicitNameLookupDict("location")
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
