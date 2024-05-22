@@ -409,6 +409,8 @@ trap_table = {
     "50 hp subtract": ItemData(357, IType.TRAP, 0x097ba0, ItemClassification.trap),
     "10 heart subtract": ItemData(358, IType.TRAP, 0x097ba8, ItemClassification.trap),
     "50 heart subtract": ItemData(359, IType.TRAP, 0x097ba8, ItemClassification.trap),
+    "Turn into stone": ItemData(360, IType.TRAP, 0x073404, ItemClassification.trap),
+    "Teleport to zone entrance": ItemData(361, IType.TRAP, 0x03c9a4, ItemClassification.trap),
     "Fall damage 5": ItemData(366, IType.TRAP, 0x0, ItemClassification.trap),
     "Fall damage 10": ItemData(367, IType.TRAP, 0x0, ItemClassification.trap),
     "Ice floor 5": ItemData(368, IType.TRAP, 0x0, ItemClassification.trap),
