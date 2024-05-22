@@ -42,16 +42,18 @@ scout_item_table = {
 # These are special items representing unique unlocks in the world. Notice that their Item ID equals their
 # respective Location ID. Like scout flies, this is necessary for game<->archipelago communication.
 special_item_table = {
-    5: "Fisherman's Boat",
-    4: "Jungle Elevator",
-    2: "Blue Eco Switch",
-    17: "Flut Flut",
-    60: "Yellow Eco Switch",
-    63: "Snowy Fort Gate",
-    71: "Freed The Blue Sage",
-    72: "Freed The Red Sage",
-    73: "Freed The Yellow Sage",
-    70: "Freed The Green Sage",
+    5: "Fisherman's Boat",              # Unlocks 14 checks in Misty Island
+    4: "Jungle Elevator",               # Unlocks 2 checks in Forbidden Jungle
+    2: "Blue Eco Switch",               # Unlocks 1 check in Jungle and 1 in Beach
+    17: "Flut Flut",                    # Unlocks 2 checks in Swamp and 2 in Snowy
+    33: "Warrior's Pontoons",           # Unlocks 14 checks in Swamp and everything post-Rock Village
+    105: "Snowy Mountain Gondola",      # Unlocks 15 checks in Snowy Mountain
+    60: "Yellow Eco Switch",            # Unlocks 1 check in Pass and 1 in Snowy
+    63: "Snowy Fort Gate",              # Unlocks 3 checks in Snowy Mountain
+    71: "Freed The Blue Sage",          # 1 of 3 unlocks for the final staircase and 2 checks in Citadel
+    72: "Freed The Red Sage",           # 1 of 3 unlocks for the final staircase and 2 checks in Citadel
+    73: "Freed The Yellow Sage",        # 1 of 3 unlocks for the final staircase and 2 checks in Citadel
+    70: "Freed The Green Sage",         # Unlocks the final elevator
 }
 
 # All Items

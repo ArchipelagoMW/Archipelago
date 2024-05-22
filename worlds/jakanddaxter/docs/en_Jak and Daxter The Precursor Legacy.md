@@ -5,52 +5,82 @@
 The [Player Options Page](../player-options) for this game contains 
 all the options you need to configure and export a config file.
 
-At this time, Scout Flies are always randomized, and Precursor Orbs 
-are never randomized.
+At this time, there are several caveats and restrictions:
+- Power Cells and Scout Flies are **always** randomized.
+- Precursor Orbs are **never** randomized.
+- **All** of the traders in the game become in-logic checks **if and only if** you have enough Orbs (1530) to pay them all at once. 
+  - This is to prevent hard locks, where an item required for progression is locked behind a trade you can't afford.
 
 ## What does randomization do to this game?
-All 101 Power Cells and 112 Scout Flies are now Location Checks 
-and may contain Items for different games, as well as different Items from within Jak and Daxter.
+All 101 Power Cells and 112 Scout Flies are now Location Checks and may contain Items for different games, 
+as well as different Items from within Jak and Daxter. Additionally, several special checks and corresponding items
+have been added that are required to complete the game.
+
+## What are the special checks and how do I check them?
+| Check Name             | How To Check                                                                 |
+|------------------------|------------------------------------------------------------------------------|
+| Fisherman's Boat       | Complete the fishing minigame in Forbidden Jungle                            |
+| Jungle Elevator        | Collect the power cell at the top of the temple in Forbidden Jungle          |
+| Blue Eco Switch        | Collect the power cell on the blue vent switch in Forbidden Jungle           |
+| Flut Flut              | Push the egg off the cliff in Sentinel Beach and talk to the bird lady       |
+| Warrior's Pontoons     | Talk to the Warrior in Rock Village once (you do NOT have to trade with him) |
+| Snowy Mountain Gondola | Approach the gondola in Volcanic Crater                                      |
+| Yellow Eco Switch      | Collect the power cell on the yellow vent switch in Snowy Mountain           |
+| Snowy Fort Gate        | Ride the Flut Flut in Snowy Mountain and press the fort gate switch          |
+| Freed The Blue Sage    | Free the Blue Sage in Gol and Maia's Citadel                                 | 
+| Freed The Red Sage     | Free the Red Sage in Gol and Maia's Citadel                                  | 
+| Freed The Yellow Sage  | Free the Yellow Sage in Gol and Maia's Citadel                               | 
+| Freed The Green Sage   | Free the Green Sage in Gol and Maia's Citadel                                | 
+
+## What are the special items and what do they unlock?
+| Item Name                                                                | What It Unlocks                                                                               |
+|--------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| Fisherman's Boat                                                         | Misty Island                                                                                  |
+| Jungle Elevator                                                          | The blue vent switch inside the temple in Forbidden Jungle                                    |
+| Blue Eco Switch                                                          | The plant boss inside the temple in Forbidden Jungle <br/> The cannon tower in Sentinel Beach |
+| Flut Flut                                                                | The upper platforms in Boggy Swamp <br/> The fort gate switch in Snowy Mountain               |
+| Warrior's Pontoons                                                       | Boggy Swamp and Mountain Pass                                                                 |
+| Snowy Mountain Gondola                                                   | Snowy Mountain                                                                                |
+| Yellow Eco Switch                                                        | The frozen box in Snowy Mountain <br/> The shortcut in Mountain Pass                          |
+| Snowy Fort Gate                                                          | The fort in Snowy Mountain                                                                    |
+| Freed The Blue Sage <br/> Freed The Red Sage <br/> Freed The Yellow Sage | The final staircase in Gol and Maia's Citadel                                                 |
+| Freed The Green Sage                                                     | The final elevator in Gol and Maia's Citadel                                                  | 
 
 ## What is the goal of the game once randomized?
 To complete the game, you must defeat the Gol and Maia and stop them from opening the Dark Eco silo.
 
 In order to reach them, you will need at least 72 Power Cells to cross the Lava Tube. In addition, 
-you will need the four specific Power Cells obtained by freeing the Red, Blue, Yellow, and Green Sages.
+you will need the four special items that free the Red, Blue, Yellow, and Green Sages.
 
-## How do I progress through the game?
-You can progress by performing tasks and completing the challenges that would normally give you Power Cells and 
-Scout Flies in the game. If you are playing with others, those players may find Power Cells and Scout Flies 
-in their games, and those Items will be automatically sent to your game. 
+## What happens when I pick up or receive a power cell?
+When you pick up a power cell, Jak and Daxter will perform their victory animation. Your power cell count will 
+NOT change. The pause menu will say "Task Completed" below the picked-up Power Cell. If your power cell was related 
+to one of the special checks listed above, you will automatically check that location as well - a 2 for 1 deal!
+Finally, your text client will inform you what you found and who it belongs to.
 
-If you have completed all possible tasks available to you but still cannot progress, you may have to wait for 
-another player to find enough of your game's Items to allow you to progress. If that does not apply, 
-double-check your spoiler log to make sure you have all the items you should have. If you don't, 
-you may have encountered a bug. Please see the options for bug reporting below.
+When you receive a power cell, your power cell count will tick up by 1. Gameplay will otherwise continue as normal. 
+Finally, your text client will inform you where you received the power cell from.
 
-## What happens when I pick up an item?
-Jak and Daxter will perform their victory animation, if applicable. You will not receive that item, and 
-the Item count for that item will not change. The pause menu will say "Task Completed" below the 
-picked-up Power Cell, but the icon will remain "dormant." You will see a message in your text client saying 
-what you found and who it belongs to.
+## What happens when I pick up or receive a scout fly?
+When you pick up a scout fly, your scout fly count will NOT change. The pause menu will show you the number of
+scout flies you picked up per-region, and this number will have ticked up by 1 for the region that scout fly belongs to. 
+Finally, your text client will inform you what you found and who it belongs to.
 
-## What happens when I receive an item?
-Jak and Daxter won't perform their victory animation, and gameplay will continue as normal. Your text client will 
-inform you where you received the Item from, and which one it is. Your Item count for that type of Item will also 
-tick up. The pause menu will not say "Task Completed" below the selected Power Cell, but the icon will be "activated."
+When you receive a scout fly, your total scout fly count will tick up by 1. The pause menu will show you the number of
+scout flies you received per-region, and this number will have ticked up by 1 for the region that scout fly belongs to. 
+Finally, your text client will inform you where you received the scout fly from, and which one it is.
 
-## I can't reach a certain area within an accessible region, how do I get there?
-Some areas are locked behind possession of specific Power Cells. For example, you cannot access Misty Island 
-until you have the "Catch 200 Pounds of Fish" Power Cell. Keep in mind, your access to Misty Island is determined 
-_through possession of this specific Power Cell only,_ **not** _by you completing the Fishing minigame._
+## How do I check the "Free 7 Scout Flies" power cell?
+You will automatically check this power cell when you _receive_ your 7th scout fly, NOT when you _pick up_ your 7th
+scout fly. So in short:
+
+- When you _pick up_ your 7th fly, the normal rules apply. 
+- When you _receive_ your 7th fly, 2 things will happen in quick succession.
+  - First, you will receive that scout fly, as normal.
+  - Second, you will immediately complete the "Free 7 Scout Flies" check, which will send out another item.
 
 ## I got soft-locked and can't leave, how do I get out of here?
-As stated before, some areas are locked behind possession of specific Power Cells. But you may already be past 
-a point-of-no-return preventing you from backtracking. One example is the Forbidden Jungle temple, where 
-the elevator is locked at the bottom, and if you haven't unlocked the Blue Eco Switch, you cannot access 
-the Plant Boss's room and escape.
-
-In this scenario, you will need to open your menu and find the "Warp To Home" option at the bottom of the list. 
+Open the game's menu, navigate to Options, and find the "Warp To Home" option at the bottom of the list. 
 Selecting this option will instantly teleport you to Geyser Rock. From there, you can teleport back to the nearest
 sage's hut to continue your journey.
 
@@ -60,8 +90,7 @@ Depending on the nature of the bug, there are a couple of different options.
 * If you found a logical error in the randomizer, please create a new Issue 
 [here.](https://github.com/ArchipelaGOAL/Archipelago/issues)
   * Use this page if:
-    * You are hard-locked from progressing. For example, you are stuck on Geyser Rock because one of the four 
-      Geyser Rock Power Cells is not on Geyser Rock.
+    * An item required for progression is unreachable. 
     * The randomizer did not respect one of the Options you chose.
     * You see a mistake, typo, etc. on this webpage.
     * You see an error or stack trace appear on the text client.
@@ -70,7 +99,7 @@ Depending on the nature of the bug, there are a couple of different options.
 * If you encountered an error in OpenGOAL, please create a new Issue 
 [here.](https://github.com/ArchipelaGOAL/ArchipelaGOAL/issues)
   * Use this page if:
-    * You encounter a crash, freeze, reset, etc.
+    * You encounter a crash, freeze, reset, etc in the game.
     * You fail to send Items you find in the game to the Archipelago server.
     * You fail to receive Items the server sends to you.
     * Your game disconnects from the server and cannot reconnect.

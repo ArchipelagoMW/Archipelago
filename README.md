@@ -31,6 +31,7 @@ Currently, the following games are supported:
 * Super Mario World
 * Pokémon Red and Blue
 * Hylics 2
+* Jak and Daxter: The Precursor Legacy
 * Overcooked! 2
 * Zillion
 * Lufia II Ancient Cave

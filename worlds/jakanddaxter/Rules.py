@@ -25,8 +25,11 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     fj_fisherman = item_table[Specials.to_ap_id(5)]
 
     sb_flut_flut = item_table[Specials.to_ap_id(17)]
+    rv_pontoon_bridge = item_table[Specials.to_ap_id(33)]
+
     sm_yellow_switch = item_table[Specials.to_ap_id(60)]
     sm_fort_gate = item_table[Specials.to_ap_id(63)]
+    sm_gondola = item_table[Specials.to_ap_id(105)]
 
     gmc_blue_sage = item_table[Specials.to_ap_id(71)]
     gmc_red_sage = item_table[Specials.to_ap_id(72)]
@@ -96,39 +99,20 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                     Jak1Level.ROCK_VILLAGE,
                     Jak1Level.PRECURSOR_BASIN)
 
-    # This is another virtual location that shares it's "borders" with its parent location.
-    # You can do blue rings as soon as you finish purple rings.
-    connect_region_to_sub(multiworld, player,
-                          Jak1Level.PRECURSOR_BASIN,
-                          Jak1SubLevel.PRECURSOR_BASIN_BLUE_RINGS)
-
     connect_regions(multiworld, player,
                     Jak1Level.ROCK_VILLAGE,
                     Jak1Level.LOST_PRECURSOR_CITY)
 
+    # This pontoon bridge locks out Boggy Swamp and Mountain Pass,
+    # effectively making it required to complete the game.
     connect_region_to_sub(multiworld, player,
-                          Jak1Level.LOST_PRECURSOR_CITY,
-                          Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM)
+                          Jak1Level.ROCK_VILLAGE,
+                          Jak1SubLevel.ROCK_VILLAGE_PONTOON_BRIDGE,
+                          lambda state: state.has(rv_pontoon_bridge, player))
 
-    connect_subregions(multiworld, player,
-                       Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM,
-                       Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM)
-
-    # LPC is such a mess logistically... once you complete the climb up the helix room,
-    # you are back to the room before the first slide, which is still the "main area" of LPC.
     connect_sub_to_region(multiworld, player,
-                          Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM,
-                          Jak1Level.LOST_PRECURSOR_CITY)
-
-    # Once you raise the sunken room to the surface, you can access Rock Village directly.
-    # You just need to complete the Location check to do this, you don't need to receive the power cell Item.
-    connect_sub_to_region(multiworld, player,
-                          Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM,
-                          Jak1Level.ROCK_VILLAGE)
-
-    connect_regions(multiworld, player,
-                    Jak1Level.ROCK_VILLAGE,
-                    Jak1Level.BOGGY_SWAMP)
+                          Jak1SubLevel.ROCK_VILLAGE_PONTOON_BRIDGE,
+                          Jak1Level.BOGGY_SWAMP)
 
     # Flut Flut only has one landing pad here, so leaving this subregion is as easy
     # as dismounting Flut Flut right where you found her.
@@ -137,36 +121,30 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                           Jak1SubLevel.BOGGY_SWAMP_FLUT_FLUT,
                           lambda state: state.has(sb_flut_flut, player))
 
-    # Klaww is considered the "main area" of MP, and the "race" is a subregion.
-    # It's not really intended to get back up the ledge overlooking Klaww's lava pit.
-    connect_regions(multiworld, player,
-                    Jak1Level.ROCK_VILLAGE,
-                    Jak1Level.MOUNTAIN_PASS,
-                    lambda state: state.has(power_cell, player, 45))
+    connect_sub_to_region(multiworld, player,
+                          Jak1SubLevel.ROCK_VILLAGE_PONTOON_BRIDGE,
+                          Jak1Level.MOUNTAIN_PASS,
+                          lambda state: state.has(power_cell, player, 45))
 
     connect_region_to_sub(multiworld, player,
                           Jak1Level.MOUNTAIN_PASS,
-                          Jak1SubLevel.MOUNTAIN_PASS_RACE)
+                          Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT,
+                          lambda state: state.has(sm_yellow_switch, player))
 
-    connect_subregions(multiworld, player,
-                       Jak1SubLevel.MOUNTAIN_PASS_RACE,
-                       Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT,
-                       lambda state: state.has(sm_yellow_switch, player))
-
-    connect_sub_to_region(multiworld, player,
-                          Jak1SubLevel.MOUNTAIN_PASS_RACE,
-                          Jak1Level.VOLCANIC_CRATER)
+    connect_regions(multiworld, player,
+                    Jak1Level.MOUNTAIN_PASS,
+                    Jak1Level.VOLCANIC_CRATER)
     set_trade_requirements(multiworld, player, Jak1Level.VOLCANIC_CRATER, vc_traders, 1530)
 
     connect_regions(multiworld, player,
                     Jak1Level.VOLCANIC_CRATER,
                     Jak1Level.SPIDER_CAVE)
 
-    # TODO - Yeah, this is a weird one. You technically need either 71 power cells OR
-    #  any 2 power cells after arriving at Volcanic Crater. Not sure how to model this...
+    # Custom-added unlock for snowy mountain's gondola.
     connect_regions(multiworld, player,
                     Jak1Level.VOLCANIC_CRATER,
-                    Jak1Level.SNOWY_MOUNTAIN)
+                    Jak1Level.SNOWY_MOUNTAIN,
+                    lambda state: state.has(sm_gondola, player))
 
     connect_region_to_sub(multiworld, player,
                           Jak1Level.SNOWY_MOUNTAIN,

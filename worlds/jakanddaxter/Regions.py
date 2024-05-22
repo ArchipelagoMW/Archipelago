@@ -47,11 +47,8 @@ class Jak1SubLevel(int, Enum):
     FORBIDDEN_JUNGLE_SWITCH_ROOM = auto()
     FORBIDDEN_JUNGLE_PLANT_ROOM = auto()
     SENTINEL_BEACH_CANNON_TOWER = auto()
-    PRECURSOR_BASIN_BLUE_RINGS = auto()
-    LOST_PRECURSOR_CITY_SUNKEN_ROOM = auto()
-    LOST_PRECURSOR_CITY_HELIX_ROOM = auto()
+    ROCK_VILLAGE_PONTOON_BRIDGE = auto()
     BOGGY_SWAMP_FLUT_FLUT = auto()
-    MOUNTAIN_PASS_RACE = auto()
     MOUNTAIN_PASS_SHORTCUT = auto()
     SNOWY_MOUNTAIN_FLUT_FLUT = auto()
     SNOWY_MOUNTAIN_LURKER_FORT = auto()
@@ -76,15 +73,15 @@ level_table: typing.Dict[Jak1Level, Jak1LevelInfo] = {
     Jak1Level.FIRE_CANYON:
         Jak1LevelInfo("Fire Canyon", 50),
     Jak1Level.ROCK_VILLAGE:
-        Jak1LevelInfo("Rock Village", 50),
+        Jak1LevelInfo("Rock Village", 43),
     Jak1Level.PRECURSOR_BASIN:
         Jak1LevelInfo("Precursor Basin", 200),
     Jak1Level.LOST_PRECURSOR_CITY:
-        Jak1LevelInfo("Lost Precursor City", 133),
+        Jak1LevelInfo("Lost Precursor City", 200),
     Jak1Level.BOGGY_SWAMP:
         Jak1LevelInfo("Boggy Swamp", 177),
     Jak1Level.MOUNTAIN_PASS:
-        Jak1LevelInfo("Mountain Pass", 0),
+        Jak1LevelInfo("Mountain Pass", 50),
     Jak1Level.VOLCANIC_CRATER:
         Jak1LevelInfo("Volcanic Crater", 50),
     Jak1Level.SPIDER_CAVE:
@@ -104,16 +101,10 @@ sub_level_table: typing.Dict[Jak1SubLevel, Jak1LevelInfo] = {
         Jak1LevelInfo("Forbidden Jungle Plant Room", 27),
     Jak1SubLevel.SENTINEL_BEACH_CANNON_TOWER:
         Jak1LevelInfo("Sentinel Beach Cannon Tower", 22),
-    Jak1SubLevel.PRECURSOR_BASIN_BLUE_RINGS:
-        Jak1LevelInfo("Precursor Basin Blue Rings", 0),  # Another virtual location, no orbs.
-    Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM:
-        Jak1LevelInfo("Lost Precursor City Sunken Room", 37),
-    Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM:
-        Jak1LevelInfo("Lost Precursor City Helix Room", 30),
+    Jak1SubLevel.ROCK_VILLAGE_PONTOON_BRIDGE:
+        Jak1LevelInfo("Rock Village Pontoon Bridge", 7),
     Jak1SubLevel.BOGGY_SWAMP_FLUT_FLUT:
         Jak1LevelInfo("Boggy Swamp Flut Flut", 23),
-    Jak1SubLevel.MOUNTAIN_PASS_RACE:
-        Jak1LevelInfo("Mountain Pass Race", 50),
     Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT:
         Jak1LevelInfo("Mountain Pass Shortcut", 0),
     Jak1SubLevel.SNOWY_MOUNTAIN_FLUT_FLUT:
@@ -177,26 +168,20 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
 
     region_rv = create_region(player, multiworld, Jak1Level.ROCK_VILLAGE)
     create_cell_locations(region_rv, Cells.locRV_cellTable)
-    create_fly_locations(region_rv, Scouts.locRV_scoutTable)
+    create_fly_locations(region_rv, {k: Scouts.locRV_scoutTable[k]
+                                     for k in {76, 131148, 196684, 262220, 65612, 327756}})
+    create_special_locations(region_rv, {k: Specials.loc_specialTable[k] for k in {33}})
+
+    sub_region_rvpb = create_subregion(region_rv, Jak1SubLevel.ROCK_VILLAGE_PONTOON_BRIDGE)
+    create_fly_locations(sub_region_rvpb, {k: Scouts.locRV_scoutTable[k] for k in {393292}})
 
     region_pb = create_region(player, multiworld, Jak1Level.PRECURSOR_BASIN)
-    create_cell_locations(region_pb, {k: Cells.locPB_cellTable[k] for k in {54, 53, 52, 56, 55, 58}})
+    create_cell_locations(region_pb, Cells.locPB_cellTable)
     create_fly_locations(region_pb, Scouts.locPB_scoutTable)
 
-    sub_region_pbbr = create_subregion(region_pb, Jak1SubLevel.PRECURSOR_BASIN_BLUE_RINGS)
-    create_cell_locations(sub_region_pbbr, {k: Cells.locPB_cellTable[k] for k in {59}})
-
     region_lpc = create_region(player, multiworld, Jak1Level.LOST_PRECURSOR_CITY)
-    create_cell_locations(region_lpc, {k: Cells.locLPC_cellTable[k] for k in {45, 48, 44, 51}})
-    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k]
-                                      for k in {262193, 131121, 393265, 196657, 49, 65585}})
-
-    sub_region_lpcsr = create_subregion(region_lpc, Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM)
-    create_cell_locations(sub_region_lpcsr, {k: Cells.locLPC_cellTable[k] for k in {47}})
-    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k] for k in {327729}})
-
-    sub_region_lpchr = create_subregion(region_lpc, Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM)
-    create_cell_locations(sub_region_lpchr, {k: Cells.locLPC_cellTable[k] for k in {46, 50}})
+    create_cell_locations(region_lpc, Cells.locLPC_cellTable)
+    create_fly_locations(region_lpc, Scouts.locLPC_scoutTable)
 
     region_bs = create_region(player, multiworld, Jak1Level.BOGGY_SWAMP)
     create_cell_locations(region_bs, {k: Cells.locBS_cellTable[k] for k in {36, 38, 39, 40, 41, 42}})
@@ -207,18 +192,16 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     create_fly_locations(sub_region_bsff, {k: Scouts.locBS_scoutTable[k] for k in {327723, 131115}})
 
     region_mp = create_region(player, multiworld, Jak1Level.MOUNTAIN_PASS)
-    create_cell_locations(region_mp, {k: Cells.locMP_cellTable[k] for k in {86}})
+    create_cell_locations(region_mp, {k: Cells.locMP_cellTable[k] for k in {86, 87}})
+    create_fly_locations(region_mp, Scouts.locMP_scoutTable)
 
-    sub_region_mpr = create_subregion(region_mp, Jak1SubLevel.MOUNTAIN_PASS_RACE)
-    create_cell_locations(sub_region_mpr, {k: Cells.locMP_cellTable[k] for k in {87}})
-    create_fly_locations(sub_region_mpr, Scouts.locMP_scoutTable)
-
-    sub_region_mps = create_subregion(sub_region_mpr, Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT)
+    sub_region_mps = create_subregion(region_mp, Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT)
     create_cell_locations(sub_region_mps, {k: Cells.locMP_cellTable[k] for k in {110}})
 
     region_vc = create_region(player, multiworld, Jak1Level.VOLCANIC_CRATER)
     create_cell_locations(region_vc, Cells.locVC_cellTable)
     create_fly_locations(region_vc, Scouts.locVC_scoutTable)
+    create_special_locations(region_vc, {k: Specials.loc_specialTable[k] for k in {105}})
 
     region_sc = create_region(player, multiworld, Jak1Level.SPIDER_CAVE)
     create_cell_locations(region_sc, Cells.locSC_cellTable)

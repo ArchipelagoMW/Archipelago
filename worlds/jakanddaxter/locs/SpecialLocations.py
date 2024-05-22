@@ -38,6 +38,8 @@ loc_specialTable = {
     4: "Jungle Elevator",
     2: "Blue Eco Switch",
     17: "Flut Flut",
+    33: "Warrior's Pontoons",
+    105: "Snowy Mountain Gondola",
     60: "Yellow Eco Switch",
     63: "Snowy Fort Gate",
     71: "Freed The Blue Sage",

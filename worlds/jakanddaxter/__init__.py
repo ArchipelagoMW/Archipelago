@@ -16,10 +16,10 @@ from worlds.LauncherComponents import components, Component, launch_subprocess, 
 
 class JakAndDaxterSettings(settings.Group):
     class RootDirectory(settings.UserFolderPath):
-        """Path to folder containing the ArchipelaGOAL mod."""
+        """Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe)."""
         description = "ArchipelaGOAL Root Directory"
 
-    root_directory:  RootDirectory = RootDirectory("D:/Files/Repositories/ArchipelaGOAL")
+    root_directory:  RootDirectory = RootDirectory("D:/Files/Repositories/ArchipelaGOAL/out/build/Release/bin")
 
 
 class JakAndDaxterWebWorld(WebWorld):

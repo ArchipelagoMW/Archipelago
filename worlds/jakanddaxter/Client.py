@@ -4,6 +4,8 @@ import subprocess
 import typing
 import asyncio
 import colorama
+import pymem
+from pymem.exception import ProcessNotFound, ProcessError
 
 import Utils
 from NetUtils import ClientStatus
@@ -137,45 +139,52 @@ class JakAndDaxterContext(CommonContext):
 
 
 async def run_game(ctx: JakAndDaxterContext):
-    exec_directory = ""
-    try:
-        exec_directory = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
-        files_in_path = os.listdir(exec_directory)
-        if ".git" in files_in_path:
-            # Indicates the user is running from source, append expected subdirectory appropriately.
-            exec_directory = os.path.join(exec_directory, "out", "build", "Release", "bin")
-        else:
-            # Indicates the user is running from the official launcher, a mod launcher, or otherwise.
-            # We'll need to handle version numbers in the path somehow...
-            exec_directory = os.path.join(exec_directory, "versions", "official")
-            latest_version = list(reversed(os.listdir(exec_directory)))[0]
-            exec_directory = os.path.join(exec_directory, str(latest_version))
-    except FileNotFoundError:
-        logger.error(f"Unable to locate directory {exec_directory}, "
-                     f"unable to locate game executable.")
-        return
-    except KeyError as e:
-        logger.error(f"Hosts.yaml does not contain {e.args[0]}, "
-                     f"unable to locate game executable.")
-        return
 
-    gk = os.path.join(exec_directory, "gk.exe")
-    goalc = os.path.join(exec_directory, "goalc.exe")
+    # If you're running the game through the mod launcher, these may already be running.
+    # If they are not running, try to start them.
+    gk_running = False
+    try:
+        pymem.Pymem("gk.exe")  # The GOAL Kernel
+        gk_running = True
+    except ProcessNotFound:
+        logger.info("Game not running, attempting to start.")
+
+    goalc_running = False
+    try:
+        pymem.Pymem("goalc.exe")  # The GOAL Compiler and REPL
+        goalc_running = True
+    except ProcessNotFound:
+        logger.info("Compiler not running, attempting to start.")
 
     # Don't mind all the arguments, they are exactly what you get when you run "task boot-game" or "task repl".
-    await asyncio.create_subprocess_exec(
-        gk,
-        "-v", "--game jak1", "--", "-boot", "-fakeiso", "-debug",
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stdin=subprocess.DEVNULL)
+    # TODO - Support other OS's. cmd for some reason does not work with goalc.
+    if not gk_running:
+        try:
+            gk_path = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
+            gk_path = os.path.normpath(gk_path)
+            gk_path = os.path.join(gk_path, "gk.exe")
+        except AttributeError as e:
+            logger.error(f"Hosts.yaml does not contain {e.args[0]}, unable to locate game executables.")
+            return
 
-    # You MUST launch goalc as a console application, so powershell/cmd/bash/etc is the program
-    # and goalc is just an argument. It HAS to be this way.
-    #  TODO - Support other OS's.
-    await asyncio.create_subprocess_exec(
-        "powershell.exe",
-        goalc, "--user-auto", "--game jak1")
+        if gk_path:
+            gk_process = subprocess.Popen(
+                ["powershell.exe", gk_path, "--game jak1", "--", "-v", "-boot", "-fakeiso", "-debug"],
+                creationflags=subprocess.CREATE_NEW_CONSOLE)  # These need to be new consoles for stability.
+
+    if not goalc_running:
+        try:
+            goalc_path = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
+            goalc_path = os.path.normpath(goalc_path)
+            goalc_path = os.path.join(goalc_path, "goalc.exe")
+        except AttributeError as e:
+            logger.error(f"Hosts.yaml does not contain {e.args[0]}, unable to locate game executables.")
+            return
+
+        if goalc_path:
+            goalc_process = subprocess.Popen(
+                ["powershell.exe", goalc_path, "--game jak1"],
+                creationflags=subprocess.CREATE_NEW_CONSOLE)  # These need to be new consoles for stability.
 
     # Auto connect the repl and memr agents. Sleep 5 because goalc takes just a little bit of time to load,
     # and it's not something we can await.
@@ -189,7 +198,6 @@ async def main():
     Utils.init_logging("JakAndDaxterClient", exception_logger="Client")
 
     ctx = JakAndDaxterContext(None, None)
-
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
     ctx.repl_task = create_task_log_exception(ctx.run_repl_loop())
     ctx.memr_task = create_task_log_exception(ctx.run_memr_loop())
@@ -199,7 +207,7 @@ async def main():
     ctx.run_cli()
 
     # Find and run the game (gk) and compiler/repl (goalc).
-    # await run_game(ctx)
+    await run_game(ctx)
     await ctx.exit_event.wait()
     await ctx.shutdown()
 
