@@ -259,6 +259,10 @@ class GauntletLegendsContext(CommonContext):
             name = "Runestone"
         if "Fruit" in name or "Meat" in name:
             name = "Health"
+        if "Obelisk" in name:
+            name = "Obelisk"
+        if "Mirror" in name:
+            name = "Mirror Shard"
         for item in self.inventory:
             if item.name == name:
                 zero = item.count == 0
@@ -268,7 +272,7 @@ class GauntletLegendsContext(CommonContext):
                     item.count = count
                 elif "Health" in name:
                     item.count = min(item.count + count, self.item_from_name("Max").count)
-                elif "Runestone" in name:
+                elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
                     item.count |= count
                 else:
                     item.count += count
