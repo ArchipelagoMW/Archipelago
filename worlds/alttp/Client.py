@@ -339,7 +339,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
     def new_check(location_id):
         new_locations.append(location_id)
         ctx.locations_checked.add(location_id)
-        location = ctx.location_names[location_id]
+        location = ctx.location_names[ctx.game][location_id]
         snes_logger.info(
             f'New Check: {location} ' +
             f'({len(ctx.checked_locations) + 1 if ctx.checked_locations else len(ctx.locations_checked)}/' +
