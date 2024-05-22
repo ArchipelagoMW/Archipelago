@@ -1130,6 +1130,8 @@ class OptionGroup(typing.NamedTuple):
     """Name of the group to categorize these options in for display on the WebHost and in generated YAMLS."""
     options: typing.List[typing.Type[Option[typing.Any]]]
     """Options to be in the defined group."""
+    start_collapsed: bool = False
+    """Whether the group will start collapsed on the WebHost options pages."""
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):

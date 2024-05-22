@@ -143,7 +143,7 @@ class WebWorldRegister(type):
                 assert option not in seen_options, f"{option} found in two option groups"
                 seen_options.append(option)
         if not item_group_in_list:
-            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options))
+            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options, True))
         return super().__new__(mcs, name, bases, dct)
 
 
