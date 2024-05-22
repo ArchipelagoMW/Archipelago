@@ -130,7 +130,6 @@ class WebWorldRegister(type):
         seen_options = []
         item_group_in_list = False
         for group in option_groups:
-            assert group.name != "Game Options", "Game Options is a pre-determined group and can not be defined."
             if group.name == "Item & Location Options":
                 group.options.extend(item_and_loc_options)
                 item_group_in_list = True
