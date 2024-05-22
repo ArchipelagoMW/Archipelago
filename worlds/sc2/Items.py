@@ -1712,8 +1712,6 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.HIVE_MIND_EMULATOR,
     ItemNames.PSI_DISRUPTER,
     ItemNames.PERDITION_TURRET,
-    # Terran units without upgrades
-    ItemNames.WARHOUND,
     # General Terran upgrades without any dependencies
     ItemNames.SCV_ADVANCED_CONSTRUCTION,
     ItemNames.SCV_DUAL_FUSION_WELDERS,
