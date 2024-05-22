@@ -70,9 +70,9 @@ class GauntletLegendsWorld(World):
         if self.options.chests_barrels == 0:
             self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)]
         elif self.options.chests_barrels == 1:
-            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
-        elif self.options.chests_barrels == 2:
             self.disabled_locations += [location.name for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name]
+        elif self.options.chests_barrels == 2:
+            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
 
         create_regions(self)
         connect_regions(self)

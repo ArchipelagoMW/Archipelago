@@ -392,9 +392,9 @@ class GauntletLegendsContext(CommonContext):
                 if self.item_from_name(characters[self.glslotdata["character"] - 1]) is None:
                     self.inv_add(characters[self.glslotdata["character"] - 1], 50)
             if self.item_from_name("Key") is None and self.glslotdata["keys"]:
-                self.inv_add("Key", 9000)
+                self.inv_update("Key", 9000)
             if self.item_from_name("Speed Boots") is None and self.glslotdata["speed"]:
-                self.inv_add("Speed Boots", 20000)
+                self.inv_update("Speed Boots", 20000)
             i = item.count
             if i - 1 != len(self.items_received):
                 for index in range(i - 1, len(self.items_received)):
@@ -457,7 +457,7 @@ class GauntletLegendsContext(CommonContext):
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
         raw_locations = [location for location in level_locations.get((level[1] << 4) + _id, []) if difficulty >= location.difficulty]
-        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [location.id for location in raw_locations], "create_as_hint": 0}])
+        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [location.id for location in raw_locations if "Chest" not in location.name and ("Barrel" not in location.name or "Barrel of Gold" in location.name)], "create_as_hint": 0}])
         while len(self.location_scouts) == 0:
             await asyncio.sleep(.1)
         self.obelisks = [item for item in self.location_scouts if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).itemName and item.player == self.slot]
