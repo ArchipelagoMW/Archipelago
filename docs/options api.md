@@ -97,7 +97,7 @@ group, which is automatically created using certain specified `item_and_loc_opti
 removed from this group.
 
 Both the "Game Options" and "Item & Location Options" groups can be overridden by creating your own groups with
-those names, allowing specifying options to add to them, as well as change whether they start collapsed. The "Item &
+those names, letting you add options to them and change whether they start collapsed. The "Item &
 Location Options" group can also be moved to a different position in the group ordering, but "Game Options" will always
 be first, regardless of where it is in your list.
 
