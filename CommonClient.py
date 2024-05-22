@@ -24,7 +24,7 @@ from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
 from Utils import Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister, DataPackage
+from worlds import network_data_package, AutoWorldRegister
 import os
 import ssl
 
