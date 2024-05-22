@@ -86,7 +86,7 @@ class ExampleWorld(World):
 ```
 
 ### Option Groups
-Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order as specified
+Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order specified
 by your world on the player-options and weighted-options pages. In the generated template files, there will be a comment
 with the group name at the beginning of each group of options. The `start_collapsed` Boolean only affects how the groups
 appear on the WebHost, with the grouping being collapsed when this is `True`.
