@@ -430,7 +430,7 @@ class GauntletLegendsContext(CommonContext):
 
     def scale(self):
         level = self.read_level()
-        if self.movement is not 0x12:
+        if self.movement != 0x12:
             level = [0x1, 0xF]
         players = self.active_players()
         player_level = self.player_level()
@@ -445,7 +445,7 @@ class GauntletLegendsContext(CommonContext):
         if level in boss_level:
             for i in range(4):
                 self.socket.write(MessageFormat(WRITE, ParamFormat(BOSS_ADDR, bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]))))
-        if self.movement is not 0x12:
+        if self.movement != 0x12:
             level = [0x1, 0xF]
         self.current_level = level
         if self.clear_counts.get(str(level), 0) != 0:

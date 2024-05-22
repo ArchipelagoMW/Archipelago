@@ -44,7 +44,7 @@ class Obelisks(Choice):
 
 class MirrorShards(Choice):
     """
-    Choose how you want Obelisks to be randomized.
+    Choose how you want Mirror Shards to be randomized.
     None: Mirror Shards will be placed in their own locations.
     All Shards: Mirror Shards will be shuffled into the item pool.
     """
