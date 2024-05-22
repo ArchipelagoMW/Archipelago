@@ -48,10 +48,6 @@ class MLSSClient(BizHawkClient):
             rom_name_bytes = await bizhawk.read(ctx.bizhawk_ctx, [(0xA0, 14, "ROM")])
             rom_name = bytes([byte for byte in rom_name_bytes[0] if byte != 0]).decode("UTF-8")
             if not rom_name.startswith("MARIO&LUIGIUA8"):
-                logger.info(
-                    "ERROR: You have opened a game that is not Mario & Luigi Superstar Saga. "
-                    "Please make sure you are opening the correct ROM."
-                )
                 return False
         except UnicodeDecodeError:
             return False
