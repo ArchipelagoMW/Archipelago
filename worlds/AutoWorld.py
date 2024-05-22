@@ -127,9 +127,15 @@ class WebWorldRegister(type):
         option_groups: List[OptionGroup] = dct.get("option_groups", [])
         item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
                                 StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+        prebuilt_options = ["Game Options", "Item & Location Options"]
         seen_options = []
         item_group_in_list = False
         for group in option_groups:
+            # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
+            title_name = group.name.title()
+            if title_name in prebuilt_options:
+                group.name = title_name
+
             if group.name == "Item & Location Options":
                 group.options.extend(item_and_loc_options)
                 item_group_in_list = True
