@@ -28,7 +28,7 @@ class TunicWeb(WebWorld):
     theme = "grassFlowers"
     game = "TUNIC"
     option_groups = tunic_option_groups
-    option_presets = tunic_option_presets
+    options_presets = tunic_option_presets
 
 
 class TunicItem(Item):
