@@ -1,6 +1,6 @@
-from typing import ClassVar, Dict, Tuple, TextIO, Any
+from typing import ClassVar, Dict, Tuple, Any
 
-import settings, typing
+import settings, typing, os
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
 from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch_subprocess, Type
@@ -13,8 +13,11 @@ from .Locations import location_table, SotnLocation, exp_locations_token
 from .Regions import create_regions
 from .Rules import set_rules
 from .Options import sotn_option_definitions
-from .Rom import SOTNDeltaPatch, patch_rom
+from .Rom import SOTNDeltaPatch, patch_rom, get_base_rom_path
 from .client import SotNClient
+
+BOOST_QTY = 12
+TRAPS_QTY = 16
 
 
 def run_client():
@@ -80,11 +83,17 @@ class SotnWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
-        # don't need rom anymore
-        pass
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
-        pass
+        difficult = self.options.difficult
+
+        if difficult == 0:
+            self.multiworld.early_items[self.player]["Soul of bat"] = 1
+            self.multiworld.early_items[self.player]["Leap stone"] = 1
+            self.multiworld.early_items[self.player]["Gravity boots"] = 1
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -170,7 +179,7 @@ class SotnWorld(World):
             self.create_item("Boss token"))
         self.multiworld.get_location("CHI - Cerberos kill", self.player).place_locked_item(
             self.create_item("Boss token"))
-        self.multiworld.get_location("CAT - Legion kill", self.player).place_locked_item(
+        self.multiworld.get_location("CAT - Granfaloon kill", self.player).place_locked_item(
             self.create_item("Boss token"))
         self.multiworld.get_location("RARE - Fake Trevor/Grant/Sypha kill", self.player).place_locked_item(
             self.create_item("Boss token"))
@@ -250,10 +259,6 @@ class SotnWorld(World):
                 self.added_pool.append(r)
                 added_items += 1
 
-            self.multiworld.early_items[self.player]["Soul of bat"] = 1
-            self.multiworld.early_items[self.player]["Leap stone"] = 1
-            self.multiworld.early_items[self.player]["Gravity boots"] = 1
-
         if difficult == 1:
             itempool += [self.create_item("Life Vessel") for _ in range(32)]
             itempool += [self.create_item("Heart Vessel") for _ in range(33)]
@@ -292,13 +297,13 @@ class SotnWorld(World):
         boosts_weight_list = []
         boosts_list = boosts_weight.current_key.split(';')
         for i, b in enumerate(boosts_list):
-            if i < 12:
+            if i < BOOST_QTY:
                 if b == "*":
                     boosts_weight_list.append(self.random.randint(0, 10))
                 else:
                     boosts_weight_list.append(int(b))
 
-        while len(boosts_weight_list) < 12:
+        while len(boosts_weight_list) < BOOST_QTY:
             boosts_weight_list.append(0)
 
         boost_list = [name for name in boost_table.keys()]
@@ -312,13 +317,13 @@ class SotnWorld(World):
         traps_weight_list = []
         traps_list = traps_weight.current_key.split(';')
         for i, t in enumerate(traps_list):
-            if i < 14:
+            if i < TRAPS_QTY:
                 if t == "*":
                     traps_weight_list.append(self.random.randint(0, 10))
                 else:
                     traps_weight_list.append(int(t))
 
-        while len(traps_weight_list) < 14:
+        while len(traps_weight_list) < TRAPS_QTY:
             traps_weight_list.append(0)
 
         trap_list = [name for name in trap_table.keys()]
