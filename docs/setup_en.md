@@ -7,7 +7,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 ## Required Software
 
 - Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
+  - Version 2.3.1 and later are supported. Version 2.9.1 is recommended for stability.
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
@@ -18,18 +18,18 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 
 Once BizHawk has been installed, open BizHawk and change the following settings:
 
-- Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua"
-  to "Lua+LuaInterface". Then restart BizHawk. This is required for the Lua script to function
-  correctly. **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two**
-  **options and reselect it. Fresh installs of newer versions of BizHawk have a tendency to show**
-  **"Lua+LuaInterface" as the default selected option but still load "NLua+KopiLua" until this**
-  **step is done.**
 - Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the
   5s button. This reduces the possibility of losing save data in emulator crashes.
 - Under Config > Customize, check the "Run in background" and "Accept background input" boxes. This
   will allow you to continue playing in the background, even if another window is selected.
 - Under Config > Hotkeys, many hotkeys are listed, with many bound to common keys on the keyboard.
   You will likely want to disable most of these, which you can do quickly using `Esc`.
+- **For Bizhawk version 2.7 and below** Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua"
+  to "Lua+LuaInterface". Then restart BizHawk. This is required for the Lua script to function
+  correctly. **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two**
+  **options and reselect it. Fresh installs of newer versions of BizHawk have a tendency to show**
+  **"Lua+LuaInterface" as the default selected option but still load "NLua+KopiLua" until this**
+  **step is done.**
 
 It is strongly recommended to associate the GBA ROM extension (\*.gba) to the BizHawk we've just
 installed. To do so, we simply have to search any GBA ROM we happened to own, right click and select
@@ -70,11 +70,10 @@ automatically launch the client, and will also create your ROM in the same place
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, you must connect them. Within the emulator click
+Once both the client and the emulator are started, they must be connected. **This should happen automatically** 
+However, if the lua script window doesn't appear, then within the emulator click
 on the "Tools" menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua
-script.
-
-Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
+script. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the text field on top and
 press enter (if the server uses a password, type in the bottom text field
