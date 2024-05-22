@@ -703,9 +703,9 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
             return False
 
     # Need to be able to hover
-    if (diff < Difficulty.EXPERT or world.options.ShuffleSubconPaintings and world.options.NoPaintingSkips) \
-       and act.name == "Your Contract has Expired":
-        return False
+    if act.name == "Your Contract has Expired":
+        if diff < Difficulty.EXPERT or world.options.ShuffleSubconPaintings and world.options.NoPaintingSkips:
+            return False
 
     if act.name == "Dead Bird Studio":
         # No umbrella logic = moderate, umbrella logic = expert.
