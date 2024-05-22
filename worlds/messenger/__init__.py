@@ -343,7 +343,7 @@ class MessengerWorld(World):
 
         if name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             return ItemClassification.useful
-
+        
         if name in TRAPS:
             return ItemClassification.trap
 
@@ -353,7 +353,7 @@ class MessengerWorld(World):
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
         group = super().create_group(multiworld, new_player_id, players)
         assert isinstance(group, MessengerWorld)
-
+        
         group.filler = FILLER.copy()
         group.options.traps.value = all(multiworld.worlds[player].options.traps for player in players)
         if group.options.traps:
@@ -389,7 +389,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
-
+    
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)
