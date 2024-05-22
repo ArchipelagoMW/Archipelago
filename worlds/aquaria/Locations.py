@@ -43,7 +43,7 @@ class AquariaLocations:
 
     locations_home_water = {
         "Home water, bulb below the grouper fish": 698058,
-        "Home water, bulb in the path bellow Nautilus Prime": 698059,
+        "Home water, bulb in the path below Nautilus Prime": 698059,
         "Home water, bulb in the little room above the grouper fish": 698060,
         "Home water, bulb in the end of the left path from the verse cave": 698061,
         "Home water, bulb in the top left path": 698062,
@@ -129,7 +129,7 @@ class AquariaLocations:
 
     locations_openwater_bl = {
         "Open water bottom left area, bulb behind the chomper fish": 698011,
-        "Open water bottom left area, bulb inside the downest fish pass": 698010,
+        "Open water bottom left area, bulb inside the lowest fish pass": 698010,
     }
 
     locations_skeleton_path = {
@@ -226,7 +226,7 @@ class AquariaLocations:
         "Mithalas cathedral, third urn in the path behind the flesh vein": 698146,
         "Mithalas cathedral, one of the urns in the top right room": 698147,
         "Mithalas cathedral, Mithalan Dress": 698189,
-        "Mithalas cathedral right area, urn bellow the left entrance": 698198,
+        "Mithalas cathedral right area, urn below the left entrance": 698198,
     }
 
     locations_cathedral_underground = {
@@ -457,7 +457,7 @@ class AquariaLocations:
     locations_body_l = {
         "The body left area, first bulb in the top face room": 698066,
         "The body left area, second bulb in the top face room": 698069,
-        "The body left area, bulb bellow the water stream": 698067,
+        "The body left area, bulb below the water stream": 698067,
         "The body left area, bulb in the top path to the top face room": 698068,
         "The body left area, bulb in the bottom face room": 698070,
     }
