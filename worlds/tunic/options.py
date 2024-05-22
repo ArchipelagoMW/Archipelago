@@ -213,7 +213,7 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
     "Glace Mode": {
         "accessibility": "minimal",
         "ability_shuffling": True,
-        "entrance_rando": True,
+        "entrance_rando": "yes",
         "fool_traps": "onslaught",
         "logic_rules": "unrestricted",
         "maskless": True,
