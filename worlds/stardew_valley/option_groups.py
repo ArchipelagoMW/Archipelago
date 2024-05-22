@@ -10,7 +10,7 @@ from .options import (Goal, StartingMoney, ProfitMargin, BundleRandomization, Bu
                       Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Mods)
 
 sv_option_groups = [
-    OptionGroup('General', [
+    OptionGroup("General", [
         Goal,
         FarmType,
         BundleRandomization,
@@ -18,7 +18,7 @@ sv_option_groups = [
         EntranceRandomization,
         ExcludeGingerIsland,
     ]),
-    OptionGroup('Major Unlocks', [
+    OptionGroup("Major Unlocks", [
         SeasonRandomization,
         Cropsanity,
         BackpackProgression,
@@ -27,7 +27,7 @@ sv_option_groups = [
         SkillProgression,
         BuildingProgression,
     ]),
-    OptionGroup('Extra Shuffling', [
+    OptionGroup("Extra Shuffling", [
         FestivalLocations,
         ArcadeMachineLocations,
         SpecialOrderLocations,
@@ -40,9 +40,9 @@ sv_option_groups = [
         Shipsanity,
         Cooksanity,
         Chefsanity,
-        Craftsanity
+        Craftsanity,
     ]),
-    OptionGroup('Multipliers and Buffs', [
+    OptionGroup("Multipliers and Buffs", [
         StartingMoney,
         ProfitMargin,
         ExperienceMultiplier,
@@ -55,7 +55,7 @@ sv_option_groups = [
         MultipleDaySleepCost,
         QuickStart,
     ]),
-    OptionGroup('Advanced Options', [
+    OptionGroup("Advanced Options", [
         Gifting,
         DeathLink,
         Mods,
