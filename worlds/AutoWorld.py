@@ -11,10 +11,7 @@ from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
                     Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
-from Options import (
-    ExcludeLocations, ItemLinks, LocalItems, NonLocalItems, OptionGroup, PerGameCommonOptions,
-    PriorityLocations, StartHints, StartInventory, StartInventoryPool, StartLocationHints
-)
+from Options import item_and_loc_options, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -125,8 +122,6 @@ class WebWorldRegister(type):
         # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
         # dev, putting it at the end if they don't define options in it
         option_groups: List[OptionGroup] = dct.get("option_groups", [])
-        item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
-                                StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
         seen_options = []
         item_group_in_list = False
         for group in option_groups:

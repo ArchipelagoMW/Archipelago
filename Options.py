@@ -1132,7 +1132,16 @@ class OptionGroup(typing.NamedTuple):
     """Options to be in the defined group."""
 
 
-def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
+item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
+                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+"""
+Options that are always populated in "Item & Location Options" Option Group. Cannot be moved to another group.
+If desired, a custom "Item & Location Options" Option Group can be defined, but only for adding additional options to
+it.
+"""
+
+
+def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
     import os
 
     import yaml
