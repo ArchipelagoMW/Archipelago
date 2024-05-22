@@ -81,6 +81,8 @@ mushroom_tree_seed = BundleItem(TreeSeed.mushroom, source=BundleItem.Sources.isl
 mystic_tree_seed = BundleItem(TreeSeed.mystic, source=BundleItem.Sources.masteries)
 mossy_seed = BundleItem(TreeSeed.mossy)
 
+strawberry_seeds = BundleItem(Seed.strawberry)
+
 blue_jazz = BundleItem(Flower.blue_jazz)
 cauliflower = BundleItem(Vegetable.cauliflower)
 green_bean = BundleItem(Vegetable.green_bean)
@@ -318,7 +320,11 @@ shrimp_cocktail = BundleItem(Meal.shrimp_cocktail)
 pina_colada = BundleItem(Beverage.pina_colada, source=BundleItem.Sources.island)
 stuffing = BundleItem(Meal.stuffing)
 magic_rock_candy = BundleItem(Meal.magic_rock_candy)
+spicy_eel = BundleItem(Meal.spicy_eel)
+crab_cakes = BundleItem(Meal.crab_cakes)
 eggplant_parmesan = BundleItem(Meal.eggplant_parmesan)
+pumpkin_soup = BundleItem(Meal.pumpkin_soup)
+lucky_lunch = BundleItem(Meal.lucky_lunch)
 
 green_algae = BundleItem(WaterItem.green_algae)
 white_algae = BundleItem(WaterItem.white_algae)
@@ -809,8 +815,11 @@ winter_star_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.winter_sta
 bartender_items = [shrimp_cocktail, triple_shot_espresso, ginger_ale, cranberry_candy, beer, pale_ale, pina_colada]
 bartender_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.bartender, bartender_items, 3, 3)
 
-calico_items = [calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg.as_amount(200), magic_rock_candy, mega_bomb.as_amount(10),
-                mystery_box.as_amount(10), mixed_seeds.as_amount(50), eggplant_parmesan.as_amount(50)]
+calico_items = [calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg.as_amount(200),
+                magic_rock_candy, mega_bomb.as_amount(10), mystery_box.as_amount(10), mixed_seeds.as_amount(50),
+                strawberry_seeds.as_amount(20),
+                spicy_eel.as_amount(5), crab_cakes.as_amount(5), eggplant_parmesan.as_amount(5),
+                pumpkin_soup.as_amount(5), lucky_lunch.as_amount(5),]
 calico_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.calico, calico_items, 2, 2)
 
 raccoon_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.raccoon, raccoon_foraging_items, 4, 4)
