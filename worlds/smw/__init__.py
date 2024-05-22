@@ -150,7 +150,7 @@ class SMWWorld(World):
         itempool += [self.create_item(ItemName.red_switch_palace)]
         itempool += [self.create_item(ItemName.blue_switch_palace)]
         itempool += [self.create_item(ItemName.special_world_clear)]
-
+        
         if self.options.goal == "yoshi_egg_hunt":
             raw_egg_count = total_required_locations - len(itempool) - len(exclusion_pool)
             total_egg_count = min(raw_egg_count, self.options.max_yoshi_egg_cap.value)
@@ -194,7 +194,7 @@ class SMWWorld(World):
         junk_weights += ([ItemName.one_up_mushroom] * 20)
 
         junk_pool = [self.create_item(self.random.choice(junk_weights)) for _ in range(junk_count)]
-
+        
         itempool += junk_pool
 
         boss_location_names = [LocationName.yoshis_island_koopaling, LocationName.donut_plains_koopaling, LocationName.vanilla_dome_koopaling,
