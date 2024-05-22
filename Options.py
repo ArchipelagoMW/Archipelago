@@ -1142,7 +1142,7 @@ it.
 
 
 def get_option_groups(world: typing.Type[World], visibility_level: Visibility = Visibility.template) -> typing.Dict[
-    str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
+        str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
     """Generates and returns a dictionary for the option groups of a specified world."""
     option_groups = {option: option_group.name
                      for option_group in world.web.option_groups
