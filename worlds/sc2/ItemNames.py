@@ -414,6 +414,10 @@ SWARM_QUEEN_INCUBATOR_CHAMBER           = "Incubator Chamber (Swarm Queen)"
 BROOD_QUEEN_FUNGAL_GROWTH               = "Fungal Growth (Brood Queen)"
 BROOD_QUEEN_ENSNARE                     = "Ensnare (Brood Queen)"
 BROOD_QUEEN_ENHANCED_MITOCHONDRIA       = "Enhanced Mitochondria (Brood Queen)"
+DEFILER_PATHOGEN_PROJECTORS             = "Pathogen Projectors (Defiler)"
+DEFILER_TRAPDOOR_ADAPTATION             = "Trapdoor Adaptation (Defiler)"
+DEFILER_PREDATORY_CONSUMPTION           = "Predatory Consumption (Defiler)"
+DEFILER_COMORBIDITY                     = "Comorbidity (Defiler)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
