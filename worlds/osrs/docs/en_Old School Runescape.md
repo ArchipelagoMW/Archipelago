@@ -102,7 +102,7 @@ These task categories can have different weights, minimums, and maximums based o
 [Logic Document](https://docs.google.com/spreadsheets/d/1R8Cm8L6YkRWeiN7uYrdru8Vc1DlJ0aFAinH_fwhV8aU/edit?usp=sharing)
 
 ## Which items can be in another player's world?
-Any Item unlock can be found in any player's world.
+Any Item or Region unlock can be found in any player's world.
 
 ## What does another world's item look like in Old School Runescape?
 Upon completing a Task, the item and recipient will be listed in the player's chatbox.
