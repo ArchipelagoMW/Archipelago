@@ -67,6 +67,7 @@ Currently, the following games are supported:
 * Yoshi's Island
 * Mario & Luigi: Superstar Saga
 * Bomb Rush Cyberfunk
+* Aquaria
 * Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
 * A Hat in Time
 

@@ -13,7 +13,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple
+from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -272,7 +272,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if multiworld.algorithm == 'flood':
         flood_items(multiworld)  # different algo, biased towards early game progress items
     elif multiworld.algorithm == 'balanced':
-        distribute_items_restrictive(multiworld)
+        distribute_items_restrictive(multiworld, get_settings().generator.panic_method)
 
     AutoWorld.call_all(multiworld, 'post_fill')
 

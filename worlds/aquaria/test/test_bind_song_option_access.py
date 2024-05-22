@@ -24,7 +24,7 @@ class BindSongOptionAccessTest(AquariaTestBase):
             "Song cave, bulb under the rock close to the song door",
             "Song cave, bulb under the rock in the path to the singing statues",
             "Naija's home, bulb under the rock at the right of the main path",
-            "Home water, bulb in the path bellow Nautilus Prime",
+            "Home water, bulb in the path below Nautilus Prime",
             "Home water, bulb in the bottom left room",
             "Home water, Nautilus Egg",
             "Song cave, Verse egg",
