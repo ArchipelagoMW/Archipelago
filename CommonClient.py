@@ -9,7 +9,6 @@ import sys
 import typing
 import time
 import functools
-from collections.abc import MutableMapping
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -175,7 +174,7 @@ class CommonContext:
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
-    class ImplicitNameLookupDict(MutableMapping):
+    class ImplicitNameLookupDict(collections.abc.MutableMapping):
         _store: typing.Dict
 
         def __init__(self, lookup_type: typing.Literal["item", "location"]):
