@@ -779,21 +779,21 @@ async def on_client_connected(ctx: Context, client: Client):
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     games.add("Archipelago")
     await ctx.send_msgs(client, [{
-        "cmd": "RoomInfo",
-        "password": bool(ctx.password),
-        "games": games,
+        'cmd': 'RoomInfo',
+        'password': bool(ctx.password),
+        'games': games,
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
-        "tags": ctx.tags,
-        "version": version_tuple,
-        "generator_version": ctx.generator_version,
-        "permissions": get_permissions(ctx),
-        "hint_cost": ctx.hint_cost,
-        "location_check_points": ctx.location_check_points,
+        'tags': ctx.tags,
+        'version': version_tuple,
+        'generator_version': ctx.generator_version,
+        'permissions': get_permissions(ctx),
+        'hint_cost': ctx.hint_cost,
+        'location_check_points': ctx.location_check_points,
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
-        "seed_name": ctx.seed_name,
-        "time": time.time(),
+        'seed_name': ctx.seed_name,
+        'time': time.time(),
     }])
 
 
