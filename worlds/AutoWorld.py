@@ -137,6 +137,8 @@ class WebWorldRegister(type):
                 group.name = title_name
 
             if group.name == "Item & Location Options":
+                assert not [option for option in item_and_loc_options if option in group.options], \
+                    f"Item and Location Options cannot be specified multiple times"
                 group.options.extend(item_and_loc_options)
                 item_group_in_list = True
             else:
