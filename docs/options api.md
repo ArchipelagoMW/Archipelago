@@ -87,7 +87,9 @@ class ExampleWorld(World):
 
 ### Option Groups
 Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order as specified
-by your world on the player-options and weighted-options pages.
+by your world on the player-options and weighted-options pages. In the generated template files, there will be a comment
+with the group name at the beginning of each group of options. The `start_collapsed` only affects how the groups appear
+on the WebHost, with the grouping being collapsed when this is `True`.
 
 Options without a group name are categorized into a generic "Game Options" group, which is always the first group. If
 every option for your world is in a group, this group will be removed. There is also an "Items & Locations Options"
@@ -95,9 +97,9 @@ group, which is automatically created using certain specified`item_and_loc_optio
 removed from this group.
 
 Both the "Game Options" and "Item & Location Options" groups can be overridden by creating your own groups with
-those names, and specify specific options to add to them. The "Item & Location Options" group can also be moved to a
-different position in the group ordering, but "Game Options" will always be first, regardless of where it is in your
-list.
+those names, and specify specific options to add to them, as well as change the visibility. The "Item & Location
+Options" group can also be moved to a different position in the group ordering, but "Game Options" will always be first,
+regardless of where it is in your list.
 
 ```python
 from worlds.AutoWorld import WebWorld
