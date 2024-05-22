@@ -220,7 +220,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 def remaining_fill(multiworld: MultiWorld,
                    locations: typing.List[Location],
                    itempool: typing.List[Item],
-                   name: str = "Remaining", move_unplaceable_to_start_inventory: bool = False) -> None:
+                   name: str = "Remaining", 
+                   move_unplaceable_to_start_inventory: bool = False) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
