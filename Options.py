@@ -1155,6 +1155,10 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
         if visibility_level & option.visibility:
             grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
+    # if the world doesn't have any ungrouped options, this group will be empty so just remove it
+    if not grouped_options["Game Options"]:
+        del grouped_options["Game Options"]
+
     return grouped_options
 
 
