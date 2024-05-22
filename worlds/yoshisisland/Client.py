@@ -116,7 +116,7 @@ class YoshisIslandSNIClient(SNIClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names[ctx.game][new_check_id]
             total_locations = len(ctx.missing_locations) + len(ctx.checked_locations)
             snes_logger.info(f"New Check: {location} ({len(ctx.locations_checked)}/{total_locations})")
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [new_check_id]}])
@@ -126,10 +126,11 @@ class YoshisIslandSNIClient(SNIClient):
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
+            sending_game = ctx.slot_info[item.player].game
             logging.info("Received %s from %s (%s) (%d/%d in list)" % (
-                color(ctx.item_names[item.item], "red", "bold"),
+                color(ctx.item_names[ctx.game][item.item], "red", "bold"),
                 color(ctx.player_names[item.player], "yellow"),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names[sending_game][item.location], recv_index, len(ctx.items_received)))
 
             snes_buffered_write(ctx, ITEMQUEUE_HIGH, pack("H", recv_index))
             if item.item in item_values:

@@ -197,7 +197,7 @@ class WargrooveContext(CommonContext):
                     open(print_path, 'w').close()
                     with open(print_path, 'w') as f:
                         f.write("Received " +
-                                self.item_names[network_item.item] +
+                                self.item_names[self.game][network_item.item] +
                                 " from " +
                                 self.player_names[network_item.player])
                         f.close()
@@ -342,7 +342,7 @@ class WargrooveContext(CommonContext):
             faction_items = 0
             faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
             for network_item in self.items_received:
-                if self.item_names[network_item.item] in faction_item_names:
+                if self.item_names[self.game][network_item.item] in faction_item_names:
                     faction_items += 1
             starting_groove = (faction_items - 1) * self.starting_groove_multiplier
             # Must be an integer larger than 0
