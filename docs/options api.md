@@ -92,8 +92,8 @@ with the group name at the beginning of each group of options. The `start_collap
 on the WebHost, with the grouping being collapsed when this is `True`.
 
 Options without a group name are categorized into a generic "Game Options" group, which is always the first group. If
-every option for your world is in a group, this group will be removed. There is also an "Items & Locations Options"
-group, which is automatically created using certain specified`item_and_loc_options`. These specified options cannot be
+every option for your world is in a group, this group will be removed. There is also an "Items & Location Options"
+group, which is automatically created using certain specified `item_and_loc_options`. These specified options cannot be
 removed from this group.
 
 Both the "Game Options" and "Item & Location Options" groups can be overridden by creating your own groups with
