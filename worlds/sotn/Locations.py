@@ -61,7 +61,7 @@ zones_dict = {
     31: ZoneData("RTOP", "Reverse Castle Keep", 0x2524, 0x03bf3f, 4),
     32: ZoneData("RWRP", "Reverse Warp rooms", 0xa198),
     33: ZoneData("BO0", "Olrox", 0xc10c, 0x03bef0, 2),
-    34: ZoneData("BO1", "Legion", 0x55d0, 0x03befc, 3),  # or Granfaloon
+    34: ZoneData("BO1", "Granfaloon", 0x55d0, 0x03befc, 3),  # or Granfaloon
     35: ZoneData("BO2", "Werewolf & Minotaur", 0x76a0, 0x03bf06, 2),
     36: ZoneData("BO3", "Scylla", 0x6734, 0x03bef4, 5),
     37: ZoneData("BO4", "Doppleganger10", 0x69ec, 0x03beee, 2),
@@ -137,7 +137,7 @@ no3_locations = {
                                                        [0x4b68612, 0x53f5f8e]),
     "NO3 - Life Vessel (Above entry)": LocationData("Castle Entrance", 8,[0x4b68614, 0x53f5f90]),
     "NO3 - Jewel sword": LocationData("Castle Entrance", 9, [0x53f5f92]),
-    "NO3 - Pot Roast": LocationData("Castle Entrance", 3110, [0x4ba9774, 0x5431554],
+    "NO3 - Pot roast": LocationData("Castle Entrance", 3110, [0x4ba9774, 0x5431554],
                                     True, False),
     "NO3 - Turkey": LocationData("Castle Entrance", 3111, [0x4baa2b0, 0x5431f60],
                                  True, False),
@@ -196,7 +196,7 @@ no1_locations = {
     "NO1 - Gladius": LocationData("Outer Wall", 4, [0x49d367c]),
     "NO1 - Life Vessel": LocationData("Outer Wall", 5, [0x49d367e]),
     "NO1 - Zircon": LocationData("Outer Wall", 6, [0x49d3680]),
-    "NO1 - Pot Roast": LocationData("Outer Wall", 3090, [0x4a197d8], True),
+    "NO1 - Pot roast": LocationData("Outer Wall", 3090, [0x4a197d8], True),
     "NO1 - Doppleganger 10 kill": LocationData("Outer Wall", 3091),
     "Soul of Wolf": LocationData("Outer Wall", 3092, [0x49d5d36+8, 0x49d658e+8],
                                  False, True, 0x002e00b0, 7, [0x49d3682])
@@ -405,7 +405,7 @@ cat_locations = {
     "CAT - Monster vial 3 2(Sarcophagus)": LocationData("Catacombs", 18, [0x4491308]),
     "CAT - Monster vial 3 3(Sarcophagus)": LocationData("Catacombs", 19, [0x449130a]),
     "CAT - Monster vial 3 4(Sarcophagus)": LocationData("Catacombs", 20, [0x449130c]),
-    "CAT - Legion kill": LocationData("Catacombs", 3020),
+    "CAT - Granfaloon kill": LocationData("Catacombs", 3020),
 }
 
 rare_locations = {
@@ -619,7 +619,7 @@ rnz1_locations = {
     "RNZ1 - Heart Vessel": LocationData("Reverse Clock Tower", 10, [0x59bc0e4]),
     "RNZ1 - Moon rod": LocationData("Reverse Clock Tower", 11, [0x59bc0e6]),
     "RNZ1 - Bwaka knife": LocationData("Reverse Clock Tower", 3300, [0x59bc354], True),
-    "RNZ1 - Turkey": LocationData("Reverse Clock Tower", 3301, [0x59bc34c], True),
+    "RNZ1 - Pot roast": LocationData("Reverse Clock Tower", 3301, [0x59bc34c], True),
     "RNZ1 - Shuriken": LocationData("Reverse Clock Tower", 3302, [0x59bc350], True),
     "RNZ1 - TNT": LocationData("Reverse Clock Tower", 3303, [0x59bc358], True),
     "RNZ1 - Darkwing bat kill": LocationData("Reverse Clock Tower", 3304),
@@ -723,7 +723,7 @@ cat_enemies = {
     "Enemysanity: 86 - Discus lord": LocationData("Catacombs", 186),
     "Enemysanity: 88 - Large slime": LocationData("Catacombs", 188),
     "Enemysanity: 89 - Hellfire beast": LocationData("Catacombs", 189),
-    "Enemysanity: 98 - Legion": LocationData("Catacombs", 198),
+    "Enemysanity: 98 - Granfaloon": LocationData("Catacombs", 198),
 }
 
 cat_drops = {
@@ -1046,7 +1046,6 @@ rno3_enemies = {
 rno3_drops = {
     "Dropsanity: 114 - Orobourous": LocationData("Reverse Entrance", 414),
     "Dropsanity: 116 - Fire warg": LocationData("Reverse Entrance", 416),
-    "Dropsanity: 121 - Warg rider": LocationData("Reverse Entrance", 421),
     "Dropsanity: 141 - Dodo bird": LocationData("Reverse Entrance", 441),
 }
 
