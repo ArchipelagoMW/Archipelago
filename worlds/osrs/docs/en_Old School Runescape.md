@@ -29,9 +29,9 @@ This can lead to a more consistent length of run, and generally shorter than dis
   * **Max [Category] Level** - The highest level you intend to have to reach in order to complete all tasks for this
 category. For the Combat category, this is the max level of monster you are willing to fight.
 General tasks do not have a level and thus do not have this option.
-  * **Max [Category] Tasks** - The most amount of tasks in this category you are willing to be assigned.
+  * **Max [Category] Tasks** - The highest number of tasks in this category you are willing to be assigned.
 Note that you can end up with _less_ than this amount, but never more. The "General" category is used to fill remaining
-spots so cannot have a maximum specified, instead having a _minimum_ count.
+spots so a maximum specified is not specifed, instead having a _minimum_ count.
   * **[Category] Task Weighting** - The relative weighting of this category to all of the others. Increase this to make 
 tasks in this category more likely.
 
