@@ -529,14 +529,14 @@ class World(metaclass=AutoWorldRegister):
         return self.multiworld.get_player_name(self.player)
 
     @classmethod
-    def get_data_package_data(cls) -> GamesPackage:
+    def get_data_package_data(cls) -> "GamesPackage":
         sorted_item_name_groups = {
             name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
         sorted_location_name_groups = {
             name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
         }
-        res: GamesPackage = {
+        res: "GamesPackage" = {
             # sorted alphabetically
             "item_name_groups": sorted_item_name_groups,
             "item_name_to_id": cls.item_name_to_id,

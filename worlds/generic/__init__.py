@@ -1,9 +1,10 @@
 from typing import NamedTuple, Union
 import logging
 
-from BaseClasses import Item, ItemClassification, Tutorial
+from BaseClasses import Item, Tutorial, ItemClassification
+
+from ..AutoWorld import World, WebWorld
 from NetUtils import SlotType
-from worlds.AutoWorld import WebWorld, World
 
 
 class GenericWeb(WebWorld):

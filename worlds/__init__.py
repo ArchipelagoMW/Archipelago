@@ -9,9 +9,6 @@ from typing import Dict, List, TypedDict, Optional, TYPE_CHECKING
 
 from Utils import local_path, user_path
 
-if TYPE_CHECKING:
-    from .AutoWorld import World
-
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else None
 
