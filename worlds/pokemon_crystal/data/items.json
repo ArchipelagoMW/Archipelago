@@ -197,7 +197,7 @@
 		"classification": "PROGRESSION",
 		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
-	"PASS": {"name": "Pass", "classification": "PROGRESSION", "tags": ["KeyItem", "Unique"]},
+	"PASS": {"name": "Pass", "classification": "PROGRESSION", "tags": ["KeyItem", "Unique", "Tracker"]},
 	"CHARCOAL": {"name": "Charcoal", "classification": "FILLER", "tags": []},
 	"BERRY_JUICE": {"name": "Berry Juice", "classification": "FILLER", "tags": []},
 	"SCOPE_LENS": {"name": "Scope Lens", "classification": "FILLER", "tags": []},
