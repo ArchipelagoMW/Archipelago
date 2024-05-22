@@ -42,8 +42,10 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
         if visibility_flag in option.visibility:
             grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
-    group_visibility = {group.name: group.start_collapsed for group in world.web.option_groups}
-    group_visibility["Game Options"] = False
+    group_visibility = {"Game Options": False}
+    for group in world.web.option_groups:
+        group_visibility[group.name] = group.start_collapsed
+
     return render_template(
         template,
         world_name=world_name,
