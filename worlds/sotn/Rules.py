@@ -26,6 +26,9 @@ def sotn_has_any(state: CollectionState, player: int) -> bool:
 def sotn_has_bat(state: CollectionState, player: int) -> bool:
     return state.has("Soul of bat", player) and state.has("Echo of bat", player)
 
+def sotn_has_wolf(state: CollectionState, player: int) -> bool:
+    return state.has("Soul of wolf", player) and state.has("Power of wolf", player)
+
 
 def sotn_has_reverse(state: CollectionState, player: int) -> bool:
     return state.has("Holy glasses", player) and sotn_has_flying(state, player)
@@ -42,6 +45,41 @@ def set_rules(world: MultiWorld, player: int) -> None:
     no2 = world.opened_no2[player]
     esanity = world.enemysanity[player]
     dsanity = world.dropsanity[player]
+    rules = world.rand_rules[player]
+
+    # Limited options
+    if rules == 1:
+        locations = ["NO4 - Crystal cloak", "CAT - Mormegil", "RNO4 - Dark Blade", "RNZ0 - Ring of Arcana",
+                     "NO3 - Holy mail", "NO3 - Jewel sword", "NZ0 - Basilard", "NZ0 - Sunglasses", "NZ0 - Cloth cape",
+                     "DAI - Mystic pendant", "DAI - Ankh of life(Stairs)", "DAI - Morningstar", "DAI - Goggles",
+                     "DAI - Silver plate", "DAI - Cutlass", "TOP - Platinum mail(Above Richter)", "TOP - Falchion",
+                     "NZ1 - Gold plate", "NZ1 - Bekatowa", "NO1 - Gladius", "NO1 - Jewel knuckles", "LIB - Holy rod",
+                     "LIB - Onyx", "LIB - Bronze cuirass", "NO0 - Alucart sword", "NO2 - Broadsword", "NO2 - Estoc",
+                     "NO2 - Garnet", "ARE - Blood cloak", "ARE - Shield rod", "ARE - Knight shield(Chapel passage)",
+                     "ARE - Holy sword(Hidden attic)", "NO4 - Bandanna", "NO4 - Secret boots", "NO4 - Nunchaku",
+                     "NO4 - Knuckle duster(Holy)", "NO4 - Onyx(Holy)", "CHI - Combat knife", "CHI - Ring of ares",
+                     "CAT - Bloodstone", "CAT - Icebrand", "CAT - Walk armor", "RNO3 - Beryl circlet", "RNO3 - Talisman",
+                     "RNZ0 - Katana", "RNZ0 - Goddess shield", "RDAI - Twilight cloak", "RDAI - Talwar",
+                     "RTOP - Sword of dawn", "RTOP - Bastard sword", "RTOP - Royal cloak", "RTOP - Lightning mail",
+                     "RNZ1 - Moon rod", "RNZ1 - Sunstone(Hidden room)", "RNZ1 - Luminus", "RNZ1 - Dragon helm",
+                     "RNO1 - Shotel", "RLIB - Staurolite", "RLIB - Badelaire",  "RLIB - Opal", "RNO4 - Diamond",
+                     "RNO4 - Opal", "RNO4 - Garnet", "RNO4 - Osafune katana", "RNO4 - Alucard shield",
+                     "RCHI - Alucard sword", "RCAT - Necklace of j", "RCAT - Diamond", "RNO2 - Sword of hador",
+                     "RNO2 - Alucard mail", "RARE - Gram", "RARE - Fury plate(Hidden floor)", "Cube of Zoe",
+                     "Power of Wolf", "Skill of Wolf", "Bat Card", "Spirit Orb", "Gravity Boots", "Soul of Wolf",
+                     "Soul of Bat", "Faerie Scroll", "Jewel of Open", "Faerie Card", "Fire of Bat", "Leap Stone",
+                     "Power of Mist", "Ghost Card", "Form of Mist", "Echo of Bat", "Sword Card", "Holy Symbol",
+                     "Merman Statue", "Demon Card", "Gas Cloud", "Eye of Vlad", "Heart of Vlad", "Tooth of Vlad",
+                     "Rib of Vlad", "Force of Echo", "Ring of Vlad"]
+        items = ["Spike breaker", "Holy glasses", "Gold ring", "Silver ring", "Soul of bat", "Echo of bat",
+                 "Soul of wolf", "Form of mist", "Cube of zoe", "Gravity boots", "Leap stone", "Holy symbol",
+                 "Jewel of open", "Merman statue", "Demon card", "Heart of vlad", "Tooth of vlad", "Rib of vlad",
+                 "Ring of vlad", "Eye of vlad"]
+        for name, data in location_table.items():
+            if name not in locations:
+                location = world.get_location(name, player)
+                for item in items:
+                    forbid_item(location, item, player)
 
     for name, data in location_table.items():
         if data.no_offset:
