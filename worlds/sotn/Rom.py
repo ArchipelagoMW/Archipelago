@@ -11,7 +11,7 @@ from .Items import (ItemData, item_table, IType, get_item_data_shop, tile_id_off
                     helmet_type_table, cloak_type_table, acc_type_table)
 from .Locations import location_table
 from .Candles import Candles
-from .Enemies import Enemies
+from .Enemies import Enemy_dict, Global_drop
 
 import hashlib
 import os
@@ -119,7 +119,9 @@ class SOTNDeltaPatch(APDeltaPatch):
             patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
 
             # Duplicate Sanity options
-            patched_rom[0xf50c6] = patched_rom[0x0438d85e]
+            # patched_rom[0xf50c6] = patched_rom[0x0438d85e]
+            # Duplicate Seed options
+            patched_rom[0xf4ce4:0xf4d50] = patched_rom[0x438d47c:0x438d4e8]
 
             with open(target[:-4] + ".bin", "wb") as stream:
                 stream.write(patched_rom)
@@ -186,7 +188,7 @@ def get_base_rom_bytes() -> bytes:
 def get_base_rom_path(file_name: str = "") -> str:
     options = get_settings()
     if not file_name:
-        file_name = options["sotn_options"]["rom_file"]
+        file_name = options["sotn_settings"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
@@ -236,17 +238,23 @@ def patch_rom(world: World, output_directory: str) -> None:
     no2 = world.options.opened_no2
     songs = world.options.rng_songs
     shop = world.options.rng_shop
-    shop_prog = world.options.noprog_shop
+    shop_prog = world.options.prog_shop
     shop_lib = world.options.lib_shop
     prices = world.options.rng_prices
     bosses = world.options.bosses_need
     exp = world.options.exp_need
     candles = world.options.rng_candles
-    candles_prog = world.options.noprog_candles
+    candles_prog = world.options.prog_candles
     drops = world.options.rng_drops
-    drops_prog = world.options.noprog_drops
+    drops_prog = world.options.prog_drops
     esanity = world.options.enemysanity
     dsanity = world.options.dropsanity
+    difficult = world.options.difficult
+    player_xp = world.options.xp_mod
+    player_att = world.options.att_mod
+    player_hp = world.options.hp_mod
+    bonus_luck = world.options.bonus_luck
+
     if bosses > 20:
         bosses = 20
     if exp > 20:
@@ -376,9 +384,6 @@ def patch_rom(world: World, output_directory: str) -> None:
     """
     write_word(patched_rom, 0x04fcf7b4, 0x10000118)
 
-    seed_num = world.multiworld.seed
-    write_seed(patched_rom, seed_num)
-
     if songs:
         randomize_music(patched_rom)
 
@@ -389,7 +394,28 @@ def patch_rom(world: World, output_directory: str) -> None:
         randomize_prices(patched_rom, prices)
 
     randomize_candles(patched_rom, candles, candles_prog)
-    randomize_drops(patched_rom, drops, drops_prog)
+
+    xp_mod, mon_atk, mon_hp = 1, 1, 1
+    if difficult == 0:
+        xp_mod = 1.5
+        mon_atk = 0.7
+        mon_hp = 0.7
+    elif difficult == 2:
+        xp_mod = 0.8
+        mon_atk = 1.3
+        mon_hp = 1.3
+    elif difficult == 3:
+        xp_mod = 0.5
+        mon_atk = 1.5
+        mon_hp = 2
+    if player_xp != 0:
+        xp_mod = player_xp / 100
+    if player_att != 0:
+        mon_atk = player_att / 100
+    if player_hp != 0:
+        mon_hp = player_hp / 100
+
+    randomize_enemy(patched_rom, drops, drops_prog, xp_mod, mon_atk, mon_hp)
 
     sanity = 0
 
@@ -399,7 +425,13 @@ def patch_rom(world: World, output_directory: str) -> None:
         sanity |= (1 << 1)
 
     # 0xf50c6
-    write_char(patched_rom, 0x0438d85e, sanity)
+    # write_char(patched_rom, 0x0438d85e, sanity)
+
+    player_name = world.multiworld.get_player_name(world.player)
+    player_num = world.player
+
+    seed_num = world.multiworld.seed_name
+    write_seed(patched_rom, seed_num, player_num, player_name, sanity, bonus_luck)
 
     music_slice = original_rom[0x000affd0:0x000b9ea5]
     music_patched = patched_rom[0x000affd0:0x000b9ea5]
@@ -417,25 +449,92 @@ def patch_rom(world: World, output_directory: str) -> None:
         outfile.write(patch)
 
 
-def write_seed(buffer, seed) -> None:
-    write_short(buffer, 0x043930c4, 0x78b4)
-    write_short(buffer, 0x043930d4, 0x78d4)
-    write_short(buffer, 0x0439312c, 0x78b4)
-    write_short(buffer, 0x0439313c, 0x78d4)
-    write_short(buffer, 0x04393484, 0x78b4)
-    write_short(buffer, 0x04393494, 0x78d4)
-    # No idea why, but SOTN.io write those values.
+def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_luck) -> None:
+    byte = 0
+    start_address = 0x0438d47c
+    seed_text = []
 
-    start_address = 0x04389c6c
+    # Seed number occupies 10 bytes total line have 22 + 0xFF 0x00 at end
+    for i, num in enumerate(str(seed)):
+        if i % 2 != 0:
+            byte = (byte | int(num))
+            seed_text.append(byte)
+            byte = 0
+        else:
+            byte = (int(num) << 4)
 
-    for n in str(seed):
-        write_char(buffer, start_address, 0x82)
+    seed_text.append(player_number)
+    seed_text.append(sanity_options)
+    hex_luck = int(bonus_luck).to_bytes(2, "little")
+    for b in hex_luck:
+        seed_text.append(b)
+
+    options_len = len(seed_text)
+    for _ in range(options_len, 22):
+        seed_text.append(0x00)
+
+    seed_text.append(0xFF)
+    seed_text.append(0x00)
+
+    for b in seed_text:
+        write_char(buffer, start_address, b)
         start_address += 1
-        write_char(buffer, start_address, ord(n) + 0x1f)
+
+    utf_name = player_name.encode("utf8")
+    sizes = [30, 30, 20]
+    first_line = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00]
+    second_line = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00]
+    third_line = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0xFF, 0x00]
+    # Name MAX SIZE is 16 chars = 64 bytes
+    char_count = 0
+    line_count = 0
+    for c in utf_name:
+        if char_count == sizes[line_count]:
+            line_count += 1
+            char_count = 0
+
+        if line_count == 0:
+            first_line[char_count] = c
+        elif line_count == 1:
+            second_line[char_count] = c
+        elif line_count == 2:
+            third_line[char_count] = c
+
+        char_count += 1
+
+    # Write a CR+LF 0d 0a
+    if char_count == sizes[line_count]:
+        line_count += 1
+        char_count = 0
+
+    if line_count == 0:
+        first_line[char_count] = 0x0d
+        first_line[char_count + 1] = 0x0a
+    elif line_count == 1:
+        second_line[char_count] = 0x0d
+        second_line[char_count + 1] = 0x0a
+    elif line_count == 2:
+        third_line[char_count] = 0x0d
+        third_line[char_count + 1] = 0x0a
+
+    # Write to file
+    start_address = 0x438d494
+    for b in first_line:
+        write_char(buffer, start_address, b)
         start_address += 1
-    write_char(buffer, start_address, 0x00)
-    write_char(buffer, start_address + 1, 0x00)
-    write_char(buffer, start_address + 2, 0x00)
+
+    start_address = 0x438d4b4
+    for b in second_line:
+        write_char(buffer, start_address, b)
+        start_address += 1
+
+    start_address = 0x438d4d4
+    for b in third_line:
+        write_char(buffer, start_address, b)
+        start_address += 1
 
 
 def write_to_file(buffer, filename=""):
@@ -507,10 +606,10 @@ def randomize_music(buffer):
 
 
 def randomize_shop(buffer, prog, lib):
-    forbid_items = [169, 195, 217, 226]
+    forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
-        forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
+        forbid_items = [169, 195, 217, 226]
 
     for i, (key, value) in enumerate(shop_stock.items()):
         if lib and i == 0:
@@ -552,14 +651,14 @@ def randomize_prices(buffer, prices):
         write_word(buffer, value + 4, rng_price)
 
 
-def randomize_candles(buffer, rng_choice=0, prog=False):
+def randomize_candles(buffer, rng_choice, prog):
     if rng_choice == 0:
         return
 
-    forbid_items = [169, 195, 217, 226]
+    forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
-        forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
+        forbid_items = [169, 195, 217, 226]
 
     rng_item = 0
     rng_type = 0
@@ -600,60 +699,98 @@ def randomize_candles(buffer, rng_choice=0, prog=False):
             write_short(buffer, a, item_id)
 
 
-def randomize_drops(buffer, rng_choice=0, prog=False):
-    if rng_choice == 0:
-        return
-
-    forbid_items = [169, 195, 217, 226]
+def randomize_enemy(buffer, rng_choice, prog, xp_mod=1, mon_atk=1, mon_hp=1):
+    forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
-        forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
+        forbid_items = [169, 195, 217, 226]
 
     rng_item = 0
     rng_type = 0
 
-    for enemy in Enemies:
+    for drop in Global_drop:
         if rng_choice == 1:
-            for a in enemy.addresses:
-                if enemy.name in ["Heart", "Big heart"]:
-                    rng_item = random.choice([0, 1])
-                elif enemy.name in ["$1", "$25", "$50", "$100", "$250", "$400", "$1000", "$2000"]:
+            if drop.vanilla_drop in ["Heart", "Big heart"]:
+                rng_item = random.choice([0, 1])
+            elif drop.vanilla_drop in ["$1", "$25", "$50", "$100", "$250", "$400", "$1000", "$2000"]:
+                rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
+            elif drop.vanilla_drop in hand_type_table:
+                rng_item = random.randrange(1, 169)
+                rng_type = 1
+            else:
+                print(f"DEBUG: Item {drop} not found")
+
+            item_id = item_value(rng_item, rng_type)
+            for address in drop.drop_addresses:
+                write_short(buffer, address, item_id)
+        elif rng_choice == 2:
+            rng_type = random.randrange(0, 2)
+
+            if rng_type == 0:
+                rng_item = random.choice([i for i in range(2, 12) if i not in [8]])
+            elif rng_type == 1:
+                rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
+
+            item_id = item_value(rng_item, rng_type)
+            for address in drop.drop_addresses:
+                write_short(buffer, address, item_id)
+
+    for k, v in Enemy_dict.items():
+        if k in ["Stone skull", "Slime", "Large slime", "Poltergeist", "Puppet sword", "Shield", "Spear", "Ball"]:
+            continue
+        # Monster data
+        # XP
+        cur_value = int.from_bytes(buffer[v.drop_addresses[0] - 2:v.drop_addresses[0]], byteorder='little')
+        new_value = int(xp_mod * cur_value)
+        new_value = clamp(new_value, 1, 65535)
+        write_short(buffer, v.drop_addresses[0] - 2, new_value)
+        # Monster attack
+        cur_value = int.from_bytes(buffer[v.drop_addresses[0] - 20:v.drop_addresses[0] - 18], byteorder='little')
+        new_value = int(mon_atk * cur_value)
+        new_value = clamp(new_value, 1, 65535)
+        if k != "Galamoth":
+            write_short(buffer, v.drop_addresses[0] - 20, new_value)
+        # Moster HP
+        cur_value = int.from_bytes(buffer[v.drop_addresses[0] - 22:v.drop_addresses[0] - 20], byteorder='little')
+        new_value = int(mon_hp * cur_value)
+        new_value = clamp(new_value, 1, 65535)
+        if k != "Galamoth":
+            write_short(buffer, v.drop_addresses[0] - 22, new_value)
+        for i, drop in enumerate(v.vanilla_drop):
+            if rng_choice == 1:
+                if drop == "Axe":
+                    continue
+
+                if drop in ["$1", "$25", "$50", "$100", "$250", "$400", "$1000", "$2000"]:
                     rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
-                elif enemy.name in ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone",
-                                    "Vibhuti", "Agunea"]:
-                    print("DEBUG: NOT Need it anymore for enemies")
-                    rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
-                elif enemy.name in hand_type_table:
+                elif drop in hand_type_table:
                     rng_item = random.randrange(1, 169)
                     rng_type = 1
-                elif enemy.name in chest_type_table:
+                elif drop in chest_type_table:
                     chest_table = [x for x in range(170, 195) if x not in forbid_items]
                     chest_table.append(258)
                     rng_item = random.choice(chest_table)
                     rng_type = 1
-                elif enemy.name in helmet_type_table:
+                elif drop in helmet_type_table:
                     rng_item = random.choice([i for i in range(196, 217) if i not in forbid_items])
                     rng_type = 1
-                elif enemy.name in cloak_type_table:
+                elif drop in cloak_type_table:
                     rng_item = random.choice([i for i in range(218, 226) if i not in forbid_items])
                     rng_type = 1
-                elif enemy.name in acc_type_table:
+                elif drop in acc_type_table:
                     rng_item = random.choice([i for i in range(227, 258) if i not in forbid_items])
                     rng_type = 1
                 else:
-                    print(f"DEBUG: ERROR {enemy.name}")
+                    print(f"DEBUG: Item {drop} not found")
 
-                item_id = rng_item
-                if rng_item >= tile_id_offset:
-                    item_id += tile_id_offset
-                else:
-                    if rng_type == 1:
-                        item_id += tile_id_offset
+                item_id = item_value(rng_item, rng_type)
+                write_short(buffer, v.drop_addresses[i], item_id)
+                if k == "Blue venus weed":
+                    write_short(buffer, v.drop_addresses[i+2], item_id)
+            if rng_choice == 2:
+                if drop == "Axe":
+                    continue
 
-                write_short(buffer, a, item_id)
-
-        if rng_choice == 2:
-            for a in enemy.addresses:
                 rng_type = random.randrange(0, 2)
 
                 if rng_type == 0:
@@ -661,12 +798,25 @@ def randomize_drops(buffer, rng_choice=0, prog=False):
                 else:
                     rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
 
-                item_id = rng_item
-                if rng_item >= tile_id_offset:
-                    item_id += tile_id_offset
-                else:
-                    if rng_type == 1:
-                        item_id += tile_id_offset
+                item_id = item_value(rng_item, rng_type)
+                write_short(buffer, v.drop_addresses[i], item_id)
 
-                write_short(buffer, a, item_id)
 
+def item_value(rng_item: int, rng_type: int) -> int:
+    item_id = rng_item
+    if rng_item >= tile_id_offset:
+        item_id += tile_id_offset
+    else:
+        if rng_type == 1:
+            item_id += tile_id_offset
+    return item_id
+
+
+# def clamp(n, minn, maxn): return max(min(maxn, n), minn) ????
+def clamp(n, minn, maxn):
+    if n <= minn:
+        return minn
+    elif n > maxn:
+        return maxn
+    else:
+        return n
