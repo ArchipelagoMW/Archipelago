@@ -36,6 +36,30 @@ class Difficult(Choice):
     default = 1
 
 
+class XpModifier(Range):
+    """Override Monster XP modifier in percentage"""
+    display_name = "XP modifier"
+    range_start = 0
+    range_end = 300
+    default = 0
+
+
+class AttModifier(Range):
+    """Override Monster attack modifier in percentage"""
+    display_name = "Attack modifier"
+    range_start = 0
+    range_end = 300
+    default = 0
+
+
+class HpModifier(Range):
+    """Override Monster HP modifier in percentage"""
+    display_name = "HP modifier"
+    range_start = 0
+    range_end = 300
+    default = 0
+
+
 class BossesNeed(Range):
     """Bosses required to beat Dracula."""
     display_name = "Required Bosses Tokens"
@@ -58,9 +82,9 @@ class RngShop(Toggle):
     display_name = "Randomize shop items"
 
 
-class NoProgShop(Toggle):
+class ProgShop(Toggle):
     """
-        Shop items can't be progression items
+        Shop items can be progression items
     """
     display_name = "Forbid progression items on shop"
 
@@ -103,9 +127,9 @@ class RngCandles(Choice):
     default = 0
 
 
-class NoProgCandle(Toggle):
+class ProgCandle(Toggle):
     """
-        Candle drop can't be progression items
+        Candle drop can be progression items
     """
     display_name = "Forbid progression items on candles"
 
@@ -121,9 +145,9 @@ class RngDrops(Choice):
     default = 0
 
 
-class NoProgDrop(Toggle):
+class ProgDrop(Toggle):
     """
-        Enemy drop can't be progression items
+        Enemy drop can be progression items
     """
     display_name = "Forbid progression items on enemies"
 
@@ -140,6 +164,14 @@ class Dropsanity(Toggle):
         Enemies second item drop become a location check
     """
     display_name = "Enemies drops are locations checks"
+
+
+class BonusLuck(Range):
+    """A hack way to have bonus luck and help with dropsanity"""
+    display_name = "Hacky luck"
+    range_start = 0
+    range_end = 999
+    default = 0
 
 
 class Boostqty(Range):
@@ -167,7 +199,17 @@ class Trapqty(Range):
 class TrapWeight(FreeText):
     """Weights for randomize traps"""
     display_name = "Traps weights"
-    default = "1;2;1;2;1;2;7;3;7;3;6;2;6;2"
+    default = "1;2;1;2;1;2;7;3;7;3;8;5;6;2;6;2"
+
+
+class RandRules(Choice):
+    """
+    Define randomize rules
+    """
+    display_name = "Randomize random rules"
+    option_full = 0
+    option_limited = 1
+    default = 0
 
 
 class ExtraPool(FreeText):
@@ -181,23 +223,28 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "opened_are": OpenedDAIARE,
     "opened_no2": OpenedDAINO2,
     "difficult": Difficult,
+    "xp_mod": XpModifier,
+    "att_mod": AttModifier,
+    "hp_mod": HpModifier,
     "bosses_need": BossesNeed,
     "rng_songs": RngSongs,
     "rng_shop": RngShop,
-    "noprog_shop": NoProgShop,
+    "prog_shop": ProgShop,
     "lib_shop": LibCardShop,
     "rng_prices": RngPrices,
     "exp_need": ExpNeed,
     "rng_candles": RngCandles,
-    "noprog_candles": NoProgCandle,
+    "prog_candles": ProgCandle,
     "rng_drops": RngDrops,
-    "noprog_drops": NoProgDrop,
+    "prog_drops": ProgDrop,
     "enemysanity": Enemysanity,
     "dropsanity": Dropsanity,
+    "bonus_luck": BonusLuck,
     "boostqty": Boostqty,
     "boostweight": BoostWeight,
     "trapqty": Trapqty,
     "trapweight": TrapWeight,
+    "rand_rules": RandRules,
     "extra_pool": ExtraPool
 }
 
