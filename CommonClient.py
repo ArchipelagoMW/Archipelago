@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import collections
 import copy
 import logging
 import asyncio
@@ -174,51 +175,82 @@ class CommonContext:
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
-    # TODO: Remove this fallback helper class in 0.6 and just force clients accessing with 'game'?
-    class NameLookupDict(MutableMapping):
-        def __init__(self, lookup_type: str, *args, **kwargs):
+    class ImplicitNameLookupDict(MutableMapping):
+        _store: typing.Dict
+
+        def __init__(self, lookup_type: typing.Literal["item", "location"]):
             self.lookup_type = lookup_type
-            self.flattened_lookup = Utils.KeyedDefaultDict(lambda key: f"Unknown {self.lookup_type} (ID: {key})")
-            self.store = dict()
-            self.update(dict(*args, **kwargs))
+            self._archipelago_lookup = {}
+            self._store = collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda key: f"Unknown {lookup_type} "
+                                                                                             f"(ID {key})"))
 
-        def __getitem__(self, key: typing.Union[int, str]) -> str:
+        def __getitem__(self, key):
             if isinstance(key, str):
-                return self.store[key]
+                return self._store[key]
 
-            name = self.flattened_lookup[key]
+            logger.warning(f"Attempting to do an implicit lookup for an {self.lookup_type}. To avoid ambiguous id "
+                           f"names, attempt lookup with the game name. See f{self.lookup_type}_names docstring for "
+                           f"usage examples.")
+            name = self._store.get(key, f"Unknown {self.lookup_type} (ID: {key})")
             return name if name is not None else f"Ambiguous {self.lookup_type} (ID: {key})"
 
         def __setitem__(self, key, value):
-            raise TypeError("NameLookupDict cannot be mutated at runtime, outside of update_game.")
+            if isinstance(key, int) and key in self._store:
+                # A `None` value signifies a duplicate item/location with the same id already exists. If anyone is
+                # trying to do an implicit name lookup, we can't be sure which game it is, so this will cause
+                # 'Ambiguous item/location' to be returned when `__getitem__` is called.
+                self._store[key] = None
+                return
+
+            self._store[key] = value
 
         def __delitem__(self, key):
-            raise TypeError("NameLookupDict cannot be mutated at runtime, outside of update_game.")
+            del self._store[key]
 
         def __len__(self):
-            return len(self.store)
+            return len(self._store)
 
         def __iter__(self):
-            return iter(self.store)
+            return iter(self._store)
 
-        def update_game(self, lookup_package: typing.Dict[str, int], game: str):
-            lookup_table = Utils.KeyedDefaultDict(lambda key: f"Unknown {self.lookup_type} (ID: {key})")
-            for name, code in lookup_package.items():
-                lookup_table[code] = name
-                if code in self.flattened_lookup:
-                    # A 'None' value signifies a duplicate key with the same id. If anyone is trying to lookup without
-                    # providing a game name first, we can't be sure which game it is, so this will cause 'Ambiguous' to
-                    # be returned instead.
-                    self.flattened_lookup[code] = None
-                else:
-                    self.flattened_lookup[code] = name
+        def __repr__(self):
+            return self._store.__repr__()
 
-            self.store[game] = lookup_table
+        def update_game(self, game: str, lookup_table: typing.Dict[str, int]):
+            reverse_lookup_table = Utils.KeyedDefaultDict(lambda key: f"Unknown {self.lookup_type} (ID: {key})")
+            reverse_lookup_table.update({code: name for name, code in lookup_table.items()})
+            self._store[game] = collections.ChainMap(self._archipelago_lookup, reverse_lookup_table)
+            self.update(reverse_lookup_table)
+            if game == "Archipelago":
+                # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
+                # it updates in all chain maps automatically.
+                self._archipelago_lookup.clear()
+                self._archipelago_lookup.update(reverse_lookup_table)
 
     # data package
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
-    item_names = NameLookupDict("Item")
-    location_names = NameLookupDict("Location")
+    item_names = ImplicitNameLookupDict("item")
+    """A dictionary lookup of id -> name for items and updates automatically when a new data package arrives. If game 
+    name is omitted, it will attempt a lookup in all game packages.
+    
+    Returns "Unknown item" if an id does not exist in session data package.
+    Returns "Ambiguous item" if a game name is not provided and multiple items share the same id.
+    
+    Example usages::
+        name = item_names[game][id]  # Explicit id lookup with game name.
+        name = item_names[id]        # Implicit id lookup. May return "Ambiguous Item" if duplicate ids exist.
+    """
+    location_names = ImplicitNameLookupDict("location")
+    """A dictionary lookup of id -> name for locations and updates automatically when a new data package arrives. If 
+    game name is omitted, it will attempt a lookup in all game packages.
+
+    Returns "Unknown location" if an id does not exist in session data package.
+    Returns "Ambiguous location" if a game name is not provided and multiple locations share the same id.
+
+    Example usages::
+        name = location_names[game][id]  # Explicit id lookup with game name.
+        name = location_names[id]        # Implicit id lookup. May return "Ambiguous Location" if duplicate ids exist.
+    """
 
     # defaults
     starting_reconnect_delay: int = 5
@@ -273,7 +305,7 @@ class CommonContext:
     # message box reporting a loss of connection
     _messagebox_connection_loss: typing.Optional["kvui.MessageBox"] = None
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
+    def __init__(self, server_address: typing.Optional[str] = None, password: typing.Optional[str] = None) -> None:
         # server state
         self.server_address = server_address
         self.username = None
@@ -533,8 +565,8 @@ class CommonContext:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
     def update_game(self, game_package: dict, game: str):
-        self.item_names.update_game(game_package["item_name_to_id"], game)
-        self.location_names.update_game(game_package["location_name_to_id"], game)
+        self.item_names.update_game(game, game_package["item_name_to_id"])
+        self.location_names.update_game(game, game_package["location_name_to_id"])
 
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():

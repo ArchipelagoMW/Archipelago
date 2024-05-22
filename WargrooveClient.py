@@ -176,7 +176,7 @@ class WargrooveContext(CommonContext):
                 if not os.path.isfile(path):
                     open(path, 'w').close()
                     # Announcing commander unlocks
-                    item_name = self.item_names[network_item.item]
+                    item_name = self.item_names[self.game][network_item.item]
                     if item_name in faction_table.keys():
                         for commander in faction_table[item_name]:
                             logger.info(f"{commander.name} has been unlocked!")

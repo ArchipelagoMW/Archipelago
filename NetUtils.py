@@ -247,7 +247,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.item_names[item_id]
+        game = self.ctx.slot_info[node["player"]].game
+        node["text"] = self.ctx.item_names[game][item_id]
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
@@ -256,7 +257,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_location_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.location_names[item_id]
+        game = self.ctx.slot_info[node["player"]].game
+        node["text"] = self.ctx.location_names[game][item_id]
         return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
