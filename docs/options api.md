@@ -92,7 +92,7 @@ group.
 
 ```python
 from worlds.AutoWorld import WebWorld
-from BaseClasses import OptionGroup
+from Options import OptionGroup
 
 class MyWorldWeb(WebWorld):
     option_groups = [
