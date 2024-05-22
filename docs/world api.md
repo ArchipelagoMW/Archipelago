@@ -181,8 +181,7 @@ required, and will prevent progression and useful items from being placed at exc
 #### Documenting Locations
 
 Worlds can optionally provide a `location_descriptions` map which contains human-friendly descriptions of locations and
-location groups. These descriptions will show up in location-selection options on the Weighted Options page. Extra
-indentation and single newlines will be collapsed into spaces.
+location groups. These descriptions will show up in location-selection options on the options pages.
 
 ```python
 # locations.py
@@ -236,8 +235,7 @@ Other classifications include:
 #### Documenting Items
 
 Worlds can optionally provide an `item_descriptions` map which contains human-friendly descriptions of items and item
-groups. These descriptions will show up in item-selection options on the Weighted Options page. Extra indentation and
-single newlines will be collapsed into spaces.
+groups. These descriptions will show up in item-selection options on the options pages.
 
 ```python
 # items.py
@@ -380,11 +378,6 @@ from BaseClasses import Location
 
 class MyGameLocation(Location):
     game: str = "My Game"
-
-    # override constructor to automatically mark event locations as such
-    def __init__(self, player: int, name="", code=None, parent=None) -> None:
-        super(MyGameLocation, self).__init__(player, name, code, parent)
-        self.event = code is None
 ```
 
 in your `__init__.py` or your `locations.py`.

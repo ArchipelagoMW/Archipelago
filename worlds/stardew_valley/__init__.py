@@ -30,10 +30,6 @@ client_version = 0
 class StardewLocation(Location):
     game: str = "Stardew Valley"
 
-    def __init__(self, player: int, name: str, address: Optional[int], parent=None):
-        super().__init__(player, name, address, parent)
-        self.event = not address
-
 
 class StardewItem(Item):
     game: str = "Stardew Valley"
@@ -144,7 +140,7 @@ class StardewValleyWorld(World):
 
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+                               if location.address is not None])
 
         created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options,
                                      self.random)
