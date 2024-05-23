@@ -32,7 +32,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         return state.has("Mach Bike", world.player)
     
     def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
-        return sum([state.has(event, world.player) for event in [
+        return state.has_from_list([
             "EVENT_DEFEAT_ROXANNE",
             "EVENT_DEFEAT_BRAWLY",
             "EVENT_DEFEAT_WATTSON",
@@ -41,7 +41,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "EVENT_DEFEAT_WINONA",
             "EVENT_DEFEAT_TATE_AND_LIZA",
             "EVENT_DEFEAT_JUAN",
-        ]]) >= n
+        ], world.player, n)
 
     huntable_legendary_events = [
         f"EVENT_ENCOUNTER_{key}"
@@ -62,7 +62,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         if name in world.options.allowed_legendary_hunt_encounters.value
     ]
     def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
-        return sum(int(state.has(event, world.player)) for event in huntable_legendary_events) >= n
+        return state.has_from_list(huntable_legendary_events, world.player, n)
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
@@ -439,7 +439,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_GRANITE_CAVE_B1F/LOWER -> REGION_GRANITE_CAVE_B1F/UPPER"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
 
     # Route 107
@@ -695,11 +695,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Jagged Pass
     set_rule(
         get_entrance("REGION_JAGGED_PASS/BOTTOM -> REGION_JAGGED_PASS/MIDDLE"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_JAGGED_PASS/MIDDLE -> REGION_JAGGED_PASS/TOP"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"),
@@ -715,11 +715,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Mirage Tower
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_2F/TOP -> REGION_MIRAGE_TOWER_2F/BOTTOM"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_2F/BOTTOM -> REGION_MIRAGE_TOWER_2F/TOP"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_3F/TOP -> REGION_MIRAGE_TOWER_3F/BOTTOM"),
@@ -826,11 +826,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_ACROSS_RAILS"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER_ACROSS_RAILS -> REGION_ROUTE119/LOWER"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE_RIVER"),
@@ -846,7 +846,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     if "Route 119 Aqua Grunts" not in world.options.remove_roadblocks.value:
         set_rule(
@@ -923,11 +923,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_NORTH/MAIN"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/MAIN"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_SOUTHWEST/POND"),
