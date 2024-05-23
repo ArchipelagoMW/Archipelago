@@ -80,7 +80,27 @@ class TestCommonContext(unittest.IsolatedAsyncioTestCase):
         assert self.ctx.location_names["__TestGame2"][-1] == "Cheat Console"
 
     async def test_lookup_helper_functions(self):
-        assert self.ctx.item_names.lookup_by_slot(2**54+1) == f"Test Item 1 - Safe"
-        assert self.ctx.item_names.lookup_by_slot(2**54+2) == f"Test Item 2 - Duplicate"
+        # Checking own slot.
+        assert self.ctx.item_names.lookup_by_slot(2**54+1) == "Test Item 1 - Safe"
+        assert self.ctx.item_names.lookup_by_slot(2**54+2) == "Test Item 2 - Duplicate"
         assert self.ctx.item_names.lookup_by_slot(2**54+3) == f"Unknown item (ID: {2**54+3})"
         assert self.ctx.item_names.lookup_by_slot(-1) == f"Nothing"
+
+        # Checking others' slots.
+        assert self.ctx.item_names.lookup_by_slot(2**54+1, 2) == "Test Item 1 - Safe"
+        assert self.ctx.item_names.lookup_by_slot(2**54+2, 2) == "Test Item 2 - Duplicate"
+        assert self.ctx.item_names.lookup_by_slot(2**54+1, 3) == f"Unknown item (ID: {2**54+1})"
+        assert self.ctx.item_names.lookup_by_slot(2**54+2, 3) == "Test Item 3 - Duplicate"
+
+        # Checking by game.
+        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 1, "__TestGame1") == "Test Item 1 - Safe"
+        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 2, "__TestGame1") == "Test Item 2 - Duplicate"
+        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 3, "__TestGame1") == f"Unknown item (ID: {2**54+3})"
+        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 1, "__TestGame2") == f"Unknown item (ID: {2**54+1})"
+        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 2, "__TestGame2") == "Test Item 3 - Duplicate"
+
+        # Checking with Archipelago ids are valid in any game package.
+        assert self.ctx.item_names.lookup_by_slot(-1, 2) == "Nothing"
+        assert self.ctx.item_names.lookup_by_slot(-1, 3) == "Nothing"
+        assert self.ctx.item_names.lookup_by_game(-1, "__TestGame1") == "Nothing"
+        assert self.ctx.item_names.lookup_by_game(-1, "__TestGame2") == "Nothing"

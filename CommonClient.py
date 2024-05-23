@@ -175,7 +175,7 @@ class CommonContext:
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
     class NameLookupDict(collections.abc.MutableMapping):
-        _game_store: typing.Dict[str, typing.ChainMap[int, str]]
+        _game_store: typing.Dict[str, typing.ChainMap]
 
         def __init__(self, ctx: CommonContext, lookup_type: typing.Literal["item", "location"]):
             self.ctx = ctx
@@ -184,6 +184,7 @@ class CommonContext:
             self._archipelago_lookup = {}
             self._game_store = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
+            self._flat_store = Utils.KeyedDefaultDict(self._unknown_item)
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Union[typing.ChainMap[int, str], typing.Dict[int, str]]:
@@ -194,8 +195,7 @@ class CommonContext:
                                f"output could be incorrect. Please use `{self.lookup_type}_names.lookup_by_game()` or "
                                f"`{self.lookup_type}_names.lookup_by_slot()` instead to avoid this issue.")
                 # Flattened version of self._game_store
-                chain_map = collections.ChainMap([game for game, data in self._game_store.items()])
-                return chain_map[key]
+                return self._flat_store[key]
 
             return self._game_store[key]
 
@@ -229,6 +229,7 @@ class CommonContext:
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
+            self._flat_store.update(id_to_name_lookup_table)
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
