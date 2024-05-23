@@ -13,8 +13,14 @@
 # Adventure
 /worlds/adventure/ @JusticePS
 
+# A Hat in Time
+/worlds/ahit/ @CookieCat45
+
 # A Link to the Past
 /worlds/alttp/ @Berserker66
+
+# Aquaria
+/worlds/aquaria/ @tioui
 
 # ArchipIDLE
 /worlds/archipidle/ @LegendaryLinux
@@ -24,6 +30,9 @@
 
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
+
+# Bomb Rush Cyberfunk
+/worlds/bomb_rush_cyberfunk/ @TRPG0
 
 # Bumper Stickers
 /worlds/bumpstik/ @FelicitusNeko
@@ -196,6 +205,9 @@
 
 # Yoshi's Island
 /worlds/yoshisisland/ @PinkSwitch
+
+#Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
+/worlds/yugioh06/ @rensen
 
 # Zillion
 /worlds/zillion/ @beauxq

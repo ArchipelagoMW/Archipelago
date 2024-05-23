@@ -464,7 +464,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Slateport City
     set_rule(
-        get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_ROUTE134/WEST"),
+        get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_SLATEPORT_CITY/WATER"),
         hm_rules["HM03 Surf"]
     )
     set_rule(
@@ -992,6 +992,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if "Lilycove City Wailmer" not in world.options.remove_roadblocks.value:
         set_rule(
             get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN"),
+            lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", world.player)
+        )
+        set_rule(
+            get_entrance("REGION_ROUTE124/MAIN -> REGION_LILYCOVE_CITY/SEA"),
             lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", world.player)
         )
 
