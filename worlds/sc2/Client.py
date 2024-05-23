@@ -244,7 +244,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     self.formatted_print(f" [u]{faction.name}[/u] ")
             
             for item_id in categorized_items[faction]:
-                item_name = self.ctx.item_names.lookup(item_id)
+                item_name = self.ctx.item_names.lookup_in_slot(item_id)
                 received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
                 matching_children = [child for child in received_child_items
                                      if item_matches_filter(self.ctx.item_names.lookup_in_slot(child))]
