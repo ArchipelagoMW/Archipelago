@@ -5,7 +5,7 @@ import warnings
 import zipimport
 import time
 import dataclasses
-from typing import Dict, List, TypedDict, Optional, TYPE_CHECKING
+from typing import Dict, List, TypedDict, Optional
 
 from Utils import local_path, user_path
 
