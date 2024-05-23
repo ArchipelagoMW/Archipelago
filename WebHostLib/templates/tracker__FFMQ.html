@@ -129,7 +129,7 @@
                             alt="{{ non_prog_item }}"
                             title="{{ non_prog_item }}"
                             {# Progressive Armor gets a special exception, since it starts displaying Steel Armor. #}
-                            class="{{ 'missing' if (item not in inventory or inventory[item] == 0) and item not in ('Progressive Armor', 'Steel Sword') }}"
+                            class="{{ 'missing' if (item not in inventory or inventory[item] == 0) and item != 'Progressive Armor' }}"
                         />
                     </div>
                 {% else %}
