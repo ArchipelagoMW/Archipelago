@@ -347,7 +347,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
@@ -375,7 +375,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.extra_bumpy_slope:
         set_rule(
             get_entrance("REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"),
-            lambda state: has_acro_bike(state)
+            has_acro_bike
         )
     else:
         set_rule(
