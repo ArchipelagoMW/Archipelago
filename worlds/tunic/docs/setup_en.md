@@ -31,6 +31,8 @@ Download [BepInEx](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-p
 
 If playing on Steam Deck, follow this [guide to set up BepInEx via Proton](https://docs.bepinex.dev/articles/advanced/proton_wine.html).
 
+If playing on Linux, you may be able to add `WINEDLLOVERRIDES="winhttp=n,b" %command%` to your Steam launch options. If this does not work, follow the guide for Steam Deck above.
+
 Extract the contents of the BepInEx .zip file into your TUNIC game directory:<br>
 - **Steam**: Steam\steamapps\common\TUNIC<br>
 - **PC Game Pass**: XboxGames\Tunic\Content<br>
@@ -54,7 +56,7 @@ Launch the game, and if everything was installed correctly you should see `Rando
 
 ### Configure Your YAML File
 
-Visit the [TUNIC options page](/games/Tunic/player-options) to generate a YAML with your selected options.
+Visit the [TUNIC options page](/games/TUNIC/player-options) to generate a YAML with your selected options.
 
 ### Configure Your Mod Settings
 Launch the game, and using the menu on the Title Screen select `Archipelago` under `Randomizer Mode`. 

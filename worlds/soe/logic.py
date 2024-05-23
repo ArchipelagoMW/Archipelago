@@ -1,4 +1,5 @@
 import typing
+from itertools import chain
 from typing import Callable, Set
 
 from . import pyevermizer
@@ -11,10 +12,12 @@ if typing.TYPE_CHECKING:
 
 # TODO: resolve/flatten/expand rules to get rid of recursion below where possible
 # Logic.rules are all rules including locations, excluding those with no progress (i.e. locations that only drop items)
-rules = [rule for rule in pyevermizer.get_logic() if len(rule.provides) > 0]
+rules = pyevermizer.get_logic()
 # Logic.items are all items and extra items excluding non-progression items and duplicates
+# NOTE: we are skipping sniff items here because none of them is supposed to provide progression
 item_names: Set[str] = set()
-items = [item for item in filter(lambda item: item.progression, pyevermizer.get_items() + pyevermizer.get_extra_items())
+items = [item for item in filter(lambda item: item.progression,  # type: ignore[arg-type]
+                                 chain(pyevermizer.get_items(), pyevermizer.get_extra_items()))
          if item.name not in item_names and not item_names.add(item.name)]  # type: ignore[func-returns-value]
 
 

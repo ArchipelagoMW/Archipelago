@@ -26,5 +26,4 @@ To achieve the Help Everyone goal, the following characters will need to be help
 
 ## Can I have more than one save at a time?
 
-No, unfortunately only one save slot is available for use in A Short Hike.
-Starting a new save will erase the old one _permanently_.
+You can have up to 3 saves at a time. To switch between them, use the Save Data button in the options menu.

@@ -1,4 +1,4 @@
-# Starcraft 2 Wings of Liberty
+# Starcraft 2
 
 ## What does randomization do to this game?
 

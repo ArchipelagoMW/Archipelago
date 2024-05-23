@@ -199,8 +199,14 @@ class HKWorld(World):
         self.multiworld.regions.append(menu_region)
         # wp_exclusions = self.white_palace_exclusions()
 
+        # check for any goal that godhome events are relevant to
+        all_event_names = event_names.copy()
+        if self.multiworld.Goal[self.player] in [Goal.option_godhome, Goal.option_godhome_flower]:
+            from .GodhomeData import godhome_event_names
+            all_event_names.update(set(godhome_event_names))
+
         # Link regions
-        for event_name in event_names:
+        for event_name in all_event_names:
             #if event_name in wp_exclusions:
             #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
@@ -431,6 +437,10 @@ class HKWorld(World):
             world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
         elif goal == Goal.option_radiance:
             world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
+        elif goal == Goal.option_godhome:
+            world.completion_condition[player] = lambda state: state.count("Defeated_Pantheon_5", player)
+        elif goal == Goal.option_godhome_flower:
+            world.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
         else:
             # Any goal
             world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)
