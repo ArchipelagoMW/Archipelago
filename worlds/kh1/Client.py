@@ -75,6 +75,8 @@ class KH1Context(CommonContext):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root + "/" + file)
+        global item_num
+        item_num = 1
 
     @property
     def endpoints(self):
@@ -89,6 +91,8 @@ class KH1Context(CommonContext):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root+"/"+file)
+        global item_num
+        item_num = 1
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
