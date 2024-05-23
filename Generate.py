@@ -448,7 +448,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     Important note:
     The same weights dict is shared between all slots using the same yaml (e.g. generic weights file for filler slots).
-    This means that it should never be modified without making a copy first.
+    This means that it should never be modified without making a deepcopy first.
     """
     
     if "linked_options" in weights:
