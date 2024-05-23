@@ -27,26 +27,16 @@ def get_world_theme(game_name: str) -> str:
 
 
 def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:
-    visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
     world = AutoWorldRegister.world_types[world_name]
     if world.hidden or world.web.options_page is False:
         return redirect("games")
-
-    option_groups = {option: option_group.name
-                     for option_group in world.web.option_groups
-                     for option in option_group.options}
-    ordered_groups = ["Game Options", *[group.name for group in world.web.option_groups]]
-    grouped_options = {group: {} for group in ordered_groups}
-    for option_name, option in world.options_dataclass.type_hints.items():
-        # Exclude settings from options pages if their visibility is disabled
-        if visibility_flag in option.visibility:
-            grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+    visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
 
     return render_template(
         template,
         world_name=world_name,
         world=world,
-        option_groups=grouped_options,
+        option_groups=Options.get_option_groups(world, visibility_level=visibility_flag),
         issubclass=issubclass,
         Options=Options,
         theme=get_world_theme(world_name),
