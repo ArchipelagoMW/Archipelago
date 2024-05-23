@@ -64,15 +64,6 @@ class TestBase(unittest.TestCase):
                 for item in multiworld.itempool:
                     self.assertIn(item.name, world_type.item_name_to_id)
 
-    def test_item_descriptions_have_valid_names(self):
-        """Ensure all item descriptions match an item name or item group name"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            valid_names = world_type.item_names.union(world_type.item_name_groups)
-            for name in world_type.item_descriptions:
-                with self.subTest("Name should be valid", game=game_name, item=name):
-                    self.assertIn(name, valid_names,
-                                  "All item descriptions must match defined item names")
-
     def test_itempool_not_modified(self):
         """Test that worlds don't modify the itempool after `create_items`"""
         gen_steps = ("generate_early", "create_regions", "create_items")

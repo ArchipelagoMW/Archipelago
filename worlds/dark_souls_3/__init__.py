@@ -35,6 +35,8 @@ class DarkSouls3Web(WebWorld):
 
     tutorials = [setup_en, setup_fr]
 
+    item_descriptions = item_descriptions
+
 
 class DarkSouls3World(World):
     """
@@ -61,8 +63,6 @@ class DarkSouls3World(World):
             "Cinders of a Lord - Lothric Prince"
         }
     }
-    item_descriptions = item_descriptions
-
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
