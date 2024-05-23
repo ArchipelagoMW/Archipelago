@@ -16,7 +16,7 @@ from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
 from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations, static_witness_locations
-from .options import TheWitnessOptions
+from .options import TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
@@ -36,6 +36,7 @@ class WitnessWebWorld(WebWorld):
     )]
 
     options_presets = witness_option_presets
+    option_groups = witness_option_groups
 
 
 class WitnessWorld(World):

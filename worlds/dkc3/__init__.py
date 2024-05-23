@@ -4,20 +4,21 @@ import typing
 import math
 import threading
 
-import settings
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
-from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
-from .Locations import DKC3Location, all_locations, setup_locations
-from .Options import DKC3Options
-from .Regions import create_regions, connect_regions
-from .Levels import level_list
-from .Rules import set_rules
-from .Names import ItemName, LocationName
-from .Client import DKC3SNIClient
-from worlds.AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
 import Patch
+import settings
+from worlds.AutoWorld import WebWorld, World
+
+from .Client import DKC3SNIClient
+from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
+from .Levels import level_list
+from .Locations import DKC3Location, all_locations, setup_locations
+from .Names import ItemName, LocationName
+from .Options import DKC3Options, dkc3_option_groups
+from .Regions import create_regions, connect_regions
+from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
+from .Rules import set_rules
 
 
 class DK3Settings(settings.Group):
@@ -41,8 +42,10 @@ class DKC3Web(WebWorld):
         "setup/en",
         ["PoryGone"]
     )
-    
+
     tutorials = [setup_en]
+
+    option_groups = dkc3_option_groups
 
 
 class DKC3World(World):

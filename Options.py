@@ -24,7 +24,7 @@ if typing.TYPE_CHECKING:
 class OptionError(ValueError):
     pass
 
-  
+
 class Visibility(enum.IntFlag):
     none = 0b0000
     template = 0b0001
@@ -746,6 +746,7 @@ class NamedRange(Range):
 
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
+        assert not "_valid_keys" in attrs, "'_valid_keys' gets set by FreezeValidKeys, define 'valid_keys' instead."
         if "valid_keys" in attrs:
             attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
         return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
@@ -947,7 +948,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
-        
+
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
@@ -1123,6 +1124,14 @@ class DeathLinkMixin:
     death_link: DeathLink
 
 
+class OptionGroup(typing.NamedTuple):
+    """Define a grouping of options."""
+    name: str
+    """Name of the group to categorize these options in for display on the WebHost and in generated YAMLS."""
+    options: typing.List[typing.Type[Option[typing.Any]]]
+    """Options to be in the defined group."""
+
+
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
     import os
 
@@ -1161,15 +1170,21 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = {
-                option_name: option for option_name, option in world.options_dataclass.type_hints.items()
-                if option.visibility & Visibility.template
-            }
+
+            option_groups = {option: option_group.name
+                             for option_group in world.web.option_groups
+                             for option in option_group.options}
+            ordered_groups = ["Game Options"]
+            [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
+            grouped_options = {group: {} for group in ordered_groups}
+            for option_name, option in world.options_dataclass.type_hints.items():
+                if option.visibility >= Visibility.template:
+                    grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
             res = Template(file_data).render(
-                options=all_options,
+                option_groups=grouped_options,
                 __version__=__version__, game=game_name, yaml_dump=yaml.dump,
                 dictify_range=dictify_range,
             )

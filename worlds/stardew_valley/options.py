@@ -697,8 +697,6 @@ class Mods(OptionSet):
 class StardewValleyOptions(PerGameCommonOptions):
     goal: Goal
     farm_type: FarmType
-    starting_money: StartingMoney
-    profit_margin: ProfitMargin
     bundle_randomization: BundleRandomization
     bundle_price: BundlePrice
     entrance_randomization: EntranceRandomization
@@ -722,16 +720,18 @@ class StardewValleyOptions(PerGameCommonOptions):
     craftsanity: Craftsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
-    movement_buff_number: NumberOfMovementBuffs
-    luck_buff_number: NumberOfLuckBuffs
     exclude_ginger_island: ExcludeGingerIsland
-    trap_items: TrapItems
-    multiple_day_sleep_enabled: MultipleDaySleepEnabled
-    multiple_day_sleep_cost: MultipleDaySleepCost
+    quick_start: QuickStart
+    starting_money: StartingMoney
+    profit_margin: ProfitMargin
     experience_multiplier: ExperienceMultiplier
     friendship_multiplier: FriendshipMultiplier
     debris_multiplier: DebrisMultiplier
-    quick_start: QuickStart
+    movement_buff_number: NumberOfMovementBuffs
+    luck_buff_number: NumberOfLuckBuffs
+    trap_items: TrapItems
+    multiple_day_sleep_enabled: MultipleDaySleepEnabled
+    multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
     mods: Mods
     death_link: DeathLink
