@@ -175,7 +175,8 @@ class CommonContext:
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
     class NameLookupDict(collections.abc.MutableMapping):
-        _game_store: typing.Dict[str, typing.ChainMap]
+        """A specialized dict, with helper methods, for id -> name item/location data package lookups by game."""
+        _game_store: typing.Dict[str, typing.ChainMap[int, str]]
 
         def __init__(self, ctx: CommonContext, lookup_type: typing.Literal["item", "location"]):
             self.ctx = ctx
@@ -192,9 +193,8 @@ class CommonContext:
             if isinstance(key, int):
                 logger.warning(f"Implicit name lookup by id only is deprecated and only supported to maintain backwards"
                                f"compatibility for now. If multiple games share the same id for a {self.lookup_type}, "
-                               f"output could be incorrect. Please use `{self.lookup_type}_names.lookup_by_game()` or "
+                               f"name could be incorrect. Please use `{self.lookup_type}_names.lookup_by_game()` or "
                                f"`{self.lookup_type}_names.lookup_by_slot()` instead to avoid this issue.")
-                # Flattened version of self._game_store
                 return self._flat_store[key]
 
             return self._game_store[key]
@@ -214,22 +214,30 @@ class CommonContext:
         def __repr__(self):
             return self._game_store.__repr__()
 
-        def lookup_by_game(self, code: int, game_name: str) -> str:
-            """Returns the name of an item/location in the context of a specific game."""
-            return self._game_store[game_name][code]
-
-        def lookup_by_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
-            """Returns the name of a given item/location in the context of a specific slot or own slot if `slot` is
+        def lookup_in_game(self, code: int, game_name: typing.Optional[str] = None) -> str:
+            """Returns the name for an item/location id in the context of a specific game or own game if `game` is
             omitted.
             """
-            return self.lookup_by_game(code, self.ctx.slot_info[slot if slot is not None else self.ctx.slot].game)
+            if game_name is None:
+                game_name = self.ctx.slot_info[self.ctx.slot].game
+
+            return self._game_store[game_name][code]
+
+        def lookup_in_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
+            """Returns the name for an item/location id in the context of a specific slot or own slot if `slot` is
+            omitted.
+            """
+            if slot is None:
+                slot = self.ctx.slot
+
+            return self.lookup_in_game(code, self.ctx.slot_info[slot].game)
 
         def update_game(self, game: str, name_to_id_lookup_table: typing.Dict[str, int]) -> None:
             """Overrides existing lookup tables for a particular game."""
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
-            self._flat_store.update(id_to_name_lookup_table)
+            self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.

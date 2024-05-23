@@ -81,26 +81,26 @@ class TestCommonContext(unittest.IsolatedAsyncioTestCase):
 
     async def test_lookup_helper_functions(self):
         # Checking own slot.
-        assert self.ctx.item_names.lookup_by_slot(2**54+1) == "Test Item 1 - Safe"
-        assert self.ctx.item_names.lookup_by_slot(2**54+2) == "Test Item 2 - Duplicate"
-        assert self.ctx.item_names.lookup_by_slot(2**54+3) == f"Unknown item (ID: {2**54+3})"
-        assert self.ctx.item_names.lookup_by_slot(-1) == f"Nothing"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 1) == "Test Item 1 - Safe"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 2) == "Test Item 2 - Duplicate"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 3) == f"Unknown item (ID: {2 ** 54 + 3})"
+        assert self.ctx.item_names.lookup_in_slot(-1) == f"Nothing"
 
         # Checking others' slots.
-        assert self.ctx.item_names.lookup_by_slot(2**54+1, 2) == "Test Item 1 - Safe"
-        assert self.ctx.item_names.lookup_by_slot(2**54+2, 2) == "Test Item 2 - Duplicate"
-        assert self.ctx.item_names.lookup_by_slot(2**54+1, 3) == f"Unknown item (ID: {2**54+1})"
-        assert self.ctx.item_names.lookup_by_slot(2**54+2, 3) == "Test Item 3 - Duplicate"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 1, 2) == "Test Item 1 - Safe"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 2, 2) == "Test Item 2 - Duplicate"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 1, 3) == f"Unknown item (ID: {2 ** 54 + 1})"
+        assert self.ctx.item_names.lookup_in_slot(2 ** 54 + 2, 3) == "Test Item 3 - Duplicate"
 
         # Checking by game.
-        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 1, "__TestGame1") == "Test Item 1 - Safe"
-        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 2, "__TestGame1") == "Test Item 2 - Duplicate"
-        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 3, "__TestGame1") == f"Unknown item (ID: {2**54+3})"
-        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 1, "__TestGame2") == f"Unknown item (ID: {2**54+1})"
-        assert self.ctx.item_names.lookup_by_game(2 ** 54 + 2, "__TestGame2") == "Test Item 3 - Duplicate"
+        assert self.ctx.item_names.lookup_in_game(2 ** 54 + 1, "__TestGame1") == "Test Item 1 - Safe"
+        assert self.ctx.item_names.lookup_in_game(2 ** 54 + 2, "__TestGame1") == "Test Item 2 - Duplicate"
+        assert self.ctx.item_names.lookup_in_game(2 ** 54 + 3, "__TestGame1") == f"Unknown item (ID: {2 ** 54 + 3})"
+        assert self.ctx.item_names.lookup_in_game(2 ** 54 + 1, "__TestGame2") == f"Unknown item (ID: {2 ** 54 + 1})"
+        assert self.ctx.item_names.lookup_in_game(2 ** 54 + 2, "__TestGame2") == "Test Item 3 - Duplicate"
 
         # Checking with Archipelago ids are valid in any game package.
-        assert self.ctx.item_names.lookup_by_slot(-1, 2) == "Nothing"
-        assert self.ctx.item_names.lookup_by_slot(-1, 3) == "Nothing"
-        assert self.ctx.item_names.lookup_by_game(-1, "__TestGame1") == "Nothing"
-        assert self.ctx.item_names.lookup_by_game(-1, "__TestGame2") == "Nothing"
+        assert self.ctx.item_names.lookup_in_slot(-1, 2) == "Nothing"
+        assert self.ctx.item_names.lookup_in_slot(-1, 3) == "Nothing"
+        assert self.ctx.item_names.lookup_in_game(-1, "__TestGame1") == "Nothing"
+        assert self.ctx.item_names.lookup_in_game(-1, "__TestGame2") == "Nothing"

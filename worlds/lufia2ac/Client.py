@@ -145,12 +145,11 @@ class L2ACSNIClient(SNIClient):
                 item: NetworkItem = ctx.items_received[snes_items_received]
                 item_code: int = item.item - items_start_id
                 snes_items_received += 1
-                sending_game = ctx.slot_info[item.player].game
 
                 snes_logger.info("Received %s from %s (%s) (%d/%d in list)" % (
-                    ctx.item_names[ctx.game][item.item],
+                    ctx.item_names.lookup_in_slot(item.item),
                     ctx.player_names[item.player],
-                    ctx.location_names[sending_game][item.location],
+                    ctx.location_names.lookup_in_slot(item.location, item.player),
                     snes_items_received, len(ctx.items_received)))
                 snes_buffered_write(ctx, L2AC_RX_ADDR + 2 * (snes_items_received + 1), item_code.to_bytes(2, "little"))
                 snes_buffered_write(ctx, L2AC_RX_ADDR, snes_items_received.to_bytes(2, "little"))

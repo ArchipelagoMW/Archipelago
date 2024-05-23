@@ -109,7 +109,7 @@ class SMZ3SNIClient(SNIClient):
             location_id = locations_start_id + convertLocSMZ3IDToAPID(item_index)
 
             ctx.locations_checked.add(location_id)
-            location = ctx.location_names[ctx.game][location_id]
+            location = ctx.location_names.lookup_in_slot(location_id)
             snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
@@ -131,9 +131,8 @@ class SMZ3SNIClient(SNIClient):
                                 bytes([player_id & 0xFF, (player_id >> 8) & 0xFF, item_id & 0xFF, (item_id >> 8) & 0xFF]))
             item_out_ptr += 1
             snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + recv_progress_addr_table_offset, bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
-            sending_game = ctx.slot_info[item.player].game
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[ctx.game][item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[sending_game][item.location], item_out_ptr, len(ctx.items_received)))
+                color(ctx.item_names.lookup_in_slot(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                ctx.location_names.lookup_in_slot(item.location, item.player), item_out_ptr, len(ctx.items_received)))
 
         await snes_flush_writes(ctx)
