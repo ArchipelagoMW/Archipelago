@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions,
                      OptionGroup)
 
@@ -199,3 +199,24 @@ tunic_option_groups = [
         Maskless,
     ])
 ]
+
+tunic_option_presets: Dict[str, Dict[str, Any]] = {
+    "Sync": {
+        "ability_shuffling": True,
+    },
+    "Async": {
+        "progression_balancing": 0,
+        "ability_shuffling": True,
+        "shuffle_ladders": True,
+        "laurels_location": "10_fairies",
+    },
+    "Glace Mode": {
+        "accessibility": "minimal",
+        "ability_shuffling": True,
+        "entrance_rando": "yes",
+        "fool_traps": "onslaught",
+        "logic_rules": "unrestricted",
+        "maskless": True,
+        "lanternless": True,
+    },
+}
