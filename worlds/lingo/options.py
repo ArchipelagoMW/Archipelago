@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict, \
+    OptionGroup
 from .items import TRAP_ITEMS
 
 
@@ -32,8 +33,8 @@ class ProgressiveColorful(DefaultOnToggle):
 
 
 class LocationChecks(Choice):
-    """On "normal", there will be a location check for each panel set that would ordinarily open a door, as well as for
-    achievement panels and a small handful of other panels.
+    """Determines what locations are available.
+    On "normal", there will be a location check for each panel set that would ordinarily open a door, as well as for achievement panels and a small handful of other panels.
     On "reduced", many of the locations that are associated with opening doors are removed.
     On "insanity", every individual panel in the game is a location check."""
     display_name = "Location Checks"
@@ -43,8 +44,10 @@ class LocationChecks(Choice):
 
 
 class ShuffleColors(DefaultOnToggle):
-    """If on, an item is added to the pool for every puzzle color (besides White).
-    You will need to unlock the requisite colors in order to be able to solve puzzles of that color."""
+    """
+    If on, an item is added to the pool for every puzzle color (besides White).
+    You will need to unlock the requisite colors in order to be able to solve puzzles of that color.
+    """
     display_name = "Shuffle Colors"
 
 
@@ -62,20 +65,25 @@ class ShufflePaintings(Toggle):
 
 
 class EnablePilgrimage(Toggle):
-    """If on, you are required to complete a pilgrimage in order to access the Pilgrim Antechamber.
+    """Determines how the pilgrimage works.
+    If on, you are required to complete a pilgrimage in order to access the Pilgrim Antechamber.
     If off, the pilgrimage will be deactivated, and the sun painting will be added to the pool, even if door shuffle is off."""
     display_name = "Enable Pilgrimage"
 
 
 class PilgrimageAllowsRoofAccess(DefaultOnToggle):
-    """If on, you may use the Crossroads roof access during a pilgrimage (and you may be expected to do so).
-    Otherwise, pilgrimage will be deactivated when going up the stairs."""
+    """
+    If on, you may use the Crossroads roof access during a pilgrimage (and you may be expected to do so).
+    Otherwise, pilgrimage will be deactivated when going up the stairs.
+    """
     display_name = "Allow Roof Access for Pilgrimage"
 
 
 class PilgrimageAllowsPaintings(DefaultOnToggle):
-    """If on, you may use paintings during a pilgrimage (and you may be expected to do so).
-    Otherwise, pilgrimage will be deactivated when going through a painting."""
+    """
+    If on, you may use paintings during a pilgrimage (and you may be expected to do so).
+    Otherwise, pilgrimage will be deactivated when going through a painting.
+    """
     display_name = "Allow Paintings for Pilgrimage"
 
 
@@ -137,8 +145,10 @@ class Level2Requirement(Range):
 
 
 class EarlyColorHallways(Toggle):
-    """When on, a painting warp to the color hallways area will appear in the starting room.
-    This lets you avoid being trapped in the starting room for long periods of time when door shuffle is on."""
+    """
+    When on, a painting warp to the color hallways area will appear in the starting room.
+    This lets you avoid being trapped in the starting room for long periods of time when door shuffle is on.
+    """
     display_name = "Early Color Hallways"
 
 
@@ -151,8 +161,10 @@ class TrapPercentage(Range):
 
 
 class TrapWeights(OptionDict):
-    """Specify the distribution of traps that should be placed into the pool.
-    If you don't want a specific type of trap, set the weight to zero."""
+    """
+    Specify the distribution of traps that should be placed into the pool.
+    If you don't want a specific type of trap, set the weight to zero.
+    """
     display_name = "Trap Weights"
     schema = Schema({trap_name: And(int, lambda n: n >= 0) for trap_name in TRAP_ITEMS})
     default = {trap_name: 1 for trap_name in TRAP_ITEMS}
@@ -169,6 +181,26 @@ class PuzzleSkipPercentage(Range):
 class DeathLink(Toggle):
     """If on: Whenever another player on death link dies, you will be returned to the starting room."""
     display_name = "Death Link"
+
+
+lingo_option_groups = [
+    OptionGroup("Pilgrimage", [
+        EnablePilgrimage,
+        PilgrimageAllowsRoofAccess,
+        PilgrimageAllowsPaintings,
+        SunwarpAccess,
+        ShuffleSunwarps,
+    ]),
+    OptionGroup("Fine-tuning", [
+        ProgressiveOrangeTower,
+        ProgressiveColorful,
+        MasteryAchievements,
+        Level2Requirement,
+        TrapPercentage,
+        TrapWeights,
+        PuzzleSkipPercentage,
+    ])
+]
 
 
 @dataclass
