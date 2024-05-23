@@ -212,7 +212,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
     else:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
-        assert open_command, "Really!? What kind of system are you running?"
+        assert open_command, "Didn't find program for open_file! Please report this together with system details."
         subprocess.call([open_command, filename])
 
 
