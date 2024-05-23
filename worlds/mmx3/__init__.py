@@ -240,6 +240,40 @@ class MMX3World(World):
 
     def fill_slot_data(self):
         slot_data = {}
+
+        # Write options to slot_data
+        slot_data["boss_weakness_rando"] = self.options.boss_weakness_rando.value
+        slot_data["boss_weakness_strictness"] = self.options.boss_weakness_strictness.value
+        slot_data["pickupsanity"] = self.options.pickupsanity.value
+        slot_data["jammed_buster"] = self.options.jammed_buster.value
+        slot_data["zsaber_in_pool"] = self.options.zsaber_in_pool.value
+        slot_data["doppler_open"] = self.options.doppler_open.value
+        slot_data["doppler_medal_count"] = self.options.doppler_medal_count.value
+        slot_data["doppler_weapon_count"] = self.options.doppler_weapon_count.value
+        slot_data["doppler_upgrade_count"] = self.options.doppler_upgrade_count.value
+        slot_data["doppler_heart_tank_count"] = self.options.doppler_heart_tank_count.value
+        slot_data["doppler_sub_tank_count"] = self.options.doppler_sub_tank_count.value
+        slot_data["doppler_lab_2_boss"] = self.options.doppler_lab_2_boss.value
+        slot_data["doppler_lab_3_boss_rematch_count"] = self.options.doppler_lab_3_boss_rematch_count.value
+        slot_data["doppler_all_labs"] = self.options.doppler_all_labs.value
+        slot_data["vile_open"] = self.options.vile_open.value
+        slot_data["vile_medal_count"] = self.options.vile_medal_count.value
+        slot_data["vile_weapon_count"] = self.options.vile_weapon_count.value
+        slot_data["vile_upgrade_count"] = self.options.vile_upgrade_count.value
+        slot_data["vile_heart_tank_count"] = self.options.vile_heart_tank_count.value
+        slot_data["vile_sub_tank_count"] = self.options.vile_sub_tank_count.value
+        slot_data["bit_medal_count"] = self.options.bit_medal_count.value
+        slot_data["byte_medal_count"] = self.options.byte_medal_count.value
+        slot_data["logic_boss_weakness"] = self.options.logic_boss_weakness.value
+        slot_data["logic_vile_required"] = self.options.logic_vile_required.value
+
+        # Write boss weaknesses to slot_data
+        slot_data["boss_weaknesses"] = {}
+        for boss, entries in self.boss_weaknesses.items():
+            slot_data[boss] = []
+            for entry in entries:
+                slot_data[boss].append(entry[1])
+                
         return slot_data
 
 
