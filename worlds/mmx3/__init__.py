@@ -14,10 +14,10 @@ from .Items import MMX3Item, ItemData, item_table, junk_table, item_groups
 from .Locations import MMX3Location, setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
-from .Options import MMX3Options
+from .Options import MMX3Options, mmx3_option_groups
 from .Client import MMX3SNIClient
 from .Levels import location_id_to_level_id
-from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
+from .Weaknesses import handle_weaknesses, weapon_id
 from .Rom import patch_rom, MMX3ProcedurePatch, HASH_US, HASH_LEGACY
 
 class MMX3Settings(settings.Group):
@@ -43,6 +43,8 @@ class MMX3Web(WebWorld):
     )
 
     tutorials = [setup_en]
+
+    option_groups = mmx3_option_groups
 
 
 class MMX3World(World):
@@ -110,11 +112,12 @@ class MMX3World(World):
                 else:
                     itempool += [self.create_item(stage_list[i])]
 
-        if self.options.doppler_open == "multiworld":
+        if len(self.options.doppler_open.value) == 0:
             itempool += [self.create_item(ItemName.stage_doppler_lab)]
-        if self.options.vile_open == "multiworld":
+        if len(self.options.vile_open.value) == 0:
             itempool += [self.create_item(ItemName.stage_vile)]
 
+        # Add weapons into the pool
         itempool += [self.create_item(ItemName.parasitic_bomb)]
         itempool += [self.create_item(ItemName.frost_shield)]
         itempool += [self.create_item(ItemName.acid_burst)]
@@ -129,12 +132,13 @@ class MMX3World(World):
         itempool += [self.create_item(ItemName.ride_hawk)]
         itempool += [self.create_item(ItemName.ride_frog)]
         
-        if self.options.logic_z_saber.value == 5:
+        if self.options.zsaber_in_pool:
             itempool += [self.create_item(ItemName.z_saber, ItemClassification.useful)]
-        else:
-            itempool += [self.create_item(ItemName.z_saber)]
 
-        if self.options.doppler_open in ("armor_upgrades", "all") or self.options.vile_open in ("armor_upgrades", "all"):
+        # Add armor upgrades into the pool
+        doppler_open = self.options.doppler_open.value
+        vile_open = self.options.vile_open.value
+        if "Armor Upgrades" in doppler_open or "Armor Upgrades" in vile_open:
             itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2 + self.options.jammed_buster.value)]
@@ -146,9 +150,9 @@ class MMX3World(World):
         itempool += [self.create_item(ItemName.third_armor_legs) for _ in range(2)]
 
         # Add heart tanks into the pool
-        doppler_logic = self.options.doppler_open in ("heart_tanks", "all") and self.options.doppler_heart_tank_count.value > 0
+        doppler_logic = "Heart Tanks" in doppler_open and self.options.doppler_heart_tank_count.value > 0
         highest_count = self.options.doppler_heart_tank_count.value if doppler_logic else 0
-        vile_logic = self.options.vile_open in ("heart_tanks", "all") and self.options.vile_heart_tank_count.value > 0
+        vile_logic = "Heart Tanks" in vile_open and self.options.vile_heart_tank_count.value > 0
         if vile_logic:
             if self.options.vile_heart_tank_count.value > highest_count:
                 highest_count = self.options.vile_heart_tank_count.value
@@ -162,9 +166,9 @@ class MMX3World(World):
             itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
 
         # Add heart tanks into the pool
-        doppler_logic = self.options.doppler_open in ("sub_tanks", "all") and self.options.doppler_sub_tank_count.value > 0
+        doppler_logic = "Sub Tanks" in doppler_open and self.options.doppler_sub_tank_count.value > 0
         highest_count = self.options.doppler_sub_tank_count.value if doppler_logic else 0
-        vile_logic = self.options.vile_open in ("sub_tanks", "all") and self.options.vile_sub_tank_count.value > 0
+        vile_logic = "Sub Tanks" in vile_open and self.options.vile_sub_tank_count.value > 0
         if vile_logic:
             if self.options.vile_sub_tank_count.value > highest_count:
                 highest_count = self.options.vile_sub_tank_count.value
@@ -181,9 +185,7 @@ class MMX3World(World):
         junk_count = total_required_locations - len(itempool)
 
         junk_weights = []
-        junk_weights += ([ItemName.small_weapon] * 5)
-        junk_weights += ([ItemName.large_weapon] * 10)
-        junk_weights += ([ItemName.small_hp] * 25)
+        junk_weights += ([ItemName.small_hp] * 20)
         junk_weights += ([ItemName.large_hp] * 35)
         junk_weights += ([ItemName.life] * 25)
 
@@ -238,42 +240,29 @@ class MMX3World(World):
 
     def fill_slot_data(self):
         slot_data = {}
-        slot_data["Doppler Open"] = self.options.doppler_open.value
-        slot_data["Vile Open"] = self.options.vile_open.value
-        slot_data["Boss Weakness Rando"] = self.options.boss_weakness_rando.value
-        slot_data["Boss Weaknesses"] = {}
-        for boss, data in self.boss_weaknesses.items():
-            slot_data["Boss Weaknesses"][boss] = []
-            for i in range(len(data)):
-                slot_data["Boss Weaknesses"][boss].append(data[i][1])
         return slot_data
 
 
     def generate_early(self):
-        if self.options.boss_weakness_rando != "vanilla":
-            self.boss_weaknesses = {}
-            self.boss_weakness_data = {}
-            randomize_weaknesses(self)
+        self.boss_weaknesses = {}
+        self.boss_weakness_data = {}
+        handle_weaknesses(self)
         early_stage = self.random.choice(list(item_groups["Access Codes"]))
         self.multiworld.local_early_items[self.player][early_stage] = 1
 
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
-        if self.options.boss_weakness_rando != "vanilla":
-            spoiler_handle.write(f"\nMega Man X3 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
-            
-            for boss, data in self.boss_weaknesses.items():
-                weaknesses = ""
-                for i in range(len(data)):
-                    weaknesses += f"{weapon_id[data[i][1]]}, "
-                weaknesses = weaknesses[:-2]
-                spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
+        spoiler_handle.write(f"\nMega Man X3 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
+        
+        for boss, data in self.boss_weaknesses.items():
+            weaknesses = ""
+            for i in range(len(data)):
+                weaknesses += f"{weapon_id[data[i][1]]}, "
+            weaknesses = weaknesses[:-2]
+            spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
 
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
-        if not self.options.boss_weakness_rando:
-            return
-        
         boss_to_id = {
             0x202: "Blast Hornet",
             0x203: "Shurikein",

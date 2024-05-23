@@ -1,37 +1,134 @@
 from .Names import LocationName, ItemName, RegionName, EventName
 
-boss_weaknesses = {
-    "Blizzard Buffalo": [[[ItemName.parasitic_bomb]]],
-    "Toxic Seahorse": [[[ItemName.frost_shield]]],
-    "Tunnel Rhino": [[[ItemName.acid_burst]]],
-    "Volt Catfish": [[[ItemName.tornado_fang]]],
-    "Crush Crawfish": [[[ItemName.triad_thunder]]],
-    "Neon Tiger": [[[ItemName.spinning_blade]]],
-    "Gravity Beetle": [[[ItemName.ray_splasher]]],
-    "Blast Hornet": [[[ItemName.gravity_well]]],
-    "Hotareeca": [[None]],
-    "Worm Seeker-R": [[None]],
-    "Hell Crusher": [[None]],
-    "Shurikein": [[None]],
-    #"Hotareeca": [[[ItemName.frost_shield, ItemName.triad_thunder]]],
-    #"Worm Seeker-R": [[[ItemName.triad_thunder, ItemName.acid_burst]]],
-    #"Hell Crusher": [[[ItemName.tornado_fang, ItemName.ray_splasher]]],
-    #"Shurikein": [[[ItemName.acid_burst]]],
-    "Bit": [[[ItemName.frost_shield, ItemName.triad_thunder]]],
-    "Byte": [[[ItemName.tornado_fang, ItemName.ray_splasher]]],
-    "Vile": [[[ItemName.spinning_blade, ItemName.ray_splasher]]],
-    "Press Disposer": [[[ItemName.tornado_fang, ItemName.ray_splasher]]],
-    "Godkarmachine": [[[ItemName.ray_splasher]]],
-    "Dr. Doppler's Lab 2 Boss": [[None]],
-    "Volt Kurageil": [[[ItemName.frost_shield, ItemName.triad_thunder]]],
-    "Vile Goliath": [[[ItemName.parasitic_bomb, ItemName.tornado_fang]]],
-    "Doppler": [[[ItemName.acid_burst]]],
-    "Sigma": [[[ItemName.spinning_blade, ItemName.frost_shield]]],
-    "Kaiser Sigma": [[None]],
-}
-
 WEAKNESS_UNCHARGED_DMG = 0x03
 WEAKNESS_CHARGED_DMG = 0x05
+
+boss_weaknesses = {
+    "Blizzard Buffalo": [
+        [[ItemName.parasitic_bomb], 0x08, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.parasitic_bomb], 0x11, WEAKNESS_CHARGED_DMG],
+    ],
+    "Toxic Seahorse": [
+        [[ItemName.frost_shield], 0x0D, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x16, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.frost_shield], 0x21, WEAKNESS_CHARGED_DMG],
+    ],
+    "Tunnel Rhino": [
+        [[ItemName.acid_burst], 0x07, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.acid_burst], 0x10, WEAKNESS_CHARGED_DMG],
+        [[ItemName.acid_burst], 0x18, WEAKNESS_UNCHARGED_DMG-1],
+    ],
+    "Volt Catfish": [
+        [[ItemName.tornado_fang], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.tornado_fang], 0x17, WEAKNESS_CHARGED_DMG+2],
+    ],
+    "Crush Crawfish": [
+        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
+        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Neon Tiger": [
+        [[ItemName.spinning_blade], 0x0A, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.spinning_blade], 0x12, WEAKNESS_CHARGED_DMG],
+    ],
+    "Gravity Beetle": [
+        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Blast Hornet": [
+        [[ItemName.gravity_well], 0x0C, 0x03],
+        [[ItemName.gravity_well], 0x15, 0x03],
+    ],
+    "Hotareeca": [
+        [[ItemName.frost_shield], 0x0D, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x16, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.frost_shield], 0x21, WEAKNESS_CHARGED_DMG],
+        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
+        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Worm Seeker-R": [
+        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
+        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.acid_burst], 0x07, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.acid_burst], 0x10, WEAKNESS_CHARGED_DMG],
+        [[ItemName.acid_burst], 0x18, WEAKNESS_UNCHARGED_DMG-1],
+    ],
+    "Hell Crusher": [
+        [[ItemName.tornado_fang], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.tornado_fang], 0x17, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Shurikein": [
+        [[ItemName.acid_burst], 0x07, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.acid_burst], 0x10, WEAKNESS_CHARGED_DMG],
+        [[ItemName.acid_burst], 0x18, WEAKNESS_UNCHARGED_DMG-1],
+    ],
+    "Bit": [
+        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
+        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x0D, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x16, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.frost_shield], 0x21, WEAKNESS_CHARGED_DMG],
+    ],
+    "Byte": [
+        [[ItemName.tornado_fang], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.tornado_fang], 0x17, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Vile": [
+        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.spinning_blade], 0x0A, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.spinning_blade], 0x12, WEAKNESS_CHARGED_DMG],
+    ],
+    "Press Disposer": [
+        [[ItemName.tornado_fang], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.tornado_fang], 0x17, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Godkarmachine": [
+        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Dr. Doppler's Lab 2 Boss": [
+        [None]
+    ],
+    "Volt Kurageil": [
+        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
+        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x0D, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x16, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.frost_shield], 0x21, WEAKNESS_CHARGED_DMG],
+    ],
+    "Vile Goliath": [
+        [[ItemName.parasitic_bomb], 0x08, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.parasitic_bomb], 0x11, WEAKNESS_CHARGED_DMG],
+        [[ItemName.tornado_fang], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.tornado_fang], 0x17, WEAKNESS_CHARGED_DMG+2],
+    ],
+    "Doppler": [
+        [[ItemName.acid_burst], 0x07, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.acid_burst], 0x10, WEAKNESS_CHARGED_DMG],
+        [[ItemName.acid_burst], 0x18, WEAKNESS_UNCHARGED_DMG-1],
+    ],
+    "Sigma": [
+        [[ItemName.frost_shield], 0x0D, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.frost_shield], 0x16, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.frost_shield], 0x21, WEAKNESS_CHARGED_DMG],
+        [[ItemName.spinning_blade], 0x0A, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.spinning_blade], 0x12, WEAKNESS_CHARGED_DMG],
+    ],
+    "Kaiser Sigma": [
+        [None, 0x00, 0x02],
+        [None, 0x01, 0x03],
+        [None, 0x03, 0x04],
+        [None, 0x06, 0x03],
+        [None, 0x1D, 0x04],
+        [None, 0x1F, 0x05],
+        [None, 0x20, 0x03],
+    ],
+}
 
 weapon_id = {
     0x00: "Lemon",
@@ -423,14 +520,15 @@ weapons_chaotic = {
 }
 
 
-def randomize_weaknesses(world):
+def handle_weaknesses(world):
     shuffle_type = world.options.boss_weakness_rando.value
     strictness_type = world.options.boss_weakness_strictness.value
 
-    weapon_list = weapons.keys()
-    if shuffle_type == 2 or shuffle_type == 3:
-        weapon_list = weapons_chaotic.keys()
-    weapon_list = list(weapon_list)
+    if shuffle_type != "vanilla":
+        weapon_list = weapons.keys()
+        if shuffle_type == 2 or shuffle_type == 3:
+            weapon_list = weapons_chaotic.keys()
+        weapon_list = list(weapon_list)
     
     for boss in boss_weaknesses.keys():
         if boss == "Dr. Doppler's Lab 2 Boss":
@@ -446,15 +544,16 @@ def randomize_weaknesses(world):
         else:
             damage_table = damage_templates["Only Weakness"].copy()
 
-        if boss == "Blast Hornet":
-            world.boss_weaknesses[boss].append(blast_hornet_data["Gravity Well"][0])
-            damage_table[0x0C] = 0x03
-            damage_table[0x15] = 0x03
+        if shuffle_type != "vanilla":
+            if boss == "Blast Hornet":
+                world.boss_weaknesses[boss].append(blast_hornet_data["Gravity Well"][0])
+                damage_table[0x0C] = 0x03
+                damage_table[0x15] = 0x03
 
-        copied_weapon_list = weapon_list.copy()
-        for weapon in boss_excluded_weapons[boss]:
-            if weapon in copied_weapon_list:
-                copied_weapon_list.remove(weapon)
+            copied_weapon_list = weapon_list.copy()
+            for weapon in boss_excluded_weapons[boss]:
+                if weapon in copied_weapon_list:
+                    copied_weapon_list.remove(weapon)
 
         if shuffle_type == 1:
             chosen_weapon = world.random.choice(copied_weapon_list)
@@ -463,8 +562,6 @@ def randomize_weaknesses(world):
                 world.boss_weaknesses[boss].append(entry)
                 damage = entry[2]
                 damage_table[entry[1]] = damage
-            world.boss_weakness_data[boss] = damage_table.copy()
-
 
         elif shuffle_type == 2:
             for _ in range(2):
@@ -475,8 +572,6 @@ def randomize_weaknesses(world):
                     world.boss_weaknesses[boss].append(entry)
                     damage = entry[2]
                     damage_table[entry[1]] = damage
-            world.boss_weakness_data[boss] = damage_table.copy()
-
 
         elif shuffle_type == 3:
             chosen_weapon = world.random.choice(copied_weapon_list)
@@ -485,13 +580,19 @@ def randomize_weaknesses(world):
                 world.boss_weaknesses[boss].append(entry)
                 damage = entry[2]
                 damage_table[entry[1]] = damage
-            world.boss_weakness_data[boss] = damage_table.copy()
+
+        else:
+            for entry in boss_weaknesses[boss]:
+                world.boss_weaknesses[boss].append(entry)
+                damage = entry[2]
+                damage_table[entry[1]] = damage
+        
+        world.boss_weakness_data[boss] = damage_table.copy()
 
     if world.options.doppler_lab_2_boss == "volt_kurageil":
-        world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"] = world.boss_weaknesses["Volt Kurageil"]
+        world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"] = world.boss_weaknesses["Volt Kurageil"].copy()
     else:
         world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"] = [
-            world.boss_weaknesses["Vile"][0],
-            world.boss_weaknesses["Vile Goliath"][0],
+            world.boss_weaknesses["Vile"][0].copy(),
+            world.boss_weaknesses["Vile Goliath"][0].copy(),
         ]
-

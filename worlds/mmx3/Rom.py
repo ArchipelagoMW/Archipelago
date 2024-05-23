@@ -129,6 +129,7 @@ class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
     def write_bytes(self, offset, value: typing.Iterable[int]):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
+
 def adjust_boss_damage_table(world: World, patch: MMX3ProcedurePatch):
     strictness = world.options.boss_weakness_strictness
     for boss, data in world.boss_weakness_data.items():
@@ -146,8 +147,17 @@ def adjust_boss_damage_table(world: World, patch: MMX3ProcedurePatch):
             continue
         patch.write_bytes(offset, bytearray(data))
 
-    # Adjust Charged Triad Thunder lag (lasts 90 less frames)
-    patch.write_byte(0x1FD2D1, 0x14)
+    # Write weaknesses to a table
+    offset = 0x98000
+    for _, entries in world.boss_weaknesses.items():
+        data = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+        i = 0
+        for entry in entries:
+            data[i] = entry[1]
+            i += 1
+        patch.write_bytes(offset, bytearray(data))
+        offset += 8
+
 
 def adjust_boss_hp(world: World, patch: MMX3ProcedurePatch):
     option = world.options.boss_randomize_hp
@@ -162,7 +172,6 @@ def adjust_boss_hp(world: World, patch: MMX3ProcedurePatch):
     
     for _, offset in boss_hp_caps_offsets.items():
         patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
-
 
 
 def patch_rom(world: World, patch: MMX3ProcedurePatch):
@@ -202,8 +211,10 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_bytes(0x0FF84, bytearray([0xFF for _ in range(0x007C)]))
     patch.write_bytes(0x1FA80, bytearray([0xFF for _ in range(0x0580)]))
 
-    if world.options.boss_weakness_rando != "vanilla":
-        adjust_boss_damage_table(world, patch)
+    # Adjust Charged Triad Thunder lag (lasts 90 less frames)
+    patch.write_byte(0x1FD2D1, 0x14)
+
+    adjust_boss_damage_table(world, patch)
     
     if world.options.boss_randomize_hp != "off":
         adjust_boss_hp(world, patch)
@@ -224,18 +235,13 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x0021BE, world.options.starting_life_count.value)
 
     # Write options to the ROM
-    patch.write_byte(0x17FFE0, world.options.doppler_open.value)
     patch.write_byte(0x17FFE1, world.options.doppler_medal_count.value)
     patch.write_byte(0x17FFE2, world.options.doppler_weapon_count.value)
     patch.write_byte(0x17FFE3, world.options.doppler_upgrade_count.value)
     patch.write_byte(0x17FFE4, world.options.doppler_heart_tank_count.value)
     patch.write_byte(0x17FFE5, world.options.doppler_sub_tank_count.value)
     patch.write_byte(0x17FFE6, world.options.starting_life_count.value)
-    if world.options.pickupsanity.value:
-        patch.write_byte(0x17FFE7, 0x01)
-    else:
-        patch.write_byte(0x17FFE7, 0x00)
-    patch.write_byte(0x17FFE8, world.options.vile_open.value)
+    patch.write_byte(0x17FFE7, world.options.pickupsanity.value)
     patch.write_byte(0x17FFE9, world.options.vile_medal_count.value)
     patch.write_byte(0x17FFEA, world.options.vile_weapon_count.value)
     patch.write_byte(0x17FFEB, world.options.vile_upgrade_count.value)
@@ -244,8 +250,36 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
 
     patch.write_byte(0x17FFEE, world.options.logic_boss_weakness.value)
     patch.write_byte(0x17FFEF, world.options.logic_vile_required.value)
-    patch.write_byte(0x17FFF0, world.options.logic_z_saber.value)
+    patch.write_byte(0x17FFF0, world.options.zsaber_in_pool.value)
     
+    value = 0
+    doppler_open = world.options.doppler_open.value
+    if "Medals" in doppler_open:
+        value |= 0x01
+    if "Weapons" in doppler_open:
+        value |= 0x02
+    if "Armor Upgrades" in doppler_open:
+        value |= 0x04
+    if "Heart Tanks" in doppler_open:
+        value |= 0x08
+    if "Sub Tanks" in doppler_open:
+        value |= 0x10
+    patch.write_byte(0x17FFE0, value)
+
+    value = 0
+    vile_open = world.options.vile_open.value
+    if "Medals" in vile_open:
+        value |= 0x01
+    if "Weapons" in vile_open:
+        value |= 0x02
+    if "Armor Upgrades" in vile_open:
+        value |= 0x04
+    if "Heart Tanks" in vile_open:
+        value |= 0x08
+    if "Sub Tanks" in vile_open:
+        value |= 0x10
+    patch.write_byte(0x17FFE8, value)
+
     #patch.write_byte(0x17FFF1, world.options.doppler_lab_1_boss.value)
     patch.write_byte(0x17FFF1, 0x00)
     patch.write_byte(0x17FFF2, world.options.doppler_lab_2_boss.value)

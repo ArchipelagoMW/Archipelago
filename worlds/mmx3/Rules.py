@@ -127,66 +127,76 @@ def set_rules(world: MMX3World):
              lambda state: state.has(ItemName.stage_blast_hornet, player))
 
     # Doppler Lab entrance rules
-    doppler_open = world.options.doppler_open
+    doppler_open = world.options.doppler_open.value
     entrance = multiworld.get_entrance(f"{RegionName.intro_stage} -> {RegionName.dr_doppler_lab}", player)
 
-    if doppler_open == "multiworld":
+    if len(doppler_open) == 0:
         set_rule(entrance, lambda state: state.has(ItemName.stage_doppler_lab, player))
-    if doppler_open in ("medals", "all") and world.options.doppler_medal_count.value > 0:
-        add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.doppler_medal_count.value))
-    if doppler_open in ("weapons", "all") and world.options.doppler_weapon_count.value > 0:
-        add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.doppler_weapon_count.value))
-    if doppler_open in ("armor_upgrades", "all") and world.options.doppler_upgrade_count.value > 0:
-        add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.doppler_upgrade_count.value))
-    if doppler_open in ("heart_tanks", "all") and world.options.doppler_heart_tank_count.value > 0:
-        add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.doppler_heart_tank_count.value))
-    if doppler_open in ("sub_tanks", "all") and world.options.doppler_sub_tank_count.value > 0:
-        add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.doppler_sub_tank_count.value))
+    else:
+        if "Medals" in doppler_open and world.options.doppler_medal_count.value > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.doppler_medal_count.value))
+        if "Weapons" in doppler_open and world.options.doppler_weapon_count.value > 0:
+            add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.doppler_weapon_count.value))
+        if "Armor Upgrades" in doppler_open and world.options.doppler_upgrade_count.value > 0:
+            add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.doppler_upgrade_count.value))
+        if "Heart Tanks" in doppler_open and world.options.doppler_heart_tank_count.value > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.doppler_heart_tank_count.value))
+        if "Sub Tanks" in doppler_open and world.options.doppler_sub_tank_count.value > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.doppler_sub_tank_count.value))
 
     if world.options.logic_vile_required.value:
         add_rule(entrance, lambda state: state.has(EventName.vile_defeated, player))
 
     # Doppler Lab level rules
-    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_1} -> {RegionName.dr_doppler_lab_2}", player),
-             lambda state: state.has(EventName.dr_doppler_lab_1_clear, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_2} -> {RegionName.dr_doppler_lab_3}", player),
-             lambda state: state.has(EventName.dr_doppler_lab_2_clear, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}", player),
-             lambda state: state.has(EventName.dr_doppler_lab_3_clear, player))
-
+    if world.options.doppler_all_labs:
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}", player),
+                 lambda state: (
+                     state.has(EventName.dr_doppler_lab_1_clear, player) and 
+                     state.has(EventName.dr_doppler_lab_2_clear, player) and 
+                     state.has(EventName.dr_doppler_lab_3_clear, player)
+                    ))
+    else:
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_1} -> {RegionName.dr_doppler_lab_2}", player),
+                 lambda state: state.has(EventName.dr_doppler_lab_1_clear, player))
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_2} -> {RegionName.dr_doppler_lab_3}", player),
+                 lambda state: state.has(EventName.dr_doppler_lab_2_clear, player))
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}", player),
+                 lambda state: state.has(EventName.dr_doppler_lab_3_clear, player))
+        
     # Set Boss rematch rules
     set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_boss}", player),
              lambda state: state.has(EventName.boss_rematch_clear, player, world.options.doppler_lab_3_boss_rematch_count.value))
     
     # Vile entrance rules
-    vile_open = world.options.vile_open
+    vile_open = world.options.vile_open.value
     entrance_blizzard = multiworld.get_entrance(f"{RegionName.blizzard_buffalo_start} -> {RegionName.vile}", player)
     entrance_volt = multiworld.get_entrance(f"{RegionName.volt_catfish_start} -> {RegionName.vile}", player)
     entrance_crush = multiworld.get_entrance(f"{RegionName.crush_crawfish_start} -> {RegionName.vile}", player)
-    if vile_open == "multiworld":
+    if len(vile_open) == 0:
         set_rule(entrance_blizzard, lambda state: state.has(ItemName.stage_vile, player))
         set_rule(entrance_volt, lambda state: state.has(ItemName.stage_vile, player))
         set_rule(entrance_crush, lambda state: state.has(ItemName.stage_vile, player))
-    if vile_open in ("medals", "all") and world.options.vile_medal_count.value > 0:
-        add_rule(entrance_blizzard, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
-        add_rule(entrance_volt, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
-        add_rule(entrance_crush, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
-    if vile_open in ("weapons", "all") and world.options.vile_weapon_count.value > 0:
-        add_rule(entrance_blizzard, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
-        add_rule(entrance_volt, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
-        add_rule(entrance_crush, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
-    if vile_open in ("armor_upgrades", "all") and world.options.vile_upgrade_count.value > 0:
-        add_rule(entrance_blizzard, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
-        add_rule(entrance_volt, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
-        add_rule(entrance_crush, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
-    if vile_open in ("heart_tanks", "all") and world.options.vile_heart_tank_count.value > 0:
-        add_rule(entrance_blizzard, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
-        add_rule(entrance_volt, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
-        add_rule(entrance_crush, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
-    if vile_open in ("sub_tanks", "all") and world.options.vile_sub_tank_count.value > 0:
-        add_rule(entrance_blizzard, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
-        add_rule(entrance_volt, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
-        add_rule(entrance_crush, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
+    else:
+        if "Medals" in vile_open and world.options.vile_medal_count.value > 0:
+            add_rule(entrance_blizzard, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
+            add_rule(entrance_volt, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
+            add_rule(entrance_crush, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
+        if "Weapons" in vile_open and world.options.vile_weapon_count.value > 0:
+            add_rule(entrance_blizzard, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
+            add_rule(entrance_volt, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
+            add_rule(entrance_crush, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
+        if "Armor Upgrades" in vile_open and world.options.vile_upgrade_count.value > 0:
+            add_rule(entrance_blizzard, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
+            add_rule(entrance_volt, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
+            add_rule(entrance_crush, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
+        if "Heart Tanks" in vile_open and world.options.vile_heart_tank_count.value > 0:
+            add_rule(entrance_blizzard, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
+            add_rule(entrance_volt, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
+            add_rule(entrance_crush, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
+        if "Sub Tanks" in vile_open and world.options.vile_sub_tank_count.value > 0:
+            add_rule(entrance_blizzard, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
+            add_rule(entrance_volt, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
+            add_rule(entrance_crush, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
 
     # Bit & Byte arena entrance rules
     set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet_bit_byte} -> {RegionName.bit_byte}", player), 
@@ -319,16 +329,12 @@ def set_rules(world: MMX3World):
     if world.options.logic_boss_weakness.value or world.options.boss_weakness_strictness.value >= 2:
         add_boss_weakness_logic(world)
 
-    # Z-Saber logic
-    if world.options.logic_z_saber != "not_required":
-        add_z_saber_logic(world)
-        
     # Handle pickupsanity logic
     if world.options.pickupsanity.value:
         add_pickupsanity_logic(world)
 
 
-def add_boss_weakness_logic(world):
+def add_boss_weakness_logic(world: MMX3World):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value
@@ -341,39 +347,23 @@ def add_boss_weakness_logic(world):
     for boss, regions in bosses.items():
         weaknesses = world.boss_weaknesses[boss]
         for weakness in weaknesses:
+            if weakness[0] is None:
+                continue
             weakness = weakness[0]
-            if weakness is not None:
-                for region in regions:
-                    is_entrance = "->" in region
-                    if "Check Charge" in weakness[0]:
-                        charge_level = int(weakness[0][-1:]) - 1
-                        if len(weakness) == 1:
-                            if is_entrance:
-                                add_rule(multiworld.get_entrance(region, player),
-                                        lambda state: state.has(ItemName.third_armor_arms, player, jammed_buster + charge_level))
-                            else:
-                                add_rule(multiworld.get_location(region, player),
-                                        lambda state: state.has(ItemName.third_armor_arms, player, jammed_buster + charge_level))
-                        else:
-                            if is_entrance:
-                                add_rule(multiworld.get_entrance(region, player),
-                                        lambda state, weapons=tuple([weakness[1]]): (
-                                            state.has(ItemName.third_armor_arms, player, jammed_buster + charge_level) and
-                                            state.has_all(weapons, player)
-                                        ))
-                            else:
-                                add_rule(multiworld.get_location(region, player),
-                                        lambda state, weapons=tuple([weakness[1]]): (
-                                            state.has(ItemName.third_armor_arms, player, jammed_buster + charge_level) and
-                                            state.has_all(weapons, player)
-                                        ))
-                    else:
-                        if is_entrance:
-                            add_rule(multiworld.get_entrance(region, player),
-                                    lambda state, weapons=tuple(weakness): state.has_all(weapons, player))
-                        else:
-                            add_rule(multiworld.get_location(region, player),
-                                    lambda state, weapons=tuple(weakness): state.has_all(weapons, player))
+            for region in regions:
+                ruleset = {}
+                if "Check Charge" in weakness[0]:
+                    ruleset[ItemName.third_armor_arms] = jammed_buster + int(weakness[0][-1:]) - 1
+                else:
+                    ruleset[weakness[0]] = 1
+                if len(weakness) != 1:
+                    ruleset[weakness[1]] = 1
+                if "->" in region:
+                    add_rule(multiworld.get_entrance(region, player),
+                             lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
+                else:
+                    add_rule(multiworld.get_location(region, player),
+                             lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
 
     if world.options.boss_weakness_rando == "vanilla":
         if world.options.doppler_lab_2_boss == "volt_kurageil":
@@ -411,29 +401,8 @@ def add_boss_weakness_logic(world):
                         )
                     ))
 
-def add_z_saber_logic(world):
-    player = world.player
-    multiworld = world.multiworld
 
-    logic_z_saber = world.options.logic_z_saber
-    if logic_z_saber == 0:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab} -> {RegionName.dr_doppler_lab_1}", player),
-                 lambda state: state.has(ItemName.z_saber, player))
-    elif logic_z_saber == 1:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_1} -> {RegionName.dr_doppler_lab_2}", player), 
-                 lambda state: state.has(ItemName.z_saber, player))
-    elif logic_z_saber == 2:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_2} -> {RegionName.dr_doppler_lab_3}", player), 
-                 lambda state: state.has(ItemName.z_saber, player))
-    elif logic_z_saber == 3:
-        add_rule(multiworld.get_location(LocationName.doppler_lab_3_boss, player), 
-                 lambda state: state.has(ItemName.z_saber, player))
-    elif logic_z_saber == 4:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}", player), 
-                 lambda state: state.has(ItemName.z_saber, player))
-
-
-def add_pickupsanity_logic(world):
+def add_pickupsanity_logic(world: MMX3World):
     player = world.player
     multiworld = world.multiworld
 
