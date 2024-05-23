@@ -202,7 +202,7 @@ def set_rules(world):
         "LD18 Attacks forbidden":
             lambda state: state.has_all(["Wave-Motion Cannon", "Stealth Bird"], player)
                           and state.count_from_list_unique(["Dark World Lightning", "Nobleman of Crossout",
-                                                             "Shield Crash", "Tribute to the Doomed"], player) >= 2
+                                                            "Shield Crash", "Tribute to the Doomed"], player) >= 2
                           and yugioh06_difficulty(state, player, 3),
         "LD19 All except E-Hero's forbidden":
             lambda state: state.has_any(["Polymerization", "Fusion Gate"], player) and
@@ -394,10 +394,10 @@ def set_rules(world):
         "TD39 Raviel, Lord of Phantasms":
             lambda state: state.has_all(["Raviel, Lord of Phantasms", "Giant Germ"], player) and
                           state.count_from_list_unique(["Archfiend Soldier",
-                                                           "Skull Descovery Knight",
-                                                           "Slate Warrior",
-                                                           "D. D. Trainer",
-                                                           "Earthbound Spirit"], player) >= 3
+                                                        "Skull Descovery Knight",
+                                                        "Slate Warrior",
+                                                        "D. D. Trainer",
+                                                        "Earthbound Spirit"], player) >= 3
                           and yugioh06_difficulty(state, player, 3),
         "TD40 Make a Chain":
             lambda state: state.has("Ultimate Offering", player)
@@ -785,20 +785,20 @@ def only_level(state, player):
 def spell_counter(state, player):
     return (state.has("Pitch-Black Power Stone", player) and
             state.has_from_list_unique(["Blast Magician",
-                                           "Magical Marionette",
-                                           "Mythical Beast Cerberus",
-                                           "Royal Magical Library",
-                                           "Spell-Counter Cards"], player, 2))
+                                        "Magical Marionette",
+                                        "Mythical Beast Cerberus",
+                                        "Royal Magical Library",
+                                        "Spell-Counter Cards"], player, 2))
 
 
 def take_control(state, player):
     return state.has_from_list_unique(["Aussa the Earth Charmer",
-                                          "Jowls of Dark Demise",
-                                          "Brain Control",
-                                          "Creature Swap",
-                                          "Enemy Controller",
-                                          "Mind Control",
-                                          "Magician of Faith"], player, 5)
+                                       "Jowls of Dark Demise",
+                                       "Brain Control",
+                                       "Creature Swap",
+                                       "Enemy Controller",
+                                       "Mind Control",
+                                       "Magician of Faith"], player, 5)
 
 
 def only_toons(state, player):
@@ -819,50 +819,50 @@ def only_spirit(state, player):
 
 def pacman_deck(state, player):
     return state.has_from_list_unique(["Des Lacooda",
-                                          "Swarm of Locusts",
-                                          "Swarm of Scarabs",
-                                          "Wandering Mummy",
-                                          "Golem Sentry",
-                                          "Great Spirit",
-                                          "Royal Keeper",
-                                          "Stealth Bird"], player, 4)
+                                       "Swarm of Locusts",
+                                       "Swarm of Scarabs",
+                                       "Wandering Mummy",
+                                       "Golem Sentry",
+                                       "Great Spirit",
+                                       "Royal Keeper",
+                                       "Stealth Bird"], player, 4)
 
 
 def quick_plays(state, player):
     return state.has_from_list_unique(["Collapse",
-                                          "Emergency Provisions",
-                                          "Enemy Controller",
-                                          "Graceful Dice",
-                                          "Mystik Wok",
-                                          "Offerings to the Doomed",
-                                          "Poison of the Old Man",
-                                          "Reload",
-                                          "Rush Recklessly",
-                                          "The Reliable Guardian"], player, 4)
+                                       "Emergency Provisions",
+                                       "Enemy Controller",
+                                       "Graceful Dice",
+                                       "Mystik Wok",
+                                       "Offerings to the Doomed",
+                                       "Poison of the Old Man",
+                                       "Reload",
+                                       "Rush Recklessly",
+                                       "The Reliable Guardian"], player, 4)
 
 
 def counter_traps(state, player):
     return state.has_from_list_unique(["Cursed Seal of the Forbidden Spell",
-                                          "Divine Wrath",
-                                          "Horn of Heaven",
-                                          "Magic Drain",
-                                          "Magic Jammer",
-                                          "Negate Attack",
-                                          "Seven Tools of the Bandit",
-                                          "Solemn Judgment",
-                                          "Spell Shield Type-8"], player, 5)
+                                       "Divine Wrath",
+                                       "Horn of Heaven",
+                                       "Magic Drain",
+                                       "Magic Jammer",
+                                       "Negate Attack",
+                                       "Seven Tools of the Bandit",
+                                       "Solemn Judgment",
+                                       "Spell Shield Type-8"], player, 5)
 
 
 def back_row_removal(state, player):
     return state.has_from_list_unique(["Anteatereatingant",
-                                          "B.E.S. Tetran",
-                                          "Breaker the Magical Warrior",
-                                          "Calamity of the Wicked",
-                                          "Chiron the Mage",
-                                          "Dust Tornado",
-                                          "Heavy Storm",
-                                          "Mystical Space Typhoon",
-                                          "Mobius the Frost Monarch",
-                                          "Raigeki Break",
-                                          "Stamping Destruction",
+                                       "B.E.S. Tetran",
+                                       "Breaker the Magical Warrior",
+                                       "Calamity of the Wicked",
+                                       "Chiron the Mage",
+                                       "Dust Tornado",
+                                       "Heavy Storm",
+                                       "Mystical Space Typhoon",
+                                       "Mobius the Frost Monarch",
+                                       "Raigeki Break",
+                                       "Stamping Destruction",
                                        "Swarm of Locusts"], player, 2)
