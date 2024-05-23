@@ -272,9 +272,6 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
     # Bake seed name into ROM
     patch.write_token(APTokenTypes.WRITE, 0xDF00A0, world.multiworld.seed_name.encode("UTF-8"))
 
-    # Bake patch into header
-    patch.write_token(APTokenTypes.WRITE, 0xAD, "P".encode("UTF-8"))
-
     # Intro Skip
     patch.write_token(
         APTokenTypes.WRITE,
