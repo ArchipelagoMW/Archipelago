@@ -193,8 +193,8 @@ class CommonContext:
             if isinstance(key, int):
                 logger.warning(f"Implicit name lookup by id only is deprecated and only supported to maintain backwards"
                                f"compatibility for now. If multiple games share the same id for a {self.lookup_type}, "
-                               f"name could be incorrect. Please use `{self.lookup_type}_names.lookup_by_game()` or "
-                               f"`{self.lookup_type}_names.lookup_by_slot()` instead to avoid this issue.")
+                               f"name could be incorrect. Please use `{self.lookup_type}_names.lookup_in_game()` or "
+                               f"`{self.lookup_type}_names.lookup_in_slot()` instead to avoid this issue.")
                 return self._flat_store[key]
 
             return self._game_store[key]
