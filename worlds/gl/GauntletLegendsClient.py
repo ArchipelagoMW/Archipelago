@@ -390,11 +390,11 @@ class GauntletLegendsContext(CommonContext):
         if item is not None:
             if self.glslotdata["character"] != 0:
                 if self.item_from_name(characters[self.glslotdata["character"] - 1]) is None:
-                    self.inv_add(characters[self.glslotdata["character"] - 1], 50)
-            if self.item_from_name("Key") is None and self.glslotdata["keys"]:
+                    self.inv_update(characters[self.glslotdata["character"] - 1], 50)
+            if self.item_from_name("Key") is None and self.glslotdata["keys"] == 1:
                 self.inv_update("Key", 9000)
-            if self.item_from_name("Speed Boots") is None and self.glslotdata["speed"]:
-                self.inv_update("Speed Boots", 20000)
+            if self.item_from_name("Speed Boots") is None and self.glslotdata["speed"] == 1:
+                self.inv_update("Speed Boots", 200)
             i = item.count
             if i - 1 != len(self.items_received):
                 for index in range(i - 1, len(self.items_received)):
