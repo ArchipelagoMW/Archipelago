@@ -19,20 +19,22 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     hm_rules: Dict[str, Callable[[CollectionState], bool]] = {}
     for hm, badges in world.hm_requirements.items():
         if isinstance(badges, list):
-            hm_rules[hm] = lambda state, hm=hm, badges=badges: state.has(hm, world.player) \
-                                                               and state.has_all(badges, world.player)
+            hm_rules[hm] = lambda state, hm=hm, badges=badges: \
+                state.has(hm, world.player) and \
+                state.has_all(badges, world.player)
         else:
-            hm_rules[hm] = lambda state, hm=hm, badges=badges: state.has(hm, world.player) \
-                                                               and state.has_group("Badges", world.player, badges)
+            hm_rules[hm] = lambda state, hm=hm, badges=badges: \
+                state.has(hm, world.player) and \
+                state.has_group_exclusive("Badges", world.player, badges)
 
     def has_acro_bike(state: CollectionState):
         return state.has("Acro Bike", world.player)
 
     def has_mach_bike(state: CollectionState):
         return state.has("Mach Bike", world.player)
-    
+
     def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
-        return state.has_from_list([
+        return state.has_from_list_exclusive([
             "EVENT_DEFEAT_ROXANNE",
             "EVENT_DEFEAT_BRAWLY",
             "EVENT_DEFEAT_WATTSON",
@@ -61,8 +63,9 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         }.items()
         if name in world.options.allowed_legendary_hunt_encounters.value
     ]
+
     def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
-        return state.has_from_list(huntable_legendary_events, world.player, n)
+        return state.has_from_list_exclusive(huntable_legendary_events, world.player, n)
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
@@ -235,11 +238,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.norman_requirement == NormanRequirement.option_badges:
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3"),
-            lambda state: state.has_group("Badges", world.player, world.options.norman_count.value)
+            lambda state: state.has_group_exclusive("Badges", world.player, world.options.norman_count.value)
         )
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6"),
-            lambda state: state.has_group("Badges", world.player, world.options.norman_count.value)
+            lambda state: state.has_group_exclusive("Badges", world.player, world.options.norman_count.value)
         )
     else:
         set_rule(
@@ -299,8 +302,8 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE116/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_116_1", world.player) and \
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and
+            state.has("TERRA_CAVE_ROUTE_116_1", world.player) and
             state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
@@ -1501,7 +1504,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.elite_four_requirement == EliteFourRequirement.option_badges:
         set_rule(
             get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS"),
-            lambda state: state.has_group("Badges", world.player, world.options.elite_four_count.value)
+            lambda state: state.has_group_exclusive("Badges", world.player, world.options.elite_four_count.value)
         )
     else:
         set_rule(
