@@ -75,7 +75,7 @@ webhost:
   of the options and the values are the values to be set for that option. These presets will be available for users to
   select from on the game's options page.
 
-  **Note: The values must be a non-aliased value for the option type and can only include the following option types:**
+Note: The values must be a non-aliased value for the option type and can only include the following option types:
 
 * If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
   values.
@@ -122,8 +122,7 @@ class RLWeb(WebWorld):
 ```
 
 * `location_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of locations 
-or location groups. These descriptions will show up in location-selection options in the Weighted Options page. Extra
-indentation and single newlines will be collapsed into spaces.
+or location groups.
 
   ```python
   # locations.py
@@ -147,8 +146,7 @@ indentation and single newlines will be collapsed into spaces.
   ```
 
 * `item_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of items or item 
-groups. These descriptions will show up in item-selection options in the Weighted Options page. Extra indentation and 
-single newlines will be collapsed into spaces.
+groups.
 
   ```python
   # items.py
