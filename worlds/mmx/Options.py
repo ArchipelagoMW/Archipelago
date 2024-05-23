@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import typing
 
-from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -216,6 +216,33 @@ class SigmaSubTankCount(Range):
     range_end = 4
     default = 4
 
+mmx_option_groups = [
+    OptionGroup("Sigma Fortress Options", [
+        SigmaOpen,
+        SigmaMedalCount,
+        SigmaWeaponCount,
+        SigmaArmorUpgradeCount,
+        SigmaHeartTankCount,
+        SigmaSubTankCount,
+        FortressBundleUnlock,
+    ]),
+    OptionGroup("Boss Weaknesses", [
+        BossWeaknessRando,
+        BossWeaknessStrictness,
+        BossRandomizedHP,
+    ]),
+    OptionGroup("Gameplay Options", [
+        StartingLifeCount,
+        StartingHP,
+        HeartTankEffectiveness,
+        JammedBuster,
+    ]),
+    OptionGroup("Logic", [
+        LogicBossWeakness,
+        LogicLegSigma,
+        LogicChargedShotgunIce,
+    ]),
+]
 
 @dataclass
 class MMXOptions(PerGameCommonOptions):

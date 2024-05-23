@@ -14,7 +14,7 @@ from .Items import MMXItem, ItemData, item_table, junk_table, item_groups
 from .Locations import MMXLocation, setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
-from .Options import MMXOptions
+from .Options import MMXOptions, mmx_option_groups
 from .Client import MMXSNIClient
 from .Levels import location_id_to_level_id
 from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
@@ -43,6 +43,8 @@ class MMXWeb(WebWorld):
     )
 
     tutorials = [setup_en]
+
+    option_groups = mmx_option_groups
 
 
 class MMXWorld(World):
