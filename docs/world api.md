@@ -156,7 +156,7 @@ groups.
         The key to the spaceship in Level 2.
   
         This is necessary to get to the Star Realm.
-      """
+      """,
   }
   
   # __init__.py
