@@ -219,7 +219,7 @@ class CommonContext:
             omitted.
             """
             if game_name is None:
-                game_name = self.ctx.slot_info[self.ctx.slot].game
+                game_name = self.ctx.game
 
             return self._game_store[game_name][code]
 
