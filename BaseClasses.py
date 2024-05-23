@@ -852,9 +852,6 @@ class Entrance:
         region.entrances.append(self)
 
     def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
         multiworld = self.parent_region.multiworld if self.parent_region else None
         return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
@@ -1072,9 +1069,6 @@ class Location:
         self.locked = True
 
     def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
         multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
         return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
@@ -1179,9 +1173,6 @@ class Item:
         return hash((self.name, self.player))
 
     def __repr__(self) -> str:
-        return self.__str__()
-
-    def __str__(self) -> str:
         if self.location and self.location.parent_region and self.location.parent_region.multiworld:
             return self.location.parent_region.multiworld.get_name_string_for_object(self)
         return f"{self.name} (Player {self.player})"
