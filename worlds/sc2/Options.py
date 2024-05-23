@@ -9,7 +9,7 @@ from BaseClasses import PlandoOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
 from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
-from .mission_groups import mission_groups, MissionGroupNames
+from .MissionGroups import mission_groups, MissionGroupNames
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
