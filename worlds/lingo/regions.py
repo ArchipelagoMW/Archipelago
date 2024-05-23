@@ -4,7 +4,7 @@ from BaseClasses import Entrance, ItemClassification, Region
 from .datatypes import EntranceType, Room, RoomAndDoor
 from .items import LingoItem
 from .locations import LingoLocation
-from .options import ShuffleDoors, SunwarpAccess, VictoryCondition
+from .options import SunwarpAccess
 from .rules import lingo_can_do_pilgrimage, lingo_can_use_entrance, make_location_lambda
 from .static_logic import ALL_ROOMS, PAINTINGS
 
