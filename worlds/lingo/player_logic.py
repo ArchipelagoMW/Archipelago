@@ -197,7 +197,7 @@ class LingoPlayerLogic:
 
         if victory_condition == VictoryCondition.option_the_end:
             self.victory_condition = "Orange Tower Seventh Floor - THE END"
-            self.add_location("Orange Tower Seventh Floor", "The End (Solved)", None, [], world)
+            self.add_location("Ending Area", "The End (Solved)", None, [], world)
             self.event_loc_to_item["The End (Solved)"] = "Victory"
         elif victory_condition == VictoryCondition.option_the_master:
             self.victory_condition = "Orange Tower Seventh Floor - THE MASTER"
@@ -467,7 +467,7 @@ class LingoPlayerLogic:
                                                                     req_panel.panel, world)
                 access_reqs.merge(sub_access_reqs)
 
-            if self.victory_condition == f"{room} - {panel}":
+            if self.victory_condition == (panel_object.location_name or f"{room} - {panel}"):
                 access_reqs.postgame = True
 
             self.panel_reqs[room][panel] = access_reqs

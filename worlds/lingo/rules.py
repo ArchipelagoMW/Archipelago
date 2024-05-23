@@ -9,11 +9,7 @@ if TYPE_CHECKING:
     from . import LingoWorld
 
 
-def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, victory_wall: bool,
-                           world: "LingoWorld"):
-    if victory_wall and state.has("Prevent Victory", world.player):
-        return False
-
+def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, world: "LingoWorld"):
     if door is None:
         return True
 
