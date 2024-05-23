@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
-from Options import PerGameCommonOptions, Toggle
+from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import static_items as static_witness_items
@@ -16,7 +16,7 @@ from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
 from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations, static_witness_locations
-from .options import TheWitnessOptions
+from .options import TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
@@ -36,6 +36,7 @@ class WitnessWebWorld(WebWorld):
     )]
 
     options_presets = witness_option_presets
+    option_groups = witness_option_groups
 
 
 class WitnessWorld(World):
@@ -124,9 +125,9 @@ class WitnessWorld(World):
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
-            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
-                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle, or Obelisk Keys.")
+            raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                              f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                              f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
         disabled_locations = self.options.exclude_locations.value

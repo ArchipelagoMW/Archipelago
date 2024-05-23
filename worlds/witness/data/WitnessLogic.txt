@@ -482,7 +482,7 @@ Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 
 158207 - 0x03713 (Laser Shortcut Panel) - True - True
 Door - 0x0364E (Laser Shortcut) - 0x03713
 158208 - 0x00B10 (Entry Left) - True - True
-158209 - 0x00C92 (Entry Right) - True - True
+158209 - 0x00C92 (Entry Right) - 0x00B10 - True
 Door - 0x0C128 (Entry Inner) - 0x00B10
 Door - 0x0C153 (Entry Outer) - 0x00C92
 158210 - 0x00290 (Outside 1) - 0x09D9B - True
@@ -1033,7 +1033,7 @@ Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 
 158427 - 0x09FD4 (Near Row 2) - 0x09FD3 - Stars & Colored Squares & Stars + Same Colored Symbol
 158428 - 0x09FD6 (Near Row 3) - 0x09FD4 - Stars & Colored Squares & Stars + Same Colored Symbol
 158429 - 0x09FD7 (Near Row 4) - 0x09FD6 - Stars & Colored Squares & Stars + Same Colored Symbol & Shapers
-158430 - 0x09FD8 (Near Row 5) - 0x09FD7 - Colored Squares & Symmetry & Colored Dots
+158430 - 0x09FD8 (Near Row 5) - 0x09FD7 - Symmetry & Colored Dots
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
 Mountain Floor 2 At Door (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EDD:

@@ -39,11 +39,12 @@ mentioned_doors = Set[]
 mentioned_panels = Set[]
 mentioned_sunwarp_entrances = Set[]
 mentioned_sunwarp_exits = Set[]
+mentioned_paintings = Set[]
 
 door_groups = {}
 
 directives = Set["entrances", "panels", "doors", "paintings", "sunwarps", "progression"]
-panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt"]
+panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt", "location_name"]
 door_directives = Set["id", "painting_id", "panels", "item_name", "item_group", "location_name", "skip_location", "skip_item", "door_group", "include_reduce", "event", "warp_id"]
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
@@ -256,6 +257,12 @@ config.each do |room_name, room|
     if painting.include?("id") and painting["id"].kind_of? String then
       unless paintings.include? painting["id"] then
         puts "#{room_name} :::: Invalid Painting ID #{painting["id"]}"
+      end
+
+      if mentioned_paintings.include?(painting["id"]) then
+        puts "Painting #{painting["id"]} is mentioned more than once"
+      else
+        mentioned_paintings.add(painting["id"])
       end
     else
       puts "#{room_name} :::: Painting is missing an ID"

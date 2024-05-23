@@ -24,7 +24,7 @@ if typing.TYPE_CHECKING:
 class OptionError(ValueError):
     pass
 
-  
+
 class Visibility(enum.IntFlag):
     none = 0b0000
     template = 0b0001
@@ -139,12 +139,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     @property
     def current_key(self) -> str:
         return self.name_lookup[self.value]
-
-    def get_current_option_name(self) -> str:
-        """Deprecated. use current_option_name instead. TODO remove around 0.4"""
-        logging.warning(DeprecationWarning(f"get_current_option_name for {self.__class__.__name__} is deprecated."
-                                           f" use current_option_name instead. Worlds should use {self}.current_key"))
-        return self.current_option_name
 
     @property
     def current_option_name(self) -> str:
@@ -750,39 +744,9 @@ class NamedRange(Range):
         return super().from_text(text)
 
 
-class SpecialRange(NamedRange):
-    special_range_cutoff = 0
-
-    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
-    def __new__(cls, value: int) -> SpecialRange:
-        from Utils import deprecate
-        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
-                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
-                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
-                  "placed anywhere (below, inside, or above the regular range).")
-        return super().__new__(cls)
-
-    @classmethod
-    def weighted_range(cls, text) -> Range:
-        if text == "random-low":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.special_range_cutoff))
-        elif text == "random-high":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.range_end))
-        elif text == "random-middle":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end))
-        elif text.startswith("random-range-"):
-            return cls.custom_range(text)
-        elif text == "random":
-            return cls(random.randint(cls.special_range_cutoff, cls.range_end))
-        else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: random, random-high, random-middle, random-low, "
-                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
-
-
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
+        assert not "_valid_keys" in attrs, "'_valid_keys' gets set by FreezeValidKeys, define 'valid_keys' instead."
         if "valid_keys" in attrs:
             attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
         return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
@@ -984,7 +948,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
-        
+
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
@@ -1160,6 +1124,14 @@ class DeathLinkMixin:
     death_link: DeathLink
 
 
+class OptionGroup(typing.NamedTuple):
+    """Define a grouping of options."""
+    name: str
+    """Name of the group to categorize these options in for display on the WebHost and in generated YAMLS."""
+    options: typing.List[typing.Type[Option[typing.Any]]]
+    """Options to be in the defined group."""
+
+
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
     import os
 
@@ -1198,15 +1170,21 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = {
-                option_name: option for option_name, option in world.options_dataclass.type_hints.items()
-                if option.visibility & Visibility.template
-            }
+
+            option_groups = {option: option_group.name
+                             for option_group in world.web.option_groups
+                             for option in option_group.options}
+            ordered_groups = ["Game Options"]
+            [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
+            grouped_options = {group: {} for group in ordered_groups}
+            for option_name, option in world.options_dataclass.type_hints.items():
+                if option.visibility >= Visibility.template:
+                    grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
             res = Template(file_data).render(
-                options=all_options,
+                option_groups=grouped_options,
                 __version__=__version__, game=game_name, yaml_dump=yaml.dump,
                 dictify_range=dictify_range,
             )
