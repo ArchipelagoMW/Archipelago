@@ -174,82 +174,66 @@ class CommonContext:
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
-    class ImplicitNameLookupDict(collections.abc.MutableMapping):
-        _store: typing.Dict
+    class NameLookupDict(collections.abc.MutableMapping):
+        _game_store: typing.Dict[str, typing.ChainMap[int, str]]
 
-        def __init__(self, lookup_type: typing.Literal["item", "location"]):
+        def __init__(self, ctx: CommonContext, lookup_type: typing.Literal["item", "location"]):
+            self.ctx = ctx
             self.lookup_type = lookup_type
+            self._unknown_item = lambda key: f"Unknown {lookup_type} (ID: {key})"
             self._archipelago_lookup = {}
-            self._store = collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda key: f"Unknown {lookup_type} "
-                                                                                             f"(ID {key})"))
+            self._game_store = collections.defaultdict(
+                lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
 
-        def __getitem__(self, key):
-            if isinstance(key, str):
-                return self._store[key]
+        # noinspection PyTypeChecker
+        def __getitem__(self, key: str) -> typing.Union[typing.ChainMap[int, str], typing.Dict[int, str]]:
+            # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
+            if isinstance(key, int):
+                logger.warning(f"Implicit name lookup by id only is deprecated and only supported to maintain backwards"
+                               f"compatibility for now. If multiple games share the same id for a {self.lookup_type}, "
+                               f"output could be incorrect. Please use `{self.lookup_type}_names.lookup_by_game()` or "
+                               f"`{self.lookup_type}_names.lookup_by_slot()` instead to avoid this issue.")
+                # Flattened version of self._game_store
+                chain_map = collections.ChainMap([game for game, data in self._game_store.items()])
+                return chain_map[key]
 
-            logger.warning(f"Attempting to do an implicit lookup for an {self.lookup_type}. To avoid ambiguous id "
-                           f"names, attempt lookup with the game name. See f{self.lookup_type}_names docstring for "
-                           f"usage examples.")
-            name = self._store.get(key, f"Unknown {self.lookup_type} (ID: {key})")
-            return name if name is not None else f"Ambiguous {self.lookup_type} (ID: {key})"
+            return self._game_store[key]
 
-        def __setitem__(self, key, value):
-            if isinstance(key, int) and key in self._store:
-                # A `None` value signifies a duplicate item/location with the same id already exists. If anyone is
-                # trying to do an implicit name lookup, we can't be sure which game it is, so this will cause
-                # 'Ambiguous item/location' to be returned when `__getitem__` is called.
-                self._store[key] = None
-                return
+        def __setitem__(self, key: str, value: typing.Union[typing.ChainMap[int, str], typing.Dict[int, str]]):
+            self._game_store[key] = value
 
-            self._store[key] = value
-
-        def __delitem__(self, key):
-            del self._store[key]
+        def __delitem__(self, key: str):
+            del self._game_store[key]
 
         def __len__(self):
-            return len(self._store)
+            return len(self._game_store)
 
         def __iter__(self):
-            return iter(self._store)
+            return iter(self._game_store)
 
         def __repr__(self):
-            return self._store.__repr__()
+            return self._game_store.__repr__()
 
-        def update_game(self, game: str, lookup_table: typing.Dict[str, int]):
-            reverse_lookup_table = Utils.KeyedDefaultDict(lambda key: f"Unknown {self.lookup_type} (ID: {key})")
-            reverse_lookup_table.update({code: name for name, code in lookup_table.items()})
-            self._store[game] = collections.ChainMap(self._archipelago_lookup, reverse_lookup_table)
-            self.update(reverse_lookup_table)
+        def lookup_by_game(self, code: int, game_name: str) -> str:
+            """Returns the name of an item/location in the context of a specific game."""
+            return self._game_store[game_name][code]
+
+        def lookup_by_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
+            """Returns the name of a given item/location in the context of a specific slot or own slot if `slot` is
+            omitted.
+            """
+            return self.lookup_by_game(code, self.ctx.slot_info[slot if slot is not None else self.ctx.slot].game)
+
+        def update_game(self, game: str, name_to_id_lookup_table: typing.Dict[str, int]) -> None:
+            """Overrides existing lookup tables for a particular game."""
+            id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
+            id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
+            self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
                 self._archipelago_lookup.clear()
-                self._archipelago_lookup.update(reverse_lookup_table)
-
-    # data package
-    # Contents in flux until connection to server is made, to download correct data for this multiworld.
-    item_names: ImplicitNameLookupDict
-    """A dictionary lookup of id -> name for items and updates automatically when a new data package arrives. If game 
-    name is omitted, it will attempt a lookup in all game packages.
-    
-    Returns "Unknown item" if an id does not exist in session data package.
-    Returns "Ambiguous item" if a game name is not provided and multiple items share the same id.
-    
-    Example usages::
-        name = item_names[game][id]  # Explicit id lookup with game name.
-        name = item_names[id]        # Implicit id lookup. May return "Ambiguous Item" if duplicate ids exist.
-    """
-    location_names: ImplicitNameLookupDict
-    """A dictionary lookup of id -> name for locations and updates automatically when a new data package arrives. If 
-    game name is omitted, it will attempt a lookup in all game packages.
-
-    Returns "Unknown location" if an id does not exist in session data package.
-    Returns "Ambiguous location" if a game name is not provided and multiple locations share the same id.
-
-    Example usages::
-        name = location_names[game][id]  # Explicit id lookup with game name.
-        name = location_names[id]        # Implicit id lookup. May return "Ambiguous Location" if duplicate ids exist.
-    """
+                self._archipelago_lookup.update(id_to_name_lookup_table)
 
     # defaults
     starting_reconnect_delay: int = 5
@@ -344,8 +328,8 @@ class CommonContext:
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
 
-        self.item_names = self.ImplicitNameLookupDict("item")
-        self.location_names = self.ImplicitNameLookupDict("location")
+        self.item_names = self.NameLookupDict(self, "item")
+        self.location_names = self.NameLookupDict(self, "location")
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
