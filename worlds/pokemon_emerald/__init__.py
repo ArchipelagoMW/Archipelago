@@ -188,7 +188,7 @@ class PokemonEmeraldWorld(World):
             if self.options.legendary_hunt_count.value > len(self.options.allowed_legendary_hunt_encounters.value):
                 logging.warning("Pokemon Emerald: Legendary hunt count for Player %s (%s) higher than number of allowed "
                                 "legendary encounters. Reducing to number of allowed encounters.", self.player,
-                                self.multiworld.player_name[self.player])
+                                self.player_name)
                 self.options.legendary_hunt_count.value = len(self.options.allowed_legendary_hunt_encounters.value)
 
         # Require random wild encounters if dexsanity is enabled
