@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import Options, MissionTables, ItemNames, Items, ItemGroups, mission_groups
+from .. import Options, MissionTables, ItemNames, Items, ItemGroups, MissionGroups
 from .. import get_all_missions
 
 
@@ -93,7 +93,7 @@ class TestItemFiltering(Sc2SetupTestBase):
     def test_excluding_mission_groups_excludes_all_missions_in_group(self):
         options = {
             'excluded_missions': [
-                mission_groups.MissionGroupNames.HOTS_ZERUS_MISSIONS,
+                MissionGroups.MissionGroupNames.HOTS_ZERUS_MISSIONS,
             ],
             'mission_order': Options.MissionOrder.option_grid,
         }
