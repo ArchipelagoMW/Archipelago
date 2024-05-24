@@ -365,42 +365,6 @@ def add_boss_weakness_logic(world: MMX3World):
                     add_rule(multiworld.get_location(region, player),
                              lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
 
-    if world.options.boss_weakness_rando == "vanilla":
-        if world.options.doppler_lab_2_boss == "volt_kurageil":
-            # Set Volt Kurageil rules
-            set_rule(multiworld.get_location(EventName.dr_doppler_lab_2_clear, player),
-                    lambda state: (
-                        state.has(ItemName.frost_shield, player) or
-                        state.has(ItemName.triad_thunder, player)
-                    ))
-            set_rule(multiworld.get_location(LocationName.doppler_lab_2_boss, player),
-                    lambda state: (
-                        state.has(ItemName.frost_shield, player) or
-                        state.has(ItemName.triad_thunder, player)
-                    ))
-        elif world.options.doppler_lab_2_boss == "vile":
-            # Set Vile rematch rules
-            set_rule(multiworld.get_location(EventName.dr_doppler_lab_2_clear, player),
-                    lambda state: (
-                        (
-                            state.has(ItemName.parasitic_bomb, player) or 
-                            state.has(ItemName.tornado_fang, player)
-                        ) and (
-                            state.has(ItemName.spinning_blade, player) or
-                            state.has(ItemName.ray_splasher, player)
-                        )
-                    ))
-            set_rule(multiworld.get_location(LocationName.doppler_lab_2_boss, player),
-                    lambda state: (
-                        (
-                            state.has(ItemName.parasitic_bomb, player) or 
-                            state.has(ItemName.tornado_fang, player)
-                        ) and (
-                            state.has(ItemName.spinning_blade, player) or
-                            state.has(ItemName.ray_splasher, player)
-                        )
-                    ))
-
 
 def add_pickupsanity_logic(world: MMX3World):
     player = world.player
