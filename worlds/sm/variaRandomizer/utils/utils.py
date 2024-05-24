@@ -383,7 +383,7 @@ def loadRandoPreset(options, args):
     args.allowGreyDoors = options.allow_grey_doors.value
     args.bosses = options.boss_randomization.value
     if options.fun_combat.value:
-        args.superFun.append()
+        args.superFun.append("Combat")
     if options.fun_movement.value:
         args.superFun.append("Movement")
     if options.fun_suits.value:
