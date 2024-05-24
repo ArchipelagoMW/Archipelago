@@ -50,40 +50,45 @@ def extractProgression(state, player, options):
         score_mult = 0.01 * number_of_mults
    
     categories = []
+    
+    category_mappings = {
+        "Category Ones": "Ones",
+        "Category Twos": "Twos",
+        "Category Threes": "Threes",
+        "Category Fours": "Fours",
+        "Category Fives": "Fives",
+        "Category Sixes": "Sixes",
+        "Category Choice": "Choice",
+        "Category Inverse Choice": "Choice",
+        "Category Pair": "Pair",
+        "Category Three of a Kind": "ThreeOfAKind",
+        "Category Four of a Kind": "FourOfAKind",
+        "Category Tiny Straight": "TinyStraight",
+        "Category Small Straight": "SmallStraight",
+        "Category Large Straight": "LargeStraight",
+        "Category Full House": "FullHouse",
+        "Category Yacht": "Yacht",
+        "Category Distincts": "Distincts",
+        "Category Two times Ones": "TwoTimesOnes",
+        "Category Half of Sixes": "HalfOfSixes",
+        "Category Twos and Threes": "TwosAndThrees",
+        "Category Sum of Odds": "SumOfOdds",
+        "Category Sum of Evens": "SumOfEvens",
+        "Category Double Threes and Fours": "DoubleThreesAndFours",
+        "Category Quadruple Ones and Twos": "QuadrupleOnesAndTwos",
+        "Category Micro Straight": "MicroStraight",
+        "Category Three Odds": "ThreeOdds",
+        "Category 1-2-1 Consecutive": "OneTwoOneConsecutive",
+        "Category Three Distinct Dice": "ThreeDistinctDice",
+        "Category Two Pair": "TwoPair",
+        "Category 2-1-2 Consecutive": "TwoOneTwoConsecutive",
+        "Category Five Distinct Dice": "FiveDistinctDice",
+        "Category 4&5 Full House": "FourAndFiveFullHouse"
+    }
 
-    if state.has("Category Choice", player, 1):
-        categories.append(Category("Choice"))
-    if state.has("Category Inverse Choice", player, 1):
-        categories.append(Category("Choice"))
-    if state.has("Category Sixes", player, 1):
-        categories.append(Category("Sixes"))
-    if state.has("Category Fives", player, 1):
-        categories.append(Category("Fives"))
-    if state.has("Category Tiny Straight", player, 1):
-        categories.append(Category("TinyStraight"))
-    if state.has("Category Threes", player, 1):
-        categories.append(Category("Threes"))
-    if state.has("Category Fours", player, 1):
-        categories.append(Category("Fours"))
-    if state.has("Category Pair", player, 1):
-        categories.append(Category("Pair"))
-    if state.has("Category Three of a Kind", player, 1):
-        categories.append(Category("ThreeOfAKind"))
-    if state.has("Category Four of a Kind", player, 1):
-        categories.append(Category("FourOfAKind"))
-    if state.has("Category Ones", player, 1):
-        categories.append(Category("Ones"))
-    if state.has("Category Twos", player, 1):
-        categories.append(Category("Twos"))
-    if state.has("Category Small Straight", player, 1):
-        categories.append(Category("SmallStraight"))
-    if state.has("Category Large Straight", player, 1):
-        categories.append(Category("LargeStraight"))
-    if state.has("Category Full House", player, 1):
-        categories.append(Category("FullHouse"))
-    if state.has("Category Yacht", player, 1):
-        categories.append(Category("Yacht"))
-        
+    for category_name, category_value in category_mappings.items():
+        if state.has(category_name, player, 1):
+            categories.append(Category(category_value))      
     
     extra_points_in_logic = state.count("1 Point", player)
     extra_points_in_logic += state.count("10 Points", player) * 10

@@ -71,12 +71,6 @@ item_table = {
 }
 
 ITEM_GROUPS = {
-    "Rolls": {
-        "Roll", "Roll Fragment"
-    },
-    "Dice": {
-        "Dice", "Dice Fragment"
-    },
     "Categories": {
         "Category Ones", 
         "Category Twos", 

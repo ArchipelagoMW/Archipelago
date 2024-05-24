@@ -85,7 +85,7 @@ class YachtDiceWorld(World):
         
         item1 = ["Category Choice", "Category Double Threes and Fours"][categorylist[0]]
         item2 = ["Category Inverse Choice", "Category Quadruple Ones and Twos"][categorylist[1]]
-        
+                
         self.multiworld.push_precollected(self.create_item(item1))
         self.multiworld.push_precollected(self.create_item(item2))
         
@@ -115,21 +115,22 @@ class YachtDiceWorld(World):
         itempool += ["Score Multiplier"] * 10
         
         #add all categories. Note: not "choice" and "inverse choice", they are obtained at the start
-        itempool += ["Category Ones", "Category Distincts"][categorylist[2]]
-        itempool += ["Category Twos", "Category Two times Ones"][categorylist[3]]
-        itempool += ["Category Threes", "Category Half of Sixes"][categorylist[4]]
-        itempool += ["Category Fours", "Category Twos and Threes"][categorylist[5]]
-        itempool += ["Category Fives", "Category Sum of Odds"][categorylist[6]]
-        itempool += ["Category Sixes", "Category Sum of Evens"][categorylist[7]]
+        itempool += [["Category Ones", "Category Distincts"][categorylist[2]]]
+        itempool += [["Category Twos", "Category Two times Ones"][categorylist[3]]]
+        itempool += [["Category Threes", "Category Half of Sixes"][categorylist[4]]]
+        itempool += [["Category Fours", "Category Twos and Threes"][categorylist[5]]]
+        itempool += [["Category Fives", "Category Sum of Odds"][categorylist[6]]]
+        itempool += [["Category Sixes", "Category Sum of Evens"][categorylist[7]]]
         
-        itempool += ["Category Pair", "Category Micro Straight"][categorylist[8]]
-        itempool += ["Category Three of a Kind", "Category Three Odds"][categorylist[9]]
-        itempool += ["Category Four of a Kind", "Category 1-2-1 Consecutive"][categorylist[10]]
-        itempool += ["Category Tiny Straight", "Category Three Distinct Dice"][categorylist[11]]
-        itempool += ["Category Small Straight", "Category Two Pair"][categorylist[12]]
-        itempool += ["Category Large Straight", "Category 2-1-2 Consecutive"][categorylist[13]]
-        itempool += ["Category Full House", "Category Five Distinct Dice"][categorylist[14]]
-        itempool += ["Category Yacht", "Category 4&5 Full House"][categorylist[15]]
+        itempool += [["Category Pair", "Category Micro Straight"][categorylist[8]]]
+        itempool += [["Category Three of a Kind", "Category Three Odds"][categorylist[9]]]
+        itempool += [["Category Four of a Kind", "Category 1-2-1 Consecutive"][categorylist[10]]]
+        itempool += [["Category Tiny Straight", "Category Three Distinct Dice"][categorylist[11]]]
+        itempool += [["Category Small Straight", "Category Two Pair"][categorylist[12]]]
+        itempool += [["Category Large Straight", "Category 2-1-2 Consecutive"][categorylist[13]]]
+        itempool += [["Category Full House", "Category Five Distinct Dice"][categorylist[14]]]
+        itempool += [["Category Yacht", "Category 4&5 Full House"][categorylist[15]]]
+        
         
         if self.options.game_mode.value == 2:
             if(self.options.points_game_mode.value >= 4):
