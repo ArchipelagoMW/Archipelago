@@ -13,7 +13,7 @@ from .options import (get_option_value, MissionOrder,
     ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, EnableMorphling,
     static_mission_orders, dynamic_mission_orders
 )
-from . import ItemNames, item_groups
+from . import item_groups, item_names
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -406,114 +406,114 @@ class ValidInventory:
         if not BARRACKS_UNITS & logical_inventory_set:
             inventory = [
                 item for item in inventory
-                if not (item.name.startswith(ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX)
-                        or item.name == ItemNames.ORBITAL_STRIKE)]
+                if not (item.name.startswith(item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
+                        or item.name == item_names.ORBITAL_STRIKE)]
             unused_items = [
                 item_name for item_name in unused_items
                 if not (item_name.startswith(
-                    ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX)
-                        or item_name == ItemNames.ORBITAL_STRIKE)]
+                    item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
+                        or item_name == item_names.ORBITAL_STRIKE)]
         if not FACTORY_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_VEHICLE_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
         if not STARPORT_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
+            inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
         # HotS
         # Baneling without sources => remove Baneling and upgrades
-        if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
-                and ItemNames.ZERGLING not in self.logical_inventory
-                and ItemNames.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
+        if (item_names.ZERGLING_BANELING_ASPECT in self.logical_inventory
+                and item_names.ZERGLING not in self.logical_inventory
+                and item_names.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
                 and not enable_morphling
         ):
-            inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ZERGLING_BANELING_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
+            inventory = [item for item in inventory if item.name != item_names.ZERGLING_BANELING_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ZERGLING_BANELING_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ZERGLING_BANELING_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ZERGLING_BANELING_ASPECT]
         # Spawn Banelings without Zergling/Morphling => remove Baneling unit, keep upgrades except macro ones
-        if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
-            and ItemNames.ZERGLING not in self.logical_inventory
-            and ItemNames.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
+        if (item_names.ZERGLING_BANELING_ASPECT in self.logical_inventory
+            and item_names.ZERGLING not in self.logical_inventory
+            and item_names.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
             and not enable_morphling
         ):
-            inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
-            inventory = [item for item in inventory if item.name != ItemNames.BANELING_RAPID_METAMORPH]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ZERGLING_BANELING_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.BANELING_RAPID_METAMORPH]
-        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR, ItemNames.SCOURGE} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
-            locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
+            inventory = [item for item in inventory if item.name != item_names.ZERGLING_BANELING_ASPECT]
+            inventory = [item for item in inventory if item.name != item_names.BANELING_RAPID_METAMORPH]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ZERGLING_BANELING_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.BANELING_RAPID_METAMORPH]
+        if not {item_names.MUTALISK, item_names.CORRUPTOR, item_names.SCOURGE} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            locked_items = [item for item in locked_items if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
         # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in and morphling is unavailable
-        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set and not enable_morphling:
+        if not {item_names.MUTALISK, item_names.CORRUPTOR} & logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Mutalisk/Corruptor)")]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
-        if ItemNames.ROACH not in logical_inventory_set and not enable_morphling:
-            inventory = [item for item in inventory if item.name != ItemNames.ROACH_RAVAGER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ROACH_RAVAGER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ROACH_RAVAGER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.ROACH_RAVAGER_ASPECT]
-        if ItemNames.HYDRALISK not in logical_inventory_set and not enable_morphling:
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT]
+        if item_names.ROACH not in logical_inventory_set and not enable_morphling:
+            inventory = [item for item in inventory if item.name != item_names.ROACH_RAVAGER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_RAVAGER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
+        if item_names.HYDRALISK not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.HYDRALISK_LURKER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.HYDRALISK_IMPALER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.HYDRALISK_IMPALER_ASPECT]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Hydralisk)")]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.HYDRALISK_LURKER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.HYDRALISK_IMPALER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.HYDRALISK_IMPALER_ASPECT]
         # LotV
         # Shared unit upgrades between several units
-        if not {ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER} & logical_inventory_set:
+        if not {item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Stalker/Instigator/Slayer)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Stalker/Instigator/Slayer)")]
-        if not {ItemNames.PHOENIX, ItemNames.MIRAGE} & logical_inventory_set:
+        if not {item_names.PHOENIX, item_names.MIRAGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Phoenix/Mirage)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Phoenix/Mirage)")]
-        if not {ItemNames.VOID_RAY, ItemNames.DESTROYER} & logical_inventory_set:
+        if not {item_names.VOID_RAY, item_names.DESTROYER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer)")]
-        if not {ItemNames.IMMORTAL, ItemNames.ANNIHILATOR} & logical_inventory_set:
+        if not {item_names.IMMORTAL, item_names.ANNIHILATOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator)")]
-        if not {ItemNames.DARK_TEMPLAR, ItemNames.AVENGER, ItemNames.BLOOD_HUNTER} & logical_inventory_set:
+        if not {item_names.DARK_TEMPLAR, item_names.AVENGER, item_names.BLOOD_HUNTER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
-        if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR} & logical_inventory_set:
+        if not {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_TEMPLAR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Archon)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Archon)")]
             logical_inventory_set.difference_update([item_name for item_name in logical_inventory_set if item_name.endswith("(Archon)")])
-        if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ARCHON_HIGH_ARCHON} & logical_inventory_set:
+        if not {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ARCHON_HIGH_ARCHON} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(High Templar/Signifier)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(High Templar/Signifier)")]
-        if ItemNames.SUPPLICANT not in logical_inventory_set:
-            inventory = [item for item in inventory if item.name != ItemNames.ASCENDANT_POWER_OVERWHELMING]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ASCENDANT_POWER_OVERWHELMING]
-        if not {ItemNames.DARK_ARCHON, ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD} & logical_inventory_set:
+        if item_names.SUPPLICANT not in logical_inventory_set:
+            inventory = [item for item in inventory if item.name != item_names.ASCENDANT_POWER_OVERWHELMING]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ASCENDANT_POWER_OVERWHELMING]
+        if not {item_names.DARK_ARCHON, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Archon)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Archon)")]
-        if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC} & logical_inventory_set:
+        if not {item_names.SENTRY, item_names.ENERGIZER, item_names.HAVOC} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Sentry/Energizer/Havoc)")]
-        if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC, ItemNames.SHIELD_BATTERY} & logical_inventory_set:
+        if not {item_names.SENTRY, item_names.ENERGIZER, item_names.HAVOC, item_names.SHIELD_BATTERY} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
-        if not {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL} & logical_inventory_set:
+        if not {item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Zealot/Sentinel/Centurion)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Zealot/Sentinel/Centurion)")]
         # Static defense upgrades only if static defense present
-        if not {ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH, ItemNames.NEXUS_OVERCHARGE, ItemNames.SHIELD_BATTERY} & logical_inventory_set:
-            inventory = [item for item in inventory if item.name != ItemNames.ENHANCED_TARGETING]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ENHANCED_TARGETING]
-        if not {ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH, ItemNames.NEXUS_OVERCHARGE} & logical_inventory_set:
-            inventory = [item for item in inventory if item.name != ItemNames.OPTIMIZED_ORDNANCE]
-            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.OPTIMIZED_ORDNANCE]
+        if not {item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH, item_names.NEXUS_OVERCHARGE, item_names.SHIELD_BATTERY} & logical_inventory_set:
+            inventory = [item for item in inventory if item.name != item_names.ENHANCED_TARGETING]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ENHANCED_TARGETING]
+        if not {item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH, item_names.NEXUS_OVERCHARGE} & logical_inventory_set:
+            inventory = [item for item in inventory if item.name != item_names.OPTIMIZED_ORDNANCE]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.OPTIMIZED_ORDNANCE]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items

@@ -7,7 +7,7 @@ from .options import get_option_value, RequiredTactics, kerrigan_unit_available,
 from .items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
     kerrigan_levels, get_full_item_list
 from .mission_tables import SC2Race, SC2Campaign
-from . import ItemNames
+from . import item_names
 from worlds.AutoWorld import World
 
 
@@ -33,8 +33,8 @@ class SC2Logic:
         :return:
         """
         return (
-                state.has_any({ItemNames.MARINE, ItemNames.FIREBAT, ItemNames.MARAUDER, ItemNames.REAPER, ItemNames.HELLION}, self.player)
-                or (self.advanced_tactics and state.has_any({ItemNames.GOLIATH, ItemNames.DIAMONDBACK, ItemNames.VIKING, ItemNames.BANSHEE}, self.player))
+                state.has_any({item_names.MARINE, item_names.FIREBAT, item_names.MARAUDER, item_names.REAPER, item_names.HELLION}, self.player)
+                or (self.advanced_tactics and state.has_any({item_names.GOLIATH, item_names.DIAMONDBACK, item_names.VIKING, item_names.BANSHEE}, self.player))
         )
 
     def terran_air(self, state: CollectionState) -> bool:
@@ -43,8 +43,8 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return (state.has_any({ItemNames.VIKING, ItemNames.WRAITH, ItemNames.BANSHEE, ItemNames.BATTLECRUISER}, self.player) or self.advanced_tactics
-                and state.has_any({ItemNames.HERCULES, ItemNames.MEDIVAC}, self.player) and self.terran_common_unit(state)
+        return (state.has_any({item_names.VIKING, item_names.WRAITH, item_names.BANSHEE, item_names.BATTLECRUISER}, self.player) or self.advanced_tactics
+                and state.has_any({item_names.HERCULES, item_names.MEDIVAC}, self.player) and self.terran_common_unit(state)
         )
 
     def terran_air_anti_air(self, state: CollectionState) -> bool:
@@ -54,10 +54,10 @@ class SC2Logic:
         :return:
         """
         return (
-            state.has(ItemNames.VIKING, self.player)
-            or state.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
-            or state.has_all({ItemNames.BATTLECRUISER, ItemNames.BATTLECRUISER_ATX_LASER_BATTERY}, self.player)
-            or self.advanced_tactics and state.has_any({ItemNames.WRAITH, ItemNames.VALKYRIE, ItemNames.BATTLECRUISER}, self.player)
+            state.has(item_names.VIKING, self.player)
+            or state.has_all({item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
+            or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player)
+            or self.advanced_tactics and state.has_any({item_names.WRAITH, item_names.VALKYRIE, item_names.BATTLECRUISER}, self.player)
         )
 
     def terran_competent_ground_to_air(self, state: CollectionState) -> bool:
@@ -67,9 +67,9 @@ class SC2Logic:
         :return:
         """
         return (
-            state.has(ItemNames.GOLIATH, self.player)
-            or state.has(ItemNames.MARINE, self.player) and self.terran_bio_heal(state)
-            or self.advanced_tactics and state.has(ItemNames.CYCLONE, self.player)
+            state.has(item_names.GOLIATH, self.player)
+            or state.has(item_names.MARINE, self.player) and self.terran_bio_heal(state)
+            or self.advanced_tactics and state.has(item_names.CYCLONE, self.player)
         )
 
     def terran_competent_anti_air(self, state: CollectionState) -> bool:
@@ -94,7 +94,7 @@ class SC2Logic:
             and self.terran_competent_ground_to_air(state)
         ) or (
             self.advanced_tactics
-            and state.has_any({ItemNames.MARINE, ItemNames.VULTURE}, self.player)
+            and state.has_any({item_names.MARINE, item_names.VULTURE}, self.player)
             and self.terran_air_anti_air(state)
         )
 
@@ -106,12 +106,12 @@ class SC2Logic:
         """
         return (
             state.has_any({
-                ItemNames.MISSILE_TURRET, ItemNames.THOR, ItemNames.WAR_PIGS, ItemNames.SPARTAN_COMPANY,
-                ItemNames.HELS_ANGELS, ItemNames.BATTLECRUISER, ItemNames.MARINE, ItemNames.WRAITH,
-                ItemNames.VALKYRIE, ItemNames.CYCLONE, ItemNames.WINGED_NIGHTMARES, ItemNames.BRYNHILDS
+                item_names.MISSILE_TURRET, item_names.THOR, item_names.WAR_PIGS, item_names.SPARTAN_COMPANY,
+                item_names.HELS_ANGELS, item_names.BATTLECRUISER, item_names.MARINE, item_names.WRAITH,
+                item_names.VALKYRIE, item_names.CYCLONE, item_names.WINGED_NIGHTMARES, item_names.BRYNHILDS
             }, self.player)
             or self.terran_competent_anti_air(state)
-            or self.advanced_tactics and state.has_any({ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.WIDOW_MINE, ItemNames.LIBERATOR}, self.player)
+            or self.advanced_tactics and state.has_any({item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR}, self.player)
         )
 
     def terran_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
@@ -124,20 +124,20 @@ class SC2Logic:
         """
         defense_score = sum((defense_ratings[item] for item in defense_ratings if state.has(item, self.player)))
         # Manned Bunker
-        if state.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, self.player) and state.has(ItemNames.BUNKER, self.player):
+        if state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 3
-        elif zerg_enemy and state.has(ItemNames.FIREBAT, self.player) and state.has(ItemNames.BUNKER, self.player):
+        elif zerg_enemy and state.has(item_names.FIREBAT, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 2
         # Siege Tank upgrades
-        if state.has_all({ItemNames.SIEGE_TANK, ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS}, self.player):
+        if state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_MAELSTROM_ROUNDS}, self.player):
             defense_score += 2
-        if state.has_all({ItemNames.SIEGE_TANK, ItemNames.SIEGE_TANK_GRADUATING_RANGE}, self.player):
+        if state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_GRADUATING_RANGE}, self.player):
             defense_score += 1
         # Widow Mine upgrade
-        if state.has_all({ItemNames.WIDOW_MINE, ItemNames.WIDOW_MINE_CONCEALMENT}, self.player):
+        if state.has_all({item_names.WIDOW_MINE, item_names.WIDOW_MINE_CONCEALMENT}, self.player):
             defense_score += 1
         # Viking with splash
-        if state.has_all({ItemNames.VIKING, ItemNames.VIKING_SHREDDER_ROUNDS}, self.player):
+        if state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player):
             defense_score += 2
 
         # General enemy-based rules
@@ -145,7 +145,7 @@ class SC2Logic:
             defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if state.has(item, self.player)))
         if air_enemy:
             defense_score += sum((air_defense_ratings[item] for item in air_defense_ratings if state.has(item, self.player)))
-        if air_enemy and zerg_enemy and state.has(ItemNames.VALKYRIE, self.player):
+        if air_enemy and zerg_enemy and state.has(item_names.VALKYRIE, self.player):
             # Valkyries shred mass Mutas, most common air enemy that's massed in these cases
             defense_score += 2
         # Advanced Tactics bumps defense rating requirements down by 2
@@ -161,13 +161,13 @@ class SC2Logic:
         """
         return (
             (
-                (state.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, self.player) and self.terran_bio_heal(state))
-                or state.has_any({ItemNames.THOR, ItemNames.BANSHEE, ItemNames.SIEGE_TANK}, self.player)
-                or state.has_all({ItemNames.LIBERATOR, ItemNames.LIBERATOR_RAID_ARTILLERY}, self.player)
+                (state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player) and self.terran_bio_heal(state))
+                or state.has_any({item_names.THOR, item_names.BANSHEE, item_names.SIEGE_TANK}, self.player)
+                or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
             )
             and self.terran_competent_anti_air(state)
         ) or (
-            state.has(ItemNames.BATTLECRUISER, self.player) and self.terran_common_unit(state)
+            state.has(item_names.BATTLECRUISER, self.player) and self.terran_common_unit(state)
         )
 
     def great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
@@ -177,12 +177,12 @@ class SC2Logic:
         :return:
         """
         return (
-            state.has_any({ItemNames.SIEGE_TANK, ItemNames.DIAMONDBACK, ItemNames.MARAUDER, ItemNames.CYCLONE, ItemNames.BANSHEE}, self.player)
+            state.has_any({item_names.SIEGE_TANK, item_names.DIAMONDBACK, item_names.MARAUDER, item_names.CYCLONE, item_names.BANSHEE}, self.player)
             or self.advanced_tactics
             and (
-                state.has_all({ItemNames.REAPER, ItemNames.REAPER_G4_CLUSTERBOMB}, self.player)
-                or state.has_all({ItemNames.SPECTRE, ItemNames.SPECTRE_PSIONIC_LASH}, self.player)
-                or state.has_any({ItemNames.VULTURE, ItemNames.LIBERATOR}, self.player)
+                state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
+                or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
             )
         )
 
@@ -192,7 +192,7 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has_any({ItemNames.MEDIVAC, ItemNames.HERCULES, ItemNames.RAVEN, ItemNames.VIKING}, self.player) or self.advanced_tactics
+        return state.has_any({item_names.MEDIVAC, item_names.HERCULES, item_names.RAVEN, item_names.VIKING}, self.player) or self.advanced_tactics
 
     def terran_beats_protoss_deathball(self, state: CollectionState) -> bool:
         """
@@ -202,8 +202,8 @@ class SC2Logic:
         """
         return (
             (
-                state.has_any({ItemNames.BANSHEE, ItemNames.BATTLECRUISER}, self.player)
-                or state.has_all({ItemNames.LIBERATOR, ItemNames.LIBERATOR_RAID_ARTILLERY}, self.player)
+                state.has_any({item_names.BANSHEE, item_names.BATTLECRUISER}, self.player)
+                or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
             ) and self.terran_competent_anti_air(state)
             or self.terran_competent_comp(state) and self.terran_air_anti_air(state)
         )
@@ -215,9 +215,9 @@ class SC2Logic:
         :return:
         """
         return state.has_any({
-            ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MARINE_MAGRAIL_MUNITIONS, ItemNames.MEDIC_STABILIZER_MEDPACKS
+            item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_MAGRAIL_MUNITIONS, item_names.MEDIC_STABILIZER_MEDPACKS
         }, self.player) \
-            or (state.count(ItemNames.MARINE_PROGRESSIVE_STIMPACK, self.player) >= 2
+            or (state.count(item_names.MARINE_PROGRESSIVE_STIMPACK, self.player) >= 2
                 and state.has_group("Missions", self.player, 1))
 
     def terran_survives_rip_field(self, state: CollectionState) -> bool:
@@ -226,7 +226,7 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return (state.has(ItemNames.BATTLECRUISER, self.player)
+        return (state.has(item_names.BATTLECRUISER, self.player)
                 or self.terran_air(state) and self.terran_competent_anti_air(state) and self.terran_sustainable_mech_heal(state))
 
     def terran_sustainable_mech_heal(self, state: CollectionState) -> bool:
@@ -235,13 +235,13 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has(ItemNames.SCIENCE_VESSEL, self.player) \
-            or state.has_all({ItemNames.MEDIC, ItemNames.MEDIC_ADAPTIVE_MEDPACKS}, self.player) \
-            or state.count(ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3 \
+        return state.has(item_names.SCIENCE_VESSEL, self.player) \
+            or state.has_all({item_names.MEDIC, item_names.MEDIC_ADAPTIVE_MEDPACKS}, self.player) \
+            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3 \
             or (self.advanced_tactics
                 and (
-                        state.has_all({ItemNames.RAVEN, ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
-                        or state.count(ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2)
+                        state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+                        or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2)
                 )
 
     def terran_bio_heal(self, state: CollectionState) -> bool:
@@ -250,8 +250,8 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has_any({ItemNames.MEDIC, ItemNames.MEDIVAC}, self.player) \
-            or self.advanced_tactics and state.has_all({ItemNames.RAVEN, ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+        return state.has_any({item_names.MEDIC, item_names.MEDIVAC}, self.player) \
+            or self.advanced_tactics and state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
 
     def terran_base_trasher(self, state: CollectionState) -> bool:
         """
@@ -259,20 +259,20 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has(ItemNames.SIEGE_TANK, self.player) \
-            or state.has_all({ItemNames.BATTLECRUISER, ItemNames.BATTLECRUISER_ATX_LASER_BATTERY}, self.player) \
-            or state.has_all({ItemNames.LIBERATOR, ItemNames.LIBERATOR_RAID_ARTILLERY}, self.player) \
+        return state.has(item_names.SIEGE_TANK, self.player) \
+            or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player) \
+            or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player) \
             or (self.advanced_tactics
-                and ((state.has_all({ItemNames.RAVEN, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
+                and ((state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
                       or self.can_nuke(state))
                      and (
-                             state.has_all({ItemNames.VIKING, ItemNames.VIKING_SHREDDER_ROUNDS}, self.player)
-                             or state.has_all({ItemNames.BANSHEE, ItemNames.BANSHEE_SHOCKWAVE_MISSILE_BATTERY}, self.player))
+                             state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
+                             or state.has_all({item_names.BANSHEE, item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY}, self.player))
                      )
                 )
 
     def terran_mobile_detector(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.RAVEN, ItemNames.SCIENCE_VESSEL, ItemNames.PROGRESSIVE_ORBITAL_COMMAND}, self.player)
+        return state.has_any({item_names.RAVEN, item_names.SCIENCE_VESSEL, item_names.PROGRESSIVE_ORBITAL_COMMAND}, self.player)
 
     def can_nuke(self, state: CollectionState) -> bool:
         """
@@ -281,8 +281,8 @@ class SC2Logic:
         :return:
         """
         return (self.advanced_tactics
-                and (state.has_any({ItemNames.GHOST, ItemNames.SPECTRE}, self.player)
-                     or state.has_all({ItemNames.THOR, ItemNames.THOR_BUTTON_WITH_A_SKULL_ON_IT}, self.player)))
+                and (state.has_any({item_names.GHOST, item_names.SPECTRE}, self.player)
+                     or state.has_all({item_names.THOR, item_names.THOR_BUTTON_WITH_A_SKULL_ON_IT}, self.player)))
 
     def terran_respond_to_colony_infestations(self, state: CollectionState) -> bool:
         """
@@ -295,7 +295,7 @@ class SC2Logic:
             and self.terran_competent_anti_air(state)
             and (
                     self.terran_air_anti_air(state)
-                    or state.has_any({ItemNames.BATTLECRUISER, ItemNames.VALKYRIE}, self.player)
+                    or state.has_any({item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player)
                 )
             and self.terran_defense_rating(state, True) >= 3
         )
@@ -304,7 +304,7 @@ class SC2Logic:
         return self.marine_medic_upgrade(state) \
         and (
                 self.terran_competent_anti_air(state)
-                and self.terran_common_unit(state) or state.has(ItemNames.WRAITH, self.player)
+                and self.terran_common_unit(state) or state.has(item_names.WRAITH, self.player)
         )
 
     def all_in_requirement(self, state: CollectionState):
@@ -313,73 +313,73 @@ class SC2Logic:
         :param state:
         :return:
         """
-        beats_kerrigan = state.has_any({ItemNames.MARINE, ItemNames.BANSHEE, ItemNames.GHOST}, self.player) or self.advanced_tactics
+        beats_kerrigan = state.has_any({item_names.MARINE, item_names.BANSHEE, item_names.GHOST}, self.player) or self.advanced_tactics
         if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
-            if state.has_any({ItemNames.BATTLECRUISER, ItemNames.BANSHEE}, self.player):
+            if state.has_any({item_names.BATTLECRUISER, item_names.BANSHEE}, self.player):
                 defense_rating += 2
             return defense_rating >= 13 and beats_kerrigan
         else:
             # Air
             defense_rating = self.terran_defense_rating(state, True, True)
             return defense_rating >= 9 and beats_kerrigan \
-                and state.has_any({ItemNames.VIKING, ItemNames.BATTLECRUISER, ItemNames.VALKYRIE}, self.player) \
-                and state.has_any({ItemNames.HIVE_MIND_EMULATOR, ItemNames.PSI_DISRUPTER, ItemNames.MISSILE_TURRET}, self.player)
+                and state.has_any({item_names.VIKING, item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player) \
+                and state.has_any({item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER, item_names.MISSILE_TURRET}, self.player)
 
     # HotS
     def zerg_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_zerg_units, self.player)
 
     def zerg_competent_anti_air(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK, ItemNames.CORRUPTOR, ItemNames.BROOD_QUEEN}, self.player) \
-            or state.has_all({ItemNames.SWARM_HOST, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) \
-            or state.has_all({ItemNames.SCOURGE, ItemNames.SCOURGE_RESOURCE_EFFICIENCY}, self.player) \
-            or (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
+        return state.has_any({item_names.HYDRALISK, item_names.MUTALISK, item_names.CORRUPTOR, item_names.BROOD_QUEEN}, self.player) \
+            or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) \
+            or state.has_all({item_names.SCOURGE, item_names.SCOURGE_RESOURCE_EFFICIENCY}, self.player) \
+            or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
 
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
         return self.zerg_competent_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available or \
-               state.has_any({ItemNames.SWARM_QUEEN, ItemNames.SCOURGE}, self.player) or (self.advanced_tactics and state.has(ItemNames.SPORE_CRAWLER, self.player))
+               state.has_any({item_names.SWARM_QUEEN, item_names.SCOURGE}, self.player) or (self.advanced_tactics and state.has(item_names.SPORE_CRAWLER, self.player))
     
     def morph_brood_lord(self, state: CollectionState) -> bool:
-        return (state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) or self.morphling_enabled) \
-            and state.has(ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
+        return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
+            and state.has(item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
     
     def morph_viper(self, state: CollectionState) -> bool:
-        return (state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) or self.morphling_enabled) \
-            and state.has(ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
+        return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
+            and state.has(item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
 
     def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
-        return (state.has(ItemNames.HYDRALISK, self.player) or self.morphling_enabled) \
-            and state.has_any({ItemNames.HYDRALISK_IMPALER_ASPECT, ItemNames.HYDRALISK_LURKER_ASPECT}, self.player)
+        return (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled) \
+            and state.has_any({item_names.HYDRALISK_IMPALER_ASPECT, item_names.HYDRALISK_LURKER_ASPECT}, self.player)
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
-        core_unit = state.has_any({ItemNames.ROACH, ItemNames.ABERRATION, ItemNames.ZERGLING}, self.player)
-        support_unit = state.has_any({ItemNames.SWARM_QUEEN, ItemNames.HYDRALISK}, self.player) \
+        core_unit = state.has_any({item_names.ROACH, item_names.ABERRATION, item_names.ZERGLING}, self.player)
+        support_unit = state.has_any({item_names.SWARM_QUEEN, item_names.HYDRALISK}, self.player) \
                        or self.morph_brood_lord(state) \
-                       or advanced and (state.has_any({ItemNames.INFESTOR, ItemNames.DEFILER}, self.player) or self.morph_viper(state))
+                       or advanced and (state.has_any({item_names.INFESTOR, item_names.DEFILER}, self.player) or self.morph_viper(state))
         if core_unit and support_unit:
             return True
-        vespene_unit = state.has_any({ItemNames.ULTRALISK, ItemNames.ABERRATION}, self.player) \
+        vespene_unit = state.has_any({item_names.ULTRALISK, item_names.ABERRATION}, self.player) \
                        or advanced and self.morph_viper(state)
-        return vespene_unit and state.has_any({ItemNames.ZERGLING, ItemNames.SWARM_QUEEN}, self.player)
+        return vespene_unit and state.has_any({item_names.ZERGLING, item_names.SWARM_QUEEN}, self.player)
 
     def spread_creep(self, state: CollectionState) -> bool:
-        return self.advanced_tactics or state.has(ItemNames.SWARM_QUEEN, self.player)
+        return self.advanced_tactics or state.has(item_names.SWARM_QUEEN, self.player)
     
     def zerg_competent_defense(self, state: CollectionState) -> bool:
         return (
             self.zerg_common_unit(state)
             and (
                 (
-                    state.has(ItemNames.SWARM_HOST, self.player)
+                    state.has(item_names.SWARM_HOST, self.player)
                     or self.morph_brood_lord(state)
                     or self.morph_impaler_or_lurker(state)
                 ) or (
                     self.advanced_tactics
                     and (self.morph_viper(state)
-                        or state.has(ItemNames.SPINE_CRAWLER, self.player))
+                        or state.has(item_names.SPINE_CRAWLER, self.player))
                 )
             )
         )
@@ -387,15 +387,15 @@ class SC2Logic:
     def basic_kerrigan(self, state: CollectionState) -> bool:
         # One active ability that can be used to defeat enemies directly on Standard
         if not self.advanced_tactics and \
-            not state.has_any({ItemNames.KERRIGAN_KINETIC_BLAST, ItemNames.KERRIGAN_LEAPING_STRIKE,
-                              ItemNames.KERRIGAN_CRUSHING_GRIP, ItemNames.KERRIGAN_PSIONIC_SHIFT,
-                              ItemNames.KERRIGAN_SPAWN_BANELINGS}, self.player):
+            not state.has_any({item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE,
+                              item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
+                              item_names.KERRIGAN_SPAWN_BANELINGS}, self.player):
             return False
         # Two non-ultimate abilities
         count = 0
-        for item in (ItemNames.KERRIGAN_KINETIC_BLAST, ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_HEROIC_FORTITUDE,
-                     ItemNames.KERRIGAN_CHAIN_REACTION, ItemNames.KERRIGAN_CRUSHING_GRIP, ItemNames.KERRIGAN_PSIONIC_SHIFT,
-                     ItemNames.KERRIGAN_SPAWN_BANELINGS, ItemNames.KERRIGAN_INFEST_BROODLINGS, ItemNames.KERRIGAN_FURY):
+        for item in (item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_HEROIC_FORTITUDE,
+                     item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
+                     item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY):
             if state.has(item, self.player):
                 count += 1
             if count >= 2:
@@ -411,14 +411,14 @@ class SC2Logic:
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
-            or state.has_any({ItemNames.ZERGLING, ItemNames.HYDRALISK, ItemNames.ROACH}, self.player) \
-            or (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
+            or state.has_any({item_names.ZERGLING, item_names.HYDRALISK, item_names.ROACH}, self.player) \
+            or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
 
     def supreme_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
             or not self.kerrigan_unit_available \
             or (
-                state.has_all({ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_MEND}, self.player)
+                state.has_all({item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_MEND}, self.player)
                 and self.kerrigan_levels(state, 35)
             )
 
@@ -464,59 +464,59 @@ class SC2Logic:
 
     def protoss_basic_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER, ItemNames.SCOUT,
-                             ItemNames.DARK_ARCHON, ItemNames.WRATHWALKER, ItemNames.MOTHERSHIP}, self.player) \
-            or state.has_all({ItemNames.WARP_PRISM, ItemNames.WARP_PRISM_PHASE_BLASTER}, self.player) \
+            or state.has_any({item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER, item_names.SCOUT,
+                             item_names.DARK_ARCHON, item_names.WRATHWALKER, item_names.MOTHERSHIP}, self.player) \
+            or state.has_all({item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER}, self.player) \
             or self.advanced_tactics and state.has_any(
-                {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR,
-                 ItemNames.SENTRY, ItemNames.ENERGIZER}, self.player)
+                {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_TEMPLAR,
+                 item_names.SENTRY, item_names.ENERGIZER}, self.player)
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, self.player) \
-            or (state.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, self.player)
-                and state.has(ItemNames.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
+            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER}, self.player) \
+            or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
+                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_anti_light_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, self.player)
+            or state.has_any({item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER}, self.player)
 
     def protoss_competent_anti_air(self, state: CollectionState) -> bool:
         return state.has_any(
-            {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.DRAGOON, ItemNames.ADEPT,
-             ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.TEMPEST}, self.player) \
-            or (state.has_any({ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR, ItemNames.CARRIER}, self.player)
-                and state.has_any({ItemNames.SCOUT, ItemNames.WRATHWALKER}, self.player)) \
+            {item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
+             item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST}, self.player) \
+            or (state.has_any({item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER}, self.player)
+                and state.has_any({item_names.SCOUT, item_names.WRATHWALKER}, self.player)) \
             or (self.advanced_tactics
-                and state.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, self.player)
-                and state.has(ItemNames.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
+                and state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
+                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_has_blink(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER}, self.player) \
+        return state.has_any({item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER}, self.player) \
             or (
-                    state.has(ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK, self.player)
-                    and state.has_any({ItemNames.DARK_TEMPLAR, ItemNames.BLOOD_HUNTER, ItemNames.AVENGER}, self.player)
+                    state.has(item_names.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK, self.player)
+                    and state.has_any({item_names.DARK_TEMPLAR, item_names.BLOOD_HUNTER, item_names.AVENGER}, self.player)
             )
 
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any(
-            {ItemNames.SCOUT, ItemNames.TEMPEST,
-             ItemNames.CARRIER, ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.MOTHERSHIP}, self.player) \
+            {item_names.SCOUT, item_names.TEMPEST,
+             item_names.CARRIER, item_names.VOID_RAY, item_names.DESTROYER, item_names.MOTHERSHIP}, self.player) \
             or self.protoss_has_blink(state) \
-            or (state.has(ItemNames.WARP_PRISM, self.player)
-                and (self.protoss_common_unit(state) or state.has(ItemNames.WARP_PRISM_PHASE_BLASTER, self.player))) \
+            or (state.has(item_names.WARP_PRISM, self.player)
+                and (self.protoss_common_unit(state) or state.has(item_names.WARP_PRISM_PHASE_BLASTER, self.player))) \
             or (self.advanced_tactics
-                and state.has_any({ItemNames.ORACLE, ItemNames.ARBITER}, self.player))
+                and state.has_any({item_names.ORACLE, item_names.ARBITER}, self.player))
 
     def protoss_fleet(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.CARRIER, ItemNames.TEMPEST, ItemNames.VOID_RAY, ItemNames.DESTROYER}, self.player)
+        return state.has_any({item_names.CARRIER, item_names.TEMPEST, item_names.VOID_RAY, item_names.DESTROYER}, self.player)
 
     def templars_return_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
             or (
-                state.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, self.player)
-                and state.has_any({ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.REAVER, ItemNames.DARK_TEMPLAR}, self.player)
-                and state.has_any({ItemNames.SENTRY, ItemNames.HIGH_TEMPLAR}, self.player)
+                state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
+                and state.has_any({item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR}, self.player)
+                and state.has_any({item_names.SENTRY, item_names.HIGH_TEMPLAR}, self.player)
             )
 
     def brothers_in_arms_requirement(self, state: CollectionState) -> bool:
@@ -536,10 +536,10 @@ class SC2Logic:
                 )
                 and (
                         self.protoss_hybrid_counter(state)
-                        or state.has_any({ItemNames.BATTLECRUISER, ItemNames.LIBERATOR, ItemNames.SIEGE_TANK}, self.player)
-                        or state.has_all({ItemNames.SPECTRE, ItemNames.SPECTRE_PSIONIC_LASH}, self.player)
-                        or (state.has(ItemNames.IMMORTAL, self.player)
-                            and state.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, self.player)
+                        or state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.SIEGE_TANK}, self.player)
+                        or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                        or (state.has(item_names.IMMORTAL, self.player)
+                            and state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player)
                             and self.terran_bio_heal(state))
                 )
         )
@@ -549,10 +549,10 @@ class SC2Logic:
         Ground Hybrids
         """
         return state.has_any(
-            {ItemNames.ANNIHILATOR, ItemNames.ASCENDANT, ItemNames.TEMPEST, ItemNames.CARRIER, ItemNames.VOID_RAY,
-             ItemNames.WRATHWALKER, ItemNames.VANGUARD}, self.player) \
-            or (state.has(ItemNames.IMMORTAL, self.player) or self.advanced_tactics) and state.has_any(
-                {ItemNames.STALKER, ItemNames.DRAGOON, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.SLAYER}, self.player)
+            {item_names.ANNIHILATOR, item_names.ASCENDANT, item_names.TEMPEST, item_names.CARRIER, item_names.VOID_RAY,
+             item_names.WRATHWALKER, item_names.VANGUARD}, self.player) \
+            or (state.has(item_names.IMMORTAL, self.player) or self.advanced_tactics) and state.has_any(
+                {item_names.STALKER, item_names.DRAGOON, item_names.ADEPT, item_names.INSTIGATOR, item_names.SLAYER}, self.player)
 
     def the_infinite_cycle_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
@@ -565,11 +565,11 @@ class SC2Logic:
 
     def protoss_basic_splash(self, state: CollectionState) -> bool:
         return state.has_any(
-            {ItemNames.ZEALOT, ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER,
-             ItemNames.DARK_TEMPLAR, ItemNames.REAVER, ItemNames.ASCENDANT}, self.player)
+            {item_names.ZEALOT, item_names.COLOSSUS, item_names.VANGUARD, item_names.HIGH_TEMPLAR, item_names.SIGNIFIER,
+             item_names.DARK_TEMPLAR, item_names.REAVER, item_names.ASCENDANT}, self.player)
 
     def protoss_static_defense(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH}, self.player)
+        return state.has_any({item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH}, self.player)
 
     def last_stand_requirement(self, state: CollectionState) -> bool:
         return self.protoss_common_unit(state) \
@@ -598,8 +598,8 @@ class SC2Logic:
     def protoss_stalker_upgrade(self, state: CollectionState) -> bool:
         return (
             state.has_any({
-                ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
-                ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION
+                item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
+                item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION
             }, self.player)
         )
 
@@ -612,7 +612,7 @@ class SC2Logic:
             )
 
     def protoss_heal(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.CARRIER, ItemNames.SENTRY, ItemNames.SHIELD_BATTERY, ItemNames.RECONSTRUCTION_BEAM}, self.player)
+        return state.has_any({item_names.CARRIER, item_names.SENTRY, item_names.SHIELD_BATTERY, item_names.RECONSTRUCTION_BEAM}, self.player)
 
     def templars_charge_requirement(self, state: CollectionState) -> bool:
         return self.protoss_heal(state) \
@@ -629,7 +629,7 @@ class SC2Logic:
                 and self.protoss_static_defense(state)
                 ) or (
                 self.protoss_competent_comp(state)
-                and state.has(ItemNames.SOA_TIME_STOP, self.player)
+                and state.has(item_names.SOA_TIME_STOP, self.player)
         )
 
     def salvation_requirement(self, state: CollectionState) -> bool:
@@ -644,9 +644,9 @@ class SC2Logic:
             or (
                     self.take_over_ai_allies
                     and (
-                            state.has(ItemNames.BATTLECRUISER, self.player)
+                            state.has(item_names.BATTLECRUISER, self.player)
                             or (
-                                    state.has(ItemNames.ULTRALISK, self.player)
+                                    state.has(item_names.ULTRALISK, self.player)
                                     and self.protoss_competent_anti_air(state)
                             )
                     )
@@ -663,29 +663,29 @@ class SC2Logic:
                     and self.protoss_competent_anti_air(state)
             ) \
             and (
-                    state.has(ItemNames.BATTLECRUISER, self.player)
-                    or (state.has(ItemNames.BANSHEE, self.player) and state.has_any({ItemNames.VIKING, ItemNames.VALKYRIE},
+                    state.has(item_names.BATTLECRUISER, self.player)
+                    or (state.has(item_names.BANSHEE, self.player) and state.has_any({item_names.VIKING, item_names.VALKYRIE},
                                                                                     self.player))
                     or self.take_over_ai_allies and self.protoss_fleet(state)
             ) \
-            and state.has_any({ItemNames.SIEGE_TANK, ItemNames.LIBERATOR}, self.player)
+            and state.has_any({item_names.SIEGE_TANK, item_names.LIBERATOR}, self.player)
 
     def amons_fall_requirement(self, state: CollectionState) -> bool:
         if self.take_over_ai_allies:
             return (
                     (
-                        state.has_any({ItemNames.BATTLECRUISER, ItemNames.CARRIER}, self.player)
+                        state.has_any({item_names.BATTLECRUISER, item_names.CARRIER}, self.player)
                     )
-                    or (state.has(ItemNames.ULTRALISK, self.player)
+                    or (state.has(item_names.ULTRALISK, self.player)
                         and self.protoss_competent_anti_air(state)
                         and (
-                                state.has_any({ItemNames.LIBERATOR, ItemNames.BANSHEE, ItemNames.VALKYRIE, ItemNames.VIKING}, self.player)
-                                or state.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
+                                state.has_any({item_names.LIBERATOR, item_names.BANSHEE, item_names.VALKYRIE, item_names.VIKING}, self.player)
+                                or state.has_all({item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
                                 or self.protoss_fleet(state)
                         )
                         and (self.terran_sustainable_mech_heal(state)
                              or (self.spear_of_adun_autonomously_cast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere
-                                 and state.has(ItemNames.RECONSTRUCTION_BEAM, self.player))
+                                 and state.has(item_names.RECONSTRUCTION_BEAM, self.player))
                              )
                         )
             ) \
@@ -693,36 +693,36 @@ class SC2Logic:
                 and self.protoss_competent_comp(state) \
                 and self.zerg_competent_comp(state)
         else:
-            return state.has(ItemNames.MUTALISK, self.player) and self.zerg_competent_comp(state)
+            return state.has(item_names.MUTALISK, self.player) and self.zerg_competent_comp(state)
 
     def nova_any_weapon(self, state: CollectionState) -> bool:
         return state.has_any(
-            {ItemNames.NOVA_C20A_CANISTER_RIFLE, ItemNames.NOVA_HELLFIRE_SHOTGUN, ItemNames.NOVA_PLASMA_RIFLE,
-             ItemNames.NOVA_MONOMOLECULAR_BLADE, ItemNames.NOVA_BLAZEFIRE_GUNBLADE}, self.player)
+            {item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_PLASMA_RIFLE,
+             item_names.NOVA_MONOMOLECULAR_BLADE, item_names.NOVA_BLAZEFIRE_GUNBLADE}, self.player)
 
     def nova_ranged_weapon(self, state: CollectionState) -> bool:
         return state.has_any(
-            {ItemNames.NOVA_C20A_CANISTER_RIFLE, ItemNames.NOVA_HELLFIRE_SHOTGUN, ItemNames.NOVA_PLASMA_RIFLE},
+            {item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_PLASMA_RIFLE},
             self.player)
 
     def nova_splash(self, state: CollectionState) -> bool:
         return state.has_any({
-            ItemNames.NOVA_HELLFIRE_SHOTGUN, ItemNames.NOVA_BLAZEFIRE_GUNBLADE, ItemNames.NOVA_PULSE_GRENADES
+            item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_BLAZEFIRE_GUNBLADE, item_names.NOVA_PULSE_GRENADES
         }, self.player) \
             or self.advanced_tactics and state.has_any(
-                {ItemNames.NOVA_PLASMA_RIFLE, ItemNames.NOVA_MONOMOLECULAR_BLADE}, self.player)
+                {item_names.NOVA_PLASMA_RIFLE, item_names.NOVA_MONOMOLECULAR_BLADE}, self.player)
 
     def nova_dash(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.NOVA_MONOMOLECULAR_BLADE, ItemNames.NOVA_BLINK}, self.player)
+        return state.has_any({item_names.NOVA_MONOMOLECULAR_BLADE, item_names.NOVA_BLINK}, self.player)
 
     def nova_full_stealth(self, state: CollectionState) -> bool:
-        return state.count(ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE, self.player) >= 2
+        return state.count(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE, self.player) >= 2
 
     def nova_heal(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.NOVA_ARMORED_SUIT_MODULE, ItemNames.NOVA_STIM_INFUSION}, self.player)
+        return state.has_any({item_names.NOVA_ARMORED_SUIT_MODULE, item_names.NOVA_STIM_INFUSION}, self.player)
 
     def nova_escape_assist(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.NOVA_BLINK, ItemNames.NOVA_HOLO_DECOY, ItemNames.NOVA_IONIC_FORCE_FIELD}, self.player)
+        return state.has_any({item_names.NOVA_BLINK, item_names.NOVA_HOLO_DECOY, item_names.NOVA_IONIC_FORCE_FIELD}, self.player)
 
     def the_escape_stuff_granted(self) -> bool:
         """
@@ -741,30 +741,30 @@ class SC2Logic:
             and (self.the_escape_stuff_granted() or self.nova_splash(state))
 
     def terran_cliffjumper(self, state: CollectionState) -> bool:
-        return state.has(ItemNames.REAPER, self.player) \
-                or state.has_all({ItemNames.GOLIATH, ItemNames.GOLIATH_JUMP_JETS}, self.player) \
-                or state.has_all({ItemNames.SIEGE_TANK, ItemNames.SIEGE_TANK_JUMP_JETS}, self.player)
+        return state.has(item_names.REAPER, self.player) \
+                or state.has_all({item_names.GOLIATH, item_names.GOLIATH_JUMP_JETS}, self.player) \
+                or state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_JUMP_JETS}, self.player)
 
     def terran_able_to_snipe_defiler(self, state: CollectionState) -> bool:
-        return state.has_all({ItemNames.NOVA_JUMP_SUIT_MODULE, ItemNames.NOVA_C20A_CANISTER_RIFLE}, self.player) \
-                or state.has_all({ItemNames.SIEGE_TANK, ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS, ItemNames.SIEGE_TANK_JUMP_JETS}, self.player)
+        return state.has_all({item_names.NOVA_JUMP_SUIT_MODULE, item_names.NOVA_C20A_CANISTER_RIFLE}, self.player) \
+                or state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_MAELSTROM_ROUNDS, item_names.SIEGE_TANK_JUMP_JETS}, self.player)
 
     def sudden_strike_requirement(self, state: CollectionState) -> bool:
         return self.sudden_strike_can_reach_objectives(state) \
             and self.terran_able_to_snipe_defiler(state) \
-            and state.has_any({ItemNames.SIEGE_TANK, ItemNames.VULTURE}, self.player) \
+            and state.has_any({item_names.SIEGE_TANK, item_names.VULTURE}, self.player) \
             and self.nova_splash(state) \
             and (self.terran_defense_rating(state, True, False) >= 2
-                 or state.has(ItemNames.NOVA_JUMP_SUIT_MODULE, self.player))
+                 or state.has(item_names.NOVA_JUMP_SUIT_MODULE, self.player))
 
     def sudden_strike_can_reach_objectives(self, state: CollectionState) -> bool:
         return self.terran_cliffjumper(state) \
-            or state.has_any({ItemNames.BANSHEE, ItemNames.VIKING}, self.player) \
+            or state.has_any({item_names.BANSHEE, item_names.VIKING}, self.player) \
             or (
                     self.advanced_tactics
-                    and state.has(ItemNames.MEDIVAC, self.player)
-                    and state.has_any({ItemNames.MARINE, ItemNames.MARAUDER, ItemNames.VULTURE, ItemNames.HELLION,
-                                       ItemNames.GOLIATH}, self.player)
+                    and state.has(item_names.MEDIVAC, self.player)
+                    and state.has_any({item_names.MARINE, item_names.MARAUDER, item_names.VULTURE, item_names.HELLION,
+                                       item_names.GOLIATH}, self.player)
             )
 
     def enemy_intelligence_garrisonable_unit(self, state: CollectionState) -> bool:
@@ -774,14 +774,14 @@ class SC2Logic:
         :return:
         """
         return state.has_any(
-            {ItemNames.MARINE, ItemNames.REAPER, ItemNames.MARAUDER, ItemNames.GHOST, ItemNames.SPECTRE,
-             ItemNames.HELLION, ItemNames.GOLIATH, ItemNames.WARHOUND, ItemNames.DIAMONDBACK, ItemNames.VIKING},
+            {item_names.MARINE, item_names.REAPER, item_names.MARAUDER, item_names.GHOST, item_names.SPECTRE,
+             item_names.HELLION, item_names.GOLIATH, item_names.WARHOUND, item_names.DIAMONDBACK, item_names.VIKING},
             self.player)
 
     def enemy_intelligence_cliff_garrison(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.REAPER, ItemNames.VIKING, ItemNames.MEDIVAC, ItemNames.HERCULES}, self.player) \
-            or state.has_all({ItemNames.GOLIATH, ItemNames.GOLIATH_JUMP_JETS}, self.player) \
-            or self.advanced_tactics and state.has_any({ItemNames.HELS_ANGELS, ItemNames.BRYNHILDS}, self.player)
+        return state.has_any({item_names.REAPER, item_names.VIKING, item_names.MEDIVAC, item_names.HERCULES}, self.player) \
+            or state.has_all({item_names.GOLIATH, item_names.GOLIATH_JUMP_JETS}, self.player) \
+            or self.advanced_tactics and state.has_any({item_names.HELS_ANGELS, item_names.BRYNHILDS}, self.player)
 
     def enemy_intelligence_first_stage_requirement(self, state: CollectionState) -> bool:
         return self.enemy_intelligence_garrisonable_unit(state) \
@@ -789,7 +789,7 @@ class SC2Logic:
                  or (
                          self.terran_common_unit(state)
                          and self.terran_competent_anti_air(state)
-                         and state.has(ItemNames.NOVA_NUKE, self.player)
+                         and state.has(item_names.NOVA_NUKE, self.player)
                  )
                  ) \
             and self.terran_defense_rating(state, True, True) >= 5
@@ -815,7 +815,7 @@ class SC2Logic:
             and (
                     self.story_tech_granted
                     or (
-                            state.has(ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE, self.player)
+                            state.has(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE, self.player)
                             and self.nova_dash(state)
                     )
             )
@@ -831,25 +831,25 @@ class SC2Logic:
             and self.terran_competent_anti_air(state) \
             and (
                 # These can handle the waves of infested, even volatile ones
-                    state.has(ItemNames.SIEGE_TANK, self.player)
-                    or state.has_all({ItemNames.VIKING, ItemNames.VIKING_SHREDDER_ROUNDS}, self.player)
+                    state.has(item_names.SIEGE_TANK, self.player)
+                    or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
                     or (
                             (
                                 # Regular infesteds
-                                    state.has(ItemNames.FIREBAT, self.player)
-                                    or state.has_all({ItemNames.HELLION, ItemNames.HELLION_HELLBAT_ASPECT}, self.player)
+                                    state.has(item_names.FIREBAT, self.player)
+                                    or state.has_all({item_names.HELLION, item_names.HELLION_HELLBAT_ASPECT}, self.player)
                                     or (
                                             self.advanced_tactics
-                                            and state.has_any({ItemNames.PERDITION_TURRET, ItemNames.PLANETARY_FORTRESS}, self.player)
+                                            and state.has_any({item_names.PERDITION_TURRET, item_names.PLANETARY_FORTRESS}, self.player)
                                     )
                             )
                             and self.terran_bio_heal(state)
                             and (
                                 # Volatile infesteds
-                                    state.has(ItemNames.LIBERATOR, self.player)
+                                    state.has(item_names.LIBERATOR, self.player)
                                     or (
                                             self.advanced_tactics
-                                            and state.has_any({ItemNames.HERC, ItemNames.VULTURE}, self.player)
+                                            and state.has_any({item_names.HERC, item_names.VULTURE}, self.player)
                                     )
                             )
                     )
@@ -861,18 +861,18 @@ class SC2Logic:
             and self.terran_defense_rating(state, True, False) >= 6
 
     def enemy_shadow_tripwires_tool(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.NOVA_FLASHBANG_GRENADES, ItemNames.NOVA_BLINK, ItemNames.NOVA_DOMINATION},
+        return state.has_any({item_names.NOVA_FLASHBANG_GRENADES, item_names.NOVA_BLINK, item_names.NOVA_DOMINATION},
                              self.player)
 
     def enemy_shadow_door_unlocks_tool(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.NOVA_DOMINATION, ItemNames.NOVA_BLINK, ItemNames.NOVA_JUMP_SUIT_MODULE},
+        return state.has_any({item_names.NOVA_DOMINATION, item_names.NOVA_BLINK, item_names.NOVA_JUMP_SUIT_MODULE},
                              self.player)
 
     def enemy_shadow_domination(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
             or (self.nova_ranged_weapon(state)
                 and (self.nova_full_stealth(state)
-                     or state.has(ItemNames.NOVA_JUMP_SUIT_MODULE, self.player)
+                     or state.has(item_names.NOVA_JUMP_SUIT_MODULE, self.player)
                      or (self.nova_heal(state) and self.nova_splash(state))
                      )
                 )
@@ -910,12 +910,12 @@ class SC2Logic:
         return self.terran_competent_comp(state) \
             and self.terran_mobile_detector(state) \
             and (
-                    state.has_any({ItemNames.BATTLECRUISER, ItemNames.LIBERATOR, ItemNames.BANSHEE}, self.player)
-                    or state.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
+                    state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.BANSHEE}, self.player)
+                    or state.has_all({item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
             ) \
-            and (state.has_any({ItemNames.BATTLECRUISER, ItemNames.VIKING, ItemNames.LIBERATOR}, self.player)
+            and (state.has_any({item_names.BATTLECRUISER, item_names.VIKING, item_names.LIBERATOR}, self.player)
                  or (self.advanced_tactics
-                     and state.has_all({ItemNames.RAVEN, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
+                     and state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
                      )
                  )
 

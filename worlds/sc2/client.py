@@ -23,7 +23,7 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from worlds.sc2 import ItemNames
+from worlds.sc2 import item_names
 from worlds.sc2.item_groups import item_name_groups, unlisted_item_name_groups
 from worlds.sc2 import options
 from worlds.sc2.options import (
@@ -804,15 +804,15 @@ async def main():
 
 # These items must be given to the player if the game is generated on version 2
 API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
-    CompatItemHolder(ItemNames.PHOTON_CANNON),
-    CompatItemHolder(ItemNames.OBSERVER),
-    CompatItemHolder(ItemNames.WARP_HARMONIZATION),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_SHIELDS, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
+    CompatItemHolder(item_names.PHOTON_CANNON),
+    CompatItemHolder(item_names.OBSERVER),
+    CompatItemHolder(item_names.WARP_HARMONIZATION),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_SHIELDS, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
 }
 
 
@@ -856,26 +856,26 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             if item_data.type not in upgrade_item_types or ctx.generic_upgrade_items == 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
-                if name == ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
+                if name == item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
                     shields_from_ground_upgrade += 1
-                if name == ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
+                if name == item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
                     shields_from_air_upgrade += 1
                 for bundled_number in upgrade_numbers[item_data.number]:
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
             # Regen bio-steel nerf with API3 - undo for older games
-            if ctx.slot_data_version < 3 and name == ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL:
+            if ctx.slot_data_version < 3 and name == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL:
                 current_level = (accumulators[item_data.race][flaggroup] >> item_data.number) % 4
                 if current_level == 2:
                     # Switch from level 2 to level 3 for compatibility
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
-            if name == ItemNames.STARTING_MINERALS:
+            if name == item_names.STARTING_MINERALS:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.minerals_per_item
-            elif name == ItemNames.STARTING_VESPENE:
+            elif name == item_names.STARTING_VESPENE:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
-            elif name == ItemNames.STARTING_SUPPLY:
+            elif name == item_names.STARTING_SUPPLY:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
             else:
                 accumulators[item_data.race][item_data.type.flag_word] += item_data.number
@@ -883,7 +883,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
     if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
-        shield_upgrade_item = item_list[ItemNames.PROGRESSIVE_PROTOSS_SHIELDS]
+        shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][item_data.type.flag_word] += 1 << shield_upgrade_item.number
 
@@ -1010,7 +1010,7 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
-        return get_full_item_list()[ItemNames.KERRIGAN_PRIMAL_FORM].code in codes
+        return get_full_item_list()[item_names.KERRIGAN_PRIMAL_FORM].code in codes
     return False
 
 async def starcraft_launch(ctx: SC2Context, mission_id: int):

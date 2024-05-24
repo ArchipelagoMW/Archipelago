@@ -3,7 +3,7 @@ Unit tests for yaml usecases we want to support
 """
 
 from .test_base import Sc2SetupTestBase
-from .. import ItemNames, get_all_missions, item_groups, items, mission_tables, options
+from .. import get_all_missions, item_groups, item_names, items, mission_tables, options
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -23,14 +23,14 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertIn(ItemNames.MARINE, item_names)
-        self.assertIn(ItemNames.RAVEN, item_names)
-        self.assertIn(ItemNames.LIBERATOR, item_names)
-        self.assertIn(ItemNames.BATTLECRUISER, item_names)
-        self.assertNotIn(ItemNames.DIAMONDBACK, item_names)
-        self.assertNotIn(ItemNames.DIAMONDBACK_BURST_CAPACITORS, item_names)
-        self.assertNotIn(ItemNames.VIKING, item_names)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        self.assertIn(item_names.MARINE, world_item_names)
+        self.assertIn(item_names.RAVEN, world_item_names)
+        self.assertIn(item_names.LIBERATOR, world_item_names)
+        self.assertIn(item_names.BATTLECRUISER, world_item_names)
+        self.assertNotIn(item_names.DIAMONDBACK, world_item_names)
+        self.assertNotIn(item_names.DIAMONDBACK_BURST_CAPACITORS, world_item_names)
+        self.assertNotIn(item_names.VIKING, world_item_names)
 
     def test_nco_with_nobuilds_excluded_generates(self):
         world_options = {
@@ -70,25 +70,25 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             },
         }
         self.generate_world(world_options)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertTrue(item_names)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(world_item_names)
         missions = get_all_missions(self.world.mission_req_table)
         for mission in missions:
             self.assertIn(mission_tables.MissionFlag.Terran, mission.flags)
-        self.assertIn(ItemNames.MARINE, item_names)
-        self.assertIn(ItemNames.MARAUDER, item_names)
-        self.assertIn(ItemNames.BUNKER, item_names)
-        self.assertIn(ItemNames.BANSHEE, item_names)
-        self.assertIn(ItemNames.BATTLECRUISER_ATX_LASER_BATTERY, item_names)
-        self.assertIn(ItemNames.NOVA_C20A_CANISTER_RIFLE, item_names)
-        self.assertGreaterEqual(item_names.count(ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS), 2)
-        self.assertGreaterEqual(item_names.count(ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON), 3)
-        self.assertNotIn(ItemNames.MEDIC, item_names)
-        self.assertNotIn(ItemNames.PSI_DISRUPTER, item_names)
-        self.assertNotIn(ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS, item_names)
-        self.assertNotIn(ItemNames.HELLION_INFERNAL_PLATING, item_names)
-        self.assertNotIn(ItemNames.CELLULAR_REACTOR, item_names)
-        self.assertNotIn(ItemNames.TECH_REACTOR, item_names)
+        self.assertIn(item_names.MARINE, world_item_names)
+        self.assertIn(item_names.MARAUDER, world_item_names)
+        self.assertIn(item_names.BUNKER, world_item_names)
+        self.assertIn(item_names.BANSHEE, world_item_names)
+        self.assertIn(item_names.BATTLECRUISER_ATX_LASER_BATTERY, world_item_names)
+        self.assertIn(item_names.NOVA_C20A_CANISTER_RIFLE, world_item_names)
+        self.assertGreaterEqual(world_item_names.count(item_names.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS), 2)
+        self.assertGreaterEqual(world_item_names.count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON), 3)
+        self.assertNotIn(item_names.MEDIC, world_item_names)
+        self.assertNotIn(item_names.PSI_DISRUPTER, world_item_names)
+        self.assertNotIn(item_names.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS, world_item_names)
+        self.assertNotIn(item_names.HELLION_INFERNAL_PLATING, world_item_names)
+        self.assertNotIn(item_names.CELLULAR_REACTOR, world_item_names)
+        self.assertNotIn(item_names.TECH_REACTOR, world_item_names)
     
     def test_nco_and_2_wol_missions_only_can_generate_with_vanilla_items_only(self) -> None:
         world_options = {
@@ -108,12 +108,12 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'vanilla_items_only': True,
         }
         self.generate_world(world_options)
-        item_names = [item.name for item in self.multiworld.itempool]
+        world_item_names = [item.name for item in self.multiworld.itempool]
         self.assertTrue(item_names)
-        self.assertNotIn(ItemNames.LIBERATOR, item_names)
-        self.assertNotIn(ItemNames.MARAUDER_PROGRESSIVE_STIMPACK, item_names)
-        self.assertNotIn(ItemNames.HELLION_HELLBAT_ASPECT, item_names)
-        self.assertNotIn(ItemNames.BATTLECRUISER_CLOAK, item_names)
+        self.assertNotIn(item_names.LIBERATOR, world_item_names)
+        self.assertNotIn(item_names.MARAUDER_PROGRESSIVE_STIMPACK, world_item_names)
+        self.assertNotIn(item_names.HELLION_HELLBAT_ASPECT, world_item_names)
+        self.assertNotIn(item_names.BATTLECRUISER_CLOAK, world_item_names)
     
     def test_free_protoss_only_generates(self) -> None:
         world_options = {
@@ -130,27 +130,27 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'accessibility': 'locations',
         }
         self.generate_world(world_options)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertTrue(item_names)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(world_item_names)
         missions = get_all_missions(self.world.mission_req_table)
         self.assertEqual(len(missions), 7, "Wrong number of missions in free protoss seed")
         for mission in missions:
             self.assertIn(mission.campaign, (mission_tables.SC2Campaign.PROLOGUE, mission_tables.SC2Campaign.PROPHECY))
-        for item_name in item_names:
+        for item_name in world_item_names:
             self.assertIn(items.item_table[item_name].race, (mission_tables.SC2Race.ANY, mission_tables.SC2Race.PROTOSS))
 
     def test_resource_filler_items_may_be_put_in_start_inventory(self) -> None:
         NUM_RESOURCE_ITEMS = 10
         world_options = {
             'start_inventory': {
-                ItemNames.STARTING_MINERALS: NUM_RESOURCE_ITEMS,
-                ItemNames.STARTING_VESPENE: NUM_RESOURCE_ITEMS,
-                ItemNames.STARTING_SUPPLY: NUM_RESOURCE_ITEMS,
+                item_names.STARTING_MINERALS: NUM_RESOURCE_ITEMS,
+                item_names.STARTING_VESPENE: NUM_RESOURCE_ITEMS,
+                item_names.STARTING_SUPPLY: NUM_RESOURCE_ITEMS,
             },
         }
         self.generate_world(world_options)
         start_item_names = [item.name for item in self.multiworld.precollected_items[self.player]]
-        self.assertEqual(start_item_names.count(ItemNames.STARTING_MINERALS), NUM_RESOURCE_ITEMS, "Wrong number of starting minerals in starting inventory")
-        self.assertEqual(start_item_names.count(ItemNames.STARTING_VESPENE), NUM_RESOURCE_ITEMS, "Wrong number of starting vespene in starting inventory")
-        self.assertEqual(start_item_names.count(ItemNames.STARTING_SUPPLY), NUM_RESOURCE_ITEMS, "Wrong number of starting supply in starting inventory")
+        self.assertEqual(start_item_names.count(item_names.STARTING_MINERALS), NUM_RESOURCE_ITEMS, "Wrong number of starting minerals in starting inventory")
+        self.assertEqual(start_item_names.count(item_names.STARTING_VESPENE), NUM_RESOURCE_ITEMS, "Wrong number of starting vespene in starting inventory")
+        self.assertEqual(start_item_names.count(item_names.STARTING_SUPPLY), NUM_RESOURCE_ITEMS, "Wrong number of starting supply in starting inventory")
 

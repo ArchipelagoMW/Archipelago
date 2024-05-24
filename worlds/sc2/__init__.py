@@ -7,7 +7,7 @@ from math import floor, ceil
 from dataclasses import dataclass
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import WebWorld, World
-from . import ItemNames
+from . import item_names
 from .items import (StarcraftItem, filler_items, get_full_item_list,
     get_basic_units, ItemData, upgrade_included_names, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units,
@@ -285,7 +285,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
         ):
             if (SC2Mission.ENEMY_WITHIN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_true
-                or item.name not in (ItemNames.ZERGLING, ItemNames.ROACH, ItemNames.HYDRALISK, ItemNames.INFESTOR)
+                or item.name not in (item_names.ZERGLING, item_names.ROACH, item_names.HYDRALISK, item_names.INFESTOR)
             ):
                 item.flags |= ItemFilterFlags.Excluded
         if (not protoss_build_missions
@@ -300,9 +300,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_true
                 or item.name not in (
-                    ItemNames.IMMORTAL, ItemNames.ANNIHILATOR,
-                    ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.REAVER, ItemNames.DARK_TEMPLAR,
-                    ItemNames.SENTRY, ItemNames.HIGH_TEMPLAR,
+                    item_names.IMMORTAL, item_names.ANNIHILATOR,
+                    item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
+                    item_names.SENTRY, item_names.HIGH_TEMPLAR,
                 )
             ):
                 item.flags |= ItemFilterFlags.Excluded
@@ -401,7 +401,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             item.flags |= ItemFilterFlags.Excluded
         
         # Remove Psi Disrupter and Hive Mind Emulator if you never play a build TvZ
-        if (item.name in (ItemNames.HIVE_MIND_EMULATOR, ItemNames.PSI_DISRUPTER)
+        if (item.name in (item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER)
             and not tvz_build_missions
         ):
             item.flags |= ItemFilterFlags.Excluded
@@ -414,8 +414,8 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
     terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
     for item in item_list:
         if item.name in (
-            ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MARINE_PROGRESSIVE_STIMPACK, ItemNames.MARINE_MAGRAIL_MUNITIONS,
-            ItemNames.MEDIC_STABILIZER_MEDPACKS, ItemNames.MEDIC_NANO_PROJECTOR,
+            item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
+            item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR,
         ) and terran_nobuild_missions:
             item.flags |= ItemFilterFlags.AllowedOrphan
 
@@ -466,11 +466,11 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         if first_mission == SC2Mission.DARK_WHISPERS:
             # Special case - you don't have a logicless location but need an AA
             basic_units = basic_units.difference(
-                {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.BLOOD_HUNTER,
-                    ItemNames.AVENGER, ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD})
+                {item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL, item_names.BLOOD_HUNTER,
+                    item_names.AVENGER, item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.VANGUARD})
         if first_mission == SC2Mission.SUDDEN_STRIKE:
             # Special case - cliffjumpers
-            basic_units = {ItemNames.REAPER, ItemNames.GOLIATH, ItemNames.SIEGE_TANK, ItemNames.VIKING, ItemNames.BANSHEE}
+            basic_units = {item_names.REAPER, item_names.GOLIATH, item_names.SIEGE_TANK, item_names.VIKING, item_names.BANSHEE}
         basic_unit_options = [
             item for item in possible_starter_items.values()
             if item.name in basic_units
@@ -479,10 +479,10 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         
         # For Sudden Strike, starter units need an upgrade to help them get around
         nco_support_items = {
-            ItemNames.REAPER: ItemNames.REAPER_SPIDER_MINES,
-            ItemNames.GOLIATH: ItemNames.GOLIATH_JUMP_JETS,
-            ItemNames.SIEGE_TANK: ItemNames.SIEGE_TANK_JUMP_JETS,
-            ItemNames.VIKING: ItemNames.VIKING_SMART_SERVOS,
+            item_names.REAPER: item_names.REAPER_SPIDER_MINES,
+            item_names.GOLIATH: item_names.GOLIATH_JUMP_JETS,
+            item_names.SIEGE_TANK: item_names.SIEGE_TANK_JUMP_JETS,
+            item_names.VIKING: item_names.VIKING_SMART_SERVOS,
         }
         if first_mission == SC2Mission.SUDDEN_STRIKE:
             basic_unit_options = [
@@ -505,13 +505,13 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
             if unit.name in nco_support_items:
                 support_item = possible_starter_items[nco_support_items[unit.name]]
                 support_item.flags |= ItemFilterFlags.StartInventory
-            if ItemNames.NOVA_JUMP_SUIT_MODULE in possible_starter_items:
-                possible_starter_items[ItemNames.NOVA_JUMP_SUIT_MODULE].flags |= ItemFilterFlags.StartInventory
+            if item_names.NOVA_JUMP_SUIT_MODULE in possible_starter_items:
+                possible_starter_items[item_names.NOVA_JUMP_SUIT_MODULE].flags |= ItemFilterFlags.StartInventory
         if MissionFlag.Nova in first_mission.flags:
             possible_starter_weapons = (
-                ItemNames.NOVA_HELLFIRE_SHOTGUN,
-                ItemNames.NOVA_PLASMA_RIFLE,
-                ItemNames.NOVA_PULSE_GRENADES,
+                item_names.NOVA_HELLFIRE_SHOTGUN,
+                item_names.NOVA_PLASMA_RIFLE,
+                item_names.NOVA_PULSE_GRENADES,
             )
             starter_weapon_options = [item for item in possible_starter_items.values() if item.name in possible_starter_weapons]
             starter_weapon = world.random.choice(starter_weapon_options)
