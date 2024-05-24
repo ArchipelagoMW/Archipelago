@@ -44,7 +44,7 @@ class MMX3Web(WebWorld):
 
     tutorials = [setup_en]
 
-    option_groups = mmx3_option_groups
+    #option_groups = mmx3_option_groups
 
 
 class MMX3World(World):
@@ -247,7 +247,20 @@ class MMX3World(World):
         slot_data["pickupsanity"] = self.options.pickupsanity.value
         slot_data["jammed_buster"] = self.options.jammed_buster.value
         slot_data["zsaber_in_pool"] = self.options.zsaber_in_pool.value
-        slot_data["doppler_open"] = self.options.doppler_open.value
+        
+        value = 0
+        doppler_open = self.options.doppler_open.value
+        if "Medals" in doppler_open:
+            value |= 0x01
+        if "Weapons" in doppler_open:
+            value |= 0x02
+        if "Armor Upgrades" in doppler_open:
+            value |= 0x04
+        if "Heart Tanks" in doppler_open:
+            value |= 0x08
+        if "Sub Tanks" in doppler_open:
+            value |= 0x10
+        slot_data["doppler_open"] = value
         slot_data["doppler_medal_count"] = self.options.doppler_medal_count.value
         slot_data["doppler_weapon_count"] = self.options.doppler_weapon_count.value
         slot_data["doppler_upgrade_count"] = self.options.doppler_upgrade_count.value
@@ -256,7 +269,20 @@ class MMX3World(World):
         slot_data["doppler_lab_2_boss"] = self.options.doppler_lab_2_boss.value
         slot_data["doppler_lab_3_boss_rematch_count"] = self.options.doppler_lab_3_boss_rematch_count.value
         slot_data["doppler_all_labs"] = self.options.doppler_all_labs.value
-        slot_data["vile_open"] = self.options.vile_open.value
+        
+        value = 0
+        vile_open = self.options.vile_open.value
+        if "Medals" in vile_open:
+            value |= 0x01
+        if "Weapons" in vile_open:
+            value |= 0x02
+        if "Armor Upgrades" in vile_open:
+            value |= 0x04
+        if "Heart Tanks" in vile_open:
+            value |= 0x08
+        if "Sub Tanks" in vile_open:
+            value |= 0x10
+        slot_data["vile_open"] = value
         slot_data["vile_medal_count"] = self.options.vile_medal_count.value
         slot_data["vile_weapon_count"] = self.options.vile_weapon_count.value
         slot_data["vile_upgrade_count"] = self.options.vile_upgrade_count.value
@@ -270,9 +296,9 @@ class MMX3World(World):
         # Write boss weaknesses to slot_data
         slot_data["boss_weaknesses"] = {}
         for boss, entries in self.boss_weaknesses.items():
-            slot_data[boss] = []
+            slot_data["boss_weaknesses"][boss] = []
             for entry in entries:
-                slot_data[boss].append(entry[1])
+                slot_data["boss_weaknesses"][boss].append(entry[1])
                 
         return slot_data
 
