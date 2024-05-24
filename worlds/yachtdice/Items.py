@@ -25,8 +25,10 @@ item_table = {
     "Category Fours": ItemData(16871244106, ItemClassification.progression),
     "Category Fives": ItemData(16871244107, ItemClassification.progression),
     "Category Sixes": ItemData(16871244108, ItemClassification.progression),
+    
     "Category Choice": ItemData(16871244109, ItemClassification.progression),
     "Category Inverse Choice": ItemData(16871244110, ItemClassification.progression),
+    
     "Category Pair": ItemData(16871244111, ItemClassification.progression),
     "Category Three of a Kind": ItemData(16871244112, ItemClassification.progression),
     "Category Four of a Kind": ItemData(16871244113, ItemClassification.progression),
@@ -42,8 +44,10 @@ item_table = {
     "Category Twos and Threes": ItemData(16871244126, ItemClassification.progression),
     "Category Sum of Odds": ItemData(16871244127, ItemClassification.progression),
     "Category Sum of Evens": ItemData(16871244128, ItemClassification.progression),
+    
     "Category Double Threes and Fours": ItemData(16871244129, ItemClassification.progression),
     "Category Quadruple Ones and Twos": ItemData(16871244130, ItemClassification.progression),
+    
     "Category Micro Straight": ItemData(16871244131, ItemClassification.progression),
     "Category Three Odds": ItemData(16871244132, ItemClassification.progression),
     "Category 1-2-1 Consecutive": ItemData(16871244133, ItemClassification.progression),
@@ -54,7 +58,6 @@ item_table = {
     "Category 4&5 Full House": ItemData(16871244138, ItemClassification.progression),
     
     
-
     "Encouragement": ItemData(16871244200, ItemClassification.filler),
     "Fun Fact": ItemData(16871244201, ItemClassification.filler),
     "Story Chapter": ItemData(16871244202, ItemClassification.filler),
@@ -65,4 +68,52 @@ item_table = {
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),
     "100 Points": ItemData(16871244303, ItemClassification.progression)
+}
+
+ITEM_GROUPS = {
+    "Rolls": {
+        "Roll", "Roll Fragment"
+    },
+    "Dice": {
+        "Dice", "Dice Fragment"
+    },
+    "Categories": {
+        "Category Ones", 
+        "Category Twos", 
+        "Category Threes", 
+        "Category Fours", 
+        "Category Fives",
+        "Category Sixes",
+        
+        "Category Choice",
+        "Category Inverse Choice",
+        
+        "Category Pair",
+        "Category Three of a Kind",
+        "Category Four of a Kind",
+        "Category Tiny Straight",
+        "Category Small Straight",
+        "Category Large Straight",
+        "Category Full House",
+        "Category Yacht",
+        
+        "Category Distincts",
+        "Category Two times Ones",
+        "Category Half of Sixes",
+        "Category Twos and Threes",
+        "Category Sum of Odds",
+        "Category Sum of Evens",
+        
+        "Category Double Threes and Fours",
+        "Category Quadruple Ones and Twos",
+        
+        "Category Micro Straight",
+        "Category Three Odds",
+        "Category 1-2-1 Consecutive",
+        "Category Three Distinct Dice",
+        "Category Two Pair",
+        "Category 2-1-2 Consecutive",
+        "Category Five Distinct Dice",
+        "Category 4&5 Full House"
+    }
 }

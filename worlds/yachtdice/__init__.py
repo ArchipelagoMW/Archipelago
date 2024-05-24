@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance, Item, Tutorial
-from .Items import YachtDiceItem, item_table
+from .Items import ITEM_GROUPS, YachtDiceItem, item_table
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import YachtDiceOptions
 from .Rules import set_yacht_rules, set_yacht_completion_rules
@@ -37,6 +37,8 @@ class YachtDiceWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
 
     location_name_to_id = {name: data.id for name, data in all_locations.items()}
+    
+    item_name_groups = ITEM_GROUPS
 
     ap_world_version = "1.0.1"
 
