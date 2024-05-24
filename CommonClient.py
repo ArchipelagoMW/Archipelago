@@ -238,10 +238,6 @@ class CommonContext:
                 self._archipelago_lookup.clear()
                 self._archipelago_lookup.update(id_to_name_lookup_table)
 
-        def remove_game(self, game: str) -> None:
-            """Removes existing lookup table for a particular game."""
-            del self._game_store[game]
-
     # defaults
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
