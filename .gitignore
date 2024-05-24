@@ -198,6 +198,7 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+<<<<<<< HEAD
 /worlds/zillion
 /worlds/zillion
 worlds/zillion/__init__.py
@@ -221,3 +222,5 @@ worlds/zillion/test/__init__.py
 worlds/zillion/test/TestGoal.py
 worlds/zillion/test/TestOptions.py
 worlds/zillion/test/TestReproducibleRandom.py
+=======
+>>>>>>> parent of 10ea81dc (Update .gitignore)
