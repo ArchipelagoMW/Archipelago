@@ -1155,7 +1155,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
         grouped_options = set(option for group in ordered_groups.values() for option in group)
         ungrouped_options = [option for option in world.options_dataclass.type_hints.values()
                              if option not in grouped_options]
-        # if the world doesn't have any ungrouped options, this group will be empty so don't add it
+        # only add the game options group if we have ungrouped options
         if ungrouped_options:
             ordered_groups = {**{"Game Options": ungrouped_options}, **ordered_groups}
 
