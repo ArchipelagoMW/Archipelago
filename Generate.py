@@ -558,19 +558,19 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     else:
                         ret.sprite_pool += [key] * int(value)
 
-for i in range(100):
-    if __name__ == '__main__':
-        import atexit
-        confirmation = atexit.register(input, "Press enter to close.")
-        multiworld = main()
-        if __debug__:
-            import gc
-            import sys
-            import weakref
-            weak = weakref.ref(multiworld)
-            del multiworld
-            gc.collect()  # need to collect to deref all hard references
-            assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
-                            " This would be a memory leak."
-        # in case of error-free exit should not need confirmation
-        atexit.unregister(confirmation)
+
+if __name__ == '__main__':
+    import atexit
+    confirmation = atexit.register(input, "Press enter to close.")
+    multiworld = main()
+    if __debug__:
+        import gc
+        import sys
+        import weakref
+        weak = weakref.ref(multiworld)
+        del multiworld
+        gc.collect()  # need to collect to deref all hard references
+        assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
+                           " This would be a memory leak."
+    # in case of error-free exit should not need confirmation
+    atexit.unregister(confirmation)
