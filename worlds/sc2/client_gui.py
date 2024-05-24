@@ -329,5 +329,5 @@ def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)
     context.ui_task = asyncio.create_task(context.ui.async_run(), name="UI")
     import pkgutil
-    data = pkgutil.get_data(SC2World.__module__, "Starcraft2.kv").decode()
+    data = pkgutil.get_data(SC2World.__module__, "starcraft2.kv").decode()
     Builder.load_string(data)
