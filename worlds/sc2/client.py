@@ -137,11 +137,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
-        options = difficulty.split()
-        num_options = len(options)
+        arguments = difficulty.split()
+        num_arguments = len(arguments)
 
-        if num_options > 0:
-            difficulty_choice = options[0].lower()
+        if num_arguments > 0:
+            difficulty_choice = arguments[0].lower()
             if difficulty_choice == "casual":
                 self.ctx.difficulty_override = 0
             elif difficulty_choice == "normal":
@@ -151,10 +151,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             elif difficulty_choice == "brutal":
                 self.ctx.difficulty_override = 3
             else:
-                self.output("Unable to parse difficulty '" + options[0] + "'")
+                self.output("Unable to parse difficulty '" + arguments[0] + "'")
                 return False
 
-            self.output("Difficulty set to " + options[0])
+            self.output("Difficulty set to " + arguments[0])
             return True
 
         else:
@@ -172,11 +172,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_game_speed(self, game_speed: str = "") -> bool:
         """Overrides the current game speed for the world.
          Takes the arguments default, slower, slow, normal, fast, faster"""
-        options = game_speed.split()
-        num_options = len(options)
+        arguments = game_speed.split()
+        num_arguments = len(arguments)
 
-        if num_options > 0:
-            speed_choice = options[0].lower()
+        if num_arguments > 0:
+            speed_choice = arguments[0].lower()
             if speed_choice == "default":
                 self.ctx.game_speed_override = 0
             elif speed_choice == "slower":
@@ -190,10 +190,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             elif speed_choice == "faster":
                 self.ctx.game_speed_override = 5
             else:
-                self.output("Unable to parse game speed '" + options[0] + "'")
+                self.output("Unable to parse game speed '" + arguments[0] + "'")
                 return False
 
-            self.output("Game speed set to " + options[0])
+            self.output("Game speed set to " + arguments[0])
             return True
 
         else:
@@ -307,7 +307,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
 
-        options = (
+        configurable_options = (
             ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', options.KerriganPresence, can_break_logic=True),
             ConfigurableOptionInfo('kerrigan_level_cap', 'kerrigan_total_level_cap', options.KerriganTotalLevelCap, ConfigurableOptionType.INTEGER, can_break_logic=True),
             ConfigurableOptionInfo('kerrigan_mission_level_cap', 'kerrigan_levels_per_mission_completed_cap', options.KerriganLevelsPerMissionCompletedCap, ConfigurableOptionType.INTEGER),
@@ -339,7 +339,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             Options
         --------------------
         """))('\n')
-        for option in options:
+        for option in configurable_options:
             option_help_text = inspect.cleandoc(option.option_class.__doc__ or "No description provided.").split('\n', 1)[0]
             help_message.coloured(option.name, CMD_COLOUR)(": " + " | ".join(option.option_class.options)
                 + f" -- {option_help_text}\n")
@@ -350,7 +350,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if not option_name or option_name == 'list' or option_name == 'help':
             help_message.send(self.ctx)
             return
-        for option in options:
+        for option in configurable_options:
             if option_name == option.name:
                 option_value = boolean_option_map.get(option_value, option_value)
                 if not option_value:
@@ -423,11 +423,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
 
-        options = mission_id.split()
-        num_options = len(options)
+        arguments = mission_id.split()
+        num_arguments = len(arguments)
 
-        if num_options > 0:
-            mission_number = int(options[0])
+        if num_arguments > 0:
+            mission_number = int(arguments[0])
 
             self.ctx.play_mission(mission_number)
 
@@ -937,23 +937,23 @@ def get_kerrigan_level(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[
 
 
 def calculate_kerrigan_options(ctx: SC2Context) -> int:
-    options = 0
+    result = 0
 
     # Bits 0, 1
     # Kerrigan unit available
     if ctx.kerrigan_presence in kerrigan_unit_available:
-        options |= 1 << 0
+        result |= 1 << 0
 
     # Bit 2
     # Kerrigan primal status by map
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_vanilla:
-        options |= 1 << 2
+        result |= 1 << 2
 
-    return options
+    return result
 
 
 def caclulate_soa_options(ctx: SC2Context) -> int:
-    options = 0
+    result = 0
 
     # Bits 0, 1
     # SoA Calldowns available
@@ -966,12 +966,12 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
         soa_presence_value = 2
     elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere:
         soa_presence_value = 3
-    options |= soa_presence_value << 0
+    result |= soa_presence_value << 0
 
     # Bit 2
     # SoA Calldowns for no-builds
     if ctx.spear_of_adun_present_in_no_build == SpearOfAdunPresentInNoBuild.option_true:
-        options |= 1 << 2
+        result |= 1 << 2
 
     # Bits 3,4
     # Autocasts
@@ -987,14 +987,14 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
     # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
     if ctx.slot_data_version < 4 and soa_autocasts_presence_value < 2:
         soa_autocasts_presence_value = 2
-    options |= soa_autocasts_presence_value << 3
+    result |= soa_autocasts_presence_value << 3
 
     # Bit 5
     # Autocasts in no-builds
     if ctx.spear_of_adun_autonomously_cast_present_in_no_build == SpearOfAdunAutonomouslyCastPresentInNoBuild.option_true:
-        options |= 1 << 5
+        result |= 1 << 5
 
-    return options
+    return result
 
 def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_zerg:
