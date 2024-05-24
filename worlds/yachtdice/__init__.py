@@ -1,8 +1,8 @@
 from BaseClasses import Region, Entrance, Item, Tutorial
-from .Items import ITEM_GROUPS, YachtDiceItem, item_table
+from .Items import YachtDiceItem, item_table, ITEM_GROUPS
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import YachtDiceOptions
-from .Rules import set_yacht_rules, set_yacht_completion_rules
+from .Rules import set_yacht_rules, set_yacht_completion_rules, diceSimulation
 from ..AutoWorld import World, WebWorld
 import math
 import logging
@@ -154,8 +154,8 @@ class YachtDiceWorld(World):
         #the number of necessary items, should never exceed the number_of_locations
         #if it does, there is some weird error, perhaps with plando. This should raise an error...
         if already_items > self.number_of_locations:
-            logging.error(f"In Yacht Dice, there are more items \
-                          than locations ({already_items}, {self.number_of_locations})")
+            raise Exception(f"In Yacht Dice, there are more items than locations ({already_items}, {self.number_of_locations})")
+
             
         #note that self.number_of_locations is the number of locations EXCLUDING the victory location.
         #and since the victory item is added later, we should have the number of items
@@ -221,7 +221,7 @@ class YachtDiceWorld(World):
         #we're done adding items. Now because of the last step, number of items should be number of locations
         already_items = len(itempool) + self.extra_plando_items
         if len(itempool) != self.number_of_locations:
-            logging.error(f"Number in itempool is not number of locations {len(itempool)} {self.number_of_locations}.")
+            raise Exception(f"Number in itempool is not number of locations {len(itempool)} {self.number_of_locations}.")
 
         #convert strings to actual items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
@@ -230,12 +230,17 @@ class YachtDiceWorld(World):
         for item in itempool:
             self.multiworld.itempool += [item]
             
+            
                         
 
     def set_rules(self):
         #set rules per location, and add the rule for beating the game
         set_yacht_rules(self.multiworld, self.player, self.options)
         set_yacht_completion_rules(self.multiworld, self.player)
+        
+        maxScoreWithItems = diceSimulation(self.multiworld.get_all_state(False), self.player, self.options)
+        if self.goal_score > maxScoreWithItems:
+            raise Exception("In Yacht Dice, with all items in the pool, it is impossible to get to the goal.")
         
     
 

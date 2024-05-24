@@ -186,6 +186,8 @@ def diceSimulation(state, player, options):
     categories, nbDice, nbRolls, multiplier, expoints = extractProgression(state, player, options)
     return diceSimulationStrings(categories, nbDice, nbRolls, multiplier, 
                                  options.game_difficulty.value, options.score_multiplier_type.value) + expoints
+    
+    
 
 # Sets rules on entrances and advancements that are always applied
 def set_yacht_rules(world: MultiWorld, player: int, options):

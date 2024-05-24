@@ -143,36 +143,37 @@ class gameMode(Choice):
     
     Standard. Get to 500 points on medium difficulty (and a bit lower/higher on other difficulties).
     
-    Extra points: a bunch of "10 Points" items are shuffled through the item pool. Get to 1000 points.
+    Points mode: a bunch of "10 Points" items are shuffled through the item pool. Get to 1000 points.
     The amount of "10 Points" items in the pool depends on your selected difficulty.
     
-    Extra categories: categories may appear multiple times. 
-    Getting a category again gives a x2 multiplier for that category. Get to 1000 points.
-    The amount of "10 Points" items in the pool depends on your selected difficulty.
+    I'll add a new category soon™
     """
+    # Extra categories: categories may appear multiple times. 
+    # Getting a category again gives a x2 multiplier for that category. Get to 1000 points.
+    # The amount of "10 Points" items in the pool depends on your selected difficulty.
+    
     display_name = "Game mode"
     option_standard = 1
-    option_extra_points = 2
-    option_extra_categories = 3
+    option_points_mode = 2
+    #option_extra_categories = 3
     default = 1
     
 class pointsGameMode(Choice):
     """
-    This extra game mode shuffles many points items in the pool, 
-    and your goal is to reach a score of 1000.
+    If points mode is selected, this option determines the value of the points items.
     
     yes_1_per_item: hundreds of "1 Point" items are shuffled into the pool.
-    NOT recommended in multiplayer, unless everyone is aware of the hundred of extra items
+    NOT recommended in multiplayer, unless everyone is aware of the hundred of points items
     
     yes_10_per_item: puts tens of "10 Points" (and a few 1 Points) into the item pool.
     
     yes_100_per_item: puts a few "100 Points" (and a few 1 and 10 Points) into the item pool. 
     Warning: will unlock many checks if an 100 Points item is collected.
     """
-    display_name = "Extra points game mode"
-    option_yes_1_per_item = 2
-    option_yes_10_per_item = 3
-    option_yes_100_per_item = 4
+    display_name = "Value of points item"
+    option_1_per_item = 2
+    option_10_per_item = 3
+    option_100_per_item = 4
     default = 3
 
     
