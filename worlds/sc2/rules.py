@@ -1,4 +1,4 @@
-from typing import Set
+from typing import TYPE_CHECKING
 
 from BaseClasses import  CollectionState
 from .options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
@@ -8,7 +8,9 @@ from .items import get_basic_units, defense_ratings, zerg_defense_ratings, kerri
     kerrigan_levels, get_full_item_list
 from .mission_tables import SC2Race, SC2Campaign
 from . import item_names
-from worlds.AutoWorld import World
+
+if TYPE_CHECKING:
+    from . import SC2World
 
 
 class SC2Logic:
@@ -919,8 +921,8 @@ class SC2Logic:
                      )
                  )
 
-    def __init__(self, world: World):
-        self.world: World = world
+    def __init__(self, world: 'SC2World'):
+        self.world: 'SC2World' = world
         self.player = None if world is None else world.player
         self.logic_level = get_option_value(world, 'required_tactics')
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard

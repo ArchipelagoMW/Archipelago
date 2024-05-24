@@ -327,7 +327,7 @@ def make_hopscotch(two_start_positions: bool, num_missions: int) -> Dict[SC2Camp
     mission_order: List[FillMission] = []
     menu_connection = [MissionConnection(-1)]
     max_width = 7
-    difficulty_progress = 0
+    difficulty_progress = 0.0
     difficulty_rate = max(0.5, min(1, 3 * max_difficulty / num_missions))
     x = 0
     y = 0
