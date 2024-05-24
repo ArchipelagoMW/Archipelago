@@ -116,12 +116,19 @@ class WebWorldRegister(type):
         # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
         # dev, putting it at the end if they don't define options in it
         option_groups: List[OptionGroup] = dct.get("option_groups", [])
+        prebuilt_options = ["Game Options", "Item & Location Options"]
         seen_options = []
         item_group_in_list = False
         for group in option_groups:
-            assert group.name != "Game Options", "Game Options is a pre-determined group and can not be defined."
             assert group.options, "A custom defined Option Group must contain at least one Option."
+            # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
+            title_name = group.name.title()
+            if title_name in prebuilt_options:
+                group.name = title_name
+
             if group.name == "Item & Location Options":
+                assert not any(option in item_and_loc_options for option in group.options), \
+                    f"Item and Location Options cannot be specified multiple times"
                 group.options.extend(item_and_loc_options)
                 item_group_in_list = True
             else:
@@ -133,7 +140,7 @@ class WebWorldRegister(type):
                 assert option not in seen_options, f"{option} found in two option groups"
                 seen_options.append(option)
         if not item_group_in_list:
-            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options))
+            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options, True))
         return super().__new__(mcs, name, bases, dct)
 
 

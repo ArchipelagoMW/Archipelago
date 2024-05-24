@@ -32,11 +32,16 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
         return redirect("games")
     visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
 
+    start_collapsed = {"Game Options": False}
+    for group in world.web.option_groups:
+        start_collapsed[group.name] = group.start_collapsed
+
     return render_template(
         template,
         world_name=world_name,
         world=world,
         option_groups=Options.get_option_groups(world, visibility_level=visibility_flag),
+        start_collapsed=start_collapsed,
         issubclass=issubclass,
         Options=Options,
         theme=get_world_theme(world_name),

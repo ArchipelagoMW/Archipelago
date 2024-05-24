@@ -51,7 +51,7 @@
 
             <div id="{{ world_name }}-container">
                 {% for group_name, group_options in option_groups.items() %}
-                    <details {% if loop.index == 1 %}open{% endif %}>
+                    <details {% if not start_collapsed[group_name] %}open{% endif %}>
                         <summary class="h2">{{ group_name }}</summary>
                         {% for option_name, option in group_options.items() %}
                             <div class="option-wrapper">
