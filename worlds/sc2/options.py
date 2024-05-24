@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 class Sc2MissionSet(OptionSet):
     """Option set made for handling missions and expanding mission groups"""
-    valid_keys = [x.mission_name for x in SC2Mission]
+    valid_keys: Iterable[str] = [x.mission_name for x in SC2Mission]
 
     @classmethod
     def from_any(cls, data: Any):
@@ -689,7 +689,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         case_insensitive_group_mapping = {
             group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()
         }
-        case_insensitive_group_mapping.update({item.casefold(): [item] for item in world.item_names})
+        case_insensitive_group_mapping.update({item.casefold(): {item} for item in world.item_names})
         for group_name in self.value:
             item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             for item_name in item_names:
