@@ -1,4 +1,4 @@
-from .MissionTables import FillMission, MissionPools, MissionConnection, SC2Campaign
+from .mission_tables import FillMission, MissionPools, MissionConnection, SC2Campaign
 from typing import Dict, List
 import math
 

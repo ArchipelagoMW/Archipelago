@@ -1,10 +1,10 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
 from . import ItemNames
-from .Options import (VanillaItemsOnly, get_option_value, RequiredTactics,
+from .options import (VanillaItemsOnly, get_option_value, RequiredTactics,
     LocationInclusion, KerriganPresence,
 )
-from .Rules import SC2Logic
+from .rules import SC2Logic
 
 from BaseClasses import Location
 from worlds.AutoWorld import World

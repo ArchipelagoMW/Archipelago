@@ -4,8 +4,8 @@ from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
 import enum
 
-from .Options import get_option_value, RequiredTactics
-from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
+from .options import get_option_value, RequiredTactics
+from .mission_tables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import ItemNames
 from worlds.AutoWorld import World
 

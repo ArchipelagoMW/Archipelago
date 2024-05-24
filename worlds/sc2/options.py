@@ -6,10 +6,10 @@ from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys)
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
+from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
-from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
-from .MissionGroups import mission_groups, MissionGroupNames
+from .mission_orders import vanilla_shuffle_order, mini_campaign_order
+from .mission_groups import mission_groups, MissionGroupNames
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -697,10 +697,10 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                from . import ItemGroups
+                from . import item_groups
                 picks = get_fuzzy_results(
                     item_name,
-                    list(world.item_names) + list(ItemGroups.ItemGroupNames.get_all_group_names()),
+                    list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
                     limit=1,
                 )
                 raise Exception(f"Item {item_name} from option {self} "

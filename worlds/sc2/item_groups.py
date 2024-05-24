@@ -1,6 +1,6 @@
 import typing
-from . import Items, ItemNames
-from .MissionTables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
+from . import ItemNames, items
+from .mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
 
 """
 Item name groups, given to Archipelago and used in YAMLs and /received filtering.
@@ -29,12 +29,12 @@ item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission i
 # These item name groups should not show up in documentation
 unlisted_item_name_groups = {
     "Missions", "WoL Missions",
-    Items.TerranItemType.Progressive.display_name,
-    Items.TerranItemType.Nova_Gear.display_name,
-    Items.TerranItemType.Mercenary.display_name,
-    Items.ZergItemType.Ability.display_name,
-    Items.ZergItemType.Morph.display_name,
-    Items.ZergItemType.Strain.display_name,
+    items.TerranItemType.Progressive.display_name,
+    items.TerranItemType.Nova_Gear.display_name,
+    items.TerranItemType.Mercenary.display_name,
+    items.ZergItemType.Ability.display_name,
+    items.ZergItemType.Morph.display_name,
+    items.ZergItemType.Strain.display_name,
 }
 
 # Some item names only differ in bracketed parts
@@ -52,7 +52,7 @@ bracketless_duplicates = set(_shortened_names)
 del _shortened_names
 
 # All items get sorted into their data type
-for item, data in Items.get_full_item_list().items():
+for item, data in items.get_full_item_list().items():
     # Items get assigned to their flaggroup's display type
     item_name_groups.setdefault(data.type.display_name, []).append(item)
     # Items with a bracket get a short-hand name group for ease of use in YAMLs
@@ -160,16 +160,16 @@ class ItemGroupNames:
 
 # Terran
 item_name_groups[ItemGroupNames.TERRAN_ITEMS] = terran_items = [
-    item_name for item_name, item_data in Items.item_table.items()
+    item_name for item_name, item_data in items.item_table.items()
     if item_data.race == SC2Race.TERRAN
 ]
 item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Mercenary)
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type in (items.TerranItemType.Unit, items.TerranItemType.Mercenary)
 ]
 item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrades = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type == Items.TerranItemType.Upgrade
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type == items.TerranItemType.Upgrade
 ]
 item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
     ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
@@ -186,12 +186,12 @@ item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     ItemNames.LIBERATOR, ItemNames.VALKYRIE,
 ]
 item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type == Items.TerranItemType.Building
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type == items.TerranItemType.Building
 ]
 item_name_groups[ItemGroupNames.TERRAN_MERCENARIES] = terran_mercenaries = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type == Items.TerranItemType.Mercenary
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type == items.TerranItemType.Mercenary
 ]
 item_name_groups[ItemGroupNames.NCO_UNITS] = nco_units = [
     ItemNames.MARINE, ItemNames.MARAUDER, ItemNames.REAPER,
@@ -203,8 +203,8 @@ item_name_groups[ItemGroupNames.NCO_BUILDINGS] = nco_buildings = [
     ItemNames.BUNKER, ItemNames.MISSILE_TURRET, ItemNames.PLANETARY_FORTRESS,
 ]
 item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
-    *[item_name for item_name, item_data in Items.item_table.items()
-        if item_data.type == Items.TerranItemType.Nova_Gear],
+    *[item_name for item_name, item_data in items.item_table.items()
+        if item_data.type == items.TerranItemType.Nova_Gear],
     ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE,
 ]
 item_name_groups[ItemGroupNames.WOL_UNITS] = wol_units = [
@@ -355,8 +355,8 @@ item_name_groups[ItemGroupNames.NCO_UPGRADES] = nco_upgrades = nco_baseline_upgr
 item_name_groups[ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS] = nco_unit_technology + nova_equipment + terran_generic_upgrades
 item_name_groups[ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS] = nco_units + nco_baseline_upgrades
 item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressive_items = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.TerranItemType.Progressive, Items.TerranItemType.Progressive_2)
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type in (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2)
 ]
 item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     wol_units
@@ -368,18 +368,18 @@ item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
 
 # Zerg
 item_name_groups[ItemGroupNames.ZERG_ITEMS] = zerg_items = [
-    item_name for item_name, item_data in Items.item_table.items()
+    item_name for item_name, item_data in items.item_table.items()
     if item_data.race == SC2Race.ZERG
 ]
 item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [ItemNames.SPINE_CRAWLER, ItemNames.SPORE_CRAWLER]
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Morph)
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type in (items.ZergItemType.Unit, items.ZergItemType.Mercenary, items.ZergItemType.Morph)
         and item_name not in zerg_buildings
 ]
 item_name_groups[ItemGroupNames.ZERG_GENERIC_UPGRADES] = zerg_generic_upgrades = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type == Items.ZergItemType.Upgrade
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type == items.ZergItemType.Upgrade
 ]
 item_name_groups[ItemGroupNames.HOTS_UNITS] = hots_units = [
     ItemNames.ZERGLING, ItemNames.SWARM_QUEEN, ItemNames.ROACH, ItemNames.HYDRALISK,
@@ -399,13 +399,13 @@ item_name_groups[ItemGroupNames.HOTS_MORPHS] = hots_morphs = [
     ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
 ]
 item_name_groups[ItemGroupNames.ZERG_MORPHS] = zerg_morphs = [
-    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Morph
+    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ZergItemType.Morph
 ]
 item_name_groups[ItemGroupNames.ZERG_MERCS] = zerg_mercs = [
-    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Mercenary
+    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ZergItemType.Mercenary
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_ABILITIES] = kerrigan_abilities = [
-    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Ability
+    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ZergItemType.Ability
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_PASSIVES] = kerrigan_passives = [
     ItemNames.KERRIGAN_HEROIC_FORTITUDE, ItemNames.KERRIGAN_CHAIN_REACTION,
@@ -414,7 +414,7 @@ item_name_groups[ItemGroupNames.KERRIGAN_PASSIVES] = kerrigan_passives = [
 
 # Zerg Upgrades
 item_name_groups[ItemGroupNames.HOTS_STRAINS] = hots_strains = [
-    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Strain
+    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ZergItemType.Strain
 ]
 item_name_groups[ItemGroupNames.HOTS_MUTATIONS] = hots_mutations = [
     ItemNames.ZERGLING_HARDENED_CARAPACE, ItemNames.ZERGLING_ADRENAL_OVERLOAD, ItemNames.ZERGLING_METABOLIC_BOOST,
@@ -446,16 +446,16 @@ item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
 
 # Protoss
 item_name_groups[ItemGroupNames.PROTOSS_ITEMS] = protoss_items = [
-    item_name for item_name, item_data in Items.item_table.items()
+    item_name for item_name, item_data in items.item_table.items()
     if item_data.race == SC2Race.PROTOSS
 ]
 item_name_groups[ItemGroupNames.PROTOSS_UNITS] = protoss_units = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.ProtossItemType.Unit, Items.ProtossItemType.Unit_2)
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type in (items.ProtossItemType.Unit, items.ProtossItemType.Unit_2)
 ]
 item_name_groups[ItemGroupNames.PROTOSS_GENERIC_UPGRADES] = protoss_generic_upgrades = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type == Items.ProtossItemType.Upgrade
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type == items.ProtossItemType.Upgrade
 ]
 item_name_groups[ItemGroupNames.LOTV_UNITS] = lotv_units = [
     ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL,
@@ -499,8 +499,8 @@ item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     ItemNames.ARBITER, ItemNames.ORACLE,
 ]
 item_name_groups[ItemGroupNames.PROTOSS_BUILDINGS] = protoss_buildings = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type == Items.ProtossItemType.Building
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type == items.ProtossItemType.Building
 ]
 item_name_groups[ItemGroupNames.AIUR_UNITS] = [
     ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
@@ -523,12 +523,12 @@ item_name_groups[ItemGroupNames.PURIFIER_UNITS] = [
     ItemNames.MIRAGE, ItemNames.TEMPEST,
 ]
 item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = [
-    *[item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ProtossItemType.Spear_Of_Adun],
+    *[item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ProtossItemType.Spear_Of_Adun],
     ItemNames.SOA_PROGRESSIVE_PROXY_PYLON,
 ]
 lotv_soa_items = [item_name for item_name in soa_items if item_name != ItemNames.SOA_PYLON_OVERCHARGE]
 item_name_groups[ItemGroupNames.PROTOSS_GLOBAL_UPGRADES] = [
-    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ProtossItemType.Solarite_Core
+    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ProtossItemType.Solarite_Core
 ]
 item_name_groups[ItemGroupNames.LOTV_GLOBAL_UPGRADES] = lotv_global_upgrades = [
     ItemNames.NEXUS_OVERCHARGE,

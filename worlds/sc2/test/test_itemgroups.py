@@ -3,28 +3,28 @@ Unit tests for ItemGroups.py
 """
 
 import unittest
-from .. import ItemGroups, Items
+from .. import item_groups, items
 
 class ItemGroupsUnitTests(unittest.TestCase):
     def test_all_production_structure_groups_capture_all_units(self) -> None:
         self.assertCountEqual(
-            ItemGroups.terran_units,
-            ItemGroups.barracks_units + ItemGroups.factory_units + ItemGroups.starport_units + ItemGroups.terran_mercenaries
+            item_groups.terran_units,
+            item_groups.barracks_units + item_groups.factory_units + item_groups.starport_units + item_groups.terran_mercenaries
         )
         self.assertCountEqual(
-            ItemGroups.protoss_units,
-            ItemGroups.gateway_units + ItemGroups.robo_units + ItemGroups.stargate_units
+            item_groups.protoss_units,
+            item_groups.gateway_units + item_groups.robo_units + item_groups.stargate_units
         )
     
     def test_terran_original_progressive_group_fully_contained_in_wol_upgrades(self) -> None:
-        for item_name in ItemGroups.terran_original_progressive_upgrades:
-            self.assertIn(Items.item_table[item_name].type, (Items.TerranItemType.Progressive, Items.TerranItemType.Progressive_2), f"{item_name} is not progressive")
-            self.assertIn(item_name, ItemGroups.wol_upgrades)
+        for item_name in item_groups.terran_original_progressive_upgrades:
+            self.assertIn(items.item_table[item_name].type, (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2), f"{item_name} is not progressive")
+            self.assertIn(item_name, item_groups.wol_upgrades)
     
     def test_all_items_in_stimpack_group_are_stimpacks(self) -> None:
-        for item_name in ItemGroups.terran_stimpacks:
+        for item_name in item_groups.terran_stimpacks:
             self.assertIn("Stimpack", item_name)
 
     def test_all_item_group_names_have_a_group_defined(self) -> None:
-        for display_name in ItemGroups.ItemGroupNames.get_all_group_names():
-            self.assertIn(display_name, ItemGroups.item_name_groups)
+        for display_name in item_groups.ItemGroupNames.get_all_group_names():
+            self.assertIn(display_name, item_groups.item_name_groups)

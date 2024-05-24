@@ -1,19 +1,19 @@
 from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING
 from BaseClasses import  Item, Location
-from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
+from .items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
     upgrade_item_types,
 )
-from .MissionTables import (MissionInfo, MissionPools,
+from .mission_tables import (MissionInfo, MissionPools,
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations,
     SC2Campaign, SC2CampaignGoalPriority, SC2Mission,
 )
-from .Options import (get_option_value, MissionOrder,
+from .options import (get_option_value, MissionOrder,
     get_enabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
     TakeOverAIAllies, campaign_depending_orders,
     ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, EnableMorphling,
     static_mission_orders, dynamic_mission_orders
 )
-from . import ItemNames, ItemGroups
+from . import ItemNames, item_groups
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -21,9 +21,9 @@ if TYPE_CHECKING:
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
-BARRACKS_UNITS = set(ItemGroups.barracks_units)
-FACTORY_UNITS = set(ItemGroups.factory_units)
-STARPORT_UNITS = set(ItemGroups.starport_units)
+BARRACKS_UNITS = set(item_groups.barracks_units)
+FACTORY_UNITS = set(item_groups.factory_units)
+STARPORT_UNITS = set(item_groups.starport_units)
 
 
 def filter_missions(world: 'SC2World') -> Dict[MissionPools, List[SC2Mission]]:

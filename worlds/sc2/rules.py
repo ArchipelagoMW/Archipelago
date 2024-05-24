@@ -1,12 +1,12 @@
 from typing import Set
 
 from BaseClasses import  CollectionState
-from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
+from .options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
     get_enabled_campaigns, MissionOrder, EnableMorphling
-from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
+from .items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
     kerrigan_levels, get_full_item_list
-from .MissionTables import SC2Race, SC2Campaign
+from .mission_tables import SC2Race, SC2Campaign
 from . import ItemNames
 from worlds.AutoWorld import World
 
