@@ -37,15 +37,17 @@ class RandomizeCodes(Toggle):
 
 
 class RandomizeDeck(Choice):
-    """Randomize all cards in your deck into new cards every encounter.
+    """Randomize cards in your deck into new cards.
     Disable: Disable the feature.
-    Randomize Within Same Type: Randomize cards within the same type (keep rarity and scrybe type).
-    Randomize All: Randomize cards into any possible card."""
+    Every Encounter Within Same Type: Randomize cards within the same type every encounter (keep rarity/scrybe type).
+    Every Encounter Any Type: Randomize cards into any possible card every encounter.
+    Starting Only: Only randomize cards given at the beginning of runs and acts."""
     auto_display_name = True
     display_name = "Randomize Deck"
     option_disable = 0
-    option_randomize_within_same_type = 1
-    option_randomize_all = 2
+    option_every_encounter_within_same_type = 1
+    option_every_encounter_any_type = 2
+    option_starting_only = 3
 
 
 class RandomizeSigils(Choice):
