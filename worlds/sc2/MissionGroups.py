@@ -90,7 +90,7 @@ for group_name, campaign in (
     (MissionGroupNames.EPILOGUE_MISSIONS, SC2Campaign.EPILOGUE),
 ):
     mission_groups[group_name] = [
-        mission.mission_name for mission in SC2Mission if mission.campaign == SC2Campaign.WOL
+        mission.mission_name for mission in SC2Mission if mission.campaign == campaign
     ]
 
 for group_name, flags in (
