@@ -76,6 +76,8 @@ class BossWeaknessStrictness(Choice):
     weakness_and_buster: Only allow the weakness and buster to deal damage to the bosses
     weakness_and_upgraded_buster: Only allow the weakness and buster charge levels 3 & 4 to deal damage to the bosses
     only_weakness: Only the weakness will deal damage to the bosses
+
+    Z-Saber damage output will be cut to 50%/37.5%/25% of its original damage according to the strictness setting.
     """
     display_name = "Boss Weakness Strictness"
     option_not_strict = 0
