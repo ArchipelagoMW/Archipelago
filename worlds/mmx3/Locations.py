@@ -219,7 +219,6 @@ location_groups = {
     "Neon Tiger Stage": {location for location in all_locations.keys() if "Neon Tiger Stage - " in location},
     "Vile's Stage": {location for location in all_locations.keys() if "Vile's Stage - " in location},
     "Dr. Doppler's Lab 1": {location for location in all_locations.keys() if "Dr. Doppler's Lab 1 - " in location},
-    "Dr. Doppler's Lab 2": {location for location in all_locations.keys() if "Dr. Doppler's Lab 2 - " in location},
     "Dr. Doppler's Lab 3": {location for location in all_locations.keys() if "Dr. Doppler's Lab 3 - " in location},
 }
     
