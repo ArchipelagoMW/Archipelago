@@ -71,8 +71,8 @@ class Received(CombinableStardewRule):
 
     def __repr__(self):
         if self.count == 1:
-            return f"Received {self.item}"
-        return f"Received {self.count} {self.item}"
+            return f"Received {'event ' if self.event else ' '}{self.item}"
+        return f"Received {'event ' if self.event else ' '}{self.count} {self.item}"
 
     def get_difficulty(self):
         return self.count
@@ -132,7 +132,7 @@ class HasProgressionPercent(CombinableStardewRule):
         return self, self(state)
 
     def __repr__(self):
-        return f"HasProgressionPercent {self.percent}"
+        return f"Received {self.percent}% progression items."
 
     def get_difficulty(self):
         return self.percent
