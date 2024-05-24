@@ -1,26 +1,78 @@
 from .Names import ItemName
 
-boss_weaknesses = {
-    "Sting Chameleon": [[[ItemName.boomerang_cutter]]],
-    "Storm Eagle": [[[ItemName.chameleon_sting]]],
-    "Flame Mammoth": [[[ItemName.storm_tornado]]],
-    "Chill Penguin": [[[ItemName.fire_wave]]],
-    "Spark Mandrill": [[[ItemName.shotgun_ice]]],
-    "Armored Armadillo": [[[ItemName.electric_spark]]],
-    "Launch Octopus": [[[ItemName.rolling_shield]]],
-    "Boomer Kuwanger": [[[ItemName.homing_torpedo]]],
-    "Thunder Slimer": [[None]],
-    "Vile": [[[ItemName.homing_torpedo]]],
-    "Bospider": [[[ItemName.shotgun_ice]]],
-    "Rangda Bangda": [[[ItemName.chameleon_sting]]],
-    "D-Rex": [[[ItemName.boomerang_cutter]]],
-    "Velguarder": [[[ItemName.shotgun_ice]]],
-    "Sigma": [[[ItemName.electric_spark]]],
-    "Wolf Sigma": [[["Check Charge 2", ItemName.rolling_shield]]],
-}
-
 WEAKNESS_UNCHARGED_DMG = 0x03
 WEAKNESS_CHARGED_DMG = 0x05
+
+boss_weaknesses = {
+    "Sting Chameleon": [
+        [[ItemName.boomerang_cutter], 0x0D, WEAKNESS_CHARGED_DMG],
+        [[ItemName.boomerang_cutter], 0x16, WEAKNESS_CHARGED_DMG],
+    ],
+    "Storm Eagle": [
+        [[ItemName.chameleon_sting], 0x08, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Flame Mammoth": [
+        [[ItemName.storm_tornado], 0x0B, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.storm_tornado], 0x14, WEAKNESS_CHARGED_DMG],
+    ],
+    "Chill Penguin": [
+        [[ItemName.fire_wave], 0x0A, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.fire_wave], 0x13, WEAKNESS_CHARGED_DMG+3],
+    ],
+    "Spark Mandrill": [
+        [[ItemName.shotgun_ice], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG+3],
+    ],
+    "Armored Armadillo":  [
+        [[ItemName.electric_spark], 0x0C, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.electric_spark], 0x15, WEAKNESS_CHARGED_DMG],
+    ],
+    "Launch Octopus": [
+        [[ItemName.rolling_shield], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+2],
+    ],
+    "Boomer Kuwanger": [
+        [[ItemName.homing_torpedo], 0x07, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.homing_torpedo], 0x10, WEAKNESS_CHARGED_DMG],
+    ],
+    "Thunder Slimer": [
+        [None, 0x00, 0x02],
+        [None, 0x06, 0x04],
+        [None, 0x01, 0x03],
+        [None, 0x03, 0x04],
+        [None, 0x02, 0x05],
+        [None, 0x1D, 0x02],
+    ],
+    "Vile": [
+        [[ItemName.homing_torpedo], 0x07, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.homing_torpedo], 0x10, WEAKNESS_CHARGED_DMG],
+    ],
+    "Bospider": [
+        [[ItemName.shotgun_ice], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG+3],
+    ],
+    "Rangda Bangda": [
+        [[ItemName.chameleon_sting], 0x08, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "D-Rex": [
+        [[ItemName.boomerang_cutter], 0x0D, WEAKNESS_CHARGED_DMG],
+        [[ItemName.boomerang_cutter], 0x16, WEAKNESS_CHARGED_DMG],
+    ],
+    "Velguarder": [
+        [[ItemName.shotgun_ice], 0x0E, WEAKNESS_CHARGED_DMG],
+        [[ItemName.shotgun_ice], 0x17, WEAKNESS_CHARGED_DMG+3],
+    ],
+    "Sigma":  [
+        [[ItemName.electric_spark], 0x0C, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.electric_spark], 0x15, WEAKNESS_CHARGED_DMG],
+    ],
+    "Wolf Sigma": [
+        [["Check Charge 2"], 0x02, 0x05],
+        [["Check Charge 2"], 0x1D, 0x02],
+        [[ItemName.rolling_shield], 0x09, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+2],
+    ],
+}
 
 weapon_id = {
     0x00: "Lemon",
@@ -198,6 +250,7 @@ boss_excluded_weapons = {
     "Velguarder": [
     ],
     "Sigma": [
+        "Charged Rolling Shield",
     ],
     "Wolf Sigma": [
     ],
@@ -210,6 +263,7 @@ weapons = {
         [None, 0x01, 0x03],
         [None, 0x03, 0x04],
         [None, 0x02, 0x05],
+        [None, 0x1D, 0x02],
     ],
     "Homing Torpedo": [
         [[ItemName.homing_torpedo], 0x07, WEAKNESS_UNCHARGED_DMG],
@@ -307,18 +361,17 @@ weapons_chaotic = {
 }
 
 
-def randomize_weaknesses(world):
+def handle_weaknesses(world):
     shuffle_type = world.options.boss_weakness_rando.value
     strictness_type = world.options.boss_weakness_strictness.value
 
-    weapon_list = weapons.keys()
-    if shuffle_type == 2 or shuffle_type == 3:
-        weapon_list = weapons_chaotic.keys()
-    weapon_list = list(weapon_list)
+    if shuffle_type != "vanilla":
+        weapon_list = weapons.keys()
+        if shuffle_type == 2 or shuffle_type == 3:
+            weapon_list = weapons_chaotic.keys()
+        weapon_list = list(weapon_list)
     
     for boss in boss_weaknesses.keys():
-        if boss == "Dr. Doppler's Lab 2 Boss":
-            continue
         world.boss_weaknesses[boss] = []
 
         if strictness_type == 0:
@@ -330,10 +383,11 @@ def randomize_weaknesses(world):
         else:
             damage_table = damage_templates["Only Weakness"].copy()
 
-        copied_weapon_list = weapon_list.copy()
-        for weapon in boss_excluded_weapons[boss]:
-            if weapon in copied_weapon_list:
-                copied_weapon_list.remove(weapon)
+        if shuffle_type != "vanilla":
+            copied_weapon_list = weapon_list.copy()
+            for weapon in boss_excluded_weapons[boss]:
+                if weapon in copied_weapon_list:
+                    copied_weapon_list.remove(weapon)
 
         if shuffle_type == 1:
             chosen_weapon = world.random.choice(copied_weapon_list)
@@ -343,7 +397,6 @@ def randomize_weaknesses(world):
                 damage = entry[2]
                 damage_table[entry[1]] = damage
             world.boss_weakness_data[boss] = damage_table.copy()
-
 
         elif shuffle_type == 2:
             for _ in range(2):
@@ -356,7 +409,6 @@ def randomize_weaknesses(world):
                     damage_table[entry[1]] = damage
             world.boss_weakness_data[boss] = damage_table.copy()
 
-
         elif shuffle_type == 3:
             chosen_weapon = world.random.choice(copied_weapon_list)
             data = weapons_chaotic[chosen_weapon].copy()
@@ -365,3 +417,9 @@ def randomize_weaknesses(world):
                 damage = entry[2]
                 damage_table[entry[1]] = damage
             world.boss_weakness_data[boss] = damage_table.copy()
+
+        else:
+            for entry in boss_weaknesses[boss]:
+                world.boss_weaknesses[boss].append(entry)
+                damage = entry[2]
+                damage_table[entry[1]] = damage
