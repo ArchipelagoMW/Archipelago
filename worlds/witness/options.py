@@ -76,8 +76,8 @@ class DoorGroupings(Choice):
     """
     Controls how door items are grouped.
 
-    - None: There will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
-    - Regional: - All doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
+    - Off: There will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
+    - Regional: All doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
     """
     display_name = "Door Groupings"
     option_off = 0
