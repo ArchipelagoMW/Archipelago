@@ -174,7 +174,7 @@ class CommonContext:
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
-    class NameLookupDict(collections.abc.MutableMapping):
+    class NameLookupDict:
         """A specialized dict, with helper methods, for id -> name item/location data package lookups by game."""
         _game_store: typing.Dict[str, typing.ChainMap[int, str]]
 
@@ -198,12 +198,6 @@ class CommonContext:
                 return self._flat_store[key]
 
             return self._game_store[key]
-
-        def __setitem__(self, key: str, value: typing.Union[typing.ChainMap[int, str], typing.Dict[int, str]]):
-            self._game_store[key] = value
-
-        def __delitem__(self, key: str):
-            del self._game_store[key]
 
         def __len__(self):
             return len(self._game_store)
@@ -243,6 +237,10 @@ class CommonContext:
                 # it updates in all chain maps automatically.
                 self._archipelago_lookup.clear()
                 self._archipelago_lookup.update(id_to_name_lookup_table)
+
+        def remove_game(self, game: str) -> None:
+            """Removes existing lookup table for a particular game."""
+            del self._game_store[game]
 
     # defaults
     starting_reconnect_delay: int = 5
