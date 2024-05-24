@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 import typing
 
-from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+#from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -330,6 +331,7 @@ class ByteMedalCount(Range):
     default = 5
 
 mmx3_option_groups = [
+    """
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
         StartingHP,
@@ -367,6 +369,7 @@ mmx3_option_groups = [
         BitMedalCount,
         ByteMedalCount,
     ]),
+    """
 ]
 
 @dataclass
