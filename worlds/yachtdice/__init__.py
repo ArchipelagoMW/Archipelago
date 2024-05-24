@@ -43,7 +43,7 @@ class YachtDiceWorld(World):
 
     def _get_yachtdice_data(self):
         return {
-            "world_seed": self.multiworld.per_slot_randoms[self.player].getrandbits(32),
+            # "world_seed": self.multiworld.per_slot_randoms[self.player].getrandbits(32),
             "seed_name": self.multiworld.seed_name,
             "player_name": self.multiworld.get_player_name(self.player),
             "player_id": self.player,
@@ -70,8 +70,22 @@ class YachtDiceWorld(World):
         #Start the game with one dice, one roll, category choice and category inverse choice.
         self.multiworld.push_precollected(self.create_item("Dice"))
         self.multiworld.push_precollected(self.create_item("Roll"))
-        self.multiworld.push_precollected(self.create_item("Category Choice"))
-        self.multiworld.push_precollected(self.create_item("Category Inverse Choice"))
+        
+        # Create a list with the specified number of 1s
+        num_ones = self.options.alternative_categories.value
+        categorylist = [1] * num_ones + [0] * (16 - num_ones)
+        
+        # Shuffle the list to randomize the order
+        self.multiworld.random.shuffle(categorylist)
+        
+        
+        
+        
+        item1 = ["Category Choice", "Category Double Threes and Fours"][categorylist[0]]
+        item2 = ["Category Inverse Choice", "Category Quadruple Ones and Twos"][categorylist[1]]
+        
+        self.multiworld.push_precollected(self.create_item(item1))
+        self.multiworld.push_precollected(self.create_item(item2))
         
 
 
@@ -99,33 +113,35 @@ class YachtDiceWorld(World):
         itempool += ["Score Multiplier"] * 10
         
         #add all categories. Note: not "choice" and "inverse choice", they are obtained at the start
-        itempool += ["Category Ones"]
-        itempool += ["Category Twos"]
-        itempool += ["Category Threes"]
-        itempool += ["Category Fours"]
-        itempool += ["Category Fives"]
-        itempool += ["Category Sixes"]
-        itempool += ["Category Pair"]
-        itempool += ["Category Three of a Kind"]
-        itempool += ["Category Four of a Kind"]
-        itempool += ["Category Tiny Straight"]
-        itempool += ["Category Small Straight"]
-        itempool += ["Category Large Straight"]
-        itempool += ["Category Full House"]
-        itempool += ["Category Yacht"]
+        itempool += ["Category Ones", "Category Distincts"][categorylist[2]]
+        itempool += ["Category Twos", "Category Two times Ones"][categorylist[3]]
+        itempool += ["Category Threes", "Category Half of Sixes"][categorylist[4]]
+        itempool += ["Category Fours", "Category Twos and Threes"][categorylist[5]]
+        itempool += ["Category Fives", "Category Sum of Odds"][categorylist[6]]
+        itempool += ["Category Sixes", "Category Sum of Evens"][categorylist[7]]
         
-        if(self.options.points_game_mode.value >= 4):
-            while self.extra_points_for_game_mode >= 89: #rather have 100 points than lot of smaller items
-                itempool += ["100 Points"]
-                self.extra_points_for_game_mode -= 100
-                
-        if(self.options.points_game_mode.value >= 3):
-            while self.extra_points_for_game_mode >= 7: #rather have 10 points that lot of 1 points.
-                itempool += ["10 Points"]
-                self.extra_points_for_game_mode -= 10
+        itempool += ["Category Pair", "Category Micro Straight"][categorylist[8]]
+        itempool += ["Category Three of a Kind", "Category Three Odds"][categorylist[9]]
+        itempool += ["Category Four of a Kind", "Category 1-2-1 Consecutive"][categorylist[10]]
+        itempool += ["Category Tiny Straight", "Category Three Distinct Dice"][categorylist[11]]
+        itempool += ["Category Small Straight", "Category Two Pair"][categorylist[12]]
+        itempool += ["Category Large Straight", "Category 2-1-2 Consecutive"][categorylist[13]]
+        itempool += ["Category Full House", "Category Five Distinct Dice"][categorylist[14]]
+        itempool += ["Category Yacht", "Category 4&5 Full House"][categorylist[15]]
         
-        if(self.options.points_game_mode.value >= 2 and self.extra_points_for_game_mode > 0):        
-            itempool += ["1 Point"] * self.extra_points_for_game_mode
+        if self.options.game_mode.value == 2:
+            if(self.options.points_game_mode.value >= 4):
+                while self.extra_points_for_game_mode >= 89: #rather have 100 points than lot of smaller items
+                    itempool += ["100 Points"]
+                    self.extra_points_for_game_mode -= 100
+                    
+            if(self.options.points_game_mode.value >= 3):
+                while self.extra_points_for_game_mode >= 7: #rather have 10 points that lot of 1 points.
+                    itempool += ["10 Points"]
+                    self.extra_points_for_game_mode -= 10
+            
+            if(self.options.points_game_mode.value >= 2 and self.extra_points_for_game_mode > 0):        
+                itempool += ["1 Point"] * self.extra_points_for_game_mode
         
         #count the number of locations in the game. extra_plando_items is set in generate_early
         #and counts number of plando items *not* from pool.
@@ -236,7 +252,7 @@ class YachtDiceWorld(World):
             self.max_score = 683
             
         self.extra_points_for_game_mode = 0
-        if(self.options.points_game_mode.value >= 2):
+        if(self.options.game_mode.value == 2):
             self.extra_points_for_game_mode = 1000 - self.max_score
             self.max_score = 1000
             
@@ -288,12 +304,13 @@ class YachtDiceWorld(World):
         min_number_of_locations = max(min_number_of_locations + 10, 
                                        math.ceil(min_number_of_locations * extraPercentage))
         
-        if(self.options.points_game_mode == 2):
-            min_number_of_locations += self.extra_points_for_game_mode
-        if(self.options.points_game_mode == 3):
-            min_number_of_locations += self.extra_points_for_game_mode // 10 + 10
-        if(self.options.points_game_mode == 4):
-            min_number_of_locations += self.extra_points_for_game_mode // 100 + 20
+        if self.options.game_mode.value == 2:
+            if(self.options.points_game_mode.value == 2):
+                min_number_of_locations += self.extra_points_for_game_mode
+            if(self.options.points_game_mode.value == 3):
+                min_number_of_locations += self.extra_points_for_game_mode // 10 + 10
+            if(self.options.points_game_mode.value == 4):
+                min_number_of_locations += self.extra_points_for_game_mode // 100 + 20
         
         #then to make sure generation works, we need to add locations, in case important items are placed late
         #add at least 10 locations or 20%.
@@ -364,7 +381,10 @@ class YachtDiceWorld(World):
             "number_of_extra_roll_fragments",
             "game_difficulty",
             "goal_location_percentage", 
+            "alternative_categories",
             "score_multiplier_type", 
+            "game_mode",
+            "minimize_extra_items",
             "add_extra_points", 
             "add_story_chapters", 
             "which_story"

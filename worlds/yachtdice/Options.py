@@ -103,6 +103,17 @@ class goalLocationPercentage(Range):
     range_start = 70
     range_end = 100
     default = 90
+    
+class alternativeCategories(Range):
+    """
+    There are 16 default categories, but there are also 16 alternative categories.
+    These alternative categories can replace the default categories.
+    How many alternative categories would you like to see in your game?
+    """
+    display_name = "Number of alternative categories"
+    range_start = 0
+    range_end = 16
+    default = 0
       
     
     
@@ -126,6 +137,25 @@ class scoreMultiplierType(Choice):
     option_step_multiplier = 2
     default = 1 
     
+class gameMode(Choice):
+    """
+    Yacht Dice has three main game modes:
+    
+    Standard. Get to 500 points on medium difficulty (and a bit lower/higher on other difficulties).
+    
+    Extra points: a bunch of "10 Points" items are shuffled through the item pool. Get to 1000 points.
+    The amount of "10 Points" items in the pool depends on your selected difficulty.
+    
+    Extra categories: categories may appear multiple times. 
+    Getting a category again gives a x2 multiplier for that category. Get to 1000 points.
+    The amount of "10 Points" items in the pool depends on your selected difficulty.
+    """
+    display_name = "Game mode"
+    option_standard = 1
+    option_extra_points = 2
+    option_extra_categories = 3
+    default = 1
+    
 class pointsGameMode(Choice):
     """
     This extra game mode shuffles many points items in the pool, 
@@ -140,11 +170,11 @@ class pointsGameMode(Choice):
     Warning: will unlock many checks if an 100 Points item is collected.
     """
     display_name = "Extra points game mode"
-    option_no_thanks = 1
     option_yes_1_per_item = 2
     option_yes_10_per_item = 3
     option_yes_100_per_item = 4
-    default = 1
+    default = 3
+
     
 class minimizeExtraItems(Choice):
     """
@@ -209,7 +239,9 @@ class YachtDiceOptions(PerGameCommonOptions):
     number_of_extra_roll_fragments: numberExtraRollFragments
     game_difficulty: gameDifficulty
     goal_location_percentage: goalLocationPercentage
+    alternative_categories: alternativeCategories
     score_multiplier_type: scoreMultiplierType
+    game_mode: gameMode
     points_game_mode: pointsGameMode
     minimize_extra_items: minimizeExtraItems
     add_extra_points: addExtraPoints
