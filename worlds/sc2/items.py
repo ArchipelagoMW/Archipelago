@@ -1274,6 +1274,33 @@ item_table = {
     item_names.DEFILER_COMORBIDITY:
         ItemData(280 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 18, SC2Race.ZERG, parent_item=item_names.DEFILER,
                  origin={"ext"}),
+    item_names.ABERRATION_MONSTROUS_RESILIENCE:
+        ItemData(281 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 21, SC2Race.ZERG, parent_item=item_names.ABERRATION,
+                 origin={"ext"}),
+    item_names.ABERRATION_CONSTRUCT_REGENERATION:
+        ItemData(282 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 22, SC2Race.ZERG, parent_item=item_names.ABERRATION,
+                 origin={"ext"}),
+    item_names.ABERRATION_BANELING_INCUBATION:
+        ItemData(283 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 23, SC2Race.ZERG, parent_item=item_names.ABERRATION,
+                 origin={"ext"}),
+    item_names.ABERRATION_PROTECTIVE_COVER:
+        ItemData(284 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 24, SC2Race.ZERG, parent_item=item_names.ABERRATION,
+                 origin={"ext"}),
+    item_names.ABERRATION_RESOURCE_EFFICIENCY:
+        ItemData(285 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 25, SC2Race.ZERG, parent_item=item_names.ABERRATION,
+                 origin={"ext"}),
+    item_names.CORRUPTOR_MONSTROUS_RESILIENCE:
+        ItemData(286 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 26, SC2Race.ZERG, parent_item=item_names.CORRUPTOR,
+                 origin={"ext"}),
+    item_names.CORRUPTOR_CONSTRUCT_REGENERATION:
+        ItemData(287 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 27, SC2Race.ZERG, parent_item=item_names.CORRUPTOR,
+                 origin={"ext"}),
+    item_names.CORRUPTOR_SCOURGE_INCUBATION:
+        ItemData(288 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 28, SC2Race.ZERG, parent_item=item_names.CORRUPTOR,
+                 origin={"ext"}),
+    item_names.CORRUPTOR_RESOURCE_EFFICIENCY:
+        ItemData(289 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 29, SC2Race.ZERG, parent_item=item_names.CORRUPTOR,
+                 origin={"ext"}),
 
     item_names.ZERGLING_RAPTOR_STRAIN:
         ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING,
@@ -1740,8 +1767,6 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Zerg static defenses
     item_names.SPORE_CRAWLER,
     item_names.SPINE_CRAWLER,
-    # Aberration (no upgrades)
-    item_names.ABERRATION,
     # Spear of Adun Abilities
     item_names.SOA_CHRONO_SURGE,
     item_names.SOA_PROGRESSIVE_PROXY_PYLON,
