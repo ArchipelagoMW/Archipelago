@@ -57,7 +57,7 @@ class numberExtraDiceFragments(Range):
     The option will never give an extra full dice, but makes it easier to collect all dice.
     """
     display_name = "Number of extra dice fragments in the pool"
-    range_start = 1
+    range_start = 0
     range_end = 4
     default = 3
     
@@ -71,7 +71,7 @@ class numberExtraRollFragments(Range):
     The option will never give an extra full roll, but makes it easier to collect all roll.
     """
     display_name = "Number of extra roll fragments in the pool"
-    range_start = 1
+    range_start = 0
     range_end = 4
     default = 3
 
