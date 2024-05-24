@@ -3,7 +3,6 @@ import bsdiff4
 import Utils
 import hashlib
 import os
-from typing import Optional, TYPE_CHECKING
 from pkgutil import get_data
 
 from worlds.AutoWorld import World
@@ -178,8 +177,7 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
                                            0x20,0x42,0x59,0x20,0x4E,0x49,0x4E,0x54,
                                            0x45,0x4E,0x44,0x4F,0x00]))
 
-    if world.options.boss_weakness_rando != "vanilla":
-        adjust_boss_damage_table(world, patch)
+    adjust_boss_damage_table(world, patch)
     
     if world.options.boss_randomize_hp != "off":
         adjust_boss_hp(world, patch)
@@ -194,7 +192,19 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_bytes(0x7FC0, patch.name)
 
     # Write options to the ROM
-    patch.write_byte(0x17FFE0, world.options.sigma_open.value)
+    value = 0
+    sigma_open = world.options.sigma_open.value
+    if "Medals" in sigma_open:
+        value |= 0x01
+    if "Weapons" in sigma_open:
+        value |= 0x02
+    if "Armor Upgrades" in sigma_open:
+        value |= 0x04
+    if "Heart Tanks" in sigma_open:
+        value |= 0x08
+    if "Sub Tanks" in sigma_open:
+        value |= 0x10
+    patch.write_byte(0x17FFE0, value)
     patch.write_byte(0x17FFE1, world.options.sigma_medal_count.value)
     patch.write_byte(0x17FFE2, world.options.sigma_weapon_count.value)
     patch.write_byte(0x17FFE3, world.options.sigma_upgrade_count.value)

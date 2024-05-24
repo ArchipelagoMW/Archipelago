@@ -17,7 +17,7 @@ from .Names import ItemName, LocationName, EventName
 from .Options import MMXOptions, mmx_option_groups
 from .Client import MMXSNIClient
 from .Levels import location_id_to_level_id
-from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
+from .Weaknesses import handle_weaknesses, weapon_id
 from .Rom import patch_rom, MMXProcedurePatch, HASH_US, HASH_LEGACY
 
 class MMXSettings(settings.Group):
@@ -44,7 +44,7 @@ class MMXWeb(WebWorld):
 
     tutorials = [setup_en]
 
-    option_groups = mmx_option_groups
+    #option_groups = mmx_option_groups
 
 
 class MMXWorld(World):
@@ -108,36 +108,15 @@ class MMXWorld(World):
                 else:
                     itempool += [self.create_item(stage_list[i])]
 
-        if self.options.sigma_open == "multiworld":
+        if len(self.options.sigma_open.value) == 0:
             itempool += [self.create_item(ItemName.stage_sigma_fortress)]
 
         # Add weapons into the pool
-        if self.options.sigma_open == "weapons" or (self.options.sigma_open == "all" and self.options.sigma_weapon_count.value > 0):
-            itempool += [self.create_item(ItemName.electric_spark)]
-            itempool += [self.create_item(ItemName.homing_torpedo)]
-            itempool += [self.create_item(ItemName.storm_tornado)]
-            itempool += [self.create_item(ItemName.shotgun_ice)]
-            itempool += [self.create_item(ItemName.rolling_shield)]
-        else:
-            if self.options.logic_boss_weakness.value:
-                itempool += [self.create_item(ItemName.electric_spark)]
-                itempool += [self.create_item(ItemName.homing_torpedo)]
-                itempool += [self.create_item(ItemName.storm_tornado)]
-            else:
-                itempool += [self.create_item(ItemName.electric_spark, ItemClassification.useful)]
-                itempool += [self.create_item(ItemName.homing_torpedo, ItemClassification.useful)]
-                itempool += [self.create_item(ItemName.storm_tornado, ItemClassification.useful)]
-
-            if self.options.logic_boss_weakness.value or self.options.logic_charged_shotgun_ice.value:
-                itempool += [self.create_item(ItemName.shotgun_ice)]
-            else:
-                itempool += [self.create_item(ItemName.shotgun_ice, ItemClassification.useful)]
-
-            if self.options.logic_boss_weakness.value or self.options.pickupsanity.value: 
-                itempool += [self.create_item(ItemName.rolling_shield)]
-            else: 
-                itempool += [self.create_item(ItemName.rolling_shield, ItemClassification.useful)]
-
+        itempool += [self.create_item(ItemName.electric_spark)]
+        itempool += [self.create_item(ItemName.homing_torpedo)]
+        itempool += [self.create_item(ItemName.storm_tornado)]
+        itempool += [self.create_item(ItemName.shotgun_ice)]
+        itempool += [self.create_item(ItemName.rolling_shield)]
         itempool += [self.create_item(ItemName.chameleon_sting)]
         itempool += [self.create_item(ItemName.fire_wave)]
         itempool += [self.create_item(ItemName.boomerang_cutter)]
@@ -146,7 +125,8 @@ class MMXWorld(World):
             itempool += [self.create_item(ItemName.hadouken, ItemClassification.useful)]
 
         # Add upgrades into the pool
-        if self.options.sigma_open == "armor_upgrades" or (self.options.sigma_open == "all" and self.options.sigma_upgrade_count.value > 0):
+        sigma_open = self.options.sigma_open.value
+        if "Armor Upgrades" in sigma_open and self.options.sigma_upgrade_count.value > 0:
             itempool += [self.create_item(ItemName.body)]
         else:
             itempool += [self.create_item(ItemName.body, ItemClassification.useful)]
@@ -157,7 +137,7 @@ class MMXWorld(World):
         itempool += [self.create_item(ItemName.legs)]
 
         # Add heart tanks into the pool
-        if self.options.sigma_open == "heart_tanks" or (self.options.sigma_open == "all" and self.options.sigma_heart_tank_count.value > 0):
+        if "Heart Tanks" in sigma_open and self.options.sigma_heart_tank_count.value > 0:
             i = self.options.sigma_heart_tank_count.value
             itempool += [self.create_item(ItemName.heart_tank) for _ in range(i)]
             if i != 8:
@@ -167,7 +147,7 @@ class MMXWorld(World):
             itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
 
         # Add sub tanks into the pool
-        if self.options.sigma_open == "sub_tanks" or (self.options.sigma_open == "all" and self.options.sigma_sub_tank_count.value > 0):
+        if "Sub Tanks" in sigma_open and self.options.sigma_sub_tank_count.value > 0:
             i = self.options.sigma_sub_tank_count.value
             itempool += [self.create_item(ItemName.sub_tank) for _ in range(i)]
             if i != 4:
@@ -235,10 +215,43 @@ class MMXWorld(World):
 
     def fill_slot_data(self):
         slot_data = {}
-        for option_name in (attr.name for attr in dataclasses.fields(MMXOptions)
-                            if attr not in dataclasses.fields(PerGameCommonOptions)):
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = option.value
+        # Write options to slot_data
+        slot_data["boss_weakness_rando"] = self.options.boss_weakness_rando.value
+        slot_data["boss_weakness_strictness"] = self.options.boss_weakness_strictness.value
+        slot_data["pickupsanity"] = self.options.pickupsanity.value
+        slot_data["jammed_buster"] = self.options.jammed_buster.value
+        slot_data["hadouken_in_pool"] = self.options.hadouken_in_pool.value
+        slot_data["pickupsanity"] = self.options.pickupsanity.value
+        slot_data["logic_boss_weakness"] = self.options.logic_boss_weakness.value
+        slot_data["logic_leg_sigma"] = self.options.logic_leg_sigma.value
+        slot_data["logic_charged_shotgun_ice"] = self.options.logic_charged_shotgun_ice.value
+        slot_data["sigma_all_levels"] = self.options.sigma_all_levels.value
+        value = 0
+        sigma_open = self.options.sigma_open.value
+        if "Medals" in sigma_open:
+            value |= 0x01
+        if "Weapons" in sigma_open:
+            value |= 0x02
+        if "Armor Upgrades" in sigma_open:
+            value |= 0x04
+        if "Heart Tanks" in sigma_open:
+            value |= 0x08
+        if "Sub Tanks" in sigma_open:
+            value |= 0x10
+        slot_data["sigma_open"] = value
+        slot_data["sigma_medal_count"] = self.options.sigma_medal_count.value
+        slot_data["sigma_weapon_count"] = self.options.sigma_weapon_count.value
+        slot_data["sigma_upgrade_count"] = self.options.sigma_upgrade_count.value
+        slot_data["sigma_heart_tank_count"] = self.options.sigma_heart_tank_count.value
+        slot_data["sigma_sub_tank_count"] = self.options.sigma_sub_tank_count.value
+
+        # Write boss weaknesses to slot_data
+        slot_data["boss_weaknesses"] = {}
+        for boss, entries in self.boss_weaknesses.items():
+            slot_data["boss_weaknesses"][boss] = []
+            for entry in entries:
+                slot_data["boss_weaknesses"][boss].append(entry[1])
+        
         return slot_data
 
 
@@ -246,11 +259,10 @@ class MMXWorld(World):
         if self.options.early_legs:
             self.multiworld.early_items[self.player][ItemName.legs] = 1
             
-        if self.options.boss_weakness_rando != "vanilla":
-            self.boss_weaknesses = {}
-            self.boss_weakness_data = {}
-            randomize_weaknesses(self)
-        
+        self.boss_weaknesses = {}
+        self.boss_weakness_data = {}
+        handle_weaknesses(self)
+    
         early_stage = self.random.choice(list(item_groups["Access Codes"]))
         self.multiworld.local_early_items[self.player][early_stage] = 1
 

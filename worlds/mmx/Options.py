@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 import typing
 
-from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
+#from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -69,8 +70,6 @@ class BossWeaknessStrictness(Choice):
     weakness_and_buster: Only allow the weakness and buster to deal damage to the bosses
     weakness_and_upgraded_buster: Only allow the weakness and buster charge levels 3 & 4 to deal damage to the bosses
     only_weakness: Only the weakness will deal damage to the bosses
-
-    Z-Saber damage output will be cut to 50%/37.5%/25% of its original damage according to the strictness setting.
     """
     display_name = "Boss Weakness Strictness"
     option_not_strict = 0
@@ -147,29 +146,28 @@ class FortressBundleUnlock(Toggle):
     """
     display_name = "Fortress Levels Bundle Unlock"
 
-class SigmaOpen(Choice):
+class SigmaOpen(OptionSet):
     """
-    Under what conditions will Sigma's Fortress open.
-      multiworld: Access will require an Access Code multiworld item, similar to the main stages.
-      medals: Access will be granted after collecting a certain amount of Maverick Medals.
-      weapons: Access will be granted after collecting a certain amount of weapons.
-      armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
-      heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
-      sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
-      all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
-           Heart Tanks and Sub Tanks.
-    Do not enable all on solo seeds without pickupsanity or sessions with very few items.
-    There's a big chance it'll cause an error.
+    Under which conditions will Sigma's Fortress open.
+    If no options are selected a multiworld item granting access to the stage will be created.
+
+    Medals: Consider Maverick medals to get access to the fortress.
+    Weapons: Consider weapons to get access to the fortress.
+    Armor Upgrades: Consider upgrades to get access to the fortress.
+    Heart Tanks: Consider heart tanks to get access to the fortress.
+    Sub Tanks: Consider sub tanks to get access to the fortress.
     """
     display_name = "Sigma Fortress Rules"
-    option_multiworld = 0
-    option_medals = 1
-    option_weapons = 2
-    option_armor_upgrades = 4
-    option_heart_tanks = 8
-    option_sub_tanks = 16
-    option_all = 31
-    default = 1
+    valid_keys = {
+        "Medals",
+        "Weapons",
+        "Armor Upgrades",
+        "Heart Tanks",
+        "Sub Tanks",
+    }
+    default = {
+        "Medals",
+    }
 
 class SigmaMedalCount(Range):
     """
@@ -217,6 +215,7 @@ class SigmaSubTankCount(Range):
     default = 4
 
 mmx_option_groups = [
+    """
     OptionGroup("Sigma Fortress Options", [
         SigmaOpen,
         SigmaMedalCount,
@@ -242,6 +241,7 @@ mmx_option_groups = [
         LogicLegSigma,
         LogicChargedShotgunIce,
     ]),
+    """
 ]
 
 @dataclass

@@ -89,21 +89,22 @@ def set_rules(world: MMXWorld):
              lambda state: state.has(ItemName.stage_storm_eagle, player))
     
     # Fortress entrance rules
-    fortress_open = world.options.sigma_open
+    fortress_open = world.options.sigma_open.value
     entrance = multiworld.get_entrance(f"{RegionName.intro} -> {RegionName.sigma_fortress}", player)
 
-    if fortress_open == "multiworld":
+    if len(fortress_open) == 0:
         add_rule(entrance, lambda state: state.has(ItemName.stage_sigma_fortress, player))
-    if fortress_open in ("medals", "all") and world.options.sigma_medal_count.value > 0:
-        add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.sigma_medal_count.value))
-    if fortress_open in ("weapons", "all") and world.options.sigma_weapon_count.value > 0:
-        add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.sigma_weapon_count.value))
-    if fortress_open in ("armor_upgrades", "all") and world.options.sigma_upgrade_count.value > 0:
-        add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.sigma_upgrade_count.value))
-    if fortress_open in ("heart_tanks", "all") and world.options.sigma_heart_tank_count.value > 0:
-        add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.sigma_heart_tank_count.value))
-    if fortress_open in ("sub_tanks", "all") and world.options.sigma_sub_tank_count.value > 0:
-        add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.sigma_sub_tank_count.value))
+    else:
+        if "Medals" in fortress_open and world.options.sigma_medal_count.value > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.sigma_medal_count.value))
+        if "Weapons" in fortress_open and world.options.sigma_weapon_count.value > 0:
+            add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.sigma_weapon_count.value))
+        if "Armor Upgrades" in fortress_open and world.options.sigma_upgrade_count.value > 0:
+            add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.sigma_upgrade_count.value))
+        if "Heart Tanks" in fortress_open and world.options.sigma_heart_tank_count.value > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.sigma_heart_tank_count.value))
+        if "Sub Tanks" in fortress_open and world.options.sigma_sub_tank_count.value > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.sigma_sub_tank_count.value))
 
     if world.options.logic_leg_sigma.value:
         add_rule(entrance, lambda state: state.has(ItemName.legs, player))
@@ -233,10 +234,6 @@ def add_boss_weakness_logic(world: MMXWorld):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value
-
-    if world.options.boss_weakness_rando == "vanilla":
-        from .Weaknesses import boss_weaknesses
-        world.boss_weaknesses = boss_weaknesses
 
     for boss, regions in bosses.items():
         weaknesses = world.boss_weaknesses[boss]
