@@ -1132,7 +1132,37 @@ class OptionGroup(typing.NamedTuple):
     """Options to be in the defined group."""
 
 
-def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
+item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
+                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+"""
+Options that are always populated in "Item & Location Options" Option Group. Cannot be moved to another group.
+If desired, a custom "Item & Location Options" Option Group can be defined, but only for adding additional options to
+it.
+"""
+
+
+def get_option_groups(world: typing.Type[World], visibility_level: Visibility = Visibility.template) -> typing.Dict[
+        str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
+    """Generates and returns a dictionary for the option groups of a specified world."""
+    option_groups = {option: option_group.name
+                     for option_group in world.web.option_groups
+                     for option in option_group.options}
+    # add a default option group for uncategorized options to get thrown into
+    ordered_groups = ["Game Options"]
+    [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
+    grouped_options = {group: {} for group in ordered_groups}
+    for option_name, option in world.options_dataclass.type_hints.items():
+        if visibility_level & option.visibility:
+            grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+
+    # if the world doesn't have any ungrouped options, this group will be empty so just remove it
+    if not grouped_options["Game Options"]:
+        del grouped_options["Game Options"]
+
+    return grouped_options
+
+
+def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
     import os
 
     import yaml
@@ -1170,17 +1200,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-
-            option_groups = {option: option_group.name
-                             for option_group in world.web.option_groups
-                             for option in option_group.options}
-            ordered_groups = ["Game Options"]
-            [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
-            grouped_options = {group: {} for group in ordered_groups}
-            for option_name, option in world.options_dataclass.type_hints.items():
-                if option.visibility >= Visibility.template:
-                    grouped_options[option_groups.get(option, "Game Options")][option_name] = option
-
+            grouped_options = get_option_groups(world)
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
             res = Template(file_data).render(
