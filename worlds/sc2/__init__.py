@@ -7,22 +7,22 @@ from math import floor, ceil
 from dataclasses import dataclass
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import WebWorld, World
-from . import ItemNames
-from .Items import (StarcraftItem, filler_items, get_full_item_list,
+from . import item_names
+from .items import (StarcraftItem, filler_items, get_full_item_list,
     get_basic_units, ItemData, upgrade_included_names, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units,
 )
-from . import Items
-from . import ItemGroups
-from .Locations import get_locations, get_location_types, get_plando_locations
-from .Regions import create_regions
-from .Options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
+from . import items
+from . import item_groups
+from .locations import get_locations, get_location_types, get_plando_locations
+from .regions import create_regions
+from .options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch,
 )
-from .PoolFilter import filter_items
-from .MissionTables import (
+from .pool_filter import filter_items
+from .mission_tables import (
     MissionInfo, SC2Campaign, SC2Mission, SC2Race, MissionFlag
 )
 
@@ -78,7 +78,7 @@ class SC2World(World):
     options_dataclass = Starcraft2Options
     options: Starcraft2Options
 
-    item_name_groups = ItemGroups.item_name_groups
+    item_name_groups = item_groups.item_name_groups
     locked_locations: List[str]
     """Locations locked to contain specific items, such as victory events or forced resources"""
     location_cache: List[Location]
@@ -196,7 +196,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         return min(count, max_count)
 
     result: List[FilterItem] = []
-    for item_name, item_data in Items.item_table.items():
+    for item_name, item_data in items.item_table.items():
         max_count = item_data.quantity
         excluded_count = excluded_items.get(item_name)
         unexcluded_count = unexcluded_items.get(item_name)
@@ -271,28 +271,28 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             item.flags |= ItemFilterFlags.Excluded
             continue
         if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
-            if item.name not in ItemGroups.soa_items:
+            if item.name not in item_groups.soa_items:
                 item.flags |= ItemFilterFlags.Excluded
             continue
         
         # Faction units
         if (not terran_build_missions
-            and item.data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Building, Items.TerranItemType.Mercenary)
+            and item.data.type in (items.TerranItemType.Unit, items.TerranItemType.Building, items.TerranItemType.Mercenary)
         ):
             item.flags |= ItemFilterFlags.Excluded
         if (not zerg_build_missions
-            and item.data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Evolution_Pit)
+            and item.data.type in (items.ZergItemType.Unit, items.ZergItemType.Mercenary, items.ZergItemType.Evolution_Pit)
         ):
             if (SC2Mission.ENEMY_WITHIN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_true
-                or item.name not in (ItemNames.ZERGLING, ItemNames.ROACH, ItemNames.HYDRALISK, ItemNames.INFESTOR)
+                or item.name not in (item_names.ZERGLING, item_names.ROACH, item_names.HYDRALISK, item_names.INFESTOR)
             ):
                 item.flags |= ItemFilterFlags.Excluded
         if (not protoss_build_missions
             and item.data.type in (
-                Items.ProtossItemType.Unit,
-                Items.ProtossItemType.Unit_2,
-                Items.ProtossItemType.Building,
+                items.ProtossItemType.Unit,
+                items.ProtossItemType.Unit_2,
+                items.ProtossItemType.Building,
             )
         ):
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
@@ -300,25 +300,25 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_true
                 or item.name not in (
-                    ItemNames.IMMORTAL, ItemNames.ANNIHILATOR,
-                    ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.REAVER, ItemNames.DARK_TEMPLAR,
-                    ItemNames.SENTRY, ItemNames.HIGH_TEMPLAR,
+                    item_names.IMMORTAL, item_names.ANNIHILATOR,
+                    item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
+                    item_names.SENTRY, item_names.HIGH_TEMPLAR,
                 )
             ):
                 item.flags |= ItemFilterFlags.Excluded
         
         # Faction +attack/armour upgrades
-        if (item.data.type == Items.TerranItemType.Upgrade
+        if (item.data.type == items.TerranItemType.Upgrade
             and not terran_build_missions
             and not auto_upgrades_in_nobuilds
         ):
             item.flags |= ItemFilterFlags.Excluded
-        if (item.data.type == Items.ZergItemType.Upgrade
+        if (item.data.type == items.ZergItemType.Upgrade
             and not zerg_build_missions
             and not auto_upgrades_in_nobuilds
         ):
             item.flags |= ItemFilterFlags.Excluded
-        if (item.data.type == Items.ProtossItemType.Upgrade
+        if (item.data.type == items.ProtossItemType.Upgrade
             and not protoss_build_missions
             and not auto_upgrades_in_nobuilds
         ):
@@ -375,33 +375,33 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
     for item in item_list:
         # Filter Nova equipment if you never get Nova
-        if not nova_missions and (item.name in ItemGroups.nova_equipment):
+        if not nova_missions and (item.name in item_groups.nova_equipment):
             item.flags |= ItemFilterFlags.Excluded
         
         # Todo(mm): How should no-build only / grant_story_tech affect excluding Kerrigan items?
         # Exclude Primal form based on Kerrigan presence or primal form option
-        if (item.data.type == Items.ZergItemType.Primal_Form
+        if (item.data.type == items.ZergItemType.Primal_Form
             and ((not kerrigan_is_present) or world.options.kerrigan_primal_status != KerriganPrimalStatus.option_item)
         ):
             item.flags |= ItemFilterFlags.Excluded
         
         # Remove Kerrigan abilities if there's no kerrigan
-        if item.data.type == Items.ZergItemType.Ability:
+        if item.data.type == items.ZergItemType.Ability:
             if not kerrigan_is_present:
                 item.flags |= ItemFilterFlags.Excluded
             elif world.options.grant_story_tech and not kerrigan_build_missions:
                 item.flags |= ItemFilterFlags.Excluded
         
         # Remove Spear of Adun if it's off
-        if item.name in Items.spear_of_adun_calldowns and not soa_presence:
+        if item.name in items.spear_of_adun_calldowns and not soa_presence:
             item.flags |= ItemFilterFlags.Excluded
 
         # Remove Spear of Adun passives
-        if item.name in Items.spear_of_adun_castable_passives and not soa_passive_presence:
+        if item.name in items.spear_of_adun_castable_passives and not soa_passive_presence:
             item.flags |= ItemFilterFlags.Excluded
         
         # Remove Psi Disrupter and Hive Mind Emulator if you never play a build TvZ
-        if (item.name in (ItemNames.HIVE_MIND_EMULATOR, ItemNames.PSI_DISRUPTER)
+        if (item.name in (item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER)
             and not tvz_build_missions
         ):
             item.flags |= ItemFilterFlags.Excluded
@@ -414,8 +414,8 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
     terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
     for item in item_list:
         if item.name in (
-            ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MARINE_PROGRESSIVE_STIMPACK, ItemNames.MARINE_MAGRAIL_MUNITIONS,
-            ItemNames.MEDIC_STABILIZER_MEDPACKS, ItemNames.MEDIC_NANO_PROJECTOR,
+            item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
+            item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR,
         ) and terran_nobuild_missions:
             item.flags |= ItemFilterFlags.AllowedOrphan
 
@@ -466,11 +466,11 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         if first_mission == SC2Mission.DARK_WHISPERS:
             # Special case - you don't have a logicless location but need an AA
             basic_units = basic_units.difference(
-                {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.BLOOD_HUNTER,
-                    ItemNames.AVENGER, ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD})
+                {item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL, item_names.BLOOD_HUNTER,
+                    item_names.AVENGER, item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.VANGUARD})
         if first_mission == SC2Mission.SUDDEN_STRIKE:
             # Special case - cliffjumpers
-            basic_units = {ItemNames.REAPER, ItemNames.GOLIATH, ItemNames.SIEGE_TANK, ItemNames.VIKING, ItemNames.BANSHEE}
+            basic_units = {item_names.REAPER, item_names.GOLIATH, item_names.SIEGE_TANK, item_names.VIKING, item_names.BANSHEE}
         basic_unit_options = [
             item for item in possible_starter_items.values()
             if item.name in basic_units
@@ -479,10 +479,10 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         
         # For Sudden Strike, starter units need an upgrade to help them get around
         nco_support_items = {
-            ItemNames.REAPER: ItemNames.REAPER_SPIDER_MINES,
-            ItemNames.GOLIATH: ItemNames.GOLIATH_JUMP_JETS,
-            ItemNames.SIEGE_TANK: ItemNames.SIEGE_TANK_JUMP_JETS,
-            ItemNames.VIKING: ItemNames.VIKING_SMART_SERVOS,
+            item_names.REAPER: item_names.REAPER_SPIDER_MINES,
+            item_names.GOLIATH: item_names.GOLIATH_JUMP_JETS,
+            item_names.SIEGE_TANK: item_names.SIEGE_TANK_JUMP_JETS,
+            item_names.VIKING: item_names.VIKING_SMART_SERVOS,
         }
         if first_mission == SC2Mission.SUDDEN_STRIKE:
             basic_unit_options = [
@@ -505,13 +505,13 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
             if unit.name in nco_support_items:
                 support_item = possible_starter_items[nco_support_items[unit.name]]
                 support_item.flags |= ItemFilterFlags.StartInventory
-            if ItemNames.NOVA_JUMP_SUIT_MODULE in possible_starter_items:
-                possible_starter_items[ItemNames.NOVA_JUMP_SUIT_MODULE].flags |= ItemFilterFlags.StartInventory
+            if item_names.NOVA_JUMP_SUIT_MODULE in possible_starter_items:
+                possible_starter_items[item_names.NOVA_JUMP_SUIT_MODULE].flags |= ItemFilterFlags.StartInventory
         if MissionFlag.Nova in first_mission.flags:
             possible_starter_weapons = (
-                ItemNames.NOVA_HELLFIRE_SHOTGUN,
-                ItemNames.NOVA_PLASMA_RIFLE,
-                ItemNames.NOVA_PULSE_GRENADES,
+                item_names.NOVA_HELLFIRE_SHOTGUN,
+                item_names.NOVA_PLASMA_RIFLE,
+                item_names.NOVA_PULSE_GRENADES,
             )
             starter_weapon_options = [item for item in possible_starter_items.values() if item.name in possible_starter_weapons]
             starter_weapon = world.random.choice(starter_weapon_options)
@@ -555,7 +555,7 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
     include_upgrades = world.options.generic_upgrade_missions == 0
     upgrade_items = world.options.generic_upgrade_items
     for item in item_list:
-        if item.data.type in Items.upgrade_item_types:
+        if item.data.type in items.upgrade_item_types:
             if not include_upgrades or (item.name not in upgrade_included_names[upgrade_items]):
                 item.flags |= ItemFilterFlags.Excluded
 
@@ -566,15 +566,15 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
         return
 
     vanilla_nonprogressive_count = {
-        item_name: 0 for item_name in ItemGroups.terran_original_progressive_upgrades
+        item_name: 0 for item_name in item_groups.terran_original_progressive_upgrades
     }
-    vanilla_items = ItemGroups.vanilla_items + ItemGroups.nova_equipment
+    vanilla_items = item_groups.vanilla_items + item_groups.nova_equipment
     for item in item_list:
         if ItemFilterFlags.Excluded in item.flags:
             continue
         if item.name not in vanilla_items:
             item.flags |= ItemFilterFlags.Excluded
-        if item.name in ItemGroups.terran_original_progressive_upgrades:
+        if item.name in item_groups.terran_original_progressive_upgrades:
             if vanilla_nonprogressive_count[item.name]:
                 item.flags |= ItemFilterFlags.Excluded
             vanilla_nonprogressive_count[item.name] += 1
@@ -599,7 +599,7 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
                 item_name = world.random.choice(filler_items)
                 item = create_item_with_correct_settings(world.player, item_name)
                 location.place_locked_item(item)
-                item_list.append(FilterItem(item_name, Items.item_table[item_name], 0, ItemFilterFlags.Plando|ItemFilterFlags.Locked))
+                item_list.append(FilterItem(item_name, items.item_table[item_name], 0, ItemFilterFlags.Plando|ItemFilterFlags.Locked))
                 world.locked_locations.append(location.name)
 
 
@@ -665,7 +665,7 @@ def get_all_missions(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:
-    data = Items.item_table[name]
+    data = items.item_table[name]
 
     item = Item(name, data.classification, data.code, player)
 

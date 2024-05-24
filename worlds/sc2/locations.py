@@ -1,10 +1,10 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
-from . import ItemNames
-from .Options import (VanillaItemsOnly, get_option_value, RequiredTactics,
+from . import item_names
+from .options import (VanillaItemsOnly, get_option_value, RequiredTactics,
     LocationInclusion, KerriganPresence,
 )
-from .Rules import SC2Logic
+from .rules import SC2Logic
 
 from BaseClasses import Location
 from worlds.AutoWorld import World
@@ -157,28 +157,28 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                     or logic.terran_competent_anti_air(state))),
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_LOC_ID_OFFSET + 500, LocationType.VICTORY,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 4 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: Left Infestor", SC2WOL_LOC_ID_OFFSET + 501, LocationType.VANILLA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: Right Infestor", SC2WOL_LOC_ID_OFFSET + 502, LocationType.VANILLA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: North Infested Command Center", SC2WOL_LOC_ID_OFFSET + 503, LocationType.EXTRA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: South Infested Command Center", SC2WOL_LOC_ID_OFFSET + 504, LocationType.EXTRA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: Northwest Bar", SC2WOL_LOC_ID_OFFSET + 505, LocationType.EXTRA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: North Bar", SC2WOL_LOC_ID_OFFSET + 506, LocationType.EXTRA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Outbreak", "Outbreak: South Bar", SC2WOL_LOC_ID_OFFSET + 507, LocationType.EXTRA,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                   (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Safe Haven", "Safe Haven: Victory", SC2WOL_LOC_ID_OFFSET + 600, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_competent_anti_air(state)),
@@ -305,12 +305,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("The Moebius Factor", "The Moebius Factor: Victory", SC2WOL_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
                      lambda state: logic.terran_basic_anti_air(state) and
                                    (logic.terran_air(state)
-                                    or state.has_any({ItemNames.MEDIVAC, ItemNames.HERCULES}, player)
+                                    or state.has_any({item_names.MEDIVAC, item_names.HERCULES}, player)
                                     and logic.terran_common_unit(state))),
         LocationData("The Moebius Factor", "The Moebius Factor: 1st Data Core", SC2WOL_LOC_ID_OFFSET + 1001, LocationType.VANILLA),
         LocationData("The Moebius Factor", "The Moebius Factor: 2nd Data Core", SC2WOL_LOC_ID_OFFSET + 1002, LocationType.VANILLA,
                      lambda state: (logic.terran_air(state)
-                                    or state.has_any({ItemNames.MEDIVAC, ItemNames.HERCULES}, player)
+                                    or state.has_any({item_names.MEDIVAC, item_names.HERCULES}, player)
                                     and logic.terran_common_unit(state))),
         LocationData("The Moebius Factor", "The Moebius Factor: South Rescue", SC2WOL_LOC_ID_OFFSET + 1003, LocationType.EXTRA,
                      lambda state: logic.terran_can_rescue(state)),
@@ -325,12 +325,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("The Moebius Factor", "The Moebius Factor: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1008, LocationType.VANILLA,
                      lambda state: logic.terran_basic_anti_air(state) and
                                    (logic.terran_air(state)
-                                    or state.has_any({ItemNames.MEDIVAC, ItemNames.HERCULES}, player)
+                                    or state.has_any({item_names.MEDIVAC, item_names.HERCULES}, player)
                                     and logic.terran_common_unit(state))),
         LocationData("The Moebius Factor", "The Moebius Factor: 3rd Data Core", SC2WOL_LOC_ID_OFFSET + 1009, LocationType.VANILLA,
                      lambda state: logic.terran_basic_anti_air(state) and
                                    (logic.terran_air(state)
-                                    or state.has_any({ItemNames.MEDIVAC, ItemNames.HERCULES}, player)
+                                    or state.has_any({item_names.MEDIVAC, item_names.HERCULES}, player)
                                     and logic.terran_common_unit(state))),
         LocationData("Supernova", "Supernova: Victory", SC2WOL_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
                      lambda state: logic.terran_beats_protoss_deathball(state)),
@@ -375,26 +375,26 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("Devil's Playground", "Devil's Playground: Victory", SC2WOL_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: adv_tactics or
                                    logic.terran_basic_anti_air(state) and (
-                                           logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                           logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Devil's Playground", "Devil's Playground: Tosh's Miners", SC2WOL_LOC_ID_OFFSET + 1301, LocationType.VANILLA),
         LocationData("Devil's Playground", "Devil's Playground: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1302, LocationType.VANILLA,
-                     lambda state: adv_tactics or logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player)),
+                     lambda state: adv_tactics or logic.terran_common_unit(state) or state.has(item_names.REAPER, player)),
         LocationData("Devil's Playground", "Devil's Playground: North Reapers", SC2WOL_LOC_ID_OFFSET + 1303, LocationType.EXTRA),
         LocationData("Devil's Playground", "Devil's Playground: Middle Reapers", SC2WOL_LOC_ID_OFFSET + 1304, LocationType.EXTRA,
-                     lambda state: adv_tactics or logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player)),
+                     lambda state: adv_tactics or logic.terran_common_unit(state) or state.has(item_names.REAPER, player)),
         LocationData("Devil's Playground", "Devil's Playground: Southwest Reapers", SC2WOL_LOC_ID_OFFSET + 1305, LocationType.EXTRA,
-                     lambda state: adv_tactics or logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player)),
+                     lambda state: adv_tactics or logic.terran_common_unit(state) or state.has(item_names.REAPER, player)),
         LocationData("Devil's Playground", "Devil's Playground: Southeast Reapers", SC2WOL_LOC_ID_OFFSET + 1306, LocationType.EXTRA,
                      lambda state: adv_tactics or
                                    logic.terran_basic_anti_air(state) and (
-                                           logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                           logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Devil's Playground", "Devil's Playground: East Reapers", SC2WOL_LOC_ID_OFFSET + 1307, LocationType.CHALLENGE,
                      lambda state: logic.terran_basic_anti_air(state) and
                                     (adv_tactics or
-                                           logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                           logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Devil's Playground", "Devil's Playground: Zerg Cleared", SC2WOL_LOC_ID_OFFSET + 1308, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_anti_air(state) and (
-                                           logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+                                           logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Victory", SC2WOL_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
                      lambda state: logic.welcome_to_the_jungle_requirement(state)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Close Relic", SC2WOL_LOC_ID_OFFSET + 1401, LocationType.VANILLA),
@@ -744,8 +744,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY,
                      lambda state: logic.zerg_pass_vents(state)
                                    and (logic.story_tech_granted
-                                        or state.has_any({ItemNames.ZERGLING_RAPTOR_STRAIN, ItemNames.ROACH,
-                                                         ItemNames.HYDRALISK, ItemNames.INFESTOR}, player))
+                                        or state.has_any({item_names.ZERGLING_RAPTOR_STRAIN, item_names.ROACH,
+                                                         item_names.HYDRALISK, item_names.INFESTOR}, player))
                      ),
         LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.VANILLA,
                      lambda state: logic.zerg_pass_vents(state)),
@@ -891,7 +891,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.supreme_requirement(state)),
         LocationData("Infested", "Infested: Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
-                                   ((logic.zerg_competent_anti_air(state) and state.has(ItemNames.INFESTOR, player)) or
+                                   ((logic.zerg_competent_anti_air(state) and state.has(item_names.INFESTOR, player)) or
                                    (adv_tactics and logic.zerg_basic_anti_air(state)))),
         LocationData("Infested", "Infested: East Science Facility", SC2HOTS_LOC_ID_OFFSET + 1301, LocationType.VANILLA,
                      lambda state: logic.zerg_common_unit(state) and
@@ -911,23 +911,23 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("Infested", "Infested: East Garrison", SC2HOTS_LOC_ID_OFFSET + 1307, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
         LocationData("Infested", "Infested: Mid Garrison", SC2HOTS_LOC_ID_OFFSET + 1308, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
         LocationData("Infested", "Infested: North Garrison", SC2HOTS_LOC_ID_OFFSET + 1309, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
         LocationData("Infested", "Infested: Close Southwest Garrison", SC2HOTS_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
         LocationData("Infested", "Infested: Far Southwest Garrison", SC2HOTS_LOC_ID_OFFSET + 1311, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
         LocationData("Hand of Darkness", "Hand of Darkness: Victory", SC2HOTS_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
@@ -1229,8 +1229,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.last_stand_requirement(state)),
         LocationData("Last Stand", "Last Stand: 1.5 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1005, LocationType.VANILLA,
                      lambda state: logic.last_stand_requirement(state) and (
-                         state.has_all({ItemNames.KHAYDARIN_MONOLITH, ItemNames.PHOTON_CANNON, ItemNames.SHIELD_BATTERY}, player)
-                         or state.has_any({ItemNames.SOA_SOLAR_LANCE, ItemNames.SOA_DEPLOY_FENIX}, player)
+                         state.has_all({item_names.KHAYDARIN_MONOLITH, item_names.PHOTON_CANNON, item_names.SHIELD_BATTERY}, player)
+                         or state.has_any({item_names.SOA_SOLAR_LANCE, item_names.SOA_DEPLOY_FENIX}, player)
                      )),
         LocationData("Forbidden Weapon", "Forbidden Weapon: Victory", SC2LOTV_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
                      lambda state: logic.protoss_common_unit(state)
@@ -1522,8 +1522,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.night_terrors_requirement(state)
                                    and logic.nova_ranged_weapon(state)
                                    and state.has_any(
-                         {ItemNames.NOVA_HELLFIRE_SHOTGUN, ItemNames.NOVA_PULSE_GRENADES, ItemNames.NOVA_STIM_INFUSION,
-                          ItemNames.NOVA_HOLO_DECOY}, player)),
+                         {item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_PULSE_GRENADES, item_names.NOVA_STIM_INFUSION,
+                          item_names.NOVA_HOLO_DECOY}, player)),
         LocationData("Night Terrors", "Night Terrors: Science Facility", SC2NCO_LOC_ID_OFFSET + 509, LocationType.EXTRA,
                      lambda state: logic.night_terrors_requirement(state)),
         LocationData("Night Terrors", "Night Terrors: Eradicators", SC2NCO_LOC_ID_OFFSET + 510, LocationType.VANILLA,
@@ -1533,11 +1533,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.flashpoint_far_requirement(state)),
         LocationData("Flashpoint", "Flashpoint: Close North Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 601, LocationType.EXTRA,
                      lambda state: state.has_any(
-                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                         {item_names.LIBERATOR_RAID_ARTILLERY, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, player)
                                    or logic.terran_common_unit(state)),
         LocationData("Flashpoint", "Flashpoint: Close East Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 602, LocationType.EXTRA,
                      lambda state: state.has_any(
-                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                         {item_names.LIBERATOR_RAID_ARTILLERY, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, player)
                                    or logic.terran_common_unit(state)),
         LocationData("Flashpoint", "Flashpoint: Far North Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 603, LocationType.EXTRA,
                      lambda state: logic.flashpoint_far_requirement(state)),
@@ -1547,18 +1547,18 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.flashpoint_far_requirement(state)),
         LocationData("Flashpoint", "Flashpoint: Northwest Subway Entrance", SC2NCO_LOC_ID_OFFSET + 606, LocationType.VANILLA,
                      lambda state: state.has_any(
-                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                         {item_names.LIBERATOR_RAID_ARTILLERY, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, player)
                                    and logic.terran_common_unit(state)
                                    or logic.flashpoint_far_requirement(state)),
         LocationData("Flashpoint", "Flashpoint: Southeast Subway Entrance", SC2NCO_LOC_ID_OFFSET + 607, LocationType.VANILLA,
                      lambda state: state.has_any(
-                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                         {item_names.LIBERATOR_RAID_ARTILLERY, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, player)
                                    and logic.terran_common_unit(state)
                                    or logic.flashpoint_far_requirement(state)),
         LocationData("Flashpoint", "Flashpoint: Northeast Subway Entrance", SC2NCO_LOC_ID_OFFSET + 608, LocationType.VANILLA,
                      lambda state: logic.flashpoint_far_requirement(state)),
         LocationData("Flashpoint", "Flashpoint: Expansion Hatchery", SC2NCO_LOC_ID_OFFSET + 609, LocationType.EXTRA,
-                     lambda state: state.has(ItemNames.LIBERATOR_RAID_ARTILLERY, player) and logic.terran_common_unit(state)
+                     lambda state: state.has(item_names.LIBERATOR_RAID_ARTILLERY, player) and logic.terran_common_unit(state)
                                    or logic.flashpoint_far_requirement(state)),
         LocationData("Flashpoint", "Flashpoint: Baneling Spawns", SC2NCO_LOC_ID_OFFSET + 610, LocationType.EXTRA,
                      lambda state: logic.flashpoint_far_requirement(state)),
@@ -1587,8 +1587,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Blazefire Gunblade", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
                      lambda state: logic.enemy_shadow_second_stage(state)
                                    and (logic.story_tech_granted
-                                        or state.has(ItemNames.NOVA_BLINK, player)
-                                        or (adv_tactics and state.has_all({ItemNames.NOVA_DOMINATION, ItemNames.NOVA_HOLO_DECOY, ItemNames.NOVA_JUMP_SUIT_MODULE}, player))
+                                        or state.has(item_names.NOVA_BLINK, player)
+                                        or (adv_tactics and state.has_all({item_names.NOVA_DOMINATION, item_names.NOVA_HOLO_DECOY, item_names.NOVA_JUMP_SUIT_MODULE}, player))
                                         )
                      ),
         LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Blink Suit", SC2NCO_LOC_ID_OFFSET + 707, LocationType.VANILLA,

@@ -2,13 +2,13 @@ from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union, TYP
 import math
 
 from BaseClasses import Region, Entrance, Location, CollectionState
-from .Locations import LocationData
-from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
+from .locations import LocationData
+from .options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
     GridTwoStartPositions, static_mission_orders, dynamic_mission_orders
-from .MissionTables import MissionInfo, vanilla_mission_req_table, \
+from .mission_tables import MissionInfo, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection, FillMission
-from .MissionOrders import make_gauntlet, make_blitz, make_golden_path, make_hopscotch
-from .PoolFilter import filter_missions
+from .mission_orders import make_gauntlet, make_blitz, make_golden_path, make_hopscotch
+from .pool_filter import filter_missions
 
 
 if TYPE_CHECKING:

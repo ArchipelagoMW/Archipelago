@@ -23,10 +23,10 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from worlds.sc2 import ItemNames
-from worlds.sc2.ItemGroups import item_name_groups, unlisted_item_name_groups
-from worlds.sc2 import Options
-from worlds.sc2.Options import (
+from worlds.sc2 import item_names
+from worlds.sc2.item_groups import item_name_groups, unlisted_item_name_groups
+from worlds.sc2 import options
+from worlds.sc2.options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
@@ -47,17 +47,17 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.Items import (
+from worlds.sc2.items import (
     lookup_id_to_name, get_full_item_list, ItemData, upgrade_numbers, upgrade_numbers_all,
     race_to_item_type, upgrade_item_types, ZergItemType,
 )
-from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
+from worlds.sc2.locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
+from worlds.sc2.mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
-from worlds.sc2.Regions import MissionInfo
+from worlds.sc2.regions import MissionInfo
 
 import colorama
-from Options import Option
+from worlds.sc2.options import Option
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
@@ -137,11 +137,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
-        options = difficulty.split()
-        num_options = len(options)
+        arguments = difficulty.split()
+        num_arguments = len(arguments)
 
-        if num_options > 0:
-            difficulty_choice = options[0].lower()
+        if num_arguments > 0:
+            difficulty_choice = arguments[0].lower()
             if difficulty_choice == "casual":
                 self.ctx.difficulty_override = 0
             elif difficulty_choice == "normal":
@@ -151,10 +151,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             elif difficulty_choice == "brutal":
                 self.ctx.difficulty_override = 3
             else:
-                self.output("Unable to parse difficulty '" + options[0] + "'")
+                self.output("Unable to parse difficulty '" + arguments[0] + "'")
                 return False
 
-            self.output("Difficulty set to " + options[0])
+            self.output("Difficulty set to " + arguments[0])
             return True
 
         else:
@@ -172,11 +172,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_game_speed(self, game_speed: str = "") -> bool:
         """Overrides the current game speed for the world.
          Takes the arguments default, slower, slow, normal, fast, faster"""
-        options = game_speed.split()
-        num_options = len(options)
+        arguments = game_speed.split()
+        num_arguments = len(arguments)
 
-        if num_options > 0:
-            speed_choice = options[0].lower()
+        if num_arguments > 0:
+            speed_choice = arguments[0].lower()
             if speed_choice == "default":
                 self.ctx.game_speed_override = 0
             elif speed_choice == "slower":
@@ -190,10 +190,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             elif speed_choice == "faster":
                 self.ctx.game_speed_override = 5
             else:
-                self.output("Unable to parse game speed '" + options[0] + "'")
+                self.output("Unable to parse game speed '" + arguments[0] + "'")
                 return False
 
-            self.output("Game speed set to " + options[0])
+            self.output("Game speed set to " + arguments[0])
             return True
 
         else:
@@ -307,26 +307,26 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
 
-        options = (
-            ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True),
-            ConfigurableOptionInfo('kerrigan_level_cap', 'kerrigan_total_level_cap', Options.KerriganTotalLevelCap, ConfigurableOptionType.INTEGER, can_break_logic=True),
-            ConfigurableOptionInfo('kerrigan_mission_level_cap', 'kerrigan_levels_per_mission_completed_cap', Options.KerriganLevelsPerMissionCompletedCap, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('kerrigan_levels_per_mission', 'kerrigan_levels_per_mission_completed', Options.KerriganLevelsPerMissionCompleted, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('grant_story_levels', 'grant_story_levels', Options.GrantStoryLevels, can_break_logic=True),
-            ConfigurableOptionInfo('grant_story_tech', 'grant_story_tech', Options.GrantStoryTech, can_break_logic=True),
-            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True),
-            ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True),
-            ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
+        configurable_options = (
+            ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', options.KerriganPresence, can_break_logic=True),
+            ConfigurableOptionInfo('kerrigan_level_cap', 'kerrigan_total_level_cap', options.KerriganTotalLevelCap, ConfigurableOptionType.INTEGER, can_break_logic=True),
+            ConfigurableOptionInfo('kerrigan_mission_level_cap', 'kerrigan_levels_per_mission_completed_cap', options.KerriganLevelsPerMissionCompletedCap, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('kerrigan_levels_per_mission', 'kerrigan_levels_per_mission_completed', options.KerriganLevelsPerMissionCompleted, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('grant_story_levels', 'grant_story_levels', options.GrantStoryLevels, can_break_logic=True),
+            ConfigurableOptionInfo('grant_story_tech', 'grant_story_tech', options.GrantStoryTech, can_break_logic=True),
+            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', options.TakeOverAIAllies, can_break_logic=True),
+            ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', options.SpearOfAdunPresence, can_break_logic=True),
+            ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
             # Note(mm): Technically SOA passive presence is in the logic for Amon's Fall if Takeover AI Allies is true,
             # but that's edge case enough I don't think we should warn about it.
-            ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', Options.SpearOfAdunAutonomouslyCastAbilityPresence),
-            ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', Options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
-            ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera),
-            ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes),
-            ConfigurableOptionInfo('enable_morphling', 'enable_morphling', Options.EnableMorphling, can_break_logic=True),
+            ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', options.SpearOfAdunAutonomouslyCastAbilityPresence),
+            ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
+            ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', options.MineralsPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', options.VespenePerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
+            ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
+            ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -339,7 +339,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             Options
         --------------------
         """))('\n')
-        for option in options:
+        for option in configurable_options:
             option_help_text = inspect.cleandoc(option.option_class.__doc__ or "No description provided.").split('\n', 1)[0]
             help_message.coloured(option.name, CMD_COLOUR)(": " + " | ".join(option.option_class.options)
                 + f" -- {option_help_text}\n")
@@ -350,7 +350,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if not option_name or option_name == 'list' or option_name == 'help':
             help_message.send(self.ctx)
             return
-        for option in options:
+        for option in configurable_options:
             if option_name == option.name:
                 option_value = boolean_option_map.get(option_value, option_value)
                 if not option_value:
@@ -423,11 +423,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
 
-        options = mission_id.split()
-        num_options = len(options)
+        arguments = mission_id.split()
+        num_arguments = len(arguments)
 
-        if num_options > 0:
-            mission_number = int(options[0])
+        if num_arguments > 0:
+            mission_number = int(arguments[0])
 
             self.ctx.play_mission(mission_number)
 
@@ -724,7 +724,7 @@ class SC2Context(CommonContext):
         super(SC2Context, self).on_print_json(args)
 
     def run_gui(self) -> None:
-        from .ClientGui import start_gui
+        from .client_gui import start_gui
         start_gui(self)
 
 
@@ -804,15 +804,15 @@ async def main():
 
 # These items must be given to the player if the game is generated on version 2
 API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
-    CompatItemHolder(ItemNames.PHOTON_CANNON),
-    CompatItemHolder(ItemNames.OBSERVER),
-    CompatItemHolder(ItemNames.WARP_HARMONIZATION),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_SHIELDS, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
-    CompatItemHolder(ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
+    CompatItemHolder(item_names.PHOTON_CANNON),
+    CompatItemHolder(item_names.OBSERVER),
+    CompatItemHolder(item_names.WARP_HARMONIZATION),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_SHIELDS, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
+    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
 }
 
 
@@ -856,26 +856,26 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             if item_data.type not in upgrade_item_types or ctx.generic_upgrade_items == 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
-                if name == ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
+                if name == item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
                     shields_from_ground_upgrade += 1
-                if name == ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
+                if name == item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
                     shields_from_air_upgrade += 1
                 for bundled_number in upgrade_numbers[item_data.number]:
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
             # Regen bio-steel nerf with API3 - undo for older games
-            if ctx.slot_data_version < 3 and name == ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL:
+            if ctx.slot_data_version < 3 and name == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL:
                 current_level = (accumulators[item_data.race][flaggroup] >> item_data.number) % 4
                 if current_level == 2:
                     # Switch from level 2 to level 3 for compatibility
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
-            if name == ItemNames.STARTING_MINERALS:
+            if name == item_names.STARTING_MINERALS:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.minerals_per_item
-            elif name == ItemNames.STARTING_VESPENE:
+            elif name == item_names.STARTING_VESPENE:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
-            elif name == ItemNames.STARTING_SUPPLY:
+            elif name == item_names.STARTING_SUPPLY:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
             else:
                 accumulators[item_data.race][item_data.type.flag_word] += item_data.number
@@ -883,7 +883,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
     if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
-        shield_upgrade_item = item_list[ItemNames.PROGRESSIVE_PROTOSS_SHIELDS]
+        shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][item_data.type.flag_word] += 1 << shield_upgrade_item.number
 
@@ -937,23 +937,23 @@ def get_kerrigan_level(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[
 
 
 def calculate_kerrigan_options(ctx: SC2Context) -> int:
-    options = 0
+    result = 0
 
     # Bits 0, 1
     # Kerrigan unit available
     if ctx.kerrigan_presence in kerrigan_unit_available:
-        options |= 1 << 0
+        result |= 1 << 0
 
     # Bit 2
     # Kerrigan primal status by map
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_vanilla:
-        options |= 1 << 2
+        result |= 1 << 2
 
-    return options
+    return result
 
 
 def caclulate_soa_options(ctx: SC2Context) -> int:
-    options = 0
+    result = 0
 
     # Bits 0, 1
     # SoA Calldowns available
@@ -966,12 +966,12 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
         soa_presence_value = 2
     elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere:
         soa_presence_value = 3
-    options |= soa_presence_value << 0
+    result |= soa_presence_value << 0
 
     # Bit 2
     # SoA Calldowns for no-builds
     if ctx.spear_of_adun_present_in_no_build == SpearOfAdunPresentInNoBuild.option_true:
-        options |= 1 << 2
+        result |= 1 << 2
 
     # Bits 3,4
     # Autocasts
@@ -987,14 +987,14 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
     # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
     if ctx.slot_data_version < 4 and soa_autocasts_presence_value < 2:
         soa_autocasts_presence_value = 2
-    options |= soa_autocasts_presence_value << 3
+    result |= soa_autocasts_presence_value << 3
 
     # Bit 5
     # Autocasts in no-builds
     if ctx.spear_of_adun_autonomously_cast_present_in_no_build == SpearOfAdunAutonomouslyCastPresentInNoBuild.option_true:
-        options |= 1 << 5
+        result |= 1 << 5
 
-    return options
+    return result
 
 def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_zerg:
@@ -1010,7 +1010,7 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
-        return get_full_item_list()[ItemNames.KERRIGAN_PRIMAL_FORM].code in codes
+        return get_full_item_list()[item_names.KERRIGAN_PRIMAL_FORM].code in codes
     return False
 
 async def starcraft_launch(ctx: SC2Context, mission_id: int):

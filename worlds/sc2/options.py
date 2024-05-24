@@ -6,10 +6,10 @@ from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys)
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
+from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
-from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
-from .MissionGroups import mission_groups, MissionGroupNames
+from .mission_orders import vanilla_shuffle_order, mini_campaign_order
+from .mission_groups import mission_groups, MissionGroupNames
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 class Sc2MissionSet(OptionSet):
     """Option set made for handling missions and expanding mission groups"""
-    valid_keys = [x.mission_name for x in SC2Mission]
+    valid_keys: Iterable[str] = [x.mission_name for x in SC2Mission]
 
     @classmethod
     def from_any(cls, data: Any):
@@ -689,7 +689,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         case_insensitive_group_mapping = {
             group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()
         }
-        case_insensitive_group_mapping.update({item.casefold(): [item] for item in world.item_names})
+        case_insensitive_group_mapping.update({item.casefold(): {item} for item in world.item_names})
         for group_name in self.value:
             item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             for item_name in item_names:
@@ -697,10 +697,10 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                from . import ItemGroups
+                from . import item_groups
                 picks = get_fuzzy_results(
                     item_name,
-                    list(world.item_names) + list(ItemGroups.ItemGroupNames.get_all_group_names()),
+                    list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
                     limit=1,
                 )
                 raise Exception(f"Item {item_name} from option {self} "

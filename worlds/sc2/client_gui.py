@@ -13,11 +13,11 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
+from worlds.sc2.client import SC2Context, calc_unfinished_missions, parse_unlock
+from worlds.sc2.mission_tables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race, SC2Campaign
-from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
-from worlds.sc2.Options import LocationInclusion
+from worlds.sc2.locations import LocationType, lookup_location_id_to_type
+from worlds.sc2.options import LocationInclusion
 from worlds.sc2 import SC2World, get_first_mission
 
 
@@ -329,5 +329,5 @@ def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)
     context.ui_task = asyncio.create_task(context.ui.async_run(), name="UI")
     import pkgutil
-    data = pkgutil.get_data(SC2World.__module__, "Starcraft2.kv").decode()
+    data = pkgutil.get_data(SC2World.__module__, "starcraft2.kv").decode()
     Builder.load_string(data)
