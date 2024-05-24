@@ -319,10 +319,10 @@ class SMWorld(World):
                       player=self.player)
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(0, 100) < self.multiworld.minor_qty[self.player].value:
-            power_bombs = self.multiworld.power_bomb_qty[self.player].value
-            missiles = self.multiworld.missile_qty[self.player].value
-            super_missiles = self.multiworld.super_qty[self.player].value
+        if self.multiworld.random.randint(0, 100) < self.options.minor_qty.value:
+            power_bombs = self.options.power_bomb_qty.value
+            missiles = self.options.missile_qty.value
+            super_missiles = self.options.super_qty.value
             roll = self.multiworld.random.randint(1, power_bombs + missiles + super_missiles)
             if roll <= power_bombs:
                 return "Power Bomb"
