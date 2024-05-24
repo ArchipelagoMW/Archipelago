@@ -198,32 +198,4 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
-<<<<<<< HEAD
-/worlds/zillion
-/worlds/zillion
-<<<<<<< HEAD
-worlds/zillion/__init__.py
-worlds/zillion/__init__.py
-worlds/zillion/__init__.py
-worlds/zillion/client.py
-worlds/zillion/config.py
-worlds/zillion/docs/en_Zillion.md
-worlds/zillion/docs/setup_en.md
-worlds/zillion/empty-zillion-map-row-col-labels-281.png
-worlds/zillion/gen_data.py
-worlds/zillion/id_maps.py
-worlds/zillion/item.py
-worlds/zillion/logic.py
-worlds/zillion/options.py
-worlds/zillion/patch.py
-worlds/zillion/py.typed
-worlds/zillion/region.py
-worlds/zillion/requirements.txt
-worlds/zillion/test/__init__.py
-worlds/zillion/test/TestGoal.py
-worlds/zillion/test/TestOptions.py
-worlds/zillion/test/TestReproducibleRandom.py
-=======
->>>>>>> parent of 10ea81dc (Update .gitignore)
-=======
->>>>>>> parent of fe196db0 (Removed zillion because it doesn't work)
+.gitignore
