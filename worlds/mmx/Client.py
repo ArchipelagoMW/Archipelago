@@ -531,6 +531,7 @@ class MMXSNIClient(SNIClient):
         collected_pickups_data = await snes_read(ctx, MMX_COLLECTED_PICKUPS, 0x20)
         collected_pickups = list(collected_pickups_data)
         pickupsanity_enabled = await snes_read(ctx, MMX_PICKUPSANITY_ACTIVE, 0x1)
+        completed_intro_level = await snes_read(ctx, WRAM_START + 0x01F9B, 0x1)
         new_checks = []
         for loc_name, data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
@@ -567,7 +568,10 @@ class MMXSNIClient(SNIClient):
                         new_checks.append(loc_id)
                 elif internal_id == 0x007:
                     # Intro
-                    if game_state[0] == 0x02 and menu_state[0] == 0x00 and gameplay_state[0] == 0x01:
+                    if game_state[0] == 0x02 and \
+                       menu_state[0] == 0x00 and \
+                       gameplay_state[0] == 0x01 and \
+                       completed_intro_level[0] == 0x04:
                         new_checks.append(loc_id)
                 elif internal_id == 0x020:
                     # Pickups
