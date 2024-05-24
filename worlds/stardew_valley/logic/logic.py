@@ -440,9 +440,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             FestivalCheck.real_calico_egg_hunter: self.region.can_reach(Region.skull_cavern_100),
             FestivalCheck.willy_challenge: self.fishing.can_catch_fish(content.fishes[Fish.scorpion_carp]),
             FestivalCheck.desert_scholar: True_(),
-            FestivalCheck.trout_derby_reward_1: self.fishing.can_catch_fish(content.fishes[Fish.rainbow_trout]),
-            FestivalCheck.trout_derby_reward_2: self.fishing.can_catch_fish(content.fishes[Fish.rainbow_trout]),
-            FestivalCheck.trout_derby_reward_3: self.fishing.can_catch_fish(content.fishes[Fish.rainbow_trout]),
             FestivalCheck.squidfest_day_1_copper: self.fishing.can_catch_fish(content.fishes[Fish.squid]),
             FestivalCheck.squidfest_day_1_iron: self.fishing.can_catch_fish(content.fishes[Fish.squid]) & self.has(Fishing.bait),
             FestivalCheck.squidfest_day_1_gold: self.fishing.can_catch_fish(content.fishes[Fish.squid]) & self.has(Fishing.deluxe_bait),
@@ -454,6 +451,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             FestivalCheck.squidfest_day_2_iridium: self.fishing.can_catch_fish(content.fishes[Fish.squid]) &
                                                    self.fishing.has_specific_bait(content.fishes[Fish.squid]),
         })
+        for i in range(1, 11):
+            self.registry.festival_rules[f"{FestivalCheck.trout_derby_reward_pattern}{i}"] = self.fishing.can_catch_fish(content.fishes[Fish.rainbow_trout])
 
         self.special_order.initialize_rules()
         self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
