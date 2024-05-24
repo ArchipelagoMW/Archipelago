@@ -79,7 +79,7 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
   different weights.
 
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
-  is good for detailing the version of Archipelago this YAML was prepared for as, if it is rolled on an older version,
+  is good for detailing the version of Archipelago this YAML was prepared for. If it is rolled on an older version,
   options may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
   here to ensure it will be used is good practice.
 
@@ -137,7 +137,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
-  can also have local and non local items, forcing the items to either be placed within the worlds of the group or in
+  can also have local and non-local items, forcing the items to either be placed within the worlds of the group or in
   worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the
   players will be the amount put into the group.
 
@@ -277,7 +277,7 @@ one file, removing the need to manage separate files if one chooses to do so.
 
 As a precautionary measure, before submitting a multi-game yaml like this one in a synchronous/sync multiworld, please
 confirm that the other players in the multi are OK with what you are submitting, and please be fairly reasonable about
-the submission. (ie. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
+the submission. (i.e. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
 reasonable, but submitting a ChecksFinder alongside another game OR submitting multiple Slay the Spire runs is likely
 OK)
 
@@ -295,7 +295,7 @@ requires:
   version: 0.3.2
 Super Mario 64:
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
   EnableCoinStars: false
   StrictCapRequirements: true
   StrictCannonRequirements: true
@@ -315,7 +315,7 @@ name: Minecraft
 game: Minecraft
 Minecraft:
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
   advancement_goal: 40
   combat_difficulty: hard
   include_hard_advancements: false
@@ -341,7 +341,7 @@ game: ChecksFinder
 
 ChecksFinder: 
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
 ```
 
 The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.
