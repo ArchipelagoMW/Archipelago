@@ -19,7 +19,7 @@ from .regions import create_regions
 from .options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-    GrantStoryTech, GenericUpgradeResearch,
+    GrantStoryTech, GenericUpgradeResearch, get_enabled_races
 )
 from .pool_filter import filter_items
 from .mission_tables import (
@@ -264,13 +264,13 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
 
     for item in item_list:
         # Catch-all for all of a faction's items
-        if (not terran_missions and item.data.race == SC2Race.TERRAN):
+        if not terran_missions and item.data.race == SC2Race.TERRAN:
             item.flags |= ItemFilterFlags.Excluded
             continue
-        if (not zerg_missions and item.data.race == SC2Race.ZERG):
+        if not zerg_missions and item.data.race == SC2Race.ZERG:
             item.flags |= ItemFilterFlags.Excluded
             continue
-        if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
+        if not protoss_missions and item.data.race == SC2Race.PROTOSS:
             if item.name not in item_groups.soa_items:
                 item.flags |= ItemFilterFlags.Excluded
             continue
@@ -680,6 +680,7 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
     if (world.options.kerrigan_presence.value not in kerrigan_unit_available
         or total_levels == 0
         or not kerrigan_missions
+        or SC2Race.ZERG not in get_enabled_races(world)
         or (world.options.grant_story_levels and not kerrigan_build_missions)
     ):
         return
