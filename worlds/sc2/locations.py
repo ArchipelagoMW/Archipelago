@@ -17,6 +17,7 @@ SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
+SC2_RACESWAP_LOC_ID_OFFSET = SC2NCO_LOC_ID_OFFSET + 900
 
 
 class SC2Location(Location):
@@ -1619,6 +1620,52 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.end_game_requirement(state) and logic.nova_any_weapon(state)),
         LocationData("End Game", "End Game: Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
                      lambda state: logic.end_game_requirement(state)),
+
+        # Mission Variants
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 100, LocationType.VICTORY,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): First Relic", SC2_RACESWAP_LOC_ID_OFFSET + 101, LocationType.VANILLA),
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): Second Relic", SC2_RACESWAP_LOC_ID_OFFSET + 102, LocationType.VANILLA),
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): Third Relic", SC2_RACESWAP_LOC_ID_OFFSET + 103, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): Fourth Relic", SC2_RACESWAP_LOC_ID_OFFSET + 104, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): First Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 105, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Z)", "Smash and Grab (Zerg): Second Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 106, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 200, LocationType.VICTORY,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): First Relic", SC2_RACESWAP_LOC_ID_OFFSET + 201, LocationType.VANILLA),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): Second Relic", SC2_RACESWAP_LOC_ID_OFFSET + 202, LocationType.VANILLA),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): Third Relic", SC2_RACESWAP_LOC_ID_OFFSET + 203, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): Fourth Relic", SC2_RACESWAP_LOC_ID_OFFSET + 204, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): First Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 205, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (P)", "Smash and Grab (Protoss): Second Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 206, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
     ]
 
     beat_events = []

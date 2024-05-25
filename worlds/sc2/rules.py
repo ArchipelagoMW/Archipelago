@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import  CollectionState
 from .options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
-    get_enabled_campaigns, MissionOrder, EnableMorphling
+    get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
 from .items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
     kerrigan_levels, get_full_item_list
 from .mission_tables import SC2Race, SC2Campaign
@@ -340,9 +340,12 @@ class SC2Logic:
             or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
 
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
-        return self.zerg_competent_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available or \
-               state.has_any({item_names.SWARM_QUEEN, item_names.SCOURGE}, self.player) or (self.advanced_tactics and state.has(item_names.SPORE_CRAWLER, self.player))
-    
+        return self.zerg_basic_kerriganless_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available
+
+    def zerg_basic_kerriganless_anti_air(self, state: CollectionState) -> bool:
+        return self.zerg_competent_anti_air(state) or state.has_any({item_names.SWARM_QUEEN, item_names.SCOURGE}, self.player) \
+            or (self.advanced_tactics and state.has(item_names.SPORE_CRAWLER, self.player))
+
     def morph_brood_lord(self, state: CollectionState) -> bool:
         return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
             and state.has(item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)

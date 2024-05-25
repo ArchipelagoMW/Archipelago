@@ -19,7 +19,7 @@ from .regions import create_regions
 from .options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-    GrantStoryTech, GenericUpgradeResearch,
+    GrantStoryTech, GenericUpgradeResearch, get_enabled_races
 )
 from .pool_filter import filter_items
 from .mission_tables import (
@@ -246,6 +246,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
 def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes items based on if their faction has a mission present where they can be used"""
     missions = get_all_missions(world.mission_req_table)
+    races = get_enabled_races(world)
     if world.options.take_over_ai_allies.value:
         terran_missions = [mission for mission in missions if (MissionFlag.Terran|MissionFlag.AiTerranAlly) & mission.flags]
         zerg_missions = [mission for mission in missions if (MissionFlag.Zerg|MissionFlag.AiZergAlly) & mission.flags]
@@ -264,13 +265,13 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
 
     for item in item_list:
         # Catch-all for all of a faction's items
-        if (not terran_missions and item.data.race == SC2Race.TERRAN):
+        if (not terran_missions or SC2Race.TERRAN not in races) and item.data.race == SC2Race.TERRAN:
             item.flags |= ItemFilterFlags.Excluded
             continue
-        if (not zerg_missions and item.data.race == SC2Race.ZERG):
+        if (not zerg_missions or SC2Race.ZERG not in races) and item.data.race == SC2Race.ZERG:
             item.flags |= ItemFilterFlags.Excluded
             continue
-        if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
+        if (not protoss_missions or SC2Race.PROTOSS not in races) and item.data.race == SC2Race.PROTOSS:
             if item.name not in item_groups.soa_items:
                 item.flags |= ItemFilterFlags.Excluded
             continue

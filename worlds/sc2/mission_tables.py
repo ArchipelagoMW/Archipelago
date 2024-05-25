@@ -36,6 +36,7 @@ class MissionFlag(IntFlag):
     VsTerran      = auto()
     VsZerg        = auto()
     VsProtoss     = auto()
+    RaceSwap      = auto()  # The mission uses a faction other than the one it uses in vanilla
 
     AiAlly        = AiTerranAlly|AiZergAlly|AiProtossAlly
     TimedDefense  = AutoScroller|Defense
@@ -193,6 +194,10 @@ class SC2Mission(Enum):
     IN_THE_ENEMY_S_SHADOW = 81, "In the Enemy's Shadow", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_in_the_enemy_s_shadow", MissionFlag.Terran|MissionFlag.Nova|MissionFlag.NoBuild|MissionFlag.VsTerran
     DARK_SKIES = 82, "Dark Skies", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.HARD, "ap_dark_skies", MissionFlag.Terran|MissionFlag.Nova|MissionFlag.TimedDefense|MissionFlag.VsProtoss
     END_GAME = 83, "End Game", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_end_game", MissionFlag.Terran|MissionFlag.Nova|MissionFlag.Defense|MissionFlag.VsTerran
+
+    # Race-Swapped Variants
+    SMASH_AND_GRAB_Z = 84, "Smash and Grab (Z)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
+    SMASH_AND_GRAB_P = 85, "Smash and Grab (P)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
 
 
 class MissionConnection:
@@ -486,5 +491,5 @@ def get_campaign_potential_goal_missions(campaign: SC2Campaign) -> List[SC2Missi
     return missions
 
 
-def get_no_build_missions() -> List[SC2Mission]:
-    return [mission for mission in SC2Mission if MissionFlag.NoBuild in mission.flags]
+def get_missions_with_flags(flags: MissionFlag) -> List[SC2Mission]:
+    return [mission for mission in SC2Mission if flags & mission.flags]

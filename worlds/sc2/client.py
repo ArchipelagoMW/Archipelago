@@ -34,6 +34,7 @@ from worlds.sc2.options import (
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
 )
+from .mission_tables import MissionFlag
 
 
 if __name__ == "__main__":
@@ -1013,6 +1014,21 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return get_full_item_list()[item_names.KERRIGAN_PRIMAL_FORM].code in codes
     return False
 
+
+def get_mission_variant(mission_id):
+    mission_flags = lookup_id_to_mission[mission_id].flags
+    faction_variant = 0
+    if MissionFlag.RaceSwap not in mission_flags:
+        return faction_variant
+    if MissionFlag.Terran in mission_flags:
+        faction_variant = 1
+    elif MissionFlag.Zerg in mission_flags:
+        faction_variant = 2
+    elif MissionFlag.Protoss in mission_flags:
+        faction_variant = 3
+    return faction_variant
+
+
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
@@ -1061,6 +1077,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
+            mission_variant = get_mission_variant(self.mission_id)
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
@@ -1070,7 +1087,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -1084,7 +1101,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.mission_order,
                 1 if self.ctx.nova_covert_ops_only else 0,
                 self.ctx.grant_story_levels,
-                self.ctx.enable_morphling
+                self.ctx.enable_morphling,
+                mission_variant
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
