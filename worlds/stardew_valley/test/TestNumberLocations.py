@@ -15,8 +15,7 @@ class TestLocationGeneration(SVTestBase):
 
     def test_all_location_created_are_in_location_table(self):
         for location in self.get_real_locations():
-            if not location.event:
-                self.assertIn(location.name, location_table)
+            self.assertIn(location.name, location_table)
 
 
 class TestMinLocationAndMaxItem(SVTestBase):
