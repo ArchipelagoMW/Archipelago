@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from functools import cached_property
 from typing import Collection, Callable
 
 from .ability_logic import AbilityLogicMixin
@@ -50,10 +51,11 @@ from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
-from ..options import SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
+from ..options import SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions, Walnutsanity
 from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
+from ..strings.ap_names.ap_option_names import OptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -466,18 +468,31 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
 
-    def can_complete_field_office(self) -> StardewRule:
+    @cached_property
+    def can_start_field_office(self) -> StardewRule:
         field_office = self.region.can_reach(Region.field_office)
         professor_snail = self.received("Open Professor Snail Cave")
-        tools = self.tool.has_tool(Tool.pickaxe) & self.tool.has_tool(Tool.hoe) & self.tool.has_tool(Tool.scythe)
-        leg_and_snake_skull = self.has_all(Fossil.fossilized_leg, Fossil.snake_skull)
-        ribs_and_spine = self.has_all(Fossil.fossilized_ribs, Fossil.fossilized_spine)
-        skull = self.has(Fossil.fossilized_skull)
-        tail = self.has(Fossil.fossilized_tail)
-        frog = self.has(Fossil.mummified_frog)
-        bat = self.has(Fossil.mummified_bat)
-        snake_vertebrae = self.has(Fossil.snake_vertebrae)
-        return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
+        return field_office & professor_snail
+
+    def can_complete_large_animal_collection(self) -> StardewRule:
+        fossils = self.has_all(Fossil.fossilized_leg, Fossil.fossilized_ribs, Fossil.fossilized_skull, Fossil.fossilized_spine, Fossil.fossilized_tail)
+        return self.can_start_field_office & fossils
+
+    def can_complete_snake_collection(self) -> StardewRule:
+        fossils = self.has_all(Fossil.snake_skull, Fossil.snake_vertebrae)
+        return self.can_start_field_office & fossils
+
+    def can_complete_frog_collection(self) -> StardewRule:
+        fossils = self.has_all(Fossil.mummified_frog)
+        return self.can_start_field_office & fossils
+
+    def can_complete_bat_collection(self) -> StardewRule:
+        fossils = self.has_all(Fossil.mummified_bat)
+        return self.can_start_field_office & fossils
+
+    def can_complete_field_office(self) -> StardewRule:
+        return self.can_complete_large_animal_collection() & self.can_complete_snake_collection() & \
+               self.can_complete_frog_collection() & self.can_complete_bat_collection()
 
     def can_finish_grandpa_evaluation(self) -> StardewRule:
         # https://stardewvalleywiki.com/Grandpa
@@ -566,6 +581,46 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             return False_()
         if number <= 0:
             return True_()
+
+        if self.options.walnutsanity == Walnutsanity.preset_none:
+            return self.can_get_walnuts(number)
+        if self.options.walnutsanity == Walnutsanity.preset_all:
+            return self.has_received_walnuts(number)
+        puzzle_walnuts = 61
+        bush_walnuts = 25
+        dig_walnuts = 18
+        repeatable_walnuts = 33
+        total_walnuts = puzzle_walnuts + bush_walnuts + dig_walnuts + repeatable_walnuts
+        walnuts_to_receive = 0
+        walnuts_to_collect = total_walnuts
+        if OptionName.walnutsanity_puzzles in self.options.walnutsanity:
+            puzzle_walnut_rate = puzzle_walnuts / total_walnuts
+            puzzle_walnuts_required = round(puzzle_walnut_rate * number)
+            walnuts_to_receive += puzzle_walnuts_required
+            walnuts_to_collect -= puzzle_walnuts_required
+        if OptionName.walnutsanity_bushes in self.options.walnutsanity:
+            bush_walnuts_rate = bush_walnuts / total_walnuts
+            bush_walnuts_required = round(bush_walnuts_rate * number)
+            walnuts_to_receive += bush_walnuts_required
+            walnuts_to_collect -= bush_walnuts_required
+        if OptionName.walnutsanity_dig_spots in self.options.walnutsanity:
+            dig_walnuts_rate = dig_walnuts / total_walnuts
+            dig_walnuts_required = round(dig_walnuts_rate * number)
+            walnuts_to_receive += dig_walnuts_required
+            walnuts_to_collect -= dig_walnuts_required
+        if OptionName.walnutsanity_repeatables in self.options.walnutsanity:
+            repeatable_walnuts_rate = repeatable_walnuts / total_walnuts
+            repeatable_walnuts_required = round(repeatable_walnuts_rate * number)
+            walnuts_to_receive += repeatable_walnuts_required
+            walnuts_to_collect -= repeatable_walnuts_required
+        return self.has_received_walnuts(walnuts_to_receive) & self.can_get_walnuts(walnuts_to_collect)
+
+
+    def has_received_walnuts(self, number: int) -> StardewRule:
+        raise
+
+
+    def can_get_walnuts(self, number: int) -> StardewRule:
         # https://stardewcommunitywiki.com/Golden_Walnut#Walnut_Locations
         reach_south = self.region.can_reach(Region.island_south)
         reach_north = self.region.can_reach(Region.island_north)
@@ -585,7 +640,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         reach_caves = self.logic.and_(self.region.can_reach(Region.qi_walnut_room), self.region.can_reach(Region.dig_site),
                                       self.region.can_reach(Region.gourmand_frog_cave),
                                       self.region.can_reach(Region.colored_crystals_cave),
-                                      self.region.can_reach(Region.shipwreck), self.received(APWeapon.slingshot))
+                                      self.region.can_reach(Region.shipwreck), self.combat.has_slingshot)
         reach_entire_island = self.logic.and_(reach_outside_areas, reach_all_volcano,
                                               reach_caves, reach_southeast, reach_field_office, reach_pirate_cove)
         if number <= 5:

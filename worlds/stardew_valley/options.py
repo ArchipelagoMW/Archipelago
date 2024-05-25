@@ -4,6 +4,7 @@ from typing import Protocol, ClassVar
 
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList
 from .mods.mod_data import ModNames
+from .strings.ap_names.ap_option_names import OptionName
 
 
 class StardewValleyOption(Protocol):
@@ -562,9 +563,9 @@ class Walnutsanity(OptionList):
     """
     internal_name = "walnutsanity"
     display_name = "Walnutsanity"
-    valid_keys = {"Puzzles", "Bushes", "Dig Spots", "Repeatables", }
+    valid_keys = {OptionName.walnutsanity_puzzles, OptionName.walnutsanity_bushes, OptionName.walnutsanity_dig_spots, OptionName.walnutsanity_repeatables, }
     preset_none = []
-    preset_all = ["Puzzles", "Bushes", "Dig Spots", "Repeatables", ]
+    preset_all = list(valid_keys)
     default = preset_none
 
 

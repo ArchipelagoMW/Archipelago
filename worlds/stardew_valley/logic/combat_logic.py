@@ -56,3 +56,7 @@ class CombatLogic(BaseLogic[Union[HasLogicMixin, CombatLogicMixin, RegionLogicMi
     @cached_property
     def has_galaxy_weapon(self) -> StardewRule:
         return self.logic.or_(*(self.logic.received(weapon, 5) for weapon in valid_weapons))
+
+    @cached_property
+    def has_slingshot(self) -> StardewRule:
+        return self.logic.received(APWeapon.slingshot)
