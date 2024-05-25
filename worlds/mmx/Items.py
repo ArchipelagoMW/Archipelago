@@ -64,6 +64,8 @@ junk_table = {
     ItemName.small_hp:      ItemData(STARTING_ID + 0x0030, False),
     ItemName.large_hp:      ItemData(STARTING_ID + 0x0031, False),
     ItemName.life:          ItemData(STARTING_ID + 0x0034, False),
+    ItemName.small_weapon:  ItemData(STARTING_ID + 0x0032, False), 
+    ItemName.large_weapon:  ItemData(STARTING_ID + 0x0033, False), 
 }
 
 item_groups = {

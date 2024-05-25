@@ -49,8 +49,8 @@ refill_rom_data = {
     STARTING_ID + 0x0030: ["hp refill", 2],
     STARTING_ID + 0x0031: ["hp refill", 8],
     STARTING_ID + 0x0034: ["1up", 0],
-    #0xBD0032: ["small weapon refill"],
-    #0xBD0033: ["large weapon refill"]
+    STARTING_ID + 0x0032: ["weapon refill", 2],
+    STARTING_ID + 0x0033: ["weapon refill", 8],
 }
 
 boss_weakness_offsets = {
