@@ -82,13 +82,14 @@ class gameDifficulty(Choice):
     Easy: for beginners. No luck required, just roll the dice and have fun. Lower final goal.
     Medium: intended difficulty. If you play smart, you'll finish the game without any trouble.
     Hard: you may need to play smart, be lucky and understand the score multiplier mechanic. Higher final goal.
-    Extreme: more strict logic, higher final goal. NOT RECOMMENDED FOR MULTIWORLDS.
+    Extreme: more strict logic, higher final goal. ONLY FOR EXPERIENCES PLAYERS IN MULTIWORLDS.
     """
     display_name = "Game difficulty"
     option_easy = 1
     option_medium = 2
     option_hard = 3
     option_extreme = 4
+    #option_nightmare = 5
     
     default = 2
     

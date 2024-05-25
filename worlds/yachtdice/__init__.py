@@ -153,6 +153,7 @@ class YachtDiceWorld(World):
                 
         if self.options.game_mode.value == 1:
             self.max_score = scoreInLogic
+            print(f"Max score: {self.max_score}, difficulty {game_difficulty}")
         
         if self.options.game_mode.value == 2:
             self.max_score = 1000

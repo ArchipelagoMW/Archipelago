@@ -49,9 +49,9 @@ category_mappings = {
 
 
 class Category:
-    def __init__(self, name, mult = 1):
+    def __init__(self, name, quantity = 1):
         self.name = name
-        self.multiplicity = mult #how many times you have the category
+        self.quantity = quantity #how many times you have the category
 
     #return mean score of a category
     def meanScore(self, nbDice, nbRolls):
@@ -60,7 +60,7 @@ class Category:
         meanScore = 0
         for key in yacht_weights[self.name, min(8,nbDice), min(8,nbRolls)]:
             meanScore += key*yacht_weights[self.name, min(8,nbDice), min(8,nbRolls)][key]/100000
-        return meanScore
+        return meanScore * self.quantity
 
 
 
@@ -105,7 +105,7 @@ yachtdice_cache = {}
 
 #Function that returns the feasible score in logic based on items obtained.
 def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremulttype):
-    tup = tuple([tuple(sorted([c.name+str(c.multiplicity) for c in categories])), nbDice, nbRolls, multiplier]) #identifier
+    tup = tuple([tuple(sorted([c.name+str(c.quantity) for c in categories])), nbDice, nbRolls, multiplier, diff, scoremulttype]) #identifier
     
     #if already computed, return the result
     if tup in yachtdice_cache.keys():
@@ -159,6 +159,10 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
         # Return the first value if percentile is lower than all probabilities
         return prev_val if prev_val is not None else sorted_values[0]  
             
+            
+    percReturn = [0, 0.4, 0.4, 0.45, 0.45, 0.45][diff]
+    diffDivide = [0, 9, 5, 3, 2, 1][diff]
+    
     #calculate total distribution
     total_dist = {0: 1}
     for j in range(len(categories)):
@@ -172,17 +176,17 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
             
             
         #for higher difficulties, the simulation gets multiple tries for categories.
-        dist = max_dist(dist, max(1, len(categories) // (10 - 2*diff)))
+        dist = max_dist(dist, max(1, len(categories) // diffDivide))
         
         cur_mult = -100
         if scoremulttype == 1: #fixed
             cur_mult = multiplier
         if scoremulttype == 2: #step
             cur_mult = j * multiplier
-        total_dist = add_distributions(total_dist, dist, (1 + cur_mult) * ( 2 ** (categories[j].multiplicity-1) ))
+        total_dist = add_distributions(total_dist, dist, (1 + cur_mult) * ( 2 ** (categories[j].quantity-1) ))
     
     #save result into the cache, then return it
-    yachtdice_cache[tup] = math.floor(percentile_distribution(total_dist, .20 + diff/10))
+    yachtdice_cache[tup] = math.floor(percentile_distribution(total_dist, percReturn))
     return yachtdice_cache[tup]
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.
