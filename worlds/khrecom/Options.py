@@ -10,7 +10,7 @@ class Cure(DefaultOnToggle):
 
 class EarlyCure(DefaultOnToggle):
     """
-    Toggle whether one of the starting checks should include Cure 4-6
+    Toggle whether one of the starting checks should include Cure
     """
     display_name = "Early Cure"
 
