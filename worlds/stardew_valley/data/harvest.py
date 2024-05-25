@@ -59,9 +59,3 @@ class HarvestCropSource(ItemSource):
         return {
             self.seed: (ItemTag.CROPSANITY_SEED,)
         }
-
-
-@dataclass(**source_dataclass_args)
-class ToolSource(ItemSource):
-    regions: Tuple[str, ...]
-    tools: Tuple[Tuple[str, str], ...]

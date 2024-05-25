@@ -39,6 +39,13 @@ class PermanentSource(ItemSource):
 
 
 @dataclass(**source_dataclass_args)
+class GenericToolSource(ItemSource):
+    """A source for something that requires tools, but does not really fit any category. Typically, won't give any xp."""
+    regions: Tuple[str, ...]
+    tools: Tuple[Tuple[str, str], ...]
+
+
+@dataclass(**source_dataclass_args)
 class CustomRuleSource(ItemSource):
     """A source just to make sure the item is not pruned, since its rule will be implemented directly in logic."""
     ...

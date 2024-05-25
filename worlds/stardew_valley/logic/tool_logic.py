@@ -1,4 +1,4 @@
-from typing import Union, Iterable
+from typing import Union, Iterable, Tuple
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
@@ -42,6 +42,10 @@ class ToolLogicMixin(BaseLogicMixin):
 
 
 class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, MagicLogicMixin]]):
+
+    def has_all_tools(self, tools: Iterable[Tuple[str, str]]):
+        return self.logic.and_(*(self.logic.tool.has_tool(tool, material) for tool, material in tools))
+
     # Should be cached
     def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
         if tool == Tool.fishing_rod:

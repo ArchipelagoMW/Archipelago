@@ -1,8 +1,11 @@
 from .base_logic import BaseLogic
-from ..stardew_rule import StardewRule, And, Or, Has, Count, true_
+from ..stardew_rule import StardewRule, And, Or, Has, Count, true_, false_
 
 
 class HasLogicMixin(BaseLogic[None]):
+    true_ = true_
+    false_ = false_
+
     # Should be cached
     def has(self, item: str) -> StardewRule:
         return Has(item, self.registry.item_rules)
