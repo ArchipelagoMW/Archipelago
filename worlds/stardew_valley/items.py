@@ -15,7 +15,8 @@ from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Booksanity, Walnutsanity
+from .strings.ap_names.ap_option_names import OptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -247,6 +248,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_festival_rewards(item_factory, options, items)
     create_special_order_board_rewards(item_factory, options, items)
     create_special_order_qi_rewards(item_factory, options, items)
+    create_walnuts(item_factory, options, items)
     create_walnut_purchase_rewards(item_factory, options, items)
     create_crafting_recipes(item_factory, options, items)
     create_cooking_recipes(item_factory, options, items)
@@ -532,6 +534,35 @@ def create_festival_rewards(item_factory: StardewItemFactory, options: StardewVa
 
     festival_rewards = [item_factory(item) for item in items_by_group[Group.FESTIVAL] if item.classification != ItemClassification.filler]
     items.extend([*festival_rewards, item_factory("Stardrop", get_stardrop_classification(options))])
+
+
+def create_walnuts(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    walnutsanity = options.walnutsanity
+    if options.exclude_ginger_island == ExcludeGingerIsland.option_true or walnutsanity == Walnutsanity.preset_none:
+        return
+
+    # Give baseline walnuts just to be nice
+    num_single_walnuts = 0
+    num_triple_walnuts = 2
+    num_penta_walnuts = 1
+    # https://stardewvalleywiki.com/Golden_Walnut
+    # Totals should be accurate, but distribution is slightly offset to make room for baseline walnuts
+    if OptionName.walnutsanity_puzzles in walnutsanity:  # 61
+        num_single_walnuts += 6  # 6
+        num_triple_walnuts += 5  # 15
+        num_penta_walnuts += 8  # 40
+    if OptionName.walnutsanity_bushes in walnutsanity:  # 25
+        num_single_walnuts += 16  # 16
+        num_triple_walnuts += 3  # 9
+    if OptionName.walnutsanity_dig_spots in walnutsanity:  # 18
+        num_single_walnuts += 18  # 18
+    if OptionName.walnutsanity_repeatables in walnutsanity:  # 33
+        num_single_walnuts += 30  # 30
+        num_triple_walnuts += 1  # 3
+
+    items.extend([item_factory(item) for item in ["Golden Walnut"] * num_single_walnuts])
+    items.extend([item_factory(item) for item in ["3 Golden Walnuts"] * num_triple_walnuts])
+    items.extend([item_factory(item) for item in ["5 Golden Walnuts"] * num_penta_walnuts])
 
 
 def create_walnut_purchase_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
