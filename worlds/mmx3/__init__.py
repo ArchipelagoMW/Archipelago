@@ -138,7 +138,8 @@ class MMX3World(World):
         # Add armor upgrades into the pool
         doppler_open = self.options.doppler_open.value
         vile_open = self.options.vile_open.value
-        if "Armor Upgrades" in doppler_open or "Armor Upgrades" in vile_open:
+        if ("Armor Upgrades" in doppler_open and self.options.doppler_upgrade_count.value > 0) or \
+           ("Armor Upgrades" in vile_open and self.options.vile_upgrade_count.value > 0):
             itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2 + self.options.jammed_buster.value)]
@@ -160,12 +161,11 @@ class MMX3World(World):
             i = highest_count
             itempool += [self.create_item(ItemName.heart_tank) for _ in range(i)]
             if i != 8:
-                i = 8 - i
                 itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8 - i)]
         else:
             itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
 
-        # Add heart tanks into the pool
+        # Add sub tanks into the pool
         doppler_logic = "Sub Tanks" in doppler_open and self.options.doppler_sub_tank_count.value > 0
         highest_count = self.options.doppler_sub_tank_count.value if doppler_logic else 0
         vile_logic = "Sub Tanks" in vile_open and self.options.vile_sub_tank_count.value > 0
@@ -176,7 +176,6 @@ class MMX3World(World):
             i = highest_count
             itempool += [self.create_item(ItemName.sub_tank) for _ in range(i)]
             if i != 4:
-                i = 4 - i
                 itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4 - i)]
         else:
             itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4)]
@@ -339,7 +338,6 @@ class MMX3World(World):
             0x009: "Vile",
             0x20E: "Godkarmachine",
             0x210: "Dr. Doppler's Lab 2 Boss",
-            0x212: "Doppler",
             0x21A: "Blast Hornet",
             0x213: "Blizzard Buffalo",
             0x219: "Gravity Beetle",
@@ -348,10 +346,22 @@ class MMX3World(World):
             0x217: "Crush Crawfish",
             0x215: "Tunnel Rhino",
             0x218: "Neon Tiger",
+            0x212: "Doppler",
             0x00B: "Bit",
             0x00A: "Byte",
             0x00E: "Sigma",
         }
+        # Remove disabled locations if rematch count is 0
+        if self.options.doppler_lab_3_boss_rematch_count.value == 0:
+            del boss_to_id[0x21A]
+            del boss_to_id[0x213]
+            del boss_to_id[0x219]
+            del boss_to_id[0x214]
+            del boss_to_id[0x216]
+            del boss_to_id[0x217]
+            del boss_to_id[0x215]
+            del boss_to_id[0x218]
+
         boss_weakness_hint_data = {}
         for loc_name, level_data in location_id_to_level_id.items():
             boss_id = level_data[1]
