@@ -295,7 +295,7 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression and item.name != Event.victory:
+        if override_classification == ItemClassification.progression:
             self.total_progression_items += 1
             # if item.name not in self.all_progression_items:
             #     self.all_progression_items[item.name] = 0
@@ -325,6 +325,10 @@ class StardewValleyWorld(World):
         location.access_rule = rule
         region.locations.append(location)
         location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
+
+        # This is not ideal, but the rule count them so...
+        if item != Event.victory:
+            self.total_progression_items += 1
 
     def set_rules(self):
         set_rules(self)

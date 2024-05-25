@@ -1,5 +1,6 @@
 from collections import Counter
 
+from BaseClasses import ItemClassification
 from . import SVTestBase
 from .. import options, HasProgressionPercent, Event
 from ..data.craftable_data import all_crafting_recipes_by_name
@@ -9,6 +10,12 @@ from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland,
 from ..strings.entrance_names import Entrance
 from ..strings.region_names import Region
 from ..strings.tool_names import Tool, ToolMaterial
+
+
+class TestHasProgressionPercent(SVTestBase):
+    def test_max_item_amount_is_full_collection(self):
+        progression_item_count = sum(1 for i in self.multiworld.get_items() if ItemClassification.progression in i.classification)
+        self.assertEqual(self.world.total_progression_items, progression_item_count - 1)  # -1 to skip Victory
 
 
 class TestProgressiveToolsLogic(SVTestBase):
