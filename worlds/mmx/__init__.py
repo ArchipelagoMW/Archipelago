@@ -141,7 +141,6 @@ class MMXWorld(World):
             i = self.options.sigma_heart_tank_count.value
             itempool += [self.create_item(ItemName.heart_tank) for _ in range(i)]
             if i != 8:
-                i = 8 - i
                 itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8 - i)]
         else:
             itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
