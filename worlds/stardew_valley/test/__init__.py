@@ -219,15 +219,18 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def get_real_location_names(self) -> List[str]:
         return [location.name for location in self.get_real_locations()]
 
-    def collect(self, item_name: str, count: int = 1) -> Union[Item, List[Item]]:
+    def collect(self, item: Union[str, Item, Iterable[Item]], count: int = 1) -> Union[None, Item, List[Item]]:
         assert count > 0
+        if not isinstance(item, str):
+            super().collect(item)
+            return
         if count == 1:
-            item = self.multiworld.create_item(item_name, self.player)
+            item = self.multiworld.create_item(item, self.player)
             self.multiworld.state.collect(item)
             return item
         items = []
         for i in range(count):
-            item = self.multiworld.create_item(item_name, self.player)
+            item = self.multiworld.create_item(item, self.player)
             self.multiworld.state.collect(item)
             items.append(item)
         return items
