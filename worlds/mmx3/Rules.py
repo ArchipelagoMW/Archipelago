@@ -164,8 +164,9 @@ def set_rules(world: MMX3World):
                  lambda state: state.has(EventName.dr_doppler_lab_3_clear, player))
         
     # Set Boss rematch rules
-    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_boss}", player),
-             lambda state: state.has(EventName.boss_rematch_clear, player, world.options.doppler_lab_3_boss_rematch_count.value))
+    if world.options.doppler_lab_3_boss_rematch_count.value > 0:
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_boss}", player),
+                lambda state: state.has(EventName.boss_rematch_clear, player, world.options.doppler_lab_3_boss_rematch_count.value))
     
     # Vile entrance rules
     vile_open = world.options.vile_open.value
