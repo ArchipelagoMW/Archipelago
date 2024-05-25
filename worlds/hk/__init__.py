@@ -447,7 +447,7 @@ class HKWorld(World):
             pass  # will set in stage_pre_fill()
         else:
             # Any goal
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player) or state.count("Defeated_Pantheon_5", player)
+            multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state, player) and _hk_can_beat_radiance(state, player) and state.count("Godhome_Flower_Quest", player)
 
         set_rules(self)
 
@@ -466,7 +466,7 @@ class HKWorld(World):
                     multiworld.completion_condition[player] = grub_rule
                 else:
                     old_rule = multiworld.completion_condition[player]
-                    multiworld.completion_condition[player] = lambda state: old_rule(state) or grub_rule(state)
+                    multiworld.completion_condition[player] = lambda state: old_rule(state) and grub_rule(state)
 
             if grub_hunt_goal == grub_hunt_goal.special_range_names["all"]:
                 from collections import Counter
