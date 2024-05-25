@@ -47,9 +47,9 @@ if TYPE_CHECKING:
 #           corresponding Locations and Entrances will all be created.
 stage_info = {
     "Forest of Silence": {
-        "start region": rname.forest_start, "start map id": 0x00, "start spawn id": 0x00,
-        "mid region": rname.forest_mid, "mid map id": 0x00, "mid spawn id": 0x04,
-        "end region": rname.forest_end, "end map id": 0x00, "end spawn id": 0x01,
+        "start region": rname.forest_start, "start map id": b"\x00", "start spawn id": b"\x00",
+        "mid region": rname.forest_mid, "mid map id": b"\x00", "mid spawn id": b"\x04",
+        "end region": rname.forest_end, "end map id": b"\x00", "end spawn id": b"\x01",
         "endzone map offset": 0xB6302F, "endzone spawn offset": 0xB6302B,
         "save number offsets": [0x1049C5, 0x1049CD, 0x1049D5],
         "regions": [rname.forest_start,
@@ -58,9 +58,9 @@ stage_info = {
     },
 
     "Castle Wall": {
-        "start region": rname.cw_start, "start map id": 0x02, "start spawn id": 0x00,
-        "mid region": rname.cw_start, "mid map id": 0x02, "mid spawn id": 0x07,
-        "end region": rname.cw_exit, "end map id": 0x02, "end spawn id": 0x10,
+        "start region": rname.cw_start, "start map id": b"\x02", "start spawn id": b"\x00",
+        "mid region": rname.cw_start, "mid map id": b"\x02", "mid spawn id": b"\x07",
+        "end region": rname.cw_exit, "end map id": b"\x02", "end spawn id": b"\x10",
         "endzone map offset": 0x109A5F, "endzone spawn offset": 0x109A61,
         "save number offsets": [0x1049DD, 0x1049E5, 0x1049ED],
         "regions": [rname.cw_start,
@@ -69,9 +69,9 @@ stage_info = {
     },
 
     "Villa": {
-        "start region": rname.villa_start, "start map id": 0x03, "start spawn id": 0x00,
-        "mid region": rname.villa_storeroom, "mid map id": 0x05, "mid spawn id": 0x04,
-        "end region": rname.villa_crypt, "end map id": 0x1A, "end spawn id": 0x03,
+        "start region": rname.villa_start, "start map id": b"\x03", "start spawn id": b"\x00",
+        "mid region": rname.villa_storeroom, "mid map id": b"\x05", "mid spawn id": b"\x04",
+        "end region": rname.villa_crypt, "end map id": b"\x1A", "end spawn id": b"\x03",
         "endzone map offset": 0xD9DA3, "endzone spawn offset": 0x109E81,
         "altzone map offset": 0xD9DAB, "altzone spawn offset": 0x109E81,
         "save number offsets": [0x1049F5, 0x1049FD, 0x104A05, 0x104A0D],
@@ -85,9 +85,9 @@ stage_info = {
     },
 
     "Tunnel": {
-        "start region": rname.tunnel_start, "start map id": 0x07, "start spawn id": 0x00,
-        "mid region": rname.tunnel_end, "mid map id": 0x07, "mid spawn id": 0x03,
-        "end region": rname.tunnel_end, "end map id": 0x07, "end spawn id": 0x11,
+        "start region": rname.tunnel_start, "start map id": b"\x07", "start spawn id": b"\x00",
+        "mid region": rname.tunnel_end, "mid map id": b"\x07", "mid spawn id": b"\x03",
+        "end region": rname.tunnel_end, "end map id": b"\x07", "end spawn id": b"\x11",
         "endzone map offset": 0x109B4F, "endzone spawn offset": 0x109B51, "character": "Reinhardt",
         "save number offsets": [0x104A15, 0x104A1D, 0x104A25, 0x104A2D],
         "regions": [rname.tunnel_start,
@@ -95,9 +95,9 @@ stage_info = {
     },
 
     "Underground Waterway": {
-        "start region": rname.uw_main, "start map id": 0x08, "start spawn id": 0x00,
-        "mid region": rname.uw_main, "mid map id": 0x08, "mid spawn id": 0x03,
-        "end region": rname.uw_end, "end map id": 0x08, "end spawn id": 0x01,
+        "start region": rname.uw_main, "start map id": b"\x08", "start spawn id": b"\x00",
+        "mid region": rname.uw_main, "mid map id": b"\x08", "mid spawn id": b"\x03",
+        "end region": rname.uw_end, "end map id": b"\x08", "end spawn id": b"\x01",
         "endzone map offset": 0x109B67, "endzone spawn offset": 0x109B69, "character": "Carrie",
         "save number offsets": [0x104A35, 0x104A3D],
         "regions": [rname.uw_main,
@@ -105,9 +105,9 @@ stage_info = {
     },
 
     "Castle Center": {
-        "start region": rname.cc_main, "start map id": 0x19, "start spawn id": 0x00,
-        "mid region": rname.cc_main, "mid map id": 0x0E, "mid spawn id": 0x03,
-        "end region": rname.cc_elev_top, "end map id": 0x0F, "end spawn id": 0x02,
+        "start region": rname.cc_main, "start map id": b"\x19", "start spawn id": b"\x00",
+        "mid region": rname.cc_main, "mid map id": b"\x0E", "mid spawn id": b"\x03",
+        "end region": rname.cc_elev_top, "end map id": b"\x0F", "end spawn id": b"\x02",
         "endzone map offset": 0x109CB7, "endzone spawn offset": 0x109CB9,
         "altzone map offset": 0x109CCF, "altzone spawn offset": 0x109CD1,
         "save number offsets": [0x104A45, 0x104A4D, 0x104A55, 0x104A5D, 0x104A65, 0x104A6D, 0x104A75],
@@ -119,20 +119,20 @@ stage_info = {
     },
 
     "Duel Tower": {
-        "start region": rname.dt_main, "start map id": 0x13, "start spawn id": 0x00,
+        "start region": rname.dt_main, "start map id": b"\x13", "start spawn id": b"\x00",
         "startzone map offset": 0x109DA7, "startzone spawn offset": 0x109DA9,
-        "mid region": rname.dt_main, "mid map id": 0x13, "mid spawn id": 0x15,
-        "end region": rname.dt_main, "end map id": 0x13, "end spawn id": 0x01,
+        "mid region": rname.dt_main, "mid map id": b"\x13", "mid spawn id": b"\x15",
+        "end region": rname.dt_main, "end map id": b"\x13", "end spawn id": b"\x01",
         "endzone map offset": 0x109D8F, "endzone spawn offset": 0x109D91, "character": "Reinhardt",
         "save number offsets": [0x104ACD],
         "regions": [rname.dt_main]
     },
 
     "Tower of Execution": {
-        "start region": rname.toe_main, "start map id": 0x10, "start spawn id": 0x00,
+        "start region": rname.toe_main, "start map id": b"\x10", "start spawn id": b"\x00",
         "startzone map offset": 0x109D17, "startzone spawn offset": 0x109D19,
-        "mid region": rname.toe_main, "mid map id": 0x10, "mid spawn id": 0x02,
-        "end region": rname.toe_main, "end map id": 0x10, "end spawn id": 0x12,
+        "mid region": rname.toe_main, "mid map id": b"\x10", "mid spawn id": b"\x02",
+        "end region": rname.toe_main, "end map id": b"\x10", "end spawn id": b"\x12",
         "endzone map offset": 0x109CFF, "endzone spawn offset": 0x109D01, "character": "Reinhardt",
         "save number offsets": [0x104A7D, 0x104A85],
         "regions": [rname.toe_main,
@@ -140,10 +140,10 @@ stage_info = {
     },
 
     "Tower of Science": {
-        "start region": rname.tosci_start, "start map id": 0x12, "start spawn id": 0x00,
+        "start region": rname.tosci_start, "start map id": b"\x12", "start spawn id": b"\x00",
         "startzone map offset": 0x109D77, "startzone spawn offset": 0x109D79,
-        "mid region": rname.tosci_conveyors, "mid map id": 0x12, "mid spawn id": 0x03,
-        "end region": rname.tosci_conveyors, "end map id": 0x12, "end spawn id": 0x04,
+        "mid region": rname.tosci_conveyors, "mid map id": b"\x12", "mid spawn id": b"\x03",
+        "end region": rname.tosci_conveyors, "end map id": b"\x12", "end spawn id": b"\x04",
         "endzone map offset": 0x109D5F, "endzone spawn offset": 0x109D61, "character": "Carrie",
         "save number offsets": [0x104A95, 0x104A9D, 0x104AA5],
         "regions": [rname.tosci_start,
@@ -153,28 +153,28 @@ stage_info = {
     },
 
     "Tower of Sorcery": {
-        "start region": rname.tosor_main, "start map id": 0x11, "start spawn id": 0x00,
+        "start region": rname.tosor_main, "start map id": b"\x11", "start spawn id": b"\x00",
         "startzone map offset": 0x109D47, "startzone spawn offset": 0x109D49,
-        "mid region": rname.tosor_main, "mid map id": 0x11, "mid spawn id": 0x01,
-        "end region": rname.tosor_main, "end map id": 0x11, "end spawn id": 0x13,
+        "mid region": rname.tosor_main, "mid map id": b"\x11", "mid spawn id": b"\x01",
+        "end region": rname.tosor_main, "end map id": b"\x11", "end spawn id": b"\x13",
         "endzone map offset": 0x109D2F, "endzone spawn offset": 0x109D31, "character": "Carrie",
         "save number offsets": [0x104A8D],
         "regions": [rname.tosor_main]
     },
 
     "Room of Clocks": {
-        "start region": rname.roc_main, "start map id": 0x1B, "start spawn id": 0x00,
-        "mid region": rname.roc_main, "mid map id": 0x1B, "mid spawn id": 0x02,
-        "end region": rname.roc_main, "end map id": 0x1B, "end spawn id": 0x14,
+        "start region": rname.roc_main, "start map id": b"\x1B", "start spawn id": b"\x00",
+        "mid region": rname.roc_main, "mid map id": b"\x1B", "mid spawn id": b"\x02",
+        "end region": rname.roc_main, "end map id": b"\x1B", "end spawn id": b"\x14",
         "endzone map offset": 0x109EAF, "endzone spawn offset": 0x109EB1,
         "save number offsets": [0x104AC5],
         "regions": [rname.roc_main]
     },
 
     "Clock Tower": {
-        "start region": rname.ct_start, "start map id": 0x17, "start spawn id": 0x00,
-        "mid region": rname.ct_middle, "mid map id": 0x17, "mid spawn id": 0x02,
-        "end region": rname.ct_end, "end map id": 0x17, "end spawn id": 0x03,
+        "start region": rname.ct_start, "start map id": b"\x17", "start spawn id": b"\x00",
+        "mid region": rname.ct_middle, "mid map id": b"\x17", "mid spawn id": b"\x02",
+        "end region": rname.ct_end, "end map id": b"\x17", "end spawn id": b"\x03",
         "endzone map offset": 0x109E37, "endzone spawn offset": 0x109E39,
         "save number offsets": [0x104AB5, 0x104ABD],
         "regions": [rname.ct_start,
@@ -183,8 +183,8 @@ stage_info = {
     },
 
     "Castle Keep": {
-        "start region": rname.ck_main, "start map id": 0x14, "start spawn id": 0x02,
-        "mid region": rname.ck_main, "mid map id": 0x14, "mid spawn id": 0x03,
+        "start region": rname.ck_main, "start map id": b"\x14", "start spawn id": b"\x02",
+        "mid region": rname.ck_main, "mid map id": b"\x14", "mid spawn id": b"\x03",
         "end region": rname.ck_drac_chamber,
         "save number offsets": [0x104AAD],
         "regions": [rname.ck_main]

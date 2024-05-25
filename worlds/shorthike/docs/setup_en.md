@@ -14,12 +14,13 @@
 
 ## Installation
 
-1. Download the [Modding Tools](https://github.com/BrandenEK/AShortHike.ModdingTools/releases), and follow
-the [installation instructions](https://github.com/BrandenEK/AShortHike.ModdingTools#a-short-hike-modding-tools) on the GitHub page.
+1. Open the [Modding Tools GitHub page](https://github.com/BrandenEK/AShortHike.ModdingTools/), and follow
+the installation instructions. After this step, your `A Short Hike/` folder should have an empty `Modding/` subfolder.
 
 2. After the Modding Tools have been installed, download the 
-[Randomizer](https://github.com/BrandenEK/AShortHike.Randomizer/releases) and extract the contents of it
-into the `Modding` folder.
+[Randomizer](https://github.com/BrandenEK/AShortHike.Randomizer/releases) zip, extract it, and move the contents
+of the `Randomizer/` folder into your `Modding/` folder. After this step, your `Modding/` folder should have
+ `data/` and `plugins/` subfolders.
 
 ## Connecting
 

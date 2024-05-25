@@ -650,7 +650,7 @@ campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
     SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory"),
     SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, "Salvation: Victory"),
     SC2Campaign.EPILOGUE: None,
-    SC2Campaign.NCO: None,
+    SC2Campaign.NCO: SC2CampaignGoal(SC2Mission.END_GAME, "End Game: Victory"),
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
@@ -683,7 +683,6 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.THE_ESSENCE_OF_ETERNITY: "The Essence of Eternity: Victory",
     },
     SC2Campaign.NCO: {
-        SC2Mission.END_GAME: "End Game: Victory",
         SC2Mission.FLASHPOINT: "Flashpoint: Victory",
         SC2Mission.DARK_SKIES: "Dark Skies: Victory",
         SC2Mission.NIGHT_TERRORS: "Night Terrors: Victory",
@@ -709,10 +708,10 @@ def get_goal_location(mission: SC2Mission) -> Union[str, None]:
             return primary_campaign_goal.location
 
     campaign_alt_goals = campaign_alt_final_mission_locations[campaign]
-    if campaign_alt_goals is not None:
+    if campaign_alt_goals is not None and mission in campaign_alt_goals:
         return campaign_alt_goals.get(mission)
 
-    return None
+    return mission.mission_name + ": Victory"
 
 
 def get_campaign_potential_goal_missions(campaign: SC2Campaign) -> List[SC2Mission]:

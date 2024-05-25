@@ -1,9 +1,8 @@
 import os
 import pkgutil
+import pickle
 from io import BytesIO
 from typing import Dict, List, Set
-
-import pickle
 
 from .datatypes import Door, Painting, Panel, Progression, Room
 
@@ -20,6 +19,9 @@ PAINTING_EXIT_ROOMS: Set[str] = set()
 PAINTING_EXITS: int = 0
 REQUIRED_PAINTING_ROOMS: List[str] = []
 REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
+
+SUNWARP_ENTRANCES: List[str] = []
+SUNWARP_EXITS: List[str] = []
 
 SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
@@ -76,13 +78,16 @@ def get_progressive_item_id(name: str):
 def load_static_data_from_file():
     global PAINTING_ENTRANCES, PAINTING_EXITS
 
+    from . import datatypes
+    from Utils import safe_builtins
+
     class RenameUnpickler(pickle.Unpickler):
         def find_class(self, module, name):
-            renamed_module = module
-            if module == "datatypes":
-                renamed_module = "worlds.lingo.datatypes"
-
-            return super(RenameUnpickler, self).find_class(renamed_module, name)
+            if module in ("worlds.lingo.datatypes", "datatypes"):
+                return getattr(datatypes, name)
+            elif module == "builtins" and name in safe_builtins:
+                return getattr(safe_builtins, name)
+            raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
     file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
     pickdata = RenameUnpickler(BytesIO(file)).load()
@@ -99,6 +104,8 @@ def load_static_data_from_file():
     PAINTING_EXITS = pickdata["PAINTING_EXITS"]
     REQUIRED_PAINTING_ROOMS.extend(pickdata["REQUIRED_PAINTING_ROOMS"])
     REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.extend(pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"])
+    SUNWARP_ENTRANCES.extend(pickdata["SUNWARP_ENTRANCES"])
+    SUNWARP_EXITS.extend(pickdata["SUNWARP_EXITS"])
     SPECIAL_ITEM_IDS.update(pickdata["SPECIAL_ITEM_IDS"])
     PANEL_LOCATION_IDS.update(pickdata["PANEL_LOCATION_IDS"])
     DOOR_LOCATION_IDS.update(pickdata["DOOR_LOCATION_IDS"])
