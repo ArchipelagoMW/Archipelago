@@ -71,10 +71,15 @@ SeasonLogicMixin]]):
     def can_shop_from(self, source: ShopSource) -> StardewRule:
         season_rule = self.logic.season.has_any(source.seasons)
         money_rule = self.logic.money.can_spend(source.money_price) if source.money_price is not None else true_
-        item_rule = self.logic.has_all(*source.items_price) if source.items_price is not None else true_
+
+        item_rules = []
+        if source.items_price is not None:
+            for price, item in source.items_price:
+                item_rules.append(self.logic.has(item) & self.logic.time.can_grind_item(price))
+
         region_rule = self.logic.region.can_reach(source.shop_region)
 
-        return self.logic.and_(season_rule, money_rule, item_rule, region_rule)
+        return self.logic.and_(season_rule, money_rule, *item_rules, region_rule)
 
     # Should be cached
     def can_trade(self, currency: str, amount: int) -> StardewRule:

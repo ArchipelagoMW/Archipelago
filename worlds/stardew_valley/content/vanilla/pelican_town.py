@@ -179,10 +179,10 @@ pelican_town = ContentPack(
         Seed.grape: (ShopSource(money_price=60, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
         Seed.artichoke: (ShopSource(money_price=30, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
 
-        Seed.broccoli: (ShopSource(items_price=(Material.moss,), shop_region=LogicRegion.raccoon_shop),),
-        Seed.carrot: (ShopSource(items_price=(TreeSeed.maple,), shop_region=LogicRegion.raccoon_shop),),
-        Seed.powdermelon: (ShopSource(items_price=(TreeSeed.acorn,), shop_region=LogicRegion.raccoon_shop),),
-        Seed.summer_squash: (ShopSource(items_price=(Material.sap,), shop_region=LogicRegion.raccoon_shop),),
+        Seed.broccoli: (ShopSource(items_price=((5, Material.moss),), shop_region=LogicRegion.raccoon_shop),),
+        Seed.carrot: (ShopSource(items_price=((1, TreeSeed.maple),), shop_region=LogicRegion.raccoon_shop),),
+        Seed.powdermelon: (ShopSource(items_price=((2, TreeSeed.acorn),), shop_region=LogicRegion.raccoon_shop),),
+        Seed.summer_squash: (ShopSource(items_price=((15, Material.sap),), shop_region=LogicRegion.raccoon_shop),),
 
         Seed.strawberry: (ShopSource(money_price=100, shop_region=LogicRegion.egg_festival, seasons=(Season.spring,)),),
         Seed.rare_seed: (ShopSource(money_price=1000, shop_region=LogicRegion.traveling_cart, seasons=(Season.spring, Season.summer)),),
@@ -222,7 +222,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.raccoon_journal: (  # Needs a source for the AP item you'll get for completion of the 2nd raccoon bundle,
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),
-            ShopSource(items_price=(Material.fiber,), shop_region=LogicRegion.raccoon_shop),),  # This one is 999 Fiber, should maybe add time?
+            ShopSource(items_price=((999, Material.fiber),), shop_region=LogicRegion.raccoon_shop),),
         Book.way_of_the_wind_pt_1: (ShopSource(money_price=15000, shop_region=LogicRegion.bookseller_2),),
         Book.way_of_the_wind_pt_2: (ShopSource(money_price=35000, shop_region=LogicRegion.bookseller_2),),
         # This one requires the first book. If randomized, should have logic?

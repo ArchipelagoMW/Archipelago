@@ -52,13 +52,13 @@ ginger_island_content_pack = GingerIslandContentPack(
 
     },
     shop_sources={
-        Seed.taro: (ShopSource(items_price=(Mushroom.magma_cap,), shop_region=Region.island_trader),),
-        Seed.pineapple: (ShopSource(items_price=(Fossil.bone_fragment,), shop_region=Region.island_trader),),
-        Sapling.banana: (ShopSource(items_price=(Forageable.dragon_tooth,), shop_region=Region.island_trader),),
-        Sapling.mango: (ShopSource(items_price=(Fish.mussel_node,), shop_region=Region.island_trader),),
+        Seed.taro: (ShopSource(items_price=((2, Fossil.bone_fragment),), shop_region=Region.island_trader),),
+        Seed.pineapple: (ShopSource(items_price=((1, Mushroom.magma_cap),), shop_region=Region.island_trader),),
+        Sapling.banana: (ShopSource(items_price=((5, Forageable.dragon_tooth),), shop_region=Region.island_trader),),
+        Sapling.mango: (ShopSource(items_price=((75, Fish.mussel_node),), shop_region=Region.island_trader),),
 
         # This one is 10 diamonds, should maybe add time?
-        Book.the_diamond_hunter: (ShopSource(items_price=(Mineral.diamond,), shop_region=Region.volcano_dwarf_shop),),
+        Book.the_diamond_hunter: (ShopSource(items_price=((10, Mineral.diamond),), shop_region=Region.volcano_dwarf_shop),),
 
     },
     fishes=(
