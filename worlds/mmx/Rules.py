@@ -167,7 +167,10 @@ def set_rules(world: MMXWorld):
     set_rule(multiworld.get_location(LocationName.spark_mandrill_sub_tank, player),
              lambda state: state.has(ItemName.boomerang_cutter, player))
     set_rule(multiworld.get_location(LocationName.spark_mandrill_heart_tank, player),
-             lambda state: state.has(ItemName.boomerang_cutter, player))
+             lambda state: (
+                 state.has(ItemName.boomerang_cutter, player) or 
+                 state.has(ItemName.legs, player)
+             ))
 
     # Storm Eagle collectibles
     set_rule(multiworld.get_location(LocationName.storm_eagle_heart_tank, player),
