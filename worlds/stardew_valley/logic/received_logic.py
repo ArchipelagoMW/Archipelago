@@ -5,7 +5,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from .logic_event import all_events
 from ..items import item_table
-from ..stardew_rule import StardewRule, Received, TotalReceived
+from ..stardew_rule import StardewRule, Received, TotalReceived, ReceivedCustom
 
 
 class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
@@ -39,3 +39,8 @@ class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
         assert count >= 0, "Can't receive a negative amount of item."
 
         return TotalReceived(count, items, self.player)
+
+    def received_custom(self, item: str, count: Optional[int] = 1) -> StardewRule:
+        assert count >= 0, "Can't receive a negative amount of item."
+
+        return ReceivedCustom(item, self.player, count)

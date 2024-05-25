@@ -48,6 +48,35 @@ class TotalReceived(BaseStardewRule):
 
 
 @dataclass(frozen=True)
+class ReceivedCustom(CombinableStardewRule):
+    item: str
+    player: int
+    count: int
+
+    @property
+    def combination_key(self) -> Hashable:
+        return self.item
+
+    @property
+    def value(self):
+        return self.count
+
+    def __call__(self, state: CollectionState) -> bool:
+        return state.has(self.item, self.player, self.count)
+
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
+
+    def __repr__(self):
+        if self.count == 1:
+            return f"Received {self.item}"
+        return f"Received {self.count} {self.item}s"
+
+    def get_difficulty(self):
+        return self.count
+
+
+@dataclass(frozen=True)
 class Received(CombinableStardewRule):
     item: str
     player: int

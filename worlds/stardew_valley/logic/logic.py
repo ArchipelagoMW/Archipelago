@@ -44,7 +44,7 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
-from .. import ReceivedCurrency
+from ..strings.ap_names.received_currency_names import ReceivedCurrency
 from ..content.game_content import StardewContent
 from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
@@ -57,7 +57,6 @@ from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.ap_option_names import OptionName
-from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
@@ -617,7 +616,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         return self.has_received_walnuts(walnuts_to_receive) & self.can_get_walnuts(walnuts_to_collect)
 
     def has_received_walnuts(self, number: int) -> StardewRule:
-        return self.received(ReceivedCurrency.walnut, number)
+        return self.received_custom(ReceivedCurrency.walnut, number)
 
     def can_get_walnuts(self, number: int) -> StardewRule:
         # https://stardewcommunitywiki.com/Golden_Walnut#Walnut_Locations
