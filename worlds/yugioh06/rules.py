@@ -154,11 +154,11 @@ def set_rules(world):
             lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)
                           and state.has_any(["No Banlist", "Banlist September 2003"], player),
         "Can Stall with Monsters":
-            lambda state: state.count_from_list_exclusive(
+            lambda state: state.count_from_list_unique(
                 ["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2,
         "Can Stall with ST":
-            lambda state: state.count_from_list_exclusive(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"],
-                                                        player) >= 2,
+            lambda state: state.count_from_list_unique(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"],
+                                                       player) >= 2,
         "Has Back-row removal":
             lambda state: back_row_removal(state, player)
 
@@ -201,8 +201,8 @@ def set_rules(world):
             lambda state: yugioh06_difficulty(state, player, 3),
         "LD18 Attacks forbidden":
             lambda state: state.has_all(["Wave-Motion Cannon", "Stealth Bird"], player)
-                          and state.count_from_list_exclusive(["Dark World Lightning", "Nobleman of Crossout",
-                                                             "Shield Crash", "Tribute to the Doomed"], player) >= 2
+                          and state.count_from_list_unique(["Dark World Lightning", "Nobleman of Crossout",
+                                                            "Shield Crash", "Tribute to the Doomed"], player) >= 2
                           and yugioh06_difficulty(state, player, 3),
         "LD19 All except E-Hero's forbidden":
             lambda state: state.has_any(["Polymerization", "Fusion Gate"], player) and
@@ -363,7 +363,7 @@ def set_rules(world):
         "TD30 Tribute Summon":
             lambda state: state.has("Treeborn Frog", player) and yugioh06_difficulty(state, player, 2),
         "TD31 Special Summon C":
-            lambda state: state.count_from_list_exclusive(
+            lambda state: state.count_from_list_unique(
                 ["Aqua Spirit", "Rock Spirit", "Spirit of Flames",
                  "Garuda the Wind Spirit", "Gigantes", "Inferno", "Megarock Dragon", "Silpheed"],
                 player) > 4 and yugioh06_difficulty(state, player, 3),
@@ -393,11 +393,11 @@ def set_rules(world):
                           and yugioh06_difficulty(state, player, 3),
         "TD39 Raviel, Lord of Phantasms":
             lambda state: state.has_all(["Raviel, Lord of Phantasms", "Giant Germ"], player) and
-                          state.count_from_list_exclusive(["Archfiend Soldier",
-                                                           "Skull Descovery Knight",
-                                                           "Slate Warrior",
-                                                           "D. D. Trainer",
-                                                           "Earthbound Spirit"], player) >= 3
+                          state.count_from_list_unique(["Archfiend Soldier",
+                                                        "Skull Descovery Knight",
+                                                        "Slate Warrior",
+                                                        "D. D. Trainer",
+                                                        "Earthbound Spirit"], player) >= 3
                           and yugioh06_difficulty(state, player, 3),
         "TD40 Make a Chain":
             lambda state: state.has("Ultimate Offering", player)
@@ -450,20 +450,20 @@ def set_rules(world):
 
 
 def only_light(state, player):
-    return state.has_from_list_exclusive([
+    return state.has_from_list_unique([
         "Dunames Dark Witch",
         "X-Head Cannon",
         "Homunculus the Alchemic Being",
         "Hysteric Fairy",
         "Ninja Grandmaster Sasuke"], player, 2)\
-           and state.has_from_list_exclusive([
+           and state.has_from_list_unique([
         "Chaos Command Magician",
         "Cybernetic Magician",
         "Kaiser Glider",
         "The Agent of Judgment - Saturn",
         "Zaborg the Thunder Monarch",
         "Cyber Dragon"], player, 1) \
-           and state.has_from_list_exclusive([
+           and state.has_from_list_unique([
         "D.D. Warrior Lady",
         "Mystic Swordsman LV2",
         "Y-Dragon Head",
@@ -472,7 +472,7 @@ def only_light(state, player):
 
 
 def only_dark(state, player):
-    return state.has_from_list_exclusive([
+    return state.has_from_list_unique([
         "Dark Elf",
         "Archfiend Soldier",
         "Mad Dog of Darkness",
@@ -501,7 +501,7 @@ def only_dark(state, player):
         "Jinzo",
         "Ryu Kokki"
     ], player) \
-           and state.has_from_list_exclusive([
+           and state.has_from_list_unique([
         "Legendary Fiend",
         "Don Zaloog",
         "Newdoria",
@@ -512,7 +512,7 @@ def only_dark(state, player):
 
 
 def only_earth(state, player):
-    return state.has_from_list_exclusive([
+    return state.has_from_list_unique([
         "Berserk Gorilla",
         "Gemini Elf",
         "Insect Knight",
@@ -527,7 +527,7 @@ def only_earth(state, player):
         "Granmarg the Rock Monarch",
         "Hieracosphinx",
         "Saber Beetle"
-    ], player) and state.has_from_list_exclusive([
+    ], player) and state.has_from_list_unique([
         "Hyper Hammerhead",
         "Green Gadget",
         "Red Gadget",
@@ -539,7 +539,7 @@ def only_earth(state, player):
 
 
 def only_water(state, player):
-    return state.has_from_list_exclusive([
+    return state.has_from_list_unique([
         "Gagagigo",
         "Familiar-Possessed - Eria",
         "7 Colored Fish",
@@ -550,7 +550,7 @@ def only_water(state, player):
         "Amphibian Beast",
         "Terrorking Salmon",
         "Mobius the Frost Monarch"
-    ], player) and state.has_from_list_exclusive([
+    ], player) and state.has_from_list_unique([
         "Revival Jam",
         "Yomi Ship",
         "Treeborn Frog"
@@ -558,7 +558,7 @@ def only_water(state, player):
 
 
 def only_fire(state, player):
-    return state.has_from_list_exclusive([
+    return state.has_from_list_unique([
         "Blazing Inpachi",
         "Familiar-Possessed - Hiita",
         "Great Angus",
@@ -566,7 +566,7 @@ def only_fire(state, player):
     ], player, 2) and state.has_any([
         "Thestalos the Firestorm Monarch",
         "Horus the Black Flame Dragon LV6"
-    ], player) and state.has_from_list_exclusive([
+    ], player) and state.has_from_list_unique([
         "Solar Flare Dragon",
         "Tenkabito Shien",
         "Ultimate Baseball Kid"
@@ -574,7 +574,7 @@ def only_fire(state, player):
 
 
 def only_wind(state, player):
-    return state.has_from_list_exclusive([
+    return state.has_from_list_unique([
         "Luster Dragon",
         "Slate Warrior",
         "Spear Dragon",
@@ -588,7 +588,7 @@ def only_wind(state, player):
         "Luster Dragon #2",
         "Armed Dragon LV5",
         "Roc from the Valley of Haze"
-    ], player) and state.has_from_list_exclusive([
+    ], player) and state.has_from_list_unique([
         "Armed Dragon LV3",
         "Twin-Headed Behemoth",
         "Harpie Lady 1"
@@ -599,7 +599,7 @@ def only_fairy(state, player):
     return state.has_any([
         "Dunames Dark Witch",
         "Hysteric Fairy"
-    ], player) and (state.count_from_list_exclusive([
+    ], player) and (state.count_from_list_unique([
         "Dunames Dark Witch",
         "Hysteric Fairy",
         "Dancing Fairy",
@@ -623,7 +623,7 @@ def only_warrior(state, player):
         "Gearfried the Iron knight",
         "Ninja Grandmaster Sasuke",
         "Warrior Beaters"
-    ], player) and (state.count_from_list_exclusive([
+    ], player) and (state.count_from_list_unique([
         "Warrior Lady of the Wasteland",
         "Exiled Force",
         "Mystic Swordsman LV2",
@@ -644,7 +644,7 @@ def only_warrior(state, player):
 
 def only_zombie(state, player):
     return state.has("Pyramid Turtle", player) \
-           and state.has_from_list_exclusive([
+           and state.has_from_list_unique([
         "Regenerating Mummy",
         "Ryu Kokki",
         "Spirit Reaper",
@@ -665,7 +665,7 @@ def only_dragon(state, player):
         "Luster Dragon",
         "Spear Dragon",
         "Cave Dragon"
-    ], player) and (state.count_from_list_exclusive([
+    ], player) and (state.count_from_list_unique([
         "Luster Dragon",
         "Spear Dragon",
         "Cave Dragon"
@@ -692,7 +692,7 @@ def only_spellcaster(state, player):
         "Toon Gemini Elf",
         "Kycoo the Ghost Destroyer",
         "Familiar-Possessed - Aussa"
-    ], player) and (state.count_from_list_exclusive([
+    ], player) and (state.count_from_list_unique([
         "Dark Elf",
         "Gemini Elf",
         "Skilled Dark Magician",
@@ -730,7 +730,7 @@ def equip_unions(state, player):
 
 
 def can_gain_lp_every_turn(state, player):
-    return state.count_from_list_exclusive([
+    return state.count_from_list_unique([
         "Solemn Wishes",
         "Cure Mermaid",
         "Dancing Fairy",
@@ -739,7 +739,7 @@ def can_gain_lp_every_turn(state, player):
 
 
 def only_normal(state, player):
-    return (state.has_from_list_exclusive([
+    return (state.has_from_list_unique([
         "Archfiend Soldier",
         "Gemini Elf",
         "Insect Knight",
@@ -784,21 +784,21 @@ def only_level(state, player):
 
 def spell_counter(state, player):
     return (state.has("Pitch-Black Power Stone", player) and
-            state.has_from_list_exclusive(["Blast Magician",
-                                           "Magical Marionette",
-                                           "Mythical Beast Cerberus",
-                                           "Royal Magical Library",
-                                           "Spell-Counter Cards"], player, 2))
+            state.has_from_list_unique(["Blast Magician",
+                                        "Magical Marionette",
+                                        "Mythical Beast Cerberus",
+                                        "Royal Magical Library",
+                                        "Spell-Counter Cards"], player, 2))
 
 
 def take_control(state, player):
-    return state.has_from_list_exclusive(["Aussa the Earth Charmer",
-                                          "Jowls of Dark Demise",
-                                          "Brain Control",
-                                          "Creature Swap",
-                                          "Enemy Controller",
-                                          "Mind Control",
-                                          "Magician of Faith"], player, 5)
+    return state.has_from_list_unique(["Aussa the Earth Charmer",
+                                       "Jowls of Dark Demise",
+                                       "Brain Control",
+                                       "Creature Swap",
+                                       "Enemy Controller",
+                                       "Mind Control",
+                                       "Magician of Faith"], player, 5)
 
 
 def only_toons(state, player):
@@ -818,51 +818,51 @@ def only_spirit(state, player):
 
 
 def pacman_deck(state, player):
-    return state.has_from_list_exclusive(["Des Lacooda",
-                                          "Swarm of Locusts",
-                                          "Swarm of Scarabs",
-                                          "Wandering Mummy",
-                                          "Golem Sentry",
-                                          "Great Spirit",
-                                          "Royal Keeper",
-                                          "Stealth Bird"], player, 4)
+    return state.has_from_list_unique(["Des Lacooda",
+                                       "Swarm of Locusts",
+                                       "Swarm of Scarabs",
+                                       "Wandering Mummy",
+                                       "Golem Sentry",
+                                       "Great Spirit",
+                                       "Royal Keeper",
+                                       "Stealth Bird"], player, 4)
 
 
 def quick_plays(state, player):
-    return state.has_from_list_exclusive(["Collapse",
-                                          "Emergency Provisions",
-                                          "Enemy Controller",
-                                          "Graceful Dice",
-                                          "Mystik Wok",
-                                          "Offerings to the Doomed",
-                                          "Poison of the Old Man",
-                                          "Reload",
-                                          "Rush Recklessly",
-                                          "The Reliable Guardian"], player, 4)
+    return state.has_from_list_unique(["Collapse",
+                                       "Emergency Provisions",
+                                       "Enemy Controller",
+                                       "Graceful Dice",
+                                       "Mystik Wok",
+                                       "Offerings to the Doomed",
+                                       "Poison of the Old Man",
+                                       "Reload",
+                                       "Rush Recklessly",
+                                       "The Reliable Guardian"], player, 4)
 
 
 def counter_traps(state, player):
-    return state.has_from_list_exclusive(["Cursed Seal of the Forbidden Spell",
-                                          "Divine Wrath",
-                                          "Horn of Heaven",
-                                          "Magic Drain",
-                                          "Magic Jammer",
-                                          "Negate Attack",
-                                          "Seven Tools of the Bandit",
-                                          "Solemn Judgment",
-                                          "Spell Shield Type-8"], player, 5)
+    return state.has_from_list_unique(["Cursed Seal of the Forbidden Spell",
+                                       "Divine Wrath",
+                                       "Horn of Heaven",
+                                       "Magic Drain",
+                                       "Magic Jammer",
+                                       "Negate Attack",
+                                       "Seven Tools of the Bandit",
+                                       "Solemn Judgment",
+                                       "Spell Shield Type-8"], player, 5)
 
 
 def back_row_removal(state, player):
-    return state.has_from_list_exclusive(["Anteatereatingant",
-                                          "B.E.S. Tetran",
-                                          "Breaker the Magical Warrior",
-                                          "Calamity of the Wicked",
-                                          "Chiron the Mage",
-                                          "Dust Tornado",
-                                          "Heavy Storm",
-                                          "Mystical Space Typhoon",
-                                          "Mobius the Frost Monarch",
-                                          "Raigeki Break",
-                                          "Stamping Destruction",
-                                          "Swarm of Locusts"], player, 2)
+    return state.has_from_list_unique(["Anteatereatingant",
+                                       "B.E.S. Tetran",
+                                       "Breaker the Magical Warrior",
+                                       "Calamity of the Wicked",
+                                       "Chiron the Mage",
+                                       "Dust Tornado",
+                                       "Heavy Storm",
+                                       "Mystical Space Typhoon",
+                                       "Mobius the Frost Monarch",
+                                       "Raigeki Break",
+                                       "Stamping Destruction",
+                                       "Swarm of Locusts"], player, 2)
