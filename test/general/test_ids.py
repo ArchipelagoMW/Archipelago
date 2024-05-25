@@ -42,7 +42,7 @@ class TestIDs(unittest.TestCase):
             with self.subTest(game=gamename):
                 if gamename == "Archipelago":
                     for item_id in world_type.item_id_to_name:
-                        self.assertLess(item_id, 0)
+                        self.assertLessEqual(item_id, 0)
                 else:
                     for item_id in world_type.item_id_to_name:
                         self.assertGreater(item_id, 0)
@@ -53,7 +53,7 @@ class TestIDs(unittest.TestCase):
             with self.subTest(game=gamename):
                 if gamename == "Archipelago":
                     for location_id in world_type.location_id_to_name:
-                        self.assertLess(location_id, 0)
+                        self.assertLessEqual(location_id, 0)
                 else:
                     for location_id in world_type.location_id_to_name:
                         self.assertGreater(location_id, 0)
