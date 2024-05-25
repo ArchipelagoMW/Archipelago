@@ -155,7 +155,7 @@ class gameMode(Choice):
     display_name = "Game mode"
     option_standard = 1
     option_points_mode = 2
-    #option_extra_categories = 3
+    option_extra_categories = 3
     default = 1
     
 class pointsGameMode(Choice):

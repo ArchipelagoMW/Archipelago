@@ -3,6 +3,41 @@ from BaseClasses import MultiWorld
 from .YachtWeights import yacht_weights
 import math
 
+category_mappings = {
+    "Category Ones": "Ones",
+    "Category Twos": "Twos",
+    "Category Threes": "Threes",
+    "Category Fours": "Fours",
+    "Category Fives": "Fives",
+    "Category Sixes": "Sixes",
+    "Category Choice": "Choice",
+    "Category Inverse Choice": "Choice",
+    "Category Pair": "Pair",
+    "Category Three of a Kind": "ThreeOfAKind",
+    "Category Four of a Kind": "FourOfAKind",
+    "Category Tiny Straight": "TinyStraight",
+    "Category Small Straight": "SmallStraight",
+    "Category Large Straight": "LargeStraight",
+    "Category Full House": "FullHouse",
+    "Category Yacht": "Yacht",
+    "Category Distincts": "Distincts",
+    "Category Two times Ones": "TwoTimesOnes",
+    "Category Half of Sixes": "HalfOfSixes",
+    "Category Twos and Threes": "TwosAndThrees",
+    "Category Sum of Odds": "SumOfOdds",
+    "Category Sum of Evens": "SumOfEvens",
+    "Category Double Threes and Fours": "DoubleThreesAndFours",
+    "Category Quadruple Ones and Twos": "QuadrupleOnesAndTwos",
+    "Category Micro Straight": "MicroStraight",
+    "Category Three Odds": "ThreeOdds",
+    "Category 1-2-1 Consecutive": "OneTwoOneConsecutive",
+    "Category Three Distinct Dice": "ThreeDistinctDice",
+    "Category Two Pair": "TwoPair",
+    "Category 2-1-2 Consecutive": "TwoOneTwoConsecutive",
+    "Category Five Distinct Dice": "FiveDistinctDice",
+    "Category 4&5 Full House": "FourAndFiveFullHouse"
+}
+
 #This class adds logic to the apworld.
 #In short, we ran a simulation for every possible combination of dice and rolls you can have, per category.
 #This simulation has a good strategy for locking dice.
@@ -11,9 +46,12 @@ import math
 #We then pick a correct percentile to reflect the correct score that should be in logic.
 #The score is logic is *much* lower than the actual maximum reachable score.
 
+
+
 class Category:
-    def __init__(self, name):
+    def __init__(self, name, mult = 1):
         self.name = name
+        self.multiplicity = mult #how many times you have the category
 
     #return mean score of a category
     def meanScore(self, nbDice, nbRolls):
@@ -51,45 +89,10 @@ def extractProgression(state, player, options):
    
     categories = []
     
-    category_mappings = {
-        "Category Ones": "Ones",
-        "Category Twos": "Twos",
-        "Category Threes": "Threes",
-        "Category Fours": "Fours",
-        "Category Fives": "Fives",
-        "Category Sixes": "Sixes",
-        "Category Choice": "Choice",
-        "Category Inverse Choice": "Choice",
-        "Category Pair": "Pair",
-        "Category Three of a Kind": "ThreeOfAKind",
-        "Category Four of a Kind": "FourOfAKind",
-        "Category Tiny Straight": "TinyStraight",
-        "Category Small Straight": "SmallStraight",
-        "Category Large Straight": "LargeStraight",
-        "Category Full House": "FullHouse",
-        "Category Yacht": "Yacht",
-        "Category Distincts": "Distincts",
-        "Category Two times Ones": "TwoTimesOnes",
-        "Category Half of Sixes": "HalfOfSixes",
-        "Category Twos and Threes": "TwosAndThrees",
-        "Category Sum of Odds": "SumOfOdds",
-        "Category Sum of Evens": "SumOfEvens",
-        "Category Double Threes and Fours": "DoubleThreesAndFours",
-        "Category Quadruple Ones and Twos": "QuadrupleOnesAndTwos",
-        "Category Micro Straight": "MicroStraight",
-        "Category Three Odds": "ThreeOdds",
-        "Category 1-2-1 Consecutive": "OneTwoOneConsecutive",
-        "Category Three Distinct Dice": "ThreeDistinctDice",
-        "Category Two Pair": "TwoPair",
-        "Category 2-1-2 Consecutive": "TwoOneTwoConsecutive",
-        "Category Five Distinct Dice": "FiveDistinctDice",
-        "Category 4&5 Full House": "FourAndFiveFullHouse"
-    }
-
     for category_name, category_value in category_mappings.items():
-        if state.has(category_name, player, 1):
-            categories.append(Category(category_value))      
-    
+        if state.count(category_name, player) >= 1:
+            categories += [Category(category_value, state.count(category_name, player))] 
+  
     extra_points_in_logic = state.count("1 Point", player)
     extra_points_in_logic += state.count("10 Points", player) * 10
     extra_points_in_logic += state.count("100 Points", player) * 100
@@ -102,7 +105,7 @@ yachtdice_cache = {}
 
 #Function that returns the feasible score in logic based on items obtained.
 def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremulttype):
-    tup = tuple([tuple(sorted([c.name for c in categories])), nbDice, nbRolls, multiplier]) #identifier
+    tup = tuple([tuple(sorted([c.name+str(c.multiplicity) for c in categories])), nbDice, nbRolls, multiplier]) #identifier
     
     #if already computed, return the result
     if tup in yachtdice_cache.keys():
@@ -167,18 +170,19 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
         for key in dist.keys():
             dist[key] /= 100000
             
+            
         #for higher difficulties, the simulation gets multiple tries for categories.
-        dist = max_dist(dist, max(1, len(categories) // (6 - diff)))
+        dist = max_dist(dist, max(1, len(categories) // (10 - 2*diff)))
         
         cur_mult = -100
         if scoremulttype == 1: #fixed
             cur_mult = multiplier
         if scoremulttype == 2: #step
             cur_mult = j * multiplier
-        total_dist = add_distributions(total_dist, dist, 1 + cur_mult )
+        total_dist = add_distributions(total_dist, dist, (1 + cur_mult) * ( 2 ** (categories[j].multiplicity-1) ))
     
     #save result into the cache, then return it
-    yachtdice_cache[tup] = math.floor(percentile_distribution(total_dist, .40))
+    yachtdice_cache[tup] = math.floor(percentile_distribution(total_dist, .20 + diff/10))
     return yachtdice_cache[tup]
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.
@@ -187,7 +191,38 @@ def diceSimulation(state, player, options):
     return diceSimulationStrings(categories, nbDice, nbRolls, multiplier, 
                                  options.game_difficulty.value, options.score_multiplier_type.value) + expoints
     
+def calculateScoreInLogic(state, options):
+    number_of_dice = (
+        state.count("Dice") 
+        + state.count("Dice Fragment") // options.number_of_dice_fragments_per_dice.value
+    )
+
+    number_of_rerolls = (
+        state.count("Roll") 
+        + state.count("Roll Fragment") // options.number_of_roll_fragments_per_roll.value
+    )
+
+    number_of_mults = state.count("Score Multiplier")
     
+    
+    score_mult = -10000
+    if options.score_multiplier_type.value == 1: #fixed
+        score_mult = 0.1 * number_of_mults
+    if options.score_multiplier_type.value == 2: #step
+        score_mult = 0.01 * number_of_mults
+   
+    categories = []
+
+    for category_name, category_value in category_mappings.items():
+        if state.count(category_name) >= 1:
+            categories += [Category(category_value, state.count(category_name))]
+    
+    extra_points_in_logic = state.count("1 Point")
+    extra_points_in_logic += state.count("10 Points") * 10
+    extra_points_in_logic += state.count("100 Points") * 100
+    
+    return diceSimulationStrings(categories, number_of_dice, number_of_rerolls, score_mult, 
+                                 options.game_difficulty.value, options.score_multiplier_type.value) + extra_points_in_logic
 
 # Sets rules on entrances and advancements that are always applied
 def set_yacht_rules(world: MultiWorld, player: int, options):
