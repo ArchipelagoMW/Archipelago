@@ -44,6 +44,7 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
+from .. import ReceivedCurrency
 from ..content.game_content import StardewContent
 from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
@@ -615,10 +616,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             walnuts_to_collect -= repeatable_walnuts_required
         return self.has_received_walnuts(walnuts_to_receive) & self.can_get_walnuts(walnuts_to_collect)
 
-
     def has_received_walnuts(self, number: int) -> StardewRule:
-        raise
-
+        return self.received(ReceivedCurrency.walnut, number)
 
     def can_get_walnuts(self, number: int) -> StardewRule:
         # https://stardewcommunitywiki.com/Golden_Walnut#Walnut_Locations

@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
@@ -22,6 +22,7 @@ from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
 from .strings.ap_names.event_names import Event
+from .strings.ap_names.received_currency_names import ReceivedCurrency
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
 from .strings.metal_names import Ore
@@ -418,3 +419,26 @@ class StardewValleyWorld(World):
         })
 
         return slot_data
+
+    def collect(self, state: CollectionState, item: StardewItem) -> bool:
+        change = super().collect(state, item)
+        if change:
+            state.prog_items[self.player][ReceivedCurrency.walnut] += self.get_walnut_amount(item.name)
+        return change
+
+    def remove(self, state: CollectionState, item: StardewItem) -> bool:
+        change = super().remove(state, item)
+        if change:
+            state.prog_items[self.player][ReceivedCurrency.walnut] -= self.get_walnut_amount(item.name)
+        return change
+
+    @staticmethod
+    def get_walnut_amount(item_name: str) -> int:
+        if item_name == "Golden Walnut":
+            return 1
+        if item_name == "3 Golden Walnuts":
+            return 3
+        if item_name == "5 Golden Walnuts":
+            return 5
+        return 0
+

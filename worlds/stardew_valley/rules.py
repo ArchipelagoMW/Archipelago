@@ -420,10 +420,11 @@ def set_island_entrances_rules(logic: StardewLogic, multiworld, player, world_op
 
 
 def set_island_parrot_rules(logic: StardewLogic, multiworld, player):
-    has_walnut = logic.has_walnut(1)
-    has_5_walnut = logic.has_walnut(5)
-    has_10_walnut = logic.has_walnut(10)
-    has_20_walnut = logic.has_walnut(20)
+    # Logic rules require more walnuts than in reality, to allow the player to spend them "wrong"
+    has_walnut = logic.has_walnut(5)
+    has_5_walnut = logic.has_walnut(15)
+    has_10_walnut = logic.has_walnut(40)
+    has_20_walnut = logic.has_walnut(60)
     MultiWorldRules.add_rule(multiworld.get_location("Leo's Parrot", player),
                              has_walnut)
     MultiWorldRules.add_rule(multiworld.get_location("Island West Turtle", player),
