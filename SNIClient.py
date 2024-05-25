@@ -511,7 +511,8 @@ async def snes_recv_loop(ctx: SNIContext) -> None:
             ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
 
 
-async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional[bytes]:
+async def snes_read(ctx: SNIContext, address: int, size: int) -> bytes:
+    from worlds.AutoSNIClient import SNIException
     try:
         await ctx.snes_request_lock.acquire()
 
@@ -521,7 +522,7 @@ async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional
             not ctx.snes_socket.open or
             ctx.snes_socket.closed
         ):
-            return None
+            raise SNIException("SNI is not connected.")
 
         GetAddress_Request: SNESRequest = {
             "Opcode": "GetAddress",
@@ -531,7 +532,7 @@ async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional
         try:
             await ctx.snes_socket.send(dumps(GetAddress_Request))
         except ConnectionClosed:
-            return None
+            raise SNIException("SNI connection was unexpectedly closed.")
 
         data: bytes = bytes()
         while len(data) < size:
@@ -541,15 +542,17 @@ async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional
                 break
 
         if len(data) != size:
-            snes_logger.error('Error reading %s, requested %d bytes, received %d' % (hex(address), size, len(data)))
+            snes_logger.error("Error reading %s, requested %d bytes, received %d" % (hex(address), size, len(data)))
             if len(data):
                 snes_logger.error(str(data))
                 snes_logger.warning('Communication Failure with SNI')
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
-            return None
+            raise SNIException(f"Error reading {hex(address)}, requested {size} bytes, received {len(data)}")
 
         return data
+    except SNIException as ex:
+        raise ex  # reraise
     finally:
         ctx.snes_request_lock.release()
 
@@ -597,6 +600,7 @@ async def snes_flush_writes(ctx: SNIContext) -> None:
 
 
 async def game_watcher(ctx: SNIContext) -> None:
+    from worlds.AutoSNIClient import SNIException
     perf_counter = time.perf_counter()
     while not ctx.exit_event.is_set():
         try:
@@ -633,7 +637,10 @@ async def game_watcher(ctx: SNIContext) -> None:
         if not ctx.client_handler:
             continue
 
-        rom_validated = await ctx.client_handler.validate_rom(ctx)
+        try:
+            rom_validated = await ctx.client_handler.validate_rom(ctx)
+        except SNIException:
+            rom_validated = False
 
         if not rom_validated or (ctx.auth and ctx.auth != ctx.rom):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
@@ -649,7 +656,13 @@ async def game_watcher(ctx: SNIContext) -> None:
 
         perf_counter = time.perf_counter()
 
-        await ctx.client_handler.game_watcher(ctx)
+        try:
+            await ctx.client_handler.game_watcher(ctx)
+        except SNIException:
+            return
+        except Exception as ex:
+            ctx.gui_error("Game Exception", ex)
+            raise ex  # Reraise to kill the thread
 
 
 async def run_game(romfile: str) -> None:
