@@ -239,8 +239,8 @@ item_table: Dict[str, KH1ItemData] = {
    #"Crystal Trident":                   KH1ItemData("Key",              code = 264_1210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Postcard":                          KH1ItemData("Key",              code = 264_1211, classification = ItemClassification.progression, max_quantity = 3,  weight = 10),
    #"Torn Page 1":                       KH1ItemData("Key",              code = 264_1212, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Torn Page 2":                       KH1ItemData("Torn Pages",       code = 264_1213, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Torn Page 3":                       KH1ItemData("Torn Pages",       code = 264_1214, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "Torn Page 1":                       KH1ItemData("Torn Pages",       code = 264_1213, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "Torn Page 2":                       KH1ItemData("Torn Pages",       code = 264_1214, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Torn Page 4":                       KH1ItemData("Key",              code = 264_1215, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Torn Page 5":                       KH1ItemData("Key",              code = 264_1216, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Slide 1":                           KH1ItemData("Key",              code = 264_1217, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
@@ -523,6 +523,8 @@ item_table: Dict[str, KH1ItemData] = {
 }
 
 event_item_table: Dict[str, KH1ItemData] = {
+    "Vanilla Postcard":                  KH1ItemData("Event",            classification = ItemClassification.progression),
+    "Vanilla Torn Page":                 KH1ItemData("Event",            classification = ItemClassification.progression),
 }
 
 #Make item categories

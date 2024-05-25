@@ -26,14 +26,9 @@ def has_at_least(state: CollectionState, player: int, item: str, x: int) -> bool
     return state.count(item, player) >= x
 
 def has_postcards(state: CollectionState, player: int, postcards_required: int) -> bool:
-    postcards_available = 3 #You can get three postcards without any items
-    if has_item(state, player, "Progressive Thunder"):
-        postcards_available = postcards_available + 2 #Gizmo Shop Postcards
-    if  has_item(state, player, "Green Trinity"):
-        postcards_available = postcards_available + 1 #After locking Traverse Town, examine the Synthesis Shop poster.
-    if has_item(state, player, "Monstro") and has_item(state, player, "High Jump"):
-        postcards_available = postcards_available + 1 #Gepetto's House Pot on Shelf
-    postcards_available = postcards_available + state.count("Postcard", player) #3 can be found in chests/events
+    postcards_available = 0
+    postcards_available = postcards_available + state.count("Vanilla Postcard", player)
+    postcards_available = postcards_available + state.count("Postcard", player)
     return postcards_available >= postcards_required
 
 def has_puppies(state: CollectionState, player: int, puppies_required: int) -> bool:
@@ -50,14 +45,9 @@ def has_puppies(state: CollectionState, player: int, puppies_required: int) -> b
 
 def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> bool:
     pages_available = 0
-    if state.has("Atlantica", player):
-        pages_available = pages_available + 1
-    if state.has("Halloween Town", player):
-        pages_available = pages_available + 1
-    if has_puppies(state, player, 51):
-        pages_available = pages_available + 1
+    pages_available = pages_available + state.count("Vanilla Torn Page", player)
+    pages_available = pages_available + state.count("Torn Page 1", player)
     pages_available = pages_available + state.count("Torn Page 2", player)
-    pages_available = pages_available + state.count("Torn Page 3", player)
     return pages_available >= pages_required
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
@@ -543,6 +533,19 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
         multiworld.get_location("Final Ansem"                                                              , player).access_rule = lambda state: has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_reports)
     for i in range(options.level_checks):
         multiworld.get_location("Level " + str(i+1).rjust(3,'0')                                           , player).access_rule = lambda state, level_num=i: has_x_worlds(state, player, min(((level_num//10)*2), 8))
+    
+    #Set up event location rules
+   #multiworld.get_location("Traverse Town Item Shop Postcard"                                             , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Traverse Town 1st District Safe Postcard"                                     , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Traverse Town Gizmo Shop Postcard 1"                                          , player).access_rule = lambda state: has_item(state, player, "Progressive Thunder")
+    multiworld.get_location("Traverse Town Gizmo Shop Postcard 2"                                          , player).access_rule = lambda state: has_item(state, player, "Progressive Thunder")
+    multiworld.get_location("Traverse Town Item Workshop Postcard"                                         , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+   #multiworld.get_location("Traverse Town 3rd District Balcony Postcard"                                  , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Traverse Town Geppetto's House Postcard"                                      , player).access_rule = lambda state: has_item(state, player, "Monstro") and has_item(state, player, "High Jump")
+    multiworld.get_location("Traverse Town Piano Room Return 50 Puppies Torn Page"                         , player).access_rule = lambda state: has_puppies(state, player, 50)
+   #multiworld.get_location("Halloween Town Lab Torn Page"                                                 , player).access_rule = lambda state: has_item(state, player, "")
+   #if options.atlantica:
+   #    multiworld.get_location("Atlantica Ariel's Grotto Torn Page"                                       , player).access_rule = lambda state: has_item(state, player, "")
 
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")

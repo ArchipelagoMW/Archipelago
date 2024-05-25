@@ -552,6 +552,16 @@ location_table: Dict[str, KH1LocationData] = {
 }
 
 event_location_table: Dict[str, KH1LocationData] = {
+    "Traverse Town Item Shop Postcard":                                                 KH1LocationData("Event"),
+    "Traverse Town 1st District Safe Postcard":                                         KH1LocationData("Event"),
+    "Traverse Town Gizmo Shop Postcard 1":                                              KH1LocationData("Event"),
+    "Traverse Town Gizmo Shop Postcard 2":                                              KH1LocationData("Event"),
+    "Traverse Town Item Workshop Postcard":                                             KH1LocationData("Event"),
+    "Traverse Town 3rd District Balcony Postcard":                                      KH1LocationData("Event"),
+    "Traverse Town Geppetto's House Postcard":                                          KH1LocationData("Event"),
+    "Traverse Town Piano Room Return 50 Puppies Torn Page":                             KH1LocationData("Event"),
+    "Halloween Town Lab Torn Page":                                                     KH1LocationData("Event"),
+    "Atlantica Ariel's Grotto Torn Page":                                               KH1LocationData("Event")
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}

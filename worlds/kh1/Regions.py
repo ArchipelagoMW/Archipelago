@@ -486,6 +486,20 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     
     if options.goal.current_key == "final_ansem":
         regions["End of the World"].locations.append("Final Ansem")
+    
+    
+    #Set up event locations:
+    regions["Traverse Town"].locations.append("Traverse Town Item Shop Postcard")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Safe Postcard")
+    regions["Traverse Town"].locations.append("Traverse Town Gizmo Shop Postcard 1")
+    regions["Traverse Town"].locations.append("Traverse Town Gizmo Shop Postcard 2")
+    regions["Traverse Town"].locations.append("Traverse Town Item Workshop Postcard")
+    regions["Traverse Town"].locations.append("Traverse Town 3rd District Balcony Postcard")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Postcard")
+    regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 50 Puppies Torn Page")
+    regions["Halloween Town"].locations.append("Halloween Town Lab Torn Page")
+    if options.atlantica:
+        regions["Atlantica"].locations.append("Atlantica Ariel's Grotto Torn Page")
 
     # Set up the regions correctly.
     for name, data in regions.items():

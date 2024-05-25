@@ -199,6 +199,20 @@ class KH1World(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
+        self._place_events()
+    
+    def _place_events(self):
+        self.multiworld.get_location("Traverse Town Item Shop Postcard"                    , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town 1st District Safe Postcard"            , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town Gizmo Shop Postcard 1"                 , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town Gizmo Shop Postcard 2"                 , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town Item Workshop Postcard"                , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town 3rd District Balcony Postcard"         , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town Geppetto's House Postcard"             , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
+        self.multiworld.get_location("Traverse Town Piano Room Return 50 Puppies Torn Page", self.player).place_locked_item(self.create_event("Vanilla Torn Page"))
+        self.multiworld.get_location("Halloween Town Lab Torn Page"                        , self.player).place_locked_item(self.create_event("Vanilla Torn Page"))
+        if self.options.atlantica:
+            self.multiworld.get_location("Atlantica Ariel's Grotto Torn Page"              , self.player).place_locked_item(self.create_event("Vanilla Torn Page"))
     
     def get_numbers_of_reports_to_consider(self) -> int:
         numbers_to_consider = []
