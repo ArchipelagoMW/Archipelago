@@ -10,7 +10,7 @@ from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
 
 class TestWalnutsanityNone(SVTestBase):
     options = {
-        Walnutsanity.internal_name: [],
+        Walnutsanity.internal_name: Walnutsanity.preset_none,
     }
 
     def test_no_walnut_locations(self):
@@ -24,10 +24,34 @@ class TestWalnutsanityNone(SVTestBase):
         self.assertNotIn("Volcano Monsters Walnut 3", location_names)
         self.assertNotIn("Cliff Over Island South Bush", location_names)
 
+    def test_logic_received_walnuts(self):
+        # You need to receive 0, and collect 40
+        self.collect("Island Obelisk")
+        self.collect("Island West Turtle")
+        items = self.collect("5 Golden Walnuts", 10)
+
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.collect("Island North Turtle")
+        self.collect("Island Resort")
+        self.collect("Open Professor Snail Cave")
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.collect("Dig Site Bridge")
+        self.collect("Island Farmhouse")
+        self.collect("Qi Walnut Room")
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.collect("Combat Level", 10)
+        self.collect("Mining Level", 10)
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.collect("Progressive Slingshot")
+        self.collect("Progressive Weapon", 5)
+        self.collect("Progressive Pickaxe", 4)
+        self.collect("Progressive Watering Can", 4)
+        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+
 
 class TestWalnutsanityPuzzles(SVTestBase):
     options = {
-        Walnutsanity.internal_name: ["Puzzles"],
+        Walnutsanity.internal_name: {"Puzzles"},
     }
 
     def test_only_puzzle_walnut_locations(self):
@@ -44,7 +68,7 @@ class TestWalnutsanityPuzzles(SVTestBase):
 
 class TestWalnutsanityBushes(SVTestBase):
     options = {
-        Walnutsanity.internal_name: ["Bushes"],
+        Walnutsanity.internal_name: {"Bushes"},
     }
 
     def test_only_bush_walnut_locations(self):
@@ -59,9 +83,36 @@ class TestWalnutsanityBushes(SVTestBase):
         self.assertIn("Cliff Over Island South Bush", location_names)
 
 
+class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
+    options = {
+        Walnutsanity.internal_name: {"Puzzles", "Bushes"},
+    }
+
+    def test_only_bush_walnut_locations(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertIn("Open Golden Coconut", location_names)
+        self.assertNotIn("Fishing Walnut 4", location_names)
+        self.assertNotIn("Journal Scrap #6", location_names)
+        self.assertNotIn("Starfish Triangle", location_names)
+        self.assertIn("Bush Behind Coconut Tree", location_names)
+        self.assertIn("Purple Starfish Island Survey", location_names)
+        self.assertNotIn("Volcano Monsters Walnut 3", location_names)
+        self.assertIn("Cliff Over Island South Bush", location_names)
+
+    def test_logic_received_walnuts(self):
+        # You need to receive 25, and collect 15
+        self.collect("Island Obelisk")
+        self.collect("Island West Turtle")
+        items = self.collect("5 Golden Walnuts", 5)
+
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        items = self.collect("Island North Turtle")
+        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+
+
 class TestWalnutsanityDigSpots(SVTestBase):
     options = {
-        Walnutsanity.internal_name: ["Dig Spots"],
+        Walnutsanity.internal_name: {"Dig Spots"},
     }
 
     def test_only_dig_spots_walnut_locations(self):
@@ -78,7 +129,7 @@ class TestWalnutsanityDigSpots(SVTestBase):
 
 class TestWalnutsanityRepeatables(SVTestBase):
     options = {
-        Walnutsanity.internal_name: ["Repeatables"],
+        Walnutsanity.internal_name: {"Repeatables"},
     }
 
     def test_only_repeatable_walnut_locations(self):
@@ -95,7 +146,7 @@ class TestWalnutsanityRepeatables(SVTestBase):
 
 class TestWalnutsanityAll(SVTestBase):
     options = {
-        Walnutsanity.internal_name: ["Puzzles", "Bushes", "Dig Spots", "Repeatables", ],
+        Walnutsanity.internal_name: Walnutsanity.preset_all,
     }
 
     def test_all_walnut_locations(self):
@@ -109,3 +160,24 @@ class TestWalnutsanityAll(SVTestBase):
         self.assertIn("Volcano Monsters Walnut 3", location_names)
         self.assertIn("Cliff Over Island South Bush", location_names)
 
+    def test_logic_received_walnuts(self):
+        # You need to receive 40, and collect 4
+        self.collect("Island Obelisk")
+        self.collect("Island West Turtle")
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        items = self.collect("5 Golden Walnuts", 8)
+        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.remove(items)
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        items = self.collect("3 Golden Walnuts", 14)
+        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.remove(items)
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        items = self.collect("Golden Walnut", 40)
+        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.remove(items)
+        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        items = self.collect("5 Golden Walnuts", 4)
+        items = self.collect("3 Golden Walnuts", 6)
+        items = self.collect("Golden Walnut", 2)
+        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))

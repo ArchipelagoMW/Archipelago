@@ -1,4 +1,5 @@
 import sys
+import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
@@ -554,7 +555,7 @@ class Booksanity(Choice):
     option_all = 3
 
 
-class Walnutsanity(OptionList):
+class Walnutsanity(OptionSet):
     """Shuffle walnuts?
     Puzzles: Walnuts obtained from solving a special puzzle or winning a minigame
     Bushes: Walnuts that are in a bush and can be collected by clicking it
@@ -564,9 +565,15 @@ class Walnutsanity(OptionList):
     internal_name = "walnutsanity"
     display_name = "Walnutsanity"
     valid_keys = {OptionName.walnutsanity_puzzles, OptionName.walnutsanity_bushes, OptionName.walnutsanity_dig_spots, OptionName.walnutsanity_repeatables, }
-    preset_none = []
-    preset_all = list(valid_keys)
+    preset_none = {}
+    preset_all = valid_keys
     default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return self.value == other.value
+        else:
+            return typing.cast(bool, self.value == other)
 
 
 class NumberOfMovementBuffs(Range):

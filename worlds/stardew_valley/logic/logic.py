@@ -592,7 +592,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         repeatable_walnuts = 33
         total_walnuts = puzzle_walnuts + bush_walnuts + dig_walnuts + repeatable_walnuts
         walnuts_to_receive = 0
-        walnuts_to_collect = total_walnuts
+        walnuts_to_collect = number
         if OptionName.walnutsanity_puzzles in self.options.walnutsanity:
             puzzle_walnut_rate = puzzle_walnuts / total_walnuts
             puzzle_walnuts_required = round(puzzle_walnut_rate * number)

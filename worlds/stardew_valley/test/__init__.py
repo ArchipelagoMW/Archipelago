@@ -4,7 +4,7 @@ from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location
+from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
 from Options import VerifyKeys
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -218,6 +218,19 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     def get_real_location_names(self) -> List[str]:
         return [location.name for location in self.get_real_locations()]
+
+    def collect(self, item_name: str, count: int = 1) -> Union[Item, List[Item]]:
+        assert count > 0
+        if count == 1:
+            item = self.multiworld.create_item(item_name, self.player)
+            self.multiworld.state.collect(item)
+            return item
+        items = []
+        for i in range(count):
+            item = self.multiworld.create_item(item_name, self.player)
+            self.multiworld.state.collect(item)
+            items.append(item)
+        return items
 
 
 pre_generated_worlds = {}

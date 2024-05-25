@@ -73,7 +73,7 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         return self.has_tool(tool, material) & self.logic.region.can_reach(region)
 
     @cache_self1
-    def has_fishing_rod(self, level: int = 1) -> StardewRule:
+    def has_fishing_rod(self, level: int) -> StardewRule:
         assert 1 <= level <= 4, "Fishing rod 0 isn't real, it can't hurt you. Training is 1, Bamboo is 2, Fiberglass is 3 and Iridium is 4."
 
         if self.options.tool_progression & ToolProgression.option_progressive:

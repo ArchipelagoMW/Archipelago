@@ -469,7 +469,7 @@ def set_walnut_puzzle_rules(logic, multiworld, player, world_options):
     MultiWorldRules.add_rule(multiworld.get_location("Leo's Tree", player), logic.tool.has_tool(Tool.axe))
     MultiWorldRules.add_rule(multiworld.get_location("Gem Birds Shrine", player), logic.has(Mineral.amethyst) & logic.has(Mineral.aquamarine) &
                              logic.has(Mineral.emerald) & logic.has(Mineral.ruby) & logic.has(Mineral.topaz) &
-                             logic.region.can_reach_all(*(Region.island_north, Region.island_west, Region.island_east, Region.island_south)))
+                             logic.region.can_reach_all((Region.island_north, Region.island_west, Region.island_east, Region.island_south)))
     MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Melon", player), logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
     MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Wheat", player), logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west))
     MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Garlic", player), logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west))
@@ -479,7 +479,7 @@ def set_walnut_puzzle_rules(logic, multiworld, player, world_options):
     MultiWorldRules.add_rule(multiworld.get_location("Complete Mummified Frog Collection", player), logic.can_complete_frog_collection())
     MultiWorldRules.add_rule(multiworld.get_location("Complete Mummified Bat Collection", player), logic.can_complete_bat_collection())
     MultiWorldRules.add_rule(multiworld.get_location("Protruding Tree Walnut", player), logic.combat.has_slingshot)
-    MultiWorldRules.add_rule(multiworld.get_location("Starfish Tide Pool", player), logic.tool.has_fishing_rod())
+    MultiWorldRules.add_rule(multiworld.get_location("Starfish Tide Pool", player), logic.tool.has_fishing_rod(1))
     MultiWorldRules.add_rule(multiworld.get_location("Mermaid Song", player), logic.has(Furniture.flute_block))
 
 
@@ -495,7 +495,7 @@ def set_walnut_dig_spot_rules(logic, multiworld, player, world_options):
         return
 
     for dig_spot_walnut in locations.locations_by_tag[LocationTags.WALNUTSANITY_DIG]:
-        rule = logic.tool.has(Tool.hoe)
+        rule = logic.tool.has_tool(Tool.hoe)
         if "Journal Scrap" in dig_spot_walnut.name:
             rule = rule & logic.has(Forageable.journal_scrap)
         MultiWorldRules.set_rule(multiworld.get_location(dig_spot_walnut.name, player), rule)
@@ -505,7 +505,7 @@ def set_walnut_repeatable_rules(logic, multiworld, player, world_options):
     if OptionName.walnutsanity_repeatables not in world_options.walnutsanity:
         return
     for i in range(1, 6):
-        MultiWorldRules.set_rule(multiworld.get_location(f"Fishing Walnut {i}", player), logic.tool.has_fishing_rod())
+        MultiWorldRules.set_rule(multiworld.get_location(f"Fishing Walnut {i}", player), logic.tool.has_fishing_rod(1))
         MultiWorldRules.set_rule(multiworld.get_location(f"Harvesting Walnut {i}", player), logic.skill.can_get_farming_xp)
         MultiWorldRules.set_rule(multiworld.get_location(f"Mussel Node Walnut {i}", player), logic.tool.has_tool(Tool.pickaxe))
         MultiWorldRules.set_rule(multiworld.get_location(f"Volcano Rocks Walnut {i}", player), logic.tool.has_tool(Tool.pickaxe))

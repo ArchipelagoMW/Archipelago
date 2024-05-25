@@ -70,7 +70,7 @@ class ReceivedCustom(CombinableStardewRule):
     def __repr__(self):
         if self.count == 1:
             return f"Received {self.item}"
-        return f"Received {self.count} {self.item}s"
+        return f"Received {self.count} {self.item}"
 
     def get_difficulty(self):
         return self.count
