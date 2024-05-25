@@ -311,6 +311,7 @@ class MarioLand2World(World):
                 ["Mushroom", "Fire Flower", "Carrot"], self.player) and has_pipe_right(state, self.player))
                 or state.has("Mario Zone 1 Midway Bell", self.player),
             "Mario Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
+            "Turtle Zone 1 - Normal Exit": lambda state: logic.not_blocked_by_sharks(state, self.player),
             "Turtle Zone 2 - Normal Exit": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
                 state, self.player) and has_pipe_right(state, self.player) and has_pipe_left(state, self.player)
                 and state.has("Water Physics", self.player) and not is_auto_scroll(state, self.player, "Turtle Zone 2"),

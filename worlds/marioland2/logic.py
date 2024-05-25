@@ -230,13 +230,20 @@ def mario_zone_1_coins(state, player, coins):
 
 def mario_zone_3_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Mario Zone 3")
-    reachable_coins = 24
+    reachable_coins = 10
+    if state.has("Carrot", player):
+        reachable_spike_coins = 15
+    else:
+        sprites = state.multiworld.worlds[player].sprite_data["Mario Zone 3"]
+        reachable_spike_coins = min(3, len({sprites[i]["sprite"] == "Claw Grabber" for i in (17, 18, 25)})
+                                    + state.has("Mushroom", player) + state.has("Fire Flower", player)) * 5
+    reachable_coins += reachable_spike_coins
     if not auto_scroll:
         reachable_coins += 10
     if state.has("Fire Flower", player):
-        reachable_coins += 23
+        reachable_coins += 22
         if auto_scroll:
-            reachable_coins -= 18
+            reachable_coins -= 3 + reachable_spike_coins
     return coins <= reachable_coins
 
 
@@ -244,13 +251,27 @@ def mario_zone_4_coins(state, player, coins):
     return coins <= 63 or not is_auto_scroll(state, player, "Mario Zone 4")
 
 
+def not_blocked_by_sharks(state, player):
+    sharks = [state.multiworld.worlds[player].sprite_data["Turtle Zone 1"][i]["sprite"]
+              for i in (27, 28)].count("Shark")
+    if state.has("Carrot", player) or not sharks:
+        return True
+    if sharks == 2:
+        return state.has_all(["Mushroom", "Fire Flower"], player)
+    if sharks == 1:
+        return state.has_any(["Mushroom", "Fire Flower"], player)
+    return False
+
+
 def turtle_zone_1_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Turtle Zone 1")
-    reachable_coins = 37
-    if auto_scroll:
-        reachable_coins -= 1
-    if state.has("Water Physics", player):
-        reachable_coins += 16
+    reachable_coins = 30
+    if not_blocked_by_sharks(state, player):
+        reachable_coins += 13
+        if auto_scroll:
+            reachable_coins -= 1
+    if state.has("Water Physics", player) or state.has("Carrot", player):
+        reachable_coins += 10
     if state.has("Carrot", player):
         reachable_coins += 24
         if auto_scroll:
