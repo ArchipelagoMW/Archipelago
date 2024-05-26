@@ -123,8 +123,8 @@ window.addEventListener('load', () => {
             event.preventDefault();
         }
     });
-    const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
-    const target_second = document.getElementById('tracker-wrapper').getAttribute('data-second') + 3;
+    const target_second = parseInt(document.getElementById('tracker-wrapper').getAttribute('data-second')) + 3;
+    console.log("Target second of refresh: " + target_second);
 
     function getSleepTimeSeconds() {
         // -40 % 60 is -40, which is absolutely wrong and should burn

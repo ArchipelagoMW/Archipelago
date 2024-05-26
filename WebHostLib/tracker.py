@@ -411,6 +411,7 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         videos=tracker_data.get_room_videos(),
         item_id_to_name=tracker_data.item_id_to_name,
         location_id_to_name=tracker_data.location_id_to_name,
+        saving_second=tracker_data.get_room_saving_second(),
     )
 
 
