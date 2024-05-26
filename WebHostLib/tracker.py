@@ -325,7 +325,7 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, ge
 
 
 def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player: int, generic: bool)\
-        -> Tuple[int, datetime, str]:
+        -> Tuple[int, datetime.datetime, str]:
     tracker_data = TrackerData(room)
 
     # Load and render the game-specific player tracker, or fallback to generic tracker if none exists.
@@ -366,7 +366,7 @@ def get_multiworld_tracker(tracker: UUID, game: str) -> Response:
 
 
 def get_timeout_and_multiworld_tracker(room: Room, game: str)\
-        -> Tuple[int, datetime, str]:
+        -> Tuple[int, datetime.datetime, str]:
     tracker_data = TrackerData(room)
     enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
     if game in _multiworld_trackers:
