@@ -1019,11 +1019,11 @@ class BlasRules:
         quicksilver: int = self.quicksilver(state)
 
         player_strength: float = (
-            (6 if life > 6 else life) * 0.25 / 6
-            + (7 if sword > 7 else sword) * 0.25 / 7
-            + (6 if fervour > 6 else fervour) * 0.20 / 6
-            + (8 if flasks > 8 else flasks) * 0.15 / 8
-            + (5 if quicksilver > 5 else quicksilver) * 0.15 / 5
+            min(6, life) * 0.25 / 6
+            + min(7, sword) * 0.25 / 7
+            + min(6, fervour) * 0.20 / 6
+            + min(8, flasks) * 0.15 / 8
+            + min(5, quicksilver) * 0.15 / 5
         )
 
         bosses: Dict[str, float] = {
