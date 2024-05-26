@@ -659,7 +659,7 @@ async def game_watcher(ctx: SNIContext) -> None:
         try:
             await ctx.client_handler.game_watcher(ctx)
         except SNIException:
-            return
+            pass
         except Exception as ex:
             ctx.gui_error("Game Exception", ex)
             raise ex  # Reraise to kill the thread
