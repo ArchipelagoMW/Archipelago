@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, Counter
 from uuid import UUID
 
-from flask import render_template
+from flask import render_template, make_response, Response
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -293,40 +293,21 @@ class TrackerData:
 
 
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
-def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> str:
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> Response:
     key = f"{tracker}_{tracked_team}_{tracked_player}_{generic}"
-    tracker_page = cache.get(key)
-    if tracker_page:
-        return tracker_page
+    response: Optional[Response] = cache.get(key)
+    if response:
+        return response
 
-    timeout, tracker_page = get_timeout_and_tracker(tracker, tracked_team, tracked_player, generic)
-    cache.set(key, tracker_page, timeout)
-    return tracker_page
-
-
-@app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
-def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> str:
-    return get_player_tracker(tracker, tracked_team, tracked_player, True)
+    timeout,  last_modified, tracker_page = get_timeout_and_player_tracker(tracker, tracked_team, tracked_player, generic)
+    response = make_response(tracker_page)
+    response.last_modified = last_modified
+    cache.set(key, response, timeout)
+    return response
 
 
-@app.route("/tracker/<suuid:tracker>", defaults={"game": "Generic"})
-@app.route("/tracker/<suuid:tracker>/<game>")
-@cache.memoize(timeout=TRACKER_CACHE_TIMEOUT_IN_SECONDS)
-def get_multiworld_tracker(tracker: UUID, game: str):
-    # Room must exist.
-    room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
-
-    tracker_data = TrackerData(room)
-    enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
-    if game not in _multiworld_trackers:
-        return render_generic_multiworld_tracker(tracker_data, enabled_trackers)
-
-    return _multiworld_trackers[game](tracker_data, enabled_trackers)
-
-
-def get_timeout_and_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool) -> Tuple[int, str]:
+def get_timeout_and_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool)\
+        -> Tuple[int, datetime, str]:
     # Room must exist.
     room = Room.get(tracker=tracker)
     if not room:
@@ -341,7 +322,44 @@ def get_timeout_and_tracker(tracker: UUID, tracked_team: int, tracked_player: in
     else:
         tracker = render_generic_tracker(tracker_data, tracked_team, tracked_player)
 
-    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, tracker
+    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, room.last_activity, tracker
+
+
+@app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
+def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> Response:
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
+
+
+@app.route("/tracker/<suuid:tracker>", defaults={"game": "Generic"})
+@app.route("/tracker/<suuid:tracker>/<game>")
+def get_multiworld_tracker(tracker: UUID, game: str) -> Response:
+    key = f"{tracker}_{game}"
+    response: Optional[Response] = cache.get(key)
+    if response:
+        return response
+
+    timeout, last_modified, tracker_page = get_timeout_and_multiworld_tracker(tracker, game)
+    response = make_response(tracker_page)
+    response.last_modified = last_modified
+    cache.set(key, response, timeout)
+    return response
+
+
+def get_timeout_and_multiworld_tracker(tracker: UUID, game: str)\
+        -> Tuple[int, datetime, str]:
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+
+    tracker_data = TrackerData(room)
+    enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
+    if game in _multiworld_trackers:
+        tracker = _multiworld_trackers[game](tracker_data, enabled_trackers)
+    else:
+        tracker = render_generic_multiworld_tracker(tracker_data, enabled_trackers)
+
+    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, room.last_activity, tracker
 
 
 def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
