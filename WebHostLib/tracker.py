@@ -335,7 +335,8 @@ def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player
     else:
         tracker = render_generic_tracker(tracker_data, tracked_team, tracked_player)
 
-    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, room.last_activity, tracker
+    return ((tracker_data.get_room_saving_second() - datetime.datetime.now().second)
+            % TRACKER_CACHE_TIMEOUT_IN_SECONDS or TRACKER_CACHE_TIMEOUT_IN_SECONDS, room.last_activity, tracker)
 
 
 @app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
@@ -374,7 +375,8 @@ def get_timeout_and_multiworld_tracker(room: Room, game: str)\
     else:
         tracker = render_generic_multiworld_tracker(tracker_data, enabled_trackers)
 
-    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, room.last_activity, tracker
+    return ((tracker_data.get_room_saving_second() - datetime.datetime.now().second)
+            % TRACKER_CACHE_TIMEOUT_IN_SECONDS or TRACKER_CACHE_TIMEOUT_IN_SECONDS, room.last_activity, tracker)
 
 
 def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
