@@ -33,3 +33,8 @@ class ArtifactTroveSource(ItemSource):
 @dataclass(**source_dataclass_args)
 class PrizeMachineSource(ItemSource):
     amount: int
+
+
+@dataclass(**source_dataclass_args)
+class FishingTreasureChestSource(ItemSource):
+    amount: int

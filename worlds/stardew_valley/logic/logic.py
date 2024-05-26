@@ -19,6 +19,7 @@ from .crafting_logic import CraftingLogicMixin
 from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
+from .grind_logic import GrindLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .logic_event import all_logic_events
@@ -95,7 +96,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
-                   RequirementLogicMixin, BookLogicMixin):
+                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent

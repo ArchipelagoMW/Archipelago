@@ -3,19 +3,19 @@ from typing import Union, Any, Iterable
 
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
+from .grind_logic import GrindLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .requirement_logic import RequirementLogicMixin
-from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
 from ..data.game_item import GenericSource, ItemSource, GameItem
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource
-from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource
+from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -25,7 +25,7 @@ class SourceLogicMixin(BaseLogicMixin):
 
 
 class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogicMixin, HarvestingLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, TimeLogicMixin]]):
+ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
 
     def has_access_to_item(self, item: GameItem):
         rules = []
@@ -83,12 +83,16 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, TimeLogicMixin]]):
 
     @has_access_to.register
     def _(self, source: MysteryBoxSource):
-        return self.logic.time.can_grind_mystery_boxes(source.amount)
+        return self.logic.grind.can_grind_mystery_boxes(source.amount)
 
     @has_access_to.register
     def _(self, source: ArtifactTroveSource):
-        return self.logic.time.can_grind_artifact_troves(source.amount)
+        return self.logic.grind.can_grind_artifact_troves(source.amount)
 
     @has_access_to.register
     def _(self, source: PrizeMachineSource):
-        return self.logic.time.can_grind_artifact_troves(source.amount)
+        return self.logic.grind.can_grind_prize_tickets(source.amount)
+
+    @has_access_to.register
+    def _(self, source: FishingTreasureChestSource):
+        return self.logic.grind.can_grind_fishing_treasure_chests(source.amount)

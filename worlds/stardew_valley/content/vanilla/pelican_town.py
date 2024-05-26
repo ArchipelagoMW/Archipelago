@@ -3,7 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
-from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource
+from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
@@ -227,6 +227,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.jewels_of_the_sea: (  # Needs a source for Fishing Treasure Chests
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            FishingTreasureChestSource(amount=21),  # After 21 chests, there are 49.44% chances player received the book.
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.mapping_cave_systems: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
