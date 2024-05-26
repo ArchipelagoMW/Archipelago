@@ -18,3 +18,8 @@ class ShopSource(ItemSource):
     def __post_init__(self):
         assert self.money_price or self.items_price, "At least money price or items price need to be defined."
         assert self.items_price is None or all(type(p) == tuple for p in self.items_price), "Items price should be a tuple."
+
+
+@dataclass(**source_dataclass_args)
+class MysteryBoxSource(ItemSource):
+    amount_of_box: int

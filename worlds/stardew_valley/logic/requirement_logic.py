@@ -2,6 +2,7 @@ import functools
 from typing import Union, Iterable
 
 from .base_logic import BaseLogicMixin, BaseLogic
+from .book_logic import BookLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .skill_logic import SkillLogicMixin
@@ -16,7 +17,7 @@ class RequirementLogicMixin(BaseLogicMixin):
         self.requirement = RequirementLogic(*args, **kwargs)
 
 
-class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin]]):
+class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin]]):
 
     def meet_all_requirements(self, requirements: Iterable[Requirement]):
         if not requirements:

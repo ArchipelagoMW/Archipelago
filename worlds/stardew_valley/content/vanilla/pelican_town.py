@@ -3,7 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.game_item import PermanentSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
-from ...data.shop import ShopSource
+from ...data.shop import ShopSource, MysteryBoxSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
@@ -210,7 +210,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=5000, shop_region=Region.ranch),),
         Book.book_of_mysteries: (  # Needs a MysteryBoxSource, THIS ONE IS INVALID RIGHT NOW
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ShopSource(money_price=999999999, shop_region=Region.blacksmith),),
+            MysteryBoxSource(amount_of_box=38),),  # After 38 boxes, there are 50% chances player received the book.
         Book.dwarvish_safety_manual: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=4000, shop_region=LogicRegion.mines_dwarf_shop),

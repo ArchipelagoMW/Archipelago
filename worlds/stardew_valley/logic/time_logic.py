@@ -3,9 +3,12 @@ from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
+from .book_logic import BookLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, HasProgressionPercent
+from ..strings.book_names import Book
+from ..strings.craftable_names import Consumable
 
 ONE_YEAR = 4
 MAX_MONTHS = 3 * ONE_YEAR
@@ -23,7 +26,14 @@ class TimeLogicMixin(BaseLogicMixin):
         self.time = TimeLogic(*args, **kwargs)
 
 
-class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixin]]):
+class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixin, BookLogicMixin]]):
+
+    @cache_self1
+    def can_grind_mystery_boxes(self, quantity: int) -> StardewRule:
+        return self.logic.and_(self.logic.has(Consumable.mystery_box),
+                               self.logic.book.has_book_power(Book.book_of_mysteries),
+                               # Assuming 1 box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride
+                               self.logic.time.has_lived_months(quantity // 14))
 
     @cache_self1
     def can_grind_item(self, quantity: int) -> StardewRule:

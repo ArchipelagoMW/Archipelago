@@ -9,6 +9,7 @@ from .animal_logic import AnimalLogicMixin
 from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry
+from .book_logic import BookLogicMixin
 from .buff_logic import BuffLogicMixin
 from .building_logic import BuildingLogicMixin
 from .bundle_logic import BundleLogicMixin
@@ -94,7 +95,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
-                   RequirementLogicMixin):
+                   RequirementLogicMixin, BookLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
