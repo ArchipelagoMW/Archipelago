@@ -300,8 +300,8 @@ def _process_if_request_valid(incoming_request, room: Optional[Room]) -> Optiona
     if_modified = incoming_request.headers.get("If-Modified-Since", None)
     if if_modified:
         if_modified = parsedate_to_datetime(if_modified)
-        # if_modified has less precision than last_activity, so we add an extra second to avoid misses due to precision
-        if if_modified + datetime.timedelta(seconds=1) > room.last_activity:
+        # if_modified has less precision than last_activity, so we bring them to same precision
+        if if_modified >= room.last_activity.replace(microsecond=0):
             return make_response("",  304)
 
 
