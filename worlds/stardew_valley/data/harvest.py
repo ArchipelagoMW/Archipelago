@@ -1,18 +1,18 @@
 from dataclasses import dataclass
 from typing import Tuple, Sequence, Mapping
 
-from .game_item import ItemSource, source_dataclass_args, ItemTag, Requirement
+from .game_item import ItemSource, kw_only, ItemTag, Requirement
 from ..strings.season_names import Season
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class ForagingSource(ItemSource):
     regions: Tuple[str, ...]
     seasons: Tuple[str, ...] = Season.all
     other_requirements: Tuple[Requirement, ...] = ()
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class SeasonalForagingSource(ItemSource):
     season: str
     days: Sequence[int]
@@ -22,17 +22,17 @@ class SeasonalForagingSource(ItemSource):
         return ForagingSource(seasons=(self.season,), regions=self.regions)
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class FruitBatsSource(ItemSource):
     ...
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class MushroomCaveSource(ItemSource):
     ...
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class HarvestFruitTreeSource(ItemSource):
     add_tags = (ItemTag.CROPSANITY,)
 
@@ -46,7 +46,7 @@ class HarvestFruitTreeSource(ItemSource):
         }
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class HarvestCropSource(ItemSource):
     add_tags = (ItemTag.CROPSANITY,)
 

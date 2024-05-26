@@ -10,6 +10,7 @@ from ...strings.food_names import Beverage
 from ...strings.forageable_names import all_edible_mushrooms, Mushroom, Forageable
 from ...strings.fruit_tree_names import Sapling
 from ...strings.machine_names import Machine
+from ...strings.monster_names import Monster
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 
@@ -132,15 +133,17 @@ base_game = BaseGameContentPack(
         Fruit.sweet_gem_berry: (HarvestCropSource(seed=Seed.rare_seed, seasons=(Season.fall,)),),
         Fruit.ancient_fruit: (HarvestCropSource(seed=WildSeeds.ancient, seasons=(Season.spring, Season.summer, Season.fall,)),),
 
-        Seed.coffee_starter: (CustomRuleSource(),),  # from monsters and travelling merchant
+        Seed.coffee_starter: (CustomRuleSource(lambda logic: logic.traveling_merchant.has_days(3) & logic.monster.can_kill_many(Monster.dust_sprite)),),
         Seed.coffee: (HarvestCropSource(seed=Seed.coffee_starter, seasons=(Season.spring, Season.summer,)),),
 
-        Vegetable.tea_leaves: (CustomRuleSource(),),  # friendship with Caroline
+        Vegetable.tea_leaves: (CustomRuleSource(lambda logic: logic.has(Sapling.tea) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
     },
     artisan_good_sources={
         Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),
         # Ingredient.vinegar: (MachineSource(item=Ingredient.rice, machine=Machine.keg),),
-        Beverage.coffee: (MachineSource(item=Seed.coffee, machine=Machine.keg), CustomRuleSource(),),  # Coffee machine
+        Beverage.coffee: (MachineSource(item=Seed.coffee, machine=Machine.keg),
+                          CustomRuleSource(lambda logic: logic.has(Machine.coffee_maker)),
+                          CustomRuleSource(lambda logic: logic.has("Hot Java Ring"))),
         ArtisanGood.green_tea: (MachineSource(item=Vegetable.tea_leaves, machine=Machine.keg),),
         ArtisanGood.mead: (MachineSource(item=ArtisanGood.honey, machine=Machine.keg),),
         ArtisanGood.pale_ale: (MachineSource(item=Vegetable.hops, machine=Machine.keg),),

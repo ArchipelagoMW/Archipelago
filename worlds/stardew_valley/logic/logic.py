@@ -39,7 +39,7 @@ from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogicMixin
 from .source_logic import SourceLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
-from .time_logic import TimeLogicMixin, ONE_YEAR
+from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
@@ -212,7 +212,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
             ArtisanGood.void_mayonnaise: (self.skill.can_fish(Region.witch_swamp)) | (self.artisan.can_mayonnaise(AnimalProduct.void_egg)),
-            Beverage.coffee: self.artisan.can_keg(Seed.coffee) | self.has(Machine.coffee_maker) | (self.money.can_spend_at(Region.saloon, 300)) | self.has("Hot Java Ring"),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             Consumable.butterfly_powder: self.money.can_spend_at(Region.sewer, 20000),
@@ -309,7 +308,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
-            Seed.coffee_starter: self.traveling_merchant.has_days(3) & self.monster.can_kill(Monster.dust_sprite, ONE_YEAR),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.skill.can_crab_pot,
@@ -324,7 +322,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             TreeSeed.mushroom: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 5),
             TreeSeed.pine: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mossy: self.ability.can_chop_trees() & self.season.has(Season.summer),
-            Vegetable.tea_leaves: self.has(Sapling.tea) & self.time.has_lived_months(2) & self.season.has_any_not_winter(),
             Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
             Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(), #
@@ -340,7 +337,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         content_rules = {
             item_name: self.source.has_access_to_item(game_item)
             for item_name, game_item in self.content.game_items.items()
-            if not game_item.has_custom_rule
         }
 
         for item in set(content_rules.keys()).intersection(self.registry.item_rules.keys()):

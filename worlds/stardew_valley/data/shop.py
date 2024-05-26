@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from typing import Tuple, Optional
 
-from .game_item import ItemSource, source_dataclass_args, Requirement
+from .game_item import ItemSource, kw_only, Requirement
 from ..strings.season_names import Season
 
 ItemPrice = Tuple[int, str]
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class ShopSource(ItemSource):
     shop_region: str
     money_price: Optional[int] = None
@@ -20,21 +20,21 @@ class ShopSource(ItemSource):
         assert self.items_price is None or all(type(p) == tuple for p in self.items_price), "Items price should be a tuple."
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class MysteryBoxSource(ItemSource):
     amount: int
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class ArtifactTroveSource(ItemSource):
     amount: int
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class PrizeMachineSource(ItemSource):
     amount: int
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class FishingTreasureChestSource(ItemSource):
     amount: int

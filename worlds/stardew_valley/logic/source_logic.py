@@ -12,7 +12,7 @@ from .region_logic import RegionLogicMixin
 from .requirement_logic import RequirementLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
-from ..data.game_item import GenericSource, ItemSource, GameItem
+from ..data.game_item import GenericSource, ItemSource, GameItem, CustomRuleSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
@@ -43,6 +43,14 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):
         raise ValueError(f"Sources of type{type(source)} have no rule registered.")
+
+    @has_access_to.register
+    def _(self, source: GenericSource):
+        return self.logic.region.can_reach_any(source.regions) if source.regions else self.logic.true_
+
+    @has_access_to.register
+    def _(self, source: CustomRuleSource):
+        return source.create_rule(self.logic)
 
     @has_access_to.register
     def _(self, source: ForagingSource):
@@ -76,10 +84,6 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
     @has_access_to.register
     def _(self, source: MachineSource):
         return self.logic.artisan.can_produce_from(source)
-
-    @has_access_to.register
-    def _(self, source: GenericSource):
-        return self.logic.region.can_reach_any(source.regions) if source.regions else self.logic.true_
 
     @has_access_to.register
     def _(self, source: MysteryBoxSource):

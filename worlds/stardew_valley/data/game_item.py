@@ -4,12 +4,12 @@ from abc import ABC
 from dataclasses import dataclass, field
 from types import MappingProxyType
 
-from typing import List, Iterable, Set, ClassVar, Tuple, Mapping
+from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable
 
 if sys.version_info >= (3, 10):
-    source_dataclass_args = {"frozen": True, "kw_only": True}
+    kw_only = {"kw_only": True}
 else:
-    source_dataclass_args = {"frozen": True}
+    kw_only = {}
 
 DEFAULT_REQUIREMENT_TAGS = MappingProxyType({})
 
@@ -31,7 +31,7 @@ class ItemTag(enum.Enum):
     BOOK_SKILL = enum.auto()
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True)
 class ItemSource(ABC):
     add_tags: ClassVar[Tuple[ItemTag]] = ()
 
@@ -45,17 +45,17 @@ class ItemSource(ABC):
         return ()
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True, **kw_only)
 class GenericSource(ItemSource):
     regions: Tuple[str, ...] = ()
     """No region means it's available everywhere."""
     other_requirements: Tuple[Requirement, ...] = ()
 
 
-@dataclass(**source_dataclass_args)
+@dataclass(frozen=True)
 class CustomRuleSource(ItemSource):
-    """A source just to make sure the item is not pruned, since its rule will be implemented directly in logic."""
-    ...
+    """Hopefully once everything is migrated to sources, we won't need these custom logic anymore."""
+    create_rule: Callable[["StardewLogic"], "StardewRule"]
 
 
 class Tag(ItemSource):
@@ -63,7 +63,7 @@ class Tag(ItemSource):
     tag: Tuple[ItemTag, ...]
 
     def __init__(self, *tag: ItemTag):
-        self.tag = tag
+        self.tag = tag  # noqa
 
     @property
     def add_tags(self):
@@ -83,7 +83,3 @@ class GameItem:
 
     def add_tags(self, tags: Iterable[ItemTag]):
         self.tags.update(tags)
-
-    @property
-    def has_custom_rule(self):
-        return any(isinstance(source, CustomRuleSource) for source in self.sources)
