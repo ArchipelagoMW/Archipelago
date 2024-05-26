@@ -117,6 +117,9 @@ class StaticWitnessLogicObj:
             elif "Obelisk Side" in entity_name:
                 entity_type = "Obelisk Side"
                 location_type = "Obelisk Side"
+            elif "Obelisk" in entity_name:
+                entity_type = "Obelisk"
+                location_type = None
             elif "EP" in entity_name:
                 entity_type = "EP"
                 location_type = "EP"
