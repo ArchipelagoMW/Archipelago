@@ -486,5 +486,5 @@ def get_campaign_potential_goal_missions(campaign: SC2Campaign) -> List[SC2Missi
     return missions
 
 
-def get_missions_with_flags(flags: MissionFlag) -> List[SC2Mission]:
+def get_missions_with_any_flags_in_list(flags: MissionFlag) -> List[SC2Mission]:
     return [mission for mission in SC2Mission if flags & mission.flags]
