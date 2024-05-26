@@ -7,7 +7,7 @@ from .options import (Goal, StartingMoney, ProfitMargin, BundleRandomization, Bu
                       NumberOfMovementBuffs, NumberOfLuckBuffs, ExcludeGingerIsland, TrapItems,
                       MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier,
                       FriendshipMultiplier, DebrisMultiplier, QuickStart, Gifting, FarmType,
-                      Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Mods)
+                      Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Mods, Booksanity, Walnutsanity)
 
 sv_option_groups = [
     OptionGroup("General", [
@@ -41,6 +41,8 @@ sv_option_groups = [
         Cooksanity,
         Chefsanity,
         Craftsanity,
+        Booksanity,
+        Walnutsanity,
     ]),
     OptionGroup("Multipliers and Buffs", [
         StartingMoney,
