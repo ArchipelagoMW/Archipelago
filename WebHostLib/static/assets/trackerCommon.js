@@ -27,7 +27,7 @@ const adjustTableHeight = () => {
  * @returns {string}
  */
 const secondsToHours = (seconds) => {
-    let hours   = Math.floor(seconds / 3600);
+    let hours = Math.floor(seconds / 3600);
     let minutes = Math.floor((seconds - (hours * 3600)) / 60).toString().padStart(2, '0');
     return `${hours}:${minutes}`;
 };
@@ -38,18 +38,18 @@ window.addEventListener('load', () => {
         info: false,
         dom: "t",
         stateSave: true,
-        stateSaveCallback: function(settings, data) {
+        stateSaveCallback: function (settings, data) {
             delete data.search;
             localStorage.setItem(`DataTables_${settings.sInstance}_/tracker`, JSON.stringify(data));
         },
-        stateLoadCallback: function(settings) {
+        stateLoadCallback: function (settings) {
             return JSON.parse(localStorage.getItem(`DataTables_${settings.sInstance}_/tracker`));
         },
-        footerCallback: function(tfoot, data, start, end, display) {
+        footerCallback: function (tfoot, data, start, end, display) {
             if (tfoot) {
                 const activityData = this.api().column('lastActivity:name').data().toArray().filter(x => !isNaN(x));
                 Array.from(tfoot?.children).find(td => td.classList.contains('last-activity')).innerText =
-                  (activityData.length) ? secondsToHours(Math.min(...activityData)) : 'None';
+                    (activityData.length) ? secondsToHours(Math.min(...activityData)) : 'None';
             }
         },
         columnDefs: [
@@ -126,45 +126,60 @@ window.addEventListener('load', () => {
     const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
     const target_second = document.getElementById('tracker-wrapper').getAttribute('data-second') + 3;
 
-    function getSleepTimeSeconds(){
+    function getSleepTimeSeconds() {
         // -40 % 60 is -40, which is absolutely wrong and should burn
         var sleepSeconds = (((target_second - new Date().getSeconds()) % 60) + 60) % 60;
         return sleepSeconds || 60;
     }
 
+    let update_on_view = false;
     const update = () => {
-        const target = $("<div></div>");
-        console.log("Updating Tracker...");
-        target.load(location.href, function (response, status) {
-            if (status === "success") {
-                target.find(".table").each(function (i, new_table) {
-                    const new_trs = $(new_table).find("tbody>tr");
-                    const footer_tr = $(new_table).find("tfoot>tr");
-                    const old_table = tables.eq(i);
-                    const topscroll = $(old_table.settings()[0].nScrollBody).scrollTop();
-                    const leftscroll = $(old_table.settings()[0].nScrollBody).scrollLeft();
-                    old_table.clear();
-                    if (footer_tr.length) {
-                        $(old_table.table).find("tfoot").html(footer_tr);
-                    }
-                    old_table.rows.add(new_trs);
-                    old_table.draw();
-                    $(old_table.settings()[0].nScrollBody).scrollTop(topscroll);
-                    $(old_table.settings()[0].nScrollBody).scrollLeft(leftscroll);
-                });
-                $("#multi-stream-link").replaceWith(target.find("#multi-stream-link"));
-            } else {
-                console.log("Failed to connect to Server, in order to update Table Data.");
-                console.log(response);
-            }
-        })
-        setTimeout(update, getSleepTimeSeconds()*1000);
+        if (document.hidden) {
+            console.log("Document reporting as not visible, not updating Tracker...");
+            update_on_view = true;
+        } else {
+            update_on_view = false;
+            const target = $("<div></div>");
+            console.log("Updating Tracker...");
+            target.load(location.href, function (response, status) {
+                if (status === "success") {
+                    target.find(".table").each(function (i, new_table) {
+                        const new_trs = $(new_table).find("tbody>tr");
+                        const footer_tr = $(new_table).find("tfoot>tr");
+                        const old_table = tables.eq(i);
+                        const topscroll = $(old_table.settings()[0].nScrollBody).scrollTop();
+                        const leftscroll = $(old_table.settings()[0].nScrollBody).scrollLeft();
+                        old_table.clear();
+                        if (footer_tr.length) {
+                            $(old_table.table).find("tfoot").html(footer_tr);
+                        }
+                        old_table.rows.add(new_trs);
+                        old_table.draw();
+                        $(old_table.settings()[0].nScrollBody).scrollTop(topscroll);
+                        $(old_table.settings()[0].nScrollBody).scrollLeft(leftscroll);
+                    });
+                    $("#multi-stream-link").replaceWith(target.find("#multi-stream-link"));
+                } else {
+                    console.log("Failed to connect to Server, in order to update Table Data.");
+                    console.log(response);
+                }
+            })
+        }
+        updater = setTimeout(update, getSleepTimeSeconds() * 1000);
     }
-    setTimeout(update, getSleepTimeSeconds()*1000);
+    let updater = setTimeout(update, getSleepTimeSeconds() * 1000);
 
     window.addEventListener('resize', () => {
         adjustTableHeight();
         tables.draw();
+    });
+
+    window.addEventListener('visibilitychange', () => {
+        if (!document.hidden && update_on_view) {
+            console.log("Page became visible, tracker should be refreshed.");
+            clearTimeout(updater);
+            update();
+        }
     });
 
     adjustTableHeight();
