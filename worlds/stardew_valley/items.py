@@ -636,7 +636,7 @@ def create_booksanity_items(item_factory: StardewItemFactory, content: StardewCo
         return
 
     items.extend(item_factory(item_table[booksanity.to_item_name(book.name)]) for book in content.find_tagged_items(ItemTag.BOOK_POWER))
-    progressive_lost_book = item_table["Progressive Lost Book"]
+    progressive_lost_book = item_table[booksanity.progressive_lost_book]
     items.extend(item_factory(progressive_lost_book) for _ in content.features.booksanity.get_randomized_lost_books())
 
 

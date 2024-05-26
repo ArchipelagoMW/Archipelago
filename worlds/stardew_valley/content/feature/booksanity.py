@@ -27,6 +27,7 @@ class BooksanityFeature(ABC):
     is_enabled: ClassVar[bool]
 
     to_item_name = staticmethod(to_item_name)
+    progressive_lost_book = "Progressive Lost Book"
     to_location_name = staticmethod(to_location_name)
     extract_book_from_location_name = staticmethod(extract_book_from_location_name)
 

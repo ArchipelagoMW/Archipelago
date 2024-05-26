@@ -779,7 +779,7 @@ def set_booksanity_rules(logic: StardewLogic, multiworld, player, content: Stard
     for i, book in enumerate(booksanity.get_randomized_lost_books()):
         if i <= 0:
             continue
-        MultiWorldRules.set_rule(multiworld.get_location(booksanity.to_location_name(book), player), logic.received("Progressive Lost Book", i))
+        MultiWorldRules.set_rule(multiworld.get_location(booksanity.to_location_name(book), player), logic.received(booksanity.progressive_lost_book, i))
 
 
 def set_traveling_merchant_day_rules(logic: StardewLogic, multiworld: MultiWorld, player: int):
