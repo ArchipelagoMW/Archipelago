@@ -11,10 +11,9 @@ from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
-from ..stardew_rule import StardewRule, true_
+from ..stardew_rule import StardewRule
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region
-from ..strings.tool_names import Tool
 
 
 class HarvestingLogicMixin(BaseLogicMixin):
@@ -38,8 +37,7 @@ FarmingLogicMixin, TimeLogicMixin]]):
     def can_forage_from(self, source: ForagingSource) -> StardewRule:
         seasons_rule = self.logic.season.has_any(source.seasons)
         regions_rule = self.logic.region.can_reach_any(source.regions)
-        hoe_rule = self.logic.tool.has_tool(Tool.hoe) if source.requires_hoe else true_
-        return seasons_rule & regions_rule & hoe_rule
+        return seasons_rule & regions_rule
 
     @cache_self1
     def can_harvest_tree_from(self, source: HarvestFruitTreeSource) -> StardewRule:

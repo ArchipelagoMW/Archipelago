@@ -8,9 +8,10 @@ from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
+from .requirement_logic import RequirementLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
-from ..data.game_item import PermanentSource, ItemSource, GameItem, GenericToolSource
+from ..data.game_item import PermanentSource, ItemSource, GameItem
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource
 from ..data.shop import ShopSource
@@ -23,7 +24,7 @@ class SourceLogicMixin(BaseLogicMixin):
 
 
 class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogicMixin, HarvestingLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-ArtisanLogicMixin, ToolLogicMixin]]):
+ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin]]):
 
     def has_access_to_item(self, item: GameItem):
         rules = []
@@ -35,7 +36,8 @@ ArtisanLogicMixin, ToolLogicMixin]]):
         return self.logic.and_(*rules)
 
     def has_access_to_any(self, sources: Iterable[ItemSource]):
-        return self.logic.or_(*(self.logic.source.has_access_to(source) for source in sources))
+        return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
+                                for source in sources))
 
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):
@@ -77,7 +79,3 @@ ArtisanLogicMixin, ToolLogicMixin]]):
     @has_access_to.register
     def _(self, source: PermanentSource):
         return self.logic.region.can_reach_any(source.regions) if source.regions else self.logic.true_
-
-    @has_access_to.register
-    def _(self, source: GenericToolSource):
-        return self.logic.region.can_reach_any(source.regions) & self.logic.tool.has_all_tools(source.tools)

@@ -14,6 +14,11 @@ else:
 DEFAULT_REQUIREMENT_TAGS = MappingProxyType({})
 
 
+@dataclass(frozen=True)
+class Requirement(ABC):
+    ...
+
+
 class ItemTag(enum.Enum):
     CROPSANITY_SEED = enum.auto()
     CROPSANITY = enum.auto()
@@ -34,18 +39,17 @@ class ItemSource(ABC):
     def requirement_tags(self) -> Mapping[str, Tuple[ItemTag, ...]]:
         return DEFAULT_REQUIREMENT_TAGS
 
+    # FIXME this should just be an optional field, but kw_only requires python 3.10...
+    @property
+    def other_requirements(self) -> Iterable[Requirement]:
+        return ()
+
 
 @dataclass(**source_dataclass_args)
 class PermanentSource(ItemSource):
     regions: Tuple[str, ...] = ()
     """No region means it's available everywhere."""
-
-
-@dataclass(**source_dataclass_args)
-class GenericToolSource(ItemSource):
-    """A source for something that requires tools, but does not really fit any category. Typically, won't give any xp."""
-    regions: Tuple[str, ...]
-    tools: Tuple[Tuple[str, str], ...]
+    other_requirements: Tuple[Requirement, ...] = ()
 
 
 @dataclass(**source_dataclass_args)

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Tuple, Sequence, Mapping
 
-from .game_item import ItemSource, source_dataclass_args, ItemTag
+from .game_item import ItemSource, source_dataclass_args, ItemTag, Requirement
 from ..strings.season_names import Season
 
 
@@ -9,7 +9,7 @@ from ..strings.season_names import Season
 class ForagingSource(ItemSource):
     regions: Tuple[str, ...]
     seasons: Tuple[str, ...] = Season.all
-    requires_hoe: bool = False
+    other_requirements: Tuple[Requirement, ...] = ()
 
 
 @dataclass(**source_dataclass_args)

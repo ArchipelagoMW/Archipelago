@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Tuple, Optional
 
-from .game_item import ItemSource, source_dataclass_args
+from .game_item import ItemSource, source_dataclass_args, Requirement
 from ..strings.season_names import Season
 
 ItemPrice = Tuple[int, str]
@@ -13,6 +13,7 @@ class ShopSource(ItemSource):
     money_price: Optional[int] = None
     items_price: Optional[Tuple[ItemPrice, ...]] = None
     seasons: Tuple[str, ...] = Season.all
+    other_requirements: Tuple[Requirement, ...] = ()
 
     def __post_init__(self):
         assert self.money_price or self.items_price, "At least money price or items price need to be defined."

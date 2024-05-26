@@ -1,7 +1,8 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
-from ...data.game_item import PermanentSource, GenericToolSource, ItemTag, Tag
+from ...data.game_item import PermanentSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
+from ...data.requirement import ToolRequirement, BookRequirement
 from ...data.shop import ShopSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -84,12 +85,13 @@ pelican_town = ContentPack(
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.farm, Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.railroad,
                                     Region.secret_woods, Region.beach),
-                           requires_hoe=True),
+                           other_requirements=(ToolRequirement(Tool.hoe),)),
         ),
         Forageable.winter_root: (
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.farm, Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.railroad,
-                                    Region.secret_woods, Region.beach), requires_hoe=True),
+                                    Region.secret_woods, Region.beach),
+                           other_requirements=(ToolRequirement(Tool.hoe),)),
         ),
 
         # Mushrooms
@@ -134,7 +136,8 @@ pelican_town = ContentPack(
         Book.jack_be_nimble_jack_be_thick: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ForagingSource(regions=(Region.forest, Region.backwoods, Region.bus_stop, Region.farm, Region.mountain),
-                           seasons=Season.all, requires_hoe=True),),
+                           seasons=Season.all,
+                           other_requirements=(ToolRequirement(Tool.hoe),)),),
         # Needs a condition for owning an axe. Plus maybe the abysmal drop rate with a time gate?
         Book.woodys_secret: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
@@ -238,7 +241,8 @@ pelican_town = ContentPack(
             ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
         Book.the_alleyway_buffet: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            GenericToolSource(regions=Region.town, tools=((Tool.axe, ToolMaterial.iron), (Tool.pickaxe, ToolMaterial.iron))),
+            PermanentSource(regions=Region.town,
+                            other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), ToolRequirement(Tool.pickaxe, ToolMaterial.iron))),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (  # Needs a source for the SquidFest Iridium Tier,
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
@@ -255,8 +259,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=15000, shop_region=LogicRegion.bookseller_2),),
         Book.way_of_the_wind_pt_2: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ShopSource(money_price=35000, shop_region=LogicRegion.bookseller_2),),
-        # This one requires the first book. If randomized, should have logic?
+            ShopSource(money_price=35000, shop_region=LogicRegion.bookseller_2, other_requirements=(BookRequirement(Book.way_of_the_wind_pt_1),)),),
         Book.woodys_secret: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
