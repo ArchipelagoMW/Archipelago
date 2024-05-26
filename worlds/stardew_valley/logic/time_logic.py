@@ -9,6 +9,7 @@ from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, HasProgressionPercent
 from ..strings.book_names import Book
 from ..strings.craftable_names import Consumable
+from ..strings.currency_names import Currency
 from ..strings.geode_names import Geode
 
 ONE_YEAR = 4
@@ -39,6 +40,11 @@ class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixi
         return self.logic.and_(self.logic.has(Geode.artifact_trove),
                                # Assuming one per month if the player does not grind it.
                                self.logic.time.has_lived_months(quantity))
+
+    def can_grind_prize_tickets(self, quantity: int) -> StardewRule:
+        return self.logic.and_(self.logic.has(Currency.prize_ticket),
+                               # Assuming two per month if the player does not grind it.
+                               self.logic.time.has_lived_months(quantity // 2))
 
     @cache_self1
     def can_grind_item(self, quantity: int) -> StardewRule:

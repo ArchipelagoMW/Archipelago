@@ -28,3 +28,8 @@ class MysteryBoxSource(ItemSource):
 @dataclass(**source_dataclass_args)
 class ArtifactTroveSource(ItemSource):
     amount: int
+
+
+@dataclass(**source_dataclass_args)
+class PrizeMachineSource(ItemSource):
+    amount: int

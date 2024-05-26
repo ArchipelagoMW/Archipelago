@@ -15,7 +15,7 @@ from ..data.artisan import MachineSource
 from ..data.game_item import GenericSource, ItemSource, GameItem
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource
-from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource
+from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -87,4 +87,8 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, TimeLogicMixin]]):
 
     @has_access_to.register
     def _(self, source: ArtifactTroveSource):
+        return self.logic.time.can_grind_artifact_troves(source.amount)
+
+    @has_access_to.register
+    def _(self, source: PrizeMachineSource):
         return self.logic.time.can_grind_artifact_troves(source.amount)

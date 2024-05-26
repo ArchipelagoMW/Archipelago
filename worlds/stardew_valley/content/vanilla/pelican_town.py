@@ -3,7 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
-from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource
+from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
@@ -208,7 +208,7 @@ pelican_town = ContentPack(
         Book.animal_catalogue: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=5000, shop_region=Region.ranch),),
-        Book.book_of_mysteries: (  # Needs a MysteryBoxSource, THIS ONE IS INVALID RIGHT NOW
+        Book.book_of_mysteries: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             MysteryBoxSource(amount=38),),  # After 38 boxes, there are 49.99% chances player received the book.
         Book.dwarvish_safety_manual: (
@@ -216,8 +216,8 @@ pelican_town = ContentPack(
             ShopSource(money_price=4000, shop_region=LogicRegion.mines_dwarf_shop),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.friendship_101: (
-            # ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_rares),  # You can get this one in the prize machine, but how do I logic that :(
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            PrizeMachineSource(amount=9),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.horse_the_book: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
@@ -239,7 +239,6 @@ pelican_town = ContentPack(
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
         Book.price_catalogue: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
         Book.the_alleyway_buffet: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
