@@ -19,7 +19,7 @@ from .regions import create_regions
 from .options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-    GrantStoryTech, GenericUpgradeResearch, get_enabled_races
+    GrantStoryTech, GenericUpgradeResearch,
 )
 from .pool_filter import filter_items
 from .mission_tables import (
@@ -680,7 +680,6 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
     if (world.options.kerrigan_presence.value not in kerrigan_unit_available
         or total_levels == 0
         or not kerrigan_missions
-        or SC2Race.ZERG not in get_enabled_races(world)
         or (world.options.grant_story_levels and not kerrigan_build_missions)
     ):
         return
