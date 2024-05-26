@@ -676,7 +676,7 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
     total_levels = world.options.kerrigan_level_item_sum.value
     missions = get_all_missions(world.mission_req_table)
     kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
-    kerrigan_build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
+    kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
     if (world.options.kerrigan_presence.value not in kerrigan_unit_available
         or total_levels == 0
         or not kerrigan_missions
