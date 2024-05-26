@@ -1013,7 +1013,6 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return get_full_item_list()[item_names.KERRIGAN_PRIMAL_FORM].code in codes
     return False
 
-
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
@@ -1085,7 +1084,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.mission_order,
                 1 if self.ctx.nova_covert_ops_only else 0,
                 self.ctx.grant_story_levels,
-                self.ctx.enable_morphling,
+                self.ctx.enable_morphling
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],

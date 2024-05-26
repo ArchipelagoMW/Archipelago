@@ -264,13 +264,13 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
 
     for item in item_list:
         # Catch-all for all of a faction's items
-        if not terran_missions and item.data.race == SC2Race.TERRAN:
+        if (not terran_missions and item.data.race == SC2Race.TERRAN):
             item.flags |= ItemFilterFlags.Excluded
             continue
-        if not zerg_missions and item.data.race == SC2Race.ZERG:
+        if (not zerg_missions and item.data.race == SC2Race.ZERG):
             item.flags |= ItemFilterFlags.Excluded
             continue
-        if not protoss_missions and item.data.race == SC2Race.PROTOSS:
+        if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
             if item.name not in item_groups.soa_items:
                 item.flags |= ItemFilterFlags.Excluded
             continue
