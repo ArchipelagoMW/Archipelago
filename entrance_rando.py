@@ -345,18 +345,18 @@ def randomize_entrances(
 
     # stage 1 - try to place all the non-dead-end entrances
     while entrance_lookup.others:
-        if not find_pairing(False, True):
+        if not find_pairing(dead_end=False, require_new_regions=True):
             break
     # stage 2 - try to place all the dead-end entrances
     while entrance_lookup.dead_ends:
-        if not find_pairing(True, True):
+        if not find_pairing(dead_end=True, require_new_regions=True):
             break
     # stage 3 - connect any dangling entrances that remain
     while entrance_lookup.others:
-        find_pairing(False, False)
+        find_pairing(dead_end=False, require_new_regions=False)
     # stage 4 - last chance for dead ends
     while entrance_lookup.dead_ends:
-        find_pairing(True, False)
+        find_pairing(dead_end=True, require_new_regions=False)
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:
