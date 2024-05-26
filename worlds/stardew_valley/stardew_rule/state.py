@@ -71,8 +71,8 @@ class Received(CombinableStardewRule):
 
     def __repr__(self):
         if self.count == 1:
-            return f"Received {'event ' if self.event else ' '}{self.item}"
-        return f"Received {'event ' if self.event else ' '}{self.count} {self.item}"
+            return f"Received {'event ' if self.event else ''}{self.item}"
+        return f"Received {'event ' if self.event else ''}{self.count} {self.item}"
 
     def get_difficulty(self):
         return self.count
@@ -130,7 +130,7 @@ class HasProgressionPercent(CombinableStardewRule):
             total_count += item_count
             if total_count >= needed_count:
                 return True
-            
+
         return False
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:

@@ -1,6 +1,6 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
-from ...data.game_item import PermanentSource, GenericToolSource
+from ...data.game_item import PermanentSource, GenericToolSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...data.shop import ShopSource
 from ...strings.book_names import Book
@@ -131,10 +131,14 @@ pelican_town = ContentPack(
         ),
 
         # Books
-        Book.jack_be_nimble_jack_be_thick: (ForagingSource(regions=(Region.forest, Region.backwoods, Region.bus_stop, Region.farm, Region.mountain),
-                                                           seasons=Season.all, requires_hoe=True),),
+        Book.jack_be_nimble_jack_be_thick: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ForagingSource(regions=(Region.forest, Region.backwoods, Region.bus_stop, Region.farm, Region.mountain),
+                           seasons=Season.all, requires_hoe=True),),
         # Needs a condition for owning an axe. Plus maybe the abysmal drop rate with a time gate?
-        Book.woodys_secret: (ForagingSource(regions=(Region.forest, Region.mountain), seasons=Season.all),),
+        Book.woodys_secret: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ForagingSource(regions=(Region.forest, Region.mountain), seasons=Season.all),),
     },
     shop_sources={
         # Saplings
@@ -196,46 +200,89 @@ pelican_town = ContentPack(
         Beverage.coffee: (ShopSource(money_price=300, shop_region=Region.saloon),),
 
         # Books
-        Book.animal_catalogue: (ShopSource(money_price=5000, shop_region=Region.ranch),),
+        Book.animal_catalogue: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=5000, shop_region=Region.ranch),),
         Book.book_of_mysteries: (  # Needs a MysteryBoxSource, THIS ONE IS INVALID RIGHT NOW
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=999999999, shop_region=Region.blacksmith),),
-        Book.dwarvish_safety_manual: (ShopSource(money_price=4000, shop_region=LogicRegion.mines_dwarf_shop),
-                                      ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
+        Book.dwarvish_safety_manual: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=4000, shop_region=LogicRegion.mines_dwarf_shop),
+            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.friendship_101: (
             # ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_rares),  # You can get this one in the prize machine, but how do I logic that :(
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
-        Book.horse_the_book: (ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
-        Book.jack_be_nimble_jack_be_thick: (ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
+        Book.horse_the_book: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
+        Book.jack_be_nimble_jack_be_thick: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.jewels_of_the_sea: (  # Needs a source for Fishing Treasure Chests
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
-        Book.mapping_cave_systems: (PermanentSource(regions=Region.adventurer_guild_bedroom),
-                                    ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
+        Book.mapping_cave_systems: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            PermanentSource(regions=Region.adventurer_guild_bedroom),
+            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.monster_compendium: (  # Needs a source for monster drops
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
-        Book.ol_slitherlegs: (ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
-        Book.price_catalogue: (ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
-        Book.the_alleyway_buffet: (GenericToolSource(regions=Region.town, tools=((Tool.axe, ToolMaterial.iron), (Tool.pickaxe, ToolMaterial.iron))),
-                                   ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
+        Book.ol_slitherlegs: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
+        Book.price_catalogue: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
+        Book.the_alleyway_buffet: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            GenericToolSource(regions=Region.town, tools=((Tool.axe, ToolMaterial.iron), (Tool.pickaxe, ToolMaterial.iron))),
+            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (  # Needs a source for the SquidFest Iridium Tier,
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.treasure_appraisal_guide: (  # Needs a source for artifact troves and mystery boxes,
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.raccoon_journal: (  # Needs a source for the AP item you'll get for completion of the 2nd raccoon bundle,
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),
             ShopSource(items_price=((999, Material.fiber),), shop_region=LogicRegion.raccoon_shop),),
-        Book.way_of_the_wind_pt_1: (ShopSource(money_price=15000, shop_region=LogicRegion.bookseller_2),),
-        Book.way_of_the_wind_pt_2: (ShopSource(money_price=35000, shop_region=LogicRegion.bookseller_2),),
+        Book.way_of_the_wind_pt_1: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=15000, shop_region=LogicRegion.bookseller_2),),
+        Book.way_of_the_wind_pt_2: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=35000, shop_region=LogicRegion.bookseller_2),),
         # This one requires the first book. If randomized, should have logic?
-        Book.woodys_secret: (ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
-        Book.queen_of_sauce_cookbook: (ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2),),  # Worst book ever
+        Book.woodys_secret: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
 
         # Experience Books
-        Book.book_of_stars: (ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.bait_and_bobber: (ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.combat_quarterly: (ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.mining_monthly: (ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.stardew_valley_almanac: (ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.woodcutters_weekly: (ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.book_of_stars: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.bait_and_bobber: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.combat_quarterly: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.mining_monthly: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.stardew_valley_almanac: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.woodcutters_weekly: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+        Book.queen_of_sauce_cookbook: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2),),  # Worst book ever
     },
     fishes=(
         fish_data.albacore,

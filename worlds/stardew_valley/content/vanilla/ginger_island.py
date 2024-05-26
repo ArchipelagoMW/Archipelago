@@ -1,7 +1,7 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
-from ...data.game_item import ItemTag
+from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.shop import ShopSource
 from ...strings.book_names import Book
@@ -58,7 +58,10 @@ ginger_island_content_pack = GingerIslandContentPack(
         Sapling.mango: (ShopSource(items_price=((75, Fish.mussel_node),), shop_region=Region.island_trader),),
 
         # This one is 10 diamonds, should maybe add time?
-        Book.the_diamond_hunter: (ShopSource(items_price=((10, Mineral.diamond),), shop_region=Region.volcano_dwarf_shop),),
+        Book.the_diamond_hunter: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ShopSource(items_price=((10, Mineral.diamond),), shop_region=Region.volcano_dwarf_shop),
+        ),
 
     },
     fishes=(

@@ -15,7 +15,7 @@ from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Booksanity
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -253,7 +253,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_crafting_recipes(item_factory, options, items)
     create_cooking_recipes(item_factory, options, items)
     create_shipsanity_items(item_factory, options, items)
-    create_booksanity_items(item_factory, options, items)
+    create_booksanity_items(item_factory, content, items)
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
     items.append(item_factory(CommunityUpgrade.mr_qi_plane_ride))
@@ -630,14 +630,14 @@ def create_shipsanity_items(item_factory: StardewItemFactory, options: StardewVa
     items.append(item_factory(Wallet.metal_detector))
 
 
-def create_booksanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    booksanity = options.booksanity
-    if booksanity == Booksanity.option_none:
+def create_booksanity_items(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+    booksanity = content.features.booksanity
+    if not booksanity.is_enabled:
         return
 
-    items.extend([item_factory(item) for item in items_by_group[Group.BOOK_POWER]])
-    if booksanity >= Booksanity.option_all:
-        items.extend([item_factory(item) for item in ["Progressive Lost Book"] * 20])
+    items.extend(item_factory(item_table[booksanity.to_item_name(book.name)]) for book in content.find_tagged_items(ItemTag.BOOK_POWER))
+    progressive_lost_book = item_table["Progressive Lost Book"]
+    items.extend(item_factory(progressive_lost_book) for _ in content.features.booksanity.get_randomized_lost_books())
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

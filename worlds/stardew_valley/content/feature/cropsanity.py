@@ -6,8 +6,8 @@ from ...data.game_item import GameItem, ItemTag
 location_prefix = "Harvest "
 
 
-def to_location_name(fish: str) -> str:
-    return location_prefix + fish
+def to_location_name(crop: str) -> str:
+    return location_prefix + crop
 
 
 def extract_crop_from_location_name(location_name: str) -> Optional[str]:

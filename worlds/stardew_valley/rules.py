@@ -18,9 +18,8 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, Booksanity
-from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
+from .options import StardewValleyOptions, ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, \
+    Shipsanity, Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -42,7 +41,6 @@ from .strings.performance_names import Performance
 from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
-from .strings.seed_names import Seed
 from .strings.skill_names import ModSkill, Skill
 from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
@@ -82,7 +80,7 @@ def set_rules(world):
     set_cooksanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_chefsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_craftsanity_rules(all_location_names, logic, multiworld, player, world_options)
-    set_booksanity_rules(all_location_names, logic, multiworld, player, world_options)
+    set_booksanity_rules(logic, multiworld, player, world_content)
     set_isolated_locations_rules(logic, multiworld, player)
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
@@ -451,11 +449,6 @@ def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content:
 
     for item in world_content.find_tagged_items(ItemTag.CROPSANITY):
         location = world_content.features.cropsanity.to_location_name(item.name)
-
-        if item.name == Seed.coffee:
-            MultiWorldRules.set_rule(multiworld.get_location(location, player), logic.has(Seed.coffee))
-            continue
-
         harvest_sources = (source for source in item.sources if isinstance(source, (HarvestFruitTreeSource, HarvestCropSource)))
         MultiWorldRules.set_rule(multiworld.get_location(location, player), logic.source.has_access_to_any(harvest_sources))
 
@@ -774,28 +767,19 @@ def set_craftsanity_rules(all_location_names: Set[str], logic: StardewLogic, mul
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), craft_rule)
 
 
-def set_booksanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    booksanity_option = world_options.booksanity
-    if booksanity_option == Booksanity.option_none:
+def set_booksanity_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
+    booksanity = content.features.booksanity
+    if not booksanity.is_enabled:
         return
 
-    read_prefix = "Read "
-    books_to_find_yourself = []
-    books_to_find_yourself.extend(locations.locations_by_tag[LocationTags.BOOKSANITY_POWER])
-    books_to_find_yourself.extend(locations.locations_by_tag[LocationTags.BOOKSANITY_SKILL])
-    for location in books_to_find_yourself:
-        if location.name not in all_location_names or not location.name.startswith(read_prefix):
+    for book in content.find_tagged_items(ItemTag.BOOK):
+        if booksanity.is_included(book):
+            MultiWorldRules.set_rule(multiworld.get_location(booksanity.to_location_name(book.name), player), logic.has(book.name))
+
+    for i, book in enumerate(booksanity.get_randomized_lost_books()):
+        if i <= 0:
             continue
-        book_name = location.name[len(read_prefix):]
-        read_rule = logic.has(book_name)
-        MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
-    lost_books_in_order = sorted(locations.locations_by_tag[LocationTags.BOOKSANITY_LOST], key=lambda x: x.code_without_offset)
-    for i in range(len(lost_books_in_order)):
-        location = lost_books_in_order[i]
-        if i <= 0 or location.name not in all_location_names or not location.name.startswith(read_prefix):
-            continue
-        read_rule = logic.received(f"Progressive Lost Book", i)
-        MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
+        MultiWorldRules.set_rule(multiworld.get_location(booksanity.to_location_name(book), player), logic.received("Progressive Lost Book", i))
 
 
 def set_traveling_merchant_day_rules(logic: StardewLogic, multiworld: MultiWorld, player: int):

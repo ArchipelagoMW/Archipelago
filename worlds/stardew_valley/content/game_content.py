@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
 
-from .feature import cropsanity, fishsanity, friendsanity
+from .feature import booksanity, cropsanity, fishsanity, friendsanity
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, ItemSource, ItemTag
 from ..data.villagers_data import Villager
@@ -48,6 +48,7 @@ class StardewContent:
 
 @dataclass(frozen=True)
 class StardewFeatures:
+    booksanity: booksanity.BooksanityFeature
     cropsanity: cropsanity.CropsanityFeature
     fishsanity: fishsanity.FishsanityFeature
     friendsanity: friendsanity.FriendsanityFeature

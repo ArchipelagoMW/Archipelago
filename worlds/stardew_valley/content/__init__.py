@@ -1,5 +1,5 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity
+from .feature import cropsanity, friendsanity, fishsanity, booksanity
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
@@ -28,10 +28,28 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
 
 def choose_features(player_options: options.StardewValleyOptions) -> StardewFeatures:
     return StardewFeatures(
+        choose_booksanity(player_options.booksanity),
         choose_cropsanity(player_options.cropsanity),
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size)
     )
+
+
+booksanity_by_option = {
+    options.Booksanity.option_none: booksanity.BooksanityDisabled(),
+    options.Booksanity.option_power: booksanity.BooksanityPower(),
+    options.Booksanity.option_power_skill: booksanity.BooksanityPowerSkill(),
+    options.Booksanity.option_all: booksanity.BooksanityAll(),
+}
+
+
+def choose_booksanity(booksanity_option: options.Booksanity) -> booksanity.BooksanityFeature:
+    booksanity_feature = booksanity_by_option.get(booksanity_option)
+
+    if booksanity_feature is None:
+        raise ValueError(f"No booksanity feature mapped to {str(booksanity_option.value)}")
+
+    return booksanity_feature
 
 
 cropsanity_by_option = {

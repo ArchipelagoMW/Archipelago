@@ -21,6 +21,9 @@ class ItemTag(enum.Enum):
     FRUIT = enum.auto()
     VEGETABLE = enum.auto()
     EDIBLE_MUSHROOM = enum.auto()
+    BOOK = enum.auto()
+    BOOK_POWER = enum.auto()
+    BOOK_SKILL = enum.auto()
 
 
 @dataclass(**source_dataclass_args)
@@ -51,6 +54,18 @@ class CustomRuleSource(ItemSource):
     ...
 
 
+class Tag(ItemSource):
+    """Not a real source, just a way to add tags to an item. Will be removed from the item sources during unpacking."""
+    tag: Tuple[ItemTag, ...]
+
+    def __init__(self, *tag: ItemTag):
+        self.tag = tag
+
+    @property
+    def add_tags(self):
+        return self.tag
+
+
 @dataclass(frozen=True)
 class GameItem:
     name: str
@@ -58,8 +73,9 @@ class GameItem:
     tags: Set[ItemTag] = field(default_factory=set)
 
     def add_sources(self, sources: Iterable[ItemSource]):
-        self.sources.extend(sources)
-        self.tags.update(tag for source in sources for tag in source.add_tags)
+        self.sources.extend(source for source in sources if type(source) is not Tag)
+        for source in sources:
+            self.add_tags(source.add_tags)
 
     def add_tags(self, tags: Iterable[ItemTag]):
         self.tags.update(tags)
