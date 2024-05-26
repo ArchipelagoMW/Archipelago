@@ -13,3 +13,9 @@ class BookRequirement(Requirement):
 class ToolRequirement(Requirement):
     tool: str
     tier: str = ToolMaterial.basic
+
+
+@dataclass(frozen=True)
+class SkillRequirement(Requirement):
+    skill: str
+    level: int

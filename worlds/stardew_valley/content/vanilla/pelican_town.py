@@ -2,7 +2,7 @@ from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.game_item import PermanentSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
-from ...data.requirement import ToolRequirement, BookRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
 from ...data.shop import ShopSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -14,6 +14,7 @@ from ...strings.material_names import Material
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
+from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
 
 pelican_town = ContentPack(
@@ -138,10 +139,11 @@ pelican_town = ContentPack(
             ForagingSource(regions=(Region.forest, Region.backwoods, Region.bus_stop, Region.farm, Region.mountain),
                            seasons=Season.all,
                            other_requirements=(ToolRequirement(Tool.hoe),)),),
-        # Needs a condition for owning an axe. Plus maybe the abysmal drop rate with a time gate?
         Book.woodys_secret: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ForagingSource(regions=(Region.forest, Region.mountain), seasons=Season.all),),
+            ForagingSource(regions=(Region.forest, Region.mountain),
+                           seasons=Season.all,
+                           other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), SkillRequirement(Skill.foraging, 5))),),
     },
     shop_sources={
         # Saplings
