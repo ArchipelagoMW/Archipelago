@@ -16,10 +16,10 @@ class KHRECOMItemData(NamedTuple):
     weight: int = 1
 
 
-def get_items_by_category(category: str, disclude: list) -> Dict[str, KHRECOMItemData]:
+def get_items_by_category(category: str, exclude: list) -> Dict[str, KHRECOMItemData]:
     item_dict: Dict[str, KHRECOMItemData] = {}
     for name, data in item_table.items():
-        if data.category == category and all(x not in name for x in disclude):
+        if data.category == category and all(x not in name for x in exclude):
             item_dict.setdefault(name, data)
 
     return item_dict
@@ -201,7 +201,7 @@ item_table: Dict[str, KHRECOMItemData] = {
     "Sleight Magic LV3":                 KHRECOMItemData("Sleights",         code = 268_2066, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
     "Sleight Stardust Blitz":            KHRECOMItemData("Sleights",         code = 268_2067, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
     "Sleight Goofy Tornado LV2":         KHRECOMItemData("Sleights",         code = 268_2068, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
-    "Sleight Goofy Torando LV3":         KHRECOMItemData("Sleights",         code = 268_2069, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
+    "Sleight Goofy Tornado LV3":         KHRECOMItemData("Sleights",         code = 268_2069, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
     "Sleight Goofy Smash":               KHRECOMItemData("Sleights",         code = 268_2070, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
     "Sleight Wild Crush":                KHRECOMItemData("Sleights",         code = 268_2071, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),
     "Sleight Sandstorm LV2":             KHRECOMItemData("Sleights",         code = 268_2072, classification = ItemClassification.useful,      max_quantity = 1, weight = 5),

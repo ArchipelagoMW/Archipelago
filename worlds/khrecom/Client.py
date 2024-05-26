@@ -88,35 +88,10 @@ class KHRECOMContext(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
-            if "EXP Multiplier" in list(args['slot_data'].keys()):
-                exp_multiplier = args['slot_data']["EXP Multiplier"]
-            else:
-                exp_multiplier = 1
-            with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
-                f.write(str(exp_multiplier))
-                f.close()
-            if "World Order" in list(args['slot_data'].keys()):
-                world_order = args['slot_data']["World Order"]
-            else:
-                world_order = "2,3,4,5,6,7,8,9,10"
-            with open(os.path.join(self.game_communication_path, "worldorder.cfg"), 'w') as f:
-                f.write(str(world_order))
-                f.close()
-            if "Zeroes" in list(args['slot_data'].keys()):
-                zeroes_str = args['slot_data']["Zeroes"]
-            else:
-                zeroes_str = "Yes"
-            if zeroes_str == "No":
-                with open(os.path.join(self.game_communication_path, "nozeroes.cfg"), 'w') as f:
-                    f.write("")
+            for key in list(args['slot_data'].keys()):
+                with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
+                    f.write(str(args['slot_data'][key]))
                     f.close()
-            if "Attack Power" in list(args['slot_data'].keys()):
-                attack_power = args['slot_data']["Attack Power"]
-            else:
-                attack_power = 10
-            with open(os.path.join(self.game_communication_path, "attackpower.cfg"), 'w') as f:
-                f.write(str(attack_power))
-                f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
