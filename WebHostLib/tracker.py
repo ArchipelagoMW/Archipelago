@@ -3,8 +3,9 @@ import collections
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, Counter
 from uuid import UUID
+from email.utils import parsedate_to_datetime
 
-from flask import render_template, make_response, Response
+from flask import render_template, make_response, Response, request
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -292,6 +293,16 @@ class TrackerData:
         return video_feeds
 
 
+def _process_if_request_valid(incoming_request, room: Optional[Room]) -> Optional[Response]:
+    if not room:
+        abort(404)
+
+    if_modified = incoming_request.headers.get("If-Modified-Since", None)
+    if if_modified:
+        if_modified = parsedate_to_datetime(if_modified)
+        if if_modified < room.last_activity:
+            return make_response("",  304)
+
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
 def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> Response:
     key = f"{tracker}_{tracked_team}_{tracked_player}_{generic}"
@@ -299,20 +310,22 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, ge
     if response:
         return response
 
-    timeout,  last_modified, tracker_page = get_timeout_and_player_tracker(tracker, tracked_team, tracked_player, generic)
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+
+    response = _process_if_request_valid(request, room)
+    if response:
+        return response
+
+    timeout, last_modified, tracker_page = get_timeout_and_player_tracker(room, tracked_team, tracked_player, generic)
     response = make_response(tracker_page)
     response.last_modified = last_modified
     cache.set(key, response, timeout)
     return response
 
 
-def get_timeout_and_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool)\
+def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player: int, generic: bool)\
         -> Tuple[int, datetime, str]:
-    # Room must exist.
-    room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
-
     tracker_data = TrackerData(room)
 
     # Load and render the game-specific player tracker, or fallback to generic tracker if none exists.
@@ -338,20 +351,22 @@ def get_multiworld_tracker(tracker: UUID, game: str) -> Response:
     if response:
         return response
 
-    timeout, last_modified, tracker_page = get_timeout_and_multiworld_tracker(tracker, game)
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+
+    response = _process_if_request_valid(request, room)
+    if response:
+        return response
+
+    timeout, last_modified, tracker_page = get_timeout_and_multiworld_tracker(room, game)
     response = make_response(tracker_page)
     response.last_modified = last_modified
     cache.set(key, response, timeout)
     return response
 
 
-def get_timeout_and_multiworld_tracker(tracker: UUID, game: str)\
+def get_timeout_and_multiworld_tracker(room: Room, game: str)\
         -> Tuple[int, datetime, str]:
-    # Room must exist.
-    room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
-
     tracker_data = TrackerData(room)
     enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
     if game in _multiworld_trackers:
