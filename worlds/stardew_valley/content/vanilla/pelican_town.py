@@ -1,9 +1,9 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
-from ...data.game_item import PermanentSource, ItemTag, Tag
+from ...data.game_item import GenericSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
-from ...data.shop import ShopSource, MysteryBoxSource
+from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
@@ -210,7 +210,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=5000, shop_region=Region.ranch),),
         Book.book_of_mysteries: (  # Needs a MysteryBoxSource, THIS ONE IS INVALID RIGHT NOW
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            MysteryBoxSource(amount_of_box=38),),  # After 38 boxes, there are 50% chances player received the book.
+            MysteryBoxSource(amount=38),),  # After 38 boxes, there are 49.99% chances player received the book.
         Book.dwarvish_safety_manual: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=4000, shop_region=LogicRegion.mines_dwarf_shop),
@@ -230,7 +230,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.mapping_cave_systems: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            PermanentSource(regions=Region.adventurer_guild_bedroom),
+            GenericSource(regions=Region.adventurer_guild_bedroom),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.monster_compendium: (  # Needs a source for monster drops
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
@@ -243,14 +243,15 @@ pelican_town = ContentPack(
             ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
         Book.the_alleyway_buffet: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            PermanentSource(regions=Region.town,
-                            other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), ToolRequirement(Tool.pickaxe, ToolMaterial.iron))),
+            GenericSource(regions=Region.town,
+                          other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), ToolRequirement(Tool.pickaxe, ToolMaterial.iron))),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (  # Needs a source for the SquidFest Iridium Tier,
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
-        Book.treasure_appraisal_guide: (  # Needs a source for artifact troves and mystery boxes,
+        Book.treasure_appraisal_guide: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            ArtifactTroveSource(amount=18),  # After 18 troves, there is 49,88% chances player received the book.
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.raccoon_journal: (  # Needs a source for the AP item you'll get for completion of the 2nd raccoon bundle,
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),

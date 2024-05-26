@@ -9,6 +9,7 @@ from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, HasProgressionPercent
 from ..strings.book_names import Book
 from ..strings.craftable_names import Consumable
+from ..strings.geode_names import Geode
 
 ONE_YEAR = 4
 MAX_MONTHS = 3 * ONE_YEAR
@@ -28,12 +29,16 @@ class TimeLogicMixin(BaseLogicMixin):
 
 class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixin, BookLogicMixin]]):
 
-    @cache_self1
     def can_grind_mystery_boxes(self, quantity: int) -> StardewRule:
         return self.logic.and_(self.logic.has(Consumable.mystery_box),
                                self.logic.book.has_book_power(Book.book_of_mysteries),
-                               # Assuming 1 box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride
+                               # Assuming one box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride.
                                self.logic.time.has_lived_months(quantity // 14))
+
+    def can_grind_artifact_troves(self, quantity: int) -> StardewRule:
+        return self.logic.and_(self.logic.has(Geode.artifact_trove),
+                               # Assuming one per month if the player does not grind it.
+                               self.logic.time.has_lived_months(quantity))
 
     @cache_self1
     def can_grind_item(self, quantity: int) -> StardewRule:

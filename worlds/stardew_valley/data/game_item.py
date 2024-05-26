@@ -46,7 +46,7 @@ class ItemSource(ABC):
 
 
 @dataclass(**source_dataclass_args)
-class PermanentSource(ItemSource):
+class GenericSource(ItemSource):
     regions: Tuple[str, ...] = ()
     """No region means it's available everywhere."""
     other_requirements: Tuple[Requirement, ...] = ()

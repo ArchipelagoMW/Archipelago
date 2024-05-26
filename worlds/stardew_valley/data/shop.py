@@ -22,4 +22,9 @@ class ShopSource(ItemSource):
 
 @dataclass(**source_dataclass_args)
 class MysteryBoxSource(ItemSource):
-    amount_of_box: int
+    amount: int
+
+
+@dataclass(**source_dataclass_args)
+class ArtifactTroveSource(ItemSource):
+    amount: int

@@ -2,7 +2,7 @@ from .ginger_island import ginger_island_content_pack as ginger_island_content_p
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack, StardewContent
 from ...data import fish_data
-from ...data.game_item import PermanentSource, ItemTag
+from ...data.game_item import GenericSource, ItemTag
 from ...data.harvest import HarvestCropSource
 from ...strings.crop_names import Fruit
 from ...strings.region_names import Region
@@ -23,7 +23,7 @@ qi_board_content_pack = QiBoardContentPack(
     ),
     harvest_sources={
         # This one is a bit special, because it's only available during the special order, but it can be found from like, everywhere.
-        Seed.qi_bean: (PermanentSource(regions=(Region.qi_walnut_room,)),),
+        Seed.qi_bean: (GenericSource(regions=(Region.qi_walnut_room,)),),
         Fruit.qi_fruit: (HarvestCropSource(seed=Seed.qi_bean, seasons=(Season.spring, Season.summer, Season.fall,)),),
     },
     fishes=(

@@ -12,10 +12,10 @@ from .requirement_logic import RequirementLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
-from ..data.game_item import PermanentSource, ItemSource, GameItem
+from ..data.game_item import GenericSource, ItemSource, GameItem
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource
-from ..data.shop import ShopSource, MysteryBoxSource
+from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -78,9 +78,13 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, TimeLogicMixin]]):
         return self.logic.artisan.can_produce_from(source)
 
     @has_access_to.register
-    def _(self, source: PermanentSource):
+    def _(self, source: GenericSource):
         return self.logic.region.can_reach_any(source.regions) if source.regions else self.logic.true_
 
     @has_access_to.register
     def _(self, source: MysteryBoxSource):
-        return self.logic.time.can_grind_mystery_boxes(source.amount_of_box)
+        return self.logic.time.can_grind_mystery_boxes(source.amount)
+
+    @has_access_to.register
+    def _(self, source: ArtifactTroveSource):
+        return self.logic.time.can_grind_artifact_troves(source.amount)
