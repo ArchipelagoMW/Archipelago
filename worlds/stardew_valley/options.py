@@ -21,7 +21,7 @@ class Goal(Choice):
     Master Angler: Catch every fish. Adapts to Fishsanity
     Complete Collection: Complete the museum collection
     Full House: Get married and have 2 children
-    Greatest Walnut Hunter: Find 130 Golden Walnuts
+    Greatest Walnut Hunter: Find 130 Golden Walnuts. Pairs well with Walnutsanity
     Protector of the Valley: Complete the monster slayer goals. Adapts to Monstersanity
     Full Shipment: Ship every item. Adapts to Shipsanity
     Gourmet Chef: Cook every recipe. Adapts to Cooksanity
