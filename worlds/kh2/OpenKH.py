@@ -413,6 +413,8 @@ def patch_kh2(self, output_directory):
     ]
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
+    self.mod_yml["title"] = f"Randomizer Seed {mod_name}"
+
     openkhmod = {
         "TrsrList.yml": yaml.dump(self.formattedTrsr, line_break="\n"),
         "LvupList.yml": yaml.dump(self.formattedLvup, line_break="\n"),

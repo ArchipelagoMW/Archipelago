@@ -88,7 +88,7 @@ class ShuffleTransitions(Choice):
 
 
 class Goal(Choice):
-    """Requirement to finish the game."""
+    """Requirement to finish the game. To win with the power seal hunt goal, you must enter the Music Box through the shop chest."""
     display_name = "Goal"
     option_open_music_box = 0
     option_power_seal_hunt = 1
@@ -121,6 +121,11 @@ class RequiredSeals(Range):
     range_start = 10
     range_end = 100
     default = range_end
+
+
+class Traps(Toggle):
+    """Whether traps should be included in the itempool."""
+    display_name = "Include Traps"
 
 
 class ShopPrices(Range):
@@ -197,5 +202,6 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     notes_needed: NotesNeeded
     total_seals: AmountSeals
     percent_seals_required: RequiredSeals
+    traps: Traps
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices

@@ -81,22 +81,17 @@ For the locations which do not include a normal reward, Resource Packs and traps
 
 A player can enable some options that will add some items to the pool that are relevant to progression
 - Seasons Randomizer:
-  * All 4 seasons will be items, and one of them will be selected randomly and be added to the player's start inventory. 
-  * At the end of each month, the player can choose the next season, instead of following the vanilla season order. On 
-Seasons Randomizer, they can only choose from the seasons they have received.
+    - All 4 seasons will be items, and one of them will be selected randomly and be added to the player's start inventory. 
+    - At the end of each month, the player can choose the next season, instead of following the vanilla season order. On Seasons Randomizer, they can only choose from the seasons they have received.
 - Cropsanity:
-  * Every single seed in the game starts off locked and cannot be purchased from any merchant. Their unlocks are received 
-  as multiworld items. Growing each seed and harvesting the resulting crop sends a location check
-  * The way merchants sell seeds is considerably changed. Pierre sells fewer seeds at a high price, while Joja sells 
-  unlimited seeds but in huge discount packs, not individually.
+    - Every single seed in the game starts off locked and cannot be purchased from any merchant. Their unlocks are received as multiworld items. Growing each seed and harvesting the resulting crop sends a location check
+    - The way merchants sell seeds is considerably changed. Pierre sells fewer seeds at a high price, while Joja sells unlimited seeds but in huge discount packs, not individually.
 - Museumsanity:
-  * The items that are normally obtained from museum donation milestones are added to the item pool. Some items, like the 
-  magic rock candy, are duplicated for convenience.
-  * The Traveling Merchant now sells artifacts and minerals, with a bias towards undonated ones, to mitigate randomness. 
-  She will sell these items as the player receives "Traveling Merchant Metal Detector" items.
+    - The items that are normally obtained from museum donation milestones are added to the item pool. Some items, like the magic rock candy, are duplicated for convenience.
+    - The Traveling Merchant now sells artifacts and minerals, with a bias towards undonated ones, to mitigate randomness. She will sell these items as the player receives "Traveling Merchant Metal Detector" items.
 - TV Channels
 - Babies
-  * Only if Friendsanity is enabled
+    - Only if Friendsanity is enabled
 
 There are a few extra vanilla items, which are added to the pool for convenience, but do not have a matching location. These include
 - [Wizard Buildings](https://stardewvalleywiki.com/Wizard%27s_Tower#Buildings)
@@ -135,32 +130,32 @@ for these mods, the specifics will vary from mod to mod
 List of supported mods:
 
 - General
-  * [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753)
-  * [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
-  * [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
-  * [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
-  * [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
-  * [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109)
+    - [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753)
+    - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
+    - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
+    - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
+    - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
+    - [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109)
 - Skills
-  * [Magic](https://www.nexusmods.com/stardewvalley/mods/2007)
-  * [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
-  * [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142)
-  * [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793)
-  * [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522)
-  * [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073)
+    - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007)
+    - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
+    - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142)
+    - [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793)
+    - [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522)
+    - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073)
 - NPCs
-  * [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427)
-  * [Mister Ginger (cat npc)](https://www.nexusmods.com/stardewvalley/mods/5295)
-  * [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606)
-  * [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599)
-  * [Alec Revisited](https://www.nexusmods.com/stardewvalley/mods/10697)
-  * [Custom NPC - Yoba](https://www.nexusmods.com/stardewvalley/mods/14871)
-  * [Custom NPC Eugene](https://www.nexusmods.com/stardewvalley/mods/9222)
-  * ['Prophet' Wellwick](https://www.nexusmods.com/stardewvalley/mods/6462)
-  * [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732)
-  * [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510)
-  * [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811)
-  * [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671)
+    - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427)
+    - [Mister Ginger (cat npc)](https://www.nexusmods.com/stardewvalley/mods/5295)
+    - [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606)
+    - [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599)
+    - [Alec Revisited](https://www.nexusmods.com/stardewvalley/mods/10697)
+    - [Custom NPC - Yoba](https://www.nexusmods.com/stardewvalley/mods/14871)
+    - [Custom NPC Eugene](https://www.nexusmods.com/stardewvalley/mods/9222)
+    - ['Prophet' Wellwick](https://www.nexusmods.com/stardewvalley/mods/6462)
+    - [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732)
+    - [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510)
+    - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811)
+    - [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671)
   
 Some of these mods might need a patch mod to tie the randomizer with the mod. These can be found 
 [here](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases)

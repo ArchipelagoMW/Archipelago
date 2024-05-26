@@ -12,9 +12,13 @@ from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region
-from ..strings.skill_names import ModSkill
 from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool
+
+fishing_rod_prices = {
+    3: 1800,
+    4: 7500,
+}
 
 tool_materials = {
     ToolMaterial.copper: 1,
@@ -40,27 +44,31 @@ class ToolLogicMixin(BaseLogicMixin):
 class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, MagicLogicMixin]]):
     # Should be cached
     def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
+        assert tool != Tool.fishing_rod, "Use `has_fishing_rod` instead of `has_tool`."
+
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
         if self.options.tool_progression & ToolProgression.option_progressive:
             return self.logic.received(f"Progressive {tool}", tool_materials[material])
 
-        return self.logic.has(f"{material} Bar") & self.logic.money.can_spend(tool_upgrade_prices[material])
+        return self.logic.has(f"{material} Bar") & self.logic.money.can_spend_at(Region.blacksmith, tool_upgrade_prices[material])
 
     def can_use_tool_at(self, tool: str, material: str, region: str) -> StardewRule:
         return self.has_tool(tool, material) & self.logic.region.can_reach(region)
 
     @cache_self1
     def has_fishing_rod(self, level: int) -> StardewRule:
+        assert 1 <= level <= 4, "Fishing rod 0 isn't real, it can't hurt you. Training is 1, Bamboo is 2, Fiberglass is 3 and Iridium is 4."
+
         if self.options.tool_progression & ToolProgression.option_progressive:
             return self.logic.received(f"Progressive {Tool.fishing_rod}", level)
 
-        if level <= 1:
+        if level <= 2:
+            # We assume you always have access to the Bamboo pole, because mod side there is a builtin way to get it back.
             return self.logic.region.can_reach(Region.beach)
-        prices = {2: 500, 3: 1800, 4: 7500}
-        level = min(level, 4)
-        return self.logic.money.can_spend_at(Region.fish_shop, prices[level])
+
+        return self.logic.money.can_spend_at(Region.fish_shop, fishing_rod_prices[level])
 
     # Should be cached
     def can_forage(self, season: Union[str, Iterable[str]], region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
