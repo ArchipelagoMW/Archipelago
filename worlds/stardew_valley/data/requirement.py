@@ -19,3 +19,8 @@ class ToolRequirement(Requirement):
 class SkillRequirement(Requirement):
     skill: str
     level: int
+
+
+@dataclass(frozen=True)
+class SeasonRequirement(Requirement):
+    season: str

@@ -2,7 +2,7 @@ from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -246,8 +246,12 @@ pelican_town = ContentPack(
             GenericSource(regions=Region.town,
                           other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), ToolRequirement(Tool.pickaxe, ToolMaterial.iron))),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
-        Book.the_art_o_crabbing: (  # TODO Needs a source for the SquidFest Iridium Tier,
+        Book.the_art_o_crabbing: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
+            GenericSource(regions=Region.beach,
+                          other_requirements=(ToolRequirement(Tool.fishing_rod, ToolMaterial.iridium),
+                                              SkillRequirement(Skill.fishing, 6),
+                                              SeasonRequirement(Season.winter))),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.treasure_appraisal_guide: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),

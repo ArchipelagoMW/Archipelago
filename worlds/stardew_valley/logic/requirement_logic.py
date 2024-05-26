@@ -5,10 +5,11 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from .book_logic import BookLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
+from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.game_item import Requirement
-from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement
+from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -17,7 +18,8 @@ class RequirementLogicMixin(BaseLogicMixin):
         self.requirement = RequirementLogic(*args, **kwargs)
 
 
-class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin]]):
+class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin,
+SeasonLogicMixin]]):
 
     def meet_all_requirements(self, requirements: Iterable[Requirement]):
         if not requirements:
@@ -38,10 +40,8 @@ class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, Rec
 
     @meet_requirement.register
     def _(self, requirement: BookRequirement):
-        # Should be extracted in its own logic mixin if this ever need to be reused. Something like `has_book_power(book)` would be nice.
-        book_name = requirement.book
-        booksanity = self.content.features.booksanity
-        if booksanity.is_included(self.content.game_items[book_name]):
-            return self.logic.received(booksanity.to_item_name(book_name))
-        else:
-            return self.logic.has(book_name)
+        return self.logic.book.has_book_power(requirement.book)
+
+    @meet_requirement.register
+    def _(self, requirement: SeasonRequirement):
+        return self.logic.season.has(requirement.season)
