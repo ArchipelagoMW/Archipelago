@@ -218,7 +218,7 @@ transitions can be accessed in the game, one-ways are only randomized with other
 randomized with other two-ways. You can set whether an `Entrance` is one-way or two-way using the `randomization_type`
 attribute.
 
-`Entrace`s can also set the `randomization_group` attribute to allow for grouping during randomization. This can be
+`Entrance`s can also set the `randomization_group` attribute to allow for grouping during randomization. This can be
 any arbitrary string you define and may be based on player options. Some possible use cases for grouping include:
 * Directional matching - only match leftward-facing transitions to rightward-facing ones
 * Terrain matching - only match water transitions to water transitions and land transitions to land transitions
@@ -326,14 +326,15 @@ def get_target_groups(group: str) -> List[str]:
 The short answer is that you will almost always want to do ER in `pre_fill`. For more information why, continue reading.
 
 ER begins by collecting the entire item pool and then uses your access rules to try and prevent some kinds of failures. 
-Consider a case where an `Entrance`'s access rule requires another region. In logic, these would usually be represented 
-with events or indirect connections, which are not part of the item pool. Logic is used to prevent an arrangement where
-that region is locked behind that entrance, thus making the seed impossible. In theory, if none of these appear in your
-logic, you could do ER as early as `create_regions`, immediately after the regions are available.
+This means 2 things about when you can call ER:
+1. You must supply your item pool before calling ER, or call ER before setting any rules which require items.
+2. If you have rules dependent on anything other than items (e.g. `Entrance`s or events), you must set your rules
+   and create your events before you call ER if you want to guarantee a correct output.
 
-However, plando is also a consideration. Since item plando happens before `pre_fill` and modifies the item pool,
-doing ER in `pre_fill` is the only way to account for placements made by item plando, otherwise you risk impossible
-seeds or generation failures. Obviously, you may also want to perform ER after entrance plando as well.
+If the conditions above are met, you could theoretically do ER as early as `create_regions`. However, plando is also 
+a consideration. Since item plando happens before `pre_fill` and modifies the item pool, doing ER in `pre_fill` is the
+only way to account for placements made by item plando, otherwise you risk impossible seeds or generation failures. 
+Obviously, you may also want to perform ER after entrance plando as well.
 
 #### Informing your client about randomized entrances
 
