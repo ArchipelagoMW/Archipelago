@@ -7,7 +7,7 @@ from ... import items, Group, ItemClassification
 from ... import options
 from ...items import items_by_group
 from ...mods.mod_data import all_mods
-from ...options import SkillProgression
+from ...options import SkillProgression, Walnutsanity
 from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 
 
@@ -59,6 +59,7 @@ class TestBaseItemGeneration(SVTestBase):
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
+        Walnutsanity.internal_name: Walnutsanity.preset_all,
         options.Mods.internal_name: all_mods
     }
 

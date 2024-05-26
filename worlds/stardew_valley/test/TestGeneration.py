@@ -7,7 +7,7 @@ from .. import items, location_table, options
 from ..items import Group, item_table
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
-    SkillProgression, Booksanity
+    SkillProgression, Booksanity, Walnutsanity
 from ..strings.region_names import Region
 
 
@@ -21,6 +21,7 @@ class TestBaseItemGeneration(SVTestBase):
         Chefsanity.internal_name: Chefsanity.option_all,
         Craftsanity.internal_name: Craftsanity.option_all,
         Booksanity.internal_name: Booksanity.option_all,
+        Walnutsanity.internal_name: Walnutsanity.preset_all,
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
