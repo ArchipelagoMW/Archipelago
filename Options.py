@@ -1000,6 +1000,13 @@ class StartInventoryPool(StartInventory):
     display_name = "Start Inventory from Pool"
 
 
+class ExcludeItemsPool(StartInventory):
+    """Prevent these items to be placed in the world.
+    The game decides what the replacement items will be."""
+    verify_item_name = True
+    display_name = "Exclude Items from Pool"
+
+
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
     display_name = "Start Hints"

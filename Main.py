@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
-from Options import StartInventoryPool
+from Options import StartInventoryPool, ExcludeItemsPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
 from worlds import AutoWorld
@@ -139,17 +139,20 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         multiworld.worlds[1].options.non_local_items.value = set()
         multiworld.worlds[1].options.local_items.value = set()
-    
+
     AutoWorld.call_all(multiworld, "generate_basic")
 
-    # remove starting inventory from pool items.
+    # remove starting inventory and excluded items from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
+    if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) or
+           getattr(multiworld.worlds[player].options, "exclude_items_from_pool", None)
+           for player in multiworld.player_ids):
         new_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
-            player: getattr(multiworld.worlds[player].options,
-                            "start_inventory_from_pool",
-                            StartInventoryPool({})).value.copy()
+            player: {
+                **getattr(multiworld.worlds[player].options, "start_inventory_from_pool", StartInventoryPool({})).value,
+                **getattr(multiworld.worlds[player].options, "exclude_items_from_pool", ExcludeItemsPool({})).value
+            }
             for player in multiworld.player_ids
         }
         for player, items in depletion_pool.items():
