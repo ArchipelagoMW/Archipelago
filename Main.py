@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
-from Options import StartInventoryPool, ExcludeItemsPool
+from Options import StartInventoryPool, RemoveItemsPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
 from worlds import AutoWorld
@@ -151,7 +151,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: {
                 **getattr(multiworld.worlds[player].options, "start_inventory_from_pool", StartInventoryPool({})).value,
-                **getattr(multiworld.worlds[player].options, "exclude_items_from_pool", ExcludeItemsPool({})).value
+                **getattr(multiworld.worlds[player].options, "remove_items_from_pool", RemoveItemsPool({})).value
             }
             for player in multiworld.player_ids
         }
