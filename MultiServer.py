@@ -175,7 +175,10 @@ class Context:
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
+    spheres: typing.List[typing.Dict[int, typing.Set[int]]]
+    """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
+
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
@@ -238,6 +241,7 @@ class Context:
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
+        self.spheres = []
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -466,6 +470,9 @@ class Context:
         for game_name, data in self.location_name_groups.items():
             self.read_data[f"location_name_groups_{game_name}"] = lambda lgame=game_name: self.location_name_groups[lgame]
 
+        # sorted access spheres
+        self.spheres = decoded_obj.get("spheres", [])
+
     # saving
 
     def save(self, now=False) -> bool:
@@ -623,6 +630,16 @@ class Context:
     def get_rechecked_hints(self, team: int, slot: int):
         self.recheck_hints(team, slot)
         return self.hints[team, slot]
+
+    def get_sphere(self, player: int, location_id: int) -> int:
+        """Get sphere of a location, -1 if spheres are not available."""
+        if self.spheres:
+            for i, sphere in enumerate(self.spheres):
+                if location_id in sphere.get(player, set()):
+                    return i
+            raise KeyError(f"No Sphere found for location ID {location_id} belonging to player {player}. "
+                           f"Location or player may not exist.")
+        return -1
 
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
@@ -1549,6 +1566,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.ctx.random.shuffle(not_found_hints)
                 # By popular vote, make hints prefer non-local placements
                 not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
+                # By another popular vote, prefer early sphere
+                not_found_hints.sort(key=lambda hint: self.ctx.get_sphere(hint.finding_player, hint.location),
+                                     reverse=True)
 
                 hints = found_hints + old_hints
                 while can_pay > 0:
@@ -1558,10 +1578,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints.append(hint)
                     can_pay -= 1
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
-                    points_available = get_client_points(self.ctx, self.client)
 
                 self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
+                    points_available = get_client_points(self.ctx, self.client)
                     if hints and cost and int((points_available // cost) == 0):
                         self.output(
                             f"There may be more hintables, however, you cannot afford to pay for any more. "
