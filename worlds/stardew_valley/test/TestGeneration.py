@@ -1,10 +1,9 @@
 from typing import List
 
 from BaseClasses import ItemClassification, Item
-from . import SVTestBase, allsanity_no_mods_6_x_x, \
-    allsanity_mods_6_x_x, minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, get_minsanity_options, default_6_x_x
+from . import SVTestBase
 from .. import items, location_table, options
-from ..items import Group, item_table
+from ..items import Group
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
     SkillProgression, Booksanity, Walnutsanity
@@ -120,7 +119,11 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
 
 
 class TestMonstersanityNone(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_none}
+    options = {
+        options.Monstersanity.internal_name: options.Monstersanity.option_none,
+        # Not really necessary, but it adds more locations, so we don't have to remove useful items.
+        options.Fishsanity.internal_name: options.Fishsanity.option_all
+    }
 
     @property
     def run_default_tests(self) -> bool:

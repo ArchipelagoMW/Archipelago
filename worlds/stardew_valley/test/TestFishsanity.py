@@ -44,6 +44,17 @@ distant_lands_hard_fishes = {DistantLandsFish.giant_horsehoe_crab, }
 distant_lands_easy_fishes = {DistantLandsFish.void_minnow, DistantLandsFish.purple_algae, DistantLandsFish.swamp_leech, }
 
 
+def complete_options_with_default(options):
+    return {
+        **{
+            ExcludeGingerIsland: ExcludeGingerIsland.default,
+            Mods: Mods.default,
+            SpecialOrderLocations: SpecialOrderLocations.default,
+        },
+        **options
+    }
+
+
 class SVFishsanityTestBase(SVTestBase):
     expected_fishes: ClassVar[Set[str]] = set()
 
@@ -69,9 +80,9 @@ class SVFishsanityTestBase(SVTestBase):
 
 
 class TestFishsanityNoneVanilla(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_none,
-    }
+    })
 
     @property
     def run_default_tests(self) -> bool:
@@ -80,31 +91,31 @@ class TestFishsanityNoneVanilla(SVFishsanityTestBase):
 
 
 class TestFishsanityLegendaries_Vanilla(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_legendaries,
-    }
+    })
     expected_fishes = pelican_town_legendary_fishes
 
 
 class TestFishsanityLegendaries_QiBoard(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_legendaries,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
-    }
+    })
     expected_fishes = pelican_town_legendary_fishes | qi_board_legendary_fishes
 
 
 class TestFishsanitySpecial(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_special,
-    }
+    })
     expected_fishes = pelican_town_legendary_fishes | pelican_town_hard_special_fishes | pelican_town_medium_special_fishes
 
 
 class TestFishsanityAll_Vanilla(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -119,10 +130,10 @@ class TestFishsanityAll_Vanilla(SVFishsanityTestBase):
 
 
 class TestFishsanityAll_ExcludeGingerIsland(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         ExcludeGingerIsland: ExcludeGingerIsland.option_true,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -135,10 +146,10 @@ class TestFishsanityAll_ExcludeGingerIsland(SVFishsanityTestBase):
 
 
 class TestFishsanityAll_SVE(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         Mods: ModNames.sve,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -159,11 +170,11 @@ class TestFishsanityAll_SVE(SVFishsanityTestBase):
 
 
 class TestFishsanityAll_ExcludeGingerIsland_SVE(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         ExcludeGingerIsland: ExcludeGingerIsland.option_true,
         Mods: ModNames.sve,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -179,10 +190,10 @@ class TestFishsanityAll_ExcludeGingerIsland_SVE(SVFishsanityTestBase):
 
 
 class TestFishsanityAll_DistantLands(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         Mods: ModNames.distant_lands,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -199,10 +210,10 @@ class TestFishsanityAll_DistantLands(SVFishsanityTestBase):
 
 
 class TestFishsanityAll_QiBoard(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -218,11 +229,11 @@ class TestFishsanityAll_QiBoard(SVFishsanityTestBase):
 
 
 class TestFishsanityAll_ExcludeGingerIsland_QiBoard(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         ExcludeGingerIsland: ExcludeGingerIsland.option_true,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
-    }
+    })
     expected_fishes = (
             pelican_town_legendary_fishes |
             pelican_town_hard_special_fishes |
@@ -235,9 +246,9 @@ class TestFishsanityAll_ExcludeGingerIsland_QiBoard(SVFishsanityTestBase):
 
 
 class TestFishsanityExcludeLegendaries_Vanilla(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_legendaries,
-    }
+    })
     expected_fishes = (
             pelican_town_hard_special_fishes |
             pelican_town_medium_special_fishes |
@@ -251,10 +262,10 @@ class TestFishsanityExcludeLegendaries_Vanilla(SVFishsanityTestBase):
 
 
 class TestFishsanityExcludeLegendaries_QiBoard(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_legendaries,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
-    }
+    })
     expected_fishes = (
             pelican_town_hard_special_fishes |
             pelican_town_medium_special_fishes |
@@ -268,9 +279,9 @@ class TestFishsanityExcludeLegendaries_QiBoard(SVFishsanityTestBase):
 
 
 class TestFishsanityExcludeHardFishes_Vanilla(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
-    }
+    })
     expected_fishes = (
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
@@ -281,10 +292,10 @@ class TestFishsanityExcludeHardFishes_Vanilla(SVFishsanityTestBase):
 
 
 class TestFishsanityExcludeHardFishes_SVE(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
         Mods: ModNames.sve,
-    }
+    })
     expected_fishes = (
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
@@ -299,10 +310,10 @@ class TestFishsanityExcludeHardFishes_SVE(SVFishsanityTestBase):
 
 
 class TestFishsanityExcludeHardFishes_DistantLands(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
         Mods: ModNames.distant_lands,
-    }
+    })
     expected_fishes = (
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
@@ -314,10 +325,10 @@ class TestFishsanityExcludeHardFishes_DistantLands(SVFishsanityTestBase):
 
 
 class TestFishsanityExcludeHardFishes_QiBoard(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
-    }
+    })
     expected_fishes = (
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
@@ -328,9 +339,9 @@ class TestFishsanityExcludeHardFishes_QiBoard(SVFishsanityTestBase):
 
 
 class TestFishsanityOnlyEasyFishes_Vanilla(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
-    }
+    })
     expected_fishes = (
             pelican_town_easy_normal_fishes |
             pelican_town_crab_pot_fishes
@@ -338,10 +349,10 @@ class TestFishsanityOnlyEasyFishes_Vanilla(SVFishsanityTestBase):
 
 
 class TestFishsanityOnlyEasyFishes_SVE(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
         Mods: ModNames.sve,
-    }
+    })
     expected_fishes = (
             pelican_town_easy_normal_fishes |
             pelican_town_crab_pot_fishes |
@@ -351,10 +362,10 @@ class TestFishsanityOnlyEasyFishes_SVE(SVFishsanityTestBase):
 
 
 class TestFishsanityOnlyEasyFishes_DistantLands(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
         Mods: ModNames.distant_lands,
-    }
+    })
     expected_fishes = (
             pelican_town_easy_normal_fishes |
             pelican_town_crab_pot_fishes |
@@ -363,10 +374,10 @@ class TestFishsanityOnlyEasyFishes_DistantLands(SVFishsanityTestBase):
 
 
 class TestFishsanityOnlyEasyFishes_QiBoard(SVFishsanityTestBase):
-    options = {
+    options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
-    }
+    })
     expected_fishes = (
             pelican_town_easy_normal_fishes |
             pelican_town_crab_pot_fishes

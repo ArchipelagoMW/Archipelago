@@ -37,7 +37,7 @@ def extract_npc_from_location_name(location_name: str) -> Tuple[Optional[str], i
     return trimmed[:last_space], int(trimmed[last_space + 1:])
 
 
-@lru_cache(maxsize=None)  # Should not go pass 32 values if every friendsanity options are in the multi world
+@lru_cache(maxsize=32)  # Should not go pass 32 values if every friendsanity options are in the multi world
 def get_heart_steps(max_heart: int, heart_size: int) -> Tuple[int, ...]:
     return tuple(range(heart_size, max_heart + 1, heart_size)) + ((max_heart,) if max_heart % heart_size else ())
 

@@ -12,7 +12,7 @@ class TestStartInventoryStandardFarm(WorldAssertMixin, SVTestBase):
         start_items = dict(map(lambda x: (x.name, self.multiworld.precollected_items[self.player].count(x)), self.multiworld.precollected_items[self.player]))
         items = dict(map(lambda x: (x.name, self.multiworld.itempool.count(x)), self.multiworld.itempool))
         self.assertIn("Progressive Coop", items)
-        self.assertEquals(items["Progressive Coop"], 3)
+        self.assertEqual(items["Progressive Coop"], 3)
         self.assertNotIn("Progressive Coop", start_items)
 
 
@@ -26,6 +26,6 @@ class TestStartInventoryMeadowLands(WorldAssertMixin, SVTestBase):
         start_items = dict(map(lambda x: (x.name, self.multiworld.precollected_items[self.player].count(x)), self.multiworld.precollected_items[self.player]))
         items = dict(map(lambda x: (x.name, self.multiworld.itempool.count(x)), self.multiworld.itempool))
         self.assertIn("Progressive Coop", items)
-        self.assertEquals(items["Progressive Coop"], 2)
+        self.assertEqual(items["Progressive Coop"], 2)
         self.assertIn("Progressive Coop", start_items)
-        self.assertEquals(start_items["Progressive Coop"], 1)
+        self.assertEqual(start_items["Progressive Coop"], 1)

@@ -117,7 +117,8 @@ class TestMuseumMilestones(SVTestBase):
 
 class TestBundlesLogic(SVTestBase):
     options = {
-        BundleRandomization.internal_name: BundleRandomization.option_vanilla
+        options.BundleRandomization: BundleRandomization.option_vanilla,
+        options.BundlePrice: options.BundlePrice.default,
     }
 
     def test_vault_2500g_bundle(self):
