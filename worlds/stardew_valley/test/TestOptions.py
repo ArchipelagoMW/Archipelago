@@ -25,7 +25,7 @@ class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
                 continue
             for value in option.special_range_names:
                 world_options = {option_name: option.special_range_names[value]}
-                with self.solo_world_sub_test(f"{option_name}: {value}", world_options, dirty_state=True) as (multiworld, _):
+                with self.solo_world_sub_test(f"{option_name}: {value}", world_options) as (multiworld, _):
                     self.assert_basic_checks(multiworld)
 
     def test_given_choice_when_generate_then_basic_checks(self):
@@ -35,7 +35,7 @@ class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
                 continue
             for value in option.options:
                 world_options = {option_name: option.options[value]}
-                with self.solo_world_sub_test(f"{option_name}: {value}", world_options, dirty_state=True) as (multiworld, _):
+                with self.solo_world_sub_test(f"{option_name}: {value}", world_options) as (multiworld, _):
                     self.assert_basic_checks(multiworld)
 
 
@@ -143,7 +143,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase
                 option: option_choice
             }
 
-            with self.solo_world_sub_test(f"{option.internal_name}: {option_choice}", world_options, dirty_state=True) as (multiworld, stardew_world):
+            with self.solo_world_sub_test(f"{option.internal_name}: {option_choice}", world_options) as (multiworld, stardew_world):
 
                 # Some options, like goals, will force Ginger island back in the game. We want to skip testing those.
                 if stardew_world.options.exclude_ginger_island != ExcludeGingerIsland.option_true:
@@ -160,7 +160,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase
                 ExcludeGingerIsland: exclude_island
             }
 
-            with self.solo_world_sub_test(f"Goal: {goal}, {ExcludeGingerIsland.internal_name}: {exclude_island}", world_options, dirty_state=True) \
+            with self.solo_world_sub_test(f"Goal: {goal}, {ExcludeGingerIsland.internal_name}: {exclude_island}", world_options) \
                     as (multiworld, stardew_world):
                 self.assertEqual(stardew_world.options.exclude_ginger_island, ExcludeGingerIsland.option_false)
                 self.assert_basic_checks(multiworld)

@@ -15,7 +15,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         for mod in all_mods:
-            with self.solo_world_sub_test(f"Mod: {mod}", {options.Mods: mod}, dirty_state=True) as (multi_world, _):
+            with self.solo_world_sub_test(f"Mod: {mod}", {options.Mods: mod}) as (multi_world, _):
                 self.assert_basic_checks(multi_world)
                 self.assert_stray_mod_items(mod, multi_world)
 
@@ -26,18 +26,18 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
                     options.EntranceRandomization.internal_name: options.EntranceRandomization.options[option],
                     options.Mods: mod
                 }
-                with self.solo_world_sub_test(f"entrance_randomization: {option}, Mod: {mod}", world_options, dirty_state=True) as (multi_world, _):
+                with self.solo_world_sub_test(f"entrance_randomization: {option}, Mod: {mod}", world_options) as (multi_world, _):
                     self.assert_basic_checks(multi_world)
                     self.assert_stray_mod_items(mod, multi_world)
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
-        with self.solo_world_sub_test(world_options=allsanity_mods_6_x_x(), dirty_state=True) as (multi_world, _):
+        with self.solo_world_sub_test(world_options=allsanity_mods_6_x_x()) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
         world_options = allsanity_mods_6_x_x()
         world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
-        with self.solo_world_sub_test(world_options=world_options, dirty_state=True) as (multi_world, _):
+        with self.solo_world_sub_test(world_options=world_options) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 
