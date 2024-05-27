@@ -923,7 +923,7 @@ class WitnessPlayerLogic:
             hunt_panels = world.random.choices(
                 list(eligible_panels_to_weights),
                 weights=list(eligible_panels_to_weights.values()),
-                k = total_panels - len(self.HUNT_ENTITIES)
+                k=total_panels - len(self.HUNT_ENTITIES)
             )
             self.HUNT_ENTITIES.update(hunt_panels)
             return
