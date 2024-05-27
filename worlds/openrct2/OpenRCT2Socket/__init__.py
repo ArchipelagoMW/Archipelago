@@ -8,6 +8,12 @@ from select import select
 
 logger = logging.getLogger("Client")
 
+def logex(*args):
+    print(traceback.format_exc())
+    print(*sys.exc_info())
+    if args:
+        print(*args)
+
 class OpenRCT2Socket:
     listener:socket.socket = None
     gamecons:list[socket.socket] = []
@@ -20,7 +26,7 @@ class OpenRCT2Socket:
         self.initial_connection = True
         self.outbound_packet_queue = []
 
-    
+
     async def main(self):
         while True:
             try:
@@ -28,8 +34,7 @@ class OpenRCT2Socket:
             except KeyboardInterrupt as e:
                 break
             except Exception as e:
-                print(e)
-                print(traceback.format_exc())
+                logex(e)
         if self.listener:
             try:
                 self.listener.shutdown(socket.SHUT_RDWR)
@@ -66,7 +71,7 @@ class OpenRCT2Socket:
             print("connectgame got listener:", self.listener)
         try:
             #self.listener.settimeout(0.01)
-            self.listener.setblocking(0)
+            self.listener.setblocking(False)
             (newgame, addr) = self.listener.accept()
             if newgame:
                 # maybe we should do a recv before disconnecting?
@@ -77,13 +82,13 @@ class OpenRCT2Socket:
                     logger.info("Connection to OpenRCT2 Established!")
                     self.initial_connection = False
                 self.connected_to_game.set()
-                newgame.setblocking(0)
+                newgame.setblocking(False)
                 try:
                     while self.outbound_packet_queue:
                         self._send(self.outbound_packet_queue.pop(0))
                         await asyncio.sleep(0.1)
                 except Exception as e:
-                    print("Error in connect game: ", e)
+                    logex("Error in connect game: ", e)
         except socket.timeout as e:
             #print('error connecting to game', e)
             pass
@@ -92,15 +97,17 @@ class OpenRCT2Socket:
             pass
         except Exception as e:
             self.listener.close()
-            print(traceback.format_exc())
-            print('error connecting to game', e)
+            logex('error connecting to game', e)
             raise
 
     
     def recv(self):
         packets = []
         # print('Attempting to Receive', self.game, self)
-        for sock in select(self.gamecons, [], [])[0]:
+        if not self.gamecons:
+            return
+        sock:socket
+        for sock in select(self.gamecons, [], [], 1)[0]:
             # print(repr(sock))
             try:
                 data = sock.recv(1000000)
@@ -118,8 +125,7 @@ class OpenRCT2Socket:
                 print('closing')
                 self.gamecons.remove(sock)
             except Exception as e:
-                print(traceback.format_exc(100))
-                print("Error in recv", e)
+                logex("Error in recv", e)
                 #self.disconnectgame(sock)
                 # raise
                 # self.connectgame()
@@ -136,7 +142,7 @@ class OpenRCT2Socket:
                 try:
                     packets.append(json.loads(packet))
                 except Exception as e:
-                    print("partial packet received?", e)
+                    logex("partial packet received?", e)
         print(packets)
         return packets
 
@@ -152,9 +158,9 @@ class OpenRCT2Socket:
                     print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
                     data = None
         except socket.timeout as e:
-            print(e)
+            logex(e)
         except BlockingIOError as e:
-            print(e)
+            logex(e)
         finally:
             if data:
                 self.outbound_packet_queue.append(data)
@@ -169,7 +175,7 @@ class OpenRCT2Socket:
         try:
             self._send(data)
         except Exception as e:
-            print('error sending to game:', e)
+            logex('error sending to game:', e)
             #self.disconnectgame(self.gamecons[-1])
             # self.connectgame()
             # asyncio.get_event_loop().run_until_complete(connectgame())
@@ -184,6 +190,6 @@ class OpenRCT2Socket:
                 await self.ctx.send_msgs(data)
                 #await self.ctx.send_death('Some death message')
         except Exception as e:
-            print('error receiving from game', e)
+            logex('error receiving from game', e)
             #self.connectgame()
         
