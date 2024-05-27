@@ -519,7 +519,7 @@ Hey Vincent.|43-49|MD Plus Project|True|6|8|10|
 Meteor feat. TEA|43-50|MD Plus Project|True|3|6|9|
 Narcissism Angel|43-51|MD Plus Project|True|1|3|6|
 AlterLuna|43-52|MD Plus Project|True|6|8|11|12
-Niki Tousen|43-53|MD Plus Project|True|6|8|10|11
+Niki Tousen|43-53|MD Plus Project|True|6|8|10|12
 Rettou Joutou|70-0|Rin Len's Mirrorland|False|4|7|9|
 Telecaster B-Boy|70-1|Rin Len's Mirrorland|False|5|7|10|
 Iya Iya Iya|70-2|Rin Len's Mirrorland|False|2|4|7|
@@ -551,3 +551,9 @@ Dance Dance Good Night Dance|73-2|Happy Otaku Pack Vol.19|True|2|4|7|
 Ops Limone|73-3|Happy Otaku Pack Vol.19|True|5|8|11|
 NOVA|73-4|Happy Otaku Pack Vol.19|True|6|8|10|
 Heaven's Gradius|73-5|Happy Otaku Pack Vol.19|True|6|8|10|
+Ray Tuning|74-0|CHUNITHM COURSE MUSE|True|6|8|10|
+World Vanquisher|74-1|CHUNITHM COURSE MUSE|True|6|8|10|11
+Territory Battles|74-2|CHUNITHM COURSE MUSE|True|5|7|9|
+The wheel to the right|74-3|CHUNITHM COURSE MUSE|True|5|7|9|11
+Climax|74-4|CHUNITHM COURSE MUSE|True|4|8|11|11
+Spider's Thread|74-5|CHUNITHM COURSE MUSE|True|5|8|10|12
