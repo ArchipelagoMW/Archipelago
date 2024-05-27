@@ -25,6 +25,7 @@ class OpenRCT2Socket:
         self.connected_to_game = asyncio.Event()
         self.initial_connection = True
         self.outbound_packet_queue = []
+        self.inbound_buffer = ''
 
 
     async def main(self):
@@ -141,8 +142,14 @@ class OpenRCT2Socket:
             if packet:
                 try:
                     packets.append(json.loads(packet))
+                    self.inbound_buffer = ''
                 except Exception as e:
-                    logex("partial packet received?", e)
+                    self.inbound_buffer += packet
+                    try:
+                        packets.append(json.loads(self.inbound_buffer))
+                        self.inbound_buffer = ''
+                    except Exception as e:
+                        print("partial packet received?")
         print(packets)
         return packets
 

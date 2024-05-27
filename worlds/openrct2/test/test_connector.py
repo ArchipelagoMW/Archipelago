@@ -38,7 +38,7 @@ class TestConn(unittest.TestCase):
     
     async def ping(self, data):
         self.gamesock.sendobj(data)
-        await self.ctx.received.wait()
+        await asyncio.wait_for(self.ctx.received.wait(), 60)
         self.ctx.received.clear()
         data['cmd'] = 'Pong'
         last_received = self.ctx.last_received[0]
@@ -59,6 +59,19 @@ class TestConn(unittest.TestCase):
             for i in range(4): # We'll never forget you int()!
                 data["key" + str(i)] = i
             await self.ping(data)
+        
+        with self.subTest("larger packet"):
+            data = {'cmd': 'Ping', 'extra': 123}
+            for i in range(2000):
+                data["key" + str(i)] = i
+            await self.ping(data)
+        
+        with self.subTest("largest packet"):
+            data = {'cmd': 'Ping', 'extra': 123}
+            for i in range(42069):
+                data["key" + str(i)] = i
+            await self.ping(data)
+
 
 def run_tests():
     global test_network
