@@ -926,7 +926,8 @@ class WitnessPlayerLogic:
                 area = static_witness_logic.ENTITIES_BY_HEX[new_hunt_panel]["area"]["name"]
                 for panel_in_the_same_area in eligible_panels_by_area[area]:
                     # More drastic change when the total is lower
-                    eligible_panels_to_weights[panel_in_the_same_area] *= log10(total_panels) * 0.4
+                    # 0.4725 on 5-panel-hunt, 0.8 on 100-panel-hunt
+                    eligible_panels_to_weights[panel_in_the_same_area] *= (log10(total_panels) + 1.2) / 4
 
             self.HUNT_ENTITIES.update(new_hunt_panels)
 
