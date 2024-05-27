@@ -138,11 +138,11 @@ class ShortHikeOptions(PerGameCommonOptions):
 shorthike_option_groups = [
     OptionGroup("General Options", [
         Goal,
-        FillerCoinAmount
+        FillerCoinAmount,
+        RandomWalkieTalkie
     ]),
     OptionGroup("Logic Options", [
         GoldenFeatherProgression,
-        RandomWalkieTalkie,
         EasierRaces
     ]),
     OptionGroup("Item Pool Options", [

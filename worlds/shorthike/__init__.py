@@ -69,8 +69,6 @@ class ShortHikeWorld(World):
             if feather_count < 12:
                 feather_count = 12
 
-        junk = 58 - self.options.silver_feathers - feather_count - self.options.buckets - self.options.sticks - self.options.toy_shovels
-        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
         self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(feather_count)]
         self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers)]
         self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets)]
@@ -81,6 +79,9 @@ class ShortHikeWorld(World):
             self.multiworld.itempool.append(self.create_item("Walkie Talkie"))
         else:
             self.multiworld.get_location("Lose Race Gift", self.player).place_locked_item(self.create_item("Walkie Talkie"))
+
+        junk = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.multiworld.itempool)
+        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)

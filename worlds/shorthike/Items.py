@@ -48,9 +48,9 @@ item_table: List[ItemDict] = [
     {"name": "21 Coins", "id": base_id + 31, "count": 2, "classification": ItemClassification.filler},
     {"name": "25 Coins", "id": base_id + 32, "count": 7, "classification": ItemClassification.filler},
     {"name": "27 Coins", "id": base_id + 33, "count": 1, "classification": ItemClassification.filler},
-    {"name": "32 Coins", "id": base_id + 34, "count": 1, "classification": ItemClassification.filler},
-    {"name": "33 Coins", "id": base_id + 35, "count": 6, "classification": ItemClassification.filler},
-    {"name": "50 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.progression},
+    {"name": "32 Coins", "id": base_id + 34, "count": 1, "classification": ItemClassification.useful},
+    {"name": "33 Coins", "id": base_id + 35, "count": 6, "classification": ItemClassification.useful},
+    {"name": "50 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.useful},
 
     # Filler item determined by settings
     {"name": "13 Coins", "id": base_id + 37, "count": 0, "classification": ItemClassification.filler},
