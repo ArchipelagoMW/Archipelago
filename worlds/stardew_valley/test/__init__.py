@@ -1,9 +1,8 @@
-import logging
 import os
 import unittest
 from argparse import Namespace
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Hashable, Tuple, Optional, List, Union, Any
+from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
 from BaseClasses import MultiWorld, CollectionState, get_seed, Location
 from Options import VerifyKeys
@@ -14,8 +13,6 @@ from .assertion import RuleAssertMixin
 from .. import StardewValleyWorld, options
 from ..mods.mod_data import all_mods
 from ..options import StardewValleyOptions, StardewValleyOption
-
-logger = logging.Logger(__name__)
 
 DEFAULT_TEST_SEED = get_seed()
 
@@ -229,7 +226,7 @@ pre_generated_worlds = {}
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
 def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOption], str]] = None,
                           seed=DEFAULT_TEST_SEED,
-                          _cache: Dict[Hashable, MultiWorld] = {},  # noqa
+                          _cache: Dict[frozenset, MultiWorld] = {},  # noqa
                           _steps=gen_steps) -> MultiWorld:
     test_options = parse_class_option_keys(test_options)
 
@@ -237,12 +234,10 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     should_cache = "start_inventory" not in test_options
     if should_cache:
         frozen_options = frozenset(test_options.items()).union({seed})
-        if frozen_options in _cache:
-            cached_multi_world = _cache[frozen_options]
-            logger.info(f"Using cached solo multi world [Seed = {cached_multi_world.seed}]")
+        cached_multi_world = search_world_in_cache(frozen_options, _cache)
+        if cached_multi_world:
+            print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}]")
             return cached_multi_world
-    else:
-        frozen_options = frozenset({})
 
     multiworld = setup_base_solo_multiworld(StardewValleyWorld, (), seed=seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
@@ -267,7 +262,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
         call_all(multiworld, step)
 
     if should_cache:
-        _cache[frozen_options] = multiworld
+        _cache[frozen_options] = multiworld  # noqa
 
     return multiworld
 
@@ -286,6 +281,16 @@ def parse_class_option_keys(test_options: dict) -> dict:
             parsed_options[option] = value
 
     return parsed_options
+
+
+def search_world_in_cache(frozen_options: frozenset, _cache: Dict[frozenset, MultiWorld]) -> Optional[MultiWorld]:
+    try:
+        return _cache[frozen_options]
+    except KeyError:
+        for cached_options, multi_world in _cache.items():
+            if frozen_options.issubset(cached_options):
+                return multi_world
+        return None
 
 
 def complete_options_with_default(options_to_complete=None) -> StardewValleyOptions:
