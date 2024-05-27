@@ -72,6 +72,18 @@ class TestConn(unittest.TestCase):
                 data["key" + str(i)] = i
             await self.ping(data)
 
+        with self.subTest("large packet"):
+            print('waiting for game connection...')
+            await gamesock.connected_to_game.wait()
+
+            data = {'cmd': 'Ping', 'extra': 123}
+            for i in range(4): # We'll never forget you int()!
+                data["key" + str(i)] = i
+            gamesock.sendobj(data)
+            await ctx.received.wait()
+            ctx.received.clear()
+            data['cmd'] = 'Pong'
+            self.assertDictEqual(ctx.last_received[0], data)
 
 def run_tests():
     global test_network
