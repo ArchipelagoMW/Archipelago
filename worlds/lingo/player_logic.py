@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
-from .datatypes import Door, DoorType, RoomAndDoor, RoomAndPanel
+from Options import OptionError
+from .datatypes import Door, DoorType, Painting, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
@@ -149,8 +150,8 @@ class LingoPlayerLogic:
         early_color_hallways = world.options.early_color_hallways
 
         if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
-            raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
-                            "be enough locations for all of the door items.")
+            raise OptionError("You cannot have reduced location checks when door shuffle is on, because there would not"
+                              " be enough locations for all of the door items.")
 
         # Create door items, where needed.
         door_groups: Set[str] = set()
@@ -219,7 +220,7 @@ class LingoPlayerLogic:
             self.event_loc_to_item[self.level_2_location] = "Victory"
 
             if world.options.level_2_requirement == 1:
-                raise Exception("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
+                raise OptionError("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
         elif victory_condition == VictoryCondition.option_pilgrimage:
             self.victory_condition = "Pilgrim Antechamber - PILGRIM"
             self.add_location("Pilgrim Antechamber", "PILGRIM (Solved)", None,
@@ -248,11 +249,11 @@ class LingoPlayerLogic:
                 self.real_locations.append(location_name)
 
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
-            raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
+            raise OptionError("Sunwarps cannot be disabled when pilgrimage is enabled.")
 
         if world.options.shuffle_sunwarps:
             if world.options.sunwarp_access == SunwarpAccess.option_disabled:
-                raise Exception("Sunwarps cannot be shuffled if they are disabled.")
+                raise OptionError("Sunwarps cannot be shuffled if they are disabled.")
 
             self.sunwarp_mapping = list(range(0, 12))
             world.random.shuffle(self.sunwarp_mapping)
@@ -360,13 +361,29 @@ class LingoPlayerLogic:
         if door_shuffle == ShuffleDoors.option_none:
             required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
             req_exits = [painting_id for painting_id, painting in PAINTINGS.items() if painting.required_when_no_doors]
-            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
-                             not painting.req_blocked_when_no_doors and painting.room not in required_painting_rooms]
-        else:
-            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
-                             painting.room not in required_painting_rooms]
+
+        def is_req_enterable(painting_id: str, painting: Painting) -> bool:
+            if painting.exit_only or painting.disable or painting.req_blocked\
+                    or painting.room in required_painting_rooms:
+                return False
+
+            if world.options.shuffle_doors == ShuffleDoors.option_none:
+                if painting.req_blocked_when_no_doors:
+                    return False
+
+                # Special case for the paintings in Color Hunt and Champion's Rest. These are req blocked when not on
+                # doors mode, and when sunwarps are disabled or sunwarp shuffle is on and the Color Hunt sunwarp is not
+                # an exit. This is because these two rooms would then be inaccessible without roof access, and we can't
+                # hide the Owl Hallway entrance behind roof access.
+                if painting.room in ["Color Hunt", "Champion's Rest"]:
+                    if world.options.sunwarp_access == SunwarpAccess.option_disabled\
+                            or (world.options.shuffle_sunwarps and "Color Hunt" not in self.sunwarp_exits):
+                        return False
+
+            return True
+
+        req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
+                         if is_req_enterable(painting_id, painting)]
         req_exits += [painting_id for painting_id, painting in PAINTINGS.items()
                       if painting.exit_only and painting.required]
         req_entrances = world.random.sample(req_enterable, len(req_exits))
