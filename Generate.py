@@ -432,7 +432,6 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
                 player_option = option.from_any(game_weights[option_key])
             else:
                 player_option = option.from_any(get_choice(option_key, game_weights))
-            del game_weights[option_key]
         else:
             player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
@@ -446,9 +445,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
-    valid_trigger_names = set()
+    valid_keys = set()
     if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"], valid_trigger_names)
+        weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -490,7 +489,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception(f"Remove tag cannot be used outside of trigger contexts. Found {weight}")
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"], valid_trigger_names)
+        weights = roll_triggers(weights, game_weights["triggers"], valid_keys)
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
@@ -499,8 +498,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
+        valid_keys.add(option_key)
     for option_key in game_weights:
-        if option_key in {"triggers", *valid_trigger_names}:
+        if option_key in {"triggers", *valid_keys}:
             continue
         logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
     if PlandoOptions.items in plando_options:
