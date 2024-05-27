@@ -20,9 +20,13 @@ class FakeCtx():
         self.last_received = data
         self.received.set()
 
+test_network = False
 class TestConn(unittest.TestCase):
     def test_init(self) -> None:
+        global test_network
         self.assertTrue(True, "true is true")
+        if not test_network:
+            return
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.asynctests())
@@ -42,6 +46,8 @@ class TestConn(unittest.TestCase):
 
 
 def run_tests():
+    global test_network
+    test_network = True
     unittest.main(verbosity=9, warnings="error", failfast=True)
 
 if __name__ == '__main__':
