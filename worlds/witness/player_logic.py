@@ -928,7 +928,7 @@ class WitnessPlayerLogic:
                     area: (max_percentage - current_percentage) / max_percentage
                     for area, current_percentage in contributing_percentage_per_area.items()
                 }
-                # use same_area_discouragement as lerp
+                # use same_area_discouragement as lerp factor
                 allowance_per_area = {
                     area: (1.0 - same_area_discouragement_factor) + (weight * same_area_discouragement_factor)
                     for area, weight in allowance_per_area.items()
