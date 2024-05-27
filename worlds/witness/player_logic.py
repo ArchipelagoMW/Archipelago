@@ -17,8 +17,10 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
+from math import log10
 from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
 
+from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.utils import (
@@ -876,7 +878,7 @@ class WitnessPlayerLogic:
             "0x0A3AD",  # Reset PP
         }
 
-        all_eligible_panels = [
+        eligible_panels = (
             entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
             and not (
@@ -888,11 +890,45 @@ class WitnessPlayerLogic:
             )
             and entity_hex not in disallowed_entities_for_panel_hunt
             and entity_hex not in self.HUNT_ENTITIES
-        ]
+        )
 
+        # Make check panels less likely to be hunt panels.
+        # It has to do with client-side jingles.
+        # Yes, I'm optimising for that. Screw you, it's my rando & my jingles. :D
+        eligible_panels_to_weights = {
+            entity_hex: 0.6 if entity_hex in static_witness_locations.GENERAL_LOCATION_HEXES else 1.0
+            for entity_hex in eligible_panels
+        }
+
+        # Make a lookup of eligible hunt panels per area
+        eligible_panels_by_area = defaultdict(set)
+        for eligible_panel in eligible_panels_to_weights:
+            associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"]["name"]
+            eligible_panels_by_area[associated_area].add(eligible_panel)
+
+        # Start picking hunt panels
+        # Each picked panel will update the weights, but to make this performant, for high totals, we will do batches
         total_panels = world.options.panel_hunt_total.value
+        batch_size = max(1, total_panels // 20)
 
-        self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels - len(self.HUNT_ENTITIES)))
+        while len(self.HUNT_ENTITIES) < total_panels:
+            amount_to_choose = min(batch_size, len(self.HUNT_ENTITIES))
+
+            new_hunt_panels = world.random.choices(
+                list(eligible_panels_to_weights),
+                weights=list(eligible_panels_to_weights.values()),
+                k=amount_to_choose
+            )
+
+            # Make other panels in these areas less likely (i.e. prevent "Oops all Treehouse")
+            for new_hunt_panel in new_hunt_panels:
+                eligible_panels_to_weights[new_hunt_panel] = 0.0
+                area = static_witness_logic.ENTITIES_BY_HEX[new_hunt_panel]["area"]["name"]
+                for panel_in_the_same_area in eligible_panels_by_area[area]:
+                    # More drastic change when the total is lower
+                    eligible_panels_to_weights[panel_in_the_same_area] *= log10(total_panels) * 0.4
+
+            self.HUNT_ENTITIES.update(new_hunt_panels)
 
     def make_event_panel_lists(self) -> None:
         """
