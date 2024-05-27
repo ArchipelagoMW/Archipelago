@@ -11,8 +11,20 @@ def create_rules(self, location_table):
             forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups['Maps'], player)
             add_rule(multiworld.get_location(loc["name"], player),
                 lambda state: state.has("Shovel", player))
-        if loc["purchase"] and not options.coins_in_shops:
+
+        # Shop Rules
+        if loc["purchase"] > 0 and not options.coins_in_shops:
             forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups['Coins'], player)
+        if loc["purchase"] >= get_min_shop_logic_cost(self) and options.shop_check_logic != 0:
+            if options.shop_check_logic == 1 or options.shop_check_logic == 2:
+                add_rule(multiworld.get_location(loc["name"], player),
+                    lambda state: state.has("Progressive Fishing Rod", player))
+            if options.shop_check_logic == 3 or options.shop_check_logic == 4:
+                add_rule(multiworld.get_location(loc["name"], player),
+                    lambda state: state.has("Progressive Fishing Rod", player, 2))
+            if options.shop_check_logic == 2 or options.shop_check_logic == 4:
+                add_rule(multiworld.get_location(loc["name"], player),
+                    lambda state: state.has("Shovel", player))
 
         # Minimum Feather Rules
         if options.golden_feather_progression != 2:
@@ -32,11 +44,11 @@ def create_rules(self, location_table):
 
     # Fishing Rules
     add_rule(multiworld.get_location("Catch 3 Fish Reward", player),
-        lambda state: state.has("Fishing Rod", player))
+        lambda state: state.has("Progressive Fishing Rod", player))
     add_rule(multiworld.get_location("Catch Fish with Permit", player),
-        lambda state: state.has("Fishing Rod", player))
+        lambda state: state.has("Progressive Fishing Rod", player))
     add_rule(multiworld.get_location("Catch All Fish Reward", player),
-        lambda state: state.has("Fishing Rod", player))
+        lambda state: state.has("Progressive Fishing Rod", player, 2))
 
     # Misc Rules
     add_rule(multiworld.get_location("Return Camping Permit", player),
@@ -59,6 +71,15 @@ def create_rules(self, location_table):
         lambda state: state.has("Stick", player))
     add_rule(multiworld.get_location("Beachstickball (30 Hits)", player),
         lambda state: state.has("Stick", player))
+    
+    # Race Rules
+    if options.easier_races:
+        add_rule(multiworld.get_location("Lighthouse Race Reward", player),
+            lambda state: state.has("Running Shoes", player))
+        add_rule(multiworld.get_location("Old Building Race Reward", player),
+            lambda state: state.has("Running Shoes", player))
+        add_rule(multiworld.get_location("Hawk Peak Race Reward", player),
+            lambda state: state.has("Running Shoes", player))
 
 def get_min_feathers(self, min_golden_feathers, min_golden_feathers_easy):
     options = self.options
@@ -71,3 +92,13 @@ def get_min_feathers(self, min_golden_feathers, min_golden_feathers_easy):
             min_feathers = options.golden_feathers
 
     return min_feathers
+
+def get_min_shop_logic_cost(self):
+    options = self.options
+
+    if options.min_shop_check_logic == 0:
+        return 40
+    elif options.min_shop_check_logic == 1:
+        return 100
+    elif options.min_shop_check_logic == 2:
+        return 400
