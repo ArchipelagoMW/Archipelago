@@ -179,6 +179,7 @@ class Context:
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
 
+
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
