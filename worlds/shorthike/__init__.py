@@ -132,6 +132,9 @@ class ShortHikeWorld(World):
             "goal": int(options.goal),
             "logicLevel": int(options.golden_feather_progression),
             "costMultiplier": int(options.cost_multiplier),
+            "shopCheckLogic": int(options.shop_check_logic),
+            "minShopCheckLogic": int(options.min_shop_check_logic),
+            "easierRaces": bool(options.easier_races),
         }
     
         slot_data = {
