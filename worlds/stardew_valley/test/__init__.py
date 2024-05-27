@@ -299,8 +299,8 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
     should_cache = "start_inventory" not in test_options
     if should_cache:
-        frozen_options = frozenset(test_options.items()).union({seed})
-        cached_multi_world = search_world_in_cache(frozen_options, _cache)
+        frozen_options = frozenset(test_options.items()).union({("seed", seed)})
+        cached_multi_world = search_world_cache(_cache, frozen_options)
         if cached_multi_world:
             print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}] [Cache size = {len(_cache)}]")
             return cached_multi_world
@@ -328,7 +328,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
         call_all(multiworld, step)
 
     if should_cache:
-        _cache[frozen_options] = multiworld  # noqa
+        add_to_world_cache(_cache, frozen_options, multiworld)  # noqa
 
     return multiworld
 
@@ -349,14 +349,18 @@ def parse_class_option_keys(test_options: dict) -> dict:
     return parsed_options
 
 
-def search_world_in_cache(frozen_options: frozenset, _cache: Dict[frozenset, MultiWorld]) -> Optional[MultiWorld]:
+def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:
     try:
-        return _cache[frozen_options]
+        return cache[frozen_options]
     except KeyError:
-        for cached_options, multi_world in _cache.items():
+        for cached_options, multi_world in cache.items():
             if frozen_options.issubset(cached_options):
                 return multi_world
         return None
+
+
+def add_to_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset, multi_world: MultiWorld) -> None:
+    cache[frozen_options] = multi_world
 
 
 def complete_options_with_default(options_to_complete=None) -> StardewValleyOptions:

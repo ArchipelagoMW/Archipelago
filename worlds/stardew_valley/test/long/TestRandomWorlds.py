@@ -5,7 +5,7 @@ from typing import Dict
 from BaseClasses import MultiWorld, get_seed
 from Options import NamedRange, Range
 from .option_names import options_to_include
-from .. import setup_solo_multiworld, SVTestCase
+from .. import SVTestCase
 from ..assertion import GoalAssertMixin, OptionAssertMixin, WorldAssertMixin
 
 
@@ -17,12 +17,6 @@ def get_option_choices(option) -> Dict[str, int]:
     elif option.options:
         return option.options
     return {}
-
-
-def generate_random_multiworld(world_id: int):
-    world_options = generate_random_world_options(world_id)
-    multiworld = setup_solo_multiworld(world_options, seed=world_id)
-    return multiworld
 
 
 def generate_random_world_options(seed: int) -> Dict[str, int]:
