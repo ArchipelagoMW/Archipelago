@@ -17,11 +17,11 @@ from ..options import StardewValleyOptions, StardewValleyOption
 DEFAULT_TEST_SEED = get_seed()
 
 
-def default_5_x_x():
+def default_6_x_x():
     return {}
 
 
-def allsanity_no_mods_5_x_x():
+def allsanity_no_mods_6_x_x():
     return {
         options.Goal.internal_name: options.Goal.option_perfection,
         options.BundleRandomization.internal_name: options.BundleRandomization.option_thematic,
@@ -54,8 +54,8 @@ def allsanity_no_mods_5_x_x():
     }
 
 
-def allsanity_mods_5_x_x():
-    allsanity = allsanity_no_mods_5_x_x()
+def allsanity_mods_6_x_x():
+    allsanity = allsanity_no_mods_6_x_x()
     allsanity.update({options.Mods.internal_name: all_mods})
     return allsanity
 
