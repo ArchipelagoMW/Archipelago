@@ -1,16 +1,12 @@
-import unittest
-from typing import ClassVar, Set
-
 from . import SVTestBase
-from ..content.feature import fishsanity
-from ..mods.mod_data import ModNames
-from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations, Walnutsanity
-from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
+from ..options import ExcludeGingerIsland, Walnutsanity
+from ..strings.ap_names.ap_option_names import OptionName
 
 
 class TestWalnutsanityNone(SVTestBase):
     options = {
-        Walnutsanity.internal_name: Walnutsanity.preset_none,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: Walnutsanity.preset_none,
     }
 
     def test_no_walnut_locations(self):
@@ -51,7 +47,8 @@ class TestWalnutsanityNone(SVTestBase):
 
 class TestWalnutsanityPuzzles(SVTestBase):
     options = {
-        Walnutsanity.internal_name: {"Puzzles"},
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: frozenset({OptionName.walnutsanity_puzzles}),
     }
 
     def test_only_puzzle_walnut_locations(self):
@@ -68,7 +65,8 @@ class TestWalnutsanityPuzzles(SVTestBase):
 
 class TestWalnutsanityBushes(SVTestBase):
     options = {
-        Walnutsanity.internal_name: {"Bushes"},
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: frozenset({OptionName.walnutsanity_bushes}),
     }
 
     def test_only_bush_walnut_locations(self):
@@ -85,7 +83,8 @@ class TestWalnutsanityBushes(SVTestBase):
 
 class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
     options = {
-        Walnutsanity.internal_name: {"Puzzles", "Bushes"},
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: frozenset({OptionName.walnutsanity_puzzles, OptionName.walnutsanity_bushes}),
     }
 
     def test_only_bush_walnut_locations(self):
@@ -112,7 +111,8 @@ class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
 
 class TestWalnutsanityDigSpots(SVTestBase):
     options = {
-        Walnutsanity.internal_name: {"Dig Spots"},
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: frozenset({OptionName.walnutsanity_dig_spots}),
     }
 
     def test_only_dig_spots_walnut_locations(self):
@@ -129,7 +129,8 @@ class TestWalnutsanityDigSpots(SVTestBase):
 
 class TestWalnutsanityRepeatables(SVTestBase):
     options = {
-        Walnutsanity.internal_name: {"Repeatables"},
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: frozenset({OptionName.walnutsanity_repeatables}),
     }
 
     def test_only_repeatable_walnut_locations(self):
@@ -146,7 +147,8 @@ class TestWalnutsanityRepeatables(SVTestBase):
 
 class TestWalnutsanityAll(SVTestBase):
     options = {
-        Walnutsanity.internal_name: Walnutsanity.preset_all,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Walnutsanity: Walnutsanity.preset_all,
     }
 
     def test_all_walnut_locations(self):

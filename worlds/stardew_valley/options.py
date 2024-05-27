@@ -564,7 +564,8 @@ class Walnutsanity(OptionSet):
     """
     internal_name = "walnutsanity"
     display_name = "Walnutsanity"
-    valid_keys = {OptionName.walnutsanity_puzzles, OptionName.walnutsanity_bushes, OptionName.walnutsanity_dig_spots, OptionName.walnutsanity_repeatables, }
+    valid_keys = frozenset({OptionName.walnutsanity_puzzles, OptionName.walnutsanity_bushes, OptionName.walnutsanity_dig_spots,
+                            OptionName.walnutsanity_repeatables, })
     preset_none = frozenset()
     preset_all = valid_keys
     default = preset_none

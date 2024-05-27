@@ -49,6 +49,7 @@ def default_6_x_x():
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.default,
         options.ToolProgression.internal_name: options.ToolProgression.default,
         options.TrapItems.internal_name: options.TrapItems.default,
+        options.Walnutsanity.internal_name: options.Walnutsanity.default
     }
 
 
@@ -84,6 +85,7 @@ def allsanity_no_mods_6_x_x():
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.Walnutsanity.internal_name: options.Walnutsanity.preset_all
     }
 
 
@@ -125,6 +127,7 @@ def get_minsanity_options():
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
         options.TrapItems.internal_name: options.TrapItems.option_no_traps,
+        options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
 
 
@@ -160,6 +163,7 @@ def minimal_locations_maximal_items():
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
         options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
     return min_max_options
 
