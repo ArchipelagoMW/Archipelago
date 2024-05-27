@@ -134,7 +134,7 @@ class OpenRCT2Socket:
     def _parseReceivedData(self, data:bytes):
         if not data:
             return []
-        print('received', len(data), 'bytes:\n', data)
+        #print('received', len(data), 'bytes:\n', data)
         packets = []
         for packet in data.split(b'\0'):
             packet = packet.decode('UTF-8')
@@ -150,10 +150,12 @@ class OpenRCT2Socket:
         # time.sleep(0.3)
         try:
             if data:
-                print("DATA")
-                sock = self.gamecons[-1]
+                #print("DATA")
+                sock:socket = None
+                if self.gamecons:
+                    sock = self.gamecons[-1]
                 if sock:
-                    print("SOCK")
+                    #print("SOCK")
                     sock.sendall(data)
                     print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
                     data = None

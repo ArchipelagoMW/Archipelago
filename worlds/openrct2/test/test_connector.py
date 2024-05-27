@@ -23,6 +23,10 @@ class FakeCtx():
 
 test_network = False
 class TestConn(unittest.TestCase):
+    def subTest(self, msg, **kargs):
+        print('\n=============\nsubTest', msg)
+        return super().subTest(msg, **kargs)
+
     def test_init(self) -> None:
         global test_network
         self.assertTrue(True, "true is true")
@@ -32,19 +36,29 @@ class TestConn(unittest.TestCase):
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.asynctests())
     
-    async def asynctests(self):
-        ctx = FakeCtx()
-        gamesock = OpenRCT2Socket(ctx)
-
-        print('waiting for game connection...')
-        await gamesock.connected_to_game.wait()
-
-        data = {'cmd': 'Ping', 'extra': 123}
-        gamesock.sendobj(data)
-        await ctx.received.wait()
+    async def ping(self, data):
+        self.gamesock.sendobj(data)
+        await self.ctx.received.wait()
+        self.ctx.received.clear()
         data['cmd'] = 'Pong'
-        self.assertDictEqual(ctx.last_received[0], data)
+        last_received = self.ctx.last_received[0]
+        self.assertDictEqual(last_received, data)
 
+    async def asynctests(self):
+        self.ctx = FakeCtx()
+        self.gamesock = OpenRCT2Socket(self.ctx)
+        print('waiting for game connection...')
+        await self.gamesock.connected_to_game.wait()
+
+        with self.subTest("small packet"):
+            data = {'cmd': 'Ping', 'extra': 123}
+            await self.ping(data)
+
+        with self.subTest("large packet"):
+            data = {'cmd': 'Ping', 'extra': 123}
+            for i in range(4): # We'll never forget you int()!
+                data["key" + str(i)] = i
+            await self.ping(data)
 
 def run_tests():
     global test_network
