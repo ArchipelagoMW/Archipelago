@@ -6,7 +6,7 @@ import typing
 from CommonClient import CommonContext, get_base_parser, server_loop
 import Utils
 import re
-from OpenRCT2Socket import OpenRCT2Socket
+from .OpenRCT2Socket import OpenRCT2Socket
 
 if __name__ == "__main__":
     print("\n\n\n\n\n\n==================================\n")
