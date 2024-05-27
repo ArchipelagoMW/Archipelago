@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle, Visibility, OptionGroup
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -219,6 +219,25 @@ class PanelHuntPostgame(Choice):
     default = 3
 
 
+class PanelHuntDistribution(Choice):
+    """
+    Modifies the way panel hunt panels are picked.
+
+    - Random: Fully random out of all eligible panels.
+    - Discourage Same Area: Distribute hunt panels somewhat more evenly between areas.
+    - Discourage Checks: Make panels that are location checks less likely to be picked as hunt panels.
+    - Discourage Checks And Same Area: Apply both "Discourage Same Area" and "Discourage Checks".
+    """
+    display = "Panel Hunt Distribution"
+    visibility = Visibility.template
+
+    option_random = 0
+    option_discourage_same_area = 1
+    option_discourage_checks = 2
+    option_discourage_checks_and_same_area = 3
+    default = 1
+
+
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
@@ -370,6 +389,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     panel_hunt_total: PanelHuntTotal
     panel_hunt_required_percentage: PanelHuntRequiredPercentage
     panel_hunt_postgame: PanelHuntPostgame
+    panel_hunt_distribution: PanelHuntDistribution
     early_caves: EarlyCaves
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage

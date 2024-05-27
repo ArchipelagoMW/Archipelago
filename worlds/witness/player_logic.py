@@ -878,8 +878,18 @@ class WitnessPlayerLogic:
             "0x0A3AD",  # Reset PP
         }
 
-        eligible_panels = (
-            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+        distribution = world.options.panel_hunt_distribution
+        discourage_same_area = (
+            distribution == "discourage_same_area"
+            or distribution == "discourage_checks_and_same_area"
+        )
+        discourage_checks = (
+            distribution == "discourage_checks"
+            or distribution == "discourage_checks_and_same_area"
+        )
+
+        eligible_panels_to_weights = {
+            entity_hex: 1 for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
             and not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
@@ -890,15 +900,13 @@ class WitnessPlayerLogic:
             )
             and entity_hex not in disallowed_entities_for_panel_hunt
             and entity_hex not in self.HUNT_ENTITIES
-        )
-
-        # Make check panels less likely to be hunt panels.
-        # It has to do with client-side jingles.
-        # Yes, I'm optimising for that. Screw you, it's my rando & my jingles. :D
-        eligible_panels_to_weights = {
-            entity_hex: 0.75 if entity_hex in static_witness_locations.GENERAL_LOCATION_HEXES else 1.0
-            for entity_hex in eligible_panels
         }
+
+        if discourage_checks:
+            eligible_panels_to_weights = {
+                entity_hex: 0.7 if entity_hex in static_witness_locations.GENERAL_LOCATION_HEXES else 1.0
+                for entity_hex in eligible_panels_to_weights
+            }
 
         # Make a lookup of eligible hunt panels per area
         eligible_panels_by_area = defaultdict(set)
@@ -909,6 +917,19 @@ class WitnessPlayerLogic:
         # Start picking hunt panels
         # Each picked panel will update the weights, but to make this performant, for high totals, we will do batches
         total_panels = world.options.panel_hunt_total.value
+
+        # If we're using random picking, just choose all the panels now and return
+        if not discourage_same_area:
+            hunt_panels = world.random.choices(
+                list(eligible_panels_to_weights),
+                weights=list(eligible_panels_to_weights.values()),
+                k = total_panels - len(self.HUNT_ENTITIES)
+            )
+            self.HUNT_ENTITIES.update(hunt_panels)
+            return
+
+        # If we're discouraging panels from the same area being picked, we have to pick panels one at a time
+        # For higher total counts, we do them in small batches for performance
         batch_size = max(1, total_panels // 20)
 
         while len(self.HUNT_ENTITIES) < total_panels:
