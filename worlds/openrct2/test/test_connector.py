@@ -8,8 +8,9 @@ if __name__ == '__main__':
     currentframe = Path(inspect.getfile(inspect.currentframe()))
     parentdir = currentframe.parent.parent
     sys.path.insert(0, str(parentdir))
-
-from OpenRCT2Socket import OpenRCT2Socket
+    from OpenRCT2Socket import OpenRCT2Socket
+else:
+    from worlds.openrct2.OpenRCT2Socket import OpenRCT2Socket
 
 class FakeCtx():
     last_received = None
