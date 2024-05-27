@@ -878,18 +878,8 @@ class WitnessPlayerLogic:
             "0x0A3AD",  # Reset PP
         }
 
-        distribution = world.options.panel_hunt_distribution
-        discourage_same_area = (
-            distribution == "discourage_same_area"
-            or distribution == "discourage_checks_and_same_area"
-        )
-        discourage_checks = (
-            distribution == "discourage_checks"
-            or distribution == "discourage_checks_and_same_area"
-        )
-
-        eligible_panels_to_weights = {
-            entity_hex: 1 for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+        eligible_panels = [
+            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
             and not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
@@ -900,57 +890,59 @@ class WitnessPlayerLogic:
             )
             and entity_hex not in disallowed_entities_for_panel_hunt
             and entity_hex not in self.HUNT_ENTITIES
-        }
+        ]
 
-        if discourage_checks:
-            eligible_panels_to_weights = {
-                entity_hex: 0.7 if entity_hex in static_witness_locations.GENERAL_LOCATION_HEXES else 1.0
-                for entity_hex in eligible_panels_to_weights
-            }
+        total_panels = world.options.panel_hunt_total.value
+        same_area_discouragement_factor = world.options.panel_hunt_discourage_same_area_factor / 100
+
+        # If we're using random picking, just choose all the panels now and return
+        if not same_area_discouragement_factor:
+            hunt_panels = world.random.choices(eligible_panels, k=total_panels - len(self.HUNT_ENTITIES))
+            self.HUNT_ENTITIES.update(hunt_panels)
+            return
 
         # Make a lookup of eligible hunt panels per area
         eligible_panels_by_area = defaultdict(set)
-        for eligible_panel in eligible_panels_to_weights:
+        for eligible_panel in eligible_panels:
             associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"]["name"]
             eligible_panels_by_area[associated_area].add(eligible_panel)
-
-        # Start picking hunt panels
-        # Each picked panel will update the weights, but to make this performant, for high totals, we will do batches
-        total_panels = world.options.panel_hunt_total.value
-
-        # If we're using random picking, just choose all the panels now and return
-        if not discourage_same_area:
-            hunt_panels = world.random.choices(
-                list(eligible_panels_to_weights),
-                weights=list(eligible_panels_to_weights.values()),
-                k=total_panels - len(self.HUNT_ENTITIES)
-            )
-            self.HUNT_ENTITIES.update(hunt_panels)
-            return
 
         # If we're discouraging panels from the same area being picked, we have to pick panels one at a time
         # For higher total counts, we do them in small batches for performance
         batch_size = max(1, total_panels // 20)
 
         while len(self.HUNT_ENTITIES) < total_panels:
-            amount_to_choose = min(batch_size, total_panels - len(self.HUNT_ENTITIES))
+            actual_amount_to_pick = min(batch_size, total_panels - len(self.HUNT_ENTITIES))
 
-            new_hunt_panels = world.random.choices(
-                list(eligible_panels_to_weights),
-                weights=list(eligible_panels_to_weights.values()),
-                k=amount_to_choose
+            contributing_percentage_per_area = dict()
+            for area, eligible_panels in eligible_panels_by_area.items():
+                amount_of_already_chosen_panels = len(eligible_panels_by_area[area] & self.HUNT_ENTITIES)
+                current_percentage = amount_of_already_chosen_panels / len(self.HUNT_ENTITIES)
+                contributing_percentage_per_area[area] = current_percentage
+
+            max_percentage = max(contributing_percentage_per_area.values())
+            if max_percentage == 0:
+                allowance_per_area = {area: 1 for area in contributing_percentage_per_area}
+            else:
+                allowance_per_area = {
+                    area: (max_percentage - current_percentage) / max_percentage
+                    for area, current_percentage in contributing_percentage_per_area.items()
+                }
+                # use same_area_discouragement as lerp
+                allowance_per_area = {
+                    area: (1.0 - same_area_discouragement_factor) + (weight * same_area_discouragement_factor)
+                    for area, weight in allowance_per_area.items()
+                }
+
+            remaining_panels, remaining_panels_weights = [], []
+            for area, eligible_panels in eligible_panels_by_area.items():
+                for panel in eligible_panels - self.HUNT_ENTITIES:
+                    remaining_panels.append(panel)
+                    remaining_panels_weights.append(allowance_per_area[area])
+
+            self.HUNT_ENTITIES.update(
+                world.random.choices(remaining_panels, weights=remaining_panels_weights, k=actual_amount_to_pick)
             )
-
-            # Make other panels in these areas less likely (i.e. prevent "Oops all Treehouse")
-            for new_hunt_panel in new_hunt_panels:
-                eligible_panels_to_weights[new_hunt_panel] = 0.0
-                area = static_witness_logic.ENTITIES_BY_HEX[new_hunt_panel]["area"]["name"]
-                for panel_in_the_same_area in eligible_panels_by_area[area]:
-                    # More drastic change when the total is lower
-                    # 0.4725 on 5-panel-hunt, 0.8 on 100-panel-hunt
-                    eligible_panels_to_weights[panel_in_the_same_area] *= (log10(total_panels) + 1.2) / 4
-
-            self.HUNT_ENTITIES.update(new_hunt_panels)
 
     def make_event_panel_lists(self) -> None:
         """

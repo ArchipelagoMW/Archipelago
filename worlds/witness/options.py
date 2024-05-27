@@ -219,23 +219,18 @@ class PanelHuntPostgame(Choice):
     default = 3
 
 
-class PanelHuntDistribution(Choice):
+class PanelHuntDiscourageSameAreaFactor(Range):
     """
-    Modifies the way panel hunt panels are picked.
-
-    - Random: Fully random out of all eligible panels.
-    - Discourage Same Area: Distribute hunt panels somewhat more evenly between areas.
-    - Discourage Checks: Make panels that are location checks less likely to be picked as hunt panels.
-    - Discourage Checks And Same Area: Apply both "Discourage Same Area" and "Discourage Checks".
+    The greater this value, the less likely is that many hunt panels show up in the same area.
+    At 0, hunt panels will be selected randomly.
+    At 100, hunt panels will be almost completely evenly distributed between areas.
     """
-    display = "Panel Hunt Distribution"
+    display = "Panel Hunt Discourage Same Area Factor"
     visibility = Visibility.template
 
-    option_random = 0
-    option_discourage_same_area = 1
-    option_discourage_checks = 2
-    option_discourage_checks_and_same_area = 3
-    default = 1
+    range_start = 0
+    range_end = 100
+    default = 30
 
 
 class PuzzleRandomization(Choice):
@@ -389,7 +384,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     panel_hunt_total: PanelHuntTotal
     panel_hunt_required_percentage: PanelHuntRequiredPercentage
     panel_hunt_postgame: PanelHuntPostgame
-    panel_hunt_distribution: PanelHuntDistribution
+    panel_hunt_discourage_same_area_factor: PanelHuntDiscourageSameAreaFactor
     early_caves: EarlyCaves
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
