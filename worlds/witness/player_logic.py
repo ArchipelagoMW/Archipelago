@@ -933,7 +933,7 @@ class WitnessPlayerLogic:
         batch_size = max(1, total_panels // 20)
 
         while len(self.HUNT_ENTITIES) < total_panels:
-            amount_to_choose = min(batch_size, len(self.HUNT_ENTITIES))
+            amount_to_choose = min(batch_size, total_panels - len(self.HUNT_ENTITIES))
 
             new_hunt_panels = world.random.choices(
                 list(eligible_panels_to_weights),
