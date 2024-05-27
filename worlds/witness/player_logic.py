@@ -896,7 +896,7 @@ class WitnessPlayerLogic:
         # It has to do with client-side jingles.
         # Yes, I'm optimising for that. Screw you, it's my rando & my jingles. :D
         eligible_panels_to_weights = {
-            entity_hex: 0.6 if entity_hex in static_witness_locations.GENERAL_LOCATION_HEXES else 1.0
+            entity_hex: 0.75 if entity_hex in static_witness_locations.GENERAL_LOCATION_HEXES else 1.0
             for entity_hex in eligible_panels
         }
 
