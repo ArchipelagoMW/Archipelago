@@ -45,32 +45,18 @@ class TestConn(unittest.TestCase):
         self.assertDictEqual(last_received, data)
 
     async def asynctests(self):
-        self.ctx = FakeCtx()
-        self.gamesock = OpenRCT2Socket(self.ctx)
-        print('waiting for game connection...')
-        await self.gamesock.connected_to_game.wait()
-
+        ctx = FakeCtx()
+        gamesock = OpenRCT2Socket(ctx)
         with self.subTest("small packet"):
-            data = {'cmd': 'Ping', 'extra': 123}
-            await self.ping(data)
+            print('waiting for game connection...')
+            await gamesock.connected_to_game.wait()
 
-        with self.subTest("large packet"):
             data = {'cmd': 'Ping', 'extra': 123}
-            for i in range(4): # We'll never forget you int()!
-                data["key" + str(i)] = i
-            await self.ping(data)
-        
-        with self.subTest("larger packet"):
-            data = {'cmd': 'Ping', 'extra': 123}
-            for i in range(2000):
-                data["key" + str(i)] = i
-            await self.ping(data)
-        
-        with self.subTest("largest packet"):
-            data = {'cmd': 'Ping', 'extra': 123}
-            for i in range(42069):
-                data["key" + str(i)] = i
-            await self.ping(data)
+            gamesock.sendobj(data)
+            await ctx.received.wait()
+            ctx.received.clear()
+            data['cmd'] = 'Pong'
+            self.assertDictEqual(ctx.last_received[0], data)
 
         with self.subTest("large packet"):
             print('waiting for game connection...')
