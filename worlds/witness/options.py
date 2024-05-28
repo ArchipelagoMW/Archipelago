@@ -226,7 +226,6 @@ class PanelHuntDiscourageSameAreaFactor(Range):
     At 100, hunt panels will be almost completely evenly distributed between areas.
     """
     display = "Panel Hunt Discourage Same Area Factor"
-    visibility = Visibility.template
 
     range_start = 0
     range_end = 100
