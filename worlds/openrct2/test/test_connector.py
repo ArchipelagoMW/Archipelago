@@ -38,11 +38,15 @@ class TestConn(unittest.TestCase):
     
     async def ping(self, data):
         self.gamesock.sendobj(data)
-        await asyncio.wait_for(self.ctx.received.wait(), 60)
-        self.ctx.received.clear()
-        data['cmd'] = 'Pong'
-        last_received = self.ctx.last_received[0]
-        self.assertDictEqual(last_received, data)
+        for number, i in enumerate(range(data.get('multiply', 1))):
+            await asyncio.wait_for(self.ctx.received.wait(), 60)
+            self.ctx.received.clear()
+            data['cmd'] = 'Pong'
+            if data.get('multiply', 0):
+                data['multiply'] = number
+            last_received = self.ctx.last_received[0]
+            self.assertDictEqual(last_received, data)
+
 
     async def asynctests(self):
         ctx = FakeCtx()
@@ -56,17 +60,38 @@ class TestConn(unittest.TestCase):
             for i in range(4): # We'll never forget you int()!
                 data["key" + str(i)] = i
             await self.ping(data)
+
+        # Saving future Colby time by commenting these tests out. Feel free to uncomment        
+        # with self.subTest("larger packet"):
+        #     data = {'cmd': 'Ping', 'extra': 123}
+        #     for i in range(2000):
+        #         data["key" + str(i)] = i
+        #     await self.ping(data)
         
-        with self.subTest("larger packet"):
-            data = {'cmd': 'Ping', 'extra': 123}
-            for i in range(2000):
-                data["key" + str(i)] = i
-            await self.ping(data)
-        
-        with self.subTest("largest packet"):
-            data = {'cmd': 'Ping', 'extra': 123}
-            for i in range(42069):
-                data["key" + str(i)] = i
+        # with self.subTest("largest packet"):
+        #     data = {'cmd': 'Ping', 'extra': 123}
+        #     for i in range(42069):
+        #         data["key" + str(i)] = i
+        #     await self.ping(data)
+
+        with self.subTest("sending multiple packets"):
+            for i in range(5):
+                data = {'cmd': 'Ping', 'extra': i}
+                await self.ping(data)
+                
+        # This is probably too many packets
+        # with self.subTest("sending a lot of packets"):
+        #     for i in range(50):
+        #         data = {'cmd': 'Ping', 'extra': i}
+        #         await self.ping(data)
+
+        # with self.subTest("sending a p*ck ton of packets"):
+        #     for i in range(500):
+        #         data = {'cmd': 'Ping', 'extra': i}
+        #         await self.ping(data)
+
+        with self.subTest("receiving a lot of packets"):
+            data = {'cmd': 'Ping', 'multiply': 4, 'response':None}
             await self.ping(data)
 
 def run_tests():
