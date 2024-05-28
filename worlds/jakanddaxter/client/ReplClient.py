@@ -1,11 +1,14 @@
+import json
 import time
 import struct
+import typing
 from socket import socket, AF_INET, SOCK_STREAM
 
 import pymem
 from pymem.exception import ProcessNotFound, ProcessError
 
 from CommonClient import logger
+from NetUtils import NetworkItem
 from worlds.jakanddaxter.GameID import jak1_id
 from worlds.jakanddaxter.Items import item_table
 from worlds.jakanddaxter.locs import (
@@ -27,7 +30,7 @@ class JakAndDaxterReplClient:
     gk_process: pymem.process = None
     goalc_process: pymem.process = None
 
-    item_inbox = {}
+    item_inbox: typing.Dict[int, NetworkItem] = {}
     inbox_index = 0
 
     def __init__(self, ip: str = "127.0.0.1", port: int = 8181):
@@ -139,11 +142,15 @@ class JakAndDaxterReplClient:
 
             # Disable cheat-mode and debug (close the visual cue).
             # self.send_form("(set! *debug-segment* #f)")
-            if self.send_form("(set! *cheat-mode* #f)"):
+            if self.send_form("(set! *cheat-mode* #f)", print_ok=False):
+                ok_count += 1
+
+            # Run the retail game start sequence (while still in debug).
+            if self.send_form("(start \'play (get-continue-by-name *game-info* \"title-start\"))"):
                 ok_count += 1
 
             # Now wait until we see the success message... 6 times.
-            if ok_count == 6:
+            if ok_count == 7:
                 self.connected = True
             else:
                 self.connected = False
@@ -219,3 +226,32 @@ class JakAndDaxterReplClient:
         else:
             logger.error(f"Unable to receive special unlock {item_table[ap_id]}!")
         return ok
+
+    def save_data(self):
+        with open("jakanddaxter_item_inbox.json", "w+") as f:
+            dump = {
+                "inbox_index": self.inbox_index,
+                "item_inbox": [{
+                    "item": self.item_inbox[k].item,
+                    "location": self.item_inbox[k].location,
+                    "player": self.item_inbox[k].player,
+                    "flags": self.item_inbox[k].flags
+                    } for k in self.item_inbox
+                ]
+            }
+            json.dump(dump, f, indent=4)
+
+    def load_data(self):
+        try:
+            with open("jakanddaxter_item_inbox.json", "r") as f:
+                load = json.load(f)
+                self.inbox_index = load["inbox_index"]
+                self.item_inbox = {k: NetworkItem(
+                        item=load["item_inbox"][k]["item"],
+                        location=load["item_inbox"][k]["location"],
+                        player=load["item_inbox"][k]["player"],
+                        flags=load["item_inbox"][k]["flags"]
+                    ) for k in range(0, len(load["item_inbox"]))
+                }
+        except FileNotFoundError:
+            pass

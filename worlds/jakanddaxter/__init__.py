@@ -1,6 +1,7 @@
 import typing
 import settings
 
+from Utils import local_path
 from BaseClasses import Item, ItemClassification, Tutorial
 from .GameID import jak1_id, jak1_name
 from .JakAndDaxterOptions import JakAndDaxterOptions
@@ -11,7 +12,21 @@ from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import components, Component, launch_subprocess, Type
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type, icon_paths
+
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="JakAndDaxterClient")
+
+
+components.append(Component("Jak and Daxter Client",
+                            "JakAndDaxterClient",
+                            func=launch_client,
+                            component_type=Type.CLIENT,
+                            icon="egg"))
+
+icon_paths["egg"] = local_path("worlds", "jakanddaxter", "icons", "egg.png")
 
 
 class JakAndDaxterSettings(settings.Group):
@@ -126,9 +141,3 @@ class JakAndDaxterWorld(World):
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="JakAndDaxterClient")
-
-
-components.append(Component("Jak and Daxter Client",
-                            "JakAndDaxterClient",
-                            func=launch_client,
-                            component_type=Type.CLIENT))

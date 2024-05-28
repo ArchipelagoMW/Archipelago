@@ -2,6 +2,7 @@ import typing
 import pymem
 from pymem import pattern
 from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinAPIError
+import json
 
 from CommonClient import logger
 from worlds.jakanddaxter.locs import CellLocations as Cells, ScoutLocations as Flies, SpecialLocations as Specials
@@ -58,7 +59,7 @@ class JakAndDaxterMemoryReader:
 
         # Read the memory address to check the state of the game.
         self.read_memory()
-        location_callback(self.location_outbox)  # TODO - I forgot why call this here when it's already down below...
+        # location_callback(self.location_outbox)  # TODO - I forgot why call this here when it's already down below...
 
         # Checked Locations in game. Handle the entire outbox every tick until we're up to speed.
         if len(self.location_outbox) > self.outbox_index:
@@ -169,3 +170,20 @@ class JakAndDaxterMemoryReader:
             self.connected = False
 
         return self.location_outbox
+
+    def save_data(self):
+        with open("jakanddaxter_location_outbox.json", "w+") as f:
+            dump = {
+                "outbox_index": self.outbox_index,
+                "location_outbox": self.location_outbox
+            }
+            json.dump(dump, f, indent=4)
+
+    def load_data(self):
+        try:
+            with open("jakanddaxter_location_outbox.json", "r") as f:
+                load = json.load(f)
+                self.outbox_index = load["outbox_index"]
+                self.location_outbox = load["location_outbox"]
+        except FileNotFoundError:
+            pass

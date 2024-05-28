@@ -85,6 +85,8 @@ class JakAndDaxterContext(CommonContext):
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         self.repl = JakAndDaxterReplClient()
         self.memr = JakAndDaxterMemoryReader()
+        # self.memr.load_data()
+        # self.repl.load_data()
         super().__init__(server_address, password)
 
     def run_gui(self):
@@ -110,6 +112,8 @@ class JakAndDaxterContext(CommonContext):
             for index, item in enumerate(args["items"], start=args["index"]):
                 logger.info(args)
                 self.repl.item_inbox[index] = item
+            self.memr.save_data()
+            self.repl.save_data()
 
     async def ap_inform_location_check(self, location_ids: typing.List[int]):
         message = [{"cmd": "LocationChecks", "locations": location_ids}]
@@ -140,8 +144,7 @@ class JakAndDaxterContext(CommonContext):
 
 async def run_game(ctx: JakAndDaxterContext):
 
-    # If you're running the game through the mod launcher, these may already be running.
-    # If they are not running, try to start them.
+    # These may already be running. If they are not running, try to start them.
     gk_running = False
     try:
         pymem.Pymem("gk.exe")  # The GOAL Kernel
@@ -157,7 +160,7 @@ async def run_game(ctx: JakAndDaxterContext):
         logger.info("Compiler not running, attempting to start.")
 
     # Don't mind all the arguments, they are exactly what you get when you run "task boot-game" or "task repl".
-    # TODO - Support other OS's. cmd for some reason does not work with goalc.
+    # TODO - Support other OS's. cmd for some reason does not work with goalc. Pymem is Windows-only.
     if not gk_running:
         try:
             gk_path = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
