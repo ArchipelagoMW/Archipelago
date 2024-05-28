@@ -313,6 +313,7 @@ class MMXWorld(World):
             0x10: "Spark Mandrill",
             0x11: "Launch Octopus",
             0x12: "Flame Mammoth",
+            0x17: "Thunder Slimer",
             0x1E: "D-Rex",
             0x13: "Velguarder",
             0x1F: "Sigma",
