@@ -388,7 +388,7 @@
 	"TM_ROCK_SMASH": {
 		"name": "TM08 Rock Smash",
 		"classification": "PROGRESSION",
-		"tags": ["TM"]
+		"tags": ["TM", "Tracker"]
 	},
 	"TM_PSYCH_UP": {"name": "TM09 Psych Up", "classification": "USEFUL", "tags": ["TM"]},
 	"TM_HIDDEN_POWER": {
