@@ -17,7 +17,7 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from logging import info
+from logging import debug
 from pprint import pformat
 from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
 
@@ -953,9 +953,15 @@ class WitnessPlayerLogic:
                 current_percentage = amount_of_already_chosen_panels / len(self.HUNT_ENTITIES)
                 contributing_percentage_per_area[area] = current_percentage
 
-        info(
+        # Some logging
+        sorted_area_percentages_dict = dict(sorted(contributing_percentage_per_area.items(), key=lambda x: x[1]))
+        sorted_area_percentages_dict = {
+            area: str(percentage) + (" (maxed)" if eligible_panels_by_area[area] <= self.HUNT_ENTITIES else "")
+            for area, percentage in sorted_area_percentages_dict.items()
+        }
+        debug(
             f"Final area percentages ({same_area_discouragement_factor} discouragement): "
-            f"{pformat(dict(sorted(contributing_percentage_per_area.items(), key=lambda x: x[1])))}"
+            f"{pformat(sorted_area_percentages_dict)}"
         )
 
     def make_event_panel_lists(self) -> None:
