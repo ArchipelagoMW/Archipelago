@@ -232,7 +232,6 @@ boss_excluded_weapons = {
     "Spark Mandrill": [
     ],
     "Armored Armadillo": [
-        "Fire Wave",
     ],
     "Launch Octopus": [
         "Fire Wave",
@@ -277,7 +276,7 @@ weapons = {
     ],
     "Rolling Shield": [
         [[ItemName.rolling_shield], 0x09, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+2],
+        [[ItemName.rolling_shield], 0x12, WEAKNESS_CHARGED_DMG+1],
     ],
     "Fire Wave": [
         [[ItemName.fire_wave], 0x0A, WEAKNESS_UNCHARGED_DMG],
