@@ -39,30 +39,40 @@ boss_weaknesses = {
         [[ItemName.gravity_well], 0x15, 0x03],
     ],
     "Hotareeca": [
-        [[ItemName.frost_shield], 0x0D, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.frost_shield], 0x16, WEAKNESS_CHARGED_DMG+2],
-        [[ItemName.frost_shield], 0x21, WEAKNESS_CHARGED_DMG],
-        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
-        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
+        [None, 0x00, 0x02],
+        [None, 0x01, 0x03],
+        [None, 0x03, 0x04],
+        [None, 0x06, 0x03],
+        [None, 0x1D, 0x04],
+        [None, 0x1F, 0x05],
+        [None, 0x20, 0x03],
     ],
     "Worm Seeker-R": [
-        [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.triad_thunder], 0x12, WEAKNESS_CHARGED_DMG+1],
-        [[ItemName.triad_thunder], 0x1B, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.acid_burst], 0x07, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.acid_burst], 0x10, WEAKNESS_CHARGED_DMG],
-        [[ItemName.acid_burst], 0x18, WEAKNESS_UNCHARGED_DMG-1],
+        [None, 0x00, 0x02],
+        [None, 0x01, 0x03],
+        [None, 0x03, 0x04],
+        [None, 0x06, 0x03],
+        [None, 0x1D, 0x04],
+        [None, 0x1F, 0x05],
+        [None, 0x20, 0x03],
     ],
     "Hell Crusher": [
-        [[ItemName.tornado_fang], 0x0E, WEAKNESS_CHARGED_DMG],
-        [[ItemName.tornado_fang], 0x17, WEAKNESS_CHARGED_DMG+2],
-        [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
+        [None, 0x00, 0x02],
+        [None, 0x01, 0x03],
+        [None, 0x03, 0x04],
+        [None, 0x06, 0x03],
+        [None, 0x1D, 0x04],
+        [None, 0x1F, 0x05],
+        [None, 0x20, 0x03],
     ],
     "Shurikein": [
-        [[ItemName.acid_burst], 0x07, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.acid_burst], 0x10, WEAKNESS_CHARGED_DMG],
-        [[ItemName.acid_burst], 0x18, WEAKNESS_UNCHARGED_DMG-1],
+        [None, 0x00, 0x02],
+        [None, 0x01, 0x03],
+        [None, 0x03, 0x04],
+        [None, 0x06, 0x03],
+        [None, 0x1D, 0x04],
+        [None, 0x1F, 0x05],
+        [None, 0x20, 0x03],
     ],
     "Bit": [
         [[ItemName.triad_thunder], 0x09, WEAKNESS_UNCHARGED_DMG],
@@ -177,7 +187,7 @@ damage_templates = {
         0x01, 0x80, 0x80, 0x80, 0x80, 0x80
     ],
     "Only Weakness": [
-        0x80, 0x80, 0x04, 0x80, 0x02, 0x01, 0x80, 0x80,
+        0x80, 0x80, 0x04, 0x80, 0x02, 0x02, 0x80, 0x80,
         0x80, 0x80, 0x80, 0x80, 0x00, 0x80, 0x80, 0x80,
         0x80, 0x80, 0x80, 0x80, 0x80, 0x00, 0x80, 0x80,
         0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
@@ -371,6 +381,7 @@ boss_excluded_weapons = {
     "Vile Goliath": [
     ],
     "Hell Crusher": [
+        "Charged Tornado Fang",
     ],
     "Shurikein": [
     ],
@@ -384,8 +395,6 @@ boss_excluded_weapons = {
         "Charged Parasitic Bomb",
     ],
     "Volt Kurageil": [
-        "Acid Burst",
-        "Charged Acid Burst",
         "Charged Frost Shield",
         "Charged Triad Thunder",
     ],
@@ -393,6 +402,7 @@ boss_excluded_weapons = {
         "Charged Triad Thunder",
     ],
     "Press Disposer": [
+        "Charged Frost Shield",
         "Charged Tornado Fang",
     ],
     "Doppler": [
@@ -402,6 +412,7 @@ boss_excluded_weapons = {
     ],
     "Kaiser Sigma": [
         "Charged Tornado Fang",
+        "Charged Frost Shield",
         "Charged Parasitic Bomb",
     ]
 }
