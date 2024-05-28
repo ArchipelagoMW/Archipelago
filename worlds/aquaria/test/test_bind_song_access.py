@@ -18,7 +18,7 @@ class BindSongAccessTest(AquariaTestBase):
         """Test locations that require Bind song"""
         locations = [
             "Verse cave right area, Big Seed",
-            "Home water, bulb in the path bellow Nautilus Prime",
+            "Home water, bulb in the path below Nautilus Prime",
             "Home water, bulb in the bottom left room",
             "Home water, Nautilus Egg",
             "Song cave, Verse egg",
