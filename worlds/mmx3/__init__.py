@@ -303,6 +303,49 @@ class MMX3World(World):
 
 
     def generate_early(self):
+        # Attempt to fix potential Fill issues by lowering Doppler & Vile values if they're too high if pickupsanity is disabled
+        if self.options.pickupsanity:
+            doppler_item_count = 0
+            doppler_open = self.options.doppler_open.value
+            if "Medals" in doppler_open:
+                doppler_item_count += self.options.doppler_medal_count.value
+            if "Weapons" in doppler_open:
+                doppler_item_count += self.options.doppler_weapon_count.value
+            if "Armor Upgrades" in doppler_open:
+                doppler_item_count += self.options.doppler_upgrade_count.value
+            if "Heart Tanks" in doppler_open:
+                doppler_item_count += self.options.doppler_heart_tank_count.value
+            if "Sub Tanks" in doppler_open:
+                doppler_item_count += self.options.doppler_sub_tank_count.value
+            vile_item_count = 0
+            vile_open = self.options.vile_open.value
+            if "Medals" in vile_open:
+                vile_item_count += self.options.vile_medal_count.value
+            if "Weapons" in vile_open:
+                vile_item_count += self.options.vile_weapon_count.value
+            if "Armor Upgrades" in vile_open:
+                vile_item_count += self.options.vile_upgrade_count.value
+            if "Heart Tanks" in vile_open:
+                vile_item_count += self.options.vile_heart_tank_count.value
+            if "Sub Tanks" in vile_open:
+                vile_item_count += self.options.vile_sub_tank_count.value
+
+            if doppler_item_count > 31:
+                print (f"[{self.multiworld.player_name[self.player]}] Doppler item counts will be lowered due to a high concentration of progressive items")
+                self.options.doppler_medal_count.value -= min(self.options.doppler_medal_count.value, 1)
+                self.options.doppler_weapon_count.value -= min(self.options.doppler_weapon_count.value, 1)
+                self.options.doppler_upgrade_count.value -= min(self.options.doppler_upgrade_count.value, 1)
+                self.options.doppler_heart_tank_count.value -= min(self.options.doppler_heart_tank_count.value, 1)
+                self.options.doppler_sub_tank_count.value -= min(self.options.doppler_sub_tank_count.value, 1)
+            
+            if vile_item_count > 31:
+                print (f"[{self.multiworld.player_name[self.player]}] Vile item counts will be lowered due to a high concentration of progressive items")
+                self.options.vile_medal_count.value -= min(self.options.vile_medal_count.value, 1)
+                self.options.vile_weapon_count.value -= min(self.options.vile_weapon_count.value, 1)
+                self.options.vile_upgrade_count.value -= min(self.options.vile_upgrade_count.value, 1)
+                self.options.vile_heart_tank_count.value -= min(self.options.vile_heart_tank_count.value, 1)
+                self.options.vile_sub_tank_count.value -= min(self.options.vile_sub_tank_count.value, 1)
+           
         self.boss_weaknesses = {}
         self.boss_weakness_data = {}
         handle_weaknesses(self)
