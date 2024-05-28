@@ -959,8 +959,9 @@ class WitnessPlayerLogic:
             area: str(percentage) + (" (maxed)" if eligible_panels_by_area[area] <= self.HUNT_ENTITIES else "")
             for area, percentage in sorted_area_percentages_dict.items()
         }
+        player_name = world.multiworld.get_player_name(world.player)
         debug(
-            f"Final area percentages ({same_area_discouragement_factor} discouragement): "
+            f'Final area percentages for player "{player_name}" ({same_area_discouragement_factor} discouragement): '
             f"{pformat(sorted_area_percentages_dict)}"
         )
 
