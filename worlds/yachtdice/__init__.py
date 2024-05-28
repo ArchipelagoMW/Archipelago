@@ -38,7 +38,7 @@ class YachtDiceWorld(World):
     
     item_name_groups = ITEM_GROUPS
 
-    ap_world_version = "1.1"
+    ap_world_version = "1.1.1"
 
     def _get_yachtdice_data(self):
         return {
@@ -153,7 +153,7 @@ class YachtDiceWorld(World):
                 
         if self.options.game_mode.value == 1:
             self.max_score = scoreInLogic
-            print(f"Max score: {self.max_score}, difficulty {game_difficulty}")
+            #print(f"Max score: {self.max_score}, difficulty {game_difficulty}")
         
         if self.options.game_mode.value == 2:
             self.max_score = 1000

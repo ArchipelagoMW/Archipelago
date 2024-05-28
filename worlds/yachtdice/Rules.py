@@ -163,6 +163,10 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
     percReturn = [0, 0.4, 0.4, 0.45, 0.45, 0.45][diff]
     diffDivide = [0, 9, 5, 3, 2, 1][diff]
     
+    if scoremulttype == 2:
+        percReturn = [0, 0.4, 0.4, 0.45, 0.45, 0.45][diff]
+        diffDivide = [0, 9, 8, 5, 4, 3][diff]
+    
     #calculate total distribution
     total_dist = {0: 1}
     for j in range(len(categories)):
