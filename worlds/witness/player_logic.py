@@ -314,9 +314,9 @@ class WitnessPlayerLogic:
 
     def handle_postgame(self, world: "WitnessWorld") -> List[List[str]]:
         """
-            In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
-            This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
-            These will then hava a cascading effect on other entities that are locked "behind" them.
+        In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
+        This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
+        These will then hava a cascading effect on other entities that are locked "behind" them.
         """
 
         postgame_adjustments = []
@@ -361,10 +361,10 @@ class WitnessPlayerLogic:
 
         mbfd_extra_exclusions = (
             # Progressive Dots 2 behind 11 lasers in an Elevator seed with vanilla doors = :(
-                victory == "elevator" and not remote_doors
+            victory == "elevator" and not remote_doors
 
-                # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
-                or victory == "challenge" and early_caves and not remote_doors
+            # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
+            or victory == "challenge" and early_caves and not remote_doors
         )
 
         if mbfd_extra_exclusions:
@@ -533,7 +533,11 @@ class WitnessPlayerLogic:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
     def discover_reachable_regions(self):
-        # First step: Find unreachable regions
+        """
+        Some options disable panels or remove specific items.
+        This can make entire regions completely unreachable, because all their incoming connections are invalid.
+        This function starts from the Entry region and performs a graph search to discover all reachable regions.
+        """
         reachable_regions = {"Entry"}
         new_regions_found = True
 
@@ -585,9 +589,8 @@ class WitnessPlayerLogic:
             # Re-make the dependency reduced entity requirements dict, which depends on currently
             self.make_dependency_reduced_checklist()
 
-            # Discover currently reachable regions.
+            # Check if any regions have become unreachable.
             reachable_regions = self.discover_reachable_regions()
-
             new_unreachable_regions = all_regions - reachable_regions - self.UNREACHABLE_REGIONS
             if new_unreachable_regions:
                 self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
@@ -666,7 +669,7 @@ class WitnessPlayerLogic:
         """
         Every entity has a requirement. This requirement may involve other entities.
         Example: Solving a panel powers a cable, and that cable turns on the next panel.
-        These dependencies are specified in the logic files (e.g. "WitnessLogic.txt") and may be modified by settings.
+        These dependencies are specified in the logic files (e.g. "WitnessLogic.txt") and may be modified by options.
 
         Recursively having to check the requirements of every dependent entity would be very slow, so we go through this
         recursion once and make a single, independent requirement for each entity.
