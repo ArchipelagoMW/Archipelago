@@ -17,6 +17,8 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
+from logging import info
+from pprint import pformat
 from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
 
 from .data import static_logic as static_witness_logic
@@ -909,14 +911,10 @@ class WitnessPlayerLogic:
         # For higher total counts, we do them in small batches for performance
         batch_size = max(1, total_panels // 20)
 
+        contributing_percentage_per_area = {area: 0 for area in eligible_panels_by_area}
+
         while len(self.HUNT_ENTITIES) < total_panels:
             actual_amount_to_pick = min(batch_size, total_panels - len(self.HUNT_ENTITIES))
-
-            contributing_percentage_per_area = dict()
-            for area, eligible_panels in eligible_panels_by_area.items():
-                amount_of_already_chosen_panels = len(eligible_panels_by_area[area] & self.HUNT_ENTITIES)
-                current_percentage = amount_of_already_chosen_panels / len(self.HUNT_ENTITIES)
-                contributing_percentage_per_area[area] = current_percentage
 
             max_percentage = max(contributing_percentage_per_area.values())
             if max_percentage == 0:
@@ -948,6 +946,17 @@ class WitnessPlayerLogic:
             self.HUNT_ENTITIES.update(
                 world.random.choices(remaining_panels, weights=remaining_panels_weights, k=actual_amount_to_pick)
             )
+
+            contributing_percentage_per_area = dict()
+            for area, eligible_panels in eligible_panels_by_area.items():
+                amount_of_already_chosen_panels = len(eligible_panels_by_area[area] & self.HUNT_ENTITIES)
+                current_percentage = amount_of_already_chosen_panels / len(self.HUNT_ENTITIES)
+                contributing_percentage_per_area[area] = current_percentage
+
+        info(
+            f"Final area percentages ({same_area_discouragement_factor} discouragement): "
+            f"{pformat(dict(sorted(contributing_percentage_per_area.items(), key=lambda x: x[1])))}"
+        )
 
     def make_event_panel_lists(self) -> None:
         """
