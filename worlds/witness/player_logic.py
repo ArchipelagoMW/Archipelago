@@ -932,14 +932,14 @@ class WitnessPlayerLogic:
                     for area, weight in allowance_per_area.items()
                 }
 
+            assert min(allowance_per_area.values()) >= 0, (f"Somehow, an area had a negative weight when picking"
+                                                           f" hunt panels: {allowance_per_area}")
+
             remaining_panels, remaining_panels_weights = [], []
             for area, eligible_panels in eligible_panels_by_area.items():
                 for panel in eligible_panels - self.HUNT_ENTITIES:
                     remaining_panels.append(panel)
                     remaining_panels_weights.append(allowance_per_area[area])
-
-            assert min(remaining_panels_weights) >= 0, (f"Somehow, an area had a negative weight when picking"
-                                                        f" hunt panels: {remaining_panels_weights}")
 
             # I don't think this can ever happen, but let's be safe
             if sum(remaining_panels_weights) == 0:
