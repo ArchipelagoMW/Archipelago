@@ -538,11 +538,13 @@ class MMX3SNIClient(SNIClient):
             self.game_state = False
             self.energy_link_enabled = False
             ctx.item_queue = []
+            ctx.current_level_value = 42
             return
     
         if game_state[0] == 0:
             self.game_state = False
             ctx.item_queue = []
+            ctx.current_level_value = 42
             return
         
         validation = await snes_read(ctx, MMX3_VALIDATION_CHECK, 0x2)
@@ -692,6 +694,34 @@ class MMX3SNIClient(SNIClient):
             snes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
+
+        # Send Current Room for Tracker
+        current_level = int.from_bytes(await snes_read(ctx, MMX3_LEVEL_INDEX, 0x1), "little")
+
+        if game_state[0] == 0x00 or \
+           (game_state[0] == 0x02 and menu_state[0] != 0x04):
+            current_level = -1
+
+        if ctx.current_level_value != (current_level + 1):
+            ctx.current_level_value = current_level + 1
+
+            # Send level id data to tracker
+            await ctx.send_msgs(
+                [
+                    {
+                        "cmd": "Set",
+                        "key": f"mmx3_level_id_{ctx.team}_{ctx.slot}",
+                        "default": 0,
+                        "want_reply": False,
+                        "operations": [
+                            {
+                                "operation": "replace",
+                                "value": ctx.current_level_value,
+                            }
+                        ],
+                    }
+                ]
+            )
 
         recv_count = await snes_read(ctx, MMX3_RECV_INDEX, 1)
         if recv_count is None:
