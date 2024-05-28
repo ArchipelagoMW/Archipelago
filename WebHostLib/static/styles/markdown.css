@@ -43,6 +43,20 @@
     margin-bottom: 0.5rem;
     text-transform: lowercase;
     text-shadow: 1px 1px 2px #000000;
+    display: flex;
+    align-items: center;
+}
+
+.markdown details summary.h2::before{
+    content: "▶";
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 9px;
+}
+
+.markdown details[open] summary.h2::before{
+    content: "▼";
 }
 
 .markdown h3, .markdown details summary.h3{
