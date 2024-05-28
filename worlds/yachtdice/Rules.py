@@ -68,44 +68,57 @@ def extractProgression(state, player, options):
     #method to obtain a list of what items the player has.
     #this includes categories, dice, rolls and score multiplier.
     
-    number_of_dice = (
-        state.count("Dice", player) 
-        + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
-    )
-
-    number_of_rerolls = (
-        state.count("Roll", player) 
-        + state.count("Roll Fragment", player) // options.number_of_roll_fragments_per_roll.value
-    )
-
-    number_of_mults = state.count("Score Multiplier", player)
+    if player == "state_is_a_list":
+        number_of_dice = (
+            state.count("Dice") 
+            + state.count("Dice Fragment") // options.number_of_dice_fragments_per_dice.value
+        )
+        number_of_rerolls = (
+            state.count("Roll") 
+            + state.count("Roll Fragment") // options.number_of_roll_fragments_per_roll.value
+        )
+        roll = state.count("Roll") 
+        rollfragments = state.count("Roll Fragment")
+        number_of_fixed_mults = state.count("Fixed Score Multiplier")
+        number_of_step_mults = state.count("Step Score Multiplier")
+        categories = []
+        for category_name, category_value in category_mappings.items():
+            if state.count(category_name) >= 1:
+                categories += [Category(category_value, state.count(category_name))] 
+        extra_points_in_logic = state.count("1 Point")
+        extra_points_in_logic += state.count("10 Points") * 10
+        extra_points_in_logic += state.count("100 Points") * 100
+    else:
+        number_of_dice = (
+            state.count("Dice", player) 
+            + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
+        )
+        number_of_rerolls = (
+            state.count("Roll", player) 
+            + state.count("Roll Fragment", player) // options.number_of_roll_fragments_per_roll.value
+        )
+        roll = state.count("Roll", player) 
+        rollfragments = state.count("Roll Fragment", player)
+        number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
+        number_of_step_mults = state.count("Step Score Multiplier", player)
+        categories = []
+        for category_name, category_value in category_mappings.items():
+            if state.count(category_name, player) >= 1:
+                categories += [Category(category_value, state.count(category_name, player))] 
+        extra_points_in_logic = state.count("1 Point", player)
+        extra_points_in_logic += state.count("10 Points", player) * 10
+        extra_points_in_logic += state.count("100 Points", player) * 100
     
-    
-    score_mult = -10000
-    if options.score_multiplier_type.value == 1: #fixed
-        score_mult = 0.1 * number_of_mults
-    if options.score_multiplier_type.value == 2: #step
-        score_mult = 0.01 * number_of_mults
-   
-    categories = []
-    
-    for category_name, category_value in category_mappings.items():
-        if state.count(category_name, player) >= 1:
-            categories += [Category(category_value, state.count(category_name, player))] 
-  
-    extra_points_in_logic = state.count("1 Point", player)
-    extra_points_in_logic += state.count("10 Points", player) * 10
-    extra_points_in_logic += state.count("100 Points", player) * 100
-    
-
-    return [categories, number_of_dice, number_of_rerolls, score_mult, extra_points_in_logic]
+    return [categories, number_of_dice, number_of_rerolls, 
+            number_of_fixed_mults * 0.1, number_of_step_mults * 0.01, extra_points_in_logic]
     
 #We will store the results of this function as it is called often for the same parameters.
 yachtdice_cache = {}
 
 #Function that returns the feasible score in logic based on items obtained.
-def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremulttype):
-    tup = tuple([tuple(sorted([c.name+str(c.quantity) for c in categories])), nbDice, nbRolls, multiplier, diff, scoremulttype]) #identifier
+def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, diff):
+    tup = tuple([tuple(sorted([c.name+str(c.quantity) for c in categories])), 
+                 nbDice, nbRolls, fixed_mult, step_mult, diff]) #identifier
     
     #if already computed, return the result
     if tup in yachtdice_cache.keys():
@@ -161,11 +174,7 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
             
             
     percReturn = [0, 0.4, 0.4, 0.45, 0.45, 0.45][diff]
-    diffDivide = [0, 9, 5, 3, 2, 1][diff]
-    
-    if scoremulttype == 2:
-        percReturn = [0, 0.4, 0.4, 0.45, 0.45, 0.45][diff]
-        diffDivide = [0, 9, 8, 5, 4, 3][diff]
+    diffDivide = [0, 9, 8, 5, 4, 3][diff]
     
     #calculate total distribution
     total_dist = {0: 1}
@@ -178,15 +187,10 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
         for key in dist.keys():
             dist[key] /= 100000
             
-            
         #for higher difficulties, the simulation gets multiple tries for categories.
         dist = max_dist(dist, max(1, len(categories) // diffDivide))
         
-        cur_mult = -100
-        if scoremulttype == 1: #fixed
-            cur_mult = multiplier
-        if scoremulttype == 2: #step
-            cur_mult = j * multiplier
+        cur_mult = fixed_mult + step_mult * j
         total_dist = add_distributions(total_dist, dist, (1 + cur_mult) * ( 2 ** (categories[j].quantity-1) ))
     
     #save result into the cache, then return it
@@ -195,43 +199,10 @@ def diceSimulationStrings(categories, nbDice, nbRolls, multiplier, diff, scoremu
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.
 def diceSimulation(state, player, options):
-    categories, nbDice, nbRolls, multiplier, expoints = extractProgression(state, player, options)
-    return diceSimulationStrings(categories, nbDice, nbRolls, multiplier, 
-                                 options.game_difficulty.value, options.score_multiplier_type.value) + expoints
+    categories, nbDice, nbRolls, fixed_mult, step_mult, expoints = extractProgression(state, player, options)
+    return diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, 
+                                 options.game_difficulty.value) + expoints
     
-def calculateScoreInLogic(state, options):
-    number_of_dice = (
-        state.count("Dice") 
-        + state.count("Dice Fragment") // options.number_of_dice_fragments_per_dice.value
-    )
-
-    number_of_rerolls = (
-        state.count("Roll") 
-        + state.count("Roll Fragment") // options.number_of_roll_fragments_per_roll.value
-    )
-
-    number_of_mults = state.count("Score Multiplier")
-    
-    
-    score_mult = -10000
-    if options.score_multiplier_type.value == 1: #fixed
-        score_mult = 0.1 * number_of_mults
-    if options.score_multiplier_type.value == 2: #step
-        score_mult = 0.01 * number_of_mults
-   
-    categories = []
-
-    for category_name, category_value in category_mappings.items():
-        if state.count(category_name) >= 1:
-            categories += [Category(category_value, state.count(category_name))]
-    
-    extra_points_in_logic = state.count("1 Point")
-    extra_points_in_logic += state.count("10 Points") * 10
-    extra_points_in_logic += state.count("100 Points") * 100
-    
-    return diceSimulationStrings(categories, number_of_dice, number_of_rerolls, score_mult, 
-                                 options.game_difficulty.value, options.score_multiplier_type.value) + extra_points_in_logic
-
 # Sets rules on entrances and advancements that are always applied
 def set_yacht_rules(world: MultiWorld, player: int, options):
     for l in world.get_locations(player):

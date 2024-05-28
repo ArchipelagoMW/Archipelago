@@ -25,9 +25,8 @@ def all_locations_fun(max_score):
     return location_table
 
 #function that loads in all locations necessary for the game, so based on options.
-def ini_locations(max_score, num_locs, dif):    
-    location_table = {}
-    
+#will make sure that goal_score and max_score are included locations
+def ini_locations(goal_score, max_score, num_locs, dif):       
     scaling = 2 #parameter that determines how many low-score location there are.
     #need more low-score locations or lower difficulties:
     if dif == 1:
@@ -35,25 +34,31 @@ def ini_locations(max_score, num_locs, dif):
     elif dif == 2:
         scaling = 2.2
 
+    scores = []
     #the scores follow the function int( 1 + (perc ** scaling) * (max_score-1) )
     #however, this will have many low values, sometimes repeating.
     #to avoid repeating scores, hiscore keeps tracks of the highest score location
     #and the next score will always be at least hiscore + 1
     #note that curscore is at most max_score-1
     hiscore = 0
-    for i in range(num_locs):
+    for i in range(num_locs - 1):
         perc = (i/num_locs)
         curscore = int( 1 + (perc ** scaling) * (max_score-2) )
         if(curscore <= hiscore):
             curscore = hiscore + 1
         hiscore = curscore
-        location_table[f"{curscore} score"] = LocData(starting_index + curscore, "Board", curscore)
+        scores += [curscore]
+    
+    #if the goal score is not in the list, find the closest one and make it the goal.
+    if goal_score not in scores:
+        closest_num = min(scores, key=lambda x: abs(x - 500))
+        scores[scores.index(closest_num)] = goal_score
         
-    #Finally, add a check for the actual max_score. 
-    #This is *not* counted in num_locs, since the victory items is not as well.
-    location_table[f"{max_score} score"] = LocData(starting_index + max_score, "Board", max_score)
+    scores += [max_score]
+    
+    location_table = {f"{score} score": LocData(starting_index + score, "Board", score) for score in scores}
 
-    return location_table
+    return location_table, scores.index(goal_score)
 
 lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in all_locations.items() if data.id}
 

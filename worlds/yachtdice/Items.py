@@ -17,7 +17,10 @@ item_table = {
     "Dice Fragment": ItemData(16871244001, ItemClassification.progression),
     "Roll": ItemData(16871244002, ItemClassification.progression),
     "Roll Fragment": ItemData(16871244003, ItemClassification.progression),
+    
     "Score Multiplier": ItemData(16871244004, ItemClassification.progression),
+    "Fixed Score Multiplier": ItemData(16871244005, ItemClassification.progression),
+    "Step Score Multiplier": ItemData(16871244006, ItemClassification.progression),
 
     "Category Ones": ItemData(16871244103, ItemClassification.progression),
     "Category Twos": ItemData(16871244104, ItemClassification.progression),
@@ -63,7 +66,7 @@ item_table = {
     "Story Chapter": ItemData(16871244202, ItemClassification.filler),
     "Good RNG": ItemData(16871244203, ItemClassification.filler),
     "Bad RNG": ItemData(16871244204, ItemClassification.trap),
-    "Extra Point": ItemData(16871244205, ItemClassification.useful),
+    "Extra Point": ItemData(16871244205, ItemClassification.useful), #not included in logic
     
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),
@@ -71,6 +74,11 @@ item_table = {
 }
 
 ITEM_GROUPS = {
+    "Score Multiplier": {
+        "Score Multiplier",
+        "Step Score Multiplier",
+        "Fixed Score Multiplier"
+    },
     "Categories": {
         "Category Ones", 
         "Category Twos", 
