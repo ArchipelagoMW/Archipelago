@@ -76,8 +76,6 @@ class BossWeaknessStrictness(Choice):
     weakness_and_buster: Only allow the weakness and buster to deal damage to the bosses
     weakness_and_upgraded_buster: Only allow the weakness and buster charge levels 3 & 4 to deal damage to the bosses
     only_weakness: Only the weakness will deal damage to the bosses
-
-    Z-Saber damage output will be cut to 50%/37.5%/25% of its original damage according to the strictness setting.
     """
     display_name = "Boss Weakness Strictness"
     option_not_strict = 0
@@ -119,7 +117,7 @@ class DisableChargeFreeze(DefaultOnToggle):
 
 class LogicBossWeakness(DefaultOnToggle):
     """
-    Every main boss will logically expect you to have its weakness.
+    Most bosses will logically expect you to have its weakness.
 
     This option will be forced if the Boss Weakness Strictness setting is set to require only the weakness or
     the upgraded buster option.
@@ -138,7 +136,8 @@ class ZSaberInPool(DefaultOnToggle):
     """
     Adds Z-Saber to the item pool.
 
-    Z-Saber will deal the current HP as damage and half the current HP on strict weakness settings.
+    Z-Saber melee attack will deal 100% HP as DMG, ranged attack will deal 50% HP and its DoT will deal 4x2 DMG.
+    On strict weakness settings Z-Saber will deal half the DMG (doesn't affect DoT from ranged attack)
     """
     display_name = "Z-Saber In Pool"
 
