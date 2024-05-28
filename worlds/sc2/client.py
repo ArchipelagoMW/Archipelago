@@ -34,6 +34,7 @@ from worlds.sc2.options import (
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
 )
+from worlds.sc2.mission_order.structs import MissionRequirements, SC2MissionOrder
 
 
 if __name__ == "__main__":
@@ -541,7 +542,10 @@ class SC2Context(CommonContext):
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
+        self.custom_mission_order: typing.Dict[str, typing.Dict[str, typing.List[typing.List[typing.Tuple[int, MissionRequirements]]]]]
         self.final_mission: int = 29
+        self.final_mission_ids: typing.List[int] = [29]
+        self.final_locations: typing.List[int] = []
         self.announcements: queue.Queue = queue.Queue()
         self.sc2_run_task: typing.Optional[asyncio.Task] = None
         self.missions_unlocked: bool = False  # allow launching missions ignoring requirements
@@ -598,29 +602,48 @@ class SC2Context(CommonContext):
             self.skip_cutscenes = args["slot_data"].get("skip_cutscenes", SkipCutscenes.default)
             self.all_in_choice = args["slot_data"]["all_in_map"]
             self.slot_data_version = args["slot_data"].get("version", 2)
-            slot_req_table: dict = args["slot_data"]["mission_req"]
 
-            first_item = list(slot_req_table.keys())[0]
-            # Maintaining backwards compatibility with older slot data
-            if first_item in [str(campaign.id) for campaign in SC2Campaign]:
-                # Multi-campaign
-                self.mission_req_table = {}
-                for campaign_id in slot_req_table:
-                    campaign = lookup_id_to_campaign[int(campaign_id)]
-                    self.mission_req_table[campaign] = {
-                        mission: self.parse_mission_info(mission_info)
-                        for mission, mission_info in slot_req_table[campaign_id].items()
+            # TODO: convert the old mission_req data into the new custom_mission_order data and remove mission_req_table references everywhere
+            if self.slot_data_version < 4:
+                slot_req_table: dict = args["slot_data"]["mission_req"]
+
+                first_item = list(slot_req_table.keys())[0]
+                # Maintaining backwards compatibility with older slot data
+                if first_item in [str(campaign.id) for campaign in SC2Campaign]:
+                    # Multi-campaign
+                    self.mission_req_table = {}
+                    for campaign_id in slot_req_table:
+                        campaign = lookup_id_to_campaign[int(campaign_id)]
+                        self.mission_req_table[campaign] = {
+                            mission: self.parse_mission_info(mission_info)
+                            for mission, mission_info in slot_req_table[campaign_id].items()
+                        }
+                else:
+                    # Old format
+                    self.mission_req_table = {SC2Campaign.GLOBAL: {
+                            mission: self.parse_mission_info(mission_info)
+                            for mission, mission_info in slot_req_table.items()
+                        }
                     }
-            else:
-                # Old format
-                self.mission_req_table = {SC2Campaign.GLOBAL: {
-                        mission: self.parse_mission_info(mission_info)
-                        for mission, mission_info in slot_req_table.items()
-                    }
+            if self.slot_data_version >= 4:
+                self.custom_mission_order = {
+                    campaign: {
+                        layout: [
+                            [
+                                (mission_id, MissionRequirements(
+                                    **{field: value for field, value in mission_reqs.items() if field in MissionRequirements._fields}
+                                )) for (mission_id, mission_reqs) in column
+                            ] for column in columns
+                        ] for (layout, columns) in layouts.items()
+                    } for (campaign, layouts) in args["slot_data"]["custom_mission_order"].items()
                 }
 
             self.mission_order = args["slot_data"].get("mission_order", MissionOrder.option_vanilla)
-            self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
+            if self.slot_data_version < 4:
+                self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
+            else:
+                self.final_mission_ids = args["slot_data"].get("final_mission_ids", [SC2Mission.ALL_IN.id])
+                self.final_locations = [mission_id * VICTORY_MODULO + get_location_offset(mission_id) for mission_id in self.final_mission_ids]
             self.player_color_raynor = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
             self.player_color_zerg = args["slot_data"].get("player_color_zerg", ColorChoice.option_orange)
             self.player_color_zerg_primal = args["slot_data"].get("player_color_zerg_primal", ColorChoice.option_purple)
@@ -757,6 +780,12 @@ class SC2Context(CommonContext):
         mission_id_to_location_ids: typing.Dict[int, typing.Set[int]] = {
             mission_info.mission.id: set() for campaign_mission in self.mission_req_table.values() for mission_info in campaign_mission.values()
         }
+        # TODO remove req table
+        for layouts in self.custom_mission_order.values():
+            for columns in layouts.values():
+                for column in columns:
+                    for (mission_id, _) in column:
+                        mission_id_to_location_ids[mission_id] = set()
 
         for loc in self.server_locations:
             offset = SC2WOL_LOC_ID_OFFSET if loc < SC2HOTS_LOC_ID_OFFSET \
@@ -768,6 +797,11 @@ class SC2Context(CommonContext):
 
     def locations_for_mission(self, mission: SC2Mission):
         mission_id: int = mission.id
+        objectives = self.mission_id_to_location_ids[mission_id]
+        for objective in objectives:
+            yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
+    
+    def locations_for_mission_id(self, mission_id: int):
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
             yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
@@ -889,7 +923,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
-        total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
+        # total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
+        total_missions = sum(len(column) for layout in ctx.custom_mission_order.values() for columns in layout.values() for column in columns)
         for race in SC2Race:
             if race == SC2Race.ANY:
                 continue
@@ -1143,13 +1178,21 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
                 if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        if self.mission_id != self.ctx.final_mission:
-                            print("Mission Completed")
-                            await self.ctx.send_msgs(
-                                [{"cmd": 'LocationChecks',
-                                  "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id]}])
-                            self.mission_completed = True
-                        else:
+                        victory_location = get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id
+                        send_victory = (
+                            self.mission_id in self.ctx.final_mission_ids and
+                            len(self.ctx.final_locations) == len(self.ctx.checked_locations.union([victory_location]).intersection(self.ctx.final_locations))
+                        )
+                        
+                        # if self.mission_id != self.ctx.final_mission:
+                        print("Mission Completed")
+                        await self.ctx.send_msgs(
+                            [{"cmd": 'LocationChecks',
+                                "locations": [victory_location]}])
+                        self.mission_completed = True
+
+                        if send_victory:
+                        # else:
                             print("Game Complete")
                             await self.ctx.send_msgs([{"cmd": 'StatusUpdate', "status": ClientStatus.CLIENT_GOAL}])
                             self.mission_completed = True
@@ -1202,7 +1245,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         ))
 
 
-def request_unfinished_missions(ctx: SC2Context) -> None:
+def request_unfinished_missions(ctx: SC2Context) -> None: # TODO still uses req table
     if ctx.mission_req_table:
         message = "Unfinished Missions: "
         unlocks = initialize_blank_mission_dict(ctx.mission_req_table)
@@ -1241,6 +1284,29 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
+def calc_unfinished_missions_custom_order(ctx: SC2Context, unlocks: typing.Optional[typing.Dict] = None):
+    unfinished_missions: typing.List[int] = []
+    locations_completed: typing.List[typing.Union[typing.Set[int], typing.Literal[-1]]] = []
+
+    # TODO I can't tell if this is actually used by anything
+    # if not unlocks:
+    #     unlocks = initialize_blank_mission_dict_custom_order(ctx.custom_mission_order)
+
+    available_missions = calc_available_missions_custom_order(ctx)
+
+    for mission_id in available_missions:
+        objectives = set(ctx.locations_for_mission_id(mission_id))
+        if objectives:
+            objectives_completed = ctx.checked_locations & objectives
+            if len(objectives_completed) < len(objectives):
+                unfinished_missions.append(mission_id)
+                locations_completed.append(objectives_completed)
+        else:
+            unfinished_missions.append(mission_id)
+            locations_completed.append(-1)
+
+    return available_missions, dict(zip(unfinished_missions, locations_completed))
+
 def calc_unfinished_missions(ctx: SC2Context, unlocks: typing.Optional[typing.Dict] = None):
     unfinished_missions: typing.List[str] = []
     locations_completed: typing.List[typing.Union[typing.Set[int], typing.Literal[-1]]] = []
@@ -1265,13 +1331,18 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks: typing.Optional[typing.Di
     return available_missions, dict(zip(unfinished_missions, locations_completed))
 
 
-def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool:
-    unfinished_missions = calc_available_missions(ctx)
+def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool: # TODO uses req table
+    if ctx.slot_data_version < 4:
+        unfinished_missions = calc_available_missions(ctx)
 
-    return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
+        return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
+    else:
+        available_missions = calc_available_missions_custom_order(ctx)
+
+        return mission_id_to_check in available_missions
 
 
-def mark_up_mission_name(ctx: SC2Context, mission_name: str, unlock_table: typing.Dict) -> str:
+def mark_up_mission_name(ctx: SC2Context, mission_name: str, unlock_table: typing.Dict) -> str: # TODO
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
 
     campaign = ctx.find_campaign(mission_name)
@@ -1302,7 +1373,7 @@ def mark_up_mission_name(ctx: SC2Context, mission_name: str, unlock_table: typin
     return message
 
 
-def mark_up_objectives(message, ctx, unfinished_locations, mission):
+def mark_up_objectives(message, ctx, unfinished_locations, mission): # TODO
     formatted_message = message
 
     if ctx.ui:
@@ -1317,7 +1388,7 @@ def mark_up_objectives(message, ctx, unfinished_locations, mission):
     return formatted_message
 
 
-def request_available_missions(ctx: SC2Context):
+def request_available_missions(ctx: SC2Context): # TODO
     if ctx.mission_req_table:
         message = "Available Missions: "
 
@@ -1338,6 +1409,27 @@ def request_available_missions(ctx: SC2Context):
     else:
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
+
+def calc_available_missions_custom_order(ctx: SC2Context, unlocks: typing.Optional[dict] = None) -> typing.List[int]:
+    available_missions: typing.List[int] = []
+    missions_complete = 0
+
+    # Get number of missions completed
+    for loc in ctx.checked_locations:
+        if loc % VICTORY_MODULO == 0:
+            missions_complete += 1
+    
+    for campaign in ctx.custom_mission_order.values():
+        for layout in campaign.values():
+            for column in layout:
+                for (mission_id, mission_reqs) in column:
+                    if mission_id == -1:
+                        continue
+
+                    if mission_reqs_completed_custom_order(ctx, mission_reqs, missions_complete):
+                        available_missions.append(mission_id)
+    
+    return available_missions
 
 def calc_available_missions(ctx: SC2Context, unlocks: typing.Optional[dict] = None) -> typing.List[str]:
     available_missions: typing.List[str] = []
@@ -1379,6 +1471,60 @@ def parse_unlock(unlock: typing.Union[typing.Dict[typing.Literal["connect_to", "
         # Multi-campaign
         return MissionConnection(unlock["connect_to"], lookup_id_to_campaign[unlock["campaign"]])
 
+
+def mission_reqs_completed_custom_order(ctx: SC2Context, mission_reqs: MissionRequirements, mission_complete: int) -> bool:
+    def mission_beaten(mission_id: int) -> bool:
+        return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
+
+    # Beat any of these
+    prev_requirement = False
+    if len(mission_reqs.prev_missions) == 0:
+        prev_requirement = True
+    for prev_id in mission_reqs.prev_missions:
+        if mission_beaten(prev_id):
+            prev_requirement = True
+            break
+    
+    # Beat all of these
+    specific_requirement = True
+    for unlock_id in mission_reqs.unlocking_missions:
+        if not mission_beaten(unlock_id):
+            specific_requirement = False
+            break
+    
+    # Beat this many in the campaign
+    count = sum(
+        mission_beaten(mission_id)
+        for columns in ctx.custom_mission_order[mission_reqs.parent_campaign].values()
+        for column in columns for (mission_id, _) in column
+    )
+    campaign_count_requirement = count >= mission_reqs.unlocking_count
+    
+    # Beat this many sets of required missions from previous-order campaigns
+    count = sum(
+        all(
+            mission_beaten(mission_id)
+            for mission_id in prev_campaign_missions
+        ) for prev_campaign_missions in mission_reqs.campaign_required
+    )
+    if mission_reqs.campaign_count == -1: # -1 -> beat them all
+        campaign_order_requirement = count == len(mission_reqs.campaign_required)
+    else:
+        campaign_order_requirement = count >= mission_reqs.campaign_count
+    
+    # Beat this many sets of required missions from previous-order layouts
+    count = sum(
+        all(
+            mission_beaten(mission_id)
+            for mission_id in prev_layout_missions
+        ) for prev_layout_missions in mission_reqs.layout_required
+    )
+    if mission_reqs.layout_count == -1: # -1 -> beat them all
+        layout_order_requirement = count == len(mission_reqs.layout_required)
+    else:
+        layout_order_requirement = count >= mission_reqs.layout_count
+    
+    return prev_requirement and specific_requirement and campaign_count_requirement and campaign_order_requirement and layout_order_requirement
 
 def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int) -> bool:
     """Returns a bool signifying if the mission has all requirements complete and can be done
@@ -1444,6 +1590,9 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
     else:
         return True
 
+
+def initialize_blank_mission_dict_custom_order(mission_order: SC2MissionOrder):
+    pass
 
 def initialize_blank_mission_dict(location_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]]):
     unlocks: typing.Dict[SC2Campaign, typing.Dict] = {}

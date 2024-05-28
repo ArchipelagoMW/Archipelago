@@ -10,6 +10,7 @@ from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, Mis
     campaign_mission_table, SC2Race, MissionFlag
 from .mission_orders import vanilla_shuffle_order, mini_campaign_order
 from .mission_groups import mission_groups, MissionGroupNames
+from .mission_order.options import CustomMissionOrder
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -950,6 +951,7 @@ class Starcraft2Options(PerGameCommonOptions):
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
 
+    custom_mission_order: CustomMissionOrder
 
 def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
     if world is None:

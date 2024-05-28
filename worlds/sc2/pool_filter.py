@@ -545,7 +545,8 @@ class ValidInventory:
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
         # Inventory restrictiveness based on number of missions with checks
-        mission_count = sum(len(campaign) for campaign in world.mission_req_table.values())
+        # mission_count = sum(len(campaign) for campaign in world.mission_req_table.values())
+        mission_count = len(world.custom_mission_order.get_used_missions())
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
@@ -567,7 +568,7 @@ class ValidInventory:
                 self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
 
-def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
+def filter_items(world: 'SC2World', location_cache: List[Location],
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
