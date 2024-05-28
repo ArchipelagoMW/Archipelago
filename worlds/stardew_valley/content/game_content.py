@@ -6,6 +6,7 @@ from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
 from .feature import booksanity, cropsanity, fishsanity, friendsanity
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, ItemSource, ItemTag
+from ..data.skill import Skill
 from ..data.villagers_data import Villager
 
 
@@ -19,7 +20,7 @@ class StardewContent:
     game_items: Dict[str, GameItem] = field(default_factory=dict)
     fishes: Dict[str, FishItem] = field(default_factory=dict)
     villagers: Dict[str, Villager] = field(default_factory=dict)
-    skills: Dict[str, Any] = field(default_factory=dict)
+    skills: Dict[str, Skill] = field(default_factory=dict)
     quests: Dict[str, Any] = field(default_factory=dict)
 
     def find_sources_of_type(self, types: Union[Type[ItemSource], Tuple[Type[ItemSource]]]) -> Iterable[ItemSource]:
@@ -98,7 +99,7 @@ class ContentPack:
     def villager_hook(self, content: StardewContent):
         ...
 
-    skills: Iterable[Any] = ()
+    skills: Iterable[Skill] = ()
 
     def skill_hook(self, content: StardewContent):
         ...

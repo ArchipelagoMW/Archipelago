@@ -65,7 +65,9 @@ def register_pack(content: StardewContent, pack: ContentPack):
         content.villagers[villager.name] = villager
     pack.villager_hook(content)
 
-    # register_skills
+    for skill in pack.skills:
+        content.skills[skill.name] = skill
+    pack.skill_hook(content)
 
     # register_quests
 

@@ -2,6 +2,7 @@ from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
 from ...data.game_item import ItemTag, CustomRuleSource, GameItem
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
+from ...data.skill import Skill
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import WildSeeds
 from ...strings.crop_names import Fruit, Vegetable
@@ -13,6 +14,7 @@ from ...strings.machine_names import Machine
 from ...strings.monster_names import Monster
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
+from ...strings.skill_names import Skill as SkillName
 
 all_fruits = (
     Fruit.ancient_fruit, Fruit.apple, Fruit.apricot, Fruit.banana, Forageable.blackberry, Fruit.blueberry, Forageable.cactus_fruit, Fruit.cherry,
@@ -159,5 +161,12 @@ base_game = BaseGameContentPack(
         ArtisanGood.green_tea: (MachineSource(item=Vegetable.tea_leaves, machine=Machine.keg),),
         ArtisanGood.mead: (MachineSource(item=ArtisanGood.honey, machine=Machine.keg),),
         ArtisanGood.pale_ale: (MachineSource(item=Vegetable.hops, machine=Machine.keg),),
-    }
+    },
+    skills=(
+        Skill(SkillName.farming, has_mastery=True),
+        Skill(SkillName.foraging, has_mastery=True),
+        Skill(SkillName.fishing, has_mastery=True),
+        Skill(SkillName.mining, has_mastery=True),
+        Skill(SkillName.combat, has_mastery=True),
+    )
 )
