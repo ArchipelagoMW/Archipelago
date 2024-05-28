@@ -498,6 +498,8 @@ def set_walnut_dig_spot_rules(logic, multiworld, player, world_options):
         rule = logic.tool.has_tool(Tool.hoe)
         if "Journal Scrap" in dig_spot_walnut.name:
             rule = rule & logic.has(Forageable.journal_scrap)
+        if "Starfish Diamond" in dig_spot_walnut.name:
+            rule = rule & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron)
         MultiWorldRules.set_rule(multiworld.get_location(dig_spot_walnut.name, player), rule)
 
 
