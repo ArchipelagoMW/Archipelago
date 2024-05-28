@@ -281,10 +281,10 @@ def turtle_zone_1_coins(state, player, coins):
 
 def turtle_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Turtle Zone 2")
-    reachable_coins = 1
+    reachable_coins = 2
     if auto_scroll:
         if state.has("Water Physics", player):
-            reachable_coins += 7
+            reachable_coins += 6
     else:
         reachable_coins += 3
         if state.has("Water Physics", player):
