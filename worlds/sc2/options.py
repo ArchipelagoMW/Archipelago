@@ -6,8 +6,8 @@ from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys)
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
-    campaign_mission_table
+from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
+    campaign_mission_table, SC2Race, MissionFlag
 from .mission_orders import vanilla_shuffle_order, mini_campaign_order
 from .mission_groups import mission_groups, MissionGroupNames
 
@@ -53,6 +53,22 @@ class Sc2MissionSet(OptionSet):
 
     def __len__(self) -> int:
         return self.value.__len__()
+
+
+class SelectRaces(Choice):
+    """
+    Pick which factions' missions and items can be shuffled into the world.
+    """
+    display_name = "Select Playable Races"
+    option_all = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss).value
+    option_terran = MissionFlag.Terran.value
+    option_zerg = MissionFlag.Zerg.value
+    option_protoss = MissionFlag.Protoss.value
+    option_terran_and_zerg = (MissionFlag.Terran|MissionFlag.Zerg).value
+    option_terran_and_protoss = (MissionFlag.Terran|MissionFlag.Protoss).value
+    option_zerg_and_protoss = (MissionFlag.Zerg|MissionFlag.Protoss).value
+    option_plando = 0
+    default = option_all
 
 
 class GameDifficulty(Choice):
@@ -874,6 +890,7 @@ class StartingSupplyPerItem(Range):
 
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
+    selected_races: SelectRaces
     game_difficulty: GameDifficulty
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera
@@ -944,6 +961,20 @@ def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
     return player_option.value
 
 
+def get_enabled_races(world: 'SC2World') -> Set[SC2Race]:
+    selection = get_option_value(world, 'selected_races')
+    if selection == SelectRaces.option_all:
+        return set(SC2Race)
+    enabled = set()
+    if selection & MissionFlag.Terran:
+        enabled.add(SC2Race.TERRAN)
+    if selection & MissionFlag.Zerg:
+        enabled.add(SC2Race.ZERG)
+    if selection & MissionFlag.Protoss:
+        enabled.add(SC2Race.PROTOSS)
+    return enabled
+
+
 def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     enabled_campaigns = set()
     if get_option_value(world, "enable_wol_missions"):
@@ -960,7 +991,7 @@ def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
     if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
-    return enabled_campaigns
+    return set([campaign for campaign in enabled_campaigns if campaign.race in get_enabled_races(world)])
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -971,11 +1002,20 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     return disabled_campaigns
 
 
+def get_disabled_flags(world: 'SC2World') -> MissionFlag:
+    excluded = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss) ^ MissionFlag(get_option_value(world, "selected_races"))
+    # filter out no-build missions
+    if not get_option_value(world, "shuffle_no_build"):
+        excluded |= MissionFlag.NoBuild
+    # TODO: add more flags to potentially exclude once we have a way to get that from the player
+    return MissionFlag(excluded)
+
+
 def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     mission_order_type = world.options.mission_order.value
     excluded_mission_names = world.options.excluded_missions.value
-    shuffle_no_build = world.options.shuffle_no_build.value
     disabled_campaigns = get_disabled_campaigns(world)
+    disabled_flags = get_disabled_flags(world)
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
@@ -991,8 +1031,8 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
              mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE]
         )
     # Omitting No-Build missions if not shuffling no-build
-    if not shuffle_no_build:
-        excluded_missions = excluded_missions.union(get_no_build_missions())
+    if disabled_flags:
+        excluded_missions = excluded_missions.union(get_missions_with_any_flags_in_list(disabled_flags))
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
