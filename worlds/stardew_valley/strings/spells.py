@@ -28,6 +28,3 @@ class MagicSpell:
     lucksteal = spell("Spell: Lucksteal")
     spirit = spell("Spell: Spirit")
     rewind = spell("Spell: Rewind")
-
-
-all_spells = tuple(all_spells)
