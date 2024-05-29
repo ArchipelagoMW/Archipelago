@@ -11,8 +11,6 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
-EXPECTED_ROM_VERSION = 3
-
 TRACKER_EVENT_FLAGS = [
     "EVENT_GOT_KENYA",
     "EVENT_GAVE_KENYA",
@@ -94,8 +92,8 @@ class PokemonCrystalClient(BizHawkClient):
                 generator_version = "{0:x}".format(rom_version)
                 client_version = "{0:x}".format(data.rom_version)
                 logger.info("ERROR: The patch file used to create this ROM is not compatible with "
-                            "this client. Double check your client version against the version being "
-                            "used by the generator.")
+                            "this client. Double check your version of pokemon_crystal.apworld "
+                            "against the version used to generate this game.")
                 logger.info(f"Client checksum: {client_version}, Generator checksum: {generator_version}")
                 return False
         except UnicodeDecodeError:
