@@ -184,7 +184,7 @@ def generate_yaml(game: str):
                 del options[key]
 
             # Detect keys which end with -custom, indicating a TextChoice with a possible custom value
-            if key_parts[-1].endswith("-custom"):
+            elif key_parts[-1].endswith("-custom"):
                 if val:
                     options[key_parts[-1][:-7]] = val
 
