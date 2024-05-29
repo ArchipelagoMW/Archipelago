@@ -27,7 +27,8 @@ class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, HasLogicM
     def can_use_altar(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:
             return False_()
-        return self.logic.region.can_reach(MagicRegion.altar) & self.logic.has_any(all_spells)
+        spell_rule = False_()
+        return self.logic.region.can_reach(MagicRegion.altar) & self.logic.received_any(*all_spells)
 
     def has_any_spell(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:
