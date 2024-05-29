@@ -240,6 +240,7 @@ pelican_town = ContentPack(
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
         Book.price_catalogue: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
         Book.the_alleyway_buffet: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
