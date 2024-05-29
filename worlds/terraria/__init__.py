@@ -25,7 +25,7 @@ from .Checks import (
     armor_minions,
     accessory_minions,
 )
-from .Options import options
+from .Options import TerrariaOptions
 
 
 class TerrariaWeb(WebWorld):
@@ -49,7 +49,8 @@ class TerrariaWorld(World):
 
     game = "Terraria"
     web = TerrariaWeb()
-    option_definitions = options
+    options_dataclass = TerrariaOptions
+    options: TerrariaOptions
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
@@ -65,7 +66,7 @@ class TerrariaWorld(World):
     goal_locations: Set[str]
 
     def generate_early(self) -> None:
-        goal, goal_locations = goals[self.multiworld.goal[self.player].value]
+        goal, goal_locations = goals[self.options.goal.value]
         ter_goals = {}
         goal_items = set()
         for location in goal_locations:
@@ -74,7 +75,7 @@ class TerrariaWorld(World):
             ter_goals[item] = location
             goal_items.add(item)
 
-        achievements = self.multiworld.achievements[self.player].value
+        achievements = self.options.achievements.value
         location_count = 0
         locations = []
         for rule, flags, _, _ in rules[:goal]:
@@ -84,7 +85,7 @@ class TerrariaWorld(World):
                 or (achievements < 2 and "Grindy" in flags)
                 or (achievements < 3 and "Fishing" in flags)
                 or (
-                    rule == "Zenith" and self.multiworld.goal[self.player].value != 11
+                    rule == "Zenith" and self.options.goal.value != 11
                 )  # Bad hardcoding
             ):
                 continue
@@ -118,7 +119,7 @@ class TerrariaWorld(World):
                 # Event
                 items.append(rule)
 
-        extra_checks = self.multiworld.fill_extra_checks_with[self.player].value
+        extra_checks = self.options.fill_extra_checks_with.value
         ordered_rewards = [
             reward
             for reward in labels["ordered"]
@@ -236,7 +237,7 @@ class TerrariaWorld(World):
             elif condition == "calamity":
                 return sign == self.calamity
             elif condition == "grindy":
-                return sign == (self.multiworld.achievements[self.player].value >= 2)
+                return sign == (self.options.achievements.value >= 2)
             elif condition == "pickaxe":
                 if type(arg) is not int:
                     raise Exception("@pickaxe requires an integer argument")
@@ -335,6 +336,6 @@ class TerrariaWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         return {
             "goal": list(self.goal_locations),
-            "achievements": self.multiworld.achievements[self.player].value,
-            "deathlink": bool(self.multiworld.death_link[self.player]),
+            "achievements": self.options.achievements.value,
+            "deathlink": bool(self.options.death_link),
         }
