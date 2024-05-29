@@ -135,7 +135,7 @@ ReceivedLogicMixin, HasLogicMixin]]):
             rules.append(self.logic.time.has_year_two)
 
         elif npc == NPC.leo:
-            rules.append(self.logic.received("Island West Turtle"))
+            rules.append(self.logic.received("Island North Turtle"))
 
         elif npc == ModNPC.lance:
             rules.append(self.logic.region.can_reach(Region.volcano_floor_10))

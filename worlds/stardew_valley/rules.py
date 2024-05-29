@@ -263,6 +263,7 @@ def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewVa
 
 
 def set_farm_buildings_entrance_rules(logic, multiworld, player):
+    set_entrance_rule(multiworld, player, Entrance.downstairs_to_cellar, logic.building.has_house(3))
     set_entrance_rule(multiworld, player, Entrance.use_desert_obelisk, logic.can_use_obelisk(Transportation.desert_obelisk))
     set_entrance_rule(multiworld, player, Entrance.enter_greenhouse, logic.received("Greenhouse"))
     set_entrance_rule(multiworld, player, Entrance.enter_coop, logic.building.has_building(Building.coop))

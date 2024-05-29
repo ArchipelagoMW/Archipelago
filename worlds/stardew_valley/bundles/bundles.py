@@ -75,7 +75,8 @@ def get_shuffled_bundles(random: Random, logic: StardewLogic, content: StardewCo
     random.shuffle(rooms)
 
     chosen_bundle_items = random.sample(valid_bundle_items, required_items)
-    sorted_bundle_items = sorted(chosen_bundle_items, key=lambda x: logic.has(x.item_name).get_difficulty())
+    # sorted_bundle_items = sorted(chosen_bundle_items, key=lambda x: logic.has(x.item_name).get_difficulty())
+    sorted_bundle_items = chosen_bundle_items
     for room in rooms:
         for bundle in room.bundles:
             num_items = len(bundle.items)
