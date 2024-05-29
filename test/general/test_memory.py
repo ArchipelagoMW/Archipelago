@@ -5,7 +5,7 @@ from . import setup_solo_multiworld
 
 
 class TestWorldMemory(unittest.TestCase):
-    def test_leak(self):
+    def test_leak(self) -> None:
         """Tests that worlds don't leak references to MultiWorld or themselves with default options."""
         import gc
         import weakref
