@@ -268,7 +268,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld Well Ladder"],
         rule=lambda state: has_ladder("Ladders in Well", state, player, options))
     regions["Overworld Well Ladder"].connect(
-        connecting_region=regions["Overworld"])
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
 
     # nmg: can ice grapple through the door
     regions["Overworld"].connect(
@@ -706,17 +707,18 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Fortress Exterior from Overworld"])
 
     regions["Beneath the Vault Ladder Exit"].connect(
-        connecting_region=regions["Beneath the Vault Front"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
-    regions["Beneath the Vault Front"].connect(
+        connecting_region=regions["Beneath the Vault Main"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options)
+        and has_lantern(state, player, options))
+    regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
-    regions["Beneath the Vault Front"].connect(
-        connecting_region=regions["Beneath the Vault Back"],
-        rule=lambda state: has_lantern(state, player, options))
+    regions["Beneath the Vault Main"].connect(
+        connecting_region=regions["Beneath the Vault Back"])
     regions["Beneath the Vault Back"].connect(
-        connecting_region=regions["Beneath the Vault Front"])
+        connecting_region=regions["Beneath the Vault Main"],
+        rule=lambda state: has_lantern(state, player, options))
 
     regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
@@ -870,6 +872,9 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
+    regions["Zig Skip Exit"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
+
     regions["Rooted Ziggurat Portal"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
         rule=lambda state: state.has("Activate Ziggurat Fuse", player))
@@ -986,12 +991,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
-                            state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)))
+                            state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)))
 
     # connecting the regions portals are in to other portals you can access via ladder storage
     # using has_stick instead of can_ladder_storage since it's already checking the logic rules
     if options.logic_rules == "unrestricted":
-        def get_portal_info(portal_sd: str) -> (str, str):
+        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
             for portal1, portal2 in portal_pairs.items():
                 if portal1.scene_destination() == portal_sd:
                     return portal1.name, portal2.region
@@ -1226,12 +1231,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     and (has_ladder("Ladders in Swamp", state, player, options)
                          or has_ice_grapple_logic(True, state, player, options, ability_unlocks)
                          or not options.entrance_rando))
+            # soft locked without this ladder
             elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
                     and (state.has("Ladders to West Bell", player)))
             # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
             elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
@@ -1434,9 +1439,9 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     set_rule(multiworld.get_location("Ruined Atoll - [West] Near Kevin Block", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Lower Chest", player),
-             lambda state: state.has_any({laurels, key}, player))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2))
     set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Upper Chest", player),
-             lambda state: state.has_any({laurels, key}, player))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2))
 
     # Frog's Domain
     set_rule(multiworld.get_location("Frog's Domain - Side Room Grapple Secret", player),
@@ -1452,9 +1457,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
 
     # Beneath the Vault
     set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
-             lambda state: state.has_group("melee weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
-    set_rule(multiworld.get_location("Beneath the Fortress - Obscured Behind Waterfall", player),
-             lambda state: has_lantern(state, player, options))
+             lambda state: state.has_group("Melee Weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
 
     # Quarry
     set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),

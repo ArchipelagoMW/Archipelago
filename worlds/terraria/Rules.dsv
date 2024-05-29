@@ -378,6 +378,7 @@ Electrician's Glove;                Calamity;                                   
 Adamantite Ore;                     ;                                           (((~@calamity & Altar) | (@calamity & @mech_boss(2))) & @pickaxe(150)) | (Wall of Flesh & (~@calamity | @mech_boss(2))) | (~@calamity & Chlorophyte Ore) | Adamantite Bar | (@calamity & Hallowed Ore);
 Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
 Adamantite Bar;                     ;                                           (Hardmode Forge & Adamantite Ore) | (Wall of Flesh & (~@calamity | @mech_boss(2)));
+Adamantite Bar;                     ;                                           (Hardmode Forge & Adamantite Ore) | (Wall of Flesh & (~@calamity | @mech_boss(2)));
 Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
 Forbidden Armor;                    Armor Minions(2);                           Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
 Aquatic Scourge;                    Calamity | Location | Item;

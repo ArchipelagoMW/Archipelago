@@ -397,8 +397,8 @@ class Goal(Choice):
     option_hollowknight = 1
     option_siblings = 2
     option_radiance = 3
-    # Client support exists for this, but logic is a nightmare
-    # option_godhome = 4
+    option_godhome = 4
+    option_godhome_flower = 5
     default = 0
 
 
