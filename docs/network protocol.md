@@ -649,7 +649,6 @@ A data package is a JSON object which may contain arbitrary metadata to enable a
 server most easily and not maintain their own mappings. Some contents include:
 
    - Name to ID mappings for items and locations.
-   - Item and Location groups.
    - A checksum of each game's data package for clients to tell if a cached package is invalid.
 
 We encourage clients to cache the data package they receive on disk, or otherwise not tied to a session. You will know 
@@ -667,7 +666,7 @@ than any locally cached ones.
   * For example, a data package like this is valid:
     ```jsonc
     {
-      // Some properties such as 'checksum', 'item_name_groups', and 'location_name_groups' were omitted.
+      // Some properties such as 'checksum' were omitted.
       "games": {
         "Game A": {
           "location_name_to_id": {
