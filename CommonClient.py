@@ -176,36 +176,34 @@ class CommonContext:
 
     class NameLookupDict:
         """A specialized dict, with helper methods, for id -> name item/location data package lookups by game."""
-        _game_store: typing.Dict[str, typing.ChainMap[int, str]]
-
         def __init__(self, ctx: CommonContext, lookup_type: typing.Literal["item", "location"]):
-            self.ctx = ctx
-            self.lookup_type = lookup_type
-            self._unknown_item = lambda key: f"Unknown {lookup_type} (ID: {key})"
-            self._archipelago_lookup = {}
-            self._game_store = collections.defaultdict(
+            self.ctx: CommonContext = ctx
+            self.lookup_type: typing.Literal["item", "location"] = lookup_type
+            self._unknown_item: typing.Callable[[int], str] = lambda key: f"Unknown {lookup_type} (ID: {key})"
+            self._archipelago_lookup: typing.Dict[int, str] = {}
+            self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
+            self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
-            self._flat_store = Utils.KeyedDefaultDict(self._unknown_item)
 
         # noinspection PyTypeChecker
-        def __getitem__(self, key: str) -> typing.Union[typing.ChainMap[int, str], typing.Dict[int, str]]:
+        def __getitem__(self, key: str) -> typing.Mapping[int, str]:
             # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
             if isinstance(key, int):
                 logger.warning(f"Implicit name lookup by id only is deprecated and only supported to maintain backwards"
                                f"compatibility for now. If multiple games share the same id for a {self.lookup_type}, "
                                f"name could be incorrect. Please use `{self.lookup_type}_names.lookup_in_game()` or "
                                f"`{self.lookup_type}_names.lookup_in_slot()` instead to avoid this issue.")
-                return self._flat_store[key]
+                return self._flat_store[key]  # type: ignore
 
             return self._game_store[key]
 
-        def __len__(self):
+        def __len__(self) -> int:
             return len(self._game_store)
 
-        def __iter__(self):
+        def __iter__(self) -> typing.Iterator[str]:
             return iter(self._game_store)
 
-        def __repr__(self):
+        def __repr__(self) -> str:
             return self._game_store.__repr__()
 
         def lookup_in_game(self, code: int, game_name: typing.Optional[str] = None) -> str:
@@ -214,6 +212,7 @@ class CommonContext:
             """
             if game_name is None:
                 game_name = self.ctx.game
+                assert game_name is not None, f"Attempted to lookup {self.lookup_type} with no game name available."
 
             return self._game_store[game_name][code]
 
@@ -223,6 +222,7 @@ class CommonContext:
             """
             if slot is None:
                 slot = self.ctx.slot
+                assert slot is not None, f"Attempted to lookup {self.lookup_type} with no slot info available."
 
             return self.lookup_in_game(code, self.ctx.slot_info[slot].game)
 
