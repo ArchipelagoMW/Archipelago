@@ -659,6 +659,8 @@ class HKItem(Item):
     def __init__(self, name, advancement, code, type: str, player: int = None):
         if name == "Mimic_Grub":
             classification = ItemClassification.trap
+        elif name == "Godtuner":
+            classification = ItemClassification.progression
         elif type in ("Grub", "DreamWarrior", "Root", "Egg", "Dreamer"):
             classification = ItemClassification.progression_skip_balancing
         elif type == "Charm" and name not in progression_charms:
