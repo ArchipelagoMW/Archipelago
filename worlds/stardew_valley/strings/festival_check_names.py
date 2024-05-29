@@ -60,7 +60,7 @@ class FestivalCheck:
     shrimp_donut = "Shrimp Donut"
     smell_of_the_sea = "Smell Of The Sea"
     desert_gumbo = "Desert Gumbo"
-    free_cactus = "Free Cactus"
+    free_cactis = "Free Cactis"
     monster_hunt = "Monster Hunt"
     deep_dive = "Deep Dive"
     treasure_hunt = "Treasure Hunt"

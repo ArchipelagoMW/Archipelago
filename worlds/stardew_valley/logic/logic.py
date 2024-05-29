@@ -434,7 +434,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             FestivalCheck.shrimp_donut: True_(),
             FestivalCheck.smell_of_the_sea: True_(),
             FestivalCheck.desert_gumbo: True_(),
-            FestivalCheck.free_cactus: True_(),
+            FestivalCheck.free_cactis: True_(),
             FestivalCheck.monster_hunt: self.monster.can_kill(Monster.serpent),
             FestivalCheck.deep_dive: self.region.can_reach(Region.skull_cavern_50),
             FestivalCheck.treasure_hunt: self.region.can_reach(Region.skull_cavern_25),
