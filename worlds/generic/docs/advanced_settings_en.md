@@ -3,13 +3,12 @@ This guide covers more the more advanced options available in YAML files. This g
 to edit their YAML file manually. This guide should take about 10 minutes to read.
 
 If you would like to generate a basic, fully playable YAML without editing a file, then visit the options page for the
-game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
+game you intend to play.
 
 The options page can be found on the supported games page, just click the "Options Page" link under the name of the
 game you would like.
 
 * Supported games page: [Archipelago Games List](/games)
-* Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
 Clicking on the "Export Options" button at the bottom-left will provide you with a pre-filled YAML with your options.
 The player options page also has a link to download a full template file for that game which will have every option
@@ -80,7 +79,7 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
   different weights.
 
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
-  is good for detailing the version of Archipelago this YAML was prepared for as, if it is rolled on an older version,
+  is good for detailing the version of Archipelago this YAML was prepared for. If it is rolled on an older version,
   options may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
   here to ensure it will be used is good practice.
 
@@ -132,12 +131,13 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   the location without using any hint points.
 * `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained
   there without using any hint points.
-* `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
-  item which isn't necessary for progression to go in these locations.
-* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations.
+* `exclude_locations` lets you define any locations that you don't want to do and forces a filler or trap item which
+  isn't necessary for progression into these locations.
+* `priority_locations` lets you define any locations that you want to do and forces a progression item into these
+  locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
-  can also have local and non local items, forcing the items to either be placed within the worlds of the group or in
+  can also have local and non-local items, forcing the items to either be placed within the worlds of the group or in
   worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the
   players will be the amount put into the group.
 
@@ -277,7 +277,7 @@ one file, removing the need to manage separate files if one chooses to do so.
 
 As a precautionary measure, before submitting a multi-game yaml like this one in a synchronous/sync multiworld, please
 confirm that the other players in the multi are OK with what you are submitting, and please be fairly reasonable about
-the submission. (ie. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
+the submission. (i.e. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
 reasonable, but submitting a ChecksFinder alongside another game OR submitting multiple Slay the Spire runs is likely
 OK)
 
@@ -295,7 +295,7 @@ requires:
   version: 0.3.2
 Super Mario 64:
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
   EnableCoinStars: false
   StrictCapRequirements: true
   StrictCannonRequirements: true
@@ -315,7 +315,7 @@ name: Minecraft
 game: Minecraft
 Minecraft:
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
   advancement_goal: 40
   combat_difficulty: hard
   include_hard_advancements: false
@@ -341,7 +341,7 @@ game: ChecksFinder
 
 ChecksFinder: 
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
 ```
 
 The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.
