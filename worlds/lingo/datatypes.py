@@ -69,6 +69,7 @@ class Panel(NamedTuple):
     achievement: bool
     non_counting: bool
     panel_door: Optional[RoomAndPanelDoor]  # This will always be fully specified.
+    location_name: Optional[str]
 
 
 class PanelDoor(NamedTuple):

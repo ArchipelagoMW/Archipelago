@@ -208,8 +208,6 @@ def process_panel_door(room_name, panel_door_name, panel_door_data):
 def process_panel(room_name, panel_name, panel_data):
     global PANELS_BY_ROOM
 
-    full_name = f"{room_name} - {panel_name}"
-
     # required_room can either be a single room or a list of rooms.
     if "required_room" in panel_data:
         if isinstance(panel_data["required_room"], list):
@@ -292,8 +290,13 @@ def process_panel(room_name, panel_name, panel_data):
     else:
         panel_door = None
 
+    if "location_name" in panel_data:
+        location_name = panel_data["location_name"]
+    else:
+        location_name = None
+
     panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, exclude_reduce,
-                      achievement, non_counting, panel_door)
+                      achievement, non_counting, panel_door, location_name)
     PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
 
