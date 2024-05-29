@@ -121,3 +121,45 @@ def prompt_and_create_backup(backup_directory: str, copy_from_directory: str):
             print(f"created backup at directory {backup_path}")
         elif response.lower() not in ["no", "n"]:
             print("invalid response. Please enter y/n")
+
+def write_item_id_to_desc(ittxt_path: str, output_path: str) -> None:
+    """
+    This method is used to read the state of t_ittxt._dt / t_ittxt2._dt
+    to parse the items to a specified file for debugging purposes.
+
+    Args:
+        ittxt_path (str): The path to t_ittxt._dt / t_ittxt2._dt
+        output_path (str): The path to write the contents to
+    """
+    offsets = []
+    items = []
+    with open (ittxt_path, "rb") as fp:
+        with open (output_path, "w", encoding="utf-8") as item_id_to_name_fp:
+            first_item_addr = int.from_bytes(fp.read(2), byteorder="little")
+            fp.seek(0)
+            while fp.tell() < first_item_addr:
+                item_offset = int.from_bytes(fp.read(2), byteorder="little")
+                offsets.append(item_offset)
+            for idx in range(len(offsets)):  # pylint: disable=consider-using-enumerate
+                fp.seek(offsets[idx])
+                item_id = int.from_bytes(fp.read(4), byteorder="little")
+                fp.seek(offsets[idx] + 8)
+                name = b""
+                desc = b""
+                while True:
+                    byte = fp.read(1)
+                    if byte == b'\x00':  # Check if the byte is null
+                        break
+                    name += byte
+                while True:
+                    byte = fp.read(1)
+                    if byte == b'\x00':  # Check if the byte is null
+                        break
+                    desc += byte
+                try:
+                    name = name.decode("utf-8")
+                    desc = desc.decode("utf-8")
+                except Exception:
+                    pass
+                item_id_to_name_fp.write(f"{item_id} {name} {desc}\n")
+    return items

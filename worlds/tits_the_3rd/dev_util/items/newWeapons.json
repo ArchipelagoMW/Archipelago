@@ -1,0 +1,36 @@
+[
+    {
+        "type": "staff",
+        "id": 5000,
+        "name": "Test Weapon",
+        "desc": "Test Desc",
+        "range": 0,
+        "strength": 100,
+        "defence": 0,
+        "arts": 0,
+        "artDefence": 0,
+        "dexterity": 0,
+        "agility": 0,
+        "move": 0,
+        "speed": 0,
+        "sellPrice": 500,
+        "inventoryLimit": 99
+    },
+    {
+        "type": "staff",
+        "id": 5001,
+        "name": "Test Weapon",
+        "desc": "Test Desc",
+        "range": 0,
+        "strength": 100,
+        "defence": 0,
+        "arts": 0,
+        "artDefence": 0,
+        "dexterity": 0,
+        "agility": 0,
+        "move": 0,
+        "speed": 0,
+        "sellPrice": 500,
+        "inventoryLimit": 99
+    }
+]
