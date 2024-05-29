@@ -72,12 +72,19 @@ class LingoWorld(World):
             state = CollectionState(self.multiworld)
             state.collect(LingoItem("Prevent Victory", ItemClassification.progression, None, self.player), True)
 
+            # Note: relies on the assumption that real_items is a definitive list of real progression items in this
+            # world, and is not modified after being created.
             for item in self.player_logic.real_items:
                 state.collect(self.create_item(item), True)
 
-            state.sweep_for_events()
+            # Exception to the above: a forced good item is not considered a "real item", but needs to be here anyway.
+            if self.player_logic.forced_good_item != "":
+                state.collect(self.create_item(self.player_logic.forced_good_item), True)
 
-            unreachable_locations = [location for location in self.multiworld.get_locations(self.player)
+            all_locations = self.multiworld.get_locations(self.player)
+            state.sweep_for_events(locations=all_locations)
+
+            unreachable_locations = [location for location in all_locations
                                      if not state.can_reach_location(location.name, self.player)]
 
             for location in unreachable_locations:

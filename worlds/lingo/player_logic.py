@@ -467,6 +467,8 @@ class LingoPlayerLogic:
                                                                     req_panel.panel, world)
                 access_reqs.merge(sub_access_reqs)
 
+            # Evil python magic (so sayeth NewSoupVi): this checks victory_condition against the panel's location name
+            # override if it exists, or the auto-generated location name if it's None.
             if self.victory_condition == (panel_object.location_name or f"{room} - {panel}"):
                 access_reqs.postgame = True
 
