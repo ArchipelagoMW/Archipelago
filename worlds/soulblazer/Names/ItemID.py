@@ -74,6 +74,8 @@ MAGICBELL       = 0x40
 
 # TODO: extend with more rewards (DeathLink/Traps)
 #Special
+VICTORY         = 0xFA
+SOUL            = 0xFB
 REMOTE_ITEM     = 0xFC
 LAIR_RELEASE    = 0xFD
 EXP             = 0xFE

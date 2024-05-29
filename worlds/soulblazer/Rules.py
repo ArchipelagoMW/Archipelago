@@ -73,7 +73,7 @@ def has_thunder(state: CollectionState, player: int) -> bool:
 
 
 def has_magic(state: CollectionState, player: int) -> bool:
-    return state.has_any(magic_items, player)
+    return state.has(ItemName.SOUL_MAGICIAN) and state.has_any(magic_items, player)
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
@@ -94,8 +94,7 @@ rule_for_flag = {
 location_dependencies: Dict[str, List[str]] = {
     # Act 1 - Grass Valley
     NPCRewardName.TOOL_SHOP_OWNER: [NPCName.TOOL_SHOP_OWNER],
-    # TODO: figure out if we can patch it to make emblem A tile activatable without turning the water wheel
-    NPCRewardName.EMBLEM_A_TILE: [NPCName.IVY, NPCName.IVY_EMBLEM_A, NPCName.WATER_MILL],
+    NPCRewardName.EMBLEM_A_TILE: [NPCName.IVY, NPCName.IVY_EMBLEM_A],
     NPCRewardName.GOAT_PEN_CORNER: [NPCName.GOAT_HERB],
     NPCRewardName.TEDDY: [NPCName.TOOL_SHOP_OWNER, NPCName.TEDDY],
     NPCRewardName.PASS_TILE: [NPCName.IVY, NPCName.TULIP_PASS],
@@ -119,6 +118,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.PSYCHO_SWORD_SQUIRREL: [NPCName.SQUIRREL_PSYCHO_SWORD, ItemName.DELICIOUSSEEDS],
     NPCRewardName.EMBLEM_C_SQUIRREL: [NPCName.SQUIRREL_EMBLEM_C, NPCName.SQUIRREL_PSYCHO_SWORD],
     NPCRewardName.GREENWOODS_GUARDIAN: [NPCName.GREENWOODS_GUARDIAN],
+    NPCRewardName.MOLE_SOUL_OF_LIGHT: [NPCName.MOLE_SOUL_OF_LIGHT],
     ChestName.GREENWOOD_ICE_ARMOR: [NPCName.MOLE, NPCName.SQUIRREL_ICE_ARMOR, ItemName.DREAMROD],
     ChestName.GREENWOOD_TUNNELS: [NPCName.MONMO, NPCName.MOLE3],
     # Act 3 - St Elles
@@ -128,6 +128,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.LUE: [NPCName.LUE, NPCName.DOLPHIN_SAVES_LUE, NPCName.MERMAID_PEARL],
     # Logical mermaids tears. TODO: move to separate list for optional logic toggle
     NPCRewardName.MERMAID_QUEEN: [NPCName.MERMAID_QUEEN],
+    NPCRewardName.ANGELFISH_SOUL_OF_SHIELD: [NPCName.ANGELFISH_SOUL_OF_SHIELD],
     LairName.MERMAID3: [ItemName.MERMAIDSTEARS],
     LairName.MERMAID_STATUE_BLESTER: [ItemName.MERMAIDSTEARS],
     ChestName.DUREAN_CRITICAL_SWORD: [ItemName.MERMAIDSTEARS],
@@ -175,6 +176,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.MARIE: [NPCName.MARIE],
     # Potentially optional icearmor requirement.
     NPCRewardName.POWER_PLANT_CRYSTAL: [ItemName.ICEARMOR],
+    NPCRewardName.GREAT_DOOR_SOUL_OF_DETECTION: [NPCName.GREAT_DOOR_SOUL_OF_DETECTION],
     LairName.DOLL: [ItemName.ICEARMOR],
     LairName.MARIE: [ItemName.ICEARMOR],
     # Act 6 - Magridd Castle
@@ -195,6 +197,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.EMBLEM_H_TILE: [NPCName.SOLDIER_CASTLE],
     NPCRewardName.KING_MAGRIDD: [NPCName.KING_MAGRIDD, NPCName.SOLDIER_CASTLE],
     NPCRewardName.LEO_ON_THE_AIRSHIP_DECK: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK],
+    NPCRewardName.SOLDIER_SOUL_OF_REALITY: [NPCName.SOLDIER_SOUL_OF_REALITY],
     LairName.KING_MAGRIDD: [ItemName.AIRSHIPKEY],
     # Act 7 - World of Evil
     ChestName.DAZZLING_SPACE_SE: [ItemName.SOULARMOR],

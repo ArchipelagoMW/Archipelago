@@ -14,7 +14,6 @@ LEOS_PAINTING = "Act 1 - Leo's Painting"
 GREENWOOD = "Act 2 - Greenwood"
 LOST_MARSHES_SOUTH = "Act 2 - Lost Marshes South and Water/Fire Shrines"
 LOST_MARSHES_NORTH = "Act 2 - Lost Marshes North and Light Shrine"
-# TODO: use this region
 LIGHT_SHRINE_DARK = "Act 2 - Light Shrine Dark Rooms and Boss"
 
 # Act 3 Regions
@@ -52,8 +51,11 @@ LEOS_LAB_POWER_PLANT = "Act 5 - Leo's Lab Power Plant"
 # Act 6 Regions
 MAGRIDD_CASTLE_TOWN = "Act 6 - Magridd Castle Town and Basement Start"
 MAGRIDD_CASTLE_BASEMENT = "Act 6 - Magridd Castle Basement Spirit-locked"
+MAGRIDD_CASTLE_BASEMENT_INVIS = "Act 6 - Magridd Castle Basement Invisible Checks"
 MAGRIDD_CASTLE_LEFT_TOWER = "Act 6 - Magridd Castle Left Tower"
+MAGRIDD_CASTLE_LEFT_TOWER_INVIS = "Act 6 - Magridd Castle Left Tower Invisible Checks"
 MAGRIDD_CASTLE_RIGHT_TOWER = "Act 6 - Magridd Castle Right Tower"
+MAGRIDD_CASTLE_RIGHT_TOWER_INVIS = "Act 6 - Magridd Castle Right Tower Invisible Checks"
 
 # Act 7 Regions
 WORLD_OF_EVIL = "Act 7 - World of Evil"

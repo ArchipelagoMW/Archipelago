@@ -187,6 +187,12 @@ npc_reward_table = {
     NPCRewardName.ROCKBIRD_CRYSTAL                 : SoulBlazerLocationData(NPCRewardID.ROCKBIRD_CRYSTAL                , LocationType.NPC_REWARD),
     NPCRewardName.SEABED_CRYSTAL_NEAR_BLESTER      : SoulBlazerLocationData(NPCRewardID.SEABED_CRYSTAL_NEAR_BLESTER     , LocationType.NPC_REWARD),
     NPCRewardName.SEABED_CRYSTAL_NEAR_DUREAN       : SoulBlazerLocationData(NPCRewardID.SEABED_CRYSTAL_NEAR_DUREAN      , LocationType.NPC_REWARD),
+
+    NPCRewardName.MAGICIAN_SOUL                    : SoulBlazerLocationData(NPCRewardID.MAGICIAN_SOUL                   , LocationType.NPC_REWARD, RuleFlag.HAS_SWORD),
+    NPCRewardName.MOLE_SOUL_OF_LIGHT               : SoulBlazerLocationData(NPCRewardID.MOLE_SOUL_OF_LIGHT              , LocationType.NPC_REWARD),
+    NPCRewardName.ANGELFISH_SOUL_OF_SHIELD         : SoulBlazerLocationData(NPCRewardID.ANGELFISH_SOUL_OF_SHIELD        , LocationType.NPC_REWARD),
+    NPCRewardName.GREAT_DOOR_SOUL_OF_DETECTION     : SoulBlazerLocationData(NPCRewardID.GREAT_DOOR_SOUL_OF_DETECTION    , LocationType.NPC_REWARD),
+    NPCRewardName.SOLDIER_SOUL_OF_REALITY          : SoulBlazerLocationData(NPCRewardID.SOLDIER_SOUL_OF_REALITY         , LocationType.NPC_REWARD),
 }
 
 lair_table = {

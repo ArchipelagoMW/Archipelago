@@ -7,3 +7,6 @@ LAIR_ID_OFFSET: int = 1000
 
 NPC_REWARD_OFFSET: int = 500
 """ID offset for NPC rewards"""
+
+SOUL_OFFSET: int = 300
+"""ID Offset for Soul rewards."""

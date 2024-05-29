@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 from typing import Optional, TYPE_CHECKING, List, Dict
 from .Names import ItemID, ItemName, LairID, NPCName
-from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET
+from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET, SOUL_OFFSET
 from .Util import int_to_bcd
 
 if TYPE_CHECKING:
@@ -29,6 +29,8 @@ class SoulBlazerItemData:
 
         if self.id == ItemID.LAIR_RELEASE:
             return BASE_ID + LAIR_ID_OFFSET + self.operand
+        elif self.id == ItemID.SOUL:
+            return BASE_ID + SOUL_OFFSET
         return BASE_ID + self.id
 
     @property
@@ -401,9 +403,18 @@ npc_release_table = {
     NPCName.KING_MAGRIDD                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.KING_MAGRIDD                 , ItemClassification.progression),
 }
 
+souls_table = {
+    ItemName.SOUL_MAGICIAN : SoulBlazerItemData(ItemID.SOUL, 0x00, ItemClassification.progression),
+    ItemName.SOUL_LIGHT : SoulBlazerItemData(ItemID.SOUL, 0x01, ItemClassification.progression),
+    ItemName.SOUL_SHIELD : SoulBlazerItemData(ItemID.SOUL, 0x02, ItemClassification.useful),
+    ItemName.SOUL_DETECTION : SoulBlazerItemData(ItemID.SOUL, 0x03, ItemClassification.useful),
+    ItemName.SOUL_REALITY : SoulBlazerItemData(ItemID.SOUL, 0x04, ItemClassification.progression),
+}
+
 all_items_table = {
     **items_table,
     **npc_release_table,
+    **souls_table,
 }
 
 unique_items_table = {k: v for k, v in all_items_table.items() if k not in repeatable_items_table}

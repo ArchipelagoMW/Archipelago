@@ -74,6 +74,13 @@ MAGICBELL       = "Magic Bell"
 
 # TODO: extend with more rewards (Traps/DeathLink)
 # Special
+
+SOUL_MAGICIAN   = "Soul of Magician"
+SOUL_LIGHT      = "Soul of Light"
+SOUL_SHIELD     = "Soul of Shield"
+SOUL_DETECTION  = "Soul of Detection"
+SOUL_REALITY    = "Soul of Reality"
+
 LAIR_RELEASE    = "Lair Release"
 EXP             = "EXP"
 GEMS            = "GEMs"

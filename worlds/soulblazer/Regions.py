@@ -17,6 +17,7 @@ locations_for_region: Dict[str, List[str]] = {
     RegionName.TRIAL_ROOM: [
         ChestName.TRIAL_ROOM,
         NPCRewardName.MAGICIAN,
+        NPCRewardName.MAGICIAN_SOUL,
     ],
     RegionName.GRASS_VALLEY_WEST: [
         NPCRewardName.TOOL_SHOP_OWNER,
@@ -85,6 +86,7 @@ locations_for_region: Dict[str, List[str]] = {
         NPCRewardName.SHIELD_BRACELET_MOLE,
         NPCRewardName.PSYCHO_SWORD_SQUIRREL,
         NPCRewardName.EMBLEM_C_SQUIRREL,
+        NPCRewardName.MOLE_SOUL_OF_LIGHT,
         ChestName.GREENWOOD_ICE_ARMOR,
         ChestName.GREENWOOD_TUNNELS,
     ],
@@ -129,12 +131,14 @@ locations_for_region: Dict[str, List[str]] = {
         LairName.MOLE_SHIELD_BRACELET,
         LairName.DOG3,
         LairName.SQUIRREL_EMBLEM_C,
+        NPCRewardName.LOST_MARSH_CRYSTAL,
+        ChestName.LIGHT_SHRINE,
+    ],
+    RegionName.LIGHT_SHRINE_DARK: [
         LairName.CROCODILE3,
         LairName.MONMO,
         LairName.GREENWOODS_GUARDIAN,
         LairName.BIRD_RED_HOT_MIRROR,
-        NPCRewardName.LOST_MARSH_CRYSTAL,
-        ChestName.LIGHT_SHRINE,
     ],
     # Act 3 Regions
     RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA: [
@@ -158,13 +162,14 @@ locations_for_region: Dict[str, List[str]] = {
         NPCRewardName.MAGIC_FLARE_MERMAID,
         ChestName.ST_ELLIS_BIG_PEARL,
     ],
-    RegionName.SEABED_SANCTUARY_EAST: [NPCRewardName.NORTHEASTERN_MERMAID_HERB],
-    # Unneded until there are locations or exits in this region.
-    # RegionName.SEABED_SANCTUARY_SOUTHEAST: [
-    #     # Unused for now, but you need to reach here to get soul of shield.
-    # ],
+    RegionName.SEABED_SANCTUARY_EAST: [
+        NPCRewardName.NORTHEASTERN_MERMAID_HERB,
+    ],
+    RegionName.SEABED_SANCTUARY_SOUTHEAST: [
+        NPCRewardName.ANGELFISH_SOUL_OF_SHIELD,
+    ],
     RegionName.SEABED_HUB: [
-        # TODO: make bubble armor requirement for this lair optional toggle
+        # TODO: make bubble armor requirement for this lair an optional toggle
         LairName.MERMAID_STATUE_ROCKBIRD,
     ],
     RegionName.ROCKBIRD: [
@@ -284,6 +289,7 @@ locations_for_region: Dict[str, List[str]] = {
     RegionName.LEOS_LAB_2ND_FLOOR: [
         NPCRewardName.LEOS_CAT_DOOR_KEY,
         NPCRewardName.ACTINIDIA_PLANT,
+        NPCRewardName.GREAT_DOOR_SOUL_OF_DETECTION,
     ],
     RegionName.LEOS_LAB_ATTIC: [
         NPCRewardName.MARIE,
@@ -346,6 +352,7 @@ locations_for_region: Dict[str, List[str]] = {
         NPCRewardName.MAID_HERB,
         NPCRewardName.EMBLEM_H_TILE,
         NPCRewardName.KING_MAGRIDD,
+        NPCRewardName.SOLDIER_SOUL_OF_REALITY,
     ],
     RegionName.MAGRIDD_CASTLE_BASEMENT: [
         LairName.SOLDIER2,
@@ -360,6 +367,8 @@ locations_for_region: Dict[str, List[str]] = {
         LairName.SOLDIER_DOK,
         LairName.SOLDIER_PLATINUM_CARD,
         LairName.SINGER,
+    ],
+    RegionName.MAGRIDD_CASTLE_BASEMENT_INVIS: [
         ChestName.CASTLE_BASEMENT_2_N,
         ChestName.CASTLE_BASEMENT_2_SW,
         ChestName.CASTLE_BASEMENT_2_MIDDLE,
@@ -367,17 +376,22 @@ locations_for_region: Dict[str, List[str]] = {
     ],
     RegionName.MAGRIDD_CASTLE_LEFT_TOWER: [
         LairName.SOLDIER_SOUL_OF_REALITY,
-        LairName.QUEEN_MAGRIDD,
-        LairName.MAID2,
         LairName.SOLDIER_WITH_LEO,
         LairName.SOLDIER_RIGHT_TOWER,
         LairName.DR_LEO,
         LairName.SOLDIER7,
     ],
+    RegionName.MAGRIDD_CASTLE_LEFT_TOWER_INVIS: [
+        LairName.MAID2,
+        LairName.QUEEN_MAGRIDD,
+    ],
     RegionName.MAGRIDD_CASTLE_RIGHT_TOWER: [
         LairName.MAID_HERB,
         LairName.SOLDIER8,
         LairName.SOLDIER_CASTLE,
+    ],
+    # Everything past the invisible staircase
+    RegionName.MAGRIDD_CASTLE_RIGHT_TOWER_INVIS: [
         LairName.SOLDIER9,
         LairName.SOLDIER10,
         LairName.SOLDIER11,
@@ -445,6 +459,9 @@ exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.LOST_MARSHES_SOUTH: [
         ExitData(RegionName.LOST_MARSHES_NORTH, [ItemName.TURBOSLEAVES]),
     ],
+    RegionName.LOST_MARSHES_NORTH: [
+        ExitData(RegionName.LIGHT_SHRINE_DARK, [ItemName.SOUL_LIGHT]),
+    ],
     # Act 3 Exits
     RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA: [
         ExitData(RegionName.SEABED_SANCTUARY_SOUTH, [NPCName.MERMAID_BUBBLE_ARMOR]),
@@ -454,20 +471,18 @@ exits_for_region: Dict[str, List[ExitData]] = {
     ],
     RegionName.SEABED_SANCTUARY_SOUTH: [
         ExitData(RegionName.SEABED_SANCTUARY_WEST, [NPCName.MERMAID_PEARL]),
-        # Unneeded until there are any locations in SEABED_SANCTUARY_SOUTHEAST
-        # ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD]),
+        ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD]),
         ExitData(RegionName.SEABED_HUB, [ItemName.BUBBLEARMOR]),
     ],
     RegionName.SEABED_SANCTUARY_WEST: [
         ExitData(RegionName.SEABED_SANCTUARY_SOUTHWEST, [NPCName.DOLPHIN_PEARL]),
     ],
     RegionName.SEABED_SANCTUARY_EAST: [
-        # Unneded until there are locations or exits in this region.
-        # ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD, NPCName.MERMAID5])
+        ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD, NPCName.MERMAID5])
     ],
-    # Unneded until there are locations or exits in this region.
+    # Unneded until there are exits in this region.
     # RegionName.SEABED_SANCTUARY_SOUTHEAST: [
-    #    # TODO: if putting soul of shield in logic, have this connect to durean?
+    #
     # ],
     RegionName.SEABED_HUB: [
         ExitData(RegionName.ROCKBIRD, [NPCName.MERMAID_STATUE_ROCKBIRD]),
@@ -519,6 +534,15 @@ exits_for_region: Dict[str, List[ExitData]] = {
         ExitData(RegionName.MAGRIDD_CASTLE_LEFT_TOWER, [NPCName.SOLDIER_LEFT_TOWER, ItemName.PLATINUMCARD]),
         ExitData(RegionName.MAGRIDD_CASTLE_RIGHT_TOWER, [NPCName.SOLDIER_RIGHT_TOWER, ItemName.VIPCARD]),
         ExitData(RegionName.WORLD_OF_EVIL, [NPCName.SOLDIER_CASTLE, NPCName.KING_MAGRIDD, *stones_table.keys()]),
+    ],
+    RegionName.MAGRIDD_CASTLE_BASEMENT: [
+        ExitData(RegionName.MAGRIDD_CASTLE_BASEMENT_INVIS, [ItemName.SOUL_REALITY]),
+    ],
+    RegionName.MAGRIDD_CASTLE_LEFT_TOWER: [
+        ExitData(RegionName.MAGRIDD_CASTLE_LEFT_TOWER_INVIS, [ItemName.SOUL_REALITY]),
+    ],
+    RegionName.MAGRIDD_CASTLE_RIGHT_TOWER: [
+        ExitData(RegionName.MAGRIDD_CASTLE_RIGHT_TOWER_INVIS, [ItemName.SOUL_REALITY]),
     ],
     # Act 7 Exits
     RegionName.WORLD_OF_EVIL: [

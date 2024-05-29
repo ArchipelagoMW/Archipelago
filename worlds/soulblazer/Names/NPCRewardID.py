@@ -58,3 +58,10 @@ LUE                              = 0x38
 ROCKBIRD_CRYSTAL                 = 0x39
 SEABED_CRYSTAL_NEAR_BLESTER      = 0x3A
 SEABED_CRYSTAL_NEAR_DUREAN       = 0x3B
+
+# Souls
+MAGICIAN_SOUL                    = 0x3C
+MOLE_SOUL_OF_LIGHT               = 0x3D
+ANGELFISH_SOUL_OF_SHIELD         = 0x3E
+GREAT_DOOR_SOUL_OF_DETECTION     = 0x3F
+SOLDIER_SOUL_OF_REALITY          = 0x40
