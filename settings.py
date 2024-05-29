@@ -643,17 +643,6 @@ class GeneratorOptions(Group):
         PLAYTHROUGH = 2
         FULL = 3
 
-    class GlitchTriforceRoom(IntEnum):
-        """
-        Glitch to Triforce room from Ganon
-        When disabled, you have to have a weapon that can hurt ganon (master sword or swordless/easy item functionality
-        + hammer) and have completed the goal required for killing ganon to be able to access the triforce room.
-        1 -> Enabled.
-        0 -> Disabled (except in no-logic)
-        """
-        OFF = 0
-        ON = 1
-
     class PlandoOptions(str):
         """
         List of options that can be plando'd. Can be combined, for example "bosses, items"

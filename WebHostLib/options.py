@@ -11,6 +11,7 @@ import Options
 from Utils import local_path
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
+from .generate import get_meta
 
 
 def create() -> None:
@@ -50,7 +51,7 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
 
 def generate_game(options: Dict[str, Union[dict, str]]) -> Union[Response, str]:
     from .generate import start_generation
-    return start_generation(options, {"plando_options": ["items", "connections", "texts", "bosses"]})
+    return start_generation(options, get_meta({}))
 
 
 def send_yaml(player_name: str, formatted_options: dict) -> Response:
