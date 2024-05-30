@@ -2400,47 +2400,51 @@ if "Starcraft 2" in network_data_package["games"]:
 if "Final Fantasy Mystic Quest" in network_data_package["games"]:
     # Mapping from non-progressive item to progressive name and max level.
     non_progressive_items = {
-        "Steel Helm":   ("Progressive Helm",  1),
-        "Moon Helm":    ("Progressive Helm",  2),
-        "Apollo Helm":  ("Progressive Helm",  3),
+        "Steel Helm"    : ("Progressive Helm",  1),
+        "Moon Helm"     : ("Progressive Helm",  2),
+        "Apollo Helm"   : ("Progressive Helm",  3),
 
-        "Noble Armor":  ("Progressive Armor", 1),
-        "Gaia's Armor": ("Progressive Armor", 2),
+        "Noble Armor"   : ("Progressive Armor", 1),
+        "Gaia's Armor"  : ("Progressive Armor", 2),
 
-        "Steel Shield": ("Progressive Shield", 1),
-        "Venus Shield": ("Progressive Shield", 2),
-        "Aegis Shield": ("Progressive Shield", 3),
+        "Steel Shield"  : ("Progressive Shield", 1),
+        "Venus Shield"  : ("Progressive Shield", 2),
+        "Aegis Shield"  : ("Progressive Shield", 3),
 
-        "Charm":        ("Progressive Accessory", 1),
-        "Magic Ring":   ("Progressive Accessory", 2),
-        "Cupid Locket": ("Progressive Accessory", 3),
+        "Charm"         : ("Progressive Accessory", 1),
+        "Magic Ring"    : ("Progressive Accessory", 2),
+        "Cupid Locket"  : ("Progressive Accessory", 3),
 
-        "Axe":          ("Progressive Axe", 1),
-        "Battle Axe":   ("Progressive Axe", 2),
-        "Giant's Axe":  ("Progressive Axe", 3),
+        "Axe"           : ("Progressive Axe", 1),
+        "Battle Axe"    : ("Progressive Axe", 2),
+        "Giant's Axe"   : ("Progressive Axe", 3),
 
-        "Bomb":         ("Progressive Bomb", 1),
-        "Jumbo Bomb":   ("Progressive Bomb", 2),
-        "Mega Grenade": ("Progressive Bomb", 3),
+        "Bomb"          : ("Progressive Bomb", 1),
+        "Jumbo Bomb"    : ("Progressive Bomb", 2),
+        "Mega Grenade"  : ("Progressive Bomb", 3),
 
-        "Cat Claw":     ("Progressive Claw", 1),
-        "Charm Claw":   ("Progressive Claw", 2),
-        "Dragon Claw":  ("Progressive Claw", 3),
+        "Cat Claw"      : ("Progressive Claw", 1),
+        "Charm Claw"    : ("Progressive Claw", 2),
+        "Dragon Claw"   : ("Progressive Claw", 3),
 
-        "Steel Sword":  ("Progressive Sword", 1),
-        "Knight Sword": ("Progressive Sword", 2),
-        "Excalibur":    ("Progressive Sword", 3)
+        "Steel Sword"   : ("Progressive Sword", 1),
+        "Knight Sword"  : ("Progressive Sword", 2),
+        "Excalibur"     : ("Progressive Sword", 3),
+        
+        "Sky Fragment"  : ("Progressive Sky Coin", 1),
+        "Sky Coin"      : ("Progressive Sky Coin", 2)
     }
 
     progressive_item_max = {
-        "Progressive Helm":         3,
-        "Progressive Armor":        2,
-        "Progressive Shield":       3,
-        "Progressive Accessory":    3,
-        "Progressive Axe":          3,
-        "Progressive Bomb":         3,
-        "Progressive Claw":         3,
-        "Progressive Sword":        3
+        "Progressive Helm"      : 3,
+        "Progressive Armor"     : 2,
+        "Progressive Shield"    : 3,
+        "Progressive Accessory" : 3,
+        "Progressive Axe"       : 3,
+        "Progressive Bomb"      : 3,
+        "Progressive Claw"      : 3,
+        "Progressive Sword"     : 3,
+        "Progressive Sky Coin"  : 2
     }
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
@@ -2450,7 +2454,7 @@ if "Final Fantasy Mystic Quest" in network_data_package["games"]:
 
         # Completed item if we meet goal.
         if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
-            inventory["Completed"] = 1
+            inventory["IsCompleted"] = 1
 
     def render_FFMQ_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
         inventories: Dict[Tuple[int, int], Counter[str]] = {
