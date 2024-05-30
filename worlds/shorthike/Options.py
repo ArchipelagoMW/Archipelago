@@ -114,7 +114,11 @@ class ShopCheckLogic(Choice):
     default = 1
 
 class MinShopCheckLogic(Choice):
-    """Determines the minimum cost of a shop item that will have the shop check logic applied to it. If the cost of a shop item is less than this value, no items will be required to access it."""
+    """
+    Determines the minimum cost of a shop item that will have the shop check logic applied to it.
+    If the cost of a shop item is less than this value, no items will be required to access it.
+    This is based on the vanilla prices of the shop item. The set cost multiplier will not affect this value.
+    """
     display_name = "Minimum Shop Check Logic Application"
     option_40_coins = 0
     option_100_coins = 1
