@@ -966,8 +966,8 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return kerrigan_level >= 35
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
-        completed = len([(mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
-                         for mission_id in ctx.mission_id_to_location_ids])
+        completed = sum((mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
+                         for mission_id in ctx.mission_id_to_location_ids)
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
