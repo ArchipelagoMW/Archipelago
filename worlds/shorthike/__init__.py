@@ -55,6 +55,7 @@ class ShortHikeWorld(World):
         return ShortHikeItem(name, classification, item_id, player=self.player)
 
     def create_items(self) -> None:
+        itempool = []
         for item in item_table:
             count = item["count"]
             
@@ -62,26 +63,28 @@ class ShortHikeWorld(World):
                 continue
             else:
                 for i in range(count):
-                    self.multiworld.itempool.append(self.create_item(item["name"]))
+                    itempool.append(self.create_item(item["name"]))
  
         feather_count = self.options.golden_feathers
         if self.options.goal == 1 or self.options.goal == 3:
             if feather_count < 12:
                 feather_count = 12
 
-        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(feather_count)]
-        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers)]
-        self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets)]
-        self.multiworld.itempool += [self.create_item("Stick") for _ in range(self.options.sticks)]
-        self.multiworld.itempool += [self.create_item("Toy Shovel") for _ in range(self.options.toy_shovels)]
+        itempool += [self.create_item("Golden Feather") for _ in range(feather_count)]
+        itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers)]
+        itempool += [self.create_item("Bucket") for _ in range(self.options.buckets)]
+        itempool += [self.create_item("Stick") for _ in range(self.options.sticks)]
+        itempool += [self.create_item("Toy Shovel") for _ in range(self.options.toy_shovels)]
 
         if self.options.random_walkie_talkie:
-            self.multiworld.itempool.append(self.create_item("Walkie Talkie"))
+            itempool.append(self.create_item("Walkie Talkie"))
         else:
             self.multiworld.get_location("Lose Race Gift", self.player).place_locked_item(self.create_item("Walkie Talkie"))
 
-        junk = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.multiworld.itempool)
-        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
+        junk = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+        itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
+
+        self.multiworld.itempool += itempool
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)

@@ -13,7 +13,7 @@ def create_rules(self, location_table):
                 lambda state: state.has("Shovel", player))
 
         # Shop Rules
-        if loc["purchase"] > 0 and not options.coins_in_shops:
+        if loc["purchase"] and not options.coins_in_shops:
             forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups['Coins'], player)
         if loc["purchase"] >= get_min_shop_logic_cost(self) and options.shop_check_logic != 0:
             if options.shop_check_logic == 1 or options.shop_check_logic == 2:

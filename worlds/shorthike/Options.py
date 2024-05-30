@@ -23,7 +23,7 @@ class CoinsInShops(Toggle):
 
 class GoldenFeathers(Range):
     """Number of Golden Feathers in the item pool.
-    (Note that for the Photo and Help Everyone goals, a minimum of 12 Golden Feathers is enforced)"""
+(Note that for the Photo and Help Everyone goals, a minimum of 12 Golden Feathers is enforced)"""
     display_name = "Golden Feathers"
     range_start = 0
     range_end = 20
@@ -92,7 +92,7 @@ class FillerCoinAmount(Choice):
 
 class RandomWalkieTalkie(DefaultOnToggle):
     """When enabled, the Walkie Talkie item will be placed into the item pool. Otherwise, it will be placed in its vanilla location.
-    This item usually allows the player to locate Avery around the map or restart a race."""
+This item usually allows the player to locate Avery around the map or restart a race."""
     display_name = "Randomize Walkie Talkie"
 
 class EasierRaces(Toggle):
@@ -110,7 +110,7 @@ class ShopCheckLogic(Choice):
     default = 1
 
 class MinShopCheckLogic(Choice):
-    """Determines the minimum cost of a shop that will have the shop check logic applied to it. If the cost of a shop is less than this value, no items will be required to access it."""
+    """Determines the minimum cost of a shop item that will have the shop check logic applied to it. If the cost of a shop item is less than this value, no items will be required to access it."""
     display_name = "Minimum Shop Check Logic Application"
     option_40_coins = 0
     option_100_coins = 1
