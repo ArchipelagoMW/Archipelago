@@ -134,7 +134,7 @@ class SC2World(World):
 
         self.multiworld.itempool += pool
 
-    def set_rules(self):
+    def set_rules(self) -> None:
         # self.multiworld.completion_condition[self.player] = lambda state: state.has(self.victory_item, self.player)
         self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 

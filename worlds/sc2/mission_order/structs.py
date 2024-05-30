@@ -1,14 +1,14 @@
 from __future__ import annotations
-from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, NamedTuple, Union, TypeVar
+from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, NamedTuple, Union, TypeVar, TYPE_CHECKING
 from collections.abc import Iterable
 from enum import IntEnum
 
-from BaseClasses import Region, Location, CollectionState, Entrance, ItemClassification
-from ..mission_tables import SC2Mission, SC2Race, SC2Campaign, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
+from BaseClasses import Region, Location, CollectionState, Entrance
+from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission
 from worlds.AutoWorld import World
 
-# TODO band-aid for ..locations circular import
-LocationData = Any
+if TYPE_CHECKING:
+    from ..locations import LocationData
 
 class Difficulty(IntEnum):
     RELATIVE = 0
@@ -102,7 +102,7 @@ class SC2MOGenMissionPools:
     _used_flags: Dict[MissionFlag, int]
     _used_missions: Set[SC2Mission]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.master_list = {mission.id for mission in SC2Mission}
         self.difficulty_pools = {
             diff: {mission.id for mission in SC2Mission if mission.pool + 1 == diff}
@@ -111,13 +111,13 @@ class SC2MOGenMissionPools:
         self._used_flags = {}
         self._used_missions = set()
 
-    def set_exclusions(self, excluded: List[str], unexcluded: List[str]):
+    def set_exclusions(self, excluded: List[str], unexcluded: List[str]) -> None:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
         from appearing in the mission order."""
         total_exclusions = [lookup_name_to_mission[name] for name in excluded if name not in unexcluded]
         self.master_list.difference_update(total_exclusions)
 
-    def move_mission(self, mission: SC2Mission, old_diff: Difficulty, new_diff: Difficulty):
+    def move_mission(self, mission: SC2Mission, old_diff: Difficulty, new_diff: Difficulty) -> None:
         """Changes the difficulty of the given `mission`. Does nothing if the mission is not allowed to appear
         or if it isn't set to the `old_diff` difficulty."""
         if mission.id in self.master_list and mission.id in self.difficulty_pools[old_diff]:
@@ -137,7 +137,7 @@ class SC2MOGenMissionPools:
         """Returns a set of all missions used in the mission order."""
         return self._used_missions
 
-    def pull_specific_mission(self, mission: SC2Mission):
+    def pull_specific_mission(self, mission: SC2Mission) -> None:
         """Marks the given mission as present in the mission order."""
         # Remove the mission from the master list and whichever difficulty pool it is in
         if mission.id in self.master_list:
@@ -148,7 +148,7 @@ class SC2MOGenMissionPools:
                     break
         self._add_mission_stats(mission)
     
-    def _add_mission_stats(self, mission: SC2Mission):
+    def _add_mission_stats(self, mission: SC2Mission) -> None:
         # Update used flag counts & missions
         for flag in mission.flags:
             self._used_flags.setdefault(flag, 0)
@@ -166,14 +166,14 @@ class SC2MOGenMissionPools:
         else:
             pool = base_pool
         
-        difficulty_pools = {
+        difficulty_pools: Dict[int, List[int]] = {
             diff: list(pool.intersection(self.difficulty_pools[diff]))
             for diff in Difficulty if diff != Difficulty.RELATIVE
         }
 
         # Iteratively look down and up around the slot's desired difficulty
         # Either a difficulty with valid missions is found, or an error is raised
-        final_pool = []
+        final_pool: List[int] = []
         final_difficulty = Difficulty.RELATIVE
         desired_diff = slot.option_difficulty
         diff_offset = 0
@@ -182,11 +182,11 @@ class SC2MOGenMissionPools:
             higher_diff = min(desired_diff + diff_offset, 5)
             final_pool = difficulty_pools[lower_diff]
             if len(final_pool) > 0:
-                final_difficulty = lower_diff
+                final_difficulty = Difficulty(lower_diff)
                 break
             final_pool = difficulty_pools[higher_diff]
             if len(final_pool) > 0:
-                final_difficulty = higher_diff
+                final_difficulty = Difficulty(higher_diff)
                 break
             if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
                 raise Exception(f"Slot in campaign \"{slot.parent_campaign.option_name}\" and layout \"{slot.parent_layout.option_name}\" ran out of possible missions to place.")
@@ -301,7 +301,7 @@ class SC2MissionOrder:
                     cur_missions.update(mission.next.difference(seen_missions))
                     mission.make_connections(world, names)
         
-    def fill_min_steps(self):
+    def fill_min_steps(self) -> None:
         steps = 0
 
         cur_campaigns: Set[SC2MOGenCampaign] = set()
@@ -326,15 +326,15 @@ class SC2MissionOrder:
                 cur_layouts[campaign.option_name] = set()
         next_campaigns.difference_update(cur_campaigns)
         next_campaigns.update(new_campaigns)
-        for campaign in next_layouts:
+        for campaign_name, layouts in next_layouts.items():
             new_layouts: Set[SC2MOGenLayout] = set()
-            for layout in next_layouts[campaign]:
-                if layout.is_unlocked(beaten_layouts[campaign], beaten_missions):
-                    cur_layouts[campaign].add(layout)
+            for layout in layouts:
+                if layout.is_unlocked(beaten_layouts[campaign_name], beaten_missions):
+                    cur_layouts[campaign_name].add(layout)
                     new_layouts.update(layout.next)
                     next_missions.update(layout.entrances)
-            next_layouts[campaign].difference_update(cur_layouts[campaign])
-            next_layouts[campaign].update(new_layouts)
+            layouts.difference_update(cur_layouts[campaign_name])
+            layouts.update(new_layouts)
         
         # Sanity check: Can any missions be accessed?
         if len(next_missions) == 0:
@@ -380,15 +380,15 @@ class SC2MissionOrder:
                     cur_layouts[campaign.option_name] = set()
             next_campaigns.difference_update(cur_campaigns)
             next_campaigns.update(new_campaigns)
-            for campaign in next_layouts:
+            for campaign_name, layouts in next_layouts.items():
                 new_layouts: Set[SC2MOGenLayout] = set()
-                for layout in next_layouts[campaign]:
-                    if layout.is_unlocked(beaten_layouts[campaign], beaten_missions):
-                        cur_layouts[campaign].add(layout)
+                for layout in layouts:
+                    if layout.is_unlocked(beaten_layouts[campaign_name], beaten_missions):
+                        cur_layouts[campaign_name].add(layout)
                         new_layouts.update(layout.next)
                         next_missions.update(layout.entrances)
-                next_layouts[campaign].difference_update(cur_layouts[campaign])
-                next_layouts[campaign].update(new_layouts)
+                layouts.difference_update(cur_layouts[campaign_name])
+                layouts.update(new_layouts)
         
             # Remove fully beaten campaigns & layouts
             done_campaigns: Set[SC2MOGenCampaign] = set()
@@ -410,7 +410,7 @@ class SC2MissionOrder:
             cur_campaigns.difference_update(done_campaigns)
         self.max_steps = steps - 1
     
-    def resolve_difficulties(self):
+    def resolve_difficulties(self) -> None:
         for campaign in self.campaigns:
             (campaign_sorted, campaign_fixed) = campaign.resolve_difficulties(self.max_steps)
             self.fixed_missions.update(campaign_fixed)
@@ -571,7 +571,7 @@ class SC2MissionOrder:
 
     def fill_missions(
             self, world: World, locked_missions: List[str],
-            locations: Tuple[LocationData], location_cache: List[Location]
+            locations: Tuple['LocationData', ...], location_cache: List[Location]
     ):
         locations_per_region = get_locations_per_region(locations)
         regions: List[Region] = [create_region(world, locations_per_region, location_cache, "Menu")]
@@ -783,7 +783,7 @@ class SC2MOGenLayout:
 
         # Build base layout
         self.layout_type: LayoutType = self.option_type(self.option_size, self.option_limit)
-        mission_factory = lambda: SC2MOGenMission(parent_campaign, self, self.option_mission_pool)
+        mission_factory = lambda: SC2MOGenMission(parent_campaign, self, set(self.option_mission_pool))
         self.missions = self.layout_type.make_slots(mission_factory)
         for (slot, mission_data) in data.items():
             if type(slot) == int:
@@ -907,7 +907,7 @@ class SC2MOGenLayout:
             sorted_missions[mission.option_difficulty].add(mission)
         return (sorted_missions, fixed_missions)
 
-    def get_slot_data(self) -> List[List[int, Dict[str, Any]]]:
+    def get_slot_data(self) -> List[List[Tuple[int, Dict[str, Any]]]]:
         mission_slots = self.layout_type.get_slot_data(self.missions)
         return [[(-1 if row.option_empty else row.mission.id, row.get_slot_requirements()._asdict()) for row in column] for column in mission_slots]
     
@@ -974,7 +974,7 @@ class SC2MOGenMission:
     
     def set_mission(
             self, world: World, mission: SC2Mission,
-            locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location]
+            locations_per_region: Dict[str, List['LocationData']], location_cache: List[Location]
     ):
         self.mission = mission
         self.region = create_region(world, locations_per_region, location_cache,
@@ -1083,11 +1083,12 @@ class MissionRequirements(NamedTuple):
     layout_required: List[Set[int]] # Parent layout's previous layouts' exit missions
     layout_count: int # Beat this many sets from the above list
 
+    @staticmethod
     def empty() -> MissionRequirements:
         return MissionRequirements(set(), set(), "", 0, [], 0, [], 0)
 
 # TODO band-aid for ..regions circular import
-def create_location(player: int, location_data: LocationData, region: Region,
+def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
@@ -1101,7 +1102,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
     return location
 
 
-def create_region(world: World, locations_per_region: Dict[str, List[LocationData]],
+def create_region(world: World, locations_per_region: Dict[str, List['LocationData']],
                   location_cache: List[Location], name: str) -> Region:
     region = Region(name, world.player, world.multiworld)
 
@@ -1134,8 +1135,8 @@ def connect(world: World, used_names: Dict[str, int], source: str, target: str,
     connection.connect(target_region)
 
 
-def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
-    per_region: Dict[str, List[LocationData]] = {}
+def get_locations_per_region(locations: Tuple['LocationData', ...]) -> Dict[str, List['LocationData']]:
+    per_region: Dict[str, List['LocationData']] = {}
 
     for location in locations:
         per_region.setdefault(location.region, []).append(location)

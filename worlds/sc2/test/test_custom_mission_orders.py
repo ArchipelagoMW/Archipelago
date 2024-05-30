@@ -84,5 +84,6 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
         flags = self.world.custom_mission_order.get_used_flags()
         self.assertEqual(flags[MissionFlag.Terran], 13)
         self.assertEqual(flags[MissionFlag.Protoss], 2)
-        self.assertEqual(flags[MissionFlag.Zerg], 0)
-        self.assertEqual(len(self.world.custom_mission_order.get_used_missions()), len(self.multiworld.regions))
+        self.assertEqual(flags.get(MissionFlag.Zerg, 0), 0)
+        sc2_regions = set(self.multiworld.regions.region_cache[self.player]) - {"Menu"}
+        self.assertEqual(len(self.world.custom_mission_order.get_used_missions()), len(sc2_regions))
