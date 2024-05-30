@@ -2511,6 +2511,11 @@ if "Hollow Knight" in network_data_package["games"]:
     }
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        # Creating logic for splittet cloak
+        #         Right 0                 1                  2
+        # Left 0  no dash                 right dash        right shade, no left
+        # 1       left dash               left right        shade both
+        # 2       shade left, no right    shade both        -
         if inventory["Left_Mothwing_Cloak"] >= 1 and inventory["Right_Mothwing_Cloak"] >= 1:
             inventory["Mothwing_Cloak"] = 1
 
@@ -2533,13 +2538,17 @@ if "Hollow Knight" in network_data_package["games"]:
                 inventory["Left_Mothwing_Cloak"] != inventory["Right_Mothwing_Cloak"] and
                 tracker_data.get_slot_data(team, player)["options"]["SplitMothwingCloak"] == 1
             )
+        # End cloak logic
             
+        # Handling logic for splittet claw and Crystal Heart
         if inventory["Left_Mantis_Claw"] == 1 and inventory["Right_Mantis_Claw"] == 1:
             inventory["Mantis_Claw"] = 1
 
         if inventory["Left_Crystal_Heart"] == 1 and inventory["Right_Crystal_Heart"] == 1:
             inventory["Crystal_Heart"] = 1
+        # End claw / cdash logic
 
+        # Sum essence and count stags
         for source, essence in essences.items():
             if source in inventory:
                 inventory["Essence"] += essence
@@ -2547,7 +2556,9 @@ if "Hollow Knight" in network_data_package["games"]:
         for stag in stags:
             if stag in inventory:
                 inventory["Stag"] += 1
+        # End essence / stags
 
+        # Naildirections (bit based)
         inventory["Nail"] = 1 * inventory["Downslash"] + 2 * inventory["Leftslash"] + 4 * inventory["Upslash"] + 8 * inventory["Rightslash"]
 
         # add progressive items
@@ -2582,6 +2593,7 @@ if "Hollow Knight" in network_data_package["games"]:
             for player in players if tracker_data.get_slot_info(team, player).game == "Hollow Knight"
         }
 
+        # To handle both options as one on the page
         for (team, player), randoOptions in options.copy().items():
             randomizeEssence = 0
 
@@ -2617,10 +2629,12 @@ if "Hollow Knight" in network_data_package["games"]:
         )
 
     def render_HK_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        # Remap rando options for visualization
         options = tracker_data.get_slot_data(team, player)["options"]
         options["RandomizeDreamers_WorldSense"] = options["RandomizeDreamers"]
         options["RandomizeEssence"] = options["RandomizeBossEssence"] or options["RandomizeWhisperingRoots"]
 
+        # Creating the content for the grid placeholders
         inventory_order_template = {
             "Dreamers": { "content": ["RandomizeDreamers"] },
             "Skills":   { "content": ["RandomizeSkills", "RandomizeSwim", "RandomizeFocus"] },

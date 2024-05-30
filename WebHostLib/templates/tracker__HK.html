@@ -241,6 +241,8 @@
     </div>
 
     {% if inventory_order|length == 0 %}
+        {# Theoretical case: if there are choosen just options which are not included in inventory_order show a short message. #}
+        {# There is no way to avoid this tracker page in that case therefore the notification. #}
         <p>There is nothing randomized. So this tracker is empty.</p>
     {% else %}
         <div class="grid">
@@ -253,6 +255,7 @@
                             {% for item in randomizerGroups[option] %}
                                 {% if item in progressive_order %}
                                     {% set non_prog_item = progressive_order[item][inventory[item]] %}
+                                    {# Show either just cloak or the splitted ones (rules in Python part) #}
                                     <div class="item {{ 'hidden' if
                                                             (item == 'Progressive Cloak' and inventory["ShowCloakSplitted"]) or
                                                             (item in ('Progressive Left Cloak', 'Progressive Right Cloak') and not inventory["ShowCloakSplitted"])
@@ -264,6 +267,7 @@
                                             class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
                                         />
         
+                                        {# Show L/R indicator for splitted skill #}
                                         {% if
                                             item == 'Progressive Left Cloak' and options["SplitMothwingCloak"] == 1 or
                                             item == 'Progressive Claw' and inventory["Left_Mantis_Claw"] == 1 and inventory["Mantis_Claw"] == 0 and options["SplitMantisClaw"] == 1 or
