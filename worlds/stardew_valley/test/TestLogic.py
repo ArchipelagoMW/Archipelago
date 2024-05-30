@@ -38,7 +38,7 @@ class LogicTestBase(RuleAssertMixin, TestCase):
                 continue
 
             with self.subTest(msg=bundle_item.item_name):
-                self.assertIn(bundle_item.item_name, self.logic.registry.item_rules)
+                self.assertIn(bundle_item.get_item(), self.logic.registry.item_rules)
 
     def test_given_item_rule_then_can_be_resolved(self):
         for item in self.logic.registry.item_rules.keys():

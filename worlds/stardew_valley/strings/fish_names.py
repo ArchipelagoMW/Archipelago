@@ -11,7 +11,6 @@ class Fish:
     anchovy = fish("Anchovy")
     angler = fish("Angler")
     any = fish("Any Fish")
-    blob_fish = fish("Blobfish")
     blobfish = fish("Blobfish")
     blue_discus = fish("Blue Discus")
     bream = fish("Bream")

@@ -95,7 +95,7 @@ class BundleItem:
 
     def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         if isinstance(self.source, ContentItemSource):
-            return self.item_name in content.game_items
+            return self.get_item() in content.game_items
 
         return self.source.can_appear(options)
 

@@ -111,7 +111,7 @@ void_salmon = create_fish(Fish.void_salmon, witch_swamp, season.all_seasons, 80)
 walleye = create_fish(Fish.walleye, town_river + forest_river + forest_pond + mountain_lake, season.fall, 45)
 woodskip = create_fish(Fish.woodskip, secret_woods, season.all_seasons, 50)
 
-blob_fish = create_fish(Fish.blob_fish, night_market, season.winter, 75)
+blobfish = create_fish(Fish.blobfish, night_market, season.winter, 75)
 midnight_squid = create_fish(Fish.midnight_squid, night_market, season.winter, 55)
 spook_fish = create_fish(Fish.spook_fish, night_market, season.winter, 60)
 

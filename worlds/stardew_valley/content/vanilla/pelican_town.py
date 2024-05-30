@@ -335,7 +335,7 @@ pelican_town = ContentPack(
         fish_data.void_salmon,
         fish_data.walleye,
         fish_data.woodskip,
-        fish_data.blob_fish,
+        fish_data.blobfish,
         fish_data.midnight_squid,
         fish_data.spook_fish,
 

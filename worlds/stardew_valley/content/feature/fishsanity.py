@@ -60,7 +60,7 @@ class FishsanitySpecial(FishsanityFeature):
         Fish.glacierfish,
         Fish.legend,
         Fish.mutant_carp,
-        Fish.blob_fish,
+        Fish.blobfish,
         Fish.lava_eel,
         Fish.octopus,
         Fish.scorpion_carp,

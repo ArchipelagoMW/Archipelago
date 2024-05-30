@@ -425,7 +425,7 @@ calico_egg = BundleItem(Currency.calico_egg)
 
 raccoon_crab_pot_fish_items = [periwinkle.as_amount(5), snail.as_amount(5), crayfish.as_amount(5), mussel.as_amount(5),
                                oyster.as_amount(5), cockle.as_amount(5), clam.as_amount(5)]
-raccoon_smoked_fish_items = [BundleItem(ArtisanGood.specific_smoked(fish)) for fish in
+raccoon_smoked_fish_items = [BundleItem(ArtisanGood.smoked_fish, flavor=fish) for fish in
                              [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fish.ghostfish, Fish.flounder, Fish.shad,
                               Fish.rainbow_trout, Fish.tilapia, Fish.red_mullet, Fish.tuna, Fish.midnight_carp, Fish.salmon, Fish.perch]]
 raccoon_fish_items_flat = [*raccoon_crab_pot_fish_items, *raccoon_smoked_fish_items]
@@ -433,15 +433,15 @@ raccoon_fish_items_deep = [raccoon_crab_pot_fish_items, raccoon_smoked_fish_item
 raccoon_fish_bundle_vanilla = DeepBundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_fish, raccoon_fish_items_deep, 2, 2)
 raccoon_fish_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_fish, raccoon_fish_items_flat, 3, 2)
 
-all_specific_jellies = [BundleItem(ArtisanGood.specific_jelly(fruit), source=BundleItem.Sources.content) for fruit in all_fruits]
-all_specific_pickles = [BundleItem(ArtisanGood.specific_pickles(vegetable), source=BundleItem.Sources.content) for vegetable in all_vegetables]
-all_specific_dried_fruits = [BundleItem(ArtisanGood.specific_dried(fruit), source=BundleItem.Sources.content) for fruit in all_fruits]
-all_specific_juices = [BundleItem(ArtisanGood.specific_juice(vegetable), source=BundleItem.Sources.content) for vegetable in all_vegetables]
+all_specific_jellies = [BundleItem(ArtisanGood.jelly, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits]
+all_specific_pickles = [BundleItem(ArtisanGood.pickles, flavor=vegetable, source=BundleItem.Sources.content) for vegetable in all_vegetables]
+all_specific_dried_fruits = [BundleItem(ArtisanGood.dried_fruit, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits]
+all_specific_juices = [BundleItem(ArtisanGood.juice, flavor=vegetable, source=BundleItem.Sources.content) for vegetable in all_vegetables]
 raccoon_artisan_items = [*all_specific_jellies, *all_specific_pickles, *all_specific_dried_fruits, *all_specific_juices]
 raccoon_artisan_bundle_vanilla = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_artisan, raccoon_artisan_items, 2, 2)
 raccoon_artisan_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_artisan, raccoon_artisan_items, 3, 2)
 
-all_specific_dried_mushrooms = [BundleItem(ArtisanGood.specific_dried(mushroom), source=BundleItem.Sources.content) for mushroom in all_edible_mushrooms]
+all_specific_dried_mushrooms = [BundleItem(ArtisanGood.dried_mushroom, flavor=mushroom, source=BundleItem.Sources.content) for mushroom in all_edible_mushrooms]
 raccoon_food_items = [egg.as_amount(5), cave_carrot.as_amount(5), white_algae.as_amount(5)]
 raccoon_food_items_vanilla = [all_specific_dried_mushrooms, raccoon_food_items]
 raccoon_food_items_thematic = [*all_specific_dried_mushrooms, *raccoon_food_items, brown_egg.as_amount(5), large_egg.as_amount(2), large_brown_egg.as_amount(2),
@@ -594,11 +594,11 @@ slime_farmer_items = [slime.as_amount(99), petrified_slime.as_amount(10), blue_s
                       purple_slime_egg, green_slime_egg, tiger_slime_egg]
 slime_farmer_bundle = BundleTemplate(CCRoom.pantry, BundleName.slime_farmer, slime_farmer_items, 4, 3)
 
-sommelier_items = [BundleItem(ArtisanGood.specific_wine(fruit), source=BundleItem.Sources.content) for fruit in all_fruits]
+sommelier_items = [BundleItem(ArtisanGood.wine, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits]
 sommelier_bundle = BundleTemplate(CCRoom.pantry, BundleName.sommelier, sommelier_items, 6, 3)
 
-dry_items = [BundleItem(dry_item, source=BundleItem.Sources.content)
-             for dry_item in [ArtisanGood.specific_dried(item_to_dry) for item_to_dry in [*all_fruits, *all_edible_mushrooms]]]
+dry_items = [*[BundleItem(ArtisanGood.dried_fruit, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits],
+             *[BundleItem(ArtisanGood.dried_mushroom, flavor=mushroom, source=BundleItem.Sources.content) for mushroom in all_edible_mushrooms]]
 dry_bundle = BundleTemplate(CCRoom.pantry, BundleName.dry, dry_items, 6, 3)
 
 pantry_bundles_vanilla = [spring_crops_bundle_vanilla, summer_crops_bundle_vanilla, fall_crops_bundle_vanilla,
@@ -690,8 +690,8 @@ deep_fishing_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.deep_f
 
 smokeable_fish = [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fish.ghostfish, Fish.flounder, Fish.shad, Fish.rainbow_trout, Fish.tilapia,
                   Fish.red_mullet, Fish.tuna, Fish.midnight_carp, Fish.salmon, Fish.perch]
-fish_smoker_items = [BundleItem(ArtisanGood.specific_smoked(fish)) for fish in smokeable_fish]
-fish_smoker_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.fish_smoker, fish_smoker_items, 6, 3)
+fish_smoker_items = [BundleItem(ArtisanGood.smoked_fish, flavor=fish) for fish in smokeable_fish]
+fish_smoker_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.fish_smoker, fish_smoker_items, 6, 3)
 
 fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla, ocean_fish_bundle_vanilla,
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]

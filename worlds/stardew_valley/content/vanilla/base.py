@@ -28,7 +28,7 @@ all_vegetables = (
     Vegetable.tea_leaves, Vegetable.tomato, Vegetable.unmilled_rice, Vegetable.wheat, Vegetable.yam
 )
 
-non_juiceable_vegetables = (Vegetable.hops, Vegetable.tea_leaves, Vegetable.wheat)
+non_juiceable_vegetables = (Vegetable.hops, Vegetable.tea_leaves, Vegetable.wheat, Vegetable.tea_leaves)
 
 
 # This will hold items, skills and stuff that is available everywhere across the game, but not directly needing pelican town (crops, ore, foraging, etc.)
@@ -59,11 +59,13 @@ class BaseGameContentPack(ContentPack):
             content.source_item(wine, MachineSource(item=fruit.name, machine=Machine.keg))
             content.source_item(ArtisanGood.wine, MachineSource(item=fruit.name, machine=Machine.keg))
 
-            dried = ArtisanGood.specific_dried(fruit.name)
-            content.source_item(dried, MachineSource(item=fruit.name, machine=Machine.dehydrator))
+            dried_fruit = ArtisanGood.specific_dried_fruit(fruit.name)
+            content.source_item(dried_fruit, MachineSource(item=fruit.name, machine=Machine.dehydrator))
+            content.source_item(ArtisanGood.dried_fruit, MachineSource(item=fruit.name, machine=Machine.dehydrator))
 
             jelly = ArtisanGood.specific_jelly(fruit.name)
             content.source_item(jelly, MachineSource(item=fruit.name, machine=Machine.preserves_jar))
+            content.source_item(ArtisanGood.jelly, MachineSource(item=fruit.name, machine=Machine.preserves_jar))
 
         for vegetable in tuple(content.find_tagged_items(ItemTag.VEGETABLE)):
             if vegetable.name not in non_juiceable_vegetables:
@@ -73,10 +75,17 @@ class BaseGameContentPack(ContentPack):
 
             pickles = ArtisanGood.specific_pickles(vegetable.name)
             content.source_item(pickles, MachineSource(item=vegetable.name, machine=Machine.preserves_jar))
+            content.source_item(ArtisanGood.pickles, MachineSource(item=vegetable.name, machine=Machine.preserves_jar))
 
         for mushroom in tuple(content.find_tagged_items(ItemTag.EDIBLE_MUSHROOM)):
-            dried = ArtisanGood.specific_dried(mushroom.name)
-            content.source_item(dried, MachineSource(item=mushroom.name, machine=Machine.dehydrator))
+            dried_mushroom = ArtisanGood.specific_dried_mushroom(mushroom.name)
+            content.source_item(dried_mushroom, MachineSource(item=mushroom.name, machine=Machine.dehydrator))
+            content.source_item(ArtisanGood.dried_mushroom, MachineSource(item=mushroom.name, machine=Machine.dehydrator))
+
+        # for fish in tuple(content.find_tagged_items(ItemTag.FISH)):
+        #     smoked_fish = ArtisanGood.specific_smoked_fish(fish.name)
+        #     content.source_item(smoked_fish, MachineSource(item=fish.name, machine=Machine.fish_smoker))
+        #     content.source_item(ArtisanGood.smoked_fish, MachineSource(item=fish.name, machine=Machine.fish_smoker))
 
 
 base_game = BaseGameContentPack(
