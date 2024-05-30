@@ -104,27 +104,6 @@ class KH1Context(CommonContext):
                     f.close()
             
             #Handle Slot Data
-            
-            ####if "EXP Multiplier" in list(args['slot_data'].keys()):
-            ####    xp_mult = args['slot_data']["EXP Multiplier"]
-            ####else:
-            ####    xp_mult = 1.0
-            ####with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
-            ####    f.write(str(xp_mult))
-            ####    f.close()
-            ####
-            ####if "Required Reports" in list(args['slot_data'].keys()):
-            ####    reports_required = args['slot_data']["Required Reports"]
-            ####else:
-            ####    reports_required = 4
-            ####with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
-            ####    f.write(str(reports_required))
-            ####    f.close()
-            ####if "Keyblade Stats" in list(args['slot_data'].keys()):
-            ####    keyblade_stats = args['slot_data']["Keyblade Stats"]
-            ####    with open(os.path.join(self.game_communication_path, "keyblade_stats.cfg"), 'w') as f:
-            ####        f.write(str(keyblade_stats))
-            ####        f.close()
             for key in list(args['slot_data'].keys()):
                 with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
                     f.write(str(args['slot_data'][key]))
@@ -237,6 +216,12 @@ async def game_watcher(ctx: KH1Context):
                     if st != "nil":
                         if timegm(time.strptime(st, '%Y%m%d%H%M%S')) > ctx.last_death_link and int(time.time()) % int(timegm(time.strptime(st, '%Y%m%d%H%M%S'))) < 10:
                             await ctx.send_death(death_text = "Sora was defeated!")
+                if file.find("insynthshop") > -1:
+                    await ctx.send_msgs([{
+                        "cmd": "LocationScouts",
+                        "locations": [2656401,2656402,2656403,2656404,2656405,2656406],
+                        "create_as_hint": 2
+                    }])
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
