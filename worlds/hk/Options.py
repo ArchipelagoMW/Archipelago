@@ -105,7 +105,7 @@ default_on = {
     "RandomizeVesselFragments",
     "RandomizeCharmNotches",
     "RandomizePaleOre",
-    "RandomizeRancidEggs"
+    "RandomizeRancidEggs",
     "RandomizeRelics",
     "RandomizeStags",
     "RandomizeLifebloodCocoons"
