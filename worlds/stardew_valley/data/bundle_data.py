@@ -571,7 +571,8 @@ artisan_bundle_thematic = BundleTemplate.extend_from(artisan_bundle_vanilla, art
 rare_crops_items = [ancient_fruit, sweet_gem_berry]
 rare_crops_bundle = BundleTemplate(CCRoom.pantry, BundleName.rare_crops, rare_crops_items, 2, 2)
 
-fish_farmer_items = [roe.as_amount(15), aged_roe.as_amount(15), squid_ink]
+# all_specific_roes = [BundleItem(AnimalProduct.roe, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fish]
+fish_farmer_items = [roe.as_amount(15), aged_roe.as_amount(5), squid_ink, caviar.as_amount(5)]
 fish_farmer_bundle = BundleTemplate(CCRoom.pantry, BundleName.fish_farmer, fish_farmer_items, 3, 2)
 
 garden_items = [tulip, blue_jazz, summer_spangle, sunflower, fairy_rose, poppy, bouquet]
