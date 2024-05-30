@@ -2,7 +2,6 @@ from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union, TYP
 import math
 
 from BaseClasses import Region, Entrance, Location, CollectionState
-from .locations import LocationData
 from .options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
     GridTwoStartPositions, static_mission_orders, dynamic_mission_orders
 from .mission_tables import MissionInfo, vanilla_mission_req_table, \
@@ -13,6 +12,7 @@ from .pool_filter import filter_missions
 
 if TYPE_CHECKING:
     from . import SC2World
+    from .locations import LocationData
 
 
 class SC2MissionSlot(NamedTuple):
@@ -21,7 +21,7 @@ class SC2MissionSlot(NamedTuple):
 
 
 def create_regions(
-    world: 'SC2World', locations: Tuple[LocationData, ...], location_cache: List[Location]
+    world: 'SC2World', locations: Tuple['LocationData', ...], location_cache: List[Location]
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     """
     Creates region connections by calling the multiworld's `connect()` methods
@@ -41,7 +41,7 @@ def create_regions(
 
 def create_vanilla_regions(
     world: 'SC2World',
-    locations: Tuple[LocationData, ...],
+    locations: Tuple['LocationData', ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
@@ -273,7 +273,7 @@ def create_vanilla_regions(
 
 def create_grid_regions(
     world: 'SC2World',
-    locations: Tuple[LocationData, ...],
+    locations: Tuple['LocationData', ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
@@ -403,7 +403,7 @@ def make_dynamic_mission_order(
 
 def create_structured_regions(
     world: 'SC2World',
-    locations: Tuple[LocationData, ...],
+    locations: Tuple['LocationData', ...],
     location_cache: List[Location],
     mission_order_type: MissionOrder,
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
@@ -642,7 +642,7 @@ def setup_final_location(final_location, location_cache):
             break
 
 
-def create_location(player: int, location_data: LocationData, region: Region,
+def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
@@ -652,7 +652,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
     return location
 
 
-def create_region(world: 'SC2World', locations_per_region: Dict[str, List[LocationData]],
+def create_region(world: 'SC2World', locations_per_region: Dict[str, List['LocationData']],
                   location_cache: List[Location], name: str) -> Region:
     region = Region(name, world.player, world.multiworld)
 
@@ -685,8 +685,8 @@ def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: 
     connection.connect(target_region)
 
 
-def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
-    per_region: Dict[str, List[LocationData]] = {}
+def get_locations_per_region(locations: Tuple['LocationData', ...]) -> Dict[str, List['LocationData']]:
+    per_region: Dict[str, List['LocationData']] = {}
 
     for location in locations:
         per_region.setdefault(location.region, []).append(location)

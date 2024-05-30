@@ -9,6 +9,7 @@ def _empty_slot() -> SC2MOGenMission:
     slot.option_empty = True
     return slot
 
+
 class Column(LayoutType):
     """Linear layout. Default entrance is index 0 at the top, default exit is index `size - 1` at the bottom."""
 
@@ -37,7 +38,8 @@ class Grid(LayoutType):
             self.width = limit
             self.height = math.ceil(size / self.width)
             self.num_corners_to_remove = self.height * limit - size
-        
+
+    @staticmethod
     def get_factors(number: int) -> Tuple[int, int]:
         """
         Simple factorization into pairs of numbers (x, y) using a sieve method.
@@ -51,6 +53,7 @@ class Grid(LayoutType):
                 return divisor, quotient
         return 1, number
 
+    @staticmethod
     def get_grid_dimensions(size: int) -> Tuple[int, int, int]:
         """
         Get the dimensions of a grid mission order from the number of missions, int the format (x, y, error).

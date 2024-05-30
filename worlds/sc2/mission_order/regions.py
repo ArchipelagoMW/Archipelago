@@ -1,13 +1,16 @@
 import typing
 
-from worlds.AutoWorld import World
 from ..locations import LocationData, Location
 from ..mission_tables import SC2Mission
 from ..options import get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, kerrigan_unit_available, TakeOverAIAllies
 from .structs import SC2MissionOrder, Difficulty
 
+if typing.TYPE_CHECKING:
+    from .. import SC2World
+
+
 def mission_order_regions(
-    world: World, locations: typing.Tuple[LocationData, ...], location_cache: typing.List[Location]
+    world: 'SC2World', locations: typing.Tuple[LocationData, ...], location_cache: typing.List[Location]
 ):
     # 'locations' contains both actual game locations and beat event locations for all mission regions
     # When a region (mission) is accessible, all its locations are potentially accessible
@@ -17,7 +20,7 @@ def mission_order_regions(
     # Event locations contain an event item of (by default) identical name,
     # which Archipelago's generator will consider part of the logical inventory
     # whenever the event location becomes accessible
-    mission_order = SC2MissionOrder(world, get_option_value(world, "custom_mission_order"))
+    mission_order = SC2MissionOrder(world, world.options.custom_mission_order.value)
 
     # Set up mission pools
     mission_order.mission_pools.set_exclusions([], []) # TODO set excluded + unexcluded
@@ -36,7 +39,7 @@ def mission_order_regions(
     
     return mission_order
 
-def adjust_mission_pools(world: World, mission_order: SC2MissionOrder):
+def adjust_mission_pools(world: 'SC2World', mission_order: SC2MissionOrder):
     pools = mission_order.mission_pools
     # Mission pool changes
     adv_tactics = get_option_value(world, "required_tactics") != RequiredTactics.option_standard
