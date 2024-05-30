@@ -19,7 +19,7 @@ The locations in the randomizer are:
 - Li cave
 - Every Transportation Turtle (also called transturtle)
 - Locations where you get songs:
-    * Erulian spirit cristal
+    * Erulian spirit crystal
     * Energy status mini-boss
     * Beating Mithalan God boss
     * Fish cave puzzle

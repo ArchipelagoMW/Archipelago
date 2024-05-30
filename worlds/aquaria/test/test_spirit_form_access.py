@@ -20,17 +20,17 @@ class SpiritFormAccessTest(AquariaTestBase):
             "Abyss right area, bulb behind the rock in the whale room",
             "The whale, Verse egg",
             "Ice cave, bulb in the room to the right",
-            "Ice cave, First bulbs in the top exit room",
-            "Ice cave, Second bulbs in the top exit room",
-            "Ice cave, third bulbs in the top exit room",
+            "Ice cave, first bulb in the top exit room",
+            "Ice cave, second bulb in the top exit room",
+            "Ice cave, third bulb in the top exit room",
             "Ice cave, bulb in the left room",
             "Bubble cave, bulb in the left cave wall",
-            "Bubble cave, bulb in the right cave wall (behind the ice cristal)",
+            "Bubble cave, bulb in the right cave wall (behind the ice crystal)",
             "Bubble cave, Verse egg",
-            "Sunken city left area, Girl Costume",
+            "Sunken city left area, Girl costume",
             "Beating Mantis Shrimp Prime",
             "First secret",
-            "Arnassi ruins, Arnassi Armor",
+            "Arnassi ruins, Arnassi armor",
         ]
         items = [["Spirit form"]]
         self.assertAccessDependency(locations, items)

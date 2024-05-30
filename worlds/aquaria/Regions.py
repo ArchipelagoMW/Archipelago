@@ -275,7 +275,7 @@ class AquariaRegions:
         self.openwater_br = self.__add_region("Open water bottom right area", None)
         self.skeleton_path = self.__add_region("Open water skeleton path",
                                                AquariaLocations.locations_skeleton_path)
-        self.skeleton_path_sc = self.__add_region("Open water skeleton path spirit cristal",
+        self.skeleton_path_sc = self.__add_region("Open water skeleton path spirit crystal",
                                                   AquariaLocations.locations_skeleton_path_sc)
         self.arnassi = self.__add_region("Arnassi Ruins", AquariaLocations.locations_arnassi)
         self.arnassi_path = self.__add_region("Arnassi Ruins, back entrance path",
@@ -296,7 +296,7 @@ class AquariaRegions:
         self.cathedral_l = self.__add_region("Mithalas castle", AquariaLocations.locations_cathedral_l)
         self.cathedral_l_tube = self.__add_region("Mithalas castle, plant tube entrance",
                                                   AquariaLocations.locations_cathedral_l_tube)
-        self.cathedral_l_sc = self.__add_region("Mithalas castle spirit cristal",
+        self.cathedral_l_sc = self.__add_region("Mithalas castle spirit crystal",
                                                 AquariaLocations.locations_cathedral_l_sc)
         self.cathedral_r = self.__add_region("Mithalas Cathedral",
                                              AquariaLocations.locations_cathedral_r)
@@ -359,7 +359,7 @@ class AquariaRegions:
                                              AquariaLocations.locations_octo_cave_b)
         self.veil_bl = self.__add_region("The veil bottom left area",
                                          AquariaLocations.locations_veil_bl)
-        self.veil_b_sc = self.__add_region("The veil bottom spirit cristal area",
+        self.veil_b_sc = self.__add_region("The veil bottom spirit crystal area",
                                            AquariaLocations.locations_veil_b_sc)
         self.veil_bl_fp = self.__add_region("The veil bottom left area, in the sunken ship",
                                             AquariaLocations.locations_veil_bl_fp)
@@ -1002,13 +1002,13 @@ class AquariaRegions:
 
     def __adjusting_crates_rules(self) -> None:
         """Since Crate need to be broken, add a damaging item to rules"""
-        add_rule(self.multiworld.get_location("Sunken city right area, crate close to the save cristal", self.player),
+        add_rule(self.multiworld.get_location("Sunken city right area, crate close to the save crystal", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Sunken city right area, crate in the left bottom room", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Sunken city left area, crate in the little pipe room", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Sunken city left area, crate close to the save cristal", self.player),
+        add_rule(self.multiworld.get_location("Sunken city left area, crate close to the save crystal", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Sunken city left area, crate before the bedroom", self.player),
                  lambda state: _has_damaging_item(state, self.player))
@@ -1023,7 +1023,7 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location("The veil top right area, bulb in the top of the water fall", self.player),
+        add_rule(self.multiworld.get_location("The veil top right area, bulb in the top of the waterfall", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
 
     def __adjusting_under_rock_location(self) -> None:
@@ -1046,7 +1046,7 @@ class AquariaRegions:
                                          self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Open water top left area, bulb under the rock in the left path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Kelp Forest top right area, bulb under the rock in the right path",
+        add_rule(self.multiworld.get_location("Kelp forest top right area, bulb under the rock in the right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("The veil top left area, bulb under the rock in the top right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
@@ -1094,7 +1094,7 @@ class AquariaRegions:
                  lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
 
     def __adjusting_manual_rules(self) -> None:
-        add_rule(self.multiworld.get_location("Mithalas cathedral, Mithalan Dress", self.player),
+        add_rule(self.multiworld.get_location("Mithalas cathedral, Mithalan dress", self.player),
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Open water bottom left area, bulb inside the lowest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
@@ -1102,7 +1102,7 @@ class AquariaRegions:
                  lambda state: _has_spirit_form(state, self.player))
         add_rule(self.multiworld.get_location("The veil top left area, bulb hidden behind the blocking rock", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Turtle cave, Turtle Egg", self.player),
+        add_rule(self.multiworld.get_location("Turtle cave, Turtle egg", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Abyss left area, bulb in the bottom fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
@@ -1110,9 +1110,9 @@ class AquariaRegions:
                  lambda state: _has_nature_form(state, self.player))
         add_rule(self.multiworld.get_location("Song cave, Verse egg", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Verse cave right area, Big Seed", self.player),
+        add_rule(self.multiworld.get_location("Verse cave right area, Big seed", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Arnassi ruins, Song plant spore on the top of the ruins", self.player),
+        add_rule(self.multiworld.get_location("Arnassi ruins, Song plant spore", self.player),
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Energy temple first area, bulb in the bottom room blocked by a rock",
                                          self.player), lambda state: _has_energy_form(state, self.player))
@@ -1125,7 +1125,7 @@ class AquariaRegions:
         add_rule(self.multiworld.get_location("Abyss right area, bulb behind the rock in the whale room", self.player),
                  lambda state: _has_spirit_form(state, self.player) and
                                _has_sun_form(state, self.player))
-        add_rule(self.multiworld.get_location("Arnassi ruins, Arnassi Armor", self.player),
+        add_rule(self.multiworld.get_location("Arnassi ruins, Arnassi armor", self.player),
                  lambda state: _has_fish_form(state, self.player) and
                                _has_spirit_form(state, self.player))
 
@@ -1142,22 +1142,22 @@ class AquariaRegions:
         self.multiworld.get_location("Sun temple boss area, beating Sun God",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
+        self.multiworld.get_location("Sunken city, bulb on top of the boss area",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Home water, Nautilus Egg",
+        self.multiworld.get_location("Home water, Nautilus egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Energy temple blaster room, Blaster egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Mithalas castle, beating the priests",
+        self.multiworld.get_location("Mithalas city castle, beating the priests",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Mermog cave, Piranha Egg",
+        self.multiworld.get_location("Mermog cave, Piranha egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Octopus cave, Dumbo Egg",
+        self.multiworld.get_location("Octopus cave, Dumbo egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
@@ -1175,19 +1175,19 @@ class AquariaRegions:
         self.multiworld.get_location("Sun Worm path, second cliff bulb",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("The veil top right area, bulb in the top of the water fall",
+        self.multiworld.get_location("The veil top right area, bulb in the top of the waterfall",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble cave, bulb in the left cave wall",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
+        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice crystal)",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble cave, Verse egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit crystals",
+        self.multiworld.get_location("Kelp forest bottom left area, bulb close to the spirit crystals",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Kelp forest bottom left area, Walker baby",
@@ -1196,13 +1196,13 @@ class AquariaRegions:
         self.multiworld.get_location("Sun temple, Sun key",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("The body bottom area, Mutant Costume",
+        self.multiworld.get_location("The body bottom area, Mutant costume",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Arnassi ruins, Arnassi Armor",
+        self.multiworld.get_location("Arnassi ruins, Arnassi armor",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
 

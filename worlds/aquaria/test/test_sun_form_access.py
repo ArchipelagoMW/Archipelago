@@ -16,7 +16,7 @@ class SunFormAccessTest(AquariaTestBase):
             "First secret",
             "The whale, Verse egg",
             "Abyss right area, bulb behind the rock in the whale room",
-            "Octopus cave, Dumbo Egg",
+            "Octopus cave, Dumbo egg",
             "Beating Octopus Prime",
             "Final boss area, bulb in the boss third form room",
             "Objective complete"

@@ -22,16 +22,16 @@ class FishFormAccessTest(AquariaTestBase):
             "Kelp Forest top right area, bulb in the top fish pass",
             "The veil bottom area, Verse egg",
             "Open water bottom left area, bulb inside the lowest fish pass",
-            "Kelp Forest top left area, bulb close to the Verse egg",
+            "Kelp forest top left area, bulb close to the Verse egg",
             "Kelp forest top left area, Verse egg",
             "Mermog cave, bulb in the left part of the cave",
-            "Mermog cave, Piranha Egg",
+            "Mermog cave, Piranha egg",
             "Beating Mergog",
-            "Octopus cave, Dumbo Egg",
+            "Octopus cave, Dumbo egg",
             "Octopus cave, bulb in the path below the octopus cave path",
             "Beating Octopus Prime",
             "Abyss left area, bulb in the bottom fish pass",
-            "Arnassi ruins, Arnassi Armor"
+            "Arnassi ruins, Arnassi armor"
         ]
         items = [["Fish form"]]
         self.assertAccessDependency(locations, items)

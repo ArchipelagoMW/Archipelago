@@ -18,7 +18,7 @@ class LiAccessTest(AquariaTestBase):
         locations = [
             "The body bottom area, bulb in the Jelly Zap room",
             "The body bottom area, bulb in the nautilus room",
-            "The body bottom area, Mutant Costume",
+            "The body bottom area, Mutant costume",
             "Final boss area, bulb in the boss third form room",
             "Objective complete"
         ]

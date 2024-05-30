@@ -18,7 +18,7 @@ class BindSongOptionAccessTest(AquariaTestBase):
     def test_bind_song_location(self) -> None:
         """Test locations that require Bind song with the bind song needed option activated"""
         locations = [
-            "Verse cave right area, Big Seed",
+            "Verse cave right area, Big seed",
             "Verse cave left area, bulb under the rock at the end of the path",
             "Home water, bulb under the rock in the left path from the verse cave",
             "Song cave, bulb under the rock close to the song door",
@@ -26,11 +26,11 @@ class BindSongOptionAccessTest(AquariaTestBase):
             "Naija's home, bulb under the rock at the right of the main path",
             "Home water, bulb in the path below Nautilus Prime",
             "Home water, bulb in the bottom left room",
-            "Home water, Nautilus Egg",
+            "Home water, Nautilus egg",
             "Song cave, Verse egg",
             "Energy temple first area, beating the energy statue",
             "Energy temple first area, bulb in the bottom room blocked by a rock",
-            "Energy temple first area, Energy Idol",
+            "Energy temple first area, Energy idol",
             "Energy temple second area, bulb under the rock",
             "Energy temple bottom entrance, Krotite armor",
             "Energy temple third area, bulb in the bottom path",

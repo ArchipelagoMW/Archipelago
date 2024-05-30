@@ -158,7 +158,7 @@ class AquariaWorld(World):
             self.__pre_fill_item("Transturtle Veil top right", "The veil top right area, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Open Water top right", "Open water top right area, Transturtle",
                                  precollected)
-            self.__pre_fill_item("Transturtle Forest bottom left", "Kelp Forest bottom left area, Transturtle",
+            self.__pre_fill_item("Transturtle Forest bottom left", "Kelp forest bottom left area, Transturtle",
                                  precollected)
             self.__pre_fill_item("Transturtle Home water", "Home water, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
