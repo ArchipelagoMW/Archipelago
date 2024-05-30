@@ -204,7 +204,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.mystic_syrup: self.has(Machine.tapper) & self.has(TreeSeed.mystic),
             ArtisanGood.oak_resin: self.has(Machine.tapper),
             ArtisanGood.pine_tar: self.has(Machine.tapper),
-            ArtisanGood.raisins: self.artisan.has_raisins(),
             ArtisanGood.smoked_fish: self.artisan.has_smoked_fish(),
             ArtisanGood.targeted_bait: self.artisan.has_targeted_bait(),
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),

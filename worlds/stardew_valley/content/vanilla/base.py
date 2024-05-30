@@ -59,9 +59,12 @@ class BaseGameContentPack(ContentPack):
             content.source_item(wine, MachineSource(item=fruit.name, machine=Machine.keg))
             content.source_item(ArtisanGood.wine, MachineSource(item=fruit.name, machine=Machine.keg))
 
-            dried_fruit = ArtisanGood.specific_dried_fruit(fruit.name)
-            content.source_item(dried_fruit, MachineSource(item=fruit.name, machine=Machine.dehydrator))
-            content.source_item(ArtisanGood.dried_fruit, MachineSource(item=fruit.name, machine=Machine.dehydrator))
+            if fruit.name == Fruit.grape:
+                content.source_item(ArtisanGood.raisins, MachineSource(item=fruit.name, machine=Machine.dehydrator))
+            else:
+                dried_fruit = ArtisanGood.specific_dried_fruit(fruit.name)
+                content.source_item(dried_fruit, MachineSource(item=fruit.name, machine=Machine.dehydrator))
+                content.source_item(ArtisanGood.dried_fruit, MachineSource(item=fruit.name, machine=Machine.dehydrator))
 
             jelly = ArtisanGood.specific_jelly(fruit.name)
             content.source_item(jelly, MachineSource(item=fruit.name, machine=Machine.preserves_jar))
