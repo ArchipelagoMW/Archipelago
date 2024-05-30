@@ -172,8 +172,8 @@ def get_price_multiplier(bundle_price_option: BundlePrice, is_currency: bool) ->
     if bundle_price_option == BundlePrice.option_minimum:
         return 0.1 if is_currency else 0.2
     if bundle_price_option == BundlePrice.option_maximum:
-        return 4 if is_currency else 1.8
-    price_factor = 0.4 if is_currency else 0.2
+        return 4 if is_currency else 1.4
+    price_factor = 0.4 if is_currency else (0.2 if bundle_price_option.value <= 0 else 0.1)
     price_multiplier_difference = bundle_price_option.value * price_factor
     price_multiplier = 1 + price_multiplier_difference
     return round(price_multiplier, 2)
