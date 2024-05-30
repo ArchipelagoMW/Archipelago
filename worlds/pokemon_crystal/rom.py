@@ -306,6 +306,9 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text2"] + 1)
     write_bytes(patched_rom, [world.options.red_badges - 1], data.rom_addresses["AP_Setting_RedBadges"] + 1)
 
+    trainersanity_alerts_address = data.rom_addresses["AP_Setting_TrainersanityMessages"] + 1
+    write_bytes(patched_rom, [world.options.trainersanity_alerts], trainersanity_alerts_address)
+
     for i in range(0, 16):
         address = data.rom_addresses["AP_Setting_PhoneCallTrapTexts"] + (i * 0x400)
         script = world.generated_phone_traps[i]

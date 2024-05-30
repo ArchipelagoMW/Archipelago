@@ -60,6 +60,15 @@ class Trainersanity(Toggle):
     default = 0
 
 
+class TrainersanityAlerts(Choice):
+    """Shows a message box or plays a sound for trainersanity checks"""
+    display_name = "Trainersanity"
+    default = 1
+    option_no_alerts = 0
+    option_message_box = 1
+    option_sound_only = 2
+
+
 class RandomizePokegear(Toggle):
     """Shuffles the Pokegear and cards into the pool"""
     display_name = "Randomize Pokegear"
@@ -296,6 +305,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_hidden_items: RandomizeHiddenItems
     require_itemfinder: RequireItemfinder
     trainersanity: Trainersanity
+    trainersanity_alerts: TrainersanityAlerts
     randomize_pokegear: RandomizePokegear
     randomize_starters: RandomizeStarters
     randomize_wilds: RandomizeWilds
