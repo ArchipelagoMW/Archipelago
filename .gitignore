@@ -886,3 +886,4 @@ worlds/witness/data/__pycache__/static_logic.cpython-311.pyc
 worlds/witness/data/__pycache__/utils.cpython-311.pyc
 *.pyc
 worlds/yachtdice.apworld
+GenerateManyTimes.py

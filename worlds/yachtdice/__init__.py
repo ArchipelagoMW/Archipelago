@@ -144,28 +144,22 @@ class YachtDiceWorld(World):
         self.goal_score = min(self.max_score, self.options.score_for_goal.value)
         
         weights = [
-            self.options.chance_of_dice.value,
-            self.options.chance_of_roll.value,
-            self.options.chance_of_fixed_score_multiplier.value,
-            self.options.chance_of_step_score_multiplier.value,
-            self.options.chance_of_double_category.value,
-            self.options.chance_of_points.value
+            self.options.weight_of_dice.value,
+            self.options.weight_of_roll.value,
+            self.options.weight_of_fixed_score_multiplier.value,
+            self.options.weight_of_step_score_multiplier.value,
+            self.options.weight_of_double_category.value,
+            self.options.weight_of_points.value
         ]
         
-        if self.options.chance_of_dice.value > 0:
-            if amDiceF > 1:
-                self.itempool += ["Dice Fragment"] * (amDiceF - 1)
-        if self.options.chance_of_roll.value > 0:
-            if amRollsF > 1:
-                self.itempool += ["Roll Fragment"] * (amRollsF - 1)
-        
-        
-        
-        while diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:
-            print("Max score currently ")
-            print(diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options))
-            print(self.itempool)
+        if weights[0] > 0 and amDiceF > 1:
+            self.itempool += ["Dice Fragment"] * (amDiceF - 1)
+        if weights[1] > 0 and amRollsF > 1:
+            self.itempool += ["Roll Fragment"] * (amRollsF - 1)
             
+        extraPointsAdded = 0
+        
+        while diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:     
             allitems = self.itempool + self.precollected
             dice_fragments_in_pool = allitems.count("Dice") * amDiceF + allitems.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * amDiceF:
@@ -187,13 +181,13 @@ class YachtDiceWorld(World):
                     self.itempool += ["Dice"]
                 else:
                     self.itempool += ["Dice Fragment"]
-                weights[0] /= 1.1
+                weights[0] /= (1+amDiceF)
             elif which_item_to_add == 1:
                 if amRollsF == 1:
                     self.itempool += ["Roll"]
                 else:
                     self.itempool += ["Roll Fragment"]
-                weights[1] /= 1.1
+                weights[1] /= (1+amRollsF)
             elif which_item_to_add == 2:
                 self.itempool += ["Fixed Score Multiplier"]
                 weights[2] /= 1.1
@@ -214,16 +208,25 @@ class YachtDiceWorld(World):
                     probs = [0,0.3,0.7]
                 if score_dist == 4:
                     probs = [0.3,0.4,0.3]
-                self.itempool += self.multiworld.random.choices(["1 Point", "10 Points", "100 Points"],  
-                                                                 weights = probs)
-                weights[5] /= 1.1
+                c = self.multiworld.random.choices([0,1,2], weights = probs)[0] 
+                if c == 0:
+                    self.itempool += ["1 Point"]
+                    extraPointsAdded += 1
+                    weights[5] /= 1.01
+                elif c==1:
+                    self.itempool += ["10 Points"]
+                    extraPointsAdded += 10
+                    weights[5] /= 1.1
+                elif c==2:
+                    self.itempool += ["100 Points"]
+                    extraPointsAdded += 100
+                    weights[5] /= 2
+                else:
+                    raise Exception("Unknown point value (Yacht Dice)")
+                if extraPointsAdded > 300:
+                    weights[5] = 0
             else:
                 raise Exception("Invalid index when adding new items in Yacht Dice")
-        
-            print("Max score after adding ")
-            print(self.itempool)
-            print(diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options))
-            print()
                     
         #count the number of locations in the game. extra_plando_items is set in generate_early
         #and counts number of plando items *not* from pool.
@@ -237,7 +240,7 @@ class YachtDiceWorld(World):
         #first, we flood the entire pool with extra points (useful), if that setting is chosen.
         if self.options.add_extra_points.value == 1: #all of the extra points
             already_items = len(self.itempool) + self.extra_plando_items + 1
-            self.itempool += ["Extra Point"] * min(self.number_of_locations - already_items, 100)
+            self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 100)
          
         #second, we flood the entire pool with story chapters (filler), if that setting is chosen.   
         if self.options.add_story_chapters.value == 1: #all of the story chapters
@@ -249,7 +252,7 @@ class YachtDiceWorld(World):
         #add some extra points (useful)
         if self.options.add_extra_points.value == 2: #add extra points if wanted
             already_items = len(self.itempool) + self.extra_plando_items + 1
-            self.itempool += ["Extra Point"] * min(self.number_of_locations - already_items, 10)
+            self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 10)
             
         #add some story chapters (filler)
         if self.options.add_story_chapters.value == 2: #add extra points if wanted
@@ -260,7 +263,7 @@ class YachtDiceWorld(World):
         #add some extra points if there is still room
         if self.options.add_extra_points.value == 2:
             already_items = len(self.itempool) + self.extra_plando_items + 1
-            self.itempool += ["Extra Point"] * min(self.number_of_locations - already_items, 10)
+            self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 10)
          
         #add some encouragements filler-items if there is still room
         already_items = len(self.itempool) + self.extra_plando_items + 1
@@ -363,12 +366,12 @@ class YachtDiceWorld(World):
                 "number_of_dice_fragments_per_dice",
                 "number_of_roll_fragments_per_roll",            
                 "alternative_categories",
-                "chance_of_dice",
-                "chance_of_roll",
-                "chance_of_fixed_score_multiplier",
-                "chance_of_step_score_multiplier",
-                "chance_of_double_category",
-                "chance_of_points",
+                "weight_of_dice",
+                "weight_of_roll",
+                "weight_of_fixed_score_multiplier",
+                "weight_of_step_score_multiplier",
+                "weight_of_double_category",
+                "weight_of_points",
                 "points_size",
                 "minimize_extra_items",
                 "add_extra_points",
@@ -381,7 +384,6 @@ class YachtDiceWorld(World):
         slot_data["goal_score"] = self.goal_score
         slot_data["last_check_score"] = self.max_score
         slot_data["ap_world_version"] = self.ap_world_version
-        print(1/0)
         return slot_data
 
     def create_item(self, name: str) -> Item:

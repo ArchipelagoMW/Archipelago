@@ -66,7 +66,7 @@ item_table = {
     "Story Chapter": ItemData(16871244202, ItemClassification.filler),
     "Good RNG": ItemData(16871244203, ItemClassification.filler),
     "Bad RNG": ItemData(16871244204, ItemClassification.trap),
-    "Extra Point": ItemData(16871244205, ItemClassification.useful), #not included in logic
+    "Bonus Point": ItemData(16871244205, ItemClassification.useful), #not included in logic
     
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),

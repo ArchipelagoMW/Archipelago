@@ -18,9 +18,9 @@ class gameDifficulty(Choice):
     
 class scoreForLastCheck(Range):
     """
-    The items in the itempool will always allow you to reach this score of 1000.
-    By default, the last check is at a score of 1000. 
-    However, you can set the score for last check lower. This will make the game shorter and easier.
+    The items in the item pool will always allow you to reach a score of 1000.
+    By default, the last check is also at a score of 1000. 
+    However, you can set the score for the last check to be lower. This will make the game shorter and easier.
     """
     display_name = "Score for last check"
     range_start = 500
@@ -29,8 +29,8 @@ class scoreForLastCheck(Range):
 
 class scoreForGoal(Range):
     """
-    This setting determines what score you need to get to finish the game.
-    It cannot be higher than the score for last check (if it is, it is changed automatically).
+    This setting determines what score you need to reach to finish the game.
+    It cannot be higher than the score for the last check (if it is, it is changed automatically).
     """
     display_name = "Score for goal"
     range_start = 500
@@ -40,7 +40,7 @@ class scoreForGoal(Range):
 class minimalNumberOfDiceAndRolls(Choice):
     """
     The minimal number of dice and rolls in the pool.
-    There is an option later on that, if selected, can put more dice or rolls in the pool.
+    These are guaranteed, unlike the later items.
     You can never get more than 8 dice and 5 rolls.
     You start with one dice and one roll.
     """
@@ -58,7 +58,7 @@ class numberDiceFragmentsPerDice(Range):
     Dice can be split into fragments, gathering enough will give you an extra dice. 
     You start with one dice, and there will always be one full dice in the pool. 
     The other dice are split into fragments, according to this setting. 
-    Setting this to 1 fragment per dice, just puts 'Dice' objects in the pool.
+    Setting this to 1 fragment per dice just puts 'Dice' objects in the pool.
     """
     display_name = "Number of dice fragments per dice"
     range_start = 1
@@ -70,17 +70,21 @@ class numberRollFragmentsPerRoll(Range):
     Rolls can be split into fragments, gathering enough will give you an extra roll. 
     You start with one roll, and there will always be one full roll in the pool. 
     The other three rolls are split into fragments, according to this setting.
-    Setting this to 1 fragment per roll, just puts 'Roll' objects in the pool.
+    Setting this to 1 fragment per roll just puts 'Roll' objects in the pool.
     """
     display_name = "Number of roll fragments per roll"
     range_start = 1
     range_end = 5
     default = 4
     
+"""
+Test 1 2 3
+"""
+    
 class alternativeCategories(Range):
     """
     There are 16 default categories, but there are also 16 alternative categories.
-    These alternative categories can replace the default categories.
+    These alternative categories can be randomly selected to replace the default categories.
     They are a little strange, but can give a fun new experience.
     In the game, you can hover over categories to check what they do.
     How many alternative categories would you like to see in your game?
@@ -90,83 +94,64 @@ class alternativeCategories(Range):
     range_end = 16
     default = 0    
     
+    
 class chanceOfDice(Range):
     """
-    The itempool is always filled in such a way, that you can get to a score of 1000.
-    Extra items are shuffled in the itempool that will help you on your quest.
+    The item pool is always filled in such a way that you can reach a score of 1000.
+    Extra progressive items are added that will help you on your quest.
+    You can set the weight for each extra progressive item in the following options.
     
-    The higher this chance compared to the others, the more Dice (or Dice Fragments if selected) are added.
-    And of course, more dice = more points!
+    Of course, more dice = more points!
     """
-    display_name = "Chance of adding Dice"
+    display_name = "Weight of adding Dice"
     range_start = 0
     range_end = 100
     default = 5 
     
 class chanceOfRoll(Range):
     """
-    The itempool is always filled in such a way, that you can get to a score of 1000.
-    Extra items are shuffled in the itempool that will help you on your quest.
-    
-    The higher this chance compared to the others, the more Rolls (or Roll Fragments if selected) are added.
-    And with more rolls, you'll be able to reach higher scores.
+    With more rolls, you'll be able to reach higher scores.
     """
-    display_name = "Chance of adding Roll"
+    display_name = "Weight of adding Roll"
     range_start = 0
     range_end = 100
     default = 20     
 
 class chanceOfFixedScoreMultiplier(Range):
     """
-    The itempool is always filled in such a way, that you can get to a score of 1000.
-    Extra items are shuffled in the itempool that will help you on your quest.
-    
-    The higher this chance compared to the others, the more Fixed Score Multipliers are added.
     Getting a Fixed Score Multiplier will boost all future scores by 10%.
     """
-    display_name = "Chance of adding Fixed Score Multiplier"
+    display_name = "Weight of adding Fixed Score Multiplier"
     range_start = 0
     range_end = 100
     default = 30 
     
 class chanceOfStepScoreMultiplier(Range):
     """
-    The itempool is always filled in such a way, that you can get to a score of 1000.
-    Extra items are shuffled in the itempool that will help you on your quest.
-    
-    The higher this chance compared to the others, the more Step Score Multipliers are added.
-    The Step Score Multiplier boosts your multiplier after every roll by 1%, and resets on reset.
-    So, keep high scoring categories for last to get the most of them.
+    The Step Score Multiplier boosts your multiplier after every roll by 1%, and resets on sheet reset.
+    So, keep high scoring categories for later to get the most of them.
     By default, this item is not included. It is fun however, you just need to know the above strategy.
     """
-    display_name = "Chance of adding Step Score Multiplier"
+    display_name = "Weight of adding Step Score Multiplier"
     range_start = 0
     range_end = 100
     default = 0 
     
 class chanceOfDoubleCategory(Range):
     """
-    The itempool is always filled in such a way, that you can get to a score of 1000.
-    Extra items are shuffled in the itempool that will help you on your quest.
-    
-    The higher this chance compared to the others, the more frequently categories will appear multiple times.
-    Getting a category for the second time, gives a x2 multiplier for that category.
-    And getting the category again will double it again!
+    This option allows categories to appear multiple times.
+    Each time you get a category after the first, its score value gets doubled.
     """
-    display_name = "Chance of adding Double Category"
+    display_name = "Weight of adding Category copy"
     range_start = 0
     range_end = 100
     default = 50
     
 class chanceOfPoints(Range):
     """
-    The itempool is always filled in such a way, that you can get to a score of 1000.
-    Extra items are shuffled in the itempool that will help you on your quest.
-    
-    The higher this chance compared to the others, the more points are added into the pool.
-    And getting points gives you... points. You can get 1 point, 10 points, and even 100 points.
+    Getting points gives you... points. You can get 1 point, 10 points, and even 100 points.
     """
-    display_name = "Chance of adding Points"
+    display_name = "Weight of adding Points"
     range_start = 0
     range_end = 100
     default = 20    
@@ -174,7 +159,7 @@ class chanceOfPoints(Range):
 class pointsSize(Choice):
     """
     If you choose to add points to the item pool, do you prefer many small points, 
-    a few larger points, or a mix of both?
+    medium size, a few larger points, or a mix of them?
     """
     display_name = "Size of points"
     option_small = 1
@@ -185,8 +170,8 @@ class pointsSize(Choice):
     
 class minimizeExtraItems(Choice):
     """
-    Besides necessary items, Yacht Dice needs extra items (see below) in the item pool to ensure success in generation.
-    It is possible however to decrease the number of extra items,
+    Besides necessary items, Yacht Dice has extra items in the item pool.
+    It is possible however to decrease the number of extra items
     by putting categories Fives, Sixes and Pair early into the playthrough. Would you like to do this?
     """
     display_name = "Minimize extra items"
@@ -224,7 +209,7 @@ class addStoryChapters(Choice):
     option_all_of_it = 1
     option_sure = 2
     option_never = 3
-    default = 2
+    default = 3
     
 class whichStory(Choice):
     """
@@ -257,12 +242,12 @@ class YachtDiceOptions(PerGameCommonOptions):
     alternative_categories: alternativeCategories
     
     #the following options determine what extra items are shuffled into the pool:
-    chance_of_dice: chanceOfDice
-    chance_of_roll: chanceOfRoll
-    chance_of_fixed_score_multiplier: chanceOfFixedScoreMultiplier
-    chance_of_step_score_multiplier: chanceOfStepScoreMultiplier
-    chance_of_double_category: chanceOfDoubleCategory
-    chance_of_points: chanceOfPoints
+    weight_of_dice: chanceOfDice
+    weight_of_roll: chanceOfRoll
+    weight_of_fixed_score_multiplier: chanceOfFixedScoreMultiplier
+    weight_of_step_score_multiplier: chanceOfStepScoreMultiplier
+    weight_of_double_category: chanceOfDoubleCategory
+    weight_of_points: chanceOfPoints
     points_size: pointsSize
     
     minimize_extra_items: minimizeExtraItems

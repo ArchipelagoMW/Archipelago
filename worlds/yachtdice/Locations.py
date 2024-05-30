@@ -26,7 +26,7 @@ def all_locations_fun(max_score):
 
 #function that loads in all locations necessary for the game, so based on options.
 #will make sure that goal_score and max_score are included locations
-def ini_locations(goal_score, max_score, num_locs, dif):       
+def ini_locations(goal_score, max_score, num_locs, dif):      
     scaling = 2 #parameter that determines how many low-score location there are.
     #need more low-score locations or lower difficulties:
     if dif == 1:
@@ -49,10 +49,11 @@ def ini_locations(goal_score, max_score, num_locs, dif):
         hiscore = curscore
         scores += [curscore]
     
-    #if the goal score is not in the list, find the closest one and make it the goal.
-    if goal_score not in scores:
-        closest_num = min(scores, key=lambda x: abs(x - 500))
-        scores[scores.index(closest_num)] = goal_score
+    if goal_score != max_score:
+        #if the goal score is not in the list, find the closest one and make it the goal.
+        if goal_score not in scores:
+            closest_num = min(scores, key=lambda x: abs(x - 500))
+            scores[scores.index(closest_num)] = goal_score
         
     scores += [max_score]
     
