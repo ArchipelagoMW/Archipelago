@@ -2399,115 +2399,118 @@ if "Starcraft 2" in network_data_package["games"]:
 
 if "Hollow Knight" in network_data_package["games"]:
     # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_charms = {
+        "Fragile_Heart"         : ("Progressive Heart", 1),
+        "Unbreakable_Heart"     : ("Progressive Heart", 2),
+
+        "Fragile_Greed"         : ("Progressive Greed", 1),
+        "Unbreakable_Greed"     : ("Progressive Greed", 2),
+
+        "Fragile_Strength"      : ("Progressive Strength", 1),
+        "Unbreakable_Strength"  : ("Progressive Strength", 2),
+
+        "Grimmchild1"           : ("Progressive Grimmchild", 1),
+        "Grimmchild2"           : ("Progressive Grimmchild", 2),
+        "Grimmchild3"           : ("Progressive Grimmchild", 3),
+        "Grimmchild4"           : ("Progressive Grimmchild", 4),
+
+        "Queen_Fragment"        : ("Progressive Void Heart", 1),
+        "King_Fragment"         : ("Progressive Void Heart", 2),
+        "Kingsoul"              : ("Progressive Void Heart", 3),
+        "Void_Heart"            : ("Progressive Void Heart", 4)
+    }
+
     non_progressive_items = {
-        "Fragile_Heart":        ("Progressive Heart", 1),
-        "Unbreakable_Heart":    ("Progressive Heart", 2),
+        "Mothwing_Cloak"        : ("Progressive Cloak", 1),
+        "Shade_Cloak"           : ("Progressive Cloak", 2),
 
-        "Fragile_Greed":        ("Progressive Greed", 1),
-        "Unbreakable_Greed":    ("Progressive Greed", 2),
+        "Left_Mothwing_Cloak"   : ("Progressive Left Cloak", 1),
+        "Left_Shade_Cloak"      : ("Progressive Left Cloak", 2) ,
 
-        "Fragile_Strength":     ("Progressive Strength", 1),
-        "Unbreakable_Strength": ("Progressive Strength", 2),
+        "Right_Mothwing_Cloak"  : ("Progressive Right Cloak", 1),
+        "Right_Shade_Cloak"     : ("Progressive Right Cloak", 2),
 
-        "Grimmchild1":          ("Progressive Grimmchild", 1),
-        "Grimmchild2":          ("Progressive Grimmchild", 2),
-        "Grimmchild3":          ("Progressive Grimmchild", 3),
-        "Grimmchild4":          ("Progressive Grimmchild", 4),
+        "Left_Mantis_Claw"      : ("Progressive Claw", 1),
+        "Right_Mantis_Claw"     : ("Progressive Claw", 2),
+        "Mantis_Claw"           : ("Progressive Claw", 3),
 
-        "Queen_Fragment":       ("Progressive Void Heart", 1),
-        "Kingsoul":             ("Progressive Void Heart", 2),
-        "Void_Heart":           ("Progressive Void Heart", 3),
+        "Left_Crystal_Heart"    : ("Progressive Crystal Heart", 1),
+        "Right_Crystal_Heart"   : ("Progressive Crystal Heart", 2),
+        "Crystal_Heart"         : ("Progressive Crystal Heart", 3),
 
-        "Mothwing_Cloak":       ("Progressive Cloak", 1),
-        "Shade_Cloak":          ("Progressive Cloak", 2),
+        "Vengeful_Spirit"       : ("Progressive Fireball", 1),
+        "Shade_Soul"            : ("Progressive Fireball", 2),
 
-        "Left_Mothwing_Cloak":  ("Progressive Left Cloak", 1),
-        "Left_Shade_Cloak":     ("Progressive Left Cloak", 2) ,
+        "Desolate_Dive"         : ("Progressive Dive", 1),
+        "Descending_Dark"       : ("Progressive Dive", 2),
 
-        "Right_Mothwing_Cloak": ("Progressive Right Cloak", 1),
-        "Right_Shade_Cloak":    ("Progressive Right Cloak", 2),
+        "Howling_Wraiths"       : ("Progressive Shriek", 1),
+        "Abyss_Shriek"          : ("Progressive Shriek", 2),
 
-        "Left_Mantis_Claw":     ("Progressive Claw", 1),
-        "Right_Mantis_Claw":    ("Progressive Claw", 2),
-        "Mantis_Claw":          ("Progressive Claw", 3),
-
-        "Left_Crystal_Heart":   ("Progressive Crystal Heart", 1),
-        "Right_Crystal_Heart":  ("Progressive Crystal Heart", 2),
-        "Crystal_Heart":        ("Progressive Crystal Heart", 3),
-
-        "Vengeful_Spirit":      ("Progressive Fireball", 1),
-        "Shade_Soul":           ("Progressive Fireball", 2),
-
-        "Desolate_Dive":        ("Progressive Dive", 1),
-        "Descending_Dark":      ("Progressive Dive", 2),
-
-        "Howling_Wraiths":      ("Progressive Shriek", 1),
-        "Abyss_Shriek":         ("Progressive Shriek", 2),
-
-        "Dream_Nail":           ("Progressive Dreamnail", 1),
-        "Awoken_Dream_Nail":    ("Progressive Dreamnail", 2)
+        "Dream_Nail"            : ("Progressive Dreamnail", 1),
+        "Awoken_Dream_Nail"     : ("Progressive Dreamnail", 2)
     }
 
     progressive_item_max = {
-        "Progressive Heart":            2,
-        "Progressive Greed":            2,
-        "Progressive Strength":         2,
-        "Progressive Grimmchild":       4,
-        "Progressive Void Heart":       3,
-        "Progressive Cloak":            2,
-        "Progressive Left Cloak":       2,
-        "Progressive Right Cloak":      2,
-        "Progressive Claw":             3,
-        "Progressive Crystal Heart":    3,
-        "Progressive Fireball":         2,
-        "Progressive Dive":             2,
-        "Progressive Shriek":           2,
-        "Progressive Dreamnail":        2
+        "Progressive Heart"         : 2,
+        "Progressive Greed"         : 2,
+        "Progressive Strength"      : 2,
+        "Progressive Grimmchild"    : 4,
+        "Progressive Void Heart"    : 4,
+        "Progressive Cloak"         : 2,
+        "Progressive Left Cloak"    : 2,
+        "Progressive Right Cloak"   : 2,
+        "Progressive Claw"          : 3,
+        "Progressive Crystal Heart" : 3,
+        "Progressive Fireball"      : 2,
+        "Progressive Dive"          : 2,
+        "Progressive Shriek"        : 2,
+        "Progressive Dreamnail"     : 2
     }
 
     essences = {
-        "Boss_Essence-Elder_Hu":            100,
-        "Boss_Essence-Galien":              200,
-        "Boss_Essence-Gorb":                100,
-        "Boss_Essence-Markoth":             250,
-        "Boss_Essence-Marmu":               150,
-        "Boss_Essence-No_Eyes":             200,
-        "Boss_Essence-Xero":                100,
-        "Boss_Essence-Failed_Champion":     300,
-        "Boss_Essence-Grey_Prince_Zote":    300,
-        "Boss_Essence-Lost_Kin":            400,
-        "Boss_Essence-White_Defender":      300,
-        "Boss_Essence-Soul_Tyrant":         300,
+        "Boss_Essence-Elder_Hu"             : 100,
+        "Boss_Essence-Galien"               : 200,
+        "Boss_Essence-Gorb"                 : 100,
+        "Boss_Essence-Markoth"              : 250,
+        "Boss_Essence-Marmu"                : 150,
+        "Boss_Essence-No_Eyes"              : 200,
+        "Boss_Essence-Xero"                 : 100,
+        "Boss_Essence-Failed_Champion"      : 300,
+        "Boss_Essence-Grey_Prince_Zote"     : 300,
+        "Boss_Essence-Lost_Kin"             : 400,
+        "Boss_Essence-White_Defender"       : 300,
+        "Boss_Essence-Soul_Tyrant"          : 300,
 
-        "Whispering_Root-Ancestral_Mound":  42,
-        "Whispering_Root-City":             28,
-        "Whispering_Root-Crystal_Peak":     21,
-        "Whispering_Root-Deepnest":         45,
-        "Whispering_Root-Crossroads":       29,
-        "Whispering_Root-Leg_Eater":        20,
-        "Whispering_Root-Mantis_Village":   18,
-        "Whispering_Root-Greenpath":        44,
-        "Whispering_Root-Hive":             20,
-        "Whispering_Root-Howling_Cliffs":   46,
-        "Whispering_Root-Kingdoms_Edge":    51,
-        "Whispering_Root-Queens_Gardens":   29,
-        "Whispering_Root-Resting_Grounds":  20,
-        "Whispering_Root-Waterways":        35,
-        "Whispering_Root-Spirits_Glade":    34
+        "Whispering_Root-Ancestral_Mound"   : 42,
+        "Whispering_Root-City"              : 28,
+        "Whispering_Root-Crystal_Peak"      : 21,
+        "Whispering_Root-Deepnest"          : 45,
+        "Whispering_Root-Crossroads"        : 29,
+        "Whispering_Root-Leg_Eater"         : 20,
+        "Whispering_Root-Mantis_Village"    : 18,
+        "Whispering_Root-Greenpath"         : 44,
+        "Whispering_Root-Hive"              : 20,
+        "Whispering_Root-Howling_Cliffs"    : 46,
+        "Whispering_Root-Kingdoms_Edge"     : 51,
+        "Whispering_Root-Queens_Gardens"    : 29,
+        "Whispering_Root-Resting_Grounds"   : 20,
+        "Whispering_Root-Waterways"         : 35,
+        "Whispering_Root-Spirits_Glade"     : 34
     }
 
     stags = {
-        "Dirtmouth_Stag":       "DM",
-        "Crossroads_Stag":      "CR",
-        "Greenpath_Stag":       "GP",
-        "Queen's_Station_Stag": "QS",
-        "Queen's_Gardens_Stag": "QG",
-        "City_Storerooms_Stag": "CS",
-        "King's_Station_Stag":  "KS",
-        "Resting_Grounds_Stag": "RG",
-        "Distant_Village_Stag": "DV",
-        "Hidden_Station_Stag":  "HS",
-        "Stag_Nest_Stag":       "SN"
+        "Dirtmouth_Stag"        : "DM",
+        "Crossroads_Stag"       : "CR",
+        "Greenpath_Stag"        : "GP",
+        "Queen's_Station_Stag"  : "QS",
+        "Queen's_Gardens_Stag"  : "QG",
+        "City_Storerooms_Stag"  : "CS",
+        "King's_Station_Stag"   : "KS",
+        "Resting_Grounds_Stag"  : "RG",
+        "Distant_Village_Stag"  : "DV",
+        "Hidden_Station_Stag"   : "HS",
+        "Stag_Nest_Stag"        : "SN"
     }
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
@@ -2565,6 +2568,12 @@ if "Hollow Knight" in network_data_package["games"]:
         for item, (prog_item, level) in non_progressive_items.items():
             if item in inventory:
                 inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+                
+        # add progressive charms
+        # Charms are progressing in order, not by the one which was actually got.
+        for item, (prog_item, level) in non_progressive_charms.items():
+            if item in inventory:
+                inventory[prog_item] += 1
 
         # Completed item if we meet goal.
         if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:

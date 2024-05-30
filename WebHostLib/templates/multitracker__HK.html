@@ -419,6 +419,7 @@
 
             <tbody>
                 {% for (player_team, player), inventory in inventories.items() if team == player_team %}
+                    {# If a player has neither charms nor charm notches randomized there will not be create a row. #}
                     {% if options[(player_team, player)]["RandomizeCharms"] == 1 or options[(player_team, player)]["RandomizeCharmNotches"] == 1 %}
                         <tr>
                             <td>
