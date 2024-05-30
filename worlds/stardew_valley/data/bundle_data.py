@@ -600,7 +600,8 @@ sommelier_items = [BundleItem(ArtisanGood.wine, flavor=fruit, source=BundleItem.
 sommelier_bundle = BundleTemplate(CCRoom.pantry, BundleName.sommelier, sommelier_items, 6, 3)
 
 dry_items = [*[BundleItem(ArtisanGood.dried_fruit, flavor=fruit, source=BundleItem.Sources.content) for fruit in all_fruits],
-             *[BundleItem(ArtisanGood.dried_mushroom, flavor=mushroom, source=BundleItem.Sources.content) for mushroom in all_edible_mushrooms]]
+             *[BundleItem(ArtisanGood.dried_mushroom, flavor=mushroom, source=BundleItem.Sources.content) for mushroom in all_edible_mushrooms],
+             BundleItem(ArtisanGood.raisins, source=BundleItem.Sources.content)]
 dry_bundle = BundleTemplate(CCRoom.pantry, BundleName.dry, dry_items, 6, 3)
 
 pantry_bundles_vanilla = [spring_crops_bundle_vanilla, summer_crops_bundle_vanilla, fall_crops_bundle_vanilla,
