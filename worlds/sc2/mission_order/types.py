@@ -4,6 +4,11 @@ import math
 
 from .structs import LayoutType, SC2MOGenMission
 
+def _empty_slot() -> SC2MOGenMission:
+    slot = SC2MOGenMission(None, None, set())
+    slot.option_empty = True
+    return slot
+
 
 class Column(LayoutType):
     """Linear layout. Default entrance is index 0 at the top, default exit is index `size - 1` at the bottom."""
