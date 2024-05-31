@@ -128,7 +128,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for location_name in multiworld.worlds[player].options.priority_locations.value:
             try:
                 location = multiworld.get_location(location_name, player)
-            except:
+            except KeyError:
                 pass
             else:
                 if location.progress_type != LocationProgressType.EXCLUDED:
