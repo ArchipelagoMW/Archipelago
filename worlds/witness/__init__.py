@@ -200,7 +200,7 @@ class WitnessWorld(World):
                 self.own_itempool.append(gate_item)
                 self.items_placed_early.append(random_early_item)
 
-        # There are some really restrictive settings in The Witness.
+        # There are some really restrictive options in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
         # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
@@ -213,7 +213,7 @@ class WitnessWorld(World):
             if loc.address and not loc.item
         )
 
-        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
+        # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
         needed_size = 2
         needed_size += self.options.puzzle_randomization == "sigma_expert"

@@ -543,7 +543,7 @@ class WitnessPlayerLogic:
         )
 
     def determine_unrequired_entities(self, world: "WitnessWorld") -> None:
-        """Figure out which major items are actually useless in this world's settings"""
+        """Figure out which major items are actually useless in this world's options"""
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
