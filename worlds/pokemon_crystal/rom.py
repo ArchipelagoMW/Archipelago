@@ -178,7 +178,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         tm_bytes = [0, 0, 0, 0, 0, 0, 0, 0]
         for tm in pkmn_data.tm_hm:
             tm_num = data.tmhm[tm].tm_num
-            tm_bytes[int(tm_num / 8)] |= 1 << tm_num % 8
+            tm_bytes[int((tm_num - 1) / 8)] |= 1 << (tm_num - 1) % 8
         address = data.rom_addresses["AP_Stats_TMHM_" + pkmn_name]
         write_bytes(patched_rom, tm_bytes, address)
 
