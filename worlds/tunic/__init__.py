@@ -70,17 +70,17 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
 
     def generate_early(self) -> None:
-        if self.multiworld.plando_connections[self.player]:
-            for index, cxn in enumerate(self.multiworld.plando_connections[self.player]):
+        if self.options.plando_connections:
+            for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
                 if cxn.entrance.startswith("Shop"):
                     replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].remove(cxn)
-                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
                 elif cxn.exit.startswith("Shop"):
                     replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].remove(cxn)
-                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
 
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):

@@ -174,10 +174,8 @@ class ShuffleLadders(Toggle):
     
     
 class TUNICPlandoConnections(PlandoConnections):
-    entrances = {portal.name for portal in portal_mapping}
-    exits = {portal.name for portal in portal_mapping}
-    entrances.add("Shop Portal")
-    exits.add("Shop Portal")
+    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
 
     duplicate_exits = True
 
