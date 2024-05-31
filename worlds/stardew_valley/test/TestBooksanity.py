@@ -1,5 +1,5 @@
 from . import SVTestBase
-from ..options import ExcludeGingerIsland, Booksanity
+from ..options import ExcludeGingerIsland, Booksanity, Shipsanity
 from ..strings.ap_names.ap_option_names import OptionName
 from ..strings.book_names import Book, LostBook
 
@@ -26,6 +26,7 @@ lost_book = "Progressive Lost Book"
 class TestBooksanityNone(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_none,
     }
 
@@ -55,10 +56,23 @@ class TestBooksanityNone(SVTestBase):
         with self.subTest(lost_book):
             self.assertNotIn(lost_book, item_names)
 
+    def test_can_ship_all_books(self):
+        self.collect_everything()
+        shipsanity_prefix = "Shipsanity: "
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(shipsanity_prefix):
+                continue
+            item_to_ship = location.name[len(shipsanity_prefix):]
+            if item_to_ship not in power_books and item_to_ship not in skill_books:
+                continue
+            with self.subTest(location.name):
+                self.assert_reach_location_true(location, self.multiworld.state)
+
 
 class TestBooksanityPowers(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_power,
     }
 
@@ -88,10 +102,23 @@ class TestBooksanityPowers(SVTestBase):
         with self.subTest(lost_book):
             self.assertNotIn(lost_book, item_names)
 
+    def test_can_ship_all_books(self):
+        self.collect_everything()
+        shipsanity_prefix = "Shipsanity: "
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(shipsanity_prefix):
+                continue
+            item_to_ship = location.name[len(shipsanity_prefix):]
+            if item_to_ship not in power_books and item_to_ship not in skill_books:
+                continue
+            with self.subTest(location.name):
+                self.assert_reach_location_true(location, self.multiworld.state)
+
 
 class TestBooksanityPowersAndSkills(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_power_skill,
     }
 
@@ -121,10 +148,23 @@ class TestBooksanityPowersAndSkills(SVTestBase):
         with self.subTest(lost_book):
             self.assertNotIn(lost_book, item_names)
 
+    def test_can_ship_all_books(self):
+        self.collect_everything()
+        shipsanity_prefix = "Shipsanity: "
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(shipsanity_prefix):
+                continue
+            item_to_ship = location.name[len(shipsanity_prefix):]
+            if item_to_ship not in power_books and item_to_ship not in skill_books:
+                continue
+            with self.subTest(location.name):
+                self.assert_reach_location_true(location, self.multiworld.state)
+
 
 class TestBooksanityAll(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_all,
     }
 
@@ -153,3 +193,15 @@ class TestBooksanityAll(SVTestBase):
                 self.assertIn(f"Power: {book}", item_names)
         with self.subTest(lost_book):
             self.assertIn(lost_book, item_names)
+
+    def test_can_ship_all_books(self):
+        self.collect_everything()
+        shipsanity_prefix = "Shipsanity: "
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(shipsanity_prefix):
+                continue
+            item_to_ship = location.name[len(shipsanity_prefix):]
+            if item_to_ship not in power_books and item_to_ship not in skill_books:
+                continue
+            with self.subTest(location.name):
+                self.assert_reach_location_true(location, self.multiworld.state)

@@ -32,12 +32,12 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
         option_dict = {
-            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
-            options.Monstersanity.internal_name: options.Monstersanity.option_one_per_monster,
+            options.Shipsanity.internal_name: options.Shipsanity.option_everything,
+            options.Booksanity.internal_name: options.Booksanity.option_none,
         }
         for i in range(1):
             # seed = int(random() * pow(10, 18) - 1)
-            seed = 823942126251776128
+            seed = 64936975574258130357
             with self.subTest(f"Seed: {seed}"):
                 print(f"Seed: {seed}")
                 multiworld = setup_solo_multiworld(option_dict, seed)
