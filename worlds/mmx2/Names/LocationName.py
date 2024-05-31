@@ -1,0 +1,68 @@
+intro_stage_boss = "Defeated Gigantic Mechaniloid CF-0"
+intro_stage_clear = "Intro Stage - Clear"
+
+wheel_gator_boss = "Defeated Wheel Gator"
+wheel_gator_clear = "Wheel Gator - Clear"
+wheel_gator_heart_tank = "Wheel Gator - Heart Tank"
+wheel_gator_arms = "Wheel Gator - Arms Capsule"
+
+bubble_crab_boss = "Defeated Bubble Crab"
+bubble_crab_clear = "Bubble Crab - Clear"
+bubble_crab_heart_tank = "Bubble Crab - Heart Tank"
+bubble_crab_sub_tank = "Bubble Crab - Sub Tank"
+bubble_crab_mini_boss = "Defeated Sea Canthller"
+
+flame_stag_boss = "Defeated Flame Stag"
+flame_stag_clear = "Flame Stag - Clear"
+flame_stag_heart_tank = "Flame Stag - Heart Tank"
+flame_stag_sub_tank = "Flame Stag - Sub Tank"
+
+morph_moth_boss = "Defeated Morph Moth"
+morph_moth_clear = "Morph Moth - Clear"
+morph_moth_heart_tank = "Morph Moth - Heart Tank"
+morph_moth_body = "Morph Moth - Body Capsule"
+morph_moth_mini_boss_1 = "Defeated Pararoid S-38 #1"
+morph_moth_mini_boss_2 = "Defeated Pararoid S-38 #2"
+
+magna_centipede_boss = "Defeated Magna Centipede"
+magna_centipede_clear = "Magna Centipede - Clear"
+magna_centipede_heart_tank = "Magna Centipede - Heart Tank"
+magna_centipede_sub_tank = "Magna Centipede - Sub Tank"
+magna_centipede_mini_boss_1 = "Defeated Chop Register"
+magna_centipede_mini_boss_2 = "Defeated Raider Killer"
+
+crystal_snail_boss = "Defeated Crystal Snail"
+crystal_snail_clear = "Crystal Snail - Clear"
+crystal_snail_heart_tank = "Crystal Snail - Heart Tank"
+crystal_snail_helmet = "Crystal Snail - Helmet Capsule"
+crystal_snail_mini_boss_1 = "Defeated Magna Quartz"
+
+overdrive_ostrich_boss = "Defeated Overdrive Ostrich"
+overdrive_ostrich_clear = "Overdrive Ostrich - Clear"
+overdrive_ostrich_heart_tank = "Overdrive Ostrich - Heart Tank"
+overdrive_ostrich_leg = "Overdrive Ostrich - Legs Capsule"
+
+wire_sponge_boss = "Defeated Wire Sponge"
+wire_sponge_clear = "Wire Sponge - Clear"
+wire_sponge_heart_tank = "Wire Sponge - Heart Tank"
+wire_sponge_sub_tank = "Wire Sponge - Sub Tank"
+
+agile_defeated = "Agile Defeated"
+serges_defeated = "Serges Defeated"
+violen_defeated = "Violen Defeated"
+
+x_hunter_stage_1_boss = "Defeated Neo Violen"
+x_hunter_stage_2_boss = "Defeated Serges Tank"
+x_hunter_stage_3_boss = "Defeated Agile Flyer"
+
+x_hunter_stage_4_wheel_gator = "Defeated Wheel Gator (Rematch)"
+x_hunter_stage_4_bubble_crab = "Defeated Bubble Crab (Rematch)"
+x_hunter_stage_4_flame_stag = "Defeated Flame Stag (Rematch)"
+x_hunter_stage_4_morph_moth = "Defeated Morph Moth (Rematch)"
+x_hunter_stage_4_magna_centipede = "Defeated Magna Centipede (Rematch)"
+x_hunter_stage_4_crystal_snail = "Defeated Crystal Snail (Rematch)"
+x_hunter_stage_4_overdrive_ostrich = "Defeated Overdrive Ostrich (Rematch)"
+x_hunter_stage_4_wire_sponge = "Defeated Wire Sponge (Rematch)"
+
+x_hunter_stage_5_zero = "Defeated Zero"
+victory = "Defeated Sigma"
