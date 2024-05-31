@@ -15,7 +15,7 @@ class gameDifficulty(Choice):
     option_hard = 3
     option_extreme = 4
     default = 2
-    
+        
 class scoreForLastCheck(Range):
     """
     The items in the item pool will always allow you to reach a score of 1000.
@@ -26,7 +26,7 @@ class scoreForLastCheck(Range):
     range_start = 500
     range_end = 1000
     default = 1000
-
+    
 class scoreForGoal(Range):
     """
     This setting determines what score you need to reach to finish the game.

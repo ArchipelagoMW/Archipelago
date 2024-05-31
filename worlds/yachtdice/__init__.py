@@ -159,7 +159,7 @@ class YachtDiceWorld(World):
             
         extraPointsAdded = 0
         
-        while diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:     
+        while diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:  
             allitems = self.itempool + self.precollected
             dice_fragments_in_pool = allitems.count("Dice") * amDiceF + allitems.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * amDiceF:
