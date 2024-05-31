@@ -6,6 +6,7 @@ from .book_logic import BookLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogicMixin
+from ..options import Booksanity
 from ..stardew_rule import StardewRule, HasProgressionPercent
 from ..strings.book_names import Book
 from ..strings.craftable_names import Consumable
@@ -27,10 +28,13 @@ class GrindLogicMixin(BaseLogicMixin):
 class GrindLogic(BaseLogic[Union[GrindLogicMixin, HasLogicMixin, ReceivedLogicMixin, BookLogicMixin, TimeLogicMixin]]):
 
     def can_grind_mystery_boxes(self, quantity: int) -> StardewRule:
-        return self.logic.and_(self.logic.has(Consumable.mystery_box),
-                               self.logic.book.has_book_power(Book.book_of_mysteries),
-                               # Assuming one box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride.
-                               self.logic.time.has_lived_months(quantity // 14))
+        mystery_box_rule = self.logic.has(Consumable.mystery_box)
+        book_of_mysteries_rule = self.logic.true_ if self.options.booksanity == Booksanity.option_none else self.logic.book.has_book_power(Book.book_of_mysteries)
+        # Assuming one box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride.
+        time_rule = self.logic.time.has_lived_months(quantity // 14)
+        return self.logic.and_(mystery_box_rule,
+                               book_of_mysteries_rule,
+                               time_rule)
 
     def can_grind_artifact_troves(self, quantity: int) -> StardewRule:
         return self.logic.and_(self.logic.has(Geode.artifact_trove),
