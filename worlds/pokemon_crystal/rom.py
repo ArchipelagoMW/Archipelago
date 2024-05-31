@@ -137,23 +137,23 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 cur_address += 3
 
         for tree_set in ["Canyon", "Town", "Route", "Kanto", "Lake", "Forest"]:
-            address = data.rom_addresses["TreeMonSet_" + tree_set] + 1
+            address = data.rom_addresses["TreeMonSet_" + tree_set]
             for i in range(0, 2):
                 for j in range(0, 6):
                     if world.options.normalize_encounter_rates:
-                        encounter_rate = int(((j + 1) / 6) * 255)
-                        write_bytes(patched_rom, [encounter_rate], address - 1)
+                        encounter_rate = 16 + (j % 2) + int(j == 0)
+                        write_bytes(patched_rom, [encounter_rate], address)
                     random_poke = get_random_pokemon_id(random)
-                    write_bytes(patched_rom, [random_poke], address)
+                    write_bytes(patched_rom, [random_poke], address + 1)
                     address += 3
                 address += 1
-        address = data.rom_addresses["TreeMonSet_Rock"] + 1
+        address = data.rom_addresses["TreeMonSet_Rock"]
         for i in range(0, 2):
             if world.options.normalize_encounter_rates:
-                write_bytes(patched_rom, [((i + 1) * 128) - 1], address - 1)
-                random_poke = get_random_pokemon_id(random)
-                write_bytes(patched_rom, [random_poke], address)
-                address += 3
+                write_bytes(patched_rom, [50], address)
+            random_poke = get_random_pokemon_id(random)
+            write_bytes(patched_rom, [random_poke], address + 1)
+            address += 3
 
     if world.options.normalize_encounter_rates:
         write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
