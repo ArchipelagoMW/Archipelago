@@ -663,10 +663,9 @@ than any locally cached ones.
 * Any names and IDs are only unique in its own world data package, but different games may reuse these names or IDs.
   * At runtime, you will need to look up the game of the player to know which item or location ID/Name to lookup in the
     data package. This can be easily achieved by reviewing the `slot_info` for a particular player ID prior to lookup.
-  * For example, a data package like this is valid:
-    ```jsonc
+  * For example, a data package like this is valid (Some properties such as `checksum` were omitted):
+    ```json
     {
-      // Some properties such as 'checksum' were omitted.
       "games": {
         "Game A": {
           "location_name_to_id": {
