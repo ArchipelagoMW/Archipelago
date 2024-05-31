@@ -2,6 +2,7 @@ from ..generic.Rules import set_rule
 from BaseClasses import MultiWorld
 from .YachtWeights import yacht_weights
 import math
+from collections import defaultdict
 
 category_mappings = {
     "Category Ones": "Ones",
@@ -127,26 +128,24 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
     #sort categories because for the step multiplier, you will want low-scorig categories first
     categories.sort(key=lambda category: category.meanScore(nbDice, nbRolls))
 
-    #function to add two discrete distribution.
-    def add_distributions(dist1, dist2, mult):
-        combined_dist = {}
+
+
+    def add_distributions(dist1, dist2):
+        combined_dist = defaultdict(float)
         for val1, prob1 in dist1.items():
             for val2, prob2 in dist2.items():
-                if int(val1 + val2 * mult) in combined_dist.keys():
-                    combined_dist[int(val1 + val2 * mult)] += prob1 * prob2
-                else:
-                    combined_dist[int(val1 + val2 * mult)] = prob1 * prob2
-        return combined_dist
+                combined_dist[int(val1 + val2)] += prob1 * prob2
+        return dict(combined_dist)
     
     #function to take the maximum of 'times' i.i.d. dist1.
-    def max_dist(dist1, times):
+    def max_dist(dist1, mults):
         new_dist = {0: 1}
-        for _ in range(times):
+        for mult in mults:
             c = new_dist.copy()
             new_dist = {}
             for val1, prob1 in c.items():
                 for val2, prob2 in dist1.items():
-                    new_val = max(val1, val2)
+                    new_val = max(val1, val2 * mult)
                     new_prob = prob1 * prob2
                     
                     # Update the probability for the new value
@@ -187,11 +186,14 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
         for key in dist.keys():
             dist[key] /= 100000
             
+        cat_mult = 2 ** (categories[j].quantity-1)
+        max_tries = j // diffDivide
+        mults = [(1 + fixed_mult + step_mult * ii) * cat_mult for ii in range(max(0,j - max_tries), j+1)]
+            
         #for higher difficulties, the simulation gets multiple tries for categories.
-        dist = max_dist(dist, max(1, len(categories) // diffDivide))
+        dist = max_dist(dist, mults)
         
-        cur_mult = fixed_mult + step_mult * j
-        total_dist = add_distributions(total_dist, dist, (1 + cur_mult) * ( 2 ** (categories[j].quantity-1) ))
+        total_dist = add_distributions(total_dist, dist)
     
     #save result into the cache, then return it
     yachtdice_cache[tup] = math.floor(percentile_distribution(total_dist, percReturn))

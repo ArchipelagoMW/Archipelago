@@ -887,3 +887,4 @@ worlds/witness/data/__pycache__/utils.cpython-311.pyc
 *.pyc
 worlds/yachtdice.apworld
 GenerateManyTimes.py
+profiler_stats.txt
