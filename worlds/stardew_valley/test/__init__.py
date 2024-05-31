@@ -14,7 +14,8 @@ from .. import StardewValleyWorld, options
 from ..mods.mod_data import all_mods
 from ..options import StardewValleyOptions, StardewValleyOption
 
-DEFAULT_TEST_SEED = get_seed(91300163431675286888)
+DEFAULT_TEST_SEED = get_seed()
+print(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
 
 def default_6_x_x():
@@ -262,6 +263,11 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
         for i in range(1000):
             self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+
+    def collect_everything(self):
+        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        for item in non_event_items:
+            self.multiworld.state.collect(item)
 
     def get_real_locations(self) -> List[Location]:
         return [location for location in self.multiworld.get_locations(self.player) if location.address is not None]
