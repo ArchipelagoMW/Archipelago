@@ -382,7 +382,7 @@ witness_option_groups = [
         DeathLink,
         DeathLinkAmnesty,
     ]),
-    OptionGroup("Silly Settings", [
+    OptionGroup("Silly Options", [
         ShuffleDog,
     ])
 ]
