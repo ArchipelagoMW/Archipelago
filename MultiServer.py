@@ -175,11 +175,16 @@ class Context:
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
+    spheres: typing.List[typing.Dict[int, typing.Set[int]]]
+    """ each sphere is { player: { location_id, ... } } """
+    logger: logging.Logger
+
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
-                 log_network: bool = False):
+                 log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+        self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
         self.log_network = log_network
@@ -236,6 +241,7 @@ class Context:
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
+        self.spheres = []
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -287,12 +293,12 @@ class Context:
         try:
             await endpoint.socket.send(msg)
         except websockets.ConnectionClosed:
-            logging.exception(f"Exception during send_msgs, could not send {msg}")
+            self.logger.exception(f"Exception during send_msgs, could not send {msg}")
             await self.disconnect(endpoint)
             return False
         else:
             if self.log_network:
-                logging.info(f"Outgoing message: {msg}")
+                self.logger.info(f"Outgoing message: {msg}")
             return True
 
     async def send_encoded_msgs(self, endpoint: Endpoint, msg: str) -> bool:
@@ -301,12 +307,12 @@ class Context:
         try:
             await endpoint.socket.send(msg)
         except websockets.ConnectionClosed:
-            logging.exception("Exception during send_encoded_msgs")
+            self.logger.exception("Exception during send_encoded_msgs")
             await self.disconnect(endpoint)
             return False
         else:
             if self.log_network:
-                logging.info(f"Outgoing message: {msg}")
+                self.logger.info(f"Outgoing message: {msg}")
             return True
 
     async def broadcast_send_encoded_msgs(self, endpoints: typing.Iterable[Endpoint], msg: str) -> bool:
@@ -317,11 +323,11 @@ class Context:
         try:
             websockets.broadcast(sockets, msg)
         except RuntimeError:
-            logging.exception("Exception during broadcast_send_encoded_msgs")
+            self.logger.exception("Exception during broadcast_send_encoded_msgs")
             return False
         else:
             if self.log_network:
-                logging.info(f"Outgoing broadcast: {msg}")
+                self.logger.info(f"Outgoing broadcast: {msg}")
             return True
 
     def broadcast_all(self, msgs: typing.List[dict]):
@@ -330,7 +336,7 @@ class Context:
         async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
-        logging.info("Notice (all): %s" % text)
+        self.logger.info("Notice (all): %s" % text)
         self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
@@ -352,7 +358,7 @@ class Context:
     def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
         if not client.auth:
             return
-        logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
+        self.logger.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
@@ -451,7 +457,7 @@ class Context:
         for game_name, data in decoded_obj.get("datapackage", {}).items():
             if game_name in game_data_packages:
                 data = game_data_packages[game_name]
-            logging.info(f"Loading embedded data package for game {game_name}")
+            self.logger.info(f"Loading embedded data package for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
             if "location_name_groups" in data:
@@ -463,6 +469,9 @@ class Context:
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
         for game_name, data in self.location_name_groups.items():
             self.read_data[f"location_name_groups_{game_name}"] = lambda lgame=game_name: self.location_name_groups[lgame]
+
+        # sorted access spheres
+        self.spheres = decoded_obj.get("spheres", [])
 
     # saving
 
@@ -483,7 +492,7 @@ class Context:
             with open(self.save_filename, "wb") as f:
                 f.write(zlib.compress(encoded_save))
         except Exception as e:
-            logging.exception(e)
+            self.logger.exception(e)
             return False
         else:
             return True
@@ -501,12 +510,12 @@ class Context:
                     save_data = restricted_loads(zlib.decompress(f.read()))
                     self.set_save(save_data)
             except FileNotFoundError:
-                logging.error('No save data found, starting a new game')
+                self.logger.error('No save data found, starting a new game')
             except Exception as e:
-                logging.exception(e)
+                self.logger.exception(e)
             self._start_async_saving()
 
-    def _start_async_saving(self):
+    def _start_async_saving(self, atexit_save: bool = True):
         if not self.auto_saver_thread:
             def save_regularly():
                 # time.time() is platform dependent, so using the expensive datetime method instead
@@ -520,18 +529,19 @@ class Context:
                         next_wakeup = (second - get_datetime_second()) % self.auto_save_interval
                         time.sleep(max(1.0, next_wakeup))
                         if self.save_dirty:
-                            logging.debug("Saving via thread.")
+                            self.logger.debug("Saving via thread.")
                             self._save()
                     except OperationalError as e:
-                        logging.exception(e)
-                        logging.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
+                        self.logger.exception(e)
+                        self.logger.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
                     else:
                         self.save_dirty = False
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
-            import atexit
-            atexit.register(self._save, True)  # make sure we save on exit too
+            if atexit_save:
+                import atexit
+                atexit.register(self._save, True)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         self.recheck_hints()
@@ -598,7 +608,7 @@ class Context:
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
         # count items and slots from lists for items_handling = remote
-        logging.info(
+        self.logger.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
             f'for {sum(k[2] for k in self.received_items)} players')
 
@@ -621,6 +631,16 @@ class Context:
         self.recheck_hints(team, slot)
         return self.hints[team, slot]
 
+    def get_sphere(self, player: int, location_id: int) -> int:
+        """Get sphere of a location, -1 if spheres are not available."""
+        if self.spheres:
+            for i, sphere in enumerate(self.spheres):
+                if location_id in sphere.get(player, set()):
+                    return i
+            raise KeyError(f"No Sphere found for location ID {location_id} belonging to player {player}. "
+                           f"Location or player may not exist.")
+        return -1
+
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
@@ -640,13 +660,13 @@ class Context:
                         try:
                             raise Exception(f"Could not set server option {key}, skipping.") from e
                         except Exception as e:
-                            logging.exception(e)
-                logging.debug(f"Setting server option {key} to {value} from supplied multidata")
+                            self.logger.exception(e)
+                self.logger.debug(f"Setting server option {key} to {value} from supplied multidata")
                 setattr(self, key, value)
             elif key == "disable_item_cheat":
                 self.item_cheat = not bool(value)
             else:
-                logging.debug(f"Unrecognized server option {key}")
+                self.logger.debug(f"Unrecognized server option {key}")
 
     def get_aliased_name(self, team: int, slot: int):
         if (team, slot) in self.name_aliases:
@@ -680,7 +700,7 @@ class Context:
                         self.hints[team, player].add(hint)
                         new_hint_events.add(player)
 
-            logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
+            self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
@@ -688,7 +708,7 @@ class Context:
                 clients = self.clients[team].get(slot)
                 if not clients:
                     continue
-                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
                 for client in clients:
                     async_start(self.send_msgs(client, client_hints))
 
@@ -739,21 +759,21 @@ async def server(websocket, path: str = "/", ctx: Context = None):
 
     try:
         if ctx.log_network:
-            logging.info("Incoming connection")
+            ctx.logger.info("Incoming connection")
         await on_client_connected(ctx, client)
         if ctx.log_network:
-            logging.info("Sent Room Info")
+            ctx.logger.info("Sent Room Info")
         async for data in websocket:
             if ctx.log_network:
-                logging.info(f"Incoming message: {data}")
+                ctx.logger.info(f"Incoming message: {data}")
             for msg in decode(data):
                 await process_client_cmd(ctx, client, msg)
     except Exception as e:
         if not isinstance(e, websockets.WebSocketException):
-            logging.exception(e)
+            ctx.logger.exception(e)
     finally:
         if ctx.log_network:
-            logging.info("Disconnected")
+            ctx.logger.info("Disconnected")
         await ctx.disconnect(client)
 
 
@@ -803,14 +823,25 @@ async def on_client_disconnected(ctx: Context, client: Client):
         await on_client_left(ctx, client)
 
 
+_non_game_messages = {"HintGame": "hinting", "Tracker": "tracking", "TextOnly": "viewing"}
+""" { tag: ui_message } """
+
+
 async def on_client_joined(ctx: Context, client: Client):
     if ctx.client_game_state[client.team, client.slot] == ClientStatus.CLIENT_UNKNOWN:
         update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
-    verb = "tracking" if "Tracker" in client.tags else "playing"
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = verb
+            break
+    else:
+        final_verb = "playing"
+
     ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
-        f"{verb} {ctx.games[client.slot]} has joined. "
+        f"{final_verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}.",
         {"type": "Join", "team": client.team, "slot": client.slot, "tags": client.tags})
     ctx.notify_client(client, "Now that you are connected, "
@@ -825,8 +856,19 @@ async def on_client_left(ctx: Context, client: Client):
     if len(ctx.clients[client.team][client.slot]) < 1:
         update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
         ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
+
+    version_str = '.'.join(str(x) for x in client.version)
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = f"stopped {verb}"
+            break
+    else:
+        final_verb = "left"
+
     ctx.broadcast_text_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has {final_verb} the game. "
+        f"Client({version_str}), {client.tags}.",
         {"type": "Part", "team": client.team, "slot": client.slot})
 
 
@@ -963,7 +1005,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             new_item = NetworkItem(item_id, location, slot, flags)
             send_items_to(ctx, team, target_player, new_item)
 
-            logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+            ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id],
                 ctx.player_names[(team, target_player)], ctx.location_names[location]))
             info_text = json_format_send_event(new_item, target_player)
@@ -1507,15 +1549,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         if hints:
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
-            old_hints = set(hints) - new_hints
-            if old_hints:
-                self.ctx.notify_hints(self.client.team, list(old_hints))
-                if not new_hints:
-                    self.output("Hint was previously used, no points deducted.")
+            old_hints = list(set(hints) - new_hints)
+            if old_hints and not new_hints:
+                self.ctx.notify_hints(self.client.team, old_hints)
+                self.output("Hint was previously used, no points deducted.")
             if new_hints:
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
-
                 if not not_found_hints:  # everything's been found, no need to pay
                     can_pay = 1000
                 elif cost:
@@ -1526,8 +1566,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.ctx.random.shuffle(not_found_hints)
                 # By popular vote, make hints prefer non-local placements
                 not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
+                # By another popular vote, prefer early sphere
+                not_found_hints.sort(key=lambda hint: self.ctx.get_sphere(hint.finding_player, hint.location),
+                                     reverse=True)
 
-                hints = found_hints
+                hints = found_hints + old_hints
                 while can_pay > 0:
                     if not not_found_hints:
                         break
@@ -1535,9 +1578,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints.append(hint)
                     can_pay -= 1
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
-                    points_available = get_client_points(self.ctx, self.client)
 
+                self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
+                    points_available = get_client_points(self.ctx, self.client)
                     if hints and cost and int((points_available // cost) == 0):
                         self.output(
                             f"There may be more hintables, however, you cannot afford to pay for any more. "
@@ -1550,7 +1594,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         self.output(f"You can't afford the hint. "
                                     f"You have {points_available} points and need at least "
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                self.ctx.notify_hints(self.client.team, hints)
                 self.ctx.save()
                 return True
 
@@ -1605,7 +1648,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
     try:
         cmd: str = args["cmd"]
     except:
-        logging.exception(f"Could not get command from {args}")
+        ctx.logger.exception(f"Could not get command from {args}")
         await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Could not get command from {args} at `cmd`"}])
         raise
@@ -1631,7 +1674,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
+
+            ignore_game = not args.get("game") and any(tag in _non_game_messages for tag in args["tags"])
+
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
@@ -1646,7 +1691,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         if ctx.compatibility == 0 and args['version'] != version_tuple:
             errors.add('IncompatibleVersion')
         if errors:
-            logging.info(f"A client connection was refused due to: {errors}, the sent connect information was {args}.")
+            ctx.logger.info(f"A client connection was refused due to: {errors}, the sent connect information was {args}.")
             await ctx.send_msgs(client, [{"cmd": "ConnectionRefused", "errors": list(errors)}])
         else:
             team, slot = ctx.connect_names[args['name']]
@@ -2264,7 +2309,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         if to_cancel:
             for task in to_cancel:
                 task.cancel()
-        logging.info("Shutting down due to inactivity.")
+        ctx.logger.info("Shutting down due to inactivity.")
 
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
