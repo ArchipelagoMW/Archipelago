@@ -417,7 +417,7 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(utils.get_complex_doors())
                 adjustment_linesets_in_order.append(utils.get_complex_additional_panels())
 
-        if world.options.shuffle_dog == "off":
+        if not world.options.shuffle_dog:
             adjustment_linesets_in_order.append(["Disabled Locations:", "0xFFF80 (Town Pet the Dog)"])
 
         if world.options.shuffle_boat:
