@@ -409,6 +409,7 @@ wild_bait = BundleItem(Fishing.wild_bait, 20)
 magic_bait = BundleItem(Fishing.magic_bait, 10, source=BundleItem.Sources.island)
 pearl = BundleItem(Gift.pearl)
 challenge_bait = BundleItem(Fishing.challenge_bait, 25, source=BundleItem.Sources.masteries)
+targeted_bait = BundleItem(ArtisanGood.targeted_bait, 25, source=BundleItem.Sources.content)
 
 ginger = BundleItem(Forageable.ginger, source=BundleItem.Sources.content)
 magma_cap = BundleItem(Mushroom.magma_cap, source=BundleItem.Sources.content)
@@ -685,7 +686,7 @@ island_fish_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.island_fi
 tackle_items = [spinner, dressed_spinner, trap_bobber, sonar_bobber, cork_bobber, lead_bobber, treasure_hunter, barbed_hook, curiosity_lure, quality_bobber]
 tackle_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle_items, 3, 2)
 
-bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait, deluxe_bait]
+bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait, deluxe_bait, targeted_bait]
 bait_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 2, 2)
 
 deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
