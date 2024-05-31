@@ -126,7 +126,7 @@ def set_rules(world: "MM2World") -> None:
                         world.weapon_damage[weapon][i] = 0
             # handle special cases
             for boss in range(14):
-                for weapon in (1, 3, 6):
+                for weapon in (1, 3, 6, 8):
                     if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
                             not any(world.weapon_damage[i][boss] > 0 for i in range(1, 8) if i != weapon)):
                         # Weapon does not have enough possible ammo to kill the boss, raise the damage
@@ -160,6 +160,12 @@ def set_rules(world: "MM2World") -> None:
         if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
             world.weapon_damage[0][world.options.starting_robot_master.value] = 1
 
+        # final special case
+        # There's a vanilla crash if Time Stopper kills Wily phase 1
+        # There's multiple fixes, but ensuring Wily cannot take Time Stopper damage is best
+        if world.weapon_damage[8][12] > 0:
+            world.weapon_damage[8][12] = 0
+
         # weakness validation, it is better to confirm a completable seed than respect plando
         boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in [*list(range(8)), 12]}
 
@@ -171,7 +177,7 @@ def set_rules(world: "MM2World") -> None:
         for _, boss in [*sorted(flexibility), (0, 12)]:
             boss_damage = weapon_boss[boss]
             weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
-                             boss_damage.items() if weapon_energy[weapon]}
+                             boss_damage.items() if weapon_energy[weapon] > 0}
             if any(boss_damage[i] > 0 for i in range(8)):
                 # We get exactly one use of Time Stopper during the rush
                 # So we want to make sure that use is absolutely needed
