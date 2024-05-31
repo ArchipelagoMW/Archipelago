@@ -75,7 +75,7 @@ class KHRECOMWorld(World):
             elif data.category == "Sleights" and sleights_added < self.options.sleight_amount and name not in ["Sleight " + sleight_name for sleight_name in self.options.exclude_sleights.value]:
                 sleights_added = sleights_added + quantity
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            elif data.category not in ["Sleights", "Enemy Cards"] and name not in self.starting_worlds:
+            elif data.category not in ["Sleights", "Enemy Cards"] and name not in self.starting_worlds and name != "Friend Card Pluto":
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.

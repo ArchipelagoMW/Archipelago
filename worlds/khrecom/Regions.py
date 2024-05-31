@@ -131,7 +131,6 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["100 Acre Wood"].locations.append("100 Acre Wood Whirlwind Plunge (Item Cards Mega-Ether)")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Tigger's Playground (Attack Cards Spellbinder)")
     
-   #regions["Twilight Town"].locations.append("11F Exit Hall Riku III (Item Cards Mega-Potion)")
     regions["Twilight Town"].locations.append("Twilight Town Room of Beginnings")
     regions["Twilight Town"].locations.append("Twilight Town Room of Beginnings (Enemy Cards Vexen)")
     if options.days_locations:
@@ -159,6 +158,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Castle Oblivion Halls"].locations.append("01F Exit Hall Axel I (Magic Cards Fire)")
     regions["Castle Oblivion Halls"].locations.append("06F Exit Hall Larxene I (Magic Cards Thunder)")
     regions["Castle Oblivion Halls"].locations.append("07F Exit Hall Riku I (Magic Cards Aero)")
+    regions["Castle Oblivion Halls"].locations.append("11F Exit Hall Riku III (Item Cards Mega-Potion)")
     regions["Castle Oblivion Halls"].locations.append("12F Exit Hall Larxene II (Attack Cards Oblivion)")
     regions["Castle Oblivion Halls"].locations.append("12F Exit Hall Larxene II (Enemy Cards Larxene)")
     regions["Castle Oblivion Halls"].locations.append("12F Exit Hall Riku IV (Enemy Cards Riku)")
@@ -295,7 +295,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Castle Oblivion Halls"].locations.append("06F Exit Hall Larxene I (Sleight Thundaga)")
     regions["Castle Oblivion Halls"].locations.append("07F Exit Hall Riku I (Sleight Aeroga)")
     regions["Castle Oblivion Halls"].locations.append("07F Exit Hall Riku I (Sleight Aerora)")
-   #regions["Castle Oblivion Halls"].locations.append("08F Exit Hall Riku II (Sleight Magnet Spiral)")
+    regions["Castle Oblivion Halls"].locations.append("08F Exit Hall Riku II (Sleight Magnet Spiral)")
     regions["Castle Oblivion Halls"].locations.append("10F Exit Hall Vexen I (Sleight Freeze)")
     regions["Castle Oblivion"].locations.append("Castle Oblivion Bounty (Sleight Raging Storm)")
     regions["Castle Oblivion"].locations.append("Castle Oblivion Entrance (Sleight Trinity Limit)")
@@ -303,7 +303,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Halloween Town"].locations.append("Halloween Town Bounty (Sleight Gifted Miracle)")
     regions["Halloween Town"].locations.append("Halloween Town Ally (Sleight Surprise! LV2)")
     regions["Halloween Town"].locations.append("Halloween Town Ally (Sleight Surprise! LV3)")
-    regions["Halloween Town"].locations.append("Halloween Town Entrance (Sleight Terror)")
+    regions["Halloween Town"].locations.append("Halloween Town Ally (Sleight Terror)")
     regions["Halloween Town"].locations.append("Halloween Town Room of Rewards (Sleight Bind)")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Bounty (Sleight Reflect Raid)")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Ally (Sleight Furious Volley LV2)")
