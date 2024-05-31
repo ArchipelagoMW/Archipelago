@@ -643,17 +643,6 @@ class GeneratorOptions(Group):
         PLAYTHROUGH = 2
         FULL = 3
 
-    class GlitchTriforceRoom(IntEnum):
-        """
-        Glitch to Triforce room from Ganon
-        When disabled, you have to have a weapon that can hurt ganon (master sword or swordless/easy item functionality
-        + hammer) and have completed the goal required for killing ganon to be able to access the triforce room.
-        1 -> Enabled.
-        0 -> Disabled (except in no-logic)
-        """
-        OFF = 0
-        ON = 1
-
     class PlandoOptions(str):
         """
         List of options that can be plando'd. Can be combined, for example "bosses, items"
@@ -665,6 +654,14 @@ class GeneratorOptions(Group):
         OFF = 0
         ON = 1
 
+    class PanicMethod(str):
+        """
+        What to do if the current item placements appear unsolvable.
+        raise -> Raise an exception and abort.
+        swap -> Attempt to fix it by swapping prior placements around. (Default)
+        start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
+        """
+
     enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
@@ -673,6 +670,7 @@ class GeneratorOptions(Group):
     spoiler: Spoiler = Spoiler(3)
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
+    panic_method: PanicMethod = PanicMethod("swap")
 
 
 class SNIOptions(Group):
