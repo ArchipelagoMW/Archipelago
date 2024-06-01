@@ -238,12 +238,15 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.multiworld = setup_solo_multiworld(self.options, seed=self.seed)
         self.original_state = self.multiworld.state.copy()
         self.original_itempool = self.multiworld.itempool.copy()
+        self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
 
     def tearDown(self) -> None:
         self.multiworld.state = self.original_state
         self.multiworld.itempool = self.original_itempool
+        for location in self.unfilled_locations:
+            location.item = None
 
     @property
     def run_default_tests(self) -> bool:
