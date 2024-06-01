@@ -209,7 +209,7 @@ class PokemonCrystalWorld(World):
 
         if self.options.randomize_tm_moves.value:
             move_pool = [move_data for move_name, move_data in copy.deepcopy(crystal_data.moves).items() if
-                         not move_data.is_hm and move_name not in ["ROCK_SMASH", "NO_MOVE"]]
+                         not move_data.is_hm and move_name not in ["ROCK_SMASH", "NO_MOVE", "STRUGGLE"]]
             self.random.shuffle(move_pool)
             for tm_name, tm_data in self.generated_tms.items():
                 if tm_data.is_hm or tm_name == "ROCK_SMASH":
