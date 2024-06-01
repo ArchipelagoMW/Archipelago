@@ -29,7 +29,7 @@ class TestStartInventoryAllsanity(WorldAssertMixin, SVTestBase):
         options.Friendsanity.internal_name: options.Friendsanity.option_bachelors,
         options.FriendsanityHeartSize.internal_name: 3,
         options.NumberOfMovementBuffs.internal_name: 10,
-        options.NumberOfLuckBuffs.internal_name: 12,
+        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.preset_all,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
         options.Mods.internal_name: ["Tractor Mod", "Bigger Backpack", "Luck Skill", "Magic", "Socializing Skill", "Archaeology", "Cooking Skill",
                                      "Binning Skill"],

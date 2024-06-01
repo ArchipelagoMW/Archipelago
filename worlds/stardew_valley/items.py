@@ -84,6 +84,7 @@ class Group(enum.Enum):
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
     CRAFTSANITY = enum.auto()
+    PLAYER_BUFF = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()
@@ -239,7 +240,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_stardrops(item_factory, options, content, items)
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
-    create_player_buffs(item_factory, options, items)
+    create_movement_buffs(item_factory, options, items)
     create_traveling_merchant_items(item_factory, items)
     items.append(item_factory("Return Scepter"))
     create_seasons(item_factory, options, items)
@@ -488,20 +489,9 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, options: Stard
         items.extend(item_factory(item) for item in ["Junimo Kart: Extra Life"] * 8)
 
 
-def create_player_buffs(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+def create_movement_buffs(item_factory, options: StardewValleyOptions, items: List[Item]):
     movement_buffs: int = options.movement_buff_number.value
-    luck_buffs: int = options.luck_buff_number.value
-    need_all_buffs = options.special_order_locations == SpecialOrderLocations.option_board_qi
-    need_half_buffs = options.festival_locations == FestivalLocations.option_easy
-    create_player_buff(item_factory, Buff.movement, movement_buffs, need_all_buffs, need_half_buffs, items)
-    create_player_buff(item_factory, Buff.luck, luck_buffs, True, need_half_buffs, items)
-
-
-def create_player_buff(item_factory, buff: str, amount: int, need_all_buffs: bool, need_half_buffs: bool, items: List[Item]):
-    progression_buffs = amount if need_all_buffs else (amount // 2 if need_half_buffs else 0)
-    useful_buffs = amount - progression_buffs
-    items.extend(item_factory(item, ItemClassification.useful) for item in [buff] * useful_buffs)
-    items.extend(item_factory(item) for item in [buff] * progression_buffs)
+    items.extend(item_factory(item) for item in [Buff.movement] * movement_buffs)
 
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory, items: List[Item]):
@@ -767,15 +757,18 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     trap_items.extend([bonus for bonus in items_by_group[Group.BONUS]
                        if bonus.name not in items_already_added_names and
                        (bonus.mod_name is None or bonus.mod_name in options.mods)])
+    player_buffs = get_allowed_player_buffs(options)
 
     priority_filler_items = []
     priority_filler_items.extend(useful_resource_packs)
+    priority_filler_items.extend(player_buffs)
 
     if include_traps:
         priority_filler_items.extend(trap_items)
 
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     all_filler_packs = remove_excluded_items(get_all_filler_items(include_traps, exclude_ginger_island), options)
+    all_filler_packs.extend(player_buffs)
     priority_filler_items = remove_excluded_items(priority_filler_items, options)
 
     number_priority_items = len(priority_filler_items)
@@ -841,7 +834,7 @@ def remove_limited_amount_packs(packs):
     return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.EXACTLY_TWO not in pack.groups]
 
 
-def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool):
+def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool) -> List[ItemData]:
     all_filler_items = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
     all_filler_items.extend(items_by_group[Group.TRASH])
     if include_traps:
@@ -849,6 +842,34 @@ def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool):
         all_filler_items.extend(items_by_group[Group.BONUS])
     all_filler_items = remove_excluded_items_island_mods(all_filler_items, exclude_ginger_island, set())
     return all_filler_items
+
+
+def get_allowed_player_buffs(options: StardewValleyOptions) -> List[ItemData]:
+    buff_option = options.enabled_filler_buffs
+    allowed_buffs = []
+    if OptionName.buff_luck in buff_option:
+        allowed_buffs.append(item_table[Buff.luck])
+    if OptionName.buff_damage in buff_option:
+        allowed_buffs.append(item_table[Buff.damage])
+    if OptionName.buff_defense in buff_option:
+        allowed_buffs.append(item_table[Buff.defense])
+    if OptionName.buff_immunity in buff_option:
+        allowed_buffs.append(item_table[Buff.immunity])
+    if OptionName.buff_health in buff_option:
+        allowed_buffs.append(item_table[Buff.health])
+    if OptionName.buff_energy in buff_option:
+        allowed_buffs.append(item_table[Buff.energy])
+    if OptionName.buff_bite in buff_option:
+        allowed_buffs.append(item_table[Buff.bite_rate])
+    if OptionName.buff_fish_trap in buff_option:
+        allowed_buffs.append(item_table[Buff.fish_trap])
+    if OptionName.buff_fishing_bar in buff_option:
+        allowed_buffs.append(item_table[Buff.fishing_bar])
+    if OptionName.buff_quality in buff_option:
+        allowed_buffs.append(item_table[Buff.quality])
+    if OptionName.buff_glow in buff_option:
+        allowed_buffs.append(item_table[Buff.glow])
+    return allowed_buffs
 
 
 def get_stardrop_classification(options) -> ItemClassification:

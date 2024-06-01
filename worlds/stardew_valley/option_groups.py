@@ -6,7 +6,7 @@ from .options import (Goal, StartingMoney, ProfitMargin, BundleRandomization, Bu
                       ToolProgression, ElevatorProgression, SkillProgression, BuildingProgression,
                       FestivalLocations, ArcadeMachineLocations, SpecialOrderLocations,
                       QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize,
-                      NumberOfMovementBuffs, NumberOfLuckBuffs, ExcludeGingerIsland, TrapItems,
+                      NumberOfMovementBuffs, EnabledFillerBuffs, ExcludeGingerIsland, TrapItems,
                       MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier,
                       FriendshipMultiplier, DebrisMultiplier, QuickStart, Gifting, FarmType,
                       Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Mods, Booksanity, Walnutsanity)
@@ -59,7 +59,7 @@ else:
             FriendshipMultiplier,
             DebrisMultiplier,
             NumberOfMovementBuffs,
-            NumberOfLuckBuffs,
+            EnabledFillerBuffs,
             TrapItems,
             MultipleDaySleepEnabled,
             MultipleDaySleepCost,

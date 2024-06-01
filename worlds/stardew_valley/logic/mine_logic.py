@@ -3,6 +3,7 @@ from typing import Union
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
+from .cooking_logic import CookingLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -24,7 +25,7 @@ class MineLogicMixin(BaseLogicMixin):
 
 
 class MineLogic(BaseLogic[Union[HasLogicMixin, MineLogicMixin, RegionLogicMixin, ReceivedLogicMixin, CombatLogicMixin, ToolLogicMixin,
-SkillLogicMixin]]):
+SkillLogicMixin, CookingLogicMixin]]):
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
         return self.logic.region.can_reach(Region.mines_floor_5)
@@ -63,6 +64,8 @@ SkillLogicMixin]]):
             skill_tier = min(10, max(0, tier * 2))
             rules.append(self.logic.skill.has_level(Skill.combat, skill_tier))
             rules.append(self.logic.skill.has_level(Skill.mining, skill_tier))
+        if tier >= 4:
+            rules.append(self.logic.cooking.can_cook())
         return self.logic.and_(*rules)
 
     @cache_self1

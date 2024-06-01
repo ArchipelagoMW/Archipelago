@@ -2,12 +2,12 @@ from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .buff_logic import BuffLogicMixin
 from .grind_logic import GrindLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
+from .time_logic import TimeLogicMixin
 from ..data.shop import ShopSource
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
@@ -25,7 +25,7 @@ class MoneyLogicMixin(BaseLogicMixin):
         self.money = MoneyLogic(*args, **kwargs)
 
 
-class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, BuffLogicMixin, SeasonLogicMixin,
+class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, SeasonLogicMixin,
 GrindLogicMixin]]):
 
     @cache_self1
@@ -90,7 +90,7 @@ GrindLogicMixin]]):
         if currency == Currency.star_token:
             return self.logic.region.can_reach(LogicRegion.fair)
         if currency == Currency.qi_coin:
-            return self.logic.region.can_reach(Region.casino) & self.logic.buff.has_max_luck()
+            return self.logic.region.can_reach(Region.casino) & self.logic.time.has_lived_months(amount // 1000)
         if currency == Currency.qi_gem:
             if self.options.special_order_locations == SpecialOrderLocations.option_board_qi:
                 number_rewards = min(len(qi_gem_rewards), max(1, (amount // 10)))

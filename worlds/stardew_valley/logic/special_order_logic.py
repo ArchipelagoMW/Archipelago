@@ -4,7 +4,6 @@ from .ability_logic import AbilityLogicMixin
 from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .buff_logic import BuffLogicMixin
 from .cooking_logic import CookingLogicMixin
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogicMixin
@@ -48,7 +47,7 @@ class SpecialOrderLogicMixin(BaseLogicMixin):
 
 class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
 ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
-MineLogicMixin, CookingLogicMixin, BuffLogicMixin,
+MineLogicMixin, CookingLogicMixin,
 AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
 
     def initialize_rules(self):
@@ -99,14 +98,14 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
                 SpecialOrder.lets_play_a_game: self.logic.arcade.has_junimo_kart_max_level(),
                 SpecialOrder.four_precious_stones: self.logic.time.has_lived_max_months & self.logic.has("Prismatic Shard") &
                                                    self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
-                SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern() & self.logic.buff.has_max_buffs(),
+                SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.received(Event.can_ship_items) &
                                           (self.logic.money.can_spend_at(Region.saloon, 205000) | self.logic.money.can_spend_at(Region.pierre_store, 170000)),
                 SpecialOrder.qis_kindness: self.logic.relationship.can_give_loved_gifts_to_everyone(),
                 SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &
                                               self.logic.has(Fish.crimsonfish) & self.logic.has(Fish.mutant_carp) & self.logic.has(Fish.legend),
                 SpecialOrder.danger_in_the_deep: self.logic.ability.can_mine_perfectly() & self.logic.mine.has_mine_elevator_to_floor(120),
-                SpecialOrder.skull_cavern_invasion: self.logic.ability.can_mine_perfectly_in_the_skull_cavern() & self.logic.buff.has_max_buffs(),
+                SpecialOrder.skull_cavern_invasion: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_prismatic_grange: self.logic.has(Loot.bug_meat) &  # 100 Bug Meat
                                                    self.logic.money.can_spend_at(Region.saloon, 24000) &  # 100 Spaghetti
                                                    self.logic.money.can_spend_at(Region.blacksmith, 15000) &  # 100 Copper Ore

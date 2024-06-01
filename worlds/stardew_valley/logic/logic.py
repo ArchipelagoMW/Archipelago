@@ -11,7 +11,6 @@ from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry
 from .book_logic import BookLogicMixin
-from .buff_logic import BuffLogicMixin
 from .building_logic import BuildingLogicMixin
 from .bundle_logic import BundleLogicMixin
 from .combat_logic import CombatLogicMixin
@@ -92,7 +91,7 @@ from ..strings.wallet_item_names import Wallet
 logger = logging.getLogger(__name__)
 
 
-class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
+class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
                    SeasonLogicMixin, MoneyLogicMixin, ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin,
                    BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, WalletLogicMixin, AnimalLogicMixin,
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
@@ -517,10 +516,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         return self.count(12, *rules_worth_a_point)
 
     def can_win_egg_hunt(self) -> StardewRule:
-        number_of_movement_buffs = self.options.movement_buff_number
-        if self.options.festival_locations == FestivalLocations.option_hard or number_of_movement_buffs < 2:
-            return True_()
-        return self.received(Buff.movement, number_of_movement_buffs // 2)
+        return True_()
 
     def can_succeed_luau_soup(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:

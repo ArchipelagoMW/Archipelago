@@ -15,7 +15,7 @@ from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .option_groups import sv_option_groups
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, EnabledFillerBuffs, NumberOfMovementBuffs, \
     BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
 from .presets import sv_options_presets
 from .regions import create_regions
@@ -410,7 +410,7 @@ class StardewValleyWorld(World):
                 for i, item in enumerate(bundle.items):
                     bundles[room.name][bundle.name][i] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
-        excluded_options = [BundleRandomization, NumberOfMovementBuffs, NumberOfLuckBuffs]
+        excluded_options = [BundleRandomization, NumberOfMovementBuffs, EnabledFillerBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names.extend(generic_option_names)

@@ -590,15 +590,17 @@ class NumberOfMovementBuffs(Range):
     # step = 1
 
 
-class NumberOfLuckBuffs(Range):
-    """Number of luck buffs to the player that exist as items in the pool.
-    Each luck buff is a bonus to daily luck of 0.025"""
-    internal_name = "luck_buff_number"
-    display_name = "Number of Luck Buffs"
-    range_start = 0
-    range_end = 12
-    default = 4
-    # step = 1
+class EnabledFillerBuffs(OptionSet):
+    """Enable various permanent player buffs to roll as filler items
+    """
+    internal_name = "enabled_filler_buffs"
+    display_name = "Enabled Filler Buffs"
+    valid_keys = frozenset({OptionName.buff_luck, OptionName.buff_damage, OptionName.buff_defense, OptionName.buff_immunity, OptionName.buff_health,
+                            OptionName.buff_energy, OptionName.buff_bite, OptionName.buff_fish_trap, OptionName.buff_fishing_bar})
+                            # OptionName.buff_quality, OptionName.buff_glow}) # Disabled these two buffs because they are too hard to make on the mod side
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset({OptionName.buff_luck, OptionName.buff_defense, OptionName.buff_bite})
 
 
 class ExcludeGingerIsland(Toggle):
@@ -789,7 +791,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     friendship_multiplier: FriendshipMultiplier
     debris_multiplier: DebrisMultiplier
     movement_buff_number: NumberOfMovementBuffs
-    luck_buff_number: NumberOfLuckBuffs
+    enabled_filler_buffs: EnabledFillerBuffs
     trap_items: TrapItems
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost

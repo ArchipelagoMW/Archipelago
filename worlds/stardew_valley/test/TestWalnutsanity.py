@@ -24,6 +24,7 @@ class TestWalnutsanityNone(SVTestBase):
         # You need to receive 0, and collect 40
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
+        self.collect("Progressive House")
         items = self.collect("5 Golden Walnuts", 10)
 
         self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))

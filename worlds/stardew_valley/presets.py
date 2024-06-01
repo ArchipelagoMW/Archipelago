@@ -3,7 +3,7 @@ from typing import Any, Dict
 from Options import Accessibility, ProgressionBalancing, DeathLink
 from .options import Goal, StartingMoney, ProfitMargin, BundleRandomization, BundlePrice, EntranceRandomization, SeasonRandomization, Cropsanity, \
     BackpackProgression, ToolProgression, ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations, ArcadeMachineLocations, \
-    SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, NumberOfLuckBuffs, \
+    SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, EnabledFillerBuffs, \
     ExcludeGingerIsland, TrapItems, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, \
     Gifting, FarmType, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Booksanity, Walnutsanity
 from .strings.ap_names.ap_option_names import OptionName
@@ -41,7 +41,7 @@ all_random_settings = {
     Booksanity.internal_name:               "random",
     # Walnutsanity.internal_name:             "random",
     NumberOfMovementBuffs.internal_name:    "random",
-    NumberOfLuckBuffs.internal_name:        "random",
+    EnabledFillerBuffs.internal_name:       "random",
     ExcludeGingerIsland.internal_name:      "random",
     TrapItems.internal_name:                "random",
     MultipleDaySleepEnabled.internal_name:  "random",
@@ -87,7 +87,7 @@ easy_settings = {
     Booksanity.internal_name:               Booksanity.option_none,
     # Walnutsanity.internal_name:             Walnutsanity.preset_none,
     NumberOfMovementBuffs.internal_name:    8,
-    NumberOfLuckBuffs.internal_name:        8,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.option_easy,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -133,7 +133,7 @@ medium_settings = {
     Booksanity.internal_name:               Booksanity.option_power_skill,
     # Walnutsanity.internal_name:             [OptionName.walnutsanity_puzzles],
     NumberOfMovementBuffs.internal_name:    6,
-    NumberOfLuckBuffs.internal_name:        6,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.option_medium,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -179,7 +179,7 @@ hard_settings = {
     Booksanity.internal_name:               Booksanity.option_all,
     # Walnutsanity.internal_name:             Walnutsanity.preset_all,
     NumberOfMovementBuffs.internal_name:    4,
-    NumberOfLuckBuffs.internal_name:        4,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.default,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
     TrapItems.internal_name:                TrapItems.option_hard,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -225,7 +225,7 @@ nightmare_settings = {
     Booksanity.internal_name:               Booksanity.option_all,
     # Walnutsanity.internal_name:             Walnutsanity.preset_all,
     NumberOfMovementBuffs.internal_name:    2,
-    NumberOfLuckBuffs.internal_name:        2,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_none,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
     TrapItems.internal_name:                TrapItems.option_hell,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -271,7 +271,7 @@ short_settings = {
     Booksanity.internal_name:               Booksanity.option_none,
     # Walnutsanity.internal_name:             Walnutsanity.preset_none,
     NumberOfMovementBuffs.internal_name:    10,
-    NumberOfLuckBuffs.internal_name:        10,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.option_easy,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -317,7 +317,7 @@ minsanity_settings = {
     Booksanity.internal_name:               Booksanity.option_none,
     # Walnutsanity.internal_name:             Walnutsanity.preset_none,
     NumberOfMovementBuffs.internal_name:    NumberOfMovementBuffs.default,
-    NumberOfLuckBuffs.internal_name:        NumberOfLuckBuffs.default,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.default,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.default,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.default,
@@ -363,7 +363,7 @@ allsanity_settings = {
     Booksanity.internal_name:               Booksanity.option_all,
     # Walnutsanity.internal_name:             Walnutsanity.preset_all,
     NumberOfMovementBuffs.internal_name:    12,
-    NumberOfLuckBuffs.internal_name:        12,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
     TrapItems.internal_name:                TrapItems.default,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.default,
