@@ -1235,120 +1235,109 @@ class KH2FightRules(KH2Rules):
         # easy:scom,limit form,guard,magnera
 
         return self.kh2_dict_count(easy_thousand_heartless_rules, state)
-    def get_normal_thousand_heartless_rules(self, state: CollectionState) -> bool:
 
+    def get_normal_thousand_heartless_rules(self, state: CollectionState) -> bool:
         # normal:limit form, guard
 
         return self.kh2_dict_count(normal_thousand_heartless_rules, state)
 
     def get_hard_thousand_heartless_rules(self, state: CollectionState) -> bool:
-
         # hard:guard
 
         return state.has(ItemName.Guard, self.player)
-    def get__data_demyx_rules(self, state: CollectionState) -> bool:
-        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
-        # normal:remove form boost and scom
-        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
-        data_demyx_rules = {
-            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4),
-        }
-        return data_demyx_rules[self.fight_logic]
-    def get__data_demyx_rules(self, state: CollectionState) -> bool:
-        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
-        # normal:remove form boost and scom
-        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
-        data_demyx_rules = {
-            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4),
-        }
-        return data_demyx_rules[self.fight_logic]
-    def get__data_demyx_rules(self, state: CollectionState) -> bool:
-        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
-        # normal:remove form boost and scom
-        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
-        data_demyx_rules = {
-            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4),
-        }
-        return data_demyx_rules[self.fight_logic]
 
-    def get_sephiroth_rules(self, state: CollectionState) -> bool:
+    def get_easy_data_demyx_rules(self, state: CollectionState) -> bool:
+        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
+
+        return self.kh2_dict_count(easy_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5)
+
+    def get_normal_data_demyx_rules(self, state: CollectionState) -> bool:
+        # normal:remove form boost and scom
+
+        return self.kh2_dict_count(normal_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5)
+
+    def get_hard_data_demyx_rules(self, state: CollectionState) -> bool:
+        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
+        return self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4)
+
+    def get_easy_sephiroth_rules(self, state: CollectionState) -> bool:
         # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
+        return self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1
+
+    def get_normal_sephiroth_rules(self, state: CollectionState) -> bool:
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
+        return self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2
+
+    def get_hard_sephiroth_rules(self, state: CollectionState) -> bool:
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-        sephiroth_rules = {
-            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
-        }
-        return sephiroth_rules[self.fight_logic]
 
-    def get_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
+        return self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
+
+    def get_easy_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
         # easy: quick run 3 or wisdom 5 (wisdom has qr 3)
+        return state.has(ItemName.QuickRun, self.player, 3) or (self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 3))
+
+    def get_normal_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
         # normal: quick run 2 and aerial dodge 1 or wisdom 5 (wisdom has qr 3)
+        return self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 1}, state) or (self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5)),
+
+    def get_hard_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
         # hard: (quick run 1, aerial dodge 1) or (wisdom form and aerial dodge 1)
-        cor_first_fight_movement_rules = {
-            "easy":   state.has(ItemName.QuickRun, self.player, 3) or (self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 3)),
-            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 1}, state) or (self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5)),
-            "hard":   self.kh2_has_all([ItemName.AerialDodge, ItemName.QuickRun], state) or self.kh2_has_all([ItemName.AerialDodge, ItemName.WisdomForm], state),
-        }
-        return cor_first_fight_movement_rules[self.fight_logic]
+        return self.kh2_has_all([ItemName.AerialDodge, ItemName.QuickRun], state) or self.kh2_has_all([ItemName.AerialDodge, ItemName.WisdomForm], state)
 
-    def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
+    def get_easy_cor_first_fight_rules(self, state: CollectionState) -> bool:
         # easy:have 5 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
-        # normal:have 3 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
-        # hard: reflect,stitch or chicken,final form
-        cor_first_fight_rules = {
-            "easy":   self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 5 or (self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 4 and self.kh2_has_final_form(state)),
-            "normal": self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 3 or (self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 2 and self.kh2_has_final_form(state)),
-            "hard":   state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.kh2_has_final_form(state),
-        }
-        return cor_first_fight_rules[self.fight_logic]
+        return self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 5 or (self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 4 and self.kh2_has_final_form(state))
 
-    def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
+    def get_normal_cor_first_fight_rules(self, state: CollectionState) -> bool:
+        # normal:have 3 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
+        return self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 3 or (self.kh2_dict_one_count(not_hard_cor_tools_dict, state) >= 2 and self.kh2_has_final_form(state))
+
+    def get_hard_cor_first_fight_rules(self, state: CollectionState) -> bool:
+        # hard: reflect,stitch or chicken,final form
+        return state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.kh2_has_final_form(state)
+
+    def get_easy_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules
         if not self.world.options.CorSkipToggle:
             return False
         # easy: aerial dodge 3,master form,fire
+        return state.has(ItemName.AerialDodge, self.player, 3) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state)
+
+    def get_normal_cor_skip_first_rules(self, state: CollectionState) -> bool:
+        # if option is not allow skips return false else run rules
+        if not self.world.options.CorSkipToggle:
+            return False
         # normal: aerial dodge 2, master form,fire
+        return state.has(ItemName.AerialDodge, self.player, 2) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state)
+
+    def get_hard_cor_skip_first_rules(self, state: CollectionState) -> bool:
+        # if option is not allow skips return false else run rules
+        if not self.world.options.CorSkipToggle:
+            return False
         # hard:void cross(quick run 3,aerial dodge 1)
         # or (quick run 2,aerial dodge 2 and magic)
         # or (final form and (magic or combo master))
         # or (master form and (reflect or fire or thunder or combo master)
         # wall rise(aerial dodge 1 and (final form lvl 5 or glide 2) or (master form and (1 of black magic or combo master)
-        void_cross_rules = {
-            "easy":   state.has(ItemName.AerialDodge, self.player, 3) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state),
-            "normal": state.has(ItemName.AerialDodge, self.player, 2) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state),
-            "hard":   (self.kh2_dict_count({ItemName.QuickRun: 3, ItemName.AerialDodge: 1}, state)) \
-                      or (self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.FinalForm, self.player) and (self.kh2_has_any(magic, state) or state.has(ItemName.ComboMaster, self.player))) \
-                      or (state.has(ItemName.MasterForm, self.player) and (self.kh2_has_any([ItemName.ReflectElement, ItemName.FireElement, ItemName.ComboMaster], state)))
-        }
-        wall_rise_rules = {
-            "easy":   True,
-            "normal": True,
-            "hard":   state.has(ItemName.AerialDodge, self.player) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) or state.has(ItemName.Glide, self.player, 2)
-        }
-        return void_cross_rules[self.fight_logic] and wall_rise_rules[self.fight_logic]
+        return (self.kh2_dict_count({ItemName.QuickRun: 3, ItemName.AerialDodge: 1}, state)) \
+            or (self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) and self.kh2_has_any(magic, state)) \
+            or (state.has(ItemName.FinalForm, self.player) and (self.kh2_has_any(magic, state) or state.has(ItemName.ComboMaster, self.player))) \
+            or (state.has(ItemName.MasterForm, self.player) and (self.kh2_has_any([ItemName.ReflectElement, ItemName.FireElement, ItemName.ComboMaster], state))) and state.has(ItemName.AerialDodge, self.player) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) or state.has(ItemName.Glide, self.player, 2)
 
-    def get_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
+    def get_easy_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
         # easy: quick run 2, aerial dodge 3 or master form 5
-        # normal: quick run 2, aerial dodge 2 or master 5
-        # hard: (glide 1,aerial dodge 1 any magic) or (master 3 any magic) or glide 1 and aerial dodge 2
+        return self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 3}, state) or self.kh2_has_master_form(state) and self.get_form_level_max(state, 3)
 
-        cor_second_fight_movement_rules = {
-            "easy":   self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 3}, state) or self.kh2_has_master_form(state) and self.get_form_level_max(state, 3),
-            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) or self.kh2_has_master_form(state) and self.get_form_level_max(state, 3),
-            "hard":   (self.kh2_has_all([ItemName.Glide, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)) \
+    def get_normal_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
+        # normal: quick run 2, aerial dodge 2 or master 5
+        return self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) or self.kh2_has_master_form(state) and self.get_form_level_max(state, 3)
+
+    def get_hard_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
+        # hard: (glide 1,aerial dodge 1 any magic) or (master 3 any magic) or glide 1 and aerial dodge 2
+        return (self.kh2_has_all([ItemName.Glide, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)) \
                       or (state.has(ItemName.MasterForm, self.player) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2)),
-        }
-        return cor_second_fight_movement_rules[self.fight_logic]
+                      or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2))
 
     def get_transport_fight_rules(self, state: CollectionState) -> bool:
         # easy: reflega,stitch and chicken,final form,magnera,explosion,finishing leap,thundaga,2 donald limits
