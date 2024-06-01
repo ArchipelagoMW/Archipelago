@@ -2310,7 +2310,7 @@
 		"events": []
 	},
 	"REGION_OLIVINE_PORT": {
-		"johto": true,
+		"johto": false,
 		"exits": [
 			"REGION_OLIVINE_PORT_PASSAGE",
 			"REGION_FAST_SHIP_1F"
