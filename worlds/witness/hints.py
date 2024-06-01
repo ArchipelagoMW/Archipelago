@@ -199,6 +199,8 @@ def hint_from_item(world: "WitnessWorld", item_name: str,
             return location
 
         try:
+            if not location.item:
+                return location
             return multiworld.find_item(location.item.name, location.player)
         except StopIteration:
             return location

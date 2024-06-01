@@ -219,7 +219,7 @@ class WitnessPlayerLogic:
 
             # For each entity in this option, resolve it to its actual requirement.
             for option_entity in option:
-                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity, object())
+                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity, {})
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels"}:
