@@ -30,6 +30,9 @@ def generate_lithograph_hint(world: "LandstalkerWorld"):
     jewel_items = world.jewel_items
 
     for item in jewel_items:
+        if item.location is None:
+            continue
+
         # Jewel hints are composed of 4 'words' shuffled randomly:
         # - the name of the player whose world contains said jewel (if not ours)
         # - the color of the jewel (if relevant)
@@ -61,7 +64,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
     excluded_items = ["Life Stock", "EkeEke"]
 
     progression_items = [item for item in multiworld.itempool if item.advancement and
-                         item.name not in excluded_items]
+                         item.name not in excluded_items and item.location is not None]
 
     local_own_progression_items = [item for item in progression_items if item.player == this_player
                                    and item.location.player == this_player]
