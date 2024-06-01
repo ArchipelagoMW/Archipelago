@@ -1,7 +1,7 @@
 import random
 
 from BaseClasses import get_seed
-from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, complete_options_with_default
+from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, complete_options_with_default, solo_multiworld
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification
 from ... import options
@@ -152,9 +152,9 @@ class TestModTraps(SVTestCase):
 
             world_options = allsanity_no_mods_6_x_x()
             world_options.update({options.TrapItems.internal_name: options.TrapItems.options[value], options.Mods.internal_name: "Magic"})
-            multi_world = setup_solo_multiworld(world_options)
-            trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
-            multiworld_items = [item.name for item in multi_world.get_items()]
-            for item in trap_items:
-                with self.subTest(f"Option: {value}, Item: {item}"):
-                    self.assertIn(item, multiworld_items)
+            with solo_multiworld(world_options) as (multi_world, _):
+                trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
+                multiworld_items = [item.name for item in multi_world.get_items()]
+                for item in trap_items:
+                    with self.subTest(f"Option: {value}, Item: {item}"):
+                        self.assertIn(item, multiworld_items)

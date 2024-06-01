@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld, get_seed
-from . import setup_solo_multiworld, SVTestCase, allsanity_no_mods_6_x_x, get_minsanity_options
+from . import setup_solo_multiworld, SVTestCase, allsanity_no_mods_6_x_x, get_minsanity_options, solo_multiworld
 from .. import StardewValleyWorld
 from ..items import Group, item_table
 from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanity, Goal
@@ -44,15 +44,15 @@ class TestItems(SVTestCase):
 
     def test_correct_number_of_stardrops(self):
         allsanity_options = allsanity_no_mods_6_x_x()
-        multiworld = setup_solo_multiworld(allsanity_options)
-        stardrop_items = [item for item in multiworld.get_items() if item.name == "Stardrop"]
-        self.assertEqual(len(stardrop_items), 7)
+        with solo_multiworld(allsanity_options) as (multiworld, _):
+            stardrop_items = [item for item in multiworld.get_items() if item.name == "Stardrop"]
+            self.assertEqual(len(stardrop_items), 7)
 
     def test_no_duplicate_rings(self):
         allsanity_options = allsanity_no_mods_6_x_x()
-        multiworld = setup_solo_multiworld(allsanity_options)
-        ring_items = [item.name for item in multiworld.get_items() if Group.RING in item_table[item.name].groups]
-        self.assertEqual(len(ring_items), len(set(ring_items)))
+        with solo_multiworld(allsanity_options) as (multiworld, _):
+            ring_items = [item.name for item in multiworld.get_items() if Group.RING in item_table[item.name].groups]
+            self.assertEqual(len(ring_items), len(set(ring_items)))
 
     def test_can_start_in_any_season(self):
         starting_seasons_rolled = set()
@@ -74,50 +74,50 @@ class TestItems(SVTestCase):
 class TestMetalDetectors(SVTestCase):
     def test_minsanity_1_metal_detector(self):
         options = get_minsanity_options()
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 1)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 1)
 
     def test_museumsanity_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Museumsanity.internal_name] = Museumsanity.option_all
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 2)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 2)
 
     def test_shipsanity_full_shipment_1_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Shipsanity.internal_name] = Shipsanity.option_full_shipment
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 1)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 1)
 
     def test_shipsanity_everything_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Shipsanity.internal_name] = Shipsanity.option_everything
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 2)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 2)
 
     def test_complete_collection_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Goal.internal_name] = Goal.option_complete_collection
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 2)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 2)
 
     def test_perfection_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Goal.internal_name] = Goal.option_perfection
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 2)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 2)
 
     def test_maxsanity_4_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Museumsanity.internal_name] = Museumsanity.option_all
         options[Shipsanity.internal_name] = Shipsanity.option_everything
         options[Goal.internal_name] = Goal.option_perfection
-        multiworld = setup_solo_multiworld(options)
-        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEqual(len(items), 4)
+        with solo_multiworld(options) as (multiworld, _):
+            items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+            self.assertEqual(len(items), 4)

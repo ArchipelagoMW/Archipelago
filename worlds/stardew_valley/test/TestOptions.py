@@ -1,7 +1,7 @@
 import itertools
 
 from Options import NamedRange
-from . import setup_solo_multiworld, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
+from . import SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld
 from .assertion import WorldAssertMixin
 from .long.option_names import all_option_choices
 from .. import items_by_group, Group, StardewValleyWorld
@@ -58,77 +58,71 @@ class TestGoal(SVTestCase):
 class TestSeasonRandomization(SVTestCase):
     def test_given_disabled_when_generate_then_all_seasons_are_precollected(self):
         world_options = {SeasonRandomization.internal_name: SeasonRandomization.option_disabled}
-        multi_world = setup_solo_multiworld(world_options)
-
-        precollected_items = {item.name for item in multi_world.precollected_items[1]}
-        self.assertTrue(all([season in precollected_items for season in SEASONS]))
+        with solo_multiworld(world_options) as (multi_world, _):
+            precollected_items = {item.name for item in multi_world.precollected_items[1]}
+            self.assertTrue(all([season in precollected_items for season in SEASONS]))
 
     def test_given_randomized_when_generate_then_all_seasons_are_in_the_pool_or_precollected(self):
         world_options = {SeasonRandomization.internal_name: SeasonRandomization.option_randomized}
-        multi_world = setup_solo_multiworld(world_options)
-        precollected_items = {item.name for item in multi_world.precollected_items[1]}
-        items = {item.name for item in multi_world.get_items()} | precollected_items
-        self.assertTrue(all([season in items for season in SEASONS]))
-        self.assertEqual(len(SEASONS.intersection(precollected_items)), 1)
+        with solo_multiworld(world_options) as (multi_world, _):
+            precollected_items = {item.name for item in multi_world.precollected_items[1]}
+            items = {item.name for item in multi_world.get_items()} | precollected_items
+            self.assertTrue(all([season in items for season in SEASONS]))
+            self.assertEqual(len(SEASONS.intersection(precollected_items)), 1)
 
     def test_given_progressive_when_generate_then_3_progressive_seasons_are_in_the_pool(self):
         world_options = {SeasonRandomization.internal_name: SeasonRandomization.option_progressive}
-        multi_world = setup_solo_multiworld(world_options)
-
-        items = [item.name for item in multi_world.get_items()]
-        self.assertEqual(items.count(Season.progressive), 3)
+        with solo_multiworld(world_options) as (multi_world, _):
+            items = [item.name for item in multi_world.get_items()]
+            self.assertEqual(items.count(Season.progressive), 3)
 
 
 class TestToolProgression(SVTestCase):
     def test_given_vanilla_when_generate_then_no_tool_in_pool(self):
         world_options = {ToolProgression.internal_name: ToolProgression.option_vanilla}
-        multi_world = setup_solo_multiworld(world_options)
-
-        items = {item.name for item in multi_world.get_items()}
-        for tool in TOOLS:
-            self.assertNotIn(tool, items)
+        with solo_multiworld(world_options) as (multi_world, _):
+            items = {item.name for item in multi_world.get_items()}
+            for tool in TOOLS:
+                self.assertNotIn(tool, items)
 
     def test_given_progressive_when_generate_then_each_tool_is_in_pool_4_times(self):
         world_options = {ToolProgression.internal_name: ToolProgression.option_progressive,
                          SkillProgression.internal_name: SkillProgression.option_progressive}
-        multi_world = setup_solo_multiworld(world_options)
-
-        items = [item.name for item in multi_world.get_items()]
-        for tool in TOOLS:
-            count = items.count("Progressive " + tool)
-            self.assertEqual(count, 4, f"Progressive {tool} was there {count} times")
-        scythe_count = items.count("Progressive Scythe")
-        self.assertEqual(scythe_count, 1, f"Progressive Scythe was there {scythe_count} times")
-        self.assertEqual(items.count("Golden Scythe"), 0, f"Golden Scythe is deprecated")
+        with solo_multiworld(world_options) as (multi_world, _):
+            items = [item.name for item in multi_world.get_items()]
+            for tool in TOOLS:
+                count = items.count("Progressive " + tool)
+                self.assertEqual(count, 4, f"Progressive {tool} was there {count} times")
+            scythe_count = items.count("Progressive Scythe")
+            self.assertEqual(scythe_count, 1, f"Progressive Scythe was there {scythe_count} times")
+            self.assertEqual(items.count("Golden Scythe"), 0, f"Golden Scythe is deprecated")
 
     def test_given_progressive_with_masteries_when_generate_then_fishing_rod_is_in_the_pool_5_times(self):
         world_options = {ToolProgression.internal_name: ToolProgression.option_progressive,
                          SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries}
-        multi_world = setup_solo_multiworld(world_options)
-
-        items = [item.name for item in multi_world.get_items()]
-        for tool in TOOLS:
-            count = items.count("Progressive " + tool)
-            expected_count = 5 if tool == "Fishing Rod" else 4
-            self.assertEqual(count, expected_count, f"Progressive {tool} was there {count} times")
-        scythe_count = items.count("Progressive Scythe")
-        self.assertEqual(scythe_count, 2, f"Progressive Scythe was there {scythe_count} times")
-        self.assertEqual(items.count("Golden Scythe"), 0, f"Golden Scythe is deprecated")
+        with solo_multiworld(world_options) as (multi_world, _):
+            items = [item.name for item in multi_world.get_items()]
+            for tool in TOOLS:
+                count = items.count("Progressive " + tool)
+                expected_count = 5 if tool == "Fishing Rod" else 4
+                self.assertEqual(count, expected_count, f"Progressive {tool} was there {count} times")
+            scythe_count = items.count("Progressive Scythe")
+            self.assertEqual(scythe_count, 2, f"Progressive Scythe was there {scythe_count} times")
+            self.assertEqual(items.count("Golden Scythe"), 0, f"Golden Scythe is deprecated")
 
     def test_given_progressive_when_generate_then_tool_upgrades_are_locations(self):
         world_options = {ToolProgression.internal_name: ToolProgression.option_progressive}
-        multi_world = setup_solo_multiworld(world_options)
-
-        locations = {locations.name for locations in multi_world.get_locations(1)}
-        for material, tool in itertools.product(ToolMaterial.tiers.values(),
-                                                [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can]):
-            if material == ToolMaterial.basic:
-                continue
-            self.assertIn(f"{material} {tool} Upgrade", locations)
-        self.assertIn("Purchase Training Rod", locations)
-        self.assertIn("Bamboo Pole Cutscene", locations)
-        self.assertIn("Purchase Fiberglass Rod", locations)
-        self.assertIn("Purchase Iridium Rod", locations)
+        with solo_multiworld(world_options) as (multi_world, _):
+            locations = {locations.name for locations in multi_world.get_locations(1)}
+            for material, tool in itertools.product(ToolMaterial.tiers.values(),
+                                                    [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can]):
+                if material == ToolMaterial.basic:
+                    continue
+                self.assertIn(f"{material} {tool} Upgrade", locations)
+            self.assertIn("Purchase Training Rod", locations)
+            self.assertIn("Bamboo Pole Cutscene", locations)
+            self.assertIn("Purchase Fiberglass Rod", locations)
+            self.assertIn("Purchase Iridium Rod", locations)
 
 
 class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase):
@@ -170,14 +164,13 @@ class TestTraps(SVTestCase):
     def test_given_no_traps_when_generate_then_no_trap_in_pool(self):
         world_options = allsanity_no_mods_6_x_x().copy()
         world_options[TrapItems.internal_name] = TrapItems.option_no_traps
-        multi_world = setup_solo_multiworld(world_options)
+        with solo_multiworld(world_options) as (multi_world, _):
+            trap_items = [item_data.name for item_data in items_by_group[Group.TRAP]]
+            multiworld_items = [item.name for item in multi_world.get_items()]
 
-        trap_items = [item_data.name for item_data in items_by_group[Group.TRAP]]
-        multiworld_items = [item.name for item in multi_world.get_items()]
-
-        for item in trap_items:
-            with self.subTest(f"{item}"):
-                self.assertNotIn(item, multiworld_items)
+            for item in trap_items:
+                with self.subTest(f"{item}"):
+                    self.assertNotIn(item, multiworld_items)
 
     def test_given_traps_when_generate_then_all_traps_in_pool(self):
         trap_option = TrapItems
@@ -186,59 +179,58 @@ class TestTraps(SVTestCase):
                 continue
             world_options = allsanity_mods_6_x_x()
             world_options.update({TrapItems.internal_name: trap_option.options[value]})
-            multi_world = setup_solo_multiworld(world_options)
-            trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups and item_data.mod_name is None]
-            multiworld_items = [item.name for item in multi_world.get_items()]
-            for item in trap_items:
-                with self.subTest(f"Option: {value}, Item: {item}"):
-                    self.assertIn(item, multiworld_items)
+            with solo_multiworld(world_options) as (multi_world, _):
+                trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if
+                              Group.DEPRECATED not in item_data.groups and item_data.mod_name is None]
+                multiworld_items = [item.name for item in multi_world.get_items()]
+                for item in trap_items:
+                    with self.subTest(f"Option: {value}, Item: {item}"):
+                        self.assertIn(item, multiworld_items)
 
 
 class TestSpecialOrders(SVTestCase):
     def test_given_disabled_then_no_order_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled}
-        multi_world = setup_solo_multiworld(world_options)
-
-        locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
-        for location_name in locations_in_pool:
-            location = location_table[location_name]
-            self.assertNotIn(LocationTags.SPECIAL_ORDER_BOARD, location.tags)
-            self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
+        with solo_multiworld(world_options) as (multi_world, _):
+            locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
+            for location_name in locations_in_pool:
+                location = location_table[location_name]
+                self.assertNotIn(LocationTags.SPECIAL_ORDER_BOARD, location.tags)
+                self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
     def test_given_board_only_then_no_qi_order_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_only}
-        multi_world = setup_solo_multiworld(world_options)
+        with solo_multiworld(world_options) as (multi_world, _):
 
-        locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
-        for location_name in locations_in_pool:
-            location = location_table[location_name]
-            self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
+            locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
+            for location_name in locations_in_pool:
+                location = location_table[location_name]
+                self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
-        for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
-            if board_location.mod_name:
-                continue
-            self.assertIn(board_location.name, locations_in_pool)
+            for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
+                if board_location.mod_name:
+                    continue
+                self.assertIn(board_location.name, locations_in_pool)
 
     def test_given_board_and_qi_then_all_orders_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
                          ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories}
-        multi_world = setup_solo_multiworld(world_options)
+        with solo_multiworld(world_options) as (multi_world, _):
 
-        locations_in_pool = {location.name for location in multi_world.get_locations()}
-        for qi_location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
-            if qi_location.mod_name:
-                continue
-            self.assertIn(qi_location.name, locations_in_pool)
+            locations_in_pool = {location.name for location in multi_world.get_locations()}
+            for qi_location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
+                if qi_location.mod_name:
+                    continue
+                self.assertIn(qi_location.name, locations_in_pool)
 
-        for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
-            if board_location.mod_name:
-                continue
-            self.assertIn(board_location.name, locations_in_pool)
+            for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
+                if board_location.mod_name:
+                    continue
+                self.assertIn(board_location.name, locations_in_pool)
 
     def test_given_board_and_qi_without_arcade_machines_then_lets_play_a_game_not_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
                          ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled}
-        multi_world = setup_solo_multiworld(world_options)
-
-        locations_in_pool = {location.name for location in multi_world.get_locations()}
-        self.assertNotIn(SpecialOrder.lets_play_a_game, locations_in_pool)
+        with solo_multiworld(world_options) as (multi_world, _):
+            locations_in_pool = {location.name for location in multi_world.get_locations()}
+            self.assertNotIn(SpecialOrder.lets_play_a_game, locations_in_pool)

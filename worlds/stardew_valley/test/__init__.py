@@ -207,23 +207,8 @@ class SVTestCase(unittest.TestCase):
         msg += f"[Seed = {seed}]"
 
         with self.subTest(msg, **kwargs):
-            if world_caching:
-                multiworld = setup_solo_multiworld(world_options, seed)
-                original_state = multiworld.state.copy()
-                original_itempool = multiworld.itempool.copy()
-                unfilled_locations = multiworld.get_unfilled_locations(1)
-                multiworld.lock.acquire()
-            else:
-                multiworld = setup_solo_multiworld(world_options, seed, _cache={})
-
-            yield multiworld, multiworld.worlds[1]
-
-            if world_caching:
-                multiworld.state = original_state
-                multiworld.itempool = original_itempool
-                for location in unfilled_locations:
-                    location.item = None
-                multiworld.lock.release()
+            with solo_multiworld(world_options, seed=seed, world_caching=world_caching) as (multiworld, world):
+                yield multiworld, world
 
 
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
@@ -303,6 +288,32 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
 
 pre_generated_worlds = {}
+
+
+@contextmanager
+def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
+                    *,
+                    seed=DEFAULT_TEST_SEED,
+                    world_caching=True) -> MultiWorld:
+    if not world_caching:
+        multiworld = setup_solo_multiworld(world_options, seed, _cache={})
+        yield multiworld, multiworld.worlds[1]
+    else:
+        multiworld = setup_solo_multiworld(world_options, seed)
+        multiworld.lock.acquire()
+
+        original_state = multiworld.state.copy()
+        original_itempool = multiworld.itempool.copy()
+        unfilled_locations = multiworld.get_unfilled_locations(1)
+
+        yield multiworld, multiworld.worlds[1]
+
+        multiworld.state = original_state
+        multiworld.itempool = original_itempool
+        for location in unfilled_locations:
+            location.item = None
+
+        multiworld.lock.release()
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
