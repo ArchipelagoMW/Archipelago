@@ -5,17 +5,17 @@ from .Regions import Stages
 
 
 def graffitiM(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
-    return state.count_group_exclusive("graffitim", player) * 7 >= spots if limit \
+    return state.count_group_unique("graffitim", player) * 7 >= spots if limit \
         else state.has_group("graffitim", player)
 
 
 def graffitiL(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
-    return state.count_group_exclusive("graffitil", player) * 6 >= spots if limit \
+    return state.count_group_unique("graffitil", player) * 6 >= spots if limit \
         else state.has_group("graffitil", player)
 
 
 def graffitiXL(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
-    return state.count_group_exclusive("graffitixl", player) * 4 >= spots if limit \
+    return state.count_group_unique("graffitixl", player) * 4 >= spots if limit \
         else state.has_group("graffitixl", player)
 
 
@@ -469,7 +469,7 @@ def spots_s_glitchless(state: CollectionState, player: int, limit: bool, access_
             break
 
     if limit:
-        sprayable: int = 5 + (state.count_group_exclusive("characters", player) * 5)
+        sprayable: int = 5 + (state.count_group_unique("characters", player) * 5)
         if total <= sprayable:
             return total
         else:
@@ -492,7 +492,7 @@ def spots_s_glitched(state: CollectionState, player: int, limit: bool, access_ca
             break
 
     if limit:
-        sprayable: int = 5 + (state.count_group_exclusive("characters", player) * 5)
+        sprayable: int = 5 + (state.count_group_unique("characters", player) * 5)
         if total <= sprayable:
             return total
         else:
@@ -537,7 +537,7 @@ def spots_m_glitchless(state: CollectionState, player: int, limit: bool, access_
             break
 
     if limit:
-        sprayable: int = state.count_group_exclusive("graffitim", player) * 7
+        sprayable: int = state.count_group_unique("graffitim", player) * 7
         if total <= sprayable:
             return total
         else:
@@ -563,7 +563,7 @@ def spots_m_glitched(state: CollectionState, player: int, limit: bool, access_ca
             break
 
     if limit:
-        sprayable: int = state.count_group_exclusive("graffitim", player) * 7
+        sprayable: int = state.count_group_unique("graffitim", player) * 7
         if total <= sprayable:
             return total
         else:
@@ -614,7 +614,7 @@ def spots_l_glitchless(state: CollectionState, player: int, limit: bool, access_
             break
 
     if limit:
-        sprayable: int = state.count_group_exclusive("graffitil", player) * 6
+        sprayable: int = state.count_group_unique("graffitil", player) * 6
         if total <= sprayable:
             return total
         else:
@@ -641,7 +641,7 @@ def spots_l_glitched(state: CollectionState, player: int, limit: bool, access_ca
             break
 
     if limit:
-        sprayable: int = state.count_group_exclusive("graffitil", player) * 6
+        sprayable: int = state.count_group_unique("graffitil", player) * 6
         if total <= sprayable:
             return total
         else:
@@ -685,7 +685,7 @@ def spots_xl_glitchless(state: CollectionState, player: int, limit: bool, access
             break
 
     if limit:
-        sprayable: int = state.count_group_exclusive("graffitixl", player) * 4
+        sprayable: int = state.count_group_unique("graffitixl", player) * 4
         if total <= sprayable:
             return total
         else:
@@ -712,7 +712,7 @@ def spots_xl_glitched(state: CollectionState, player: int, limit: bool, access_c
             break
 
     if limit:
-        sprayable: int = state.count_group_exclusive("graffitixl", player) * 4
+        sprayable: int = state.count_group_unique("graffitixl", player) * 4
         if total <= sprayable:
             return total
         else:

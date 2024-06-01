@@ -13,6 +13,7 @@ from .locations import location_table, create_locations, LocationData, locations
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
+from .option_groups import sv_option_groups
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
     BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization
 from .presets import sv_options_presets
@@ -39,6 +40,7 @@ class StardewWebWorld(WebWorld):
     theme = "dirt"
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
     options_presets = sv_options_presets
+    option_groups = sv_option_groups
 
     tutorials = [
         Tutorial(
@@ -71,7 +73,6 @@ class StardewValleyWorld(World):
             [location.name for location in locations] for group, locations in locations_by_tag.items()
     }
 
-    data_version = 3
     required_client_version = (0, 4, 0)
 
     options_dataclass = StardewValleyOptions
