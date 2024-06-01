@@ -910,8 +910,10 @@ class Accessibility(Choice):
 
 
 class ProgressionBalancing(NamedRange):
-    """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    """
+    A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    A lower setting means more getting stuck. A higher setting means less getting stuck.
+    """
     default = 50
     range_start = 0
     range_end = 99
@@ -984,7 +986,7 @@ class LocalItems(ItemSet):
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
-    display_name = "Not Local Items"
+    display_name = "Non-local Items"
 
 
 class StartInventory(ItemDict):
