@@ -169,14 +169,21 @@ def generate_yaml(game: str):
             else:
                 options[key] = val
 
-        # Detect and build ItemDict options from their name pattern
         for key, val in options.copy().items():
             key_parts = key.rsplit("||", 2)
+            # Detect and build ItemDict options from their name pattern
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
                 if val != "0":
                     options[key_parts[0]][key_parts[1]] = int(val)
+                del options[key]
+
+            # Detect keys which end with -custom, indicating a TextChoice with a possible custom value
+            elif key_parts[-1].endswith("-custom"):
+                if val:
+                    options[key_parts[-1][:-7]] = val
+
                 del options[key]
 
         # Detect random-* keys and set their options accordingly
