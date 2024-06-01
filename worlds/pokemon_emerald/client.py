@@ -51,6 +51,13 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",                # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
     "FLAG_PURCHASED_HARBOR_MAIL",
+    "FLAG_REGI_DOORS_OPENED",
+    "FLAG_RETURNED_DEVON_GOODS",
+    "FLAG_DOCK_REJECTED_DEVON_GOODS",
+    "FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY",
+    "FLAG_WINGULL_SENT_ON_ERRAND",
+    "FLAG_WINGULL_DELIVERED_MAIL",
+    "FLAG_MET_PRETTY_PETAL_SHOP_OWNER",
 ]
 EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
 
@@ -84,6 +91,10 @@ KEY_LOCATION_FLAGS = [
     "NPC_GIFT_RECEIVED_OLD_ROD",
     "NPC_GIFT_RECEIVED_GOOD_ROD",
     "NPC_GIFT_RECEIVED_SUPER_ROD",
+    "NPC_GIFT_RECEIVED_EON_TICKET",
+    "NPC_GIFT_RECEIVED_AURORA_TICKET",
+    "NPC_GIFT_RECEIVED_MYSTIC_TICKET",
+    "NPC_GIFT_RECEIVED_OLD_SEA_MAP",
 ]
 KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
@@ -441,7 +452,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     self.death_counter = times_whited_out
                 elif times_whited_out > self.death_counter:
                     await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
-                                        f"{ctx.player_names[ctx.slot]} whited out!")
+                                         f"{ctx.player_names[ctx.slot]} whited out!")
                     self.ignore_next_death_link = True
                     self.death_counter = times_whited_out
 

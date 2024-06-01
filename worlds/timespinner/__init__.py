@@ -39,7 +39,6 @@ class TimespinnerWorld(World):
     options: BackwardsCompatiableTimespinnerOptions
     game = "Timespinner"
     topology_present = True
-    data_version = 12
     web = TimespinnerWebWorld()
     required_client_version = (0, 4, 2)
 
@@ -257,7 +256,7 @@ class TimespinnerWorld(World):
         non_local_items: Set[str] = self.options.non_local_items.value
         local_items: Set[str] = self.options.local_items.value
 
-        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if 
+        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if
                                             item in local_items or not item in non_local_items)
         if not local_starter_melee_weapons:
             if 'Plasma Orb' in non_local_items:
