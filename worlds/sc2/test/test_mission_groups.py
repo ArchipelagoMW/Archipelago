@@ -1,6 +1,6 @@
-
 import unittest
 from .. import mission_groups
+
 
 class TestMissionGroups(unittest.TestCase):
     def test_all_mission_groups_are_defined_and_nonempty(self) -> None:

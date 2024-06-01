@@ -6,7 +6,7 @@ from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys)
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_flags, \
+from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
     campaign_mission_table, SC2Race, MissionFlag
 from .mission_orders import vanilla_shuffle_order, mini_campaign_order
 from .mission_groups import mission_groups, MissionGroupNames
@@ -53,6 +53,22 @@ class Sc2MissionSet(OptionSet):
 
     def __len__(self) -> int:
         return self.value.__len__()
+
+
+class SelectRaces(Choice):
+    """
+    Pick which factions' missions and items can be shuffled into the world.
+    """
+    display_name = "Select Playable Races"
+    option_all = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss).value
+    option_terran = MissionFlag.Terran.value
+    option_zerg = MissionFlag.Zerg.value
+    option_protoss = MissionFlag.Protoss.value
+    option_terran_and_zerg = (MissionFlag.Terran|MissionFlag.Zerg).value
+    option_terran_and_protoss = (MissionFlag.Terran|MissionFlag.Protoss).value
+    option_zerg_and_protoss = (MissionFlag.Zerg|MissionFlag.Protoss).value
+    option_plando = 0
+    default = option_all
 
 
 class GameDifficulty(Choice):
@@ -186,23 +202,6 @@ class PlayerColorZerg(ColorChoice):
 class PlayerColorZergPrimal(ColorChoice):
     """Determines in-game team color for playable Zerg factions after Kerrigan becomes Primal Kerrigan."""
     display_name = "Zerg Player Color (Primal)"
-
-
-class SelectRaces(Choice):
-    """
-    Pick which factions' missions can be shuffled into the world.
-    """
-    # bit 0: terran, bit 1: zerg, bit 2: protoss. all disabled means plando only
-    display_name = "Select Playable Races"
-    option_all = 7
-    option_terran = 1
-    option_zerg = 2
-    option_protoss = 4
-    option_terran_and_zerg = 3
-    option_terran_and_protoss = 5
-    option_zerg_and_protoss = 6
-    option_plando = 0
-    default = option_all
 
 
 class EnableWolMissions(DefaultOnToggle):
@@ -907,6 +906,7 @@ class StartingSupplyPerItem(Range):
 
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
+    selected_races: SelectRaces
     game_difficulty: GameDifficulty
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera
@@ -980,16 +980,15 @@ def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
 
 
 def get_enabled_races(world: 'SC2World') -> Set[SC2Race]:
-    selection = world.options.selected_races.value
+    selection = get_option_value(world, 'selected_races')
+    if selection == SelectRaces.option_all:
+        return set(SC2Race)
     enabled = set()
-    # if bit 0, enable terran
-    if selection & 1:
+    if selection & MissionFlag.Terran:
         enabled.add(SC2Race.TERRAN)
-    # if bit 1, enable zerg
-    if selection & (1 << 1):
+    if selection & MissionFlag.Zerg:
         enabled.add(SC2Race.ZERG)
-    # if bit 2, enable protoss
-    if selection & (1 << 2):
+    if selection & MissionFlag.Protoss:
         enabled.add(SC2Race.PROTOSS)
     return enabled
 
@@ -1010,7 +1009,7 @@ def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
     if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
-    return enabled_campaigns
+    return set([campaign for campaign in enabled_campaigns if campaign.race in get_enabled_races(world)])
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1022,21 +1021,11 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
-    excluded = 0
-    races = get_enabled_races(world)
-    # filter out missions based on disabled races
-    if SC2Race.TERRAN not in races:
-        excluded |= MissionFlag.Terran
-    if SC2Race.ZERG not in races:
-        excluded |= MissionFlag.Zerg
-    if SC2Race.PROTOSS not in races:
-        excluded |= MissionFlag.Protoss
-    # filter out race-swapped mission variants
-    if world.options.enable_race_swap == EnableRaceSwapVariants.option_disabled:
-        excluded |= MissionFlag.RaceSwap
+    excluded = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss) ^ MissionFlag(get_option_value(world, "selected_races"))
     # filter out no-build missions
-    if not world.options.shuffle_no_build:
+    if not get_option_value(world, "shuffle_no_build"):
         excluded |= MissionFlag.NoBuild
+    # TODO: add more flags to potentially exclude once we have a way to get that from the player
     return MissionFlag(excluded)
 
 
@@ -1061,7 +1050,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
         )
     # Omitting No-Build missions if not shuffling no-build
     if disabled_flags:
-        excluded_missions = excluded_missions.union(get_missions_with_flags(disabled_flags))
+        excluded_missions = excluded_missions.union(get_missions_with_any_flags_in_list(disabled_flags))
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])

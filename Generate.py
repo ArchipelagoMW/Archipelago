@@ -9,6 +9,7 @@ import urllib.parse
 import urllib.request
 from collections import Counter
 from typing import Any, Dict, Tuple, Union
+from itertools import chain
 
 import ModuleUpdate
 
@@ -319,16 +320,32 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
     for option in new_weights:
-        option_name = option.lstrip("+")
+        option_name = option.lstrip("+-")
         if option.startswith("+") and option_name in weights:
             cleaned_value = weights[option_name]
             new_value = new_weights[option]
-            if isinstance(new_value, (set, dict)):
+            if isinstance(new_value, set):
                 cleaned_value.update(new_value)
             elif isinstance(new_value, list):
                 cleaned_value.extend(new_value)
+            elif isinstance(new_value, dict):
+                cleaned_value = dict(Counter(cleaned_value) + Counter(new_value))
             else:
                 raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
+                                f" received {type(new_value).__name__}.")
+            cleaned_weights[option_name] = cleaned_value
+        elif option.startswith("-") and option_name in weights:
+            cleaned_value = weights[option_name]
+            new_value = new_weights[option]
+            if isinstance(new_value, set):
+                cleaned_value.difference_update(new_value)
+            elif isinstance(new_value, list):
+                for element in new_value:
+                    cleaned_value.remove(element)
+            elif isinstance(new_value, dict):
+                cleaned_value = dict(Counter(cleaned_value) - Counter(new_value))
+            else:
+                raise Exception(f"Cannot apply remove to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
             cleaned_weights[option_name] = cleaned_value
         else:
@@ -378,7 +395,7 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict, triggers: list) -> dict:
+def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
@@ -401,7 +418,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
-
+            valid_keys.add(key)
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
@@ -428,8 +445,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
+    valid_keys = set()
     if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"])
+        weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -464,12 +482,14 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
 
-    if any(weight.startswith("+") for weight in game_weights) or \
-       any(weight.startswith("+") for weight in weights):
-        raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
+    for weight in chain(game_weights, weights):
+        if weight.startswith("+"):
+            raise Exception(f"Merge tag cannot be used outside of trigger contexts. Found {weight}")
+        if weight.startswith("-"):
+            raise Exception(f"Remove tag cannot be used outside of trigger contexts. Found {weight}")
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"])
+        weights = roll_triggers(weights, game_weights["triggers"], valid_keys)
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
@@ -478,6 +498,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
+        valid_keys.add(option_key)
+    for option_key in game_weights:
+        if option_key in {"triggers", *valid_keys}:
+            continue
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":

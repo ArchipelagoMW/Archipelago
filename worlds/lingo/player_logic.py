@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from Options import OptionError
-from .datatypes import Door, DoorType, RoomAndDoor, RoomAndPanel
+from .datatypes import Door, DoorType, Painting, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
@@ -361,13 +361,29 @@ class LingoPlayerLogic:
         if door_shuffle == ShuffleDoors.option_none:
             required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
             req_exits = [painting_id for painting_id, painting in PAINTINGS.items() if painting.required_when_no_doors]
-            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
-                             not painting.req_blocked_when_no_doors and painting.room not in required_painting_rooms]
-        else:
-            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
-                             painting.room not in required_painting_rooms]
+
+        def is_req_enterable(painting_id: str, painting: Painting) -> bool:
+            if painting.exit_only or painting.disable or painting.req_blocked\
+                    or painting.room in required_painting_rooms:
+                return False
+
+            if world.options.shuffle_doors == ShuffleDoors.option_none:
+                if painting.req_blocked_when_no_doors:
+                    return False
+
+                # Special case for the paintings in Color Hunt and Champion's Rest. These are req blocked when not on
+                # doors mode, and when sunwarps are disabled or sunwarp shuffle is on and the Color Hunt sunwarp is not
+                # an exit. This is because these two rooms would then be inaccessible without roof access, and we can't
+                # hide the Owl Hallway entrance behind roof access.
+                if painting.room in ["Color Hunt", "Champion's Rest"]:
+                    if world.options.sunwarp_access == SunwarpAccess.option_disabled\
+                            or (world.options.shuffle_sunwarps and "Color Hunt" not in self.sunwarp_exits):
+                        return False
+
+            return True
+
+        req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
+                         if is_req_enterable(painting_id, painting)]
         req_exits += [painting_id for painting_id, painting in PAINTINGS.items()
                       if painting.exit_only and painting.required]
         req_entrances = world.random.sample(req_enterable, len(req_exits))
