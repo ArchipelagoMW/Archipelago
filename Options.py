@@ -12,6 +12,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
+from typing_extensions import Self
 
 from Utils import get_fuzzy_results, is_iterable_except_str
 
@@ -896,6 +897,228 @@ class ItemSet(OptionSet):
     convert_name_groups = True
 
 
+class PlandoText(typing.NamedTuple):
+    at: str
+    text: typing.List[str]
+    percentage: int = 100
+
+
+PlandoTextsFromAnyType = typing.Union[
+    typing.Iterable[typing.Union[typing.Mapping[str, typing.Any], PlandoText, typing.Any]], typing.Any
+]
+
+
+class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
+    default = ()
+    supports_weighting = False
+    display_name = "Plando Texts"
+
+    def __init__(self, value: typing.Iterable[PlandoText]) -> None:
+        self.value = list(deepcopy(value))
+        super().__init__()
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        from BaseClasses import PlandoOptions
+        if self.value and not (PlandoOptions.texts & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando texts module is turned off, "
+                            f"so text for {player_name} will be ignored.")
+
+    @classmethod
+    def from_any(cls, data: PlandoTextsFromAnyType) -> Self:
+        texts: typing.List[PlandoText] = []
+        if isinstance(data, typing.Iterable):
+            for text in data:
+                if isinstance(text, typing.Mapping):
+                    if random.random() < float(text.get("percentage", 100)/100):
+                        at = text.get("at", None)
+                        if at is not None:
+                            given_text = text.get("text", [])
+                            if isinstance(given_text, str):
+                                given_text = [given_text]
+                            texts.append(PlandoText(
+                                at,
+                                given_text,
+                                text.get("percentage", 100)
+                            ))
+                elif isinstance(text, PlandoText):
+                    if random.random() < float(text.percentage/100):
+                        texts.append(text)
+                else:
+                    raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
+            cls.verify_keys([text.at for text in texts])
+            return cls(texts)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-list, got {type(data)}")
+
+    @classmethod
+    def get_option_name(cls, value: typing.List[PlandoText]) -> str:
+        return str({text.at: " ".join(text.text) for text in value})
+
+    def __iter__(self) -> typing.Iterator[PlandoText]:
+        yield from self.value
+
+    def __getitem__(self, index: typing.SupportsIndex) -> PlandoText:
+        return self.value.__getitem__(index)
+
+    def __len__(self) -> int:
+        return self.value.__len__()
+
+
+class ConnectionsMeta(AssembleOptions):
+    def __new__(mcs, name: str, bases: tuple[type, ...], attrs: dict[str, typing.Any]):
+        if name != "PlandoConnections":
+            assert "entrances" in attrs, f"Please define valid entrances for {name}"
+            attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
+            assert "exits" in attrs, f"Please define valid exits for {name}"
+            attrs["exits"] = frozenset((connection.lower() for connection in attrs["exits"]))
+        if "__doc__" not in attrs:
+            attrs["__doc__"] = PlandoConnections.__doc__
+        cls = super().__new__(mcs, name, bases, attrs)
+        return cls
+
+
+class PlandoConnection(typing.NamedTuple):
+    class Direction:
+        entrance = "entrance"
+        exit = "exit"
+        both = "both"
+
+    entrance: str
+    exit: str
+    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.8 is dropped
+    percentage: int = 100
+
+
+PlandoConFromAnyType = typing.Union[
+    typing.Iterable[typing.Union[typing.Mapping[str, typing.Any], PlandoConnection, typing.Any]], typing.Any
+]
+
+
+class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=ConnectionsMeta):
+    """Generic connections plando. Format is:
+    - entrance: "Entrance Name"
+      exit: "Exit Name"
+      direction: "Direction"
+      percentage: 100
+    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
+
+    display_name = "Plando Connections"
+
+    default = ()
+    supports_weighting = False
+
+    entrances: typing.ClassVar[typing.AbstractSet[str]]
+    exits: typing.ClassVar[typing.AbstractSet[str]]
+
+    duplicate_exits: bool = False
+    """Whether or not exits should be allowed to be duplicate."""
+
+    def __init__(self, value: typing.Iterable[PlandoConnection]):
+        self.value = list(deepcopy(value))
+        super(PlandoConnections, self).__init__()
+
+    @classmethod
+    def validate_entrance_name(cls, entrance: str) -> bool:
+        return entrance.lower() in cls.entrances
+
+    @classmethod
+    def validate_exit_name(cls, exit: str) -> bool:
+        return exit.lower() in cls.exits
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        """Checks that a given entrance can connect to a given exit.
+        By default, this will always return true unless overridden."""
+        return True
+
+    @classmethod
+    def validate_plando_connections(cls, connections: typing.Iterable[PlandoConnection]) -> None:
+        used_entrances: typing.List[str] = []
+        used_exits: typing.List[str] = []
+        for connection in connections:
+            entrance = connection.entrance
+            exit = connection.exit
+            direction = connection.direction
+            if direction not in (PlandoConnection.Direction.entrance,
+                                 PlandoConnection.Direction.exit,
+                                 PlandoConnection.Direction.both):
+                raise ValueError(f"Unknown direction: {direction}")
+            if entrance in used_entrances:
+                raise ValueError(f"Duplicate Entrance {entrance} not allowed.")
+            if not cls.duplicate_exits and exit in used_exits:
+                raise ValueError(f"Duplicate Exit {exit} not allowed.")
+            used_entrances.append(entrance)
+            used_exits.append(exit)
+            if not cls.validate_entrance_name(entrance):
+                raise ValueError(f"{entrance.title()} is not a valid entrance.")
+            if not cls.validate_exit_name(exit):
+                raise ValueError(f"{exit.title()} is not a valid exit.")
+            if not cls.can_connect(entrance, exit):
+                raise ValueError(f"Connection between {entrance.title()} and {exit.title()} is invalid.")
+
+    @classmethod
+    def from_any(cls, data: PlandoConFromAnyType) -> Self:
+        if not isinstance(data, typing.Iterable):
+            raise Exception(f"Cannot create plando connections from non-List value, got {type(data)}.")
+
+        value: typing.List[PlandoConnection] = []
+        for connection in data:
+            if isinstance(connection, typing.Mapping):
+                percentage = connection.get("percentage", 100)
+                if random.random() < float(percentage / 100):
+                    entrance = connection.get("entrance", None)
+                    if is_iterable_except_str(entrance):
+                        entrance = random.choice(sorted(entrance))
+                    exit = connection.get("exit", None)
+                    if is_iterable_except_str(exit):
+                        exit = random.choice(sorted(exit))
+                    direction = connection.get("direction", "both")
+
+                    if not entrance or not exit:
+                        raise Exception("Plando connection must have an entrance and an exit.")
+                    value.append(PlandoConnection(
+                        entrance,
+                        exit,
+                        direction,
+                        percentage
+                    ))
+            elif isinstance(connection, PlandoConnection):
+                if random.random() < float(connection.percentage / 100):
+                    value.append(connection)
+            else:
+                raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
+        cls.validate_plando_connections(value)
+        return cls(value)
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        from BaseClasses import PlandoOptions
+        if self.value and not (PlandoOptions.connections & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando connections module is turned off, "
+                            f"so connections for {player_name} will be ignored.")
+
+    @classmethod
+    def get_option_name(cls, value: typing.List[PlandoConnection]) -> str:
+        return ", ".join(["%s %s %s" % (connection.entrance,
+                                        "<=>" if connection.direction == PlandoConnection.Direction.both else
+                                        "<=" if connection.direction == PlandoConnection.Direction.exit else
+                                        "=>",
+                                        connection.exit) for connection in value])
+
+    def __getitem__(self, index: typing.SupportsIndex) -> PlandoConnection:
+        return self.value.__getitem__(index)
+
+    def __iter__(self) -> typing.Iterator[PlandoConnection]:
+        yield from self.value
+
+    def __len__(self) -> int:
+        return len(self.value)
+
+
 class Accessibility(Choice):
     """Set rules for reachability of your items/locations.
     Locations: ensure everything can be reached and acquired.
@@ -1049,7 +1272,8 @@ class ItemLinks(OptionList):
     ])
 
     @staticmethod
-    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world, allow_item_groups: bool = True) -> typing.Set:
+    def verify_items(items: typing.List[str], item_link: str, pool_name: str, world,
+                     allow_item_groups: bool = True) -> typing.Set:
         pool = set()
         for item_name in items:
             if item_name not in world.item_names and (not allow_item_groups or item_name not in world.item_name_groups):
