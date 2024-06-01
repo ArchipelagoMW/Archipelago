@@ -85,8 +85,8 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "entities": list(),
-        "physical_entities": list(),
+        "entities": [],
+        "physical_entities": [],
     }
     return region_obj, options
 
@@ -100,9 +100,8 @@ def parse_lambda(lambda_string: str) -> WitnessRule:
     if lambda_string == "True":
         return frozenset([frozenset()])
     split_ands = set(lambda_string.split(" | "))
-    lambda_set = frozenset({frozenset(a.split(" & ")) for a in split_ands})
+    return frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
-    return lambda_set
 
 
 @lru_cache(maxsize=None)

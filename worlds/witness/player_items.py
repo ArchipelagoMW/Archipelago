@@ -87,7 +87,8 @@ class WitnessPlayerItems:
                                      if data.classification == ItemClassification.useful}.items():
             if item_name in static_witness_items._special_usefuls:
                 continue
-            elif item_name == "Energy Capacity":
+
+            if item_name == "Energy Capacity":
                 self._mandatory_items[item_name] = NUM_ENERGY_UPGRADES
             elif isinstance(item_data.classification, ProgressiveItemDefinition):
                 self._mandatory_items[item_name] = len(item_data.mappings)
@@ -184,14 +185,14 @@ class WitnessPlayerItems:
                                 output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(list(output))
+        return sorted(output)
 
     def get_door_ids_in_pool(self) -> List[int]:
         """
         Returns the total set of all door IDs that are controlled by items in the pool.
         """
         output: List[int] = []
-        for item_name, item_data in {name: data for name, data in self.item_data.items()}.items():
+        for item_name, item_data in dict(self.item_data.items()).items():
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
             output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
@@ -210,7 +211,7 @@ class WitnessPlayerItems:
 
     def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
         output: Dict[int, List[int]] = {}
-        for item_name, quantity in {name: quantity for name, quantity in self._mandatory_items.items()}.items():
+        for item_name, quantity in dict(self._mandatory_items.items()).items():
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child

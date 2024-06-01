@@ -28,20 +28,20 @@ class StaticWitnessLogicObj:
             lines = get_sigma_normal_logic()
 
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
-        self.ALL_REGIONS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
-        self.ALL_AREAS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.ALL_REGIONS_BY_NAME: Dict[str, Dict[str, Any]] = {}
+        self.ALL_AREAS_BY_NAME: Dict[str, Dict[str, Any]] = {}
         self.CONNECTIONS_WITH_DUPLICATES: Dict[str, Dict[str, Set[WitnessRule]]] = defaultdict(lambda: defaultdict(set))
-        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = dict()
+        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = {}
 
-        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = dict()
-        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = dict()
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Any] = dict()
+        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = {}
+        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = {}
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Any] = {}
 
-        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = dict()
+        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = {}
 
-        self.EP_TO_OBELISK_SIDE: Dict[str, str] = dict()
+        self.EP_TO_OBELISK_SIDE: Dict[str, str] = {}
 
-        self.ENTITY_ID_TO_NAME: Dict[str, str] = dict()
+        self.ENTITY_ID_TO_NAME: Dict[str, str] = {}
 
         self.read_logic_file(lines)
         self.reverse_connections()
@@ -52,7 +52,7 @@ class StaticWitnessLogicObj:
         Reads the logic file and does the initial population of data structures
         """
 
-        current_region = dict()
+        current_region = {}
         current_area: Dict[str, Any] = {
             "name": "Misc",
             "regions": [],
@@ -278,9 +278,9 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
 def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
         return get_vanilla()
-    elif name == "sigma_normal":
+    if name == "sigma_normal":
         return get_sigma_normal()
-    elif name == "sigma_expert":
+    if name == "sigma_expert":
         return get_sigma_expert()
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 

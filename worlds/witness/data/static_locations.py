@@ -443,9 +443,9 @@ OBELISK_SIDES = {
     "Town Obelisk Side 6",
 }
 
-ALL_LOCATIONS_TO_ID: Dict[str, int] = dict()
+ALL_LOCATIONS_TO_ID: Dict[str, int] = {}
 
-AREA_LOCATION_GROUPS: Dict[str, Set[str]] = dict()
+AREA_LOCATION_GROUPS: Dict[str, Set[str]] = {}
 
 
 def get_id(entity_hex: str) -> int:

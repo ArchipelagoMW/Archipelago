@@ -349,8 +349,8 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
     When this happens, they are made less likely to receive an area hint.
     """
 
-    unhinted_locations_per_area = dict()
-    unhinted_location_percentage_per_area = dict()
+    unhinted_locations_per_area = {}
+    unhinted_location_percentage_per_area = {}
 
     for area_name, locations in locations_per_area.items():
         not_yet_hinted_locations = sum(location not in already_hinted_locations for location in locations)
@@ -373,8 +373,8 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
     potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.keys())
 
-    locations_per_area = dict()
-    items_per_area = dict()
+    locations_per_area = {}
+    items_per_area = {}
 
     for area in potential_areas:
         regions = [
@@ -538,7 +538,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     location_hints_created_in_round_1 = len(generated_hints)
 
-    unhinted_locations_per_area: Dict[str, Set[Location]] = dict()
+    unhinted_locations_per_area: Dict[str, Set[Location]] = {}
 
     # Then, make area hints.
     if area_hints:
@@ -611,7 +611,7 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
 
 
 def make_laser_hints(world: "WitnessWorld", laser_names: List[str]) -> Dict[str, WitnessWordedHint]:
-    laser_hints_by_name = dict()
+    laser_hints_by_name = {}
 
     for item_name in laser_names:
         location_hint = hint_from_item(world, item_name, world.own_itempool)

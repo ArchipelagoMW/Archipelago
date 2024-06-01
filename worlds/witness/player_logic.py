@@ -75,7 +75,7 @@ class WitnessPlayerLogic:
         self.THEORETICAL_ITEMS: Set[str] = set()
         self.THEORETICAL_ITEMS_NO_MULTI: Set[str] = set()
         self.MULTI_AMOUNTS: Dict[str, int] = defaultdict(lambda: 1)
-        self.MULTI_LISTS: Dict[str, List[str]] = dict()
+        self.MULTI_LISTS: Dict[str, List[str]] = {}
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI: Set[str] = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
@@ -98,9 +98,9 @@ class WitnessPlayerLogic:
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
-        self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = dict()
+        self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = {}
 
-        self.EVENT_ITEM_PAIRS: Dict[str, str] = dict()
+        self.EVENT_ITEM_PAIRS: Dict[str, str] = {}
         self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
         self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
         self.PRECOMPLETED_LOCATIONS: Set[str] = set()
@@ -125,8 +125,8 @@ class WitnessPlayerLogic:
             "0xFFF00": "Bottom Floor Discard Turns On",
         }
 
-        self.USED_EVENT_NAMES_BY_HEX: Dict[str, str] = dict()
-        self.CONDITIONAL_EVENTS: Dict[Tuple[str, str], str] = dict()
+        self.USED_EVENT_NAMES_BY_HEX: Dict[str, str] = {}
+        self.CONDITIONAL_EVENTS: Dict[Tuple[str, str], str] = {}
 
         # The basic requirements to solve each entity come from StaticWitnessLogic.
         # However, for any given world, the options (e.g. which item shuffles are enabled) affect the requirements.
@@ -212,7 +212,7 @@ class WitnessPlayerLogic:
         # For each entity that this entity depends on (e.g. a panel turning on another panel),
         # Add that entities requirements to this entity.
         # If there are multiple options, consider each, and then or-chain them.
-        all_options = list()
+        all_options = []
 
         for option in these_panels:
             dependent_items_for_option: WitnessRule = frozenset({frozenset()})
@@ -771,12 +771,12 @@ class WitnessPlayerLogic:
 
         # Requirements are cached per entity. However, we might redo the whole reduction process multiple times.
         # So, we first clear this cache.
-        self.REQUIREMENTS_BY_HEX = dict()
+        self.REQUIREMENTS_BY_HEX = {}
 
         # We also clear any data structures that we might have filled in a previous dependency reduction
-        self.REQUIREMENTS_BY_HEX = dict()
-        self.USED_EVENT_NAMES_BY_HEX = dict()
-        self.CONNECTIONS_BY_REGION_NAME = dict()
+        self.REQUIREMENTS_BY_HEX = {}
+        self.USED_EVENT_NAMES_BY_HEX = {}
+        self.CONNECTIONS_BY_REGION_NAME = {}
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
 
         # Make independent requirements for entities
@@ -896,8 +896,7 @@ class WitnessPlayerLogic:
         if entity_hex not in self.USED_EVENT_NAMES_BY_HEX:
             warning(f'Entity "{name}" does not have an associated event name.')
             self.USED_EVENT_NAMES_BY_HEX[entity_hex] = name + " Event"
-        pair = (name, self.USED_EVENT_NAMES_BY_HEX[entity_hex])
-        return pair
+        return (name, self.USED_EVENT_NAMES_BY_HEX[entity_hex])
 
     def make_event_panel_lists(self) -> None:
         """
