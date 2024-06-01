@@ -76,42 +76,42 @@ class TestMetalDetectors(SVTestCase):
         options = get_minsanity_options()
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 1)
+        self.assertEqual(len(items), 1)
 
     def test_museumsanity_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Museumsanity.internal_name] = Museumsanity.option_all
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 2)
+        self.assertEqual(len(items), 2)
 
     def test_shipsanity_full_shipment_1_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Shipsanity.internal_name] = Shipsanity.option_full_shipment
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 1)
+        self.assertEqual(len(items), 1)
 
     def test_shipsanity_everything_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Shipsanity.internal_name] = Shipsanity.option_everything
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 2)
+        self.assertEqual(len(items), 2)
 
     def test_complete_collection_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Goal.internal_name] = Goal.option_complete_collection
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 2)
+        self.assertEqual(len(items), 2)
 
     def test_perfection_2_metal_detector(self):
         options = get_minsanity_options().copy()
         options[Goal.internal_name] = Goal.option_perfection
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 2)
+        self.assertEqual(len(items), 2)
 
     def test_maxsanity_4_metal_detector(self):
         options = get_minsanity_options().copy()
@@ -120,4 +120,4 @@ class TestMetalDetectors(SVTestCase):
         options[Goal.internal_name] = Goal.option_perfection
         multiworld = setup_solo_multiworld(options)
         items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
-        self.assertEquals(len(items), 4)
+        self.assertEqual(len(items), 4)

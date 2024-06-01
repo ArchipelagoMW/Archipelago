@@ -1,4 +1,5 @@
 import os
+import threading
 import unittest
 from argparse import Namespace
 from contextlib import contextmanager
@@ -207,15 +208,22 @@ class SVTestCase(unittest.TestCase):
 
         with self.subTest(msg, **kwargs):
             if world_caching:
-                multi_world = setup_solo_multiworld(world_options, seed)
-                original_state = multi_world.state.copy()
+                multiworld = setup_solo_multiworld(world_options, seed)
+                original_state = multiworld.state.copy()
+                original_itempool = multiworld.itempool.copy()
+                unfilled_locations = multiworld.get_unfilled_locations(1)
+                multiworld.lock.acquire()
             else:
-                multi_world = setup_solo_multiworld(world_options, seed, _cache={})
+                multiworld = setup_solo_multiworld(world_options, seed, _cache={})
 
-            yield multi_world, multi_world.worlds[1]
+            yield multiworld, multiworld.worlds[1]
 
             if world_caching:
-                multi_world.state = original_state
+                multiworld.state = original_state
+                multiworld.itempool = original_itempool
+                for location in unfilled_locations:
+                    location.item = None
+                multiworld.lock.release()
 
 
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
@@ -236,6 +244,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.options = parse_class_option_keys(self.options)
 
         self.multiworld = setup_solo_multiworld(self.options, seed=self.seed)
+        self.multiworld.lock.acquire()
         self.original_state = self.multiworld.state.copy()
         self.original_itempool = self.multiworld.itempool.copy()
         self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
@@ -247,6 +256,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.multiworld.itempool = self.original_itempool
         for location in self.unfilled_locations:
             location.item = None
+        self.multiworld.lock.release()
 
     @property
     def run_default_tests(self) -> bool:
@@ -336,6 +346,9 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
     if should_cache:
         add_to_world_cache(_cache, frozen_options, multiworld)  # noqa
+
+    # Lock is needed for multi-threading tests
+    setattr(multiworld, "lock", threading.Lock())
 
     return multiworld
 
