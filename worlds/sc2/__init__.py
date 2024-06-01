@@ -8,7 +8,8 @@ from dataclasses import dataclass
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from . import item_names
-from .items import (StarcraftItem, filler_items, get_full_item_list,
+from .items import (
+    StarcraftItem, filler_items, get_full_item_list,
     get_basic_units, ItemData, upgrade_included_names, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units,
 )
@@ -16,11 +17,12 @@ from . import items
 from . import item_groups
 from .locations import get_locations, get_location_types, get_plando_locations
 from .regions import create_regions
-from .options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
-                      KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
-                      get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-                      GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems,
-                      )
+from .options import (
+    get_option_value, LocationInclusion, KerriganLevelItemDistribution,
+    KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
+    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
+    GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems,
+)
 from .pool_filter import filter_items
 from .mission_tables import (
     MissionInfo, SC2Campaign, SC2Mission, SC2Race, MissionFlag
