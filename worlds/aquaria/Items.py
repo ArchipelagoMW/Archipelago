@@ -77,41 +77,41 @@ class ItemData:
 item_table = {
     #       name:           ID,    Nb,   Item Type,        Item Group
     "Anemone": ItemData(698000, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_anemone
-    "Arnassi statue": ItemData(698001, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_arnassi_statue
-    "Big seed": ItemData(698002, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_big_seed
-    "Glowing seed": ItemData(698003, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_bio_seed
-    "Black pearl": ItemData(698004, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_blackpearl
-    "Baby blaster": ItemData(698005, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_blaster
-    "Crab armor": ItemData(698006, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_crab_costume
-    "Baby dumbo": ItemData(698007, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_dumbo
+    "Arnassi Statue": ItemData(698001, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_arnassi_statue
+    "Big Seed": ItemData(698002, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_big_seed
+    "Glowing Seed": ItemData(698003, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_bio_seed
+    "Black Pearl": ItemData(698004, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_blackpearl
+    "Baby Blaster": ItemData(698005, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_blaster
+    "Crab Armor": ItemData(698006, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_crab_costume
+    "Baby Dumbo": ItemData(698007, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_dumbo
     "Tooth": ItemData(698008, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_boss
-    "Energy statue": ItemData(698009, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_statue
-    "Krotite armor": ItemData(698010, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_temple
-    "Golden starfish": ItemData(698011, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_gold_star
-    "Golden gear": ItemData(698012, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_golden_gear
-    "Jelly beacon": ItemData(698013, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_jelly_beacon
-    "Jelly costume": ItemData(698014, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_jelly_costume
-    "Jelly plant": ItemData(698015, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_jelly_plant
-    "Mithalas doll": ItemData(698016, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithala_doll
-    "Mithalan dress": ItemData(698017, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalan_costume
-    "Mithalas banner": ItemData(698018, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_banner
-    "Mithalas pot": ItemData(698019, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_pot
-    "Mutant costume": ItemData(698020, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mutant_costume
-    "Baby nautilus": ItemData(698021, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_nautilus
-    "Baby piranha": ItemData(698022, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_piranha
+    "Energy Statue": ItemData(698009, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_statue
+    "Krotite Armor": ItemData(698010, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_temple
+    "Golden Starfish": ItemData(698011, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_gold_star
+    "Golden Gear": ItemData(698012, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_golden_gear
+    "Jelly Beacon": ItemData(698013, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_jelly_beacon
+    "Jelly Costume": ItemData(698014, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_jelly_costume
+    "Jelly Plant": ItemData(698015, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_jelly_plant
+    "Mithalas Doll": ItemData(698016, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithala_doll
+    "Mithalan Dress": ItemData(698017, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalan_costume
+    "Mithalas Banner": ItemData(698018, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_banner
+    "Mithalas Pot": ItemData(698019, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_pot
+    "Mutant Costume": ItemData(698020, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mutant_costume
+    "Baby Nautilus": ItemData(698021, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_nautilus
+    "Baby Piranha": ItemData(698022, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_piranha
     "Arnassi Armor": ItemData(698023, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_seahorse_costume
-    "Seed bag": ItemData(698024, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_seed_bag
+    "Seed Bag": ItemData(698024, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_seed_bag
     "King's Skull": ItemData(698025, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_skull
-    "Song plant spore": ItemData(698026, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_spore_seed
-    "Stone head": ItemData(698027, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_stone_head
-    "Sun key": ItemData(698028, 1, ItemType.NORMAL, ItemGroup.COLLECTIBLE),  # collectible_sun_key
-    "Girl costume": ItemData(698029, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_teen_costume
-    "Odd container": ItemData(698030, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_treasure_chest
+    "Song Plant Spore": ItemData(698026, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_spore_seed
+    "Stone Head": ItemData(698027, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_stone_head
+    "Sun Key": ItemData(698028, 1, ItemType.NORMAL, ItemGroup.COLLECTIBLE),  # collectible_sun_key
+    "Girl Costume": ItemData(698029, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_teen_costume
+    "Odd Container": ItemData(698030, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_treasure_chest
     "Trident": ItemData(698031, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_trident_head
-    "Turtle egg": ItemData(698032, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_turtle_egg
-    "Jelly egg": ItemData(698033, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_upsidedown_seed
-    "Urchin costume": ItemData(698034, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_urchin_costume
-    "Baby walker": ItemData(698035, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_walker
+    "Turtle Egg": ItemData(698032, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_turtle_egg
+    "Jelly Egg": ItemData(698033, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_upsidedown_seed
+    "Urchin Costume": ItemData(698034, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_urchin_costume
+    "Baby Walker": ItemData(698035, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_walker
     "Vedha's Cure-All-All": ItemData(698036, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_Vedha'sCure-All
     "Zuuna's perogi": ItemData(698037, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_Zuuna'sperogi
     "Arcane poultice": ItemData(698038, 7, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_arcanepoultice
@@ -206,9 +206,9 @@ item_table = {
     "Transturtle Open Water top right": ItemData(698127, 1, ItemType.PROGRESSION,
                                                  ItemGroup.TURTLE),  # transport_openwater03
     "Transturtle Forest bottom left": ItemData(698128, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest04
-    "Transturtle Home water": ItemData(698129, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_mainarea
+    "Transturtle Home Water": ItemData(698129, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_mainarea
     "Transturtle Abyss right": ItemData(698130, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_abyss03
     "Transturtle Final Boss": ItemData(698131, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_finalboss
-    "Transturtle Simon says": ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
-    "Transturtle Arnassi ruins": ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
+    "Transturtle Simon Says": ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
+    "Transturtle Arnassi Ruins": ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
 }
