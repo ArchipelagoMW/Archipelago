@@ -614,13 +614,16 @@ def read_data() -> Tuple[
 
     for rule in rules:
         if "Goal" in rule.flags:
-            _, items = goals[
-                goal_indices[
+            if (name := rule.flags.get("Goal")) is not None:
+                goal_name = name
+            else:
+                goal_name = (
                     rule.name.translate(str.maketrans("", "", string.punctuation))
                     .replace(" ", "_")
                     .lower()
-                ]
-            ]
+                )
+
+            _, items = goals[goal_indices[goal_name]]
             items.add(rule.name)
 
     _, mech_boss_items = goals[goal_indices["mechanical_bosses"]]

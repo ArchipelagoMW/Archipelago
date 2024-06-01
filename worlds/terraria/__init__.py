@@ -116,10 +116,7 @@ class TerrariaWorld(World):
                 )
                 or (not self.options.grindy_achievements.value and grindy)
                 or (not self.options.fishing_achievements.value and fishing)
-                or (
-                    rule.name == "Zenith" and self.options.goal.value != 11
-                )  # Bad hardcoding
-            ):
+            ) and rule.name not in goal_locations:
                 continue
 
             if "Location" in rule.flags or "Achievement" in rule.flags:
@@ -134,7 +131,9 @@ class TerrariaWorld(World):
                 # Event
                 locations.append(rule.name)
 
-            if "Item" in rule.flags:
+            if "Item" in rule.flags and not (
+                "Achievement" in rule.flags and rule.name not in goal_locations
+            ):
                 # Item
                 item_count += 1
                 if rule.name not in goal_locations:
