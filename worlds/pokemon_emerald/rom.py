@@ -184,7 +184,7 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
                 location.item.name
             ) for trainer in alternates)
 
-    player_name_ids: Dict[str, int] = {world.multiworld.player_name[world.player]: 0}
+    player_name_ids: Dict[str, int] = {world.player_name: 0}
     item_name_offsets: Dict[str, int] = {}
     next_item_name_offset = 0
     for i, (flag, item_player, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
@@ -208,7 +208,7 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
                 struct.pack("<B", 0)
             )
         else:
-            player_name = world.multiworld.player_name[item_player]
+            player_name = world.multiworld.get_player_name(item_player)
 
             if player_name not in player_name_ids:
                 # Only space for 50 player names
