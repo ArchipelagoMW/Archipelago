@@ -35,7 +35,7 @@ class StaticWitnessLogicObj:
 
         self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = {}
         self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = {}
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Any] = {}
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = {}
 
         self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = {}
 

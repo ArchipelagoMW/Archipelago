@@ -97,7 +97,9 @@ class WitnessPlayerLogic:
         self.CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
-        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+        self.DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = copy.deepcopy(
+            self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX
+        )
         self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = {}
 
         self.EVENT_ITEM_PAIRS: Dict[str, str] = {}
