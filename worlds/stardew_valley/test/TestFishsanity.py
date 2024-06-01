@@ -101,6 +101,7 @@ class TestFishsanityLegendaries_QiBoard(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_legendaries,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false
     })
     expected_fishes = pelican_town_legendary_fishes | qi_board_legendary_fishes
 
@@ -213,6 +214,7 @@ class TestFishsanityAll_QiBoard(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false
     })
     expected_fishes = (
             pelican_town_legendary_fishes |
@@ -265,6 +267,7 @@ class TestFishsanityExcludeLegendaries_QiBoard(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_legendaries,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false
     })
     expected_fishes = (
             pelican_town_hard_special_fishes |
@@ -328,6 +331,7 @@ class TestFishsanityExcludeHardFishes_QiBoard(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false
     })
     expected_fishes = (
             pelican_town_medium_special_fishes |
@@ -377,6 +381,7 @@ class TestFishsanityOnlyEasyFishes_QiBoard(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
         SpecialOrderLocations: SpecialOrderLocations.option_board_qi,
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false
     })
     expected_fishes = (
             pelican_town_easy_normal_fishes |

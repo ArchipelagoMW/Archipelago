@@ -214,7 +214,8 @@ class TestSpecialOrders(SVTestCase):
 
     def test_given_board_and_qi_then_all_orders_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-                         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories}
+                         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories,
+                         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
         with solo_multiworld(world_options) as (multi_world, _):
 
             locations_in_pool = {location.name for location in multi_world.get_locations()}
@@ -230,7 +231,8 @@ class TestSpecialOrders(SVTestCase):
 
     def test_given_board_and_qi_without_arcade_machines_then_lets_play_a_game_not_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-                         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled}
+                         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
+                         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
         with solo_multiworld(world_options) as (multi_world, _):
             locations_in_pool = {location.name for location in multi_world.get_locations()}
             self.assertNotIn(SpecialOrder.lets_play_a_game, locations_in_pool)

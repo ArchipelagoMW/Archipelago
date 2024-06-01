@@ -14,6 +14,7 @@ class TestBaseItemGeneration(SVTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
@@ -397,6 +398,7 @@ class TestShipsanityNone(SVTestBase):
 class TestShipsanityCrops(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_crops,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi
     }
 
@@ -466,6 +468,7 @@ class TestShipsanityCropsNoQiCropWithoutSpecialOrders(SVTestBase):
 class TestShipsanityFish(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_fish,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi
     }
 
@@ -538,6 +541,7 @@ class TestShipsanityFishExcludeQiOrders(SVTestBase):
 class TestShipsanityFullShipment(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_full_shipment,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi
     }
 
@@ -618,6 +622,7 @@ class TestShipsanityFullShipmentExcludeQiBoard(SVTestBase):
 class TestShipsanityFullShipmentWithFish(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_full_shipment_with_fish,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi
     }
 

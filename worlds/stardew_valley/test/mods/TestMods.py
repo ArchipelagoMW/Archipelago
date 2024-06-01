@@ -53,6 +53,7 @@ class TestBaseItemGeneration(SVTestBase):
     options = {
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
