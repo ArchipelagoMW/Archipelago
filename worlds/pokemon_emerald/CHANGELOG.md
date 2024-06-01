@@ -7,6 +7,8 @@ and won't show up in the wild. Previously they would be forced to show up exactl
 - Dexsanity locations for species that evolve via item contribute their evolution item to the item pool instead of a
 great/ultra ball.
 - Added support for some new autotracking events.
+- Updated option descriptions.
+- Added `full` alias for `100` on TM and HM compatibility options.
 
 ### Fixes
 
