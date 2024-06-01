@@ -751,13 +751,27 @@ class Gifting(Toggle):
 # These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
 # or we didn't find the time to validate that they work or fix compatibility issues if they do.
 # Once a mod is validated to be functional, it can simply be removed from this list
-disabled_mods = {ModNames.deepwoods, ModNames.tractor,
-                 ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-                 ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+disabled_mods = {ModNames.deepwoods, ModNames.magic,
+                 ModNames.cooking_skill,
                  ModNames.yoba, ModNames.eugene,
-                 ModNames.wellwick, ModNames.shiko, ModNames.delores,
-                 ModNames.ayeisha, ModNames.riley, ModNames.sve, ModNames.distant_lands,
+                 ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley, ModNames.distant_lands,
                  ModNames.lacey, ModNames.boarding_house}
+
+# In Progress:
+# Tractor
+# Luck
+# Socializing
+# Archaeology
+# Binning Skill
+# Juna
+# Jasper
+# Alec
+# Mister Ginger
+# Ayeisha
+# Alecto
+# Bigger Backpack
+# Skull Cavern Elevator
+
 
 if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
     disabled_mods = {}
