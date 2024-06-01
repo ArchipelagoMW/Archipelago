@@ -37,7 +37,7 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_loads, Version, async_start
+from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore
 
@@ -1093,28 +1093,6 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player,
             "item": net_item}
-
-
-def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
-    picks = Utils.get_fuzzy_results(input_text, possible_answers, limit=2)
-    if len(picks) > 1:
-        dif = picks[0][1] - picks[1][1]
-        if picks[0][1] == 100:
-            return picks[0][0], True, "Perfect Match"
-        elif picks[0][1] < 75:
-            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
-                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
-        elif dif > 5:
-            return picks[0][0], True, "Close Match"
-        else:
-            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
-                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
-    else:
-        if picks[0][1] > 90:
-            return picks[0][0], True, "Only Option Match"
-        else:
-            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
-                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
 class CommandMeta(type):
