@@ -8,9 +8,9 @@ from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
-from .options import TunicOptions, EntranceRando
+from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic import PlandoConnection
+from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -27,6 +27,8 @@ class TunicWeb(WebWorld):
     ]
     theme = "grassFlowers"
     game = "TUNIC"
+    option_groups = tunic_option_groups
+    options_presets = tunic_option_presets
 
 
 class TunicItem(Item):
@@ -68,17 +70,17 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
 
     def generate_early(self) -> None:
-        if self.multiworld.plando_connections[self.player]:
-            for index, cxn in enumerate(self.multiworld.plando_connections[self.player]):
+        if self.options.plando_connections:
+            for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
                 if cxn.entrance.startswith("Shop"):
                     replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].remove(cxn)
-                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
                 elif cxn.exit.startswith("Shop"):
                     replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].remove(cxn)
-                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
 
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):

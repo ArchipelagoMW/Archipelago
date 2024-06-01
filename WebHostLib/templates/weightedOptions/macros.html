@@ -142,7 +142,7 @@
         {% for group_name in world.location_name_groups.keys()|sort %}
             {% if group_name != "Everywhere" %}
                 <div class="set-entry">
-                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}||{{ group_name }}" value="1" {{ "checked" if grop_name in option.default }} />
+                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}||{{ group_name }}" value="1" {{ "checked" if group_name in option.default }} />
                     <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                 </div>
             {% endif %}

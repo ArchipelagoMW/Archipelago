@@ -15,14 +15,14 @@ The locations in the randomizer are:
 - All Mithalas Urns
 - All Sunken City crates
 - Collectible treasure locations (including pet eggs and costumes)
-- Beating Simon says
+- Beating Simon Says
 - Li cave
 - Every Transportation Turtle (also called transturtle)
 - Locations where you get songs:
-    * Erulian spirit cristal
+    * Erulian spirit crystal
     * Energy status mini-boss
     * Beating Mithalan God boss
-    * Fish cave puzzle
+    * Fish Cave puzzle
     * Beating Drunian God boss
     * Beating Sun God boss
     * Breaking Li cage in the body

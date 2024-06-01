@@ -16,5 +16,5 @@ class ConfinedHomeWaterAccessTest(AquariaTestBase):
 
     def test_confine_home_water_location(self) -> None:
         """Test region accessible with confined home water"""
-        self.assertFalse(self.can_reach_region("Open water top left area"), "Can reach Open water top left area")
+        self.assertFalse(self.can_reach_region("Open Water top left area"), "Can reach Open Water top left area")
         self.assertFalse(self.can_reach_region("Home Water, turtle room"), "Can reach Home Water, turtle room")
