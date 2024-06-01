@@ -4,7 +4,6 @@
 
 - A Short Hike: [Steam](https://store.steampowered.com/app/1055540/A_Short_Hike/)
     - The Epic Games Store or itch.io version of A Short Hike will also work.
-- A Short Hike Modding Tools: [GitHub](https://github.com/BrandenEK/AShortHike.ModdingTools)
 - A Short Hike Randomizer: [GitHub](https://github.com/BrandenEK/AShortHike.Randomizer)
 
 ## Optional Software
@@ -14,13 +13,8 @@
 
 ## Installation
 
-1. Open the [Modding Tools GitHub page](https://github.com/BrandenEK/AShortHike.ModdingTools/), and follow
-the installation instructions. After this step, your `A Short Hike/` folder should have an empty `Modding/` subfolder.
-
-2. After the Modding Tools have been installed, download the 
-[Randomizer](https://github.com/BrandenEK/AShortHike.Randomizer/releases) zip, extract it, and move the contents
-of the `Randomizer/` folder into your `Modding/` folder. After this step, your `Modding/` folder should have
- `data/` and `plugins/` subfolders.
+Open the [Randomizer Repository](https://github.com/BrandenEK/AShortHike.Modding.Installer) and follow
+the installation instructions listed there.
 
 ## Connecting
 
