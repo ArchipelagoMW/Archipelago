@@ -1153,8 +1153,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
     # add a default option group for uncategorized options to get thrown into
     if "Game Options" not in ordered_groups:
         grouped_options = set(option for group in ordered_groups.values() for option in group)
-        ungrouped_options = [option for option in world.options_dataclass.type_hints.values()
-                             if option not in grouped_options]
+        ungrouped_options = [option for option in option_to_name if option not in grouped_options]
         # only add the game options group if we have ungrouped options
         if ungrouped_options:
             ordered_groups = {**{"Game Options": ungrouped_options}, **ordered_groups}
@@ -1163,8 +1162,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
         group: {
             option_to_name[option]: option
             for option in group_options
-            if (visibility_level in option.visibility
-                and option in world.options_dataclass.type_hints.values())
+            if (visibility_level in option.visibility and option in option_to_name)
         }
         for group, group_options in ordered_groups.items()
     }
