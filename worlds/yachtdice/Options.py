@@ -182,14 +182,14 @@ class minimizeExtraItems(Choice):
 class addExtraPoints(Choice):
     """
     Yacht Dice typically has space for extra items.
-    If there is space, would you like extra points shuffled in the item pool?
+    If there is space, would you like bonus points shuffled in the item pool?
     They make the game a little bit easier, as they are not considered in the logic.
     
     all_of_it: fill all locations with extra points
-    sure: put some extra points in
-    never: don't put any extra points
+    sure: put some bonus points in
+    never: don't put any bonus points
     """
-    display_name = "Extra points in the pool"
+    display_name = "Extra bonus in the pool"
     option_all_of_it = 1
     option_sure = 2
     option_never = 3
@@ -251,6 +251,6 @@ class YachtDiceOptions(PerGameCommonOptions):
     points_size: pointsSize
     
     minimize_extra_items: minimizeExtraItems
-    add_extra_points: addExtraPoints
+    add_bonus_points: addExtraPoints
     add_story_chapters: addStoryChapters
     which_story: whichStory

@@ -238,7 +238,7 @@ class YachtDiceWorld(World):
         # making sure not to exceed the number of locations.
         
         #first, we flood the entire pool with extra points (useful), if that setting is chosen.
-        if self.options.add_extra_points.value == 1: #all of the extra points
+        if self.options.add_bonus_points.value == 1: #all of the extra points
             already_items = len(self.itempool) + self.extra_plando_items + 1
             self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 100)
          
@@ -250,7 +250,7 @@ class YachtDiceWorld(World):
             self.itempool += ["Story Chapter"] * number_of_items
             
         #add some extra points (useful)
-        if self.options.add_extra_points.value == 2: #add extra points if wanted
+        if self.options.add_bonus_points.value == 2: #add extra points if wanted
             already_items = len(self.itempool) + self.extra_plando_items + 1
             self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 10)
             
@@ -261,7 +261,7 @@ class YachtDiceWorld(World):
                 self.itempool += ["Story Chapter"] * 10
                 
         #add some extra points if there is still room
-        if self.options.add_extra_points.value == 2:
+        if self.options.add_bonus_points.value == 2:
             already_items = len(self.itempool) + self.extra_plando_items + 1
             self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 10)
          
@@ -374,7 +374,7 @@ class YachtDiceWorld(World):
                 "weight_of_points",
                 "points_size",
                 "minimize_extra_items",
-                "add_extra_points",
+                "add_bonus_points",
                 "add_story_chapters",
                 "which_story"
         )

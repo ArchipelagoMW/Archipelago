@@ -2,7 +2,6 @@ from ..generic.Rules import set_rule
 from BaseClasses import MultiWorld
 from .YachtWeights import yacht_weights
 import math
-from collections import defaultdict
 
 category_mappings = {
     "Category Ones": "Ones",
@@ -128,14 +127,16 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
     #sort categories because for the step multiplier, you will want low-scorig categories first
     categories.sort(key=lambda category: category.meanScore(nbDice, nbRolls))
 
-
-
+    #function to add two discrete distribution.
     def add_distributions(dist1, dist2):
-        combined_dist = defaultdict(float)
+        combined_dist = {}
         for val1, prob1 in dist1.items():
             for val2, prob2 in dist2.items():
-                combined_dist[int(val1 + val2)] += prob1 * prob2
-        return dict(combined_dist)
+                if int(val1 + val2) in combined_dist.keys():
+                    combined_dist[int(val1 + val2)] += prob1 * prob2
+                else:
+                    combined_dist[int(val1 + val2)] = prob1 * prob2
+        return combined_dist
     
     #function to take the maximum of 'times' i.i.d. dist1.
     def max_dist(dist1, mults):
@@ -145,7 +146,7 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
             new_dist = {}
             for val1, prob1 in c.items():
                 for val2, prob2 in dist1.items():
-                    new_val = max(val1, val2 * mult)
+                    new_val = int(max(val1, val2 * mult))
                     new_prob = prob1 * prob2
                     
                     # Update the probability for the new value
@@ -172,8 +173,8 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
         return prev_val if prev_val is not None else sorted_values[0]  
             
             
-    percReturn = [0, 0.4, 0.4, 0.45, 0.45, 0.45][diff]
-    diffDivide = [0, 9, 8, 5, 4, 3][diff]
+    percReturn = [0, 0.30, 0.45, 0.53, 0.7, 0.9][diff]
+    diffDivide = [0, 9, 8, 4, 2, 1][diff]
     
     #calculate total distribution
     total_dist = {0: 1}
