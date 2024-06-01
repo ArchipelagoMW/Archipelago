@@ -17,19 +17,19 @@ class BindSongAccessTest(AquariaTestBase):
     def test_bind_song_location(self) -> None:
         """Test locations that require Bind song"""
         locations = [
-            "Verse cave right area, Big Seed",
-            "Home water, bulb in the path below Nautilus Prime",
-            "Home water, bulb in the bottom left room",
-            "Home water, Nautilus Egg",
-            "Song cave, Verse egg",
-            "Energy temple first area, beating the energy statue",
-            "Energy temple first area, bulb in the bottom room blocked by a rock",
-            "Energy temple first area, Energy Idol",
-            "Energy temple second area, bulb under the rock",
-            "Energy temple bottom entrance, Krotite armor",
-            "Energy temple third area, bulb in the bottom path",
-            "Energy temple boss area, Fallen god tooth",
-            "Energy temple blaster room, Blaster egg",
+            "Verse Cave right area, Big Seed",
+            "Home Water, bulb in the path below Nautilus Prime",
+            "Home Water, bulb in the bottom left room",
+            "Home Water, Nautilus Egg",
+            "Song Cave, Verse Egg",
+            "Energy Temple first area, beating the Energy Statue",
+            "Energy Temple first area, bulb in the bottom room blocked by a rock",
+            "Energy Temple first area, Energy Idol",
+            "Energy Temple second area, bulb under the rock",
+            "Energy Temple bottom entrance, Krotite Armor",
+            "Energy Temple third area, bulb in the bottom path",
+            "Energy Temple boss area, Fallen God Tooth",
+            "Energy Temple blaster room, Blaster Egg",
             *after_home_water_locations
         ]
         items = [["Bind song"]]

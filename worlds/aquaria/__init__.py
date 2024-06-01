@@ -71,9 +71,9 @@ class AquariaWorld(World):
 
     item_name_groups = {
         "Damage": {"Energy form", "Nature form", "Beast form",
-                   "Li and Li song", "Baby nautilus", "Baby piranha",
-                   "Baby blaster"},
-        "Light": {"Sun form", "Baby dumbo"}
+                   "Li and Li song", "Baby Nautilus", "Baby Piranha",
+                   "Baby Blaster"},
+        "Light": {"Sun form", "Baby Dumbo"}
     }
     """Grouping item make it easier to find them"""
 
@@ -152,20 +152,20 @@ class AquariaWorld(World):
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
         if self.options.turtle_randomizer.value > 0:
             if self.options.turtle_randomizer.value == 2:
-                self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle", precollected)
+                self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
         else:
-            self.__pre_fill_item("Transturtle Veil top left", "The veil top left area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Veil top right", "The veil top right area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Open Water top right", "Open water top right area, Transturtle",
+            self.__pre_fill_item("Transturtle Veil top left", "The Veil top left area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Veil top right", "The Veil top right area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Open Water top right", "Open Water top right area, Transturtle",
                                  precollected)
             self.__pre_fill_item("Transturtle Forest bottom left", "Kelp Forest bottom left area, Transturtle",
                                  precollected)
-            self.__pre_fill_item("Transturtle Home water", "Home water, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Home Water", "Home Water, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item("Transturtle Simon says", "Arnassi Ruins, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Arnassi ruins", "Simon says area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Arnassi Ruins", "Simon Says area, Transturtle", precollected)
         for name, data in item_table.items():
             if name in precollected:
                 precollected.remove(name)

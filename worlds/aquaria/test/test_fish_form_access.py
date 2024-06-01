@@ -16,22 +16,22 @@ class FishFormAccessTest(AquariaTestBase):
     def test_fish_form_location(self) -> None:
         """Test locations that require fish form"""
         locations = [
-            "The veil top left area, bulb inside the fish pass",
-            "Mithalas city, Doll",
-            "Mithalas city, urn inside a home fish pass",
+            "The Veil top left area, bulb inside the fish pass",
+            "Mithalas City, Doll",
+            "Mithalas City, urn inside a home fish pass",
             "Kelp Forest top right area, bulb in the top fish pass",
-            "The veil bottom area, Verse egg",
-            "Open water bottom left area, bulb inside the lowest fish pass",
-            "Kelp Forest top left area, bulb close to the Verse egg",
-            "Kelp forest top left area, Verse egg",
+            "The Veil bottom area, Verse Egg",
+            "Open Water bottom left area, bulb inside the lowest fish pass",
+            "Kelp Forest top left area, bulb close to the Verse Egg",
+            "Kelp Forest top left area, Verse Egg",
             "Mermog cave, bulb in the left part of the cave",
             "Mermog cave, Piranha Egg",
             "Beating Mergog",
-            "Octopus cave, Dumbo Egg",
-            "Octopus cave, bulb in the path below the octopus cave path",
+            "Octopus Cave, Dumbo Egg",
+            "Octopus Cave, bulb in the path below the Octopus Cave path",
             "Beating Octopus Prime",
             "Abyss left area, bulb in the bottom fish pass",
-            "Arnassi ruins, Arnassi Armor"
+            "Arnassi Ruins, Arnassi Armor"
         ]
         items = [["Fish form"]]
         self.assertAccessDependency(locations, items)
