@@ -455,148 +455,148 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     Traps: hidden(Traps) # type: ignore
     DeathLink: hidden(DeathLink) # type: ignore
 
-    def handle_backward_compatibility(o) -> None:
+    def handle_backward_compatibility(self) -> None:
         has_replaced_options: bool = False
 
-        if o.StartWithJewelryBox.value != o.StartWithJewelryBox.default and \
-            o.start_with_jewelry_box.value == o.start_with_jewelry_box.default:
-            o.start_with_jewelry_box.value = o.StartWithJewelryBox.value
+        if self.StartWithJewelryBox != StartWithJewelryBox.default and \
+            self.start_with_jewelry_box == StartWithJewelryBox.default:
+            self.start_with_jewelry_box.value = self.StartWithJewelryBox.value
             has_replaced_options = True
-        if o.DownloadableItems.value != o.DownloadableItems.default and \
-            o.downloadable_items.value == o.downloadable_items.default:
-            o.downloadable_items.value = o.DownloadableItems.value
+        if self.DownloadableItems != DownloadableItems.default and \
+            self.downloadable_items == DownloadableItems.default:
+            self.downloadable_items.value = self.DownloadableItems.value
             has_replaced_options = True
-        if o.EyeSpy.value != o.EyeSpy.default and \
-            o.eye_spy.value == o.eye_spy.default:
-            o.eye_spy.value = o.EyeSpy.value
+        if self.EyeSpy != EyeSpy.default and \
+            self.eye_spy == EyeSpy.default:
+            self.eye_spy.value = self.EyeSpy.value
             has_replaced_options = True
-        if o.StartWithMeyef.value != o.StartWithMeyef.default and \
-            o.start_with_meyef.value == o.start_with_meyef.default:
-            o.start_with_meyef.value = o.StartWithMeyef.value
+        if self.StartWithMeyef != StartWithMeyef.default and \
+            self.start_with_meyef == StartWithMeyef.default:
+            self.start_with_meyef.value = self.StartWithMeyef.value
             has_replaced_options = True
-        if o.QuickSeed.value != o.QuickSeed.default and \
-            o.quick_seed.value == o.quick_seed.default:
-            o.quick_seed.value = o.QuickSeed.value
+        if self.QuickSeed != QuickSeed.default and \
+            self.quick_seed == QuickSeed.default:
+            self.quick_seed.value = self.QuickSeed.value
             has_replaced_options = True
-        if o.SpecificKeycards.value != o.SpecificKeycards.default and \
-            o.specific_keycards.value == o.specific_keycards.default:
-            o.specific_keycards.value = o.SpecificKeycards.value
+        if self.SpecificKeycards != SpecificKeycards.default and \
+            self.specific_keycards == SpecificKeycards.default:
+            self.specific_keycards.value = self.SpecificKeycards.value
             has_replaced_options = True
-        if o.Inverted.value != o.Inverted.default and \
-            o.inverted.value == o.inverted.default:
-            o.inverted.value = o.Inverted.value
+        if self.Inverted != Inverted.default and \
+            self.inverted == Inverted.default:
+            self.inverted.value = self.Inverted.value
             has_replaced_options = True
-        if o.GyreArchives.value != o.GyreArchives.default and \
-            o.gyre_archives.value == o.gyre_archives.default:
-            o.gyre_archives.value = o.GyreArchives.value
+        if self.GyreArchives != GyreArchives.default and \
+            self.gyre_archives == GyreArchives.default:
+            self.gyre_archives.value = self.GyreArchives.value
             has_replaced_options = True
-        if o.Cantoran.value != o.Cantoran.default and \
-            o.cantoran.value == o.cantoran.default:
-            o.cantoran.value = o.Cantoran.value
+        if self.Cantoran != Cantoran.default and \
+            self.cantoran == Cantoran.default:
+            self.cantoran.value = self.Cantoran.value
             has_replaced_options = True
-        if o.LoreChecks.value != o.LoreChecks.default and \
-            o.lore_checks.value == o.lore_checks.default:
-            o.lore_checks.value = o.LoreChecks.value
+        if self.LoreChecks != LoreChecks.default and \
+            self.lore_checks == LoreChecks.default:
+            self.lore_checks.value = self.LoreChecks.value
             has_replaced_options = True
-        if o.BossRando.value != o.BossRando.default and \
-            o.boss_rando.value == o.boss_rando.default:
-            o.boss_rando.value = o.BossRando.value
+        if self.BossRando != BossRando.default and \
+            self.boss_rando == BossRando.default:
+            self.boss_rando.value = self.BossRando.value
             has_replaced_options = True
-        if o.DamageRando.value != o.DamageRando.default and \
-            o.damage_rando.value == o.damage_rando.default:
-            o.damage_rando.value = o.DamageRando.value
+        if self.DamageRando != DamageRando.default and \
+            self.damage_rando == DamageRando.default:
+            self.damage_rando.value = self.DamageRando.value
             has_replaced_options = True
-        if o.DamageRandoOverrides.value != o.DamageRandoOverrides.default and \
-            o.damage_rando_overrides.value == o.damage_rando_overrides.default:
-            o.damage_rando_overrides.value = o.DamageRandoOverrides.value
+        if self.DamageRandoOverrides != DamageRandoOverrides.default and \
+            self.damage_rando_overrides == DamageRandoOverrides.default:
+            self.damage_rando_overrides.value = self.DamageRandoOverrides.value
             has_replaced_options = True
-        if o.HpCap.value != o.HpCap.default and \
-            o.hp_cap.value == o.hp_cap.default:
-            o.hp_cap.value = o.HpCap.value
+        if self.HpCap != HpCap.default and \
+            self.hp_cap == HpCap.default:
+            self.hp_cap.value = self.HpCap.value
             has_replaced_options = True
-        if o.LevelCap.value != o.LevelCap.default and \
-            o.level_cap.value == o.level_cap.default:
-            o.level_cap.value = o.LevelCap.value
+        if self.LevelCap != LevelCap.default and \
+            self.level_cap == LevelCap.default:
+            self.level_cap.value = self.LevelCap.value
             has_replaced_options = True
-        if o.ExtraEarringsXP.value != o.ExtraEarringsXP.default and \
-            o.extra_earrings_xp.value == o.extra_earrings_xp.default:
-            o.extra_earrings_xp.value = o.ExtraEarringsXP.value
+        if self.ExtraEarringsXP != ExtraEarringsXP.default and \
+            self.extra_earrings_xp == ExtraEarringsXP.default:
+            self.extra_earrings_xp.value = self.ExtraEarringsXP.value
             has_replaced_options = True
-        if o.BossHealing.value != o.BossHealing.default and \
-            o.boss_healing.value == o.boss_healing.default:
-            o.boss_healing.value = o.BossHealing.value
+        if self.BossHealing != BossHealing.default and \
+            self.boss_healing == BossHealing.default:
+            self.boss_healing.value = self.BossHealing.value
             has_replaced_options = True
-        if o.ShopFill.value != o.ShopFill.default and \
-            o.shop_fill.value == o.shop_fill.default:
-            o.shop_fill.value = o.ShopFill.value
+        if self.ShopFill != ShopFill.default and \
+            self.shop_fill == ShopFill.default:
+            self.shop_fill.value = self.ShopFill.value
             has_replaced_options = True
-        if o.ShopWarpShards.value != o.ShopWarpShards.default and \
-            o.shop_warp_shards.value == o.shop_warp_shards.default:
-            o.shop_warp_shards.value = o.ShopWarpShards.value
+        if self.ShopWarpShards != ShopWarpShards.default and \
+            self.shop_warp_shards == ShopWarpShards.default:
+            self.shop_warp_shards.value = self.ShopWarpShards.value
             has_replaced_options = True
-        if o.ShopMultiplier.value != o.ShopMultiplier.default and \
-            o.shop_multiplier.value == o.shop_multiplier.default:
-            o.shop_multiplier.value = o.ShopMultiplier.value
+        if self.ShopMultiplier != ShopMultiplier.default and \
+            self.shop_multiplier == ShopMultiplier.default:
+            self.shop_multiplier.value = self.ShopMultiplier.value
             has_replaced_options = True
-        if o.LootPool.value != o.LootPool.default and \
-            o.loot_pool.value == o.loot_pool.default:
-            o.loot_pool.value = o.LootPool.value
+        if self.LootPool != LootPool.default and \
+            self.loot_pool == LootPool.default:
+            self.loot_pool.value = self.LootPool.value
             has_replaced_options = True
-        if o.DropRateCategory.value != o.DropRateCategory.default and \
-            o.drop_rate_category.value == o.drop_rate_category.default:
-            o.drop_rate_category.value = o.DropRateCategory.value
+        if self.DropRateCategory != DropRateCategory.default and \
+            self.drop_rate_category == DropRateCategory.default:
+            self.drop_rate_category.value = self.DropRateCategory.value
             has_replaced_options = True
-        if o.FixedDropRate.value != o.FixedDropRate.default and \
-            o.fixed_drop_rate.value == o.fixed_drop_rate.default:
-            o.fixed_drop_rate.value = o.FixedDropRate.value
+        if self.FixedDropRate != FixedDropRate.default and \
+            self.fixed_drop_rate == FixedDropRate.default:
+            self.fixed_drop_rate.value = self.FixedDropRate.value
             has_replaced_options = True
-        if o.LootTierDistro.value != o.LootTierDistro.default and \
-            o.loot_tier_distro.value == o.loot_tier_distro.default:
-            o.loot_tier_distro.value = o.LootTierDistro.value
+        if self.LootTierDistro != LootTierDistro.default and \
+            self.loot_tier_distro == LootTierDistro.default:
+            self.loot_tier_distro.value = self.LootTierDistro.value
             has_replaced_options = True
-        if o.ShowBestiary.value != o.ShowBestiary.default and \
-            o.show_bestiary.value == o.show_bestiary.default:
-            o.show_bestiary.value = o.ShowBestiary.value
+        if self.ShowBestiary != ShowBestiary.default and \
+            self.show_bestiary == ShowBestiary.default:
+            self.show_bestiary.value = self.ShowBestiary.value
             has_replaced_options = True
-        if o.ShowDrops.value != o.ShowDrops.default and \
-            o.show_drops.value == o.show_drops.default:
-            o.show_drops.value = o.ShowDrops.value
+        if self.ShowDrops != ShowDrops.default and \
+            self.show_drops == ShowDrops.default:
+            self.show_drops.value = self.ShowDrops.value
             has_replaced_options = True
-        if o.EnterSandman.value != o.EnterSandman.default and \
-            o.enter_sandman.value == o.enter_sandman.default:
-            o.enter_sandman.value = o.EnterSandman.value
+        if self.EnterSandman != EnterSandman.default and \
+            self.enter_sandman == EnterSandman.default:
+            self.enter_sandman.value = self.EnterSandman.value
             has_replaced_options = True
-        if o.DadPercent.value != o.DadPercent.default and \
-            o.dad_percent.value == o.dad_percent.default:
-            o.dad_percent.value = o.DadPercent.value
+        if self.DadPercent != DadPercent.default and \
+            self.dad_percent == DadPercent.default:
+            self.dad_percent.value = self.DadPercent.value
             has_replaced_options = True
-        if o.RisingTides.value != o.RisingTides.default and \
-            o.rising_tides.value == o.rising_tides.default:
-            o.rising_tides.value = o.RisingTides.value
+        if self.RisingTides != RisingTides.default and \
+            self.rising_tides == RisingTides.default:
+            self.rising_tides.value = self.RisingTides.value
             has_replaced_options = True
-        if o.RisingTidesOverrides.value != o.RisingTidesOverrides.default and \
-            o.rising_tides_overrides.value == o.rising_tides_overrides.default:
-            o.rising_tides_overrides.value = o.RisingTidesOverrides.value
+        if self.RisingTidesOverrides != RisingTidesOverrides.default and \
+            self.rising_tides_overrides == RisingTidesOverrides.default:
+            self.rising_tides_overrides.value = self.RisingTidesOverrides.value
             has_replaced_options = True
-        if o.UnchainedKeys.value != o.UnchainedKeys.default and \
-            o.unchained_keys.value == o.unchained_keys.default:
-            o.unchained_keys.value = o.UnchainedKeys.value
+        if self.UnchainedKeys != UnchainedKeys.default and \
+            self.unchained_keys == UnchainedKeys.default:
+            self.unchained_keys.value = self.UnchainedKeys.value
             has_replaced_options = True
-        if o.PresentAccessWithWheelAndSpindle.value != o.PresentAccessWithWheelAndSpindle.default and \
-            o.back_to_the_future.value == o.back_to_the_future.default:
-            o.back_to_the_future.value = o.PresentAccessWithWheelAndSpindle.value
+        if self.PresentAccessWithWheelAndSpindle != PresentAccessWithWheelAndSpindle.default and \
+            self.back_to_the_future == PresentAccessWithWheelAndSpindle.default:
+            self.back_to_the_future.value = self.PresentAccessWithWheelAndSpindle.value
             has_replaced_options = True
-        if o.TrapChance.value != o.TrapChance.default and \
-            o.trap_chance.value == o.trap_chance.default:
-            o.trap_chance.value = o.TrapChance.value
+        if self.TrapChance != TrapChance.default and \
+            self.trap_chance == TrapChance.default:
+            self.trap_chance.value = self.TrapChance.value
             has_replaced_options = True
-        if o.Traps.value != o.Traps.default and \
-            o.traps.value == o.traps.default:
-            o.traps.value = o.Traps.value
+        if self.Traps != Traps.default and \
+            self.traps == Traps.default:
+            self.traps.value = self.Traps.value
             has_replaced_options = True
-        if o.DeathLink.value != o.DeathLink.default and \
-            o.death_link.value == o.death_link.default:
-            o.death_link.value = o.DeathLink.value
+        if self.DeathLink != DeathLink.default and \
+            self.death_link == DeathLink.default:
+            self.death_link.value = self.DeathLink.value
             has_replaced_options = True
 
         if has_replaced_options:

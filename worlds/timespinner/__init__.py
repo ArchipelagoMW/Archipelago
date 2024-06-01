@@ -3,7 +3,7 @@ from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
 from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
 from .Locations import get_location_datas, EventId
-from .Options import BackwardsCompatiableTimespinnerOptions
+from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
@@ -53,11 +53,11 @@ class TimespinnerWorld(World):
 
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
         if self.options.start_inventory.value.pop('Meyef', 0) > 0:
-            self.options.start_with_meyef.value = self.options.start_with_meyef.option_true
+            self.options.start_with_meyef.value = Toggle.option_true
         if self.options.start_inventory.value.pop('Talaria Attachment', 0) > 0:
-            self.options.quick_seed.value = self.options.quick_seed.option_true
+            self.options.quick_seed.value = Toggle.option_true
         if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
-            self.options.start_with_jewelry_box.value = self.options.start_with_jewelry_box.option_true
+            self.options.start_with_jewelry_box.value = Toggle.option_true
 
         self.options.handle_backward_compatibility()
 
@@ -204,16 +204,15 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if hasattr(self, 'options'): # self.options is not always available in this method
-            if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
-                item.classification = ItemClassification.filler
-            elif name == 'Oculus Ring' and not self.options.eye_spy:
-                item.classification = ItemClassification.filler
-            elif (name == 'Kobo' or name == 'Merchant Crow') and not self.options.gyre_archives:
-                item.classification = ItemClassification.filler
-            elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
-                    and not self.options.unchained_keys:
-                item.classification = ItemClassification.filler
+        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+            item.classification = ItemClassification.filler
+        elif name == 'Oculus Ring' and not self.options.eye_spy:
+            item.classification = ItemClassification.filler
+        elif (name == 'Kobo' or name == 'Merchant Crow') and not self.options.gyre_archives:
+            item.classification = ItemClassification.filler
+        elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
+                and not self.options.unchained_keys:
+            item.classification = ItemClassification.filler
 
         return item
 
