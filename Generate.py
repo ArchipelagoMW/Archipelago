@@ -23,9 +23,7 @@ from Main import main as ERmain
 from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 from worlds.alttp.EntranceRandomizer import parse_arguments
-from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
-from worlds.generic import PlandoConnection
 from worlds import failed_world_loads
 
 
@@ -506,35 +504,12 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":
-        roll_alttp_settings(ret, game_weights, plando_options)
-    if PlandoOptions.connections in plando_options:
-        ret.plando_connections = []
-        options = game_weights.get("plando_connections", [])
-        for placement in options:
-            if roll_percentage(get_choice("percentage", placement, 100)):
-                ret.plando_connections.append(PlandoConnection(
-                    get_choice("entrance", placement),
-                    get_choice("exit", placement),
-                    get_choice("direction", placement, "both")
-                ))
+        roll_alttp_settings(ret, game_weights)
 
     return ret
 
 
-def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
-
-    ret.plando_texts = {}
-    if PlandoOptions.texts in plando_options:
-        tt = TextTable()
-        tt.removeUnwantedText()
-        options = weights.get("plando_texts", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                at = str(get_choice_legacy("at", placement))
-                if at not in tt:
-                    raise Exception(f"No text target \"{at}\" found.")
-                ret.plando_texts[at] = str(get_choice_legacy("text", placement))
-
+def roll_alttp_settings(ret: argparse.Namespace, weights):
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")
     if 'random_sprite_on_event' in weights:

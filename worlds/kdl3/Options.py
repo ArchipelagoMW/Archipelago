@@ -2,8 +2,12 @@ import random
 from dataclasses import dataclass
 
 from Options import DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions
+    PerGameCommonOptions, PlandoConnections
 from .Names import LocationName
+
+
+class KDL3PlandoConnections(PlandoConnections):
+    entrances = exits = {f"{i} {j}" for i in LocationName.level_names for j in range(1, 7)}
 
 
 class Goal(Choice):
@@ -400,6 +404,7 @@ class Gifting(Toggle):
 
 @dataclass
 class KDL3Options(PerGameCommonOptions):
+    plando_connections: KDL3PlandoConnections
     death_link: DeathLink
     game_language: GameLanguage
     goal: Goal

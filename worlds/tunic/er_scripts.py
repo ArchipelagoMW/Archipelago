@@ -3,8 +3,8 @@ from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd
 from .er_rules import set_er_region_rules
+from Options import PlandoConnection
 from .options import EntranceRando
-from worlds.generic import PlandoConnection
 from random import Random
 from copy import deepcopy
 
@@ -194,7 +194,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
 
     if world.options.entrance_rando.value in EntranceRando.options:
-        plando_connections = world.multiworld.plando_connections[world.player]
+        plando_connections = world.options.plando_connections.value
     else:
         plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
 
