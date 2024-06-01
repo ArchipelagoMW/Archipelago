@@ -38,7 +38,7 @@ class YachtDiceWorld(World):
     
     item_name_groups = ITEM_GROUPS
 
-    ap_world_version = "1.2"
+    ap_world_version = "2.0"
 
     def _get_yachtdice_data(self):
         return {
@@ -49,7 +49,7 @@ class YachtDiceWorld(World):
             "race": self.multiworld.is_race,
         }
         
-    def generate_early(self):
+    def generate_early(self):        
         self.itempool = []
         self.precollected = []       
             
@@ -152,10 +152,15 @@ class YachtDiceWorld(World):
             self.options.weight_of_points.value
         ]
         
+        #if the player wants extra rolls or dice, fill the pool with fragments until close to an extra roll/dice
         if weights[0] > 0 and amDiceF > 1:
             self.itempool += ["Dice Fragment"] * (amDiceF - 1)
         if weights[1] > 0 and amRollsF > 1:
             self.itempool += ["Roll Fragment"] * (amRollsF - 1)
+            
+        #calibrate the weights, since the impact of each of the items is different
+        weights[0] = weights[0] / 5 * amDiceF
+        weights[1] = weights[1] / 5 * amRollsF
             
         extraPointsAdded = 0
         
@@ -164,9 +169,12 @@ class YachtDiceWorld(World):
             dice_fragments_in_pool = allitems.count("Dice") * amDiceF + allitems.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * amDiceF:
                 weights[0] = 0 #can't have 9 dice
-            roll_fragments_in_pool = allitems.count("Roll") * amDiceF + allitems.count("Roll Fragment")
+            roll_fragments_in_pool = allitems.count("Roll") * amRollsF + allitems.count("Roll Fragment")
             if roll_fragments_in_pool + 1 >= 6 * amRollsF:
                 weights[1] = 0 # can't have 6 rolls
+                
+            if extraPointsAdded > 300:
+                weights[5] = 0
             
             #if all weights are zero, allow to add fixed score multiplier, double category, points.
             if sum(weights) == 0:
@@ -181,21 +189,23 @@ class YachtDiceWorld(World):
                     self.itempool += ["Dice"]
                 else:
                     self.itempool += ["Dice Fragment"]
-                weights[0] /= (1+amDiceF)
+                weights[0] /= (1 + amDiceF)
             elif which_item_to_add == 1:
                 if amRollsF == 1:
                     self.itempool += ["Roll"]
                 else:
                     self.itempool += ["Roll Fragment"]
-                weights[1] /= (1+amRollsF)
+                weights[1] /= (1 + amRollsF)
             elif which_item_to_add == 2:
                 self.itempool += ["Fixed Score Multiplier"]
-                weights[2] /= 1.1
+                weights[2] /= 1.05
             elif which_item_to_add == 3:
                 self.itempool += ["Step Score Multiplier"]
                 weights[3] /= 1.1
             elif which_item_to_add == 4:
-                self.itempool += self.multiworld.random.choices(possible_categories)
+                #increase chances of "free-score categories"
+                cat_weights = [2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1] 
+                self.itempool += self.multiworld.random.choices(possible_categories, weights = cat_weights)
                 weights[4] /= 1.1
             elif which_item_to_add == 5:
                 score_dist = self.options.points_size.value
@@ -223,8 +233,6 @@ class YachtDiceWorld(World):
                     weights[5] /= 2
                 else:
                     raise Exception("Unknown point value (Yacht Dice)")
-                if extraPointsAdded > 300:
-                    weights[5] = 0
             else:
                 raise Exception("Invalid index when adding new items in Yacht Dice")
                     

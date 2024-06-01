@@ -173,8 +173,9 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
         return prev_val if prev_val is not None else sorted_values[0]  
             
             
-    percReturn = [0, 0.30, 0.45, 0.53, 0.7, 0.9][diff]
-    diffDivide = [0, 9, 8, 4, 2, 1][diff]
+    percReturn = [[0], [0.1, 0.5], [0.3, 0.7], [0.5, 0.85], [0.85, 0.95]][diff]
+    diffDivide = [0, 9, 7, 3, 1][diff]
+
     
     #calculate total distribution
     total_dist = {0: 1}
@@ -197,7 +198,7 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
         total_dist = add_distributions(total_dist, dist)
     
     #save result into the cache, then return it
-    yachtdice_cache[tup] = math.floor(percentile_distribution(total_dist, percReturn))
+    yachtdice_cache[tup] = math.floor(sum([percentile_distribution(total_dist, perc) for perc in percReturn]) / len(percReturn))
     return yachtdice_cache[tup]
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.
