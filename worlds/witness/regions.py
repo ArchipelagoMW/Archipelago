@@ -104,7 +104,7 @@ class WitnessPlayerRegions:
         from . import create_region
 
         all_locations: Set[str] = set()
-        regions_by_name: Dict[str, Region] = dict()
+        regions_by_name: Dict[str, Region] = {}
 
         regions_to_create = {
             k: v for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
