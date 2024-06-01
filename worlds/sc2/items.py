@@ -1025,7 +1025,7 @@ item_table = {
     item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 8, SC2Race.ZERG, quantity=3, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_FLYER_ATTACK: ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 12, SC2Race.ZERG, quantity=3, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE: ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 16, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    # Upgrade bundle 'number' values are used as indices to get affected 'number's
+    # Bundles
     item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE: ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE: ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE: ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
@@ -1463,7 +1463,7 @@ item_table = {
     item_names.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 8, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
     item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 12, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
     item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 16, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    # Upgrade bundle 'number' values are used as indices to get affected 'number's
+    # Bundles
     item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
     item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
     item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
