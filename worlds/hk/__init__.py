@@ -154,7 +154,6 @@ class HKWorld(World):
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
     cached_filler_items = {}
-    data_version = 2
 
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
