@@ -32,8 +32,8 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
         option_dict = {
-            options.Shipsanity.internal_name: options.Shipsanity.option_everything,
-            options.Booksanity.internal_name: options.Booksanity.option_none,
+            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla_short,
+            options.Craftsanity.internal_name: options.Craftsanity.option_all,
         }
         for i in range(1):
             # seed = int(random() * pow(10, 18) - 1)
