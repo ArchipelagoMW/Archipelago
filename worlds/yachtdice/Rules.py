@@ -173,8 +173,8 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
         return prev_val if prev_val is not None else sorted_values[0]  
             
             
-    percReturn = [[0], [0.1, 0.5], [0.3, 0.7], [0.5, 0.85], [0.85, 0.95]][diff]
-    diffDivide = [0, 9, 7, 3, 1][diff]
+    percReturn = [[0], [0.1, 0.5], [0.3, 0.7], [0.55, 0.85], [0.85, 0.95]][diff]
+    diffDivide = [0, 9, 7, 3, 2][diff]
 
     
     #calculate total distribution
