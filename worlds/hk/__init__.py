@@ -12,7 +12,7 @@ from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules, cost_terms
 from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
-    shop_to_option
+    shop_to_option, HKOptions
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
@@ -142,7 +142,9 @@ class HKWorld(World):
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
-    option_definitions = hollow_knight_options
+    # option_definitions = hollow_knight_options
+    options_dataclass = HKOptions
+    options: HKOptions
 
     web = HKWeb()
 
@@ -486,7 +488,7 @@ class HKWorld(World):
         slot_data = {}
 
         options = slot_data["options"] = {}
-        for option_name in self.option_definitions:
+        for option_name in hollow_knight_options:
             option = getattr(self.options, option_name)
             try:
                 optionvalue = int(option.value)
