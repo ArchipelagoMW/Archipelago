@@ -129,13 +129,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             try:
                 location = multiworld.get_location(location_name, player)
             except KeyError:
-                pass
+                continue
+
+            if location.progress_type != LocationProgressType.EXCLUDED:
+                location.progress_type = LocationProgressType.PRIORITY
             else:
-                if location.progress_type != LocationProgressType.EXCLUDED:
-                    location.progress_type = LocationProgressType.PRIORITY
-                else:
-                    logger.warning(f"Unable to prioritize location \"{location_name}\" in player {player}'s world because the world excluded it.")
-                    world_excluded_locations.add(location_name)
+                logger.warning(f"Unable to prioritize location \"{location_name}\" in player {player}'s world because the world excluded it.")
+                world_excluded_locations.add(location_name)
         multiworld.worlds[player].options.priority_locations.value -= world_excluded_locations
 
     # Set local and non-local item rules.
