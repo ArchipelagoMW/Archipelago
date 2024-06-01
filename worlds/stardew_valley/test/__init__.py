@@ -228,7 +228,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     @classmethod
     def setUpClass(cls) -> None:
         if cls is SVTestBase:
-            raise unittest.SkipTest("Base tests disabled")
+            raise unittest.SkipTest("No running tests on SVTestBase import.")
 
         super().setUpClass()
 
@@ -252,10 +252,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def run_default_tests(self) -> bool:
         if self.skip_base_tests:
             return False
-        # world_setup is overridden, so it'd always run default tests when importing SVTestBase
-        is_not_stardew_test = type(self) is not SVTestBase
-        should_run_default_tests = is_not_stardew_test and super().run_default_tests
-        return should_run_default_tests
+        return super().run_default_tests
 
     def collect_lots_of_money(self):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
