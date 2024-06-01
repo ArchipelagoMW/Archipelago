@@ -247,8 +247,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 toDraw = ""
                 for i in range(20):
-                    if i < len(str(ctx.item_names[l.item])):
-                        toDraw += str(ctx.item_names[l.item])[i]
+                    if i < len(str(ctx.item_names.lookup_in_slot(l.item))):
+                        toDraw += str(ctx.item_names.lookup_in_slot(l.item))[i]
                     else:
                         break
                 f.write(toDraw)

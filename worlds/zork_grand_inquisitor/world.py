@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Tuple
 
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 
@@ -78,6 +78,7 @@ class ZorkGrandInquisitorWorld(World):
 
     web = ZorkGrandInquisitorWebWorld()
 
+    filler_item_names: List[str] = item_groups()["Filler"]
     item_name_to_item: Dict[str, ZorkGrandInquisitorItems] = item_names_to_item()
 
     def create_regions(self) -> None:
@@ -89,13 +90,13 @@ class ZorkGrandInquisitorWorld(World):
         for region_enum_item in region_data.keys():
             region_mapping[region_enum_item] = Region(region_enum_item.value, self.player, self.multiworld)
 
-        region_locations_mapping: Dict[ZorkGrandInquisitorRegions, Set[ZorkGrandInquisitorLocations]]
+        region_locations_mapping: Dict[ZorkGrandInquisitorRegions, List[ZorkGrandInquisitorLocations]]
         region_locations_mapping = locations_by_region(include_deathsanity=deathsanity)
 
         region_enum_item: ZorkGrandInquisitorRegions
         region: Region
         for region_enum_item, region in region_mapping.items():
-            regions_locations: Set[ZorkGrandInquisitorLocations] = region_locations_mapping[region_enum_item]
+            regions_locations: List[ZorkGrandInquisitorLocations] = region_locations_mapping[region_enum_item]
 
             # Locations
             location_enum_item: ZorkGrandInquisitorLocations
@@ -201,4 +202,4 @@ class ZorkGrandInquisitorWorld(World):
         )
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(self.item_name_groups["Filler"]))
+        return self.random.choice(self.filler_item_names)
