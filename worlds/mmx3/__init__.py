@@ -345,7 +345,15 @@ class MMX3World(World):
                 self.options.vile_upgrade_count.value -= min(self.options.vile_upgrade_count.value, 1)
                 self.options.vile_heart_tank_count.value -= min(self.options.vile_heart_tank_count.value, 1)
                 self.options.vile_sub_tank_count.value -= min(self.options.vile_sub_tank_count.value, 1)
-           
+        
+        # Adjust bit and byte medal counts
+        if self.options.bit_medal_count.value == 0 and self.options.byte_medal_count.value == 0:
+            self.options.byte_medal_count.value = 1
+        elif self.options.bit_medal_count.value >= self.options.byte_medal_count.value:
+            if self.options.bit_medal_count.value == 7:
+                self.options.bit_medal_count.value = 6
+            self.options.byte_medal_count.value = self.options.bit_medal_count.value + 1
+
         self.boss_weaknesses = {}
         self.boss_weakness_data = {}
         handle_weaknesses(self)

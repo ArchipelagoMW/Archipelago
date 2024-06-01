@@ -284,17 +284,8 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x17FFF1, 0x00)
     patch.write_byte(0x17FFF2, world.options.doppler_lab_2_boss.value)
     patch.write_byte(0x17FFF3, world.options.doppler_lab_3_boss_rematch_count.value)
-
-    bit_medal_count = world.options.bit_medal_count.value
-    byte_medal_count = world.options.byte_medal_count.value
-    if bit_medal_count == 0 and byte_medal_count == 0:
-        byte_medal_count = 1
-    elif bit_medal_count >= byte_medal_count:
-        if bit_medal_count == 7:
-            bit_medal_count = 6
-        byte_medal_count = bit_medal_count + 1
-    patch.write_byte(0x17FFF4, bit_medal_count)
-    patch.write_byte(0x17FFF5, byte_medal_count)
+    patch.write_byte(0x17FFF4, world.options.bit_medal_count.value)
+    patch.write_byte(0x17FFF5, world.options.byte_medal_count.value)
 
     # QoL
     patch.write_byte(0x17FFF6, world.options.disable_charge_freeze.value)
