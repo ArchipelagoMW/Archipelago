@@ -96,13 +96,15 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+                self.options.fixed_shop.value = self.options.fixed_shop.option_false
+                self.options.laurels_location.value = self.options.laurels_location.option_anywhere
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
         tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
         for tunic in tunic_worlds:
             # if it's one of the options, then it isn't a custom seed group
-            if tunic.options.entrance_rando.value in EntranceRando.options:
+            if tunic.options.entrance_rando.value in EntranceRando.options.values():
                 continue
             group = tunic.options.entrance_rando.value
             # if this is the first world in the group, set the rules equal to its rules
@@ -147,7 +149,7 @@ class TunicWorld(World):
                                             f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
                                             f"connection {cxn.entrance} <-> {cxn.exit}")
                     if new_cxn:
-                        cls.seed_groups[group]["plando"].append(cxn)
+                        cls.seed_groups[group]["plando"].value.append(cxn)
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
