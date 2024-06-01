@@ -80,9 +80,14 @@ scout fly. So in short:
   - Second, you will immediately complete the "Free 7 Scout Flies" check, which will send out another item.
 
 ## I got soft-locked and can't leave, how do I get out of here?
-Open the game's menu, navigate to Options, and find the "Warp To Home" option at the bottom of the list. 
-Selecting this option will instantly teleport you to Geyser Rock. From there, you can teleport back to the nearest
-sage's hut to continue your journey.
+Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then to `Warp To Home`. 
+Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
+to the nearest sage's hut to continue your journey.
+
+## How do I know which special items I have?
+Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then to `Item Tracker`.
+This will show you a list of all the special items in the game, ones not normally tracked as power cells or scout flies.
+Grayed-out items indicate you do not possess that item, light blue items indicate you possess that item.
 
 ## I think I found a bug, where should I report it?
 Depending on the nature of the bug, there are a couple of different options.

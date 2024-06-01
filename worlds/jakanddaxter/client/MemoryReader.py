@@ -130,7 +130,7 @@ class JakAndDaxterMemoryReader:
                 cell_ap_id = Cells.to_ap_id(next_cell)
                 if cell_ap_id not in self.location_outbox:
                     self.location_outbox.append(cell_ap_id)
-                    logger.info("Checked power cell: " + str(next_cell))
+                    logger.debug("Checked power cell: " + str(next_cell))
 
             for k in range(0, next_buzzer_index):
                 next_buzzer = int.from_bytes(
@@ -142,7 +142,7 @@ class JakAndDaxterMemoryReader:
                 buzzer_ap_id = Flies.to_ap_id(next_buzzer)
                 if buzzer_ap_id not in self.location_outbox:
                     self.location_outbox.append(buzzer_ap_id)
-                    logger.info("Checked scout fly: " + str(next_buzzer))
+                    logger.debug("Checked scout fly: " + str(next_buzzer))
 
             for k in range(0, next_special_index):
                 next_special = int.from_bytes(
@@ -163,7 +163,7 @@ class JakAndDaxterMemoryReader:
                     special_ap_id = Specials.to_ap_id(next_special)
                     if special_ap_id not in self.location_outbox:
                         self.location_outbox.append(special_ap_id)
-                        logger.info("Checked special: " + str(next_special))
+                        logger.debug("Checked special: " + str(next_special))
 
         except (ProcessError, MemoryReadError, WinAPIError):
             logger.error("The gk process has died. Restart the game and run \"/memr connect\" again.")

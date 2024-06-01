@@ -72,7 +72,7 @@ class JakAndDaxterReplClient:
         response = self.sock.recv(1024).decode()
         if "OK!" in response:
             if print_ok:
-                logger.info(response)
+                logger.debug(response)
             return True
         else:
             logger.error(f"Unexpected response from REPL: {response}")
@@ -101,7 +101,7 @@ class JakAndDaxterReplClient:
 
             # Should be the OpenGOAL welcome message (ignore version number).
             if "Connected to OpenGOAL" and "nREPL!" in welcome_message:
-                logger.info(welcome_message)
+                logger.debug(welcome_message)
             else:
                 logger.error(f"Unable to connect to REPL websocket: unexpected welcome message \"{welcome_message}\"")
         except ConnectionRefusedError as e:
@@ -198,7 +198,7 @@ class JakAndDaxterReplClient:
                             "(pickup-type fuel-cell) "
                             "(the float " + str(cell_id) + "))")
         if ok:
-            logger.info(f"Received a Power Cell!")
+            logger.debug(f"Received a Power Cell!")
         else:
             logger.error(f"Unable to receive a Power Cell!")
         return ok
@@ -210,7 +210,7 @@ class JakAndDaxterReplClient:
                             "(pickup-type buzzer) "
                             "(the float " + str(fly_id) + "))")
         if ok:
-            logger.info(f"Received a {item_table[ap_id]}!")
+            logger.debug(f"Received a {item_table[ap_id]}!")
         else:
             logger.error(f"Unable to receive a {item_table[ap_id]}!")
         return ok
@@ -222,7 +222,7 @@ class JakAndDaxterReplClient:
                             "(pickup-type ap-special) "
                             "(the float " + str(special_id) + "))")
         if ok:
-            logger.info(f"Received special unlock {item_table[ap_id]}!")
+            logger.debug(f"Received special unlock {item_table[ap_id]}!")
         else:
             logger.error(f"Unable to receive special unlock {item_table[ap_id]}!")
         return ok

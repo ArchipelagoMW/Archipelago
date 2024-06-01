@@ -110,7 +110,7 @@ class JakAndDaxterContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
-                logger.info(args)
+                logger.debug(f"index: {str(index)}, item: {str(item)}")
                 self.repl.item_inbox[index] = item
             self.memr.save_data()
             self.repl.save_data()
