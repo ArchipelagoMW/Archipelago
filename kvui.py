@@ -64,7 +64,7 @@ from kivy.uix.popup import Popup
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
-from Utils import async_start
+from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -285,16 +285,10 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
-                if not cmdinput.text and " did you mean " in text:
-                    for question in ("Didn't find something that closely matches, did you mean ",
-                                     "Too many close matches, did you mean "):
-                        if text.startswith(question):
-                            name = Utils.get_text_between(text, question,
-                                                          "? (")
-                            cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
-                            break
-                elif not cmdinput.text and text.startswith("Missing: "):
-                    cmdinput.text = text.replace("Missing: ", "!hint_location ")
+                if not cmdinput.text:
+                    input_text = get_input_text_from_response(text, App.get_running_app().last_autofillable_command)
+                    if input_text is not None:
+                        cmdinput.text = input_text
 
                 Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                 return self.parent.select_with_touch(self.index, touch)
