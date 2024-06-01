@@ -448,7 +448,7 @@ class SMWSNIClient(SNIClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names.lookup_in_slot(new_check_id)
             snes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
@@ -499,15 +499,16 @@ class SMWSNIClient(SNIClient):
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
+            sending_game = ctx.slot_info[item.player].game
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_slot(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
 
             if self.should_show_message(ctx, item):
                 if item.item != 0xBC0012 and item.item not in trap_rom_data:
                     # Don't send messages for Boss Tokens
-                    item_name = ctx.item_names[item.item]
+                    item_name = ctx.item_names.lookup_in_slot(item.item)
                     player_name = ctx.player_names[item.player]
 
                     receive_message = generate_received_text(item_name, player_name)
@@ -515,7 +516,7 @@ class SMWSNIClient(SNIClient):
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index&0xFF, (recv_index>>8)&0xFF]))
             if item.item in trap_rom_data:
-                item_name = ctx.item_names[item.item]
+                item_name = ctx.item_names.lookup_in_slot(item.item)
                 player_name = ctx.player_names[item.player]
 
                 receive_message = generate_received_text(item_name, player_name)
@@ -596,7 +597,7 @@ class SMWSNIClient(SNIClient):
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
-                loc_name = ctx.location_names[loc_id]
+                loc_name = ctx.location_names.lookup_in_slot(loc_id)
 
                 if loc_name not in location_id_to_level_id:
                     continue
