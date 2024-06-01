@@ -605,6 +605,15 @@ class NumberOfMovementBuffs(Range):
 
 class EnabledFillerBuffs(OptionSet):
     """Enable various permanent player buffs to roll as filler items
+    Luck: Increase daily luck
+    Damage: Increased Damage %
+    Defense: Increased Defense
+    Immunity: Increased Immunity
+    Health: Increased Max Health
+    Energy: Increased Max Energy
+    Bite Rate: Shorter delay to get a bite when fishing
+    Fish Trap: Effect similar to the Trap Bobber, but weaker
+    Fishing Bar Size: Increased Fishing Bar Size
     """
     internal_name = "enabled_filler_buffs"
     display_name = "Enabled Filler Buffs"
