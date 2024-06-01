@@ -403,6 +403,12 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
+    OptionGroup("Panel Hunt Settings", [
+        PanelHuntRequiredPercentage,
+        PanelHuntTotal,
+        PanelHuntPostgame,
+        PanelHuntDiscourageSameAreaFactor,
+    ], start_collapsed=True),
     OptionGroup("Locations", [
         ShuffleDiscardedPanels,
         ShuffleVaultBoxes,
