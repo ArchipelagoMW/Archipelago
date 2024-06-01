@@ -84,6 +84,8 @@ class Group(enum.Enum):
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
     CRAFTSANITY = enum.auto()
+    BOOK_POWER = enum.auto()
+    LOST_BOOK = enum.auto()
     PLAYER_BUFF = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
