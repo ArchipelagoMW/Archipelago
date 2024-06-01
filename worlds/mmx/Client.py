@@ -110,6 +110,7 @@ class MMXSNIClient(SNIClient):
         snes_buffered_write(ctx, WRAM_START + 0x00BAA, bytes([0x0C]))
         snes_buffered_write(ctx, WRAM_START + 0x00C12, bytes([0x0C]))
         snes_buffered_write(ctx, WRAM_START + 0x00BAB, bytes([0x00]))
+        snes_buffered_write(ctx, WRAM_START + 0x00BD7, bytes([0x08]))
 
         await snes_flush_writes(ctx)
 
