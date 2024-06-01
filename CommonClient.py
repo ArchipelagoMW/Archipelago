@@ -191,11 +191,14 @@ class CommonContext:
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
             # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
             if isinstance(key, int):
-                # Use warnings instead of logger to avoid deprecation message from appearing on user side.
-                warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain backwards "
-                              f"compatibility for now. If multiple games share the same id for a {self.lookup_type}, "
-                              f"name could be incorrect. Please use `{self.lookup_type}_names.lookup_in_game()` or "
-                              f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
+                if not self.warned:
+                    # Use warnings instead of logger to avoid deprecation message from appearing on user side.
+                    self.warned = True
+                    warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain "
+                                  f"backwards compatibility for now. If multiple games share the same id for a "
+                                  f"{self.lookup_type}, name could be incorrect. Please use "
+                                  f"`{self.lookup_type}_names.lookup_in_game()` or "
+                                  f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
                 return self._flat_store[key]  # type: ignore
 
             return self._game_store[key]
