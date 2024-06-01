@@ -567,12 +567,9 @@ def create_walnut_purchase_rewards(item_factory: StardewItemFactory, options: St
 
 
 def create_special_order_board_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.special_order_locations == SpecialOrderLocations.option_disabled:
-        return
-
-    special_order_board_items = [item for item in items_by_group[Group.SPECIAL_ORDER_BOARD]]
-
-    items.extend([item_factory(item) for item in special_order_board_items])
+    if options.special_order_locations & SpecialOrderLocations.option_board:
+        special_order_board_items = [item for item in items_by_group[Group.SPECIAL_ORDER_BOARD]]
+        items.extend([item_factory(item) for item in special_order_board_items])
 
 
 def special_order_board_item_classification(item: ItemData, need_all_recipes: bool) -> ItemClassification:
@@ -596,7 +593,7 @@ def create_special_order_qi_rewards(item_factory: StardewItemFactory, options: S
         qi_gem_rewards.append("15 Qi Gems")
 
     # Add test to
-    if options.special_order_locations == SpecialOrderLocations.option_board_qi:
+    if options.special_order_locations & SpecialOrderLocations.value_qi:
         qi_gem_rewards.extend(["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
                                "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"])
 

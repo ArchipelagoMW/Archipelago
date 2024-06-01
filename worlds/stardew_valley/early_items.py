@@ -33,7 +33,7 @@ def setup_early_items(multiworld, options: StardewValleyOptions, player: int, ra
     if options.quest_locations >= 0:
         early_candidates.append("Magnifying Glass")
 
-    if options.special_order_locations != SpecialOrderLocations.option_disabled:
+    if options.special_order_locations & SpecialOrderLocations.option_board:
         early_candidates.append("Special Order Board")
 
     if options.cooksanity != Cooksanity.option_none | options.chefsanity & Chefsanity.option_queen_of_sauce:

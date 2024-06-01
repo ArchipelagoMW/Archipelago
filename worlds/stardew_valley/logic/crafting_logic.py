@@ -57,7 +57,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or isinstance(
                 recipe.source, ShopSource):
             return self.logic.crafting.received_recipe(recipe.item)
-        if isinstance(recipe.source, SpecialOrderSource) and self.options.special_order_locations != SpecialOrderLocations.option_disabled:
+        if isinstance(recipe.source, SpecialOrderSource) and not (self.options.special_order_locations & SpecialOrderLocations.option_board):
             return self.logic.crafting.received_recipe(recipe.item)
         return self.logic.crafting.can_learn_recipe(recipe)
 
@@ -82,7 +82,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         if isinstance(recipe.source, QuestSource):
             return self.logic.quest.can_complete_quest(recipe.source.quest)
         if isinstance(recipe.source, SpecialOrderSource):
-            if self.options.special_order_locations == SpecialOrderLocations.option_disabled:
+            if not (self.options.special_order_locations & SpecialOrderLocations.option_board):
                 return self.logic.special_order.can_complete_special_order(recipe.source.special_order)
             return self.logic.crafting.received_recipe(recipe.item)
         if isinstance(recipe.source, LogicSource):

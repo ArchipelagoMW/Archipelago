@@ -445,7 +445,7 @@ class TestShipsanityCropsExcludeIsland(SVTestBase):
 class TestShipsanityCropsNoQiCropWithoutSpecialOrders(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_crops,
-        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_only
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board
     }
 
     def test_only_crop_shipsanity_locations(self):
@@ -517,7 +517,7 @@ class TestShipsanityFishExcludeIsland(SVTestBase):
 class TestShipsanityFishExcludeQiOrders(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_fish,
-        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_only
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board
     }
 
     def test_only_fish_shipsanity_locations(self):
@@ -595,7 +595,7 @@ class TestShipsanityFullShipmentExcludeIsland(SVTestBase):
 class TestShipsanityFullShipmentExcludeQiBoard(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_full_shipment,
-        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_vanilla
     }
 
     def test_only_full_shipment_shipsanity_locations(self):
@@ -692,7 +692,7 @@ class TestShipsanityFullShipmentWithFishExcludeIsland(SVTestBase):
 class TestShipsanityFullShipmentWithFishExcludeQiBoard(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_full_shipment_with_fish,
-        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_only
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board
     }
 
     def test_only_full_shipment_and_fish_shipsanity_locations(self):

@@ -92,7 +92,7 @@ GrindLogicMixin]]):
         if currency == Currency.qi_coin:
             return self.logic.region.can_reach(Region.casino) & self.logic.time.has_lived_months(amount // 1000)
         if currency == Currency.qi_gem:
-            if self.options.special_order_locations == SpecialOrderLocations.option_board_qi:
+            if self.options.special_order_locations & SpecialOrderLocations.value_qi:
                 number_rewards = min(len(qi_gem_rewards), max(1, (amount // 10)))
                 return self.logic.received_n(*qi_gem_rewards, count=number_rewards)
             number_rewards = 2

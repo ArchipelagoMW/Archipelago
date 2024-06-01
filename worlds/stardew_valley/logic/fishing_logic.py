@@ -64,7 +64,7 @@ class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLog
     def can_start_extended_family_quest(self) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             return False_()
-        if self.options.special_order_locations != SpecialOrderLocations.option_board_qi:
+        if not self.options.special_order_locations & SpecialOrderLocations.value_qi:
             return False_()
         return (self.logic.region.can_reach(Region.qi_walnut_room) &
                 self.logic.and_(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.vanilla_legendary_fish)))

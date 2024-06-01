@@ -284,13 +284,12 @@ def extend_desert_festival_chef_locations(randomized_locations: List[LocationDat
 
 
 def extend_special_order_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
-    if options.special_order_locations == SpecialOrderLocations.option_disabled:
-        return
+    if options.special_order_locations & SpecialOrderLocations.option_board:
+        board_locations = filter_disabled_locations(options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
+        randomized_locations.extend(board_locations)
 
     include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    board_locations = filter_disabled_locations(options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
-    randomized_locations.extend(board_locations)
-    if options.special_order_locations == SpecialOrderLocations.option_board_qi and include_island:
+    if options.special_order_locations & SpecialOrderLocations.value_qi and include_island:
         include_arcade = options.arcade_machine_locations != ArcadeMachineLocations.option_disabled
         qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if
                      include_arcade or LocationTags.JUNIMO_KART not in location.tags]
@@ -534,7 +533,7 @@ def filter_ginger_island(options: StardewValleyOptions, locations: Iterable[Loca
 
 
 def filter_qi_order_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    include_qi_orders = options.special_order_locations == SpecialOrderLocations.option_board_qi
+    include_qi_orders = options.special_order_locations & SpecialOrderLocations.value_qi
     return (location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags)
 
 

@@ -35,7 +35,7 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
         shipsanity_prefix = "Shipsanity: "
         all_items_to_ship = []
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        exclude_qi = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
+        exclude_qi = not (self.options.special_order_locations & SpecialOrderLocations.value_qi)
         mod_list = self.options.mods.value
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
             if exclude_island and LocationTags.GINGER_ISLAND in location.tags:

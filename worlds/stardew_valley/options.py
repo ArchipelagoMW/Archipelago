@@ -325,13 +325,24 @@ class SpecialOrderLocations(Choice):
     Disabled: The special orders are not included in the Archipelago shuffling.
     Board Only: The Special Orders on the board in town are location checks
     Board and Qi: The Special Orders from Mr Qi's walnut room are checks, in addition to the board in town
+    Cheap: All Special Order requirements are reduced by 40%
+    Very Cheap: All Special Order requirements are reduced by 80%
     """
     internal_name = "special_order_locations"
     display_name = "Special Order Locations"
-    default = 1
-    option_disabled = 0
-    option_board_only = 1
-    option_board_qi = 2
+    option_vanilla = 0b0000  # 0
+    option_board = 0b0001  # 1
+    value_qi = 0b0010  # 2
+    option_board_qi = option_board | value_qi  # 3
+    option_vanilla_cheap = 0b0100  # 4
+    option_board_cheap = 0b0101  # 5
+    option_board_qi_cheap = 0b0111  # 7
+    option_vanilla_very_cheap = 0b1000  # 8
+    option_board_very_cheap = 0b1001  # 9
+    option_board_qi_very_cheap = 0b1011  # 11
+    alias_disabled = option_vanilla
+    alias_board_only = option_board
+    default = option_board_cheap
 
 
 class QuestLocations(NamedRange):

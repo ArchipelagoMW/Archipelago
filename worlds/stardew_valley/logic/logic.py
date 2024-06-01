@@ -681,9 +681,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         return self.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules)
 
     def has_prismatic_jelly_reward_access(self) -> StardewRule:
-        if self.options.special_order_locations == SpecialOrderLocations.option_disabled:
-            return self.special_order.can_complete_special_order("Prismatic Jelly")
-        return self.received("Monster Musk Recipe")
+        if self.options.special_order_locations & SpecialOrderLocations.option_board:
+            return self.received("Monster Musk Recipe")
+        return self.special_order.can_complete_special_order("Prismatic Jelly")
 
     def has_all_rarecrows(self) -> StardewRule:
         rules = []

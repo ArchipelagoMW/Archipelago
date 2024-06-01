@@ -539,23 +539,21 @@ def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, mu
 
 def set_special_order_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player,
                             world_options: StardewValleyOptions):
-    if world_options.special_order_locations == SpecialOrderLocations.option_disabled:
-        return
-    board_rule = logic.received("Special Order Board") & logic.time.has_lived_months(4)
-    for board_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
-        if board_order.name in all_location_names:
-            order_rule = board_rule & logic.registry.special_order_rules[board_order.name]
-            MultiWorldRules.set_rule(multiworld.get_location(board_order.name, player), order_rule)
+    if world_options.special_order_locations & SpecialOrderLocations.option_board:
+        board_rule = logic.received("Special Order Board") & logic.time.has_lived_months(4)
+        for board_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
+            if board_order.name in all_location_names:
+                order_rule = board_rule & logic.registry.special_order_rules[board_order.name]
+                MultiWorldRules.set_rule(multiworld.get_location(board_order.name, player), order_rule)
 
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
-    if world_options.special_order_locations == SpecialOrderLocations.option_board_only:
-        return
-    qi_rule = logic.region.can_reach(Region.qi_walnut_room) & logic.time.has_lived_months(8)
-    for qi_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
-        if qi_order.name in all_location_names:
-            order_rule = qi_rule & logic.registry.special_order_rules[qi_order.name]
-            MultiWorldRules.set_rule(multiworld.get_location(qi_order.name, player), order_rule)
+    if world_options.special_order_locations & SpecialOrderLocations.value_qi:
+        qi_rule = logic.region.can_reach(Region.qi_walnut_room) & logic.time.has_lived_months(8)
+        for qi_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
+            if qi_order.name in all_location_names:
+                order_rule = qi_rule & logic.registry.special_order_rules[qi_order.name]
+                MultiWorldRules.set_rule(multiworld.get_location(qi_order.name, player), order_rule)
 
 
 help_wanted_prefix = "Help Wanted:"

@@ -17,7 +17,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
     if player_options.exclude_ginger_island == options.ExcludeGingerIsland.option_false:
         active_packs.append(content_packs.ginger_island_content_pack)
 
-        if player_options.special_order_locations == options.SpecialOrderLocations.option_board_qi:
+        if player_options.special_order_locations & options.SpecialOrderLocations.value_qi:
             active_packs.append(content_packs.qi_board_content_pack)
 
     for mod in player_options.mods.value:

@@ -17,7 +17,7 @@ class TestStartInventoryAllsanity(WorldAssertMixin, SVTestBase):
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive_very_cheap,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
         options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_only,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board,
         options.QuestLocations.internal_name: -1,
         options.Fishsanity.internal_name: options.Fishsanity.option_only_easy_fish,
         options.Museumsanity.internal_name: options.Museumsanity.option_randomized,

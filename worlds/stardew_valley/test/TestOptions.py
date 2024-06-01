@@ -190,7 +190,7 @@ class TestTraps(SVTestCase):
 
 class TestSpecialOrders(SVTestCase):
     def test_given_disabled_then_no_order_in_pool(self):
-        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled}
+        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_vanilla}
         with solo_multiworld(world_options) as (multi_world, _):
             locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
             for location_name in locations_in_pool:
@@ -199,7 +199,7 @@ class TestSpecialOrders(SVTestCase):
                 self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
     def test_given_board_only_then_no_qi_order_in_pool(self):
-        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_only}
+        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board}
         with solo_multiworld(world_options) as (multi_world, _):
 
             locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
