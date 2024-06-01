@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict, Any
-from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions,
-                     OptionGroup)
+from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
+                     PerGameCommonOptions, OptionGroup)
+from .er_data import portal_mapping
 
 
 class SwordProgression(DefaultOnToggle):
@@ -170,6 +171,13 @@ class ShuffleLadders(Toggle):
     """
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
+    
+    
+class TUNICPlandoConnections(PlandoConnections):
+    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+
+    duplicate_exits = True
 
 
 @dataclass
@@ -190,7 +198,8 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
-
+    plando_connections: TUNICPlandoConnections
+      
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [

@@ -92,8 +92,6 @@ class MinecraftWorld(World):
     item_name_to_id = Constants.item_name_to_id
     location_name_to_id = Constants.location_name_to_id
 
-    data_version = 7
-
     def _get_mc_data(self) -> Dict[str, Any]:
         exits = [connection[0] for connection in Constants.region_info["default_connections"]]
         return {
