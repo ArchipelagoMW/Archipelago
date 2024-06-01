@@ -64,7 +64,6 @@ class CV64World(World):
     options: CV64Options
     settings: typing.ClassVar[CV64Settings]
     topology_present = True
-    data_version = 1
 
     item_name_to_id = get_item_names_to_ids()
     location_name_to_id = get_location_names_to_ids()

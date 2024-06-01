@@ -33,8 +33,6 @@ class ChecksFinderWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
-
     def _get_checksfinder_data(self):
         return {
             'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),

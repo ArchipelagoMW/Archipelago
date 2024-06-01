@@ -74,7 +74,6 @@ class PokemonRedBlueWorld(World):
     option_definitions = pokemon_rb_options
     settings: typing.ClassVar[PokemonSettings]
 
-    data_version = 9
     required_client_version = (0, 4, 2)
 
     topology_present = True

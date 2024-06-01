@@ -168,9 +168,11 @@ class Context:
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
-    item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
+    item_names: typing.Dict[str, typing.Dict[int, str]] = (
+        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')))
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
-    location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
+    location_names: typing.Dict[str, typing.Dict[int, str]] = (
+        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')))
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
@@ -271,13 +273,20 @@ class Context:
             if "checksum" in game_package:
                 self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
-                self.item_names[item_id] = item_name
+                self.item_names[game_name][item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
-                self.location_names[location_id] = location_name
+                self.location_names[game_name][location_id] = location_name
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
             self.all_location_and_group_names[game_name] = \
                 set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
+
+        archipelago_item_names = self.item_names["Archipelago"]
+        archipelago_location_names = self.location_names["Archipelago"]
+        for game in [game_name for game_name in self.gamespackage if game_name != "Archipelago"]:
+            # Add Archipelago items and locations to each data package.
+            self.item_names[game].update(archipelago_item_names)
+            self.location_names[game].update(archipelago_location_names)
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
@@ -783,10 +792,7 @@ async def on_client_connected(ctx: Context, client: Client):
         for slot, connected_clients in clients.items():
             if connected_clients:
                 name = ctx.player_names[team, slot]
-                players.append(
-                    NetworkPlayer(team, slot,
-                                  ctx.name_aliases.get((team, slot), name), name)
-                )
+                players.append(NetworkPlayer(team, slot, ctx.name_aliases.get((team, slot), name), name))
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     games.add("Archipelago")
     await ctx.send_msgs(client, [{
@@ -801,8 +807,6 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_versions': {game: game_data["version"] for game, game_data
-                                 in ctx.gamespackage.items() if game in games},
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
@@ -1006,8 +1010,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             send_items_to(ctx, team, target_player, new_item)
 
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
-                team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id],
-                ctx.player_names[(team, target_player)], ctx.location_names[location]))
+                team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
+                ctx.player_names[(team, target_player)], ctx.location_names[ctx.slot_info[slot].game][location]))
             info_text = json_format_send_event(new_item, target_player)
             ctx.broadcast_team(team, [info_text])
 
@@ -1061,8 +1065,8 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
 
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
-           f"{ctx.item_names[hint.item]} is " \
-           f"at {ctx.location_names[hint.location]} " \
+           f"{ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item]} is " \
+           f"at {ctx.location_names[ctx.slot_info[hint.finding_player].game][hint.location]} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
     if hint.entrance:
@@ -1364,7 +1368,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.remaining_mode == "enabled":
             remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
             if remaining_item_ids:
-                self.output("Remaining items: " + ", ".join(self.ctx.item_names[item_id]
+                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
                                                             for item_id in remaining_item_ids))
             else:
                 self.output("No remaining items found.")
@@ -1377,7 +1381,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
                 remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if remaining_item_ids:
-                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[item_id]
+                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
                                                                 for item_id in remaining_item_ids))
                 else:
                     self.output("No remaining items found.")
@@ -1395,7 +1399,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            names = [self.ctx.location_names[location] for location in locations]
+            game = self.ctx.slot_info[self.client.slot].game
+            names = [self.ctx.location_names[game][location] for location in locations]
             if filter_text:
                 location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
                 if filter_text in location_groups:  # location group name
@@ -1420,7 +1425,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            names = [self.ctx.location_names[location] for location in locations]
+            game = self.ctx.slot_info[self.client.slot].game
+            names = [self.ctx.location_names[game][location] for location in locations]
             if filter_text:
                 location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
                 if filter_text in location_groups:  # location group name
@@ -1501,10 +1507,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
         elif input_text.isnumeric():
             game = self.ctx.games[self.client.slot]
             hint_id = int(input_text)
-            hint_name = self.ctx.item_names[hint_id] \
-                if not for_location and hint_id in self.ctx.item_names \
-                else self.ctx.location_names[hint_id] \
-                if for_location and hint_id in self.ctx.location_names \
+            hint_name = self.ctx.item_names[game][hint_id] \
+                if not for_location and hint_id in self.ctx.item_names[game] \
+                else self.ctx.location_names[game][hint_id] \
+                if for_location and hint_id in self.ctx.location_names[game] \
                 else None
             if hint_name in self.ctx.non_hintable_names[game]:
                 self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")

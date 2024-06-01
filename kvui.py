@@ -683,10 +683,18 @@ class HintLog(RecycleView):
         for hint in hints:
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
-                "item": {"text": self.parser.handle_node(
-                    {"type": "item_id", "text": hint["item"], "flags": hint["item_flags"]})},
+                "item": {"text": self.parser.handle_node({
+                    "type": "item_id",
+                    "text": hint["item"],
+                    "flags": hint["item_flags"],
+                    "player": hint["receiving_player"],
+                })},
                 "finding": {"text": self.parser.handle_node({"type": "player_id", "text": hint["finding_player"]})},
-                "location": {"text": self.parser.handle_node({"type": "location_id", "text": hint["location"]})},
+                "location": {"text": self.parser.handle_node({
+                    "type": "location_id",
+                    "text": hint["location"],
+                    "player": hint["finding_player"],
+                })},
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},

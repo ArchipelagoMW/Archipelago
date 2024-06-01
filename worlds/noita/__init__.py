@@ -34,14 +34,13 @@ class NoitaWorld(World):
 
     item_name_groups = items.item_name_groups
     location_name_groups = locations.location_name_groups
-    data_version = 2
 
     web = NoitaWeb()
 
     def generate_early(self) -> None:
         if not self.multiworld.get_player_name(self.player).isascii():
             raise Exception("Noita yaml's slot name has invalid character(s).")
-    
+
     # Returned items will be sent over to the client
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict("death_link", "victory_condition", "path_option", "hidden_chests",

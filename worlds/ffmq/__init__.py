@@ -56,8 +56,6 @@ class FFMQWorld(World):
     create_regions = create_regions
     set_rules = set_rules
     stage_set_rules = stage_set_rules
-
-    data_version = 1
     
     web = FFMQWebWorld()
     # settings: FFMQSettings
@@ -216,4 +214,3 @@ class FFMQWorld(World):
                                         hint_data[self.player][location.address] += f"/{hint}"
                                     else:
                                         hint_data[self.player][location.address] = hint
-

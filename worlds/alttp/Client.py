@@ -339,7 +339,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
     def new_check(location_id):
         new_locations.append(location_id)
         ctx.locations_checked.add(location_id)
-        location = ctx.location_names[location_id]
+        location = ctx.location_names.lookup_in_slot(location_id)
         snes_logger.info(
             f'New Check: {location} ' +
             f'({len(ctx.checked_locations) + 1 if ctx.checked_locations else len(ctx.locations_checked)}/' +
@@ -552,9 +552,9 @@ class ALTTPSNIClient(SNIClient):
             item = ctx.items_received[recv_index]
             recv_index += 1
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_slot(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
 
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR,
                                 bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))

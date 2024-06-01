@@ -37,7 +37,6 @@ class CliqueWorld(World):
     """The greatest game of all time."""
 
     game = "Clique"
-    data_version = 3
     web = CliqueWebWorld()
     option_definitions = clique_options
     location_name_to_id = location_table

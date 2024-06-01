@@ -52,8 +52,6 @@ class UndertaleWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 7
-
     def _get_undertale_data(self):
         return {
             "world_seed": self.multiworld.per_slot_randoms[self.player].getrandbits(32),

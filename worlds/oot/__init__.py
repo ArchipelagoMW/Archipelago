@@ -150,8 +150,6 @@ class OOTWorld(World):
     location_name_to_id = location_name_to_id
     web = OOTWeb()
 
-    data_version = 3
-
     required_client_version = (0, 4, 0)
 
     item_name_groups = {

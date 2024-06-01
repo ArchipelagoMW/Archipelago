@@ -176,7 +176,6 @@ class SoEWorld(World):
     options: SoEOptions
     settings: typing.ClassVar[SoESettings]
     topology_present = False
-    data_version = 5
     web = SoEWebWorld()
     required_client_version = (0, 4, 4)
 

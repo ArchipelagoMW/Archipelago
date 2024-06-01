@@ -46,7 +46,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.6"
+__version__ = "0.5.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -457,6 +457,9 @@ class ByValue:
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
+
+    def __init__(self, default_factory: typing.Callable[[Any], Any] = None, **kwargs):
+        super().__init__(default_factory, **kwargs)
 
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)

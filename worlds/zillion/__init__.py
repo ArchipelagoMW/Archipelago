@@ -86,11 +86,6 @@ class ZillionWorld(World):
     item_name_to_id = _item_name_to_id
     location_name_to_id = _loc_name_to_id
 
-    # increment this every time something in your world's names/id mappings changes.
-    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
-    # retrieved by clients on every connection.
-    data_version = 1
-
     logger: logging.Logger
 
     class LogStreamInterface:
