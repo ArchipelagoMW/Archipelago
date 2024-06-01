@@ -3,6 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from typing import TYPE_CHECKING
+
 from BaseClasses import CollectionState
 
 from worlds.generic.Rules import CollectionRule, set_rule

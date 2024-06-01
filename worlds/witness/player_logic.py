@@ -19,7 +19,7 @@ import copy
 from collections import defaultdict
 from logging import debug
 from pprint import pformat
-from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
@@ -36,6 +36,7 @@ from .data.utils import (
     get_early_caves_list,
     get_early_caves_start_list,
     get_elevators_come_to_you,
+    get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
     get_ep_no_eclipse,
@@ -50,7 +51,6 @@ from .data.utils import (
     logical_and_witness_rules,
     logical_or_witness_rules,
     parse_lambda,
-    get_entity_hunt,
 )
 
 if TYPE_CHECKING:
