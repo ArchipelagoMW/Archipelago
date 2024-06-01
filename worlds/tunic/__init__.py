@@ -8,7 +8,7 @@ from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
-from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets
+from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -43,7 +43,7 @@ class SeedGroup(TypedDict):
     logic_rules: int  # logic rules value
     laurels_at_10_fairies: bool  # laurels location value
     fixed_shop: bool  # fixed shop value
-    plando: List[PlandoConnection]  # consolidated list of plando connections for the seed group
+    plando: TunicPlandoConnections  # consolidated of plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -128,6 +128,7 @@ class TunicWorld(World):
             if multiworld.plando_connections[tunic.player]:
                 # loop through the connections in the player's yaml
                 for cxn in multiworld.plando_connections[tunic.player]:
+                    print(type(cls.seed_groups[group]["plando"]))
                     new_cxn = True
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         # if neither entrance nor exit match anything in the group, add to group
