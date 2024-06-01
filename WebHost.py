@@ -23,7 +23,6 @@ def get_app():
     from WebHostLib import register, cache, app as raw_app
     from WebHostLib.models import db
 
-    register()
     app = raw_app
     if os.path.exists(configpath) and not app.config["TESTING"]:
         import yaml
@@ -34,6 +33,7 @@ def get_app():
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
         logging.info(f"HOST_ADDRESS was set to {app.config['HOST_ADDRESS']}")
 
+    register()
     cache.init_app(app)
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
     from WebHostLib.lttpsprites import update_sprites_lttp
-    from WebHostLib.autolauncher import autohost, autogen
+    from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
 
     try:
@@ -138,3 +138,11 @@ if __name__ == "__main__":
         else:
             from waitress import serve
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
+    else:
+        from time import sleep
+        try:
+            while True:
+                sleep(1)  # wait for process to be killed
+        except (SystemExit, KeyboardInterrupt):
+            pass
+    stop()  # stop worker threads

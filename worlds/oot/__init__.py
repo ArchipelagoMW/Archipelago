@@ -32,7 +32,7 @@ from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys, Accessibility
+from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
@@ -150,8 +150,6 @@ class OOTWorld(World):
     location_name_to_id = location_name_to_id
     web = OOTWeb()
 
-    data_version = 3
-
     required_client_version = (0, 4, 0)
 
     item_name_groups = {
@@ -202,6 +200,8 @@ class OOTWorld(World):
             elif isinstance(result, Toggle):
                 option_value = bool(result)
             elif isinstance(result, VerifyKeys):
+                option_value = result.value
+            elif isinstance(result, PlandoConnections):
                 option_value = result.value
             else:
                 option_value = result.current_key
@@ -717,7 +717,6 @@ class OOTWorld(World):
             item = self.create_item(name, allow_arbitrary_name=True)
         self.multiworld.push_item(location, item, collect=False)
         location.locked = True
-        location.event = True
         if name not in item_table:
             location.internal = True
         return item
@@ -842,7 +841,7 @@ class OOTWorld(World):
         all_state.sweep_for_events(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
-                       (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
+                       (loc.internal or loc.type == 'Drop') and loc.address is None and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
@@ -972,7 +971,6 @@ class OOTWorld(World):
                     for location in song_locations:
                         location.item = None
                         location.locked = False
-                        location.event = False
                 else:
                     break
 

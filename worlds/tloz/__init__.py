@@ -68,7 +68,6 @@ class TLoZWorld(World):
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
-    data_version = 1
     base_id = 7000
     web = TLoZWeb()
 
@@ -116,7 +115,6 @@ class TLoZWorld(World):
 
     def create_location(self, name, id, parent, event=False):
         return_location = TLoZLocation(self.player, name, id, parent)
-        return_location.event = event
         return return_location
 
     def create_regions(self):
@@ -261,11 +259,11 @@ class TLoZWorld(World):
             rom_data[location_id] = item_id
         
         # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-        secret_caves = self.multiworld.per_slot_randoms[self.player].sample(sorted(secret_money_ids), 3)
+        secret_caves = self.random.sample(sorted(secret_money_ids), 3)
         secret_cave_money_amounts = [20, 50, 100]
         for i, amount in enumerate(secret_cave_money_amounts):
             # Giving approximately double the money to keep grinding down
-            amount = amount * self.multiworld.per_slot_randoms[self.player].triangular(1.5, 2.5)
+            amount = amount * self.random.triangular(1.5, 2.5)
             secret_cave_money_amounts[i] = int(amount)
         for i, cave in enumerate(secret_caves):
             rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
