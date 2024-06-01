@@ -61,6 +61,7 @@ class PokemonCrystalClient(BizHawkClient):
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
     phone_trap_locations: List[int]
+    current_map: List[int]
 
     def __init__(self) -> None:
         super().__init__()
@@ -69,6 +70,7 @@ class PokemonCrystalClient(BizHawkClient):
         self.local_set_events = {}
         self.local_found_key_items = {}
         self.phone_trap_locations = []
+        self.current_map = [0, 0]
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -239,6 +241,20 @@ class PokemonCrystalClient(BizHawkClient):
                     "operations": [{"operation": "or", "value": key_bitfield}],
                 }])
                 self.local_found_key_items = local_found_key_items
+
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [(data.ram_addresses["wMapGroup"], 2, "WRAM")],  # Current Map
+                [overworld_guard]
+            )
+
+            if read_result is not None:
+                current_map = [int(x) for x in read_result[0]]
+                if self.current_map != current_map:
+                    self.current_map = current_map
+                    message = [{"cmd": "Bounce", "slots": [ctx.slot],
+                                "data": {"mapGroup": current_map[0], "mapNumber": current_map[1]}}]
+                    await ctx.send_msgs(message)
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
