@@ -258,18 +258,6 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    data_version: ClassVar[int] = 0
-    """
-    Increment this every time something in your world's names/id mappings changes.
-
-    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
-    that it should not be cached, and clients should request that world's DataPackage every connection. Not
-    recommended for production-ready worlds.
-
-    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
-    request a new DataPackage, if necessary.
-    """
-
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
     override this if changes to a world break forward-compatibility of the client
@@ -543,7 +531,6 @@ class World(metaclass=AutoWorldRegister):
             "item_name_to_id": cls.item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
             "location_name_to_id": cls.location_name_to_id,
-            "version": cls.data_version,
         }
         res["checksum"] = data_package_checksum(res)
         return res

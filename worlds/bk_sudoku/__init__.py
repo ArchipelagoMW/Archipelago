@@ -34,7 +34,6 @@ class Bk_SudokuWorld(World):
     """
     game = "Sudoku"
     web = Bk_SudokuWebWorld()
-    data_version = 1
 
     item_name_to_id: Dict[str, int] = {}
     location_name_to_id: Dict[str, int] = {}
