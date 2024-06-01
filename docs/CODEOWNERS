@@ -21,9 +21,6 @@
 # ArchipIDLE
 /worlds/archipidle/ @LegendaryLinux
 
-# Sudoku (BK Sudoku)
-/worlds/bk_sudoku/ @Jarno458
-
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
 
@@ -217,6 +214,9 @@
 
 # Final Fantasy (1)
 # /worlds/ff1/
+
+# Sudoku (BK Sudoku)
+# /worlds/bk_sudoku/
 
 
 ## Disabled Unmaintained Worlds
