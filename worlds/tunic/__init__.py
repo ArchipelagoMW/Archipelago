@@ -128,7 +128,6 @@ class TunicWorld(World):
             if multiworld.plando_connections[tunic.player]:
                 # loop through the connections in the player's yaml
                 for cxn in multiworld.plando_connections[tunic.player]:
-                    print(type(cls.seed_groups[group]["plando"]))
                     new_cxn = True
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         # if neither entrance nor exit match anything in the group, add to group
