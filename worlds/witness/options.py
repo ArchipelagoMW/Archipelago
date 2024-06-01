@@ -165,6 +165,7 @@ class VictoryCondition(Choice):
     - Challenge: Beat the secret Challenge (requires Challenge Lasers).
     - Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
     - Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+    - Panel Hunt: Solve a specific number of randomly selected panels before going to the secret ending in Tutorial.
 
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
     to count, the laser locks on the Elevator and Challenge Timer panels do not.
@@ -174,6 +175,25 @@ class VictoryCondition(Choice):
     option_challenge = 1
     option_mountain_box_short = 2
     option_mountain_box_long = 3
+    option_panel_hunt = 4
+
+
+class PanelHuntTotal(Range):
+    """
+    Sets the number of random panels that will get marked as "Panel Hunt" panels in the "Panel Hunt" game mode.
+    """
+    display_name = "Number of Panel Hunt Panels"
+    range_start = 5
+    range_end = 100
+
+
+class PanelHuntRequiredPercentage(Range):
+    """
+    Determines the percentage of "Panel Hunt" panels that need to be solved to win.
+    """
+    display_name = "Percentage of extra panel hunt panels"
+    range_start = 20
+    range_end = 100
 
 
 class PuzzleRandomization(Choice):
@@ -324,6 +344,8 @@ class TheWitnessOptions(PerGameCommonOptions):
     victory_condition: VictoryCondition
     mountain_lasers: MountainLasers
     challenge_lasers: ChallengeLasers
+    panel_hunt_total: PanelHuntTotal
+    panel_hunt_required_percentage: PanelHuntRequiredPercentage
     early_caves: EarlyCaves
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
