@@ -113,7 +113,7 @@ class BindSongNeededToGetUnderRockBulb(Toggle):
 
 class UnconfineHomeWater(Choice):
     """
-    Open the way out of the Home water area so that Naija can go to open water and beyond without the bind song.
+    Open the way out of the Home Water area so that Naija can go to open water and beyond without the bind song.
     """
     display_name = "Unconfine Home Water Area"
     option_off = 0

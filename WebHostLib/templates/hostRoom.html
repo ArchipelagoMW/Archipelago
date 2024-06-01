@@ -24,7 +24,8 @@
             <br />
         {% endif %}
         {% if room.tracker %}
-            This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
+            This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a>
+            and a <a href="{{ url_for("get_multiworld_sphere_tracker", tracker=room.tracker) }}">Sphere Tracker</a> enabled.
             <br />
         {% endif %}
         The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
