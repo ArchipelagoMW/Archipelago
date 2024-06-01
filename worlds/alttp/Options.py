@@ -1,8 +1,11 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, \
+    StartInventoryPool, PlandoBosses, PlandoConnections, PlandoTexts, FreeText, Removed
+from .EntranceShuffle import default_connections, default_dungeon_connections, \
+    inverted_default_connections, inverted_default_dungeon_connections
+from .Text import TextTable
 
 
 class GlitchesRequired(Choice):
@@ -716,13 +719,32 @@ class BeemizerTrapChance(BeemizerRange):
     display_name = "Beemizer Trap Chance"
 
 
-class AllowCollect(Toggle):
-    """Allows for !collect / co-op to auto-open chests containing items for other players.
-    Off by default, because it currently crashes on real hardware."""
+class AllowCollect(DefaultOnToggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players."""
     display_name = "Allow Collection of checks for other players"
 
 
+class ALttPPlandoConnections(PlandoConnections):
+    entrances = set([connection[0] for connection in (
+        *default_connections, *default_dungeon_connections, *inverted_default_connections,
+        *inverted_default_dungeon_connections)])
+    exits = set([connection[1] for connection in (
+        *default_connections, *default_dungeon_connections, *inverted_default_connections,
+        *inverted_default_dungeon_connections)])
+
+
+class ALttPPlandoTexts(PlandoTexts):
+    """Text plando. Format is:
+    - text: 'This is your text'
+      at: text_key
+      percentage: 100
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
+    valid_keys = TextTable.valid_keys
+
+
 alttp_options: typing.Dict[str, type(Option)] = {
+    "plando_connections": ALttPPlandoConnections,
+    "plando_texts": ALttPPlandoTexts,
     "start_inventory_from_pool": StartInventoryPool,
     "goal": Goal,
     "mode": Mode,
@@ -796,4 +818,9 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
+
+    # removed:
+    "goals": Removed,
+    "smallkey_shuffle": Removed,
+    "bigkey_shuffle": Removed,
 }
