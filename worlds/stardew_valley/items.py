@@ -15,7 +15,7 @@ from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Booksanity, Walnutsanity
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
 from .strings.ap_names.ap_option_names import OptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
@@ -754,10 +754,10 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     trap_items = [trap for trap in items_by_group[Group.TRAP]
                   if trap.name not in items_already_added_names and
                   (trap.mod_name is None or trap.mod_name in options.mods)]
-    trap_items.extend([bonus for bonus in items_by_group[Group.BONUS]
-                       if bonus.name not in items_already_added_names and
-                       (bonus.mod_name is None or bonus.mod_name in options.mods)])
-    player_buffs = get_allowed_player_buffs(options)
+    # trap_items.extend([bonus for bonus in items_by_group[Group.BONUS]
+    #                    if bonus.name not in items_already_added_names and
+    #                    (bonus.mod_name is None or bonus.mod_name in options.mods)])
+    player_buffs = get_allowed_player_buffs(options.enabled_filler_buffs)
 
     priority_filler_items = []
     priority_filler_items.extend(useful_resource_packs)
@@ -837,15 +837,15 @@ def remove_limited_amount_packs(packs):
 def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool) -> List[ItemData]:
     all_filler_items = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
     all_filler_items.extend(items_by_group[Group.TRASH])
+    # all_filler_items.extend(get_allowed_player_buffs(buff_option)) # Not sure how to do this
     if include_traps:
         all_filler_items.extend(items_by_group[Group.TRAP])
-        all_filler_items.extend(items_by_group[Group.BONUS])
+        # all_filler_items.extend(items_by_group[Group.BONUS])
     all_filler_items = remove_excluded_items_island_mods(all_filler_items, exclude_ginger_island, set())
     return all_filler_items
 
 
-def get_allowed_player_buffs(options: StardewValleyOptions) -> List[ItemData]:
-    buff_option = options.enabled_filler_buffs
+def get_allowed_player_buffs(buff_option: EnabledFillerBuffs) -> List[ItemData]:
     allowed_buffs = []
     if OptionName.buff_luck in buff_option:
         allowed_buffs.append(item_table[Buff.luck])
