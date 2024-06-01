@@ -550,6 +550,7 @@ def read_data() -> Tuple[
                     "Location",
                     "Item",
                     "Goal",
+                    "Early",
                     "Achievement",
                     "Grindy",
                     "Fishing",

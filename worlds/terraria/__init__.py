@@ -93,27 +93,36 @@ class TerrariaWorld(World):
         self.calamity = self.options.calamity.value
         self.getfixedboi = self.options.getfixedboi.value
 
-        achievements = self.options.achievements.value
         location_count = 0
         locations = []
         item_count = 0
         items = []
         for rule in rules[:goal]:
+            early = "Early" in rule.flags
+            grindy = "Grindy" in rule.flags
+            fishing = "Fishing" in rule.flags
+
             if (
                 (not self.getfixedboi and "Getfixedboi" in rule.flags)
                 or (self.getfixedboi and "Not Getfixedboi" in rule.flags)
                 or (not self.calamity and "Calamity" in rule.flags)
-                or (achievements < 1 and "Achievement" in rule.flags)
-                or (achievements < 2 and "Grindy" in rule.flags)
-                or (achievements < 3 and "Fishing" in rule.flags)
+                or (not self.options.early_achievements.value and early)
+                or (
+                    not self.options.normal_achievements.value
+                    and "Achievement" in rule.flags
+                    and not early
+                    and not grindy
+                    and not fishing
+                )
+                or (not self.options.grindy_achievements.value and grindy)
+                or (not self.options.fishing_achievements.value and fishing)
                 or (
                     rule.name == "Zenith" and self.options.goal.value != 11
                 )  # Bad hardcoding
             ):
                 continue
-            if "Location" in rule.flags or (
-                "Achievement" in rule.flags and achievements >= 1
-            ):
+
+            if "Location" in rule.flags or "Achievement" in rule.flags:
                 # Location
                 location_count += 1
                 locations.append(rule.name)
@@ -251,7 +260,7 @@ class TerrariaWorld(World):
             elif condition.condition == "calamity":
                 return condition.sign == self.calamity
             elif condition.condition == "grindy":
-                return condition.sign == (self.options.achievements.value >= 2)
+                return condition.sign == self.options.grindy_achievements.value
             elif condition.condition == "pickaxe":
                 if type(condition.argument) is not int:
                     raise Exception("@pickaxe requires an integer argument")
@@ -352,6 +361,12 @@ class TerrariaWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         return {
             "goal": list(self.goal_locations),
-            "achievements": self.options.achievements.value,
             "deathlink": bool(self.options.death_link),
+            # The rest of these are included for trackers
+            "calamity": self.options.calamity.value,
+            "getfixedboi": self.options.getfixedboi.value,
+            "early_achievements": self.options.early_achievements.value,
+            "normal_achievements": self.options.normal_achievements.value,
+            "grindy_achievements": self.options.grindy_achievements.value,
+            "fishing_achievements": self.options.fishing_achievements.value,
         }

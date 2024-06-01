@@ -38,18 +38,35 @@ class Goal(Choice):
     default = 0
 
 
-class Achievements(Choice):
+class EarlyAchievements(Toggle):
+    """Adds checks upon collecting early Pre-Hardmode achievements. Adds many sphere 1 checks."""
+
+    display_name = "Early Pre-Hardmode achievements"
+    default = True
+
+
+class NormalAchievements(Toggle):
     """
-    Adds checks upon collecting achievements. Achievements for clearing bosses and events are excluded.
-    "Exclude Grindy" also excludes fishing achievements.
+    Adds checks upon collecting achivements not covered by the other options. Achievements for
+    clearing bosses and events are excluded.
     """
 
-    display_name = "Achievements"
-    option_none = 0
-    option_exclude_grindy = 1
-    option_exclude_fishing = 2
-    option_all = 3
-    default = 1
+    display_name = "Normal achievements"
+    default = True
+
+
+class GrindyAchievements(Toggle):
+    """Adds checks upon collecting grindy achievements"""
+
+    display_name = "Grindy achievements"
+    default = False
+
+
+class FishingAchievements(Toggle):
+    """Adds checks upon collecting fishing quest achievements"""
+
+    display_name = "Fishing quest achievements"
+    default = False
 
 
 class FillExtraChecksWith(Choice):
@@ -69,6 +86,9 @@ class TerrariaOptions(PerGameCommonOptions):
     calamity: Calamity
     getfixedboi: Getfixedboi
     goal: Goal
-    achievements: Achievements
+    early_achievements: EarlyAchievements
+    normal_achievements: NormalAchievements
+    grindy_achievements: GrindyAchievements
+    fishing_achievements: FishingAchievements
     fill_extra_checks_with: FillExtraChecksWith
     death_link: DeathLink
