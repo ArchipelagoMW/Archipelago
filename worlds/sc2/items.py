@@ -4,7 +4,7 @@ from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
 import enum
 
-from .options import get_option_value, RequiredTactics
+from .options import get_option_value, RequiredTactics, GenericUpgradeItems
 from .mission_tables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import item_names
 from worlds.AutoWorld import World
@@ -203,18 +203,18 @@ item_table = {
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=3,),
-    item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: ItemData(102 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 2, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: ItemData(103 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 4, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: ItemData(104 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 6, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON: ItemData(105 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 8, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR: ItemData(106 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 10, SC2Race.TERRAN, quantity=3),
-    # Upgrade bundle 'number' values are used as indices to get affected 'number's
-    item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: ItemData(107 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: ItemData(108 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 1, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE: ItemData(109 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 2, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE: ItemData(110 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 3, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE: ItemData(111 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 4, SC2Race.TERRAN, quantity=3),
-    item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: ItemData(112 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 5, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: ItemData(102 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 4, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: ItemData(103 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 8, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: ItemData(104 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 12, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON: ItemData(105 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 16, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR: ItemData(106 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 20, SC2Race.TERRAN, quantity=3),
+    # Bundles
+    item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: ItemData(107 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: ItemData(108 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE: ItemData(109 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE: ItemData(110 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE: ItemData(111 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, quantity=3),
+    item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: ItemData(112 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, quantity=3),
 
     # Unit and structure upgrades
     item_names.BUNKER_PROJECTILE_ACCELERATOR:
@@ -1021,16 +1021,16 @@ item_table = {
                  classification=ItemClassification.progression, origin={"bw"}),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 2, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_FLYER_ATTACK: ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 6, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE: ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 8, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 8, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_FLYER_ATTACK: ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 12, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE: ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 16, SC2Race.ZERG, quantity=3, origin={"hots"}),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
-    item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE: ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 6, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE: ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 7, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE: ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 8, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE: ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 9, SC2Race.ZERG, quantity=3, origin={"hots"}),
-    item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 10, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE: ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE: ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE: ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE: ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
+    item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, quantity=3, origin={"hots"}),
 
     item_names.ZERGLING_HARDENED_CARAPACE:
         ItemData(200 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING, origin={"hots"}),
@@ -1459,16 +1459,16 @@ item_table = {
 
     # Protoss Upgrades
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR: ItemData(101 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 2, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 4, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 6, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 8, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR: ItemData(101 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 4, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 8, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 12, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 16, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
     # Upgrade bundle 'number' values are used as indices to get affected 'number's
-    item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 11, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 12, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 13, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE: ItemData(108 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 14, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
-    item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 15, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE: ItemData(108 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, quantity=3, origin={"wol", "lotv"}),
 
     # Protoss Buildings
     item_names.PHOTON_CANNON: ItemData(200 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Building, 0, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
@@ -1895,38 +1895,98 @@ nova_equipment = {
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE
 }
 
-# 'number' values of upgrades for upgrade bundle items
-upgrade_numbers = [
+upgrade_bundles: Dict[str, List[str]] = {
     # Terran
-    {0, 4, 8}, # Weapon
-    {2, 6, 10}, # Armor
-    {0, 2}, # Infantry
-    {4, 6}, # Vehicle
-    {8, 10}, # Starship
-    {0, 2, 4, 6, 8, 10}, # All
+    item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE:
+        [
+            item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON,
+            item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON,
+            item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON
+        ],
+    item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR,
+            item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR,
+            item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR
+        ],
+    item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE:
+        [
+            item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON
+        ],
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE:
+        [
+            item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR
+        ],
+    item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE:
+        [
+            item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR
+        ],
+    item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR,
+            item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR,
+            item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR
+        ],
     # Zerg
-    {0, 2, 6}, # Weapon
-    {4, 8}, # Armor
-    {0, 2, 4}, # Ground
-    {6, 8}, # Flyer
-    {0, 2, 4, 6, 8}, # All
+    item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE:
+        [
+            item_names.PROGRESSIVE_ZERG_MELEE_ATTACK,
+            item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK,
+            item_names.PROGRESSIVE_ZERG_FLYER_ATTACK
+        ],
+    item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE
+        ],
+    item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE:
+        [
+            item_names.PROGRESSIVE_ZERG_MELEE_ATTACK,
+            item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK,
+            item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE
+        ],
+    item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE:
+        [
+            item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE
+        ],
+    item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_ZERG_MELEE_ATTACK,
+            item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK,
+            item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE,
+            item_names.PROGRESSIVE_ZERG_FLYER_ATTACK,
+            item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE
+        ],
     # Protoss
-    {0, 6}, # Weapon
-    {2, 4, 8}, # Armor
-    {0, 2}, # Ground, Shields are handled specially
-    {6, 8}, # Air, Shields are handled specially
-    {0, 2, 4, 6, 8}, # All
-]
-# 'upgrade_numbers' indices for all upgrades
-upgrade_numbers_all = {
-    SC2Race.TERRAN: 5,
-    SC2Race.ZERG: 10,
-    SC2Race.PROTOSS: 15,
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE:
+        [
+            item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON
+        ],
+    item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
+            item_names.PROGRESSIVE_PROTOSS_SHIELDS
+        ],
+    item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
+        [
+            item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR,
+            item_names.PROGRESSIVE_PROTOSS_SHIELDS
+        ],
+    item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
+            item_names.PROGRESSIVE_PROTOSS_SHIELDS
+        ],
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE:
+        [
+            item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR,
+            item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
+            item_names.PROGRESSIVE_PROTOSS_SHIELDS
+        ],
 }
 
 # Names of upgrades to be included for different options
-upgrade_included_names = [
-    { # Individual Items
+upgrade_included_names: Dict[GenericUpgradeItems, Set[str]] = {
+    GenericUpgradeItems.option_individual_items: {
         item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON,
         item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR,
         item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON,
@@ -1944,7 +2004,7 @@ upgrade_included_names = [
         item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON,
         item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
     },
-    { # Bundle Weapon And Armor
+    GenericUpgradeItems.option_bundle_weapon_and_armor: {
         item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
         item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE,
         item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE,
@@ -1952,7 +2012,7 @@ upgrade_included_names = [
         item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE,
         item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE,
     },
-    { # Bundle Unit Class
+    GenericUpgradeItems.option_bundle_unit_class: {
         item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE,
         item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE,
         item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE,
@@ -1961,12 +2021,12 @@ upgrade_included_names = [
         item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE,
         item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE,
     },
-    { # Bundle All
+    GenericUpgradeItems.option_bundle_all: {
         item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
         item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
         item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
     }
-]
+}
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}

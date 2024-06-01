@@ -48,8 +48,8 @@ from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from worlds.sc2.items import (
-    lookup_id_to_name, get_full_item_list, ItemData, upgrade_numbers, upgrade_numbers_all,
-    race_to_item_type, upgrade_item_types, ZergItemType,
+    lookup_id_to_name, get_full_item_list, ItemData,
+    race_to_item_type, upgrade_item_types, ZergItemType, upgrade_bundles, upgrade_included_names,
 )
 from worlds.sc2.locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
@@ -853,14 +853,14 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             flaggroup = item_data.type.flag_word
 
             # Generic upgrades apply only to Weapon / Armor upgrades
-            if item_data.type not in upgrade_item_types or ctx.generic_upgrade_items == 0:
+            if item_data.number >= 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
                 if name == item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
                     shields_from_ground_upgrade += 1
                 if name == item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
                     shields_from_air_upgrade += 1
-                for bundled_number in upgrade_numbers[item_data.number]:
+                for bundled_number in get_bundle_upgrade_member_numbers(name):
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
             # Regen bio-steel nerf with API3 - undo for older games
@@ -890,26 +890,35 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
         total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
-        for race in SC2Race:
-            if race == SC2Race.ANY:
-                continue
+        num_missions = ctx.generic_upgrade_missions * total_missions
+        amounts = [
+            num_missions // 100,
+            2 * num_missions // 100,
+            3 * num_missions // 100
+        ]
+        upgrade_count = 0
+        completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
+        for amount in amounts:
+            if completed >= amount:
+                upgrade_count += 1
+
+        # Equivalent to "Progressive Weapon/Armor Upgrade" item
+        global_upgrades: typing.Set[str] = upgrade_included_names[GenericUpgradeItems.option_bundle_all]
+        for global_upgrade in global_upgrades:
+            race = get_full_item_list()[global_upgrade].race
             upgrade_flaggroup = race_to_item_type[race]["Upgrade"].flag_word
-            num_missions = ctx.generic_upgrade_missions * total_missions
-            amounts = [
-                num_missions // 100,
-                2 * num_missions // 100,
-                3 * num_missions // 100
-            ]
-            upgrade_count = 0
-            completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
-            for amount in amounts:
-                if completed >= amount:
-                    upgrade_count += 1
-            # Equivalent to "Progressive Weapon/Armor Upgrade" item
-            for bundled_number in upgrade_numbers[upgrade_numbers_all[race]]:
+            for bundled_number in get_bundle_upgrade_member_numbers(global_upgrade):
                 accumulators[race][upgrade_flaggroup] += upgrade_count << bundled_number
 
     return accumulators
+
+
+def get_bundle_upgrade_member_numbers(bundled_item: str) -> typing.List[int]:
+    upgrade_elements: typing.List[str] = upgrade_bundles[bundled_item]
+    if bundled_item in (item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE, item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE):
+        # Shields are handled as a maximum of those two
+        upgrade_elements = [item_name for item_name in upgrade_elements if item_name != item_names.PROGRESSIVE_PROTOSS_SHIELDS]
+    return [get_full_item_list()[item_name].number for item_name in upgrade_elements]
 
 
 def calc_difficulty(difficulty: int):

@@ -17,10 +17,10 @@ from . import item_groups
 from .locations import get_locations, get_location_types, get_plando_locations
 from .regions import create_regions
 from .options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
-    KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
-    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-    GrantStoryTech, GenericUpgradeResearch,
-)
+                      KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
+                      get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
+                      GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems,
+                      )
 from .pool_filter import filter_items
 from .mission_tables import (
     MissionInfo, SC2Campaign, SC2Mission, SC2Race, MissionFlag
@@ -562,7 +562,7 @@ def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
 def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes +armour/attack upgrades based on generic upgrade strategy."""
     include_upgrades = world.options.generic_upgrade_missions == 0
-    upgrade_items = world.options.generic_upgrade_items
+    upgrade_items: GenericUpgradeItems = world.options.generic_upgrade_items
     for item in item_list:
         if item.data.type in items.upgrade_item_types:
             if not include_upgrades or (item.name not in upgrade_included_names[upgrade_items]):
