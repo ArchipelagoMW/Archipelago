@@ -291,6 +291,11 @@ class TrackerData:
 
         return video_feeds
 
+    @_cache_results
+    def get_spheres(self) -> List[List[int]]:
+        """ each sphere is { player: { location_id, ... } } """
+        return self._multidata.get("spheres", [])
+
 
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
 def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> str:
@@ -412,6 +417,26 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         item_id_to_name=tracker_data.item_id_to_name,
         location_id_to_name=tracker_data.location_id_to_name,
     )
+
+
+def render_generic_multiworld_sphere_tracker(tracker_data: TrackerData) -> str:
+    return render_template(
+        "multispheretracker.html",
+        room=tracker_data.room,
+        tracker_data=tracker_data,
+    )
+
+
+@app.route("/sphere_tracker/<suuid:tracker>")
+@cache.memoize(timeout=TRACKER_CACHE_TIMEOUT_IN_SECONDS)
+def get_multiworld_sphere_tracker(tracker: UUID):
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+
+    tracker_data = TrackerData(room)
+    return render_generic_multiworld_sphere_tracker(tracker_data)
 
 
 # TODO: This is a temporary solution until a proper Tracker API can be implemented for tracker templates and data to
