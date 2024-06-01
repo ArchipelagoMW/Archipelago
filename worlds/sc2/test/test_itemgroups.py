@@ -5,6 +5,7 @@ Unit tests for ItemGroups.py
 import unittest
 from .. import item_groups, items
 
+
 class ItemGroupsUnitTests(unittest.TestCase):
     def test_all_production_structure_groups_capture_all_units(self) -> None:
         self.assertCountEqual(

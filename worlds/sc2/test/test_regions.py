@@ -3,6 +3,7 @@ from .test_base import Sc2TestBase
 from .. import mission_tables, regions
 from .. import options
 
+
 class TestGridsizes(unittest.TestCase):
     def test_grid_sizes_meet_specs(self):
         self.assertTupleEqual((1, 2, 0), regions.get_grid_dimensions(2))
