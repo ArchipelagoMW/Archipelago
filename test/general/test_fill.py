@@ -1,39 +1,13 @@
 from typing import List, Iterable
 import unittest
 
-import Options
 from Options import Accessibility
-from worlds.AutoWorld import World
+from test.general import generate_items, generate_locations, generate_test_multiworld
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
     distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
-    ItemClassification, CollectionState
+    ItemClassification
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
-
-
-def generate_multiworld(players: int = 1) -> MultiWorld:
-    multiworld = MultiWorld(players)
-    multiworld.set_seed(0)
-    multiworld.player_name = {}
-    multiworld.state = CollectionState(multiworld)
-    for i in range(players):
-        player_id = i+1
-        world = World(multiworld, player_id)
-        multiworld.game[player_id] = f"Game {player_id}"
-        multiworld.worlds[player_id] = world
-        multiworld.player_name[player_id] = "Test Player " + str(player_id)
-        region = Region("Menu", player_id, multiworld, "Menu Region Hint")
-        multiworld.regions.append(region)
-        for option_key, option in Options.PerGameCommonOptions.type_hints.items():
-            if hasattr(multiworld, option_key):
-                getattr(multiworld, option_key).setdefault(player_id, option.from_any(getattr(option, "default")))
-            else:
-                setattr(multiworld, option_key, {player_id: option.from_any(getattr(option, "default"))})
-        # TODO - remove this loop once all worlds use options dataclasses
-        world.options = world.options_dataclass(**{option_key: getattr(multiworld, option_key)[player_id]
-                                                   for option_key in world.options_dataclass.type_hints})
-
-    return multiworld
 
 
 class PlayerDefinition(object):
@@ -55,12 +29,12 @@ class PlayerDefinition(object):
         self.regions = [menu]
 
     def generate_region(self, parent: Region, size: int, access_rule: CollectionRule = lambda state: True) -> Region:
-        region_tag = "_region" + str(len(self.regions))
-        region_name = "player" + str(self.id) + region_tag
-        region = Region("player" + str(self.id) + region_tag, self.id, self.multiworld)
-        self.locations += generate_locations(size, self.id, None, region, region_tag)
+        region_tag = f"_region{len(self.regions)}"
+        region_name = f"player{self.id}{region_tag}"
+        region = Region(f"player{self.id}{region_tag}", self.id, self.multiworld)
+        self.locations += generate_locations(size, self.id, region, None, region_tag)
 
-        entrance = Entrance(self.id, region_name + "_entrance", parent)
+        entrance = Entrance(self.id, f"{region_name}_entrance", parent)
         parent.exits.append(entrance)
         entrance.connect(region)
         entrance.access_rule = access_rule
@@ -94,35 +68,13 @@ def region_contains(region: Region, item: Item) -> bool:
 
 def generate_player_data(multiworld: MultiWorld, player_id: int, location_count: int = 0, prog_item_count: int = 0, basic_item_count: int = 0) -> PlayerDefinition:
     menu = multiworld.get_region("Menu", player_id)
-    locations = generate_locations(location_count, player_id, None, menu)
+    locations = generate_locations(location_count, player_id, menu, None)
     prog_items = generate_items(prog_item_count, player_id, True)
     multiworld.itempool += prog_items
     basic_items = generate_items(basic_item_count, player_id, False)
     multiworld.itempool += basic_items
 
     return PlayerDefinition(multiworld, player_id, menu, locations, prog_items, basic_items)
-
-
-def generate_locations(count: int, player_id: int, address: int = None, region: Region = None, tag: str = "") -> List[Location]:
-    locations = []
-    prefix = "player" + str(player_id) + tag + "_location"
-    for i in range(count):
-        name = prefix + str(i)
-        location = Location(player_id, name, address, region)
-        locations.append(location)
-        region.locations.append(location)
-    return locations
-
-
-def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
-    items = []
-    item_type = "prog" if advancement else ""
-    for i in range(count):
-        name = "player" + str(player_id) + "_" + item_type + "item" + str(i)
-        items.append(Item(name,
-                          ItemClassification.progression if advancement else ItemClassification.filler,
-                          code, player_id))
-    return items
 
 
 def names(objs: list) -> Iterable[str]:
@@ -132,7 +84,7 @@ def names(objs: list) -> Iterable[str]:
 class TestFillRestrictive(unittest.TestCase):
     def test_basic_fill(self):
         """Tests `fill_restrictive` fills and removes the locations and items from their respective lists"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
 
         item0 = player1.prog_items[0]
@@ -150,7 +102,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_ordered_fill(self):
         """Tests `fill_restrictive` fulfills set rules"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
         items = player1.prog_items
         locations = player1.locations
@@ -167,7 +119,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_partial_fill(self):
         """Tests that `fill_restrictive` returns unfilled locations"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 3, 2)
 
         item0 = player1.prog_items[0]
@@ -193,7 +145,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_minimal_fill(self):
         """Test that fill for minimal player can have unreachable items"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
 
         items = player1.prog_items
@@ -218,7 +170,7 @@ class TestFillRestrictive(unittest.TestCase):
         the non-minimal player get all items.
         """
 
-        multiworld = generate_multiworld(2)
+        multiworld = generate_test_multiworld(2)
         player1 = generate_player_data(multiworld, 1, 3, 3)
         player2 = generate_player_data(multiworld, 2, 3, 3)
 
@@ -245,11 +197,11 @@ class TestFillRestrictive(unittest.TestCase):
         # all of player2's locations and items should be accessible (not all of player1's)
         for item in player2.prog_items:
             self.assertTrue(multiworld.state.has(item.name, player2.id),
-                            f'{item} is unreachable in {item.location}')
+                            f"{item} is unreachable in {item.location}")
 
     def test_reversed_fill(self):
         """Test a different set of rules can be satisfied"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
 
         item0 = player1.prog_items[0]
@@ -268,7 +220,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_multi_step_fill(self):
         """Test that fill is able to satisfy multiple spheres"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 4, 4)
 
         items = player1.prog_items
@@ -293,7 +245,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_impossible_fill(self):
         """Test that fill raises an error when it can't place any items"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
         items = player1.prog_items
         locations = player1.locations
@@ -310,7 +262,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_circular_fill(self):
         """Test that fill raises an error when it can't place all items"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 3, 3)
 
         item0 = player1.prog_items[0]
@@ -331,7 +283,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_competing_fill(self):
         """Test that fill raises an error when it can't place items in a way to satisfy the conditions"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
 
         item0 = player1.prog_items[0]
@@ -348,7 +300,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_multiplayer_fill(self):
         """Test that items can be placed across worlds"""
-        multiworld = generate_multiworld(2)
+        multiworld = generate_test_multiworld(2)
         player1 = generate_player_data(multiworld, 1, 2, 2)
         player2 = generate_player_data(multiworld, 2, 2, 2)
 
@@ -369,7 +321,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_multiplayer_rules_fill(self):
         """Test that fill across worlds satisfies the rules"""
-        multiworld = generate_multiworld(2)
+        multiworld = generate_test_multiworld(2)
         player1 = generate_player_data(multiworld, 1, 2, 2)
         player2 = generate_player_data(multiworld, 2, 2, 2)
 
@@ -393,7 +345,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_restrictive_progress(self):
         """Test that various spheres with different requirements can be filled"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, prog_item_count=25)
         items = player1.prog_items.copy()
         multiworld.completion_condition[player1.id] = lambda state: state.has_all(
@@ -417,7 +369,7 @@ class TestFillRestrictive(unittest.TestCase):
     def test_swap_to_earlier_location_with_item_rule(self):
         """Test that item swap happens and works as intended"""
         # test for PR#1109
-        multiworld = generate_multiworld(1)
+        multiworld = generate_test_multiworld(1)
         player1 = generate_player_data(multiworld, 1, 4, 4)
         locations = player1.locations[:]  # copy required
         items = player1.prog_items[:]  # copy required
@@ -442,7 +394,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_swap_to_earlier_location_with_item_rule2(self):
         """Test that swap works before all items are placed"""
-        multiworld = generate_multiworld(1)
+        multiworld = generate_test_multiworld(1)
         player1 = generate_player_data(multiworld, 1, 5, 5)
         locations = player1.locations[:]  # copy required
         items = player1.prog_items[:]  # copy required
@@ -484,7 +436,7 @@ class TestFillRestrictive(unittest.TestCase):
     def test_double_sweep(self):
         """Test that sweep doesn't duplicate Event items when sweeping"""
         # test for PR1114
-        multiworld = generate_multiworld(1)
+        multiworld = generate_test_multiworld(1)
         player1 = generate_player_data(multiworld, 1, 1, 1)
         location = player1.locations[0]
         location.address = None
@@ -498,7 +450,7 @@ class TestFillRestrictive(unittest.TestCase):
 
     def test_correct_item_instance_removed_from_pool(self):
         """Test that a placed item gets removed from the submitted pool"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(multiworld, 1, 2, 2)
 
         player1.prog_items[0].name = "Different_item_instance_but_same_item_name"
@@ -515,7 +467,7 @@ class TestFillRestrictive(unittest.TestCase):
 class TestDistributeItemsRestrictive(unittest.TestCase):
     def test_basic_distribute(self):
         """Test that distribute_items_restrictive is deterministic"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -535,7 +487,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_excluded_distribute(self):
         """Test that distribute_items_restrictive doesn't put advancement items on excluded locations"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -550,7 +502,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_non_excluded_item_distribute(self):
         """Test that useful items aren't placed on excluded locations"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -565,7 +517,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_too_many_excluded_distribute(self):
         """Test that fill fails if it can't place all progression items due to too many excluded locations"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -578,7 +530,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_non_excluded_item_must_distribute(self):
         """Test that fill fails if it can't place useful items due to too many excluded locations"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -593,7 +545,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_priority_distribute(self):
         """Test that priority locations receive advancement items"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -608,7 +560,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_excess_priority_distribute(self):
         """Test that if there's more priority locations than advancement items, they can still fill"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         locations = player1.locations
@@ -623,7 +575,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_multiple_world_priority_distribute(self):
         """Test that priority fill can be satisfied for multiple worlds"""
-        multiworld = generate_multiworld(3)
+        multiworld = generate_test_multiworld(3)
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
         player2 = generate_player_data(
@@ -653,7 +605,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_can_remove_locations_in_fill_hook(self):
         """Test that distribute_items_restrictive calls the fill hook and allows for item and location removal"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, 4, prog_item_count=2, basic_item_count=2)
 
@@ -673,12 +625,12 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_seed_robust_to_item_order(self):
         """Test deterministic fill"""
-        mw1 = generate_multiworld()
+        mw1 = generate_test_multiworld()
         gen1 = generate_player_data(
             mw1, 1, 4, prog_item_count=2, basic_item_count=2)
         distribute_items_restrictive(mw1)
 
-        mw2 = generate_multiworld()
+        mw2 = generate_test_multiworld()
         gen2 = generate_player_data(
             mw2, 1, 4, prog_item_count=2, basic_item_count=2)
         mw2.itempool.append(mw2.itempool.pop(0))
@@ -691,12 +643,12 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_seed_robust_to_location_order(self):
         """Test deterministic fill even if locations in a region are reordered"""
-        mw1 = generate_multiworld()
+        mw1 = generate_test_multiworld()
         gen1 = generate_player_data(
             mw1, 1, 4, prog_item_count=2, basic_item_count=2)
         distribute_items_restrictive(mw1)
 
-        mw2 = generate_multiworld()
+        mw2 = generate_test_multiworld()
         gen2 = generate_player_data(
             mw2, 1, 4, prog_item_count=2, basic_item_count=2)
         reg = mw2.get_region("Menu", gen2.id)
@@ -710,7 +662,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_can_reserve_advancement_items_for_general_fill(self):
         """Test that priority locations fill still satisfies item rules"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         player1 = generate_player_data(
             multiworld, 1, location_count=5, prog_item_count=5)
         items = player1.prog_items
@@ -727,7 +679,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_non_excluded_local_items(self):
         """Test that local items get placed locally in a multiworld"""
-        multiworld = generate_multiworld(2)
+        multiworld = generate_test_multiworld(2)
         player1 = generate_player_data(
             multiworld, 1, location_count=5, basic_item_count=5)
         player2 = generate_player_data(
@@ -748,7 +700,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
     def test_early_items(self) -> None:
         """Test that the early items API successfully places items early"""
-        mw = generate_multiworld(2)
+        mw = generate_test_multiworld(2)
         player1 = generate_player_data(mw, 1, location_count=5, basic_item_count=5)
         player2 = generate_player_data(mw, 2, location_count=5, basic_item_count=5)
         mw.early_items[1][player1.basic_items[0].name] = 1
@@ -803,11 +755,11 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
             if location.item and location.item == item:
                 return True
 
-        self.fail("Expected " + region.name + " to contain " + item.name +
-                  "\n Contains" + str(list(map(lambda location: location.item, region.locations))))
+        self.fail(f"Expected {region.name} to contain {item.name}.\n"
+                  f"Contains{list(map(lambda location: location.item, region.locations))}")
 
     def setUp(self) -> None:
-        multiworld = generate_multiworld(2)
+        multiworld = generate_test_multiworld(2)
         self.multiworld = multiworld
         player1 = generate_player_data(
             multiworld, 1, prog_item_count=2, basic_item_count=40)

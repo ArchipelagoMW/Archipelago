@@ -43,8 +43,6 @@ class DLCqworld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    data_version = 1
-
     options_dataclass = DLCQuestOptions
     options: DLCQuestOptions
 

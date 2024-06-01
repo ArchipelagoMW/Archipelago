@@ -519,7 +519,7 @@ Hey Vincent.|43-49|MD Plus Project|True|6|8|10|
 Meteor feat. TEA|43-50|MD Plus Project|True|3|6|9|
 Narcissism Angel|43-51|MD Plus Project|True|1|3|6|
 AlterLuna|43-52|MD Plus Project|True|6|8|11|12
-Niki Tousen|43-53|MD Plus Project|True|6|8|10|11
+Niki Tousen|43-53|MD Plus Project|True|6|8|10|12
 Rettou Joutou|70-0|Rin Len's Mirrorland|False|4|7|9|
 Telecaster B-Boy|70-1|Rin Len's Mirrorland|False|5|7|10|
 Iya Iya Iya|70-2|Rin Len's Mirrorland|False|2|4|7|
@@ -538,10 +538,22 @@ Reality Show|71-2|Valentine Stage|False|5|7|10|
 SIG feat.Tobokegao|71-3|Valentine Stage|True|3|6|8|
 Rose Love|71-4|Valentine Stage|True|2|4|7|
 Euphoria|71-5|Valentine Stage|True|1|3|6|
-P E R O P E R O Brother Dance|72-0|Legends of Muse Warriors|False|0|?|0|
+P E R O P E R O Brother Dance|72-0|Legends of Muse Warriors|True|0|?|0|
 PA PPA PANIC|72-1|Legends of Muse Warriors|False|4|8|10|
-How To Make Music Game Song!|72-2|Legends of Muse Warriors|False|6|8|10|11
-Re Re|72-3|Legends of Muse Warriors|False|7|9|11|12
-Marmalade Twins|72-4|Legends of Muse Warriors|False|5|8|10|
-DOMINATOR|72-5|Legends of Muse Warriors|False|7|9|11|
-Teshikani TESHiKANi|72-6|Legends of Muse Warriors|False|5|7|9|
+How To Make Music Game Song!|72-2|Legends of Muse Warriors|True|6|8|10|11
+Re Re|72-3|Legends of Muse Warriors|True|7|9|11|12
+Marmalade Twins|72-4|Legends of Muse Warriors|True|5|8|10|
+DOMINATOR|72-5|Legends of Muse Warriors|True|7|9|11|
+Teshikani TESHiKANi|72-6|Legends of Muse Warriors|True|5|7|9|
+Urban Magic|73-0|Happy Otaku Pack Vol.19|True|3|5|7|
+Maid's Prank|73-1|Happy Otaku Pack Vol.19|True|5|7|10|
+Dance Dance Good Night Dance|73-2|Happy Otaku Pack Vol.19|True|2|4|7|
+Ops Limone|73-3|Happy Otaku Pack Vol.19|True|5|8|11|
+NOVA|73-4|Happy Otaku Pack Vol.19|True|6|8|10|
+Heaven's Gradius|73-5|Happy Otaku Pack Vol.19|True|6|8|10|
+Ray Tuning|74-0|CHUNITHM COURSE MUSE|True|6|8|10|
+World Vanquisher|74-1|CHUNITHM COURSE MUSE|True|6|8|10|11
+Territory Battles|74-2|CHUNITHM COURSE MUSE|True|5|7|9|
+The wheel to the right|74-3|CHUNITHM COURSE MUSE|True|5|7|9|11
+Climax|74-4|CHUNITHM COURSE MUSE|True|4|8|11|11
+Spider's Thread|74-5|CHUNITHM COURSE MUSE|True|5|8|10|12
