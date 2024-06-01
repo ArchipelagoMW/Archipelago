@@ -18,6 +18,7 @@ always_accessible_regions_without_er = {*main_outside_area, Region.community_cen
 always_regions_by_setting = {EntranceRandomization.option_disabled: always_accessible_regions_without_er,
                              EntranceRandomization.option_pelican_town: always_accessible_regions_without_er,
                              EntranceRandomization.option_non_progression: always_accessible_regions_without_er,
+                             EntranceRandomization.option_buildings_without_house: main_outside_area,
                              EntranceRandomization.option_buildings: main_outside_area,
                              EntranceRandomization.option_chaos: always_accessible_regions_without_er}
 

@@ -119,6 +119,7 @@ class TestModEntranceRando(SVTestCase):
     def test_mod_entrance_randomization(self):
         for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (options.EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
             sv_options = complete_options_with_default({
                 options.EntranceRandomization.internal_name: option,

@@ -608,7 +608,7 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, r
     elif world_options.entrance_randomization == EntranceRandomization.option_non_progression:
         connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
                                     RandomizationFlag.NON_PROGRESSION in connections_by_name[connection].flag]
-    elif world_options.entrance_randomization == EntranceRandomization.option_buildings:
+    elif world_options.entrance_randomization == EntranceRandomization.option_buildings or world_options.entrance_randomization == EntranceRandomization.option_buildings_without_house:
         connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
                                     RandomizationFlag.BUILDINGS in connections_by_name[connection].flag]
     elif world_options.entrance_randomization == EntranceRandomization.option_chaos:

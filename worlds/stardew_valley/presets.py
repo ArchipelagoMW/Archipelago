@@ -155,7 +155,7 @@ hard_settings = {
     ProfitMargin.internal_name:             "normal",
     BundleRandomization.internal_name:      BundleRandomization.option_remixed,
     BundlePrice.internal_name:              BundlePrice.option_expensive,
-    EntranceRandomization.internal_name:    EntranceRandomization.option_buildings,
+    EntranceRandomization.internal_name:    EntranceRandomization.option_buildings_without_house,
     SeasonRandomization.internal_name:      SeasonRandomization.option_randomized,
     Cropsanity.internal_name:               Cropsanity.option_enabled,
     BackpackProgression.internal_name:      BackpackProgression.option_progressive,

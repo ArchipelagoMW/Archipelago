@@ -56,6 +56,7 @@ class TestEntranceRando(SVTestCase):
     def test_entrance_randomization(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
             sv_options = complete_options_with_default({
                 EntranceRandomization.internal_name: option,
@@ -81,6 +82,7 @@ class TestEntranceRando(SVTestCase):
     def test_entrance_randomization_without_island(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
 
             sv_options = complete_options_with_default({
