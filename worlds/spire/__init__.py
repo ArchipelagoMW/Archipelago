@@ -30,7 +30,6 @@ class SpireWorld(World):
     option_definitions = spire_options
     game = "Slay the Spire"
     topology_present = False
-    data_version = 2
     web = SpireWeb()
     required_client_version = (0, 3, 7)
 
