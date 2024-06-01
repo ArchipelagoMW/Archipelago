@@ -1,6 +1,6 @@
 from collections import defaultdict
 from functools import lru_cache
-from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
@@ -23,6 +23,30 @@ from .utils import (
 
 
 class StaticWitnessLogicObj:
+    def __init__(self, lines: Optional[List[str]] = None) -> None:
+        if lines is None:
+            lines = get_sigma_normal_logic()
+
+        # All regions with a list of panels in them and the connections to other regions, before logic adjustments
+        self.ALL_REGIONS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.ALL_AREAS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.CONNECTIONS_WITH_DUPLICATES: Dict[str, Dict[str, Set[WitnessRule]]] = defaultdict(lambda: defaultdict(set))
+        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = dict()
+
+        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = dict()
+        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Any] = dict()
+
+        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = dict()
+
+        self.EP_TO_OBELISK_SIDE: Dict[str, str] = dict()
+
+        self.ENTITY_ID_TO_NAME: Dict[str, str] = dict()
+
+        self.read_logic_file(lines)
+        self.reverse_connections()
+        self.combine_connections()
+
     def read_logic_file(self, lines: List[str]) -> None:
         """
         Reads the logic file and does the initial population of data structures
@@ -154,7 +178,7 @@ class StaticWitnessLogicObj:
             current_region["entities"].append(entity_hex)
             current_region["physical_entities"].append(entity_hex)
 
-    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[WitnessRule]]):
+    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[WitnessRule]]) -> None:
         target = connection[0]
         traversal_options = connection[1]
 
@@ -168,13 +192,13 @@ class StaticWitnessLogicObj:
             if remaining_options:
                 self.CONNECTIONS_WITH_DUPLICATES[target][source_region].add(frozenset(remaining_options))
 
-    def reverse_connections(self):
+    def reverse_connections(self) -> None:
         # Iterate all connections
         for region_name, connections in list(self.CONNECTIONS_WITH_DUPLICATES.items()):
             for connection in connections.items():
                 self.reverse_connection(region_name, connection)
 
-    def combine_connections(self):
+    def combine_connections(self) -> None:
         # All regions need to be present, and this dict is copied later - Thus, defaultdict is not the correct choice.
         self.STATIC_CONNECTIONS_BY_REGION_NAME = {region_name: set() for region_name in self.ALL_REGIONS_BY_NAME}
 
@@ -182,30 +206,6 @@ class StaticWitnessLogicObj:
             for target, requirement in connections.items():
                 combined_req = logical_or_witness_rules(requirement)
                 self.STATIC_CONNECTIONS_BY_REGION_NAME[source].add((target, combined_req))
-
-    def __init__(self, lines: Optional[List[str]] = None) -> None:
-        if lines is None:
-            lines = get_sigma_normal_logic()
-
-        # All regions with a list of panels in them and the connections to other regions, before logic adjustments
-        self.ALL_REGIONS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
-        self.ALL_AREAS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
-        self.CONNECTIONS_WITH_DUPLICATES = defaultdict(lambda: defaultdict(lambda: set()))
-        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, FrozenSet[FrozenSet[str]]]]] = dict()
-
-        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = dict()
-        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = dict()
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Any] = dict()
-
-        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = dict()
-
-        self.EP_TO_OBELISK_SIDE: Dict[str, str] = dict()
-
-        self.ENTITY_ID_TO_NAME: Dict[str, str] = dict()
-
-        self.read_logic_file(lines)
-        self.reverse_connections()
-        self.combine_connections()
 
 
 # Item data parsed from WitnessItems.txt

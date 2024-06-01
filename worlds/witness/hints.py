@@ -192,7 +192,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
 
 def hint_from_item(world: "WitnessWorld", item_name: str,
                    own_itempool: List["WitnessItem"]) -> Optional[WitnessLocationHint]:
-    def get_real_location(multiworld: MultiWorld, location: Location):
+    def get_real_location(multiworld: MultiWorld, location: Location) -> Location:
         """If this location is from an item_link pseudo-world, get the location that the item_link item is on.
         Return the original location otherwise / as a fallback."""
         if location.player not in world.multiworld.groups:

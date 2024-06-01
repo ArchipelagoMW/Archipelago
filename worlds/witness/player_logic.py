@@ -91,10 +91,12 @@ class WitnessPlayerLogic:
         else:
             self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
 
-        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
-        self.CONNECTIONS_BY_REGION_NAME = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
+            self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
+        )
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
         self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = dict()
 
@@ -175,33 +177,35 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
-        # Also, remove any original power requirements this entity might have had.
+        # Handle door entities (door shuffle)
         if entity_hex in self.DOOR_ITEMS_BY_ID:
+            # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
             for dependent_item in door_items:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependent_item)
 
-            all_options = logical_and_witness_rules([door_items, these_items])
+            these_items = logical_and_witness_rules([door_items, these_items])
 
-            # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
-            if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP":
+            # A door entity is opened by its door item instead of previous entities powering it.
+            # That means we need to ignore any dependent requirements.
+            # However, there are some entities that depend on other entities because of an environmental reason.
+            # Those requirements need to be preserved even in door shuffle.
+            entity_dependencies_need_to_be_preserved = (
+                # EPs keep all their entity dependencies
+                static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP"
                 # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
                 # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
                 # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
-                if entity_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
-                    these_items = frozenset(all_options)
-
+                or entity_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels)
                 # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
-                elif entity_hex == "0x1C349":
-                    these_items = frozenset(all_options)
+                or entity_hex == "0x1C349"
+            )
 
-                else:
-                    return frozenset(all_options)
-
-            else:
-                these_items = frozenset(all_options)
+            # If this is not one of those special cases, solving this door entity only needs its own item requirement.
+            # Dependent entities from these_panels are ignored, and we just return these_items directly.
+            if not entity_dependencies_need_to_be_preserved:
+                return these_items
 
         # Now that we have item requirements and entity dependencies, it's time for the dependency reduction.
 
@@ -215,7 +219,7 @@ class WitnessPlayerLogic:
 
             # For each entity in this option, resolve it to its actual requirement.
             for option_entity in option:
-                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
+                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity, object())
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels"}:
@@ -619,7 +623,7 @@ class WitnessPlayerLogic:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
-    def discover_reachable_regions(self):
+    def discover_reachable_regions(self) -> Set[str]:
         """
         Some options disable panels or remove specific items.
         This can make entire regions completely unreachable, because all their incoming connections are invalid.
@@ -728,7 +732,7 @@ class WitnessPlayerLogic:
 
         # Check each traversal option individually
         for option in connection[1]:
-            individual_entity_requirements = []
+            individual_entity_requirements: List[WitnessRule] = []
             for entity in option:
                 # If a connection requires solving a disabled entity, it is not valid.
                 if not self.solvability_guaranteed(entity) or entity in self.DISABLE_EVERYTHING_BEHIND:
@@ -752,7 +756,7 @@ class WitnessPlayerLogic:
 
         return logical_or_witness_rules(all_possibilities)
 
-    def make_dependency_reduced_checklist(self):
+    def make_dependency_reduced_checklist(self) -> None:
         """
         Every entity has a requirement. This requirement may involve other entities.
         Example: Solving a panel powers a cable, and that cable turns on the next panel.
@@ -783,22 +787,18 @@ class WitnessPlayerLogic:
 
         # Make independent region connection requirements based on the entities they require
         for region, connections in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL.items():
-            self.CONNECTIONS_BY_REGION_NAME[region] = []
-
-            new_connections = []
+            new_connections = set()
 
             for connection in connections:
                 overall_requirement = self.reduce_connection_requirement(connection)
 
                 # If there is a way to use this connection, add it.
                 if overall_requirement:
-                    new_connections.append((connection[0], overall_requirement))
+                    new_connections.add((connection[0], overall_requirement))
 
-            # If there are any usable outgoing connections from this region, add them.
-            if new_connections:
-                self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
+            self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
-    def finalize_items(self):
+    def finalize_items(self) -> None:
         """
         Finalise which items are used in the world, and handle their progressive versions.
         """
