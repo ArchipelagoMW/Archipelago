@@ -12,7 +12,6 @@ from .data import static_logic as static_witness_logic
 from .data.utils import WitnessRule
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
-from .regions import WitnessPlayerRegions
 
 if TYPE_CHECKING:
     from . import WitnessWorld
