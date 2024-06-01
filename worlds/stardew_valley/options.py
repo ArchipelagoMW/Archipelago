@@ -159,6 +159,7 @@ class EntranceRandomization(Choice):
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
     Buildings: All entrances that allow you to enter a building are randomized with each other
+    Buildings Without House: Buildings, but excluding the farmhouse
     Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
     """
     # Everything: All buildings and areas are randomized with each other
@@ -173,9 +174,10 @@ class EntranceRandomization(Choice):
     option_disabled = 0
     option_pelican_town = 1
     option_non_progression = 2
-    option_buildings = 3
-    # option_everything = 4
-    option_chaos = 5
+    option_buildings_without_house = 3
+    option_buildings = 4
+    # option_everything = 10
+    option_chaos = 12
     # option_buildings_one_way = 6
     # option_everything_one_way = 7
     # option_chaos_one_way = 8
