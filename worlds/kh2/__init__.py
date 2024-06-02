@@ -430,7 +430,7 @@ class KH2World(World):
         """
         for item, value in self.options.start_inventory.value.items():
             if item in ActionAbility_Table \
-                    or item in SupportAbility_Table or exclusion_item_table["StatUps"] \
+                    or item in SupportAbility_Table or item in exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
