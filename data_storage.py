@@ -3,12 +3,14 @@ import operator
 import copy
 import math
 
+
 def remove_from_list(container, value):
     try:
         container.remove(value)
     except ValueError:
         pass
     return container
+
 
 def pop_from_container(container, value):
     try:
@@ -17,9 +19,11 @@ def pop_from_container(container, value):
         pass
     return container
 
+
 def update_dict(dictionary, entries):
     dictionary.update(entries)
     return dictionary
+
 
 # functions callable on storable data on the server by clients
 modify_functions = {
@@ -45,17 +49,19 @@ modify_functions = {
     "update": update_dict,
 }
 
+
 class InvalidArgumentsException(Exception):
     pass
 
-class DataStorage:
-    data: Dict[str, object]
 
-    def __init__(self, data: Dict[str, object]):
+class DataStorage:
+    data: Dict[str, Any]
+
+    def __init__(self, data: Dict[str, Any]):
         self.data = data
 
     @staticmethod
-    def validate_and_get_key(set_cmd: Dict[str, object]) -> str:
+    def validate_and_get_key(set_cmd: Dict[str, Any]) -> str:
         try:
             key = set_cmd["key"]
             if not isinstance(key, str):
@@ -68,7 +74,7 @@ class DataStorage:
             raise InvalidArgumentsException(str(e))
         return key
 
-    def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
+    def set(self, set_cmd: Dict[str, Any]) -> Dict[str, Any]:
         key = self.validate_and_get_key(set_cmd)
         value = self.data.get(key, set_cmd.get("default", 0))
         on_error = set_cmd.get("on_error", "raise")
@@ -87,12 +93,12 @@ class DataStorage:
                     if on_error != "ignore":
                         raise
         except Exception:
-            if (on_error == "set_default"):
+            if on_error == "set_default":
                 value = set_cmd.get("default", 0)
-            elif (on_error == "undo"):
+            elif on_error == "undo":
                 value = set_cmd["original_value"]
-            elif (on_error == "abort"):
-                pass  # dont process further operations
+            elif on_error == "abort":
+                pass  # don't process further operations
             else:
                 raise
 
