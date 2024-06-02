@@ -289,7 +289,7 @@ class TimespinnerWorld(World):
 
         local_starter_progression_items = tuple(
             item for item in starter_progression_items 
-                if item not in excluded_items and item not in self.multiworld.non_local_items[self.player].value)
+                if item not in excluded_items and item not in self.options.non_local_items.value)
 
         if not local_starter_progression_items:
             return
