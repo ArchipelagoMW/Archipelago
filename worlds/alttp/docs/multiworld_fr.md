@@ -6,8 +6,9 @@
 - [SNI](https://github.com/alttpo/sni/releases). Inclus avec l'installation d'Archipelago ci-dessus.
    - SNI n'est pas compatible avec (Q)Usb2Snes.
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
-    - Un émulateur capable d'éxécuter des scripts Lua
-      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+    - Un émulateur capable de se connecter à SNI
+      [snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+      [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
       [BizHawk](https://tasvideos.org/BizHawk), ou
       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 ou plus récent). Ou,
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle compatible. **À noter:
@@ -47,6 +48,11 @@ Quand le client se lance automatiquement, SNI devrait se lancer automatiquement 
 c'est la première fois qu'il démarre, il vous sera peut-être demandé de l'autoriser à communiquer à travers le pare-feu
 Windows.
 
+#### snes9x-nwa
+
+1. Cliquez sur 'Network Menu' et cochez **Enable Emu Network Control**
+2. Chargez votre ROM si ce n'est pas déjà fait.
+
 ##### snes9x-rr
 
 1. Chargez votre ROM si ce n'est pas déjà fait.
@@ -57,6 +63,11 @@ Windows.
     - Recherchez `/SNI/lua/` dans votre fichier Archipelago. 
 6. Si vous avez une erreur en chargeant le script indiquant `socket.dll missing` ou similaire, naviguez vers le fichier du
 lua que vous utilisez dans votre explorateur de fichiers et copiez le `socket.dll` à la base de votre installation snes9x.
+
+#### BSNES-Plus
+
+1. Chargez votre ROM si ce n'est pas déjà fait.
+2. L'émulateur devrait automatiquement se connecter lorsque SNI se lancera.
 
 ##### BizHawk
 
