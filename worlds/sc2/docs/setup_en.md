@@ -59,15 +59,15 @@ If you don't like terminals, you can also check the log file in the `logs/` fold
 
 #### What does Progression Balancing do?
 
-For Starcraft 2, this option doesn't have much impact. 
+For StarCraft 2, this option doesn't have much impact. 
 It is an Archipelago option designed to balance world progression by swapping items in spheres. 
 If the Progression Balancing of one world is greater than that of others, items in that world are more likely to be 
 obtained early, and vice versa if its value is smaller. 
-However, Starcraft 2 is more permissive regarding the items that can be used to progress, so this setting has little 
+However, StarCraft 2 is more permissive regarding the items that can be used to progress, so this setting has little 
 influence on progression in a StarCraft 2 world. 
-Starcraft 2. 
+StarCraft 2. 
 As it increases the time required to generate a MultiWorld, we recommend deactivating it (i.e., setting it to zero) for 
-Starcraft 2.
+StarCraft 2.
 
 #### How do I specify items in a list, like in excluded items?
 
@@ -138,7 +138,7 @@ For your keyboard shortcuts profile to work in Archipelago, you need to copy you
 If the folder doesn't exist, create it.
 
 To enable StarCraft 2 Archipelago to use your profile, follow these steps:
-1. Launch Starcraft 2 via the Battle.net application.
+1. Launch StarCraft 2 via the Battle.net application.
 2. Change your hotkey profile to the standard mode and accept.
 3. Select your custom profile and accept.
 
