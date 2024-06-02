@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions, OptionGroup
 
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
@@ -350,7 +350,7 @@ class ItemPoolPresetToggle(Toggle):
 
 
 class ItemWeights(Choice):
-    """Set item_pool_presets to true if you want to use one of these presets.
+    """Set Use Item Weight Presets to yes if you want to use one of these presets.
     Preset choices for determining the weights of the item pool.
     - New is a test for a potential adjustment to the default weights.
     - Uncommon puts a large number of uncommon items in the pool.
@@ -373,6 +373,44 @@ class ItemWeights(Choice):
     option_scraps_only = 7
     option_lunartic = 8
     option_void = 9
+
+
+ror2_option_groups = [
+    OptionGroup("Explore Mode Options", [
+        ChestsPerEnvironment,
+        ShrinesPerEnvironment,
+        ScavengersPerEnvironment,
+        ScannersPerEnvironment,
+        AltarsPerEnvironment,
+        RequireStages,
+        ProgressiveStages,
+    ]),
+    OptionGroup("Classic Mode Options", [
+        TotalLocations,
+    ], start_collapsed=True),
+    OptionGroup("Weighted Choices", [
+        ItemWeights,
+        ItemPoolPresetToggle,
+        GreenScrap,
+        RedScrap,
+        YellowScrap,
+        WhiteScrap,
+        CommonItem,
+        UncommonItem,
+        LegendaryItem,
+        BossItem,
+        LunarItem,
+        VoidItem,
+        Equipment,
+        Money,
+        LunarCoin,
+        Experience,
+        MountainTrap,
+        TimeWarpTrap,
+        CombatTrap,
+        TeleportTrap
+    ]),
+]
 
 
 @dataclass
