@@ -50,7 +50,7 @@ class MuseDashCollections:
     song_items: Dict[str, SongData] = {}
     song_locations: Dict[str, int] = {}
 
-    vfx_trap_items: Dict[str, int] = {
+    trap_items: Dict[str, int] = {
         "Bad Apple Trap": STARTING_CODE + 1,
         "Pixelate Trap": STARTING_CODE + 2,
         "Ripple Trap": STARTING_CODE + 3,
@@ -58,13 +58,15 @@ class MuseDashCollections:
         "Chromatic Aberration Trap": STARTING_CODE + 5,
         "Background Freeze Trap": STARTING_CODE + 6,
         "Gray Scale Trap": STARTING_CODE + 7,
-        "Focus Line Trap": STARTING_CODE + 10,
-    }
-
-    sfx_trap_items: Dict[str, int] = {
         "Nyaa SFX Trap": STARTING_CODE + 8,
         "Error SFX Trap": STARTING_CODE + 9,
+        "Focus Line Trap": STARTING_CODE + 10,  
     }
+
+    sfx_trap_items: List[str] = [
+        "Nyaa SFX Trap",
+        "Error SFX Trap",
+    ]
 
     filler_items: Dict[str, int] = {
         "Great To Perfect (10 Pack)": STARTING_CODE + 30,
@@ -78,7 +80,7 @@ class MuseDashCollections:
         "Extra Life": 1,
     }
 
-    item_names_to_id: ChainMap = ChainMap({}, filler_items, sfx_trap_items, vfx_trap_items)
+    item_names_to_id: ChainMap = ChainMap({}, filler_items, trap_items)
     location_names_to_id: ChainMap = ChainMap(song_locations, album_locations)
 
     def __init__(self) -> None:

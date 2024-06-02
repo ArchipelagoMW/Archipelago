@@ -1,10 +1,11 @@
-from typing import Dict
-from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet, OptionSet, PerGameCommonOptions
+from Options import Toggle, Range, Choice, DeathLink, ItemSet, OptionSet, OptionList, PerGameCommonOptions, OptionGroup, \
+    Visibility
 from dataclasses import dataclass
 
 from .MuseDashCollection import MuseDashCollections
 
 
+# Note: Kept around because presets can't set values for sets yet.
 class AllowJustAsPlannedDLCSongs(Toggle):
     """Whether [Muse Plus] DLC Songs, and all the albums included in it, can be chosen as randomised songs.
     Note: The [Just As Planned] DLC contains all [Muse Plus] songs."""
@@ -12,7 +13,7 @@ class AllowJustAsPlannedDLCSongs(Toggle):
 
 
 class DLCMusicPacks(OptionSet):
-    """Which non-[Muse Plus] DLC packs can be chosen as randomised songs."""
+    """Choose which DLC Packs that will be included in the pool of chooseable songs."""
     display_name = "DLC Packs"
     default = {}
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
@@ -121,19 +122,16 @@ class MusicSheetWinCountPercentage(Range):
     display_name = "Music Sheets Needed to Win"
 
 
-class TrapTypes(Choice):
-    """This controls the types of traps that can be added to the pool.
+class ChosenTraps(OptionSet):
+    """This controls the types of traps that can be added to the pool. 
+    - Traps last the length of a song, or until you die.
     - VFX Traps consist of visual effects that play over the song. (i.e. Grayscale.)
     - SFX Traps consist of changing your sfx setting to one possibly more annoying sfx.
-    Traps last the length of a song, or until you die.
     Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
-    display_name = "Available Trap Types"
-    option_None = 0
-    option_VFX = 1
-    option_SFX = 2
-    option_All = 3
-    default = 3
+    display_name = "Trap Types"
+    default = {}
+    valid_keys = [trap for trap in MuseDashCollections.trap_items.keys()]
 
 
 class TrapCountPercentage(Range):
@@ -145,19 +143,42 @@ class TrapCountPercentage(Range):
 
 
 class IncludeSongs(ItemSet):
-    """Any song listed here will be guaranteed to be included as part of the seed.
-    - Difficulty options will be skipped for these songs.
-    - If there being too many included songs, songs will be randomly chosen without regard for difficulty.
-    - If you want these songs immediately, use start_inventory instead.
+    """These songs will be guaranteed to show up within the seed.
+    - You must have the DLC enabled to play these songs.
+    - Difficulty options will not affect these songs.
+    - If there being too many included songs, this will act as a whitelist ignoring song difficulty.
     """
     verify_item_name = True
     display_name = "Include Songs"
 
 
 class ExcludeSongs(ItemSet):
-    """Any song listed here will be excluded from being a part of the seed."""
+    """These songs will be guaranteed to not show up within the seed.
+    Note: Does not affect songs within the "Include Songs" list."""
     verify_item_name = True
     display_name = "Exclude Songs"
+
+
+md_option_groups = [
+    OptionGroup("Song Choice", [
+        AllowJustAsPlannedDLCSongs,
+        DLCMusicPacks,
+        StreamerModeEnabled,
+        IncludeSongs,
+        ExcludeSongs,
+    ]),
+    OptionGroup("Difficulty", [
+        GradeNeeded,
+        DifficultyMode,
+        DifficultyModeOverrideMin,
+        DifficultyModeOverrideMax,
+        DeathLink,
+    ]),
+    OptionGroup("Traps", [
+        ChosenTraps,
+        TrapCountPercentage,
+    ]),
+]
 
 
 @dataclass
@@ -173,7 +194,7 @@ class MuseDashOptions(PerGameCommonOptions):
     grade_needed: GradeNeeded
     music_sheet_count_percentage: MusicSheetCountPercentage
     music_sheet_win_count_percentage: MusicSheetWinCountPercentage
-    available_trap_types: TrapTypes
+    chosen_traps: ChosenTraps
     trap_count_percentage: TrapCountPercentage
     death_link: DeathLink
     include_songs: IncludeSongs

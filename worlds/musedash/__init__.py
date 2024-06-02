@@ -176,11 +176,7 @@ class MuseDashWorld(World):
         if filler:
             return MuseDashFixedItem(name, ItemClassification.filler, filler, self.player)
 
-        trap = self.md_collection.vfx_trap_items.get(name)
-        if trap:
-            return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
-
-        trap = self.md_collection.sfx_trap_items.get(name)
+        trap = self.md_collection.trap_items.get(name)
         if trap:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
@@ -288,17 +284,11 @@ class MuseDashWorld(World):
             state.has(self.md_collection.MUSIC_SHEET_NAME, self.player, self.get_music_sheet_win_count())
 
     def get_available_traps(self) -> List[str]:
-        sfx_traps_available = self.options.allow_just_as_planned_dlc_songs.value
+        full_trap_list = self.trap_items.keys()
+        if self.md_collection.MUSE_PLUS_DLC not in self.options.dlc_packs.value:
+            full_trap_list = [trap for trap in full_trap_list if trap not in self.md_collection.sfx_trap_items]
 
-        trap_list = []
-        if self.options.available_trap_types.value & 1 != 0:
-            trap_list += self.md_collection.vfx_trap_items.keys()
-
-        # SFX options are only available under Just as Planned DLC.
-        if sfx_traps_available and self.options.available_trap_types.value & 2 != 0:
-            trap_list += self.md_collection.sfx_trap_items.keys()
-
-        return trap_list
+        return [trap for trap in full_trap_list if trap in self.options.chosen_traps.value]
 
     def get_trap_count(self) -> int:
         multiplier = self.options.trap_count_percentage.value / 100.0
