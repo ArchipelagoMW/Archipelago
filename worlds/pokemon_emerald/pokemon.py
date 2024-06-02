@@ -265,7 +265,8 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                 species_old_to_new_map: Dict[int, int] = {}
                 for species_id in table.slots:
                     if species_id not in species_old_to_new_map:
-                        if not placed_priority_species and len(priority_species) > 0:
+                        if not placed_priority_species and len(priority_species) > 0 \
+                                and map_name not in OUT_OF_LOGIC_MAPS:
                             new_species_id = priority_species.pop()
                             placed_priority_species = True
                         else:
@@ -328,7 +329,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                             new_species_id = world.random.choice(candidates).species_id
                         species_old_to_new_map[species_id] = new_species_id
 
-                        if world.options.dexsanity and map_data.name not in OUT_OF_LOGIC_MAPS:
+                        if world.options.dexsanity and map_name not in OUT_OF_LOGIC_MAPS:
                             already_placed.add(new_species_id)
 
                 # Actually create the new list of slots and encounter table
