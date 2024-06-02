@@ -3,7 +3,7 @@ from . import MuseDashTestBase
 
 class DifficultyRanges(MuseDashTestBase):
     def test_all_difficulty_ranges(self) -> None:
-        muse_dash_world = self.multiworld.worlds[1]
+        muse_dash_world = self.get_world()
         dlc_set = {x for x in muse_dash_world.md_collection.DLC}
         difficulty_choice = muse_dash_world.options.song_difficulty_mode
         difficulty_min = muse_dash_world.options.song_difficulty_min
@@ -16,13 +16,13 @@ class DifficultyRanges(MuseDashTestBase):
             songs = muse_dash_world.md_collection.get_songs_with_settings(dlc_set, False, inputRange[0], inputRange[1])
             for songKey in songs:
                 song = muse_dash_world.md_collection.song_items[songKey]
-                if (song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]):
+                if song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]:
                     continue
 
-                if (song.hard is not None and inputRange[0] <= song.hard <= inputRange[1]):
+                if song.hard is not None and inputRange[0] <= song.hard <= inputRange[1]:
                     continue
 
-                if (song.master is not None and inputRange[0] <= song.master <= inputRange[1]):
+                if song.master is not None and inputRange[0] <= song.master <= inputRange[1]:
                     continue
 
                 self.fail(f"Invalid song '{songKey}' was given for range '{inputRange[0]} to {inputRange[1]}'")
@@ -61,7 +61,7 @@ class DifficultyRanges(MuseDashTestBase):
         test_range(muse_dash_world.get_difficulty_range(), 4, 6)
 
     def test_songs_have_difficulty(self) -> None:
-        muse_dash_world = self.multiworld.worlds[1]
+        muse_dash_world = self.get_world()
 
         for song_name in muse_dash_world.md_collection.DIFF_OVERRIDES:
             song = muse_dash_world.md_collection.song_items[song_name]

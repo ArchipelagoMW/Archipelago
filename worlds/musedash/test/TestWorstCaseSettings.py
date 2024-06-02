@@ -4,6 +4,7 @@ from . import MuseDashTestBase
 # This ends up with only 25 valid songs that can be chosen.
 # These tests ensure that this won't fail generation
 
+
 class TestWorstCaseHighDifficulty(MuseDashTestBase):
     options = {
         "starting_song_count": 10,
@@ -14,6 +15,7 @@ class TestWorstCaseHighDifficulty(MuseDashTestBase):
         "song_difficulty_max": 11,
     }
 
+
 class TestWorstCaseMidDifficulty(MuseDashTestBase):
     options = {
         "starting_song_count": 10,
@@ -23,6 +25,7 @@ class TestWorstCaseMidDifficulty(MuseDashTestBase):
         "song_difficulty_min": 6,
         "song_difficulty_max": 6,
     }
+
 
 class TestWorstCaseLowDifficulty(MuseDashTestBase):
     options = {
