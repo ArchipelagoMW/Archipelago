@@ -209,7 +209,7 @@ def run_gui():
                     None. The button is added to the parent grid layout.
 
                 """
-                button = MDButton(MDButtonText(text=component.display_name),
+                button = MDButton(MDButtonText(text=component.display_name, pos=(15, 0)),
                                   style="elevated", size_hint_y=None, height=40)
                 button.component = component
                 button.bind(on_release=self.component_action)

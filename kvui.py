@@ -4,9 +4,7 @@ import sys
 import typing
 import re
 
-from kivy.effects.scroll import ScrollEffect
 from kivymd.uix.divider import MDDivider
-from kivymd.uix.recyclegridlayout import MDRecycleGridLayout
 
 if sys.platform == "win32":
     import ctypes
@@ -135,9 +133,8 @@ class ScrollBox(MDScrollView):
         self.layout = MDBoxLayout(size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.add_widget(self.layout)
-        self.effect_cls = ScrollEffect
         self.bar_width = dp(12)
-        self.scroll_type = ["content", "bars"]
+        self.scroll_type = ["bars"]
 
 
 class HovererableLabel(HoverBehavior, MDLabel):
