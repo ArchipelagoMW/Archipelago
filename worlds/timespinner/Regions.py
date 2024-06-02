@@ -227,7 +227,7 @@ def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOp
     tutorial = world.get_region('Tutorial', player)
     space_time_continuum = world.get_region('Space time continuum', player)
 
-    if options.gyre_archives:
+    if options.inverted:
         starting_region = world.get_region('Refugee Camp', player)
     else:
         starting_region = world.get_region('Lake desolation', player)

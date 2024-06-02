@@ -405,9 +405,17 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     traps: Traps
 
 class HiddenDamageRandoOverrides(DamageRandoOverrides): 
+    """Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that
+    you don't specify will roll with 1/1/1 as odds"""
     visibility = Visibility.none
 
 class HiddenRisingTidesOverrides(RisingTidesOverrides):
+    """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
+    Areas that are not specified will roll with the default 33% chance of getting flooded or drained"""
+    visibility = Visibility.none
+
+class HiddenTraps(Traps):
+    """List of traps that may be in the item pool to find"""
     visibility = Visibility.none
 
 @dataclass
@@ -417,6 +425,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     def hidden(option: Type[Option[Any]]) -> Type[Option]:
         new_option = AssembleOptions(f"{option}Hidden", option.__bases__, vars(option).copy())
         new_option.visibility = Visibility.none
+        new_option.__doc__ = option.__doc__
         return new_option
 
     StartWithJewelryBox: hidden(StartWithJewelryBox) # type: ignore
@@ -452,7 +461,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     UnchainedKeys: hidden(UnchainedKeys) # type: ignore
     PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
     TrapChance: hidden(TrapChance) # type: ignore
-    Traps: hidden(Traps) # type: ignore
+    Traps: HiddenTraps # type: ignore
     DeathLink: hidden(DeathLink) # type: ignore
 
     def handle_backward_compatibility(self) -> None:
