@@ -240,6 +240,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             address = data.rom_addresses["AP_Misc_OK_" + str(i + 1)]
             write_bytes(patched_rom, [0x65, 0xFF], address + 1)
             write_bytes(patched_rom, [0xFF], address + 4)
+        address = data.rom_addresses["AP_Misc_RaSfx"] + 1
+        write_bytes(patched_rom, [0x9F], address)
         for i in range(0, 5):
             answer = world.generated_misc.ra[i]
             byte = 0x08 if answer == "Y" else 0x09
