@@ -10,7 +10,7 @@ logger = logging.getLogger("Hollow Knight")
 
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
-from .Rules import set_rules, cost_terms
+from .Rules import set_rules, cost_terms, _hk_can_beat_thk, _hk_siblings_ending, _hk_can_beat_radiance
 from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
     shop_to_option, HKOptions
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
@@ -429,58 +429,22 @@ class HKWorld(World):
                 location.sort_costs()
 
     def set_rules(self):
-        player = self.player
-
-        def _hk_nail_combat(state) -> bool:
-            return state.has_any({'LEFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
-
-        def _hk_can_beat_thk(state) -> bool:
-            return (
-                state.has('Opened_Black_Egg_Temple', player)
-                and (state.count('FIREBALL', player) + state.count('SCREAM', player) + state.count('QUAKE', player)) > 1
-                and _hk_nail_combat(state)
-                and (
-                    state.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
-                    or state._hk_option(player, 'ProficientCombat')
-                )
-                and state.has('FOCUS', player)
-            )
-
-        def _hk_siblings_ending(state) -> bool:
-            return _hk_can_beat_thk(state) and state.has('WHITEFRAGMENT', player, 3)
-
-        def _hk_can_beat_radiance(state) -> bool:
-            return (
-                state.has('Opened_Black_Egg_Temple', player)
-                and _hk_nail_combat(state)
-                and state.has('WHITEFRAGMENT', player, 3)
-                and state.has('DREAMNAIL', player)
-                and (
-                    (state.has('LEFTCLAW', player) and state.has('RIGHTCLAW', player))
-                    or state.has('WINGS', player)
-                )
-                and (state.count('FIREBALL', player) + state.count('SCREAM', player) + state.count('QUAKE', player)) > 1
-                and (
-                    (state.has('LEFTDASH', player, 2) and state.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
-                    or (state._hk_option(player, 'ProficientCombat') and state.has('QUAKE', player))  # or Dive
-                )
-            )
-
         multiworld = self.multiworld
+        player = self.player
         goal = self.options.Goal
         if goal == Goal.option_hollowknight:
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state)
+            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player)
         elif goal == Goal.option_siblings:
-            multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state)
+            multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state, player)
         elif goal == Goal.option_radiance:
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_radiance(state)
+            multiworld.completion_condition[player] = lambda state: _hk_can_beat_radiance(state, player)
         elif goal == Goal.option_godhome:
             multiworld.completion_condition[player] = lambda state: state.count("Defeated_Pantheon_5", player)
         elif goal == Goal.option_godhome_flower:
             multiworld.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
         else:
             # Any goal
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state) or _hk_can_beat_radiance(state)
+            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player)
 
         set_rules(self)
 
