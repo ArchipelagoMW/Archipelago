@@ -436,7 +436,7 @@ class KH2World(World):
                 if value > item_dictionary_table[item].quantity:
                     logging.info(
                             f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}"
-                            f"Changing the amount to the max amount")
+                            f" Changing the amount to the max amount")
                     value = item_dictionary_table[item].quantity
                 self.item_quantity_dict[item] -= value
 
