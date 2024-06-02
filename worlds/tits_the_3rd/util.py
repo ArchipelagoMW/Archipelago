@@ -1,4 +1,5 @@
 import datetime
+from io import BufferedReader
 import json
 import os
 import shutil
@@ -122,6 +123,25 @@ def prompt_and_create_backup(backup_directory: str, copy_from_directory: str):
         elif response.lower() not in ["no", "n"]:
             print("invalid response. Please enter y/n")
 
+def parse_string(fp: BufferedReader, delimiter: str = b'\x00') -> str:
+    """
+    Read a string starting at the file pointer up until the first x00 byte delimiter.
+    The result will be decoded in utf-8 format.
+
+    Args:
+        fp (BufferedReader): The file pointer to start reading at.
+        delimiter (str): A 1 character byte string to use as a delimiter.
+    Raises:
+        IOError: Error during read.
+    """
+    string = b""
+    while True:
+        byte = fp.read(1)
+        if byte == delimiter:
+            break
+        string += byte
+    return string.decode("utf-8")
+
 def write_item_id_to_desc(ittxt_path: str, output_path: str) -> None:
     """
     This method is used to read the state of t_ittxt._dt / t_ittxt2._dt
@@ -144,21 +164,9 @@ def write_item_id_to_desc(ittxt_path: str, output_path: str) -> None:
                 fp.seek(offsets[idx])
                 item_id = int.from_bytes(fp.read(4), byteorder="little")
                 fp.seek(offsets[idx] + 8)
-                name = b""
-                desc = b""
-                while True:
-                    byte = fp.read(1)
-                    if byte == b'\x00':  # Check if the byte is null
-                        break
-                    name += byte
-                while True:
-                    byte = fp.read(1)
-                    if byte == b'\x00':  # Check if the byte is null
-                        break
-                    desc += byte
                 try:
-                    name = name.decode("utf-8")
-                    desc = desc.decode("utf-8")
+                    name = parse_string(fp)
+                    desc = parse_string(fp)
                 except Exception:
                     pass
                 item_id_to_name_fp.write(f"{item_id} {name} {desc}\n")
