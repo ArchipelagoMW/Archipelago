@@ -62,7 +62,7 @@ def launch_game(url: Optional[str] = None) -> None:
             if not mono_exe:
                 # download and use mono kickstart
                 # this allows steam deck support
-                mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/master.zip"
+                mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/716f0a2bd5d75138969090494a76328f39a6dd78.zip"
                 files = []
                 with urllib.request.urlopen(mono_kick_url) as download:
                     with ZipFile(io.BytesIO(download.read()), "r") as zf:
