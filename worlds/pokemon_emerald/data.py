@@ -36,7 +36,7 @@ OUT_OF_LOGIC_MAPS = {
     "MAP_MIRAGE_TOWER_4F",
 }
 """
-These maps have encounters and are locked behind beating the champion or missable.
+These maps have encounters and are locked behind beating the champion or are missable.
 Those encounter slots should be ignored for logical access to a species.
 """
 
