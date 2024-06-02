@@ -462,7 +462,10 @@ class KeyedDefaultDict(collections.defaultdict):
                  default_factory: typing.Callable[[Any], Any] = None,
                  default: typing.Union[typing.Mapping, typing.Iterable, None] = None,
                  **kwargs):
-        super().__init__(default_factory, default, **kwargs)
+        if default is not None:
+            super().__init__(default_factory, default, **kwargs)
+        else:
+            super().__init__(default_factory, **kwargs)
 
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
