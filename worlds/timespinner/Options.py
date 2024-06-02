@@ -418,51 +418,51 @@ class HiddenTraps(Traps):
     """List of traps that may be in the item pool to find"""
     visibility = Visibility.none
 
-@dataclass
-class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
-
-    @staticmethod
-    def hidden(option: Type[Option[Any]]) -> Type[Option]:
+class OptionsHider:
+    @classmethod
+    def hidden(cls, option: Type[Option[Any]]) -> Type[Option]:
         new_option = AssembleOptions(f"{option}Hidden", option.__bases__, vars(option).copy())
         new_option.visibility = Visibility.none
         new_option.__doc__ = option.__doc__
         return new_option
 
-    StartWithJewelryBox: hidden(StartWithJewelryBox) # type: ignore
-    DownloadableItems: hidden(DownloadableItems) # type: ignore
-    EyeSpy: hidden(EyeSpy) # type: ignore
-    StartWithMeyef: hidden(StartWithMeyef) # type: ignore
-    QuickSeed: hidden(QuickSeed) # type: ignore
-    SpecificKeycards: hidden(SpecificKeycards) # type: ignore
-    Inverted: hidden(Inverted) # type: ignore
-    GyreArchives: hidden(GyreArchives) # type: ignore
-    Cantoran: hidden(Cantoran) # type: ignore
-    LoreChecks: hidden(LoreChecks) # type: ignore
-    BossRando: hidden(BossRando) # type: ignore
-    DamageRando: hidden(DamageRando) # type: ignore
+@dataclass
+class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
+    StartWithJewelryBox: OptionsHider.hidden(StartWithJewelryBox) # type: ignore
+    DownloadableItems: OptionsHider.hidden(DownloadableItems) # type: ignore
+    EyeSpy: OptionsHider.hidden(EyeSpy) # type: ignore
+    StartWithMeyef: OptionsHider.hidden(StartWithMeyef) # type: ignore
+    QuickSeed: OptionsHider.hidden(QuickSeed) # type: ignore
+    SpecificKeycards: OptionsHider.hidden(SpecificKeycards) # type: ignore
+    Inverted: OptionsHider.hidden(Inverted) # type: ignore
+    GyreArchives: OptionsHider.hidden(GyreArchives) # type: ignore
+    Cantoran: OptionsHider.hidden(Cantoran) # type: ignore
+    LoreChecks: OptionsHider.hidden(LoreChecks) # type: ignore
+    BossRando: OptionsHider.hidden(BossRando) # type: ignore
+    DamageRando: OptionsHider.hidden(DamageRando) # type: ignore
     DamageRandoOverrides: HiddenDamageRandoOverrides
-    HpCap: hidden(HpCap) # type: ignore
-    LevelCap: hidden(LevelCap) # type: ignore
-    ExtraEarringsXP: hidden(ExtraEarringsXP) # type: ignore
-    BossHealing: hidden(BossHealing) # type: ignore
-    ShopFill: hidden(ShopFill) # type: ignore
-    ShopWarpShards: hidden(ShopWarpShards) # type: ignore
-    ShopMultiplier: hidden(ShopMultiplier) # type: ignore
-    LootPool: hidden(LootPool) # type: ignore
-    DropRateCategory: hidden(DropRateCategory) # type: ignore
-    FixedDropRate: hidden(FixedDropRate) # type: ignore
-    LootTierDistro: hidden(LootTierDistro) # type: ignore
-    ShowBestiary: hidden(ShowBestiary) # type: ignore
-    ShowDrops: hidden(ShowDrops) # type: ignore
-    EnterSandman: hidden(EnterSandman) # type: ignore
-    DadPercent: hidden(DadPercent) # type: ignore
-    RisingTides: hidden(RisingTides) # type: ignore
+    HpCap: OptionsHider.hidden(HpCap) # type: ignore
+    LevelCap: OptionsHider.hidden(LevelCap) # type: ignore
+    ExtraEarringsXP: OptionsHider.hidden(ExtraEarringsXP) # type: ignore
+    BossHealing: OptionsHider.hidden(BossHealing) # type: ignore
+    ShopFill: OptionsHider.hidden(ShopFill) # type: ignore
+    ShopWarpShards: OptionsHider.hidden(ShopWarpShards) # type: ignore
+    ShopMultiplier: OptionsHider.hidden(ShopMultiplier) # type: ignore
+    LootPool: OptionsHider.hidden(LootPool) # type: ignore
+    DropRateCategory: OptionsHider.hidden(DropRateCategory) # type: ignore
+    FixedDropRate: OptionsHider.hidden(FixedDropRate) # type: ignore
+    LootTierDistro: OptionsHider.hidden(LootTierDistro) # type: ignore
+    ShowBestiary: OptionsHider.hidden(ShowBestiary) # type: ignore
+    ShowDrops: OptionsHider.hidden(ShowDrops) # type: ignore
+    EnterSandman: OptionsHider.hidden(EnterSandman) # type: ignore
+    DadPercent: OptionsHider.hidden(DadPercent) # type: ignore
+    RisingTides: OptionsHider.hidden(RisingTides) # type: ignore
     RisingTidesOverrides: HiddenRisingTidesOverrides
-    UnchainedKeys: hidden(UnchainedKeys) # type: ignore
-    PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
-    TrapChance: hidden(TrapChance) # type: ignore
+    UnchainedKeys: OptionsHider.hidden(UnchainedKeys) # type: ignore
+    PresentAccessWithWheelAndSpindle: OptionsHider.hidden(PresentAccessWithWheelAndSpindle) # type: ignore
+    TrapChance: OptionsHider.hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
-    DeathLink: hidden(DeathLink) # type: ignore
+    DeathLink: OptionsHider.hidden(DeathLink) # type: ignore
 
     def handle_backward_compatibility(self) -> None:
         has_replaced_options: bool = False
