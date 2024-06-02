@@ -24,6 +24,7 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         "Distant Roost (2)":                    RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains":                       RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains (2)":                   RoRRegionData([], ["OrderedStage_1"]),
+        "Verdant Falls":                        RoRRegionData([], ["OrderedStage_1"]),
         "Abandoned Aqueduct":                   RoRRegionData([], ["OrderedStage_2"]),
         "Wetland Aspect":                       RoRRegionData([], ["OrderedStage_2"]),
         "Rallypoint Delta":                     RoRRegionData([], ["OrderedStage_3"]),
