@@ -1,10 +1,10 @@
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Item, ItemClassification, Entrance, Tutorial
-from typing import List, ClassVar, Type
+from BaseClasses import Region, Item, ItemClassification, Tutorial
+from typing import List, ClassVar, Type, Set
 from math import floor
 from Options import PerGameCommonOptions
 
-from .Options import MuseDashOptions
+from .Options import MuseDashOptions, md_option_groups
 from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
@@ -35,6 +35,7 @@ class MuseDashWebWorld(WebWorld):
 
     tutorials = [setup_en, setup_es]
     options_presets = MuseDashPresets
+    option_groups = md_option_groups
 
 
 class MuseDashWorld(World):
@@ -150,7 +151,7 @@ class MuseDashWorld(World):
                 self.victory_song_name = available_song_keys[chosen_song - included_song_count]
                 del available_song_keys[chosen_song - included_song_count]
 
-        # Next, make sure the starting songs are fufilled
+        # Next, make sure the starting songs are fulfilled
         if len(self.starting_songs) < starting_song_count:
             for _ in range(len(self.starting_songs), starting_song_count):
                 if len(available_song_keys) > 0:
@@ -158,7 +159,7 @@ class MuseDashWorld(World):
                 else:
                     self.starting_songs.append(self.included_songs.pop())
 
-        # Then attempt to fufill any remaining songs for interim songs
+        # Then attempt to fulfill any remaining songs for interim songs
         if len(self.included_songs) < additional_song_count:
             for _ in range(len(self.included_songs), self.options.additional_song_count):
                 if len(available_song_keys) <= 0:
