@@ -1,0 +1,175 @@
+{% set icons = {
+    "Monster Candy":        "https://static.wikia.nocookie.net/undertale/images/5/53/Monster_Candy_item.png",
+    "Spider Donut":         "https://static.wikia.nocookie.net/undertale/images/3/3e/Spider_Donut_item.png",
+    "Butterscotch Pie":     "https://static.wikia.nocookie.net/undertale/images/e/ee/Butterscotch_Pie_item_slice.png",
+    "Snowman Piece":        "https://static.wikia.nocookie.net/undertale/images/7/76/Snowman_overworld.png",
+    "Astronaut Food":       "https://static.wikia.nocookie.net/undertale/images/5/59/Astronaut_Food_item.png",
+    "Starfait":             "https://static.wikia.nocookie.net/undertale/images/4/43/Starfait_item.png",
+    "Glamburger":           "https://static.wikia.nocookie.net/undertale/images/4/4c/Glamburger_item.png",
+    "Legendary Hero":       "https://static.wikia.nocookie.net/undertale/images/d/d4/Legendary_Hero_item.png",
+    "Face Steak":           "https://static.wikia.nocookie.net/undertale/images/4/4c/Steak_in_the_Shape_of_Mettaton%27s_Face_item.png",
+
+    "Toy Knife":            "https://static.wikia.nocookie.net/undertale/images/b/b2/Toy_Knife_item.png",
+    "Tough Glove":          "https://static.wikia.nocookie.net/undertale/images/b/b3/Tough_Glove_item.png",
+    "Ballet Shoes":         "https://static.wikia.nocookie.net/undertale/images/6/61/Ballet_Shoes_item.png",
+    "Torn Notebook":        "https://static.wikia.nocookie.net/undertale/images/d/d3/Torn_Notebook_item.png",
+    "Burnt Pan":            "https://static.wikia.nocookie.net/undertale/images/8/8c/Burnt_Pan_item.png",
+    "Empty Gun":            "https://static.wikia.nocookie.net/undertale/images/c/cf/Empty_Gun_item.png",
+    "Real Knife":           "https://static.wikia.nocookie.net/undertale/images/5/5d/Real_Knife_item.png",
+
+    "Faded Ribbon":         "https://static.wikia.nocookie.net/undertale/images/b/b3/Faded_Ribbon_item.png",
+    "Old Tutu":             "https://static.wikia.nocookie.net/undertale/images/e/e0/Old_Tutu_item.png",
+    "Stained Apron":        "https://static.wikia.nocookie.net/undertale/images/a/a3/Stained_Apron_item.png",
+
+    "Punch Card":           "https://static.wikia.nocookie.net/undertale/images/f/fb/Punch_Card_item.png",
+    "Dog Residue":          "https://static.wikia.nocookie.net/undertale/images/2/20/Dog_Residue_item.png"
+} %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    
+} %}
+
+{% set multi_items = [
+    "LOVE",
+    "ATK Up",
+    "DEF Up",
+    "HP Up",
+    "Key Piece",
+    "Punch Card"
+] %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/globalStyles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/dirt.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker__Undertale.css') }}">
+</head>
+
+<body>
+    <header id="base-header">
+        <div id="base-header-left">
+            <a id="site-title" href="#">{{ player_name }}'s Tracker</a>
+        </div>
+    </header>
+
+    <div id="tracker-navigation">
+        <div class="tracker-navigation-bar">
+            <a class="tracker-navigation-button" href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"> 🡸 Switch To Generic Tracker </a>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="tracker-container col-1">
+            {# Inventory Grid #}
+            <div class="sub-grid">
+                {% for (category, items) in inventory_order.items() %}
+                    <div class="tracker-container sub-col-{{ loop.index }}">
+                        <div class="inventory-grid">
+                            {% for item in items %}
+                                {% if item in progressive_order %}
+                                    {% set non_prog_item = progressive_order[item][inventory[item]] %}
+                                    <div class="item">
+                                        {% if non_prog_item in icons %}
+                                            <img
+                                                src="{{ icons[non_prog_item] }}"
+                                                alt="{{ non_prog_item }}"
+                                                title="{{ non_prog_item }}"
+                                                class="{{ 'missing' if (item not in inventory or inventory[item] == 0) }}"
+                                            />
+                                        {% else %}
+                                            <div class="{{ 'missing' if (item not in inventory or inventory[item] == 0) else 'collected' }}">
+                                                {{ non_prog_item }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="item">
+                                        {% if item in icons %}
+                                            <img
+                                                src="{{ icons[item] }}"
+                                                alt="{{ item }}"
+                                                title="{{ item }}"
+                                                class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
+                                            />
+                                        {% else %}
+                                            <div class="{{ 'missing' if (item not in inventory or inventory[item] == 0) else 'collected' }}">
+                                                {{ item }}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if item in multi_items %}
+                                            <div class="quantity">{{ inventory[item] }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% for region_name in known_regions %}
+            {% set region_data = regions[region_name] %}
+            <div class="tracker-container col-{{ loop.index + 1 }}">
+                <div class="regions-list">
+                    <details class="region-details" open>
+                        <summary>
+                            <div class="region">
+                                    <span>{{ region_name }}</span>
+                                    <span>{{ region_data["checked"] }} / {{ region_data["locations"] | length }}</span>
+                                    <span>&mdash;</span>
+                                </div>
+                        </summary>
+    
+                        <div class="location-rows">
+                            {% for location, checked in region_data["locations"] %}
+                                <div>{{ location }}</div>
+                                <div>{% if checked %}✔{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+
+    <script>
+        const parser = new DOMParser();
+        const interval = 15_000;
+
+        window.addEventListener("load", () => {
+            setInterval(() => updateTracker()
+                .then(() => console.log("Refreshed tracker."))
+                .catch(console.error), interval);
+        });
+
+        async function updateTracker() {
+            const response = await fetch(`${window.location}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tracker update from ${window.location}. Received response: ${response.statusText}`);
+            }
+
+            const fakeDOM = parser.parseFromString(await response.text(), "text/html");
+            document.querySelector(".inventory-grid").innerHTML = fakeDOM.querySelector(".inventory-grid").innerHTML;
+
+            const regionDetailElements = document.querySelectorAll(".region-details");
+            const fakeDetailElements = fakeDOM.querySelectorAll(".region-details");
+
+            for (let i = 0; i < regionDetailElements.length; ++i) {
+                const isOpen = regionDetailElements[i].open;
+                regionDetailElements[i].innerHTML = fakeDetailElements[i].innerHTML;
+                regionDetailElements[i].open = isOpen;
+            }
+        }
+    </script>
+</body>
+</html>

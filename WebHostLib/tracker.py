@@ -2396,3 +2396,425 @@ if "Starcraft 2" in network_data_package["games"]:
         )
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
+
+if "Undertale" in network_data_package["games"]:
+    # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_items = {
+        "Steel Helm"    : ("Progressive Helm",  1),
+        "Moon Helm"     : ("Progressive Helm",  2),
+        "Apollo Helm"   : ("Progressive Helm",  3),
+
+        "Noble Armor"   : ("Progressive Armor", 1),
+        "Gaia's Armor"  : ("Progressive Armor", 2),
+
+        "Steel Shield"  : ("Progressive Shield", 1),
+        "Venus Shield"  : ("Progressive Shield", 2),
+        "Aegis Shield"  : ("Progressive Shield", 3),
+
+        "Charm"         : ("Progressive Accessory", 1),
+        "Magic Ring"    : ("Progressive Accessory", 2),
+        "Cupid Locket"  : ("Progressive Accessory", 3),
+
+        "Axe"           : ("Progressive Axe", 1),
+        "Battle Axe"    : ("Progressive Axe", 2),
+        "Giant's Axe"   : ("Progressive Axe", 3),
+
+        "Bomb"          : ("Progressive Bomb", 1),
+        "Jumbo Bomb"    : ("Progressive Bomb", 2),
+        "Mega Grenade"  : ("Progressive Bomb", 3),
+
+        "Cat Claw"      : ("Progressive Claw", 1),
+        "Charm Claw"    : ("Progressive Claw", 2),
+        "Dragon Claw"   : ("Progressive Claw", 3),
+
+        "Steel Sword"   : ("Progressive Sword", 1),
+        "Knight Sword"  : ("Progressive Sword", 2),
+        "Excalibur"     : ("Progressive Sword", 3),
+        
+        "Sky Fragment"  : ("Progressive Sky Coin", 1),
+        "Sky Coin"      : ("Progressive Sky Coin", 2)
+    }
+
+    progressive_item_max = {
+        "Progressive Helm"      : 3,
+        "Progressive Armor"     : 2,
+        "Progressive Shield"    : 3,
+        "Progressive Accessory" : 3,
+        "Progressive Axe"       : 3,
+        "Progressive Bomb"      : 3,
+        "Progressive Claw"      : 3,
+        "Progressive Sword"     : 3,
+        "Progressive Sky Coin"  : 2
+    }
+
+    REGION_RUINS        = "Ruins"
+    REGION_SNOWDIN      = "Snowdin"
+    REGION_WATERFALL    = "Waterfall"
+    REGION_HOTLAND      = "Hotland"
+    REGION_CORE         = "Core"
+
+    REGION_NEW_HOME     = "New Home"
+    REGION_TRUE_LAB     = "True Lab"
+
+    known_regions = [REGION_RUINS, REGION_SNOWDIN, REGION_WATERFALL, REGION_HOTLAND, REGION_CORE, REGION_NEW_HOME, REGION_TRUE_LAB]
+
+    # Data from worlds/Undertale/Locations.py to show locations with names on tracker page
+    # Slightly changed and reduced to the needed ones for tracker
+    advancement_table = {
+        "Snowman"               : (79100, REGION_SNOWDIN),
+        "Snowman 2"             : (79101, REGION_SNOWDIN),
+        "Snowman 3"             : (79102, REGION_SNOWDIN),
+        "Nicecream Snowdin"     : (79001, REGION_SNOWDIN),
+        "Nicecream Waterfall"   : (79002, REGION_WATERFALL),
+        "Nicecream Punch Card"  : (79003, REGION_WATERFALL),
+        "Quiche Bench"          : (79004, REGION_WATERFALL),
+        "Tutu Hidden"           : (79005, REGION_WATERFALL),
+        "Card Reward"           : (79006, REGION_WATERFALL),
+        "Grass Shoes"           : (79007, REGION_WATERFALL),
+        "Noodles Fridge"        : (79008, REGION_HOTLAND),
+        "Pan Hidden"            : (79009, REGION_HOTLAND),
+        "Apron Hidden"          : (79010, REGION_HOTLAND),
+        "Trash Burger"          : (79011, REGION_CORE),
+        "Present Knife"         : (79012, REGION_NEW_HOME),
+        "Present Locket"        : (79013, REGION_NEW_HOME),
+        "Candy 1"               : (79014, REGION_RUINS),
+        "Candy 2"               : (79015, REGION_RUINS),
+        "Candy 3"               : (79016, REGION_RUINS),
+        "Candy 4"               : (79017, REGION_RUINS),
+        "Donut Sale"            : (79018, REGION_RUINS),
+        "Cider Sale"            : (79019, REGION_RUINS),
+        "Ribbon Cracks"         : (79020, REGION_RUINS),
+        "Toy Knife Edge"        : (79021, REGION_RUINS),
+        "B.Scotch Pie Given"    : (79022, REGION_RUINS),
+        "Astro 1"               : (79023, REGION_WATERFALL),
+        "Astro 2"               : (79024, REGION_WATERFALL),
+        "Dog Sale 1"            : (79026, REGION_HOTLAND),
+        "Cat Sale"              : (79027, REGION_HOTLAND),
+        "Dog Sale 2"            : (79028, REGION_HOTLAND),
+        "Dog Sale 3"            : (79029, REGION_HOTLAND),
+        "Dog Sale 4"            : (79030, REGION_HOTLAND),
+        "Chisps Machine"        : (79031, REGION_TRUE_LAB),
+        "Hush Trade"            : (79032, REGION_HOTLAND),
+        "Letter Quest"          : (79033, REGION_SNOWDIN),
+        "Bunny 1"               : (79034, REGION_SNOWDIN),
+        "Bunny 2"               : (79035, REGION_SNOWDIN),
+        "Bunny 3"               : (79036, REGION_SNOWDIN),
+        "Bunny 4"               : (79037, REGION_SNOWDIN),
+        "Gerson 1"              : (79038, REGION_WATERFALL),
+        "Gerson 2"              : (79039, REGION_WATERFALL),
+        "Gerson 3"              : (79040, REGION_WATERFALL),
+        "Gerson 4"              : (79041, REGION_WATERFALL),
+        "Bratty Catty 1"        : (79042, REGION_HOTLAND),
+        "Bratty Catty 2"        : (79043, REGION_HOTLAND),
+        "Bratty Catty 3"        : (79044, REGION_HOTLAND),
+        "Bratty Catty 4"        : (79045, REGION_HOTLAND),
+        "Burgerpants 1"         : (79046, REGION_HOTLAND),
+        "Burgerpants 2"         : (79047, REGION_HOTLAND),
+        "Burgerpants 3"         : (79048, REGION_HOTLAND),
+        "Burgerpants 4"         : (79049, REGION_HOTLAND),
+        "TemmieShop 1"          : (79050, REGION_WATERFALL),
+        "TemmieShop 2"          : (79051, REGION_WATERFALL),
+        "TemmieShop 3"          : (79052, REGION_WATERFALL),
+        "TemmieShop 4"          : (79053, REGION_WATERFALL),
+        "Papyrus Plot"          : (79056, REGION_SNOWDIN),
+        "Undyne Plot"           : (79057, REGION_WATERFALL),
+        "Mettaton Plot"         : (79062, REGION_CORE),
+        "True Lab Plot"         : (79063, REGION_HOTLAND),
+        "Left New Home Key"     : (79064, REGION_NEW_HOME),
+        "Right New Home Key"    : (79065, REGION_NEW_HOME),
+
+        # Remove this locations from here because they has no location ids
+        # Maybe at some point that might change
+        #"Undyne Date"           : (None , REGION_WATERFALL), # "Undyne\"s Home"
+        #"Alphys Date"           : (None , REGION_HOTLAND),
+        #"Papyrus Date"          : (None , REGION_SNOWDIN) # "Papyrus\" Home"
+    }
+
+    # The stats location checks are not part of the visual tracker.
+    # So they are removed from this lists.
+    exclusion_table = {
+        "pacifist": [
+            "Snowman 2",
+            "Snowman 3",
+        ],
+        "neutral": [
+            "Letter Quest",
+            "Dog Sale 1",
+            "Cat Sale",
+            "Dog Sale 2",
+            "Dog Sale 3",
+            "Dog Sale 4",
+            "Chisps Machine",
+            "Hush Trade",
+            "Papyrus Plot",
+            "Undyne Plot",
+            "True Lab Plot",
+            "Snowman 2",
+            "Snowman 3",
+        ],
+        "genocide": [
+            "Letter Quest",
+            "Dog Sale 1",
+            "Cat Sale",
+            "Dog Sale 2",
+            "Dog Sale 3",
+            "Dog Sale 4",
+            "Chisps Machine",
+            "Nicecream Snowdin",
+            "Nicecream Waterfall",
+            "Nicecream Punch Card",
+            "Card Reward",
+            "Apron Hidden",
+            "Hush Trade",
+            "Papyrus Plot",
+            "Undyne Plot",
+            "True Lab Plot",
+        ],
+        "all_routes": [
+        ]
+    }
+    # End - Data from worlds/Undertale/Locations.py to show locations with names on tracker page
+
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        uses_key_hunt = route = tracker_data.get_slot_data(team, player)["key_hunt"]
+        key_pieces = route = tracker_data.get_slot_data(team, player)["key_pieces"]
+        
+        if uses_key_hunt:
+            inventory["New Home Key"] = inventory["Key Piece"] >= key_pieces
+        else:
+            inventory["New Home Key"] = inventory["Left Home Key"] and inventory["Right Home Key"]
+
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        # Completed item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["IsCompleted"] = 1
+
+    def render_Undertale_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
+            (team, player): collections.Counter({
+                tracker_data.item_id_to_name["Undertale"][code]: count
+                for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+            })
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "Undertale"
+        }
+
+        # Translate non-progression items to progression items for tracker simplicity.
+        for (team, player), inventory in inventories.items():
+            prepare_inventories(team, player, inventory, tracker_data)
+
+        return render_template(
+            "multitracker__Undertale.html",
+            enabled_trackers=enabled_trackers,
+            current_tracker="Undertale",
+            room=tracker_data.room,
+            all_slots=tracker_data.get_all_slots(),
+            room_players=tracker_data.get_all_players(),
+            locations=tracker_data.get_room_locations(),
+            locations_complete=tracker_data.get_room_locations_complete(),
+            total_team_locations=tracker_data.get_team_locations_total_count(),
+            total_team_locations_complete=tracker_data.get_team_locations_checked_count(),
+            player_names_with_alias=tracker_data.get_room_long_player_names(),
+            completed_worlds=tracker_data.get_team_completed_worlds_count(),
+            games=tracker_data.get_room_games(),
+            states=tracker_data.get_room_client_statuses(),
+            hints=tracker_data.get_team_hints(),
+            activity_timers=tracker_data.get_room_last_activity(),
+            videos=tracker_data.get_room_videos(),
+            item_id_to_name=tracker_data.item_id_to_name,
+            location_id_to_name=tracker_data.location_id_to_name,
+            inventories=inventories
+        )
+
+    def render_Undertale_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["Undertale"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
+        
+        # Translate non-progression items to progression items for tracker simplicity.
+        prepare_inventories(team, player, inventory, tracker_data)
+
+        route = tracker_data.get_slot_data(team, player)["route"]
+        noLove = not tracker_data.get_slot_data(team, player)["rando_love"]
+        noStats = not tracker_data.get_slot_data(team, player)["rando_stats"]
+        noEquips = tracker_data.get_slot_data(team, player)["no_equips"]
+        keyHunt = tracker_data.get_slot_data(team, player)["key_hunt"]
+        locations_to_check = advancement_table.copy()
+
+        for location_to_exclude in exclusion_table[route]:
+            if location_to_exclude in locations_to_check:
+                del locations_to_check[location_to_exclude]
+
+        regions = {
+            region_name: {
+                "checked": sum(
+                    1 for location, (id, region) in locations_to_check.items()
+                    if region == region_name and id in tracker_data.get_player_checked_locations(team, player)
+                ),
+                "locations": [
+                    (
+                        tracker_data.location_id_to_name["Undertale"][id],
+                        id in tracker_data.get_player_checked_locations(team, player)
+                    )
+                    for location, (id, region) in locations_to_check.items()
+                        if region == region_name
+                ],
+            }
+            for region_name in known_regions
+        }
+
+        # Sort locations in regions by name
+        for region in regions:
+            regions[region]["locations"].sort()
+
+        inventory_order = {
+            "region_keys" : [
+                "Ruins Key",
+                "Snowdin Key",
+                "Waterfall Key",
+                "Hotland Key",
+                "Core Key"
+            ],
+            "new_home_key" : [
+                "Left Home Key",
+                "Right Home Key",
+                "Key Piece"
+            ],
+            "actions": [
+                "FIGHT",
+                "ACT",
+                "ITEM",
+                "MERCY"
+            ],
+            "stats" : [
+                "LOVE",
+                "ATK Up",
+                "DEF Up",
+                "HP Up"
+            ],
+            "key_items" : [
+                "Complete Skeleton",
+                "Fish",
+                "DT Extractor",
+                "Mettaton Plush",
+                "Punch Card",
+                "Hot Dog...?"
+            ],
+            "required_armor" : [
+                "Cloudy Glasses",
+                "Manly Bandanna",
+                "Old Tutu",
+                "Stained Apron",
+                "The Locket",
+                "Heart Locket",
+                "Faded Ribbon",
+                "Cowboy Hat"
+            ],
+            "required_weapons" : [
+                "Torn Notebook",
+                "Tough Glove",
+                "Ballet Shoes",
+                "Burnt Pan",
+                "Worn Dagger",
+                "Real Knife",
+                "Toy Knife",
+                "Empty Gun"
+            ],
+            #"non_key_items" : [
+            #    "Butterscotch Pie",
+            #    "Face Steak",
+            #    "Snowman Piece",
+            #    "Instant Noodles",
+            #    "Astronaut Food",
+            #    "Hot Cat",
+            #    "Abandoned Quiche",
+            #    "Spider Donut",
+            #    "Spider Cider",
+            #    "Hush Puppy"
+            #]
+        }
+
+        if route == "pacifist":
+            inventory_order["stats"].remove("ATK Up")
+            inventory_order["stats"].remove("DEF Up")
+            inventory_order["stats"].remove("HP Up")
+            inventory_order["stats"].remove("LOVE")
+
+            inventory_order["required_armor"].remove("The Locket")
+            inventory_order["required_weapons"].remove("Real Knife")
+
+        if route == "neutral":
+            inventory_order["stats"].remove("ATK Up")
+            inventory_order["stats"].remove("DEF Up")
+            inventory_order["stats"].remove("HP Up")
+            inventory_order["stats"].remove("LOVE")
+            
+            inventory_order["required_armor"].remove("The Locket")
+            inventory_order["required_weapons"].remove("Real Knife")
+
+            inventory_order["key_items"].remove("Hot Dog...?") # Dog Sale 1-4, Cat Sale
+
+            #inventory_order["non_key_items"].remove("Hush Puppy") # "Hush Trade"
+
+            inventory_order["key_items"].remove("Complete Skeleton") # Papyrus Plot
+            inventory_order["key_items"].remove("Fish") # Undyne Plot
+            inventory_order["key_items"].remove("Mettaton Plush") # True Lab Plot
+            inventory_order["key_items"].remove("DT Extractor")
+
+        if route == "genocide":
+            inventory_order["key_items"].remove("Hot Dog...?") # Dog Sale 1-4, Cat Sale
+            inventory_order["key_items"].remove("Punch Card") # Dog Sale 1-4, Cat Sale
+
+            inventory_order["required_armor"].remove("Stained Apron")
+            inventory_order["required_armor"].remove("Heart Locket")
+            inventory_order["required_weapons"].remove("Worn Dagger")
+
+            #inventory_order["non_key_items"].remove("Hush Puppy") # "Hush Trade"
+
+            inventory_order["key_items"].remove("Complete Skeleton") # Papyrus Plot
+            inventory_order["key_items"].remove("Fish") # Undyne Plot
+            inventory_order["key_items"].remove("Mettaton Plush") # True Lab Plot
+            inventory_order["key_items"].remove("DT Extractor")
+
+        if route == "all_routes":
+            inventory_order["required_armor"].remove("Heart Locket")
+            inventory_order["required_weapons"].remove("Worn Dagger")
+
+        if noLove:
+            if "LOVE" in inventory_order["stats"]: inventory_order["stats"].remove("LOVE")
+
+        if noStats:
+            if "ATK Up" in inventory_order["stats"]: inventory_order["stats"].remove("ATK Up")
+            if "DEF Up" in inventory_order["stats"]: inventory_order["stats"].remove("DEF Up")
+            if "HP Up"  in inventory_order["stats"]: inventory_order["stats"].remove("HP Up")
+
+        if noEquips:
+            del inventory_order["required_weapons"]
+            del inventory_order["required_armor"]
+
+        if keyHunt:
+            inventory_order["new_home_key"].remove("Left Home Key")
+            inventory_order["new_home_key"].remove("Right Home Key")
+        else:
+            inventory_order["new_home_key"].remove("Key Piece")
+
+        return render_template(
+            template_name_or_list="tracker__Undertale.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            inventory=inventory,
+            player_name=tracker_data.get_player_name(team, player),
+            slot_data=tracker_data.get_slot_data(team, player),
+            tracker_data=tracker_data,
+            inventory_order=inventory_order,
+            regions=regions,
+            known_regions=known_regions
+        )
+
+    _multiworld_trackers["Undertale"] = render_Undertale_multiworld_tracker
+    _player_trackers["Undertale"] = render_Undertale_tracker
