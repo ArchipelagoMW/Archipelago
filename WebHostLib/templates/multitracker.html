@@ -10,7 +10,7 @@
     {% include "header/dirtHeader.html" %}
     {% include "multitrackerNavigation.html" %}
 
-    <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}">
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}" data-second="{{ saving_second }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search" />
 

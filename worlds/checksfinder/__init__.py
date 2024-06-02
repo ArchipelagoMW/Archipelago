@@ -10,7 +10,7 @@ client_version = 7
 
 class ChecksFinderWeb(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
@@ -32,8 +32,6 @@ class ChecksFinderWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
-
-    data_version = 4
 
     def _get_checksfinder_data(self):
         return {

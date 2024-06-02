@@ -20,7 +20,11 @@ __all__ = {
     "user_folder",
     "GamesPackage",
     "DataPackage",
+    "failed_world_loads",
 }
+
+
+failed_world_loads: List[str] = []
 
 
 class GamesPackage(TypedDict, total=False):
@@ -29,7 +33,6 @@ class GamesPackage(TypedDict, total=False):
     location_name_groups: Dict[str, List[str]]
     location_name_to_id: Dict[str, int]
     checksum: str
-    version: int  # TODO: Remove support after per game data packages API change.
 
 
 class DataPackage(TypedDict):
@@ -87,6 +90,7 @@ class WorldSource:
             file_like.seek(0)
             import logging
             logging.exception(file_like.read())
+            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
 
