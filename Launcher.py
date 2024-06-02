@@ -239,11 +239,7 @@ def run_gui():
                 launch(get_exe(button.component), button.component.cli)
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
-            """
-            kivy doc:
-            > `on_drop_file`: filename (bytes), x, y, *args
-            > Fired when a file is dropped on the application.
-            """
+            """ When a patch file is dropped into the window, run the associated component. """
             file, component = identify(filename.decode())
             if file and component:
                 run_component(component, file)
