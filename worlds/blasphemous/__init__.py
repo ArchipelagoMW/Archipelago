@@ -32,7 +32,6 @@ class BlasphemousWorld(World):
 
     game: str = "Blasphemous"
     web = BlasphemousWeb()
-    data_version = 2
 
     item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
     location_name_to_id = {loc["name"]: (base_id + index) for index, loc in enumerate(location_table)}
