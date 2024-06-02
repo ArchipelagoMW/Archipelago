@@ -2,7 +2,7 @@ import base64
 import logging
 
 from NetUtils import ClientStatus
-from worlds._bizhawk.client import BizHawkClient, BizHawkClientContext
+from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 
 from .rom_addresses import rom_addresses
@@ -36,7 +36,7 @@ class MarioLand2Client(BizHawkClient):
         auth_name = base64.b64encode(auth_name[0]).decode()
         ctx.auth = auth_name
 
-    async def game_watcher(self, ctx: BizHawkClientContext):
+    async def game_watcher(self, ctx):
         from . import START_IDS
         from .items import items
         from .locations import locations, level_id_to_name, coins_coords, location_name_to_id
@@ -233,7 +233,7 @@ class MarioLand2Client(BizHawkClient):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 
-    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict):
+    def on_package(self, ctx, cmd: str, args: dict):
         super().on_package(ctx, cmd, args)
         if cmd == 'Connected':
             if ctx.slot_data["energy_link"]:
