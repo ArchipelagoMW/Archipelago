@@ -171,6 +171,9 @@ class MuseDashCollections:
 
         return filtered_list
 
+    def filter_songs_to_dlc(self, song_list: List[str], dlc_songs: Set[str]) -> List[str]:
+        return [song for song in song_list if self.song_matches_dlc_filter(self.song_items[song], dlc_songs)]
+
     def song_matches_dlc_filter(self, song: SongData, dlc_songs: Set[str]) -> bool:
         if song.album in self.FREE_ALBUMS:
             return True

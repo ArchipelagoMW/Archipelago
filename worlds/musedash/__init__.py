@@ -88,7 +88,7 @@ class MuseDashWorld(World):
             available_song_keys = self.md_collection.get_songs_with_settings(
                 dlc_songs, bool(streamer_mode.value), lower_diff_threshold, higher_diff_threshold)
 
-            available_song_keys = self.handle_plando(available_song_keys)
+            available_song_keys = self.handle_plando(available_song_keys, dlc_songs)
 
             count_needed_for_start = max(0, starter_song_count - len(self.starting_songs))
             if len(available_song_keys) + len(self.included_songs) >= count_needed_for_start + 11:
@@ -109,7 +109,7 @@ class MuseDashWorld(World):
         for song in self.starting_songs:
             self.multiworld.push_precollected(self.create_item(song))
 
-    def handle_plando(self, available_song_keys: List[str]) -> List[str]:
+    def handle_plando(self, available_song_keys: List[str], dlc_songs: Set[str]) -> List[str]:
         song_items = self.md_collection.song_items
 
         start_items = self.options.start_inventory.value.keys()
@@ -117,7 +117,9 @@ class MuseDashWorld(World):
         exclude_songs = self.options.exclude_songs.value
 
         self.starting_songs = [s for s in start_items if s in song_items]
+        self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
         self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
+        self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
 
         return [s for s in available_song_keys if s not in start_items
                 and s not in include_songs and s not in exclude_songs]
