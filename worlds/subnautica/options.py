@@ -48,6 +48,42 @@ class EarlySeaglide(DefaultOnToggle):
     display_name = "Early Seaglide"
 
 
+class IncludeSeamoth(Choice):
+    """Whether to include the Seamoth or not.
+    Include: Include the Seamoth both logically and really.
+    Exclude from Logic: Include the Seamoth, but don't count it towards depth or distance calculations.
+    Exclude: Do not include any Seamoth fragments. The Seamoth will be unobtainable in game."""
+    display_name = "Seamoth"
+    option_include = 0
+    option_exclude_logically = 1
+    option_exclude = 2
+
+
+class IncludePrawnSuit(Choice):
+    """Whether to include the Prawn Suit or not.
+    Include: Include the Prawn Suit both logically and really.
+    Exclude from Logic: Include the Prawn Suit, but don't count it towards depth or distance calculations.
+    Exclude: Do not include any Prawn Suit fragments. The Prawn Suit will be unobtainable in game."""
+    display_name = "Prawn Suit"
+    option_include = 0
+    option_exclude_logically = 1
+    option_exclude = 2
+
+
+class IncludeCyclops(Choice):
+    """Whether to include the Cyclops or not.
+    Include: Include the Cyclops both logically and really.
+    Exclude from Logic: Include the Cyclops, but don't count it towards depth or distance calculations.
+    Exclude: Do not include any Cyclops fragments. The Cyclops will be unobtainable in game.
+
+    If the Cyclops is excluded and the goal is Launch, the Shield Generator will be
+    available at the Moonpool Fabricator (A.K.A. Vehicle Upgrade Console)."""
+    display_name = "Cyclops"
+    option_include = 0
+    option_exclude_logically = 1
+    option_exclude = 2
+
+
 class FreeSamples(Toggle):
     """Get free items with your blueprints.
     Items that can go into your inventory are awarded when you unlock their blueprint through Archipelago."""
@@ -133,6 +169,9 @@ class FillerItemsDistribution(ItemDict):
 @dataclass
 class SubnauticaOptions(PerGameCommonOptions):
     swim_rule: SwimRule
+    include_seamoth: IncludeSeamoth
+    include_prawn: IncludePrawnSuit
+    include_cyclops: IncludeCyclops
     early_seaglide: EarlySeaglide
     free_samples: FreeSamples
     goal: Goal
