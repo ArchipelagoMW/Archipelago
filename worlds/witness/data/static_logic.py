@@ -1,6 +1,7 @@
 from collections import defaultdict
-from functools import lru_cache
 from typing import Dict, List, Set, Tuple
+
+from Utils import cache_argsless
 
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
@@ -261,22 +262,22 @@ def get_parent_progressive_item(item_name: str) -> str:
     return _progressive_lookup.get(item_name, item_name)
 
 
-@lru_cache
+@cache_argsless
 def get_vanilla() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_vanilla_logic())
 
 
-@lru_cache
+@cache_argsless
 def get_sigma_normal() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_sigma_normal_logic())
 
 
-@lru_cache
+@cache_argsless
 def get_sigma_expert() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_sigma_expert_logic())
 
 
-@lru_cache
+@cache_argsless
 def get_umbra_variety() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_umbra_variety_logic())
 
