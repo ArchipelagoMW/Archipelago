@@ -35,7 +35,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 12}] 
         }
 
-        with self.assertRaisesRegex(InvalidArgumentsException, "'int' object has no attribute 'startswith'"):
+        with self.assertRaisesRegex(InvalidArgumentsException, "key has to be a string"):
             self.storage.set(set_cmd)
 
     def test_raises_on_set_on_read_only_key(self):
