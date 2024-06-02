@@ -29,5 +29,5 @@ placez-le à la racine du jeu (ex: "SteamLibrary\steamapps\common\DARK SOULS III
 
 ## Où trouver le fichier de configuration ?
 
-La [Page de configuration](/games/Dark%20Souls%20III/player-settings) sur le site vous permez de configurer vos 
+La [Page de configuration](/games/Dark%20Souls%20III/player-options) sur le site vous permez de configurer vos
 paramètres et de les exporter sous la forme d'un fichier.

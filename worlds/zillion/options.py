@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import ClassVar, Dict, Tuple
 from typing_extensions import TypeGuard  # remove when Python >= 3.10
 
-from Options import DefaultOnToggle, NamedRange, PerGameCommonOptions, Range, Toggle, Choice
+from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCommonOptions, Range, Toggle
 
 from zilliandomizer.options import (
     Options as ZzOptions, char_to_gun, char_to_jump, ID,
@@ -222,7 +222,14 @@ class ZillionEarlyScope(Toggle):
 
 
 class ZillionSkill(Range):
-    """ the difficulty level of the game """
+    """
+    the difficulty level of the game
+
+    higher skill:
+    - can require more precise platforming movement
+    - lowers your defense
+    - gives you less time to escape at the end
+    """
     range_start = 0
     range_end = 5
     default = 2
@@ -270,6 +277,14 @@ class ZillionOptions(PerGameCommonOptions):
     skill: ZillionSkill
     starting_cards: ZillionStartingCards
     room_gen: ZillionRoomGen
+
+
+z_option_groups = [
+    OptionGroup("item counts", [
+        ZillionIDCardCount, ZillionBreadCount, ZillionOpaOpaCount, ZillionZillionCount,
+        ZillionFloppyDiskCount, ZillionScopeCount, ZillionRedIDCardCount
+    ])
+]
 
 
 def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:

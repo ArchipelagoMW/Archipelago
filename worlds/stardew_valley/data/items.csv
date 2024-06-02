@@ -735,26 +735,26 @@ id,name,classification,groups,mod_name
 10007,Tractor Garage,useful,,Tractor Mod
 10008,Woods Obelisk,progression,,DeepWoods
 10009,Spell: Clear Debris,progression,MAGIC_SPELL,Magic
-10010,Spell: Till,useful,MAGIC_SPELL,Magic
+10010,Spell: Till,progression,MAGIC_SPELL,Magic
 10011,Spell: Water,progression,MAGIC_SPELL,Magic
 10012,Spell: Blink,progression,MAGIC_SPELL,Magic
-10013,Spell: Evac,useful,MAGIC_SPELL,Magic
-10014,Spell: Haste,useful,MAGIC_SPELL,Magic
+10013,Spell: Evac,progression,MAGIC_SPELL,Magic
+10014,Spell: Haste,progression,MAGIC_SPELL,Magic
 10015,Spell: Heal,progression,MAGIC_SPELL,Magic
-10016,Spell: Buff,useful,MAGIC_SPELL,Magic
+10016,Spell: Buff,progression,MAGIC_SPELL,Magic
 10017,Spell: Shockwave,progression,MAGIC_SPELL,Magic
 10018,Spell: Fireball,progression,MAGIC_SPELL,Magic
 10019,Spell: Frostbolt,progression,MAGIC_SPELL,Magic
 10020,Spell: Teleport,progression,MAGIC_SPELL,Magic
-10021,Spell: Lantern,useful,MAGIC_SPELL,Magic
+10021,Spell: Lantern,progression,MAGIC_SPELL,Magic
 10022,Spell: Tendrils,progression,MAGIC_SPELL,Magic
-10023,Spell: Photosynthesis,useful,MAGIC_SPELL,Magic
+10023,Spell: Photosynthesis,progression,MAGIC_SPELL,Magic
 10024,Spell: Descend,progression,MAGIC_SPELL,Magic
 10025,Spell: Meteor,progression,MAGIC_SPELL,Magic
-10026,Spell: Bloodmana,useful,MAGIC_SPELL,Magic
-10027,Spell: Lucksteal,useful,MAGIC_SPELL,Magic
+10026,Spell: Bloodmana,progression,MAGIC_SPELL,Magic
+10027,Spell: Lucksteal,progression,MAGIC_SPELL,Magic
 10028,Spell: Spirit,progression,MAGIC_SPELL,Magic
-10029,Spell: Rewind,useful,MAGIC_SPELL,Magic
+10029,Spell: Rewind,progression,MAGIC_SPELL,Magic
 10030,Pendant of Community,progression,,DeepWoods
 10031,Pendant of Elders,progression,,DeepWoods
 10032,Pendant of Depths,progression,,DeepWoods
