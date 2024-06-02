@@ -17,7 +17,7 @@ import time
 import typing
 import weakref
 import zlib
-from DataStorage import DataStorage, InvalidArgumentsException
+from datastorage import DataStorage, InvalidArgumentsException
 
 import ModuleUpdate
 

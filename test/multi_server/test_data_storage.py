@@ -1,6 +1,7 @@
 from typing import Dict
-from DataStorage import DataStorage, InvalidArgumentsException
+from datastorage import DataStorage, InvalidArgumentsException
 import unittest
+
 
 class TestDataStorage(unittest.TestCase):
     storage: DataStorage
@@ -71,7 +72,7 @@ class TestDataStorage(unittest.TestCase):
             self.storage.set(set_cmd)
 
     def test_adding_number(self):
-        self.setup_storage({ "BasicAdd": 10 })
+        self.setup_storage({"BasicAdd": 10})
 
         set_cmd: Dict[str, object] = { 
             "key": "BasicAdd", 
@@ -112,7 +113,7 @@ class TestDataStorage(unittest.TestCase):
         self.assert_result(result, "Default", "Hello", "Hello")
 
     def test_energy_link_depletion_pattern(self):
-        self.setup_storage({ "EnergyLink1": 20 })
+        self.setup_storage({"EnergyLink1": 20})
 
         set_cmd: Dict[str, object] = { 
             "key": "EnergyLink1", 
