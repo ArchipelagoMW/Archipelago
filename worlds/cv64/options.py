@@ -522,7 +522,7 @@ class DeathLink(Choice):
 
 @dataclass
 class CV64Options(PerGameCommonOptions):
-    accessibility = ItemsAccessibility
+    accessibility: ItemsAccessibility
     start_inventory_from_pool: StartInventoryPool
     character_stages: CharacterStages
     stage_shuffle: StageShuffle
