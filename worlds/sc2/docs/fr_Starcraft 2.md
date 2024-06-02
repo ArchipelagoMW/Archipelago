@@ -40,6 +40,8 @@ Archipelago*.
 Le but est de réussir la mission finale dans la disposition des missions (e.g. *blitz*, *grid*, etc.).
 Les choix faits dans le fichier *yaml* définissent la disposition des missions et comment elles sont mélangées.
 
+dsa mission order
+
 ## Quelles sont les modifications non aléatoires comparativement à la version de base de *StarCraft 2*
 
 1. Certaines des missions ont plus de *vespene geysers* pour permettre l'utilisation d'une plus grande variété d'unités.

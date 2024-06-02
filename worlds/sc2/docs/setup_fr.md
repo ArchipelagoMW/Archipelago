@@ -6,6 +6,7 @@ indications pour obtenir un fichier de configuration de *StarCraft 2 Archipelago
 ## Logiciels requis
 
 - [*StarCraft 2*](https://starcraft2.com/en-us/)
+   dsa
 - [La version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Comment est-ce que j'installe ce *randomizer*?
@@ -121,6 +122,8 @@ Notez que cette page contient diverses informations supplémentaires sur chacun 
 Cependant, l'information présente dans cette dernière peut différer de celle du *datapackage* d'Archipelago 
 puisqu'elle est générée, habituellement, à partir de la version en développement de *StarCraft 2 Archipelago* qui 
 n'ont peut-être pas encore été inclus dans le site web d'Archipelago.
+
+dsa
 
 ## Comment est-ce que je peux joindre un *MultiWorld*?
 
