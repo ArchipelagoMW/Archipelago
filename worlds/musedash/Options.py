@@ -1,4 +1,4 @@
-from Options import Toggle, Range, Choice, DeathLink, ItemSet, OptionSet, OptionList, PerGameCommonOptions, OptionGroup
+from Options import Toggle, Range, Choice, DeathLink, ItemSet, OptionSet, PerGameCommonOptions, OptionGroup, Removed
 from dataclasses import dataclass
 
 from .MuseDashCollection import MuseDashCollections
@@ -213,3 +213,7 @@ class MuseDashOptions(PerGameCommonOptions):
     death_link: DeathLink
     include_songs: IncludeSongs
     exclude_songs: ExcludeSongs
+    
+    # Removed
+    allow_just_as_planned_dlc_songs: Removed
+    available_trap_types: Removed
