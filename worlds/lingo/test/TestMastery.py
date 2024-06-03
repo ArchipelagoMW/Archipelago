@@ -49,8 +49,8 @@ class TestMasteryBlocksDependents(LingoTestBase):
     def test_requirement(self):
         self.collect_all_but("Gray")
         self.assertFalse(self.can_reach_location("Orange Tower Basement - THE LIBRARY"))
-        self.assertFalse(self.can_reach_location("Orange Tower Seventh Floor - MASTERY"))
+        self.assertFalse(self.can_reach_location("The Fearless - MASTERY"))
 
         self.collect_by_name("Gray")
         self.assertTrue(self.can_reach_location("Orange Tower Basement - THE LIBRARY"))
-        self.assertTrue(self.can_reach_location("Orange Tower Seventh Floor - MASTERY"))
+        self.assertTrue(self.can_reach_location("The Fearless - MASTERY"))
