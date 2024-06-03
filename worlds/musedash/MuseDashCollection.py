@@ -22,15 +22,15 @@ class MuseDashCollections:
     ]
 
     MUSE_PLUS_DLC: str = "Muse Plus"
-    
+
     # Ordering matters for webhost. Order goes: Muse Plus, Time Limited Muse Plus Dlcs, Paid Dlcs
     DLC: List[str] = [
-        # MUSE_PLUS_DLC, # To be included once option sets can have preset values
-        "CHUNITHM COURSE MUSE", # Part of Muse Plus. Goes away 22nd May 2027.
-        "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
-        "MSR Anthology", # Now no longer available.
-        "Miku in Museland", # Paid DLC not included in Muse Plus
-        "Rin Len's Mirrorland", # Paid DLC not included in Muse Plus
+        MUSE_PLUS_DLC,
+        "CHUNITHM COURSE MUSE",  # Part of Muse Plus. Goes away 22nd May 2027.
+        "maimai DX Limited-time Suite",  # Part of Muse Plus. Goes away 31st Jan 2026.
+        "MSR Anthology",  # Now no longer available.
+        "Miku in Museland",  # Paid DLC not included in Muse Plus
+        "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
     ]
 
     DIFF_OVERRIDES: List[str] = [

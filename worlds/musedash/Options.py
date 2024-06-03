@@ -1,19 +1,13 @@
-from Options import Toggle, Range, Choice, DeathLink, ItemSet, OptionSet, OptionList, PerGameCommonOptions, OptionGroup, \
-    Visibility
+from Options import Toggle, Range, Choice, DeathLink, ItemSet, OptionSet, OptionList, PerGameCommonOptions, OptionGroup
 from dataclasses import dataclass
 
 from .MuseDashCollection import MuseDashCollections
 
 
-# Note: Kept around because presets can't set values for sets yet.
-class AllowJustAsPlannedDLCSongs(Toggle):
-    """Whether [Muse Plus] DLC Songs, and all the albums included in it, can be chosen as randomised songs.
-    Note: The [Just As Planned] DLC contains all [Muse Plus] songs."""
-    display_name = "Allow [Muse Plus] DLC Songs"
-
-
 class DLCMusicPacks(OptionSet):
-    """Choose which DLC Packs that will be included in the pool of chooseable songs."""
+    """Choose which DLC Packs will be included in the pool of chooseable songs.
+
+Note: The [Just As Planned] DLC contains all [Muse Plus] songs."""
     display_name = "DLC Packs"
     default = {}
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
@@ -161,7 +155,6 @@ class ExcludeSongs(ItemSet):
 
 md_option_groups = [
     OptionGroup("Song Choice", [
-        AllowJustAsPlannedDLCSongs,
         DLCMusicPacks,
         StreamerModeEnabled,
         IncludeSongs,
@@ -183,7 +176,6 @@ md_option_groups = [
 
 @dataclass
 class MuseDashOptions(PerGameCommonOptions):
-    allow_just_as_planned_dlc_songs: AllowJustAsPlannedDLCSongs
     dlc_packs: DLCMusicPacks
     streamer_mode_enabled: StreamerModeEnabled
     starting_song_count: StartingSongs

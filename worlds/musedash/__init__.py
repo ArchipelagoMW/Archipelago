@@ -73,8 +73,6 @@ class MuseDashWorld(World):
 
     def generate_early(self):
         dlc_songs = {key for key in self.options.dlc_packs.value}
-        if self.options.allow_just_as_planned_dlc_songs.value:
-            dlc_songs.add(self.md_collection.MUSE_PLUS_DLC)
 
         streamer_mode = self.options.streamer_mode_enabled
         (lower_diff_threshold, higher_diff_threshold) = self.get_difficulty_range()
@@ -286,7 +284,7 @@ class MuseDashWorld(World):
 
     def get_available_traps(self) -> List[str]:
         full_trap_list = self.md_collection.trap_items.keys()
-        if not self.options.allow_just_as_planned_dlc_songs.value:
+        if self.md_collection.MUSE_PLUS_DLC not in self.options.dlc_packs.value:
             full_trap_list = [trap for trap in full_trap_list if trap not in self.md_collection.sfx_trap_items]
 
         return [trap for trap in full_trap_list if trap in self.options.chosen_traps.value]
