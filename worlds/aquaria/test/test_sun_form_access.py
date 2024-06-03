@@ -14,11 +14,11 @@ class SunFormAccessTest(AquariaTestBase):
         """Test locations that require sun form"""
         locations = [
             "First secret",
-            "The whale, Verse egg",
+            "The Whale, Verse Egg",
             "Abyss right area, bulb behind the rock in the whale room",
-            "Octopus cave, Dumbo Egg",
+            "Octopus Cave, Dumbo Egg",
             "Beating Octopus Prime",
-            "Final boss area, bulb in the boss third form room",
+            "Final Boss area, bulb in the boss third form room",
             "Objective complete"
         ]
         items = [["Sun form"]]
