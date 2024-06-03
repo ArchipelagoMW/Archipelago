@@ -20,6 +20,7 @@ class AccessRequirements:
     colors: Set[str]
     items: Set[str]
     progression: Dict[str, int]
+    the_master: bool
 
     def __init__(self):
         self.rooms = set()
