@@ -78,11 +78,6 @@ class LinksAwakeningWorld(World):
     settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
 
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
-
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.
     base_id = BASE_ID
