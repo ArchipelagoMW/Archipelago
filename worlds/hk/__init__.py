@@ -405,7 +405,7 @@ class HKWorld(World):
                     continue
                 if setting == CostSanity.option_shopsonly and location.basename not in multi_locations:
                     continue
-                if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
+                if location.basename in {'Grubfather', 'Seer', 'Egg_Shop'}:
                     our_weights = dict(weights_geoless)
                 else:
                     our_weights = dict(weights)
