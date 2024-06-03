@@ -460,10 +460,10 @@ class KeyedDefaultDict(collections.defaultdict):
 
     def __init__(self,
                  default_factory: typing.Callable[[Any], Any] = None,
-                 mapping: typing.Union[typing.Mapping, typing.Iterable, None] = None,
+                 seq: typing.Union[typing.Mapping, typing.Iterable, None] = None,
                  **kwargs):
-        if mapping is not None:
-            super().__init__(default_factory, mapping, **kwargs)
+        if seq is not None:
+            super().__init__(default_factory, seq, **kwargs)
         else:
             super().__init__(default_factory, **kwargs)
 
