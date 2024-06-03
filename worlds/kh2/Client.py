@@ -187,10 +187,10 @@ class KH2Context(CommonContext):
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {
             "High Jump":    [0x05E, 0x061, 0x25DA],
-            "Quick Run":    [0x62, 0x65, 0x25DC],
+            "Quick Run":    [0x62, 0x65,   0x25DC],
             "Dodge Roll":   [0x234, 0x237, 0x25DE],
-            "Aerial Dodge": [0x66, 0x069, 0x25E0],
-            "Glide":        [0x6A, 0x6D, 0x25E2]
+            "Aerial Dodge": [0x66, 0x069,  0x25E0],
+            "Glide":        [0x6A, 0x6D,   0x25E2]
         }
 
         self.ability_code_list = None

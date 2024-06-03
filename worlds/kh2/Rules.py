@@ -1336,66 +1336,72 @@ class KH2FightRules(KH2Rules):
     def get_hard_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
         # hard: (glide 1,aerial dodge 1 any magic) or (master 3 any magic) or glide 1 and aerial dodge 2
         return (self.kh2_has_all([ItemName.Glide, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.MasterForm, self.player) and self.kh2_has_any(magic, state)) \
-                      or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2))
+            or (state.has(ItemName.MasterForm, self.player) and self.kh2_has_any(magic, state)) \
+            or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2))
 
-    def get_transport_fight_rules(self, state: CollectionState) -> bool:
+    def get_easy_transport_fight_rules(self, state: CollectionState) -> bool:
         # easy: reflega,stitch and chicken,final form,magnera,explosion,finishing leap,thundaga,2 donald limits
+
+        return self.kh2_dict_count(transport_tools_dict, state)
+
+    def get_normal_transport_fight_rules(self, state: CollectionState) -> bool:
         # normal: 7 of those things
+        return self.kh2_dict_one_count(transport_tools_dict, state) >= 7
+
+    def get_hard_transport_fight_rules(self, state: CollectionState) -> bool:
         # hard: 5 of those things
-        transport_fight_rules = {
-            "easy":   self.kh2_dict_count(transport_tools_dict, state),
-            "normal": self.kh2_dict_one_count(transport_tools_dict, state) >= 7,
-            "hard":   self.kh2_dict_one_count(transport_tools_dict, state) >= 5,
-        }
-        return transport_fight_rules[self.fight_logic]
+        return self.kh2_dict_one_count(transport_tools_dict, state) >= 5
 
-    def get_transport_movement_rules(self, state: CollectionState) -> bool:
+    def get_easy_transport_movement_rules(self, state: CollectionState) -> bool:
         # easy:high jump 3,aerial dodge 3,glide 3
+        return self.kh2_dict_count({ItemName.HighJump: 3, ItemName.AerialDodge: 3, ItemName.Glide: 3}, state)
+
+    def get_normal_transport_movement_rules(self, state: CollectionState) -> bool:
         # normal: high jump 2,glide 3,aerial dodge 2
+        return self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 2, ItemName.Glide: 3}, state)
+
+    def get_hard_transport_movement_rules(self, state: CollectionState) -> bool:
         # hard: (hj 2,glide 2,ad 1,any magic) or hj 1,glide 2,ad 3 any magic or (any magic master form,ad) or hj lvl 1,glide 3,ad 1
-        transport_movement_rules = {
-            "easy":   self.kh2_dict_count({ItemName.HighJump: 3, ItemName.AerialDodge: 3, ItemName.Glide: 3}, state),
-            "normal": self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 2, ItemName.Glide: 3}, state),
-            "hard":   (self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 1, ItemName.Glide: 2}, state) and self.kh2_has_any(magic, state)) \
-                      or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 2, ItemName.AerialDodge: 3}, state) and self.kh2_has_any(magic, state)) \
-                      or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 3, ItemName.AerialDodge: 1}, state)) \
-                      or (self.kh2_has_all([ItemName.MasterForm, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)),
-        }
-        return transport_movement_rules[self.fight_logic]
+        return (self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 1, ItemName.Glide: 2}, state) and self.kh2_has_any(magic, state)) \
+            or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 2, ItemName.AerialDodge: 3}, state) and self.kh2_has_any(magic, state)) \
+            or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 3, ItemName.AerialDodge: 1}, state)) \
+            or (self.kh2_has_all([ItemName.MasterForm, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state))
 
-    def get_scar_rules(self, state: CollectionState) -> bool:
+    def get_easy_scar_rules(self, state: CollectionState) -> bool:
         # easy: reflect,thunder,fire
+        return self.kh2_has_all([ItemName.ReflectElement, ItemName.ThunderElement, ItemName.FireElement], state)
+
+    def get_normal_scar_rules(self, state: CollectionState) -> bool:
         # normal:reflect,fire
+        return self.kh2_has_all([ItemName.ReflectElement, ItemName.FireElement], state)
+
+    def get_hard_scar_rules(self, state: CollectionState) -> bool:
         # hard:reflect
-        scar_rules = {
-            "easy":   self.kh2_has_all([ItemName.ReflectElement, ItemName.ThunderElement, ItemName.FireElement], state),
-            "normal": self.kh2_has_all([ItemName.ReflectElement, ItemName.FireElement], state),
-            "hard":   state.has(ItemName.ReflectElement, self.player),
-        }
-        return scar_rules[self.fight_logic]
+        return state.has(ItemName.ReflectElement, self.player)
 
-    def get_groundshaker_rules(self, state: CollectionState) -> bool:
+    def get_easy_groundshaker_rules(self, state: CollectionState) -> bool:
         # easy:berserk charge,cure,2 air combo plus,reflect
-        # normal:berserk charge,reflect,cure
-        # hard:berserk charge or 2 air combo plus. reflect
-        groundshaker_rules = {
-            "easy":   state.has(ItemName.AirComboPlus, self.player, 2) and self.kh2_has_all([ItemName.BerserkCharge, ItemName.CureElement, ItemName.ReflectElement], state),
-            "normal": self.kh2_has_all([ItemName.BerserkCharge, ItemName.ReflectElement, ItemName.CureElement], state),
-            "hard":   (state.has(ItemName.BerserkCharge, self.player) or state.has(ItemName.AirComboPlus, self.player, 2)) and state.has(ItemName.ReflectElement, self.player),
-        }
-        return groundshaker_rules[self.fight_logic]
+        return state.has(ItemName.AirComboPlus, self.player, 2) and self.kh2_has_all([ItemName.BerserkCharge, ItemName.CureElement, ItemName.ReflectElement], state)
 
-    def get_data_saix_rules(self, state: CollectionState) -> bool:
+    def get_normal_groundshaker_rules(self, state: CollectionState) -> bool:
+        # normal:berserk charge,reflect,cure
+        return self.kh2_has_all([ItemName.BerserkCharge, ItemName.ReflectElement, ItemName.CureElement], state)
+
+    def get_hard_groundshaker_rules(self, state: CollectionState) -> bool:
+        # hard:berserk charge or 2 air combo plus. reflect
+        return (state.has(ItemName.BerserkCharge, self.player) or state.has(ItemName.AirComboPlus, self.player, 2)) and state.has(ItemName.ReflectElement, self.player)
+
+    def get_easy_data_saix_rules(self, state: CollectionState) -> bool:
         # easy:guard,2 gap closers,thunder,blizzard,2 donald limit,reflega,2 ground finisher,aerial dodge 3,glide 3,final 7,firaga,scom
+        return self.kh2_dict_count(easy_data_saix, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
+
+    def get_normal_data_saix_rules(self, state: CollectionState) -> bool:
         # normal:guard,1 gap closers,thunder,blizzard,1 donald limit,reflega,1 ground finisher,aerial dodge 3,glide 3,final 7,firaga
+        return self.kh2_dict_count(normal_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
+
+    def get_hard_data_saix_rules(self, state: CollectionState) -> bool:
         # hard:aerial dodge 3,glide 3,guard,reflect,blizzard,1 gap closer,1 ground finisher
-        easy_data_rules = {
-            "easy":   self.kh2_dict_count(easy_data_saix, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
-        }
-        return easy_data_rules[self.fight_logic]
+        return self.kh2_dict_count(hard_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
 
     @staticmethod
     def get_twilight_thorn_rules() -> bool:
