@@ -18,19 +18,23 @@ class AccessRequirements:
     rooms: Set[str]
     doors: Set[RoomAndDoor]
     colors: Set[str]
+    the_master: bool
 
     def __init__(self):
         self.rooms = set()
         self.doors = set()
         self.colors = set()
+        self.the_master = False
 
     def merge(self, other: "AccessRequirements"):
         self.rooms |= other.rooms
         self.doors |= other.doors
         self.colors |= other.colors
+        self.the_master |= other.the_master
 
     def __str__(self):
-        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})"
+        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})," \
+               f" the_master={self.the_master}"
 
 
 class PlayerLocation(NamedTuple):
@@ -463,6 +467,9 @@ class LingoPlayerLogic:
                                                                     req_panel.panel, world)
                 access_reqs.merge(sub_access_reqs)
 
+            if panel == "THE MASTER":
+                access_reqs.the_master = True
+
             self.panel_reqs[room][panel] = access_reqs
 
         return self.panel_reqs[room][panel]
@@ -502,15 +509,17 @@ class LingoPlayerLogic:
             unhindered_panels_by_color: dict[Optional[str], int] = {}
 
             for panel_name, panel_data in room_data.items():
-                # We won't count non-counting panels. THE MASTER has special access rules and is handled separately.
-                if panel_data.non_counting or panel_name == "THE MASTER":
+                # We won't count non-counting panels.
+                if panel_data.non_counting:
                     continue
 
                 # We won't coalesce any panels that have requirements beyond colors. To simplify things for now, we will
-                # only coalesce single-color panels. Chains/stacks/combo puzzles will be separate.
+                # only coalesce single-color panels. Chains/stacks/combo puzzles will be separate. THE MASTER has
+                # special access rules and is handled separately.
                 if len(panel_data.required_panels) > 0 or len(panel_data.required_doors) > 0\
                         or len(panel_data.required_rooms) > 0\
-                        or (world.options.shuffle_colors and len(panel_data.colors) > 1):
+                        or (world.options.shuffle_colors and len(panel_data.colors) > 1)\
+                        or panel_name == "THE MASTER":
                     self.counting_panel_reqs.setdefault(room_name, []).append(
                         (self.calculate_panel_requirements(room_name, panel_name, world), 1))
                 else:
