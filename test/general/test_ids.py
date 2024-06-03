@@ -1,6 +1,7 @@
 import unittest
 
 from Fill import distribute_items_restrictive
+from worlds import network_data_package
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
@@ -57,6 +58,9 @@ class TestIDs(unittest.TestCase):
     def test_postgen_datapackage(self):
         """Generates a solo multiworld and checks that the datapackage is still valid"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
+            # because of test/general/__init__.py:56
+            if world_type.hidden:
+                continue
             with self.subTest(game=gamename):
                 multiworld = setup_solo_multiworld(world_type)
                 distribute_items_restrictive(multiworld)
@@ -84,3 +88,4 @@ class TestIDs(unittest.TestCase):
                                           f"{loc_name} is not a valid item name for location_name_to_id")
                     self.assertIsInstance(loc_id, int,
                                           f"{loc_id} for {loc_name} should be an int")
+                self.assertEqual(datapackage["checksum"], network_data_package["games"][gamename]["checksum"])
