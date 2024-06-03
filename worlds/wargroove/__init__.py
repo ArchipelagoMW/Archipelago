@@ -19,7 +19,16 @@ class WargrooveSettings(settings.Group):
         """
         description = "Wargroove root directory"
 
-    root_directory: RootDirectory = RootDirectory("C:/Program Files (x86)/Steam/steamapps/common/Wargroove")
+    class CompatDataDirectory(settings.UserFolderPath):
+        """
+        Locate the proton compatdata directory for running on non-Windows systems.
+        This is used by the Wargroove client, so it knows where to send communication files to.
+        This setting is not used when running on a Windows system.
+        """
+        description = "Wargroove proton compatdata"
+
+    root_directory: RootDirectory = RootDirectory("C:/Program Files (x86)/Steam/steamcompats/common/Wargroove")
+    compatdata_directory: CompatDataDirectory = CompatDataDirectory("$HOME/.steam/debian-installation/compatdata")
 
 
 class WargrooveWeb(WebWorld):
