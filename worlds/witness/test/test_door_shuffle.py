@@ -17,5 +17,5 @@ class TestIndividualDoors(WitnessTestBase):
                 ["Swamp Entry (Door)"],
                 ["Boat"],
             ],
-            only_check_listed=True
+            only_check_listed=True,
         )

@@ -33,7 +33,7 @@ class TestElevatorsComeToYouBleed(WitnessMultiworldTestBase):
         },
         {
             "elevators_come_to_you": False,
-        }
+        },
     ]
 
     common_options = {

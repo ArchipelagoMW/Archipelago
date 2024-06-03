@@ -10,27 +10,21 @@ class TestSymbols(WitnessTestBase):
         progressive_dots = self.get_items_by_name("Progressive Dots")
         self.assertEqual(len(progressive_dots), 2)
 
-        self.assertFalse(
-            self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
-        )
+        self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
         self.assertFalse(
             self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
         )
 
         self.collect(progressive_dots.pop())
 
-        self.assertTrue(
-            self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
-        )
+        self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
         self.assertFalse(
             self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
         )
 
         self.collect(progressive_dots.pop())
 
-        self.assertTrue(
-            self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
-        )
+        self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
         self.assertTrue(
             self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
         )
@@ -46,7 +40,7 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
         },
         {
             "puzzle_randomization": "none",
-        }
+        },
     ]
 
     common_options = {

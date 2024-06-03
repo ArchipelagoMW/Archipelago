@@ -35,15 +35,16 @@ class WitnessTestBase(WorldTestBase):
         # Assert that enough items exist in the item pool to satisfy the specified required counts
         for item_name, item_objects in actual_items.items():
             self.assertEqual(
-                len(item_objects), required_item_counts[item_name],
+                len(item_objects),
+                required_item_counts[item_name],
                 f"Couldn't find {required_item_counts[item_name]} copies of item {item_name} available in the pool, "
-                f"only found {len(item_objects)}"
+                f"only found {len(item_objects)}",
             )
 
         # assert that multiworld is beatable with the items specified
         self.assertTrue(
             self.can_beat_game_with_items(item for items in actual_items.values() for item in items),
-            f"Could not beat game with items: {required_item_counts}"
+            f"Could not beat game with items: {required_item_counts}",
         )
 
         # assert that one less copy of any item would result in the multiworld being unbeatable
@@ -52,7 +53,7 @@ class WitnessTestBase(WorldTestBase):
             self.assertFalse(
                 self.can_beat_game_with_items(item for items in actual_items.values() for item in items),
                 f"Game was beatable despite having {len(item_objects)} copies of {item_name} "
-                f"instead of the specified {required_item_counts[item_name]}"
+                f"instead of the specified {required_item_counts[item_name]}",
             )
             item_objects.append(removed_item)
 

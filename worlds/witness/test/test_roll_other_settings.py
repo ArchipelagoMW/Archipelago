@@ -2,6 +2,7 @@ from worlds.witness.test import WitnessTestBase
 
 # These are just some random settings combinations, just to catch whether I broke anything obvious
 
+
 class TestExpertNonRandomizedEPs(WitnessTestBase):
     options = {
         "disable_non_randomized": True,
@@ -43,7 +44,7 @@ class TestMaxEntityShuffle(WitnessTestBase):
         "shuffle_EPs": "individual",
         "obelisk_keys": True,
         "shuffle_lasers": "anywhere",
-        "victory_condition": "mountain_box_long"
+        "victory_condition": "mountain_box_long",
     }
 
 
