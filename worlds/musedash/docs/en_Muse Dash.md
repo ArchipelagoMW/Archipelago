@@ -2,10 +2,10 @@
 
 ## Quick Links
 - [Setup Guide](../../../tutorial/Muse%20Dash/setup/en)
-- [Settings Page](../player-settings)
+- [Options Page](../player-options)
 
 ## What Does Randomization do to this Game?
-- You will be given a number of starting songs. The number of which depends on your settings.
+- You will be given a number of starting songs. The number of which depends on your options.
 - Completing any song will give you 1 or 2 rewards.
 - The rewards for completing songs will range from songs to traps and **Music Sheets**.
 

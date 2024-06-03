@@ -10,10 +10,9 @@ Archipelago will be abbreviated as "AP" from now on.
 ## Option Definitions
 Option parsing in AP is done using different Option classes. For each option you would like to have in your game, you
 need to create:
-- A new option class with a docstring detailing what the option will do to your user.
-- A `display_name` to be displayed on the webhost.
-- A new entry in the `option_definitions` dict for your World.
-By style and convention, the internal names should be snake_case.
+- A new option class, with a docstring detailing what the option does, to be exposed to the user.
+- A new entry in the `options_dataclass` definition for your World.
+By style and convention, the dataclass attributes should be `snake_case`.
 
 ### Option Creation
 - If the option supports having multiple sub_options, such as Choice options, these can be defined with
@@ -24,31 +23,55 @@ display as `Value1` on the webhost.
 (i.e. `alias_value_1 = option_value1`) which will allow users to use either `value_1` or `value1` in their yaml
 files, and both will resolve as `value1`. This should be used when changing options around, i.e. changing a Toggle to a
 Choice, and defining `alias_true = option_full`.
-- All options support `random` as a generic option. `random` chooses from any of the available values for that option,
-and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+- All options with a fixed set of possible values (i.e. those which inherit from `Toggle`, `(Text)Choice` or
+`(Named/Special)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
+option, and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+However, you can override `from_text` and handle `text == "random"` to customize its behavior or
+implement it for additional option types.
 
-As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
-create our option class (with a docstring), give it a `display_name`, and add it to our game's options dataclass:
+As an example, suppose we want an option that lets the user start their game with a sword in their inventory, an option
+to let the player choose the difficulty, and an option to choose how much health the final boss has. Let's create our
+option classes (with a docstring), give them a `display_name`, and add them to our game's options dataclass:
 
 ```python
 # options.py
 from dataclasses import dataclass
 
-from Options import Toggle, PerGameCommonOptions
+from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 
 class StartingSword(Toggle):
     """Adds a sword to your starting inventory."""
-    display_name = "Start With Sword"
+    display_name = "Start With Sword"  # this is the option name as it's displayed to the user on the webhost and in the spoiler log
+
+
+class Difficulty(Choice):
+    """Sets overall game difficulty."""
+    display_name = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    alias_beginner = 0  # same as easy but allows the player to use beginner as an alternative for easy in the result in their options
+    alias_expert = 2  # same as hard
+    default = 1  # default to normal
+
+
+class FinalBossHP(Range):
+    """Sets the HP of the final boss"""
+    display_name = "Final Boss HP"
+    range_start = 100
+    range_end = 10000
+    default = 2000
 
 
 @dataclass
 class ExampleGameOptions(PerGameCommonOptions):
     starting_sword: StartingSword
+    difficulty: Difficulty
+    final_boss_health: FinalBossHP
 ```
 
-This will create a `Toggle` option, internally called `starting_sword`. To then submit this to the multiworld, we add it
-to our world's `__init__.py`:
+To then submit this to the multiworld, we add it to our world's `__init__.py`:
 
 ```python
 from worlds.AutoWorld import World
@@ -60,6 +83,25 @@ class ExampleWorld(World):
     options_dataclass = ExampleGameOptions
     # this gives us typing hints for all the options we defined
     options: ExampleGameOptions
+```
+
+### Option Groups
+Options may be categorized into groups for display on the WebHost. Option groups are displayed alphabetically on the
+player-options and weighted-options pages. Options without a group name are categorized into a generic "Game Options"
+group.
+
+```python
+from worlds.AutoWorld import WebWorld
+from Options import OptionGroup
+
+class MyWorldWeb(WebWorld):
+    option_groups = [
+        OptionGroup('Color Options', [
+            Options.ColorblindMode,
+            Options.FlashReduction,
+            Options.UIColors,
+        ]),
+    ]
 ```
 
 ### Option Checking
@@ -132,10 +174,12 @@ Gives the player starting hints for where the items defined here are.
 Gives the player starting hints for the items on locations defined here.
 
 ### ExcludeLocations
-Marks locations given here as `LocationProgressType.Excluded` so that progression items can't be placed on them.
+Marks locations given here as `LocationProgressType.Excluded` so that neither progression nor useful items can be
+placed on them.
 
 ### PriorityLocations
-Marks locations given here as `LocationProgressType.Priority` forcing progression items on them.
+Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
+the pool.
 
 ### ItemLinks
 Allows users to share their item pool with other players. Currently item links are per game. A link of one game between
@@ -180,7 +224,7 @@ For example:
 ```python
 range_start = 1
 range_end = 99
-special_range_names: {
+special_range_names = {
     "normal": 20,
     "extreme": 99,
     "unlimited": -1,

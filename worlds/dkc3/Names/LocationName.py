@@ -294,7 +294,7 @@ barnacle_region    = "Barnacle's Island Region"
 blue_region        = "Blue's Beach Hut Region"
 blizzard_region    = "Bizzard's Basecamp Region"
 
-lake_orangatanga_region = "Lake_Orangatanga"
+lake_orangatanga_region = "Lake Orangatanga"
 kremwood_forest_region  = "Kremwood Forest"
 cotton_top_cove_region  = "Cotton-Top Cove"
 mekanos_region          = "Mekanos"

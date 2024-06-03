@@ -5,7 +5,7 @@ from typing import Dict
 from BaseClasses import Item, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
-from .Options import ff1_options
+from .Options import FF1Options
 from ..AutoWorld import World, WebWorld
 
 
@@ -34,12 +34,12 @@ class FF1World(World):
     Part puzzle and part speed-run, it breathes new life into one of the most influential games ever made.
     """
 
-    option_definitions = ff1_options
+    options: FF1Options
+    options_dataclass = FF1Options
     settings: typing.ClassVar[FF1Settings]
     settings_key = "ffr_options"
     game = "Final Fantasy"
     topology_present = False
-    data_version = 2
 
     ff1_items = FF1Items()
     ff1_locations = FF1Locations()
@@ -58,22 +58,23 @@ class FF1World(World):
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         # Fail generation if there are no items in the pool
         for player in multiworld.get_game_players(cls.game):
-            options = get_options(multiworld, 'items', player)
-            assert options,\
+            items = multiworld.worlds[player].options.items.value
+            assert items, \
                 f"FFR settings submitted with no key items ({multiworld.get_player_name(player)}). Please ensure you " \
                 f"generated the settings using finalfantasyrandomizer.com AND enabled the AP flag"
 
     def create_regions(self):
-        locations = get_options(self.multiworld, 'locations', self.player)
-        rules = get_options(self.multiworld, 'rules', self.player)
+        locations = self.options.locations.value
+        rules = self.options.rules.value
         menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules, self.multiworld)
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
         terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
 
-        items = get_options(self.multiworld, 'items', self.player)
+        items = self.options.items.value
         goal_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST and name != "Shard"]],
                                   self.player)
+        terminated_event.access_rule = goal_rule
         if "Shard" in items.keys():
             def goal_rule_and_shards(state):
                 return goal_rule(state) and state.has("Shard", self.player, 32)
@@ -92,7 +93,7 @@ class FF1World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
 
     def create_items(self):
-        items = get_options(self.multiworld, 'items', self.player)
+        items = self.options.items.value
         if FF1_BRIDGE in items.keys():
             self._place_locked_item_in_sphere0(FF1_BRIDGE)
         if items:
@@ -108,7 +109,7 @@ class FF1World(World):
 
     def _place_locked_item_in_sphere0(self, progression_item: str):
         if progression_item:
-            rules = get_options(self.multiworld, 'rules', self.player)
+            rules = self.options.rules.value
             sphere_0_locations = [name for name, rules in rules.items()
                                   if rules and len(rules[0]) == 0 and name not in self.locked_locations]
             if sphere_0_locations:
@@ -125,7 +126,3 @@ class FF1World(World):
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(["Heal", "Pure", "Soft", "Tent", "Cabin", "House"])
-
-
-def get_options(world: MultiWorld, name: str, player: int):
-    return getattr(world, name, None)[player].value
