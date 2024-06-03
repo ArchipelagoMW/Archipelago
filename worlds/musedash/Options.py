@@ -123,9 +123,9 @@ class ChosenTraps(OptionSet):
     - SFX Traps consist of changing your sfx setting to one possibly more annoying sfx.
     Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
-    display_name = "Trap Types"
+    display_name = "Chosen Traps"
     default = {}
-    valid_keys = [trap for trap in MuseDashCollections.trap_items.keys()]
+    valid_keys = {trap for trap in MuseDashCollections.trap_items.keys()}
 
 
 class TrapCountPercentage(Range):
