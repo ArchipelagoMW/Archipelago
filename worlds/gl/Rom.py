@@ -12,6 +12,7 @@ from settings import get_settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 from .Arrays import level_locations, level_size, level_address, item_dict, level_header
 from .Items import items_by_id
+from .Locations import location_data
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -132,7 +133,7 @@ class GLPatchExtension(APPatchExtension):
                 else:
                     if "Obelisk" in items_by_id[item[0]].itemName:
                         data.objects += [bytearray(data.items[j - data.obelisk][0:6]) +
-                                         bytearray([0x0, 0x0, 0x26, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0,
+                                         bytearray([0x0, 0x0, 0x26, 0x1, 0x0, location_data[location_name].difficulty, 0x0, 0x0, 0x0,
                                                     item[0] - 77780054,
                                                     0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])]
                         del data.items[j - data.obelisk]

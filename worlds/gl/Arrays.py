@@ -69,7 +69,7 @@ inv_dict: Dict[Tuple, str] = {
     (0x0, 0xA5, 0x1): "Sumner",
 }
 
-characters = ["Minotaur", "Facloness", "Tigress", "Jackal", "Sumner"]
+characters = ["Minotaur", "Falconess", "Tigress", "Jackal", "Sumner"]
 
 item_dict: Dict[int, bytes] = {
     77780000: [0x0, 0x0],
@@ -206,10 +206,10 @@ base_count: Dict[str, int] = {
     "Valley of Fire Obelisk": 1,
     "Dagger Peak Obelisk": 2,
     "Cliffs of Desolation Obelisk": 4,
-    "Castle Courtyard Obelisk": 8,
-    "Dungeon of Torment Obelisk": 16,
-    "Poisoned Fields Obelisk": 32,
-    "Haunted Cemetery Obelisk": 64,
+    "Castle Courtyard Obelisk": 32,
+    "Dungeon of Torment Obelisk": 64,
+    "Poisoned Fields Obelisk": 8,
+    "Haunted Cemetery Obelisk": 16,
     "Ice Axe of Untar": 1,
     "Flame of Tarkana": 1,
     "Scimitar of Decapitation": 1,

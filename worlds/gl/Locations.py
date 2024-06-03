@@ -1798,3 +1798,5 @@ all_locations: typing.List[LocationData] = valleyOfFire + daggerPeak + cliffsOfD
 
 
 location_table: typing.Dict[str, int] = {location.name: location.id for location in all_locations}
+
+location_data: typing.Dict[str, LocationData] = {location.name: location for location in all_locations}

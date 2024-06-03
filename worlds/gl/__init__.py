@@ -134,7 +134,9 @@ class GauntletLegendsWorld(World):
                     continue
                 if "Mirror" in item.itemName and self.options.mirror_shards == 0:
                     continue
-                freq = item_frequencies.get(item.itemName, 1)
+                if "Key" in item.itemName and self.options.infinite_keys:
+                    continue
+                freq = item_frequencies.get(item.itemName, 1) + (30 if self.options.infinite_keys and item.progression is ItemClassification.filler else  0)
                 if freq is None:
                     freq = 1
                 required_items += [item.itemName for _ in range(freq)]
