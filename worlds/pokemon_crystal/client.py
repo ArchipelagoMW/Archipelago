@@ -158,10 +158,9 @@ class PokemonCrystalClient(BizHawkClient):
             flag_bytes = read_result[0]
             for byte_i, byte in enumerate(flag_bytes):
                 for i in range(8):
+                    flag_id = byte_i * 8 + i
+                    location_id = flag_id + BASE_OFFSET
                     if byte & (1 << i) != 0:
-                        flag_id = byte_i * 8 + i
-
-                        location_id = flag_id + BASE_OFFSET
                         if location_id in ctx.server_locations:
                             local_checked_locations.add(location_id)
 
@@ -173,6 +172,13 @@ class PokemonCrystalClient(BizHawkClient):
 
                         if flag_id in KEY_ITEM_FLAG_MAP:
                             local_found_key_items[KEY_ITEM_FLAG_MAP[flag_id]] = True
+                    # else:
+                    #     if location_id in ctx.checked_locations:
+                    #         write_byte = byte & (1 << i)
+                    #         await bizhawk.write(ctx.bizhawk_ctx, [
+                    #             (data.ram_addresses["wEventFlags"],
+                    #              write_byte.to_bytes(1, "little"), "WRAM")
+                    #         ])
 
             if local_checked_locations != self.local_checked_locations:
                 self.local_checked_locations = local_checked_locations
