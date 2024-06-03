@@ -1,8 +1,8 @@
 {% macro Toggle(option_name, option) %}
     <table>
         <tbody>
-            {{ RangeRow(option_name, option, "No", "false") }}
-            {{ RangeRow(option_name, option, "Yes", "true") }}
+            {{ RangeRow(option_name, option, "No", "false", False, "true" if option.default else "false") }}
+            {{ RangeRow(option_name, option, "Yes", "true", False, "true" if option.default else "false") }}
             {{ RandomRows(option_name, option) }}
         </tbody>
     </table>
@@ -18,7 +18,7 @@
         <tbody>
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
-                    {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
+                    {{ RangeRow(option_name, option, option.get_option_name(id), id) }}
                 {% endif %}
             {% endfor %}
             {{ RandomRows(option_name, option) }}
@@ -72,7 +72,9 @@
         </div>
         <table>
             <tbody>
-                <!-- This table to be filled by JS -->
+                {% if option.default %}
+                    {{ RangeRow(option_name, option, option.default, option.default) }}
+                {% endif %}
             </tbody>
         </table>
     </div>
@@ -90,7 +92,7 @@
         <tbody>
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
-                    {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
+                    {{ RangeRow(option_name, option, option.get_option_name(id), id) }}
                 {% endif %}
             {% endfor %}
             {{ RandomRows(option_name, option) }}
@@ -112,7 +114,7 @@
                     type="number"
                     id="{{ option_name }}-{{ item_name }}-qty"
                     name="{{ option_name }}||{{ item_name }}"
-                    value="0"
+                    value="{{ option.default[item_name] if item_name in option.default else "0" }}"
                 />
             </div>
         {% endfor %}
@@ -128,6 +130,7 @@
                     id="{{ option_name }}-{{ key }}"
                     name="{{ option_name }}||{{ key }}"
                     value="1"
+                    checked="{{ "checked" if key in option.default else "" }}"
                 />
                 <label for="{{ option_name }}-{{ key }}">
                     {{ key }}
@@ -206,7 +209,7 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro RangeRow(option_name, option, display_value, value, can_delete=False) %}
+{% macro RangeRow(option_name, option, display_value, value, can_delete=False, default_override=None) %}
     <tr data-row="{{ option_name }}-{{ value }}-row" data-option-name="{{ option_name }}" data-value="{{ value }}">
         <td class="td-left">
             <label for="{{ option_name }}||{{ value }}">
@@ -220,7 +223,7 @@
                 name="{{ option_name }}||{{ value }}"
                 min="0"
                 max="50"
-                {% if option.default == value %}
+                {% if option.default == value or default_override == value %}
                     value="25"
                 {% else %}
                     value="0"
@@ -229,7 +232,7 @@
         </td>
         <td class="td-right">
             <span id="{{ option_name }}||{{ value }}-value">
-                {% if option.default == value %}
+                {% if option.default == value or default_override == value %}
                     25
                 {% else %}
                     0
