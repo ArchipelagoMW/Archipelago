@@ -8,7 +8,7 @@ from . import MuseDashTestBase
 class TestWorstCaseHighDifficulty(MuseDashTestBase):
     options = {
         "starting_song_count": 10,
-        "allow_just_as_planned_dlc_songs": False,
+        "dlc_packs": [],
         "streamer_mode_enabled": True,
         "song_difficulty_mode": 6,
         "song_difficulty_min": 11,
@@ -19,7 +19,7 @@ class TestWorstCaseHighDifficulty(MuseDashTestBase):
 class TestWorstCaseMidDifficulty(MuseDashTestBase):
     options = {
         "starting_song_count": 10,
-        "allow_just_as_planned_dlc_songs": False,
+        "dlc_packs": [],
         "streamer_mode_enabled": True,
         "song_difficulty_mode": 6,
         "song_difficulty_min": 6,
@@ -30,7 +30,7 @@ class TestWorstCaseMidDifficulty(MuseDashTestBase):
 class TestWorstCaseLowDifficulty(MuseDashTestBase):
     options = {
         "starting_song_count": 10,
-        "allow_just_as_planned_dlc_songs": False,
+        "dlc_packs": [],
         "streamer_mode_enabled": True,
         "song_difficulty_mode": 6,
         "song_difficulty_min": 1,
