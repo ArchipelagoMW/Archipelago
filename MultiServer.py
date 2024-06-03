@@ -37,7 +37,7 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_loads, Version, async_start
+from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore
 
@@ -168,14 +168,19 @@ class Context:
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
-    item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
+    item_names: typing.Dict[str, typing.Dict[int, str]] = (
+        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')))
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
-    location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
+    location_names: typing.Dict[str, typing.Dict[int, str]] = (
+        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')))
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
+    spheres: typing.List[typing.Dict[int, typing.Set[int]]]
+    """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
+
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
@@ -238,6 +243,7 @@ class Context:
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
+        self.spheres = []
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -267,13 +273,20 @@ class Context:
             if "checksum" in game_package:
                 self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
-                self.item_names[item_id] = item_name
+                self.item_names[game_name][item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
-                self.location_names[location_id] = location_name
+                self.location_names[game_name][location_id] = location_name
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
             self.all_location_and_group_names[game_name] = \
                 set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
+
+        archipelago_item_names = self.item_names["Archipelago"]
+        archipelago_location_names = self.location_names["Archipelago"]
+        for game in [game_name for game_name in self.gamespackage if game_name != "Archipelago"]:
+            # Add Archipelago items and locations to each data package.
+            self.item_names[game].update(archipelago_item_names)
+            self.location_names[game].update(archipelago_location_names)
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
@@ -466,6 +479,9 @@ class Context:
         for game_name, data in self.location_name_groups.items():
             self.read_data[f"location_name_groups_{game_name}"] = lambda lgame=game_name: self.location_name_groups[lgame]
 
+        # sorted access spheres
+        self.spheres = decoded_obj.get("spheres", [])
+
     # saving
 
     def save(self, now=False) -> bool:
@@ -624,6 +640,16 @@ class Context:
         self.recheck_hints(team, slot)
         return self.hints[team, slot]
 
+    def get_sphere(self, player: int, location_id: int) -> int:
+        """Get sphere of a location, -1 if spheres are not available."""
+        if self.spheres:
+            for i, sphere in enumerate(self.spheres):
+                if location_id in sphere.get(player, set()):
+                    return i
+            raise KeyError(f"No Sphere found for location ID {location_id} belonging to player {player}. "
+                           f"Location or player may not exist.")
+        return -1
+
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
@@ -766,10 +792,7 @@ async def on_client_connected(ctx: Context, client: Client):
         for slot, connected_clients in clients.items():
             if connected_clients:
                 name = ctx.player_names[team, slot]
-                players.append(
-                    NetworkPlayer(team, slot,
-                                  ctx.name_aliases.get((team, slot), name), name)
-                )
+                players.append(NetworkPlayer(team, slot, ctx.name_aliases.get((team, slot), name), name))
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     games.add("Archipelago")
     await ctx.send_msgs(client, [{
@@ -784,8 +807,6 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_versions': {game: game_data["version"] for game, game_data
-                                 in ctx.gamespackage.items() if game in games},
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         'seed_name': ctx.seed_name,
@@ -989,8 +1010,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             send_items_to(ctx, team, target_player, new_item)
 
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
-                team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id],
-                ctx.player_names[(team, target_player)], ctx.location_names[location]))
+                team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
+                ctx.player_names[(team, target_player)], ctx.location_names[ctx.slot_info[slot].game][location]))
             info_text = json_format_send_event(new_item, target_player)
             ctx.broadcast_team(team, [info_text])
 
@@ -1044,8 +1065,8 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
 
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
-           f"{ctx.item_names[hint.item]} is " \
-           f"at {ctx.location_names[hint.location]} " \
+           f"{ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item]} is " \
+           f"at {ctx.location_names[ctx.slot_info[hint.finding_player].game][hint.location]} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
     if hint.entrance:
@@ -1072,28 +1093,6 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player,
             "item": net_item}
-
-
-def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
-    picks = Utils.get_fuzzy_results(input_text, possible_answers, limit=2)
-    if len(picks) > 1:
-        dif = picks[0][1] - picks[1][1]
-        if picks[0][1] == 100:
-            return picks[0][0], True, "Perfect Match"
-        elif picks[0][1] < 75:
-            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
-                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
-        elif dif > 5:
-            return picks[0][0], True, "Close Match"
-        else:
-            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
-                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
-    else:
-        if picks[0][1] > 90:
-            return picks[0][0], True, "Only Option Match"
-        else:
-            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
-                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
 class CommandMeta(type):
@@ -1347,7 +1346,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.remaining_mode == "enabled":
             remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
             if remaining_item_ids:
-                self.output("Remaining items: " + ", ".join(self.ctx.item_names[item_id]
+                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
                                                             for item_id in remaining_item_ids))
             else:
                 self.output("No remaining items found.")
@@ -1360,7 +1359,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
                 remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if remaining_item_ids:
-                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[item_id]
+                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
                                                                 for item_id in remaining_item_ids))
                 else:
                     self.output("No remaining items found.")
@@ -1378,7 +1377,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_missing_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            names = [self.ctx.location_names[location] for location in locations]
+            game = self.ctx.slot_info[self.client.slot].game
+            names = [self.ctx.location_names[game][location] for location in locations]
             if filter_text:
                 location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
                 if filter_text in location_groups:  # location group name
@@ -1403,7 +1403,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_checked_checks(self.ctx, self.client.team, self.client.slot)
 
         if locations:
-            names = [self.ctx.location_names[location] for location in locations]
+            game = self.ctx.slot_info[self.client.slot].game
+            names = [self.ctx.location_names[game][location] for location in locations]
             if filter_text:
                 location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
                 if filter_text in location_groups:  # location group name
@@ -1484,10 +1485,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
         elif input_text.isnumeric():
             game = self.ctx.games[self.client.slot]
             hint_id = int(input_text)
-            hint_name = self.ctx.item_names[hint_id] \
-                if not for_location and hint_id in self.ctx.item_names \
-                else self.ctx.location_names[hint_id] \
-                if for_location and hint_id in self.ctx.location_names \
+            hint_name = self.ctx.item_names[game][hint_id] \
+                if not for_location and hint_id in self.ctx.item_names[game] \
+                else self.ctx.location_names[game][hint_id] \
+                if for_location and hint_id in self.ctx.location_names[game] \
                 else None
             if hint_name in self.ctx.non_hintable_names[game]:
                 self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
@@ -1549,6 +1550,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.ctx.random.shuffle(not_found_hints)
                 # By popular vote, make hints prefer non-local placements
                 not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
+                # By another popular vote, prefer early sphere
+                not_found_hints.sort(key=lambda hint: self.ctx.get_sphere(hint.finding_player, hint.location),
+                                     reverse=True)
 
                 hints = found_hints + old_hints
                 while can_pay > 0:
@@ -1558,10 +1562,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints.append(hint)
                     can_pay -= 1
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
-                    points_available = get_client_points(self.ctx, self.client)
 
                 self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
+                    points_available = get_client_points(self.ctx, self.client)
                     if hints and cost and int((points_available // cost) == 0):
                         self.output(
                             f"There may be more hintables, however, you cannot afford to pay for any more. "

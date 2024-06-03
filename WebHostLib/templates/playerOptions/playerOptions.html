@@ -69,7 +69,7 @@
 
             <div id="option-groups">
                 {% for group_name, group_options in option_groups.items() %}
-                    <details class="group-container" {% if loop.index == 1 %}open{% endif %}>
+                    <details class="group-container" {% if not start_collapsed[group_name] %}open{% endif %}>
                         <summary class="h2">{{ group_name }}</summary>
                         <div class="game-options">
                             <div class="left">
