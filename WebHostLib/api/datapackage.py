@@ -2,8 +2,8 @@ from flask import abort
 
 from Utils import restricted_loads
 from WebHostLib import cache
-from WebHostLib.api import api_endpoints
 from WebHostLib.models import GameDataPackage
+from . import api_endpoints
 
 
 @api_endpoints.route('/datapackage')
