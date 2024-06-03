@@ -123,7 +123,7 @@
 
 {% macro OptionList(option_name, option) %}
     <div class="list-container">
-        {% for key in option.valid_keys|sort %}
+        {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="list-entry">
                 <input
                     type="checkbox"
@@ -186,7 +186,7 @@
 
 {% macro OptionSet(option_name, option) %}
     <div class="set-container">
-        {% for key in option.valid_keys|sort %}
+        {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="set-entry">
                 <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}||{{ key }}" value="1" {{ "checked" if key in option.default }} />
                 <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
