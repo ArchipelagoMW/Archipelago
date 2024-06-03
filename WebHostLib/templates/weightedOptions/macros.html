@@ -17,7 +17,6 @@
     <table>
         <tbody>
             {% for id, name in option.name_lookup.items() %}
-                ID: {{ id }}, Name: {{ name }}, Default: {{ option.default }}, Default Name: {{ option.get_option_name(option.default) }}<br/>
                 {% if name != 'random' %}
                     {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name|lower else None) }}
                 {% endif %}
