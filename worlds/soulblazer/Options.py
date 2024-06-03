@@ -10,9 +10,9 @@ class TextSpeed(Choice):
     """
 
     display_name = "Text Speed"
-    option_fast = 0
-    option_instant = 1
-    default = 1
+    option_fast = 1
+    option_instant = 0
+    default = 0
 
 
 class Goal(Choice):
@@ -28,18 +28,31 @@ class Goal(Choice):
     default = 0
 
 
+class ActProgression(Choice):
+    """
+    Act/World progression.
+    Vanilla: Talk to town leaders to open the next Act/World.
+    Open: All worlds are open from the start of the game.
+    """
+
+    display_name = "Act Progression"
+    option_vanilla = 0
+    option_open = 1
+    default = 0
+
+
 class StonesPlacement(Choice):
     """
     Determines the placement of the 6 stones needed to enter the World of Evil.
     Vanilla: Stones are given by the town leader of each act.
     Bosses: Stones are rewarded from the boss lair of each act.
-    Random: Stones are randomized with everything else.
+    Totally Random: Stones are randomized with everything else.
     """
 
     display_name = "Stones Placement"
     option_vanilla = 0
     option_bosses = 1
-    option_random = 2
+    option_totally_random = 2
     default = 0
 
 
@@ -52,6 +65,14 @@ class StonesCount(Range):
     range_start = 0
     range_end = 6
     default = 6
+
+
+class OpenDeathToll(Toggle):
+    """
+    Determines if Deathtoll's Palace in the World of Evil is already open.
+    """
+
+    display_name = "Open Deathtoll"
 
 
 class StartingSword(Choice):
@@ -87,7 +108,7 @@ class EquipmentScaling(Choice):
     Determines the stat progression for swords/armor.
     Vanilla: Swords/Armor follow the vanilla 1/2/3/4/6/8/10/12 strength/defense progression.
     Improved: Swords/Armor follow an improved 1/3/5/7/9/12/12/12 strength/defense progression.
-    Strong: Swords/Armor follow a strong 1/3/6/9/12/12/12/12 strength/defense progression.
+    Strong: Swords/Armor follow a strong 2/4/6/9/12/12/12/12 strength/defense progression.
     """
 
     display_name = "Equipment Scaling"
@@ -100,7 +121,7 @@ class EquipmentScaling(Choice):
 class MagicianItem(Choice):
     """
     Determines the item the Magician gives you at the start of the game.
-    Vanilla: The vanilla reward (Fireball).
+    Vanilla: The vanilla reward (Flame Ball).
     Random Spell: A random castable magic spell.
     Totally Random: Any reward in the item pool.
     """
@@ -132,13 +153,14 @@ class GemExpPool(Choice):
     Modifies the Gem/Exp rewards in the item pool.
     Vanilla: The same Gem/Exp values as the vanilla game.
     Improved: Gem rewards in the item pool are multiplied by 2, and Exp rewards by 10.
-    Random: Gem rewards in the pool are randomized in the range of 1-999, and Exp rewards in the range of 1-9999.
+    Random Range: Gem rewards in the pool are randomized in the range of 1-999, and Exp rewards in the range of 1-9999.
     """
 
-    display_name = "GEM/Exp Pool"
+    display_name = "Gem/Exp Pool"
     option_vanilla = 0
     option_improved = 1
-    option_random = 2
+    option_random_range = 2
+    default = 2
 
 
 # By convention, we call the options dataclass `<world>Options`.
@@ -147,10 +169,12 @@ class GemExpPool(Choice):
 class SoulBlazerOptions(PerGameCommonOptions):
     text_speed: TextSpeed
     goal: Goal
+    act_progression: ActProgression
     stones_placement: StonesPlacement
     stones_count: StonesCount
+    open_deathtoll: OpenDeathToll
     starting_sword: StartingSword
-    equipment_Stats: EquipmentStats
+    equipment_stats: EquipmentStats
     equipment_scaling: EquipmentScaling
     magician_item: MagicianItem
     magician_soul: MagicianSoul

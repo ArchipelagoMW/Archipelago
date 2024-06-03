@@ -3,8 +3,9 @@ import os
 import math
 import pkgutil
 import bsdiff4
+import struct
 import Utils
-from typing import Callable, Dict
+from typing import Callable, Dict, TYPE_CHECKING
 from BaseClasses import ItemClassification
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
@@ -14,7 +15,16 @@ from .Items import SoulBlazerItem, SoulBlazerItemData
 from .Locations import SoulBlazerLocation, LocationType, SoulBlazerLocationData
 from .patches import get_patch_bytes
 
+if TYPE_CHECKING:
+    from . import SoulBlazerWorld
+
 USHASH = "83cf41d53a1b94aeea1a645037a24004"
+
+equipment_power_vanilla = [1, 2, 3, 4, 5, 8, 10, 12]
+equipment_power_improved = [1, 3, 5, 7, 9, 12, 12, 12]
+equipment_power_strong = [2, 4, 6, 9, 12, 12, 12, 12]
+# Level requirements are stored as 2-byte SNES BCD - Their hex representation is interpreted as decimal.
+sword_level_requirements = [0x01, 0x05, 0x11, 0x15, 0x16, 0x19, 0x22, 0x24]
 
 
 class LocalRom(object):
@@ -62,7 +72,7 @@ class LocalRom(object):
 
     def apply_patch(self, name: str):
         patch = get_patch_bytes(name)
-        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer, patch)))
+        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer), patch))
 
     def place_lair(self, index: int, id: int, operand: int):
         # Compute address of our lair entry
@@ -102,8 +112,38 @@ class LocalRom(object):
             )
 
 
-def patch_rom(world: World, rom: LocalRom):
-    # TODO: check options and patch based on results.
+def patch_rom(world: "SoulBlazerWorld", rom: LocalRom):
+    if world.options.equipment_stats == "semi_progressive":
+        rom.apply_patch("semiprogressive")
+
+    # Determine stat pool to use
+    stats = (
+        equipment_power_improved
+        if world.options.equipment_scaling == "improved"
+        else (equipment_power_strong if world.options.equipment_scaling == "strong" else equipment_power_vanilla)
+    )
+    
+    # The indexes into our stat pool which could potentially be shuffled
+    indicies_wep = list(range(len(stats)))
+    indicies_arm = list(range(len(stats)))
+    # Shuffle which sword/arm gets which stats
+    # Shuffling the index ensures that the same level requirement is needed for a given weapon power
+    if world.options.equipment_stats == "shuffle":
+        world.random.shuffle(indicies_wep)
+        world.random.shuffle(indicies_arm)
+    # Write stats to ROM
+    for i in range(len(stats)):
+        rom.write_byte(Addresses.WEAPON_STRENGTH_DATA + i, stats[indicies_wep[i]])
+        rom.write_byte(Addresses.ARMOR_DEFENSE_DATA + i, stats[indicies_arm[i]])
+        # Semi-progressive sets all sword level requirements to 1.
+        if world.options.equipment_stats != "semi_progressive":
+            # Weapon level requirements are stored as 2-byte values even if they only use 1 byte.
+            rom.write_byte(Addresses.WEAPON_REQUIRED_LEVEL_DATA + (2*i), sword_level_requirements[indicies_wep[i]])
+        
+    rom.write_byte(Addresses.TEXT_SPEED, world.options.text_speed.value)
+    rom.write_byte(Addresses.STONES_REQUIRED, world.options.stones_count.value)
+    rom.write_byte(Addresses.ACT_PROGRESSION, world.options.act_progression.value)
+    rom.write_byte(Addresses.OPEN_DEATHTOLL, world.options.open_deathtoll.value)
 
     rom.write_bytes(Addresses.SNES_ROMNAME_START, rom.name)
 

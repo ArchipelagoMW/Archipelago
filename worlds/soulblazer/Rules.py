@@ -29,7 +29,7 @@ class RuleFlag(IntEnum):
     """Requires a way to damage metal enemies (Spirit Sword|Soul Blade)."""
     HAS_THUNDER = auto()
     """
-    Requires a way to damage metal enemies in the presence of a thunder pyramids
+    Requires a way to damage metal enemies in the presence of thunder pyramids
     (Thunder Ring|Zantestu Sword|Soul Blade).
     """
     HAS_MAGIC = auto()
@@ -38,6 +38,15 @@ class RuleFlag(IntEnum):
     """
     Requires any sword. Only used as a sanity check at the start of the game
     since we prefill the first chest with a sword.
+    """
+    HAS_STONES = auto()
+    """Requires the necessary number of stones. Adjustable via option."""
+    PHOENIX_CUTSCENE = auto()
+    """
+    Requires the Phoenix cutscene:
+    Access to the Mountain King
+    Both Dancing Grandmas
+    The 3 Red-Hot Items
     """
 
 
@@ -73,11 +82,20 @@ def has_thunder(state: CollectionState, player: int) -> bool:
 
 
 def has_magic(state: CollectionState, player: int) -> bool:
-    return state.has(ItemName.SOUL_MAGICIAN) and state.has_any(magic_items, player)
+    return state.has(ItemName.SOUL_MAGICIAN, player) and state.has_any(magic_items, player)
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
     return state.has_any(sword_items, player)
+
+
+def has_stones(state: CollectionState, player: int) -> bool:
+    count: int = state.multiworld.worlds[player].options.stones_count.value
+    return state.has_group("stones", player, count)
+
+
+def has_phoenix_cutscene(state: CollectionState, player: int) -> bool:
+    return state.can_reach_location(NPCRewardName.MOUNTAIN_KING, player)
 
 
 rule_for_flag = {
@@ -87,6 +105,8 @@ rule_for_flag = {
     RuleFlag.HAS_THUNDER: has_thunder,
     RuleFlag.HAS_MAGIC: has_magic,
     RuleFlag.HAS_SWORD: has_sword,
+    RuleFlag.HAS_STONES: has_stones,
+    RuleFlag.PHOENIX_CUTSCENE: has_phoenix_cutscene,
 }
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
@@ -219,8 +239,8 @@ def get_rule_for_location(name: str, player: int, flag: RuleFlag) -> Callable[[C
     return rule
 
 
-#def set_rules(world: "SoulBlazerWorld") -> None:
-#    # TODO: Cant create locations during rule generation. 
+# def set_rules(world: "SoulBlazerWorld") -> None:
+#    # TODO: Cant create locations during rule generation.
 #    # AssertionError: 295 != 296 : Soul Blazer modified locations count during rule creation
 #    region = world.multiworld.get_region(RegionName.DEATHTOLL, world.player)
 #    region.locations.append(world.create_victory_event(region))

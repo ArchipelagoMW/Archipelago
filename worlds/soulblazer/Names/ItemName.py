@@ -81,6 +81,7 @@ SOUL_SHIELD     = "Soul of Shield"
 SOUL_DETECTION  = "Soul of Detection"
 SOUL_REALITY    = "Soul of Reality"
 
+VICTORY         = "Victory"
 LAIR_RELEASE    = "Lair Release"
 EXP             = "EXP"
 GEMS            = "GEMs"

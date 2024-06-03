@@ -372,3 +372,22 @@ all_locations_table = {
     **npc_reward_table,
     **lair_table,
 }
+
+boss_lair_names_table = {
+    LairName.VILLAGE_CHIEF,
+    LairName.GREENWOODS_GUARDIAN,
+    LairName.MERMAID_QUEEN,
+    LairName.MOUNTAIN_KING,
+    LairName.MARIE,
+    LairName.KING_MAGRIDD,
+}
+
+village_leader_names_table = {
+    NPCRewardName.VILLAGE_CHIEF,
+    NPCRewardName.GREENWOODS_GUARDIAN,
+    NPCRewardName.MERMAID_QUEEN,
+    NPCRewardName.NOME,
+    NPCRewardName.MARIE,
+    NPCRewardName.KING_MAGRIDD,
+}
+

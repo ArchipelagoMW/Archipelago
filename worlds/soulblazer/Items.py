@@ -30,7 +30,7 @@ class SoulBlazerItemData:
         if self.id == ItemID.LAIR_RELEASE:
             return BASE_ID + LAIR_ID_OFFSET + self.operand
         elif self.id == ItemID.SOUL:
-            return BASE_ID + SOUL_OFFSET
+            return BASE_ID + SOUL_OFFSET + self.operand
         return BASE_ID + self.id
 
     @property
@@ -89,11 +89,29 @@ bottle_count = 7
 nothing_count = 3
 """Number of 'Nothing' rewards in vanilla item pool"""
 
-gem_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
+gem_values_vanilla = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
 """Gem reward values in vanilla item pool"""
 
-exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
+exp_values_vanilla = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
+
+
+def create_gem_pool(world: "SoulBlazerWorld") -> List[int]:
+    if world.options.gem_exp_pool == "random_range":
+        return [world.random.randint(1, 999) for _ in range(len(gem_values_vanilla))]
+    if world.options.gem_exp_pool == "improved":
+        return [gem * 2 for gem in gem_values_vanilla]
+
+    return gem_values_vanilla[:]
+
+
+def create_exp_pool(world: "SoulBlazerWorld") -> List[int]:
+    if world.options.gem_exp_pool == "random_range":
+        return [world.random.randint(1, 9999) for _ in range(len(exp_values_vanilla))]
+    if world.options.gem_exp_pool == "improved":
+        return [exp * 10 for exp in exp_values_vanilla]
+
+    return exp_values_vanilla[:]
 
 
 def create_itempool(world: "SoulBlazerWorld") -> List[SoulBlazerItem]:
@@ -106,15 +124,14 @@ def create_itempool(world: "SoulBlazerWorld") -> List[SoulBlazerItem]:
         SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE])
         for _ in range(bottle_count)
     ]
-    # TODO: Add option to replace nothings with... something
+    # TODO: Add option to replace nothings with... something?
     itempool += [
         SoulBlazerItem(ItemName.NOTHING, world.player, repeatable_items_table[ItemName.NOTHING])
         for _ in range(nothing_count)
     ]
-    # TODO: Add option for modyfing exp/gem amounts
-    world.gem_items = [world.create_item(ItemName.GEMS).set_operand(value) for value in gem_values]
+    world.gem_items = [world.create_item(ItemName.GEMS).set_operand(value) for value in create_gem_pool(world)]
     itempool += world.gem_items
-    world.exp_items = [world.create_item(ItemName.EXP).set_operand(value) for value in exp_values]
+    world.exp_items = [world.create_item(ItemName.EXP).set_operand(value) for value in create_exp_pool(world)]
     itempool += world.exp_items
 
     return itempool
@@ -143,7 +160,7 @@ armors_table = {
     ItemName.SOULARMOR      : SoulBlazerItemData(ItemID.SOULARMOR     , 0x00, ItemClassification.progression),
 }
 
-magic_table = {
+castable_magic_table = {
     ItemName.FLAMEBALL   : SoulBlazerItemData(ItemID.FLAMEBALL  , 0x00, ItemClassification.progression),
     ItemName.LIGHTARROW  : SoulBlazerItemData(ItemID.LIGHTARROW , 0x00, ItemClassification.progression),
     ItemName.MAGICFLARE  : SoulBlazerItemData(ItemID.MAGICFLARE , 0x00, ItemClassification.progression),
@@ -151,6 +168,10 @@ magic_table = {
     ItemName.SPARKBOMB   : SoulBlazerItemData(ItemID.SPARKBOMB  , 0x00, ItemClassification.progression),
     ItemName.FLAMEPILLAR : SoulBlazerItemData(ItemID.FLAMEPILLAR, 0x00, ItemClassification.progression),
     ItemName.TORNADO     : SoulBlazerItemData(ItemID.TORNADO    , 0x00, ItemClassification.progression),
+}
+
+magic_table = {
+    **castable_magic_table,
     ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , 0x00, ItemClassification.progression_skip_balancing),
 }
 
@@ -227,7 +248,6 @@ items_table = {
     **armors_table,
     **magic_table,
     **inventory_items_table,
-    **misc_table,
 }
 
 npc_release_table = {
@@ -307,7 +327,6 @@ npc_release_table = {
     NPCName.MERMAID_TEARS                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MERMAID_TEARS                , ItemClassification.filler),
     NPCName.MERMAID_STATUE_DUREAN         : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MERMAID_STATUE_DUREAN        , ItemClassification.progression),
     NPCName.ANGELFISH3                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.ANGELFISH3                   , ItemClassification.filler),
-    #TODO: consider putting souls in logic
     NPCName.ANGELFISH_SOUL_OF_SHIELD      : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.ANGELFISH_SOUL_OF_SHIELD     , ItemClassification.useful),
     NPCName.MERMAID_MAGIC_FLARE           : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MERMAID_MAGIC_FLARE          , ItemClassification.progression),
     NPCName.MERMAID_QUEEN                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MERMAID_QUEEN                , ItemClassification.progression),
@@ -411,10 +430,26 @@ souls_table = {
     ItemName.SOUL_REALITY : SoulBlazerItemData(ItemID.SOUL, 0x04, ItemClassification.progression),
 }
 
-all_items_table = {
-    **items_table,
-    **npc_release_table,
-    **souls_table,
+special_table = {
+    ItemName.VICTORY: SoulBlazerItemData(ItemID.VICTORY, 0x00, ItemClassification.progression)
 }
 
-unique_items_table = {k: v for k, v in all_items_table.items() if k not in repeatable_items_table}
+all_items_table = {
+    **items_table,
+    **misc_table,
+    **npc_release_table,
+    **souls_table,
+    **special_table,
+}
+
+unique_items_table = {k: v for k, v in all_items_table.items() if k not in repeatable_items_table and k != ItemName.VICTORY}
+
+item_name_groups = {
+    "swords": swords_table.keys(),
+    "armors": armors_table.keys(),
+    "magic": magic_table.keys(),
+    "stones": stones_table.keys(),
+    "emblems": emblems_table.keys(),
+    "redhots": redhots_table.keys(),
+    "souls": souls_table.keys(),
+}

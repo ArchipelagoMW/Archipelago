@@ -4,7 +4,8 @@ from BaseClasses import MultiWorld, Region, Entrance, CollectionState
 from .Items import swords_table, stones_table, redhots_table
 from .Names import RegionName, ItemName, LairName, ChestName, NPCName, NPCRewardName
 from .Locations import SoulBlazerLocation, all_locations_table
-from .Rules import no_requirement
+from .Options import SoulBlazerOptions
+from .Rules import no_requirement, RuleFlag, rule_for_flag
 
 if TYPE_CHECKING:
     from . import SoulBlazerWorld
@@ -13,7 +14,6 @@ if TYPE_CHECKING:
 locations_for_region: Dict[str, List[str]] = {
     RegionName.MENU: [],
     # Act 1 Regions
-    # We could probably merge this region with Grass Valley West since we prefill the starting sword.
     RegionName.TRIAL_ROOM: [
         ChestName.TRIAL_ROOM,
         NPCRewardName.MAGICIAN,
@@ -428,6 +428,7 @@ class ExitData(NamedTuple):
     has_any: List[str] = []
     """List of item names, where only one are required to use this exit."""
     # TODO: May have to refactor data structure if location reachable requirements are needed
+    rule_flag: RuleFlag = RuleFlag.NONE
 
 
 exits_for_region: Dict[str, List[ExitData]] = {
@@ -436,7 +437,7 @@ exits_for_region: Dict[str, List[ExitData]] = {
     ],
     # Act 1 Exits
     RegionName.TRIAL_ROOM: [
-        ExitData(RegionName.GRASS_VALLEY_WEST, [], swords_table.keys()),
+        ExitData(RegionName.GRASS_VALLEY_WEST, rule_flag=RuleFlag.HAS_SWORD),
     ],
     RegionName.GRASS_VALLEY_WEST: [
         ExitData(RegionName.GRASS_VALLEY_EAST, [NPCName.BRIDGE_GUARD]),
@@ -451,7 +452,6 @@ exits_for_region: Dict[str, List[ExitData]] = {
         ExitData(RegionName.UNDERGROUND_CASTLE_EAST, [NPCName.BRIDGE_GUARD, NPCName.WATER_MILL])
     ],
     # Act 2 Exits
-    # TODO: Add region/exit for Light Shrine Dark rooms?
     RegionName.GREENWOOD: [
         ExitData(RegionName.LOST_MARSHES_SOUTH),
         ExitData(RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA, [NPCName.GREENWOODS_GUARDIAN]),
@@ -480,10 +480,6 @@ exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.SEABED_SANCTUARY_EAST: [
         ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD, NPCName.MERMAID5])
     ],
-    # Unneded until there are exits in this region.
-    # RegionName.SEABED_SANCTUARY_SOUTHEAST: [
-    #
-    # ],
     RegionName.SEABED_HUB: [
         ExitData(RegionName.ROCKBIRD, [NPCName.MERMAID_STATUE_ROCKBIRD]),
         ExitData(RegionName.DUREAN, [NPCName.MERMAID_STATUE_DUREAN]),
@@ -512,7 +508,7 @@ exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.NOME: [ExitData(RegionName.LEOS_LAB_START, [])],
     # Act 5 Exits
     RegionName.LEOS_LAB_START: [
-        ExitData(RegionName.LEOS_LAB_BASEMENT_1_METAL, [], [ItemName.ZANTETSUSWORD, ItemName.SOULBLADE]),
+        ExitData(RegionName.LEOS_LAB_BASEMENT_1_METAL, rule_flag=RuleFlag.CAN_CUT_METAL),
         ExitData(RegionName.LEOS_LAB_MAIN, [NPCName.GREAT_DOOR_ZANTETSU_SWORD]),
         ExitData(RegionName.LEOS_LAB_2ND_FLOOR, [NPCName.STEPS_UPSTAIRS, NPCName.GREAT_DOOR_MODEL_TOWNS]),
         ExitData(RegionName.LEOS_LAB_POWER_PLANT, [NPCName.STAIRS_POWER_PLANT]),
@@ -530,10 +526,14 @@ exits_for_region: Dict[str, List[ExitData]] = {
     ],
     # Act 6 Exits
     RegionName.MAGRIDD_CASTLE_TOWN: [
-        ExitData(RegionName.MAGRIDD_CASTLE_BASEMENT, [], [ItemName.SPIRITSWORD, ItemName.SOULBLADE]),
+        ExitData(RegionName.MAGRIDD_CASTLE_BASEMENT, rule_flag=RuleFlag.CAN_CUT_SPIRIT),
         ExitData(RegionName.MAGRIDD_CASTLE_LEFT_TOWER, [NPCName.SOLDIER_LEFT_TOWER, ItemName.PLATINUMCARD]),
         ExitData(RegionName.MAGRIDD_CASTLE_RIGHT_TOWER, [NPCName.SOLDIER_RIGHT_TOWER, ItemName.VIPCARD]),
-        ExitData(RegionName.WORLD_OF_EVIL, [NPCName.SOLDIER_CASTLE, NPCName.KING_MAGRIDD, *stones_table.keys()]),
+        ExitData(
+            RegionName.WORLD_OF_EVIL,
+            [NPCName.SOLDIER_CASTLE, NPCName.KING_MAGRIDD],
+            rule_flag=RuleFlag.HAS_STONES,
+        ),
     ],
     RegionName.MAGRIDD_CASTLE_BASEMENT: [
         ExitData(RegionName.MAGRIDD_CASTLE_BASEMENT_INVIS, [ItemName.SOUL_REALITY]),
@@ -548,13 +548,36 @@ exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.WORLD_OF_EVIL: [
         ExitData(
             RegionName.DEATHTOLL,
+            [ItemName.SOULARMOR, ItemName.SOULBLADE, ItemName.PHOENIX],
+            [],
+            RuleFlag.PHOENIX_CUTSCENE,
+        )
+    ],
+}
+
+exits_for_region_open_mode: Dict[str, List[ExitData]] = {
+    # Grass Valley west now connects to all Act Hubs
+    RegionName.GRASS_VALLEY_WEST: [
+        ExitData(RegionName.GRASS_VALLEY_EAST, [NPCName.BRIDGE_GUARD]),
+        ExitData(RegionName.UNDERGROUND_CASTLE_WEST),
+        ExitData(RegionName.GREENWOOD),
+        ExitData(RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA),
+        ExitData(RegionName.MOUNTAIN_HUB_NORTH_SLOPE),
+        ExitData(RegionName.LEOS_LAB_START),
+        ExitData(RegionName.MAGRIDD_CASTLE_TOWN),
+        ExitData(RegionName.WORLD_OF_EVIL, rule_flag=RuleFlag.HAS_STONES),
+    ],
+}
+
+exits_for_region_open_deathtoll: Dict[str, List[ExitData]] = {
+    # No longer needs Phoenix/Dancing Grandma cutscene.
+    RegionName.WORLD_OF_EVIL: [
+        ExitData(
+            RegionName.DEATHTOLL,
             [
-                NPCName.DANCING_GRANDMA,
-                NPCName.DANCING_GRANDMA2,
                 ItemName.SOULARMOR,
                 ItemName.SOULBLADE,
                 ItemName.PHOENIX,
-                *redhots_table.keys(),
             ],
         )
     ],
@@ -565,10 +588,16 @@ def get_rule_for_exit(data: ExitData, player: int) -> Callable[[CollectionState]
     """Returns the access rule for the given exit."""
 
     if not data.has_all and not data.has_any:
-        return no_requirement
+        def rule_simple(state: CollectionState) -> bool:
+            return rule_for_flag[data.rule_flag](state, player)
+        return rule_simple
 
     def rule(state: CollectionState) -> bool:
-        return state.has_all(data.has_all, player) and (not data.has_any or state.has_any(data.has_any, player))
+        return (
+            rule_for_flag[data.rule_flag](state, player)
+            and state.has_all(data.has_all, player)
+            and (not data.has_any or state.has_any(data.has_any, player))
+        )
 
     return rule
 
@@ -595,15 +624,13 @@ def create_regions(world: "SoulBlazerWorld") -> None:
 
         region.locations += locations
         all_locations += locations
+        exits = {**exits_for_region}
+        exits = {**exits, **exits_for_region_open_deathtoll} if world.options.open_deathtoll else exits
+        exits = {**exits, **exits_for_region_open_mode} if world.options.act_progression == "open" else exits
 
-        for exit_data in exits_for_region.get(region.name, []):
+        for exit_data in exits.get(region.name, []):
             connect_to = regions[exit_data.destination]
             region.connect(connect_to, None, get_rule_for_exit(exit_data, world.player))
-
-    # Also create our Victory Event
-    region_deathtoll = regions[RegionName.DEATHTOLL]
-    region_deathtoll.locations.append(world.create_victory_event(region_deathtoll))
-    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
     # All of the locations should have been placed in regions.
     # TODO: Delete once confident that all locations are in or move into a test instead?
