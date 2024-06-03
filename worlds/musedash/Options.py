@@ -143,7 +143,7 @@ class IncludeSongs(ItemSet):
     """These songs will be guaranteed to show up within the seed.
  - You must have the DLC enabled to play these songs.
  - Difficulty options will not affect these songs.
- - If there being too many included songs, this will act as a whitelist ignoring song difficulty.
+ - If there are too many included songs, this will act as a whitelist ignoring song difficulty.
     """
     verify_item_name = True
     display_name = "Include Songs"
