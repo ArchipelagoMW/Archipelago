@@ -3,7 +3,7 @@
         <tbody>
             {{ RangeRow(option_name, option, "No", "false", False, "true" if option.default else "false") }}
             {{ RangeRow(option_name, option, "Yes", "true", False, "true" if option.default else "false") }}
-            {{ RandomRows(option_name, option) }}
+            {{ RandomRow(option_name, option) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -21,7 +21,7 @@
                     {{ RangeRow(option_name, option, option.get_option_name(id), id) }}
                 {% endif %}
             {% endfor %}
-            {{ RandomRows(option_name, option) }}
+            {{ RandomRow(option_name, option) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -95,7 +95,7 @@
                     {{ RangeRow(option_name, option, option.get_option_name(id), id) }}
                 {% endif %}
             {% endfor %}
-            {{ RandomRows(option_name, option) }}
+            {{ RandomRow(option_name, option) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -201,6 +201,10 @@
             {{ option.display_name|default(option_name) }}
         </label>
     </td>
+{% endmacro %}
+
+{% macro RandomRow(option_name, option, extra_column=False) %}
+    {{ RangeRow(option_name, option, "Random", "random") }}
 {% endmacro %}
 
 {% macro RandomRows(option_name, option, extra_column=False) %}
