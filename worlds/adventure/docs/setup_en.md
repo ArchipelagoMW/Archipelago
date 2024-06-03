@@ -10,8 +10,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
   - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
-- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Adventure Client` during installation).
+- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 - An Adventure NTSC ROM file. The Archipelago community cannot provide these.
 
 ## Configuring BizHawk
@@ -42,9 +41,9 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Adventure Settings Page](/games/Adventure/player-settings)
+You can generate a yaml or download a template by visiting the [Adventure Options Page](/games/Adventure/player-options)
 
-### What are recommended settings to tweak for beginners to the rando?
+### What are recommended options to tweak for beginners to the rando?
 Setting difficulty_switch_a and lowering the dragons' speeds makes the dragons easier to avoid.  Adding Chalice to 
 local_items guarantees you'll visit at least one of the interesting castles, as it can only be placed in a castle or
 the credits room.

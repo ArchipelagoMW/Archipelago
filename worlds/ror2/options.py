@@ -142,14 +142,6 @@ class FinalStageDeath(Toggle):
     display_name = "Final Stage Death is Win"
 
 
-class BeginWithLoop(Toggle):
-    """
-    Enable to precollect a full loop of environments.
-    Only has an effect with Explore Mode.
-    """
-    display_name = "Begin With Loop"
-
-
 class DLC_SOTV(Toggle):
     """
      Enable if you are using SOTV DLC.
@@ -157,6 +149,17 @@ class DLC_SOTV(Toggle):
      Adds Void Items into the item pool
      """
     display_name = "Enable DLC - SOTV"
+
+
+class RequireStages(DefaultOnToggle):
+    """Add Stage items to the pool to block access to the next set of environments."""
+    display_name = "Require Stages"
+
+
+class ProgressiveStages(DefaultOnToggle):
+    """This will convert Stage items to be a progressive item. For example instead of "Stage 2" it would be
+     "Progressive Stage" """
+    display_name = "Progressive Stages"
 
 
 class GreenScrap(Range):
@@ -385,8 +388,9 @@ class ROR2Options(PerGameCommonOptions):
     total_revivals: TotalRevivals
     start_with_revive: StartWithRevive
     final_stage_death: FinalStageDeath
-    begin_with_loop: BeginWithLoop
     dlc_sotv: DLC_SOTV
+    require_stages: RequireStages
+    progressive_stages: ProgressiveStages
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
     shrine_use_step: ShrineUseStep

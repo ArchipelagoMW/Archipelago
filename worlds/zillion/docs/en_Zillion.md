@@ -4,9 +4,9 @@ Zillion is a metroidvania-style game released in 1987 for the 8-bit Sega Master 
 
 It's based on the anime Zillion (赤い光弾ジリオン, Akai Koudan Zillion).
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 ## What changes are made to this game?
 
