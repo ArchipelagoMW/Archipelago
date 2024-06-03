@@ -9,25 +9,25 @@ class DifficultyRanges(MuseDashTestBase):
         difficulty_min = muse_dash_world.options.song_difficulty_min
         difficulty_max = muse_dash_world.options.song_difficulty_max
 
-        def test_range(inputRange, lower, upper):
-            self.assertEqual(inputRange[0], lower)
-            self.assertEqual(inputRange[1], upper)
+        def test_range(input_range, lower, upper):
+            self.assertEqual(input_range[0], lower)
+            self.assertEqual(input_range[1], upper)
 
-            songs = muse_dash_world.md_collection.get_songs_with_settings(dlc_set, False, inputRange[0], inputRange[1])
+            songs = muse_dash_world.md_collection.get_songs_with_settings(dlc_set, False, input_range[0], input_range[1])
             for songKey in songs:
                 song = muse_dash_world.md_collection.song_items[songKey]
-                if song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]:
+                if song.easy is not None and input_range[0] <= song.easy <= input_range[1]:
                     continue
 
-                if song.hard is not None and inputRange[0] <= song.hard <= inputRange[1]:
+                if song.hard is not None and input_range[0] <= song.hard <= input_range[1]:
                     continue
 
-                if song.master is not None and inputRange[0] <= song.master <= inputRange[1]:
+                if song.master is not None and input_range[0] <= song.master <= input_range[1]:
                     continue
 
-                self.fail(f"Invalid song '{songKey}' was given for range '{inputRange[0]} to {inputRange[1]}'")
+                self.fail(f"Invalid song '{songKey}' was given for range '{input_range[0]} to {input_range[1]}'")
 
-        #auto ranges
+        # auto ranges
         difficulty_choice.value = 0
         test_range(muse_dash_world.get_difficulty_range(), 0, 12)
         difficulty_choice.value = 1

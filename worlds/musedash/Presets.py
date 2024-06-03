@@ -3,6 +3,7 @@
 MuseDashPresets: Dict[str, Dict[str, Any]] = {
     # An option to support Short Sync games. 40 songs.
     "No DLC - Short": {
+        "dlc_packs": [],
         "starting_song_count": 5,
         "additional_song_count": 34,
         "music_sheet_count_percentage": 20,

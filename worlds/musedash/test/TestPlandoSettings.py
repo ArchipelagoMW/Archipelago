@@ -4,7 +4,7 @@ from . import MuseDashTestBase
 class TestPlandoSettings(MuseDashTestBase):
     options = {
         "additional_song_count": 15,
-        "allow_just_as_planned_dlc_songs": True,
+        "dlc_packs": {"Muse Plus"},
         "include_songs": [
             "Lunatic",
             "Out of Sense",
