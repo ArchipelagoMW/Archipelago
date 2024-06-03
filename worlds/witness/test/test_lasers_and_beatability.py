@@ -144,11 +144,24 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
         self.assert_can_beat_with_minimally(exact_requirement)
 
     def test_win_through_caves(self):
-        # Note: Keep Laser is always accessible in these settings.
-
         exact_requirement = {
             "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
             "Caves Mountain Shortcut (Door)": 1,
+            "Caves Entry (Door)": 1,
+            "Mountain Bottom Floor Rock (Door)": 1,
+            "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
+        }
+
+        self.assert_can_beat_with_minimally(exact_requirement)
+
+    def test_win_through_tunnels_caves(self):
+        exact_requirement = {
+            "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
+            "Windmill Entry (Door)": 1,
+            "Tunnels Theater Shortcut (Door)": 1,
+            "Tunnels Entry (Door)": 1,
+            "Challenge Entry (Door)": 1,
+            "Caves Pillar Door": 1,
             "Caves Entry (Door)": 1,
             "Mountain Bottom Floor Rock (Door)": 1,
             "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
