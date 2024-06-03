@@ -5,16 +5,22 @@ from .MuseDashCollection import MuseDashCollections
 
 
 class DLCMusicPacks(OptionSet):
-    """Choose which DLC Packs will be included in the pool of chooseable songs.
-    Note: The [Just As Planned] DLC contains all [Muse Plus] songs."""
+    """
+    Choose which DLC Packs will be included in the pool of chooseable songs.
+    
+    Note: The [Just As Planned] DLC contains all [Muse Plus] songs.
+    """
     display_name = "DLC Packs"
     default = {}
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
 
 
 class StreamerModeEnabled(Toggle):
-    """In Muse Dash, an option named 'Streamer Mode' removes songs which may trigger copyright issues when streaming.
-    If this is enabled, only songs available under Streamer Mode will be available for randomization."""
+    """
+    In Muse Dash, an option named 'Streamer Mode' removes songs which may trigger copyright issues when streaming.
+    
+    If this is enabled, only songs available under Streamer Mode will be available for randomization.
+    """
     display_name = "Streamer Mode Only Songs"
 
 
@@ -27,7 +33,8 @@ class StartingSongs(Range):
 
 
 class AdditionalSongs(Range):
-    """The total number of songs that will be placed in the randomization pool.
+    """
+    The total number of songs that will be placed in the randomization pool.
     - This does not count any starting songs or the goal song.
     - The final song count may be lower due to other settings.
     """
@@ -38,7 +45,8 @@ class AdditionalSongs(Range):
 
 
 class DifficultyMode(Choice):
-    """Ensures that at any chosen song has at least 1 value falling within these values.
+    """
+    Ensures that at any chosen song has at least 1 value falling within these values.
     - Any: All songs are available
     - Easy: 1, 2 or 3
     - Medium: 4, 5
@@ -60,8 +68,11 @@ class DifficultyMode(Choice):
 
 # Todo: Investigate options to make this non randomizable
 class DifficultyModeOverrideMin(Range):
-    """Ensures that 1 difficulty has at least 1 this value or higher per song.
-    - Difficulty Mode must be set to Manual."""
+    """
+    Ensures that 1 difficulty has at least 1 this value or higher per song.
+    
+    Note: Difficulty Mode must be set to Manual.
+    """
     display_name = "Manual Difficulty Min"
     range_start = 1
     range_end = 11
@@ -70,8 +81,11 @@ class DifficultyModeOverrideMin(Range):
 
 # Todo: Investigate options to make this non randomizable
 class DifficultyModeOverrideMax(Range):
-    """Ensures that 1 difficulty has at least 1 this value or lower per song.
-    - Difficulty Mode must be set to Manual."""
+    """
+    Ensures that 1 difficulty has at least 1 this value or lower per song.
+    
+    Note: Difficulty Mode must be set to Manual.
+    """
     display_name = "Manual Difficulty Max"
     range_start = 1
     range_end = 11
@@ -79,7 +93,8 @@ class DifficultyModeOverrideMax(Range):
 
 
 class GradeNeeded(Choice):
-    """Completing a song will require a grade of this value or higher in order to unlock items.
+    """
+    Completing a song will require a grade of this value or higher in order to unlock items.
     The grades are as follows:
     - Silver S (SS): >= 95% accuracy
     - Pink S (S): >= 90% accuracy
@@ -98,7 +113,9 @@ class GradeNeeded(Choice):
 
 
 class MusicSheetCountPercentage(Range):
-    """Controls how many music sheets are added to the pool based on the number of songs, including starting songs.
+    """
+    Controls how many music sheets are added to the pool based on the number of songs, including starting songs.
+    
     Higher numbers leads to more consistent game lengths, but will cause individual music sheets to be less important.
     """
     range_start = 10
@@ -116,10 +133,12 @@ class MusicSheetWinCountPercentage(Range):
 
 
 class ChosenTraps(OptionSet):
-    """This controls the types of traps that can be added to the pool.
+    """
+    This controls the types of traps that can be added to the pool.
     - Traps last the length of a song, or until you die.
     - VFX Traps consist of visual effects that play over the song. (i.e. Grayscale.)
     - SFX Traps consist of changing your sfx setting to one possibly more annoying sfx.
+    
     Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
     display_name = "Chosen Traps"
@@ -136,7 +155,8 @@ class TrapCountPercentage(Range):
 
 
 class IncludeSongs(ItemSet):
-    """These songs will be guaranteed to show up within the seed.
+    """
+    These songs will be guaranteed to show up within the seed.
     - You must have the DLC enabled to play these songs.
     - Difficulty options will not affect these songs.
     - If there are too many included songs, this will act as a whitelist ignoring song difficulty.
@@ -146,8 +166,11 @@ class IncludeSongs(ItemSet):
 
 
 class ExcludeSongs(ItemSet):
-    """These songs will be guaranteed to not show up within the seed.
-    Note: Does not affect songs within the "Include Songs" list."""
+    """
+    These songs will be guaranteed to not show up within the seed.
+    
+    Note: Does not affect songs within the "Include Songs" list.
+    """
     verify_item_name = True
     display_name = "Exclude Songs"
 
