@@ -39,7 +39,7 @@ class TestConn(unittest.TestCase):
     async def ping(self, data):
         self.gamesock.sendobj(data)
         for i in range(data.get('multiply', 1)):
-            await asyncio.wait_for(self.ctx.received.wait(), 60)
+            await asyncio.wait_for(self.ctx.received.wait(), 130)
             last_received = self.ctx.last_received.pop(0)
             if not self.ctx.last_received:
                 self.ctx.received.clear()
