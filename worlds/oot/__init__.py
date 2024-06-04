@@ -32,7 +32,7 @@ from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys, Accessibility
+from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
@@ -150,8 +150,6 @@ class OOTWorld(World):
     location_name_to_id = location_name_to_id
     web = OOTWeb()
 
-    data_version = 3
-
     required_client_version = (0, 4, 0)
 
     item_name_groups = {
@@ -202,6 +200,8 @@ class OOTWorld(World):
             elif isinstance(result, Toggle):
                 option_value = bool(result)
             elif isinstance(result, VerifyKeys):
+                option_value = result.value
+            elif isinstance(result, PlandoConnections):
                 option_value = result.value
             else:
                 option_value = result.current_key
