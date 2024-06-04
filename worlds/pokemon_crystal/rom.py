@@ -9,7 +9,7 @@ from settings import get_settings
 from .phone_data import phone_scripts
 
 from .items import reverse_offset_item_value, item_const_name_to_id
-from .data import data
+from .data import data, BASE_OFFSET
 from .utils import get_random_pokemon_id, convert_to_ingame_text, get_random_filler_item
 
 if TYPE_CHECKING:
@@ -35,6 +35,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     base_patch = pkgutil.get_data(__name__, "data/basepatch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
+    item_texts = []
     for location in world.multiworld.get_locations(world.player):
         if location.address is None:
             continue
@@ -44,7 +45,44 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             item_id = item_id - 256 if item_id > 256 else item_id
             write_bytes(patched_rom, [item_id], location.rom_address)
         else:
+            item_flag = location.address - BASE_OFFSET
+            player_name = world.multiworld.player_name[location.item.player].upper()
+            item_name = location.item.name.upper()
+            item_texts.append([player_name, item_name, item_flag])
             write_bytes(patched_rom, [item_const_name_to_id("AP_ITEM")], location.rom_address)
+
+    item_name_table_length = len(item_texts) * 5 + 1
+    item_name_table_adr = data.rom_addresses["AP_ItemText_Table"]
+    item_name_bank1 = item_name_table_adr + item_name_table_length
+    item_name_bank1_length = data.rom_addresses["AP_ItemText_Bank1_End"] - item_name_bank1
+    item_name_bank1_capacity = int(item_name_bank1_length / 34)
+    item_name_bank2 = data.rom_addresses["AP_ItemText_Bank2"]
+    item_name_bank2_length = data.rom_addresses["AP_ItemText_Bank2_End"] - item_name_bank2
+    item_name_bank2_capacity = int(item_name_bank2_length / 34)
+
+    for i, text in enumerate(item_texts):
+        player_text = convert_to_ingame_text(text[0])[:16]
+        player_text += [0x50] * (17 - len(player_text))
+        item_text = convert_to_ingame_text(text[1])[:16]
+        item_text.append(0x50)
+        bank = 0x75
+        text_adr = 0
+        if i + 1 < item_name_bank1_capacity:
+            text_offset = i * 34
+            text_adr = item_name_bank1 + text_offset
+            write_bytes(patched_rom, player_text + item_text, text_adr)
+        elif i + 1 < item_name_bank1_capacity + item_name_bank2_capacity:
+            bank = 0x76
+            text_offset = (i + 1 - item_name_bank1_capacity) * 34
+            text_adr = item_name_bank2 + text_offset
+            write_bytes(patched_rom, player_text + item_text, text_adr)
+
+        table_offset_adr = item_name_table_adr + i * 5
+        text_bank_adr = (text_adr % 0x4000) + 0x4000
+        write_bytes(patched_rom, text[2].to_bytes(2, "big"), table_offset_adr)
+        write_bytes(patched_rom, text_bank_adr.to_bytes(2, "little"), table_offset_adr + 2)
+        write_bytes(patched_rom, [bank], table_offset_adr + 4)
+    write_bytes(patched_rom, [0xFF], item_name_table_adr + item_name_table_length - 1)
 
     static = {
         "RedGyarados": 2,
