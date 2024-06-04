@@ -231,7 +231,7 @@ class Context:
         self.embedded_blacklist = {"host", "port"}
         self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
         self.auto_save_interval = 60  # in seconds
-        self.auto_saver_thread = None
+        self.auto_saver_thread: typing.Optional[threading.Thread] = None
         self.save_dirty = False
         self.tags = ['AP']
         self.games: typing.Dict[int, str] = {}
