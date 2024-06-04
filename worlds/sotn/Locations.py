@@ -444,9 +444,9 @@ rcat_locations = {
                               False, True, 0x00ff00b0, 18, [0x4cfb704])
 }
 
-rcen_locations = {
+"""rcen_locations = {
     "RCEN - Kill Dracula": LocationData("Reverse Center Cube", None)
-}
+}"""
 
 rchi_locations = {
     "RCHI - Power of Sire(Demon)": LocationData("Cave", 0, [0x4da5134]),
@@ -1114,7 +1114,6 @@ normal_locations = {
 reverse_locations = {
     **rare_locations,
     **rcat_locations,
-    **rcen_locations,
     **rchi_locations,
     **rdai_locations,
     **rlib_locations,
