@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import collections
+import contextlib
 import copy
 import datetime
 import functools
@@ -1926,8 +1927,6 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         self.ctx.server.ws_server.close()
-        if self.ctx.shutdown_task:
-            self.ctx.shutdown_task.cancel()
         self.ctx.exit_event.set()
         return True
 
@@ -2285,7 +2284,8 @@ def parse_args() -> argparse.Namespace:
 
 
 async def auto_shutdown(ctx, to_cancel=None):
-    await asyncio.sleep(ctx.auto_shutdown)
+    with contextlib.suppress(asyncio.TimeoutError):
+        await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     def inactivity_shutdown():
         ctx.server.ws_server.close()
@@ -2305,7 +2305,8 @@ async def auto_shutdown(ctx, to_cancel=None):
             if seconds < 0:
                 inactivity_shutdown()
             else:
-                await asyncio.sleep(seconds)
+                with contextlib.suppress(asyncio.TimeoutError):
+                    await asyncio.wait_for(ctx.exit_event.wait(), seconds)
 
 
 def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLContext":
