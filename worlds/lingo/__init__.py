@@ -37,7 +37,6 @@ class LingoWorld(World):
 
     base_id = 444400
     topology_present = True
-    data_version = 1
 
     options_dataclass = LingoOptions
     options: LingoOptions
