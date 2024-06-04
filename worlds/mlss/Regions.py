@@ -299,7 +299,7 @@ def connect(
     target: str,
     rule: typing.Optional[typing.Callable] = None,
     reach: typing.Optional[bool] = False,
-) -> Entrance | None:
+) -> typing.Optional[Entrance]:
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)
 
@@ -317,7 +317,4 @@ def connect(
 
     source_region.exits.append(connection)
     connection.connect(target_region)
-    if reach:
-        return connection
-    else:
-        return None
+    return connection if reach else None
