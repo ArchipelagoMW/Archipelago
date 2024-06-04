@@ -1,10 +1,10 @@
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Item, ItemClassification, Entrance, Tutorial
-from typing import List, ClassVar, Type
+from BaseClasses import Region, Item, ItemClassification, Tutorial
+from typing import List, ClassVar, Type, Set
 from math import floor
 from Options import PerGameCommonOptions
 
-from .Options import MuseDashOptions
+from .Options import MuseDashOptions, md_option_groups
 from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
@@ -35,6 +35,7 @@ class MuseDashWebWorld(WebWorld):
 
     tutorials = [setup_en, setup_es]
     options_presets = MuseDashPresets
+    option_groups = md_option_groups
 
 
 class MuseDashWorld(World):
@@ -72,8 +73,6 @@ class MuseDashWorld(World):
 
     def generate_early(self):
         dlc_songs = {key for key in self.options.dlc_packs.value}
-        if self.options.allow_just_as_planned_dlc_songs.value:
-            dlc_songs.add(self.md_collection.MUSE_PLUS_DLC)
 
         streamer_mode = self.options.streamer_mode_enabled
         (lower_diff_threshold, higher_diff_threshold) = self.get_difficulty_range()
@@ -88,7 +87,7 @@ class MuseDashWorld(World):
             available_song_keys = self.md_collection.get_songs_with_settings(
                 dlc_songs, bool(streamer_mode.value), lower_diff_threshold, higher_diff_threshold)
 
-            available_song_keys = self.handle_plando(available_song_keys)
+            available_song_keys = self.handle_plando(available_song_keys, dlc_songs)
 
             count_needed_for_start = max(0, starter_song_count - len(self.starting_songs))
             if len(available_song_keys) + len(self.included_songs) >= count_needed_for_start + 11:
@@ -109,7 +108,7 @@ class MuseDashWorld(World):
         for song in self.starting_songs:
             self.multiworld.push_precollected(self.create_item(song))
 
-    def handle_plando(self, available_song_keys: List[str]) -> List[str]:
+    def handle_plando(self, available_song_keys: List[str], dlc_songs: Set[str]) -> List[str]:
         song_items = self.md_collection.song_items
 
         start_items = self.options.start_inventory.value.keys()
@@ -117,7 +116,9 @@ class MuseDashWorld(World):
         exclude_songs = self.options.exclude_songs.value
 
         self.starting_songs = [s for s in start_items if s in song_items]
+        self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
         self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
+        self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
 
         return [s for s in available_song_keys if s not in start_items
                 and s not in include_songs and s not in exclude_songs]
@@ -148,7 +149,7 @@ class MuseDashWorld(World):
                 self.victory_song_name = available_song_keys[chosen_song - included_song_count]
                 del available_song_keys[chosen_song - included_song_count]
 
-        # Next, make sure the starting songs are fufilled
+        # Next, make sure the starting songs are fulfilled
         if len(self.starting_songs) < starting_song_count:
             for _ in range(len(self.starting_songs), starting_song_count):
                 if len(available_song_keys) > 0:
@@ -156,7 +157,7 @@ class MuseDashWorld(World):
                 else:
                     self.starting_songs.append(self.included_songs.pop())
 
-        # Then attempt to fufill any remaining songs for interim songs
+        # Then attempt to fulfill any remaining songs for interim songs
         if len(self.included_songs) < additional_song_count:
             for _ in range(len(self.included_songs), self.options.additional_song_count):
                 if len(available_song_keys) <= 0:
@@ -174,11 +175,7 @@ class MuseDashWorld(World):
         if filler:
             return MuseDashFixedItem(name, ItemClassification.filler, filler, self.player)
 
-        trap = self.md_collection.vfx_trap_items.get(name)
-        if trap:
-            return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
-
-        trap = self.md_collection.sfx_trap_items.get(name)
+        trap = self.md_collection.trap_items.get(name)
         if trap:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
@@ -286,17 +283,11 @@ class MuseDashWorld(World):
             state.has(self.md_collection.MUSIC_SHEET_NAME, self.player, self.get_music_sheet_win_count())
 
     def get_available_traps(self) -> List[str]:
-        sfx_traps_available = self.options.allow_just_as_planned_dlc_songs.value
+        full_trap_list = self.md_collection.trap_items.keys()
+        if self.md_collection.MUSE_PLUS_DLC not in self.options.dlc_packs.value:
+            full_trap_list = [trap for trap in full_trap_list if trap not in self.md_collection.sfx_trap_items]
 
-        trap_list = []
-        if self.options.available_trap_types.value & 1 != 0:
-            trap_list += self.md_collection.vfx_trap_items.keys()
-
-        # SFX options are only available under Just as Planned DLC.
-        if sfx_traps_available and self.options.available_trap_types.value & 2 != 0:
-            trap_list += self.md_collection.sfx_trap_items.keys()
-
-        return trap_list
+        return [trap for trap in full_trap_list if trap in self.options.chosen_traps.value]
 
     def get_trap_count(self) -> int:
         multiplier = self.options.trap_count_percentage.value / 100.0
