@@ -391,10 +391,10 @@ ror2_option_groups = [
     OptionGroup("Weighted Choices", [
         ItemWeights,
         ItemPoolPresetToggle,
-        GreenScrap,
-        RedScrap,
-        YellowScrap,
         WhiteScrap,
+        GreenScrap,
+        YellowScrap,
+        RedScrap,
         CommonItem,
         UncommonItem,
         LegendaryItem,
@@ -408,7 +408,7 @@ ror2_option_groups = [
         MountainTrap,
         TimeWarpTrap,
         CombatTrap,
-        TeleportTrap
+        TeleportTrap,
     ]),
 ]
 
@@ -437,10 +437,10 @@ class ROR2Options(PerGameCommonOptions):
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle
     # define the weights of the generated item pool.
-    green_scrap: GreenScrap
-    red_scrap: RedScrap
-    yellow_scrap: YellowScrap
     white_scrap: WhiteScrap
+    green_scrap: GreenScrap
+    yellow_scrap: YellowScrap
+    red_scrap: RedScrap
     common_item: CommonItem
     uncommon_item: UncommonItem
     legendary_item: LegendaryItem
