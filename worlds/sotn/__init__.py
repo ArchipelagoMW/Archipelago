@@ -11,24 +11,13 @@ from .Items import (item_table, relic_table, SotnItem, ItemData, base_item_id, e
                     trap_table)
 from .Locations import location_table, SotnLocation, exp_locations_token
 from .Regions import create_regions
-from .Rules import set_rules
+from .Rules import set_rules, set_rules_limited
 from .Options import sotn_option_definitions
 from .Rom import SOTNDeltaPatch, patch_rom, get_base_rom_path
 from .client import SotNClient
 
 BOOST_QTY = 12
-TRAPS_QTY = 16
-
-
-def run_client():
-    print('Running SOTN Client')
-    from SotnClient import main
-    # from .SotnClient import main for release
-    launch_subprocess(main, name="SotnClient")
-
-
-components.append(Component('SOTN Client', 'SotnClient', func=run_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apsotn')))
+TRAPS_QTY = 19
 
 
 class SotnSettings(settings.Group):
@@ -72,13 +61,15 @@ class SotnWorld(World):
     settings: ClassVar[SotnSettings]
     option_definitions: ClassVar[Dict[str, AssembleOptions]] = sotn_option_definitions
     data_version: ClassVar[int] = 1
-    required_client_version: Tuple[int, int, int] = (0, 3, 9)
+    required_client_version: Tuple[int, int, int] = (0, 4, 5)
+    not_added_items = []
+    total_talisman = 0
+    required_talisman = 0
 
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data.index for name, data in item_table.items()}
     location_name_to_id: ClassVar[Dict[str, int]] = {name: data.location_id for name, data in location_table.items()}
 
     def __init__(self, world: MultiWorld, player: int):
-        self.added_pool = []
         super().__init__(world, player)
 
     @classmethod
@@ -89,6 +80,8 @@ class SotnWorld(World):
 
     def generate_early(self) -> None:
         difficult = self.options.difficult
+        tt = self.options.num_talisman
+        per_tt = self.options.per_talisman
 
         if difficult == 0:
             self.multiworld.early_items[self.player]["Soul of bat"] = 1
@@ -103,6 +96,15 @@ class SotnWorld(World):
         # Vanilla list
         # Weapon: 37 Shield: 7 Helmet: 11 Armor: 17 Cloak: 5 Accessory: 10 Salable: 32 Usable: 176 Total: 295
         # W:13% S:2% H:4% A:6% C:2% T:14% U:59%
+        # Total location table: 692
+        #   Exploration: 40
+        #   Relic: 28
+        #   Kill: 20
+        #   Enemysanity: 140
+        #   Dropsanity: 107
+        #   Item: 357
+        # Limited have 100 locations
+        required = self.options.bosses_need
         exp = self.options.exp_need
         extra = self.options.extra_pool
         esanity = self.options.enemysanity
@@ -111,8 +113,16 @@ class SotnWorld(World):
         traps = self.options.trapqty
         boosts_weight = self.options.boostweight
         traps_weight = self.options.trapweight
+        goal = self.options.goal
+        tt = self.options.num_talisman
+        per_tt = self.options.per_talisman
+        rules = self.options.rand_rules
+
         added_items = 0
         itempool: typing.List[SotnItem] = []
+        extrapool: typing.List[SotnItem] = []
+        boostpool: typing.List[SotnItem] = []
+        trappool: typing.List[SotnItem] = []
         remove_offset = 0
         weapon_list = ['Shield rod', 'Sword of dawn', 'Basilard', 'Short sword', 'Combat knife', 'Nunchaku',
                        'Were bane', 'Rapier', 'Red rust', 'Takemitsu', 'Shotel', 'Tyrfing', 'Namakura',
@@ -159,6 +169,46 @@ class SotnWorld(World):
                        'Resist stone', 'Resist holy', 'Resist dark', 'Potion', 'High potion', 'Elixir', 'Manna prism',
                        'Library card']
 
+        # Last generate 446 locations
+        # Remove Victory,40 tokens
+        # Relic list = 28 Vanilla list = 295
+        total_location = 405
+
+        if rules == 1:
+            total_location = 100
+        elif rules == 2:
+            # Add exploration items for expanded rule
+            total_location = 120
+
+        # Extra locations Enemy 140 / Drops 109
+        if esanity and rules != 1:
+            total_location += 140
+        if dsanity and rules != 1:
+            total_location += 107
+
+        tt = self.get_max_talisman()
+        talisman = int(tt * per_tt / 100)
+        self.total_talisman = tt
+        self.required_talisman = talisman
+
+        if 0 <= goal <= 2 or (goal == 4 and rules == 1):
+            self.multiworld.get_location("Keep Boss", self.player).place_locked_item(
+                self.create_event("Victory"))
+            required, exp = 0, 0
+
+        if goal == 3 or goal == 5:
+            self.multiworld.get_location("RCEN - Kill Dracula", self.player).place_locked_item(
+                self.create_event("Victory"))
+
+        if goal >= 4:
+            self.multiworld.completion_condition[self.player] = lambda state: \
+                (state.has("Boss token", self.player, required) and state.has("Exploration token", self.player, exp) and
+                 state.has("Talisman", self.player, talisman))
+        else:
+            self.multiworld.completion_condition[self.player] = lambda state: \
+                (state.has("Victory", self.player) and state.has("Boss token", self.player, required) and
+                 state.has("Exploration token", self.player, exp))
+
         self.multiworld.get_location("NZ0 - Slogra and Gaibon kill", self.player).place_locked_item(
             self.create_item("Boss token"))
         self.multiworld.get_location("NO1 - Doppleganger 10 kill", self.player).place_locked_item(
@@ -203,38 +253,26 @@ class SotnWorld(World):
         for k, v in exp_locations_token.items():
             self.multiworld.get_location(k, self.player).place_locked_item(
                 self.create_item("Exploration token"))
-        self.added_pool.append("Extra:(")
+
         extra_list = extra.current_key.split(';')
         for i in extra_list:
             try:
-                if added_items <= 50:
-                    itempool += [self.create_item(i)]
+                if added_items < 10:
+                    extrapool += [self.create_item(i)]
                     added_items += 1
-                    self.added_pool.append(f"{i}")
             except KeyError:
-                print(f"Could not find the item {i}")
-        self.added_pool.append(")")
+                print(f"ERROR: Could not find the item {i}")
 
-        exploration_junk = 0
-        for i in range(exp + 1, 20 + 1):
-            exp_location = f"Exploration {i * 10} item"
-            junk_item = self.create_random_junk()
-            self.multiworld.get_location(exp_location, self.player).place_locked_item(junk_item)
-            exploration_junk += 1
-            added_items += 1
-        self.added_pool.append(f"({exploration_junk} exploration junks)")
+        added_items = 0
+
+        if rules != 1:
+            for i in range(exp + 1, 20 + 1):
+                exp_location = f"Exploration {i * 10} item"
+                junk_item = self.create_random_junk()
+                self.multiworld.get_location(exp_location, self.player).place_locked_item(junk_item)
+                added_items += 1
 
         difficult = self.options.difficult
-
-        # Last generate 446 locations
-        # Remove Victory,40 tokens
-        # Relic list = 28 Vanilla list = 295
-        total_location = 405
-        # Extra locations Enemy 140 / Drops 109
-        if esanity:
-            total_location += 140
-        if dsanity:
-            total_location += 109
 
         # Add progression items
         itempool += [self.create_item("Spike breaker")]
@@ -242,57 +280,55 @@ class SotnWorld(World):
         itempool += [self.create_item("Gold ring")]
         itempool += [self.create_item("Silver ring")]
         added_items += 4
-        self.added_pool.append("(4 progression items)")
+
+        if goal >= 4:
+            for _ in range(tt):
+                itempool += [self.create_item("Talisman")]
+                added_items += 1
 
         prog_relics = ["Soul of bat", "Echo of bat", "Soul of wolf", "Form of mist", "Cube of zoe",
                        "Gravity boots", "Leap stone", "Holy symbol", "Jewel of open", "Merman statue",
                        "Demon card", "Heart of vlad", "Tooth of vlad", "Rib of vlad", "Ring of vlad", "Eye of vlad"
                        ]
-        self.added_pool.append("Relics:(")
+
         if difficult == 0:
-            itempool += [self.create_item("Life Vessel") for _ in range(40)]
-            itempool += [self.create_item("Heart Vessel") for _ in range(40)]
-            added_items += 80
+            if rules == 0:
+                itempool += [self.create_item("Life Vessel") for _ in range(40)]
+                itempool += [self.create_item("Heart Vessel") for _ in range(40)]
+                added_items += 80
 
             for r in relic_table:
                 itempool += [self.create_item(r)]
-                self.added_pool.append(r)
                 added_items += 1
 
         if difficult == 1:
-            itempool += [self.create_item("Life Vessel") for _ in range(32)]
-            itempool += [self.create_item("Heart Vessel") for _ in range(33)]
-            added_items += 65
-            remove_offset = 20
+            if rules == 0:
+                itempool += [self.create_item("Life Vessel") for _ in range(32)]
+                itempool += [self.create_item("Heart Vessel") for _ in range(33)]
+                added_items += 65
+                remove_offset = 20
 
             for r in relic_table:
                 itempool += [self.create_item(r)]
                 added_items += 1
-                self.added_pool.append(r)
 
         if difficult == 2:
-            itempool += [self.create_item("Life Vessel") for _ in range(17)]
-            itempool += [self.create_item("Heart Vessel") for _ in range(17)]
-            added_items += 34
-            remove_offset = 100
+            if rules == 0:
+                itempool += [self.create_item("Life Vessel") for _ in range(17)]
+                itempool += [self.create_item("Heart Vessel") for _ in range(17)]
+                added_items += 34
+                remove_offset = 100
 
             for r in prog_relics:
                 itempool += [self.create_item(r)]
                 added_items += 1
-                self.added_pool.append(r)
 
         if difficult == 3:
-            remove_offset = 200
+            if rules == 0:
+                remove_offset = 200
             for r in prog_relics:
                 itempool += [self.create_item(r)]
                 added_items += 1
-                self.added_pool.append(r)
-        self.added_pool.append(")")
-
-        if boosts > 50:
-            boosts = 50
-        if traps > 50:
-            traps = 50
 
         boosts_weight_list = []
         boosts_list = boosts_weight.current_key.split(';')
@@ -309,10 +345,7 @@ class SotnWorld(World):
         boost_list = [name for name in boost_table.keys()]
         random_boosts = self.random.choices(boost_list, weights=boosts_weight_list, k=boosts)
         for b in random_boosts:
-            if added_items == total_location:
-                break
-            itempool += [self.create_item(b)]
-            added_items += 1
+            boostpool += [self.create_item(b)]
 
         traps_weight_list = []
         traps_list = traps_weight.current_key.split(';')
@@ -329,97 +362,184 @@ class SotnWorld(World):
         trap_list = [name for name in trap_table.keys()]
         random_traps = self.random.choices(trap_list, weights=traps_weight_list, k=traps)
         for t in random_traps:
-            if added_items == total_location:
-                break
-            itempool += [self.create_item(t)]
-            added_items += 1
+            trappool += [self.create_item(t)]
 
-        remaining = total_location - added_items - remove_offset
+        if rules > 0:
+            remaining = total_location - added_items
 
-        weapon_num = int(remaining * 0.1254)
-        shield_num = int(remaining * 0.0237)
-        helmet_num = int(remaining * 0.0372)
-        armor_num = int(remaining * 0.0576)
-        cloak_num = int(remaining * 0.0169)
-        acce_num = int(remaining * 0.0338)
-        salable_num = int(remaining * 0.1084)
-        usab_num = int(remaining * 0.5966)
+            while remaining > 0 and (len(boostpool) != 0 and len(trappool) != 0):
+                rng = self.random.randrange(0, 2)
+                if rng == 0:
+                    if len(boostpool) > 0:
+                        item = boostpool.pop()
+                    else:
+                        item = trappool.pop()
+                else:
+                    if len(trappool) > 0:
+                        item = trappool.pop()
+                    else:
+                        item = boostpool.pop()
+                itempool += [item]
+                added_items += 1
+                remaining = total_location - added_items
+            while len(extrapool) > 0 and remaining != 0:
+                item = extrapool.pop()
+                itempool += [item]
+                added_items += 1
+                remaining = total_location - added_items
+            while remaining > 0:
+                # Do still have space? Throw some random equips
+                # TODO: Add vessels if there still space
+                rng_item = self.random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226, 252]])
+                item_id_to_name = {value.index - base_item_id: key for key, value in item_table.items()}
+                item = self.create_item(item_id_to_name[rng_item])
+                itempool += [item]
+                added_items += 1
+                remaining = total_location - added_items
 
-        self.added_pool.append(f"{weapon_num + 1} Weapons:(")
-        for _ in range(weapon_num + 1):
-            if weapon_list and remaining > 0:
-                item = self.random.choice(weapon_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                weapon_list.remove(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{shield_num + 1} Shields:(")
-        for _ in range(shield_num + 1):
-            if shield_list and remaining > 0:
-                item = self.random.choice(shield_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                shield_list.remove(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{helmet_num + 1} Helmets:(")
-        for _ in range(helmet_num + 1):
-            if helmet_list and remaining > 0:
-                item = self.random.choice(helmet_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                helmet_list.remove(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{armor_num + 1} Armor:(")
-        for _ in range(armor_num + 1):
-            if armor_list and remaining > 0:
-                item = self.random.choice(armor_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                armor_list.remove(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{cloak_num + 1} Cloak:(")
-        for _ in range(cloak_num + 1):
-            if cloak_list and remaining > 0:
-                item = self.random.choice(cloak_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                cloak_list.remove(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{acce_num + 1} Accessory:(")
-        for _ in range(acce_num + 1):
-            if accessory_list and remaining > 0:
-                item = self.random.choice(accessory_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                accessory_list.remove(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{salable_num + 1} Salable:(")
-        for _ in range(salable_num + 1):
-            if salable_list and remaining > 0:
-                item = self.random.choice(salable_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"{usab_num + 1} Usable:(")
-        for _ in range(usab_num + 1):
-            if usable_list and remaining > 0:
-                item = self.random.choice(usable_list)
-                itempool += [self.create_item(item)]
-                self.added_pool.append(item)
-                added_items += 1
-        self.added_pool.append(")")
-        self.added_pool.append(f"({total_location - added_items} extra junk)")
-        # Still have space? Add junk items
-        itempool += [self.create_random_junk() for _ in range(total_location - added_items)]
+            if len(extrapool) > 0:
+                for item in extrapool:
+                    self.not_added_items += [item]
+        elif rules == 0:
+            # Add extra items
+            num_extra_pool = len(extrapool)
+            num_boost = len(boostpool)
+            num_trap = len(trappool)
 
-        self.multiworld.itempool += itempool
+            remaining = total_location - added_items - remove_offset
+
+            if num_extra_pool + num_boost + num_trap < remaining:
+                # We have space add everything
+                for e in extrapool:
+                    itempool += [e]
+                    added_items += 1
+                for b in boostpool:
+                    itempool += [b]
+                    added_items += 1
+                for t in trappool:
+                    itempool += [t]
+                    added_items += 1
+            else:
+                # Add one of which while we can
+                # TODO: Shuffle every iteration or once?? Check performance
+                while remaining >= 3:
+                    self.random.shuffle(extrapool)
+                    self.random.shuffle(boostpool)
+                    self.random.shuffle(trappool)
+                    if len(extrapool) > 0:
+                        item = extrapool.pop()
+                        itempool += [item]
+                        added_items += 1
+                    if len(boostpool) > 0:
+                        item = extrapool.pop()
+                        itempool += [item]
+                        added_items += 1
+                    if len(trappool) > 0:
+                        item = extrapool.pop()
+                        itempool += [item]
+                        added_items += 1
+                    remaining = total_location - added_items - remove_offset
+
+            remaining = total_location - added_items - remove_offset
+
+            weapon_num = int(remaining * 0.1254)
+            shield_num = int(remaining * 0.0237)
+            helmet_num = int(remaining * 0.0372)
+            armor_num = int(remaining * 0.0576)
+            cloak_num = int(remaining * 0.0169)
+            acce_num = int(remaining * 0.0338)
+            salable_num = int(remaining * 0.1084)
+            usab_num = int(remaining * 0.5966)
+
+            for _ in range(weapon_num + 1):
+                if weapon_list:
+                    item = self.random.choice(weapon_list)
+                    itempool += [self.create_item(item)]
+                    weapon_list.remove(item)
+                    added_items += 1
+
+            for _ in range(shield_num + 1):
+                if shield_list:
+                    item = self.random.choice(shield_list)
+                    itempool += [self.create_item(item)]
+                    shield_list.remove(item)
+                    added_items += 1
+
+            for _ in range(helmet_num + 1):
+                if helmet_list:
+                    item = self.random.choice(helmet_list)
+                    itempool += [self.create_item(item)]
+                    helmet_list.remove(item)
+                    added_items += 1
+
+            for _ in range(armor_num + 1):
+                if armor_list:
+                    item = self.random.choice(armor_list)
+                    itempool += [self.create_item(item)]
+                    armor_list.remove(item)
+                    added_items += 1
+
+            for _ in range(cloak_num + 1):
+                if cloak_list:
+                    item = self.random.choice(cloak_list)
+                    itempool += [self.create_item(item)]
+                    cloak_list.remove(item)
+                    added_items += 1
+
+            for _ in range(acce_num + 1):
+                if accessory_list:
+                    item = self.random.choice(accessory_list)
+                    itempool += [self.create_item(item)]
+                    accessory_list.remove(item)
+                    added_items += 1
+
+            for _ in range(salable_num + 1):
+                if salable_list:
+                    item = self.random.choice(salable_list)
+                    itempool += [self.create_item(item)]
+                    added_items += 1
+
+            for _ in range(usab_num + 1):
+                if usable_list and remaining > 0:
+                    item = self.random.choice(usable_list)
+                    itempool += [self.create_item(item)]
+                    added_items += 1
+
+            # Still have space? Add junk items
+            itempool += [self.create_random_junk() for _ in range(total_location - added_items)]
+
+        items_to_be_added = []
+        for item in itempool:
+            added = False
+            if goal == 0:
+                if item.name == "Holy glasses" or "of vlad" in item.name:
+                    data = item_table[item.name]
+                    items_to_be_added += [SotnItem(item.name, ItemClassification.useful, data.index, self.player)]
+                    added = True
+            if goal == 1 or goal == 2:
+                if "of vlad" in item.name:
+                    data = item_table[item.name]
+                    items_to_be_added += [SotnItem(item.name, ItemClassification.useful, data.index, self.player)]
+                    added = True
+            if goal == 4:
+                if "of vlad" in item.name:
+                    data = item_table[item.name]
+                    items_to_be_added += [SotnItem(item.name, ItemClassification.useful, data.index, self.player)]
+                    added = True
+                if item.name == "Talisman":
+                    data = item_table[item.name]
+                    items_to_be_added += [SotnItem(item.name, ItemClassification.progression, data.index, self.player)]
+                    added = True
+            if goal == 5:
+                if item.name == "Talisman":
+                    data = item_table[item.name]
+                    items_to_be_added += [SotnItem(item.name, ItemClassification.progression, data.index, self.player)]
+                    added = True
+
+            if not added:
+                items_to_be_added += [item]
+
+        self.multiworld.itempool += items_to_be_added
 
     def create_random_junk(self) -> SotnItem:
         junk_list = ["Orange", "Apple", "Banana", "Grapes", "Strawberry", "Pineapple", "Peanuts", "Toadstool"]
@@ -428,28 +548,49 @@ class SotnWorld(World):
         return SotnItem(rng_junk, data.ic, data.index, self.player)
 
     def create_regions(self) -> None:
-        create_regions(self.multiworld, self.player)
-
-    def generate_basic(self) -> None:
-        required = self.options.bosses_need
-        exp = self.options.exp_need
-
-        if required > 20:
-            required = 20
-        if exp > 20:
-            exp = 20
-
-        self.multiworld.get_location("RCEN - Kill Dracula", self.player).place_locked_item(
-            self.create_event("Victory"))
-        self.multiworld.completion_condition[self.player] = lambda state: \
-            (state.has("Victory", self.player) and state.has("Boss token", self.player, required) and
-             state.has("Exploration token", self.player, exp))
+        open_no4 = self.options.opened_no4
+        open_are = self.options.opened_are
+        open_no2 = self.options.opened_no2
+        esanity = self.options.enemysanity
+        dsanity = self.options.dropsanity
+        goal = self.options.goal
+        rules = self.options.rand_rules
+        options = {"open_no4": open_no4,
+                   "open_are": open_are,
+                   "open_no2": open_no2,
+                   "esanity": esanity,
+                   "dsanity": dsanity,
+                   "goal": goal,
+                   "rules": rules}
+        create_regions(self.multiworld, self.player, options)
 
     def create_event(self, name: str) -> Item:
         return SotnItem(name, ItemClassification.progression, None, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        no4 = self.options.opened_no4
+        are = self.options.opened_are
+        no2 = self.options.opened_no2
+        esanity = self.options.enemysanity
+        dsanity = self.options.dropsanity
+        rules = self.options.rand_rules
+        goal = self.options.goal
+        talisman = self.options.per_talisman
+        tt = self.options.num_talisman
+        options = {"no4": no4,
+                   "are": are,
+                   "no2": no2,
+                   "esanity": esanity,
+                   "dsanity": dsanity,
+                   "rules": rules,
+                   "goal": goal,
+                   "talisman": talisman,
+                   "tt": tt}
+
+        if rules == 0:
+            set_rules(self.multiworld, self.player, options)
+        elif rules > 0:
+            set_rules_limited(self.multiworld, self.player, options)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict(*self.option_definitions.keys())
@@ -457,20 +598,24 @@ class SotnWorld(World):
     def generate_output(self, output_directory: str) -> None:
         patch_rom(self, output_directory)
 
-    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
-        player_name = self.multiworld.get_player_name(self.player)
-        spoiler_handle.write(f"\n\nSOTN item pool for {player_name}:\n")
-        for line in self.added_pool:
-            if line[-1] == line[0] or (line[0] == "(" and line[-1] == ")"):
-                spoiler_handle.write(f"{line}\n")
-            elif line[-1] != ")" and line[-1] != "(":
-                spoiler_handle.write(f"{line}, ")
-            else:
-                spoiler_handle.write(f"{line}")
+    def get_max_talisman(self) -> int:
+        esanity = self.options.enemysanity
+        dsanity = self.options.dropsanity
+        tt = self.options.num_talisman
+        rules = self.options.rand_rules
+        total_location = 405
 
+        if rules > 0:
+            total_location = 100
 
+        # Extra locations Enemy 140 / Drops 109
+        if esanity and rules != 1:
+            total_location += 140
+        if dsanity and rules != 1:
+            total_location += 107
 
+        # Max 60% of talisman
+        if int(total_location * 0.6) < tt:
+            tt = int(total_location * 0.6)
 
-
-
-
+        return tt
