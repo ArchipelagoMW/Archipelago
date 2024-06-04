@@ -6,10 +6,10 @@ from worlds.Files import APDeltaPatch
 from Utils import home_path, open_filename, messagebox
 from settings import get_settings
 from worlds.AutoWorld import World
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Item
 from .Items import (ItemData, item_table, IType, get_item_data_shop, tile_id_offset, hand_type_table, chest_type_table,
-                    helmet_type_table, cloak_type_table, acc_type_table)
-from .Locations import location_table
+                    helmet_type_table, cloak_type_table, acc_type_table, SotnItem)
+from .Locations import location_table, castle_table
 from .Candles import Candles
 from .Enemies import Enemy_dict, Global_drop
 
@@ -66,6 +66,35 @@ shop_stock = {
         "Duplicator": 0x047a31dc
 }
 
+limited_locations = ["NO4 - Crystal cloak", "CAT - Mormegil", "RNO4 - Dark Blade", "RNZ0 - Ring of Arcana",
+                     "NO3 - Holy mail", "NO3 - Jewel sword", "NZ0 - Basilard", "NZ0 - Sunglasses", "NZ0 - Cloth cape",
+                     "DAI - Mystic pendant", "DAI - Ankh of life(Stairs)", "DAI - Morningstar", "DAI - Goggles",
+                     "DAI - Silver plate", "DAI - Cutlass", "TOP - Platinum mail(Above Richter)", "TOP - Falchion",
+                     "NZ1 - Gold plate", "NZ1 - Bekatowa", "NO1 - Gladius", "NO1 - Jewel knuckles", "LIB - Holy rod",
+                     "LIB - Onyx", "LIB - Bronze cuirass", "NO0 - Alucart sword", "NO2 - Broadsword", "NO2 - Estoc",
+                     "NO2 - Garnet", "ARE - Blood cloak", "ARE - Shield rod", "ARE - Knight shield(Chapel passage)",
+                     "ARE - Holy sword(Hidden attic)", "NO4 - Bandanna", "NO4 - Secret boots", "NO4 - Nunchaku",
+                     "NO4 - Knuckle duster(Holy)", "NO4 - Onyx(Holy)", "CHI - Combat knife", "CHI - Ring of ares",
+                     "CAT - Bloodstone", "CAT - Icebrand", "CAT - Walk armor", "RNO3 - Beryl circlet",
+                     "RNO3 - Talisman", "RNZ0 - Katana", "RNZ0 - Goddess shield", "RDAI - Twilight cloak",
+                     "RDAI - Talwar", "RTOP - Sword of dawn", "RTOP - Bastard sword", "RTOP - Royal cloak",
+                     "RTOP - Lightning mail", "RNZ1 - Moon rod", "RNZ1 - Sunstone(Hidden room)", "RNZ1 - Luminus",
+                     "RNZ1 - Dragon helm", "RNO1 - Shotel", "RLIB - Staurolite", "RLIB - Badelaire",  "RLIB - Opal",
+                     "RNO4 - Diamond", "RNO4 - Opal", "RNO4 - Garnet", "RNO4 - Osafune katana", "RNO4 - Alucard shield",
+                     "RCHI - Alucard sword", "RCAT - Necklace of j", "RCAT - Diamond", "RNO2 - Sword of hador",
+                     "RNO2 - Alucard mail", "RARE - Gram", "RARE - Fury plate(Hidden floor)", "Cube of Zoe",
+                     "Power of Wolf", "Skill of Wolf", "Bat Card", "Spirit Orb", "Gravity Boots", "Soul of Wolf",
+                     "Soul of Bat", "Faerie Scroll", "Jewel of Open", "Faerie Card", "Fire of Bat", "Leap Stone",
+                     "Power of Mist", "Ghost Card", "Form of Mist", "Echo of Bat", "Sword Card", "Holy Symbol",
+                     "Merman Statue", "Demon Card", "Gas Cloud", "Eye of Vlad", "Heart of Vlad", "Tooth of Vlad",
+                     "Rib of Vlad", "Force of Echo", "Ring of Vlad", "ARE - Minotaurus/Werewolf kill",
+                     "CAT - Granfaloon kill", "CHI - Cerberos kill", "DAI - Hippogryph kill", "LIB - Lesser Demon kill",
+                     "NO1 - Doppleganger 10 kill", "NO2 - Olrox kill", "NO4 - Scylla kill", "NO4 - Succubus kill",
+                     "NZ0 - Slogra and Gaibon kill", "NZ1 - Karasuman kill", "RARE - Fake Trevor/Grant/Sypha kill",
+                     "RCAT - Galamoth kill", "RCHI - Death kill", "RDAI - Medusa kill", "RNO1 - Creature kill",
+                     "RNO2 - Akmodan II kill", "RNO4 - Doppleganger40 kill", "RNZ0 - Beezelbub kill",
+                     "RNZ1 - Darkwing bat kill"]
+
 
 class SOTNDeltaPatch(APDeltaPatch):
     hash = USHASH
@@ -118,10 +147,14 @@ class SOTNDeltaPatch(APDeltaPatch):
             patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
             patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
 
-            # Duplicate Sanity options
-            # patched_rom[0xf50c6] = patched_rom[0x0438d85e]
             # Duplicate Seed options
             patched_rom[0xf4ce4:0xf4d50] = patched_rom[0x438d47c:0x438d4e8]
+
+            seed_options = patched_rom[0x438d487]
+
+            if seed_options & (1 << 2):
+                # Wing smash timer
+                write_word(patched_rom, 0x00134990, 0x00000000)
 
             with open(target[:-4] + ".bin", "wb") as stream:
                 stream.write(patched_rom)
@@ -254,13 +287,29 @@ def patch_rom(world: World, output_directory: str) -> None:
     player_att = world.options.att_mod
     player_hp = world.options.hp_mod
     bonus_luck = world.options.bonus_luck
+    goal = world.options.goal
+    #tt = world.options.num_talisman
+    #talisman = world.options.per_talisman
+    wing_smash = world.options.infinite_wing
+    rules = world.options.rand_rules
 
-    if bosses > 20:
-        bosses = 20
-    if exp > 20:
-        exp = 20
     # Convert exploration to rooms
     exp = int((exp * 10) / 0.107)
+    # Normalize Total talismans
+    #total_location = 405
+
+    #if rules > 0:
+    #    total_location = 100
+
+    # Extra locations Enemy 140 / Drops 109
+    #if esanity and rules != 1:
+    #    total_location += 140
+    #if dsanity and rules != 1:
+    #    total_location += 107
+
+    # Max 60% of talisman
+    #if rules != 1 and int(total_location * 0.6) < tt:
+    #    tt = int(total_location * 0.6)
 
     relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -343,6 +392,184 @@ def patch_rom(world: World, output_directory: str) -> None:
                             else:
                                 write_short(patched_rom, address, 0x0003)
 
+    # 285 Castle locations to be randomized
+    if rules > 0:
+        # Randomize the game items
+        weapon_list = ['Shield rod', 'Sword of dawn', 'Basilard', 'Short sword', 'Combat knife', 'Nunchaku',
+                       'Were bane', 'Rapier', 'Red rust', 'Takemitsu', 'Shotel', 'Tyrfing', 'Namakura',
+                       'Knuckle duster', 'Gladius', 'Scimitar', 'Cutlass', 'Saber', 'Falchion', 'Broadsword',
+                       'Bekatowa', 'Damascus sword', 'Hunter sword', 'Estoc', 'Bastard sword', 'Jewel knuckles',
+                       'Claymore', 'Talwar', 'Katana', 'Flamberge', 'Iron fist', 'Zwei hander', 'Sword of hador',
+                       'Luminus', 'Harper', 'Obsidian sword', 'Gram', 'Jewel sword', 'Mormegil', 'Firebrand',
+                       'Thunderbrand', 'Icebrand', 'Stone sword', 'Holy sword', 'Terminus est', 'Marsil',
+                       'Dark blade', 'Heaven sword', 'Fist of tulkas', 'Gurthang', 'Mourneblade', 'Alucard sword',
+                       'Mablung sword', 'Badelaire', 'Sword familiar', 'Great sword', 'Mace', 'Morningstar',
+                       'Holy rod', 'Star flail', 'Moon rod', 'Chakram', 'Holbein dagger', 'Blue knuckles',
+                       'Osafune katana', 'Masamune', 'Muramasa', 'Runesword', 'Vorpal blade', 'Crissaegrim',
+                       'Yasutsuna', 'Alucart sword']
+        shield_list = ['Leather shield', 'Knight shield', 'Iron shield', 'AxeLord shield', 'Herald shield',
+                       'Dark shield', 'Goddess shield', 'Shaman shield', 'Medusa shield', 'Skull shield',
+                       'Fire shield', 'Alucard shield', 'Alucart shield']
+        helmet_list = ['Sunglasses', 'Ballroom mask', 'Bandanna', 'Felt hat', 'Velvet hat', 'Goggles', 'Leather hat',
+                       'Steel helm', 'Stone mask', 'Circlet', 'Gold circlet', 'Ruby circlet', 'Opal circlet',
+                       'Topaz circlet', 'Beryl circlet', 'Cat-eye circl.', 'Coral circlet', 'Dragon helm',
+                       'Silver crown', 'Wizard hat']
+        armor_list = ['Cloth tunic', 'Hide cuirass', 'Bronze cuirass', 'Iron cuirass', 'Steel cuirass', 'Silver plate',
+                      'Gold plate', 'Platinum mail', 'Diamond plate', 'Fire mail', 'Lightning mail', 'Ice mail',
+                      'Mirror cuirass', 'Alucard mail', 'Dark armor', 'Healing mail', 'Holy mail', 'Walk armor',
+                      'Brilliant mail', 'Mojo mail', 'Fury plate', 'Dracula tunic', "God's Garb", 'Axe Lord armor',
+                      'Alucart mail']
+        cloak_list = ['Cloth cape', 'Reverse cloak', 'Elven cloak', 'Crystal cloak', 'Royal cloak', 'Blood cloak',
+                      "Joseph's cloak", 'Twilight cloak']
+        accessory_list = ['Moonstone', 'Sunstone', 'Bloodstone', 'Staurolite', 'Ring of pales', 'Lapis lazuli',
+                          'Ring of ares', 'Ring of varda', 'Ring of arcana', 'Mystic pendant', 'Heart broach',
+                          'Necklace of j', 'Gauntlet', 'Ankh of life', 'Ring of feanor', 'Medal', 'Talisman',
+                          'Duplicator', "King's stone", 'Covenant stone', 'Nauglamir', 'Secret boots']
+        salable_list = ['Aquamarine', 'Diamond', 'Zircon', 'Turquoise', 'Onyx', 'Garnet', 'Opal']
+        usable_list = ['Monster vial 1', 'Monster vial 2', 'Monster vial 3', 'Karma coin', 'Magic missile', 'Orange',
+                       'Apple', 'Banana', 'Grapes', 'Strawberry', 'Pineapple', 'Peanuts', 'Toadstool', 'Shiitake',
+                       'Cheesecake', 'Shortcake', 'Tart', 'Parfait', 'Pudding', 'Ice cream', 'Frankfurter', 'Hamburger',
+                       'Pizza', 'Cheese', 'Ham and eggs', 'Omelette', 'Morning set', 'Lunch A', 'Lunch B', 'Curry rice',
+                       'Gyros plate', 'Spaghetti', 'Grape juice', 'Barley tea', 'Green tea', 'Natou', 'Ramen',
+                       'Miso soup', 'Sushi', 'Pork bun', 'Red bean bun', 'Chinese bun', 'Dim sum set', 'Pot roast',
+                       'Sirloin', 'Turkey', 'Meal ticket', 'Neutron bomb', 'Power of sire', 'Pentagram',
+                       'Bat pentagram', 'Shuriken', 'Cross shuriken', 'Buffalo star', 'Flame star', 'TNT',
+                       'Bwaka knife', 'Boomerang', 'Javelin', 'Fire boomerang', 'Iron ball', 'Dynamite',
+                       'Heart refresh', 'Antivenom', 'Uncurse', 'Life apple', 'Hammer', 'Str. potion', 'Luck potion',
+                       'Smart potion', 'Attack potion', 'Shield potion', 'Resist fire', 'Resist thunder', 'Resist ice',
+                       'Resist stone', 'Resist holy', 'Resist dark', 'Potion', 'High potion', 'Elixir', 'Manna prism',
+                       'Library card']
+        total_locations = 285
+        added_item = 0
+        items_to_add = []
+
+        if goal >= 4:
+            accessory_list.remove("Talisman")
+
+        if len(world.not_added_items) > 0:
+            for item in world.not_added_items:
+                items_to_add += [item]
+                added_item += 1
+
+        world.random.shuffle(weapon_list)
+        world.random.shuffle(shield_list)
+        world.random.shuffle(helmet_list)
+        world.random.shuffle(armor_list)
+        world.random.shuffle(cloak_list)
+        world.random.shuffle(accessory_list)
+        world.random.shuffle(salable_list)
+        world.random.shuffle(usable_list)
+
+        if difficult == 0:
+            items_to_add += [create_item("Life Vessel") for _ in range(40)]
+            items_to_add += [create_item("Heart Vessel") for _ in range(40)]
+            added_item += 80
+            remove_offset = 0
+        elif difficult == 1:
+            items_to_add += [create_item("Life Vessel") for _ in range(32)]
+            items_to_add += [create_item("Heart Vessel") for _ in range(33)]
+            added_item += 65
+            remove_offset = 20
+        elif difficult == 2:
+            items_to_add += [create_item("Life Vessel") for _ in range(17)]
+            items_to_add += [create_item("Heart Vessel") for _ in range(17)]
+            added_item += 34
+            remove_offset = 100
+        else:
+            remove_offset = 200
+
+        remaining = total_locations - added_item - remove_offset
+
+        weapon_num = int(remaining * 0.1254)
+        shield_num = int(remaining * 0.0237)
+        helmet_num = int(remaining * 0.0372)
+        armor_num = int(remaining * 0.0576)
+        cloak_num = int(remaining * 0.0169)
+        acce_num = int(remaining * 0.0338)
+        salable_num = int(remaining * 0.1084)
+        usab_num = int(remaining * 0.5966)
+
+        for _ in range(weapon_num + 1):
+            if weapon_list:
+                item = weapon_list.pop()
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(shield_num + 1):
+            if shield_list:
+                item = shield_list.pop()
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(helmet_num + 1):
+            if helmet_list:
+                item = helmet_list.pop()
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(armor_num + 1):
+            if armor_list:
+                item = armor_list.pop()
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(cloak_num + 1):
+            if cloak_list:
+                item = cloak_list.pop()
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(acce_num + 1):
+            if accessory_list:
+                item = accessory_list.pop()
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(salable_num + 1):
+            if salable_list and remaining > 0:
+                item = world.random.choice(salable_list)
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        for _ in range(usab_num + 1):
+            if usable_list:
+                item = world.random.choice(usable_list)
+                items_to_add += [create_item(item)]
+                added_item += 1
+
+        junk_list = ["Orange", "Apple", "Banana", "Grapes", "Strawberry", "Pineapple", "Peanuts", "Toadstool"]
+        items_to_add += [create_item(world.random.choice(junk_list)) for _ in range(total_locations - added_item)]
+
+        world.random.shuffle(items_to_add)
+        pu_backup = []
+        for i, (k, v) in enumerate(castle_table.items()):
+            if k in limited_locations:
+                continue
+
+            if len(pu_backup) > 0:
+                item = pu_backup.pop()
+            else:
+                item = items_to_add.pop()
+            item_data = item_table[item.name]
+            loc_data = location_table[k]
+
+            # Locations goes from 0 to 404
+            if loc_data.no_offset:
+                while item_data.type == IType.POWERUP:
+                    if len(pu_backup) > 404 - i:
+                        # We have leftover vessels for 'no offset locations'
+                        print(f"Warning: No item left to place at {k} replacing with Monster vial 1 {pu_backup} / {i}")
+                        item_data = item_table["Monster vial 1"]
+                        break
+                    pu_backup += [item]
+                    item = items_to_add.pop()
+                    item_data = item_table[item.name]
+                for address in loc_data.rom_address:
+                    write_short(patched_rom, address, item_data.get_item_id_no_offset())
+            else:
+                for address in loc_data.rom_address:
+                    write_short(patched_rom, address, item_data.get_item_id())
+
     offset = 0x0492df64
     offset = write_word(patched_rom, offset, 0xa0202ee8)
     offset = write_word(patched_rom, offset, 0x080735cc)
@@ -375,25 +602,26 @@ def patch_rom(world: World, output_directory: str) -> None:
     if no2:
         write_word(patched_rom, 0x046c0968, 0x1400000b)
     # Write bosses need it on index -1 of RNO0
-    write_char(patched_rom, 0x04f85ae3, bosses)
+    # write_char(patched_rom, 0x04f85ae3, bosses)
     # Write exploration need it on index -3 of RNO0
-    write_short(patched_rom, 0x04f85ae1, exp)
+    # write_short(patched_rom, 0x04f85ae1, exp)
     """
     The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
     branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
     """
-    write_word(patched_rom, 0x04fcf7b4, 0x10000118)
+    if goal == 3 or goal == 5:
+        write_word(patched_rom, 0x04fcf7b4, 0x10000118)
 
     if songs:
         randomize_music(patched_rom)
 
     if shop:
-        randomize_shop(patched_rom, shop_prog, shop_lib)
+        randomize_shop(patched_rom, shop_prog, shop_lib, goal)
 
     if prices != 0 and prices <= 3:
         randomize_prices(patched_rom, prices)
 
-    randomize_candles(patched_rom, candles, candles_prog)
+    randomize_candles(patched_rom, candles, candles_prog, goal)
 
     xp_mod, mon_atk, mon_hp = 1, 1, 1
     if difficult == 0:
@@ -415,23 +643,29 @@ def patch_rom(world: World, output_directory: str) -> None:
     if player_hp != 0:
         mon_hp = player_hp / 100
 
-    randomize_enemy(patched_rom, drops, drops_prog, xp_mod, mon_atk, mon_hp)
+    # Replace talisman from Bone Musket on talisman farm mode and rng_drops off for a Magic missile
+    if 4 <= goal <= 5 and drops == 0:
+        enemy = Enemy_dict["Bone musket"]
+        write_short(patched_rom, enemy.drop_addresses[0], item_value(25, 1))
+
+    randomize_enemy(patched_rom, drops, drops_prog, xp_mod, mon_atk, mon_hp, goal)
 
     sanity = 0
 
-    if esanity:
+    if esanity and rules != 1:
         sanity |= (1 << 0)
-    if dsanity:
+    if dsanity and rules != 1:
         sanity |= (1 << 1)
-
-    # 0xf50c6
-    # write_char(patched_rom, 0x0438d85e, sanity)
+    if wing_smash:
+        sanity |= (1 << 2)
 
     player_name = world.multiworld.get_player_name(world.player)
     player_num = world.player
 
     seed_num = world.multiworld.seed_name
-    write_seed(patched_rom, seed_num, player_num, player_name, sanity, bonus_luck)
+    tt = world.total_talisman
+    talisman = world.required_talisman
+    write_seed(patched_rom, seed_num, player_num, player_name, sanity, bonus_luck, goal, bosses, exp, tt, talisman)
 
     music_slice = original_rom[0x000affd0:0x000b9ea5]
     music_patched = patched_rom[0x000affd0:0x000b9ea5]
@@ -449,7 +683,8 @@ def patch_rom(world: World, output_directory: str) -> None:
         outfile.write(patch)
 
 
-def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_luck) -> None:
+def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_luck, goal, bosses, exp, tt,
+               talisman) -> None:
     byte = 0
     start_address = 0x0438d47c
     seed_text = []
@@ -468,6 +703,13 @@ def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_l
     hex_luck = int(bonus_luck).to_bytes(2, "little")
     for b in hex_luck:
         seed_text.append(b)
+
+    seed_text.append(goal)
+    seed_text.append(bosses)
+    seed_text.append(exp)
+    seed_text.append(tt)
+    seed_text.append(talisman)
+    # Still 3 bytes on this 1st maria meeting text
 
     options_len = len(seed_text)
     for _ in range(options_len, 22):
@@ -605,11 +847,14 @@ def randomize_music(buffer):
         music.pop(rng_song)
 
 
-def randomize_shop(buffer, prog, lib):
+def randomize_shop(buffer, prog, lib, goal):
     forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
         forbid_items = [169, 195, 217, 226]
+
+    if goal >= 4:
+        forbid_items.append(252)
 
     for i, (key, value) in enumerate(shop_stock.items()):
         if lib and i == 0:
@@ -651,7 +896,7 @@ def randomize_prices(buffer, prices):
         write_word(buffer, value + 4, rng_price)
 
 
-def randomize_candles(buffer, rng_choice, prog):
+def randomize_candles(buffer, rng_choice, prog, goal):
     if rng_choice == 0:
         return
 
@@ -659,6 +904,9 @@ def randomize_candles(buffer, rng_choice, prog):
 
     if prog:
         forbid_items = [169, 195, 217, 226]
+
+    if goal >= 4:
+        forbid_items.append(252)
 
     rng_item = 0
     rng_type = 0
@@ -699,11 +947,14 @@ def randomize_candles(buffer, rng_choice, prog):
             write_short(buffer, a, item_id)
 
 
-def randomize_enemy(buffer, rng_choice, prog, xp_mod=1, mon_atk=1, mon_hp=1):
+def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, goal):
     forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
         forbid_items = [169, 195, 217, 226]
+
+    if goal >= 4:
+        forbid_items.append(252)
 
     rng_item = 0
     rng_type = 0
@@ -810,6 +1061,12 @@ def item_value(rng_item: int, rng_type: int) -> int:
         if rng_type == 1:
             item_id += tile_id_offset
     return item_id
+
+
+def create_item(name: str) -> Item:
+    data = item_table[name]
+    return SotnItem(name, data.ic, data.index, 0
+                    )
 
 
 # def clamp(n, minn, maxn): return max(min(maxn, n), minn) ????
