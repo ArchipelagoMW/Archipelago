@@ -1,4 +1,4 @@
-# Wargroove (Steam, Windows)
+# Wargroove (Steam)
 
 ## Where is the options page?
 

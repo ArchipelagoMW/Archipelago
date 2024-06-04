@@ -3,14 +3,20 @@
 ## Required Files
 
 - Wargroove with the Double Trouble DLC installed through Steam on Windows
-  - Only the Steam Windows version is supported. MAC, Switch, Xbox, and Playstation are not supported.
+  - Only the Steam version is supported. Switch, Xbox, and Playstation are not supported.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Backup playerProgress files
 `playerProgress` and `playerProgress.bak` contain save data for all of your Wargroove campaigns. Backing up these files
 is strongly recommended in case they become corrupted.
+### Windows
 1. Type `%appdata%\Chucklefish\Wargroove\save` in the file browser and hit enter.
 2. Copy the `playerProgress` and `playerProgress.bak` files and paste them into a backup directory.
+### Mac/Linux
+1. Open Steam Settings and go to Storage. Select the three dots and then "Browse Folder", then navigate to compatdata. If there there isn't a folder named "607050", select a different drive and try again.
+2. Copy the path to the compatdata folder, you will need it later.
+3. Navigate to `607050/pfx/drive_c/users/steamuser/Application Data/Chucklefish/Wargroove`.
+4. Copy the `playerProgress` and `playerProgress.bak` files and paste them into a backup directory.
 
 ## Update host.yaml to include the Wargroove root directory
 
@@ -21,7 +27,8 @@ is strongly recommended in case they become corrupted.
    `Steam->Right Click Wargroove->Properties->Installed Files->Browse` and copying the path in the address bar.
    - Paste the path in between the quotes next to `root_directory:` in the `host.yaml`.
    - You may have to replace all single \\ with \\\\.
-4. Start the Wargroove client.
+4. (Mac/Linux only) Put the compatdata directory from earlier in the `compatdata_directory:` option.
+5. Start the Wargroove client.
 
 ## Installing the Archipelago Wargroove Mod and Campaign files
 
