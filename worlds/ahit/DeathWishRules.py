@@ -35,7 +35,7 @@ dw_requirements = {
 
     "The Mustache Gauntlet": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
 
-    "Rift Collapse - Deep Sea": LocData(hookshot=True),
+    "Rift Collapse: Deep Sea": LocData(hookshot=True),
 }
 
 # Includes main objective requirements
@@ -55,7 +55,7 @@ dw_bonus_requirements = {
 
     "The Mustache Gauntlet": LocData(required_hats=[HatType.ICE]),
 
-    "Rift Collapse - Deep Sea": LocData(required_hats=[HatType.DWELLER]),
+    "Rift Collapse: Deep Sea": LocData(required_hats=[HatType.DWELLER]),
 }
 
 dw_stamp_costs = {
@@ -178,9 +178,9 @@ def set_dw_rules(world: "HatInTimeWorld"):
 def add_dw_rules(world: "HatInTimeWorld", loc: Location):
     bonus: bool = "All Clear" in loc.name
     if not bonus:
-        data = dw_requirements.get(loc.name)
+        data = dw_requirements.get(loc.parent_region.name)
     else:
-        data = dw_bonus_requirements.get(loc.name)
+        data = dw_bonus_requirements.get(loc.parent_region.name)
 
     if data is None:
         return
