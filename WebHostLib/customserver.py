@@ -283,6 +283,9 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     ctx._save()
             finally:
                 try:
+                    ctx.save_dirty = False  # make sure the saving thread does not write to DB after final wakeup
+                    ctx.exit_event.set()  # make sure the saving thread stops at some point
+                    # NOTE: async saving should probably be an async task and could be merged with shutdown_task
                     with (db_session):
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
