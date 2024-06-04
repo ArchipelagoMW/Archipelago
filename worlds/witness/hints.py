@@ -373,9 +373,9 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
 
     for area in potential_areas:
         regions = [
-            world.player_regions.created_regions[region]
+            world.get_region(region)
             for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
-            if region in world.player_regions.created_regions
+            if region in world.player_regions.created_region_names
         ]
         locations = [location for region in regions for location in region.get_locations() if location.address]
 

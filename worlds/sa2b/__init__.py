@@ -3,20 +3,20 @@ import math
 import logging
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from worlds.AutoWorld import WebWorld, World
+
+from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
+                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
+from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
                    eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
 from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
-from .Options import SA2BOptions
+from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
+from .Names import ItemName, LocationName
+from .Options import SA2BOptions, sa2b_option_groups
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
 from .Rules import set_rules
-from .Names import ItemName, LocationName
-from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
-                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
-from worlds.AutoWorld import WebWorld, World
-from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
-from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
-import Patch
 
 
 class SA2BWeb(WebWorld):
@@ -30,8 +30,9 @@ class SA2BWeb(WebWorld):
         "setup/en",
         ["RaspberrySpaceJam", "PoryGone", "Entiss"]
     )
-    
+
     tutorials = [setup_en]
+    option_groups = sa2b_option_groups
 
 
 def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range: int, multiworld: MultiWorld):
