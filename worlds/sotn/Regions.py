@@ -2,14 +2,17 @@ from BaseClasses import MultiWorld, Region
 
 from .Locations import SotnLocation, enemy_locations, drop_locations, castle_table, exploration_table
 from .Rules import sotn_has_flying, sotn_has_any, sotn_has_wolf, sotn_has_reverse, sotn_has_dracula
+from .Rom import limited_locations
 
 
-def create_regions(multiworld: MultiWorld, player: int) -> None:
-    open_no4 = multiworld.opened_no4[player]
-    open_are = multiworld.opened_are[player]
-    open_no2 = multiworld.opened_no2[player]
-    esanity = multiworld.enemysanity[player]
-    dsanity = multiworld.dropsanity[player]
+def create_regions(multiworld: MultiWorld, player: int, seed_options: dict) -> None:
+    open_no4 = seed_options["open_no4"]
+    open_are = seed_options["open_are"]
+    open_no2 = seed_options["open_no2"]
+    esanity = seed_options["esanity"]
+    dsanity = seed_options["dsanity"]
+    goal = seed_options["goal"]
+    rules = seed_options["rules"]
 
     regions_dict = {
         1: Region("Colosseum", player, multiworld),
@@ -45,21 +48,37 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     multiworld.regions.append(menu)
 
     name_to_region = {value.name: value for key, value in regions_dict.items()}
+    if 0 <= goal <= 2 or (goal == 4 and rules == 1):
+        region = name_to_region["Castle Keep"]
+        region.locations.append(SotnLocation(player, "Keep Boss", None, region))
+
+    if goal == 3 or goal == 5:
+        region = name_to_region["Reverse Center Cube"]
+        region.locations.append(SotnLocation(player, "RCEN - Kill Dracula", None, region))
+
     for k, v in castle_table.items():
+        if rules > 0:
+            if k not in limited_locations:
+                continue
         region = name_to_region[v.zone]
         region.locations.append(SotnLocation(player, k, v.location_id, region))
-
     # Exploration locations
     no3 = name_to_region["Castle Entrance"]
     for k, v in exploration_table.items():
+        if rules == 1 and "item" in k:
+            continue
         no3.locations.append(SotnLocation(player, k, v.location_id, no3))
 
     if esanity:
         for k, v in enemy_locations.items():
+            if rules == 1:
+                continue
             region = name_to_region[v.zone]
             region.locations.append(SotnLocation(player, k, v.location_id, region))
     if dsanity:
         for k, v in drop_locations.items():
+            if rules == 1:
+                continue
             region = name_to_region[v.zone]
             region.locations.append(SotnLocation(player, k, v.location_id, region))
 
