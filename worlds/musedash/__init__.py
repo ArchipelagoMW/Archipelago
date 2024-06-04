@@ -266,11 +266,9 @@ class MuseDashWorld(World):
         self.random.shuffle(included_song_copy)
         all_selected_locations.extend(included_song_copy)
 
-        # Make a region per song/album, then adds 1-2 item locations to them
+        # Adds 2 item locations per song/album to the menu region.
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
-            # Muse Dash requires 2 locations per song to be *interesting*. Balanced out by filler.
-
             loc1 = MuseDashLocation(self.player,  name + "-0", self.md_collection.song_locations[name + "-0"], menu_region)
             loc1.access_rule = lambda state, place=name: state.has(place, self.player)
             menu_region.locations.append(loc1)
