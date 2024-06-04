@@ -949,7 +949,15 @@ sa2b_option_groups = [
         SlowTrapWeight,
         CutsceneTrapWeight,
         ReverseTrapWeight,
+        LiteratureTrapWeight,
+    ]),
+    OptionGroup("Minigames", [
         PongTrapWeight,
+        PlatformerTrapWeight,
+        FishingTrapWeight,
+        TriviaTrapWeight,
+        PokemonTriviaTrapWeight,
+        PokemonCountTrapWeight,
         MinigameTrapDifficulty,
     ]),
     OptionGroup("Speed Missions", [
