@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Option, OptionGroup, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions
+from Options import Choice, Range, Option, OptionGroup, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions, PlandoBosses
+
+from .Names import LocationName
 
 
 class Goal(Choice):
@@ -69,6 +71,42 @@ class BossRushShuffle(Choice):
     option_chaos = 2
     option_singularity = 3
     default = 0
+
+
+class GateBossPlando(PlandoBosses):
+    """
+    Possible Locations:
+    "Gate 1 Boss"
+    "Gate 2 Boss"
+    "Gate 3 Boss"
+    "Gate 4 Boss"
+    "Gate 5 Boss"
+
+    Possible Bosses:
+    "Sonic vs Shadow 1"
+    "Sonic vs Shadow 2"
+    "Tails vs Eggman 1"
+    "Tails vs Eggman 2"
+    "Knuckles vs Rouge 1"
+    "BIG FOOT"
+    "HOT SHOT"
+    "FLYING DOG"
+    "Egg Golem (Sonic)"
+    "Egg Golem (Eggman)"
+    "King Boom Boo"
+    """
+    bosses = frozenset(LocationName.boss_names.keys())
+
+    locations = frozenset(LocationName.boss_gate_names.keys())
+
+    duplicate_bosses = False
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        return True
+
+    display_name = "Boss Shuffle"
+    option_plando = 0
 
 
 class BaseTrapWeight(Choice):
@@ -1007,6 +1045,7 @@ sa2b_option_groups = [
 class SA2BOptions(PerGameCommonOptions):
     goal: Goal
     boss_rush_shuffle: BossRushShuffle
+    gate_boss_plando: GateBossPlando
     logic_difficulty: LogicDifficulty
     required_rank: RequiredRank
     max_emblem_cap: MaximumEmblemCap

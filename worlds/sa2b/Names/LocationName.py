@@ -1905,6 +1905,28 @@ gate_3_boss_region = "Gate 3 Boss"
 gate_4_boss_region = "Gate 4 Boss"
 gate_5_boss_region = "Gate 5 Boss"
 
+boss_gate_names = {
+	"gate 1 boss": 0,
+	"gate 2 boss": 1,
+	"gate 3 boss": 2,
+	"gate 4 boss": 3,
+	"gate 5 boss": 4,
+}
+
+boss_names = {
+	"sonic vs shadow 1": 0,
+	"sonic vs shadow 2": 1,
+	"tails vs eggman 1": 2,
+	"tails vs eggman 2": 3,
+	"knuckles vs rouge 1": 4,
+	"big foot": 5,
+	"hot shot": 6,
+	"flying dog": 7,
+	"egg golem (sonic)": 8,
+	"egg golem (eggman)": 9,
+	"king boom boo": 10,
+}
+
 boss_rush_1_region  = "Boss Rush 1"
 boss_rush_2_region  = "Boss Rush 2"
 boss_rush_3_region  = "Boss Rush 3"
