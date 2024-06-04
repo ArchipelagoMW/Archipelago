@@ -14,7 +14,8 @@ from .options import PokemonCrystalOptions
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
 from .regions import create_regions
-from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, reverse_offset_item_value
+from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
+    reverse_offset_item_value, ITEM_GROUPS
 from .rules import set_rules
 from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData,
                    TMHMData)
@@ -70,7 +71,7 @@ class PokemonCrystalWorld(World):
 
     item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
-    item_name_groups = {}  # item_groups
+    item_name_groups = ITEM_GROUPS  # item_groups
 
     generated_pokemon: Dict[str, PokemonData]
     generated_starters: Tuple[List[str], List[str], List[str]]
@@ -341,6 +342,7 @@ class PokemonCrystalWorld(World):
                     new_party[i] = new_pkmn_data
                 self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
                     pokemon=new_party)
+
         if self.options.enable_mischief:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
