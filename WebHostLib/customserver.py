@@ -308,10 +308,22 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
+        _tasks: typing.List[asyncio.Future]
+
+        def __init__(self):
+            super().__init__()
+            self._tasks = []
+
+        def _done(self, task: asyncio.Future):
+            self._tasks.remove(task)
+            task.result()
+
         def run(self):
             while 1:
                 next_room = rooms_to_run.get(block=True,  timeout=None)
-                asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
+                task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
+                self._tasks.append(task)
+                task.add_done_callback(self._done)
                 logging.info(f"Starting room {next_room} on {name}.")
 
     starter = Starter()
