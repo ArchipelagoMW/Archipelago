@@ -312,7 +312,9 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
-             lambda state: state.has(laurels, player) and state.has(fire_wand, player) and has_sword(state, player))
+             lambda state: (state.has(fire_wand, player) and has_sword(state, player))
+             and (state.has(laurels, player)
+                  or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
     set_rule(multiworld.get_location("Swamp - [Entrance] Above Entryway", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest", player),
