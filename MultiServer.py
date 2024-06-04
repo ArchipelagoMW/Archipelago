@@ -177,10 +177,10 @@ class Context:
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
+    public_stored_data_keys: typing.Set[str]  # keys that can be retrieved by a client that has not reached "auth" yet
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
-
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
@@ -253,6 +253,7 @@ class Context:
         self.all_item_and_group_names = {}
         self.all_location_and_group_names = {}
         self.non_hintable_names = collections.defaultdict(frozenset)
+        self.public_stored_data_keys = set()
 
         self._load_game_data()
 
@@ -474,10 +475,26 @@ class Context:
                 del data["location_name_groups"]
             del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
         self._init_game_data()
+
+        def _add_public_data_store_key(key: str, retriever: typing.Callable[[], typing.Any]):
+            """Add key to read_data and also public_stored_data_keys, to allow retrieval before auth."""
+            self.public_stored_data_keys.add(key)
+            self.read_data[key] = retriever
+
+        for game_name, game_package in self.gamespackage.items():
+            _add_public_data_store_key(f"datapackage_checksum_{game_name}",
+                                       lambda lgame=game_name: self.checksums.get(lgame, None))
+            _add_public_data_store_key(f"item_name_to_id_{game_name}",
+                                       lambda lgame=game_name: self.gamespackage[lgame]["item_name_to_id"])
+            _add_public_data_store_key(f"location_name_to_id_{game_name}",
+                                       lambda lgame=game_name: self.gamespackage[lgame]["location_name_to_id"])
+
         for game_name, data in self.item_name_groups.items():
-            self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
+            _add_public_data_store_key(f"item_name_groups_{game_name}",
+                                       lambda lgame=game_name: self.item_name_groups[lgame])
         for game_name, data in self.location_name_groups.items():
-            self.read_data[f"location_name_groups_{game_name}"] = lambda lgame=game_name: self.location_name_groups[lgame]
+            _add_public_data_store_key(f"location_name_groups_{game_name}",
+                                       lambda lgame=game_name: self.location_name_groups[lgame])
 
         # sorted access spheres
         self.spheres = decoded_obj.get("spheres", [])
@@ -1628,10 +1645,25 @@ def get_slot_points(ctx: Context, team: int, slot: int) -> int:
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
 
+async def process_get(ctx: Context, client: Client, args: dict, cmd: dict):
+    if "keys" not in args or not isinstance(args["keys"], list):
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                      "text": 'Retrieve', "original_cmd": cmd}])
+        return
+    args["cmd"] = "Retrieved"
+    keys = args["keys"]
+    args["keys"] = {
+        key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
+        ctx.stored_data.get(key, None)
+        for key in keys
+    }
+    await ctx.send_msgs(client, [args])
+
+
 async def process_client_cmd(ctx: Context, client: Client, args: dict):
     try:
         cmd: str = args["cmd"]
-    except:
+    except Exception:
         ctx.logger.exception(f"Could not get command from {args}")
         await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd", "original_cmd": None,
                                       "text": f"Could not get command from {args} at `cmd`"}])
@@ -1734,6 +1766,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
                                           "data": {"games": ctx.gamespackage}}])
 
+    elif cmd == "Get" and args.get("keys", None) and all(key in ctx.public_stored_data_keys for key in args["keys"]):
+        await process_get(ctx, client, args, cmd)
+
     elif client.auth:
         if cmd == "ConnectUpdate":
             if not args:
@@ -1829,18 +1864,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
         elif cmd == "Get":
-            if "keys" not in args or type(args["keys"]) != list:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'Retrieve', "original_cmd": cmd}])
-                return
-            args["cmd"] = "Retrieved"
-            keys = args["keys"]
-            args["keys"] = {
-                key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
-                     ctx.stored_data.get(key, None)
-                for key in keys
-            }
-            await ctx.send_msgs(client, [args])
+            await process_get(ctx, client, args, cmd)
 
         elif cmd == "Set":
             if "key" not in args or args["key"].startswith("_read_") or \
