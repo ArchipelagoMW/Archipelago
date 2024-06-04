@@ -17,6 +17,21 @@ class RegionData:
     locations: List[str]
 
 
+FREE_FLY_REGIONS = {22: "REGION_ECRUTEAK_CITY",
+                    21: "REGION_OLIVINE_CITY",
+                    19: "REGION_CIANWOOD_CITY",
+                    23: "REGION_MAHOGANY_TOWN",
+                    25: "REGION_BLACKTHORN_CITY",
+                    3: "REGION_VIRIDIAN_CITY",
+                    4: "REGION_PEWTER_CITY",
+                    5: "REGION_CERULEAN_CITY",
+                    7: "REGION_VERMILION_CITY",
+                    8: "REGION_LAVENDER_TOWN",
+                    10: "REGION_CELADON_CITY",
+                    9: "REGION_SAFFRON_CITY",
+                    11: "REGION_FUCHSIA_CITY"}
+
+
 def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
     regions: Dict[str, Region] = {}
     connections: List[Tuple[str, str, str]] = []
@@ -44,5 +59,8 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
 
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
     regions["Menu"].connect(regions["REGION_PLAYERS_HOUSE_2F"], "Start Game")
+    if world.options.free_fly_location:
+        free_fly_location = FREE_FLY_REGIONS[world.free_fly_location]
+        regions["REGION_FLY"].connect(regions[free_fly_location], f"REGION_FLY -> {free_fly_location}")
 
     return regions

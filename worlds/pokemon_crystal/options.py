@@ -184,6 +184,12 @@ class RandomizePalettes(Choice):
     option_completely_random = 2
 
 
+class FreeFlyLocation(Toggle):
+    """Unlocks a random fly location"""
+    display_name = "Free Fly Location"
+    default = 0
+
+
 class HMBadgeRequirements(Choice):
     """vanilla: HMs require their vanilla badges
     no_badges: HMs do not require a badge to use
@@ -319,6 +325,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_base_stats: RandomizeBaseStats
     randomize_types: RandomizeTypes
     randomize_palettes: RandomizePalettes
+    free_fly_location: FreeFlyLocation
     hm_badge_requirements: HMBadgeRequirements
     reusable_tms: ReusableTMs
     guaranteed_catch: GuaranteedCatch

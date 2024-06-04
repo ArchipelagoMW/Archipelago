@@ -22,7 +22,7 @@ from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as cry
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
-    get_random_colors, get_random_base_stats, get_tmhm_compatibility, get_random_nezumi
+    get_random_colors, get_random_base_stats, get_tmhm_compatibility, get_random_nezumi, get_free_fly_location
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -73,6 +73,7 @@ class PokemonCrystalWorld(World):
     location_name_to_id = create_location_label_to_id_map()
     item_name_groups = ITEM_GROUPS  # item_groups
 
+    free_fly_location: int
     generated_pokemon: Dict[str, PokemonData]
     generated_starters: Tuple[List[str], List[str], List[str]]
     generated_trainers: Dict[str, TrainerData]
@@ -83,6 +84,8 @@ class PokemonCrystalWorld(World):
     generated_tms: Dict[str, TMHMData]
 
     def generate_early(self) -> None:
+        if self.options.free_fly_location:
+            self.free_fly_location = get_free_fly_location(self.random, self.options.johto_only)
         if self.options.johto_only:
             if self.options.goal.value == 1:
                 self.options.goal.value = 0
@@ -363,6 +366,8 @@ class PokemonCrystalWorld(World):
             "randomize_pokegear",
             "hm_badge_requirements"
         )
+        if self.options.free_fly_location:
+            slot_data["free_fly_location"] = self.free_fly_location
 
         return slot_data
 
@@ -374,6 +379,24 @@ class PokemonCrystalWorld(World):
                 types_1 = ", ".join(self.generated_pokemon[evo[1]].types)
                 types_2 = ", ".join(self.generated_pokemon[evo[2]].types)
                 spoiler_handle.write(f"{evo[0]} ({types_0}) -> {evo[1]} ({types_1}) -> {evo[2]} ({types_2})\n")
+
+        if self.options.free_fly_location:
+            free_fly_locations = {22: "Ecruteak City",
+                                  21: "Olivine City",
+                                  19: "Cianwood City",
+                                  23: "Mahogany Town",
+                                  25: "Blackthorn City",
+
+                                  3: "Viridian City",
+                                  4: "Pewter City",
+                                  5: "Cerulean City",
+                                  7: "Vermilion City",
+                                  8: "Lavender Town",
+                                  10: "Celadon City",
+                                  9: "Saffron City",
+                                  11: "Fuchsia City"}
+            spoiler_handle.write(f"\n\nFree Fly Location ({self.multiworld.player_name[self.player]}): "
+                                 f"{free_fly_locations[self.free_fly_location]}\n")
 
         if self.options.enable_mischief:
             spoiler_handle.write(f"\n\nMischief ({self.multiworld.player_name[self.player]}):\n\n")

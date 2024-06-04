@@ -384,6 +384,11 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             write_bytes(patched_rom, [item_code, quantity], start_inventory_address)
             start_inventory_address += 2
 
+    if world.options.free_fly_location:
+        free_fly_write = [0, 0, 0, 0]
+        free_fly_write[int(world.free_fly_location / 8)] = 1 << (world.free_fly_location % 8)
+        write_bytes(patched_rom, free_fly_write, data.rom_addresses["AP_Setting_FreeFly"])
+
     # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
         write_bytes(patched_rom, [byte], data.rom_addresses["AP_Seed_Name"] + i)

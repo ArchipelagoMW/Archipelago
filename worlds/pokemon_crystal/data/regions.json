@@ -2136,7 +2136,8 @@
 			"REGION_ELMS_LAB",
 			"REGION_PLAYERS_HOUSE_1F",
 			"REGION_PLAYERS_NEIGHBORS_HOUSE",
-			"REGION_ELMS_HOUSE"
+			"REGION_ELMS_HOUSE",
+			"REGION_FLY"
 		],
 		"locations": [],
 		"events": []
@@ -5119,5 +5120,11 @@
 			"EVENT_WISE_TRIOS_ROOM_WISE_TRIO_1",
 			"EVENT_KOJI_ALLOWS_YOU_PASSAGE_TO_TIN_TOWER"
 		]
+	},
+	"REGION_FLY": {
+		"johto": false,
+		"exits": [],
+		"locations": [],
+		"events": []
 	}
 }

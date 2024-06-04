@@ -60,6 +60,13 @@ def get_random_pokemon_id(random):
     return random.choice(pokemon_pool)
 
 
+def get_free_fly_location(random, johto_only):
+    location_pool = [22, 21, 19, 23, 25]
+    if not johto_only:
+        location_pool += [3, 4, 5, 7, 8, 10, 9, 11]
+    return random.choice(location_pool)
+
+
 def get_tmhm_compatibility(tms, tm_value, hm_value, types, vanilla_learnset, random):
     tmhms = []
     for tm_name, tm_data in tms.items():

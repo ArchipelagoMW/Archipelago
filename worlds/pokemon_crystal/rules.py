@@ -18,8 +18,14 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         else:
             return state.has("HM01 Cut", world.player) and (has_badge(state, "hive") or has_badge(state, "cascade"))
 
-    # def can_fly(state: CollectionState):
-    #     return state.has("HM02 Fly", world.player) and state.has("Storm Badge", world.player)
+    def can_fly(state: CollectionState):
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM02 Fly", world.player) and has_badge(state, "storm") and can_surf(state)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM02 Fly", world.player) and can_surf(state)
+        else:
+            return state.has("HM02 Fly", world.player) and (
+                    has_badge(state, "storm") or has_badge(state, "thunder")) and can_surf(state)
 
     def can_surf(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
@@ -171,6 +177,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
                     and state.has("EXPN Card", world.player))
         else:
             return state.has("EVENT_GOT_EXPN_CARD", world.player)
+
+    set_rule(get_entrance("REGION_NEW_BARK_TOWN -> REGION_FLY"), can_fly)
 
     # Goal
     if world.options.goal == 1:
