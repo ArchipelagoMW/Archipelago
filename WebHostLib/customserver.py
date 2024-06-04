@@ -168,16 +168,27 @@ def get_random_port():
 def get_static_server_data() -> dict:
     import worlds
     data = {
-        "non_hintable_names": {},
-        "gamespackage": worlds.network_data_package["games"],
-        "item_name_groups": {world_name: world.item_name_groups for world_name, world in
-                             worlds.AutoWorldRegister.world_types.items()},
-        "location_name_groups": {world_name: world.location_name_groups for world_name, world in
-                                 worlds.AutoWorldRegister.world_types.items()},
+        "non_hintable_names": {
+            world_name: world.hint_blacklist
+            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+        },
+        "gamespackage": {
+            world_name: {
+                key: value
+                for key, value in game_package.items()
+                if key not in ("item_name_groups", "location_name_groups")
+            }
+            for world_name, game_package in worlds.network_data_package["games"].items()
+        },
+        "item_name_groups": {
+            world_name: world.item_name_groups
+            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+        },
+        "location_name_groups": {
+            world_name: world.location_name_groups
+            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+        },
     }
-
-    for world_name, world in worlds.AutoWorldRegister.world_types.items():
-        data["non_hintable_names"][world_name] = world.hint_blacklist
 
     return data
 

@@ -177,7 +177,7 @@ class Context:
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
-    non_hintable_names: typing.Dict[str, typing.Set[str]]
+    non_hintable_names: typing.Dict[str, typing.AbstractSet[str]]
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
@@ -268,6 +268,11 @@ class Context:
                                      worlds.AutoWorldRegister.world_types.items()}
         for world_name, world in worlds.AutoWorldRegister.world_types.items():
             self.non_hintable_names[world_name] = world.hint_blacklist
+
+        for game_package in self.gamespackage.values():
+            # remove groups from data sent to clients
+            del game_package["item_name_groups"]
+            del game_package["location_name_groups"]
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
