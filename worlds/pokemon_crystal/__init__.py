@@ -188,7 +188,7 @@ class PokemonCrystalWorld(World):
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):
-            move_pool = [move.move for move in crystal_data.pokemon[pokemon].learnset if
+            move_pool = [move.move for move in self.generated_pokemon[pokemon].learnset if
                          move.level <= level and move.move != "NO_MOVE"]
             return self.random.choice(move_pool)
 
@@ -326,12 +326,25 @@ class PokemonCrystalWorld(World):
                     new_party[i] = new_pkmn_data
                 self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
                     pokemon=new_party)
-
+        elif self.options.randomize_learnsets:
+            for trainer_name, trainer_data in self.generated_trainers.items():
+                if trainer_data.trainer_type not in ["TRAINERTYPE_MOVES", "TRAINERTYPE_ITEM_MOVES"]:
+                    continue
+                new_party = trainer_data.pokemon
+                for i, pokemon in enumerate(trainer_data.pokemon):
+                    new_pkmn_data = pokemon
+                    move_offset = 2 if trainer_data.trainer_type == "TRAINERTYPE_MOVES" else 3
+                    while move_offset < len(new_pkmn_data) and new_pkmn_data[move_offset] != "NO_MOVE":
+                        new_pkmn_data[move_offset] = get_random_move_from_learnset(
+                            new_pkmn_data[1], int(new_pkmn_data[0]))
+                        move_offset += 1
+                    new_party[i] = new_pkmn_data
+                self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
+                    pokemon=new_party)
         if self.options.enable_mischief:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
         self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
-        # print(self.generated_phone_indices)
 
         generate_output(self, output_directory)
 
