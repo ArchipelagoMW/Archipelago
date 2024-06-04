@@ -23,6 +23,7 @@ from typing import Sequence, Union, Optional
 
 import Utils
 import settings
+from kvui import ImageIcon
 from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
 
 if __name__ == "__main__":
@@ -191,9 +192,11 @@ def run_gui():
             self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40))
             tool_layout = ScrollBox()
             tool_layout.layout.orientation = "vertical"
+            tool_layout.layout.spacing = 10
             self.grid.add_widget(tool_layout)
             client_layout = ScrollBox()
             client_layout.layout.orientation = "vertical"
+            client_layout.layout.spacing = 10
             self.grid.add_widget(client_layout)
             self.grid.padding = 10
             self.grid.spacing = 5
@@ -209,18 +212,18 @@ def run_gui():
                     None. The button is added to the parent grid layout.
 
                 """
-                button = MDButton(MDButtonText(text=component.display_name, pos=(15, 0)),
-                                  style="elevated", size_hint_y=None, height=40)
+                if component.icon != "icon":
+                    image = ImageIcon(source=icon_paths[component.icon],
+                                      size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    button = MDButton(image, MDButtonText(text=component.display_name, pos=(15, 0)),
+                                      style="elevated", size_hint_y=None, height=40)
+                else:
+                    button = MDButton(MDButtonText(text=component.display_name, pos=(15, 0)),
+                                      style="elevated", size_hint_y=None, height=40)
                 button.component = component
                 button.bind(on_release=self.component_action)
                 button.size_hint = (1, 1)
-                if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    box_layout = MDRelativeLayout(size_hint_y=None, height=40)
-                    box_layout.add_widget(button)
-                    box_layout.add_widget(image)
-                    return box_layout
+
                 return button
 
             for (tool, client) in itertools.zip_longest(itertools.chain(

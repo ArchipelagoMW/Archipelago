@@ -4,6 +4,9 @@ import sys
 import typing
 import re
 
+from kivy.uix.image import AsyncImage
+from kivy.uix.relativelayout import RelativeLayout
+from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.divider import MDDivider
 
 if sys.platform == "win32":
@@ -57,7 +60,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsItemIcon, MDTabsCarousel
 from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon
-from kivymd.uix.label import MDLabel
+from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.recycleview import MDRecycleView
 from kivymd.uix.textfield.textfield import MDTextField
 from kivymd.uix.progressindicator import MDLinearProgressIndicator
@@ -76,6 +79,28 @@ else:
     context_type = object
 
 remove_between_brackets = re.compile(r"\[.*?]")
+
+
+class ImageIcon(MDButtonIcon, AsyncImage):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.image = AsyncImage(**kwargs)
+        self.add_widget(self.image)
+
+    def add_widget(self, widget, index=0, canvas=None):
+        return super(MDIcon, self).add_widget(widget)
+
+
+class ScrollBox(MDScrollView):
+    layout: MDBoxLayout
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layout = MDBoxLayout(size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
+        self.add_widget(self.layout)
+        self.bar_width = dp(12)
+        self.scroll_type = ["bars"]
 
 
 # I was surprised to find this didn't already exist in kivy :(
@@ -123,18 +148,6 @@ class ToolTip(MDLabel):
 
 class ServerToolTip(ToolTip):
     pass
-
-
-class ScrollBox(MDScrollView):
-    layout: MDBoxLayout
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.layout = MDBoxLayout(size_hint_y=None)
-        self.layout.bind(minimum_height=self.layout.setter("height"))
-        self.add_widget(self.layout)
-        self.bar_width = dp(12)
-        self.scroll_type = ["bars"]
 
 
 class HovererableLabel(HoverBehavior, MDLabel):
@@ -405,6 +418,7 @@ class MessageBox(Popup):
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
+
 class ClientTabs(MDTabsPrimary):
     carousel: MDTabsCarousel
 
@@ -469,8 +483,8 @@ class GameManager(MDApp):
         #self.tabs.carousel.add_widget(MDLabel(text="Label 1"))
 
     def build(self) -> Layout:
-        self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Green"
+        self.theme_cls.theme_style = self.json_to_kivy_parser.theme_style
+        self.theme_cls.primary_palette = self.json_to_kivy_parser.primary_palette
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
@@ -773,6 +787,8 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         for name, code in color_codes.items():
             color_codes[name] = getattr(colors, name, code)
         self.color_codes = color_codes
+        self.theme_style = colors.theme_style
+        self.primary_palette = colors.primary_palette
         super().__init__(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
