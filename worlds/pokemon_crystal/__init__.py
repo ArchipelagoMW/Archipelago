@@ -368,6 +368,8 @@ class PokemonCrystalWorld(World):
         )
         if self.options.free_fly_location:
             slot_data["free_fly_location"] = self.free_fly_location
+        else:
+            slot_data["free_fly_location"] = 0
 
         return slot_data
 
