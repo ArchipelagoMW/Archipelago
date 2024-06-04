@@ -24,6 +24,40 @@ class OpenedDAINO2(Toggle):
     display_name = "Opened NO2 Backdoor"
 
 
+class Goal(Choice):
+    """
+    Goal
+    """
+    display_name = "Goal"
+    option_richter = 0
+    option_shaft = 1
+    option_rs = 2
+    option_dracula = 3
+    option_talisman = 4
+    option_td = 5
+    default = 3
+
+
+class NumberOfTalismans(Range):
+    """
+    Amount of Talismans in game. It might be less based on available locations
+    """
+    display_name = "Max Number of Talismans"
+    range_start = 1
+    range_end = 255
+    default = 100
+
+
+class PercentageOfTalismans(Range):
+    """
+    How many talismans to beat the game
+    """
+    display_name = "Required Percentage of Talismans"
+    range_start = 1
+    range_end = 100
+    default = 100
+
+
 class Difficult(Choice):
     """
     Determines the difficult
@@ -199,7 +233,7 @@ class Trapqty(Range):
 class TrapWeight(FreeText):
     """Weights for randomize traps"""
     display_name = "Traps weights"
-    default = "1;2;1;2;1;2;7;3;7;3;8;5;6;2;6;2"
+    default = "1;2;1;2;1;2;7;3;7;3;8;5;7;6;2;6;2;6;2"
 
 
 class RandRules(Choice):
@@ -209,7 +243,15 @@ class RandRules(Choice):
     display_name = "Randomize random rules"
     option_full = 0
     option_limited = 1
+    option_expanded = 2
     default = 0
+
+
+class InfiniteWing(Toggle):
+    """
+        Makes wing smash remains until hit a wall or run out of MP
+    """
+    display_name = "Infinite wing smash while transform into bat"
 
 
 class ExtraPool(FreeText):
@@ -222,6 +264,9 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "opened_no4": OpenedNO4NO3,
     "opened_are": OpenedDAIARE,
     "opened_no2": OpenedDAINO2,
+    "goal": Goal,
+    "num_talisman": NumberOfTalismans,
+    "per_talisman": PercentageOfTalismans,
     "difficult": Difficult,
     "xp_mod": XpModifier,
     "att_mod": AttModifier,
@@ -245,6 +290,7 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "trapqty": Trapqty,
     "trapweight": TrapWeight,
     "rand_rules": RandRules,
+    "infinite_wing": InfiniteWing,
     "extra_pool": ExtraPool
 }
 
