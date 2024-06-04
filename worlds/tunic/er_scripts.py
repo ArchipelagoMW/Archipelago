@@ -1,12 +1,12 @@
 from typing import Dict, List, Set, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, \
-    dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
+from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd
 from .er_rules import set_er_region_rules
+from Options import PlandoConnection
 from .options import EntranceRando
-from worlds.generic import PlandoConnection
 from random import Random
+from copy import deepcopy
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -95,7 +95,8 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 
 def vanilla_portals() -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
-    portal_map = portal_mapping.copy()
+    # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
+    portal_map = [portal for portal in portal_mapping if portal.name != "Ziggurat Lower Falling Entrance"]
 
     while portal_map:
         portal1 = portal_map[0]
@@ -130,51 +131,75 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
     player_name = world.multiworld.get_player_name(world.player)
+    portal_map = portal_mapping.copy()
     logic_rules = world.options.logic_rules.value
     fixed_shop = world.options.fixed_shop
     laurels_location = world.options.laurels_location
+    traversal_reqs = deepcopy(traversal_requirements)
+    has_laurels = True
+    waterfall_plando = False
 
     # if it's not one of the EntranceRando options, it's a custom seed
-    if world.options.entrance_rando.value not in EntranceRando.options:
+    if world.options.entrance_rando.value not in EntranceRando.options.values():
         seed_group = world.seed_groups[world.options.entrance_rando.value]
         logic_rules = seed_group["logic_rules"]
         fixed_shop = seed_group["fixed_shop"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
-    
+
+    # marking that you don't immediately have laurels
+    if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
+        has_laurels = False
+
     shop_scenes: Set[str] = set()
     shop_count = 6
     if fixed_shop:
-        shop_count = 1
+        shop_count = 0
         shop_scenes.add("Overworld Redux")
-
-    if not logic_rules:
-        dependent_regions = dependent_regions_restricted
-    elif logic_rules == 1:
-        dependent_regions = dependent_regions_nmg
     else:
-        dependent_regions = dependent_regions_ur
+        # if fixed shop is off, remove this portal
+        for portal in portal_map:
+            if portal.region == "Zig Skip Exit":
+                portal_map.remove(portal)
+                break
+
+    # If using Universal Tracker, restore portal_map. Could be cleaner, but it does not matter for UT even a little bit
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        if "TUNIC" in world.multiworld.re_gen_passthrough:
+            portal_map = portal_mapping.copy()
 
     # create separate lists for dead ends and non-dead ends
-    if logic_rules:
-        for portal in portal_mapping:
-            if tunic_er_regions[portal.region].dead_end == 1:
-                dead_ends.append(portal)
-            else:
+    for portal in portal_map:
+        dead_end_status = tunic_er_regions[portal.region].dead_end
+        if dead_end_status == DeadEnd.free:
+            two_plus.append(portal)
+        elif dead_end_status == DeadEnd.all_cats:
+            dead_ends.append(portal)
+        elif dead_end_status == DeadEnd.restricted:
+            if logic_rules:
                 two_plus.append(portal)
-    else:
-        for portal in portal_mapping:
-            if tunic_er_regions[portal.region].dead_end:
-                dead_ends.append(portal)
             else:
-                two_plus.append(portal)
+                dead_ends.append(portal)
+        # these two get special handling
+        elif dead_end_status == DeadEnd.special:
+            if portal.region == "Secret Gathering Place":
+                if laurels_location == "10_fairies":
+                    two_plus.append(portal)
+                else:
+                    dead_ends.append(portal)
+            if portal.region == "Zig Skip Exit":
+                if fixed_shop:
+                    two_plus.append(portal)
+                else:
+                    dead_ends.append(portal)
 
     connected_regions: Set[str] = set()
     # make better start region stuff when/if implementing random start
     start_region = "Overworld"
-    connected_regions.update(add_dependent_regions(start_region, logic_rules))
+    connected_regions.add(start_region)
+    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
 
-    if world.options.entrance_rando.value in EntranceRando.options:
-        plando_connections = world.multiworld.plando_connections[world.player]
+    if world.options.entrance_rando.value in EntranceRando.options.values():
+        plando_connections = world.options.plando_connections.value
     else:
         plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
 
@@ -205,11 +230,17 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             non_dead_end_regions.add(region_name)
         elif region_info.dead_end == 2 and logic_rules:
             non_dead_end_regions.add(region_name)
+        elif region_info.dead_end == 3:
+            if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
+                    or (region_name == "Zig Skip Exit" and fixed_shop):
+                non_dead_end_regions.add(region_name)
 
     if plando_connections:
         for connection in plando_connections:
             p_entrance = connection.entrance
             p_exit = connection.exit
+            portal1_dead_end = True
+            portal2_dead_end = True
 
             portal1 = None
             portal2 = None
@@ -218,8 +249,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             for portal in two_plus:
                 if p_entrance == portal.name:
                     portal1 = portal
+                    portal1_dead_end = False
                 if p_exit == portal.name:
                     portal2 = portal
+                    portal2_dead_end = False
 
             # search dead_ends individually since we can't really remove items from two_plus during the loop
             if portal1:
@@ -227,13 +260,13 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             else:
                 # if not both, they're both dead ends
                 if not portal2:
-                    if world.options.entrance_rando.value not in EntranceRando.options:
+                    if world.options.entrance_rando.value not in EntranceRando.options.values():
                         raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
                                         "end to a dead end in their plando connections.")
                     else:
                         raise Exception(f"{player_name} paired a dead end to a dead end in their "
                                         "plando connections.")
-                    
+
                 for portal in dead_ends:
                     if p_entrance == portal.name:
                         portal1 = portal
@@ -246,7 +279,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if portal2:
                 two_plus.remove(portal2)
             else:
-                # check if portal2 is a dead end
                 for portal in dead_ends:
                     if p_exit == portal.name:
                         portal2 = portal
@@ -256,6 +288,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     portal2 = Portal(name="Shop Portal", region="Shop",
                                      destination="Previous Region", tag="_")
                     shop_count -= 1
+                    # need to maintain an even number of portals total
                     if shop_count < 0:
                         shop_count += 2
                     for p in portal_mapping:
@@ -269,48 +302,36 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                                         f"plando connections in {player_name}'s YAML.")
                     dead_ends.remove(portal2)
 
+            # update the traversal chart to say you can get from portal1's region to portal2's and vice versa
+            if not portal1_dead_end and not portal2_dead_end:
+                traversal_reqs.setdefault(portal1.region, dict())[portal2.region] = []
+                traversal_reqs.setdefault(portal2.region, dict())[portal1.region] = []
+
+            if (portal1.region == "Zig Skip Exit" and (portal2_dead_end or portal2.region == "Secret Gathering Place")
+                    or portal2.region == "Zig Skip Exit" and (portal1_dead_end or portal1.region == "Secret Gathering Place")):
+                if world.options.entrance_rando.value not in EntranceRando.options.values():
+                    raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                    "end to a dead end in their plando connections.")
+                else:
+                    raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                    "plando connections.")
+
+            if (portal1.region == "Secret Gathering Place" and (portal2_dead_end or portal2.region == "Zig Skip Exit")
+                    or portal2.region == "Secret Gathering Place" and (portal1_dead_end or portal1.region == "Zig Skip Exit")):
+                # need to make sure you didn't pair this to a dead end or zig skip
+                if portal1_dead_end or portal2_dead_end or \
+                        portal1.region == "Zig Skip Exit" or portal2.region == "Zig Skip Exit":
+                    if world.options.entrance_rando.value not in EntranceRando.options.values():
+                        raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                        "end to a dead end in their plando connections.")
+                    else:
+                        raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                        "plando connections.")
+                waterfall_plando = True
             portal_pairs[portal1] = portal2
 
-            # update dependent regions based on the plando'd connections, to ensure the portals connect well, logically
-            for origins, destinations in dependent_regions.items():
-                if portal1.region in origins:
-                    if portal2.region in non_dead_end_regions:
-                        destinations.append(portal2.region)
-                if portal2.region in origins:
-                    if portal1.region in non_dead_end_regions:
-                        destinations.append(portal1.region)
-
         # if we have plando connections, our connected regions may change somewhat
-        while True:
-            test1 = len(connected_regions)
-            for region in connected_regions.copy():
-                connected_regions.update(add_dependent_regions(region, logic_rules))
-            test2 = len(connected_regions)
-            if test1 == test2:
-                break
-    
-    # need to plando fairy cave, or it could end up laurels locked
-    # fix this later to be random after adding some item logic to dependent regions
-    if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
-        portal1 = None
-        portal2 = None
-        for portal in two_plus:
-            if portal.scene_destination() == "Overworld Redux, Waterfall_":
-                portal1 = portal
-                break
-        for portal in dead_ends:
-            if portal.scene_destination() == "Waterfall, Overworld Redux_":
-                portal2 = portal
-                break
-        if not portal1:
-            raise Exception(f"Failed to do Laurels Location at 10 Fairies option. "
-                            f"Did {player_name} plando connection the Secret Gathering Place Entrance?")
-        if not portal2:
-            raise Exception(f"Failed to do Laurels Location at 10 Fairies option. "
-                            f"Did {player_name} plando connection the Secret Gathering Place Exit?")
-        portal_pairs[portal1] = portal2
-        two_plus.remove(portal1)
-        dead_ends.remove(portal2)
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
 
     if fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
@@ -339,47 +360,54 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     previous_conn_num = 0
     fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
-        # if the connected regions length stays unchanged for too long, it's stuck in a loop
-        # should, hopefully, only ever occur if someone plandos connections poorly
+        # if this is universal tracker, just break immediately and move on
         if hasattr(world.multiworld, "re_gen_passthrough"):
             break
+        # if the connected regions length stays unchanged for too long, it's stuck in a loop
+        # should, hopefully, only ever occur if someone plandos connections poorly
         if previous_conn_num == len(connected_regions):
             fail_count += 1
             if fail_count >= 500:
-                raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for loops.")
+                raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for errors. "
+                                "Unconnected regions:", non_dead_end_regions - connected_regions)
         else:
             fail_count = 0
         previous_conn_num = len(connected_regions)
 
-        # find a portal in an inaccessible region
+        # find a portal in a connected region
         if check_success == 0:
             for portal in two_plus:
                 if portal.region in connected_regions:
-                    # if there's risk of self-locking, start over
-                    if gate_before_switch(portal, two_plus):
-                        random_object.shuffle(two_plus)
-                        break
                     portal1 = portal
                     two_plus.remove(portal)
                     check_success = 1
                     break
 
-        # then we find a portal in a connected region
+        # then we find a portal in an inaccessible region
         if check_success == 1:
             for portal in two_plus:
                 if portal.region not in connected_regions:
-                    # if there's risk of self-locking, shuffle and try again
-                    if gate_before_switch(portal, two_plus):
-                        random_object.shuffle(two_plus)
-                        break
+                    # if secret gathering place happens to get paired really late, you can end up running out
+                    if not has_laurels and len(two_plus) < 80:
+                        # if you plando'd secret gathering place with laurels at 10 fairies, you're the reason for this
+                        if waterfall_plando:
+                            cr = connected_regions.copy()
+                            cr.add(portal.region)
+                            if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_rules):
+                                continue
+                        elif portal.region != "Secret Gathering Place":
+                            continue
                     portal2 = portal
+                    connected_regions.add(portal.region)
                     two_plus.remove(portal)
                     check_success = 2
                     break
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if check_success == 2:
-            connected_regions.update(add_dependent_regions(portal2.region, logic_rules))
+            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
+            if "Secret Gathering Place" in connected_regions:
+                has_laurels = True
             portal_pairs[portal1] = portal2
             check_success = 0
             random_object.shuffle(two_plus)
@@ -411,7 +439,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal1 = two_plus.pop()
         portal2 = dead_ends.pop()
         portal_pairs[portal1] = portal2
-
     # then randomly connect the remaining portals to each other
     # every region is accessible, so gate_before_switch is not necessary
     while len(two_plus) > 1:
@@ -438,126 +465,42 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
             region2.connect(connecting_region=region1, name=portal2.name)
 
 
-# loop through the static connections, return regions you can reach from this region
-# todo: refactor to take region_name and dependent_regions
-def add_dependent_regions(region_name: str, logic_rules: int) -> Set[str]:
-    region_set = set()
-    if not logic_rules:
-        regions_to_add = dependent_regions_restricted
-    elif logic_rules == 1:
-        regions_to_add = dependent_regions_nmg
-    else:
-        regions_to_add = dependent_regions_ur
-    for origin_regions, destination_regions in regions_to_add.items():
-        if region_name in origin_regions:
-            # if you matched something in the first set, you get the regions in its paired set
-            region_set.update(destination_regions)
-            return region_set
-    # if you didn't match anything in the first sets, just gives you the region
-    region_set = {region_name}
-    return region_set
+def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
+                             has_laurels: bool, logic: int) -> Set[str]:
+    # starting count, so we can run it again if this changes
+    region_count = len(connected_regions)
+    for origin, destinations in traversal_reqs.items():
+        if origin not in connected_regions:
+            continue
+        # check if we can traverse to any of the destinations
+        for destination, req_lists in destinations.items():
+            if destination in connected_regions:
+                continue
+            met_traversal_reqs = False
+            if len(req_lists) == 0:
+                met_traversal_reqs = True
+            # loop through each set of possible requirements, with a fancy for else loop
+            for reqs in req_lists:
+                for req in reqs:
+                    if req == "Hyperdash":
+                        if not has_laurels:
+                            break
+                    elif req == "NMG":
+                        if not logic:
+                            break
+                    elif req == "UR":
+                        if logic < 2:
+                            break
+                    elif req not in connected_regions:
+                        break
+                else:
+                    met_traversal_reqs = True
+                    break
+            if met_traversal_reqs:
+                connected_regions.add(destination)
 
+    # if the length of connected_regions changed, we got new regions, so we want to check those new origins
+    if region_count != len(connected_regions):
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic)
 
-# we're checking if an event-locked portal is being placed before the regions where its key(s) is/are
-# doing this ensures the keys will not be locked behind the event-locked portal
-def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
-    # the western belltower cannot be locked since you can access it with laurels
-    # so we only need to make sure the forest belltower isn't locked
-    if check_portal.scene_destination() == "Overworld Redux, Temple_main":
-        i = 0
-        for portal in two_plus:
-            if portal.region == "Forest Belltower Upper":
-                i += 1
-                break
-        if i == 1:
-            return True
-
-    # fortress big gold door needs 2 scenes and one of the two upper portals of the courtyard
-    elif check_portal.scene_destination() == "Fortress Main, Fortress Arena_":
-        i = j = k = 0
-        for portal in two_plus:
-            if portal.region == "Fortress Courtyard Upper":
-                i += 1
-            if portal.scene() == "Fortress Basement":
-                j += 1
-            if portal.region == "Eastern Vault Fortress":
-                k += 1
-        if i == 2 or j == 2 or k == 5:
-            return True
-
-    # fortress teleporter needs only the left fuses
-    elif check_portal.scene_destination() in {"Fortress Arena, Transit_teleporter_spidertank",
-                                              "Transit, Fortress Arena_teleporter_spidertank"}:
-        i = j = k = 0
-        for portal in two_plus:
-            if portal.scene() == "Fortress Courtyard":
-                i += 1
-            if portal.scene() == "Fortress Basement":
-                j += 1
-            if portal.region == "Eastern Vault Fortress":
-                k += 1
-        if i == 8 or j == 2 or k == 5:
-            return True
-
-    # Cathedral door needs Overworld and the front of Swamp
-    # Overworld is currently guaranteed, so no need to check it
-    elif check_portal.scene_destination() == "Swamp Redux 2, Cathedral Redux_main":
-        i = 0
-        for portal in two_plus:
-            if portal.region in {"Swamp Front", "Swamp to Cathedral Treasure Room",
-                                 "Swamp to Cathedral Main Entrance Region"}:
-                i += 1
-        if i == 4:
-            return True
-
-    # Zig portal room exit needs Zig 3 to be accessible to hit the fuse
-    elif check_portal.scene_destination() == "ziggurat2020_FTRoom, ziggurat2020_3_":
-        i = 0
-        for portal in two_plus:
-            if portal.scene() == "ziggurat2020_3":
-                i += 1
-        if i == 2:
-            return True
-
-    # Quarry teleporter needs you to hit the Darkwoods fuse
-    # Since it's physically in Quarry, we don't need to check for it
-    elif check_portal.scene_destination() in {"Quarry Redux, Transit_teleporter_quarry teleporter",
-                                              "Quarry Redux, ziggurat2020_0_"}:
-        i = 0
-        for portal in two_plus:
-            if portal.scene() == "Darkwoods Tunnel":
-                i += 1
-        if i == 2:
-            return True
-
-    # Same as above, but Quarry isn't guaranteed here
-    elif check_portal.scene_destination() == "Transit, Quarry Redux_teleporter_quarry teleporter":
-        i = j = 0
-        for portal in two_plus:
-            if portal.scene() == "Darkwoods Tunnel":
-                i += 1
-            if portal.scene() == "Quarry Redux":
-                j += 1
-        if i == 2 or j == 7:
-            return True
-
-    # Need Library fuse to use this teleporter
-    elif check_portal.scene_destination() == "Transit, Library Lab_teleporter_library teleporter":
-        i = 0
-        for portal in two_plus:
-            if portal.scene() == "Library Lab":
-                i += 1
-        if i == 3:
-            return True
-
-    # Need West Garden fuse to use this teleporter
-    elif check_portal.scene_destination() == "Transit, Archipelagos Redux_teleporter_archipelagos_teleporter":
-        i = 0
-        for portal in two_plus:
-            if portal.scene() == "Archipelagos Redux":
-                i += 1
-        if i == 6:
-            return True
-
-    # false means you're good to place the portal
-    return False
+    return connected_regions

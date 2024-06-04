@@ -1,83 +1,60 @@
 import collections.abc
-import os
-import yaml
-import requests
 import json
-import flask
+import os
+from textwrap import dedent
+from typing import Dict, Union
+
+import yaml
+from flask import redirect, render_template, request, Response
 
 import Options
-from Options import Visibility
-from flask import redirect, render_template, request, Response
-from worlds.AutoWorld import AutoWorldRegister
 from Utils import local_path
-from textwrap import dedent
+from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
+from .generate import get_meta
 
 
-def create():
+def create() -> None:
     target_folder = local_path("WebHostLib", "static", "generated")
     yaml_folder = os.path.join(target_folder, "configs")
 
     Options.generate_yaml_templates(yaml_folder)
 
 
-def get_world_theme(game_name: str):
+def get_world_theme(game_name: str) -> str:
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
 
 
-def render_options_page(template: str, world_name: str, is_complex: bool = False):
+def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:
     world = AutoWorldRegister.world_types[world_name]
     if world.hidden or world.web.options_page is False:
         return redirect("games")
+    visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
 
-    option_groups = {option: option_group.name
-                     for option_group in world.web.option_groups
-                     for option in option_group.options}
-    ordered_groups = ["Game Options", *[group.name for group in world.web.option_groups]]
-    grouped_options = {group: {} for group in ordered_groups}
-    for option_name, option in world.options_dataclass.type_hints.items():
-        # Exclude settings from options pages if their visibility is disabled
-        if not is_complex and option.visibility < Visibility.simple_ui:
-            continue
-
-        if is_complex and option.visibility < Visibility.complex_ui:
-            continue
-
-        grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+    start_collapsed = {"Game Options": False}
+    for group in world.web.option_groups:
+        start_collapsed[group.name] = group.start_collapsed
 
     return render_template(
         template,
         world_name=world_name,
         world=world,
-        option_groups=grouped_options,
+        option_groups=Options.get_option_groups(world, visibility_level=visibility_flag),
+        start_collapsed=start_collapsed,
         issubclass=issubclass,
         Options=Options,
         theme=get_world_theme(world_name),
     )
 
 
-def generate_game(player_name: str, formatted_options: dict):
-    payload = {
-        "race": 0,
-        "hint_cost": 10,
-        "forfeit_mode": "auto",
-        "remaining_mode": "disabled",
-        "collect_mode": "goal",
-        "weights": {
-            player_name: formatted_options,
-        },
-    }
-    r = requests.post("https://archipelago.gg/api/generate", json=payload)
-    if 200 <= r.status_code <= 299:
-        response_data = r.json()
-        return redirect(response_data["url"])
-    else:
-        return r.text
+def generate_game(options: Dict[str, Union[dict, str]]) -> Union[Response, str]:
+    from .generate import start_generation
+    return start_generation(options, get_meta({}))
 
 
-def send_yaml(player_name: str, formatted_options: dict):
+def send_yaml(player_name: str, formatted_options: dict) -> Response:
     response = Response(yaml.dump(formatted_options, sort_keys=False))
     response.headers["Content-Type"] = "text/yaml"
     response.headers["Content-Disposition"] = f"attachment; filename={player_name}.yaml"
@@ -85,7 +62,7 @@ def send_yaml(player_name: str, formatted_options: dict):
 
 
 @app.template_filter("dedent")
-def filter_dedent(text: str):
+def filter_dedent(text: str) -> str:
     return dedent(text).strip("\n ")
 
 
@@ -98,10 +75,34 @@ def test_ordered(obj):
 @cache.cached()
 def option_presets(game: str) -> Response:
     world = AutoWorldRegister.world_types[game]
-    presets = {}
 
-    if world.web.options_presets:
-        presets = presets | world.web.options_presets
+    presets = {}
+    for preset_name, preset in world.web.options_presets.items():
+        presets[preset_name] = {}
+        for preset_option_name, preset_option in preset.items():
+            if preset_option == "random":
+                presets[preset_name][preset_option_name] = preset_option
+                continue
+
+            option = world.options_dataclass.type_hints[preset_option_name].from_any(preset_option)
+            if isinstance(option, Options.NamedRange) and isinstance(preset_option, str):
+                assert preset_option in option.special_range_names, \
+                    f"Invalid preset value '{preset_option}' for '{preset_option_name}' in '{preset_name}'. " \
+                    f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
+
+                presets[preset_name][preset_option_name] = option.value
+            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.ItemDict)):
+                presets[preset_name][preset_option_name] = option.value
+            elif isinstance(preset_option, str):
+                # Ensure the option value is valid for Choice and Toggle options
+                assert option.name_lookup[option.value] == preset_option, \
+                    f"Invalid option value '{preset_option}' for '{preset_option_name}' in preset '{preset_name}'. " \
+                    f"Values must not be resolved to a different option via option.from_text (or an alias)."
+                # Use the name of the option
+                presets[preset_name][preset_option_name] = option.current_key
+            else:
+                # Use the name of the option
+                presets[preset_name][preset_option_name] = option.current_key
 
     class SetEncoder(json.JSONEncoder):
         def default(self, obj):
@@ -111,7 +112,7 @@ def option_presets(game: str) -> Response:
             return json.JSONEncoder.default(self, obj)
 
     json_data = json.dumps(presets, cls=SetEncoder)
-    response = flask.Response(json_data)
+    response = Response(json_data)
     response.headers["Content-Type"] = "application/json"
     return response
 
@@ -169,7 +170,7 @@ def generate_weighted_yaml(game: str):
         }
 
         if intent_generate:
-            return generate_game(player_name, formatted_options)
+            return generate_game({player_name: formatted_options})
 
         else:
             return send_yaml(player_name, formatted_options)
@@ -196,14 +197,21 @@ def generate_yaml(game: str):
             else:
                 options[key] = val
 
-        # Detect and build ItemDict options from their name pattern
         for key, val in options.copy().items():
             key_parts = key.rsplit("||", 2)
+            # Detect and build ItemDict options from their name pattern
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
                 if val != "0":
                     options[key_parts[0]][key_parts[1]] = int(val)
+                del options[key]
+
+            # Detect keys which end with -custom, indicating a TextChoice with a possible custom value
+            elif key_parts[-1].endswith("-custom"):
+                if val:
+                    options[key_parts[-1][:-7]] = val
+
                 del options[key]
 
         # Detect random-* keys and set their options accordingly
@@ -243,7 +251,7 @@ def generate_yaml(game: str):
         }
 
         if intent_generate:
-            return generate_game(player_name, formatted_options)
+            return generate_game({player_name: formatted_options})
 
         else:
             return send_yaml(player_name, formatted_options)
