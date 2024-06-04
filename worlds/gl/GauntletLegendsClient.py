@@ -197,13 +197,17 @@ class GauntletLegendsContext(CommonContext):
 
     async def inv_read(self):
         _inv: List[InventoryEntry] = []
-        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(INV_ADDR, 'x')} 1024")))
+        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(INV_ADDR, 'x')} 3072")))
         if b is None:
             return
         b.iterate(0x10)
         self.inventory_raw = b
         for i, arr in enumerate(b.split):
             _inv += [InventoryEntry(arr, i)]
+        for i in range(len(_inv)):
+            if _inv[i].p_addr == 0:
+                _inv = _inv[i:]
+                break
         new_inv: List[InventoryEntry] = []
         new_inv += [_inv[0]]
         addr = new_inv[0].n_addr
@@ -309,7 +313,7 @@ class GauntletLegendsContext(CommonContext):
         for item in self.inventory:
             await self.write_inv(item)
 
-        for i, raw in enumerate(self.inventory_raw.split[len(self.inventory):]):
+        for i, raw in enumerate(self.inventory_raw.split[len(self.inventory):], len(self.inventory)):
             item = InventoryEntry(raw, i)
             if item.type != bytes([0, 0, 0]):
                 await self.write_inv(InventoryEntry(bytes([0, 0, 0, 0, 0, 0, 0, 0]) + int.to_bytes(item.addr + 0x10, 3, 'little') + bytes([0xE0, 0, 0, 0, 0]), i))
