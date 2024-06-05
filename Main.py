@@ -372,6 +372,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
+                # get spheres -> filter address==None -> skip empty
+                spheres: List[Dict[int, Set[int]]] = []
+                for sphere in multiworld.get_spheres():
+                    current_sphere: Dict[int, Set[int]] = collections.defaultdict(set)
+                    for sphere_location in sphere:
+                        if type(sphere_location.address) is int:
+                            current_sphere[sphere_location.player].add(sphere_location.address)
+
+                    if current_sphere:
+                        spheres.append(dict(current_sphere))
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
@@ -386,6 +397,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": multiworld.seed_name,
+                    "spheres": spheres,
                     "datapackage": data_package,
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
