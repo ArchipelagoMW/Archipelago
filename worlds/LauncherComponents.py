@@ -96,7 +96,6 @@ def _install_apworld(apworld_path: str = ""):
 
     try:
         import zipfile
-        print(pathlib.Path(apworld_path.name).stem + "/__init__.py")
         zipfile.ZipFile(apworld_path).open(pathlib.Path(apworld_path.name).stem + "/__init__.py")
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
