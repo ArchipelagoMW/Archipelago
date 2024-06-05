@@ -378,7 +378,8 @@ class PokemonCrystalWorld(World):
             "require_itemfinder",
             "trainersanity",
             "randomize_pokegear",
-            "hm_badge_requirements"
+            "hm_badge_requirements",
+            "randomize_berry_trees"
         )
         if self.options.free_fly_location:
             slot_data["free_fly_location"] = self.free_fly_location

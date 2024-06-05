@@ -324,8 +324,11 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 35 - HP Up After Delivering Kenya"),
              lambda state: state.has("EVENT_GAVE_KENYA", world.player))
 
+    set_rule(get_entrance("REGION_ROUTE_35 -> REGION_ROUTE_35:FRUITTREE"),
+             lambda state: state.has("Squirtbottle", world.player))
+
     # Sudowoodo
-    set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_37"), lambda state: state.has("Squirtbottle", world.player))
+    set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_37"), can_surf)
 
     set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_36_NATIONAL_PARK_GATE"),
              lambda state: state.has("Squirtbottle", world.player))
@@ -401,6 +404,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_ROUTE_42:EAST -> REGION_ROUTE_42:CENTER"), can_surf)
     set_rule(get_entrance("REGION_ROUTE_42:CENTER -> REGION_ROUTE_42:EAST"), can_surf)
 
+    set_rule(get_entrance("REGION_ROUTE_42:CENTER -> REGION_ROUTE_42:CENTERFRUIT"), can_cut)
+
     if hidden():
         set_rule(get_location("Route 42 - Hidden Item in Pond Rock"), can_surf)
 
@@ -436,6 +441,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_ROUTE_44"), has_rocket_badges)
 
     # Route 43
+
+    set_rule(get_entrance("REGION_ROUTE_43 -> REGION_ROUTE_43:FRUITTREE"),
+             lambda state: can_cut(state) and can_surf(state))
 
     set_rule(get_location("Route 43 - Sludge Bomb from Guard in Gate"),
              lambda state: state.has("EVENT_CLEARED_ROCKET_HIDEOUT", world.player))

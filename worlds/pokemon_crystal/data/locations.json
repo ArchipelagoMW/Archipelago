@@ -6276,5 +6276,245 @@
 		],
 		"default_item": "NO_ITEM",
 		"script": "AP_Trainer_SAGE_KOJI"
+	},
+	"FRUITTREE_ROUTE_29": {
+		"label": "Route 29 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_29",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BERRY",
+		"script": "AP_FruitTree_ROUTE_29"
+	},
+	"FRUITTREE_ROUTE_30_1": {
+		"label": "Route 30 - Berry Tree 1",
+		"flag": "FRUITTREE_ROUTE_30_1",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BERRY",
+		"script": "AP_FruitTree_ROUTE_30_1"
+	},
+	"FRUITTREE_ROUTE_38": {
+		"label": "Route 38 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_38",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BERRY",
+		"script": "AP_FruitTree_ROUTE_38"
+	},
+	"FRUITTREE_ROUTE_46_1": {
+		"label": "Route 46 - Berry Tree 1",
+		"flag": "FRUITTREE_ROUTE_46_1",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BERRY",
+		"script": "AP_FruitTree_ROUTE_46_1"
+	},
+	"FRUITTREE_ROUTE_30_2": {
+		"label": "Route 30 - Berry Tree 2",
+		"flag": "FRUITTREE_ROUTE_30_2",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PSNCUREBERRY",
+		"script": "AP_FruitTree_ROUTE_30_2"
+	},
+	"FRUITTREE_ROUTE_33": {
+		"label": "Route 33 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_33",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PSNCUREBERRY",
+		"script": "AP_FruitTree_ROUTE_33"
+	},
+	"FRUITTREE_ROUTE_31": {
+		"label": "Route 31 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_31",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BITTER_BERRY",
+		"script": "AP_FruitTree_ROUTE_31"
+	},
+	"FRUITTREE_ROUTE_43": {
+		"label": "Route 43 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_43",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BITTER_BERRY",
+		"script": "AP_FruitTree_ROUTE_43"
+	},
+	"FRUITTREE_VIOLET_CITY": {
+		"label": "Violet City - Berry Tree",
+		"flag": "FRUITTREE_VIOLET_CITY",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PRZCUREBERRY",
+		"script": "AP_FruitTree_VIOLET_CITY"
+	},
+	"FRUITTREE_ROUTE_46_2": {
+		"label": "Route 46 - Berry Tree 2",
+		"flag": "FRUITTREE_ROUTE_46_2",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PRZCUREBERRY",
+		"script": "AP_FruitTree_ROUTE_46_2"
+	},
+	"FRUITTREE_ROUTE_35": {
+		"label": "Route 35 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_35",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "MYSTERYBERRY",
+		"script": "AP_FruitTree_ROUTE_35"
+	},
+	"FRUITTREE_ROUTE_45": {
+		"label": "Route 45 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_45",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "MYSTERYBERRY",
+		"script": "AP_FruitTree_ROUTE_45"
+	},
+	"FRUITTREE_ROUTE_36": {
+		"label": "Route 36 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_36",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "ICE_BERRY",
+		"script": "AP_FruitTree_ROUTE_36"
+	},
+	"FRUITTREE_ROUTE_26": {
+		"label": "Route 26 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_26",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "ICE_BERRY",
+		"script": "AP_FruitTree_ROUTE_26"
+	},
+	"FRUITTREE_ROUTE_39": {
+		"label": "Route 39 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_39",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "MINT_BERRY",
+		"script": "AP_FruitTree_ROUTE_39"
+	},
+	"FRUITTREE_ROUTE_44": {
+		"label": "Route 44 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_44",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BURNT_BERRY",
+		"script": "AP_FruitTree_ROUTE_44"
+	},
+	"FRUITTREE_ROUTE_37_1": {
+		"label": "Route 37 - Berry Tree 1",
+		"flag": "FRUITTREE_ROUTE_37_1",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "RED_APRICORN",
+		"script": "AP_FruitTree_ROUTE_37_1"
+	},
+	"FRUITTREE_ROUTE_37_2": {
+		"label": "Route 37 - Berry Tree 2",
+		"flag": "FRUITTREE_ROUTE_37_2",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BLU_APRICORN",
+		"script": "AP_FruitTree_ROUTE_37_2"
+	},
+	"FRUITTREE_ROUTE_37_3": {
+		"label": "Route 37 - Berry Tree 3",
+		"flag": "FRUITTREE_ROUTE_37_3",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BLK_APRICORN",
+		"script": "AP_FruitTree_ROUTE_37_3"
+	},
+	"FRUITTREE_AZALEA_TOWN": {
+		"label": "Azalea Town - Berry Tree",
+		"flag": "FRUITTREE_AZALEA_TOWN",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "WHT_APRICORN",
+		"script": "AP_FruitTree_AZALEA_TOWN"
+	},
+	"FRUITTREE_ROUTE_42_1": {
+		"label": "Route 42 - Berry Tree 1",
+		"flag": "FRUITTREE_ROUTE_42_1",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PNK_APRICORN",
+		"script": "AP_FruitTree_ROUTE_42_1"
+	},
+	"FRUITTREE_ROUTE_42_2": {
+		"label": "Route 42 - Berry Tree 2",
+		"flag": "FRUITTREE_ROUTE_42_2",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "GRN_APRICORN",
+		"script": "AP_FruitTree_ROUTE_42_2"
+	},
+	"FRUITTREE_ROUTE_42_3": {
+		"label": "Route 42 - Berry Tree 3",
+		"flag": "FRUITTREE_ROUTE_42_3",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "YLW_APRICORN",
+		"script": "AP_FruitTree_ROUTE_42_3"
+	},
+	"FRUITTREE_ROUTE_11": {
+		"label": "Route 11 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_11",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BERRY",
+		"script": "AP_FruitTree_ROUTE_11"
+	},
+	"FRUITTREE_ROUTE_2": {
+		"label": "Route 2 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_2",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PSNCUREBERRY",
+		"script": "AP_FruitTree_ROUTE_2"
+	},
+	"FRUITTREE_ROUTE_1": {
+		"label": "Route 1 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_1",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BITTER_BERRY",
+		"script": "AP_FruitTree_ROUTE_1"
+	},
+	"FRUITTREE_ROUTE_8": {
+		"label": "Route 8 - Berry Tree",
+		"flag": "FRUITTREE_ROUTE_8",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "PRZCUREBERRY",
+		"script": "AP_FruitTree_ROUTE_8"
+	},
+	"FRUITTREE_PEWTER_CITY_1": {
+		"label": "Pewter City - Berry Tree 1",
+		"flag": "FRUITTREE_PEWTER_CITY_1",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "ICE_BERRY",
+		"script": "AP_FruitTree_PEWTER_CITY_1"
+	},
+	"FRUITTREE_PEWTER_CITY_2": {
+		"label": "Pewter City - Berry Tree 2",
+		"flag": "FRUITTREE_PEWTER_CITY_2",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "MINT_BERRY",
+		"script": "AP_FruitTree_PEWTER_CITY_2"
+	},
+	"FRUITTREE_FUCHSIA_CITY": {
+		"label": "Fuchsia City - Berry Tree",
+		"flag": "FRUITTREE_FUCHSIA_CITY",
+		"type": "berrytree",
+		"tags": ["BerryTree"],
+		"default_item": "BURNT_BERRY",
+		"script": "AP_FruitTree_FUCHSIA_CITY"
 	}
 }

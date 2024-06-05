@@ -75,6 +75,12 @@ class RandomizePokegear(Toggle):
     default = 0
 
 
+class RandomizeBerryTrees(Toggle):
+    """Shuffles berry tree items into the pool"""
+    display_name = "Randomize Berry Trees"
+    default = 0
+
+
 class RandomizeStarters(Choice):
     """Randomizes species of starter Pokemon"""
     display_name = "Randomize Starters"
@@ -325,6 +331,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     trainersanity: Trainersanity
     trainersanity_alerts: TrainersanityAlerts
     randomize_pokegear: RandomizePokegear
+    randomize_berry_trees: RandomizeBerryTrees
     randomize_starters: RandomizeStarters
     randomize_wilds: RandomizeWilds
     normalize_encounter_rates: NormalizeEncounterRates

@@ -143,7 +143,7 @@ class PokemonCrystalClient(BizHawkClient):
 
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
-                [(data.ram_addresses["wEventFlags"], 0x100, "WRAM")],  # Flags
+                [(data.ram_addresses["wEventFlags"], 0x104, "WRAM")],  # Flags
                 [overworld_guard]
             )
 
