@@ -379,7 +379,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: can_whirlpool(state) and can_flash(state))
 
     # Cianwood
-
+    set_rule(get_entrance("REGION_CIANWOOD_CITY -> REGION_ROUTE_41"), can_surf)
     if hidden():
         set_rule(get_location("Cianwood City - Hidden Item in West Rock"), can_rocksmash)
 
@@ -454,9 +454,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 44 - Item 2"), can_surf)
 
     # Ice Path
-    set_rule(get_entrance("REGION_ICE_PATH_B2F_MAHOGANY_SIDE -> REGION_ICE_PATH_B3F"), can_strength)
-
-    set_rule(get_location("Ice Path B2F - Item 2"), can_strength)
+    set_rule(get_entrance("REGION_ICE_PATH_B2F_MAHOGANY_SIDE -> REGION_ICE_PATH_B2F_MAHOGANY_SIDE:MIDDLE"),
+             can_strength)
 
     # Blackthorn
 
