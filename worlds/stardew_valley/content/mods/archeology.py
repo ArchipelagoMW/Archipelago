@@ -10,10 +10,11 @@ from ...strings.skill_names import ModSkill
 
 register_mod_content_pack(ContentPack(
     ModNames.archaeology,
-    skills=(Skill(name=ModSkill.archaeology, has_mastery=False),),
     shop_sources={
         ModBook.digging_like_worms: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=500, shop_region=LogicRegion.bookseller_1),),
     },
+    skills=(Skill(name=ModSkill.archaeology, has_mastery=False),),
+
 ))

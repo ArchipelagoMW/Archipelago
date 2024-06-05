@@ -202,7 +202,7 @@ class ModMachine:
 class ModFloor:
     glass_path = "Glass Path"
     bone_path = "Bone Path"
-    rust_path = "Rusty Path"
+    rusty_path = "Rusty Path"
 
 
 class ModConsumable:
