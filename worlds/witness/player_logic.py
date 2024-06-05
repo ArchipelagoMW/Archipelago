@@ -418,6 +418,7 @@ class WitnessPlayerLogic:
                     "Requirement Changes:",
                     "0xFFF00 - 11 Lasers - True",
                 ])
+
         if disable_challenge_lasers:
             self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")  # Long box
             self.HUNT_ENTITIES.add("0xFFF00")
