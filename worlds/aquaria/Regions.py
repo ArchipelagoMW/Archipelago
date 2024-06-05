@@ -771,6 +771,7 @@ class AquariaRegions:
         self.__connect_regions("Sunken City left area", "Sunken City boss area",
                                self.sunken_city_l, self.sunken_city_boss,
                                lambda state: _has_beast_form(state, self.player) and
+                                             _has_sun_form(state, self.player) and
                                              _has_energy_form(state, self.player) and
                                              _has_bind_song(state, self.player))
 
