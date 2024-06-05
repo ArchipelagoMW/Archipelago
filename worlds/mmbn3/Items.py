@@ -171,7 +171,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31063, ItemName.SandStage_C, ItemClassification.filler, ItemType.Chip, 182, chip_code('C')),
     ItemData(0xB31064, ItemName.SideGun_S, ItemClassification.filler, ItemType.Chip, 12, chip_code('S')),
     ItemData(0xB31065, ItemName.Slasher_B, ItemClassification.useful, ItemType.Chip, 43, chip_code('B')),
-    ItemData(0xB31066, ItemName.SloGuage_star, ItemClassification.filler, ItemType.Chip, 157, chip_code('*')),
+    ItemData(0xB31066, ItemName.SloGauge_star, ItemClassification.filler, ItemType.Chip, 157, chip_code('*')),
     ItemData(0xB31067, ItemName.Snake_D, ItemClassification.useful, ItemType.Chip, 131, chip_code('D')),
     ItemData(0xB31068, ItemName.Snctuary_C, ItemClassification.useful, ItemType.Chip, 184, chip_code('C')),
     ItemData(0xB31069, ItemName.Spreader_star, ItemClassification.useful, ItemType.Chip, 13, chip_code('*')),
