@@ -190,7 +190,7 @@ if is_windows:
     c = next(component for component in components if component.script_name == "Launcher")
     exes.append(cx_Freeze.Executable(
         script=f"{c.script_name}.py",
-        target_name=f"{c.frozen_name}(DEBUG).exe",
+        target_name=f"{c.frozen_name}Debug.exe",
         icon=resolve_icon(c.icon),
     ))
 
