@@ -75,7 +75,7 @@ Name: "{commondesktop}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLaunc
 [Run]
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Flags: nowait; Components: lttp_sprites
+Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: lttp_sprites
 Filename: "{app}\ArchipelagoLauncher"; Parameters: "--update_settings"; StatusMsg: "Updating host.yaml..."; Flags: runasoriginaluser runhidden
 Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringChange('Launcher', '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
@@ -87,7 +87,11 @@ Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: files; Name: "{app}\ArchipelagoPokemonClient.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
-Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
+Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy"
+Type: dirifempty; Name: "{app}\lib\worlds\rogue-legacy"
+Type: filesandordirs; Name: "{app}\lib\worlds\bk_sudoku"
+Type: dirifempty; Name: "{app}\lib\worlds\bk_sudoku"
+Type: files; Name: "{app}\ArchipelagoLauncher(DEBUG).exe"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
 Type: filesandordirs; Name: "{app}\EnemizerCLI*"
 #include "installdelete.iss"

@@ -3,7 +3,7 @@ Option definitions for Pokemon Emerald
 """
 from dataclasses import dataclass
 
-from Options import (Choice, DeathLink, DefaultOnToggle, TextChoice, OptionSet, NamedRange, Range, Toggle, FreeText,
+from Options import (Choice, DeathLink, DefaultOnToggle, OptionSet, NamedRange, Range, Toggle, FreeText,
                      PerGameCommonOptions)
 
 from .data import data
@@ -11,12 +11,12 @@ from .data import data
 
 class Goal(Choice):
     """
-    Determines what your goal is to consider the game beaten
+    Determines what your goal is to consider the game beaten.
 
-    Champion: Become the champion and enter the hall of fame
-    Steven: Defeat Steven in Meteor Falls
-    Norman: Defeat Norman in Petalburg Gym
-    Legendary Hunt: Defeat or catch legendary pokemon (or whatever was randomized into their encounters)
+    - Champion: Become the champion and enter the hall of fame
+    - Steven: Defeat Steven in Meteor Falls
+    - Norman: Defeat Norman in Petalburg Gym
+    - Legendary Hunt: Defeat or catch legendary pokemon (or whatever was randomized into their encounters)
     """
     display_name = "Goal"
     default = 0
@@ -28,11 +28,11 @@ class Goal(Choice):
 
 class RandomizeBadges(Choice):
     """
-    Adds Badges to the pool
+    Adds Badges to the pool.
 
-    Vanilla: Gym leaders give their own badge
-    Shuffle: Gym leaders give a random badge
-    Completely Random: Badges can be found anywhere
+    - Vanilla: Gym leaders give their own badge
+    - Shuffle: Gym leaders give a random badge
+    - Completely Random: Badges can be found anywhere
     """
     display_name = "Randomize Badges"
     default = 2
@@ -43,11 +43,11 @@ class RandomizeBadges(Choice):
 
 class RandomizeHms(Choice):
     """
-    Adds HMs to the pool
+    Adds HMs to the pool.
 
-    Vanilla: HMs are at their vanilla locations
-    Shuffle: HMs are shuffled among vanilla HM locations
-    Completely Random: HMs can be found anywhere
+    - Vanilla: HMs are at their vanilla locations
+    - Shuffle: HMs are shuffled among vanilla HM locations
+    - Completely Random: HMs can be found anywhere
     """
     display_name = "Randomize HMs"
     default = 2
@@ -58,50 +58,51 @@ class RandomizeHms(Choice):
 
 class RandomizeKeyItems(DefaultOnToggle):
     """
-    Adds most key items to the pool. These are usually required to unlock
-    a location or region (e.g. Devon Scope, Letter, Basement Key)
+    Adds most key items to the pool.
+
+    These are usually required to unlock a location or region (e.g. Devon Scope, Letter, Basement Key).
     """
     display_name = "Randomize Key Items"
 
 
 class RandomizeBikes(Toggle):
     """
-    Adds the mach bike and acro bike to the pool
+    Adds the Mach Bike and Acro Bike to the pool.
     """
     display_name = "Randomize Bikes"
 
 
 class RandomizeEventTickets(Toggle):
     """
-    Adds the event tickets to the pool, which let you access legendaries by sailing from Lilycove
+    Adds the event tickets to the pool, which let you access legendaries by sailing from Lilycove.
     """
     display_name = "Randomize Event Tickets"
 
 
 class RandomizeRods(Toggle):
     """
-    Adds fishing rods to the pool
+    Adds fishing rods to the pool.
     """
     display_name = "Randomize Fishing Rods"
 
 
 class RandomizeOverworldItems(DefaultOnToggle):
     """
-    Adds items on the ground with a Pokeball sprite to the pool
+    Adds items on the ground with a Pokeball sprite to the pool.
     """
     display_name = "Randomize Overworld Items"
 
 
 class RandomizeHiddenItems(Toggle):
     """
-    Adds hidden items to the pool
+    Adds hidden items to the pool.
     """
     display_name = "Randomize Hidden Items"
 
 
 class RandomizeNpcGifts(Toggle):
     """
-    Adds most gifts received from NPCs to the pool (not including key items or HMs)
+    Adds most gifts received from NPCs to the pool (not including key items or HMs).
     """
     display_name = "Randomize NPC Gifts"
 
@@ -115,7 +116,9 @@ class RandomizeBerryTrees(Toggle):
 
 class Dexsanity(Toggle):
     """
-    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc.).
+    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc.). Only wild encounters are considered logical access to a species.
+
+    Blacklisting wild encounters removes the dexsanity location.
 
     Defeating gym leaders provides dex info, allowing you to see where on the map you can catch species you need.
 
@@ -126,21 +129,20 @@ class Dexsanity(Toggle):
 
 class Trainersanity(Toggle):
     """
-    Defeating a trainer for the first time gives you an item. Trainers are no longer missable.
+    Defeating a trainer gives you an item.
 
-    Trainers no longer give you money for winning. Each trainer adds a valuable item (nugget, stardust, etc.) to the pool.
+    Trainers are no longer missable. Trainers no longer give you money for winning. Each trainer adds a valuable item (Nugget, Stardust, etc.) to the pool.
     """
     display_name = "Trainersanity"
 
 
 class ItemPoolType(Choice):
     """
-    Determines which non-progression items get put into the item pool
+    Determines which non-progression items get put into the item pool.
 
-    Shuffled: Item pool consists of shuffled vanilla items
-    Diverse Balanced: Item pool consists of random items approximately proportioned
-    according to what they're replacing (i.e. more pokeballs, fewer X items, etc.)
-    Diverse: Item pool consists of uniformly random (non-unique) items
+    - Shuffled: Item pool consists of shuffled vanilla items
+    - Diverse Balanced: Item pool consists of random items approximately proportioned according to what they're replacing
+    - Diverse: Item pool consists of uniformly random (non-unique) items
     """
     display_name = "Item Pool Type"
     default = 0
@@ -151,14 +153,14 @@ class ItemPoolType(Choice):
 
 class HiddenItemsRequireItemfinder(DefaultOnToggle):
     """
-    The Itemfinder is logically required to pick up hidden items
+    The Itemfinder is logically required to pick up hidden items.
     """
     display_name = "Require Itemfinder"
 
 
 class DarkCavesRequireFlash(Choice):
     """
-    Determines whether HM05 Flash is logically required to navigate a dark cave
+    Determines whether HM05 Flash is logically required to navigate a dark cave.
     """
     display_name = "Require Flash"
     default = 3
@@ -170,10 +172,10 @@ class DarkCavesRequireFlash(Choice):
 
 class EliteFourRequirement(Choice):
     """
-    Sets the requirements to challenge the elite four
+    Sets the requirements to challenge the elite four.
 
-    Badges: Obtain some number of badges
-    Gyms: Defeat some number of gyms
+    - Badges: Obtain some number of badges
+    - Gyms: Defeat some number of gyms
     """
     display_name = "Elite Four Requirement"
     default = 0
@@ -183,7 +185,7 @@ class EliteFourRequirement(Choice):
 
 class EliteFourCount(Range):
     """
-    Sets the number of badges/gyms required to challenge the elite four
+    Sets the number of badges/gyms required to challenge the elite four.
     """
     display_name = "Elite Four Count"
     range_start = 0
@@ -193,10 +195,10 @@ class EliteFourCount(Range):
 
 class NormanRequirement(Choice):
     """
-    Sets the requirements to challenge the Petalburg Gym
+    Sets the requirements to challenge the Petalburg Gym.
 
-    Badges: Obtain some number of badges
-    Gyms: Defeat some number of gyms
+    - Badges: Obtain some number of badges
+    - Gyms: Defeat some number of gym leaders
     """
     display_name = "Norman Requirement"
     default = 0
@@ -206,7 +208,7 @@ class NormanRequirement(Choice):
 
 class NormanCount(Range):
     """
-    Sets the number of badges/gyms required to challenge the Petalburg Gym
+    Sets the number of badges/gyms required to challenge the Petalburg Gym.
     """
     display_name = "Norman Count"
     range_start = 0
@@ -216,14 +218,16 @@ class NormanCount(Range):
 
 class LegendaryHuntCatch(Toggle):
     """
-    Sets whether legendaries need to be caught to satisfy the Legendary Hunt win condition. Defeated legendaries can be respawned by defeating the Elite 4.
+    Sets whether legendaries need to be caught to satisfy the Legendary Hunt win condition.
+
+    Defeated legendaries can be respawned by defeating the Elite 4.
     """
     display_name = "Legendary Hunt Requires Catching"
 
 
 class LegendaryHuntCount(Range):
     """
-    Sets the number of legendaries that must be caught/defeated for the Legendary Hunt goal
+    Sets the number of legendaries that must be caught/defeated for the Legendary Hunt goal.
     """
     display_name = "Legendary Hunt Count"
     range_start = 1
@@ -235,24 +239,12 @@ class AllowedLegendaryHuntEncounters(OptionSet):
     """
     Sets which legendary encounters can contribute to the Legendary Hunt goal.
 
-    Latios will always be the roamer. Latias will always be at Southern Island.
+    Latias will always be at Southern Island. Latios will always be the roamer. The TV broadcast describing the roamer gives you "seen" info for Latios.
 
-    Possible values are:
-    "Groudon"
-    "Kyogre"
-    "Rayquaza"
-    "Latios"
-    "Latias"
-    "Regirock"
-    "Registeel"
-    "Regice"
-    "Ho-Oh"
-    "Lugia"
-    "Deoxys"
-    "Mew"
+    The braille puzzle in Sealed Chamber gives you "seen" info for Wailord and Relicanth. The move tutor in Fortree City always teaches Dig.
     """
     display_name = "Allowed Legendary Hunt Encounters"
-    valid_keys = frozenset([
+    valid_keys = [
         "Groudon",
         "Kyogre",
         "Rayquaza",
@@ -265,19 +257,19 @@ class AllowedLegendaryHuntEncounters(OptionSet):
         "Lugia",
         "Deoxys",
         "Mew",
-    ])
+    ]
     default = valid_keys.copy()
 
 
 class RandomizeWildPokemon(Choice):
     """
-    Randomizes wild pokemon encounters (grass, caves, water, fishing)
+    Randomizes wild pokemon encounters (grass, caves, water, fishing).
 
-    Vanilla: Wild encounters are unchanged
-    Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
-    Match Type: Wild pokemon are replaced with species that share a type with the original
-    Match Base Stats and Type: Apply both Match Base Stats and Match Type
-    Completely Random: There are no restrictions
+    - Vanilla: Wild encounters are unchanged
+    - Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
+    - Match Type: Wild pokemon are replaced with species that share a type with the original
+    - Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    - Completely Random: There are no restrictions
     """
     display_name = "Randomize Wild Pokemon"
     default = 0
@@ -294,21 +286,21 @@ class WildEncounterBlacklist(OptionSet):
 
     May be overridden if enforcing other restrictions in combination with this blacklist is impossible.
 
-    Use "_Legendaries" as a shortcut for legendary pokemon.
+    Use "_Legendaries" as a shortcut for all legendary pokemon.
     """
     display_name = "Wild Encounter Blacklist"
-    valid_keys = frozenset(species.label for species in data.species.values()) | {"_Legendaries"}
+    valid_keys = ["_Legendaries"] + sorted([species.label for species in data.species.values()])
 
 
 class RandomizeStarters(Choice):
     """
-    Randomizes the starter pokemon in Professor Birch's bag
+    Randomizes the starter pokemon in Professor Birch's bag.
 
-    Vanilla: Starters are unchanged
-    Match Base Stats: Starters are replaced with species with approximately the same bst
-    Match Type: Starters are replaced with species that share a type with the original
-    Match Base Stats and Type: Apply both Match Base Stats and Match Type
-    Completely Random: There are no restrictions
+    - Vanilla: Starters are unchanged
+    - Match Base Stats: Starters are replaced with species with approximately the same bst
+    - Match Type: Starters are replaced with species that share a type with the original
+    - Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    - Completely Random: There are no restrictions
     """
     display_name = "Randomize Starters"
     default = 0
@@ -325,21 +317,21 @@ class StarterBlacklist(OptionSet):
 
     May be overridden if enforcing other restrictions in combination with this blacklist is impossible.
 
-    Use "_Legendaries" as a shortcut for legendary pokemon.
+    Use "_Legendaries" as a shortcut for all legendary pokemon.
     """
     display_name = "Starter Blacklist"
-    valid_keys = frozenset(species.label for species in data.species.values()) | {"_Legendaries"}
+    valid_keys = ["_Legendaries"] + sorted([species.label for species in data.species.values()])
 
 
 class RandomizeTrainerParties(Choice):
     """
     Randomizes the parties of all trainers.
 
-    Vanilla: Parties are unchanged
-    Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
-    Match Type: Trainer pokemon are replaced with species that share a type with the original
-    Match Base Stats and Type: Apply both Match Base Stats and Match Type
-    Completely Random: There are no restrictions
+    - Vanilla: Parties are unchanged
+    - Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
+    - Match Type: Trainer pokemon are replaced with species that share a type with the original
+    - Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    - Completely Random: There are no restrictions
     """
     display_name = "Randomize Trainer Parties"
     default = 0
@@ -356,10 +348,10 @@ class TrainerPartyBlacklist(OptionSet):
 
     May be overridden if enforcing other restrictions in combination with this blacklist is impossible.
 
-    Use "_Legendaries" as a shortcut for legendary pokemon.
+    Use "_Legendaries" as a shortcut for all legendary pokemon.
     """
     display_name = "Trainer Party Blacklist"
-    valid_keys = frozenset(species.label for species in data.species.values()) | {"_Legendaries"}
+    valid_keys = ["_Legendaries"] + sorted([species.label for species in data.species.values()])
 
 
 class ForceFullyEvolved(Range):
@@ -376,12 +368,12 @@ class RandomizeLegendaryEncounters(Choice):
     """
     Randomizes legendary encounters (Rayquaza, Regice, Latias, etc.). The roamer will always be Latios during legendary hunts.
 
-    Vanilla: Legendary encounters are unchanged
-    Shuffle: Legendary encounters are shuffled between each other
-    Match Base Stats: Legendary encounters are replaced with species with approximately the same bst
-    Match Type: Legendary encounters are replaced with species that share a type with the original
-    Match Base Stats and Type: Apply both Match Base Stats and Match Type
-    Completely Random: There are no restrictions
+    - Vanilla: Legendary encounters are unchanged
+    - Shuffle: Legendary encounters are shuffled between each other
+    - Match Base Stats: Legendary encounters are replaced with species with approximately the same bst
+    - Match Type: Legendary encounters are replaced with species that share a type with the original
+    - Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    - Completely Random: There are no restrictions
     """
     display_name = "Randomize Legendary Encounters"
     default = 0
@@ -397,12 +389,12 @@ class RandomizeMiscPokemon(Choice):
     """
     Randomizes non-legendary static encounters. May grow to include other pokemon like trades or gifts.
 
-    Vanilla: Species are unchanged
-    Shuffle: Species are shuffled between each other
-    Match Base Stats: Species are replaced with species with approximately the same bst
-    Match Type: Species are replaced with species that share a type with the original
-    Match Base Stats and Type: Apply both Match Base Stats and Match Type
-    Completely Random: There are no restrictions
+    - Vanilla: Species are unchanged
+    - Shuffle: Species are shuffled between each other
+    - Match Base Stats: Species are replaced with species with approximately the same bst
+    - Match Type: Species are replaced with species that share a type with the original
+    - Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    - Completely Random: There are no restrictions
     """
     display_name = "Randomize Misc Pokemon"
     default = 0
@@ -418,10 +410,10 @@ class RandomizeTypes(Choice):
     """
     Randomizes the type(s) of every pokemon. Each species will have the same number of types.
 
-    Vanilla: Types are unchanged
-    Shuffle: Types are shuffled globally for all species (e.g. every Water-type pokemon becomes Fire-type)
-    Completely Random: Each species has its type(s) randomized
-    Follow Evolutions: Types are randomized per evolution line instead of per species
+    - Vanilla: Types are unchanged
+    - Shuffle: Types are shuffled globally for all species (e.g. every Water-type pokemon becomes Fire-type)
+    - Completely Random: Each species has its type(s) randomized
+    - Follow Evolutions: Types are randomized per evolution line instead of per species
     """
     display_name = "Randomize Types"
     default = 0
@@ -435,10 +427,9 @@ class RandomizeAbilities(Choice):
     """
     Randomizes abilities of every species. Each species will have the same number of abilities.
 
-    Vanilla: Abilities are unchanged
-    Completely Random: Each species has its abilities randomized
-    Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability
-    when evolving, the random ability will also be retained
+    - Vanilla: Abilities are unchanged
+    - Completely Random: Each species has its abilities randomized
+    - Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability when evolving, the random ability will also be retained
     """
     display_name = "Randomize Abilities"
     default = 0
@@ -449,22 +440,21 @@ class RandomizeAbilities(Choice):
 
 class AbilityBlacklist(OptionSet):
     """
-    A list of abilities which no pokemon should have if abilities are randomized.
-    For example, you could exclude Wonder Guard and Arena Trap like this:
-    ["Wonder Guard", "Arena Trap"]
+    Prevent species from being given these abilities.
+
+    Has no effect if abilities are not randomized.
     """
     display_name = "Ability Blacklist"
-    valid_keys = frozenset([ability.label for ability in data.abilities])
+    valid_keys = sorted([ability.label for ability in data.abilities])
 
 
 class LevelUpMoves(Choice):
     """
-    Randomizes the moves a pokemon learns when they reach a level where they would learn a move.
-    Your starter is guaranteed to have a usable damaging move.
+    Randomizes the moves a pokemon learns when they reach a level where they would learn a move. Your starter is guaranteed to have a usable damaging move.
 
-    Vanilla: Learnset is unchanged
-    Randomized: Moves are randomized
-    Start with Four Moves: Moves are randomized and all Pokemon know 4 moves at level 1
+    - Vanilla: Learnset is unchanged
+    - Randomized: Moves are randomized
+    - Start with Four Moves: Moves are randomized and all Pokemon know 4 moves at level 1
     """
     display_name = "Level Up Moves"
     default = 0
@@ -487,8 +477,7 @@ class MoveMatchTypeBias(Range):
 
 class MoveNormalTypeBias(Range):
     """
-    After it has been decided that a move will not be forced to match types, sets the probability that a learned move
-    will be forced to be the Normal type.
+    After it has been decided that a move will not be forced to match types, sets the probability that a learned move will be forced to be the Normal type.
 
     If a move is not forced to be Normal, it will be completely random.
     """
@@ -500,41 +489,51 @@ class MoveNormalTypeBias(Range):
 
 class MoveBlacklist(OptionSet):
     """
-    A list of moves which should be excluded from learnsets, TMs, and move tutors.
+    Prevents species from learning these moves via learnsets, TMs, and move tutors.
+
+    HM moves are already banned.
     """
     display_name = "Move Blacklist"
-    valid_keys = frozenset(data.move_labels.keys())
+    valid_keys = sorted(data.move_labels.keys())
 
 
 class HmCompatibility(NamedRange):
     """
-    Sets the percent chance that a given HM is compatible with a species
+    Sets the percent chance that a given HM is compatible with a species.
+
+    Some opponents like gym leaders are allowed to use HMs. This option can affect the moves they know.
     """
     display_name = "HM Compatibility"
     default = -1
     range_start = 50
     range_end = 100
     special_range_names = {
-        "vanilla": -1
+        "vanilla": -1,
+        "full": 100,
     }
 
 
 class TmTutorCompatibility(NamedRange):
     """
-    Sets the percent chance that a given TM or move tutor is compatible with a species
+    Sets the percent chance that a given TM or move tutor is compatible with a species.
+
+    Some opponents like gym leaders are allowed to use TMs. This option can affect the moves they know.
     """
     display_name = "TM/Tutor Compatibility"
     default = -1
     range_start = 0
     range_end = 100
     special_range_names = {
-        "vanilla": -1
+        "vanilla": -1,
+        "full": 100,
     }
 
 
 class TmTutorMoves(Toggle):
     """
-    Randomizes the moves taught by TMs and move tutors
+    Randomizes the moves taught by TMs and move tutors.
+
+    Some opponents like gym leaders are allowed to use TMs. This option can affect the moves they know.
     """
     display_name = "TM/Tutor Moves"
 
@@ -562,7 +561,7 @@ class MinCatchRate(Range):
 
 class GuaranteedCatch(Toggle):
     """
-    Every throw is guaranteed to catch a wild pokemon
+    Every throw is guaranteed to catch a wild pokemon.
     """
     display_name = "Guaranteed Catch"
 
@@ -571,14 +570,16 @@ class NormalizeEncounterRates(Toggle):
     """
     Make every slot on an encounter table approximately equally likely.
 
-    This does NOT mean every species is equally likely. But it will make rarer encounters less rare overall.
+    This does NOT mean each species is equally likely. In the vanilla game, each species may occupy more than one slot, and slots vary in probability.
+    
+    Species will still occupy the same slots as vanilla, but the slots will be equally weighted. The minimum encounter rate will be 8% (higher in water).
     """
     display_name = "Normalize Encounter Rates"
 
 
 class ExpModifier(Range):
     """
-    Multiplies gained experience by a percentage
+    Multiplies gained experience by a percentage.
 
     100 is default
     50 is half
@@ -593,14 +594,14 @@ class ExpModifier(Range):
 
 class BlindTrainers(Toggle):
     """
-    Causes trainers to not start a battle with you unless you talk to them
+    Trainers will not start a battle with you unless you talk to them.
     """
     display_name = "Blind Trainers"
 
 
 class PurgeSpinners(Toggle):
     """
-    Trainers will rotate in predictable patterns on a set interval instead of randomly and don't turn toward you when you run
+    Trainers will rotate in predictable patterns on a set interval instead of randomly and don't turn toward you when you run.
     """
     display_name = "Purge Spinners"
 
@@ -613,9 +614,9 @@ class MatchTrainerLevels(Choice):
 
     This is a pseudo-replacement for a level cap and makes every trainer battle a fair fight while still allowing you to level up.
 
-    Off: The vanilla experience
-    Additive: The modifier you apply to your team is a flat bonus
-    Multiplicative: The modifier you apply to your team is a percent bonus
+    - Off: The vanilla experience
+    - Additive: The modifier you apply to your team is a flat bonus
+    - Multiplicative: The modifier you apply to your team is a percent bonus
     """
     display_name = "Match Trainer Levels"
     default = 0
@@ -629,10 +630,10 @@ class MatchTrainerLevelsBonus(Range):
     A level bonus (or penalty) to apply to your team when matching an opponent's levels.
 
     When the match trainer levels option is "additive", this value is added to your team's levels during a battle.
-    For example, if this value is 5 (+5 levels), you'll have a level 25 team against a level 20 team, and a level 45 team against a level 40 team.
+        For example, if this value is 5 (+5 levels), you'll have a level 25 team against a level 20 team, and a level 45 team against a level 40 team.
 
     When the match trainer levels option is "multiplicative", this is a percent bonus.
-    For example, if this value is 5 (+5%), you'll have a level 21 team against a level 20 team, and a level 42 team against a level 40 team.
+        For example, if this value is 5 (+5%), you'll have a level 21 team against a level 20 team, and a level 42 team against a level 40 team.
     """
     display_name = "Match Trainer Levels Modifier"
     range_start = -100
@@ -643,7 +644,9 @@ class MatchTrainerLevelsBonus(Range):
 class DoubleBattleChance(Range):
     """
     The percent chance that a trainer with more than 1 pokemon will be converted into a double battle.
+
     If these trainers would normally approach you, they will only do so if you have 2 unfainted pokemon.
+
     They can be battled by talking to them no matter what.
     """
     display_name = "Double Battle Chance"
@@ -654,7 +657,7 @@ class DoubleBattleChance(Range):
 
 class BetterShops(Toggle):
     """
-    Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city)
+    Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city).
     """
     display_name = "Better Shops"
 
@@ -663,19 +666,10 @@ class RemoveRoadblocks(OptionSet):
     """
     Removes specific NPCs that normally stand in your way until certain events are completed.
 
-    This can open up the world a bit and make your playthrough less linear, but careful how many you remove; it may make too much of your world accessible upon receiving Surf.
-
-    Possible values are:
-    "Route 110 Aqua Grunts"
-    "Route 112 Magma Grunts"
-    "Route 119 Aqua Grunts"
-    "Safari Zone Construction Workers"
-    "Lilycove City Wailmer"
-    "Aqua Hideout Grunts"
-    "Seafloor Cavern Aqua Grunt"
+    This can open up the world a bit and make your playthrough less linear, but be careful how many you remove; it may make too much of your world accessible upon receiving Surf.
     """
     display_name = "Remove Roadblocks"
-    valid_keys = frozenset([
+    valid_keys = [
         "Route 110 Aqua Grunts",
         "Route 112 Magma Grunts",
         "Route 119 Aqua Grunts",
@@ -683,12 +677,13 @@ class RemoveRoadblocks(OptionSet):
         "Lilycove City Wailmer",
         "Aqua Hideout Grunts",
         "Seafloor Cavern Aqua Grunt",
-    ])
+    ]
 
 
 class ExtraBoulders(Toggle):
     """
     Places strength boulders on Route 115 which block access to Meteor Falls from the beach.
+
     This aims to take some power away from Surf by restricting how much it allows you to access.
     """
     display_name = "Extra Boulders"
@@ -697,6 +692,7 @@ class ExtraBoulders(Toggle):
 class ExtraBumpySlope(Toggle):
     """
     Adds a bumpy slope to Route 115 which allows access to Meteor Falls if you have the Acro Bike.
+
     This aims to take some power away from Surf by adding a new way to exit the Rustboro area.
     """
     display_name = "Extra Bumpy Slope"
@@ -705,6 +701,7 @@ class ExtraBumpySlope(Toggle):
 class ModifyRoute118(Toggle):
     """
     Changes the layout of Route 118 so that it must be crossed with the Acro Bike instead of Surf.
+
     This aims to take some power away from Surf by restricting how much it allows you to access.
     """
     display_name = "Modify Route 118"
@@ -712,14 +709,14 @@ class ModifyRoute118(Toggle):
 
 class FreeFlyLocation(Toggle):
     """
-    Enables flying to one random location when Mom gives you the running shoes (excluding cities reachable with no items)
+    Enables flying to one random location (excluding cities reachable with no items).
     """
     display_name = "Free Fly Location"
 
 
-class HmRequirements(TextChoice):
+class HmRequirements(Choice):
     """
-    Sets the requirements to use HMs outside of battle
+    Sets the requirements to use HMs outside of battle.
     """
     display_name = "HM Requirements"
     default = 0
@@ -729,7 +726,7 @@ class HmRequirements(TextChoice):
 
 class TurboA(Toggle):
     """
-    Holding A will advance most text automatically
+    Holding A will advance most text automatically.
     """
     display_name = "Turbo A"
 
@@ -738,9 +735,9 @@ class ReceiveItemMessages(Choice):
     """
     Determines whether you receive an in-game notification when receiving an item. Items can still only be received in the overworld.
 
-    All: Every item shows a message
-    Progression: Only progression items show a message
-    None: All items are added to your bag silently (badges will still show)
+    - All: Every item shows a message
+    - Progression: Only progression items show a message
+    - None: All items are added to your bag silently (badges will still show).
     """
     display_name = "Receive Item Messages"
     default = 0
@@ -754,6 +751,7 @@ class RemoteItems(Toggle):
     Instead of placing your own items directly into the ROM, all items are received from the server, including items you find for yourself.
 
     This enables co-op of a single slot and recovering more items after a lost save file (if you're so unlucky).
+
     But it changes pickup behavior slightly and requires connection to the server to receive any items.
     """
     display_name = "Remote Items"
@@ -781,9 +779,10 @@ class WonderTrading(DefaultOnToggle):
 
     Wonder trading NEVER affects logic.
 
-    Certain aspects of a pokemon species are per-game, not per-pokemon.
-    As a result, some things are not retained during a trade, including type, ability, level up learnset, and so on.
+    Certain aspects of a pokemon species are per-game, not per-pokemon. As a result, some things are not retained during a trade, including type, ability, level up learnset, and so on.
+
     Receiving a pokemon this way does not mark it as found in your pokedex.
+
     Trade evolutions do not evolve this way; they retain their modified methods (level ups and item use).
     """
     display_name = "Wonder Trading"
@@ -795,6 +794,7 @@ class EasterEgg(FreeText):
 
     All secret phrases are something that could be a trendy phrase in Dewford Town. They are case insensitive.
     """
+    display_name = "Easter Egg"
     default = "EMERALD SECRET"
 
 
