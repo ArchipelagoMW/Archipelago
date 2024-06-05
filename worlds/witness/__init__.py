@@ -156,7 +156,7 @@ class WitnessWorld(World):
         if self.options.victory_condition == "panel_hunt":
             total_panels = self.options.panel_hunt_total
             required_percentage = self.options.panel_hunt_required_percentage
-            self.panel_hunt_required_count = round(required_percentage / 100 * total_panels)
+            self.panel_hunt_required_count = round(total_panels * required_percentage / 100)
         else:
             self.panel_hunt_required_count = 0
 
