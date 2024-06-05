@@ -9,13 +9,14 @@ from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
 from ..strings.flower_names import Flower
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
 from ..strings.ingredient_names import Ingredient
-from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal
+from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal, ArchaeologyMeal
 from ..strings.material_names import Material
-from ..strings.metal_names import Fossil
+from ..strings.metal_names import Fossil, Artifact
 from ..strings.monster_drop_names import Loot
 from ..strings.region_names import Region, SVERegion
 from ..strings.season_names import Season
-from ..strings.skill_names import Skill
+from ..strings.seed_names import Seed
+from ..strings.skill_names import Skill, ModSkill
 from ..strings.villager_names import NPC, ModNPC
 
 
@@ -49,9 +50,9 @@ def friendship_and_shop_recipe(name: str, friend: str, hearts: int, region: str,
     return create_recipe(name, ingredients, source, mod_name)
 
 
-def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int]) -> CookingRecipe:
+def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CookingRecipe:
     source = SkillSource(skill, level)
-    return create_recipe(name, ingredients, source)
+    return create_recipe(name, ingredients, source, mod_name)
 
 
 def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CookingRecipe:
@@ -210,6 +211,8 @@ pemmican = friendship_recipe(DistantLandsMeal.pemmican, ModNPC.goblin, 8, {Loot.
 
 special_pumpkin_soup = friendship_recipe(BoardingHouseMeal.special_pumpkin_soup, ModNPC.joel, 6, {Vegetable.pumpkin: 2, AnimalProduct.large_goat_milk: 1,
                                                                                                   Vegetable.garlic: 1}, ModNames.boarding_house)
-
+diggers_delight = skill_recipe(ArchaeologyMeal.diggers_delight, ModSkill.archaeology, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.milk: 1}, ModNames.archaeology)
+rocky_root = skill_recipe(ArchaeologyMeal.rocky_root, ModSkill.archaeology, 7, {Forageable.cave_carrot: 3, Seed.coffee: 1, Material.stone: 1}, ModNames.archaeology)
+ancient_jello = skill_recipe(ArchaeologyMeal.ancient_jello, ModSkill.archaeology, 9, {WaterItem.cave_jelly: 6, Ingredient.sugar: 5, AnimalProduct.egg: 1, AnimalProduct.milk: 1, Artifact.chipped_amphora: 1}, ModNames.archaeology)
 
 all_cooking_recipes_by_name = {recipe.meal: recipe for recipe in all_cooking_recipes}
