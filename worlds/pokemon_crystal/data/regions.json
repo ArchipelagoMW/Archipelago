@@ -2146,8 +2146,7 @@
 			"REGION_ELMS_LAB",
 			"REGION_PLAYERS_HOUSE_1F",
 			"REGION_PLAYERS_NEIGHBORS_HOUSE",
-			"REGION_ELMS_HOUSE",
-			"REGION_FLY"
+			"REGION_ELMS_HOUSE"
 		],
 		"locations": [],
 		"events": []
@@ -5132,7 +5131,7 @@
 		]
 	},
 	"REGION_FLY": {
-		"johto": false,
+		"johto": true,
 		"exits": [],
 		"locations": [],
 		"events": []

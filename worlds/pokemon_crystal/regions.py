@@ -59,6 +59,7 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
 
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
     regions["Menu"].connect(regions["REGION_PLAYERS_HOUSE_2F"], "Start Game")
+    regions["Menu"].connect(regions["REGION_FLY"], "Fly")
     if world.options.free_fly_location:
         free_fly_location = FREE_FLY_REGIONS[world.free_fly_location]
         regions["REGION_FLY"].connect(regions[free_fly_location], f"REGION_FLY -> {free_fly_location}")

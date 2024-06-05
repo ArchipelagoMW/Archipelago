@@ -178,7 +178,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         else:
             return state.has("EVENT_GOT_EXPN_CARD", world.player)
 
-    set_rule(get_entrance("REGION_NEW_BARK_TOWN -> REGION_FLY"), can_fly)
+    set_rule(get_entrance("Fly"), can_fly)
 
     # Goal
     if world.options.goal == 1:
