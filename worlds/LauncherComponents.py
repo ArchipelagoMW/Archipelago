@@ -122,7 +122,7 @@ def install_apworld(apworld_path: str = ""):
         source, target = _install_apworld(apworld_path)
     except Exception as e:
         import Utils
-        Utils.messagebox(e.__class__.__name__, str(e))
+        Utils.messagebox(e.__class__.__name__, str(e), error=True)
         logging.exception(e)
     else:
         import Utils
