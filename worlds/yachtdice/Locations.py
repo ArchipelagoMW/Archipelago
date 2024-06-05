@@ -15,7 +15,7 @@ class YachtDiceLocation(Location):
         self.event = not address
 
 all_locations = {}
-starting_index = 16871244500 #500 more than the startin index for items
+starting_index = 16871244500 #500 more than the starting index for items
 
 #Function that is called when this file is loaded, which loads in ALL possible locations, score 1 to 1000
 def all_locations_fun(max_score):

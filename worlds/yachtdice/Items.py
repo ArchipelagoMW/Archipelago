@@ -73,7 +73,7 @@ item_table = {
     "100 Points": ItemData(16871244303, ItemClassification.progression)
 }
 
-ITEM_GROUPS = {
+item_groups = {
     "Score Multiplier": {
         "Score Multiplier",
         "Step Score Multiplier",

@@ -1,11 +1,13 @@
-from BaseClasses import Region, Entrance, Item, Tutorial
-from .Items import YachtDiceItem, item_table, ITEM_GROUPS
-from .Locations import YachtDiceLocation, all_locations, ini_locations
-from .Options import YachtDiceOptions
-from .Rules import set_yacht_rules, set_yacht_completion_rules, diceSimulation
-from ..AutoWorld import World, WebWorld
 import math
 import logging
+
+from BaseClasses import Region, Entrance, Item, Tutorial
+from .Items import YachtDiceItem, item_table, item_groups
+from .Locations import YachtDiceLocation, all_locations, ini_locations
+from .Options import YachtDiceOptions
+from .Rules import set_yacht_rules, set_yacht_completion_rules, dice_simulation
+from ..AutoWorld import World, WebWorld
+
 
 class YachtDiceWeb(WebWorld):
     tutorials = [Tutorial(
@@ -24,7 +26,7 @@ class YachtDiceWorld(World):
     where you cast your dice to chart a course for high scores, 
     unlocking valuable treasures along the way. 
     Discover more dice, extra rolls, multipliers, 
-    and unlockable categories to navigate the game's depths. 
+    and unlockable categories to navigate the depths of the game. 
     Roll your way to victory by reaching the target score!
     """
     game: str = "Yacht Dice"
@@ -36,7 +38,7 @@ class YachtDiceWorld(World):
 
     location_name_to_id = {name: data.id for name, data in all_locations.items()}
     
-    item_name_groups = ITEM_GROUPS
+    item_name_groups = item_groups
 
     ap_world_version = "2.0.2"
 
@@ -56,12 +58,12 @@ class YachtDiceWorld(World):
         #number of dice and rolls in the pull
         ind_dice_rolls = self.options.minimal_number_of_dice_and_rolls.value
         
-        numDice = [0, 2, 5, 5, 6, 7, 8][ind_dice_rolls]
-        numRolls = [0, 2, 3, 5, 4, 3, 2][ind_dice_rolls]
+        num_of_dice = [0, 2, 5, 5, 6, 7, 8][ind_dice_rolls]
+        num_of_rolls = [0, 2, 3, 5, 4, 3, 2][ind_dice_rolls]
 
         #amount of dice and roll fragments needed to get a dice or roll
-        amDiceF = self.options.number_of_dice_fragments_per_dice.value
-        amRollsF = self.options.number_of_roll_fragments_per_roll.value
+        frags_per_dice = self.options.number_of_dice_fragments_per_dice.value
+        frags_per_roll = self.options.number_of_roll_fragments_per_roll.value
             
         #count number of plando items not from pool, we need extra locations for them
         self.extra_plando_items = 0
@@ -117,18 +119,18 @@ class YachtDiceWorld(World):
         self.precollected += ["Dice"]
 
         #if one fragment per dice, just add "Dice" objects
-        if amDiceF == 1:
-            self.itempool += ["Dice"] * (numDice-1) #minus one because one is in start inventory
+        if frags_per_dice == 1:
+            self.itempool += ["Dice"] * (num_of_dice-1) #minus one because one is in start inventory
         else:
-            self.itempool += ["Dice"] #always add a full dice to make generation easier (will be 'early')
-            self.itempool += ["Dice Fragment"] * (amDiceF * (numDice-2))
+            self.itempool += ["Dice"] #always add a full dice to make generation easier (will be early)
+            self.itempool += ["Dice Fragment"] * (frags_per_dice * (num_of_dice-2))
 
         #if one fragment per roll, just add "Roll" objects
-        if amRollsF == 1:
-            self.itempool += ["Roll"] * (numRolls-1) #minus one because one is in start inventory
+        if frags_per_roll == 1:
+            self.itempool += ["Roll"] * (num_of_rolls-1) #minus one because one is in start inventory
         else:
-            self.itempool += ["Roll"] #always add a full roll to make generation easier (will be 'early')
-            self.itempool += ["Roll Fragment"] * (amRollsF * (numRolls-2))
+            self.itempool += ["Roll"] #always add a full roll to make generation easier (will be early)
+            self.itempool += ["Roll Fragment"] * (frags_per_roll * (num_of_rolls-2))
                 
         already_items = len(self.itempool) + self.extra_plando_items
         
@@ -138,7 +140,7 @@ class YachtDiceWorld(World):
         else:
             extraPercentage = 0.7
             
-        extraLocationsNeeded = max(10, math.ceil(already_items * extraPercentage))
+        extra_locations_needed = max(10, math.ceil(already_items * extraPercentage))
                 
         self.max_score = self.options.score_for_last_check.value
         self.goal_score = min(self.max_score, self.options.score_for_goal.value)
@@ -153,25 +155,25 @@ class YachtDiceWorld(World):
         ]
         
         #if the player wants extra rolls or dice, fill the pool with fragments until close to an extra roll/dice
-        if weights[0] > 0 and amDiceF > 1:
-            self.itempool += ["Dice Fragment"] * (amDiceF - 1)
-        if weights[1] > 0 and amRollsF > 1:
-            self.itempool += ["Roll Fragment"] * (amRollsF - 1)
+        if weights[0] > 0 and frags_per_dice > 1:
+            self.itempool += ["Dice Fragment"] * (frags_per_dice - 1)
+        if weights[1] > 0 and frags_per_roll > 1:
+            self.itempool += ["Roll Fragment"] * (frags_per_roll - 1)
             
         #calibrate the weights, since the impact of each of the items is different
-        weights[0] = weights[0] / 5 * amDiceF
-        weights[1] = weights[1] / 5 * amRollsF
+        weights[0] = weights[0] / 5 * frags_per_dice
+        weights[1] = weights[1] / 5 * frags_per_roll
             
         extraPointsAdded = 0
         
-        while diceSimulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:  
-            allitems = self.itempool + self.precollected
-            dice_fragments_in_pool = allitems.count("Dice") * amDiceF + allitems.count("Dice Fragment")
-            if dice_fragments_in_pool + 1 >= 9 * amDiceF:
-                weights[0] = 0 #can't have 9 dice
-            roll_fragments_in_pool = allitems.count("Roll") * amRollsF + allitems.count("Roll Fragment")
-            if roll_fragments_in_pool + 1 >= 6 * amRollsF:
-                weights[1] = 0 # can't have 6 rolls
+        while dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:  
+            all_items = self.itempool + self.precollected
+            dice_fragments_in_pool = all_items.count("Dice") * frags_per_dice + all_items.count("Dice Fragment")
+            if dice_fragments_in_pool + 1 >= 9 * frags_per_dice:
+                weights[0] = 0 #cannot have 9 dice
+            roll_fragments_in_pool = all_items.count("Roll") * frags_per_roll + all_items.count("Roll Fragment")
+            if roll_fragments_in_pool + 1 >= 6 * frags_per_roll:
+                weights[1] = 0 # cannot have 6 rolls
                 
             if extraPointsAdded > 300:
                 weights[5] = 0
@@ -185,17 +187,17 @@ class YachtDiceWorld(World):
             which_item_to_add = self.multiworld.random.choices([0,1,2,3,4,5], weights = weights)[0]
             
             if which_item_to_add == 0:
-                if amDiceF == 1:
+                if frags_per_dice == 1:
                     self.itempool += ["Dice"]
                 else:
                     self.itempool += ["Dice Fragment"]
-                weights[0] /= (1 + amDiceF)
+                weights[0] /= (1 + frags_per_dice)
             elif which_item_to_add == 1:
-                if amRollsF == 1:
+                if frags_per_roll == 1:
                     self.itempool += ["Roll"]
                 else:
                     self.itempool += ["Roll Fragment"]
-                weights[1] /= (1 + amRollsF)
+                weights[1] /= (1 + frags_per_roll)
             elif which_item_to_add == 2:
                 self.itempool += ["Fixed Score Multiplier"]
                 weights[2] /= 1.05
@@ -240,9 +242,9 @@ class YachtDiceWorld(World):
         #and counts number of plando items *not* from pool.
         
         already_items = len(self.itempool) + self.extra_plando_items + 1 #+1 because of Victory item
-        self.number_of_locations = already_items + extraLocationsNeeded
+        self.number_of_locations = already_items + extra_locations_needed
         
-        # From here, we'll count the number of items in the self.itempool, and add items to the pool,
+        # From here, we will count the number of items in the self.itempool, and add items to the pool,
         # making sure not to exceed the number of locations.
         
         #first, we flood the entire pool with extra points (useful), if that setting is chosen.
@@ -282,7 +284,7 @@ class YachtDiceWorld(World):
         self.itempool += ["Fun Fact"] * min(self.number_of_locations - already_items, 5)
         
         #finally, add some "Good RNG" and "Bad RNG" items to complete the item pool
-        #these items are filler and don't do anything.
+        #these items are filler and do not do anything.
         
         #probability of Good and Bad rng, based on difficulty for fun :)
         p = 1.1 - 0.25 * self.options.game_difficulty.value
@@ -294,7 +296,7 @@ class YachtDiceWorld(World):
             k=self.number_of_locations - already_items
         )
 
-        #we're done adding items. Now because of the last step, number of items should be number of locations
+        #we are done adding items. Now because of the last step, number of items should be number of locations
         already_items = len(self.itempool) + self.extra_plando_items + 1
         if already_items != self.number_of_locations:
             raise Exception(f"[Yacht Dice] Number in self.itempool is not number of locations "
@@ -345,13 +347,13 @@ class YachtDiceWorld(World):
         set_yacht_rules(self.multiworld, self.player, self.options)
         set_yacht_completion_rules(self.multiworld, self.player)
         
-        maxScoreWithItems = diceSimulation(self.multiworld.get_all_state(False), self.player, self.options)
+        maxScoreWithItems = dice_simulation(self.multiworld.get_all_state(False), self.player, self.options)
         
         if self.goal_score > maxScoreWithItems:
             raise Exception("In Yacht Dice, with all items in the pool, it is impossible to get to the goal.")
         
     def pre_fill(self):
-        #in the pre_fill, make sure one dice and one roll is early, so that you'll have 2 dice and 2 rolls soon
+        #in the pre_fill, make sure one dice and one roll is early, so that you will have 2 dice and 2 rolls soon
         self.multiworld.early_items[self.player]["Dice"] = 1
         self.multiworld.early_items[self.player]["Roll"] = 1
                 

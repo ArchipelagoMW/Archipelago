@@ -5,8 +5,8 @@ class gameDifficulty(Choice):
     """
     Difficulty. This setting determines how difficult the scores are to achieve. 
     Easy: for beginners. No luck required, just roll the dice and have fun. Lower final goal.
-    Medium: intended difficulty. If you play smart, you'll finish the game without any trouble.
-    Hard: you'll need to play smart and be lucky.
+    Medium: intended difficulty. If you play smart, you will finish the game without any trouble.
+    Hard: you will need to play smart and be lucky.
     Extreme: really hard mode, which requires many brain wrinkles and insane luck. NOT RECOMMENDED FOR MULTIWORLDS.
     """
     display_name = "Game difficulty"
@@ -58,7 +58,7 @@ class numberDiceFragmentsPerDice(Range):
     Dice can be split into fragments, gathering enough will give you an extra dice. 
     You start with one dice, and there will always be one full dice in the pool. 
     The other dice are split into fragments, according to this setting. 
-    Setting this to 1 fragment per dice just puts 'Dice' objects in the pool.
+    Setting this to 1 fragment per dice just puts "Dice" objects in the pool.
     """
     display_name = "Number of dice fragments per dice"
     range_start = 1
@@ -70,7 +70,7 @@ class numberRollFragmentsPerRoll(Range):
     Rolls can be split into fragments, gathering enough will give you an extra roll. 
     You start with one roll, and there will always be one full roll in the pool. 
     The other three rolls are split into fragments, according to this setting.
-    Setting this to 1 fragment per roll just puts 'Roll' objects in the pool.
+    Setting this to 1 fragment per roll just puts "Roll" objects in the pool.
     """
     display_name = "Number of roll fragments per roll"
     range_start = 1
@@ -110,7 +110,7 @@ class chanceOfDice(Range):
     
 class chanceOfRoll(Range):
     """
-    With more rolls, you'll be able to reach higher scores.
+    With more rolls, you will be able to reach higher scores.
     """
     display_name = "Weight of adding Roll"
     range_start = 0
@@ -187,7 +187,7 @@ class addExtraPoints(Choice):
     
     all_of_it: fill all locations with extra points
     sure: put some bonus points in
-    never: don't put any bonus points
+    never: do not put any bonus points
     """
     display_name = "Extra bonus in the pool"
     option_all_of_it = 1
@@ -199,11 +199,11 @@ class addStoryChapters(Choice):
     """
     Yacht Dice typically has space for more items.
     If there is space, would you like story chapters shuffled in the item pool?
-    Note: if you have extra points on "all_of_it", there won't be story chapters.
+    Note: if you have extra points on "all_of_it", there will not be story chapters.
     
     all_of_it: fill all locations with story chapters
     sure: if there is space left, put in 10 story chapters.
-    never: don't put any story chapters, I don't like reading (but I'm glad you're reading THIS!)
+    never: do not put any story chapters, I do not like reading (but I am glad you are reading THIS!)
     """
     display_name = "Extra story chapters in the pool"
     option_all_of_it = 1
