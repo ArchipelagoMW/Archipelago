@@ -1396,7 +1396,7 @@
 		"johto": false,
 		"exits": ["REGION_PALLET_TOWN"],
 		"locations": [],
-		"events": ["EVENT_OPENED_MT_SILVER"]
+		"events": []
 	},
 	"REGION_OLIVINE_CAFE": {
 		"johto": true,
@@ -3163,7 +3163,7 @@
 		"johto": true,
 		"exits": ["REGION_ROUTE_22", "REGION_ROUTE_26", "REGION_VICTORY_ROAD", "REGION_ROUTE_28"],
 		"locations": [],
-		"events": []
+		"events": ["EVENT_OPENED_MT_SILVER"]
 	},
 	"REGION_VIOLET_CITY": {
 		"johto": true,

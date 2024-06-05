@@ -508,6 +508,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: can_surf(state) and can_waterfall(state))
 
     # Victory Road
+    
+    set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
 
     set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), has_elite_four_badges)
 
@@ -664,10 +666,6 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_21"), can_surf)
 
         set_rule(get_entrance("REGION_PALLET_TOWN -> REGION_ROUTE_21"), can_surf)
-
-        # Pallet
-
-        set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
 
     if world.options.require_itemfinder:
         for location in world.multiworld.get_locations(world.player):
