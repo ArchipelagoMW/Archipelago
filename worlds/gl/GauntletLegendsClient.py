@@ -239,20 +239,23 @@ class GauntletLegendsContext(CommonContext):
         obj_address = await self.get_obj_addr()
         _obj = []
         if self.offset == -1:
-            b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address, 'x')} {0x3C * 0x50}")))
+            b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address, 'x')} 14400")))
             b.iterate(0x3C)
             for i, arr in enumerate(b.split):
                 if arr[0] != 0xFF:
                     self.offset = i
                     break
-        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C + (0 if mode == 0 else 0x3C * (len(self.item_locations) + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])))), 'x')} {0x3C * (len(self.item_locations) if mode == 0 else len(self.chest_locations))}")))
+        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C + (0 if mode == 0 else 0x3C * (len(self.item_locations) + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])))), 'x')} {0x3C * (len(self.item_locations) + 10 if mode == 0 else len(self.chest_locations) + 10)}")))
         b.iterate(0x3C)
         for i, arr in enumerate(b.split):
             _obj += [ObjectEntry(arr)]
-            if mode == 1:
-                self.chest_objects = _obj
-            else:
-                self.item_objects = _obj
+        _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
+        if mode == 1:
+            _obj = _obj[:len(self.chest_locations)]
+            self.chest_objects = _obj
+        else:
+            _obj = _obj[:len(self.item_locations)]
+            self.item_objects = _obj
 
     async def inv_update(self, name: str, count: int):
         await self.inv_read()
