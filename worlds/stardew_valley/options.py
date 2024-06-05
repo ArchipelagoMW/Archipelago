@@ -756,8 +756,8 @@ class Gifting(Toggle):
 disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.cooking_skill, ModNames.jasper,
                  ModNames.yoba, ModNames.eugene,
-                 ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley, ModNames.distant_lands,
-                 ModNames.lacey, ModNames.boarding_house}
+                 ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
+                 ModNames.boarding_house}
 
 # In Progress:
 # Tractor
