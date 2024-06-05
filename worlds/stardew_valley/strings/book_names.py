@@ -27,6 +27,10 @@ class Book:
     the_diamond_hunter = "The Diamond Hunter"
 
 
+class ModBook:
+    digging_like_worms = "Digging Like Worms"
+
+
 ordered_lost_books = []
 all_lost_books = set()
 

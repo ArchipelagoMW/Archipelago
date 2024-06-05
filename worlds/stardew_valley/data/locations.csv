@@ -2899,6 +2899,7 @@ id,region,name,tags,mod_name
 7055,Abandoned Mines - 3,Abandoned Treasure - Floor 3,MANDATORY,Boarding House and Bus Stop Extension
 7056,Abandoned Mines - 4,Abandoned Treasure - Floor 4,MANDATORY,Boarding House and Bus Stop Extension
 7057,Abandoned Mines - 5,Abandoned Treasure - Floor 5,MANDATORY,Boarding House and Bus Stop Extension
+7351,Farm,Read Digging Like Worms,"BOOKSANITY,BOOKSANITY_SKILL",Archaeology
 7401,Farm,Cook Magic Elixir,COOKSANITY,Magic
 7402,Farm,Craft Travel Core,CRAFTSANITY,Magic
 7403,Farm,Craft Haste Elixir,CRAFTSANITY,Stardew Valley Expanded
@@ -2906,7 +2907,7 @@ id,region,name,tags,mod_name
 7405,Farm,Craft Armor Elixir,CRAFTSANITY,Stardew Valley Expanded
 7406,Witch's Swamp,Craft Ginger Tincture,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
 7407,Farm,Craft Glass Path,CRAFTSANITY,Archaeology
-7408,Farm,Craft Glass Bazier,CRAFTSANITY,Archaeology
+7408,Farm,Craft Glass Brazier,CRAFTSANITY,Archaeology
 7409,Farm,Craft Glass Fence,CRAFTSANITY,Archaeology
 7410,Farm,Craft Bone Path,CRAFTSANITY,Archaeology
 7411,Farm,Craft Water Shifter,CRAFTSANITY,Archaeology
@@ -2924,6 +2925,11 @@ id,region,name,tags,mod_name
 7423,Farm,Craft T-Rex Skeleton L,CRAFTSANITY,Boarding House and Bus Stop Extension
 7424,Farm,Craft T-Rex Skeleton M,CRAFTSANITY,Boarding House and Bus Stop Extension
 7425,Farm,Craft T-Rex Skeleton R,CRAFTSANITY,Boarding House and Bus Stop Extension
+7426,Farm,Craft Restoration Table,CRAFTSANITY,Archaeology
+7427,Farm,Craft Rusty Path,CRAFTSANITY,Archaeology
+7428,Farm,Craft Rusty Brazier,CRAFTSANITY,Archaeology
+7429,Farm,Craft Lucky Ring,CRAFTSANITY,Archaeology
+7430,Farm,Craft Bone Fence,CRAFTSANITY,Archaeology
 7451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
@@ -2969,6 +2975,9 @@ id,region,name,tags,mod_name
 7563,Kitchen,Cook Pemmican,COOKSANITY,Distant Lands - Witch Swamp Overhaul
 7564,Kitchen,Cook Void Mint Tea,COOKSANITY,Distant Lands - Witch Swamp Overhaul
 7565,Kitchen,Cook Special Pumpkin Soup,COOKSANITY,Boarding House and Bus Stop Extension
+7566,Kitchen,Cook Digger's Delight,COOKSANITY,Archaeology
+7567,Kitchen,Cook Rocky Root Coffee,COOKSANITY,Archaeology
+7568,Kitchen,Cook Ancient Jello,COOKSANITY,Archaeology
 7601,Bear Shop,Baked Berry Oatmeal Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7602,Bear Shop,Flower Cookie Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7603,Saloon,Big Bark Burger Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
@@ -2982,6 +2991,9 @@ id,region,name,tags,mod_name
 7611,Witch's Swamp,Mushroom Kebab Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 7613,Witch's Swamp,Pemmican Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 7614,Witch's Swamp,Void Mint Tea Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
+7614,Farm,Digger's Delight Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7615,Farm,Rocky Root Coffee Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7616,Farm,Ancient Jello Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 7616,Mines Dwarf Shop,Neanderthal Skeleton Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7617,Mines Dwarf Shop,Pterodactyl Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7618,Mines Dwarf Shop,Pterodactyl Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
@@ -3258,3 +3270,9 @@ id,region,name,tags,mod_name
 8235,Shipping,Shipsanity: Pterodactyl Claw,SHIPSANITY,Boarding House and Bus Stop Extension
 8236,Shipping,Shipsanity: Neanderthal Skull,SHIPSANITY,Boarding House and Bus Stop Extension
 8237,Shipping,Shipsanity: Pterodactyl R Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
+8238,Shipping,Shipsanity: Scrap Rust,SHIPSANITY,Archaeology
+8239,Shipping,Shipsanity: Rusty Path,SHIPSANITY,Archaeology
+8240,Shipping,Shipsanity: Digging Like Worms,SHIPSANITY,Archaeology
+8241,Shipping,Shipsanity: Digger's Delight,SHIPSANITY,Archaeology
+8242,Shipping,Shipsanity: Rocky Root Coffee,SHIPSANITY,Archaeology
+8243,Shipping,Shipsanity: Ancient Jello,SHIPSANITY,Archaeology

@@ -147,4 +147,8 @@ class DistantLandsFish:
     giant_horsehoe_crab = "Giant Horsehoe Crab"
 
 
+class ModTrash:
+    rusty_scrap = "Scrap Rust"
+
+
 all_fish = tuple(all_fish)

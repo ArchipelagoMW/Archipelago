@@ -74,6 +74,7 @@ class Ring:
     glowstone_ring = "Glowstone Ring"
     iridium_band = "Iridium Band"
     wedding_ring = "Wedding Ring"
+    lucky_ring = "Lucky Ring"
 
 
 class Edible:
@@ -174,9 +175,11 @@ class ModEdible:
 
 class ModCraftable:
     travel_core = "Travel Core"
-    glass_bazier = "Glass Bazier"
+    glass_bazier = "Glass Brazier"
     water_shifter = "Water Shifter"
+    rusty_brazier = "Rusty Brazier"
     glass_fence = "Glass Fence"
+    bone_fence = "Bone Fence"
     wooden_display = "Wooden Display"
     hardwood_display = "Hardwood Display"
     neanderthal_skeleton = "Neanderthal Skeleton"
@@ -193,11 +196,13 @@ class ModMachine:
     hardwood_preservation_chamber = "Hardwood Preservation Chamber"
     grinder = "Grinder"
     ancient_battery = "Ancient Battery Production Station"
+    restoration_table = "Restoration Table"
 
 
 class ModFloor:
     glass_path = "Glass Path"
     bone_path = "Bone Path"
+    rust_path = "Rusty Path"
 
 
 class ModConsumable:

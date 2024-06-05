@@ -104,6 +104,12 @@ class SVEMeal:
     grampleton_orange_chicken = "Grampleton Orange Chicken"
 
 
+class ArchaeologyMeal:
+    diggers_delight = "Digger's Delight"
+    rocky_root = "Rocky Root Coffee"
+    ancient_jello = "Ancient Jello"
+
+
 class SVEBeverage:
     sports_drink = "Sports Drink"
 
