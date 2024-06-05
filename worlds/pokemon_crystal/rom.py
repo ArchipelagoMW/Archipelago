@@ -199,6 +199,10 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         write_bytes(patched_rom, [33, 0, 66, 2, 100, 4],
                     data.rom_addresses["AP_Prob_WaterMon"])
 
+    if world.options.randomize_berry_trees:
+        # 0xC9 = ret
+        write_bytes(patched_rom, [0xC9], data.rom_addresses["AP_Setting_FruitTreesReset"])
+
     if world.options.randomize_learnsets > 0:
         for pkmn_name, pkmn_data in world.generated_pokemon.items():
             address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
