@@ -111,16 +111,16 @@ class ShortHikeWorld(World):
         elif self.options.goal == "help_everyone":
             # Help Everyone
             self.multiworld.completion_condition[self.player] = lambda state: (state.can_reach_location("Collect 15 Seashells", self.player)
+                and state.has("Golden Feather", self.player, 12)
+                and state.can_reach_location("Tough Bird Salesman (400 Coins)", self.player)
                 and state.can_reach_location("Ranger May Shell Necklace Golden Feather", self.player)
                 and state.can_reach_location("Sue the Rabbit Shoes Reward", self.player)
                 and state.can_reach_location("Wristwatch Trade", self.player)
-                and state.can_reach_location("Tough Bird Salesman (400 Coins)", self.player)
                 and state.can_reach_location("Return Camping Permit", self.player)
-                and state.can_reach_location("Shovel Kid Trade", self.player)
                 and state.can_reach_location("Boat Challenge Reward", self.player)
+                and state.can_reach_location("Shovel Kid Trade", self.player)
                 and state.can_reach_location("Purchase Sunhat", self.player)
-                and state.can_reach_location("Artist Golden Feather", self.player)
-                and state.has("Golden Feather", self.player, 12))
+                and state.can_reach_location("Artist Golden Feather", self.player))
         elif self.options.goal == "fishmonger":
             # Fishmonger
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Catch All Fish Reward", self.player)

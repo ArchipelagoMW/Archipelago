@@ -108,9 +108,10 @@ class ShopCheckLogic(Choice):
     display_name = "Shop Check Logic"
     option_nothing = 0
     option_fishing_rod = 1
-    option_fishing_rod_and_shovel = 2
-    option_golden_fishing_rod = 3
-    option_golden_fishing_rod_and_shovel = 4
+    option_shovel = 2
+    option_fishing_rod_and_shovel = 3
+    option_golden_fishing_rod = 4
+    option_golden_fishing_rod_and_shovel = 5
     default = 1
 
 class MinShopCheckLogic(Choice):
