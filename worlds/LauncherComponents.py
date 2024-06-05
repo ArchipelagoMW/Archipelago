@@ -2,7 +2,7 @@ import logging
 import pathlib
 import weakref
 from enum import Enum, auto
-from typing import Optional, Callable, List, Iterable
+from typing import Optional, Callable, List, Iterable, Tuple
 
 from Utils import local_path, open_filename
 
@@ -82,7 +82,7 @@ def launch_textclient():
     launch_subprocess(CommonClient.run_as_textclient, name="TextClient")
 
 
-def _install_apworld(apworld_path: str = ""):
+def _install_apworld(apworld_path: str = "") -> Tuple[pathlib.Path, pathlib.Path]:
     if not apworld_path:
         apworld_path = open_filename('Select APWorld file to install', (('APWorld', ('.apworld',)),))
         if not apworld_path:
