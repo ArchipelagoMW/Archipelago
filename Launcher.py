@@ -108,23 +108,68 @@ components.extend([
 ])
 
 
+def handle_uri(path: str) -> Tuple[Union[None, str], Union[None, Component]]:
+    url = urllib.parse.urlparse(path)
+    queries = urllib.parse.parse_qs(url.query)
+    client_component = None
+    text_client_component = None
+    if "game" in queries:
+        game = queries["game"][0]
+    else:  # TODO around 0.5.0 - this is for pre this change webhost uri's
+        game = "Archipelago"
+    for component in components:
+        if component.supports_uri and component.game_name == game:
+            client_component = component
+        elif component.display_name == "Text Client":
+            text_client_component = component
+
+    from kvui import App, Button, BoxLayout, Label
+
+    class Popup(App):
+        def __init__(self):
+            self.title = "Connect to Multiworld"
+            self.icon = r"data/icon.png"
+            super().__init__()
+
+        def build(self):
+            layout = BoxLayout(orientation="vertical")
+            layout.add_widget(Label(text="Select client to open and connect with."))
+            button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
+
+            text_client_button = Button(
+                text=text_client_component.display_name,
+                on_release=lambda *args: launch(get_exe(text_client_component), True, path)
+            )
+            button_row.add_widget(text_client_button)
+
+            if client_component is not None:
+                def launch_component(*args) -> None:
+                    if client_component.func:
+                        client_component.func(path)
+                    else:
+                        launch(get_exe(client_component), True, path)
+
+                game_client_button = Button(
+                    text=client_component.display_name,
+                    on_release=launch_component
+                )
+                button_row.add_widget(game_client_button)
+
+            layout.add_widget(button_row)
+
+            return layout
+
+    Popup().run()
+
+    # prevents launcher from trying to start up its gui
+    return path, None
+
+
 def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
     if path is None:
         return None, None
     if path.startswith("archipelago://"):
-        url = urllib.parse.urlparse(path)
-        queries = urllib.parse.parse_qs(url.query)
-        if "game" in queries:
-            game = queries["game"][0]
-        else:  # TODO around 0.5.0 - this is for pre this change webhost uri's
-            game = "Archipelago"
-        for component in components:
-            if component.supports_uri and component.game_name == game:
-                return path, component
-            elif component.display_name == "Text Client":
-                # fallback
-                text_client_component = component
-        return path, text_client_component
+        return handle_uri(path)
     for component in components:
         if component.handles_file(path):
             return path, component
@@ -158,21 +203,21 @@ def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
         return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
-def launch(exe, in_terminal=False):
+def launch(exe, in_terminal=False, *args):
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe], shell=True)
+            subprocess.Popen(['start', *exe, *args], shell=True)
             return
         elif is_linux:
             terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
             if terminal:
-                subprocess.Popen([terminal, '-e', shlex.join(exe)])
+                subprocess.Popen([terminal, '-e', shlex.join(exe), *args])
                 return
         elif is_macos:
             terminal = [which('open'), '-W', '-a', 'Terminal.app']
-            subprocess.Popen([*terminal, *exe])
+            subprocess.Popen([*terminal, *exe, *args])
             return
-    subprocess.Popen(exe)
+    subprocess.Popen([*exe, *args])
 
 
 def run_gui():
