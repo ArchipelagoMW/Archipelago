@@ -5,13 +5,13 @@ from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
+from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, ItemClassification
 from Options import VerifyKeys
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
-from .. import StardewValleyWorld, options
+from .. import StardewValleyWorld, options, item_table, StardewItem
 from ..mods.mod_data import all_mods
 from ..options import StardewValleyOptions, StardewValleyOption
 
@@ -251,12 +251,14 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     def collect_lots_of_money(self):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        for i in range(100):
+        required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.25))
+        for i in range(required_prog_items):
             self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
 
     def collect_all_the_money(self):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        for i in range(1000):
+        required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.95))
+        for i in range(required_prog_items):
             self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
 
     def collect_everything(self):
@@ -281,15 +283,22 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             super().collect(item)
             return
         if count == 1:
-            item = self.multiworld.create_item(item, self.player)
+            item = self.create_item(item)
             self.multiworld.state.collect(item)
             return item
         items = []
         for i in range(count):
-            item = self.multiworld.create_item(item, self.player)
+            item = self.create_item(item)
             self.multiworld.state.collect(item)
             items.append(item)
         return items
+
+    def create_item(self, item: str) -> StardewItem:
+        created_item = self.world.create_item(item)
+        if created_item.classification == ItemClassification.progression:
+            self.multiworld.worlds[self.player].total_progression_items -= 1
+        return created_item
+
 
 
 pre_generated_worlds = {}

@@ -71,7 +71,7 @@ class TestShipsanityEverything(SVTestBase):
         self.collect_all_except(bin_name)
         shipsanity_locations = [location for location in self.get_real_locations() if
                                 LocationTags.SHIPSANITY in location_table[location.name].tags]
-        bin_item = self.world.create_item(bin_name)
+        bin_item = self.create_item(bin_name)
         for location in shipsanity_locations:
             with self.subTest(location.name):
                 self.remove(bin_item)

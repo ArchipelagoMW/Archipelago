@@ -13,11 +13,11 @@ class TestArcadeMachinesLogic(SVTestBase):
         self.assertFalse(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
         self.assertFalse(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
 
-        boots = self.world.create_item("JotPK: Progressive Boots")
-        gun = self.world.create_item("JotPK: Progressive Gun")
-        ammo = self.world.create_item("JotPK: Progressive Ammo")
-        life = self.world.create_item("JotPK: Extra Life")
-        drop = self.world.create_item("JotPK: Increased Drop Rate")
+        boots = self.create_item("JotPK: Progressive Boots")
+        gun = self.create_item("JotPK: Progressive Gun")
+        ammo = self.create_item("JotPK: Progressive Ammo")
+        life = self.create_item("JotPK: Extra Life")
+        drop = self.create_item("JotPK: Increased Drop Rate")
 
         self.multiworld.state.collect(boots, event=True)
         self.multiworld.state.collect(gun, event=True)

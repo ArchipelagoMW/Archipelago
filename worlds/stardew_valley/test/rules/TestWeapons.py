@@ -10,16 +10,16 @@ class TestWeaponsLogic(SVTestBase):
     }
 
     def test_mine(self):
-        self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Progressive House"), event=True)
-        self.collect([self.world.create_item("Combat Level")] * 10)
-        self.collect([self.world.create_item("Mining Level")] * 10)
-        self.collect([self.world.create_item("Progressive Mine Elevator")] * 24)
-        self.multiworld.state.collect(self.world.create_item("Bus Repair"), event=True)
-        self.multiworld.state.collect(self.world.create_item("Skull Key"), event=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
+        self.multiworld.state.collect(self.create_item("Progressive House"), event=True)
+        self.collect([self.create_item("Combat Level")] * 10)
+        self.collect([self.create_item("Mining Level")] * 10)
+        self.collect([self.create_item("Progressive Mine Elevator")] * 24)
+        self.multiworld.state.collect(self.create_item("Bus Repair"), event=True)
+        self.multiworld.state.collect(self.create_item("Skull Key"), event=True)
 
         self.GiveItemAndCheckReachableMine("Progressive Sword", 1)
         self.GiveItemAndCheckReachableMine("Progressive Dagger", 1)
