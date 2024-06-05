@@ -116,12 +116,19 @@ class WebWorldRegister(type):
         # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
         # dev, putting it at the end if they don't define options in it
         option_groups: List[OptionGroup] = dct.get("option_groups", [])
+        prebuilt_options = ["Game Options", "Item & Location Options"]
         seen_options = []
         item_group_in_list = False
         for group in option_groups:
-            assert group.name != "Game Options", "Game Options is a pre-determined group and can not be defined."
             assert group.options, "A custom defined Option Group must contain at least one Option."
+            # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
+            title_name = group.name.title()
+            if title_name in prebuilt_options:
+                group.name = title_name
+
             if group.name == "Item & Location Options":
+                assert not any(option in item_and_loc_options for option in group.options), \
+                    f"Item and Location Options cannot be specified multiple times"
                 group.options.extend(item_and_loc_options)
                 item_group_in_list = True
             else:
@@ -133,7 +140,7 @@ class WebWorldRegister(type):
                 assert option not in seen_options, f"{option} found in two option groups"
                 seen_options.append(option)
         if not item_group_in_list:
-            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options))
+            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options, True))
         return super().__new__(mcs, name, bases, dct)
 
 
@@ -250,18 +257,6 @@ class World(metaclass=AutoWorldRegister):
 
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
-
-    data_version: ClassVar[int] = 0
-    """
-    Increment this every time something in your world's names/id mappings changes.
-
-    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
-    that it should not be cached, and clients should request that world's DataPackage every connection. Not
-    recommended for production-ready worlds.
-
-    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
-    request a new DataPackage, if necessary.
-    """
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
@@ -536,7 +531,6 @@ class World(metaclass=AutoWorldRegister):
             "item_name_to_id": cls.item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
             "location_name_to_id": cls.location_name_to_id,
-            "version": cls.data_version,
         }
         res["checksum"] = data_package_checksum(res)
         return res

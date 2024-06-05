@@ -16,5 +16,5 @@ class UnconfineHomeWaterEnergyDoorAccessTest(AquariaTestBase):
 
     def test_unconfine_home_water_energy_door_location(self) -> None:
         """Test locations accessible with unconfined home water via energy door"""
-        self.assertTrue(self.can_reach_region("Open water top left area"), "Cannot reach Open water top left area")
+        self.assertTrue(self.can_reach_region("Open Water top left area"), "Cannot reach Open Water top left area")
         self.assertFalse(self.can_reach_region("Home Water, turtle room"), "Can reach Home Water, turtle room")
