@@ -2,6 +2,7 @@ from ..generic.Rules import set_rule
 from BaseClasses import MultiWorld
 from .YachtWeights import yacht_weights
 import math
+from collections import defaultdict
 
 category_mappings = {
     "Category Ones": "Ones",
@@ -130,16 +131,14 @@ def diceSimulationStrings(categories, nbDice, nbRolls, fixed_mult, step_mult, di
 
     #function to add two discrete distribution.
     def add_distributions(dist1, dist2):
-        combined_dist = {}
+        combined_dist = defaultdict(float)
         for val1, prob1 in dist1.items():
             for val2, prob2 in dist2.items():
-                if int(val1 + val2) in combined_dist.keys():
-                    combined_dist[int(val1 + val2)] += prob1 * prob2
-                else:
-                    combined_dist[int(val1 + val2)] = prob1 * prob2
-        return combined_dist
+                combined_dist[val1 + val2] += prob1 * prob2
+        return dict(combined_dist)
     
     #function to take the maximum of 'times' i.i.d. dist1.
+    #I've tried using defaultdict but this made it slower.
     def max_dist(dist1, mults):
         new_dist = {0: 1}
         for mult in mults:
