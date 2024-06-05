@@ -85,6 +85,37 @@ class ExampleWorld(World):
     options: ExampleGameOptions
 ```
 
+### Option Groups
+Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order specified
+by your world on the player-options and weighted-options pages. In the generated template files, there will be a comment
+with the group name at the beginning of each group of options. The `start_collapsed` Boolean only affects how the groups
+appear on the WebHost, with the grouping being collapsed when this is `True`.
+
+Options without a group name are categorized into a generic "Game Options" group, which is always the first group. If
+every option for your world is in a group, this group will be removed. There is also an "Items & Location Options"
+group, which is automatically created using certain specified `item_and_loc_options`. These specified options cannot be
+removed from this group.
+
+Both the "Game Options" and "Item & Location Options" groups can be overridden by creating your own groups with
+those names, letting you add options to them and change whether they start collapsed. The "Item &
+Location Options" group can also be moved to a different position in the group ordering, but "Game Options" will always
+be first, regardless of where it is in your list.
+
+```python
+from worlds.AutoWorld import WebWorld
+from Options import OptionGroup
+from . import Options
+
+class MyWorldWeb(WebWorld):
+    option_groups = [
+        OptionGroup("Color Options", [
+            Options.ColorblindMode,
+            Options.FlashReduction,
+            Options.UIColors,
+        ]),
+    ]
+```
+
 ### Option Checking
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
@@ -172,10 +203,12 @@ Gives the player starting hints for where the items defined here are.
 Gives the player starting hints for the items on locations defined here.
 
 ### ExcludeLocations
-Marks locations given here as `LocationProgressType.Excluded` so that progression items can't be placed on them.
+Marks locations given here as `LocationProgressType.Excluded` so that neither progression nor useful items can be
+placed on them.
 
 ### PriorityLocations
-Marks locations given here as `LocationProgressType.Priority` forcing progression items on them.
+Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
+the pool.
 
 ### ItemLinks
 Allows users to share their item pool with other players. Currently item links are per game. A link of one game between

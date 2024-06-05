@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from Options import OptionError
-from .datatypes import Door, DoorType, RoomAndDoor, RoomAndPanel
+from .datatypes import Door, DoorType, Painting, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
@@ -18,19 +18,23 @@ class AccessRequirements:
     rooms: Set[str]
     doors: Set[RoomAndDoor]
     colors: Set[str]
+    the_master: bool
 
     def __init__(self):
         self.rooms = set()
         self.doors = set()
         self.colors = set()
+        self.the_master = False
 
     def merge(self, other: "AccessRequirements"):
         self.rooms |= other.rooms
         self.doors |= other.doors
         self.colors |= other.colors
+        self.the_master |= other.the_master
 
     def __str__(self):
-        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})"
+        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})," \
+               f" the_master={self.the_master}"
 
 
 class PlayerLocation(NamedTuple):
@@ -361,13 +365,29 @@ class LingoPlayerLogic:
         if door_shuffle == ShuffleDoors.option_none:
             required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
             req_exits = [painting_id for painting_id, painting in PAINTINGS.items() if painting.required_when_no_doors]
-            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
-                             not painting.req_blocked_when_no_doors and painting.room not in required_painting_rooms]
-        else:
-            req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                             if not painting.exit_only and not painting.disable and not painting.req_blocked and
-                             painting.room not in required_painting_rooms]
+
+        def is_req_enterable(painting_id: str, painting: Painting) -> bool:
+            if painting.exit_only or painting.disable or painting.req_blocked\
+                    or painting.room in required_painting_rooms:
+                return False
+
+            if world.options.shuffle_doors == ShuffleDoors.option_none:
+                if painting.req_blocked_when_no_doors:
+                    return False
+
+                # Special case for the paintings in Color Hunt and Champion's Rest. These are req blocked when not on
+                # doors mode, and when sunwarps are disabled or sunwarp shuffle is on and the Color Hunt sunwarp is not
+                # an exit. This is because these two rooms would then be inaccessible without roof access, and we can't
+                # hide the Owl Hallway entrance behind roof access.
+                if painting.room in ["Color Hunt", "Champion's Rest"]:
+                    if world.options.sunwarp_access == SunwarpAccess.option_disabled\
+                            or (world.options.shuffle_sunwarps and "Color Hunt" not in self.sunwarp_exits):
+                        return False
+
+            return True
+
+        req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
+                         if is_req_enterable(painting_id, painting)]
         req_exits += [painting_id for painting_id, painting in PAINTINGS.items()
                       if painting.exit_only and painting.required]
         req_entrances = world.random.sample(req_enterable, len(req_exits))
@@ -447,6 +467,9 @@ class LingoPlayerLogic:
                                                                     req_panel.panel, world)
                 access_reqs.merge(sub_access_reqs)
 
+            if panel == "THE MASTER":
+                access_reqs.the_master = True
+
             self.panel_reqs[room][panel] = access_reqs
 
         return self.panel_reqs[room][panel]
@@ -486,15 +509,17 @@ class LingoPlayerLogic:
             unhindered_panels_by_color: dict[Optional[str], int] = {}
 
             for panel_name, panel_data in room_data.items():
-                # We won't count non-counting panels. THE MASTER has special access rules and is handled separately.
-                if panel_data.non_counting or panel_name == "THE MASTER":
+                # We won't count non-counting panels.
+                if panel_data.non_counting:
                     continue
 
                 # We won't coalesce any panels that have requirements beyond colors. To simplify things for now, we will
-                # only coalesce single-color panels. Chains/stacks/combo puzzles will be separate.
+                # only coalesce single-color panels. Chains/stacks/combo puzzles will be separate. THE MASTER has
+                # special access rules and is handled separately.
                 if len(panel_data.required_panels) > 0 or len(panel_data.required_doors) > 0\
                         or len(panel_data.required_rooms) > 0\
-                        or (world.options.shuffle_colors and len(panel_data.colors) > 1):
+                        or (world.options.shuffle_colors and len(panel_data.colors) > 1)\
+                        or panel_name == "THE MASTER":
                     self.counting_panel_reqs.setdefault(room_name, []).append(
                         (self.calculate_panel_requirements(room_name, panel_name, world), 1))
                 else:

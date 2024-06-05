@@ -47,20 +47,7 @@ class MLSSClient(BizHawkClient):
             # Check ROM name/patch version
             rom_name_bytes = await bizhawk.read(ctx.bizhawk_ctx, [(0xA0, 14, "ROM")])
             rom_name = bytes([byte for byte in rom_name_bytes[0] if byte != 0]).decode("UTF-8")
-            if not rom_name.startswith("MARIO&LUIGIU"):
-                return False
-            if rom_name == "MARIO&LUIGIUA8":
-                logger.info(
-                    "ERROR: You appear to be running an unpatched version of Mario & Luigi Superstar Saga. "
-                    "You need to generate a patch file and use it to create a patched ROM."
-                )
-                return False
-            if rom_name != "MARIO&LUIGIUAP":
-                logger.info(
-                    "ERROR: The patch file used to create this ROM is not compatible with "
-                    "this client. Double check your client version against the version being "
-                    "used by the generator."
-                )
+            if not rom_name.startswith("MARIO&LUIGIUA8"):
                 return False
         except UnicodeDecodeError:
             return False
