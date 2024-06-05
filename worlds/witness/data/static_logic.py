@@ -285,11 +285,11 @@ def get_umbra_variety() -> StaticWitnessLogicObj:
 def __getattr__(name):
     if name == "vanilla":
         return get_vanilla()
-    elif name == "sigma_normal":
+    if name == "sigma_normal":
         return get_sigma_normal()
-    elif name == "sigma_expert":
+    if name == "sigma_expert":
         return get_sigma_expert()
-    elif name == "umbra_variety":
+    if name == "umbra_variety":
         return get_umbra_variety()
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
