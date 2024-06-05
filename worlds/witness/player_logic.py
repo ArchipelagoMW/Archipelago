@@ -438,7 +438,7 @@ class WitnessPlayerLogic:
         chal_lasers = world.options.challenge_lasers
 
         # Exclude panels from the post-game if shuffle_postgame is false.
-        if not world.options.shuffle_postgame:
+        if not world.options.shuffle_postgame and victory != "panel_hunt":
             adjustment_linesets_in_order += self.handle_regular_postgame(world)
 
         # Exclude panels from the post-game if shuffle_postgame is false.
