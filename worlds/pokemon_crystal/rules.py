@@ -20,12 +20,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     def can_fly(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM02 Fly", world.player) and has_badge(state, "storm") and can_surf(state)
+            return state.has("HM02 Fly", world.player) and has_badge(state, "storm")
         elif world.options.hm_badge_requirements == 1:
-            return state.has("HM02 Fly", world.player) and can_surf(state)
+            return state.has("HM02 Fly", world.player)
         else:
             return state.has("HM02 Fly", world.player) and (
-                    has_badge(state, "storm") or has_badge(state, "thunder")) and can_surf(state)
+                    has_badge(state, "storm") or has_badge(state, "thunder"))
 
     def can_surf(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
@@ -324,11 +324,10 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 35 - HP Up After Delivering Kenya"),
              lambda state: state.has("EVENT_GAVE_KENYA", world.player))
 
-    set_rule(get_entrance("REGION_ROUTE_35 -> REGION_ROUTE_35:FRUITTREE"),
-             lambda state: state.has("Squirtbottle", world.player))
+    set_rule(get_entrance("REGION_ROUTE_35 -> REGION_ROUTE_35:FRUITTREE"), can_surf)
 
     # Sudowoodo
-    set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_37"), can_surf)
+    set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_37"), lambda state: state.has("Squirtbottle", world.player))
 
     set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_36_NATIONAL_PARK_GATE"),
              lambda state: state.has("Squirtbottle", world.player))

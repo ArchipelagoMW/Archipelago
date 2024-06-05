@@ -113,7 +113,7 @@
 	},
 	"REGION_BLACKTHORN_GYM_1F:STRENGTH": {
 		"johto": true,
-		"exits": ["REGION_BLACKTHORN_GYM_1F"],
+		"exits": [],
 		"locations": [
 			"TM24_DRAGONBREATH",
 			"RISING_BADGE_FROM_CLAIR",

@@ -1,4 +1,4 @@
-from BaseClasses import Location, Region, Item, ItemClassification
+from BaseClasses import Location, Region, Item, ItemClassification, Entrance
 from typing import TYPE_CHECKING, Dict, List, Tuple
 
 from .data import data
@@ -60,8 +60,18 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
     regions["Menu"].connect(regions["REGION_PLAYERS_HOUSE_2F"], "Start Game")
     regions["Menu"].connect(regions["REGION_FLY"], "Fly")
-    if world.options.free_fly_location:
-        free_fly_location = FREE_FLY_REGIONS[world.free_fly_location]
-        regions["REGION_FLY"].connect(regions[free_fly_location], f"REGION_FLY -> {free_fly_location}")
 
     return regions
+
+
+def setup_free_fly(world: PokemonCrystalWorld):
+    fly = world.get_region("REGION_FLY")
+    free_fly_location = FREE_FLY_REGIONS[world.free_fly_location]
+    fly_region = world.get_region(free_fly_location)
+    connection = Entrance(
+        world.player,
+        f"REGION_FLY -> {free_fly_location}",
+        fly
+    )
+    fly.exits.append(connection)
+    connection.connect(fly_region)

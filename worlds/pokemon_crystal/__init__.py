@@ -13,7 +13,7 @@ from .misc import misc_activities, get_misc_spoiler_log
 from .options import PokemonCrystalOptions
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
-from .regions import create_regions
+from .regions import create_regions, setup_free_fly
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
     reverse_offset_item_value, ITEM_GROUPS
 from .rules import set_rules
@@ -86,8 +86,6 @@ class PokemonCrystalWorld(World):
     generated_music: List[int]
 
     def generate_early(self) -> None:
-        if self.options.free_fly_location:
-            self.free_fly_location = get_free_fly_location(self.random, self.options.johto_only)
         if self.options.johto_only:
             if self.options.goal.value == 1:
                 self.options.goal.value = 0
@@ -106,6 +104,9 @@ class PokemonCrystalWorld(World):
         regions = create_regions(self)
         create_locations(self, regions)
         self.multiworld.regions.extend(regions.values())
+        if self.options.free_fly_location:
+            self.free_fly_location = get_free_fly_location(self.random, self.options.johto_only)
+            setup_free_fly(self)
 
     def create_items(self) -> None:
         item_locations: List[PokemonCrystalLocation] = [
