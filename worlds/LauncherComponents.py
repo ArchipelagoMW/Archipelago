@@ -82,17 +82,17 @@ def launch_textclient():
     launch_subprocess(CommonClient.run_as_textclient, name="TextClient")
 
 
-def _install_apworld(apworld_path: str = "") -> Tuple[pathlib.Path, pathlib.Path]:
-    if not apworld_path:
-        apworld_path = open_filename('Select APWorld file to install', (('APWorld', ('.apworld',)),))
-        if not apworld_path:
+def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
+    if not apworld_src:
+        apworld_src = open_filename('Select APWorld file to install', (('APWorld', ('.apworld',)),))
+        if not apworld_src:
             # user closed menu
             return
 
-    if not apworld_path.endswith(".apworld"):
-        raise Exception(f"Wrong file format, looking for .apworld. File identified: {apworld_path}")
+    if not apworld_src.endswith(".apworld"):
+        raise Exception(f"Wrong file format, looking for .apworld. File identified: {apworld_src}")
 
-    apworld_path = pathlib.Path(apworld_path)
+    apworld_path = pathlib.Path(apworld_src)
 
     try:
         import zipfile
@@ -103,6 +103,8 @@ def _install_apworld(apworld_path: str = "") -> Tuple[pathlib.Path, pathlib.Path
         raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
 
     import worlds
+    if worlds.user_folder is None:
+        raise Exception("Custom Worlds directory appears to not be writable.")
     for world_source in worlds.world_sources:
         if apworld_path.samefile(world_source.resolved_path):
             raise Exception(f"APWorld is already installed at {world_source.resolved_path}.")
@@ -119,7 +121,11 @@ def _install_apworld(apworld_path: str = "") -> Tuple[pathlib.Path, pathlib.Path
 
 def install_apworld(apworld_path: str = "") -> None:
     try:
-        source, target = _install_apworld(apworld_path)
+        res = _install_apworld(apworld_path)
+        if res is None:
+            logging.info("Aborting APWorld installation.")
+            return
+        source, target = res
     except Exception as e:
         import Utils
         Utils.messagebox(e.__class__.__name__, str(e), error=True)

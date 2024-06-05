@@ -11,7 +11,10 @@ from Utils import local_path, user_path
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
-os.makedirs(user_folder, exist_ok=True)
+try:
+    os.makedirs(user_folder, exist_ok=True)
+except OSError:  # can't access/write?
+    user_folder = None
 
 __all__ = {
     "network_data_package",
