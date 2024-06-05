@@ -17,13 +17,13 @@ def create_rules(self, location_table):
         if loc["purchase"] and not options.coins_in_shops:
             forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups['Coins'], player)
         if loc["purchase"] >= get_min_shop_logic_cost(self) and options.shop_check_logic != ShopCheckLogic.option_nothing:
-            if options.shop_check_logic == ShopCheckLogic.option_fishing_rod or options.shop_check_logic == ShopCheckLogic.option_fishing_rod_and_shovel:
+            if options.shop_check_logic in {ShopCheckLogic.option_fishing_rod, ShopCheckLogic.option_fishing_rod_and_shovel}:
                 add_rule(multiworld.get_location(loc["name"], player),
                     lambda state: state.has("Progressive Fishing Rod", player))
-            if options.shop_check_logic == ShopCheckLogic.option_golden_fishing_rod or options.shop_check_logic == ShopCheckLogic.option_golden_fishing_rod_and_shovel:
+            if options.shop_check_logic in {ShopCheckLogic.option_golden_fishing_rod, ShopCheckLogic.option_golden_fishing_rod_and_shovel}:
                 add_rule(multiworld.get_location(loc["name"], player),
                     lambda state: state.has("Progressive Fishing Rod", player, 2))
-            if options.shop_check_logic == ShopCheckLogic.option_shovel or options.shop_check_logic == ShopCheckLogic.option_fishing_rod_and_shovel or options.shop_check_logic == ShopCheckLogic.option_golden_fishing_rod_and_shovel:
+            if options.shop_check_logic in {ShopCheckLogic.option_shovel, ShopCheckLogic.option_fishing_rod_and_shovel, ShopCheckLogic.option_golden_fishing_rod_and_shovel}:
                 add_rule(multiworld.get_location(loc["name"], player),
                     lambda state: state.has("Shovel", player))
 
@@ -89,7 +89,7 @@ def get_min_feathers(self, min_golden_feathers, min_golden_feathers_easy):
     if options.golden_feather_progression == GoldenFeatherProgression.option_easy:
         min_feathers = min_golden_feathers_easy
     if min_feathers > options.golden_feathers:
-        if options.goal != Goal.option_help_everyone and options.goal != Goal.option_photo:
+        if options.goal not in {Goal.option_help_everyone, Goal.option_photo}:
             min_feathers = options.golden_feathers
 
     return min_feathers
