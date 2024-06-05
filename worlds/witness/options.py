@@ -221,7 +221,8 @@ class PanelHuntPostgame(Choice):
 
 class PanelHuntDiscourageSameAreaFactor(Range):
     """
-    The greater this value, the less likely is that many hunt panels show up in the same area.
+    The greater this value, the less likely it is that many hunt panels show up in the same area.
+
     At 0, hunt panels will be selected randomly.
     At 100, hunt panels will be almost completely evenly distributed between areas.
     """
