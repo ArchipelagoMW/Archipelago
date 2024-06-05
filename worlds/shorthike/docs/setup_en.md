@@ -19,7 +19,7 @@ the installation instructions listed there.
 ## Connecting
 
 A Short Hike will prompt you with the server details when a new game is started or a previous one is continued.
-Enter in the Server Adress and Port, Name, and Password (optional) in the popup menu that appears and hit connect.
+Enter in the Server Address and Port, Name, and Password (optional) in the popup menu that appears and hit connect.
 
 ## Tracking
 
