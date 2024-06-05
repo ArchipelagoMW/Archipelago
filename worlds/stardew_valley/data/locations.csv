@@ -2991,9 +2991,6 @@ id,region,name,tags,mod_name
 7611,Witch's Swamp,Mushroom Kebab Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 7613,Witch's Swamp,Pemmican Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 7614,Witch's Swamp,Void Mint Tea Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-7614,Farm,Digger's Delight Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
-7615,Farm,Rocky Root Coffee Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
-7616,Farm,Ancient Jello Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 7616,Mines Dwarf Shop,Neanderthal Skeleton Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7617,Mines Dwarf Shop,Pterodactyl Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7618,Mines Dwarf Shop,Pterodactyl Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
@@ -3001,6 +2998,9 @@ id,region,name,tags,mod_name
 7620,Mines Dwarf Shop,T-Rex Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7621,Mines Dwarf Shop,T-Rex Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7622,Mines Dwarf Shop,T-Rex Skeleton R Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
+7623,Farm,Digger's Delight Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7624,Farm,Rocky Root Coffee Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7625,Farm,Ancient Jello Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
 7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
 7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
