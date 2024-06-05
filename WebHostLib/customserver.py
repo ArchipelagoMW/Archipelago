@@ -277,12 +277,15 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     ctx.logger.exception("Could not determine port. Likely hosting failure.")
                 with db_session:
                     ctx.auto_shutdown = Room.get(id=room_id).timeout
+                if ctx.saving:
+                    setattr(asyncio.current_task(), "save", lambda: ctx._save(True))
                 ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
                 await ctx.shutdown_task
 
             except (KeyboardInterrupt, SystemExit):
                 if ctx.saving:
                     ctx._save()
+                    setattr(asyncio.current_task(), "save", None)
             except Exception as e:
                 with db_session:
                     room = Room.get(id=room_id)
@@ -292,6 +295,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             else:
                 if ctx.saving:
                     ctx._save()
+                    setattr(asyncio.current_task(), "save", None)
             finally:
                 try:
                     ctx.save_dirty = False  # make sure the saving thread does not write to DB after final wakeup
@@ -329,4 +333,11 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
     starter = Starter()
     starter.daemon = True
     starter.start()
-    loop.run_forever()
+    try:
+        loop.run_forever()
+    finally:
+        # save all tasks that want to be saved during shutdown
+        for task in asyncio.all_tasks(loop):
+            save: typing.Optional[typing.Callable[[], typing.Any]] = getattr(task, "save", None)
+            if save:
+                save()
