@@ -1,11 +1,39 @@
+# 2.2.0
+
+### Features
+
+- When you blacklist species from wild encounters and turn on dexsanity, blacklisted species are not added as locations
+and won't show up in the wild. Previously they would be forced to show up exactly once.
+- Added support for some new autotracking events.
+- Updated option descriptions.
+- Added `full` alias for `100` on TM and HM compatibility options.
+
+### Fixes
+
+- The Lilycove Wailmer now logically block you from the east. Actual game behavior is still unchanged for now.
+- Water encounters in Slateport now correctly require Surf.
+- Mirage Tower can no longer be your only logical access to a species in the wild, since it can permanently disappear.
+- Updated the tracker link in the setup guide.
+
+# 2.1.1
+
+### Features
+
+- You no longer need a copy of Pokemon Emerald to generate a game, patch files generate much faster.
+
+# 2.1.0
+
+_Separately released, branching from 2.0.0. Included procedure patch migration, but none of the 2.0.1 fixes._
+
 # 2.0.1
 
 ### Fixes
 
-- Changed "Ho-oh" to "Ho-Oh" in options
+- Changed "Ho-oh" to "Ho-Oh" in options.
 - Temporary fix to alleviate problems with sometimes not receiving certain items just after connecting if `remote_items`
 is `true`.
-- Temporarily disable a possible location for Marine Cave to spawn, as its causes an overflow
+- Temporarily disable a possible location for Marine Cave to spawn, as it causes an overflow.
+- Water encounters in Dewford now correctly require Surf.
 
 # 2.0.0
 

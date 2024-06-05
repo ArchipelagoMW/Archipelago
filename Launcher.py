@@ -177,6 +177,7 @@ def launch(exe, in_terminal=False):
 
 def run_gui():
     from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
+    from kivy.core.window import Window
     from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
@@ -241,6 +242,8 @@ def run_gui():
                 if client:
                     client_layout.layout.add_widget(build_button(client[1]))
 
+            Window.bind(on_drop_file=self._on_drop_file)
+
             return self.container
 
         @staticmethod
@@ -249,6 +252,14 @@ def run_gui():
                 button.component.func()
             else:
                 launch(get_exe(button.component), button.component.cli)
+
+        def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
+            """ When a patch file is dropped into the window, run the associated component. """
+            file, component = identify(filename.decode())
+            if file and component:
+                run_component(component, file)
+            else:
+                logging.warning(f"unable to identify component for {filename}")
 
         def _stop(self, *largs):
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
@@ -274,7 +285,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif not args:
         args = {}
 
-    if "Patch|Game|Component" in args:
+    if args.get("Patch|Game|Component", None) is not None:
         file, component = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file
