@@ -96,12 +96,11 @@ class SMWorld(World):
      a wide range of options to randomize Item locations, required skills and even the connections 
      between the main Areas!
     """
-
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 3
     options_dataclass = SMOptions
     options: SMOptions
+      
     settings: typing.ClassVar[SMSettings]
 
     item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}

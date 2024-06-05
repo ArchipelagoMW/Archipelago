@@ -10,7 +10,11 @@ from typing import Dict, List, TypedDict, Optional
 from Utils import local_path, user_path
 
 local_folder = os.path.dirname(__file__)
-user_folder = user_path("worlds") if user_path() != local_path() else None
+user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
+try:
+    os.makedirs(user_folder, exist_ok=True)
+except OSError:  # can't access/write?
+    user_folder = None
 
 __all__ = {
     "network_data_package",
@@ -33,7 +37,6 @@ class GamesPackage(TypedDict, total=False):
     location_name_groups: Dict[str, List[str]]
     location_name_to_id: Dict[str, int]
     checksum: str
-    version: int  # TODO: Remove support after per game data packages API change.
 
 
 class DataPackage(TypedDict):
