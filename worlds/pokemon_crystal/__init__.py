@@ -18,7 +18,7 @@ from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_c
     reverse_offset_item_value, ITEM_GROUPS
 from .rules import set_rules
 from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData,
-                   TMHMData)
+                   TMHMData, BankAddress)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
@@ -82,6 +82,8 @@ class PokemonCrystalWorld(World):
     generated_phone_indices: List[int]
     generated_misc: MiscData
     generated_tms: Dict[str, TMHMData]
+    generated_sfx: List[BankAddress]
+    generated_music: List[int]
 
     def generate_early(self) -> None:
         if self.options.free_fly_location:
@@ -210,6 +212,8 @@ class PokemonCrystalWorld(World):
         self.generated_palettes = {}
         self.generated_phone_traps = []
         self.generated_phone_indices = []
+        self.generated_music = []
+        self.generated_sfx = copy.deepcopy(crystal_data.sfx.pointers)
 
         if self.options.randomize_tm_moves.value:
             move_pool = [move_data for move_name, move_data in copy.deepcopy(crystal_data.moves).items() if
@@ -346,6 +350,16 @@ class PokemonCrystalWorld(World):
                 self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
                     pokemon=new_party)
 
+        if self.options.randomize_music:
+            music_pool = [music_id for music_name, music_id in crystal_data.music.consts.items() if
+                          music_name != "MUSIC_NONE"]
+            for _music in crystal_data.music.maps:
+                new_music = self.random.choice(music_pool)
+                self.generated_music.append(new_music)
+
+        # if self.options.randomize_sfx:
+        #     self.random.shuffle(self.generated_sfx)
+
         if self.options.enable_mischief:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
@@ -388,7 +402,6 @@ class PokemonCrystalWorld(World):
                                   19: "Cianwood City",
                                   23: "Mahogany Town",
                                   25: "Blackthorn City",
-
                                   3: "Viridian City",
                                   4: "Pewter City",
                                   5: "Cerulean City",

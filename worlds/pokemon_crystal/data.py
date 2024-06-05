@@ -110,6 +110,21 @@ class MiscData(NamedTuple):
     ec: List[List[List[int]]]
 
 
+class BankAddress(NamedTuple):
+    bank: int
+    address: int
+
+
+class SfxData(NamedTuple):
+    pointers: List[BankAddress]
+    cries: Dict[str, int]
+
+
+class MusicData(NamedTuple):
+    consts: Dict[str, int]
+    maps: List[str]
+
+
 class PokemonCrystalData:
     rom_version: int
     rom_addresses: Dict[str, int]
@@ -127,6 +142,8 @@ class PokemonCrystalData:
     tmhm: Dict[str, TMHMData]
     tm_replace_map: List[int]
     misc: MiscData
+    sfx: SfxData
+    music: MusicData
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -316,6 +333,23 @@ def _init() -> None:
             tm_data["is_hm"],
             move_data[tm_name]["id"]
         )
+
+    sfx_pointers = []
+    for sfx in data_json["sfx"]["pointers"]:
+        sfx_pointers.append(BankAddress(sfx[0], sfx[1]))
+
+    sfx_cries = {}
+
+    for cry_name, cry in data_json["sfx"]["cries"].items():
+        sfx_cries[cry_name] = cry
+
+    data.sfx = SfxData(sfx_pointers, sfx_cries)
+
+    music_consts = {}
+    for music_name, music_id in data_json["music"]["consts"].items():
+        music_consts[music_name] = music_id
+
+    data.music = MusicData(music_consts, data_json["music"]["maps"])
 
 
 _init()

@@ -184,6 +184,18 @@ class RandomizePalettes(Choice):
     option_completely_random = 2
 
 
+class RandomizeMusic(Toggle):
+    """Randomize all music"""
+    display_name = "Randomize Music"
+    default = 0
+
+
+class RandomizeSFX(Toggle):
+    """Randomize all sound effects"""
+    display_name = "Randomize SFC"
+    default = 0
+
+
 class FreeFlyLocation(Toggle):
     """Unlocks a random fly location"""
     display_name = "Free Fly Location"
@@ -325,6 +337,8 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_base_stats: RandomizeBaseStats
     randomize_types: RandomizeTypes
     randomize_palettes: RandomizePalettes
+    randomize_music: RandomizeMusic
+    # randomize_sfx: RandomizeSFX
     free_fly_location: FreeFlyLocation
     hm_badge_requirements: HMBadgeRequirements
     reusable_tms: ReusableTMs

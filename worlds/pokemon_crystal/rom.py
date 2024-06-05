@@ -314,6 +314,31 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         address = data.rom_addresses["AP_Setting_MinCatchrate"] + 1
         write_bytes(patched_rom, [world.options.minimum_catch_rate], address)
 
+    if world.options.randomize_music:
+        for i, music in enumerate(data.music.maps):
+            music_address = data.rom_addresses["AP_Music_" + music]
+            if music.startswith("MAP_"):  # map music uses a single byte
+                write_bytes(patched_rom, [world.generated_music[i]], music_address)
+            else:  # script music is 2 bytes, offset by 1
+                write_bytes(patched_rom, world.generated_music[i].to_bytes(2, "little"), music_address + 1)
+
+    # if world.options.randomize_sfx:
+    #     out_bytes = b''
+    #     for bank_address in world.generated_sfx:
+    #         out_bytes += bank_address.bank.to_bytes(1, "little") + bank_address.address.to_bytes(2, "little")
+    #     sfx_address = data.rom_addresses["AP_Setting_SFX_Pointers"]
+    #     write_bytes(patched_rom, out_bytes, sfx_address)
+    #     cries_pool = [cry for cry_name, cry in data.sfx.cries.items()]
+    #     cries_address = data.rom_addresses["AP_Setting_Cries"]
+    #     for i in range(251):
+    #         cry = world.random.choice(cries_pool)
+    #         pitch = random.randint(-768, 4096)
+    #         length = random.randint(64, 512)
+    #         cry_bytes = cry.to_bytes(2, "little") + \
+    #                     pitch.to_bytes(2, "little", signed=True) + \
+    #                     length.to_bytes(2, "little")
+    #         write_bytes(patched_rom, cry_bytes, cries_address + i * 6)
+
     if world.options.better_marts:
         mart_address = data.rom_addresses["Marts"]
         better_mart_address = data.rom_addresses["MartBetterMart"] - 0x10000
