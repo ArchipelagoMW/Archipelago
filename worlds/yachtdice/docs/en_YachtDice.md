@@ -1,22 +1,15 @@
 # Yacht Dice
 
-Yacht Dice is a straightforward game, custom-made for Archipelago, where you cast your dice to chart a course for high scores, unlocking valuable treasures along the way. Discover more dice, extra rolls, multipliers, and unlockable categories to navigate the game's depths. Roll your way to victory by reaching the target score!
+Welcome to Yacht Dice, the ultimate dice-rolling adventure in Archipelago! Cast your dice, chase high scores, and unlock valuable treasures. Discover new dice, extra rolls, multipliers, and special scoring categories to enhance your game. Roll your way to victory by reaching the target score!
 
-## Where is the settings page?
+## Understanding Location Checks
+In Yacht Dice, location checks happen when you hit certain scores for the first time. The target score for your next location check is always displayed on the website.
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+## Items and Their Effects
+When you receive an item, it could be extra dice, extra rolls, score multipliers, or new scoring categories. These boosts help you sail towards higher scores and more loot. Other items include extra points, lore, and fun facts to enrich your journey.
 
-## What is considered a location check in Yacht Dice?
+## Winning the Game
+Victory in Yacht Dice is all about reaching the target score. You can set your own target score, which is displayed on the website. Once you hit it, you've conquered the game!
 
-Location checks are reaching certain scores for the first time. The score target for the next check is shown on the website.
-
-## When the player receives an item, what happens?
-
-An item can either be extra dice, extra rolls, extra score multipliers or the unlock of a scoring category.
-These items allow for sailing towards even higher scoress for even more loot.
-There are other items too, like extra points, lore, fun facts etc.
-
-## What is the victory condition?
-
-Reaching the target score completes the game. There are options for setting the location of the target score. The target score is displayed on the website.
-
+## How to Access Settings
+Need to tweak your game? Head over to the [player settings page](../player-settings) for all your configuration options and to export your config file.
