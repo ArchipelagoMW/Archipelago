@@ -117,7 +117,7 @@ def _install_apworld(apworld_path: str = ""):
     return apworld_path, target
 
 
-def install_apworld(apworld_path: str = ""):
+def install_apworld(apworld_path: str = "") -> None:
     try:
         source, target = _install_apworld(apworld_path)
     except Exception as e:
