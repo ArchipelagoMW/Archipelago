@@ -10,7 +10,8 @@ from typing import Dict, List, TypedDict, Optional
 from Utils import local_path, user_path
 
 local_folder = os.path.dirname(__file__)
-user_folder = user_path("worlds") if user_path() != local_path() else None
+user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
+os.makedirs(user_folder, exist_ok=True)
 
 __all__ = {
     "network_data_package",
