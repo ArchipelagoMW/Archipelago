@@ -508,7 +508,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: can_surf(state) and can_waterfall(state))
 
     # Victory Road
-    
+
     set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
 
     set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), has_elite_four_badges)
@@ -609,7 +609,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
                  lambda state: can_cut(state) or can_surf(state))
 
-        set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), has_red_badges)
+        set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), lambda state: has_n_badges(state, 16))
 
         set_rule(get_location("Vermilion City - Lost Item from Guy in Fan Club"),
                  lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player) and state.has(
