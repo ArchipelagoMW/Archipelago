@@ -20,22 +20,23 @@ category_mappings = {
     "Category Large Straight": "LargeStraight",
     "Category Full House": "FullHouse",
     "Category Yacht": "Yacht",
-    "Category Distincts": "Ones",
-    "Category Two times Ones": "Twos",
-    "Category Half of Sixes": "Threes",
-    "Category Twos and Threes": "Sixes",
-    "Category Sum of Odds": "Fives",
-    "Category Sum of Evens": "Sixes",
-    "Category Double Threes and Fours": "Choice",
-    "Category Quadruple Ones and Twos": "Choice",
-    "Category Micro Straight": "Pair",
-    "Category Three Odds": "ThreeOfAKind",
-    "Category 1-2-1 Consecutive": "FourOfAKind",
-    "Category Three Distinct Dice": "TinyStraight",
-    "Category Two Pair": "SmallStraight",
-    "Category 2-1-2 Consecutive": "LargeStraight",
-    "Category Five Distinct Dice": "FullHouse",
-    "Category 4&5 Full House": "Yacht"
+  
+    "Category Distincts": "Distincts",
+    "Category Two times Ones": "Twos", #same weights as twos category
+    "Category Half of Sixes": "Threes", #same weights as threes category
+    "Category Twos and Threes": "TwosAndThrees",
+    "Category Sum of Odds": "SumOfOdds",
+    "Category Sum of Evens": "SumOfEvens",
+    "Category Double Threes and Fours": "DoubleThreesAndFours",
+    "Category Quadruple Ones and Twos": "QuadrupleOnesAndTwos",
+    "Category Micro Straight": "MicroStraight",
+    "Category Three Odds": "ThreeOdds",
+    "Category 1-2-1 Consecutive": "OneTwoOneConsecutive",
+    "Category Three Distinct Dice": "ThreeDistinctDice",
+    "Category Two Pair": "TwoPair",
+    "Category 2-1-2 Consecutive": "TwoOneTwoConsecutive",
+    "Category Five Distinct Dice": "FiveDistinctDice",
+    "Category 4&5 Full House": "FourAndFiveFullHouse"
 }
 
 #This class adds logic to the apworld.
