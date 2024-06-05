@@ -95,13 +95,15 @@ if __name__ == "__main__":
             host: ServeGame
             for n, (multidata, room, game, multi_games) in enumerate(zip(data_paths, rooms, p1_games, multis), 1):
                 involved_games = {"Archipelago"} | set(multi_games)
-                for collected_items in (0, 1):
+                for collected_items in range(3):
                     print(f"\nTesting [{n}] {game} in {multidata} on MultiServer with {collected_items} items collected")
                     with LocalServeGame(multidata) as host:
                         with Client(host.address, game, "Player1") as client:
                             local_data_packages = client.games_packages
                             local_collected_items = len(client.checked_locations)
-                            client.collect_any()
+                            if collected_items < 2:  # Clique only has 2 Locations
+                                client.collect_any()
+                            # TODO: Ctrl+C test here as well
 
                     for game_name in sorted(involved_games):
                         expect_true(game_name in local_data_packages,
@@ -123,7 +125,15 @@ if __name__ == "__main__":
                         with Client(host.address, game, "Player1") as client:
                             web_data_packages = client.games_packages
                             web_collected_items = len(client.checked_locations)
-                            client.collect_any()
+                            if collected_items < 2:  # Clique only has 2 Locations
+                                client.collect_any()
+                            if collected_items == 1:
+                                sleep(1)  # wait for the server to collect the item
+                                stop_autohost(True)  # simulate Ctrl+C
+                                sleep(3)
+                                autohost(webapp.config)  # this will spin the room right up again
+                                sleep(1)  # make log less annoying
+                                # if saving failed, the next iteration will fail below
 
                     # verify server shut down
                     try:
@@ -143,7 +153,8 @@ if __name__ == "__main__":
                         expect_true(game_name in involved_games,
                                     f"Received unexpected extra data package for {game_name} from customserver")
                     assert_equal(web_collected_items, collected_items,
-                                 "customserver did not load or save correctly")
+                                 "customserver did not load or save correctly during/after "
+                                 + ("Ctrl+C" if collected_items == 2 else "/exit"))
 
                     # compare customserver to MultiServer
                     expect_equal(local_data_packages, web_data_packages,
