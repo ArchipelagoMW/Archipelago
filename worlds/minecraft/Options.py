@@ -1,5 +1,6 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PlandoConnections
+from .Constants import region_info
 
 
 class AdvancementGoal(Range):
@@ -97,7 +98,19 @@ class StartingItems(OptionList):
     display_name = "Starting Items"
 
 
+class MCPlandoConnections(PlandoConnections):
+    entrances = set(connection[0] for connection in region_info["default_connections"])
+    exits = set(connection[1] for connection in region_info["default_connections"])
+
+    @classmethod
+    def can_connect(cls, entrance, exit):
+        if exit in region_info["illegal_connections"] and entrance in region_info["illegal_connections"][exit]:
+            return False
+        return True
+
+
 minecraft_options: typing.Dict[str, type(Option)] = {
+    "plando_connections":                   MCPlandoConnections,
     "advancement_goal":                     AdvancementGoal,
     "egg_shards_required":                  EggShardsRequired,
     "egg_shards_available":                 EggShardsAvailable,

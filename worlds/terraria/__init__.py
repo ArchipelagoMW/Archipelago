@@ -52,11 +52,6 @@ class TerrariaWorld(World):
     options_dataclass = TerrariaOptions
     options: TerrariaOptions
 
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 2
-
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 

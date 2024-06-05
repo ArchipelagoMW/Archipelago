@@ -112,7 +112,7 @@ class AdventureContext(CommonContext):
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
+            msg = f"Received {', '.join([self.item_names.lookup_in_slot(item.item) for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "Retrieved":
             if f"adventure_{self.auth}_freeincarnates_used" in args["keys"]:
