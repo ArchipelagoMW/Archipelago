@@ -25,7 +25,7 @@ from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
 from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop, Fruit
-from ...strings.fish_names import WaterItem
+from ...strings.fish_names import WaterItem, ModTrash
 from ...strings.flower_names import Flower
 from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.forageable_names import SVEForage, DistantLandsForageable, Forageable, Mushroom
@@ -196,6 +196,7 @@ FarmingLogicMixin]]):
                     archaeology_item_rules[location_name] = display_item_rule & preservation_chamber_rule
                 else:
                     archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
+        archaeology_item_rules[ModTrash.rusty_scrap] = self.logic.has(ModMachine.grinder) & self.logic.has_any(*all_artifacts)
         return archaeology_item_rules
 
     def get_distant_lands_item_rules(self):
