@@ -1,4 +1,3 @@
-from functools import lru_cache
 from math import floor
 from pkgutil import get_data
 from random import Random
@@ -104,12 +103,17 @@ def parse_lambda(lambda_string: str) -> WitnessRule:
 
 
 
-@lru_cache(maxsize=None)
+_adjustment_file_cache = dict()
+
+
 def get_adjustment_file(adjustment_file: str) -> List[str]:
-    data = get_data(__name__, adjustment_file)
-    if data is None:
-        raise FileNotFoundError(f"Could not find {adjustment_file}")
-    return [line.strip() for line in data.decode("utf-8").split("\n")]
+    if adjustment_file not in _adjustment_file_cache:
+        data = get_data(__name__, adjustment_file)
+        if data is None:
+            raise FileNotFoundError(f"Could not find {adjustment_file}")
+        _adjustment_file_cache[adjustment_file] = [line.strip() for line in data.decode("utf-8").split("\n")]
+
+    return _adjustment_file_cache[adjustment_file]
 
 
 def get_disable_unrandomized_list() -> List[str]:

@@ -212,7 +212,7 @@ class MinimumEggPrice(Range):
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
-    range_end = 21
+    range_end = 20
     default = 1
 
 
