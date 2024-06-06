@@ -4,6 +4,7 @@ from .YachtWeights import yacht_weights
 import math
 from collections import defaultdict
 
+#List of categories, and the name of the logic class associated with it
 category_mappings = {
     "Category Ones": "Ones",
     "Category Twos": "Twos",
@@ -49,7 +50,6 @@ category_mappings = {
 #The score is logic is *much* lower than the actual maximum reachable score.
 
 
-
 class Category:
     def __init__(self, name, quantity = 1):
         self.name = name
@@ -65,12 +65,11 @@ class Category:
         return mean_score * self.quantity
 
 
-
 def extract_progression(state, player, options):
     #method to obtain a list of what items the player has.
-    #this includes categories, dice, rolls and score multiplier.
+    #this includes categories, dice, rolls and score multiplier etc.
     
-    if player == "state_is_a_list":
+    if player == "state_is_a_list": #the state variable is just a list with the names of the items
         number_of_dice = (
             state.count("Dice") 
             + state.count("Dice Fragment") // options.number_of_dice_fragments_per_dice.value
@@ -90,7 +89,7 @@ def extract_progression(state, player, options):
         extra_points_in_logic = state.count("1 Point")
         extra_points_in_logic += state.count("10 Points") * 10
         extra_points_in_logic += state.count("100 Points") * 100
-    else:
+    else: #state is an Archipelago object, so we need state.count(..., player)
         number_of_dice = (
             state.count("Dice", player) 
             + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
@@ -126,10 +125,11 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     if tup in yachtdice_cache.keys():
         return yachtdice_cache[tup]
     
-    #sort categories because for the step multiplier, you will want low-scorig categories first
+    #sort categories because for the step multiplier, you will want low-scoring categories first
     categories.sort(key=lambda category: category.mean_score(num_dice, num_rolls))
 
     #function to add two discrete distribution.
+    #defaultdict is a dict where you don't need to check if a id is present, you can just use += (lot faster)
     def add_distributions(dist1, dist2):
         combined_dist = defaultdict(float)
         for val1, prob1 in dist1.items():
@@ -138,7 +138,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         return dict(combined_dist)
     
     #function to take the maximum of "times" i.i.d. dist1.
-    #I have tried using defaultdict but this made it slower.
+    #(I have tried using defaultdict here too but this made it slower.)
     def max_dist(dist1, mults):
         new_dist = {0: 1}
         for mult in mults:
@@ -172,7 +172,9 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         # Return the first value if percentile is lower than all probabilities
         return prev_val if prev_val is not None else sorted_values[0]  
             
-            
+    #parameters for logic.
+    #perc_return is, per difficulty, the percentages of total score it returns (it averages out the values)
+    #diff_divide determines how many shots the logic gets per category. Lower = more shots.
     perc_return = [[0], [0.1, 0.5], [0.3, 0.7], [0.55, 0.85], [0.85, 0.95]][diff]
     diff_divide = [0, 9, 7, 3, 2][diff]
 
@@ -188,10 +190,10 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
             dist[key] /= 100000
             
         cat_mult = 2 ** (categories[j].quantity-1)
-        max_tries = j // diff_divide
-        mults = [(1 + fixed_mult + step_mult * ii) * cat_mult for ii in range(max(0,j - max_tries), j+1)]
-            
+        
         #for higher difficulties, the simulation gets multiple tries for categories.
+        max_tries = j // diff_divide       
+        mults = [(1 + fixed_mult + step_mult * ii) * cat_mult for ii in range(max(0,j - max_tries), j+1)]
         dist = max_dist(dist, mults)
         
         total_dist = add_distributions(total_dist, dist)

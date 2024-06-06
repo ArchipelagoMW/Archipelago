@@ -40,7 +40,7 @@ class YachtDiceWorld(World):
     
     item_name_groups = item_groups
 
-    ap_world_version = "2.0.3"
+    ap_world_version = "2.0.4"
 
     def _get_yachtdice_data(self):
         return {
@@ -51,7 +51,8 @@ class YachtDiceWorld(World):
             "race": self.multiworld.is_race,
         }
         
-    def generate_early(self):      
+    #In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
+    def generate_early(self):    
         self.itempool = []
         self.precollected = []       
             
@@ -72,8 +73,6 @@ class YachtDiceWorld(World):
             if plando_setting.get("from_pool", False) is False:
                 self.extra_plando_items += sum(value for value in plando_setting["items"].values())
                 
-
-        
         # Create a list with the specified number of 1s
         num_ones = self.options.alternative_categories.value
         categorylist = [1] * num_ones + [0] * (16 - num_ones)
@@ -81,8 +80,9 @@ class YachtDiceWorld(World):
         # Shuffle the list to randomize the order
         self.multiworld.random.shuffle(categorylist)                       
        
-        
         #A list of all possible categories.
+        #Every entry in the list has two categories, one 'default' category and one 'alt'.
+        #You get either of the two for every entry, so a total of 16 unique categories.
         all_categories = [
             ["Category Choice", "Category Double Threes and Fours"],
             ["Category Inverse Choice", "Category Quadruple Ones and Twos"],
@@ -135,16 +135,20 @@ class YachtDiceWorld(World):
         already_items = len(self.itempool) + self.extra_plando_items
         
         #Yacht Dice needs extra filler items so it doesn't get stuck in generation.
+        #For now, we calculate the number of extra items we'll need later.
         if self.options.minimize_extra_items.value:
             extraPercentage = max(0.1, 0.8 - self.multiworld.players / 10)
         else:
             extraPercentage = 0.7
-            
         extra_locations_needed = max(10, math.ceil(already_items * extraPercentage))
                 
+        #max score is the value of the last check. Goal score is the score needed to 'finish' the game
         self.max_score = self.options.score_for_last_check.value
         self.goal_score = min(self.max_score, self.options.score_for_goal.value)
         
+        #Yacht Dice adds items into the pool until a score of at least 1000 is reached.
+        #the yaml contains weights, which determine how likely it is that specific items get added.
+        #If all weights are 0, some of them will be made to be non-zero later.
         weights = [
             self.options.weight_of_dice.value,
             self.options.weight_of_roll.value,
@@ -167,19 +171,22 @@ class YachtDiceWorld(World):
         extra_points_added = 0
         multipliers_added = 0
         
+        #Keep adding items until a score of 1000 is in logic
         while dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:  
             all_items = self.itempool + self.precollected
             dice_fragments_in_pool = all_items.count("Dice") * frags_per_dice + all_items.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * frags_per_dice:
-                weights[0] = 0 #cannot have 9 dice
+                weights[0] = 0 #don't allow >=9 dice
             roll_fragments_in_pool = all_items.count("Roll") * frags_per_roll + all_items.count("Roll Fragment")
             if roll_fragments_in_pool + 1 >= 6 * frags_per_roll:
-                weights[1] = 0 # cannot have 6 rolls
+                weights[1] = 0 # don't allow >= 6 rolls
                 
+            #Don't allow too many multipliers
             if multipliers_added > 50:
                 weights[2] = 0
                 weights[3] = 0
                 
+            #Don't allow too many extra points
             if extra_points_added > 300:
                 weights[5] = 0                
             
@@ -191,8 +198,8 @@ class YachtDiceWorld(World):
                 if extra_points_added <= 300:
                     weights[5] = 1
                 
+            #Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
             which_item_to_add = self.multiworld.random.choices([0,1,2,3,4,5], weights = weights)[0]
-            
             if which_item_to_add == 0:
                 if frags_per_dice == 1:
                     self.itempool += ["Dice"]
@@ -214,7 +221,6 @@ class YachtDiceWorld(World):
                 weights[3] /= 1.1
                 multipliers_added += 1
             elif which_item_to_add == 4:
-                #increase chances of "free-score categories"
                 cat_weights = [2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1] 
                 self.itempool += self.multiworld.random.choices(possible_categories, weights = cat_weights)
                 weights[4] /= 1.1
@@ -247,15 +253,14 @@ class YachtDiceWorld(World):
             else:
                 raise Exception("Invalid index when adding new items in Yacht Dice")
                                
-        #count the number of locations in the game. extra_plando_items is set in generate_early
-        #and counts number of plando items *not* from pool.
-        
+        #count the number of locations in the game.
         already_items = len(self.itempool) + self.extra_plando_items + 1 #+1 because of Victory item
         
-        extra_locations_needed += (already_items - 70) // 20
+        #We need to add more filler/useful items if there are many items in the pool to guarantee succesful generation
+        extra_locations_needed += (already_items - 45) // 15
         self.number_of_locations = already_items + extra_locations_needed
         
-        # From here, we will count the number of items in the self.itempool, and add items to the pool,
+        # From here, we will count the number of items in the self.itempool, and add usuful/filler items to the pool,
         # making sure not to exceed the number of locations.
         
         #first, we flood the entire pool with extra points (useful), if that setting is chosen.
@@ -281,7 +286,7 @@ class YachtDiceWorld(World):
             if(self.number_of_locations - already_items >= 10):
                 self.itempool += ["Story Chapter"] * 10
                 
-        #add some extra points if there is still room
+        #add some more extra points if there is still room
         if self.options.add_bonus_points.value == 2:
             already_items = len(self.itempool) + self.extra_plando_items + 1
             self.itempool += ["Bonus Point"] * min(self.number_of_locations - already_items, 10)
@@ -299,7 +304,6 @@ class YachtDiceWorld(World):
         
         #probability of Good and Bad rng, based on difficulty for fun :)
         p = 1.1 - 0.25 * self.options.game_difficulty.value
-            
         already_items = len(self.itempool) + self.extra_plando_items + 1
         self.itempool += self.multiworld.random.choices(
             ["Good RNG", "Bad RNG"], 
@@ -313,15 +317,16 @@ class YachtDiceWorld(World):
             raise Exception(f"[Yacht Dice] Number in self.itempool is not number of locations "
                 f"{already_items} {self.number_of_locations}.")
         
+        #add precollected items using push_precollected. Items in self.itempool get created in create_items
         for item in self.precollected:
             self.multiworld.push_precollected(self.create_item(item))
 
     def create_items(self):
         #convert strings to actual items
-        itempoolO = [item for item in map(lambda name: self.create_item(name), self.itempool)]
+        itempool_created = [item for item in map(lambda name: self.create_item(name), self.itempool)]
 
         #and add them to the itempool
-        for item in itempoolO:
+        for item in itempool_created:
             self.multiworld.itempool += [item]    
 
     def create_regions(self):
@@ -358,11 +363,6 @@ class YachtDiceWorld(World):
         set_yacht_rules(self.multiworld, self.player, self.options)
         set_yacht_completion_rules(self.multiworld, self.player)
         
-        maxScoreWithItems = dice_simulation(self.multiworld.get_all_state(False), self.player, self.options)
-        
-        if self.goal_score > maxScoreWithItems:
-            raise Exception("In Yacht Dice, with all items in the pool, it is impossible to get to the goal.")
-        
     def pre_fill(self):
         #in the pre_fill, make sure one dice and one roll is early, so that you will have 2 dice and 2 rolls soon
         self.multiworld.early_items[self.player]["Dice"] = 1
@@ -370,9 +370,7 @@ class YachtDiceWorld(World):
         
     def fill_slot_data(self):
         #make slot data, which consists of yachtdice_data, options, and some other variables.
-        
         yacht_dice_data = self._get_yachtdice_data()
-        
         yacht_dice_options = self.options.as_dict(
                 "game_difficulty",
                 "score_for_last_check",
@@ -394,9 +392,7 @@ class YachtDiceWorld(World):
                 "which_story",
                 "allow_manual_input"
         )
-        
-        slot_data = {**yacht_dice_data, **yacht_dice_options} #combine the two
-                          
+        slot_data = {**yacht_dice_data, **yacht_dice_options} #combine the two                 
         slot_data["goal_score"] = self.goal_score
         slot_data["last_check_score"] = self.max_score
         slot_data["ap_world_version"] = self.ap_world_version

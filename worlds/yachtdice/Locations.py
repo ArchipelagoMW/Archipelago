@@ -32,7 +32,7 @@ def ini_locations(goal_score, max_score, num_locs, dif):
     if dif == 1:
         scaling = 3 
     elif dif == 2:
-        scaling = 2.2
+        scaling = 2.3
 
     scores = []
     #the scores follow the function int( 1 + (perc ** scaling) * (max_score-1) )
@@ -64,5 +64,4 @@ def ini_locations(goal_score, max_score, num_locs, dif):
 lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in all_locations.items() if data.id}
 
 # we need to run this function to initialize all scores from 1 to 1000, even though not all are used
-# this in order to make sure no other worlds use any ids that are similar to Yacht Dice
 all_locations = all_locations_fun(1000) 

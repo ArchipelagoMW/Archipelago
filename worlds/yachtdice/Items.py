@@ -11,6 +11,7 @@ class YachtDiceItem(Item):
 #the starting index is chosen semi-randomly to be 16871244000
 
 item_table = {
+    #victory item, always placed manually at goal location
     "Victory": ItemData(16871244000-1, ItemClassification.progression),
 
     "Dice": ItemData(16871244000, ItemClassification.progression),
@@ -18,7 +19,7 @@ item_table = {
     "Roll": ItemData(16871244002, ItemClassification.progression),
     "Roll Fragment": ItemData(16871244003, ItemClassification.progression),
     
-    "Score Multiplier": ItemData(16871244004, ItemClassification.progression),
+    #"Score Multiplier": ItemData(16871244004, ItemClassification.progression), #not used anymore
     "Fixed Score Multiplier": ItemData(16871244005, ItemClassification.progression),
     "Step Score Multiplier": ItemData(16871244006, ItemClassification.progression),
 
@@ -28,10 +29,8 @@ item_table = {
     "Category Fours": ItemData(16871244106, ItemClassification.progression),
     "Category Fives": ItemData(16871244107, ItemClassification.progression),
     "Category Sixes": ItemData(16871244108, ItemClassification.progression),
-    
     "Category Choice": ItemData(16871244109, ItemClassification.progression),
     "Category Inverse Choice": ItemData(16871244110, ItemClassification.progression),
-    
     "Category Pair": ItemData(16871244111, ItemClassification.progression),
     "Category Three of a Kind": ItemData(16871244112, ItemClassification.progression),
     "Category Four of a Kind": ItemData(16871244113, ItemClassification.progression),
@@ -47,10 +46,8 @@ item_table = {
     "Category Twos and Threes": ItemData(16871244126, ItemClassification.progression),
     "Category Sum of Odds": ItemData(16871244127, ItemClassification.progression),
     "Category Sum of Evens": ItemData(16871244128, ItemClassification.progression),
-    
     "Category Double Threes and Fours": ItemData(16871244129, ItemClassification.progression),
     "Category Quadruple Ones and Twos": ItemData(16871244130, ItemClassification.progression),
-    
     "Category Micro Straight": ItemData(16871244131, ItemClassification.progression),
     "Category Three Odds": ItemData(16871244132, ItemClassification.progression),
     "Category 1-2-1 Consecutive": ItemData(16871244133, ItemClassification.progression),
@@ -60,7 +57,7 @@ item_table = {
     "Category Five Distinct Dice": ItemData(16871244137, ItemClassification.progression),
     "Category 4&5 Full House": ItemData(16871244138, ItemClassification.progression),
     
-    
+    #filler items
     "Encouragement": ItemData(16871244200, ItemClassification.filler),
     "Fun Fact": ItemData(16871244201, ItemClassification.filler),
     "Story Chapter": ItemData(16871244202, ItemClassification.filler),
@@ -68,14 +65,15 @@ item_table = {
     "Bad RNG": ItemData(16871244204, ItemClassification.trap),
     "Bonus Point": ItemData(16871244205, ItemClassification.useful), #not included in logic
     
+    #These points are included in the logic and might be necessary to progress.
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),
     "100 Points": ItemData(16871244303, ItemClassification.progression)
 }
 
+#item groups for better hinting
 item_groups = {
     "Score Multiplier": {
-        "Score Multiplier",
         "Step Score Multiplier",
         "Fixed Score Multiplier"
     },
@@ -86,10 +84,8 @@ item_groups = {
         "Category Fours", 
         "Category Fives",
         "Category Sixes",
-        
         "Category Choice",
         "Category Inverse Choice",
-        
         "Category Pair",
         "Category Three of a Kind",
         "Category Four of a Kind",
@@ -98,17 +94,14 @@ item_groups = {
         "Category Large Straight",
         "Category Full House",
         "Category Yacht",
-        
         "Category Distincts",
         "Category Two times Ones",
         "Category Half of Sixes",
         "Category Twos and Threes",
         "Category Sum of Odds",
         "Category Sum of Evens",
-        
         "Category Double Threes and Fours",
         "Category Quadruple Ones and Twos",
-        
         "Category Micro Straight",
         "Category Three Odds",
         "Category 1-2-1 Consecutive",
