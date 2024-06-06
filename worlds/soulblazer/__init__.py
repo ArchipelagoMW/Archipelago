@@ -116,11 +116,13 @@ class SoulBlazerWorld(World):
     def create_items(self) -> None:
         itempool = create_itempool(self)
 
+        sword_names = list(swords_table.keys())
+
         # Starting Sword
         if self.options.starting_sword == "randomized":
-            starting_sword_name = self.random.choice(list(swords_table.keys()))
+            starting_sword_name = self.random.choice(sword_names)
         else:
-            starting_sword_name = swords_table.keys()[self.options.starting_sword.value]
+            starting_sword_name = sword_names[self.options.starting_sword.value]
 
         starting_sword = next(x for x in itempool if x.name == starting_sword_name)
         self.pre_fill_items.append(starting_sword)
