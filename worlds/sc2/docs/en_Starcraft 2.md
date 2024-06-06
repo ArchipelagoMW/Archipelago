@@ -1,5 +1,8 @@
 # Starcraft 2
 
+## Game page in other languages:
+* [Français](/games/Starcraft%202/info/fr)
+
 ## What does randomization do to this game?
 
 The following unlocks are randomized as items:
@@ -39,7 +42,7 @@ The goal is to beat the final mission in the mission order. The yaml configurati
 ## Which of my items can be in another player's world?
 
 By default, any of StarCraft 2's items (specified above) can be in another player's world. See the
-[Advanced YAML Guide](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
+[Advanced YAML Guide](/tutorial/Archipelago/advanced_settings/en)
 for more information on how to change this.
 
 ## Unique Local Commands

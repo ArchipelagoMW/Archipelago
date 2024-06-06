@@ -9,12 +9,13 @@ from worlds.AutoWorld import WebWorld, World
 from .datatypes import Room, RoomEntrance
 from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, TRAP_ITEMS, LingoItem
 from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
-from .options import LingoOptions
+from .options import LingoOptions, lingo_option_groups
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 
 
 class LingoWebWorld(WebWorld):
+    option_groups = lingo_option_groups
     theme = "grass"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -36,7 +37,6 @@ class LingoWorld(World):
 
     base_id = 444400
     topology_present = True
-    data_version = 1
 
     options_dataclass = LingoOptions
     options: LingoOptions
