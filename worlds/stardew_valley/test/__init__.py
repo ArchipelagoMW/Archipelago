@@ -384,8 +384,10 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     return multiworld
 
 
-def parse_class_option_keys(test_options: dict) -> dict:
+def parse_class_option_keys(test_options: Optional[Dict]) -> dict:
     """ Now the option class is allowed as key. """
+    if test_options is None:
+        return {}
     parsed_options = {}
 
     for option, value in test_options.items():
