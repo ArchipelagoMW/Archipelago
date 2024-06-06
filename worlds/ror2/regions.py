@@ -19,11 +19,13 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
         "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)",
-                                                                     "Titanic Plains", "Titanic Plains (2)"]),
+                                                                     "Titanic Plains", "Titanic Plains (2)",
+                                                                     "Verdant Falls"]),
         "Distant Roost":                        RoRRegionData([], ["OrderedStage_1"]),
         "Distant Roost (2)":                    RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains":                       RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains (2)":                   RoRRegionData([], ["OrderedStage_1"]),
+        "Verdant Falls":                        RoRRegionData([], ["OrderedStage_1"]),
         "Abandoned Aqueduct":                   RoRRegionData([], ["OrderedStage_2"]),
         "Wetland Aspect":                       RoRRegionData([], ["OrderedStage_2"]),
         "Rallypoint Delta":                     RoRRegionData([], ["OrderedStage_3"]),
