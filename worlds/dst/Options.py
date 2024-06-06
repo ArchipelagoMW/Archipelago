@@ -150,6 +150,7 @@ class ExtraDamageAgainstBosses(NamedRange):
     """
     This adds "Extra Damage Against Bosses" buffs as Archipelago items.
     Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
+    This is exponential. With 10 stacks, this turns into a x2.6 and x9.3 damage multipiers respectively.
     """
     display_name = "Extra Damage Against Bosses"
     range_start = 0

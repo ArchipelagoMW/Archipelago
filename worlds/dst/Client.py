@@ -9,11 +9,9 @@ import random
 from NetUtils import ClientStatus
 from CommonClient import CommonContext, get_base_parser
 from Utils import async_start
-ITEM_ID_OFFSET:int = 264000
-LOCATION_RESEARCH_RANGE = {"start": 264501, "end": 264900}
-CLIENT_VERSION = "1.1.1"
+from .Constants import LOCATION_RESEARCH_RANGE, VERSION
 
-class DSTTimeoutError(Exception):
+class DSTInvalidRequest(Exception):
     pass
 
 class DSTContext(CommonContext):
@@ -63,7 +61,7 @@ class DSTContext(CommonContext):
         self.dst_handler.enqueue({
             "datatype": "State",
             "connected": True,
-            "clientversion": CLIENT_VERSION,
+            "clientversion": VERSION,
             "generatorversion": self.slotdata.get("generator_version"),
             "seed_name": self.seed_name,
             "slot": self.slot,
@@ -96,7 +94,7 @@ class DSTContext(CommonContext):
         # Scout research locations
         async_start(self.send_msgs([{
             "cmd": "LocationScouts",
-            "locations": set([id for id in self.missing_locations if (id >= LOCATION_RESEARCH_RANGE["start"] and id <= LOCATION_RESEARCH_RANGE["end"])]),
+            "locations": [id for id in self.missing_locations if (id >= LOCATION_RESEARCH_RANGE["start"] and id <= LOCATION_RESEARCH_RANGE["end"])],
         }]))
 
     def send_hints_to_dst(self):
@@ -173,13 +171,11 @@ class DSTContext(CommonContext):
                     }, False)
 
             elif cmd == "Retrieved":
-                print("Got retrieved")
                 # Send hints to DST
                 if f"_read_hints_{self.team}_{self.slot}" in args.get("keys"):
                     self.send_hints_to_dst()
                     
             elif cmd == "SetReply":
-                print("Got setreply")
                 # Send hints to DST
                 if f"_read_hints_{self.team}_{self.slot}" == args.get("key"):
                     self.send_hints_to_dst()
@@ -248,6 +244,12 @@ class DSTContext(CommonContext):
                                             "key": self.username + "_locations_scouted",
                                             "operations": [{"operation": "replace", "value": self.locations_scouted}]}])
                         await self.send_msgs([{"cmd": "LocationScouts", "locations": [hint], "create_as_hint": 2}])
+                        
+            elif eventtype == "ScoutLocation":
+                await self.send_msgs([{
+                    "cmd": "LocationScouts",
+                    "locations": [event.get("id")],
+                }])
 
             elif eventtype == "Victory":
                 await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -292,22 +294,29 @@ class DSTContext(CommonContext):
 
 def parse_request(req_bytes:bytes):
     "Parses HTTP request from DST"
-    lines = req_bytes.decode("utf-8").splitlines()
-    req_info = lines.pop(0)
-    assert req_info.startswith("POST")
-    headers = {}
-    assert len(lines)
-    while len(lines):
-        line = lines.pop(0)
-        if not line:
-            break
-        entry = line.split(" ", 1)
-        headers[entry[0]] = entry[1]
-    assert len(lines)
-    datastr = "\r\n".join(lines)
-    if datastr.endswith("EOF"):
-        datastr = datastr[:-3]
-    return json.loads(datastr)
+    try:
+        lines = req_bytes.decode("utf-8").splitlines()
+        req_info = lines.pop(0)
+        assert req_info.startswith("POST")
+        headers = {}
+        assert len(lines)
+        while len(lines):
+            line = lines.pop(0)
+            if not line:
+                break
+            entry = line.split(" ", 1)
+            headers[entry[0]] = entry[1]
+        assert len(lines)
+        datastr = "\r\n".join(lines)
+        if datastr.endswith("EOF"):
+            datastr = datastr[:-3]
+        return json.loads(datastr)
+    except AssertionError:
+        raise DSTInvalidRequest("Assertion failed!")
+    except Exception as e:
+        print(f"Bad parse: {e}")
+        print(req_bytes)
+        raise
 
 
 def send_response(conn:socket.socket, content:Dict = {}, status=100):
@@ -365,12 +374,12 @@ class DSTHandler():
                  # Instant event
                 await self.ctx.manage_event(data)
 
-            elif datatype in {"Item", "Hint", "Victory"}:
+            elif datatype in {"Item", "Hint", "Victory", "ScoutLocation"}:
                 # Queued event
                 await self.ctx.queue_event(data)
 
             else:
-                if datatype: self.logger.error(f"Error! Recieved invalid datatype: {datatype}")
+                if datatype: self.logger.error(f"Error! Received invalid datatype: {datatype}")
                 await asyncio.sleep(1.0)
                 send_response(conn, {"datatype": "Error"}, 400)
                 return
@@ -378,8 +387,8 @@ class DSTHandler():
             # Tell DST if we're connected to AP
             send_response(conn, {"datatype": "State", "connected": self.ctx.connected_to_ap}, 100)
 
-        except AssertionError as e:
-            print(f"Invalid request! {e}")
+        except Exception as e:
+            print(f"Handle DST data error! {e}")
             send_response(conn, {"datatype": "Error"}, 400)
             await asyncio.sleep(1.0)
 
@@ -402,10 +411,14 @@ class DSTHandler():
                 await self.handle_dst_data(conn, parse_request(request))
             except asyncio.TimeoutError:
                 raise
+            except DSTInvalidRequest as e:
+                print(f"Invalid request! {e}")
+                send_response(conn, {"datatype": "Error"}, 400)
+                await asyncio.sleep(1.0)
             except Exception as e:
                 self.logger.error(f"DST request error: {e}")
                 send_response(conn, {"datatype": "Error"}, 500)
-                await asyncio.sleep(5.0)
+                await asyncio.sleep(1.0)
             finally:
                 if conn: conn.close()
 

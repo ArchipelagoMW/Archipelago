@@ -4,10 +4,10 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from .Options import DSTOptions, Goal
 from . import Regions, Rules, ItemPool, Constants
-from .Locations import location_name_to_id, location_data_table
+from .Locations import location_name_to_id
 from .Items import item_data_table, item_name_to_id, DSTItem
 
-from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Location
+from BaseClasses import Item, Tutorial, ItemClassification
 
 def launch_client():
     from .Client import launch
