@@ -116,6 +116,8 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     import shutil
     shutil.copyfile(apworld_path, target)
 
+    worlds.WorldSource(str(target), is_zip=True).load()
+
     return apworld_path, target
 
 
