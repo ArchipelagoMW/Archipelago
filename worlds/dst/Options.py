@@ -22,7 +22,7 @@ class DaysToSurvive(NamedRange):
     display_name = "Days to Survive"
     default = 70
     range_start = 0
-    range_end = 200
+    range_end = 1000
 
     special_range_names = {
         "through autumn": 20,
@@ -153,7 +153,7 @@ class ExtraDamageAgainstBosses(NamedRange):
     """
     display_name = "Extra Damage Against Bosses"
     range_start = 0
-    range_end = 10
+    range_end = 20
     default = 0
 
     special_range_names = {
