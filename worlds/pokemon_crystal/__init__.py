@@ -1,5 +1,6 @@
 import copy
 import logging
+import pkgutil
 from typing import List, Union, ClassVar, Dict, Any, Tuple
 
 import settings
@@ -19,7 +20,7 @@ from .phone import generate_phone_traps
 from .phone_data import PhoneScript
 from .pokemon import randomize_pokemon, randomize_starters
 from .regions import create_regions, setup_free_fly
-from .rom import generate_output
+from .rom import generate_output, PokemonCrystalProcedurePatch
 from .rules import set_rules
 from .trainers import randomize_trainers, vanilla_trainer_movesets
 from .utils import get_random_filler_item, get_free_fly_location
@@ -252,7 +253,9 @@ class PokemonCrystalWorld(World):
 
         self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
 
-        generate_output(self, output_directory)
+        patch = PokemonCrystalProcedurePatch(player=self.player, player_name=self.player_name)
+        patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
+        generate_output(self, output_directory, patch)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(

@@ -17,7 +17,7 @@ def randomize_learnset(world: PokemonCrystalWorld, pkmn_name):
         if move.move != "NO_MOVE":
             learn_levels.append(move.level)
         elif world.options.randomize_learnsets == RandomizeLearnsets.option_start_with_four_moves:
-            learn_levels.append(1)
+            learn_levels.insert(0, 1)
 
     new_learnset = [LearnsetData(level, get_random_move(world.random)) for level in learn_levels]
 
@@ -27,7 +27,7 @@ def randomize_learnset(world: PokemonCrystalWorld, pkmn_name):
                        and learnset.move not in ["EXPLOSION", "SELFDESTRUCT"]
                        and learnset.level == 1]
 
-    if not len(start_attacking):  # if there are no attacking moves
+    if not len(start_attacking):  # if there are no attacking moves at Lv.1, add one
         new_learnset[0] = LearnsetData(1, get_random_move(world.random, attacking=True))
 
     return new_learnset
