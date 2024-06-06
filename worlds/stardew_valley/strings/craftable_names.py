@@ -175,7 +175,7 @@ class ModEdible:
 
 class ModCraftable:
     travel_core = "Travel Core"
-    glass_bazier = "Glass Brazier"
+    glass_brazier = "Glass Brazier"
     water_shifter = "Water Shifter"
     rusty_brazier = "Rusty Brazier"
     glass_fence = "Glass Fence"
