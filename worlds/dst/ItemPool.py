@@ -29,8 +29,10 @@ class DSTItemPool:
                 continue
 
             # Add basic items as dummy event items so we can do logic with them
-            if (item.type == IC.progression and not options.shuffle_starting_recipes.value and "basic" in item.tags):
-                world.multiworld.precollected_items[world.player].append(DSTItem(name, IC.progression, None, world.player))
+            if not options.shuffle_starting_recipes.value and "basic" in item.tags:
+                if item.type == IC.progression:
+                    world.multiworld.push_precollected(DSTItem(name, IC.progression, None, world.player))
+                continue
 
             # Put junk items in the filler pool
             if "junk" in item.tags:
