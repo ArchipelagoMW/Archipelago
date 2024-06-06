@@ -3,8 +3,9 @@ import sys
 from abc import ABC
 from dataclasses import dataclass, field
 from types import MappingProxyType
+from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable, Any
 
-from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable
+from worlds.stardew_valley import StardewRule
 
 if sys.version_info >= (3, 10):
     kw_only = {"kw_only": True}
@@ -55,7 +56,7 @@ class GenericSource(ItemSource):
 @dataclass(frozen=True)
 class CustomRuleSource(ItemSource):
     """Hopefully once everything is migrated to sources, we won't need these custom logic anymore."""
-    create_rule: Callable[["StardewLogic"], "StardewRule"]
+    create_rule: Callable[[Any], StardewRule]
 
 
 class Tag(ItemSource):
