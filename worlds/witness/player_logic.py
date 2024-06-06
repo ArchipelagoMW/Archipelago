@@ -875,7 +875,7 @@ class WitnessPlayerLogic:
             "0x0A3AD",  # Reset PP
         }
 
-        eligible_panels = [
+        all_eligible_panels = [
             entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
             and not (
@@ -894,13 +894,13 @@ class WitnessPlayerLogic:
 
         # If we're using random picking, just choose all the panels now and return
         if not same_area_discouragement_factor:
-            hunt_panels = world.random.choices(eligible_panels, k=total_panels - len(self.HUNT_ENTITIES))
+            hunt_panels = world.random.choices(all_eligible_panels, k=total_panels - len(self.HUNT_ENTITIES))
             self.HUNT_ENTITIES.update(hunt_panels)
             return
 
         # Make a lookup of eligible hunt panels per area
         eligible_panels_by_area = defaultdict(set)
-        for eligible_panel in eligible_panels:
+        for eligible_panel in all_eligible_panels:
             associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"]["name"]
             eligible_panels_by_area[associated_area].add(eligible_panel)
 
@@ -949,6 +949,33 @@ class WitnessPlayerLogic:
                 amount_of_already_chosen_panels = len(eligible_panels_by_area[area] & self.HUNT_ENTITIES)
                 current_percentage = amount_of_already_chosen_panels / len(self.HUNT_ENTITIES)
                 contributing_percentage_per_area[area] = current_percentage
+
+        # Replace some of the connected panels with the one you're guaranteed to be able to solve first
+        replacements = {
+            "0x18488": "0x00609",  # Replace Swamp Sliding Bridge Underwater with Swamp Sliding Bridge Above Water
+            "0x03676": "0x03678",  # Replace Quarry Upper Ramp Control with Lower Ramp Control
+            "0x03675": "0x03679",  # Replace Quarry Upper Lift Control with Lower Lift Control
+        }
+
+        if world.options.shuffle_doors < 2:
+            replacements.update({
+                "0x334DC": "0x334DB",  # In door shuffle, the Shadows Timer Panels are disconnected
+                "0x17CBC": "0x2700B",  # In door shuffle, the Laser Timer Panels are disconnected
+                "0x334E1": "0x17FA2",  # In door shuffle, the Rock Timer and Bottom Floor Discard are disconnected
+            })
+
+        for bad_entitiy, good_entity in replacements.items():
+            # If the bad entity was picked as a hunt entity ...
+            if bad_entitiy not in self.HUNT_ENTITIES:
+                continue
+
+            # ... and the good entity was not ...
+            if good_entity in self.HUNT_ENTITIES or good_entity not in all_eligible_panels:
+                continue
+
+            # ... replace the bad entity with the good entity.
+            self.HUNT_ENTITIES.remove(bad_entitiy)
+            self.HUNT_ENTITIES.add(good_entity)
 
         # Some logging
         sorted_area_percentages_dict = dict(sorted(contributing_percentage_per_area.items(), key=lambda x: x[1]))
