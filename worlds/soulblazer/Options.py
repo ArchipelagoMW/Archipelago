@@ -79,12 +79,22 @@ class StartingSword(Choice):
     """
     Determines the sword you will get in the first chest.
     Vanilla: You will get the Sword of Life.
+    <Sword Name>: You will get that sword.
     Randomized: You will get a random sword.
     """
 
     display_name = "Starting Sword"
+    
     option_vanilla = 0
-    option_randomized = 1
+    option_psycho_sword = 1
+    option_critical_sword = 2
+    option_lucky_blade = 3
+    option_zantetsu_sword = 4
+    option_spirit_sword = 5
+    option_recovery_sword = 6
+    option_soul_blade = 7
+    option_randomized = 8
+    
     default = 0
 
 

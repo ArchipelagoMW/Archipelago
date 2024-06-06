@@ -120,7 +120,7 @@ class SoulBlazerWorld(World):
         if self.options.starting_sword == "randomized":
             starting_sword_name = self.random.choice(list(swords_table.keys()))
         else:
-            starting_sword_name = ItemName.LIFESWORD
+            starting_sword_name = swords_table.keys()[self.options.starting_sword.value]
 
         starting_sword = next(x for x in itempool if x.name == starting_sword_name)
         self.pre_fill_items.append(starting_sword)

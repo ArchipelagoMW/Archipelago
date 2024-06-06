@@ -501,9 +501,10 @@ exits_for_region: Dict[str, List[ExitData]] = {
             [NPCName.BOY, NPCName.GRANDPA3, NPCName.MOUNTAIN_KING],
             [NPCName.BOY_MUSHROOM_SHOES, NPCName.GRANDPA],
         ),
-    ],
-    RegionName.MOUNTAIN_KING: [
-        ExitData(RegionName.NOME, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.MUSHROOM2, NPCName.GRANDPA5, NPCName.NOME])
+        ExitData(
+            RegionName.NOME,
+            [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.MUSHROOM2, NPCName.GRANDPA5, NPCName.MOUNTAIN_KING, NPCName.NOME],
+        ),
     ],
     RegionName.NOME: [ExitData(RegionName.LEOS_LAB_START, [])],
     # Act 5 Exits
@@ -588,8 +589,10 @@ def get_rule_for_exit(data: ExitData, player: int) -> Callable[[CollectionState]
     """Returns the access rule for the given exit."""
 
     if not data.has_all and not data.has_any:
+
         def rule_simple(state: CollectionState) -> bool:
             return rule_for_flag[data.rule_flag](state, player)
+
         return rule_simple
 
     def rule(state: CollectionState) -> bool:
