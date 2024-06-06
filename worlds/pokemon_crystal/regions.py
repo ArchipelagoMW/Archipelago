@@ -35,10 +35,10 @@ FREE_FLY_REGIONS = {22: "REGION_ECRUTEAK_CITY",
 def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
     regions: Dict[str, Region] = {}
     connections: List[Tuple[str, str, str]] = []
-    johto_only = world.options.johto_only
+    johto_only = world.options.johto_only.value
 
     for region_name, region_data in data.regions.items():
-        if region_data.johto or not johto_only:
+        if region_data.johto or not johto_only or (region_data.silver_cave and johto_only == 2):
             new_region = Region(region_name, world.player, world.multiworld)
 
             regions[region_name] = new_region
@@ -54,7 +54,9 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
                 connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
 
     for name, source, dest in connections:
-        if (data.regions[source].johto and data.regions[dest].johto) or not johto_only:
+        src_ok = data.regions[source].johto or (data.regions[source].silver_cave and johto_only > 1) or not johto_only
+        dest_ok = data.regions[dest].johto or (data.regions[dest].silver_cave and johto_only > 1) or not johto_only
+        if src_ok and dest_ok:
             regions[source].connect(regions[dest], name)
 
     regions["Menu"] = Region("Menu", world.player, world.multiworld)

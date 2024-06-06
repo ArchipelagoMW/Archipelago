@@ -12,11 +12,15 @@ class Goal(Choice):
     option_red = 1
 
 
-class JohtoOnly(Toggle):
+class JohtoOnly(Choice):
     """Excludes all of Kanto, disables early Kanto access
-        Forces Goal to Elite Four and Badges to ≤8"""
+        Forces Goal to Elite Four unless Silver Cave is included.
+        Goal badges will be limited to 8 if badges are shuffled or vanilla"""
     display_name = "Johto Only"
     default = 0
+    option_off = 0
+    option_on = 1
+    option_include_silver_cave = 2
 
 
 class EliteFourBadges(Range):

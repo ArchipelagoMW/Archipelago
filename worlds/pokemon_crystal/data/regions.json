@@ -2018,12 +2018,14 @@
 	},
 	"REGION_ROUTE_28": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_SILVER_CAVE_OUTSIDE", "REGION_ROUTE_28_STEEL_WING_HOUSE", "REGION_VICTORY_ROAD_GATE"],
 		"locations": ["ROUTE_28_HIDDEN_RARE_CANDY"],
 		"events": []
 	},
 	"REGION_ROUTE_28_STEEL_WING_HOUSE": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_ROUTE_28"],
 		"locations": ["TM47_STEEL_WING"],
 		"events": []
@@ -2804,24 +2806,28 @@
 	},
 	"REGION_SILVER_CAVE_ITEM_ROOMS": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_SILVER_CAVE_ROOM_2"],
 		"locations": ["SILVER_CAVE_ITEM_ROOMS_FULL_RESTORE", "SILVER_CAVE_ITEM_ROOMS_MAX_REVIVE"],
 		"events": []
 	},
 	"REGION_SILVER_CAVE_OUTSIDE": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_ROUTE_28", "REGION_SILVER_CAVE_POKECENTER_1F", "REGION_SILVER_CAVE_ROOM_1"],
 		"locations": ["SILVER_CAVE_OUTSIDE_HIDDEN_FULL_RESTORE"],
 		"events": []
 	},
 	"REGION_SILVER_CAVE_POKECENTER_1F": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_SILVER_CAVE_OUTSIDE", "REGION_POKECENTER_2F"],
 		"locations": [],
 		"events": []
 	},
 	"REGION_SILVER_CAVE_ROOM_1": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_SILVER_CAVE_OUTSIDE", "REGION_SILVER_CAVE_ROOM_2"],
 		"locations": [
 			"SILVER_CAVE_ROOM_1_ESCAPE_ROPE",
@@ -2835,6 +2841,7 @@
 	},
 	"REGION_SILVER_CAVE_ROOM_2": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_SILVER_CAVE_ROOM_1", "REGION_SILVER_CAVE_ROOM_3", "REGION_SILVER_CAVE_ITEM_ROOMS"],
 		"locations": [
 			"SILVER_CAVE_ROOM_2_CALCIUM",
@@ -2846,6 +2853,7 @@
 	},
 	"REGION_SILVER_CAVE_ROOM_3": {
 		"johto": false,
+		"silver_cave": true,
 		"exits": ["REGION_SILVER_CAVE_ROOM_2"],
 		"locations": [],
 		"events": ["EVENT_BEAT_RED"]

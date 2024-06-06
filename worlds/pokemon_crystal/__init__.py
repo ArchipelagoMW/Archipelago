@@ -14,7 +14,7 @@ from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_c
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
 from .moves import randomize_tms
-from .options import PokemonCrystalOptions
+from .options import PokemonCrystalOptions, JohtoOnly, RandomizeBadges, Goal
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
 from .pokemon import randomize_pokemon, randomize_starters
@@ -92,18 +92,25 @@ class PokemonCrystalWorld(World):
 
     def generate_early(self) -> None:
         if self.options.johto_only:
-            if self.options.goal.value == 1:
-                self.options.goal.value = 0
+            if self.options.goal == Goal.option_red and self.options.johto_only == JohtoOnly.option_on:
+                self.options.goal.value = Goal.option_elite_four
                 logging.warning(
-                    "Pokemon Crystal: Red goal is incompatible with Johto Only. "
-                    "Changing goal to Elite Four for player %s.",
+                    "Pokemon Crystal: Red goal is incompatible with Johto Only "
+                    "without Silver Cave. Changing goal to Elite Four for player %s.",
                     self.multiworld.get_player_name(self.player))
-            if self.options.elite_four_badges.value > 8:
-                self.options.elite_four_badges.value = 8
-                logging.warning(
-                    "Pokemon Crystal: Elite Four Badges >8 incompatible with Johto Only. "
-                    "Changing Elite Four Badges to 8 for player %s.",
-                    self.multiworld.get_player_name(self.player))
+            if self.options.randomize_badges != RandomizeBadges.option_completely_random:
+                if self.options.red_badges.value > 8:
+                    self.options.red_badges.value = 8
+                    logging.warning(
+                        "Pokemon Crystal: Red Badges >8 incompatible with Johto Only "
+                        "if badges are not completely random. Changing Red Badges to 8 for player %s.",
+                        self.multiworld.get_player_name(self.player))
+                if self.options.elite_four_badges.value > 8:
+                    self.options.elite_four_badges.value = 8
+                    logging.warning(
+                        "Pokemon Crystal: Elite Four Badges >8 incompatible with Johto Only "
+                        "if badges are not completely random. Changing Elite Four Badges to 8 for player %s.",
+                        self.multiworld.get_player_name(self.player))
 
     def create_regions(self) -> None:
         regions = create_regions(self)
@@ -120,8 +127,15 @@ class PokemonCrystalWorld(World):
             if location.address is not None
         ]
 
-        if self.options.randomize_badges.value == 1:
+        if self.options.randomize_badges.value == RandomizeBadges.option_shuffle:
             item_locations = [location for location in item_locations if "Badge" not in location.tags]
+
+        total_badges = max(self.options.elite_four_badges.value, self.options.red_badges.value)
+        add_badges = []
+        if self.options.johto_only and total_badges > 8:
+            kanto_badges = [item_id + BASE_OFFSET for item_id, item_data in crystal_data.items.items() if
+                            "KantoBadge" in item_data.tags]
+            add_badges = kanto_badges[:total_badges - 8]
 
         total_trap_weight = sum([
             self.options.phone_trap_weight.value,
@@ -152,6 +166,8 @@ class PokemonCrystalWorld(World):
                     default_itempool += [self.create_item_by_code(item_code + 256)]
                 else:
                     default_itempool += [self.create_item_by_code(item_code)]
+            elif len(add_badges):
+                default_itempool += [self.create_item_by_code(add_badges.pop())]
             elif self.random.randint(0, 100) < total_trap_weight:
                 default_itempool += [get_random_trap()]
             elif item_code == BASE_OFFSET:

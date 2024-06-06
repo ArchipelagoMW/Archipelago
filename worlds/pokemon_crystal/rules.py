@@ -166,7 +166,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         return world.options.randomize_pokegear
 
     def johto_only():
-        return world.options.johto_only
+        return world.options.johto_only.value
 
     def trainersanity():
         return world.options.trainersanity
@@ -511,22 +511,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_TOHJO_FALLS:EAST -> REGION_TOHJO_FALLS:WEST"),
              lambda state: can_surf(state) and can_waterfall(state))
 
-    # Victory Road
-
-    if not johto_only():
-        set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
-
     set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), has_elite_four_badges)
 
-    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"), has_elite_four_badges)
+    # set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"), has_elite_four_badges)
 
-    if not johto_only():
-        set_rule(get_entrance("REGION_ROUTE_22 -> REGION_VICTORY_ROAD_GATE"),
-                 lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
+    # Victory Road
 
-        set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_22"),
-                 lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
-
+    if johto_only() != 1:
         set_rule(get_entrance("REGION_ROUTE_28 -> REGION_VICTORY_ROAD_GATE"),
                  lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
 
@@ -537,7 +528,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_location("Route 28 - Steel Wing from Celebrity in House"), can_cut)
         if hidden():
             set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
-
+            
         # Silver Cave
         set_rule(get_entrance("REGION_SILVER_CAVE_OUTSIDE -> REGION_SILVER_CAVE_ROOM_1"), can_flash)
 
@@ -550,6 +541,15 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
         set_rule(get_entrance("REGION_SILVER_CAVE_ROOM_2 -> REGION_SILVER_CAVE_ITEM_ROOMS"),
                  lambda state: can_surf(state) and can_waterfall(state))
+
+        set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
+
+    if not johto_only():
+        set_rule(get_entrance("REGION_ROUTE_22 -> REGION_VICTORY_ROAD_GATE"),
+                 lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
+
+        set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_22"),
+                 lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
 
         # Viridian
         set_rule(get_location("Viridian City - TM42 from Sleepy Guy"), lambda state: can_surf(state) or can_cut(state))
