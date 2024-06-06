@@ -34,7 +34,7 @@ class FillerItemTypes(Choice):
 class IslandFrequencyLocations(Choice):
     """Sets where frequencies for story islands are located.
     Vanilla will keep frequencies in their vanilla, non-randomized locations.
-    Random on Island will randomize each frequency within its vanilla island, but will preserve island order.
+    Random On Island will randomize each frequency within its vanilla island, but will preserve island order.
     Random Island Order will change the order you visit islands, but will preserve the vanilla location of each frequency unlock.
     Random On Island Random Order will randomize the location containing the frequency on each island and randomize the order.
     Progressive will randomize the frequencies to anywhere, but will always unlock the frequencies in vanilla order as the frequency items are received.
@@ -73,7 +73,7 @@ class BigIslandEarlyCrafting(Toggle):
     display_name = "Early recipes behind big islands"
 
 class PaddleboardMode(Toggle):
-    """Sets later story islands to in logic without an Engine or Steering Wheel. May require lots of paddling."""
+    """Sets later story islands to be in logic without an Engine or Steering Wheel. May require lots of paddling."""
     display_name = "Paddleboard Mode"
 
 raft_options = {
