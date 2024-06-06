@@ -29,8 +29,8 @@ class TestMinLocationAndMaxItem(SVTestBase):
         number_locations = len(valid_locations)
         number_items = len([item for item in self.multiworld.itempool
                             if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
-        self.assertGreaterEqual(number_locations, number_items)
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND EXCLUDED]")
+        self.assertGreaterEqual(number_locations, number_items)
 
 
 class TestMinLocationAndMaxItemWithIsland(SVTestBase):
@@ -41,8 +41,8 @@ class TestMinLocationAndMaxItemWithIsland(SVTestBase):
         number_locations = len(valid_locations)
         number_items = len([item for item in self.multiworld.itempool
                             if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
-        self.assertGreaterEqual(number_locations, number_items)
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND INCLUDED]")
+        self.assertGreaterEqual(number_locations, number_items)
 
 
 class TestMinSanityHasAllExpectedLocations(SVTestBase):
@@ -52,8 +52,8 @@ class TestMinSanityHasAllExpectedLocations(SVTestBase):
         expected_locations = 85
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
-        self.assertLessEqual(number_locations, expected_locations)
         print(f"Stardew Valley - Minsanity Locations: {number_locations}")
+        self.assertLessEqual(number_locations, expected_locations)
         if number_locations != expected_locations:
             print(f"\tDisappeared Locations Detected!"
                   f"\n\tPlease update test_minsanity_has_fewer_than_locations"
@@ -65,7 +65,7 @@ class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
     options = default_6_x_x()
 
     def test_default_settings_has_exactly_locations(self):
-        expected_locations = 489
+        expected_locations = 491
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Default options locations: {number_locations}")
@@ -80,11 +80,11 @@ class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
     options = allsanity_no_mods_6_x_x()
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 2134
+        expected_locations = 2238
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
-        self.assertGreaterEqual(number_locations, expected_locations)
         print(f"Stardew Valley - Allsanity Locations without mods: {number_locations}")
+        self.assertGreaterEqual(number_locations, expected_locations)
         if number_locations != expected_locations:
             print(f"\tNew locations detected!"
                   f"\n\tPlease update test_allsanity_without_mods_has_at_least_locations"
@@ -96,11 +96,11 @@ class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
     options = allsanity_mods_6_x_x()
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 2974
+        expected_locations = 3096
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
-        self.assertGreaterEqual(number_locations, expected_locations)
         print(f"Stardew Valley - Allsanity Locations with all mods: {number_locations}")
+        self.assertGreaterEqual(number_locations, expected_locations)
         if number_locations != expected_locations:
             print(f"\tNew locations detected!"
                   f"\n\tPlease update test_allsanity_with_mods_has_at_least_locations"
