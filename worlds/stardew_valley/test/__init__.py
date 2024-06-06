@@ -229,17 +229,22 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
         self.multiworld = setup_solo_multiworld(self.options, seed=self.seed)
         self.multiworld.lock.acquire()
+        world = self.multiworld.worlds[self.player]
+
         self.original_state = self.multiworld.state.copy()
         self.original_itempool = self.multiworld.itempool.copy()
+        self.original_prog_item_count = world.total_progression_items
         self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
         if self.constructed:
-            self.world = self.multiworld.worlds[self.player]  # noqa
+            self.world = world  # noqa
 
     def tearDown(self) -> None:
         self.multiworld.state = self.original_state
         self.multiworld.itempool = self.original_itempool
         for location in self.unfilled_locations:
             location.item = None
+        self.world.total_progression_items = self.original_prog_item_count
+
         self.multiworld.lock.release()
 
     @property
@@ -299,7 +304,6 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         return created_item
 
 
-
 pre_generated_worlds = {}
 
 
@@ -307,24 +311,27 @@ pre_generated_worlds = {}
 def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
                     *,
                     seed=DEFAULT_TEST_SEED,
-                    world_caching=True) -> MultiWorld:
+                    world_caching=True) -> Tuple[MultiWorld, StardewValleyWorld]:
     if not world_caching:
         multiworld = setup_solo_multiworld(world_options, seed, _cache={})
         yield multiworld, multiworld.worlds[1]
     else:
         multiworld = setup_solo_multiworld(world_options, seed)
         multiworld.lock.acquire()
+        world = multiworld.worlds[1]
 
         original_state = multiworld.state.copy()
         original_itempool = multiworld.itempool.copy()
         unfilled_locations = multiworld.get_unfilled_locations(1)
+        original_prog_item_count = world.total_progression_items
 
-        yield multiworld, multiworld.worlds[1]
+        yield multiworld, world
 
         multiworld.state = original_state
         multiworld.itempool = original_itempool
         for location in unfilled_locations:
             location.item = None
+        multiworld.total_progression_items = original_prog_item_count
 
         multiworld.lock.release()
 
