@@ -1,4 +1,5 @@
 import itertools
+import logging
 from typing import List, Dict, Set
 
 from BaseClasses import MultiWorld, CollectionState
@@ -18,7 +19,7 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, Booksanity, Walnutsanity
+from .options import StardewValleyOptions, Walnutsanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
 from .stardew_rule import And, StardewRule, true_
@@ -51,6 +52,8 @@ from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
 from .strings.wallet_item_names import Wallet
+
+logger = logging.getLogger(__name__)
 
 
 def set_rules(world):
@@ -519,7 +522,6 @@ def set_walnut_repeatable_rules(logic, multiworld, player, world_options):
         MultiWorldRules.set_rule(multiworld.get_location(f"Volcano Monsters Walnut {i}", player), logic.combat.has_galaxy_weapon)
         MultiWorldRules.set_rule(multiworld.get_location(f"Volcano Crates Walnut {i}", player), logic.combat.has_any_weapon)
     MultiWorldRules.set_rule(multiworld.get_location(f"Tiger Slime Walnut", player), logic.monster.can_kill(Monster.tiger_slime))
-
 
 
 def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content: StardewContent):
@@ -1039,8 +1041,7 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
 
         MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
     except KeyError as ex:
-        print(f"Failed to evaluate indirect connection in {entrance}")
-        print(explain(rule, CollectionState(multiworld)))
+        logger.error(f"""Failed to evaluate indirect connection in {entrance}: {explain(rule, CollectionState(multiworld))}""")
         raise ex
 
 
