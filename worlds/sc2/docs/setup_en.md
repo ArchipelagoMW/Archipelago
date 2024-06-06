@@ -19,7 +19,7 @@ Archipelago installer.
 2. Run ArchipelagoStarcraft2Client.exe.
    - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step 
    only.
-3. Type the command `/download_data`. This will automatically install the Maps and Data files from the third link above.
+3. Type the command `/download_data`. This will automatically install the Maps and Data files needed to play StarCraft 2 Archipelago.
 
 ## Where do I get a config file (aka "YAML") for this game?
 
