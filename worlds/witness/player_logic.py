@@ -961,7 +961,6 @@ class WitnessPlayerLogic:
             replacements.update({
                 "0x334DC": "0x334DB",  # In door shuffle, the Shadows Timer Panels are disconnected
                 "0x17CBC": "0x2700B",  # In door shuffle, the Laser Timer Panels are disconnected
-                "0x334E1": "0x17FA2",  # In door shuffle, the Rock Timer and Bottom Floor Discard are disconnected
             })
 
         for bad_entitiy, good_entity in replacements.items():
