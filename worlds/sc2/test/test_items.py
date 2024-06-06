@@ -1,5 +1,5 @@
 import unittest
-from typing import List
+from typing import List, Set
 
 from worlds.sc2 import items
 
@@ -41,3 +41,28 @@ class TestItems(unittest.TestCase):
 
         for weapon_armor_upgrade in weapon_armor_upgrades:
             self.assertEqual(items.get_full_item_list()[weapon_armor_upgrade].quantity, items.WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
+
+    def test_item_ids_distinct(self) -> None:
+        item_ids: Set[int] = {items.get_full_item_list()[item_name].code for item_name in items.get_full_item_list()}
+
+        self.assertEqual(len(item_ids), len(items.get_full_item_list()))
+
+    def test_number_distinct_in_item_type(self) -> None:
+        item_types: List[items.ItemTypeEnum] = [
+            *[item.value for item in items.TerranItemType],
+            *[item.value for item in items.ZergItemType],
+            *[item.value for item in items.ProtossItemType],
+            *[item.value for item in items.FactionlessItemType]
+        ]
+
+        self.assertGreater(len(item_types), 0)
+
+        for item_type in item_types:
+            item_names: List[str] = [
+                item_name for item_name in items.get_full_item_list()
+                if items.get_full_item_list()[item_name].number >= 0  # Negative numbers have special meaning
+                   and items.get_full_item_list()[item_name].type == item_type
+            ]
+            item_numbers: Set[int] = {items.get_full_item_list()[item_name] for item_name in item_names}
+
+            self.assertEqual(len(item_names), len(item_numbers))

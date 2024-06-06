@@ -480,6 +480,37 @@ item_table = {
     item_names.HERC_KINETIC_FOAM:
         ItemData(286 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 17, SC2Race.TERRAN,
                  parent_item=item_names.HERC, origin={"ext"}),
+    item_names.REAPER_RESOURCE_EFFICIENCY:
+        ItemData(287 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 18, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, parent_item=item_names.REAPER, origin={"ext"},),
+    item_names.REAPER_KINETIC_FOAM:
+        ItemData(288 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 19, SC2Race.TERRAN,
+                 classification=ItemClassification.filler, parent_item=item_names.REAPER, origin={"nco"}),
+    item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK:
+        ItemData(289 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive_2, 6, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, parent_item=item_names.SIEGE_TANK, quantity=2,
+                 origin={"ext"}),
+    item_names.SIEGE_TANK_ENHANCED_COMBUSTION_ENGINES:
+        ItemData(290 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 20, SC2Race.TERRAN,
+                 classification=ItemClassification.filler, parent_item=item_names.SIEGE_TANK, origin={"bw"}),
+    item_names.MEDIVAC_RAPID_REIGNITION_SYSTEMS:
+        ItemData(291 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 21, SC2Race.TERRAN,
+                 classification=ItemClassification.filler, parent_item=item_names.MEDIVAC, origin={"ext"}),
+    item_names.BATTLECRUISER_BEHEMOTH_REACTOR:
+        ItemData(292 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 22, SC2Race.TERRAN,
+                 classification=ItemClassification.filler, parent_item=item_names.BATTLECRUISER, origin={"lotv"}),
+    item_names.THOR_RAPID_RELOAD:
+        ItemData(293 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 23, SC2Race.TERRAN,
+                 parent_item=item_names.THOR, origin={"lotv"}),
+    item_names.LIBERATOR_360_DEGREE_SENSOR_ARRAY:
+        ItemData(294 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 24, SC2Race.TERRAN,
+                 parent_item=item_names.LIBERATOR, origin={"ext"}),
+    item_names.WIDOW_MINE_RESOURCE_EFFICIENCY:
+        ItemData(295 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 25, SC2Race.TERRAN,
+                 parent_item=item_names.WIDOW_MINE, origin={"ext"}),
+    item_names.HERC_GRAPPLE_PULL:
+        ItemData(296 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 26, SC2Race.TERRAN,
+                 parent_item=item_names.HERC, origin={"ext"}),
 
     item_names.HELLION_TWIN_LINKED_FLAMETHROWER:
         ItemData(300 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_3, 16, SC2Race.TERRAN,
@@ -903,17 +934,17 @@ item_table = {
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:
-        ItemData(800 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Minerals, 15, SC2Race.ANY, quantity=0,
+        ItemData(800 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Minerals, -1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler),
     item_names.STARTING_VESPENE:
-        ItemData(801 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Vespene, 15, SC2Race.ANY, quantity=0,
+        ItemData(801 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Vespene, -1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler),
     item_names.STARTING_SUPPLY:
-        ItemData(802 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Supply, 2, SC2Race.ANY, quantity=0,
+        ItemData(802 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Supply, -1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler),
     # This item is used to "remove" location from the game. Never placed unless plando'd
     item_names.NOTHING:
-        ItemData(803 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Nothing, 2, SC2Race.ANY, quantity=0,
+        ItemData(803 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Nothing, -1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.trap),
 
     # Nova gear

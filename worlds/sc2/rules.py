@@ -113,7 +113,13 @@ class SC2Logic:
                 item_names.VALKYRIE, item_names.CYCLONE, item_names.WINGED_NIGHTMARES, item_names.BRYNHILDS
             }, self.player)
             or self.terran_competent_anti_air(state)
-            or self.advanced_tactics and state.has_any({item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR}, self.player)
+            or self.advanced_tactics and (
+                state.has_any({item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR}, self.player)
+                or (
+                        state.has_all(item_names.SIEGE_TANK, item_names.MEDIVAC)
+                        and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
+                )
+            )
         )
 
     def terran_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
@@ -315,7 +321,9 @@ class SC2Logic:
         :param state:
         :return:
         """
-        beats_kerrigan = state.has_any({item_names.MARINE, item_names.BANSHEE, item_names.GHOST}, self.player) or self.advanced_tactics
+        beats_kerrigan = state.has_any({item_names.MARINE, item_names.BANSHEE, item_names.GHOST}, self.player) \
+                         or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player) \
+                         or self.advanced_tactics
         if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
