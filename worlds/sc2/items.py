@@ -1913,7 +1913,7 @@ upgrade_bundles: Dict[str, List[str]] = {
         ],
     item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE:
         [
-            item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON
+            item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR
         ],
     item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE:
         [

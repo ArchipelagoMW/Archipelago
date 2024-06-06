@@ -10,23 +10,22 @@ class TestItems(unittest.TestCase):
         bundled_item_data = [items.get_full_item_list()[item_name] for item_name in bundled_items]
         bundled_item_numbers = [item_data.number for item_data in bundled_item_data]
 
-        check_numbers = [True if number == -1 else False for number in bundled_item_numbers]
+        check_numbers = [number == -1 for number in bundled_item_numbers]
 
         self.assertNotIn(False, check_numbers)
 
     def test_non_grouped_upgrades_number(self) -> None:
         check_modulo = 4
         bundled_items = items.upgrade_bundles.keys()
-        non_bundled_upgrades = \
-            [
-                item_name for item_name in items.get_full_item_list().keys()
-                if (item_name not in bundled_items
-                    and items.get_full_item_list()[item_name].type in items.upgrade_item_types)
-            ]
+        non_bundled_upgrades = [
+            item_name for item_name in items.get_full_item_list().keys()
+            if (item_name not in bundled_items
+                and items.get_full_item_list()[item_name].type in items.upgrade_item_types)
+        ]
         non_bundled_upgrade_data = [items.get_full_item_list()[item_name] for item_name in non_bundled_upgrades]
         non_bundled_upgrade_numbers = [item_data.number for item_data in non_bundled_upgrade_data]
 
-        check_numbers = [True if number % check_modulo == 0 else False for number in non_bundled_upgrade_numbers]
+        check_numbers = [number % check_modulo == 0 for number in non_bundled_upgrade_numbers]
 
         self.assertNotIn(False, check_numbers)
 
