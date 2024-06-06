@@ -36,3 +36,9 @@ class TestItems(unittest.TestCase):
 
         for element in bundle_elements:
             self.assertNotIn(element, bundled_items)
+
+    def test_weapon_armor_level(self) -> None:
+        weapon_armor_upgrades = [item for item in items.get_full_item_list() if items.get_item_table()[item].type in items.upgrade_item_types]
+
+        for weapon_armor_upgrade in weapon_armor_upgrades:
+            self.assertEqual(items.get_full_item_list()[weapon_armor_upgrade].quantity, items.WEAPON_ARMOR_UPGRADE_MAX_LEVEL)

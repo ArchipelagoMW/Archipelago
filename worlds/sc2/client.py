@@ -50,6 +50,7 @@ from worlds._sc2common.bot.player import Bot
 from worlds.sc2.items import (
     lookup_id_to_name, get_full_item_list, ItemData,
     race_to_item_type, upgrade_item_types, ZergItemType, upgrade_bundles, upgrade_included_names,
+    WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from worlds.sc2.locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
@@ -885,22 +886,14 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
-            accumulators[shield_upgrade_item.race][item_data.type.flag_word] += 1 << shield_upgrade_item.number
+            accumulators[shield_upgrade_item.race][shield_upgrade_item.type] += 1 << shield_upgrade_item.number
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
         total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
-        num_missions = ctx.generic_upgrade_missions * total_missions
-        amounts = [
-            num_missions // 100,
-            2 * num_missions // 100,
-            3 * num_missions // 100
-        ]
-        upgrade_count = 0
+        num_missions = (ctx.generic_upgrade_missions // 100) * total_missions
         completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
-        for amount in amounts:
-            if completed >= amount:
-                upgrade_count += 1
+        upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
 
         # Equivalent to "Progressive Weapon/Armor Upgrade" item
         global_upgrades: typing.Set[str] = upgrade_included_names[GenericUpgradeItems.option_bundle_all]
