@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from typing import Iterable, Union, List, Tuple, Hashable
 
-from BaseClasses import ItemClassification, CollectionState
+from BaseClasses import CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
-from ..items import item_table
 
 
 class TotalReceived(BaseStardewRule):
@@ -19,11 +18,6 @@ class TotalReceived(BaseStardewRule):
             items_list = [*items]
         else:
             items_list = [items]
-
-        assert items_list, "Can't create a Total Received conditions without items"
-        for item in items_list:
-            assert item_table[item].classification & ItemClassification.progression, \
-                f"Item [{item_table[item].name}] has to be progression to be used in logic"
 
         self.player = player
         self.items = items_list

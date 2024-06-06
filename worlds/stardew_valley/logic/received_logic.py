@@ -38,6 +38,9 @@ class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
         assert items, "Can't receive n of no items."
         assert count >= 0, "Can't receive a negative amount of item."
 
+        for item in items:
+            assert item_table[item].classification & ItemClassification.progression, f"Item [{item_table[item].name}] has to be progression to be used in logic"
+
         return TotalReceived(count, items, self.player)
 
     def received_custom(self, item: str, count: Optional[int] = 1) -> StardewRule:
