@@ -754,7 +754,7 @@ class Gifting(Toggle):
 # or we didn't find the time to validate that they work or fix compatibility issues if they do.
 # Once a mod is validated to be functional, it can simply be removed from this list
 disabled_mods = {ModNames.deepwoods, ModNames.magic,
-                 ModNames.cooking_skill, ModNames.jasper,
+                 ModNames.cooking_skill,
                  ModNames.yoba, ModNames.eugene,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
                  ModNames.boarding_house}
