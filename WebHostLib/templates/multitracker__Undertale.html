@@ -7,6 +7,16 @@
 
 {# List all tracker-relevant icons. Format: (Name, Image URL) #}
 {% set icons = {
+    "Ruins Key"             : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyRuins.png?raw=true",
+    "Snowdin Key"           : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeySnowdin.png?raw=true",
+    "Waterfall Key"         : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyWaterfall.png?raw=true",
+    "Hotland Key"           : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyHotland.png?raw=true",
+    "Core Key"              : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyCore.png?raw=true",
+    "New Home Key"          : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHome.png?raw=true",
+    "New Home Key Left"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHomeLeft.png?raw=true",
+    "New Home Key Right"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHomeRight.png?raw=true",
+    "Key Piece"             : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyPiece.png?raw=true",
+    
     "IsCompleted"           : "https://static.wikia.nocookie.net/undertale/images/0/0b/Annoying_Dog_sprite.gif"
 } %}
 
@@ -26,23 +36,11 @@
 
 {# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
 {% set progressive_order = {
-    "Progressive Helm" :        ["Steel Helm", "Steel Helm", "Moon Helm", "Apollo Helm"],
-    "Progressive Armor":        ["Steel Armor", "Noble Armor", "Gaia's Armor"],
-    "Progressive Shield":       ["Steel Shield", "Steel Shield", "Venus Shield", "Aegis Shield"],
-    "Progressive Accessory":    ["Charm", "Charm", "Magic Ring", "Cupid Locket"],
-    "Progressive Sword":        ["Steel Sword", "Steel Sword", "Knight Sword", "Excalibur"],
-    "Progressive Axe":          ["Axe", "Axe", "Battle Axe", "Giant's Axe"],
-    "Progressive Claw":         ["Cat Claw", "Cat Claw", "Charm Claw", "Dragon Claw"],
-    "Progressive Bomb":         ["Bomb", "Bomb", "Jumbo Bomb", "Mega Grenade"]
+    
 } %}
 
 {% set allItems = {
-    "Weapons"   : weapons,
-    "Armor"     : armors,
-    "Spells"    : spells,
-    "Key Items" : keyItems,
-    "Crests"    : crests,
-    "Coins"     : coins
+    
 } %}
 
 {%- block custom_table_headers %}
@@ -78,11 +76,18 @@
             </td>
         {%- else -%}
             {% if item == "New Home Key" and inventories[(team, player)]["Key Piece"] > 0 %}
-                <td class="center-column item-acquired">{{ inventories[(team, player)]["Key Piece"] }}</td>
+                <td class="center-column item-acquired">
+                    {{ inventories[(team, player)]["Key Piece"] }}
+                    <img class="icon-sprite" style="height: 20px;" src="{{ icons["Key Piece"] }}" alt="{{ item | e }}" title="{{ item | e }}">
+                </td>
             {% elif item == "New Home Key" and inventories[(team, player)]["Left Home Key"] %}
-                <td class="center-column item-acquired">Left</td>
+                <td class="center-column item-acquired">
+                    <img class="icon-sprite" style="height: 20px;" src="{{ icons["New Home Key Left"] }}" alt="{{ item | e }}" title="{{ item | e }}">
+                </td>
             {% elif item == "New Home Key" and inventories[(team, player)]["Right Home Key"] %}
-                <td class="center-column item-acquired">Right</td>
+                <td class="center-column item-acquired">
+                    <img class="icon-sprite" style="height: 20px;" src="{{ icons["New Home Key Right"] }}" alt="{{ item | e }}" title="{{ item | e }}">
+                </td>
             {% else %}
                 <td></td>
             {% endif %}

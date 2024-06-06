@@ -2463,51 +2463,80 @@ if "Starcraft 2" in network_data_package["games"]:
 if "Undertale" in network_data_package["games"]:
     # Mapping from non-progressive item to progressive name and max level.
     non_progressive_items = {
-        "Steel Helm"    : ("Progressive Helm",  1),
-        "Moon Helm"     : ("Progressive Helm",  2),
-        "Apollo Helm"   : ("Progressive Helm",  3),
+        "Worn Dagger"               : ("Progressive Knife" , 1),
+        "Real Knife"                : ("Progressive Knife" , 2),
 
-        "Noble Armor"   : ("Progressive Armor", 1),
-        "Gaia's Armor"  : ("Progressive Armor", 2),
+        "No Manly Bandanna"         : ("Progressive Manly Bandanna", 1),
+        "Manly Bandanna"            : ("Progressive Manly Bandanna", 2),
 
-        "Steel Shield"  : ("Progressive Shield", 1),
-        "Venus Shield"  : ("Progressive Shield", 2),
-        "Aegis Shield"  : ("Progressive Shield", 3),
+        "No Cloudy Glasses"         : ("Progressive Cloudy Glasses", 1),
+        "Cloudy Glasses"            : ("Progressive Cloudy Glasses", 2),
 
-        "Charm"         : ("Progressive Accessory", 1),
-        "Magic Ring"    : ("Progressive Accessory", 2),
-        "Cupid Locket"  : ("Progressive Accessory", 3),
-
-        "Axe"           : ("Progressive Axe", 1),
-        "Battle Axe"    : ("Progressive Axe", 2),
-        "Giant's Axe"   : ("Progressive Axe", 3),
-
-        "Bomb"          : ("Progressive Bomb", 1),
-        "Jumbo Bomb"    : ("Progressive Bomb", 2),
-        "Mega Grenade"  : ("Progressive Bomb", 3),
-
-        "Cat Claw"      : ("Progressive Claw", 1),
-        "Charm Claw"    : ("Progressive Claw", 2),
-        "Dragon Claw"   : ("Progressive Claw", 3),
-
-        "Steel Sword"   : ("Progressive Sword", 1),
-        "Knight Sword"  : ("Progressive Sword", 2),
-        "Excalibur"     : ("Progressive Sword", 3),
+        "No Cowboy Hat"             : ("Progressive Cowboy Hat", 1),
+        "Cowboy Hat"                : ("Progressive Cowboy Hat", 2),
         
-        "Sky Fragment"  : ("Progressive Sky Coin", 1),
-        "Sky Coin"      : ("Progressive Sky Coin", 2)
+        "Heart Locket"              : ("Progressive Locket", 1),
+        "The Locket"                : ("Progressive Locket", 2),
+
+        "No Ruins Key"              : ("Progressive Ruins Key", 1),
+        "Ruins Key"                 : ("Progressive Ruins Key", 2),
+
+        "No Snowdin Key"            : ("Progressive Snowdin Key", 1),
+        "Snowdin Key"               : ("Progressive Snowdin Key", 2),
+
+        "No Waterfall Key"          : ("Progressive Waterfall Key", 1),
+        "Waterfall Key"             : ("Progressive Waterfall Key", 2),
+
+        "No Hotland Key"            : ("Progressive Hotland Key", 1),
+        "Hotland Key"               : ("Progressive Hotland Key", 2),
+
+        "No Core Key"               : ("Progressive Core Key", 1),
+        "Core Key"                  : ("Progressive Core Key", 2),
+
+        "No Home Key"               : ("Progressive New Home Key", 1),
+        "No Key Pieces"             : ("Progressive New Home Key", 2),
+        "Left Home Key"             : ("Progressive New Home Key", 3),
+        "Right Home Key"            : ("Progressive New Home Key", 4),
+        "Has Key Pieces"            : ("Progressive New Home Key", 5),
+        "New Home Key"              : ("Progressive New Home Key", 6)
+    }
+
+    non_progressive_weapons = {
+        "Toy Knife"                 : ("Progressive Weapons", 1),
+        "Tough Glove"               : ("Progressive Weapons", 2),
+        "Ballet Shoes"              : ("Progressive Weapons", 3),
+        "Torn Notebook"             : ("Progressive Weapons", 4),
+        "Burnt Pan"                 : ("Progressive Weapons", 5),
+        "Empty Gun"                 : ("Progressive Weapons", 6),
+        "Progressive Knife"         : ("Progressive Weapons", 7)
+    }
+
+    non_progressive_armors = {
+        "Faded Ribbon"              : ("Progressive Armors", 1),
+        "Manly Bandanna"            : ("Progressive Armors", 2),
+        "Old Tutu"                  : ("Progressive Armors", 3),
+        "Cloudy Glasses"            : ("Progressive Armors", 4),
+        "Stained Apron"             : ("Progressive Armors", 5),
+        "Cowboy Hat"                : ("Progressive Armors", 6),
+        "Progressive Locket"        : ("Progressive Armors", 7)
     }
 
     progressive_item_max = {
-        "Progressive Helm"      : 3,
-        "Progressive Armor"     : 2,
-        "Progressive Shield"    : 3,
-        "Progressive Accessory" : 3,
-        "Progressive Axe"       : 3,
-        "Progressive Bomb"      : 3,
-        "Progressive Claw"      : 3,
-        "Progressive Sword"     : 3,
-        "Progressive Sky Coin"  : 2
+        "Progressive Knife"             : 2,
+        "Progressive Weapons"           : 7,
+
+        "Progressive Manly Bandanna"    : 2,
+        "Progressive Cloudy Glasses"    : 2,
+        "Progressive Cowboy Hat"        : 2,
+        "Progressive Locket"            : 2,
+        "Progressive Armors"            : 7,
+        
+        "Progressive Ruins Key"         : 2,
+        "Progressive Snowdin Key"       : 2,
+        "Progressive Waterfall Key"     : 2,
+        "Progressive Hotland Key"       : 2,
+        "Progressive Core Key"          : 2,
+        "Progressive New Home Key"      : 6
     }
 
     REGION_RUINS        = "Ruins"
@@ -2639,17 +2668,49 @@ if "Undertale" in network_data_package["games"]:
     # End - Data from worlds/Undertale/Locations.py to show locations with names on tracker page
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
-        uses_key_hunt = route = tracker_data.get_slot_data(team, player)["key_hunt"]
-        key_pieces = route = tracker_data.get_slot_data(team, player)["key_pieces"]
+        uses_key_hunt = tracker_data.get_slot_data(team, player)["key_hunt"]
+        key_pieces = tracker_data.get_slot_data(team, player)["key_pieces"]
+
+        # Prepare for the progression handling of some items to handle an own
+        # not collected/active icon instead of the default gray filter css class
+        if inventory["Ruins Key"]       == 0 : inventory["No Ruins Key"]         = 1
+        if inventory["Snowdin Key"]     == 0 : inventory["No Snowdin Key"]       = 1
+        if inventory["Waterfall Key"]   == 0 : inventory["No Waterfall Key"]     = 1
+        if inventory["Hotland Key"]     == 0 : inventory["No Hotland Key"]       = 1
+        if inventory["Core Key"]        == 0 : inventory["No Core Key"]          = 1
+
+        if inventory["Manly Bandanna"]  == 0 : inventory["No Manly Bandanna"]    = 1
+        if inventory["Cloudy Glasses"]  == 0 : inventory["No Cloudy Glasses"]    = 1
+        if inventory["Cowboy Hat"]      == 0 : inventory["No Cowboy Hat"]        = 1
         
-        if uses_key_hunt:
-            inventory["New Home Key"] = inventory["Key Piece"] >= key_pieces
-        else:
-            inventory["New Home Key"] = inventory["Left Home Key"] and inventory["Right Home Key"]
+        # If an entry in the dictionary occurs also with 0 or False it will be handled in the following
+        # progression mapping as collected. That would lead to a wrong visual. Therefore a lot of
+        # specific clauses to handle "New Home Key" and "Key Piece" behaviour
+        if uses_key_hunt and inventory["Key Piece"] >= key_pieces:
+            inventory["New Home Key"] = 1
+        elif uses_key_hunt and inventory["Key Piece"] > 0:
+            inventory["Has Key Pieces"] = inventory["Key Piece"]
+        elif uses_key_hunt:
+            inventory["No Key Pieces"] = 0
+        elif inventory["Left Home Key"] and inventory["Right Home Key"]:
+            inventory["New Home Key"] = 1
+        elif not any(item in ["Key Piece", "Left Home Key", "Right Home Key"] for item in inventory):
+            inventory["No Home Key"] = 1
 
         for item, (prog_item, level) in non_progressive_items.items():
             if item in inventory:
+                print(item + " - " + prog_item)
                 inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        # add progressive weapons and armors
+        # Weapons and armors are progressing in order, not by the one which was actually got.
+        for item, (prog_item, level) in non_progressive_weapons.items():
+            if item in inventory:
+                inventory[prog_item] += 1
+            
+        for item, (prog_item, level) in non_progressive_armors.items():
+            if item in inventory:
+                inventory[prog_item] += 1
 
         # Completed item if we meet goal.
         if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
@@ -2706,6 +2767,8 @@ if "Undertale" in network_data_package["games"]:
         noStats = not tracker_data.get_slot_data(team, player)["rando_stats"]
         noEquips = tracker_data.get_slot_data(team, player)["no_equips"]
         keyHunt = tracker_data.get_slot_data(team, player)["key_hunt"]
+        progWeapons = tracker_data.get_slot_data(team, player)["prog_weapons"]
+        progArmor = tracker_data.get_slot_data(team, player)["prog_armor"]
         locations_to_check = advancement_table.copy()
 
         for location_to_exclude in exclusion_table[route]:
@@ -2736,16 +2799,12 @@ if "Undertale" in network_data_package["games"]:
 
         inventory_order = {
             "region_keys" : [
-                "Ruins Key",
-                "Snowdin Key",
-                "Waterfall Key",
-                "Hotland Key",
-                "Core Key"
-            ],
-            "new_home_key" : [
-                "Left Home Key",
-                "Right Home Key",
-                "Key Piece"
+                "Progressive Ruins Key",
+                "Progressive Snowdin Key",
+                "Progressive Waterfall Key",
+                "Progressive Hotland Key",
+                "Progressive Core Key",
+                "Progressive New Home Key"
             ],
             "actions": [
                 "FIGHT",
@@ -2760,6 +2819,8 @@ if "Undertale" in network_data_package["games"]:
                 "HP Up"
             ],
             "key_items" : [
+                "Progressive Weapons",
+                "Progressive Armors",
                 "Complete Skeleton",
                 "Fish",
                 "DT Extractor",
@@ -2767,38 +2828,24 @@ if "Undertale" in network_data_package["games"]:
                 "Punch Card",
                 "Hot Dog...?"
             ],
-            "required_armor" : [
-                "Cloudy Glasses",
-                "Manly Bandanna",
-                "Old Tutu",
-                "Stained Apron",
-                "The Locket",
-                "Heart Locket",
-                "Faded Ribbon",
-                "Cowboy Hat"
-            ],
             "required_weapons" : [
-                "Torn Notebook",
+                "Toy Knife",
                 "Tough Glove",
                 "Ballet Shoes",
+                "Torn Notebook",
                 "Burnt Pan",
-                "Worn Dagger",
-                "Real Knife",
-                "Toy Knife",
-                "Empty Gun"
+                "Empty Gun",
+                "Progressive Knife"
             ],
-            #"non_key_items" : [
-            #    "Butterscotch Pie",
-            #    "Face Steak",
-            #    "Snowman Piece",
-            #    "Instant Noodles",
-            #    "Astronaut Food",
-            #    "Hot Cat",
-            #    "Abandoned Quiche",
-            #    "Spider Donut",
-            #    "Spider Cider",
-            #    "Hush Puppy"
-            #]
+            "required_armor" : [
+                "Faded Ribbon",
+                "Progressive Manly Bandanna",
+                "Old Tutu",
+                "Progressive Cloudy Glasses",
+                "Stained Apron",
+                "Progressive Cowboy Hat",
+                "Progressive Locket"
+            ]
         }
 
         if route == "pacifist":
@@ -2807,21 +2854,13 @@ if "Undertale" in network_data_package["games"]:
             inventory_order["stats"].remove("HP Up")
             inventory_order["stats"].remove("LOVE")
 
-            inventory_order["required_armor"].remove("The Locket")
-            inventory_order["required_weapons"].remove("Real Knife")
-
         if route == "neutral":
             inventory_order["stats"].remove("ATK Up")
             inventory_order["stats"].remove("DEF Up")
             inventory_order["stats"].remove("HP Up")
             inventory_order["stats"].remove("LOVE")
-            
-            inventory_order["required_armor"].remove("The Locket")
-            inventory_order["required_weapons"].remove("Real Knife")
 
             inventory_order["key_items"].remove("Hot Dog...?") # Dog Sale 1-4, Cat Sale
-
-            #inventory_order["non_key_items"].remove("Hush Puppy") # "Hush Trade"
 
             inventory_order["key_items"].remove("Complete Skeleton") # Papyrus Plot
             inventory_order["key_items"].remove("Fish") # Undyne Plot
@@ -2833,10 +2872,6 @@ if "Undertale" in network_data_package["games"]:
             inventory_order["key_items"].remove("Punch Card") # Dog Sale 1-4, Cat Sale
 
             inventory_order["required_armor"].remove("Stained Apron")
-            inventory_order["required_armor"].remove("Heart Locket")
-            inventory_order["required_weapons"].remove("Worn Dagger")
-
-            #inventory_order["non_key_items"].remove("Hush Puppy") # "Hush Trade"
 
             inventory_order["key_items"].remove("Complete Skeleton") # Papyrus Plot
             inventory_order["key_items"].remove("Fish") # Undyne Plot
@@ -2844,8 +2879,7 @@ if "Undertale" in network_data_package["games"]:
             inventory_order["key_items"].remove("DT Extractor")
 
         if route == "all_routes":
-            inventory_order["required_armor"].remove("Heart Locket")
-            inventory_order["required_weapons"].remove("Worn Dagger")
+            pass
 
         if noLove:
             if "LOVE" in inventory_order["stats"]: inventory_order["stats"].remove("LOVE")
@@ -2855,15 +2889,19 @@ if "Undertale" in network_data_package["games"]:
             if "DEF Up" in inventory_order["stats"]: inventory_order["stats"].remove("DEF Up")
             if "HP Up"  in inventory_order["stats"]: inventory_order["stats"].remove("HP Up")
 
+        if not progWeapons:
+            inventory_order["key_items"].remove("Progressive Weapons")
+        else:
+            del inventory_order["required_weapons"]
+        
+        if not progArmor:
+            inventory_order["key_items"].remove("Progressive Armors")
+        else:
+            del inventory_order["required_armor"]
+
         if noEquips:
             del inventory_order["required_weapons"]
             del inventory_order["required_armor"]
-
-        if keyHunt:
-            inventory_order["new_home_key"].remove("Left Home Key")
-            inventory_order["new_home_key"].remove("Right Home Key")
-        else:
-            inventory_order["new_home_key"].remove("Key Piece")
 
         return render_template(
             template_name_or_list="tracker__Undertale.html",
