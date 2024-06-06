@@ -245,13 +245,14 @@ class GauntletLegendsContext(CommonContext):
                 if arr[0] != 0xFF:
                     self.offset = i
                     break
-        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C + (0 if mode == 0 else 0x3C * (len(self.item_locations) + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])))), 'x')} {0x3C * (len(self.item_locations) + 10 if mode == 0 else len(self.chest_locations) + 10)}")))
+        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C), 'x')} 14400")))
         b.iterate(0x3C)
         for i, arr in enumerate(b.split):
             _obj += [ObjectEntry(arr)]
-        _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
+        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF]
         if mode == 1:
-            _obj = _obj[:len(self.chest_locations)]
+            offset = len(self.item_locations) + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])
+            _obj = _obj[offset:offset + len(self.chest_locations)]
             self.chest_objects = _obj
         else:
             _obj = _obj[:len(self.item_locations)]
