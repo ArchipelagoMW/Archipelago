@@ -36,6 +36,7 @@ VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
 class YoshisIslandSNIClient(SNIClient):
     game = "Yoshi's Island"
+    patch_suffix = ".apyi"
 
     async def deathlink_kill_player(self, ctx: "SNIContext") -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -115,7 +116,7 @@ class YoshisIslandSNIClient(SNIClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names.lookup_in_slot(new_check_id)
             total_locations = len(ctx.missing_locations) + len(ctx.checked_locations)
             snes_logger.info(f"New Check: {location} ({len(ctx.locations_checked)}/{total_locations})")
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [new_check_id]}])
@@ -126,9 +127,9 @@ class YoshisIslandSNIClient(SNIClient):
             item = ctx.items_received[recv_index]
             recv_index += 1
             logging.info("Received %s from %s (%s) (%d/%d in list)" % (
-                color(ctx.item_names[item.item], "red", "bold"),
+                color(ctx.item_names.lookup_in_slot(item.item), "red", "bold"),
                 color(ctx.player_names[item.player], "yellow"),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
 
             snes_buffered_write(ctx, ITEMQUEUE_HIGH, pack("H", recv_index))
             if item.item in item_values:

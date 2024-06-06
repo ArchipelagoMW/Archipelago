@@ -39,7 +39,6 @@ class RaftWorld(World):
     location_name_to_id = locations_lookup_name_to_id
     option_definitions = raft_options
 
-    data_version = 2
     required_client_version = (0, 3, 4)
 
     def create_items(self):

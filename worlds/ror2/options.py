@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions, OptionGroup
 
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
@@ -149,6 +149,17 @@ class DLC_SOTV(Toggle):
      Adds Void Items into the item pool
      """
     display_name = "Enable DLC - SOTV"
+
+
+class RequireStages(DefaultOnToggle):
+    """Add Stage items to the pool to block access to the next set of environments."""
+    display_name = "Require Stages"
+
+
+class ProgressiveStages(DefaultOnToggle):
+    """This will convert Stage items to be a progressive item. For example instead of "Stage 2" it would be
+     "Progressive Stage" """
+    display_name = "Progressive Stages"
 
 
 class GreenScrap(Range):
@@ -339,7 +350,7 @@ class ItemPoolPresetToggle(Toggle):
 
 
 class ItemWeights(Choice):
-    """Set item_pool_presets to true if you want to use one of these presets.
+    """Set Use Item Weight Presets to yes if you want to use one of these presets.
     Preset choices for determining the weights of the item pool.
     - New is a test for a potential adjustment to the default weights.
     - Uncommon puts a large number of uncommon items in the pool.
@@ -364,6 +375,44 @@ class ItemWeights(Choice):
     option_void = 9
 
 
+ror2_option_groups = [
+    OptionGroup("Explore Mode Options", [
+        ChestsPerEnvironment,
+        ShrinesPerEnvironment,
+        ScavengersPerEnvironment,
+        ScannersPerEnvironment,
+        AltarsPerEnvironment,
+        RequireStages,
+        ProgressiveStages,
+    ]),
+    OptionGroup("Classic Mode Options", [
+        TotalLocations,
+    ], start_collapsed=True),
+    OptionGroup("Weighted Choices", [
+        ItemWeights,
+        ItemPoolPresetToggle,
+        WhiteScrap,
+        GreenScrap,
+        YellowScrap,
+        RedScrap,
+        CommonItem,
+        UncommonItem,
+        LegendaryItem,
+        BossItem,
+        LunarItem,
+        VoidItem,
+        Equipment,
+        Money,
+        LunarCoin,
+        Experience,
+        MountainTrap,
+        TimeWarpTrap,
+        CombatTrap,
+        TeleportTrap,
+    ]),
+]
+
+
 @dataclass
 class ROR2Options(PerGameCommonOptions):
     goal: Goal
@@ -378,6 +427,8 @@ class ROR2Options(PerGameCommonOptions):
     start_with_revive: StartWithRevive
     final_stage_death: FinalStageDeath
     dlc_sotv: DLC_SOTV
+    require_stages: RequireStages
+    progressive_stages: ProgressiveStages
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
     shrine_use_step: ShrineUseStep
@@ -386,10 +437,10 @@ class ROR2Options(PerGameCommonOptions):
     item_weights: ItemWeights
     item_pool_presets: ItemPoolPresetToggle
     # define the weights of the generated item pool.
-    green_scrap: GreenScrap
-    red_scrap: RedScrap
-    yellow_scrap: YellowScrap
     white_scrap: WhiteScrap
+    green_scrap: GreenScrap
+    yellow_scrap: YellowScrap
+    red_scrap: RedScrap
     common_item: CommonItem
     uncommon_item: UncommonItem
     legendary_item: LegendaryItem

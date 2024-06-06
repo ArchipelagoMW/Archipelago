@@ -78,11 +78,6 @@ class LinksAwakeningWorld(World):
     settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
 
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
-
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.
     base_id = BASE_ID
@@ -154,7 +149,7 @@ class LinksAwakeningWorld(World):
         # Place RAFT, other access events
         for region in regions:
             for loc in region.locations:
-                if loc.event:
+                if loc.address is None:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
         
         # Connect Windfish -> Victory
@@ -184,19 +179,22 @@ class LinksAwakeningWorld(World):
         self.pre_fill_items = []
         # For any and different world, set item rule instead
         
-        for option in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
-            option = "shuffle_" + option
+        for dungeon_item_type in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
+            option = "shuffle_" + dungeon_item_type
             option = self.player_options[option]
 
             dungeon_item_types[option.ladxr_item] = option.value
 
+            # The color dungeon does not contain an instrument
+            num_items = 8 if dungeon_item_type == "instruments" else 9
+
             if option.value == DungeonItemShuffle.option_own_world:
                 self.multiworld.local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
+                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items + 1)
                 }
             elif option.value == DungeonItemShuffle.option_different_world:
                 self.multiworld.non_local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
+                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items + 1)
                 }
         # option_original_dungeon = 0
         # option_own_dungeons = 1

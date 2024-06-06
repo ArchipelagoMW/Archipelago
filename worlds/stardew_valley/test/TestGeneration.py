@@ -371,8 +371,7 @@ class TestLocationGeneration(SVTestBase):
 
     def test_all_location_created_are_in_location_table(self):
         for location in self.get_real_locations():
-            if not location.event:
-                self.assertIn(location.name, location_table)
+            self.assertIn(location.name, location_table)
 
 
 class TestMinLocationAndMaxItem(SVTestBase):
@@ -771,11 +770,10 @@ class TestShipsanityNone(SVTestBase):
     }
 
     def test_no_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event:
-                with self.subTest(location.name):
-                    self.assertFalse("Shipsanity" in location.name)
-                    self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
+        for location in self.get_real_locations():
+            with self.subTest(location.name):
+                self.assertFalse("Shipsanity" in location.name)
+                self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
 
 
 class TestShipsanityCrops(SVTestBase):
@@ -785,8 +783,8 @@ class TestShipsanityCrops(SVTestBase):
     }
 
     def test_only_crop_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
 
@@ -808,8 +806,8 @@ class TestShipsanityCropsExcludeIsland(SVTestBase):
     }
 
     def test_only_crop_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
 
@@ -831,8 +829,8 @@ class TestShipsanityCropsNoQiCropWithoutSpecialOrders(SVTestBase):
     }
 
     def test_only_crop_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
 
@@ -854,8 +852,8 @@ class TestShipsanityFish(SVTestBase):
     }
 
     def test_only_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
@@ -878,8 +876,8 @@ class TestShipsanityFishExcludeIsland(SVTestBase):
     }
 
     def test_only_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
@@ -902,8 +900,8 @@ class TestShipsanityFishExcludeQiOrders(SVTestBase):
     }
 
     def test_only_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
@@ -926,8 +924,8 @@ class TestShipsanityFullShipment(SVTestBase):
     }
 
     def test_only_full_shipment_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
                     self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
@@ -953,8 +951,8 @@ class TestShipsanityFullShipmentExcludeIsland(SVTestBase):
     }
 
     def test_only_full_shipment_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
                     self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
@@ -979,8 +977,8 @@ class TestShipsanityFullShipmentExcludeQiBoard(SVTestBase):
     }
 
     def test_only_full_shipment_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
                     self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
@@ -1006,8 +1004,8 @@ class TestShipsanityFullShipmentWithFish(SVTestBase):
     }
 
     def test_only_full_shipment_and_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
                                     LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
@@ -1041,8 +1039,8 @@ class TestShipsanityFullShipmentWithFishExcludeIsland(SVTestBase):
     }
 
     def test_only_full_shipment_and_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
                                     LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
@@ -1075,8 +1073,8 @@ class TestShipsanityFullShipmentWithFishExcludeQiBoard(SVTestBase):
     }
 
     def test_only_full_shipment_and_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 with self.subTest(location.name):
                     self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
                                     LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)

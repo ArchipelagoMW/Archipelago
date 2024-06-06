@@ -1,8 +1,8 @@
 # Castlevania 64
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -91,7 +91,7 @@ either filler, useful, or a trap.
 
 When you pick up someone else's item, you will not receive anything and the item textbox will show up to announce what you
 found and who it was for. The color of the text will tell you its classification:
-- <font color="moccasin">Light brown-ish</font>: Common
+- <font color="moccasin">Light brown-ish</font>: Filler
 - <font color="white">White</font>/<font color="yellow">Yellow</font>: Useful
 - <font color="yellow">Yellow</font>/<font color="lime">Green</font>: Progression
 - <font color="yellow">Yellow</font>/<font color="red">Red</font>: Trap
@@ -116,7 +116,7 @@ Enabling Carrie Logic will also expect the following:
 
 - Orb-sniping dogs through the front gates in Villa
 
-Library Skip is **NOT** logically expected on any setting. The basement hallway crack will always logically expect two Nitros
+Library Skip is **NOT** logically expected by any options. The basement arena crack will always logically expect two Nitros
 and two Mandragoras even with Hard Logic on due to the possibility of wasting a pair on the upper wall, after managing
 to skip past it. And plus, the RNG manip may not even be possible after picking up all the items in the Nitro room.
 
