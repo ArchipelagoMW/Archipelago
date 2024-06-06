@@ -102,8 +102,7 @@ def parse_lambda(lambda_string: str) -> WitnessRule:
     return frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
 
-
-_adjustment_file_cache = dict()
+_adjustment_file_cache = {}
 
 
 def get_adjustment_file(adjustment_file: str) -> List[str]:
