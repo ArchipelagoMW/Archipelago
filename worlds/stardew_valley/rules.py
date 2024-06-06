@@ -1041,7 +1041,7 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
 
         MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
     except KeyError as ex:
-        logger.error(f"""Failed to evaluate indirect connection in {entrance}: {explain(rule, CollectionState(multiworld))}""")
+        logger.error(f"""Failed to evaluate indirect connection in: {explain(rule, CollectionState(multiworld))}""")
         raise ex
 
 
