@@ -1573,7 +1573,7 @@
 		"johto": true,
 		"exits": ["REGION_NEW_BARK_TOWN", "REGION_PLAYERS_HOUSE_2F"],
 		"locations": ["POKEGEAR"],
-		"events": []
+		"events": ["EVENT_GOT_POKEGEAR"]
 	},
 	"REGION_PLAYERS_HOUSE_2F": {
 		"johto": true,
@@ -1623,7 +1623,7 @@
 		"johto": true,
 		"exits": ["REGION_GOLDENROD_CITY", "REGION_RADIO_TOWER_2F"],
 		"locations": ["RADIO_CARD", "ITEM_FROM_ROCKET_GRUNTM_3"],
-		"events": []
+		"events": ["EVENT_GOT_RADIO_CARD"]
 	},
 	"REGION_RADIO_TOWER_2F": {
 		"johto": true,

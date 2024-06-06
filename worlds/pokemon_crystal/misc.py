@@ -36,10 +36,10 @@ def get_misc_spoiler_log(generated_misc, write):
                    generated_misc.ec[2][-1], generated_misc.ec[3][-1], [5, 4], [6, 4], [5, 5], [6, 5]]
 
     for coords in clear_tiles:
-        if coords[0] != 2:  # dont show left-side clear spots
+        if coords[0] != 2:  # don't show left-side clear spots
             ecruteak_map[coords[1] - 4][coords[0] - 2] = "  "
 
-    trainers = [[1, 9], [5, 5], [0, 7], [5, 3]]
+    trainers = [[5, 1], [0, 4], [5, 5], [1, 9]]
     for coords in trainers:
         ecruteak_map[coords[1]][coords[0]] = "()"
 

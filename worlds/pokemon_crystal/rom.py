@@ -1,16 +1,15 @@
-from typing import TYPE_CHECKING
+import copy
 import os
 import pkgutil
+from typing import TYPE_CHECKING
+
 import bsdiff4
-import copy
 
-from worlds.Files import APDeltaPatch
 from settings import get_settings
-from .phone_data import phone_scripts
-
-from .items import reverse_offset_item_value, item_const_name_to_id
+from worlds.Files import APDeltaPatch
 from .data import data, BASE_OFFSET
-from .utils import get_random_pokemon_id, convert_to_ingame_text, get_random_filler_item
+from .items import reverse_offset_item_value, item_const_name_to_id
+from .utils import convert_to_ingame_text
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
@@ -45,166 +44,150 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             item_id = item_id - 256 if item_id > 256 else item_id
             write_bytes(patched_rom, [item_id], location.rom_address)
         else:
+            # for in game text
             item_flag = location.address - BASE_OFFSET
             player_name = world.multiworld.player_name[location.item.player].upper()
             item_name = location.item.name.upper()
             item_texts.append([player_name, item_name, item_flag])
             write_bytes(patched_rom, [item_const_name_to_id("AP_ITEM")], location.rom_address)
 
+    # table has format: location id (2 bytes), string address (2 bytes), string bank (1 byte),
+    # and is terminated by 0xFF
     item_name_table_length = len(item_texts) * 5 + 1
     item_name_table_adr = data.rom_addresses["AP_ItemText_Table"]
+
+    # strings are 16 chars each, plus a terminator byte,
+    # this gives every pair of item + player names a size of 34 bytes
     item_name_bank1 = item_name_table_adr + item_name_table_length
     item_name_bank1_length = data.rom_addresses["AP_ItemText_Bank1_End"] - item_name_bank1
     item_name_bank1_capacity = int(item_name_bank1_length / 34)
+
     item_name_bank2 = data.rom_addresses["AP_ItemText_Bank2"]
     item_name_bank2_length = data.rom_addresses["AP_ItemText_Bank2_End"] - item_name_bank2
     item_name_bank2_capacity = int(item_name_bank2_length / 34)
 
     for i, text in enumerate(item_texts):
+        # truncate if too long
         player_text = convert_to_ingame_text(text[0])[:16]
+        # pad with terminator byte to keep alignment
         player_text += [0x50] * (17 - len(player_text))
         item_text = convert_to_ingame_text(text[1])[:16]
         item_text.append(0x50)
+        # bank 1
         bank = 0x75
-        text_adr = 0
+        table_offset_adr = item_name_table_adr + i * 5
+
+        if i >= item_name_bank1_capacity + item_name_bank2_capacity:
+            # if we somehow run out of capacity in both banks, just finish the table and break,
+            # there is a fallback string in the ROM, so it should handle this gracefully.
+            write_bytes(patched_rom, [0xFF], item_name_table_adr + table_offset_adr)
+            break
         if i + 1 < item_name_bank1_capacity:
             text_offset = i * 34
             text_adr = item_name_bank1 + text_offset
-            write_bytes(patched_rom, player_text + item_text, text_adr)
-        elif i + 1 < item_name_bank1_capacity + item_name_bank2_capacity:
+        else:
+            # bank 2
             bank = 0x76
             text_offset = (i + 1 - item_name_bank1_capacity) * 34
             text_adr = item_name_bank2 + text_offset
-            write_bytes(patched_rom, player_text + item_text, text_adr)
-
-        table_offset_adr = item_name_table_adr + i * 5
+        write_bytes(patched_rom, player_text + item_text, text_adr)
+        # get the address within the rom bank (0x4000 - 0x7FFF)
         text_bank_adr = (text_adr % 0x4000) + 0x4000
         write_bytes(patched_rom, text[2].to_bytes(2, "big"), table_offset_adr)
         write_bytes(patched_rom, text_bank_adr.to_bytes(2, "little"), table_offset_adr + 2)
         write_bytes(patched_rom, [bank], table_offset_adr + 4)
     write_bytes(patched_rom, [0xFF], item_name_table_adr + item_name_table_length - 1)
 
-    static = {
-        "RedGyarados": 2,
-        "Sudowoodo": 0,
-        "Suicune": 2,
-        "Ho_Oh": 2,
-        "UnionCaveLapras": 2,
-        "Snorlax": 2,
-        "Lugia": 2,
-        "CatchTutorial_1": 0,
-        "CatchTutorial_2": 0,
-        "CatchTutorial_3": 0,
-        "RocketHQTrap_1": 0,
-        "RocketHQTrap_2": 0,
-        "RocketHQTrap_3": 0,
-        "RocketHQElectrode_1": 2,
-        "RocketHQElectrode_2": 2,
-        "RocketHQElectrode_3": 2,
-        "Togepi": 0
-    }
-
     if world.options.randomize_static_pokemon:
-        for pokemon, count in static.items():
-            new_pokemon = get_random_pokemon_id(random)
-            base_flag = "AP_Static_" + pokemon
-            if count == 0:
-                address = data.rom_addresses[base_flag] + 1
-                write_bytes(patched_rom, [new_pokemon], address)
-            else:
-                for i in range(1, count + 1):
-                    address = data.rom_addresses[base_flag + "_" + str(i)] + 1
-                    write_bytes(patched_rom, [new_pokemon], address)
+        for _static_name, pkmn_data in world.generated_static.items():
+            pokemon_id = data.pokemon[pkmn_data.pokemon].id
+            for address in pkmn_data.addresses:
+                cur_address = data.rom_addresses[address] + 1
+                write_bytes(patched_rom, [pokemon_id], cur_address)
 
     if world.options.randomize_starters:
-        for i in range(1, 5):
-            cyndaquil_address = data.rom_addresses["AP_Starter_CYNDAQUIL_" + str(i)] + 1
-            cyndaquil_mon = data.pokemon[world.generated_starters[0][0]].id
-            totodile_address = data.rom_addresses["AP_Starter_TOTODILE_" + str(i)] + 1
-            totodile_mon = data.pokemon[world.generated_starters[1][0]].id
-            chikorita_address = data.rom_addresses["AP_Starter_CHIKORITA_" + str(i)] + 1
-            chikorita_mon = data.pokemon[world.generated_starters[2][0]].id
-            write_bytes(patched_rom, [cyndaquil_mon], cyndaquil_address)
-            write_bytes(patched_rom, [totodile_mon], totodile_address)
-            write_bytes(patched_rom, [chikorita_mon], chikorita_address)
-            if i == 4:
-                write_bytes(patched_rom, [item_const_name_to_id(get_random_filler_item(random))], cyndaquil_address + 2)
-                write_bytes(patched_rom, [item_const_name_to_id(get_random_filler_item(random))], totodile_address + 2)
-                write_bytes(patched_rom, [item_const_name_to_id(get_random_filler_item(random))], chikorita_address + 2)
+        for j, pokemon in enumerate(["CYNDAQUIL_", "TOTODILE_", "CHIKORITA_"]):
+            pokemon_id = data.pokemon[world.generated_starters[j][0]].id
+            for i in range(1, 5):
+                cur_address = data.rom_addresses["AP_Starter_" + pokemon + str(i)] + 1
+                write_bytes(patched_rom, [pokemon_id], cur_address)
+                if i == 4:
+                    helditem = item_const_name_to_id(world.generated_starter_helditems[j])
+                    write_bytes(patched_rom, [helditem], cur_address + 2)
 
     if world.options.randomize_wilds:
-        for address_name, address in data.rom_addresses.items():
-            if (address_name.startswith("AP_WildGrass")):
-                cur_address = address + 4
-                for i in range(7):
-                    random_poke = get_random_pokemon_id(random)
-                    write_bytes(patched_rom, [random_poke], cur_address)  # morn
-                    write_bytes(patched_rom, [random_poke], cur_address + 14)  # day
-                    write_bytes(patched_rom, [random_poke], cur_address + 28)  # nite
+        for grass_name, grass_encounters in world.generated_wild.grass.items():
+            cur_address = data.rom_addresses["AP_WildGrass_" + grass_name] + 3
+            for i in range(3):  # morn, day, nite
+                for encounter in grass_encounters:
+                    pokemon_id = data.pokemon[encounter.pokemon].id
+                    write_bytes(patched_rom, [encounter.level, pokemon_id], cur_address)  # morn
                     cur_address += 2
-            if (address_name.startswith("AP_WildWater")):
-                cur_address = address + 2
-                for i in range(3):
-                    write_bytes(patched_rom, [get_random_pokemon_id(random)], cur_address)
-                    cur_address += 2
-            if address_name == "AP_Misc_Intro_Wooper":
-                write_bytes(patched_rom, [get_random_pokemon_id(random)], address + 1)
 
-        for fish_name, fish_data in data.fish.items():
-            cur_address = data.rom_addresses["AP_FishMons_" + fish_name] + 1
-            for i, _poke in enumerate(fish_data.old):
-                if world.options.normalize_encounter_rates:
-                    encounter_rate = int(((i + 1) / 3) * 255)
-                    write_bytes(patched_rom, [encounter_rate], cur_address - 1)
-                random_poke = get_random_pokemon_id(random)
-                write_bytes(patched_rom, [random_poke], cur_address)
-                cur_address += 3
-            for i, _poke in enumerate(fish_data.good):
-                if world.options.normalize_encounter_rates:
-                    encounter_rate = int(((i + 1) / 4) * 255)
-                    write_bytes(patched_rom, [encounter_rate], cur_address - 1)
-                random_poke = get_random_pokemon_id(random)
-                write_bytes(patched_rom, [random_poke], cur_address)
-                cur_address += 3
-            for i, _poke in enumerate(fish_data.super):
-                if world.options.normalize_encounter_rates:
-                    encounter_rate = int(((i + 1) / 4) * 255)
-                    write_bytes(patched_rom, [encounter_rate], cur_address - 1)
-                random_poke = get_random_pokemon_id(random)
-                write_bytes(patched_rom, [random_poke], cur_address)
-                cur_address += 3
+        for water_name, water_encounters in world.generated_wild.water.items():
+            cur_address = data.rom_addresses["AP_WildWater_" + water_name] + 1
+            for encounter in water_encounters:
+                pokemon_id = data.pokemon[encounter.pokemon].id
+                write_bytes(patched_rom, [encounter.level, pokemon_id], cur_address)  # morn
+                cur_address += 2
 
-        for tree_set in ["Canyon", "Town", "Route", "Kanto", "Lake", "Forest"]:
-            address = data.rom_addresses["TreeMonSet_" + tree_set]
-            for i in range(0, 2):
-                for j in range(0, 6):
+        for fish_name, fish_data in world.generated_wild.fish.items():
+            cur_address = data.rom_addresses["AP_FishMons_" + fish_name]
+            for rod_type in [fish_data.old, fish_data.good, fish_data.super]:
+                for i, encounter in enumerate(rod_type):
                     if world.options.normalize_encounter_rates:
-                        encounter_rate = 16 + (j % 2) + int(j == 0)
-                        write_bytes(patched_rom, [encounter_rate], address)
-                    random_poke = get_random_pokemon_id(random)
-                    write_bytes(patched_rom, [random_poke], address + 1)
-                    address += 3
-                address += 1
-        address = data.rom_addresses["TreeMonSet_Rock"]
-        for i in range(0, 2):
-            if world.options.normalize_encounter_rates:
-                write_bytes(patched_rom, [50], address)
-            random_poke = get_random_pokemon_id(random)
-            write_bytes(patched_rom, [random_poke], address + 1)
-            address += 3
+                        # fishing encounter rates are stored as an increasing fraction of 255
+                        encounter_rate = int(((i + 1) / len(rod_type)) * 255)
+                        write_bytes(patched_rom, [encounter_rate], cur_address)
+                    cur_address += 1
+                    pokemon_id = data.pokemon[encounter.pokemon].id
+                    write_bytes(patched_rom, [pokemon_id, encounter.level], cur_address)
+                    cur_address += 2
+
+        for tree_name, tree_data in world.generated_wild.tree.items():
+            cur_address = data.rom_addresses["TreeMonSet_" + tree_name]
+            for rarity in [tree_data.common, tree_data.rare]:
+                for i, encounter in enumerate(rarity):
+                    if world.options.normalize_encounter_rates:
+                        # headbutt encounter rates are stored as individual percentages
+                        encounter_rate = int(1 / len(rarity) * 100)
+                        if i + 1 == len(rarity):
+                            # casting to int means the total percentages will not sum to 100,
+                            # this accounts for the discrepancy
+                            encounter_rate = 100 - (i * encounter_rate)
+                        write_bytes(patched_rom, [encounter_rate], cur_address)
+                    cur_address += 1
+                    pokemon_id = data.pokemon[encounter.pokemon].id
+                    write_bytes(patched_rom, [pokemon_id, encounter.level], cur_address)
+                    cur_address += 2
+
+        wooper_address = data.rom_addresses["AP_Misc_Intro_Wooper"] + 1
+        wooper_id = data.pokemon[world.generated_wooper].id
+        write_bytes(patched_rom, [wooper_id], wooper_address)
 
     if world.options.normalize_encounter_rates:
-        write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
-                    data.rom_addresses["AP_Prob_GrassMon"])
-        write_bytes(patched_rom, [33, 0, 66, 2, 100, 4],
-                    data.rom_addresses["AP_Prob_WaterMon"])
+        # list of percentage, byte offset for encounter tables (byte offsets are index * 2)
+        grass_prob_table = [f(x) for x in range(7) for f in (lambda x: int((x + 1) / 7 * 100), lambda x: x * 2)]
+        water_prob_table = [f(x) for x in range(3) for f in (lambda x: int((x + 1) / 3 * 100), lambda x: x * 2)]
+        write_bytes(patched_rom, grass_prob_table, data.rom_addresses["AP_Prob_GrassMon"])
+        write_bytes(patched_rom, water_prob_table, data.rom_addresses["AP_Prob_WaterMon"])
 
     if world.options.randomize_berry_trees:
         # 0xC9 = ret
         write_bytes(patched_rom, [0xC9], data.rom_addresses["AP_Setting_FruitTreesReset"])
 
-    if world.options.randomize_learnsets > 0:
-        for pkmn_name, pkmn_data in world.generated_pokemon.items():
+    for pkmn_name, pkmn_data in world.generated_pokemon.items():
+        if world.options.randomize_types.value:
+            address = data.rom_addresses["AP_Stats_Types_" + pkmn_name]
+            pkmn_types = [pkmn_data.types[0], pkmn_data.types[-1]]
+            type_ids = [data.type_ids[pkmn_types[0]], data.type_ids[pkmn_types[1]]]
+            write_bytes(patched_rom, type_ids, address)
+
+        if world.options.randomize_base_stats.value:
+            address = data.rom_addresses["AP_Stats_Base_" + pkmn_name]
+            write_bytes(patched_rom, pkmn_data.base_stats, address)
+
+        if world.options.randomize_learnsets.value:
             address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
             address = address + sum([len(evo) for evo in pkmn_data.evolutions]) + 1
             for move in pkmn_data.learnset:
@@ -212,29 +195,17 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 write_bytes(patched_rom, [move.level, move_id], address)
                 address += 2
 
-    for pkmn_name, pals in world.generated_palettes.items():
-        address = data.rom_addresses["AP_Stats_Palette_" + pkmn_name]
-        write_bytes(patched_rom, pals[0] + pals[1], address)
+        if pkmn_name in world.generated_palettes:
+            palettes = world.generated_palettes[pkmn_name]
+            address = data.rom_addresses["AP_Stats_Palette_" + pkmn_name]
+            write_bytes(patched_rom, palettes, address)
 
-    for pkmn_name, pkmn_data in world.generated_pokemon.items():
         tm_bytes = [0, 0, 0, 0, 0, 0, 0, 0]
         for tm in pkmn_data.tm_hm:
             tm_num = data.tmhm[tm].tm_num
             tm_bytes[int((tm_num - 1) / 8)] |= 1 << (tm_num - 1) % 8
-        address = data.rom_addresses["AP_Stats_TMHM_" + pkmn_name]
-        write_bytes(patched_rom, tm_bytes, address)
-
-    if world.options.randomize_types > 0:
-        for pkmn_name, pkmn_data in world.generated_pokemon.items():
-            address = data.rom_addresses["AP_Stats_Types_" + pkmn_name]
-            pkmn_types = pkmn_data.types if len(pkmn_data.types) == 2 else [pkmn_data.types[0], pkmn_data.types[0]]
-            type_ids = [data.type_ids[pkmn_types[0]], data.type_ids[pkmn_types[1]]]
-            write_bytes(patched_rom, type_ids, address)
-
-    if world.options.randomize_base_stats.value > 0:
-        for pkmn_name, pkmn_data in world.generated_pokemon.items():
-            address = data.rom_addresses["AP_Stats_Base_" + pkmn_name]
-            write_bytes(patched_rom, pkmn_data.base_stats, address)
+        tm_address = data.rom_addresses["AP_Stats_TMHM_" + pkmn_name]
+        write_bytes(patched_rom, tm_bytes, tm_address)
 
     for trainer_name, trainer_data in world.generated_trainers.items():
         address = data.rom_addresses["AP_TrainerParty_" + trainer_name]
@@ -366,7 +337,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                   "AP_Setting_HMBadge_Waterfall1",
                   "AP_Setting_HMBadge_Waterfall2"]:
         address = data.rom_addresses[label] + 1
-        write_bytes(patched_rom, [world.options.hm_badge_requirements], address)
+        write_bytes(patched_rom, [world.options.hm_badge_requirements.value], address)
 
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
@@ -391,7 +362,6 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         address = data.rom_addresses["AP_Setting_PhoneCallTrapTexts"] + (i * 0x400)
         script = world.generated_phone_traps[i]
         s_bytes = script.get_script_bytes()
-        # print(len(s_bytes))
         write_bytes(patched_rom, s_bytes, address)
         address = data.rom_addresses["AP_Setting_SpecialCalls"] + (6 * i) + 2
         write_bytes(patched_rom, [script.caller_id], address)
@@ -403,15 +373,22 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     write_bytes(patched_rom, phone_location_bytes, phone_location_address)
 
     start_inventory_address = data.rom_addresses["AP_Start_Inventory"]
-    start_inventory = world.options.start_inventory.value.copy()
+    start_inventory = copy.deepcopy(world.options.start_inventory.value)
     for item, quantity in start_inventory.items():
-        if quantity > 99:
-            quantity = 99
-        elif quantity == 0:
+        if quantity == 0:
             quantity = 1
-        item_code = reverse_offset_item_value(world.item_name_to_id[item])
-        if item_code < 256:
-            write_bytes(patched_rom, [item_code, quantity], start_inventory_address)
+        while quantity:
+            item_code = reverse_offset_item_value(world.item_name_to_id[item])
+            if item_code > 511:
+                continue
+            elif item_code > 255:
+                item_code -= 256
+            if quantity > 99:
+                write_bytes(patched_rom, [item_code, 99], start_inventory_address)
+                quantity -= 99
+            else:
+                write_bytes(patched_rom, [item_code, quantity], start_inventory_address)
+                quantity = 0
             start_inventory_address += 2
 
     if world.options.free_fly_location:

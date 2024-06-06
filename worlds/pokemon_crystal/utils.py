@@ -1,37 +1,4 @@
-from .data import data, BASE_OFFSET
-
-
-def get_random_pokemon(random, types=None, base_only=False):
-    pokemon_pool = []
-    if types is None or types[0] is None:
-        pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in data.pokemon.items() if
-                        pkmn_name != "UNOWN" and (pkmn_data.is_base or not base_only)]
-    else:
-        pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in data.pokemon.items()
-                        if pkmn_name != "UNOWN" and pkmn_data.types == types]
-    return random.choice(pokemon_pool)
-
-
-def get_random_nezumi(random):
-    pokemon_pool = ["RATTATA", "RATICATE", "NIDORAN_F", "NIDORAN_M", "NIDORINA", "NIDORINO", "PIKACHU", "RAICHU",
-                    "SANDSHREW", "SANDSLASH", "CYNDAQUIL", "QUILAVA", "SENTRET", "FURRET", "MARILL"]
-    return random.choice(pokemon_pool)
-
-
-def get_random_types(random):
-    if random.randint(0, 25) < 11:
-        type1 = random.choice(data.types)
-        type2 = random.choice([t for t in data.types if t != type1])
-        return [type1, type2]
-    return [random.choice(data.types)]
-
-
-def get_random_base_stats(random, bst=None):
-    if bst is None:
-        bst = random.randint(180, 680)
-    randoms = [random.random() + 0.28 for i in range(0, 6)]
-    total = sum(randoms)
-    return [int((stat * bst) / total) for stat in randoms]
+from .data import data
 
 
 def get_random_held_item(random):
@@ -79,38 +46,6 @@ def get_tmhm_compatibility(tms, tm_value, hm_value, types, vanilla_learnset, ran
         elif random.randint(0, 99) < use_value:
             tmhms.append(tm_name)
     return tmhms
-
-
-def get_random_colors(random):
-    color1 = convert_color(random.randint(0, 31), random.randint(0, 31), random.randint(0, 31))
-    color2 = convert_color(random.randint(0, 31), random.randint(0, 31), random.randint(0, 31))
-    return [color1[0], color1[1], color2[0], color2[1]]
-
-
-def get_type_colors(types, random):
-    type1 = types[0]
-    type2 = types[1] if len(types) == 2 else type1
-    c1 = type_palettes[type1][0]
-    c2 = type_palettes[type2][1]
-    r1, g1, b1 = shift_color(c1[0], c1[1], c1[2], random)
-    r2, g2, b2 = shift_color(c2[0], c2[1], c2[2], random)
-    color1 = convert_color(r1, g1, b1)
-    color2 = convert_color(r2, g2, b2)
-    return [color1[0], color1[1], color2[0], color2[1]]
-
-
-def shift_color(r: int, g: int, b: int, random):
-    return r + random.randint(-1, 1), \
-           g + random.randint(-1, 1), \
-           b + random.randint(-1, 1)
-
-
-def convert_color(r: int, g: int, b: int):
-    color = 0
-    color += sorted((0, r, 31))[1]
-    color += (sorted((0, g, 31))[1] << 5)
-    color += (sorted((0, b, 31))[1] << 10)
-    return color.to_bytes(2, "little")
 
 
 def convert_to_ingame_text(text: str):
@@ -208,24 +143,3 @@ def convert_to_ingame_text(text: str):
         "9": 0xff
     }
     return [charmap[char] if char in charmap else charmap["?"] for char in text]
-
-
-type_palettes = {
-    "NORMAL": [[31, 27, 31], [31, 24, 30]],
-    "FIGHTING": [[30, 17, 1], [24, 9, 0]],
-    "FLYING": [[17, 21, 31], [15, 11, 28]],
-    "POISON": [[27, 21, 31], [15, 10, 24]],
-    "GROUND": [[28, 19, 13], [24, 14, 0]],
-    "ROCK": [[21, 20, 22], [18, 15, 4]],
-    "BUG": [[23, 25, 6], [16, 18, 4]],
-    "GHOST": [[10, 8, 14], [5, 3, 15]],
-    "STEEL": [[19, 19, 21], [12, 14, 13]],
-    "FIRE": [[31, 7, 0], [31, 15, 0]],
-    "WATER": [[5, 8, 31], [2, 4, 26]],
-    "GRASS": [[8, 31, 5], [4, 24, 2]],
-    "ELECTRIC": [[31, 23, 7], [31, 17, 0]],
-    "PSYCHIC_TYPE": [[31, 14, 30], [24, 4, 14]],
-    "ICE": [[17, 25, 30], [22, 27, 30]],
-    "DRAGON": [[16, 20, 25], [9, 12, 23]],
-    "DARK": [[4, 2, 7], [3, 2, 6]],
-}

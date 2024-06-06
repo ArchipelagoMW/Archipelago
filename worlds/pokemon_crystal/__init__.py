@@ -1,28 +1,29 @@
-import random
-
-import settings
-from typing import List, Union, ClassVar, Dict, Any, Tuple
 import copy
 import logging
+from typing import List, Union, ClassVar, Dict, Any, Tuple
 
+import settings
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import World, WebWorld
 from .client import PokemonCrystalClient
+from .data import PokemonData, TrainerData, BASE_OFFSET, MiscData, TMHMData, BankAddress, data as crystal_data, \
+    WildData, StaticPokemon
+from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
+    reverse_offset_item_value, ITEM_GROUPS
+from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
+from .moves import randomize_tms
 from .options import PokemonCrystalOptions
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
+from .pokemon import randomize_pokemon, randomize_starters
 from .regions import create_regions, setup_free_fly
-from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
-    reverse_offset_item_value, ITEM_GROUPS
-from .rules import set_rules
-from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData,
-                   TMHMData, BankAddress)
 from .rom import generate_output
-from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
-from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
-    get_random_colors, get_random_base_stats, get_tmhm_compatibility, get_random_nezumi, get_free_fly_location
+from .rules import set_rules
+from .trainers import randomize_trainers, vanilla_trainer_movesets
+from .utils import get_random_filler_item, get_free_fly_location
+from .wild import randomize_wild_pokemon, randomize_static_pokemon
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -76,14 +77,18 @@ class PokemonCrystalWorld(World):
     free_fly_location: int
     generated_pokemon: Dict[str, PokemonData]
     generated_starters: Tuple[List[str], List[str], List[str]]
+    generated_starter_helditems: Tuple[str, str, str]
     generated_trainers: Dict[str, TrainerData]
-    generated_palettes: Dict[str, List[List[int]]]
+    generated_palettes: Dict[str, List[int]]
     generated_phone_traps: List[PhoneScript]
     generated_phone_indices: List[int]
     generated_misc: MiscData
     generated_tms: Dict[str, TMHMData]
-    generated_sfx: List[BankAddress]
+    generated_wild: WildData
+    # generated_sfx: List[BankAddress]
     generated_music: List[int]
+    generated_wooper: str
+    generated_static: Dict[str, StaticPokemon]
 
     def generate_early(self) -> None:
         if self.options.johto_only:
@@ -109,7 +114,7 @@ class PokemonCrystalWorld(World):
             setup_free_fly(self)
 
     def create_items(self) -> None:
-        item_locations: List[PokemonCrystalLocation] = [
+        item_locations = [
             location
             for location in self.multiworld.get_locations(self.player)
             if location.address is not None
@@ -179,179 +184,44 @@ class PokemonCrystalWorld(World):
                     continue
 
     def generate_output(self, output_directory: str) -> None:
-        def get_random_move(type=None, attacking=None):
-            if type is None:
-                move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
-                             move_data.id > 0 and not move_data.is_hm and move_name not in ["STRUGGLE", "BEAT_UP"]]
-            else:
-                move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
-                             move_data.id > 0 and not move_data.is_hm and move_data.type == type and move_name not in [
-                                 "STRUGGLE", "BEAT_UP"]]
-            if attacking is not None:
-                move_pool = [move_name for move_name in move_pool if crystal_data.moves[move_name].power > 0]
-            if self.options.enable_mischief.value:
-                lmao = ["GUILLOTINE", "HORN_DRILL", "FISSURE"]
-                move_pool += [lm for lm in lmao if lm in move_pool]
-            return self.random.choice(move_pool)
-
-        def get_random_move_from_learnset(pokemon, level):
-            move_pool = [move.move for move in self.generated_pokemon[pokemon].learnset if
-                         move.level <= level and move.move != "NO_MOVE"]
-            return self.random.choice(move_pool)
-
-        def set_rival_fight(trainer_name, trainer, new_pokemon):
-            trainer.pokemon[-1][1] = new_pokemon
-            self.generated_trainers[trainer_name] = trainer
 
         self.generated_pokemon = copy.deepcopy(crystal_data.pokemon)
         self.generated_starters = (["CYNDAQUIL", "QUILAVA", "TYPHLOSION"],
                                    ["TOTODILE", "CROCONAW", "FERALIGATR"],
                                    ["CHIKORITA", "BAYLEEF", "MEGANIUM"])
+        self.generated_starter_helditems = ("BERRY", "BERRY", "BERRY")
         self.generated_trainers = copy.deepcopy(crystal_data.trainers)
         self.generated_misc = copy.deepcopy(crystal_data.misc)
         self.generated_tms = copy.deepcopy(crystal_data.tmhm)
+        self.generated_wild = copy.deepcopy(crystal_data.wild)
+        self.generated_static = copy.deepcopy(crystal_data.static)
         self.generated_palettes = {}
         self.generated_phone_traps = []
         self.generated_phone_indices = []
         self.generated_music = []
-        self.generated_sfx = copy.deepcopy(crystal_data.sfx.pointers)
+        self.generated_wooper = "WOOPER"
+        # self.generated_sfx = copy.deepcopy(crystal_data.sfx.pointers)
 
-        if self.options.randomize_tm_moves.value:
-            move_pool = [move_data for move_name, move_data in copy.deepcopy(crystal_data.moves).items() if
-                         not move_data.is_hm and move_name not in ["ROCK_SMASH", "NO_MOVE", "STRUGGLE"]]
-            self.random.shuffle(move_pool)
-            for tm_name, tm_data in self.generated_tms.items():
-                if tm_data.is_hm or tm_name == "ROCK_SMASH":
-                    continue
-                new_move = move_pool.pop()
-                self.generated_tms[tm_name] = TMHMData(tm_data.tm_num, new_move.type, False, new_move.id)
-
-        if self.options.randomize_types.value > 0:
-            for pkmn_name, pkmn_data in self.generated_pokemon.items():
-                new_types = get_random_types(self.random)
-                pkmn_list = [pkmn_name]
-                if self.options.randomize_types.value == 1:
-                    if not pkmn_data.is_base and pkmn_name not in ["FLAREON", "JOLTEON", "VAPOREON", "ESPEON",
-                                                                   "UMBREON"]:
-                        continue
-                    for evo in pkmn_data.evolutions:
-                        pkmn_list.append(evo[-1])
-                        evo_poke = crystal_data.pokemon[evo[-1]]
-                        for second_evo in evo_poke.evolutions:
-                            pkmn_list.append(second_evo[-1])
-                for poke in pkmn_list:
-                    self.generated_pokemon[poke] = self.generated_pokemon[poke]._replace(types=new_types)
-
-        for pkmn_name, pkmn_data in self.generated_pokemon.items():
-            if self.options.randomize_palettes.value > 0:
-                pals = []
-                if self.options.randomize_palettes.value == 1:
-                    pals.append(get_type_colors(pkmn_data.types, self.random))
-                else:
-                    pals.append(get_random_colors(self.random))
-                pals.append(get_random_colors(self.random))  # shiny palette
-                self.generated_palettes[pkmn_name] = pals
-
-            if self.options.randomize_base_stats.value > 0:
-                if self.options.randomize_base_stats.value == 1:
-                    new_base_stats = get_random_base_stats(self.random, pkmn_data.bst)
-                else:
-                    new_base_stats = get_random_base_stats(self.random)
-                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(
-                    base_stats=new_base_stats)
-
-            if self.options.randomize_learnsets:
-                learn_levels = [1 for move in pkmn_data.learnset if move.move ==
-                                "NO_MOVE" and self.options.randomize_learnsets > 1]
-                for move in pkmn_data.learnset:
-                    if move.move != "NO_MOVE":
-                        learn_levels.append(move.level)
-                new_learnset = [LearnsetData(level, get_random_move()) for level in learn_levels]
-
-                start_attacking = [learnset for learnset in new_learnset if
-                                   crystal_data.moves[learnset.move].power > 0 and learnset.level == 1]
-
-                if not len(start_attacking):  # ensure every pokemon starts with an attacking move
-                    new_learnset[0] = LearnsetData(1, get_random_move(attacking=True))
-
-                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(learnset=new_learnset)
-
-            if self.options.tm_compatibility > 0 or self.options.hm_compatibility > 0:
-                new_tmhms = get_tmhm_compatibility(self.generated_tms, self.options.tm_compatibility.value,
-                                                   self.options.hm_compatibility.value, pkmn_data.types,
-                                                   self.generated_pokemon[pkmn_name].tm_hm, self.random)
-                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(tm_hm=new_tmhms)
+        randomize_pokemon(self)
 
         if self.options.randomize_starters.value:
-            base_only = self.options.randomize_starters.value == 1
-            for evo_line in self.generated_starters:
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
-                                trainer_name.startswith("RIVAL_" + evo_line[0])]
+            randomize_starters(self)
 
-                evo_line[0] = get_random_pokemon(self.random, base_only=base_only)
-                for trainer_name, trainer in rival_fights:
-                    set_rival_fight(trainer_name, trainer, evo_line[0])
+        if self.options.randomize_tm_moves.value:
+            randomize_tms(self)
 
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
-                                trainer_name.startswith("RIVAL_" + evo_line[1])]
+        if self.options.randomize_trainer_parties.value:
+            randomize_trainers(self)
+        elif self.options.randomize_learnsets.value:
+            vanilla_trainer_movesets(self)
 
-                first_evolutions = crystal_data.pokemon[evo_line[0]].evolutions
-                evo_line[1] = self.random.choice(first_evolutions)[-1] if len(first_evolutions) else evo_line[0]
-                for trainer_name, trainer in rival_fights:
-                    set_rival_fight(trainer_name, trainer, evo_line[1])
+        if self.options.randomize_wilds.value:
+            randomize_wild_pokemon(self)
 
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
-                                trainer_name.startswith("RIVAL_" + evo_line[2])]
+        if self.options.randomize_static_pokemon.value:
+            randomize_static_pokemon(self)
 
-                second_evolutions = crystal_data.pokemon[evo_line[1]].evolutions
-                evo_line[2] = self.random.choice(second_evolutions)[-1] if len(
-                    second_evolutions) else evo_line[1]
-                for trainer_name, trainer in rival_fights:
-                    set_rival_fight(trainer_name, trainer, evo_line[2])
-
-        if self.options.randomize_trainer_parties:
-            for trainer_name, trainer_data in self.generated_trainers.items():
-                new_party = trainer_data.pokemon
-                for i, pokemon in enumerate(trainer_data.pokemon):
-                    new_pkmn_data = pokemon
-                    if not trainer_name.startswith("RIVAL") or i != len(trainer_data.pokemon) - 1:
-                        match_types = [None, None]
-                        if self.options.randomize_trainer_parties == 1:
-                            match_types = crystal_data.pokemon[new_pkmn_data[1]].types
-                        if "LASS_3" in trainer_name:
-                            new_pokemon = get_random_nezumi(self.random)
-                        else:
-                            new_pokemon = get_random_pokemon(self.random, match_types)
-                        new_pkmn_data[1] = new_pokemon
-                    if trainer_data.trainer_type in ["TRAINERTYPE_ITEM", "TRAINERTYPE_ITEM_MOVES"]:
-                        new_pkmn_data[2] = get_random_held_item(self.random)
-                    if trainer_data.trainer_type not in ["TRAINERTYPE_MOVES", "TRAINERTYPE_ITEM_MOVES"]:
-                        continue
-                    move_offset = 2 if trainer_data.trainer_type == "TRAINERTYPE_MOVES" else 3
-                    while move_offset < len(new_pkmn_data) and new_pkmn_data[move_offset] != "NO_MOVE":
-                        new_pkmn_data[move_offset] = get_random_move_from_learnset(
-                            new_pkmn_data[1], int(new_pkmn_data[0]))
-                        move_offset += 1
-                    new_party[i] = new_pkmn_data
-                self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
-                    pokemon=new_party)
-        elif self.options.randomize_learnsets:
-            for trainer_name, trainer_data in self.generated_trainers.items():
-                if trainer_data.trainer_type not in ["TRAINERTYPE_MOVES", "TRAINERTYPE_ITEM_MOVES"]:
-                    continue
-                new_party = trainer_data.pokemon
-                for i, pokemon in enumerate(trainer_data.pokemon):
-                    new_pkmn_data = pokemon
-                    move_offset = 2 if trainer_data.trainer_type == "TRAINERTYPE_MOVES" else 3
-                    while move_offset < len(new_pkmn_data) and new_pkmn_data[move_offset] != "NO_MOVE":
-                        new_pkmn_data[move_offset] = get_random_move_from_learnset(
-                            new_pkmn_data[1], int(new_pkmn_data[0]))
-                        move_offset += 1
-                    new_party[i] = new_pkmn_data
-                self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
-                    pokemon=new_party)
-
-        if self.options.randomize_music:
+        if self.options.randomize_music.value:
             music_pool = [music_id for music_name, music_id in crystal_data.music.consts.items() if
                           music_name != "MUSIC_NONE"]
             for _music in crystal_data.music.maps:
@@ -361,7 +231,7 @@ class PokemonCrystalWorld(World):
         # if self.options.randomize_sfx:
         #     self.random.shuffle(self.generated_sfx)
 
-        if self.options.enable_mischief:
+        if self.options.enable_mischief.value:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
         self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)

@@ -1,5 +1,6 @@
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, NamedRange
 from dataclasses import dataclass
+
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, NamedRange
 
 
 class Goal(Choice):

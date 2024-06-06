@@ -1,7 +1,7 @@
 import json
 # import orjson
 import pkgutil
-from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
+from typing import Dict, List, NamedTuple, Set, FrozenSet, Any, Union
 
 from BaseClasses import ItemClassification
 
@@ -87,12 +87,6 @@ class TrainerData(NamedTuple):
     name_length: int
 
 
-class FishData(NamedTuple):
-    old: List[str]
-    good: List[str]
-    super: List[str]
-
-
 class MiscWarp(NamedTuple):
     coords: List[int]
     id: int
@@ -125,6 +119,34 @@ class MusicData(NamedTuple):
     maps: List[str]
 
 
+class EncounterMon(NamedTuple):
+    level: int
+    pokemon: str
+
+
+class FishData(NamedTuple):
+    old: List[EncounterMon]
+    good: List[EncounterMon]
+    super: List[EncounterMon]
+
+
+class TreeMonData(NamedTuple):
+    common: List[EncounterMon]
+    rare: List[EncounterMon]
+
+
+class WildData(NamedTuple):
+    grass: Dict[str, List[EncounterMon]]
+    water: Dict[str, List[EncounterMon]]
+    fish: Dict[str, FishData]
+    tree: Dict[str, TreeMonData]
+
+
+class StaticPokemon(NamedTuple):
+    pokemon: str
+    addresses: List[str]
+
+
 class PokemonCrystalData:
     rom_version: int
     rom_addresses: Dict[str, int]
@@ -136,7 +158,7 @@ class PokemonCrystalData:
     trainers: Dict[str, TrainerData]
     pokemon: Dict[str, PokemonData]
     moves: Dict[str, MoveData]
-    fish: Dict[str, FishData]
+    wild: WildData
     types: List[str]
     type_ids: Dict[str, int]
     tmhm: Dict[str, TMHMData]
@@ -144,6 +166,7 @@ class PokemonCrystalData:
     misc: MiscData
     sfx: SfxData
     music: MusicData
+    static: Dict[str, StaticPokemon]
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -155,7 +178,6 @@ class PokemonCrystalData:
         self.trainers = {}
         self.pokemon = {}
         self.moves = {}
-        self.fish = {}
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
@@ -179,7 +201,7 @@ def _init() -> None:
     item_codes = data_json["items"]
     move_data = data_json["moves"]
     trainer_data = data_json["trainers"]
-    wildfish_data = data_json["wilds"]["fish"]
+    wild_data = data_json["wilds"]
     type_data = data_json["types"]
     f_data = data_json["misc"]["fu"]
     sa_data = data_json["misc"]["sa"]
@@ -306,13 +328,57 @@ def _init() -> None:
             trainer_attributes["name_length"]
         )
 
-    data.fish = {}
-    for fish_name, fish_data in wildfish_data.items():
-        data.fish[fish_name] = FishData(
-            fish_data["Old"],
-            fish_data["Good"],
-            fish_data["Super"]
+    grass_dict = {}
+    for grass_name, grass_data in wild_data["grass"].items():
+        encounter_list = []
+        for pkmn in grass_data:
+            grass_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+            encounter_list.append(grass_encounter)
+        grass_dict[grass_name] = encounter_list
+
+    water_dict = {}
+    for water_name, water_data in wild_data["water"].items():
+        encounter_list = []
+        for pkmn in water_data:
+            water_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+            encounter_list.append(water_encounter)
+        water_dict[water_name] = encounter_list
+
+    fish_dict = {}
+    for fish_name, fish_data in wild_data["fish"].items():
+        old_encounters = []
+        good_encounters = []
+        super_encounters = []
+        for pkmn in fish_data["Old"]:
+            new_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+            old_encounters.append(new_encounter)
+        for pkmn in fish_data["Good"]:
+            new_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+            good_encounters.append(new_encounter)
+        for pkmn in fish_data["Super"]:
+            new_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+            super_encounters.append(new_encounter)
+
+        fish_dict[fish_name] = FishData(
+            old_encounters,
+            good_encounters,
+            super_encounters
         )
+
+    tree_dict = {}
+    for tree_name, tree_data in wild_data["tree"].items():
+        common_list = []
+        rare_list = []
+        for pkmn in tree_data["common"]:
+            tree_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+            common_list.append(tree_encounter)
+        if "rare" in tree_data:
+            for pkmn in tree_data["rare"]:
+                tree_encounter = EncounterMon(int(pkmn["level"]), pkmn["pokemon"])
+                rare_list.append(tree_encounter)
+        tree_dict[tree_name] = TreeMonData(common_list, rare_list)
+
+    data.wild = WildData(grass_dict, water_dict, fish_dict, tree_dict)
 
     sa_warps = {}
     # print(sa_data)
@@ -350,6 +416,47 @@ def _init() -> None:
         music_consts[music_name] = music_id
 
     data.music = MusicData(music_consts, data_json["music"]["maps"])
+
+    data.static = {
+        "UnionCaveLapras": StaticPokemon("LAPRAS", [
+            "AP_Static_UnionCaveLapras_1",
+            "AP_Static_UnionCaveLapras_2"]),
+        "EggTogepi": StaticPokemon("TOGEPI", ["AP_Static_Togepi"]),
+        "RocketHQTrap1": StaticPokemon("VOLTORB", ["AP_Static_RocketHQTrap_1"]),
+        "RocketHQTrap2": StaticPokemon("GEODUDE", ["AP_Static_RocketHQTrap_2"]),
+        "RocketHQTrap3": StaticPokemon("KOFFING", ["AP_Static_RocketHQTrap_3"]),
+        "RocketHQElectrode1": StaticPokemon("ELECTRODE",
+                                            ["AP_Static_RocketHQElectrode_1_1", "AP_Static_RocketHQElectrode_1_2", ]),
+        "RocketHQElectrode2": StaticPokemon("ELECTRODE",
+                                            ["AP_Static_RocketHQElectrode_2_1", "AP_Static_RocketHQElectrode_2_2", ]),
+        "RocketHQElectrode3": StaticPokemon("ELECTRODE",
+                                            ["AP_Static_RocketHQElectrode_3_1", "AP_Static_RocketHQElectrode_3_2", ]),
+        "RedGyarados": StaticPokemon("GYARADOS", ["AP_Static_RedGyarados_1",
+                                                  "AP_Static_RedGyarados_2", ]),
+        "Ho_Oh": StaticPokemon("HO_OH", ["AP_Static_Ho_Oh_1",
+                                         "AP_Static_Ho_Oh_2", ]),
+        "Suicune": StaticPokemon("SUICUNE", ["AP_Static_Suicune_1",
+                                             "AP_Static_Suicune_2",
+                                             "AP_Static_Suicune_3", ]),
+        "Lugia": StaticPokemon("LUGIA", ["AP_Static_Lugia_1",
+                                         "AP_Static_Lugia_2", ]),
+        "Raikou": StaticPokemon("RAIKOU", ["AP_Static_Raikou_1",
+                                           "AP_Static_Raikou_2",
+                                           "AP_Static_Raikou_3",
+                                           "AP_Static_Raikou_4",
+                                           "AP_Static_Raikou_5", ]),
+        "Entei": StaticPokemon("ENTEI", ["AP_Static_Entei_1",
+                                         "AP_Static_Entei_2",
+                                         "AP_Static_Entei_3",
+                                         "AP_Static_Entei_4",
+                                         "AP_Static_Entei_5", ]),
+        "Sudowoodo": StaticPokemon("SUDOWOODO", ["AP_Static_Sudowoodo", ]),
+        "Snorlax": StaticPokemon("SNORLAX", ["AP_Static_Snorlax_1",
+                                             "AP_Static_Snorlax_2"]),
+        "CatchTutorial1": StaticPokemon("RATATTA", ["AP_Static_CatchTutorial_1", ]),
+        "CatchTutorial2": StaticPokemon("RATATTA", ["AP_Static_CatchTutorial_2", ]),
+        "CatchTutorial3": StaticPokemon("RATATTA", ["AP_Static_CatchTutorial_3", ])
+    }
 
 
 _init()

@@ -1,8 +1,8 @@
+import copy
 from typing import List, Union
 
 from BaseClasses import Location
 from .utils import convert_to_ingame_text
-import copy
 
 
 class ScriptLine:

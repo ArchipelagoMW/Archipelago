@@ -1,9 +1,9 @@
-from BaseClasses import Location, Region, Item, ItemClassification, Entrance
 from typing import TYPE_CHECKING, Dict, List, Tuple
 
+from BaseClasses import Region, ItemClassification, Entrance
 from .data import data
-from .locations import PokemonCrystalLocation
 from .items import PokemonCrystalItem
+from .locations import PokemonCrystalLocation
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld

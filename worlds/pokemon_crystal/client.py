@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING, Dict, Set, List
-
 from NetUtils import ClientStatus
+
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-
 from .data import BASE_OFFSET, data
 
 if TYPE_CHECKING:

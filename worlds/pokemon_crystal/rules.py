@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
-from worlds.generic.Rules import add_rule, set_rule, CollectionRule
+
 from BaseClasses import CollectionState
+from worlds.generic.Rules import add_rule, set_rule
 from .data import data
 
 if TYPE_CHECKING:
@@ -176,8 +177,11 @@ def set_rules(world: PokemonCrystalWorld) -> None:
                     and state.has("Radio Card", world.player)
                     and state.has("EXPN Card", world.player))
         else:
-            return state.has("EVENT_GOT_EXPN_CARD", world.player)
+            return (state.has("EVENT_GOT_POKEGEAR", world.player)
+                    and state.has("EVENT_GOT_RADIO_CARD", world.player)
+                    and state.has("EVENT_GOT_EXPN_CARD", world.player))
 
+    # Free Fly
     set_rule(get_entrance("Fly"), can_fly)
 
     # Goal
@@ -509,7 +513,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Victory Road
 
-    set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
+    if not johto_only():
+        set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
 
     set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), has_elite_four_badges)
 

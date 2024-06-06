@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, Optional, Dict, FrozenSet
-from BaseClasses import Location, Region
 
-from .items import offset_item_value
+from BaseClasses import Location, Region
 from .data import data, BASE_OFFSET
+from .items import offset_item_value
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
