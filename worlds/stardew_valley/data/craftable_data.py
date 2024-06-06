@@ -317,7 +317,7 @@ grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 2, {Artifact.ru
                        ModNames.archaeology)
 ancient_battery = skill_recipe(ModMachine.ancient_battery, ModSkill.archaeology, 7, {Material.stone: 40, MetalBar.copper: 10, MetalBar.iron: 5},
                                ModNames.archaeology)
-glass_bazier = skill_recipe(ModCraftable.glass_bazier, ModSkill.archaeology, 4, {Artifact.glass_shards: 10}, ModNames.archaeology)
+glass_bazier = skill_recipe(ModCraftable.glass_brazier, ModSkill.archaeology, 4, {Artifact.glass_shards: 10}, ModNames.archaeology)
 glass_path = skill_recipe(ModFloor.glass_path, ModSkill.archaeology, 3, {Artifact.glass_shards: 1}, ModNames.archaeology)
 glass_fence = skill_recipe(ModCraftable.glass_fence, ModSkill.archaeology, 7, {Artifact.glass_shards: 5}, ModNames.archaeology)
 bone_path = skill_recipe(ModFloor.bone_path, ModSkill.archaeology, 4, {Fossil.bone_fragment: 1}, ModNames.archaeology)
