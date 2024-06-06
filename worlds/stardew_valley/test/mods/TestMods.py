@@ -6,7 +6,6 @@ from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification
 from ... import options
 from ...items import items_by_group
-from ...mods.mod_data import all_mods
 from ...options import SkillProgression, Walnutsanity
 from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 
@@ -14,14 +13,14 @@ from ...regions import RandomizationFlag, randomize_connections, create_final_co
 class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
-        for mod in all_mods:
+        for mod in options.Mods.valid_keys:
             with self.solo_world_sub_test(f"Mod: {mod}", {options.Mods: mod}) as (multi_world, _):
                 self.assert_basic_checks(multi_world)
                 self.assert_stray_mod_items(mod, multi_world)
 
     def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
         for option in options.EntranceRandomization.options:
-            for mod in all_mods:
+            for mod in options.Mods.valid_keys:
                 world_options = {
                     options.EntranceRandomization.internal_name: options.EntranceRandomization.options[option],
                     options.Mods: mod
@@ -43,7 +42,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
 class TestBaseLocationDependencies(SVTestBase):
     options = {
-        options.Mods.internal_name: all_mods,
+        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized
     }
@@ -61,7 +60,7 @@ class TestBaseItemGeneration(SVTestBase):
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
         Walnutsanity.internal_name: Walnutsanity.preset_all,
-        options.Mods.internal_name: all_mods
+        options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -91,7 +90,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
-        options.Mods.internal_name: all_mods
+        options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
@@ -125,7 +124,7 @@ class TestModEntranceRando(SVTestCase):
                 options.EntranceRandomization.internal_name: option,
                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
-                options.Mods.internal_name: all_mods
+                options.Mods.internal_name: frozenset(options.Mods.valid_keys)
             })
             seed = get_seed()
             rand = random.Random(seed)

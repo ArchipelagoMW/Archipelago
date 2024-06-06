@@ -11,8 +11,7 @@ from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
-from .. import StardewValleyWorld, options, item_table, StardewItem
-from ..mods.mod_data import all_mods
+from .. import StardewValleyWorld, options, StardewItem
 from ..options import StardewValleyOptions, StardewValleyOption
 
 DEFAULT_TEST_SEED = get_seed()
@@ -93,7 +92,7 @@ def allsanity_no_mods_6_x_x():
 
 def allsanity_mods_6_x_x():
     allsanity = allsanity_no_mods_6_x_x()
-    allsanity.update({options.Mods.internal_name: all_mods})
+    allsanity.update({options.Mods.internal_name: frozenset(options.Mods.valid_keys)})
     return allsanity
 
 

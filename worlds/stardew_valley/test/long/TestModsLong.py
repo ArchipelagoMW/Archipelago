@@ -6,7 +6,7 @@ from .option_names import all_option_choices
 from .. import SVTestCase
 from ..assertion import WorldAssertMixin, ModAssertMixin
 from ... import options
-from ...mods.mod_data import all_mods, ModNames
+from ...mods.mod_data import ModNames
 
 assert unittest
 
@@ -17,7 +17,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
         if self.skip_long_tests:
             raise unittest.SkipTest("Long tests disabled")
 
-        for mod_pair in combinations(all_mods, 2):
+        for mod_pair in combinations(options.Mods.valid_keys, 2):
             world_options = {
                 options.Mods: frozenset(mod_pair)
             }
@@ -30,7 +30,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
         if self.skip_long_tests:
             raise unittest.SkipTest("Long tests disabled")
 
-        for mod, (option, value) in product(all_mods, all_option_choices):
+        for mod, (option, value) in product(options.Mods.valid_keys, all_option_choices):
             world_options = {
                 option: value,
                 options.Mods: mod
