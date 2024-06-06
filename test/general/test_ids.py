@@ -85,7 +85,4 @@ class TestIDs(unittest.TestCase):
                                           f"{loc_name} is not a valid item name for location_name_to_id")
                     self.assertIsInstance(loc_id, int,
                                           f"{loc_id} for {loc_name} should be an int")
-                # because of test/general/__init__.py:56
-                if gamename in {"Test Game"}:
-                    continue
                 self.assertEqual(datapackage["checksum"], network_data_package["games"][gamename]["checksum"])
