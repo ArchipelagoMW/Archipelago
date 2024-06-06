@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable, Any
 
-from worlds.stardew_valley import StardewRule
+from ..stardew_rule.protocol import StardewRule
 
 if sys.version_info >= (3, 10):
     kw_only = {"kw_only": True}
