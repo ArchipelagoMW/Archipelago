@@ -229,6 +229,18 @@ class whichStory(Choice):
     option_random_story = -1
     default = -1
     
+class allowManual(Choice):
+    """
+    Yacht Dice allows players to roll IRL dice.
+    By sending "manual" in the chat, a input field appears where you can type your dice rolls.
+    Of course we cannot check anymore if the player is playing fair.
+    Do you want to allow manual input of rolls?
+    """
+    display_name = "Allow manual inputs"
+    option_yes_allow = 1
+    option_no_dont_allow = 2
+    default = 1
+    
 @dataclass
 class YachtDiceOptions(PerGameCommonOptions):
     game_difficulty: gameDifficulty
@@ -254,3 +266,5 @@ class YachtDiceOptions(PerGameCommonOptions):
     add_bonus_points: addExtraPoints
     add_story_chapters: addStoryChapters
     which_story: whichStory
+    
+    allow_manual_input: allowManual

@@ -197,7 +197,8 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         total_dist = add_distributions(total_dist, dist)
     
     #save result into the cache, then return it
-    yachtdice_cache[tup] = math.floor(sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return))
+    outcome = sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return)
+    yachtdice_cache[tup] = max(5, math.floor(outcome))
     return yachtdice_cache[tup]
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.

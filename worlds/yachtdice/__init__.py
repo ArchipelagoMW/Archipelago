@@ -40,7 +40,7 @@ class YachtDiceWorld(World):
     
     item_name_groups = item_groups
 
-    ap_world_version = "2.0.2"
+    ap_world_version = "2.0.3"
 
     def _get_yachtdice_data(self):
         return {
@@ -135,7 +135,7 @@ class YachtDiceWorld(World):
         already_items = len(self.itempool) + self.extra_plando_items
         
         #Yacht Dice needs extra filler items so it doesn't get stuck in generation.
-        if self.options.minimize_extra_items.value == 2:
+        if self.options.minimize_extra_items.value:
             extraPercentage = max(0.1, 0.8 - self.multiworld.players / 10)
         else:
             extraPercentage = 0.7
@@ -391,7 +391,8 @@ class YachtDiceWorld(World):
                 "minimize_extra_items",
                 "add_bonus_points",
                 "add_story_chapters",
-                "which_story"
+                "which_story",
+                "allow_manual_input"
         )
         
         slot_data = {**yacht_dice_data, **yacht_dice_options} #combine the two
