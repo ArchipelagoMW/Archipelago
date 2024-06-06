@@ -759,20 +759,6 @@ disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
                  ModNames.boarding_house}
 
-# In Progress:
-# Tractor
-# Luck
-# Socializing
-# Archaeology
-# Binning Skill
-# Juna
-# Alec
-# Mister Ginger
-# Ayeisha
-# Alecto
-# Bigger Backpack
-# Skull Cavern Elevator
-
 
 if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
     disabled_mods = {}

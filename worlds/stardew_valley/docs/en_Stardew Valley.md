@@ -57,7 +57,7 @@ There also are a number of location checks that are optional, and individual pla
 - [Carpenter Buildings](https://stardewvalleywiki.com/Carpenter%27s_Shop#Farm_Buildings)
 - [Backpack Upgrades](https://stardewvalleywiki.com/Tools#Other_Tools)
 - [Mine Elevator Levels](https://stardewvalleywiki.com/The_Mines#Staircases)
-- [Skill Levels](https://stardewvalleywiki.com/Skills)
+- [Skill Levels](https://stardewvalleywiki.com/Skills) and Masteries
 - Arcade Machines
 - [Story Quests](https://stardewvalleywiki.com/Quests#List_of_Story_Quests)
 - [Help Wanted Quests](https://stardewvalleywiki.com/Quests#Help_Wanted_Quests)
@@ -73,6 +73,8 @@ There also are a number of location checks that are optional, and individual pla
 - [Chefsanity](https://stardewvalleywiki.com/Cooking#Recipes): Learning cooking recipes
 - [Craftsanity](https://stardewvalleywiki.com/Crafting): Crafting individual items
 - [Shipsanity](https://stardewvalleywiki.com/Shipping): Shipping individual items
+- [Booksanity](https://stardewvalleywiki.com/Books): Reading individual books
+- [Walnutsanity](https://stardewvalleywiki.com/Golden_Walnut): Collecting Walnuts on Ginger Island
 
 ## Which items can be in another player's world?
 
@@ -98,13 +100,14 @@ There are a few extra vanilla items, which are added to the pool for convenience
 - [Return Scepter](https://stardewvalleywiki.com/Return_Scepter)
 - [Qi Walnut Room QoL items](https://stardewvalleywiki.com/Qi%27s_Walnut_Room#Stock)
 
+
 And lastly, some Archipelago-exclusive items exist in the pool, which are designed around game balance and QoL. These include:
 - Arcade Machine buffs (Only if the arcade machines are randomized)
   - Journey of the Prairie King has drop rate increases, extra lives, and equipment
   - Junimo Kart has extra lives.
 - Permanent Movement Speed Bonuses (customizable)
-- Permanent Luck Bonuses (customizable)
-- Traveling Merchant buffs
+- Various Permanent Player Buffs (customizable)
+- Traveling Merchant modifiers
 
 ## When the player receives an item, what happens?
 
@@ -131,17 +134,14 @@ List of supported mods:
 
 - General
     - [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753)
-    - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
     - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
     - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
     - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
     - [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109)
 - Skills
-    - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007)
     - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
     - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142)
     - [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793)
-    - [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522)
     - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073)
 - NPCs
     - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427)
@@ -149,12 +149,7 @@ List of supported mods:
     - [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606)
     - [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599)
     - [Alec Revisited](https://www.nexusmods.com/stardewvalley/mods/10697)
-    - [Custom NPC - Yoba](https://www.nexusmods.com/stardewvalley/mods/14871)
     - [Custom NPC Eugene](https://www.nexusmods.com/stardewvalley/mods/9222)
-    - ['Prophet' Wellwick](https://www.nexusmods.com/stardewvalley/mods/6462)
-    - [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732)
-    - [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510)
-    - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811)
     - [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671)
   
 Some of these mods might need a patch mod to tie the randomizer with the mod. These can be found 
@@ -164,5 +159,6 @@ Some of these mods might need a patch mod to tie the randomizer with the mod. Th
 
 You cannot play an Archipelago Slot in multiplayer at the moment. There are no short-term plans to support that feature.
 
-You can, however, send Stardew Valley objects as gifts from one Stardew Player to another Stardew player, using in-game 
+You can, however, send Stardew Valley objects as gifts from one Stardew Player 
+to another Stardew , or a player in another game that supports gifting, using in-game 
 Joja Prime delivery, for a fee. This exclusive feature can be turned off if you don't want to send and receive gifts.
