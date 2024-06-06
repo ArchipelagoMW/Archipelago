@@ -4,12 +4,25 @@ This module servies as an entrypoint into the Trails in the Sky the 3rd AP world
 from typing import ClassVar, Dict, Set
 
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, launch_subprocess, Type
 from .items import TitsThe3rdItem
 from .locations import create_locations as tits_the_third_create_locations
 from .options import TitsThe3rdOptions
 from .regions import create_regions as tits_the_third_create_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
+
+def launch_client():
+    """Launch a Trails in the Sky the 3rd client instance"""
+    from worlds.tits_the_3rd.client.client import launch
+    launch_subprocess(launch, name="TitsThe3rdClient")
+
+components.append(Component(
+    "Trails in the Sky the 3rd Client",
+    "TitsThe3rdClient",
+    func=launch_client,
+    component_type=Type.CLIENT
+))
 
 class TitsThe3rdWorld(World):
     """
