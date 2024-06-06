@@ -173,15 +173,13 @@ def run_gui():
         base_title: str = "Archipelago Launcher"
         container: ContainerLayout
         grid: GridLayout
-        _tool_layout: ScrollBox
-        _client_layout: ScrollBox
+        _tool_layout: Optional[ScrollBox] = None
+        _client_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
             self.title = self.base_title
             self.ctx = ctx
             self.icon = r"data/icon.png"
-            self._tool_layout = ScrollBox()
-            self._client_layout = ScrollBox()
             super().__init__()
 
         def _refresh_components(self) -> None:
@@ -210,6 +208,7 @@ def run_gui():
                 return button
 
             # clear before repopulating
+            assert self._tool_layout and self._client_layout, "must call `build` first"
             tool_children = reversed(self._tool_layout.layout.children)
             for child in tool_children:
                 self._tool_layout.layout.remove_widget(child)
@@ -238,18 +237,17 @@ def run_gui():
             self.container.add_widget(self.grid)
             self.grid.add_widget(Label(text="General", size_hint_y=None, height=40))
             self.grid.add_widget(Label(text="Clients", size_hint_y=None, height=40))
+            self._tool_layout = ScrollBox()
             self._tool_layout.layout.orientation = "vertical"
             self.grid.add_widget(self._tool_layout)
+            self._client_layout = ScrollBox()
             self._client_layout.layout.orientation = "vertical"
             self.grid.add_widget(self._client_layout)
 
             self._refresh_components()
 
-            def _ref():
-                self._refresh_components()
-
             global refresh_components
-            refresh_components = _ref
+            refresh_components = self._refresh_components
 
             Window.bind(on_drop_file=self._on_drop_file)
 

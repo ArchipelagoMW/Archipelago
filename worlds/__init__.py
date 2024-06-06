@@ -1,11 +1,12 @@
 import importlib
+import logging
 import os
 import sys
 import warnings
 import zipimport
 import time
 import dataclasses
-from typing import Dict, List, TypedDict, Optional
+from typing import Dict, List, TypedDict
 
 from Utils import local_path, user_path
 
@@ -48,7 +49,7 @@ class WorldSource:
     path: str  # typically relative path from this module
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
-    time_taken: Optional[float] = None
+    time_taken: float = -1.0
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
@@ -92,7 +93,6 @@ class WorldSource:
             print(f"Could not load world {self}:", file=file_like)
             traceback.print_exc(file=file_like)
             file_like.seek(0)
-            import logging
             logging.exception(file_like.read())
             failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
@@ -107,7 +107,11 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
         if not entry.name.startswith(("_", ".")):
             file_name = entry.name if relative else os.path.join(folder, entry.name)
             if entry.is_dir():
-                world_sources.append(WorldSource(file_name, relative=relative))
+                init_file_path = os.path.join(entry.path, '__init__.py')
+                if os.path.isfile(init_file_path):
+                    world_sources.append(WorldSource(file_name, relative=relative))
+                else:
+                    logging.warning(f"excluding {entry.name} from world sources because it has no __init__.py")
             elif entry.is_file() and entry.name.endswith(".apworld"):
                 world_sources.append(WorldSource(file_name, is_zip=True, relative=relative))
 
