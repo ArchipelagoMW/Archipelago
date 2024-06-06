@@ -45,7 +45,6 @@ class minimalNumberOfDiceAndRolls(Choice):
     You start with one dice and one roll.
     """
     display_name = "Minimal number of dice and rolls in pool"
-    option_2_dice_and_2_rolls = 1
     option_5_dice_and_3_rolls = 2
     option_5_dice_and_5_rolls = 3
     option_6_dice_and_4_rolls = 4
@@ -170,9 +169,10 @@ class pointsSize(Choice):
     
 class minimizeExtraItems(Choice):
     """
-    Besides necessary items, Yacht Dice has extra items in the item pool.
-    It is possible however to decrease the number of extra items
-    by putting categories Fives, Sixes and Pair early into the playthrough. Would you like to do this?
+    Besides necessary items, Yacht Dice has extra useful/filler items in the item pool.
+    It is possible however to decrease the number of extra items in multiplayer games.
+    Do you want to reduce the number of extra items? 
+    (this option only does something in multiplayer games)
     """
     display_name = "Minimize extra items"
     option_no_dont = 1
