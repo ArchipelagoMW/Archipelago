@@ -792,7 +792,7 @@
 		"script": "OlivineLighthouse5FHiddenHyperPotion"
 	},
 	"OLIVINE_PORT_HIDDEN_PROTEIN": {
-		"label": "Olivine Port - Hidden Item in Southeast Buoy",
+		"label": "Olivine Port - Hidden Item in Southwest Buoy",
 		"flag": "EVENT_OLIVINE_PORT_HIDDEN_PROTEIN",
 		"default_item": "PROTEIN",
 		"type": "hiddenitem",
