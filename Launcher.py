@@ -13,6 +13,7 @@ import argparse
 import itertools
 import logging
 import multiprocessing
+import platform
 import shlex
 import subprocess
 import sys
@@ -325,49 +326,74 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 def check_for_update() -> None:
     """Checks if an update is available, and prompts the user if they'd like to update."""
+    # no mac release and dropping windows 7
+    if is_macos or (is_windows and platform.release() == "NT"):
+        return
     update, version = Utils.available_update()
     logging.info(f"Update available: {update}. New version: {version.as_simple_string()}")
-    if update:
-        from kvui import ButtonsPrompt
+    if not update:
+        return
+    if settings.get_settings().general_options.skip_update == version.as_simple_string():
+        return
 
-        def handle_user_update(answer: str) -> None:
-            if answer == "Yes":
-                # download and install the latest Archipelago release
-                release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
-                latest_release = Utils.request_remote_json_data(release_url)[0]["assets"]
-                latest_files: Dict[str, Any] = {
-                    asset["name"]: asset["browser_download_url"] for asset in latest_release
-                }
-            
-                def download_selection(asset: str) -> None:
-                    import os
-                    nonlocal latest_files
+    from kvui import ButtonsPrompt
 
-                    download_url = latest_files[asset]
-                    response = urllib.request.urlopen(download_url)
-                    content = response.read()
-                    response.close()
-                    if os.path.exists(asset):
-                        os.remove(asset)
-                    with open(asset, "wb") as f:
-                        f.write(content)
-                    launch([asset], True)
+    def handle_user_update(answer: str) -> None:
+        if answer == "No":
+            return
+        elif answer == "Skip Version":
+            settings.get_settings().general_options.skip_update = version.as_simple_string()
+            update_settings()
+            return
+        # download and install the latest Archipelago release
+        release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
+        latest_release = Utils.request_remote_json_data(release_url)[0]["assets"]
+        latest_files: Dict[str, Any] = {
+            asset["name"]: asset["browser_download_url"] for asset in latest_release
+        }
+        linux_names = []
+        windows_name = None
+        for name in latest_files:
+            if name.endswith(".AppImage") or name.endswith(".tar.gz"):
+                linux_names.append(name)
+            elif name.endswith(".exe") and windows_name is None:
+                windows_name = name
+    
+        def download_selection(asset: str) -> None:
+            import os
+            nonlocal latest_files
 
-                ButtonsPrompt(
-                    "Select File",
-                    "Select file to download and install.",
-                    download_selection,
-                    *latest_files
-                ).open()
+            download_url = latest_files[asset]
+            response = urllib.request.urlopen(download_url)
+            content = response.read()
+            response.close()
+            if os.path.exists(asset):
+                os.remove(asset)
+            with open(asset, "wb") as f:
+                f.write(content)
+            if is_windows:
+                launch([asset], True)
+            messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
+
+        if is_windows:
+            download_selection(windows_name)
+            return
 
         ButtonsPrompt(
-            "Update Available",
-            f"Update available: {version.as_simple_string()}. "
-            f"Currently installed: {Utils.version_tuple.as_simple_string()}.\n"
-            f"Would you like to update?",
-            handle_user_update,
-            "Yes", "No"
+            "Select File",
+            "Select file to download and install.",
+            download_selection,
+            *linux_names
         ).open()
+
+    ButtonsPrompt(
+        "Update Available",
+        f"Update available: {version.as_simple_string()}. "
+        f"Currently installed: {Utils.version_tuple.as_simple_string()}.\n"
+        f"Would you like to update?",
+        handle_user_update,
+        "Yes", "No", "Skip Version"
+    ).open()
 
 
 if __name__ == '__main__':
