@@ -47,7 +47,9 @@ TRACKER_KEY_ITEM_FLAGS = [
     "EVENT_GOT_PHONE_CARD",
     "EVENT_GOT_EXPN_CARD",
     "EVENT_GOT_POKEGEAR",
-    "EVENT_GOT_POKEDEX"
+    "EVENT_GOT_POKEDEX",
+    "EVENT_MART_ESCAPE_ROPE",
+    "EVENT_MART_WATER_STONE"
 ]
 KEY_ITEM_FLAG_MAP = {data.event_flags[event]: event for event in TRACKER_KEY_ITEM_FLAGS}
 
@@ -81,8 +83,7 @@ class PokemonCrystalClient(BizHawkClient):
 
             rom_name = bytes([byte for byte in rom_info[0] if byte != 0]).decode("ascii")
             rom_version = int.from_bytes(rom_info[1], "little")
-            # logger.info(rom_name)
-            # logger.info(rom_version)
+
             if rom_name == "PM_CRYSTAL":
                 logger.info("ERROR: You appear to be running an unpatched version of Pokemon Crystal. "
                             "You need to generate a patch file and use it to create a patched ROM.")
