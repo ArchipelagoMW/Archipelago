@@ -322,12 +322,7 @@ class YachtDiceWorld(World):
             self.multiworld.push_precollected(self.create_item(item))
 
     def create_items(self):
-        #convert strings to actual items
-        itempool_created = [item for item in map(lambda name: self.create_item(name), self.itempool)]
-
-        #and add them to the itempool
-        for item in itempool_created:
-            self.multiworld.itempool += [item]    
+        self.multiworld.itempool += [self.create_item(name) for name in self.itempool]   
 
     def create_regions(self):
         #call the ini_locations function, that generates locations based on the inputs.
