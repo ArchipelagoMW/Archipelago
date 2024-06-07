@@ -76,9 +76,6 @@ class numberRollFragmentsPerRoll(Range):
     range_end = 5
     default = 4
     
-"""
-Test 1 2 3
-"""
     
 class alternativeCategories(Range):
     """
