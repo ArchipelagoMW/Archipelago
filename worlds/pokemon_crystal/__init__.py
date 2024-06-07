@@ -133,19 +133,11 @@ class PokemonCrystalWorld(World):
 
         total_badges = max(self.options.elite_four_badges.value, self.options.red_badges.value)
         add_badges = []
+        # Extra badges to add to the pool in johto only
         if self.options.johto_only and total_badges > 8:
             kanto_badges = [item_id + BASE_OFFSET for item_id, item_data in crystal_data.items.items() if
                             "KantoBadge" in item_data.tags]
             add_badges = kanto_badges[:total_badges - 8]
-
-        total_trap_weight = sum([
-            self.options.phone_trap_weight.value,
-            self.options.sleep_trap_weight.value,
-            self.options.poison_trap_weight.value,
-            self.options.burn_trap_weight.value,
-            self.options.freeze_trap_weight.value,
-            self.options.paralysis_trap_weight.value,
-        ])
 
         traps_pool = []
         traps_pool += ["Phone Trap"] * self.options.phone_trap_weight.value
@@ -154,6 +146,8 @@ class PokemonCrystalWorld(World):
         traps_pool += ["Burn Trap"] * self.options.burn_trap_weight.value
         traps_pool += ["Freeze Trap"] * self.options.freeze_trap_weight.value
         traps_pool += ["Paralysis Trap"] * self.options.paralysis_trap_weight.value
+
+        total_trap_weight = len(traps_pool)
 
         def get_random_trap():
             return self.create_item(self.random.choice(traps_pool))
@@ -171,7 +165,7 @@ class PokemonCrystalWorld(World):
                 default_itempool += [self.create_item_by_code(add_badges.pop())]
             elif self.random.randint(0, 100) < total_trap_weight:
                 default_itempool += [get_random_trap()]
-            elif item_code == BASE_OFFSET:
+            elif item_code == BASE_OFFSET:  # item is NO_ITEM, trainersanity checks
                 default_itempool += [self.create_item(get_random_filler_item(self.random))]
             else:
                 default_itempool += [self.create_item_by_code(item_code)]
@@ -182,23 +176,16 @@ class PokemonCrystalWorld(World):
         set_rules(self)
 
     def pre_fill(self) -> None:
-        if self.options.randomize_badges.value == 1:
+        if self.options.randomize_badges.value == RandomizeBadges.option_shuffle:
             badge_locs = [loc for loc in self.multiworld.get_locations(self.player) if "Badge" in loc.tags]
             badge_items = [self.create_item_by_code(loc.default_item_code) for loc in badge_locs]
 
+            # 5/8 badge locations in each region do not require a HM to access, so only trying once should be okay.
+            # I generated 1000 seeds with shuffled badges and none of them broke here, so it's fine probably
+            self.random.shuffle(badge_locs)
             collection_state = self.multiworld.get_all_state(False)
-            attempts_remaining = 2
-            while attempts_remaining > 0:
-                attempts_remaining -= 1
-                self.random.shuffle(badge_locs)
-                try:
-                    fill_restrictive(self.multiworld, collection_state, badge_locs, badge_items,
-                                     single_player_placement=True, lock=True, allow_excluded=True)
-                    break
-                except FillError as exc:
-                    if attempts_remaining == 0:
-                        raise exc
-                    continue
+            fill_restrictive(self.multiworld, collection_state, badge_locs, badge_items,
+                             single_player_placement=True, lock=True, allow_excluded=True)
 
     def generate_output(self, output_directory: str) -> None:
 
@@ -251,7 +238,7 @@ class PokemonCrystalWorld(World):
         if self.options.enable_mischief.value:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
-        self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
+        generate_phone_traps(self)
 
         patch = PokemonCrystalProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))

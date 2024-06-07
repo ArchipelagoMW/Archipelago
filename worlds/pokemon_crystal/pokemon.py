@@ -139,8 +139,11 @@ def get_random_pokemon_evolution(random, pkmn_name, pkmn_data):
 
 def get_random_base_stats(random, bst=None):
     if bst is None:
+        # sunkern to mewtwo
         bst = random.randint(180, 680)
-    randoms = [random.random() + 0.28 for i in range(0, 6)]
+    # add 0.5 to prevent a single stat exceeding 255
+    # biggest possible variance on max bst is (1.5 * 680) / 4 = 255
+    randoms = [random.random() + 0.5 for _i in range(0, 6)]
     total = sum(randoms)
     return [int((stat * bst) / total) for stat in randoms]
 

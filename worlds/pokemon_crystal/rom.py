@@ -119,14 +119,14 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
             for i in range(3):  # morn, day, nite
                 for encounter in grass_encounters:
                     pokemon_id = data.pokemon[encounter.pokemon].id
-                    write_bytes(patch, [encounter.level, pokemon_id], cur_address)  # morn
+                    write_bytes(patch, [encounter.level, pokemon_id], cur_address)
                     cur_address += 2
 
         for water_name, water_encounters in world.generated_wild.water.items():
             cur_address = data.rom_addresses["AP_WildWater_" + water_name] + 1
             for encounter in water_encounters:
                 pokemon_id = data.pokemon[encounter.pokemon].id
-                write_bytes(patch, [encounter.level, pokemon_id], cur_address)  # morn
+                write_bytes(patch, [encounter.level, pokemon_id], cur_address)
                 cur_address += 2
 
         for fish_name, fish_data in world.generated_wild.fish.items():
@@ -261,6 +261,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
         write_bytes(patch, [0xA2], address)
         address = data.rom_addresses["AP_Misc_RaSfx_Y5"] + 1
         write_bytes(patch, [0xA3], address)
+        address = data.rom_addresses["AP_Misc_Rapidash"] + 1
+        write_bytes(patch, [1], address)
         for i in range(0, 5):
             answer = world.generated_misc.ra[i]
             byte = 0x08 if answer == "Y" else 0x09
@@ -322,20 +324,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
                 write_bytes(patch, better_mart_bytes, mart_address)
             mart_address += 2
 
-    for label in ["AP_Setting_HMBadge_Cut1",
-                  "AP_Setting_HMBadge_Cut2",
-                  "AP_Setting_HMBadge_Fly",
-                  "AP_Setting_HMBadge_Surf1",
-                  "AP_Setting_HMBadge_Surf2",
-                  "AP_Setting_HMBadge_Strength1",
-                  "AP_Setting_HMBadge_Strength2",
-                  "AP_Setting_HMBadge_Flash",
-                  "AP_Setting_HMBadge_Whirlpool1",
-                  "AP_Setting_HMBadge_Whirlpool2",
-                  "AP_Setting_HMBadge_Waterfall1",
-                  "AP_Setting_HMBadge_Waterfall2"]:
-        address = data.rom_addresses[label] + 1
-        write_bytes(patch, [world.options.hm_badge_requirements.value], address)
+    hmbadges_address = data.rom_addresses["AP_Setting_HMBadges"] + 1
+    write_bytes(patch, [world.options.hm_badge_requirements.value], hmbadges_address)
 
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patch, [world.options.experience_modifier], exp_modifier_address)
@@ -356,11 +346,12 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
     trainersanity_alerts_address = data.rom_addresses["AP_Setting_TrainersanityMessages"] + 1
     write_bytes(patch, [world.options.trainersanity_alerts], trainersanity_alerts_address)
 
-    for i in range(0, 16):
+    for i, script in enumerate(world.generated_phone_traps):
         address = data.rom_addresses["AP_Setting_PhoneCallTrapTexts"] + (i * 0x400)
-        script = world.generated_phone_traps[i]
         s_bytes = script.get_script_bytes()
+        # write script text
         write_bytes(patch, s_bytes, address)
+        # write script caller id
         address = data.rom_addresses["AP_Setting_SpecialCalls"] + (6 * i) + 2
         write_bytes(patch, [script.caller_id], address)
 

@@ -24,7 +24,7 @@ def randomize_learnset(world: PokemonCrystalWorld, pkmn_name):
     # All moves available at Lv.1 that do damage (and don't faint the user)
     start_attacking = [learnset for learnset in new_learnset if
                        crystal_data.moves[learnset.move].power > 0
-                       and learnset.move not in ["EXPLOSION", "SELFDESTRUCT"]
+                       and learnset.move not in ["EXPLOSION", "SELFDESTRUCT", "STRUGGLE"]
                        and learnset.level == 1]
 
     if not len(start_attacking):  # if there are no attacking moves at Lv.1, add one
@@ -34,13 +34,14 @@ def randomize_learnset(world: PokemonCrystalWorld, pkmn_name):
 
 
 def get_random_move(random, move_type=None, attacking=None):
+    # exclude beat up as it can softlock the game if an enemy trainer uses it
     if move_type is None:
         move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
-                     move_data.id > 0 and not move_data.is_hm and move_name not in ["STRUGGLE", "BEAT_UP"]]
+                     not move_data.is_hm and move_name not in ["STRUGGLE", "BEAT_UP", "NO_MOVE", "STRUGGLE"]]
     else:
         move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
-                     move_data.id > 0 and not move_data.is_hm and move_data.type == move_type and move_name not in [
-                         "STRUGGLE", "BEAT_UP"]]
+                     not move_data.is_hm and move_data.type == move_type
+                     and move_name not in ["STRUGGLE", "BEAT_UP", "NO_MOVE", "STRUGGLE"]]
     if attacking is not None:
         move_pool = [move_name for move_name in move_pool if crystal_data.moves[move_name].power > 0]
 
@@ -81,6 +82,7 @@ def randomize_tms(world: PokemonCrystalWorld):
 def get_random_move_from_learnset(world: PokemonCrystalWorld, pokemon, level):
     move_pool = [move.move for move in world.generated_pokemon[pokemon].learnset if
                  move.level <= level and move.move != "NO_MOVE"]
-
-    move_pool += [move for move in world.generated_pokemon[pokemon].tm_hm if move != "BEAT_UP"]
+    # double learnset pool to dilute HMs slightly
+    # exclude beat up as it can softlock the game if an enemy trainer uses it
+    move_pool += move_pool + [move for move in world.generated_pokemon[pokemon].tm_hm if move != "BEAT_UP"]
     return world.random.choice(move_pool)
