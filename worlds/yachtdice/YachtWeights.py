@@ -2,7 +2,7 @@
 # Every entry consists of a key. This key has input category, number of dice, and number of rolls.
 # The value then shows a list of all possible scores to get, and how many times of 100000 it achieved.
 
-# example: ("Choice", 2, 2): 
+# example: ("Choice", 2, 2):
 # {8: 13639, 9: 12220, 10: 13755, 5: 4889, 6: 9840, 7: 14772, 12: 7780, 11: 15622, 2: 1269, 3: 2445, 4: 3769}
 # this example shows the outcomes for the category "Choice", with 2 dice and 2 rolls.
 # 13639 out of 100000 times, a score of 8 was achieved for example.

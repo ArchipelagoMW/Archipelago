@@ -1,5 +1,7 @@
-from Options import Choice, Range, PerGameCommonOptions, OptionGroup
 from dataclasses import dataclass
+
+from Options import Choice, OptionGroup, PerGameCommonOptions, Range
+
 
 class GameDifficulty(Choice):
     """
@@ -16,7 +18,7 @@ class GameDifficulty(Choice):
     option_extreme = 4
     default = 2
 
-        
+
 class ScoreForLastCheck(Range):
     """
     The items in the item pool will always allow you to reach a score of 1000.
@@ -28,7 +30,7 @@ class ScoreForLastCheck(Range):
     range_end = 1000
     default = 1000
 
-   
+
 class ScoreForGoal(Range):
     """
     This option determines what score you need to reach to finish the game.
@@ -93,7 +95,7 @@ class AlternativeCategories(Range):
     display_name = "Number of alternative categories"
     range_start = 0
     range_end = 16
-    default = 0    
+    default = 0
 
 
 class ChanceOfDice(Range):
@@ -107,7 +109,7 @@ class ChanceOfDice(Range):
     display_name = "Weight of adding Dice"
     range_start = 0
     range_end = 100
-    default = 5 
+    default = 5
 
 
 class ChanceOfRoll(Range):
@@ -117,7 +119,7 @@ class ChanceOfRoll(Range):
     display_name = "Weight of adding Roll"
     range_start = 0
     range_end = 100
-    default = 20     
+    default = 20
 
 
 class ChanceOfFixedScoreMultiplier(Range):
@@ -127,7 +129,7 @@ class ChanceOfFixedScoreMultiplier(Range):
     display_name = "Weight of adding Fixed Score Multiplier"
     range_start = 0
     range_end = 100
-    default = 30 
+    default = 30
 
 
 class ChanceOfStepScoreMultiplier(Range):
@@ -139,7 +141,7 @@ class ChanceOfStepScoreMultiplier(Range):
     display_name = "Weight of adding Step Score Multiplier"
     range_start = 0
     range_end = 100
-    default = 0 
+    default = 0
 
 
 class ChanceOfDoubleCategory(Range):
@@ -160,7 +162,7 @@ class ChanceOfPoints(Range):
     display_name = "Weight of adding Points"
     range_start = 0
     range_end = 100
-    default = 20    
+    default = 20
 
 
 class PointsSize(Choice):
@@ -186,7 +188,7 @@ class MinimizeExtraItems(Choice):
     display_name = "Minimize extra items"
     option_no_dont = 1
     option_yes_please = 2
-    default = 1    
+    default = 1
 
 
 class AddExtraPoints(Choice):
@@ -259,16 +261,16 @@ class YachtDiceOptions(PerGameCommonOptions):
     game_difficulty: GameDifficulty
     score_for_last_check: ScoreForLastCheck
     score_for_goal: ScoreForGoal
-    
+
     minimal_number_of_dice_and_rolls: MinimalNumberOfDiceAndRolls
     number_of_dice_fragments_per_dice: NumberDiceFragmentsPerDice
     number_of_roll_fragments_per_roll: NumberRollFragmentsPerRoll
-    
+
     alternative_categories: AlternativeCategories
-    
+
     allow_manual_input: AllowManual
-    
-    #the following options determine what extra items are shuffled into the pool:
+
+    # the following options determine what extra items are shuffled into the pool:
     weight_of_dice: ChanceOfDice
     weight_of_roll: ChanceOfRoll
     weight_of_fixed_score_multiplier: ChanceOfFixedScoreMultiplier
@@ -276,18 +278,19 @@ class YachtDiceOptions(PerGameCommonOptions):
     weight_of_double_category: ChanceOfDoubleCategory
     weight_of_points: ChanceOfPoints
     points_size: PointsSize
-    
+
     minimize_extra_items: MinimizeExtraItems
     add_bonus_points: AddExtraPoints
     add_story_chapters: AddStoryChapters
     which_story: WhichStory
+
 
 yd_option_groups = [
     OptionGroup("Extra progression items", [
         ChanceOfDice, ChanceOfRoll, ChanceOfFixedScoreMultiplier, ChanceOfStepScoreMultiplier,
         ChanceOfDoubleCategory, ChanceOfPoints, PointsSize
     ]),
-    
+
     OptionGroup("Other items", [
         MinimizeExtraItems, AddExtraPoints, AddStoryChapters, WhichStory
     ])
