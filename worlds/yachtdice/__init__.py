@@ -1,7 +1,7 @@
 import math
 import logging
 
-from BaseClasses import Region, Entrance, Item, Tutorial
+from BaseClasses import Region, Entrance, Item, Tutorial, CollectionState
 from .Items import YachtDiceItem, item_table, item_groups
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import YachtDiceOptions
@@ -396,3 +396,17 @@ class YachtDiceWorld(World):
         item_data = item_table[name]
         item = YachtDiceItem(name, item_data.classification, item_data.code, self.player)
         return item
+
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change:
+            state.prog_items[self.player]["state_is_fresh"] = 0
+
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change:
+            state.prog_items[self.player]["state_is_fresh"] = 0
+
+        return change

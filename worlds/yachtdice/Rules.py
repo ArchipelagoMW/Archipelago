@@ -205,17 +205,29 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.
 def dice_simulation(state, player, options):
-    categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
-    return dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, 
-                                 options.game_difficulty.value) + expoints
+    if player == "state_is_a_list":
+        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
+        return dice_simulation_strings(
+            categories, num_dice, num_rolls, fixed_mult, step_mult, options.game_difficulty.value
+        ) + expoints
     
+    if state.prog_items[player]["state_is_fresh"] == 0:
+        state.prog_items[player]["state_is_fresh"] = 1
+        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
+        state.prog_items[player]["maximum_achievable_score"] = dice_simulation_strings(
+            categories, num_dice, num_rolls, fixed_mult, step_mult, options.game_difficulty.value
+        ) + expoints
+
+    return state.prog_items[player]["maximum_achievable_score"]
+
+
 # Sets rules on entrances and advancements that are always applied
 def set_yacht_rules(world: MultiWorld, player: int, options):
     for l in world.get_locations(player):
-        set_rule(l, 
-                    lambda state, 
-                    curscore=l.yacht_dice_score, 
-                    player=player: 
+        set_rule(l,
+                    lambda state,
+                    curscore=l.yacht_dice_score,
+                    player=player:
                     dice_simulation(state, player, options) >= curscore)
 
 # Sets rules on completion condition
