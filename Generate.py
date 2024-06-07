@@ -20,13 +20,12 @@ ModuleUpdate.update()
 import Utils
 import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
-from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
 def mystery_argparse():
-    options = get_settings()
-    defaults = options.generator
+    from settings import get_settings
+    defaults = get_settings().generator
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
@@ -58,7 +57,7 @@ def mystery_argparse():
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
-    return args, options
+    return args
 
 
 def get_seed_name(random_source) -> str:
@@ -67,9 +66,7 @@ def get_seed_name(random_source) -> str:
 
 def main(args=None):
     if not args:
-        args, options = mystery_argparse()
-    else:
-        options = get_settings()
+        args = mystery_argparse()
 
     seed = get_seed(args.seed)
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
