@@ -39,7 +39,7 @@ def get_misc_spoiler_log(generated_misc, write):
         if coords[0] != 2:  # don't show left-side clear spots
             ecruteak_map[coords[1] - 4][coords[0] - 2] = "  "
 
-    trainers = [[5, 1], [0, 4], [5, 5], [1, 9]]
+    trainers = [[5, 1], [0, 3], [5, 5], [1, 9]]
     for coords in trainers:
         ecruteak_map[coords[1]][coords[0]] = "()"
 
