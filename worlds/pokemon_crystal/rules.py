@@ -272,9 +272,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_UNION_CAVE_B1F:SOUTH -> REGION_UNION_CAVE_B2F"), can_surf)
 
     # Azalea Town
-    set_rule(get_location("Slowpoke Well B2F - Kings Rock from Man"),
+    set_rule(get_entrance("REGION_SLOWPOKE_WELL_B1F -> REGION_SLOWPOKE_WELL_B2F"),
              lambda state: can_strength(state) and can_surf(state))
-    set_rule(get_location("Slowpoke Well B2F - Item 1"), lambda state: can_strength(state) and can_surf(state))
 
     set_rule(get_entrance("REGION_AZALEA_TOWN -> REGION_AZALEA_GYM"),
              lambda state: state.has("EVENT_CLEARED_SLOWPOKE_WELL", world.player))
@@ -394,7 +393,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Cianwood City - HM02 from Chuck's Wife"),
              lambda state: state.has("EVENT_BEAT_CHUCK", world.player))
 
-    set_rule(get_entrance("REGION_CIANWOOD_CITY -> REGION_CIANWOOD_GYM"), can_strength)
+    set_rule(get_entrance("REGION_CIANWOOD_GYM -> REGION_CIANWOOD_GYM:STRENGTH"), can_strength)
 
     set_rule(get_location("Cianwood Pharmacy - Secretpotion"),
              lambda state: state.has("EVENT_JASMINE_EXPLAINED_AMPHYS_SICKNESS", world.player))
@@ -528,7 +527,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_location("Route 28 - Steel Wing from Celebrity in House"), can_cut)
         if hidden():
             set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
-            
+
         # Silver Cave
         set_rule(get_entrance("REGION_SILVER_CAVE_OUTSIDE -> REGION_SILVER_CAVE_ROOM_1"), can_flash)
 

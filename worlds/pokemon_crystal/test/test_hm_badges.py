@@ -1,0 +1,200 @@
+from . import PokemonCrystalTestBase
+
+cut_regions = [
+    "REGION_LAKE_OF_RAGE:CUT",
+    "REGION_ROUTE_42:CENTERFRUIT",
+    "REGION_ROUTE_43:FRUITTREE",
+    "REGION_ROUTE_2:SOUTHEAST",
+    "REGION_CELADON_GYM"
+]
+
+fly_regions = [
+    "REGION_FLY"
+]
+
+surf_regions = [
+    "REGION_CIANWOOD_CITY",
+    "REGION_ROUTE_34:WATER",
+    "REGION_ROUTE_40:WATER",
+    "REGION_ROUTE_41",
+    "REGION_ROUTE_42:CENTER",
+    "REGION_LAKE_OF_RAGE:WATER",
+    "REGION_ROUTE_43:FRUITTREE",
+    "REGION_CINNABAR_ISLAND",
+    "REGION_ROUTE_19",
+    "REGION_ROUTE_20",
+    "REGION_ROUTE_21"
+]
+
+strength_regions = [
+    "REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM",
+    "REGION_SLOWPOKE_WELL_B2F",
+    "REGION_CIANWOOD_GYM:STRENGTH",
+    "REGION_BLACKTHORN_GYM_1F:STRENGTH"
+]
+
+flash_regions = [
+    "REGION_DARK_CAVE_VIOLET_ENTRANCE",
+    "REGION_DARK_CAVE_BLACKTHORN_ENTRANCE",
+    "REGION_RUINS_OF_ALPH_AERODACTYL_ITEM_ROOM",
+    "REGION_WHIRL_ISLAND_NW",
+    "REGION_WHIRL_ISLAND_NE",
+    "REGION_WHIRL_ISLAND_SW",
+    "REGION_WHIRL_ISLAND_SE",
+    "REGION_WHIRL_ISLAND_B1F",
+    "REGION_WHIRL_ISLAND_B2F",
+    "REGION_ROCK_TUNNEL_1F",
+    "REGION_ROCK_TUNNEL_B1F",
+    "REGION_SILVER_CAVE_ROOM_1",
+    "REGION_SILVER_CAVE_ROOM_2",
+    "REGION_SILVER_CAVE_ROOM_3"
+]
+
+whirlpool_regions = [
+    "REGION_WHIRL_ISLAND_NW",
+    "REGION_WHIRL_ISLAND_NE",
+    "REGION_WHIRL_ISLAND_SW",
+    "REGION_WHIRL_ISLAND_SE",
+    "REGION_WHIRL_ISLAND_B1F",
+    "REGION_WHIRL_ISLAND_B2F"
+]
+
+waterfall_regions = [
+    "REGION_MOUNT_MORTAR_2F_OUTSIDE"
+]
+
+
+def test_badge_access(test, items_dont_collect, regions, items_collect=None):
+    if items_collect is None:
+        items_collect = items_dont_collect
+
+    test.collect_all_but(items_dont_collect)
+    for region in regions:
+        test.assertFalse(test.can_reach_region(region),
+                         f"Region {region} reachable without items {items_dont_collect}.")
+    test.collect_by_name(items_collect)
+    for region in regions:
+        test.assertTrue(test.can_reach_region(region), f"Region {region} unreachable with items {items_collect}.")
+
+
+class VanillaHMBadgesTest(PokemonCrystalTestBase):
+    options = {
+        "hm_badge_requirements": "vanilla"
+    }
+
+    def test_cut_access(self):
+        test_badge_access(self, ["Hive Badge"], cut_regions)
+
+    def test_fly_access(self):
+        test_badge_access(self, ["Storm Badge"], fly_regions)
+
+    def test_surf_access(self):
+        test_badge_access(self, ["Fog Badge"], surf_regions)
+
+    def test_strength_access(self):
+        test_badge_access(self, ["Plain Badge"], strength_regions)
+
+    def test_flash_access(self):
+        test_badge_access(self, ["Zephyr Badge"], flash_regions)
+
+    def test_whirlpool_access(self):
+        test_badge_access(self, ["Glacier Badge"], whirlpool_regions)
+
+    def test_waterfall_access(self):
+        test_badge_access(self, ["Rising Badge"], waterfall_regions)
+
+    def test_cut_hm_access(self):
+        test_badge_access(self, ["HM01 Cut"], cut_regions)
+
+    def test_fly_hm_access(self):
+        test_badge_access(self, ["HM02 Fly"], fly_regions)
+
+    def test_surf_hm_access(self):
+        test_badge_access(self, ["HM03 Surf"], surf_regions)
+
+    def test_strength_hm_access(self):
+        test_badge_access(self, ["HM04 Strength"], strength_regions)
+
+    def test_flash_hm_access(self):
+        test_badge_access(self, ["HM05 Flash"], flash_regions)
+
+    def test_whirlpool_hm_access(self):
+        test_badge_access(self, ["HM06 Whirlpool"], whirlpool_regions)
+
+    def test_waterfall_hm_access(self):
+        test_badge_access(self, ["HM07 Waterfall"], waterfall_regions)
+
+
+class NoHMBadgesTest(PokemonCrystalTestBase):
+    options = {
+        "hm_badge_requirements": "no_badges"
+    }
+
+    def test_cut_access(self):
+        test_badge_access(self, ["HM01 Cut"], cut_regions)
+
+    def test_fly_access(self):
+        test_badge_access(self, ["HM02 Fly"], fly_regions)
+
+    def test_surf_access(self):
+        test_badge_access(self, ["HM03 Surf"], surf_regions)
+
+    def test_strength_access(self):
+        test_badge_access(self, ["HM04 Strength"], strength_regions)
+
+    def test_flash_access(self):
+        test_badge_access(self, ["HM05 Flash"], flash_regions)
+
+    def test_whirlpool_access(self):
+        test_badge_access(self, ["HM06 Whirlpool"], whirlpool_regions)
+
+    def test_waterfall_access(self):
+        test_badge_access(self, ["HM07 Waterfall"], waterfall_regions)
+
+
+class KantoHMBadgesTest(PokemonCrystalTestBase):
+    options = {
+        "hm_badge_requirements": "add_kanto"
+    }
+
+    def test_cut_access(self):
+        test_badge_access(self, ["Hive Badge", "Cascade Badge"], cut_regions, ["Cascade Badge"])
+
+    def test_fly_access(self):
+        test_badge_access(self, ["Storm Badge", "Thunder Badge"], fly_regions, ["Thunder Badge"])
+
+    def test_surf_access(self):
+        test_badge_access(self, ["Fog Badge", "Soul Badge"], surf_regions, ["Soul Badge"])
+
+    def test_strength_access(self):
+        test_badge_access(self, ["Plain Badge", "Rainbow Badge"], strength_regions, ["Rainbow Badge"])
+
+    def test_flash_access(self):
+        test_badge_access(self, ["Zephyr Badge", "Boulder Badge"], flash_regions, ["Boulder Badge"])
+
+    def test_whirlpool_access(self):
+        test_badge_access(self, ["Glacier Badge", "Volcano Badge"], whirlpool_regions, ["Volcano Badge"])
+
+    def test_waterfall_access(self):
+        test_badge_access(self, ["Rising Badge", "Earth Badge"], waterfall_regions, ["Earth Badge"])
+
+    def test_cut_hm_access(self):
+        test_badge_access(self, ["HM01 Cut"], cut_regions)
+
+    def test_fly_hm_access(self):
+        test_badge_access(self, ["HM02 Fly"], fly_regions)
+
+    def test_surf_hm_access(self):
+        test_badge_access(self, ["HM03 Surf"], surf_regions)
+
+    def test_strength_hm_access(self):
+        test_badge_access(self, ["HM04 Strength"], strength_regions)
+
+    def test_flash_hm_access(self):
+        test_badge_access(self, ["HM05 Flash"], flash_regions)
+
+    def test_whirlpool_hm_access(self):
+        test_badge_access(self, ["HM06 Whirlpool"], whirlpool_regions)
+
+    def test_waterfall_hm_access(self):
+        test_badge_access(self, ["HM07 Waterfall"], waterfall_regions)

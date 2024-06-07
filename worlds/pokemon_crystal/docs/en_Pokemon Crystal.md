@@ -1,4 +1,4 @@
-# Pokémon Emerald
+# Pokémon Crystal
 
 ## Where is the options page?
 
@@ -16,7 +16,7 @@ TODO
 
 TODO
 
-## What does another world's item look like in Pokémon Emerald?
+## What does another world's item look like in Pokémon Crystal?
 
 TODO
 
@@ -25,17 +25,5 @@ TODO
 TODO
 
 ## Can I play offline?
-
-TODO
-
-## Will battle mechanics be updated?
-
-TODO
-
-## Is this randomizer compatible with other mods?
-
-TODO
-
-## Can I use tools like the Universal Pokémon Randomizer?
 
 TODO

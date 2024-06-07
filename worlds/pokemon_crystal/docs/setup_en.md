@@ -1,4 +1,4 @@
-# Pokémon Emerald Setup Guide
+# Pokémon Crystal Setup Guide
 
 ## Required Software
 
