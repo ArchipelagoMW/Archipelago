@@ -14,8 +14,8 @@ Both options have an "offline" play option to try out the game without having to
 
 ## Play with Archipelago
 
-- Create your yaml file via the [Yacht Dice Player Settings Page](/games/YachtDice/player-settings).
-- After generating, open the Yacht Dice website. After the tutoroll, fill in the room-information. 
+- Create your yaml file via the [Yacht Dice Player Options Page](../player-options).
+- After generating, open the Yacht Dice website. After the tutoroll, fill in the room information. 
 - After logging in, you are good to go. The website has a built-in client, where you can chat and send commands.
 
-For more information on yaml files, generating Archipelago games and connecting to servers, please see the [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en).
+For more information on yaml files, generating Archipelago games, and connecting to servers, please see the [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en).

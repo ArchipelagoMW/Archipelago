@@ -1,4 +1,4 @@
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 from BaseClasses import MultiWorld
 from .YachtWeights import yacht_weights
 import math
@@ -129,7 +129,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     categories.sort(key=lambda category: category.mean_score(num_dice, num_rolls))
 
     #function to add two discrete distribution.
-    #defaultdict is a dict where you don't need to check if a id is present, you can just use += (lot faster)
+    #defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
     def add_distributions(dist1, dist2):
         combined_dist = defaultdict(float)
         for val1, prob1 in dist1.items():
@@ -233,3 +233,4 @@ def set_yacht_rules(world: MultiWorld, player: int, options):
 # Sets rules on completion condition
 def set_yacht_completion_rules(world: MultiWorld, player: int):
     world.completion_condition[player] = lambda state: state.has("Victory", player)
+    

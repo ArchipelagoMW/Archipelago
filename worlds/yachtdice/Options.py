@@ -1,9 +1,9 @@
 from Options import Choice, Range, PerGameCommonOptions
 from dataclasses import dataclass
 
-class gameDifficulty(Choice):
+class GameDifficulty(Choice):
     """
-    Difficulty. This setting determines how difficult the scores are to achieve. 
+    Difficulty. This option determines how difficult the scores are to achieve. 
     Easy: for beginners. No luck required, just roll the dice and have fun. Lower final goal.
     Medium: intended difficulty. If you play smart, you will finish the game without any trouble.
     Hard: you will need to play smart and be lucky.
@@ -29,7 +29,7 @@ class scoreForLastCheck(Range):
     
 class scoreForGoal(Range):
     """
-    This setting determines what score you need to reach to finish the game.
+    This option determines what score you need to reach to finish the game.
     It cannot be higher than the score for the last check (if it is, it is changed automatically).
     """
     display_name = "Score for goal"
@@ -56,7 +56,7 @@ class numberDiceFragmentsPerDice(Range):
     """
     Dice can be split into fragments, gathering enough will give you an extra dice. 
     You start with one dice, and there will always be one full dice in the pool. 
-    The other dice are split into fragments, according to this setting. 
+    The other dice are split into fragments, according to this option. 
     Setting this to 1 fragment per dice just puts "Dice" objects in the pool.
     """
     display_name = "Number of dice fragments per dice"
@@ -68,7 +68,7 @@ class numberRollFragmentsPerRoll(Range):
     """
     Rolls can be split into fragments, gathering enough will give you an extra roll. 
     You start with one roll, and there will always be one full roll in the pool. 
-    The other three rolls are split into fragments, according to this setting.
+    The other three rolls are split into fragments, according to this option.
     Setting this to 1 fragment per roll just puts "Roll" objects in the pool.
     """
     display_name = "Number of roll fragments per roll"
@@ -97,7 +97,7 @@ class alternativeCategories(Range):
 class chanceOfDice(Range):
     """
     The item pool is always filled in such a way that you can reach a score of 1000.
-    Extra progressive items are added that will help you on your quest.
+    Extra progression items are added that will help you on your quest.
     You can set the weight for each extra progressive item in the following options.
     
     Of course, more dice = more points!
@@ -128,7 +128,7 @@ class chanceOfFixedScoreMultiplier(Range):
 class chanceOfStepScoreMultiplier(Range):
     """
     The Step Score Multiplier boosts your multiplier after every roll by 1%, and resets on sheet reset.
-    So, keep high scoring categories for later to get the most of them.
+    So, keep high scoring categories for later to get the most out of them.
     By default, this item is not included. It is fun however, you just need to know the above strategy.
     """
     display_name = "Weight of adding Step Score Multiplier"
@@ -158,7 +158,7 @@ class chanceOfPoints(Range):
 class pointsSize(Choice):
     """
     If you choose to add points to the item pool, do you prefer many small points, 
-    medium size, a few larger points, or a mix of them?
+    medium-size points, a few larger points, or a mix of them?
     """
     display_name = "Size of points"
     option_small = 1
@@ -203,7 +203,7 @@ class addStoryChapters(Choice):
     
     all_of_it: fill all locations with story chapters
     sure: if there is space left, put in 10 story chapters.
-    never: do not put any story chapters, I do not like reading (but I am glad you are reading THIS!)
+    never: do not put any story chapters in, I do not like reading (but I am glad you are reading THIS!)
     """
     display_name = "Extra story chapters in the pool"
     option_all_of_it = 1
@@ -232,8 +232,8 @@ class whichStory(Choice):
 class allowManual(Choice):
     """
     Yacht Dice allows players to roll IRL dice.
-    By sending "manual" in the chat, a input field appears where you can type your dice rolls.
-    Of course we cannot check anymore if the player is playing fair.
+    By sending "manual" in the chat, an input field appears where you can type your dice rolls.
+    Of course, we cannot check anymore if the player is playing fair.
     Do you want to allow manual input of rolls?
     """
     display_name = "Allow manual inputs"
@@ -268,3 +268,4 @@ class YachtDiceOptions(PerGameCommonOptions):
     which_story: whichStory
     
     allow_manual_input: allowManual
+    

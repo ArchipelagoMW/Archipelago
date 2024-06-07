@@ -1,12 +1,11 @@
 import math
-import logging
 
 from BaseClasses import Region, Entrance, Item, Tutorial, CollectionState
 from .Items import YachtDiceItem, item_table, item_groups
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import YachtDiceOptions
 from .Rules import set_yacht_rules, set_yacht_completion_rules, dice_simulation
-from ..AutoWorld import World, WebWorld
+from world.AutoWorld import World, WebWorld
 
 
 class YachtDiceWeb(WebWorld):
@@ -19,6 +18,7 @@ class YachtDiceWeb(WebWorld):
         "setup/en",
         ["Spineraks"]
     )]
+
 
 class YachtDiceWorld(World):
     """
@@ -51,7 +51,7 @@ class YachtDiceWorld(World):
             "race": self.multiworld.is_race,
         }
         
-    #In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
+    # In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
     def generate_early(self):    
         self.itempool = []
         self.precollected = []       
@@ -120,7 +120,7 @@ class YachtDiceWorld(World):
 
         #if one fragment per dice, just add "Dice" objects
         if frags_per_dice == 1:
-            self.itempool += ["Dice"] * (num_of_dice-1) #minus one because one is in start inventory
+            self.itempool += ["Dice"] * (num_of_dice-1)  # minus one because one is in start inventory
         else:
             self.itempool += ["Dice"] #always add a full dice to make generation easier (will be early)
             self.itempool += ["Dice Fragment"] * (frags_per_dice * (num_of_dice-2))
@@ -199,7 +199,7 @@ class YachtDiceWorld(World):
                     weights[5] = 1
                 
             #Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
-            which_item_to_add = self.multiworld.random.choices([0,1,2,3,4,5], weights = weights)[0]
+            which_item_to_add = self.multiworld.random.choices([0, 1, 2, 3, 4, 5], weights = weights)[0]
             if which_item_to_add == 0:
                 if frags_per_dice == 1:
                     self.itempool += ["Dice"]
@@ -240,11 +240,11 @@ class YachtDiceWorld(World):
                     self.itempool += ["1 Point"]
                     extra_points_added += 1
                     weights[5] /= 1.01
-                elif c==1:
+                elif c == 1:
                     self.itempool += ["10 Points"]
                     extra_points_added += 10
                     weights[5] /= 1.1
-                elif c==2:
+                elif c == 2:
                     self.itempool += ["100 Points"]
                     extra_points_added += 100
                     weights[5] /= 2
@@ -256,11 +256,11 @@ class YachtDiceWorld(World):
         #count the number of locations in the game.
         already_items = len(self.itempool) + self.extra_plando_items + 1 #+1 because of Victory item
         
-        #We need to add more filler/useful items if there are many items in the pool to guarantee succesful generation
+        #We need to add more filler/useful items if there are many items in the pool to guarantee successful generation
         extra_locations_needed += (already_items - 45) // 15
         self.number_of_locations = already_items + extra_locations_needed
         
-        # From here, we will count the number of items in the self.itempool, and add usuful/filler items to the pool,
+        # From here, we will count the number of items in the self.itempool, and add useful/filler items to the pool,
         # making sure not to exceed the number of locations.
         
         #first, we flood the entire pool with extra points (useful), if that setting is chosen.
@@ -283,7 +283,7 @@ class YachtDiceWorld(World):
         #add some story chapters (filler)
         if self.options.add_story_chapters.value == 2: #add extra points if wanted
             already_items = len(self.itempool) + self.extra_plando_items + 1
-            if(self.number_of_locations - already_items >= 10):
+            if self.number_of_locations - already_items >= 10:
                 self.itempool += ["Story Chapter"] * 10
                 
         #add some more extra points if there is still room
@@ -315,7 +315,7 @@ class YachtDiceWorld(World):
         already_items = len(self.itempool) + self.extra_plando_items + 1
         if already_items != self.number_of_locations:
             raise Exception(f"[Yacht Dice] Number in self.itempool is not number of locations "
-                f"{already_items} {self.number_of_locations}.")
+                            f"{already_items} {self.number_of_locations}.")
         
         #add precollected items using push_precollected. Items in self.itempool get created in create_items
         for item in self.precollected:
@@ -331,7 +331,7 @@ class YachtDiceWorld(World):
     def create_regions(self):
         #call the ini_locations function, that generates locations based on the inputs.
         location_table, goal_index = ini_locations(self.goal_score, self.max_score, self.number_of_locations, 
-                                                        self.options.game_difficulty.value)
+                                                   self.options.game_difficulty.value)
 
         #simple menu-board construction
         menu = Region("Menu", self.player, self.multiworld)
@@ -339,7 +339,7 @@ class YachtDiceWorld(World):
 
         #add locations to board, one for every location in the location_table
         board.locations = [YachtDiceLocation(self.player, loc_name, loc_data.score, loc_data.id, board)
-                            for loc_name, loc_data in location_table.items() if loc_data.region == board.name]
+                           for loc_name, loc_data in location_table.items() if loc_data.region == board.name]
         
         #which index of all locations should have the Victory item.
         
