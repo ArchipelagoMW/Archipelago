@@ -399,14 +399,14 @@ class YachtDiceWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
-        if change and item.advancement:
+        if change:
             state.prog_items[self.player]["state_is_fresh"] = 0
 
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
-        if change and item.advancement:
+        if change:
             state.prog_items[self.player]["state_is_fresh"] = 0
 
         return change
