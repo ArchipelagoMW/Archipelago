@@ -102,7 +102,7 @@ components.extend([
     Component("Open Patch", func=open_patch),
     Component("Generate Template Options", func=generate_yamls),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
 ])
 
@@ -259,7 +259,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif not args:
         args = {}
 
-    if "Patch|Game|Component" in args:
+    if args.get("Patch|Game|Component", None) is not None:
         file, component = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file

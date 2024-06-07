@@ -204,6 +204,9 @@ class LandstalkerWorld(World):
             for location in self.multiworld.get_locations(self.player):
                 if location.parent_region.name in excluded_regions:
                     location.progress_type = LocationProgressType.EXCLUDED
+                # We need to make that event non-progression since it would crash generation in reach_kazalt goal
+                if location.item is not None and location.item.name == "event_visited_king_nole_labyrinth_raft_entrance":
+                    location.item.classification = ItemClassification.filler
 
     def get_starting_health(self):
         spawn_id = self.options.spawn_region.current_key

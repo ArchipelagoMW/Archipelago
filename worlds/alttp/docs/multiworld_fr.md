@@ -66,9 +66,10 @@ paramètres personnels et de les exporter vers un fichier YAML.
 ### Configuration avancée du fichier YAML
 
 Une version plus avancée du fichier YAML peut être créée en utilisant la page
-des [paramètres de pondération](/weighted-settings), qui vous permet de configurer jusqu'à trois préréglages. Cette page
-a de nombreuses options qui sont essentiellement représentées avec des curseurs glissants. Cela vous permet de choisir
-quelles sont les chances qu'une certaine option apparaisse par rapport aux autres disponibles dans une même catégorie.
+des [paramètres de pondération](/games/A Link to the Past/weighted-options), qui vous permet de configurer jusqu'à
+trois préréglages. Cette page a de nombreuses options qui sont essentiellement représentées avec des curseurs
+glissants. Cela vous permet de choisir quelles sont les chances qu'une certaine option apparaisse par rapport aux
+autres disponibles dans une même catégorie.
 
 Par exemple, imaginez que le générateur crée un seau étiqueté "Mélange des cartes", et qu'il place un morceau de papier
 pour chaque sous-option. Imaginez également que la valeur pour "On" est 20 et la valeur pour "Off" est 40.

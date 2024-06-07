@@ -33,7 +33,6 @@ class GamesPackage(TypedDict, total=False):
     location_name_groups: Dict[str, List[str]]
     location_name_to_id: Dict[str, int]
     checksum: str
-    version: int  # TODO: Remove support after per game data packages API change.
 
 
 class DataPackage(TypedDict):

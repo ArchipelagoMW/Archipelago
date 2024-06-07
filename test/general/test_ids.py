@@ -6,22 +6,6 @@ from . import setup_solo_multiworld
 
 
 class TestIDs(unittest.TestCase):
-    def test_unique_items(self):
-        """Tests that every game has a unique ID per item in the datapackage"""
-        known_item_ids = set()
-        for gamename, world_type in AutoWorldRegister.world_types.items():
-            current = len(known_item_ids)
-            known_item_ids |= set(world_type.item_id_to_name)
-            self.assertEqual(len(known_item_ids) - len(world_type.item_id_to_name), current)
-
-    def test_unique_locations(self):
-        """Tests that every game has a unique ID per location in the datapackage"""
-        known_location_ids = set()
-        for gamename, world_type in AutoWorldRegister.world_types.items():
-            current = len(known_location_ids)
-            known_location_ids |= set(world_type.location_id_to_name)
-            self.assertEqual(len(known_location_ids) - len(world_type.location_id_to_name), current)
-
     def test_range_items(self):
         """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""
         for gamename, world_type in AutoWorldRegister.world_types.items():

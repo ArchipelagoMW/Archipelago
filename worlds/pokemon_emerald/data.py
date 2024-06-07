@@ -289,6 +289,7 @@ class TrainerData:
     party: TrainerPartyData
     address: int
     script_address: int
+    battle_type: int
 
 
 class PokemonEmeraldData:
@@ -741,7 +742,7 @@ def _init() -> None:
         ("SPECIES_PUPITAR", "Pupitar", 247),
         ("SPECIES_TYRANITAR", "Tyranitar", 248),
         ("SPECIES_LUGIA", "Lugia", 249),
-        ("SPECIES_HO_OH", "Ho-oh", 250),
+        ("SPECIES_HO_OH", "Ho-Oh", 250),
         ("SPECIES_CELEBI", "Celebi", 251),
         ("SPECIES_TREECKO", "Treecko", 252),
         ("SPECIES_GROVYLE", "Grovyle", 253),
@@ -1422,7 +1423,8 @@ def _init() -> None:
                 trainer_json["party_address"]
             ),
             trainer_json["address"],
-            trainer_json["script_address"]
+            trainer_json["script_address"],
+            trainer_json["battle_type"]
         ))
 
 
