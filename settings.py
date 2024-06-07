@@ -505,6 +505,9 @@ class GeneralOptions(Group):
         """
         # created on demand, so marked as optional
 
+    class AutoUpdate(Bool):
+        """Whether the launcher should check for an available update on startup."""
+
     output_path: OutputPath = OutputPath("output")
 
 
