@@ -1,4 +1,4 @@
-from Options import Choice, Range, PerGameCommonOptions
+from Options import Choice, Range, PerGameCommonOptions, OptionGroup
 from dataclasses import dataclass
 
 class GameDifficulty(Choice):
@@ -266,6 +266,8 @@ class YachtDiceOptions(PerGameCommonOptions):
     
     alternative_categories: AlternativeCategories
     
+    allow_manual_input: AllowManual
+    
     #the following options determine what extra items are shuffled into the pool:
     weight_of_dice: ChanceOfDice
     weight_of_roll: ChanceOfRoll
@@ -279,6 +281,14 @@ class YachtDiceOptions(PerGameCommonOptions):
     add_bonus_points: AddExtraPoints
     add_story_chapters: AddStoryChapters
     which_story: WhichStory
+
+yd_option_groups = [
+    OptionGroup("Extra progression items", [
+        ChanceOfDice, ChanceOfRoll, ChanceOfFixedScoreMultiplier, ChanceOfStepScoreMultiplier,
+        ChanceOfDoubleCategory, ChanceOfPoints, PointsSize
+    ]),
     
-    allow_manual_input: AllowManual
-    
+    OptionGroup("Other items", [
+        MinimizeExtraItems, AddExtraPoints, AddStoryChapters, WhichStory
+    ])
+]

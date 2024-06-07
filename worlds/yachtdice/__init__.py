@@ -3,7 +3,7 @@ import math
 from BaseClasses import Region, Entrance, Item, Tutorial, CollectionState
 from .Items import YachtDiceItem, item_table, item_groups
 from .Locations import YachtDiceLocation, all_locations, ini_locations
-from .Options import YachtDiceOptions
+from .Options import YachtDiceOptions, yd_option_groups
 from .Rules import set_yacht_rules, set_yacht_completion_rules, dice_simulation
 from worlds.AutoWorld import World, WebWorld
 
@@ -18,6 +18,8 @@ class YachtDiceWeb(WebWorld):
         "setup/en",
         ["Spineraks"]
     )]
+    
+    option_groups = yd_option_groups
 
 
 class YachtDiceWorld(World):
