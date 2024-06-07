@@ -181,6 +181,7 @@ class GauntletLegendsContext(CommonContext):
         self.item_locations: List[LocationData] = []
         self.obelisk_locations: List[LocationData] = []
         self.chest_locations: List[LocationData] = []
+        self.extra_items: int  = 0
         self.limbo: bool = False
         self.in_portal: bool = False
         self.scaled: bool = False
@@ -239,20 +240,29 @@ class GauntletLegendsContext(CommonContext):
         obj_address = await self.get_obj_addr()
         _obj = []
         if self.offset == -1:
-            b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address, 'x')} 14400")))
+            b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address, 'x')} 3840")))
             b.iterate(0x3C)
             for i, arr in enumerate(b.split):
                 if arr[0] != 0xFF:
                     self.offset = i
                     break
-        b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C), 'x')} 14400")))
-        b.iterate(0x3C)
-        for i, arr in enumerate(b.split):
+        b: RamChunk
+        if mode == 0:
+            b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 10) * 0x3C})")))
+            b.iterate(0x3C)
+            count = 0
+            for obj in b.split:
+                if obj[0] == 0xFF:
+                    count += 1
+            self.extra_items = count
+        else:
+            b = RamChunk(await self.socket.read(MessageFormat(READ,f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C})")))
+            b.iterate(0x3C)
+        for arr in b.split:
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[0] != 0xFF]
         if mode == 1:
-            offset = len(self.item_locations) + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])
-            _obj = _obj[offset:offset + len(self.chest_locations)]
+            _obj = _obj[:len(self.chest_locations)]
             self.chest_objects = _obj
         else:
             _obj = _obj[:len(self.item_locations)]
@@ -527,6 +537,7 @@ class GauntletLegendsContext(CommonContext):
                     if self.current_level == bytes([0x2, 0xF]):
                         self.clear_counts[str([0x1, 0xF])] = max(self.clear_counts.get(str([0x1, 0xF]), 0) - 1, 0)
             self.objects_loaded = False
+            self.extra_items = 0
             self.item_locations = []
             self.item_objects = []
             self.chest_locations = []
