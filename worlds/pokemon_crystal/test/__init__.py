@@ -5,7 +5,7 @@ class PokemonCrystalTestBase(WorldTestBase):
     game = "Pokemon Crystal"
 
 
-def test_badge_access(test, items_dont_collect, regions, items_collect=None):
+def verify_region_access(test, items_dont_collect, regions, items_collect=None):
     if items_collect is None:
         items_collect = items_dont_collect
 
