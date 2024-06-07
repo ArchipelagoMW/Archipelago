@@ -36339,11 +36339,117 @@ regions = [
             {
                 "target": "D17Z01S01[E]",
                 "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_06",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "taranto"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot",
+                            "debla"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot",
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot",
+                            "tirana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot",
+                            "ruby"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap9",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap9",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap9",
+                            "debla"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap9",
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap9",
+                            "tirana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap9",
+                            "ruby"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
-        "locations": [
-            "RESCUED_CHERUB_06"
-        ],
+        "locations": [],
         "transitions": []
     },
     {
@@ -36364,6 +36470,10 @@ regions = [
         "exits": [
             {
                 "target": "D17Z01S01",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_06",
                 "logic": []
             }
         ],
@@ -37961,6 +38071,14 @@ regions = [
         "exits": [],
         "locations": [
             "RESCUED_CHERUB_34"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "RESCUED_CHERUB_06",
+        "exits": [],
+        "locations": [
+            "RESCUED_CHERUB_06"
         ],
         "transitions": []
     },
@@ -39900,6 +40018,26 @@ locations = [
                     "wallClimb",
                     "canClimbOnRoot",
                     "blood"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "wallClimb",
+                    "canClimbOnRoot",
+                    "preciseSkipsAllowed",
+                    "doubleJump"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "wallClimb",
+                    "canClimbOnRoot",
+                    "preciseSkipsAllowed",
+                    "canAirStall"
                 ],
                 "location_requirements": [],
                 "state_modifiers": []

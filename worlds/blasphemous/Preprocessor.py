@@ -531,6 +531,10 @@ def main(args: argparse.Namespace):
         logic_objects.append(obj)
 
     for location in locations:
+        if location.get("logic") != None:
+            location["Logic"] = location["logic"]
+            del location["logic"]
+        
         obj = {
             "Name": location.get("Id"),
             "Logic": [],
