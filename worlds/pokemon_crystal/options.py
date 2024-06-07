@@ -207,10 +207,15 @@ class RandomizeSFX(Toggle):
     default = 0
 
 
-class FreeFlyLocation(Toggle):
-    """Unlocks a random fly location"""
+class FreeFlyLocation(Choice):
+    """If enabled, unlocks a random fly location for free.
+    If free_fly_and_map_card is selected, an extra fly location
+    is unlocked when the pokegear and map card are obtained"""
     display_name = "Free Fly Location"
     default = 0
+    option_off = 0
+    option_free_fly = 1
+    option_free_fly_and_map_card = 2
 
 
 class HMBadgeRequirements(Choice):

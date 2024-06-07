@@ -10,6 +10,12 @@ else:
     PokemonCrystalWorld = object
 
 
+def can_map_card_fly(state: CollectionState, world: PokemonCrystalWorld):
+    if world.options.randomize_pokegear:
+        return state.has("Map Card", world.player) and state.has("Pokegear", world.player)
+    return state.has("EVENT_GOT_MAP_CARD", world.player) and state.has("EVENT_GOT_POKEGEAR", world.player)
+
+
 def set_rules(world: PokemonCrystalWorld) -> None:
     def can_cut(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
@@ -416,12 +422,10 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: can_surf(state) and can_waterfall(state))
 
     # 1F Inside Front
-    set_rule(get_location("Mount Mortar 1F Inside - Item 1"), can_strength)
-    set_rule(get_location("Mount Mortar 1F Inside - Item 2"), can_strength)
-    set_rule(get_location("Mount Mortar 1F Inside - Item 6"), can_strength)
-    set_rule(get_location("Mount Mortar 1F Inside - Item 7"), can_strength)
-    if trainersanity():
-        set_rule(get_location("Mount Mortar 1F Inside - Super Nerd Markus"), can_strength)
+    set_rule(get_entrance("REGION_MOUNT_MORTAR_1F_INSIDE:FRONT -> REGION_MOUNT_MORTAR_1F_INSIDE:STRENGTH"),
+             can_strength)
+    set_rule(get_entrance("REGION_MOUNT_MORTAR_1F_INSIDE:STRENGTH -> REGION_MOUNT_MORTAR_1F_INSIDE:FRONT"),
+             can_strength)
 
     # 1F C -> B1F Everything needs surf so im being lazy
 
@@ -478,11 +482,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: state.has("EVENT_BEAT_CLAIR", world.player) and can_surf(state))
 
     # Dragons Den
-    set_rule(get_location("Dragon's Den B1F - Item 2"), can_whirlpool)
-
-    if hidden():
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 1"), can_whirlpool)
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in SE Corner"), can_whirlpool)
+    set_rule(get_entrance("REGION_DRAGONS_DEN_B1F -> REGION_DRAGONS_DEN_B1F:WATER"), can_surf)
+    set_rule(get_entrance("REGION_DRAGONS_DEN_B1F:WATER -> REGION_DRAGONS_DEN_B1F:WHIRLPOOL"), can_whirlpool)
 
     # Route 45
 
@@ -493,9 +494,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_ROUTE_27:WEST -> REGION_NEW_BARK_TOWN"), can_surf)
 
+    set_rule(get_entrance("REGION_ROUTE_27:WEST -> REGION_ROUTE_27:WESTWATER"), can_surf)
+
     set_rule(get_entrance("REGION_ROUTE_27:CENTER -> REGION_ROUTE_27:EAST"), can_surf)
 
     set_rule(get_entrance("REGION_ROUTE_27:EAST -> REGION_ROUTE_27:CENTER"), can_surf)
+
+    set_rule(get_entrance("REGION_ROUTE_27:EAST -> REGION_ROUTE_27:EASTWHIRLPOOL"), can_whirlpool)
 
     set_rule(get_location("Route 27 - Item 1"), can_surf)
 

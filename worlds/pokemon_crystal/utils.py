@@ -1,4 +1,11 @@
+from typing import TYPE_CHECKING
 from .data import data
+from .options import FreeFlyLocation
+
+if TYPE_CHECKING:
+    from . import PokemonCrystalWorld
+else:
+    PokemonCrystalWorld = object
 
 
 def get_random_held_item(random):
@@ -27,11 +34,14 @@ def get_random_pokemon_id(random):
     return random.choice(pokemon_pool)
 
 
-def get_free_fly_location(random, johto_only):
+def get_free_fly_location(world: PokemonCrystalWorld):
     location_pool = [22, 21, 19, 23, 25]
-    if not johto_only:
+    if not world.options.johto_only:
         location_pool += [3, 4, 5, 7, 8, 10, 9, 11]
-    return random.choice(location_pool)
+    world.random.shuffle(location_pool)
+    world.free_fly_location = location_pool.pop()
+    if world.options.free_fly_location == FreeFlyLocation.option_free_fly_and_map_card:
+        world.map_card_fly_location = location_pool.pop()
 
 
 def get_tmhm_compatibility(tms, tm_value, hm_value, types, vanilla_learnset, random):

@@ -56,11 +56,14 @@ whirlpool_regions = [
     "REGION_WHIRL_ISLAND_SW",
     "REGION_WHIRL_ISLAND_SE",
     "REGION_WHIRL_ISLAND_B1F",
-    "REGION_WHIRL_ISLAND_B2F"
+    "REGION_WHIRL_ISLAND_B2F",
+    "REGION_DRAGONS_DEN_B1F:WHIRLPOOL",
+    "REGION_ROUTE_27:EASTWHIRLPOOL"
 ]
 
 waterfall_regions = [
-    "REGION_MOUNT_MORTAR_2F_OUTSIDE"
+    "REGION_MOUNT_MORTAR_2F_OUTSIDE",
+    "REGION_MOUNT_MORTAR_1F_INSIDE:BACK"
 ]
 
 
@@ -118,25 +121,28 @@ class NoHMBadgesTest(PokemonCrystalTestBase):
     }
 
     def test_cut_access(self):
-        verify_region_access(self, ["HM01 Cut"], cut_regions)
+        verify_region_access(self, ["HM01 Cut", "Hive Badge", "Cascade Badge"], cut_regions, ["HM01 Cut"])
 
     def test_fly_access(self):
-        verify_region_access(self, ["HM02 Fly"], fly_regions)
+        verify_region_access(self, ["HM02 Fly", "Storm Badge", "Thunder Badge"], fly_regions, ["HM02 Fly"])
 
     def test_surf_access(self):
-        verify_region_access(self, ["HM03 Surf"], surf_regions)
+        verify_region_access(self, ["HM03 Surf", "Fog Badge", "Soul Badge"], surf_regions, ["HM03 Surf"])
 
     def test_strength_access(self):
-        verify_region_access(self, ["HM04 Strength"], strength_regions)
+        verify_region_access(self, ["HM04 Strength", "Plain Badge", "Rainbow Badge"], strength_regions,
+                             ["HM04 Strength"])
 
     def test_flash_access(self):
-        verify_region_access(self, ["HM05 Flash"], flash_regions)
+        verify_region_access(self, ["HM05 Flash", "Zephyr Badge", "Boulder Badge"], flash_regions, ["HM05 Flash"])
 
     def test_whirlpool_access(self):
-        verify_region_access(self, ["HM06 Whirlpool"], whirlpool_regions)
+        verify_region_access(self, ["HM06 Whirlpool", "Glacier Badge", "Volcano Badge"], whirlpool_regions,
+                             ["HM06 Whirlpool"])
 
     def test_waterfall_access(self):
-        verify_region_access(self, ["HM07 Waterfall"], waterfall_regions)
+        verify_region_access(self, ["HM07 Waterfall", "Rising Badge", "Earth Badge"], waterfall_regions,
+                             ["HM07 Waterfall"])
 
 
 class KantoHMBadgesTest(PokemonCrystalTestBase):

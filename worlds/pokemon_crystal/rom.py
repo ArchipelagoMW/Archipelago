@@ -383,6 +383,11 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
         free_fly_write = [0, 0, 0, 0]
         free_fly_write[int(world.free_fly_location / 8)] = 1 << (world.free_fly_location % 8)
         write_bytes(patch, free_fly_write, data.rom_addresses["AP_Setting_FreeFly"])
+        if world.options.free_fly_location > 1:
+            map_fly_offset = int(world.map_card_fly_location / 8).to_bytes(2, "little")
+            map_fly_byte = 1 << (world.map_card_fly_location % 8)
+            write_bytes(patch, [map_fly_byte], data.rom_addresses["AP_Setting_MapCardFreeFly_Byte"] + 1)
+            write_bytes(patch, map_fly_offset, data.rom_addresses["AP_Setting_MapCardFreeFly_Offset"] + 1)
 
     # Set slot name
     for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):

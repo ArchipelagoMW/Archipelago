@@ -330,8 +330,8 @@
 		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"MAP_CARD": {
-		"name": "Map Card", "classification": "FILLER",
-		"tags": ["KeyItem", "Unique"]
+		"name": "Map Card", "classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique", "Tracker"]
 	},
 	"PHONE_CARD": {
 		"name": "Phone Card", "classification": "PROGRESSION",

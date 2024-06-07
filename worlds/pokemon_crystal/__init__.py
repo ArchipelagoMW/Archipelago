@@ -76,6 +76,7 @@ class PokemonCrystalWorld(World):
     item_name_groups = ITEM_GROUPS  # item_groups
 
     free_fly_location: int
+    map_card_fly_location: int
     generated_pokemon: Dict[str, PokemonData]
     generated_starters: Tuple[List[str], List[str], List[str]]
     generated_starter_helditems: Tuple[str, str, str]
@@ -118,7 +119,7 @@ class PokemonCrystalWorld(World):
         create_locations(self, regions)
         self.multiworld.regions.extend(regions.values())
         if self.options.free_fly_location:
-            self.free_fly_location = get_free_fly_location(self.random, self.options.johto_only)
+            get_free_fly_location(self)
             setup_free_fly(self)
 
     def create_items(self) -> None:
@@ -259,10 +260,12 @@ class PokemonCrystalWorld(World):
             "hm_badge_requirements",
             "randomize_berry_trees"
         )
+        slot_data["free_fly_location"] = 0
+        slot_data["map_card_fly_location"] = 0
         if self.options.free_fly_location:
             slot_data["free_fly_location"] = self.free_fly_location
-        else:
-            slot_data["free_fly_location"] = 0
+            if self.options.free_fly_location > 1:
+                slot_data["map_card_fly_location"] = self.map_card_fly_location
 
         return slot_data
 
@@ -291,6 +294,9 @@ class PokemonCrystalWorld(World):
                                   11: "Fuchsia City"}
             spoiler_handle.write(f"\n\nFree Fly Location ({self.multiworld.player_name[self.player]}): "
                                  f"{free_fly_locations[self.free_fly_location]}\n")
+            if self.options.free_fly_location > 1:
+                spoiler_handle.write(f"\n\nMap Card Fly Location ({self.multiworld.player_name[self.player]}): "
+                                     f"{free_fly_locations[self.map_card_fly_location]}\n")
 
         if self.options.enable_mischief:
             spoiler_handle.write(f"\n\nMischief ({self.multiworld.player_name[self.player]}):\n\n")
