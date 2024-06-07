@@ -11,5 +11,5 @@ When you receive an item, it could be extra dice, extra rolls, score multipliers
 ## Winning the Game
 Victory in Yacht Dice is all about reaching the target score. You can set your own target score, which is displayed on the website. Once you hit it, you've conquered the game!
 
-## How to Access Settings
-Need to tweak your game? Head over to the [player settings page](../player-settings) for all your configuration options and to export your config file.
+## How to Access Options
+Need to tweak your game? Head over to the [player options page](../player-options) for all your configuration options and to export your config file.
