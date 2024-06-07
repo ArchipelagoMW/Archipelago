@@ -290,12 +290,6 @@
 		"locations": [],
 		"events": []
 	},
-	"REGION_CELADON_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_CELADON_POKECENTER_1F"],
-		"locations": [],
-		"events": []
-	},
 	"REGION_CERULEAN_CITY": {
 		"johto": false,
 		"exits": [
@@ -334,12 +328,6 @@
 	"REGION_CERULEAN_POKECENTER_1F": {
 		"johto": false,
 		"exits": ["REGION_CERULEAN_CITY", "REGION_POKECENTER_2F"],
-		"locations": [],
-		"events": []
-	},
-	"REGION_CERULEAN_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_CERULEAN_POKECENTER_1F"],
 		"locations": [],
 		"events": []
 	},
@@ -460,12 +448,6 @@
 	"REGION_CINNABAR_POKECENTER_1F": {
 		"johto": false,
 		"exits": ["REGION_CINNABAR_ISLAND", "REGION_POKECENTER_2F"],
-		"locations": [],
-		"events": []
-	},
-	"REGION_CINNABAR_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_CINNABAR_POKECENTER_1F"],
 		"locations": [],
 		"events": []
 	},
@@ -719,12 +701,6 @@
 	"REGION_FUCHSIA_POKECENTER_1F": {
 		"johto": false,
 		"exits": ["REGION_FUCHSIA_CITY", "REGION_POKECENTER_2F"],
-		"locations": [],
-		"events": []
-	},
-	"REGION_FUCHSIA_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_FUCHSIA_POKECENTER_1F"],
 		"locations": [],
 		"events": []
 	},
@@ -1142,12 +1118,6 @@
 		"locations": [],
 		"events": []
 	},
-	"REGION_LAVENDER_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_LAVENDER_POKECENTER_1F"],
-		"locations": [],
-		"events": []
-	},
 	"REGION_LAVENDER_SPEECH_HOUSE": {
 		"johto": false,
 		"exits": ["REGION_LAVENDER_TOWN"],
@@ -1557,12 +1527,6 @@
 		"locations": [],
 		"events": []
 	},
-	"REGION_PEWTER_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_PEWTER_POKECENTER_1F"],
-		"locations": [],
-		"events": []
-	},
 	"REGION_PEWTER_SNOOZE_SPEECH_HOUSE": {
 		"johto": false,
 		"exits": ["REGION_PEWTER_CITY"],
@@ -1717,12 +1681,6 @@
 	"REGION_ROUTE_10_POKECENTER_1F": {
 		"johto": false,
 		"exits": ["REGION_ROUTE_10_NORTH", "REGION_POKECENTER_2F"],
-		"locations": [],
-		"events": []
-	},
-	"REGION_ROUTE_10_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_ROUTE_10_POKECENTER_1F"],
 		"locations": [],
 		"events": []
 	},
@@ -2786,12 +2744,6 @@
 		"locations": [],
 		"events": []
 	},
-	"REGION_SAFFRON_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_SAFFRON_POKECENTER_1F"],
-		"locations": [],
-		"events": []
-	},
 	"REGION_SEAFOAM_GYM": {
 		"johto": false,
 		"exits": ["REGION_ROUTE_20"],
@@ -3140,12 +3092,6 @@
 		"locations": [],
 		"events": []
 	},
-	"REGION_VERMILION_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_VERMILION_POKECENTER_1F"],
-		"locations": [],
-		"events": []
-	},
 	"REGION_VERMILION_PORT": {
 		"johto": false,
 		"exits": ["REGION_VERMILION_PORT_PASSAGE", "REGION_FAST_SHIP_1F"],
@@ -3251,12 +3197,6 @@
 	"REGION_VIRIDIAN_POKECENTER_1F": {
 		"johto": false,
 		"exits": ["REGION_VIRIDIAN_CITY", "REGION_POKECENTER_2F"],
-		"locations": [],
-		"events": []
-	},
-	"REGION_VIRIDIAN_POKECENTER_2F_BETA": {
-		"johto": false,
-		"exits": ["REGION_VIRIDIAN_POKECENTER_1F"],
 		"locations": [],
 		"events": []
 	},
