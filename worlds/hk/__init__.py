@@ -142,7 +142,6 @@ class HKWorld(World):
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
-    # option_definitions = hollow_knight_options
     options_dataclass = HKOptions
     options: HKOptions
 
@@ -170,7 +169,7 @@ class HKWorld(World):
         options = self.options
         charm_costs = options.RandomCharmCosts.get_costs(self.random)
         self.charm_costs = options.PlandoCharmCosts.get_costs(charm_costs)
-        # self.multiworld.exclude_locations[self.player].value.update(white_palace_locations)
+        # options.exclude_locations.value.update(white_palace_locations)
         for term, data in cost_terms.items():
             mini = getattr(options, f"Minimum{data.option}Price")
             maxi = getattr(options, f"Maximum{data.option}Price")
@@ -326,7 +325,7 @@ class HKWorld(World):
         # Add additional shop items, as needed.
         if additional_shop_items > 0:
             shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
-            if not self.options.EggShopSlots.value:  # No eggshop, so don't place items there
+            if not self.options.EggShopSlots:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
             if shops:
@@ -577,7 +576,7 @@ class HKWorld(World):
             spoiler_handle.write(f'\n{name}\n')
             hk_world: HKWorld = multiworld.worlds[player]
 
-            if hk_world.options.CostSanity.value:
+            if hk_world.options.CostSanity:
                 for loc in sorted(
                     (
                         loc for loc in itertools.chain(*(region.locations for region in multiworld.get_regions(player)))
