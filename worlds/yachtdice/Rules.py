@@ -78,8 +78,6 @@ def extract_progression(state, player, options):
             state.count("Roll") 
             + state.count("Roll Fragment") // options.number_of_roll_fragments_per_roll.value
         )
-        roll = state.count("Roll") 
-        rollfragments = state.count("Roll Fragment")
         number_of_fixed_mults = state.count("Fixed Score Multiplier")
         number_of_step_mults = state.count("Step Score Multiplier")
         categories = []
@@ -98,8 +96,6 @@ def extract_progression(state, player, options):
             state.count("Roll", player) 
             + state.count("Roll Fragment", player) // options.number_of_roll_fragments_per_roll.value
         )
-        roll = state.count("Roll", player) 
-        rollfragments = state.count("Roll Fragment", player)
         number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
         number_of_step_mults = state.count("Step Score Multiplier", player)
         categories = []
