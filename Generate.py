@@ -25,7 +25,8 @@ from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 def mystery_argparse():
     from settings import get_settings
-    defaults = get_settings().generator
+    settings = get_settings()
+    defaults = settings.generator
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
@@ -37,7 +38,7 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults.players, type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
-    parser.add_argument('--outputpath', default=options.general_options.output_path,
+    parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
