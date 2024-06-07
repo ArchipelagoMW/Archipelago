@@ -214,7 +214,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
     # save result into the cache, then return it
     outcome = sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return)
-    yachtdice_cache[tup] = max(5, math.floor(outcome))
+    yachtdice_cache[tup] = max(5, math.floor(outcome))  # at least 5.
     return yachtdice_cache[tup]
 
 
