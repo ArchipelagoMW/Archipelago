@@ -72,7 +72,8 @@ def main(args=None):
         options = get_settings()
 
     seed = get_seed(args.seed)
-    if "worlds" in sys.modules:
+    # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
+    if __name__ == "__main__" and "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded before logging init.")
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
     random.seed(seed)
