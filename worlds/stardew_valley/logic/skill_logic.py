@@ -37,6 +37,7 @@ class SkillLogicMixin(BaseLogicMixin):
 
 class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, ToolLogicMixin, SkillLogicMixin,
 CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
+
     # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
@@ -55,9 +56,10 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if skill == Skill.fishing:
             xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3))
         elif skill == Skill.farming:
-            xp_rule = self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
+            xp_rule = self.can_get_farming_xp & self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
-            xp_rule = self.logic.tool.has_tool(Tool.axe, tool_material) | self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
+            xp_rule = (self.can_get_foraging_xp & self.logic.tool.has_tool(Tool.axe, tool_material)) |\
+                      self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
         elif skill == Skill.mining:
             xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
