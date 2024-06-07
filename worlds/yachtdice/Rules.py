@@ -4,7 +4,7 @@ from .YachtWeights import yacht_weights
 import math
 from collections import defaultdict
 
-#List of categories, and the name of the logic class associated with it
+# List of categories, and the name of the logic class associated with it
 category_mappings = {
     "Category Ones": "Ones",
     "Category Twos": "Twos",
@@ -41,21 +41,21 @@ category_mappings = {
     "Category 4&5 Full House": "FourAndFiveFullHouse"
 }
 
-#This class adds logic to the apworld.
-#In short, we ran a simulation for every possible combination of dice and rolls you can have, per category.
-#This simulation has a good strategy for locking dice.
-#This gives rise to an approximate discrete distribution per category.
-#We calculate the distribution of the total score.
-#We then pick a correct percentile to reflect the correct score that should be in logic.
-#The score is logic is *much* lower than the actual maximum reachable score.
+# This class adds logic to the apworld.
+# In short, we ran a simulation for every possible combination of dice and rolls you can have, per category.
+# This simulation has a good strategy for locking dice.
+# This gives rise to an approximate discrete distribution per category.
+# We calculate the distribution of the total score.
+# We then pick a correct percentile to reflect the correct score that should be in logic.
+# The score is logic is *much* lower than the actual maximum reachable score.
 
 
 class Category:
     def __init__(self, name, quantity = 1):
         self.name = name
-        self.quantity = quantity #how many times you have the category
+        self.quantity = quantity  # how many times you have the category
 
-    #return mean score of a category
+    # return mean score of a category
     def mean_score(self, num_dice, num_rolls):
         if num_dice == 0 or num_rolls == 0:
             return 0
@@ -66,10 +66,10 @@ class Category:
 
 
 def extract_progression(state, player, options):
-    #method to obtain a list of what items the player has.
-    #this includes categories, dice, rolls and score multiplier etc.
+    # method to obtain a list of what items the player has.
+    # this includes categories, dice, rolls and score multiplier etc.
     
-    if player == "state_is_a_list": #the state variable is just a list with the names of the items
+    if player == "state_is_a_list": # the state variable is just a list with the names of the items
         number_of_dice = (
             state.count("Dice") 
             + state.count("Dice Fragment") // options.number_of_dice_fragments_per_dice.value
@@ -89,7 +89,7 @@ def extract_progression(state, player, options):
         extra_points_in_logic = state.count("1 Point")
         extra_points_in_logic += state.count("10 Points") * 10
         extra_points_in_logic += state.count("100 Points") * 100
-    else: #state is an Archipelago object, so we need state.count(..., player)
+    else: # state is an Archipelago object, so we need state.count(..., player)
         number_of_dice = (
             state.count("Dice", player) 
             + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
@@ -113,23 +113,23 @@ def extract_progression(state, player, options):
     return [categories, number_of_dice, number_of_rerolls, 
             number_of_fixed_mults * 0.1, number_of_step_mults * 0.01, extra_points_in_logic]
     
-#We will store the results of this function as it is called often for the same parameters.
+# We will store the results of this function as it is called often for the same parameters.
 yachtdice_cache = {}
 
-#Function that returns the feasible score in logic based on items obtained.
+# Function that returns the feasible score in logic based on items obtained.
 def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, diff):
     tup = tuple([tuple(sorted([c.name+str(c.quantity) for c in categories])), 
                  num_dice, num_rolls, fixed_mult, step_mult, diff]) #identifier
     
-    #if already computed, return the result
+    # if already computed, return the result
     if tup in yachtdice_cache.keys():
         return yachtdice_cache[tup]
     
-    #sort categories because for the step multiplier, you will want low-scoring categories first
+    # sort categories because for the step multiplier, you will want low-scoring categories first
     categories.sort(key=lambda category: category.mean_score(num_dice, num_rolls))
 
-    #function to add two discrete distribution.
-    #defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
+    # function to add two discrete distribution.
+    # defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
     def add_distributions(dist1, dist2):
         combined_dist = defaultdict(float)
         for val1, prob1 in dist1.items():
@@ -137,8 +137,8 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
                 combined_dist[val1 + val2] += prob1 * prob2
         return dict(combined_dist)
     
-    #function to take the maximum of "times" i.i.d. dist1.
-    #(I have tried using defaultdict here too but this made it slower.)
+    # function to take the maximum of "times" i.i.d. dist1.
+    # (I have tried using defaultdict here too but this made it slower.)
     def max_dist(dist1, mults):
         new_dist = {0: 1}
         for mult in mults:
@@ -157,7 +157,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
             
         return new_dist
 
-    #Returns percentile value of a distribution.
+    # Returns percentile value of a distribution.
     def percentile_distribution(dist, percentile):
         sorted_values = sorted(dist.keys())
         cumulative_prob = 0
@@ -172,13 +172,13 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         # Return the first value if percentile is lower than all probabilities
         return prev_val if prev_val is not None else sorted_values[0]  
             
-    #parameters for logic.
-    #perc_return is, per difficulty, the percentages of total score it returns (it averages out the values)
-    #diff_divide determines how many shots the logic gets per category. Lower = more shots.
+    # parameters for logic.
+    # perc_return is, per difficulty, the percentages of total score it returns (it averages out the values)
+    # diff_divide determines how many shots the logic gets per category. Lower = more shots.
     perc_return = [[0], [0.1, 0.5], [0.3, 0.7], [0.55, 0.85], [0.85, 0.95]][diff]
     diff_divide = [0, 9, 7, 3, 2][diff]
 
-    #calculate total distribution
+    # calculate total distribution
     total_dist = {0: 1}
     for j in range(len(categories)):
         if num_dice == 0 or num_rolls == 0:
@@ -191,14 +191,14 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
             
         cat_mult = 2 ** (categories[j].quantity-1)
         
-        #for higher difficulties, the simulation gets multiple tries for categories.
+        # for higher difficulties, the simulation gets multiple tries for categories.
         max_tries = j // diff_divide       
         mults = [(1 + fixed_mult + step_mult * ii) * cat_mult for ii in range(max(0,j - max_tries), j+1)]
         dist = max_dist(dist, mults)
         
         total_dist = add_distributions(total_dist, dist)
     
-    #save result into the cache, then return it
+    # save result into the cache, then return it
     outcome = sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return)
     yachtdice_cache[tup] = max(5, math.floor(outcome))
     return yachtdice_cache[tup]

@@ -15,8 +15,9 @@ class GameDifficulty(Choice):
     option_hard = 3
     option_extreme = 4
     default = 2
+
         
-class scoreForLastCheck(Range):
+class ScoreForLastCheck(Range):
     """
     The items in the item pool will always allow you to reach a score of 1000.
     By default, the last check is also at a score of 1000. 
@@ -26,8 +27,9 @@ class scoreForLastCheck(Range):
     range_start = 500
     range_end = 1000
     default = 1000
-    
-class scoreForGoal(Range):
+
+   
+class ScoreForGoal(Range):
     """
     This option determines what score you need to reach to finish the game.
     It cannot be higher than the score for the last check (if it is, it is changed automatically).
@@ -37,7 +39,8 @@ class scoreForGoal(Range):
     range_end = 1000
     default = 777
 
-class minimalNumberOfDiceAndRolls(Choice):
+
+class MinimalNumberOfDiceAndRolls(Choice):
     """
     The minimal number of dice and rolls in the pool.
     These are guaranteed, unlike the later items.
@@ -52,7 +55,8 @@ class minimalNumberOfDiceAndRolls(Choice):
     option_8_dice_and_2_rolls = 6
     default = 2
 
-class numberDiceFragmentsPerDice(Range):
+
+class NumberDiceFragmentsPerDice(Range):
     """
     Dice can be split into fragments, gathering enough will give you an extra dice. 
     You start with one dice, and there will always be one full dice in the pool. 
@@ -63,8 +67,9 @@ class numberDiceFragmentsPerDice(Range):
     range_start = 1
     range_end = 5
     default = 4
-    
-class numberRollFragmentsPerRoll(Range):
+
+
+class NumberRollFragmentsPerRoll(Range):
     """
     Rolls can be split into fragments, gathering enough will give you an extra roll. 
     You start with one roll, and there will always be one full roll in the pool. 
@@ -75,9 +80,9 @@ class numberRollFragmentsPerRoll(Range):
     range_start = 1
     range_end = 5
     default = 4
-    
-    
-class alternativeCategories(Range):
+
+
+class AlternativeCategories(Range):
     """
     There are 16 default categories, but there are also 16 alternative categories.
     These alternative categories can be randomly selected to replace the default categories.
@@ -89,9 +94,9 @@ class alternativeCategories(Range):
     range_start = 0
     range_end = 16
     default = 0    
-    
-    
-class chanceOfDice(Range):
+
+
+class ChanceOfDice(Range):
     """
     The item pool is always filled in such a way that you can reach a score of 1000.
     Extra progression items are added that will help you on your quest.
@@ -103,8 +108,9 @@ class chanceOfDice(Range):
     range_start = 0
     range_end = 100
     default = 5 
-    
-class chanceOfRoll(Range):
+
+
+class ChanceOfRoll(Range):
     """
     With more rolls, you will be able to reach higher scores.
     """
@@ -113,7 +119,8 @@ class chanceOfRoll(Range):
     range_end = 100
     default = 20     
 
-class chanceOfFixedScoreMultiplier(Range):
+
+class ChanceOfFixedScoreMultiplier(Range):
     """
     Getting a Fixed Score Multiplier will boost all future scores by 10%.
     """
@@ -121,8 +128,9 @@ class chanceOfFixedScoreMultiplier(Range):
     range_start = 0
     range_end = 100
     default = 30 
-    
-class chanceOfStepScoreMultiplier(Range):
+
+
+class ChanceOfStepScoreMultiplier(Range):
     """
     The Step Score Multiplier boosts your multiplier after every roll by 1%, and resets on sheet reset.
     So, keep high scoring categories for later to get the most out of them.
@@ -132,8 +140,9 @@ class chanceOfStepScoreMultiplier(Range):
     range_start = 0
     range_end = 100
     default = 0 
-    
-class chanceOfDoubleCategory(Range):
+
+
+class ChanceOfDoubleCategory(Range):
     """
     This option allows categories to appear multiple times.
     Each time you get a category after the first, its score value gets doubled.
@@ -142,8 +151,9 @@ class chanceOfDoubleCategory(Range):
     range_start = 0
     range_end = 100
     default = 50
-    
-class chanceOfPoints(Range):
+
+
+class ChanceOfPoints(Range):
     """
     Getting points gives you... points. You can get 1 point, 10 points, and even 100 points.
     """
@@ -151,8 +161,9 @@ class chanceOfPoints(Range):
     range_start = 0
     range_end = 100
     default = 20    
-    
-class pointsSize(Choice):
+
+
+class PointsSize(Choice):
     """
     If you choose to add points to the item pool, do you prefer many small points, 
     medium-size points, a few larger points, or a mix of them?
@@ -163,8 +174,9 @@ class pointsSize(Choice):
     option_large = 3
     option_mix = 4
     default = 2
-    
-class minimizeExtraItems(Choice):
+
+
+class MinimizeExtraItems(Choice):
     """
     Besides necessary items, Yacht Dice has extra useful/filler items in the item pool.
     It is possible however to decrease the number of extra items in multiplayer games.
@@ -175,8 +187,9 @@ class minimizeExtraItems(Choice):
     option_no_dont = 1
     option_yes_please = 2
     default = 1    
-    
-class addExtraPoints(Choice):
+
+
+class AddExtraPoints(Choice):
     """
     Yacht Dice typically has space for extra items.
     If there is space, would you like bonus points shuffled in the item pool?
@@ -191,8 +204,9 @@ class addExtraPoints(Choice):
     option_sure = 2
     option_never = 3
     default = 2
-      
-class addStoryChapters(Choice):
+
+
+class AddStoryChapters(Choice):
     """
     Yacht Dice typically has space for more items.
     If there is space, would you like story chapters shuffled in the item pool?
@@ -207,8 +221,9 @@ class addStoryChapters(Choice):
     option_sure = 2
     option_never = 3
     default = 3
-    
-class whichStory(Choice):
+
+
+class WhichStory(Choice):
     """
     The most important part of Yacht Dice is the narrative.
     If you choose to 
@@ -225,8 +240,9 @@ class whichStory(Choice):
     option_a_rollin_rhyme_adventure = 6
     option_random_story = -1
     default = -1
-    
-class allowManual(Choice):
+
+
+class AllowManual(Choice):
     """
     Yacht Dice allows players to roll IRL dice.
     By sending "manual" in the chat, an input field appears where you can type your dice rolls.
@@ -237,32 +253,33 @@ class allowManual(Choice):
     option_yes_allow = 1
     option_no_dont_allow = 2
     default = 1
-    
+
+
 @dataclass
 class YachtDiceOptions(PerGameCommonOptions):
-    game_difficulty: gameDifficulty
-    score_for_last_check: scoreForLastCheck
-    score_for_goal: scoreForGoal
+    game_difficulty: GameDifficulty
+    score_for_last_check: ScoreForLastCheck
+    score_for_goal: ScoreForGoal
     
-    minimal_number_of_dice_and_rolls: minimalNumberOfDiceAndRolls
-    number_of_dice_fragments_per_dice: numberDiceFragmentsPerDice
-    number_of_roll_fragments_per_roll: numberRollFragmentsPerRoll
+    minimal_number_of_dice_and_rolls: MinimalNumberOfDiceAndRolls
+    number_of_dice_fragments_per_dice: NumberDiceFragmentsPerDice
+    number_of_roll_fragments_per_roll: NumberRollFragmentsPerRoll
     
-    alternative_categories: alternativeCategories
+    alternative_categories: AlternativeCategories
     
     #the following options determine what extra items are shuffled into the pool:
-    weight_of_dice: chanceOfDice
-    weight_of_roll: chanceOfRoll
-    weight_of_fixed_score_multiplier: chanceOfFixedScoreMultiplier
-    weight_of_step_score_multiplier: chanceOfStepScoreMultiplier
-    weight_of_double_category: chanceOfDoubleCategory
-    weight_of_points: chanceOfPoints
-    points_size: pointsSize
+    weight_of_dice: ChanceOfDice
+    weight_of_roll: ChanceOfRoll
+    weight_of_fixed_score_multiplier: ChanceOfFixedScoreMultiplier
+    weight_of_step_score_multiplier: ChanceOfStepScoreMultiplier
+    weight_of_double_category: ChanceOfDoubleCategory
+    weight_of_points: ChanceOfPoints
+    points_size: PointsSize
     
-    minimize_extra_items: minimizeExtraItems
-    add_bonus_points: addExtraPoints
-    add_story_chapters: addStoryChapters
-    which_story: whichStory
+    minimize_extra_items: MinimizeExtraItems
+    add_bonus_points: AddExtraPoints
+    add_story_chapters: AddStoryChapters
+    which_story: WhichStory
     
-    allow_manual_input: allowManual
+    allow_manual_input: AllowManual
     

@@ -8,10 +8,10 @@ class ItemData(typing.NamedTuple):
 class YachtDiceItem(Item):
     game: str = "Yacht Dice"
 
-#the starting index is chosen semi-randomly to be 16871244000
+# the starting index is chosen semi-randomly to be 16871244000
 
 item_table = {
-    #victory item, always placed manually at goal location
+    # victory item, always placed manually at goal location
     "Victory": ItemData(16871244000-1, ItemClassification.progression),
 
     "Dice": ItemData(16871244000, ItemClassification.progression),
@@ -19,7 +19,6 @@ item_table = {
     "Roll": ItemData(16871244002, ItemClassification.progression),
     "Roll Fragment": ItemData(16871244003, ItemClassification.progression),
     
-    #"Score Multiplier": ItemData(16871244004, ItemClassification.progression), #not used anymore
     "Fixed Score Multiplier": ItemData(16871244005, ItemClassification.progression),
     "Step Score Multiplier": ItemData(16871244006, ItemClassification.progression),
 
@@ -57,21 +56,21 @@ item_table = {
     "Category Five Distinct Dice": ItemData(16871244137, ItemClassification.progression),
     "Category 4&5 Full House": ItemData(16871244138, ItemClassification.progression),
     
-    #filler items
+    # filler items
     "Encouragement": ItemData(16871244200, ItemClassification.filler),
     "Fun Fact": ItemData(16871244201, ItemClassification.filler),
     "Story Chapter": ItemData(16871244202, ItemClassification.filler),
     "Good RNG": ItemData(16871244203, ItemClassification.filler),
     "Bad RNG": ItemData(16871244204, ItemClassification.trap),
-    "Bonus Point": ItemData(16871244205, ItemClassification.useful), #not included in logic
+    "Bonus Point": ItemData(16871244205, ItemClassification.useful),  # not included in logic
     
-    #These points are included in the logic and might be necessary to progress.
+    # These points are included in the logic and might be necessary to progress.
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),
     "100 Points": ItemData(16871244303, ItemClassification.progression)
 }
 
-#item groups for better hinting
+# item groups for better hinting
 item_groups = {
     "Score Multiplier": {
         "Step Score Multiplier",
