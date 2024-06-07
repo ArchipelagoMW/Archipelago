@@ -226,9 +226,8 @@ class AddStoryChapters(Choice):
 class WhichStory(Choice):
     """
     The most important part of Yacht Dice is the narrative.
-    If you choose to 
-    10 story chapters are shuffled into the item pool. 
-    You can read them in the feed on the website.
+    Of course you will need to add story chapters to the item pool.
+    You can read story chapters in the feed on the website.
     Which story would you like to read?
     """
     display_name = "Story"
