@@ -320,6 +320,10 @@ class YachtDiceWorld(World):
         #add precollected items using push_precollected. Items in self.itempool get created in create_items
         for item in self.precollected:
             self.multiworld.push_precollected(self.create_item(item))
+            
+        #make sure one dice and one roll is early, so that you will have 2 dice and 2 rolls soon
+        self.multiworld.early_items[self.player]["Dice"] = 1
+        self.multiworld.early_items[self.player]["Roll"] = 1
 
     def create_items(self):
         self.multiworld.itempool += [self.create_item(name) for name in self.itempool]   
@@ -357,11 +361,6 @@ class YachtDiceWorld(World):
         #set rules per location, and add the rule for beating the game
         set_yacht_rules(self.multiworld, self.player, self.options)
         set_yacht_completion_rules(self.multiworld, self.player)
-        
-    def pre_fill(self):
-        #in the pre_fill, make sure one dice and one roll is early, so that you will have 2 dice and 2 rolls soon
-        self.multiworld.early_items[self.player]["Dice"] = 1
-        self.multiworld.early_items[self.player]["Roll"] = 1
         
     def fill_slot_data(self):
         #make slot data, which consists of yachtdice_data, options, and some other variables.
