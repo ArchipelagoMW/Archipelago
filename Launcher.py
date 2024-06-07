@@ -13,6 +13,7 @@ import argparse
 import itertools
 import logging
 import multiprocessing
+import os
 import platform
 import shlex
 import subprocess
@@ -351,14 +352,21 @@ def check_for_update() -> None:
         latest_files: Dict[str, Any] = {
             asset["name"]: asset["browser_download_url"] for asset in latest_release
         }
-        linux_names = []
+        linux_name = None
         windows_name = None
         for name in latest_files:
-            if name.endswith(".AppImage") or name.endswith(".tar.gz"):
-                linux_names.append(name)
+            if name.endswith(".AppImage") and "APPIMAGE" in os.environ:
+                linux_name = name
+            elif name.endswith(".tar.gz") and linux_name is None:
+                linux_name = name
             elif name.endswith(".exe") and windows_name is None:
                 windows_name = name
-    
+
+        if is_windows:
+            to_download = windows_name
+        else:
+            to_download = linux_name
+
         def download_selection(asset: str) -> None:
             import os
             nonlocal latest_files
@@ -373,18 +381,14 @@ def check_for_update() -> None:
                 f.write(content)
             if is_windows:
                 launch([asset], True)
+            else:
+                exe = which('sensible-editor') or which('gedit') or \
+                      which('xdg-open') or which('gnome-open') or which('kde-open')
+                subprocess.Popen([exe, os.getcwd()])
+                
             messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
 
-        if is_windows:
-            download_selection(windows_name)
-            return
-
-        ButtonsPrompt(
-            "Select File",
-            "Select file to download and install.",
-            download_selection,
-            *linux_names
-        ).open()
+        download_selection(to_download)
 
     ButtonsPrompt(
         "Update Available",
