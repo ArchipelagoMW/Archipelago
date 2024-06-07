@@ -1,3 +1,4 @@
+import math
 import os
 import logging
 import sys
@@ -407,15 +408,26 @@ class ButtonsPrompt(Popup):
         layout = BoxLayout(orientation="vertical")
         label = MessageBoxLabel(text=text)
         layout.add_widget(label)
-        button_layout = BoxLayout(orientation="horizontal", size_hint_y=0.4)
 
         def on_release(button: Button, *args):
             self.dismiss()
             response(button.text)
 
-        for prompt in prompts:
-            button_layout.add_widget(Button(text=prompt, on_release=on_release))
-        layout.add_widget(button_layout)
+        num_rows = math.ceil(len(prompts) / 2)
+        if len(prompts) % 2 == 0:
+            button_rows = [(prompts[i], prompts[i+1]) for i in range(0, len(prompts), 2)]
+        else:
+            button_rows = [(prompts[i], prompts[i + 1]) for i in range(0, len(prompts) - 1, 2)]
+            button_rows.append((prompts[-1],))
+        for i in range(num_rows):
+            button_layout = BoxLayout(orientation="horizontal", size_hint_y=0.4)
+            for prompt in button_rows[i]:
+                button = Button(text=prompt, on_release=on_release)
+                button.text_size = button.width + 45, button.height
+                button.halign = "center"
+                button.valign = "middle"
+                button_layout.add_widget(button)
+            layout.add_widget(button_layout)
 
         separator_color = [47 / 255., 167 / 255., 212 / 255, 1.]
         super().__init__(title=title, content=layout, size_hint=(0.4, 0.4), width=max(100, int(label.width) + 40),
