@@ -165,7 +165,7 @@ def get_number_required_items(bundle_price_option: BundlePrice, default_required
     if bundle_price_option == BundlePrice.option_maximum:
         return 8
     number_required = default_required_items + bundle_price_option.value
-    return max(1, number_required)
+    return min(8, max(1, number_required))
 
 
 def get_price_multiplier(bundle_price_option: BundlePrice, is_currency: bool) -> float:
