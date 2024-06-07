@@ -1,7 +1,7 @@
 import copy
 from typing import TYPE_CHECKING
 
-from .data import data as crystal_data, TrainerPokemon
+from .data import data as crystal_data
 from .moves import get_tmhm_compatibility, randomize_learnset
 from .options import RandomizeTypes, RandomizePalettes, RandomizeBaseStats, RandomizeStarters
 from .utils import get_random_filler_item

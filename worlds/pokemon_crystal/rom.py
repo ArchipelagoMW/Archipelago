@@ -1,6 +1,5 @@
 import copy
 import os
-
 from typing import TYPE_CHECKING
 
 from settings import get_settings

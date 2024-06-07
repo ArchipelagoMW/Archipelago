@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, Set, List
-from NetUtils import ClientStatus
 
 import worlds._bizhawk as bizhawk
+from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from .data import BASE_OFFSET, data
 
@@ -171,7 +171,7 @@ class PokemonCrystalClient(BizHawkClient):
 
                         if flag_id in KEY_ITEM_FLAG_MAP:
                             local_found_key_items[KEY_ITEM_FLAG_MAP[flag_id]] = True
-                    # else:
+                    # else: # TODO: check if item is an overworld itemball
                     #     if location_id in ctx.checked_locations:
                     #         write_byte = byte & (1 << i)
                     #         await bizhawk.write(ctx.bizhawk_ctx, [

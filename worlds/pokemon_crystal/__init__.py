@@ -5,7 +5,7 @@ from typing import List, Union, ClassVar, Dict, Any, Tuple
 
 import settings
 from BaseClasses import Tutorial, ItemClassification
-from Fill import fill_restrictive, FillError
+from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from .client import PokemonCrystalClient
 from .data import PokemonData, TrainerData, BASE_OFFSET, MiscData, TMHMData, BankAddress, data as crystal_data, \
