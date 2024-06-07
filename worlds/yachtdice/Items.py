@@ -11,21 +11,19 @@ class ItemData(typing.NamedTuple):
 class YachtDiceItem(Item):
     game: str = "Yacht Dice"
 
+
 # the starting index is chosen semi-randomly to be 16871244000
 
 
 item_table = {
     # victory item, always placed manually at goal location
     "Victory": ItemData(16871244000 - 1, ItemClassification.progression),
-
     "Dice": ItemData(16871244000, ItemClassification.progression),
     "Dice Fragment": ItemData(16871244001, ItemClassification.progression),
     "Roll": ItemData(16871244002, ItemClassification.progression),
     "Roll Fragment": ItemData(16871244003, ItemClassification.progression),
-
     "Fixed Score Multiplier": ItemData(16871244005, ItemClassification.progression),
     "Step Score Multiplier": ItemData(16871244006, ItemClassification.progression),
-
     "Category Ones": ItemData(16871244103, ItemClassification.progression),
     "Category Twos": ItemData(16871244104, ItemClassification.progression),
     "Category Threes": ItemData(16871244105, ItemClassification.progression),
@@ -42,7 +40,6 @@ item_table = {
     "Category Large Straight": ItemData(16871244116, ItemClassification.progression),
     "Category Full House": ItemData(16871244117, ItemClassification.progression),
     "Category Yacht": ItemData(16871244118, ItemClassification.progression),
-
     "Category Distincts": ItemData(16871244123, ItemClassification.progression),
     "Category Two times Ones": ItemData(16871244124, ItemClassification.progression),
     "Category Half of Sixes": ItemData(16871244125, ItemClassification.progression),
@@ -59,7 +56,6 @@ item_table = {
     "Category 2-1-2 Consecutive": ItemData(16871244136, ItemClassification.progression),
     "Category Five Distinct Dice": ItemData(16871244137, ItemClassification.progression),
     "Category 4&5 Full House": ItemData(16871244138, ItemClassification.progression),
-
     # filler items
     "Encouragement": ItemData(16871244200, ItemClassification.filler),
     "Fun Fact": ItemData(16871244201, ItemClassification.filler),
@@ -67,19 +63,15 @@ item_table = {
     "Good RNG": ItemData(16871244203, ItemClassification.filler),
     "Bad RNG": ItemData(16871244204, ItemClassification.trap),
     "Bonus Point": ItemData(16871244205, ItemClassification.useful),  # not included in logic
-
     # These points are included in the logic and might be necessary to progress.
     "1 Point": ItemData(16871244301, ItemClassification.progression_skip_balancing),
     "10 Points": ItemData(16871244302, ItemClassification.progression),
-    "100 Points": ItemData(16871244303, ItemClassification.progression)
+    "100 Points": ItemData(16871244303, ItemClassification.progression),
 }
 
 # item groups for better hinting
 item_groups = {
-    "Score Multiplier": {
-        "Step Score Multiplier",
-        "Fixed Score Multiplier"
-    },
+    "Score Multiplier": {"Step Score Multiplier", "Fixed Score Multiplier"},
     "Categories": {
         "Category Ones",
         "Category Twos",
@@ -112,6 +104,6 @@ item_groups = {
         "Category Two Pair",
         "Category 2-1-2 Consecutive",
         "Category Five Distinct Dice",
-        "Category 4&5 Full House"
-    }
+        "Category 4&5 Full House",
+    },
 }

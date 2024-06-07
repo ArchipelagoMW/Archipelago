@@ -47,8 +47,8 @@ def ini_locations(goal_score, max_score, num_locs, dif):
     # note that curscore is at most max_score-1
     hiscore = 0
     for i in range(num_locs - 1):
-        perc = (i / num_locs)
-        curscore = int(1 + (perc ** scaling) * (max_score - 2))
+        perc = i / num_locs
+        curscore = int(1 + (perc**scaling) * (max_score - 2))
         if curscore <= hiscore:
             curscore = hiscore + 1
         hiscore = curscore

@@ -11,28 +11,30 @@ from .Rules import dice_simulation, set_yacht_completion_rules, set_yacht_rules
 
 
 class YachtDiceWeb(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up Yacht Dice. This guide covers "
-        "single-player, multiworld, and website.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["Spineraks"]
-    )]
+    tutorials = [
+        Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to setting up Yacht Dice. This guide covers " "single-player, multiworld, and website.",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["Spineraks"],
+        )
+    ]
 
     option_groups = yd_option_groups
 
 
 class YachtDiceWorld(World):
     """
-    Yacht Dice is a straightforward game, custom-made for Archipelago, 
-    where you cast your dice to chart a course for high scores, 
-    unlocking valuable treasures along the way. 
-    Discover more dice, extra rolls, multipliers, 
-    and unlockable categories to navigate the depths of the game. 
+    Yacht Dice is a straightforward game, custom-made for Archipelago,
+    where you cast your dice to chart a course for high scores,
+    unlocking valuable treasures along the way.
+    Discover more dice, extra rolls, multipliers,
+    and unlockable categories to navigate the depths of the game.
     Roll your way to victory by reaching the target score!
     """
+
     game: str = "Yacht Dice"
     options_dataclass = YachtDiceOptions
 
@@ -103,7 +105,7 @@ class YachtDiceWorld(World):
             ["Category Small Straight", "Category Two Pair"],
             ["Category Large Straight", "Category 2-1-2 Consecutive"],
             ["Category Full House", "Category Five Distinct Dice"],
-            ["Category Yacht", "Category 4&5 Full House"]
+            ["Category Yacht", "Category 4&5 Full House"],
         ]
 
         # categories used in this game.
@@ -159,7 +161,7 @@ class YachtDiceWorld(World):
             self.options.weight_of_fixed_score_multiplier.value,
             self.options.weight_of_step_score_multiplier.value,
             self.options.weight_of_double_category.value,
-            self.options.weight_of_points.value
+            self.options.weight_of_points.value,
         ]
 
         # if the player wants extra rolls or dice, fill the pool with fragments until close to an extra roll/dice
@@ -209,13 +211,13 @@ class YachtDiceWorld(World):
                     self.itempool += ["Dice"]
                 else:
                     self.itempool += ["Dice Fragment"]
-                weights[0] /= (1 + frags_per_dice)
+                weights[0] /= 1 + frags_per_dice
             elif which_item_to_add == 1:
                 if frags_per_roll == 1:
                     self.itempool += ["Roll"]
                 else:
                     self.itempool += ["Roll Fragment"]
-                weights[1] /= (1 + frags_per_roll)
+                weights[1] /= 1 + frags_per_roll
             elif which_item_to_add == 2:
                 self.itempool += ["Fixed Score Multiplier"]
                 weights[2] /= 1.05
@@ -310,16 +312,16 @@ class YachtDiceWorld(World):
         p = 1.1 - 0.25 * self.options.game_difficulty.value
         already_items = len(self.itempool) + self.extra_plando_items + 1
         self.itempool += self.multiworld.random.choices(
-            ["Good RNG", "Bad RNG"],
-            weights=[p, 1 - p],
-            k=self.number_of_locations - already_items
+            ["Good RNG", "Bad RNG"], weights=[p, 1 - p], k=self.number_of_locations - already_items
         )
 
         # we are done adding items. Now because of the last step, number of items should be number of locations
         already_items = len(self.itempool) + self.extra_plando_items + 1
         if already_items != self.number_of_locations:
-            raise Exception(f"[Yacht Dice] Number in self.itempool is not number of locations "
-                            f"{already_items} {self.number_of_locations}.")
+            raise Exception(
+                f"[Yacht Dice] Number in self.itempool is not number of locations "
+                f"{already_items} {self.number_of_locations}."
+            )
 
         # add precollected items using push_precollected. Items in self.itempool get created in create_items
         for item in self.precollected:
@@ -334,16 +336,20 @@ class YachtDiceWorld(World):
 
     def create_regions(self):
         # call the ini_locations function, that generates locations based on the inputs.
-        location_table, goal_index = ini_locations(self.goal_score, self.max_score, self.number_of_locations,
-                                                   self.options.game_difficulty.value)
+        location_table, goal_index = ini_locations(
+            self.goal_score, self.max_score, self.number_of_locations, self.options.game_difficulty.value
+        )
 
         # simple menu-board construction
         menu = Region("Menu", self.player, self.multiworld)
         board = Region("Board", self.player, self.multiworld)
 
         # add locations to board, one for every location in the location_table
-        board.locations = [YachtDiceLocation(self.player, loc_name, loc_data.score, loc_data.id, board)
-                           for loc_name, loc_data in location_table.items() if loc_data.region == board.name]
+        board.locations = [
+            YachtDiceLocation(self.player, loc_name, loc_data.score, loc_data.id, board)
+            for loc_name, loc_data in location_table.items()
+            if loc_data.region == board.name
+        ]
 
         # which index of all locations should have the Victory item.
 
@@ -370,25 +376,25 @@ class YachtDiceWorld(World):
         # make slot data, which consists of yachtdice_data, options, and some other variables.
         yacht_dice_data = self._get_yachtdice_data()
         yacht_dice_options = self.options.as_dict(
-                "game_difficulty",
-                "score_for_last_check",
-                "score_for_goal",
-                "minimal_number_of_dice_and_rolls",
-                "number_of_dice_fragments_per_dice",
-                "number_of_roll_fragments_per_roll",
-                "alternative_categories",
-                "weight_of_dice",
-                "weight_of_roll",
-                "weight_of_fixed_score_multiplier",
-                "weight_of_step_score_multiplier",
-                "weight_of_double_category",
-                "weight_of_points",
-                "points_size",
-                "minimize_extra_items",
-                "add_bonus_points",
-                "add_story_chapters",
-                "which_story",
-                "allow_manual_input"
+            "game_difficulty",
+            "score_for_last_check",
+            "score_for_goal",
+            "minimal_number_of_dice_and_rolls",
+            "number_of_dice_fragments_per_dice",
+            "number_of_roll_fragments_per_roll",
+            "alternative_categories",
+            "weight_of_dice",
+            "weight_of_roll",
+            "weight_of_fixed_score_multiplier",
+            "weight_of_step_score_multiplier",
+            "weight_of_double_category",
+            "weight_of_points",
+            "points_size",
+            "minimize_extra_items",
+            "add_bonus_points",
+            "add_story_chapters",
+            "which_story",
+            "allow_manual_input",
         )
         slot_data = {**yacht_dice_data, **yacht_dice_options}  # combine the two
         slot_data["goal_score"] = self.goal_score

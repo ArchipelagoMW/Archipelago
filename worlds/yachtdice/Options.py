@@ -5,12 +5,13 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range
 
 class GameDifficulty(Choice):
     """
-    Difficulty. This option determines how difficult the scores are to achieve. 
+    Difficulty. This option determines how difficult the scores are to achieve.
     Easy: for beginners. No luck required, just roll the dice and have fun. Lower final goal.
     Medium: intended difficulty. If you play smart, you will finish the game without any trouble.
     Hard: you will need to play smart and be lucky.
     Extreme: really hard mode, which requires many brain wrinkles and insane luck. NOT RECOMMENDED FOR MULTIWORLDS.
     """
+
     display_name = "Game difficulty"
     option_easy = 1
     option_medium = 2
@@ -22,9 +23,10 @@ class GameDifficulty(Choice):
 class ScoreForLastCheck(Range):
     """
     The items in the item pool will always allow you to reach a score of 1000.
-    By default, the last check is also at a score of 1000. 
+    By default, the last check is also at a score of 1000.
     However, you can set the score for the last check to be lower. This will make the game shorter and easier.
     """
+
     display_name = "Score for last check"
     range_start = 500
     range_end = 1000
@@ -36,6 +38,7 @@ class ScoreForGoal(Range):
     This option determines what score you need to reach to finish the game.
     It cannot be higher than the score for the last check (if it is, it is changed automatically).
     """
+
     display_name = "Score for goal"
     range_start = 500
     range_end = 1000
@@ -49,6 +52,7 @@ class MinimalNumberOfDiceAndRolls(Choice):
     You can never get more than 8 dice and 5 rolls.
     You start with one dice and one roll.
     """
+
     display_name = "Minimal number of dice and rolls in pool"
     option_5_dice_and_3_rolls = 2
     option_5_dice_and_5_rolls = 3
@@ -60,11 +64,12 @@ class MinimalNumberOfDiceAndRolls(Choice):
 
 class NumberDiceFragmentsPerDice(Range):
     """
-    Dice can be split into fragments, gathering enough will give you an extra dice. 
-    You start with one dice, and there will always be one full dice in the pool. 
-    The other dice are split into fragments, according to this option. 
+    Dice can be split into fragments, gathering enough will give you an extra dice.
+    You start with one dice, and there will always be one full dice in the pool.
+    The other dice are split into fragments, according to this option.
     Setting this to 1 fragment per dice just puts "Dice" objects in the pool.
     """
+
     display_name = "Number of dice fragments per dice"
     range_start = 1
     range_end = 5
@@ -73,11 +78,12 @@ class NumberDiceFragmentsPerDice(Range):
 
 class NumberRollFragmentsPerRoll(Range):
     """
-    Rolls can be split into fragments, gathering enough will give you an extra roll. 
-    You start with one roll, and there will always be one full roll in the pool. 
+    Rolls can be split into fragments, gathering enough will give you an extra roll.
+    You start with one roll, and there will always be one full roll in the pool.
     The other three rolls are split into fragments, according to this option.
     Setting this to 1 fragment per roll just puts "Roll" objects in the pool.
     """
+
     display_name = "Number of roll fragments per roll"
     range_start = 1
     range_end = 5
@@ -92,6 +98,7 @@ class AlternativeCategories(Range):
     In the game, you can hover over categories to check what they do.
     How many alternative categories would you like to see in your game?
     """
+
     display_name = "Number of alternative categories"
     range_start = 0
     range_end = 16
@@ -103,9 +110,10 @@ class ChanceOfDice(Range):
     The item pool is always filled in such a way that you can reach a score of 1000.
     Extra progression items are added that will help you on your quest.
     You can set the weight for each extra progressive item in the following options.
-    
+
     Of course, more dice = more points!
     """
+
     display_name = "Weight of adding Dice"
     range_start = 0
     range_end = 100
@@ -116,6 +124,7 @@ class ChanceOfRoll(Range):
     """
     With more rolls, you will be able to reach higher scores.
     """
+
     display_name = "Weight of adding Roll"
     range_start = 0
     range_end = 100
@@ -126,6 +135,7 @@ class ChanceOfFixedScoreMultiplier(Range):
     """
     Getting a Fixed Score Multiplier will boost all future scores by 10%.
     """
+
     display_name = "Weight of adding Fixed Score Multiplier"
     range_start = 0
     range_end = 100
@@ -138,6 +148,7 @@ class ChanceOfStepScoreMultiplier(Range):
     So, keep high scoring categories for later to get the most out of them.
     By default, this item is not included. It is fun however, you just need to know the above strategy.
     """
+
     display_name = "Weight of adding Step Score Multiplier"
     range_start = 0
     range_end = 100
@@ -149,6 +160,7 @@ class ChanceOfDoubleCategory(Range):
     This option allows categories to appear multiple times.
     Each time you get a category after the first, its score value gets doubled.
     """
+
     display_name = "Weight of adding Category copy"
     range_start = 0
     range_end = 100
@@ -159,6 +171,7 @@ class ChanceOfPoints(Range):
     """
     Getting points gives you... points. You can get 1 point, 10 points, and even 100 points.
     """
+
     display_name = "Weight of adding Points"
     range_start = 0
     range_end = 100
@@ -167,9 +180,10 @@ class ChanceOfPoints(Range):
 
 class PointsSize(Choice):
     """
-    If you choose to add points to the item pool, do you prefer many small points, 
+    If you choose to add points to the item pool, do you prefer many small points,
     medium-size points, a few larger points, or a mix of them?
     """
+
     display_name = "Size of points"
     option_small = 1
     option_medium = 2
@@ -182,9 +196,10 @@ class MinimizeExtraItems(Choice):
     """
     Besides necessary items, Yacht Dice has extra useful/filler items in the item pool.
     It is possible however to decrease the number of extra items in multiplayer games.
-    Do you want to reduce the number of extra items? 
+    Do you want to reduce the number of extra items?
     (this option only does something in multiplayer games)
     """
+
     display_name = "Minimize extra items"
     option_no_dont = 1
     option_yes_please = 2
@@ -196,11 +211,12 @@ class AddExtraPoints(Choice):
     Yacht Dice typically has space for extra items.
     If there is space, would you like bonus points shuffled in the item pool?
     They make the game a little bit easier, as they are not considered in the logic.
-    
+
     all_of_it: fill all locations with extra points
     sure: put some bonus points in
     never: do not put any bonus points
     """
+
     display_name = "Extra bonus in the pool"
     option_all_of_it = 1
     option_sure = 2
@@ -213,11 +229,12 @@ class AddStoryChapters(Choice):
     Yacht Dice typically has space for more items.
     If there is space, would you like story chapters shuffled in the item pool?
     Note: if you have extra points on "all_of_it", there will not be story chapters.
-    
+
     all_of_it: fill all locations with story chapters
     sure: if there is space left, put in 10 story chapters.
     never: do not put any story chapters in, I do not like reading (but I am glad you are reading THIS!)
     """
+
     display_name = "Extra story chapters in the pool"
     option_all_of_it = 1
     option_sure = 2
@@ -232,6 +249,7 @@ class WhichStory(Choice):
     You can read story chapters in the feed on the website.
     Which story would you like to read?
     """
+
     display_name = "Story"
     option_the_quest_of_the_dice_warrior = 1
     option_the_tragedy_of_fortunas_gambit = 2
@@ -250,6 +268,7 @@ class AllowManual(Choice):
     Of course, we cannot check anymore if the player is playing fair.
     Do you want to allow manual input of rolls?
     """
+
     display_name = "Allow manual inputs"
     option_yes_allow = 1
     option_no_dont_allow = 2
@@ -286,12 +305,17 @@ class YachtDiceOptions(PerGameCommonOptions):
 
 
 yd_option_groups = [
-    OptionGroup("Extra progression items", [
-        ChanceOfDice, ChanceOfRoll, ChanceOfFixedScoreMultiplier, ChanceOfStepScoreMultiplier,
-        ChanceOfDoubleCategory, ChanceOfPoints, PointsSize
-    ]),
-
-    OptionGroup("Other items", [
-        MinimizeExtraItems, AddExtraPoints, AddStoryChapters, WhichStory
-    ])
+    OptionGroup(
+        "Extra progression items",
+        [
+            ChanceOfDice,
+            ChanceOfRoll,
+            ChanceOfFixedScoreMultiplier,
+            ChanceOfStepScoreMultiplier,
+            ChanceOfDoubleCategory,
+            ChanceOfPoints,
+            PointsSize,
+        ],
+    ),
+    OptionGroup("Other items", [MinimizeExtraItems, AddExtraPoints, AddStoryChapters, WhichStory]),
 ]
