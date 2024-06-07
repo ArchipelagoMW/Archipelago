@@ -14,7 +14,7 @@ class YachtDiceWeb(WebWorld):
     tutorials = [
         Tutorial(
             "Multiworld Setup Guide",
-            "A guide to setting up Yacht Dice. This guide covers " "single-player, multiworld, and website.",
+            "A guide to setting up Yacht Dice. This guide covers single-player, multiworld, and website.",
             "English",
             "setup_en.md",
             "setup/en",
@@ -143,10 +143,10 @@ class YachtDiceWorld(World):
         # Yacht Dice needs extra filler items so it doesn't get stuck in generation.
         # For now, we calculate the number of extra items we'll need later.
         if self.options.minimize_extra_items.value:
-            extraPercentage = max(0.1, 0.8 - self.multiworld.players / 10)
+            extra_percentage = max(0.1, 0.8 - self.multiworld.players / 10)
         else:
-            extraPercentage = 0.7
-        extra_locations_needed = max(10, math.ceil(already_items * extraPercentage))
+            extra_percentage = 0.7
+        extra_locations_needed = max(10, math.ceil(already_items * extra_percentage))
 
         # max score is the value of the last check. Goal score is the score needed to 'finish' the game
         self.max_score = self.options.score_for_last_check.value

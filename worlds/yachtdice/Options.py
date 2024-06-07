@@ -212,9 +212,9 @@ class AddExtraPoints(Choice):
     If there is space, would you like bonus points shuffled in the item pool?
     They make the game a little bit easier, as they are not considered in the logic.
 
-    all_of_it: fill all locations with extra points
-    sure: put some bonus points in
-    never: do not put any bonus points
+    All Of It: fill all locations with extra points
+    Sure: put some bonus points in
+    Never: do not put any bonus points
     """
 
     display_name = "Extra bonus in the pool"
@@ -230,9 +230,9 @@ class AddStoryChapters(Choice):
     If there is space, would you like story chapters shuffled in the item pool?
     Note: if you have extra points on "all_of_it", there will not be story chapters.
 
-    all_of_it: fill all locations with story chapters
-    sure: if there is space left, put in 10 story chapters.
-    never: do not put any story chapters in, I do not like reading (but I am glad you are reading THIS!)
+    All Of It: fill all locations with story chapters
+    Sure: if there is space left, put in 10 story chapters.
+    Never: do not put any story chapters in, I do not like reading (but I am glad you are reading THIS!)
     """
 
     display_name = "Extra story chapters in the pool"

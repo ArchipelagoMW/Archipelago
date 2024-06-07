@@ -244,10 +244,10 @@ def dice_simulation(state, player, options):
 
 # Sets rules on entrances and advancements that are always applied
 def set_yacht_rules(world: MultiWorld, player: int, options):
-    for l in world.get_locations(player):
+    for location in world.get_locations(player):
         set_rule(
-            l,
-            lambda state, curscore=l.yacht_dice_score, player=player: dice_simulation(state, player, options)
+            location,
+            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation(state, player, options)
             >= curscore,
         )
 
