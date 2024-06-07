@@ -5,7 +5,7 @@ from .Items import YachtDiceItem, item_table, item_groups
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import YachtDiceOptions
 from .Rules import set_yacht_rules, set_yacht_completion_rules, dice_simulation
-from world.AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 
 class YachtDiceWeb(WebWorld):
