@@ -1,6 +1,7 @@
 import math
 from collections import defaultdict
 
+from typing import List
 from BaseClasses import MultiWorld
 
 from worlds.generic.Rules import set_rule
@@ -67,44 +68,39 @@ class Category:
         return mean_score * self.quantity
 
 
+
+class ListState:
+    def __init__(self, state: List[str]):
+        self.state = state
+
+    def count(self, item: str, player: str = None) -> int:
+        return self.state.count(item)
+
+    
 def extract_progression(state, player, options):
     # method to obtain a list of what items the player has.
     # this includes categories, dice, rolls and score multiplier etc.
+    # First, we convert the state if it's a list, so we can use state.count(item, player)
+    if isinstance(state, list):
+        state = ListState(state=state)
 
-    if player == "state_is_a_list":  # the state variable is just a list with the names of the items
-        number_of_dice = (
-            state.count("Dice") + state.count("Dice Fragment") // options.number_of_dice_fragments_per_dice.value
-        )
-        number_of_rerolls = (
-            state.count("Roll") + state.count("Roll Fragment") // options.number_of_roll_fragments_per_roll.value
-        )
-        number_of_fixed_mults = state.count("Fixed Score Multiplier")
-        number_of_step_mults = state.count("Step Score Multiplier")
-        categories = []
-        for category_name, category_value in category_mappings.items():
-            if state.count(category_name) >= 1:
-                categories += [Category(category_value, state.count(category_name))]
-        extra_points_in_logic = state.count("1 Point")
-        extra_points_in_logic += state.count("10 Points") * 10
-        extra_points_in_logic += state.count("100 Points") * 100
-    else:  # state is an Archipelago object, so we need state.count(..., player)
-        number_of_dice = (
-            state.count("Dice", player)
-            + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
-        )
-        number_of_rerolls = (
-            state.count("Roll", player)
-            + state.count("Roll Fragment", player) // options.number_of_roll_fragments_per_roll.value
-        )
-        number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
-        number_of_step_mults = state.count("Step Score Multiplier", player)
-        categories = []
-        for category_name, category_value in category_mappings.items():
-            if state.count(category_name, player) >= 1:
-                categories += [Category(category_value, state.count(category_name, player))]
-        extra_points_in_logic = state.count("1 Point", player)
-        extra_points_in_logic += state.count("10 Points", player) * 10
-        extra_points_in_logic += state.count("100 Points", player) * 100
+    number_of_dice = (
+        state.count("Dice", player)
+        + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
+    )
+    number_of_rerolls = (
+        state.count("Roll", player)
+        + state.count("Roll Fragment", player) // options.number_of_roll_fragments_per_roll.value
+    )
+    number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
+    number_of_step_mults = state.count("Step Score Multiplier", player)
+    categories = []
+    for category_name, category_value in category_mappings.items():
+        if state.count(category_name, player) >= 1:
+            categories += [Category(category_value, state.count(category_name, player))]
+    extra_points_in_logic = state.count("1 Point", player)
+    extra_points_in_logic += state.count("10 Points", player) * 10
+    extra_points_in_logic += state.count("100 Points", player) * 100
 
     return [
         categories,
@@ -220,6 +216,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
 # Returns the feasible score that one can reach with the current state, options and difficulty.
 def dice_simulation(state, player, options):
+    # if the player is called "state_is_a_list", we are filling the itempool and want to calculate anyways.
     if player == "state_is_a_list":
         categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
         return (
