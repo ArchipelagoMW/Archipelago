@@ -63,12 +63,13 @@ def process_multidata(compressed_multidata, files={}):
                 game_data = games_package_schema.validate(game_data)
                 game_data = {key: value for key, value in sorted(game_data.items())}
                 game_data["checksum"] = data_package_checksum(game_data)
-                game_data_package = GameDataPackage(checksum=game_data["checksum"],
-                                                    data=pickle.dumps(game_data))
                 if original_checksum != game_data["checksum"]:
                     raise Exception(f"Original checksum {original_checksum} != "
                                     f"calculated checksum {game_data['checksum']} "
                                     f"for game {game}.")
+
+                game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                    data=pickle.dumps(game_data))
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"],
@@ -192,6 +193,8 @@ def uploads():
                             res = upload_zip_to_db(zfile)
                         except VersionException:
                             flash(f"Could not load multidata. Wrong Version detected.")
+                        except Exception as e:
+                            flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                         else:
                             if res is str:
                                 return res
