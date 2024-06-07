@@ -54,11 +54,19 @@ class LearnsetData(NamedTuple):
     move: str
 
 
+class EvolutionData(NamedTuple):
+    evo_type: str
+    level: Union[int, None]
+    condition: Union[str, None]
+    pokemon: str
+    length: int
+
+
 class PokemonData(NamedTuple):
     id: int
     base_stats: List[int]
     types: List[str]
-    evolutions: List[List[str]]
+    evolutions: List[EvolutionData]
     learnset: List[LearnsetData]
     tm_hm: List[str]
     is_base: bool
@@ -82,9 +90,16 @@ class TMHMData(NamedTuple):
     move_id: int
 
 
+class TrainerPokemon(NamedTuple):
+    level: int
+    pokemon: str
+    item: Union[str, None]
+    moves: List[str]
+
+
 class TrainerData(NamedTuple):
     trainer_type: str
-    pokemon: List[List[str]]
+    pokemon: List[TrainerPokemon]
     name_length: int
 
 
@@ -299,11 +314,19 @@ def _init() -> None:
 
     data.pokemon = {}
     for pokemon_name, pokemon_data in data_json["pokemon"].items():
+        evolutions = []
+        for evo in pokemon_data["evolutions"]:
+            if len(evo) == 4:
+                evolutions.append(EvolutionData(evo[0], int(evo[1]), evo[2], evo[3], len(evo)))
+            elif evo[0] == "EVOLVE_LEVEL":
+                evolutions.append(EvolutionData(evo[0], int(evo[1]), None, evo[2], len(evo)))
+            else:
+                evolutions.append(EvolutionData(evo[0], None, evo[1], evo[2], len(evo)))
         data.pokemon[pokemon_name] = PokemonData(
             pokemon_data["id"],
             pokemon_data["base_stats"],
             pokemon_data["types"],
-            pokemon_data["evolutions"],
+            evolutions,
             [LearnsetData(move[0], move[1]) for move in pokemon_data["learnset"]],
             pokemon_data["tm_hm"],
             pokemon_data["is_base"],
@@ -324,9 +347,21 @@ def _init() -> None:
 
     data.trainers = {}
     for trainer_name, trainer_attributes in trainer_data.items():
+        trainer_type = trainer_attributes["trainer_type"]
+        pokemon = []
+        for poke in trainer_attributes["pokemon"]:
+            if trainer_type == "TRAINERTYPE_NORMAL":
+                pokemon.append(TrainerPokemon(int(poke[0]), poke[1], None, []))
+            elif trainer_type == "TRAINERTYPE_ITEM":
+                pokemon.append(TrainerPokemon(int(poke[0]), poke[1], poke[2], []))
+            elif trainer_type == "TRAINERTYPE_MOVES":
+                pokemon.append(TrainerPokemon(int(poke[0]), poke[1], None, poke[2:]))
+            else:
+                pokemon.append(TrainerPokemon(int(poke[0]), poke[1], poke[2], poke[3:]))
+
         data.trainers[trainer_name] = TrainerData(
-            trainer_attributes["trainer_type"],
-            trainer_attributes["pokemon"],
+            trainer_type,
+            pokemon,
             trainer_attributes["name_length"]
         )
 

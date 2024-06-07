@@ -23,33 +23,23 @@ def randomize_trainers(world: PokemonCrystalWorld):
     for trainer_name, trainer_data in world.generated_trainers.items():
         new_party = trainer_data.pokemon
         for i, pkmn_data in enumerate(trainer_data.pokemon):
-            new_pkmn_data = pkmn_data
-
+            new_pokemon = pkmn_data.pokemon
+            new_item = pkmn_data.item
+            new_moves = pkmn_data.moves
             if not is_rival_starter_pokemon(trainer_name, trainer_data, i):
                 match_types = [None, None]
                 if world.options.randomize_trainer_parties == RandomizeTrainerParties.option_match_types:
-                    match_types = crystal_data.pokemon[new_pkmn_data[1]].types
+                    match_types = crystal_data.pokemon[pkmn_data.pokemon].types
                 if "LASS_3" in trainer_name:
-                    # easter egg
                     new_pokemon = get_random_nezumi(world.random)
                 else:
                     new_pokemon = get_random_pokemon(world, match_types)
-                new_pkmn_data[1] = new_pokemon
-            if trainer_data.trainer_type in ["TRAINERTYPE_ITEM", "TRAINERTYPE_ITEM_MOVES"]:
+            if pkmn_data.item is not None:
                 # If this trainer has items, add an item
-                new_pkmn_data[2] = get_random_filler_item(world.random)
-            if trainer_data.trainer_type not in ["TRAINERTYPE_MOVES", "TRAINERTYPE_ITEM_MOVES"]:
-                # If this trainer doesn't have a predefined moveset, skip adding moves
-                continue
-            # we need to increase the offset by 1 to account for the item
-            move_offset = 3 if trainer_data.trainer_type == "TRAINERTYPE_ITEM_MOVES" else 2
-            while move_offset < len(new_pkmn_data):
-                if (new_pkmn_data[move_offset] != "NO_MOVE"
-                        or world.options.randomize_learnsets == RandomizeLearnsets.option_start_with_four_moves):
-                    level = int(new_pkmn_data[0])
-                    new_pkmn_data[move_offset] = get_random_move_from_learnset(world, new_pkmn_data[1], level)
-                move_offset += 1
-            new_party[i] = new_pkmn_data
+                new_item = get_random_filler_item(world.random)
+            if len(pkmn_data.moves):
+                new_moves = randomize_trainer_pokemon_moves(world, pkmn_data)
+            new_party[i] = pkmn_data._replace(pokemon=new_pokemon, item=new_item, moves=new_moves)
         world.generated_trainers[trainer_name] = world.generated_trainers[trainer_name]._replace(pokemon=new_party)
 
 
@@ -62,15 +52,15 @@ def vanilla_trainer_movesets(world: PokemonCrystalWorld):
             continue
         new_party = trainer_data.pokemon
         for i, pkmn_data in enumerate(trainer_data.pokemon):
-            new_pkmn_data = pkmn_data
-            # we need to increase the offset by 1 to account for the item
-            move_offset = 3 if trainer_data.trainer_type == "TRAINERTYPE_ITEM_MOVES" else 2
-            while move_offset < len(new_pkmn_data):
-                # skip empty move slots, unless start with four moves is selected
-                if (new_pkmn_data[move_offset] != "NO_MOVE"
-                        or world.options.randomize_learnsets == RandomizeLearnsets.option_start_with_four_moves):
-                    level = int(new_pkmn_data[0])
-                    new_pkmn_data[move_offset] = get_random_move_from_learnset(world, new_pkmn_data[1], level)
-                move_offset += 1
-            new_party[i] = new_pkmn_data
+            new_moves = randomize_trainer_pokemon_moves(world, pkmn_data)
+            new_party[i] = pkmn_data._replace(moves=new_moves)
         world.generated_trainers[trainer_name] = world.generated_trainers[trainer_name]._replace(pokemon=new_party)
+
+
+def randomize_trainer_pokemon_moves(world, pkmn_data):
+    new_moves = pkmn_data.moves
+    for i, move in enumerate(pkmn_data.moves):
+        if move != "NO_MOVE" or world.options.randomize_learnsets == RandomizeLearnsets.option_start_with_four_moves:
+            new_move = get_random_move_from_learnset(world, pkmn_data.pokemon, pkmn_data.level)
+            new_moves[i] = new_move
+    return new_moves

@@ -187,7 +187,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
 
         if world.options.randomize_learnsets.value:
             address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
-            address = address + sum([len(evo) for evo in pkmn_data.evolutions]) + 1
+            # skip the evolutions and padding byte
+            address = address + sum([evo.length for evo in pkmn_data.evolutions]) + 1
             for move in pkmn_data.learnset:
                 move_id = data.moves[move.move].id
                 write_bytes(patch, [move.level, move_id], address)
@@ -209,17 +210,16 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
         address = data.rom_addresses["AP_TrainerParty_" + trainer_name]
         address += trainer_data.name_length + 1  # skip name and type
         for pokemon in trainer_data.pokemon:
-            pokemon_data = [pokemon[0], data.pokemon[pokemon[1]].id]
-            if trainer_data.trainer_type in ["TRAINERTYPE_ITEM_MOVES", "TRAINERTYPE_ITEM"]:
-                item_id = item_const_name_to_id(pokemon[2])
+            pokemon_data = [pokemon.level, data.pokemon[pokemon.pokemon].id]
+            if pokemon.item is not None:
+                item_id = world.item_name_to_id[pokemon.item] - BASE_OFFSET
                 pokemon_data.append(item_id)
-            if trainer_data.trainer_type in ["TRAINERTYPE_ITEM_MOVES", "TRAINERTYPE_MOVES"]:
-                for i in range(-4, 0):
-                    if pokemon[i] != "NO_MOVE":
-                        move_id = data.moves[pokemon[i]].id
-                        pokemon_data.append(move_id)
+            for move in pokemon.moves:
+                if move != "NO_MOVE":
+                    move_id = data.moves[move].id
+                    pokemon_data.append(move_id)
             write_bytes(patch, pokemon_data, address)
-            address += len(pokemon)
+            address += len(pokemon_data)
 
     if world.options.randomize_tm_moves.value:
         tm_moves = [tm_data.move_id for _name, tm_data in world.generated_tms.items()]

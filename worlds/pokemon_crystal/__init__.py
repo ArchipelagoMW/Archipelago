@@ -137,6 +137,7 @@ class PokemonCrystalWorld(World):
         if self.options.johto_only and total_badges > 8:
             kanto_badges = [item_id + BASE_OFFSET for item_id, item_data in crystal_data.items.items() if
                             "KantoBadge" in item_data.tags]
+            self.random.shuffle(kanto_badges)
             add_badges = kanto_badges[:total_badges - 8]
 
         traps_pool = []

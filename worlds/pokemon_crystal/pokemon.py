@@ -1,7 +1,7 @@
 import copy
 from typing import TYPE_CHECKING
 
-from .data import data as crystal_data
+from .data import data as crystal_data, TrainerPokemon
 from .moves import get_tmhm_compatibility, randomize_learnset
 from .options import RandomizeTypes, RandomizePalettes, RandomizeBaseStats, RandomizeStarters
 from .utils import get_random_filler_item
@@ -24,12 +24,10 @@ def randomize_pokemon(world: PokemonCrystalWorld):
                         and pkmn_name not in ["FLAREON", "JOLTEON", "VAPOREON", "ESPEON", "UMBREON"]):
                     continue
                 for evo in pkmn_data.evolutions:
-                    evo_name = evo[-1]
-                    evolution_line_list.append(evo_name)
-                    evo_poke = world.generated_pokemon[evo_name]
+                    evolution_line_list.append(evo.pokemon)
+                    evo_poke = world.generated_pokemon[evo.pokemon]
                     for second_evo in evo_poke.evolutions:
-                        second_evo_name = second_evo[-1]
-                        evolution_line_list.append(second_evo_name)
+                        evolution_line_list.append(second_evo.pokemon)
 
             new_types = get_random_types(world.random)
             for pokemon in evolution_line_list:
@@ -70,8 +68,9 @@ def randomize_starters(world: PokemonCrystalWorld):
 
     def set_rival_fight_starter(rival_name, rival, new_pokemon):
         # starter is always the last pokemon
-        rival.pokemon[-1][1] = new_pokemon
-        world.generated_trainers[rival_name] = rival
+        rival_pkmn = rival.pokemon[-1]._replace(pokemon=new_pokemon)
+        new_party = rival.pokemon[:-1] + [rival_pkmn]
+        world.generated_trainers[rival_name] = world.generated_trainers[rival_name]._replace(pokemon=new_party)
 
     base_only = world.options.randomize_starters.value == RandomizeStarters.option_unevolved_only
     for evo_line in world.generated_starters:
@@ -134,7 +133,7 @@ def get_random_pokemon_evolution(random, pkmn_name, pkmn_data):
     if not len(pkmn_data.evolutions):
         # return the same pokemon
         return pkmn_name
-    return random.choice(pkmn_data.evolutions)[-1]
+    return random.choice(pkmn_data.evolutions).pokemon
 
 
 def get_random_base_stats(random, bst=None):
