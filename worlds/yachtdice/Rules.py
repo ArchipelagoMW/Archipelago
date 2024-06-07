@@ -1,7 +1,7 @@
 import math
 from collections import defaultdict
+from typing import List, Optional
 
-from typing import List
 from BaseClasses import MultiWorld
 
 from worlds.generic.Rules import set_rule
@@ -68,15 +68,14 @@ class Category:
         return mean_score * self.quantity
 
 
-
 class ListState:
     def __init__(self, state: List[str]):
         self.state = state
 
-    def count(self, item: str, player: str = None) -> int:
+    def count(self, item: str, player: Optional[str] = None) -> int:
         return self.state.count(item)
 
-    
+
 def extract_progression(state, player, options):
     # method to obtain a list of what items the player has.
     # this includes categories, dice, rolls and score multiplier etc.
