@@ -385,14 +385,14 @@ def check_for_update() -> None:
                 exe = which('sensible-editor') or which('gedit') or \
                       which('xdg-open') or which('gnome-open') or which('kde-open')
                 subprocess.Popen([exe, os.getcwd()])
-                
+
             messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
 
         download_selection(to_download)
 
     ButtonsPrompt(
         "Update Available",
-        f"Update available: {version.as_simple_string()}. "
+        f"Update available: {version.as_simple_string()}.\n"
         f"Currently installed: {Utils.version_tuple.as_simple_string()}.\n"
         f"Would you like to update?",
         handle_user_update,
