@@ -65,7 +65,6 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
 
 
 class JakAndDaxterContext(CommonContext):
-    tags = {"AP"}
     game = jak1_name
     items_handling = 0b111  # Full item handling
     command_processor = JakAndDaxterClientCommandProcessor
@@ -115,6 +114,11 @@ class JakAndDaxterContext(CommonContext):
             self.memr.save_data()
             self.repl.save_data()
 
+    def on_deathlink(self, data: dict):
+        if self.memr.deathlink_enabled:
+            self.repl.received_deathlink = True
+            super().on_deathlink(data)
+
     async def ap_inform_location_check(self, location_ids: typing.List[int]):
         message = [{"cmd": "LocationChecks", "locations": location_ids}]
         await self.send_msgs(message)
@@ -128,8 +132,28 @@ class JakAndDaxterContext(CommonContext):
             await self.send_msgs(message)
             self.finished_game = True
 
-    def on_finish(self):
+    def on_finish_check(self):
         create_task_log_exception(self.ap_inform_finished_game())
+
+    async def ap_inform_deathlink(self):
+        if self.memr.deathlink_enabled:
+            death_text = self.memr.cause_of_death.replace("Jak", self.player_names[self.slot])
+            await self.send_death(death_text)
+            logger.info(death_text)
+
+        # Reset all flags.
+        self.memr.send_deathlink = False
+        self.memr.cause_of_death = ""
+        self.repl.reset_deathlink()
+
+    def on_deathlink_check(self):
+        create_task_log_exception(self.ap_inform_deathlink())
+
+    async def ap_inform_deathlink_toggle(self):
+        await self.update_death_link(self.memr.deathlink_enabled)
+
+    def on_deathlink_toggle(self):
+        create_task_log_exception(self.ap_inform_deathlink_toggle())
 
     async def run_repl_loop(self):
         while True:
@@ -138,7 +162,10 @@ class JakAndDaxterContext(CommonContext):
 
     async def run_memr_loop(self):
         while True:
-            await self.memr.main_tick(self.on_location_check, self.on_finish)
+            await self.memr.main_tick(self.on_location_check,
+                                      self.on_finish_check,
+                                      self.on_deathlink_check,
+                                      self.on_deathlink_toggle)
             await asyncio.sleep(0.1)
 
 

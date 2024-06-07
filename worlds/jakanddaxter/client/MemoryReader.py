@@ -1,3 +1,4 @@
+import random
 import typing
 import pymem
 from pymem import pattern
@@ -12,18 +13,62 @@ sizeof_uint64 = 8
 sizeof_uint32 = 4
 sizeof_uint8 = 1
 
-next_cell_index_offset = 0       # Each of these is an uint64, so 8 bytes.
-next_buzzer_index_offset = 8     # Each of these is an uint64, so 8 bytes.
-next_special_index_offset = 16   # Each of these is an uint64, so 8 bytes.
+next_cell_index_offset = 0  # Each of these is an uint64, so 8 bytes.
+next_buzzer_index_offset = 8  # Each of these is an uint64, so 8 bytes.
+next_special_index_offset = 16  # Each of these is an uint64, so 8 bytes.
 
 cells_checked_offset = 24
-buzzers_checked_offset = 428     # cells_checked_offset + (sizeof uint32 * 101 cells)
-specials_checked_offset = 876    # buzzers_checked_offset + (sizeof uint32 * 112 buzzers)
+buzzers_checked_offset = 428  # cells_checked_offset + (sizeof uint32 * 101 cells)
+specials_checked_offset = 876  # buzzers_checked_offset + (sizeof uint32 * 112 buzzers)
 
-buzzers_received_offset = 1004   # specials_checked_offset + (sizeof uint32 * 32 specials)
+buzzers_received_offset = 1004  # specials_checked_offset + (sizeof uint32 * 32 specials)
 specials_received_offset = 1020  # buzzers_received_offset + (sizeof uint8 * 16 levels (for scout fly groups))
 
-end_marker_offset = 1052         # specials_received_offset + (sizeof uint8 * 32 specials)
+died_offset = 1052  # specials_received_offset + (sizeof uint8 * 32 specials)
+
+deathlink_enabled_offset = 1053  # died_offset + sizeof uint8
+
+end_marker_offset = 1054  # deathlink_enabled_offset + sizeof uint8
+
+
+# "Jak" to be replaced by player name in the Client.
+def autopsy(died: int) -> str:
+    assert died > 0, f"Tried to find Jak's cause of death, but he's still alive!"
+    if died in [1, 2, 3, 4]:
+        return random.choice(["Jak said goodnight.",
+                              "Jak stepped into the light.",
+                              "Jak gave Daxter his insect collection.",
+                              "Jak did not follow Step 1."])
+    if died == 5:
+        return "Jak fell into an endless pit."
+    if died == 6:
+        return "Jak drowned in the spicy water."
+    if died == 7:
+        return "Jak tried to tackle a Lurker Shark."
+    if died == 8:
+        return "Jak hit 500 degrees."
+    if died == 9:
+        return "Jak took a bath in a pool of dark eco."
+    if died == 10:
+        return "Jak got bombarded with flaming 30-ton boulders."
+    if died == 11:
+        return "Jak hit 800 degrees."
+    if died == 12:
+        return "Jak ceased to be."
+    if died == 13:
+        return "Jak got eaten by the dark eco plant."
+    if died == 14:
+        return "Jak burned up."
+    if died == 15:
+        return "Jak hit the ground hard."
+    if died == 16:
+        return "Jak crashed the zoomer."
+    if died == 17:
+        return "Jak got Flut Flut hurt."
+    if died == 18:
+        return "Jak poisoned the whole darn catch."
+
+    return "Jak died."
 
 
 class JakAndDaxterMemoryReader:
@@ -36,14 +81,23 @@ class JakAndDaxterMemoryReader:
     gk_process: pymem.process = None
 
     location_outbox = []
-    outbox_index = 0
-    finished_game = False
+    outbox_index: int = 0
+    finished_game: bool = False
+
+    # Deathlink handling
+    deathlink_enabled: bool = False
+    send_deathlink: bool = False
+    cause_of_death: str = ""
 
     def __init__(self, marker: typing.ByteString = b'UnLiStEdStRaTs_JaK1\x00'):
         self.marker = marker
         self.connect()
 
-    async def main_tick(self, location_callback: typing.Callable, finish_callback: typing.Callable):
+    async def main_tick(self,
+                        location_callback: typing.Callable,
+                        finish_callback: typing.Callable,
+                        deathlink_callback: typing.Callable,
+                        deathlink_toggle: typing.Callable):
         if self.initiated_connect:
             await self.connect()
             self.initiated_connect = False
@@ -57,9 +111,11 @@ class JakAndDaxterMemoryReader:
         else:
             return
 
+        # Save some state variables temporarily.
+        old_deathlink_enabled = self.deathlink_enabled
+
         # Read the memory address to check the state of the game.
         self.read_memory()
-        # location_callback(self.location_outbox)  # TODO - I forgot why call this here when it's already down below...
 
         # Checked Locations in game. Handle the entire outbox every tick until we're up to speed.
         if len(self.location_outbox) > self.outbox_index:
@@ -68,6 +124,13 @@ class JakAndDaxterMemoryReader:
 
         if self.finished_game:
             finish_callback()
+
+        if old_deathlink_enabled != self.deathlink_enabled:
+            deathlink_toggle()
+            logger.debug("Toggled DeathLink " + ("ON" if self.deathlink_enabled else "OFF"))
+
+        if self.send_deathlink:
+            deathlink_callback()
 
     async def connect(self):
         try:
@@ -164,6 +227,23 @@ class JakAndDaxterMemoryReader:
                     if special_ap_id not in self.location_outbox:
                         self.location_outbox.append(special_ap_id)
                         logger.debug("Checked special: " + str(next_special))
+
+            died = int.from_bytes(
+                self.gk_process.read_bytes(self.goal_address + died_offset, sizeof_uint8),
+                byteorder="little",
+                signed=False)
+
+            if died > 0:
+                self.send_deathlink = True
+                self.cause_of_death = autopsy(died)
+
+            deathlink_flag = int.from_bytes(
+                self.gk_process.read_bytes(self.goal_address + deathlink_enabled_offset, sizeof_uint8),
+                byteorder="little",
+                signed=False)
+
+            # Listen for any changes to this setting.
+            self.deathlink_enabled = bool(deathlink_flag)
 
         except (ProcessError, MemoryReadError, WinAPIError):
             logger.error("The gk process has died. Restart the game and run \"/memr connect\" again.")

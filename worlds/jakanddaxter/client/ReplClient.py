@@ -2,6 +2,7 @@ import json
 import time
 import struct
 import typing
+import random
 from socket import socket, AF_INET, SOCK_STREAM
 
 import pymem
@@ -24,6 +25,7 @@ class JakAndDaxterReplClient:
     sock: socket
     connected: bool = False
     initiated_connect: bool = False  # Signals when user tells us to try reconnecting.
+    received_deathlink: bool = False
 
     # The REPL client needs the REPL/compiler process running, but that process
     # also needs the game running. Therefore, the REPL client needs both running.
@@ -61,6 +63,14 @@ class JakAndDaxterReplClient:
         if len(self.item_inbox) > self.inbox_index:
             self.receive_item()
             self.inbox_index += 1
+
+        if self.received_deathlink:
+            self.receive_deathlink()
+
+            # Reset all flags.
+            # As a precaution, we should reset our own deathlink flag as well.
+            self.reset_deathlink()
+            self.received_deathlink = False
 
     # This helper function formats and sends `form` as a command to the REPL.
     # ALL commands to the REPL should be sent using this function.
@@ -225,6 +235,34 @@ class JakAndDaxterReplClient:
             logger.debug(f"Received special unlock {item_table[ap_id]}!")
         else:
             logger.error(f"Unable to receive special unlock {item_table[ap_id]}!")
+        return ok
+
+    def receive_deathlink(self) -> bool:
+
+        # Because it should at least be funny sometimes.
+        death_types = ["\'death",
+                       "\'death",
+                       "\'death",
+                       "\'death",
+                       "\'endlessfall",
+                       "\'drown-death",
+                       "\'melt",
+                       "\'dark-eco-pool"]
+        chosen_death = random.choice(death_types)
+
+        ok = self.send_form("(ap-deathlink-received! " + chosen_death + ")")
+        if ok:
+            logger.debug(f"Received deathlink signal!")
+        else:
+            logger.error(f"Unable to receive deathlink signal!")
+        return ok
+
+    def reset_deathlink(self) -> bool:
+        ok = self.send_form("(set! (-> *ap-info-jak1* died) 0)")
+        if ok:
+            logger.debug(f"Reset deathlink flag!")
+        else:
+            logger.error(f"Unable to reset deathlink flag!")
         return ok
 
     def save_data(self):
