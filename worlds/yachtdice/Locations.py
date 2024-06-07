@@ -12,7 +12,6 @@ class YachtDiceLocation(Location):
     def __init__(self, player: int, name: str, score: int, address: typing.Optional[int], parent):
         super().__init__(player, name, address, parent)
         self.yacht_dice_score = score
-        self.event = not address
 
 all_locations = {}
 starting_index = 16871244500 #500 more than the starting index for items
