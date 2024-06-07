@@ -396,3 +396,17 @@ class YachtDiceWorld(World):
         item_data = item_table[name]
         item = YachtDiceItem(name, item_data.classification, item_data.code, self.player)
         return item
+
+    def collect(self, state, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change and item.advancement:
+            state.prog_items[self.player]["state_is_fresh"] = 0
+
+        return change
+
+    def remove(self, state, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change and item.advancement:
+            state.prog_items[self.player]["state_is_fresh"] = 0
+
+        return change
