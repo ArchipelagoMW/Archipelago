@@ -243,6 +243,7 @@ class PokemonCrystalWorld(World):
             misc_activities(self)
 
         generate_phone_traps(self)
+
         player_name = self.multiworld.get_player_name(self.player)
         patch = PokemonCrystalProcedurePatch(player=self.player, player_name=player_name)
         patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
