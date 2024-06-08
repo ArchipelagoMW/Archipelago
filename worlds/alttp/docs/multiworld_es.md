@@ -21,7 +21,7 @@ pero no tiene soporte.**
    **El archivo del instalador se encuentra en la sección de assets al final de la información de version**.
     - Durante la instalación se te preguntará por la localización de tu archivo ROM base. Este es tu archivo ROM de Link to the Past japonés.
 
-2. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
+3. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
    ROM.
     1. Extrae la carpeta de tu emulador al Escritorio, o algún otro sitio que vayas a recordar.
     2. Haz click derecho en un archivo ROM y selecciona **Abrir con...**
