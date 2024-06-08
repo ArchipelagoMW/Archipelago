@@ -400,8 +400,10 @@ locations_for_region: Dict[str, List[str]] = {
         ChestName.CASTLE_RIGHT_TOWER_2_R,
         ChestName.CASTLE_RIGHT_TOWER_3_TL,
         ChestName.CASTLE_RIGHT_TOWER_3_BR,
-        NPCRewardName.LEO_ON_THE_AIRSHIP_DECK,
         NPCRewardName.SUPER_BRACELET_TILE,
+    ],
+    RegionName.MAGRIDD_CASTLE_LEO: [
+        NPCRewardName.LEO_ON_THE_AIRSHIP_DECK,
     ],
     # Act 7 Regions
     RegionName.WORLD_OF_EVIL: [
@@ -544,6 +546,13 @@ exits_for_region: Dict[str, List[ExitData]] = {
     ],
     RegionName.MAGRIDD_CASTLE_RIGHT_TOWER: [
         ExitData(RegionName.MAGRIDD_CASTLE_RIGHT_TOWER_INVIS, [ItemName.SOUL_REALITY]),
+    ],
+    RegionName.MAGRIDD_CASTLE_RIGHT_TOWER_INVIS: [
+        ExitData(RegionName.MAGRIDD_CASTLE_LEO, [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK])
+    ],
+    RegionName.MAGRIDD_CASTLE_LEO: [
+        # The platinum card soldier blows up, letting you get in without platinum card
+        ExitData(RegionName.MAGRIDD_CASTLE_LEFT_TOWER, [NPCName.SOLDIER_LEFT_TOWER])
     ],
     # Act 7 Exits
     RegionName.WORLD_OF_EVIL: [

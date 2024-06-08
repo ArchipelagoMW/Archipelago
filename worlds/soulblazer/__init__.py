@@ -1,7 +1,9 @@
+import dataclasses
 import settings
 import copy
 import os
 from hashlib import blake2b
+from Options import PerGameCommonOptions
 from typing import Any, List, Dict, Optional, ClassVar
 from .Client import SoulBlazerSNIClient
 from .Options import SoulBlazerOptions  # the options we defined earlier
@@ -182,7 +184,7 @@ class SoulBlazerWorld(World):
             # Create our regular Victory Event on Deathtoll
             region_deathtoll = self.multiworld.get_region(RegionName.DEATHTOLL, self.player)
             region_deathtoll.locations.append(self.create_victory_event(region_deathtoll))
-        
+
         self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.VICTORY, self.player)
 
         self.multiworld.itempool += itempool
@@ -231,15 +233,23 @@ class SoulBlazerWorld(World):
                 os.unlink(rompath)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        gem_data = {
+        slot_data = dict()
+        slot_data["gem_data"] = {
             f"{item.code}:{item.location.address}:{item.location.player}": item.operand_for_id
             for item in self.gem_items
         }
-        exp_data = {
+        slot_data["exp_data"] = {
             f"{item.code}:{item.location.address}:{item.location.player}": item.operand_for_id
             for item in self.exp_items
         }
-        return {"gem_data": gem_data, "exp_data": exp_data}
+        for option_name in (
+            attr.name
+            for attr in dataclasses.fields(SoulBlazerOptions)
+            if attr not in dataclasses.fields(PerGameCommonOptions)
+        ):
+            option = getattr(self.options, option_name)
+            slot_data[option_name] = option.value
+        return slot_data
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         pass

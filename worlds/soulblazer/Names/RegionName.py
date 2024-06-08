@@ -56,6 +56,7 @@ MAGRIDD_CASTLE_LEFT_TOWER = "Act 6 - Magridd Castle Left Tower"
 MAGRIDD_CASTLE_LEFT_TOWER_INVIS = "Act 6 - Magridd Castle Left Tower Invisible Checks"
 MAGRIDD_CASTLE_RIGHT_TOWER = "Act 6 - Magridd Castle Right Tower"
 MAGRIDD_CASTLE_RIGHT_TOWER_INVIS = "Act 6 - Magridd Castle Right Tower Invisible Checks"
+MAGRIDD_CASTLE_LEO = "Act 6 - Magridd Castle Leo on Airship Deck"
 
 # Act 7 Regions
 WORLD_OF_EVIL = "Act 7 - World of Evil"

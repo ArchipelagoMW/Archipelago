@@ -216,7 +216,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.MAID_HERB: [NPCName.MAID_HERB],  # anything else?
     NPCRewardName.EMBLEM_H_TILE: [NPCName.SOLDIER_CASTLE],
     NPCRewardName.KING_MAGRIDD: [NPCName.KING_MAGRIDD, NPCName.SOLDIER_CASTLE],
-    NPCRewardName.LEO_ON_THE_AIRSHIP_DECK: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK],
+    NPCRewardName.LEO_ON_THE_AIRSHIP_DECK: [],
     NPCRewardName.SOLDIER_SOUL_OF_REALITY: [NPCName.SOLDIER_SOUL_OF_REALITY],
     LairName.KING_MAGRIDD: [ItemName.AIRSHIPKEY],
     # Act 7 - World of Evil
