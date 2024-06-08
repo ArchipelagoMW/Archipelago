@@ -1,5 +1,4 @@
-import json
-# import orjson
+import orjson
 import pkgutil
 from typing import Dict, List, NamedTuple, Set, FrozenSet, Any, Union
 
@@ -197,8 +196,7 @@ class PokemonCrystalData:
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
-    return json.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
-    # return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
+    return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
 
 
 data = PokemonCrystalData()
