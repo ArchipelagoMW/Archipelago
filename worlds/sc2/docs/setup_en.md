@@ -19,7 +19,8 @@ Archipelago installer.
 2. Run ArchipelagoStarcraft2Client.exe.
    - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step 
    only.
-3. Type the command `/download_data`. This will automatically install the Maps and Data files needed to play StarCraft 2 Archipelago.
+3. Type the command `/download_data`. 
+This will automatically install the Maps and Data files needed to play StarCraft 2 Archipelago.
 
 ## Where do I get a config file (aka "YAML") for this game?
 
@@ -66,8 +67,8 @@ obtained early, and vice versa if its value is smaller.
 However, StarCraft 2 is more permissive regarding the items that can be used to progress, so this setting has little 
 influence on progression in a StarCraft 2 world. 
 StarCraft 2. 
-As it increases the time required to generate a MultiWorld, we recommend deactivating it (i.e., setting it to zero) for 
-StarCraft 2.
+Since this option increases the time required to generate a MultiWorld, we recommend deactivating it (i.e., setting it 
+to zero) for a StarCraft 2 world.
 
 #### How do I specify items in a list, like in excluded items?
 
@@ -127,9 +128,10 @@ Unreachable missions will have greyed-out text. Just click on an available missi
 
 ## The game isn't launching when I try to start a mission.
 
-First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If you can't figure out
-the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel for help. Please include a
-specific description of what's going wrong and attach your log file to your message.
+First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). 
+If you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel 
+for help. 
+Please include a specific description of what's going wrong and attach your log file to your message.
 
 ## My keyboard shortcuts profile is not available when I play *StarCraft 2 Archipelago*.
 
