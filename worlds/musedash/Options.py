@@ -4,10 +4,12 @@ from dataclasses import dataclass
 
 from .MuseDashCollection import MuseDashCollections
 
+
 class AllowJustAsPlannedDLCSongs(Toggle):
     """Whether [Muse Plus] DLC Songs, and all the albums included in it, can be chosen as randomised songs.
     Note: The [Just As Planned] DLC contains all [Muse Plus] songs."""
     display_name = "Allow [Muse Plus] DLC Songs"
+
 
 class DLCMusicPacks(OptionSet):
     """Which non-[Muse Plus] DLC packs can be chosen as randomised songs."""
@@ -101,20 +103,10 @@ class GradeNeeded(Choice):
     default = 0
 
 
-class AdditionalItemPercentage(Range):
-    """The percentage of songs that will have 2 items instead of 1 when completing them.
-    - Starting Songs will always have 2 items.
-    - Locations will be filled with duplicate songs if there are not enough items.
-    """
-    display_name = "Additional Item %"
-    range_start = 50
-    default = 80
-    range_end = 100
-
-
 class MusicSheetCountPercentage(Range):
-    """Collecting enough Music Sheets will unlock the goal song needed for completion.
-    This option controls how many are in the item pool, based on the total number of songs."""
+    """Controls how many music sheets are added to the pool based on the number of songs, including starting songs.
+    Higher numbers leads to more consistent game lengths, but will cause individual music sheets to be less important.
+    """
     range_start = 10
     range_end = 40
     default = 20
@@ -175,7 +167,6 @@ class MuseDashOptions(PerGameCommonOptions):
     streamer_mode_enabled: StreamerModeEnabled
     starting_song_count: StartingSongs
     additional_song_count: AdditionalSongs
-    additional_item_percentage: AdditionalItemPercentage
     song_difficulty_mode: DifficultyMode
     song_difficulty_min: DifficultyModeOverrideMin
     song_difficulty_max: DifficultyModeOverrideMax

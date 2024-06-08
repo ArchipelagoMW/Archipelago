@@ -1,4 +1,5 @@
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink
+from dataclasses import dataclass
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
 
 class PartyShuffle(Toggle):
     """Shuffles party members into the pool.
@@ -31,11 +32,11 @@ class Hylics2DeathLink(DeathLink):
     Note that this also includes death by using the PERISH gesture.
     Can be toggled via in-game console command "/deathlink"."""
 
-hylics2_options = {
-    "party_shuffle": PartyShuffle,
-    "gesture_shuffle" : GestureShuffle,
-    "medallion_shuffle" : MedallionShuffle,
-    "random_start" : RandomStart,
-    "extra_items_in_logic": ExtraLogic,
-    "death_link": Hylics2DeathLink
-}
+@dataclass
+class Hylics2Options(PerGameCommonOptions):
+    party_shuffle: PartyShuffle
+    gesture_shuffle: GestureShuffle
+    medallion_shuffle: MedallionShuffle
+    random_start: RandomStart
+    extra_items_in_logic: ExtraLogic
+    death_link: Hylics2DeathLink

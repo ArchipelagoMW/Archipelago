@@ -7,6 +7,7 @@ import math
 import numbers
 import random
 import typing
+import enum
 from copy import deepcopy
 from dataclasses import dataclass
 
@@ -18,6 +19,15 @@ if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
     from worlds.AutoWorld import World
     import pathlib
+
+
+class Visibility(enum.IntFlag):
+    none = 0b0000
+    template = 0b0001
+    simple_ui = 0b0010  # show option in simple menus, such as player-options
+    complex_ui = 0b0100  # show option in complex menus, such as weighted-options
+    spoiler = 0b1000
+    all = 0b1111
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -102,6 +112,7 @@ T = typing.TypeVar('T')
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
     default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
+    visibility = Visibility.all
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
@@ -373,7 +384,8 @@ class Toggle(NumericOption):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
+        # if user puts in an invalid value, make it valid
+        value = int(bool(value))
         self.value = value
 
     @classmethod
@@ -1113,6 +1125,18 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} "
                                 f"items in both its local_items and non_local_items pool.")
             link.setdefault("link_replacement", None)
+            link["item_pool"] = list(pool)
+
+
+class Removed(FreeText):
+    """This Option has been Removed."""
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option removed, please update your options file.")
+        super().__init__(value)
 
 
 @dataclass
@@ -1170,7 +1194,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
+            all_options: typing.Dict[str, AssembleOptions] = {
+                option_name: option for option_name, option in world.options_dataclass.type_hints.items()
+                if option.visibility & Visibility.template
+            }
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()

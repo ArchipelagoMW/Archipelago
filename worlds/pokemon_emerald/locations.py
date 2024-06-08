@@ -212,7 +212,7 @@ def set_legendary_cave_entrances(world: "PokemonEmeraldWorld") -> None:
         "MARINE_CAVE_ROUTE_127_1",
         "MARINE_CAVE_ROUTE_127_2",
         "MARINE_CAVE_ROUTE_129_1",
-        "MARINE_CAVE_ROUTE_129_2",
+        # "MARINE_CAVE_ROUTE_129_2",  # Cave ID too high for internal data type, needs patch update
     ])
 
     marine_cave_location_location = world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player)

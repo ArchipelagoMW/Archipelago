@@ -21,7 +21,6 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
@@ -35,8 +34,8 @@ def mystery_argparse():
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
-                        help='Path to the weights file to use for rolling game settings, urls are also valid')
-    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
+                        help='Path to the weights file to use for rolling game options, urls are also valid')
+    parser.add_argument('--sameoptions', help='Rolls options per weights file rather than per player',
                         action='store_true')
     parser.add_argument('--player_files_path', default=defaults.player_files_path,
                         help="Input directory for player files.")
@@ -104,8 +103,8 @@ def main(args=None, callback=ERmain):
             del(meta_weights["meta_description"])
         except Exception as e:
             raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
-        if args.samesettings:
-            raise Exception("Cannot mix --samesettings with --meta")
+        if args.sameoptions:
+            raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
     player_id = 1
@@ -148,7 +147,6 @@ def main(args=None, callback=ERmain):
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
-    erargs.glitch_triforce = options.generator.glitch_triforce_room
     erargs.spoiler = args.spoiler
     erargs.race = args.race
     erargs.outputname = seed_name
@@ -157,7 +155,7 @@ def main(args=None, callback=ERmain):
     erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
@@ -309,13 +307,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
-
-
-def prefer_int(input_data: str) -> Union[str, int]:
-    try:
-        return int(input_data)
-    except:
-        return input_data
 
 
 def roll_percentage(percentage: Union[int, float]) -> bool:

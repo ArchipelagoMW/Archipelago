@@ -6,7 +6,7 @@ The [player options page for this game](../player-options) contains all the opti
 
 ## I haven't played TUNIC before.
 
-**Play vanilla first.** It is **_heavily discouraged_** to play this randomizer before playing the vanilla game.
+<u>**Play vanilla first.**</u> It is **_heavily discouraged_** to play this randomizer before playing the vanilla game.
 It is recommended that you achieve both endings in the vanilla game before playing the randomizer.
 
 ## What does randomization do to this game?
@@ -32,7 +32,7 @@ being to find the required amount of them and then Share Your Wisdom.
 Every item has a chance to appear in another player's world.
 
 ## How many checks are in TUNIC?
-There are 302 checks located across the world of TUNIC.
+There are 302 checks located across the world of TUNIC. The Fairy Seeking Spell can help you locate them.
 
 ## What do items from other worlds look like in TUNIC?
 Items belonging to other TUNIC players will either appear as that item directly (if in a freestanding location) or in a
@@ -51,6 +51,7 @@ There is an [entrance tracker](https://scipiowright.gitlab.io/tunic-tracker/) fo
 You can also use the Universal Tracker (by Faris and qwint) to find a complete list of what checks are in logic with your current items. You can find it on the Archipelago Discord, in its post in the future-game-design channel. This tracker is an extension of the regular Archipelago Text Client.
 
 ## What should I know regarding logic?
+In general:
 - Nighttime is not considered in logic. Every check in the game is obtainable during the day.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.

@@ -740,15 +740,17 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 
     def _handle_item_name(self, node: JSONMessagePart):
         flags = node.get("flags", 0)
+        item_types = []
         if flags & 0b001:  # advancement
-            itemtype = "progression"
-        elif flags & 0b010:  # useful
-            itemtype = "useful"
-        elif flags & 0b100:  # trap
-            itemtype = "trap"
-        else:
-            itemtype = "normal"
-        node.setdefault("refs", []).append("Item Class: " + itemtype)
+            item_types.append("progression")
+        if flags & 0b010:  # useful
+            item_types.append("useful")
+        if flags & 0b100:  # trap
+            item_types.append("trap")
+        if not item_types:
+            item_types.append("normal")
+
+        node.setdefault("refs", []).append("Item Class: " + ", ".join(item_types))
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
     def _handle_player_id(self, node: JSONMessagePart):

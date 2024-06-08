@@ -87,7 +87,7 @@ class PokemonEmeraldWorld(World):
     location_name_groups = LOCATION_GROUPS
 
     data_version = 2
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 4, 6)
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]

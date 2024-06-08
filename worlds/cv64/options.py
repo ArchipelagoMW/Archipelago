@@ -74,7 +74,8 @@ class HardItemPool(Toggle):
 
 
 class Special1sPerWarp(Range):
-    """Sets how many Special1 jewels are needed per warp menu option unlock."""
+    """Sets how many Special1 jewels are needed per warp menu option unlock.
+    This will decrease until the number x 7 is less than or equal to the Total Specail1s if it isn't already."""
     range_start = 1
     range_end = 10
     default = 1
@@ -82,8 +83,7 @@ class Special1sPerWarp(Range):
 
 
 class TotalSpecial1s(Range):
-    """Sets how many Speical1 jewels are in the pool in total.
-    If this is set to be less than Special1s Per Warp x 7, it will decrease by 1 until it isn't."""
+    """Sets how many Speical1 jewels are in the pool in total."""
     range_start = 7
     range_end = 70
     default = 7
@@ -144,8 +144,9 @@ class HardLogic(Toggle):
 
 
 class MultiHitBreakables(Toggle):
-    """Adds the items that drop from the objects that break in three hits to the pool. There are 17 of these throughout
-    the game, adding up to 74 checks in total with all stages.
+    """Adds the items that drop from the objects that break in three hits to the pool. There are 18 of these throughout
+    the game, adding up to 79 or 80 checks (depending on sub-weapons
+    being shuffled anywhere or not) in total with all stages.
     The game will be modified to
     remember exactly which of their items you've picked up instead of simply whether they were broken or not."""
     display_name = "Multi-hit Breakables"

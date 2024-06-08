@@ -56,7 +56,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "Registeel": "REGISTEEL",
             "Mew": "MEW",
             "Deoxys": "DEOXYS",
-            "Ho-oh": "HO_OH",
+            "Ho-Oh": "HO_OH",
             "Lugia": "LUGIA",
         }.items()
         if name in world.options.allowed_legendary_hunt_encounters.value
@@ -426,6 +426,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         lambda state:
             state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", world.player)
             and state.has("EVENT_TALK_TO_MR_STONE", world.player)
+    )
+    set_rule(
+        get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_DEWFORD_TOWN/WATER"),
+        hm_rules["HM03 Surf"]
     )
 
     # Granite Cave

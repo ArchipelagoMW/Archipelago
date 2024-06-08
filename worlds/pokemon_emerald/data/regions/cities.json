@@ -1143,7 +1143,7 @@
   "REGION_DEWFORD_TOWN/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN",
     "has_grass": false,
-    "has_water": true,
+    "has_water": false,
     "has_fishing": true,
     "locations": [
       "NPC_GIFT_RECEIVED_OLD_ROD"
@@ -1152,6 +1152,7 @@
       "EVENT_VISITED_DEWFORD_TOWN"
     ],
     "exits": [
+      "REGION_DEWFORD_TOWN/WATER",
       "REGION_ROUTE106/EAST",
       "REGION_ROUTE107/MAIN",
       "REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN",
@@ -1164,6 +1165,16 @@
       "MAP_DEWFORD_TOWN:3/MAP_DEWFORD_TOWN_HOUSE1:0",
       "MAP_DEWFORD_TOWN:4/MAP_DEWFORD_TOWN_HOUSE2:0"
     ]
+  },
+  "REGION_DEWFORD_TOWN/WATER": {
+    "parent_map": "MAP_DEWFORD_TOWN",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_DEWFORD_TOWN_HALL/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN_HALL",
