@@ -30,7 +30,6 @@ class SpireWorld(World):
     option_definitions = spire_options
     game = "Slay the Spire"
     topology_present = False
-    data_version = 2
     web = SpireWeb()
     required_client_version = (0, 3, 7)
 
@@ -91,12 +90,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 
 class SpireLocation(Location):
     game: str = "Slay the Spire"
-
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(SpireLocation, self).__init__(player, name, address, parent)
-        if address is None:
-            self.event = True
-            self.locked = True
 
 
 class SpireItem(Item):

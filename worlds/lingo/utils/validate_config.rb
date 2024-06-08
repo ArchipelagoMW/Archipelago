@@ -8,7 +8,8 @@ require 'set'
 require 'yaml'
 
 configpath = ARGV[0]
-mappath = ARGV[1]
+idspath = ARGV[1]
+mappath = ARGV[2]
 
 panels = Set["Countdown Panels/Panel_1234567890_wanderlust"]
 doors = Set["Naps Room Doors/Door_hider_new1", "Tower Room Area Doors/Door_wanderer_entrance"]
@@ -36,15 +37,20 @@ configured_panels = Set[]
 mentioned_rooms = Set[]
 mentioned_doors = Set[]
 mentioned_panels = Set[]
+mentioned_sunwarp_entrances = Set[]
+mentioned_sunwarp_exits = Set[]
+mentioned_paintings = Set[]
 
 door_groups = {}
 
-directives = Set["entrances", "panels", "doors", "paintings", "progression"]
-panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt"]
-door_directives = Set["id", "painting_id", "panels", "item_name", "location_name", "skip_location", "skip_item", "group", "include_reduce", "junk_item", "event"]
+directives = Set["entrances", "panels", "doors", "paintings", "sunwarps", "progression"]
+panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt", "location_name"]
+door_directives = Set["id", "painting_id", "panels", "item_name", "item_group", "location_name", "skip_location", "skip_item", "door_group", "include_reduce", "event", "warp_id"]
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
 non_counting = 0
+
+ids = YAML.load_file(idspath)
 
 config = YAML.load_file(configpath)
 config.each do |room_name, room|
@@ -64,17 +70,17 @@ config.each do |room_name, room|
 
     entrances = []
     if entrance.kind_of? Hash
-      if entrance.keys() != ["painting"] then
-        entrances = [entrance]
-      end
+      entrances = [entrance]
     elsif entrance.kind_of? Array
       entrances = entrance
     end
 
     entrances.each do |e|
-      entrance_room = e.include?("room") ? e["room"] : room_name
-      mentioned_rooms.add(entrance_room)
-      mentioned_doors.add(entrance_room + " - " + e["door"])
+      if e.include?("door") then
+        entrance_room = e.include?("room") ? e["room"] : room_name
+        mentioned_rooms.add(entrance_room)
+        mentioned_doors.add(entrance_room + " - " + e["door"])
+      end
     end
   end
 
@@ -162,6 +168,10 @@ config.each do |room_name, room|
     unless bad_subdirectives.empty? then
       puts "#{room_name} - #{panel_name} :::: Panel has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
+
+    unless ids.include?("panels") and ids["panels"].include?(room_name) and ids["panels"][room_name].include?(panel_name)
+      puts "#{room_name} - #{panel_name} :::: Panel is missing a location ID"
+    end
   end
 
   (room["doors"] || {}).each do |door_name, door|
@@ -197,8 +207,8 @@ config.each do |room_name, room|
       end
     end
 
-    if not door.include?("id") and not door.include?("painting_id") and not door["skip_item"] and not door["event"] then
-      puts "#{room_name} - #{door_name} :::: Should be marked skip_item or event if there are no doors or paintings"
+    if not door.include?("id") and not door.include?("painting_id") and not door.include?("warp_id") and not door["skip_item"] and not door["event"] then
+      puts "#{room_name} - #{door_name} :::: Should be marked skip_item or event if there are no doors, paintings, or warps"
     end
 
     if door.include?("panels")
@@ -229,12 +239,30 @@ config.each do |room_name, room|
     unless bad_subdirectives.empty? then
       puts "#{room_name} - #{door_name} :::: Door has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
+
+    unless door["skip_item"] or door["event"]
+      unless ids.include?("doors") and ids["doors"].include?(room_name) and ids["doors"][room_name].include?(door_name) and ids["doors"][room_name][door_name].include?("item")
+        puts "#{room_name} - #{door_name} :::: Door is missing an item ID"
+      end
+    end
+
+    unless door["skip_location"] or door["event"]
+      unless ids.include?("doors") and ids["doors"].include?(room_name) and ids["doors"][room_name].include?(door_name) and ids["doors"][room_name][door_name].include?("location")
+        puts "#{room_name} - #{door_name} :::: Door is missing a location ID"
+      end
+    end
   end
 
   (room["paintings"] || []).each do |painting|
     if painting.include?("id") and painting["id"].kind_of? String then
       unless paintings.include? painting["id"] then
         puts "#{room_name} :::: Invalid Painting ID #{painting["id"]}"
+      end
+
+      if mentioned_paintings.include?(painting["id"]) then
+        puts "Painting #{painting["id"]} is mentioned more than once"
+      else
+        mentioned_paintings.add(painting["id"])
       end
     else
       puts "#{room_name} :::: Painting is missing an ID"
@@ -273,6 +301,32 @@ config.each do |room_name, room|
     end
   end
 
+  (room["sunwarps"] || []).each do |sunwarp|
+    if sunwarp.include? "dots" and sunwarp.include? "direction" then
+      if sunwarp["dots"] < 1 or sunwarp["dots"] > 6 then
+        puts "#{room_name} :::: Contains a sunwarp with an invalid dots value"
+      end
+
+      if sunwarp["direction"] == "enter" then
+        if mentioned_sunwarp_entrances.include? sunwarp["dots"] then
+          puts "Multiple #{sunwarp["dots"]} sunwarp entrances were found"
+        else
+          mentioned_sunwarp_entrances.add(sunwarp["dots"])
+        end
+      elsif sunwarp["direction"] == "exit" then
+        if mentioned_sunwarp_exits.include? sunwarp["dots"] then
+          puts "Multiple #{sunwarp["dots"]} sunwarp exits were found"
+        else
+          mentioned_sunwarp_exits.add(sunwarp["dots"])
+        end
+      else
+        puts "#{room_name} :::: Contains a sunwarp with an invalid direction value"
+      end
+    else
+      puts "#{room_name} :::: Contains a sunwarp without a dots and direction"
+    end
+  end
+
   (room["progression"] || {}).each do |progression_name, door_list|
     door_list.each do |door|
       if door.kind_of? Hash then
@@ -280,6 +334,10 @@ config.each do |room_name, room|
       else
         mentioned_doors.add("#{room_name} - #{door}")
       end
+    end
+
+    unless ids.include?("progression") and ids["progression"].include?(progression_name)
+      puts "#{room_name} - #{progression_name} :::: Progression is missing an item ID"
     end
   end
 end
@@ -302,6 +360,10 @@ end
 door_groups.each do |group,num|
   if num == 1 then
     puts "Door group \"#{group}\" only has one door in it"
+  end
+
+  unless ids.include?("door_groups") and ids["door_groups"].include?(group)
+    puts "#{group} :::: Door group is missing an item ID"
   end
 end
 

@@ -29,7 +29,7 @@ def data_path(file_name: str):
 
 class UndertaleWeb(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Undertale software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
@@ -51,8 +51,6 @@ class UndertaleWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
-
-    data_version = 7
 
     def _get_undertale_data(self):
         return {

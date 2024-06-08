@@ -19,15 +19,15 @@ pero no tiene soporte.**
 
 1. Descarga e instala (Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases/latest].
    **El archivo del instalador se encuentra en la sección de assets al final de la información de version**.
-2. La primera vez que realices una generación local o parchees tu juego, se te pedirá que ubiques tu archivo ROM base. Este es su enlace japonés al archivo ROM anterior. Esto sólo debe hacerse una vez.
+2. La primera vez que realices una generación local o parchees tu juego, se te pedirá que ubiques tu archivo ROM base. Este es tu archivo ROM de Link To THe Past japonés. Esto sólo debe hacerse una vez.
 
 3. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
    ROM.
-    1. Extrae la carpeta de tu emulador al Escritorio, o algún otro sitio que vayas a recordar.
-    2. Haz click derecho en un archivo ROM y selecciona **Abrir con...**
-    3. Marca la casilla junto a **Usar siempre este programa para abrir archivos .sfc**
-    4. Baja al final de la lista y haz click en el texto gris **Buscar otro programa en este PC**
-    5. Busca el archivo `.exe` de tu emulador y haz click en **Abrir**. Este archivo debería de encontrarse dentro de la carpeta que
+    i. Extrae la carpeta de tu emulador al Escritorio, o algún otro sitio que vayas a recordar.
+    ii. Haz click derecho en un archivo ROM y selecciona **Abrir con...**
+    iii. Marca la casilla junto a **Usar siempre este programa para abrir archivos .sfc**
+    iv. Baja al final de la lista y haz click en el texto gris **Buscar otro programa en este PC**
+    v. Busca el archivo `.exe` de tu emulador y haz click en **Abrir**. Este archivo debería de encontrarse dentro de la carpeta que
       extrajiste en el paso uno. 
 
 ### Obtener el fichero de parche y crea tu ROM
@@ -45,6 +45,10 @@ automáticamente el cliente, y además creará la rom en el mismo directorio don
 
 Cuando el cliente se lance automáticamente, SNI debería de ejecutarse en segundo plano. Si es la 
 primera vez que se ejecuta, tal vez se te pida permitir que se comunique a través del firewall de Windows
+
+#### snes9x-nwa
+1. Haz click en el menu Network y marca 'Enable Emu Network Control
+2. Carga tu archivo ROM si no lo habías hecho antes
 
 ##### snes9x-rr
 
