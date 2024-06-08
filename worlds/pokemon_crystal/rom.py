@@ -212,9 +212,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
                 item_id = item_const_name_to_id(pokemon.item)
                 pokemon_data.append(item_id)
             for move in pokemon.moves:
-                if move != "NO_MOVE":
-                    move_id = data.moves[move].id
-                    pokemon_data.append(move_id)
+                move_id = data.moves[move].id
+                pokemon_data.append(move_id)
             write_bytes(patch, pokemon_data, address)
             address += len(pokemon_data)
 
