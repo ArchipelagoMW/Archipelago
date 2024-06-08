@@ -64,3 +64,4 @@ item_name_groups = ({
 })
 item_name_groups['Horizontal'] = item_name_groups['Cloak'] | item_name_groups['CDash']
 item_name_groups['Vertical'] = item_name_groups['Claw'] | {'Monarch_Wings'}
+item_name_groups['Skills'] |= item_name_groups['Vertical'] | item_name_groups['Horizontal']
