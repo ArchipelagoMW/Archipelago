@@ -51,24 +51,31 @@
     "No Cowboy Hat"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/inactive/CowboyHat.png?raw=true"
 } %}
 
+{% set route = slot_data["route"] %}
+
 {# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
 {% set progressive_order = {
-    "Progressive Knife"             : ["Worn Dagger", "Worn Dagger", "Real Knife"],
+    "Progressive Knife"             : ["Real Knife" if route == "genocide" else "Worn Dagger", "Worn Dagger", "Real Knife"],
     "Progressive Weapons"           : ["Toy Knife", "Toy Knife", "Tough Glove", "Ballet Shoes", "Torn Notebook", "Burnt Pan", "Empty Gun", "Progressive Knife"],
 
-    "Progressive Manly Bandanna"    : ["No Manly Bandanna", "No Manly Bandanna", "Manly Bandanna"],
-    "Progressive Cloudy Glasses"    : ["No Cloudy Glasses", "No Cloudy Glasses", "Cloudy Glasses"],
-    "Progressive Cowboy Hat"        : ["No Cowboy Hat", "No Cowboy Hat", "Cowboy Hat"],
-    "Progressive Locket"            : ["Heart Locket", "Heart Locket", "The Locket"],
-    "Progressive Armors"            : ["Faded Ribbon", "Faded Ribbon", "Manly Bandanna", "Old Tutu", "Cloudy Glasses", "Stained Apron", "Cowboy Hat", "Progressive Locket"],
+    "Progressive Manly Bandanna"    : ["No Manly Bandanna", "Manly Bandanna"],
+    "Progressive Cloudy Glasses"    : ["No Cloudy Glasses", "Cloudy Glasses"],
+    "Progressive Cowboy Hat"        : ["No Cowboy Hat", "Cowboy Hat"],
+    "Progressive Locket"            : ["The Locket" if route == "genocide" else "Heart Locket", "Heart Locket", "The Locket"],
+    "Progressive Armor"             : ["Faded Ribbon", "Faded Ribbon", "Progressive Manly Bandanna", "Old Tutu", "Progressive Cloudy Glasses", "Stained Apron", "Progressive Cowboy Hat", "Progressive Locket", "temy armor"],
 
-    "Progressive Ruins Key"         : ["No Ruins Key", "No Ruins Key", "Ruins Key"],
-    "Progressive Snowdin Key"       : ["No Snowdin Key", "No Snowdin Key", "Snowdin Key"],
-    "Progressive Waterfall Key"     : ["No Waterfall Key", "No Waterfall Key", "Waterfall Key"],
-    "Progressive Hotland Key"       : ["No Hotland Key", "No Hotland Key", "Hotland Key"],
-    "Progressive Core Key"          : ["No Core Key", "No Core Key", "Core Key"],
-    "Progressive New Home Key"      : ["No Home Key", "No Home Key", "No Key Pieces", "Left Home Key", "Right Home Key", "Has Key Pieces", "New Home Key"]
+    "Progressive Ruins Key"         : ["No Ruins Key", "Ruins Key"],
+    "Progressive Snowdin Key"       : ["No Snowdin Key", "Snowdin Key"],
+    "Progressive Waterfall Key"     : ["No Waterfall Key", "Waterfall Key"],
+    "Progressive Hotland Key"       : ["No Hotland Key", "Hotland Key"],
+    "Progressive Core Key"          : ["No Core Key", "Core Key"],
+    "Progressive New Home Key"      : ["No Home Key", "No Key Pieces", "Left Home Key", "Right Home Key", "Has Key Pieces", "New Home Key"]
 } %}
+
+{% if route == "genocide" %}
+    {% set stainedApronIndex = progressive_order["Progressive Armor"].index("Stained Apron") %}
+    {% set poppedOut = progressive_order["Progressive Armor"].pop(stainedApronIndex) %}
+{% endif %}
 
 {% set multi_items = [
     "LOVE",
@@ -108,17 +115,26 @@
     {# Inventory Grid #}
     <div class="tracker-container">
         {% for (category, items) in inventory_order.items() %}
-            <div class="inventory-grid">
-                {% for item in items %}
-                    {% if item in progressive_order %}
-                        {% set non_prog_item = progressive_order[item][inventory[item]] %}
+            {% if items | length > 0 %}
+                <div class="inventory-grid">
+                    {% for item in items %}
+                        {% set non_prog_item = item %}
+
+                        {% if non_prog_item in progressive_order %}
+                            {% set non_prog_item = progressive_order[non_prog_item][inventory[non_prog_item]] %}
+
+                            {% if non_prog_item in progressive_order %}
+                                {% set non_prog_item = progressive_order[non_prog_item][inventory[non_prog_item]] %}
+                            {% endif %}
+                        {% endif %}
+
                         <div class="item">
                             {% if non_prog_item in icons %}
                                 <img
                                     src="{{ icons[non_prog_item] }}"
                                     alt="{{ non_prog_item }}"
                                     title="{{ non_prog_item }}"
-                                    class="{{ 'missing' if (item not in inventory or inventory[item] == 0) }}"
+                                    class="{{ 'missing' if (non_prog_item not in inventory or inventory[non_prog_item] == 0) }}"
                                 />
                             {% elif non_prog_item in multi_image_icons %}
                                 <img
@@ -127,7 +143,7 @@
                                     title="{{ non_prog_item }}"
                                 />
                             {% else %}
-                                <div class="{{ 'missing' if (item not in inventory or inventory[item] == 0) else 'collected' }}">
+                                <div class="{{ 'missing' if (non_prog_item not in inventory or inventory[non_prog_item] == 0) else 'collected' }}">
                                     {{ non_prog_item }}
                                 </div>
                             {% endif %}
@@ -136,34 +152,9 @@
                                 <div class="quantity">{{ inventory[non_prog_item] }}</div>
                             {% endif %}
                         </div>
-                    {% else %}
-                        <div class="item">
-                            {% if item in icons %}
-                                <img
-                                    src="{{ icons[item] }}"
-                                    alt="{{ item }}"
-                                    title="{{ item }}"
-                                    class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
-                                />
-                            {% elif item in multi_image_icons %}
-                                <img
-                                    src="{{ multi_image_icons[item] }}"
-                                    alt="{{ item }}"
-                                    title="{{ item }}"
-                                />
-                            {% else %}
-                                <div class="{{ 'missing' if (item not in inventory or inventory[item] == 0) else 'collected' }}">
-                                    {{ item }}
-                                </div>
-                            {% endif %}
-
-                            {% if item in multi_items %}
-                                <div class="quantity">{{ inventory[item] }}</div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endfor %}
 
         {% for region_name in known_regions %}
