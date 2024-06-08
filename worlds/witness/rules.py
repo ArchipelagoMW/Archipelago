@@ -228,23 +228,23 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
         return region.can_reach
-    elif item == "7 Lasers":
+    if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, False)
-    elif item == "7 Lasers + Redirect":
+    if item == "7 Lasers + Redirect":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, True)
-    elif item == "11 Lasers":
+    if item == "11 Lasers":
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, False)
-    elif item == "11 Lasers + Redirect":
+    if item == "11 Lasers + Redirect":
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, True)
-    elif item == "Entity Hunt":
+    if item == "Entity Hunt":
         return _can_do_panel_hunt(world)
-    elif item == "PP2 Weirdness":
+    if item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
-    elif item == "Theater to Tunnels":
+    if item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
     if item in player_logic.USED_EVENT_NAMES_BY_HEX:
         return _can_solve_panel(item, world)
