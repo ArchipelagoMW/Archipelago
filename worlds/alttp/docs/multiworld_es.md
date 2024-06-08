@@ -2,8 +2,7 @@
 
 ## Software requerido
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Asegúrate de marcar la casilla de 
-`SNI Client - A Link to the Past Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - [SNI](https://github.com/alttpo/sni/releases). Esto está incluido automáticamente en la instalación de Archipelago.
 - SNI no es compatible con (Q)Usb2Snes.
 - Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
