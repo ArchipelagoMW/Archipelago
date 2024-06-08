@@ -172,7 +172,7 @@ castable_magic_table = {
 
 magic_table = {
     **castable_magic_table,
-    ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , 0x00, ItemClassification.progression),
 }
 
 emblems_table = {
@@ -232,7 +232,7 @@ inventory_items_table = {
 
 
 misc_table = {
-    ItemName.NOTHING : SoulBlazerItemData(ItemID.NOTHING, 0x00, ItemClassification.trap),
+    ItemName.NOTHING : SoulBlazerItemData(ItemID.NOTHING, 0x00, ItemClassification.filler),
     ItemName.GEMS    : SoulBlazerItemData(ItemID.GEMS   , 100 , ItemClassification.filler),
     ItemName.EXP     : SoulBlazerItemData(ItemID.EXP    , 250 , ItemClassification.filler),
 }
