@@ -104,12 +104,11 @@ class StaticWitnessLogicObj:
                 "Laser Hedges",
                 "Laser Pressure Plates",
             }
-            is_vault_or_video = "Vault" in entity_name
 
             if "Discard" in entity_name:
                 entity_type = "Panel"
                 location_type = "Discard"
-            elif is_vault_or_video:
+            elif "Vault" in entity_name:
                 entity_type = "Panel"
                 location_type = "Vault"
             elif entity_name in laser_names:
