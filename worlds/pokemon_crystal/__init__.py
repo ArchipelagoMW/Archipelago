@@ -11,7 +11,7 @@ from .client import PokemonCrystalClient
 from .data import PokemonData, TrainerData, BASE_OFFSET, MiscData, TMHMData, BankAddress, data as crystal_data, \
     WildData, StaticPokemon
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
-    reverse_offset_item_value, ITEM_GROUPS, item_const_name_to_id
+    reverse_offset_item_value, ITEM_GROUPS, item_const_name_to_id, item_const_name_to_label
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
 from .moves import randomize_tms
@@ -306,6 +306,10 @@ class PokemonCrystalWorld(World):
 
     def create_item(self, name: str) -> PokemonCrystalItem:
         return self.create_item_by_code(self.item_name_to_id[name])
+
+    def get_filler_item_name(self) -> str:
+        item = get_random_filler_item(self.random)
+        return item_const_name_to_label(item)
 
     def create_item_by_const_name(self, item_const: str) -> PokemonCrystalItem:
         item_code = item_const_name_to_id(item_const) + BASE_OFFSET
