@@ -506,6 +506,19 @@ class CMWorld(World):
         else:
             return []
 
+    def determine_difficulty(self):
+        difficulty = 1.0
+        if self.options.fairy_chess_army.value == self.options.fairy_chess_army.option_stable:
+            difficulty *= 1.1
+        if self.options.fairy_chess_pawns.value != self.options.fairy_chess_pawns.option_vanilla:
+            difficulty *= 1.05
+        if self.options.fairy_chess_pawns.value == self.options.fairy_chess_pawns.option_mixed:
+            difficulty *= 1.1
+        fairy_pieces = self.options.fairy_chess_pieces.value
+        difficulty *= 0.95 + (0.05 * len(fairy_pieces))
+        # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
+        return difficulty
+
     def collect(self, state: CollectionState, item: Item) -> bool:
         material = 0
         item_count = state.prog_items[self.player][item.name]
