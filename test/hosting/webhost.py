@@ -66,12 +66,19 @@ def create_room(app_client: "FlaskClient", seed: str, auto_start: bool = False) 
 def start_room(app_client: "FlaskClient", room_id: str, timeout: float = 30) -> str:
     from time import sleep
 
+    import pony.orm
+
     poll_interval = .2
 
     print(f"Starting room {room_id}")
     no_timeout = timeout <= 0
     while no_timeout or timeout > 0:
-        response = app_client.get(f"/room/{room_id}")
+        try:
+            response = app_client.get(f"/room/{room_id}")
+        except pony.orm.core.OptimisticCheckError:
+            # hoster wrote to room during our transaction
+            continue
+
         assert response.status_code == 200, f"Starting room for {room_id} failed: status {response.status_code}"
         match = re.search(r"/connect ([\w:.\-]+)", response.text)
         if match:
