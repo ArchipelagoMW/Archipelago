@@ -173,12 +173,19 @@ class YachtDiceWorld(World):
         # calibrate the weights, since the impact of each of the items is different
         weights[0] = weights[0] / 5 * frags_per_dice
         weights[1] = weights[1] / 5 * frags_per_roll
-
+        
         extra_points_added = 0
         multipliers_added = 0
-
-        # Keep adding items until a score of 1000 is in logic
-        while dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options) < 1000:
+        items_added = 0
+        
+        def get_item_to_add():
+            nonlocal weights
+            nonlocal extra_points_added
+            nonlocal multipliers_added
+            nonlocal items_added
+            
+            items_added += 1
+                        
             all_items = self.itempool + self.precollected
             dice_fragments_in_pool = all_items.count("Dice") * frags_per_dice + all_items.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * frags_per_dice:
@@ -206,30 +213,31 @@ class YachtDiceWorld(World):
 
             # Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
             which_item_to_add = self.multiworld.random.choices([0, 1, 2, 3, 4, 5], weights=weights)[0]
+            item_to_add = ""
             if which_item_to_add == 0:
-                if frags_per_dice == 1:
-                    self.itempool += ["Dice"]
-                else:
-                    self.itempool += ["Dice Fragment"]
                 weights[0] /= 1 + frags_per_dice
-            elif which_item_to_add == 1:
-                if frags_per_roll == 1:
-                    self.itempool += ["Roll"]
+                if frags_per_dice == 1:
+                    return "Dice"
                 else:
-                    self.itempool += ["Roll Fragment"]
+                    return "Dice Fragment"
+            elif which_item_to_add == 1:
                 weights[1] /= 1 + frags_per_roll
+                if frags_per_roll == 1:
+                    return "Roll"
+                else:
+                    return "Roll Fragment"
             elif which_item_to_add == 2:
-                self.itempool += ["Fixed Score Multiplier"]
                 weights[2] /= 1.05
                 multipliers_added += 1
+                return "Fixed Score Multiplier"
             elif which_item_to_add == 3:
-                self.itempool += ["Step Score Multiplier"]
                 weights[3] /= 1.1
                 multipliers_added += 1
+                return "Step Score Multiplier"
             elif which_item_to_add == 4:
                 cat_weights = [2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
-                self.itempool += self.multiworld.random.choices(possible_categories, weights=cat_weights)
                 weights[4] /= 1.1
+                return self.multiworld.random.choices(possible_categories, weights=cat_weights)[0]
             elif which_item_to_add == 5:
                 score_dist = self.options.points_size.value
                 probs = [1, 0, 0]
@@ -243,21 +251,50 @@ class YachtDiceWorld(World):
                     probs = [0.3, 0.4, 0.3]
                 c = self.multiworld.random.choices([0, 1, 2], weights=probs)[0]
                 if c == 0:
-                    self.itempool += ["1 Point"]
-                    extra_points_added += 1
                     weights[5] /= 1.01
+                    extra_points_added += 1
+                    return "1 Point"
                 elif c == 1:
-                    self.itempool += ["10 Points"]
-                    extra_points_added += 10
                     weights[5] /= 1.1
+                    extra_points_added += 10
+                    return "10 Points"
                 elif c == 2:
-                    self.itempool += ["100 Points"]
-                    extra_points_added += 100
                     weights[5] /= 2
+                    extra_points_added += 100
+                    return "100 Points"
                 else:
                     raise Exception("Unknown point value (Yacht Dice)")
             else:
                 raise Exception("Invalid index when adding new items in Yacht Dice")
+            
+        # adding 17 items as a start seems like the smartest way to get close to 1000 points
+        for _ in range(17):
+            self.itempool += [get_item_to_add()]
+
+        score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
+        
+        # if we overshoot, remove items until you get below 1000, then return the last removed item
+        if score_in_logic > 1000:
+            removed_item = ""
+            while score_in_logic > 1000:
+                removed_item = self.itempool[-1]
+                self.itempool.pop()
+                score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
+            self.itempool.append(removed_item)
+        else:
+            # Keep adding items until a score of 1000 is in logic
+            while score_in_logic < 1000:
+                item_to_add = get_item_to_add()
+                self.itempool += [item_to_add]
+                if item_to_add == "1 Point":
+                    score_in_logic += 1
+                elif item_to_add == "10 Points":
+                    score_in_logic += 10
+                elif item_to_add == "100 Points":
+                    score_in_logic += 100
+                else:
+                    score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
+        
 
         # count the number of locations in the game.
         already_items = len(self.itempool) + self.extra_plando_items + 1  # +1 because of Victory item
