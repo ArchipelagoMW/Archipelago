@@ -19,30 +19,30 @@ class EntityHuntPicker:
         self.PRE_PICKED_HUNT_ENTITIES = pre_picked_entities.copy()
         self.HUNT_ENTITIES = set()
 
-        self.ALL_ELIGIBLE_PANELS, self.ELIGIBLE_PANELS_BY_AREA = self._get_eligible_panels()
+        self.ALL_ELIGIBLE_ENTITIES, self.ELIGIBLE_ENTITIES_PER_AREA = self._get_eligible_panels()
 
     def pick_panel_hunt_panels(self, total_amount: int) -> Set[str]:
         """
-        The process of picking all hunt panels is:
+        The process of picking all hunt entities is:
 
-        1. Add pre-defined hunt panels
-        2. Pick random hunt panels to fill out the rest
-        3. Replace unfair panels with fair panels
+        1. Add pre-defined hunt entities
+        2. Pick random hunt entities to fill out the rest
+        3. Replace unfair entities with fair entities
 
         Each of these is its own function.
         """
 
         self.HUNT_ENTITIES = self.PRE_PICKED_HUNT_ENTITIES.copy()
 
-        self._pick_all_hunt_panels(total_amount)
-        self._replace_unfair_hunt_panels_with_good_hunt_panels()
+        self._pick_all_hunt_entities(total_amount)
+        self._replace_unfair_hunt_entities_with_good_hunt_entities()
         self._log_results()
 
         return self.HUNT_ENTITIES
 
     def _get_eligible_panels(self) -> Tuple[List[str], Dict[str, Set[str]]]:
         """
-        There are some panels that are not allowed for panel hunt for various technical of gameplay reasons.
+        There are some entities that are not allowed for panel hunt for various technical of gameplay reasons.
         Make a list of all the ones that *are* eligible, plus a lookup of eligible panels per area.
         """
 
@@ -87,31 +87,31 @@ class EntityHuntPicker:
 
         return all_eligible_panels, eligible_panels_by_area
 
-    def _get_percentage_of_hunt_panels_by_area(self):
+    def _get_percentage_of_hunt_entities_by_area(self):
         contributing_percentage_per_area = dict()
-        for area, eligible_panels in self.ELIGIBLE_PANELS_BY_AREA.items():
-            amount_of_already_chosen_panels = len(self.ELIGIBLE_PANELS_BY_AREA[area] & self.HUNT_ENTITIES)
-            current_percentage = amount_of_already_chosen_panels / len(self.HUNT_ENTITIES)
+        for area, eligible_entities in self.ELIGIBLE_ENTITIES_PER_AREA.items():
+            amount_of_already_chosen_entities = len(self.ELIGIBLE_ENTITIES_PER_AREA[area] & self.HUNT_ENTITIES)
+            current_percentage = amount_of_already_chosen_entities / len(self.HUNT_ENTITIES)
             contributing_percentage_per_area[area] = current_percentage
 
         return contributing_percentage_per_area
 
     def _get_next_random_batch(self, amount: int, same_area_discouragement: float) -> List[str]:
         """
-        Pick the next batch of hunt panels.
-        Areas that already have a lot of hunt panels in them will be discouraged from getting more.
+        Pick the next batch of hunt entities.
+        Areas that already have a lot of hunt entities in them will be discouraged from getting more.
         The strength of this effect is controlled by the same_area_discouragement factor from the player's options.
         """
 
-        percentage_of_hunt_panels_by_area = self._get_percentage_of_hunt_panels_by_area()
+        percentage_of_hunt_entities_by_area = self._get_percentage_of_hunt_entities_by_area()
 
-        max_percentage = max(percentage_of_hunt_panels_by_area.values())
+        max_percentage = max(percentage_of_hunt_entities_by_area.values())
         if max_percentage == 0:
-            allowance_per_area = {area: 1 for area in percentage_of_hunt_panels_by_area}
+            allowance_per_area = {area: 1 for area in percentage_of_hunt_entities_by_area}
         else:
             allowance_per_area = {
                 area: (max_percentage - current_percentage) / max_percentage
-                for area, current_percentage in percentage_of_hunt_panels_by_area.items()
+                for area, current_percentage in percentage_of_hunt_entities_by_area.items()
             }
             # use same_area_discouragement as lerp factor
             allowance_per_area = {
@@ -120,34 +120,34 @@ class EntityHuntPicker:
             }
 
         assert min(allowance_per_area.values()) >= 0, (f"Somehow, an area had a negative weight when picking"
-                                                       f" hunt panels: {allowance_per_area}")
+                                                       f" hunt entities: {allowance_per_area}")
 
-        remaining_panels, remaining_panels_weights = [], []
-        for area, eligible_panels in self.ELIGIBLE_PANELS_BY_AREA.items():
-            for panel in eligible_panels - self.HUNT_ENTITIES:
-                remaining_panels.append(panel)
-                remaining_panels_weights.append(allowance_per_area[area])
+        remaining_entities, remaining_entity_weights = [], []
+        for area, eligible_entities in self.ELIGIBLE_ENTITIES_PER_AREA.items():
+            for panel in eligible_entities - self.HUNT_ENTITIES:
+                remaining_entities.append(panel)
+                remaining_entity_weights.append(allowance_per_area[area])
 
         # I don't think this can ever happen, but let's be safe
-        if sum(remaining_panels_weights) == 0:
-            remaining_panels_weights = [1] * len(remaining_panels_weights)
+        if sum(remaining_entity_weights) == 0:
+            remaining_entity_weights = [1] * len(remaining_entity_weights)
 
-        return self.random.choices(remaining_panels, weights=remaining_panels_weights, k=amount)
+        return self.random.choices(remaining_entities, weights=remaining_entity_weights, k=amount)
 
-    def _pick_all_hunt_panels(self, total_amount: int):
+    def _pick_all_hunt_entities(self, total_amount: int):
         """
         The core function of the EntityHuntPicker in which all Hunt Entities are picked,
         respecting the player's choices for total amount and same area discouragement.
         """
         same_area_discouragement = self.player_options.panel_hunt_discourage_same_area_factor / 100
 
-        # If we're using random picking, just choose all the panels now and return
+        # If we're using random picking, just choose all the entities now and return
         if not same_area_discouragement:
-            hunt_panels = self.random.choices(self.ALL_ELIGIBLE_PANELS, k=total_amount - len(self.HUNT_ENTITIES))
-            self.HUNT_ENTITIES.update(hunt_panels)
+            hunt_entities = self.random.choices(self.ALL_ELIGIBLE_ENTITIES, k=total_amount - len(self.HUNT_ENTITIES))
+            self.HUNT_ENTITIES.update(hunt_entities)
             return
 
-        # If we're discouraging panels from the same area being picked, we have to pick panels one at a time
+        # If we're discouraging entities from the same area being picked, we have to pick entities one at a time
         # For higher total counts, we do them in small batches for performance
         batch_size = max(1, total_amount // 20)
 
@@ -156,10 +156,10 @@ class EntityHuntPicker:
 
             self.HUNT_ENTITIES.update(self._get_next_random_batch(actual_amount_to_pick, same_area_discouragement))
 
-    def _replace_unfair_hunt_panels_with_good_hunt_panels(self):
+    def _replace_unfair_hunt_entities_with_good_hunt_entities(self):
         """
-        For connected panels that "solve together", make sure that the one you're guaranteed
-        to be able to see and interact with first is the one that is chosen, so you don't get "surprise panels".
+        For connected entities that "solve together", make sure that the one you're guaranteed
+        to be able to see and interact with first is the one that is chosen, so you don't get "surprise entities".
         """
 
         replacements = {
@@ -180,7 +180,7 @@ class EntityHuntPicker:
                 continue
 
             # ... and the good entity was not ...
-            if good_entity in self.HUNT_ENTITIES or good_entity not in self.ALL_ELIGIBLE_PANELS:
+            if good_entity in self.HUNT_ENTITIES or good_entity not in self.ALL_ELIGIBLE_ENTITIES:
                 continue
 
             # ... replace the bad entity with the good entity.
@@ -188,11 +188,11 @@ class EntityHuntPicker:
             self.HUNT_ENTITIES.add(good_entity)
 
     def _log_results(self):
-        final_percentage_of_hunt_panels_by_area = self._get_percentage_of_hunt_panels_by_area()
+        final_percentage_by_area = self._get_percentage_of_hunt_entities_by_area()
 
-        sorted_area_percentages_dict = dict(sorted(final_percentage_of_hunt_panels_by_area.items(), key=lambda x: x[1]))
+        sorted_area_percentages_dict = dict(sorted(final_percentage_by_area.items(), key=lambda x: x[1]))
         sorted_area_percentages_dict = {
-            area: str(percentage) + (" (maxed)" if self.ELIGIBLE_PANELS_BY_AREA[area] <= self.HUNT_ENTITIES else "")
+            area: str(percentage) + (" (maxed)" if self.ELIGIBLE_ENTITIES_PER_AREA[area] <= self.HUNT_ENTITIES else "")
             for area, percentage in sorted_area_percentages_dict.items()
         }
         player_name = self.player_name
