@@ -418,15 +418,3 @@ def write_bytes(patch, byte_array, address):
         address,
         bytes(byte_array)
     )
-
-
-def get_random_move(random):
-    randommoves = [move.id for _name, move in data.moves.items() if not move.is_hm and move.id > 0]
-    return random.choice(randommoves)
-
-
-def get_random_helditem(random):
-    helditems = [item_id for item_id, item in data.items.items(
-    ) if "Unique" not in item.tags and "INVALID" not in item.tags]
-    item = random.choice(helditems)
-    return item if item < 256 else item - 256
