@@ -1,44 +1,63 @@
-def misc_activities(generated_misc, random):
-    new_ra = [random.choice(["Y", "N"]) for _ in generated_misc.ra]
-    generated_misc = generated_misc._replace(ra=new_ra)
+from typing import TYPE_CHECKING
 
-    random.shuffle(generated_misc.fu)
-    for line in generated_misc.ec:
-        random.shuffle(line)
+if TYPE_CHECKING:
+    from . import PokemonCrystalWorld
+else:
+    PokemonCrystalWorld = object
 
-    shuffled_warps = {}
+
+def misc_activities(world: PokemonCrystalWorld):
+    # Randomize Yes/No answers for Radio Card quiz
+    new_radio_tower = [world.random.choice(["Y", "N"]) for _ in world.generated_misc.radio_tower_questions]
+    world.generated_misc = world.generated_misc._replace(radio_tower_questions=new_radio_tower)
+
+    # shuffle positions of trainers in fuchsia gym
+    world.random.shuffle(world.generated_misc.fuchsia_gym_trainers)
+    # warps/potential warps for each y coord, shuffle these to randomize the path
+    for line in world.generated_misc.ecruteak_gym_warps:
+        world.random.shuffle(line)
+
+    shuffled_saffron_warps = {}
     for direction in ["NW", "N", "NE", "W", "E", "SW", "SE"]:
         numbers = [1, 2, 3, 4]
-        random.shuffle(numbers)
-        shuffled_warps[direction] = numbers
+        world.random.shuffle(numbers)
+        shuffled_saffron_warps[direction] = numbers
 
-    for pair in generated_misc.sa.pairs:
+    for pair in world.generated_misc.saffron_gym_warps.pairs:
         for i in range(0, 2):
             if pair[i] in ["START", "END"]:
                 continue
             direction = pair[i].split("_")[0]
             number = int(pair[i].split("_")[1])
-            new_number = shuffled_warps[direction][number - 1]
+            new_number = shuffled_saffron_warps[direction][number - 1]
             pair[i] = f"{direction}_{new_number}"
 
-    return generated_misc
 
-
-def get_misc_spoiler_log(generated_misc, write):
-    ra_answers = " -> ".join(["YES" if ra == "Y" else "NO" for ra in generated_misc.ra])
-    write(f"Radio Tower Quiz Answers:\n\n{ra_answers}\n\n")
+def get_misc_spoiler_log(world: PokemonCrystalWorld, write):
+    radio_tower_answers = " -> ".join(
+        ["YES" if answer == "Y" else "NO" for answer in world.generated_misc.radio_tower_questions])
+    write(f"Radio Tower Quiz Answers:\n\n{radio_tower_answers}\n\n")
 
     ecruteak_map = []
+    # create basic map
     for y in range(0, 10):
         ecruteak_map.append(["  " if x in [1, 2, 3, 4] and y in [3, 5, 7, 9] else "██" for x in range(0, 6)])
 
-    clear_tiles = [generated_misc.ec[0][-1], generated_misc.ec[1][-1], generated_misc.ec[2][-2],
-                   generated_misc.ec[2][-1], generated_misc.ec[3][-1], [5, 4], [6, 4], [5, 5], [6, 5]]
+    # clear the path through the gym
+    # unused (clear) warp locations get shuffled to the end, plus some that are already clear
+    clear_tiles = [world.generated_misc.ecruteak_gym_warps[0][-1],
+                   world.generated_misc.ecruteak_gym_warps[1][-1],
+                   world.generated_misc.ecruteak_gym_warps[2][-2],
+                   world.generated_misc.ecruteak_gym_warps[2][-1],
+                   world.generated_misc.ecruteak_gym_warps[3][-1],
+                   [5, 4], [6, 4], [5, 5], [6, 5]]
 
     for coords in clear_tiles:
-        if coords[0] != 2:  # don't show left-side clear spots
+        # don't show left-side clear spots, since they aren't reachable
+        if coords[0] != 2:
             ecruteak_map[coords[1] - 4][coords[0] - 2] = "  "
 
+    # add trainers
     trainers = [[5, 1], [0, 3], [5, 5], [1, 9]]
     for coords in trainers:
         ecruteak_map[coords[1]][coords[0]] = "()"
@@ -47,25 +66,28 @@ def get_misc_spoiler_log(generated_misc, write):
     write("\n".join(["".join(line) for line in ecruteak_map]) + "\n\n")
 
     saffron_map = []
+    # draw the walls in saffron gym
     for y in range(0, 17):
         saffron_map.append(["█" if x in [7, 15] or y in [5, 11] else " " for x in range(0, 23)])
-    character = ord("A")
-    for pair in generated_misc.sa.pairs:
+
+    character = ord("A")  # we will increment this while drawing the warps
+    for pair in world.generated_misc.saffron_gym_warps.pairs:
         for warp in pair:
-            [x, y] = generated_misc.sa.warps[warp].coords
+            [x, y] = world.generated_misc.saffron_gym_warps.warps[warp].coords
             # cosmetic fudging
             x = x + 2 if x > 10 else x
             y = y - 2 if warp != "END" else y
-            saffron_map[y][x] = chr(character)
-        character += 1
+            saffron_map[y][x] = chr(character)  # add warp letter
+        character += 1  # next letter
     saffron_map[7][9] = "X"  # sabrina
-    saffron_map[16][10] = "░"  # entrance
-    saffron_map[16][11] = "░"
-    saffron_map[16][12] = "░"
+    saffron_map[16][10] = "░"  #
+    saffron_map[16][11] = "░"  # entrance
+    saffron_map[16][12] = "░"  #
 
     write("Saffron Gym Warps:\n\n")
     write("\n".join(["".join(line) for line in saffron_map]) + "\n\n")
 
+    # sum of x + y for each position
     fuchsia_positions = {
         11: "South-West",
         12: "Center",
@@ -73,6 +95,7 @@ def get_misc_spoiler_log(generated_misc, write):
         13: "North-East",
         6: "North"
     }
-    position = sum(generated_misc.fu[0])
+    # janine is the first trainer in the list
+    position = sum(world.generated_misc.fuchsia_gym_trainers[0])
     if fuchsia_positions[position]:
         write(f"Fuchsia Gym Janine Position: {fuchsia_positions[position]}\n\n")

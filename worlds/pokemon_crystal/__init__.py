@@ -11,7 +11,7 @@ from .client import PokemonCrystalClient
 from .data import PokemonData, TrainerData, BASE_OFFSET, MiscData, TMHMData, BankAddress, data as crystal_data, \
     WildData, StaticPokemon
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
-    reverse_offset_item_value, ITEM_GROUPS
+    reverse_offset_item_value, ITEM_GROUPS, item_const_name_to_id
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
 from .moves import randomize_tms
@@ -168,7 +168,7 @@ class PokemonCrystalWorld(World):
             elif self.random.randint(0, 100) < total_trap_weight:
                 default_itempool += [get_random_trap()]
             elif item_code == BASE_OFFSET:  # item is NO_ITEM, trainersanity checks
-                default_itempool += [self.create_item(get_random_filler_item(self.random))]
+                default_itempool += [self.create_item_by_const_name(get_random_filler_item(self.random))]
             else:
                 default_itempool += [self.create_item_by_code(item_code)]
 
@@ -238,7 +238,7 @@ class PokemonCrystalWorld(World):
         #     self.random.shuffle(self.generated_sfx)
 
         if self.options.enable_mischief.value:
-            self.generated_misc = misc_activities(self.generated_misc, self.random)
+            misc_activities(self)
 
         generate_phone_traps(self)
 
@@ -300,10 +300,14 @@ class PokemonCrystalWorld(World):
 
         if self.options.enable_mischief:
             spoiler_handle.write(f"\n\nMischief ({self.multiworld.player_name[self.player]}):\n\n")
-            get_misc_spoiler_log(self.generated_misc, spoiler_handle.write)
+            get_misc_spoiler_log(self, spoiler_handle.write)
 
     def create_item(self, name: str) -> PokemonCrystalItem:
         return self.create_item_by_code(self.item_name_to_id[name])
+
+    def create_item_by_const_name(self, item_const: str) -> PokemonCrystalItem:
+        item_code = item_const_name_to_id(item_const) + BASE_OFFSET
+        return self.create_item_by_code(item_code)
 
     def create_item_by_code(self, item_code: int) -> PokemonCrystalItem:
         return PokemonCrystalItem(

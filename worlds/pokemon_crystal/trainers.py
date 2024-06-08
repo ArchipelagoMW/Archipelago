@@ -60,6 +60,7 @@ def vanilla_trainer_movesets(world: PokemonCrystalWorld):
 def randomize_trainer_pokemon_moves(world, pkmn_data):
     new_moves = pkmn_data.moves
     for i, move in enumerate(pkmn_data.moves):
+        # fill out all four moves if start_with_four_moves, else skip empty slots
         if move != "NO_MOVE" or world.options.randomize_learnsets == RandomizeLearnsets.option_start_with_four_moves:
             new_move = get_random_move_from_learnset(world, pkmn_data.pokemon, pkmn_data.level)
             new_moves[i] = new_move

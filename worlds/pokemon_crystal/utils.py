@@ -15,16 +15,16 @@ def get_random_held_item(random):
 
 
 def get_random_filler_item(random):
-    weighted_pool = [["Rare Candy"] * 3, ["Ether", "Elixer", "Max Ether", "Max Elixer", "Mysteryberry"] * 5,
-                     ["Water Stone", "Fire Stone", "Thunderstone", "Leaf Stone", "Sun Stone", "Moon Stone"] * 2,
-                     ["Escape Rope"] * 3, ["Nugget", "Star Piece", "Stardust", "Pearl", "Big Pearl"] * 2,
-                     ["Poke Ball", "Great Ball", "Ultra Ball"] * 5,
-                     ["Potion", "Super Potion", "Hyper Potion", "Energy Root", "Energypowder"] * 12,
-                     ["Full Restore"] * 2, ["Repel", "Super Repel", "Max Repel"] * 3,
-                     ["Revive", "Revival Herb"] * 4 + ["Max Revive"] * 2,
-                     ["HP Up", "PP Up", "Protein", "Carbos", "Calcium", "Iron"] * 5,
-                     ["Guard Spec", "Dire Hit", "X Attack", "X Defend", "X Speed", "X Special"] * 2,
-                     ["Heal Powder", "Burn Heal", "Parlyz Heal", "Ice Heal", "Antidote", "Awakening", "Full Heal"] * 5]
+    weighted_pool = [["RARE_CANDY"] * 3, ["ETHER", "ELIXER", "MAX_ETHER", "MAX_ELIXER", "MYSTERYBERRY"] * 5,
+                     ["WATER_STONE", "FIRE_STONE", "THUNDERSTONE", "LEAF_STONE", "SUN_STONE", "MOON_STONE"] * 2,
+                     ["ESCAPE_ROPE"] * 3, ["NUGGET", "STAR_PIECE", "STARDUST", "PEARL", "BIG_PEARL"] * 2,
+                     ["POKE_BALL", "GREAT_BALL", "ULTRA_BALL"] * 5,
+                     ["POTION", "SUPER_POTION", "HYPER_POTION", "ENERGY_ROOT", "ENERGYPOWDER"] * 12,
+                     ["FULL_RESTORE"] * 2, ["REPEL", "SUPER_REPEL", "MAX_REPEL"] * 3,
+                     ["REVIVE", "REVIVAL_HERB"] * 4 + ["MAX_REVIVE"] * 2,
+                     ["HP_UP", "PP_UP", "PROTEIN", "CARBOS", "CALCIUM", "IRON"] * 5,
+                     ["GUARD_SPEC", "DIRE_HIT", "X_ATTACK", "X_DEFEND", "X_SPEED", "X_SPECIAL"] * 2,
+                     ["HEAL_POWDER", "BURN_HEAL", "PARLYZ_HEAL", "ICE_HEAL", "ANTIDOTE", "AWAKENING", "FULL_HEAL"] * 5]
     group = random.choice(weighted_pool)
     return random.choice(group)
 

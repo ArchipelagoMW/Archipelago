@@ -108,16 +108,16 @@ class MiscWarp(NamedTuple):
     id: int
 
 
-class MiscSa(NamedTuple):
+class MiscSaffronWarps(NamedTuple):
     warps: Dict[str, MiscWarp]
     pairs: List[List[str]]
 
 
 class MiscData(NamedTuple):
-    fu: List[List[int]]
-    ra: List[str]
-    sa: MiscSa
-    ec: List[List[List[int]]]
+    fuchsia_gym_trainers: List[List[int]]
+    radio_tower_questions: List[str]
+    saffron_gym_warps: MiscSaffronWarps
+    ecruteak_gym_warps: List[List[List[int]]]
 
 
 class BankAddress(NamedTuple):
@@ -219,9 +219,9 @@ def _init() -> None:
     trainer_data = data_json["trainers"]
     wild_data = data_json["wilds"]
     type_data = data_json["types"]
-    f_data = data_json["misc"]["fu"]
-    sa_data = data_json["misc"]["sa"]
-    ec_data = data_json["misc"]["ec"]
+    fuchsia_data = data_json["misc"]["fuchsia_gym_trainers"]
+    saffron_data = data_json["misc"]["saffron_gym_warps"]
+    ecruteak_data = data_json["misc"]["ecruteak_gym_warps"]
     tmhm_data = data_json["tmhm"]
 
     data.rom_version = data_json["rom_version"]
@@ -417,13 +417,14 @@ def _init() -> None:
 
     data.wild = WildData(grass_dict, water_dict, fish_dict, tree_dict)
 
-    sa_warps = {}
+    saffron_warps = {}
     # print(sa_data)
-    for warp_name, warp_data in sa_data["warps"].items():
-        sa_warps[warp_name] = MiscWarp(warp_data["coords"], warp_data["id"])
+    for warp_name, warp_data in saffron_data["warps"].items():
+        saffron_warps[warp_name] = MiscWarp(warp_data["coords"], warp_data["id"])
 
-    ra_data = ["Y", "Y", "N", "Y", "N"]
-    data.misc = MiscData(f_data, ra_data, MiscSa(sa_warps, sa_data["pairs"]), ec_data)
+    radio_tower_data = ["Y", "Y", "N", "Y", "N"]
+    data.misc = MiscData(fuchsia_data, radio_tower_data, MiscSaffronWarps(saffron_warps, saffron_data["pairs"]),
+                         ecruteak_data)
 
     data.types = type_data["types"]
     data.type_ids = type_data["ids"]

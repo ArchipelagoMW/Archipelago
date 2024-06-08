@@ -109,7 +109,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
                 cur_address = data.rom_addresses["AP_Starter_" + pokemon + str(i)] + 1
                 write_bytes(patch, [pokemon_id], cur_address)
                 if i == 4:
-                    helditem = world.item_name_to_id[world.generated_starter_helditems[j]] - BASE_OFFSET
+                    helditem = item_const_name_to_id(world.generated_starter_helditems[j])
                     write_bytes(patch, [helditem], cur_address + 2)
 
     if world.options.randomize_wilds:
@@ -158,7 +158,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
                     write_bytes(patch, [pokemon_id, encounter.level], cur_address)
                     cur_address += 2
 
-        wooper_address = data.rom_addresses["AP_Misc_Intro_Wooper"] + 1
+        wooper_address = data.rom_addresses["AP_Setting_Intro_Wooper"] + 1
         wooper_id = data.pokemon[world.generated_wooper].id
         write_bytes(patch, [wooper_id], wooper_address)
 
@@ -211,7 +211,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
         for pokemon in trainer_data.pokemon:
             pokemon_data = [pokemon.level, data.pokemon[pokemon.pokemon].id]
             if pokemon.item is not None:
-                item_id = world.item_name_to_id[pokemon.item] - BASE_OFFSET
+                item_id = item_const_name_to_id(pokemon.item)
                 pokemon_data.append(item_id)
             for move in pokemon.moves:
                 if move != "NO_MOVE":
@@ -228,45 +228,54 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
     if world.options.enable_mischief:
         address = data.rom_addresses["AP_Misc_FuchsiaTrainers"] + 1
         write_bytes(patch, [0x0a], address + 2)  # spin speed
-        for c in world.generated_misc.fu:
+        for c in world.generated_misc.fuchsia_gym_trainers:
             write_coords = [c[1] + 4, c[0] + 4]
             write_bytes(patch, write_coords, address)
             address += 13
-        for pair in world.generated_misc.sa.pairs:
-            addresses = [data.rom_addresses["AP_Misc_SG_" + warp] + 2 for warp in pair]
-            ids = [world.generated_misc.sa.warps[warp].id for warp in pair]
+        for pair in world.generated_misc.saffron_gym_warps.pairs:
+            addresses = [data.rom_addresses["AP_Misc_SaffronGymWarp_" + warp] + 2 for warp in pair]
+            ids = [world.generated_misc.saffron_gym_warps.warps[warp].id for warp in pair]
             write_bytes(patch, [ids[1]], addresses[0])  # reverse ids
             write_bytes(patch, [ids[0]], addresses[1])
-        eg_warp_counts = [1, 3, 3, 2]
+        eg_warp_counts = [1, 3, 3, 2]  # number of warps to write (the rest are clear)
         for i in range(0, 4):
-            address = data.rom_addresses["AP_Misc_EG_" + str(i + 1)]
+            address = data.rom_addresses["AP_Misc_EcruteakGym_Warps" + str(i + 1)]
             warp_count = eg_warp_counts[i]
-            line_warps = world.generated_misc.ec[i][:warp_count]
+            line_warps = world.generated_misc.ecruteak_gym_warps[i][:warp_count]
             line_warps.sort(key=lambda warp: warp[0])
             for warp in line_warps:
                 write_bytes(patch, [warp[1], warp[0]], address)
                 address += 5
-        for i in range(0, 3):
-            address = data.rom_addresses["AP_Misc_OK_" + str(i + 1)]
-            write_bytes(patch, [0x65, 0xFF], address + 1)
-            write_bytes(patch, [0xFF], address + 4)
-        address = data.rom_addresses["AP_Misc_RaSfx_N"] + 1
+        for move in ["GUILLOTINE", "HORN_DRILL", "FISSURE"]:
+            address = data.rom_addresses["AP_MoveData_Effect_" + move]
+            write_bytes(patch, [0x65], address)  # false swipe effect
+            address = data.rom_addresses["AP_MoveData_Power_" + move]
+            write_bytes(patch, [0xFF], address)  # power 255
+            address = data.rom_addresses["AP_MoveData_Accuracy_" + move]
+            write_bytes(patch, [0xFF], address)  # accuracy 100%
+            address = data.rom_addresses["AP_MoveData_PP_" + move]
+            write_bytes(patch, [0x14], address)  # 20 PP
+        address = data.rom_addresses["AP_Misc_RadioTower_Sfx_N"] + 1
+        # bad pokedex rating jingle
         write_bytes(patch, [0x9F], address)
-        address = data.rom_addresses["AP_Misc_RaSfx_Y2"] + 1
+        address = data.rom_addresses["AP_Misc_RadioTower_Sfx_Y2"] + 1
+        # increasing pokedex rating jingles
         write_bytes(patch, [0xA0], address)
-        address = data.rom_addresses["AP_Misc_RaSfx_Y3"] + 1
+        address = data.rom_addresses["AP_Misc_RadioTower_Sfx_Y3"] + 1
         write_bytes(patch, [0xA1], address)
-        address = data.rom_addresses["AP_Misc_RaSfx_Y4"] + 1
+        address = data.rom_addresses["AP_Misc_RadioTower_Sfx_Y4"] + 1
         write_bytes(patch, [0xA2], address)
-        address = data.rom_addresses["AP_Misc_RaSfx_Y5"] + 1
+        address = data.rom_addresses["AP_Misc_RadioTower_Sfx_Y5"] + 1
         write_bytes(patch, [0xA3], address)
-        address = data.rom_addresses["AP_Misc_Rapidash"] + 1
-        write_bytes(patch, [1], address)
         for i in range(0, 5):
-            answer = world.generated_misc.ra[i]
+            answer = world.generated_misc.radio_tower_questions[i]
+            # # 0x08 is iffalse (.WrongAnswer), 0x09 is iftrue (.WrongAnswer)
             byte = 0x08 if answer == "Y" else 0x09
-            address = data.rom_addresses["AP_Misc_Ra_" + str(i + 1)]
+            address = data.rom_addresses["AP_Misc_RadioTower_Q" + str(i + 1)]
             write_bytes(patch, [byte], address)
+        # gives the chairman a 15/16 chance of repeating the rapidash rant each time
+        address = data.rom_addresses["AP_Misc_Rapidash_Loop"] + 1
+        write_bytes(patch, [1], address)
 
     if world.options.blind_trainers:
         address = data.rom_addresses["AP_Setting_Blind_Trainers"]
