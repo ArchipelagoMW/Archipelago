@@ -280,7 +280,7 @@ class SC2Logic:
                 )
 
     def terran_mobile_detector(self, state: CollectionState) -> bool:
-        return state.has_any({item_names.RAVEN, item_names.SCIENCE_VESSEL, item_names.PROGRESSIVE_ORBITAL_COMMAND}, self.player)
+        return state.has_any({item_names.RAVEN, item_names.SCIENCE_VESSEL, item_names.COMMAND_CENTER_SCANNER_SWEEP}, self.player)
 
     def can_nuke(self, state: CollectionState) -> bool:
         """

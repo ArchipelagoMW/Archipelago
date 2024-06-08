@@ -428,3 +428,35 @@ class TestItemFiltering(Sc2SetupTestBase):
                              .difference(set(item_groups.zerg_morphs)))
         self.assertFalse(units_in_pool)
 
+    def test_deprecated_orbital_command_not_present(self) -> None:
+        """
+        Orbital command got replaced. The item is still there for backwards compatibility.
+        It shouldn't be generated.
+        :return:
+        """
+        world_options = {}
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertTrue(itempool)
+        self.assertNotIn(item_names.PROGRESSIVE_ORBITAL_COMMAND, itempool)
+
+    def test_planetary_orbital_module_not_present_without_cc_spells(self) -> None:
+        world_options = {
+            "excluded_items": [
+                item_names.COMMAND_CENTER_MULE,
+                item_names.COMMAND_CENTER_SCANNER_SWEEP,
+                item_names.COMMAND_CENTER_EXTRA_SUPPLIES
+            ],
+            "locked_items": [
+                item_names.PLANETARY_FORTRESS
+            ]
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertTrue(itempool)
+        self.assertIn(item_names.PLANETARY_FORTRESS, itempool)
+        self.assertNotIn(item_names.PLANETARY_FORTRESS_ORBITAL_MODULE, itempool)

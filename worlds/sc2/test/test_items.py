@@ -6,6 +6,10 @@ from worlds.sc2 import items
 
 class TestItems(unittest.TestCase):
     def test_grouped_upgrades_number(self) -> None:
+        """
+        Tests if grouped upgrades have set number correctly
+        :return:
+        """
         bundled_items = items.upgrade_bundles.keys()
         bundled_item_data = [items.get_full_item_list()[item_name] for item_name in bundled_items]
         bundled_item_numbers = [item_data.number for item_data in bundled_item_data]
@@ -15,6 +19,10 @@ class TestItems(unittest.TestCase):
         self.assertNotIn(False, check_numbers)
 
     def test_non_grouped_upgrades_number(self) -> None:
+        """
+        Checks if non-grouped upgrades number is set correctly thus can be sent into the game.
+        :return:
+        """
         check_modulo = 4
         bundled_items = items.upgrade_bundles.keys()
         non_bundled_upgrades = [
@@ -30,6 +38,10 @@ class TestItems(unittest.TestCase):
         self.assertNotIn(False, check_numbers)
 
     def test_bundles_contain_only_basic_elements(self) -> None:
+        """
+        Checks if there are no bundles within bundles.
+        :return:
+        """
         bundled_items = items.upgrade_bundles.keys()
         bundle_elements: List[str] = [item_name for values in items.upgrade_bundles.values() for item_name in values]
 
@@ -37,17 +49,29 @@ class TestItems(unittest.TestCase):
             self.assertNotIn(element, bundled_items)
 
     def test_weapon_armor_level(self) -> None:
+        """
+        Checks if Weapon/Armor upgrade level is correctly set to all Weapon/Armor upgrade items.
+        :return:
+        """
         weapon_armor_upgrades = [item for item in items.get_full_item_list() if items.get_item_table()[item].type in items.upgrade_item_types]
 
         for weapon_armor_upgrade in weapon_armor_upgrades:
             self.assertEqual(items.get_full_item_list()[weapon_armor_upgrade].quantity, items.WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
 
     def test_item_ids_distinct(self) -> None:
+        """
+        Verifies if there are no duplicates of item ID.
+        :return:
+        """
         item_ids: Set[int] = {items.get_full_item_list()[item_name].code for item_name in items.get_full_item_list()}
 
         self.assertEqual(len(item_ids), len(items.get_full_item_list()))
 
     def test_number_distinct_in_item_type(self) -> None:
+        """
+        Tests if each item is distinct for sending into the mod.
+        :return:
+        """
         item_types: List[items.ItemTypeEnum] = [
             *[item.value for item in items.TerranItemType],
             *[item.value for item in items.ZergItemType],
@@ -68,6 +92,10 @@ class TestItems(unittest.TestCase):
             self.assertEqual(len(item_names), len(item_numbers))
 
     def test_progressive_has_quantity(self) -> None:
+        """
+        Checks if the quantity attribute has been set for progressive items.
+        :return:
+        """
         progressive_groups: List[items.ItemTypeEnum] = [
             items.TerranItemType.Progressive,
             items.TerranItemType.Progressive_2,
@@ -82,6 +110,10 @@ class TestItems(unittest.TestCase):
         self.assertNotIn(1, quantities)
 
     def test_non_progressive_quantity(self) -> None:
+        """
+        Check if non-progressive items have quantity at most 1.
+        :return:
+        """
         non_progressive_single_entity_groups: List[items.ItemTypeEnum] = [
             # Terran
             items.TerranItemType.Unit,
@@ -123,3 +155,20 @@ class TestItems(unittest.TestCase):
 
         for quantity in quantities:
             self.assertLessEqual(quantity, 1)
+
+    def test_item_number_less_than_30(self) -> None:
+        """
+        Checks if all item numbers are within bounds supported by game mod.
+        :return:
+        """
+        not_checked_item_types: List[items.ItemTypeEnum] = [
+            items.ZergItemType.Level
+        ]
+        items_to_check: List[str] = [
+            item for item in items.get_full_item_list()
+            if items.get_full_item_list()[item].type not in not_checked_item_types
+        ]
+
+        for item in items_to_check:
+            item_number = items.get_full_item_list()[item].number
+            self.assertLess(item_number, 30)

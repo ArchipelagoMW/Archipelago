@@ -435,6 +435,10 @@ class ValidInventory:
                 if len(unused_transport_hooks) > 1:
                     # Not in inventory, allow only one in unused_items
                     unused_items.remove(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK)
+        if not {item_names.COMMAND_CENTER_SCANNER_SWEEP, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_EXTRA_SUPPLIES} & logical_inventory_set:
+            # No orbital Command Spells
+            inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
 
         # HotS
         # Baneling without sources => remove Baneling and upgrades

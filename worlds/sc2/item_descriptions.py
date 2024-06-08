@@ -162,6 +162,7 @@ item_descriptions = {
         Level 2: Terran structures are repaired to full health instead of half health.
     """),
     item_names.PROGRESSIVE_ORBITAL_COMMAND: inspect.cleandoc("""
+        Deprecated. Replaced by Scanner Sweep, MULE, and Orbital Module (Planetary Fortress)
         Level 1: Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities.
         Level 2: Orbital Command abilities work even in Planetary Fortress mode.
     """),
@@ -446,7 +447,7 @@ item_descriptions = {
     item_names.ORBITAL_DEPOTS: "Supply depots are built instantly.",
     item_names.MICRO_FILTERING: "Refineries produce Vespene gas 25% faster.",
     item_names.AUTOMATED_REFINERY: "Eliminates the need for SCVs in vespene gas production.",
-    item_names.COMMAND_CENTER_REACTOR: "Command Centers can train two SCVs at once.",
+    item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR: "Command Centers can train two SCVs at once.",
     item_names.RAVEN: "Aerial Caster unit.",
     item_names.SCIENCE_VESSEL: "Aerial Caster unit. Can repair mechanical units.",
     item_names.TECH_REACTOR: "Merges Tech Labs and Reactors into one add on structure to provide both functions.",

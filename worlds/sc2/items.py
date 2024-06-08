@@ -83,6 +83,7 @@ class FactionlessItemType(ItemTypeEnum):
     Vespene = "Vespene", 1
     Supply = "Supply", 2
     Nothing = "Nothing Group", 4
+    Deprecated = "Deprecated", 5
 
 
 ItemType = Union[TerranItemType, ZergItemType, ProtossItemType, FactionlessItemType]
@@ -239,8 +240,8 @@ item_table = {
         ItemData(206 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 24, SC2Race.TERRAN,
                  quantity=2),
     item_names.PROGRESSIVE_ORBITAL_COMMAND:
-        ItemData(207 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 26, SC2Race.TERRAN,
-                 quantity=2, classification=ItemClassification.progression),
+        ItemData(207 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Deprecated, -1, SC2Race.TERRAN,
+                 quantity=0, classification=ItemClassification.progression),
     item_names.MARINE_PROGRESSIVE_STIMPACK:
         ItemData(208 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=item_names.MARINE, quantity=2),
@@ -511,7 +512,15 @@ item_table = {
     item_names.HERC_GRAPPLE_PULL:
         ItemData(296 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 26, SC2Race.TERRAN,
                  parent_item=item_names.HERC, origin={"ext"}),
-
+    item_names.COMMAND_CENTER_SCANNER_SWEEP:
+        ItemData(297 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 27, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, origin={"wol", "nco"}),
+    item_names.COMMAND_CENTER_MULE:
+        ItemData(298 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 28, SC2Race.TERRAN,
+                 important_for_filtering=True),
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES:
+        ItemData(299 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 29, SC2Race.TERRAN,
+                 important_for_filtering=True, origin={"nco"}),
     item_names.HELLION_TWIN_LINKED_FLAMETHROWER:
         ItemData(300 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_3, 16, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=item_names.HELLION),
@@ -794,6 +803,9 @@ item_table = {
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES:
         ItemData(394 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 12, SC2Race.TERRAN,
                  parent_item=item_names.BATTLECRUISER, origin={"nco"}),
+    item_names.PLANETARY_FORTRESS_ORBITAL_MODULE:
+        ItemData(395 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 1, SC2Race.TERRAN,
+                 parent_item=item_names.PLANETARY_FORTRESS, origin={"ext"}),
 
     #Buildings
     item_names.BUNKER:
@@ -854,7 +866,7 @@ item_table = {
         ItemData(603 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 3, SC2Race.TERRAN),
     item_names.AUTOMATED_REFINERY:
         ItemData(604 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 4, SC2Race.TERRAN),
-    item_names.COMMAND_CENTER_REACTOR:
+    item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR:
         ItemData(605 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 5, SC2Race.TERRAN),
     item_names.RAVEN:
         ItemData(606 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 22, SC2Race.TERRAN,
@@ -1782,7 +1794,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     item_names.ORBITAL_DEPOTS,
     item_names.MICRO_FILTERING,
     item_names.AUTOMATED_REFINERY,
-    item_names.COMMAND_CENTER_REACTOR,
+    item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR,
     item_names.TECH_REACTOR,
     item_names.CELLULAR_REACTOR,
     item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,  # Place only L1

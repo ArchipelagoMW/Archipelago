@@ -829,6 +829,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.slot_data_version < 3:
         for compat_item in API2_TO_API3_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
+    # API < 4 Orbital Command Count (Deprecated item)
+    orbital_command_count: int = 0
 
     network_item: NetworkItem
     accumulators: typing.Dict[SC2Race, typing.List[int]] = {
@@ -872,7 +874,9 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
-            if name == item_names.STARTING_MINERALS:
+            if name == item_names.PROGRESSIVE_ORBITAL_COMMAND:
+                orbital_command_count += 1
+            elif name == item_names.STARTING_MINERALS:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.minerals_per_item
             elif name == item_names.STARTING_VESPENE:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
@@ -887,6 +891,32 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][shield_upgrade_item.type] += 1 << shield_upgrade_item.number
+
+    # Deprecated Orbital Command handling (Backwards compatibility):
+    if orbital_command_count > 0:
+        orbital_command_replacement_items: typing.List[str] = [
+            item_names.COMMAND_CENTER_SCANNER_SWEEP,
+            item_names.COMMAND_CENTER_MULE,
+            item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
+            item_names.PLANETARY_FORTRESS_ORBITAL_MODULE
+        ]
+        replacement_item_ids = [get_full_item_list()[item_name].code for item_name in orbital_command_replacement_items]
+        if sum(item_id in replacement_item_ids for item_id in items) > 0:
+            logger.warning(inspect.cleandoc("""
+                Both old Orbital Command and its replacements are present in the world. Skipping compatibility handling.
+            """))
+        else:
+            # None of replacement items are present
+            # L1: MULE and Scanner Sweep
+            scanner_sweep_data = get_full_item_list()[item_names.COMMAND_CENTER_SCANNER_SWEEP]
+            mule_data = get_full_item_list()[item_names.COMMAND_CENTER_MULE]
+            accumulators[scanner_sweep_data.race][scanner_sweep_data.type] += 1 << scanner_sweep_data.number
+            accumulators[mule_data.race][mule_data.type] += 1 << mule_data.number
+            if orbital_command_count >= 2:
+                # L2 MULE and Scanner Sweep usable even in Planetary Fortress Mode
+                planetary_orbital_module_data = get_full_item_list()[item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+                accumulators[planetary_orbital_module_data.race][planetary_orbital_module_data.type] += \
+                    1 << planetary_orbital_module_data.number
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
