@@ -890,7 +890,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
-            accumulators[shield_upgrade_item.race][shield_upgrade_item.type] += 1 << shield_upgrade_item.number
+            accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
 
     # Deprecated Orbital Command handling (Backwards compatibility):
     if orbital_command_count > 0:
@@ -910,12 +910,12 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             # L1: MULE and Scanner Sweep
             scanner_sweep_data = get_full_item_list()[item_names.COMMAND_CENTER_SCANNER_SWEEP]
             mule_data = get_full_item_list()[item_names.COMMAND_CENTER_MULE]
-            accumulators[scanner_sweep_data.race][scanner_sweep_data.type] += 1 << scanner_sweep_data.number
-            accumulators[mule_data.race][mule_data.type] += 1 << mule_data.number
+            accumulators[scanner_sweep_data.race][scanner_sweep_data.type.flag_word] += 1 << scanner_sweep_data.number
+            accumulators[mule_data.race][mule_data.type.flag_word] += 1 << mule_data.number
             if orbital_command_count >= 2:
                 # L2 MULE and Scanner Sweep usable even in Planetary Fortress Mode
                 planetary_orbital_module_data = get_full_item_list()[item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
-                accumulators[planetary_orbital_module_data.race][planetary_orbital_module_data.type] += \
+                accumulators[planetary_orbital_module_data.race][planetary_orbital_module_data.type.flag_word] += \
                     1 << planetary_orbital_module_data.number
 
     # Upgrades from completed missions
