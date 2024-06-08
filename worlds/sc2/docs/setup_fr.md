@@ -6,7 +6,10 @@ indications pour obtenir un fichier de configuration de *StarCraft 2 Archipelago
 ## Logiciels requis
 
 - [*StarCraft 2*](https://starcraft2.com/en-us/)
-   dsa
+   - Bien que *StarCraft 2 Archipelago* supporte les quatre campagnes, elles ne sont pas obligatoires pour jouer au 
+   *randomizer*. 
+   Si vous ne possédez pas certaines campagnes, il vous suffit de les exclure dans le fichier de configuration de 
+   votre monde.
 - [La version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Comment est-ce que j'installe ce *randomizer*?

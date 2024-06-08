@@ -34,10 +34,8 @@ Additionally, metaprogression currencies such as credits and Solarite are not us
 ## What is the goal of this game when randomized?
 
 The goal is to beat the final mission in the mission order. 
-The yaml configuration file controls the mission order and how missions are shuffled. 
-Since the mission order determines the number of missions in a Starcraft 2 world, it can be used to customize the time 
-required to complete the world. 
-Players can choose which of the four Starcraft 2 campaigns will populate the mission order. 
+The yaml configuration file controls the mission order (e.g. blitz, grid, etc.), which of the four Starcraft 2 campaigns can be used to populate the mission order and how missions are shuffled. 
+Since the first two options determine the number of missions in a Starcraft 2 world, they can be used to customize the expected time to complete the world. 
 Note that the evolution missions from Heart of the Swarm are not included in the randomizer.
 
 ## What non-randomized changes are there from vanilla Starcraft 2?

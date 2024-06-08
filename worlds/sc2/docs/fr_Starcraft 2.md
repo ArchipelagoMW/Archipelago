@@ -36,11 +36,12 @@ De plus, les points de progression tels que les crédits ou la Solarite ne sont 
 Archipelago*.
 
 ## Quel est le but de ce jeu quand il est *randomized*?
-
-Le but est de réussir la mission finale dans la disposition des missions (e.g. *blitz*, *grid*, etc.).
-Les choix faits dans le fichier *yaml* définissent la disposition des missions et comment elles sont mélangées.
-
-dsa mission order
+dsa retraduire 
+Le but est de réussir la mission finale dans la disposition des missions.
+Les choix faits dans le fichier *yaml* définissent la disposition des missions (e.g. *blitz*, *grid*, etc.) et comment elles sont mélangées.
+L'option sur la disposition des missions fixe affecte le nombre de missions dans un monde de *StarCraft 2*, alors elle peut être utilisée pour moduler le temps nécessaire pour terminer le monde. 
+Les joueurs peuvent choisir quelles des quatre campagnes de *Starcraft 2* va être utilisé pour  l'ordre des missions. 
+Notez que les missions d'évolution de *Heart of the Swarm* ne sont pas incluses dans le *randomizer*.
 
 ## Quelles sont les modifications non aléatoires comparativement à la version de base de *StarCraft 2*
 

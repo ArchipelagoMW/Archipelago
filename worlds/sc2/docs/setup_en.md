@@ -6,8 +6,8 @@ where to obtain a config file for StarCraft 2.
 ## Required Software
 
 - [StarCraft 2](https://starcraft2.com/en-us/)
-   - While all four campaigns are supported by StarCraft 2 Archipelago, they are not required to play the randomizer. 
-   If you do not own some of the campaigns, you will need to exclude them in your world's configuration file.
+   - While StarCraft 2 Archipelago supports all four campaigns, they are not mandatory to play the randomizer. 
+   If you do not own certain campaigns, you only need to exclude them in the configuration file of your world.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## How do I install this randomizer?
