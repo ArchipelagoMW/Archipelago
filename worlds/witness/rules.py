@@ -241,6 +241,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, True)
     if item == "Entity Hunt":
+        # Right now, panel hunt is the only type of entity hunt. This may need to be changed later
         return _can_do_panel_hunt(world)
     if item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
