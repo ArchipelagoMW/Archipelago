@@ -185,9 +185,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
             write_bytes(patch, pkmn_data.base_stats, address)
 
         if world.options.randomize_learnsets.value:
-            address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
-            # skip the evolutions and padding byte
-            address = address + sum([evo.length for evo in pkmn_data.evolutions]) + 1
+            address = data.rom_addresses["AP_Attacks_" + pkmn_name]
             for move in pkmn_data.learnset:
                 move_id = data.moves[move.move].id
                 write_bytes(patch, [move.level, move_id], address)

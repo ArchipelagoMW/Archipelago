@@ -56,7 +56,9 @@ class PokemonCrystalWebWorld(WebWorld):
 
 
 class PokemonCrystalWorld(World):
-    """the only good pokemon game"""
+    """Pokémon Crystal is the culmination of the Generation I and II Pokémon games.
+    Explore the Johto and Kanto regions, become the Pokémon League Champion, and
+    defeat the elusive Red at the peak of Mt. Silver!"""
     game = "Pokemon Crystal"
 
     topology_present = True
