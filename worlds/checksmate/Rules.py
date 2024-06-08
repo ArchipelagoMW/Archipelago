@@ -61,8 +61,22 @@ def has_enemy(state: CollectionState, location_name: str, player: int) -> bool:
     # return state.has(enemy_locations_to_items[location_name], player)
 
 
-def set_rules(multiworld: MultiWorld, player: int):
-    # TODO: cannot import partially initialized CMWorld, is there a simpler way to access params?
+def determine_difficulty(opts: CMOptions):
+    difficulty = 1.0
+    if opts.fairy_chess_army.value == opts.fairy_chess_army.option_stable:
+        difficulty *= 1.05
+    if opts.fairy_chess_pawns.value != opts.fairy_chess_pawns.option_vanilla:
+        difficulty *= 1.05
+    if opts.fairy_chess_pawns.value == opts.fairy_chess_pawns.option_mixed:
+        difficulty *= 1.05
+    fairy_pieces = opts.fairy_chess_pieces.value
+    difficulty *= 0.99 + (0.01 * len(fairy_pieces))
+    # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
+    return difficulty
+
+
+def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
+    difficulty = determine_difficulty(opts)
 
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
@@ -70,13 +84,13 @@ def set_rules(multiworld: MultiWorld, player: int):
     # AI avoids making trades except where it wins material or secures victory, so require that much material
     for name, item in checksmate.Locations.location_table.items():
         set_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.material_expectations: state.prog_items[player]["Material"] >= v)
+                 lambda state, v=item.material_expectations: state.prog_items[player]["Material"] >= (v * difficulty))
     # player must have (a king plus) that many chessmen to capture any given number of chessmen
     for name, item in checksmate.Locations.location_table.items():
         add_rule(multiworld.get_location(name, player),
                  lambda state, v=item.chessmen_expectations: (state.count_group("Chessmen", player) + ceil(
                      state.count("Progressive Pocket", player) /
-                     state.multiworld.worlds[player].options.pocket_limit_by_pocket)) >= v)
+                     opts.pocket_limit_by_pocket)) >= v)
 
     for i in range(1, 7):
         add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),
@@ -134,3 +148,4 @@ def set_rules(multiworld: MultiWorld, player: int):
     # add_rule(multiworld.get_location("Checkmate 12 Pieces", player), lambda state: has_piece_material(state, player, 34))
     # add_rule(multiworld.get_location("Checkmate 13 Pieces", player), lambda state: has_piece_material(state, player, 36))
     # add_rule(multiworld.get_location("Checkmate 14 Pieces", player), lambda state: has_piece_material(state, player, 38))
+

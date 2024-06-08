@@ -13,7 +13,7 @@ from .Items import (CMItem, item_table, create_item_with_correct_settings, fille
                     useful_items, item_name_groups, CMItemData)
 from .Locations import CMLocation, location_table, highest_chessmen_requirement
 from .Presets import checksmate_option_presets
-from .Rules import set_rules
+from .Rules import set_rules, determine_difficulty
 
 
 class CMWeb(WebWorld):
@@ -134,7 +134,7 @@ class CMWorld(World):
         return CMItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, self.options)
 
     def create_items(self):
         is_single = self.options.goal.value == 0
@@ -170,8 +170,9 @@ class CMWorld(World):
         material = sum([
             progression_items[item].material * self.items_used[self.player][item]
             for item in self.items_used[self.player] if item in progression_items])
-        min_material_option = self.options.min_material.value * 100
-        max_material_option = self.options.max_material.value * 100
+        difficulty = determine_difficulty(self.options)
+        min_material_option = self.options.min_material.value * 100 * difficulty
+        max_material_option = self.options.max_material.value * 100 * difficulty
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_interval = self.random.random() * (max_material_option - min_material_option)
@@ -264,19 +265,19 @@ class CMWorld(World):
             if (len([item for item in items if item.name == "Progressive Major Piece"]) < 2 +
                     len([item for item in items if item.name == "Progressive Major To Queen"])):
                 for location in ["O-O-O Castle", "O-O Castle"]:
-                    if location not in self.multiworld.exclude_locations[self.player].value:
-                        self.multiworld.exclude_locations[self.player].value.add(location)
+                    if location not in self.options.exclude_locations.value:
+                        self.options.exclude_locations.value.add(location)
             # material
             for location in location_table:
-                if location not in self.multiworld.exclude_locations[self.player].value:
+                if location not in self.options.exclude_locations.value:
                     if material < location_table[location].material_expectations:
-                        self.multiworld.exclude_locations[self.player].value.add(location)
+                        self.options.exclude_locations.value.add(location)
             # chessmen
             chessmen = chessmen_count(items, self.options.pocket_limit_by_pocket.value)
             for location in location_table:
-                if location not in self.multiworld.exclude_locations[self.player].value:
+                if location not in self.options.exclude_locations.value:
                     if chessmen < location_table[location].chessmen_expectations:
-                        self.multiworld.exclude_locations[self.player].value.add(location)
+                        self.options.exclude_locations.value.add(location)
 
         my_useful_items = list(useful_items.keys())
         while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
@@ -481,7 +482,7 @@ class CMWorld(World):
         multiworld = self.multiworld
         player = self.player
         cmoptions: CMOptions = self.options
-        non_local_items = multiworld.non_local_items[player].value
+        non_local_items = self.options.non_local_items.value
         early_material_option = cmoptions.early_material.value
         if early_material_option > 0:
             early_units = []
@@ -505,19 +506,6 @@ class CMWorld(World):
             return [item]
         else:
             return []
-
-    def determine_difficulty(self):
-        difficulty = 1.0
-        if self.options.fairy_chess_army.value == self.options.fairy_chess_army.option_stable:
-            difficulty *= 1.1
-        if self.options.fairy_chess_pawns.value != self.options.fairy_chess_pawns.option_vanilla:
-            difficulty *= 1.05
-        if self.options.fairy_chess_pawns.value == self.options.fairy_chess_pawns.option_mixed:
-            difficulty *= 1.1
-        fairy_pieces = self.options.fairy_chess_pieces.value
-        difficulty *= 0.95 + (0.05 * len(fairy_pieces))
-        # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
-        return difficulty
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         material = 0
