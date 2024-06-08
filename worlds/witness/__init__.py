@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
-from .hints import CompactHintArgs, create_all_hints, make_compact_hint_data, make_laser_hints, CompactHintData
+from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations, static_witness_locations
 from .options import TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
