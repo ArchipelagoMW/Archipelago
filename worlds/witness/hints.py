@@ -10,7 +10,8 @@ from .data.utils import weighted_sample
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-CompactItemData = Tuple[str, Union[str, int], int]
+CompactHintArgs = Tuple[Union[str, int], int]
+CompactHintData = Tuple[str, Union[str, int], int]
 
 
 @dataclass
@@ -599,33 +600,42 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
     return generated_hints
 
 
-def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) -> CompactItemData:
-    location = hint.location
-    area_amount = hint.area_amount
-    hunt_panels = hint.area_hunt_panels
+def get_compact_hint_args(hint: WitnessWordedHint, local_player_number: int) -> CompactHintArgs:
+    """
+    Arg reference:
 
-    # -1 if junk hint, address if location hint, area string if area hint
-    arg_1: Union[str, int]
-    if location and location.address is not None:
-        arg_1 = location.address
-    elif hint.area is not None:
-        arg_1 = hint.area
-    else:
-        arg_1 = -1
+    Area Hint: 1st Arg is the amount of area progression and hunt panels. 2nd Arg is the name of the area.
+    Location Hint: 1st Arg is the location's address, second arg is the player number the location belongs to.
+    Junk Hint: 1st Arg is -1, second arg is this slot's player number.
+    """
 
-    # self.player if junk hint, player if location hint, progression amount & hunt panels if area hint
-    arg_2: int
-    if area_amount is not None:
-        arg_2 = area_amount
+    # Is Area Hint
+    if hint.area is not None:
+        assert hint.area_amount is not None, "Area hint had an undefined progression amount."
+
+        area_amount = hint.area_amount
+        hunt_panels = hint.area_hunt_panels
+
+        area_and_hunt_panels = area_amount
         # Encode amounts together
         if hunt_panels:
-            arg_2 += 0x100 * hunt_panels
-    elif location is not None:
-        arg_2 = location.player
-    else:
-        arg_2 = local_player_number
+            area_and_hunt_panels += 0x100 * hunt_panels
 
-    return hint.wording, arg_1, arg_2
+        return hint.area, area_and_hunt_panels
+
+    location = hint.location
+
+    # Is location hint
+    if location and location.address is not None:
+        return location.address, location.player
+
+    # Is junk / undefined hint
+    return -1, local_player_number
+
+
+def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) -> CompactHintData:
+    compact_arg_1, compact_arg_2 = get_compact_hint_args(hint, local_player_number)
+    return hint.wording, compact_arg_1, compact_arg_2
 
 
 def make_laser_hints(world: "WitnessWorld", laser_names: List[str]) -> Dict[str, WitnessWordedHint]:

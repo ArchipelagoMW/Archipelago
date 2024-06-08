@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
-from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
+from .hints import CompactHintArgs, create_all_hints, make_compact_hint_data, make_laser_hints, CompactHintData
 from .locations import WitnessPlayerLocations, static_witness_locations
 from .options import TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
@@ -66,8 +66,8 @@ class WitnessWorld(World):
     player_items: WitnessPlayerItems
     player_regions: WitnessPlayerRegions
 
-    log_ids_to_hints: Dict[int, CompactItemData]
-    laser_ids_to_hints: Dict[int, CompactItemData]
+    log_ids_to_hints: Dict[int, CompactHintData]
+    laser_ids_to_hints: Dict[int, CompactHintData]
 
     items_placed_early: List[str]
     own_itempool: List[WitnessItem]
@@ -314,8 +314,8 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
-        self.log_ids_to_hints: Dict[int, CompactItemData] = dict()
-        self.laser_ids_to_hints: Dict[int, CompactItemData] = dict()
+        self.log_ids_to_hints: Dict[int, CompactHintData] = dict()
+        self.laser_ids_to_hints: Dict[int, CompactHintData] = dict()
 
         already_hinted_locations = set()
 
