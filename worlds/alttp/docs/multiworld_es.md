@@ -57,6 +57,11 @@ primera vez que se ejecuta, tal vez se te pida permitir que se comunique a trav�
 6. Si ves un error mientras carga el script que dice `socket.dll missing` o algo similar, ve a la carpeta de
 el lua que estas usando en tu gestor de archivos y copia el `socket.dll` a la raíz de tu instalación de snes9x.
 
+##### BNES-Plus
+
+1. Cargue su archivo ROM si aún no se ha cargado.
+2. El emulador debería conectarse automáticamente mientras SNI se está ejecutando.
+
 ##### BizHawk
 
 1. Asegurate que se ha cargado el núcleo BSNES. Se hace en la barra de menú principal, bajo:
