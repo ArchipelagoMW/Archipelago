@@ -52,43 +52,55 @@ class KH1World(World):
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
+        
+        #Calculate Level Up Items
+        if True: #Allow notepad++ to collapse this section
+            # Fill pool with mandatory items
+            for i in range(self.options.item_slot_increase):
+                level_up_item_pool.append("Item Slot Increase")
+            for i in range(self.options.accessory_slot_increase):
+                level_up_item_pool.append("Accessory Slot Increase")
 
-        # Fill pool with mandatory items
-        for i in range(self.options.item_slot_increase):
-            level_up_item_pool.append("Item Slot Increase")
-        for i in range(self.options.accessory_slot_increase):
-            level_up_item_pool.append("Accessory Slot Increase")
+            # Create other pool
+            for i in range(self.options.strength_increase):
+                possible_level_up_item_pool.append("Strength Increase")
+            for i in range(self.options.defense_increase):
+                possible_level_up_item_pool.append("Defense Increase")
+            for i in range(self.options.hp_increase):
+                possible_level_up_item_pool.append("Max HP Increase")
+            for i in range(self.options.mp_increase):
+                possible_level_up_item_pool.append("Max MP Increase")
+            for i in range(self.options.ap_increase):
+                possible_level_up_item_pool.append("Max AP Increase")
 
-        # Create other pool
-        for i in range(self.options.strength_increase):
-            possible_level_up_item_pool.append("Strength Increase")
-        for i in range(self.options.defense_increase):
-            possible_level_up_item_pool.append("Defense Increase")
-        for i in range(self.options.hp_increase):
-            possible_level_up_item_pool.append("Max HP Increase")
-        for i in range(self.options.mp_increase):
-            possible_level_up_item_pool.append("Max MP Increase")
-        for i in range(self.options.ap_increase):
-            possible_level_up_item_pool.append("Max AP Increase")
+            # Fill remaining pool with items from other pool
+            while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
+                level_up_item_pool.append(possible_level_up_item_pool.pop(self.random.randrange(len(possible_level_up_item_pool))))
 
-        # Fill remaining pool with items from other pool
-        while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
-            level_up_item_pool.append(possible_level_up_item_pool.pop(self.random.randrange(len(possible_level_up_item_pool))))
-
-        level_up_locations = list(get_locations_by_category("Levels").keys())
-        self.random.shuffle(level_up_item_pool)
-        i = self.options.force_stats_on_levels - 1
-        while len(level_up_item_pool) > 0 and i < self.options.level_checks:
-            self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
-            i = i + 1
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1
+            level_up_locations = list(get_locations_by_category("Levels").keys())
+            self.random.shuffle(level_up_item_pool)
+            i = self.options.force_stats_on_levels - 1
+            while len(level_up_item_pool) > 0 and i < self.options.level_checks:
+                self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
+                i = i + 1
+        
+        #Calculate prefilled locations and items
+        if True: #Allow notepad++ to collpase this section
+            prefilled_items = []
+            prefilled_locations = 1 #Victory
+            if self.options.junk_in_missable_locations:
+                prefilled_locations = prefilled_locations + 15
+            if self.options.vanilla_emblem_pieces:
+                prefilled_locations = prefilled_locations + 4
+                prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
+        
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - prefilled_locations
+        
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons", "Puppies"]
         if self.options.hundred_acre_wood:
             non_filler_item_categories.append("Torn Pages")
         for name, data in item_table.items():
             quantity = data.max_quantity
-
-            # Ignore filler, it will be added in a later stage.
             if data.category not in non_filler_item_categories:
                 continue
             if data.category == "Puppies":
@@ -98,13 +110,32 @@ class KH1World(World):
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
                 if self.options.puppies == "full" and name == "All Puppies":
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            elif name == "Atlantica" or name == "Mermaid Kick":
+            elif name == "Atlantica":
                 if self.options.atlantica:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Mermaid Kick":
+                if self.options.atlantica:
+                    if self.options.extra_shared_abilities:
+                        item_pool += [self.create_item(name) for _ in range(0, 2)]
+                    else:
+                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "High Jump":
+                if self.options.extra_shared_abilities:
+                    item_pool += [self.create_item(name) for _ in range(0, 3)]
+                else:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Glide":
+                if self.options.extra_shared_abilities:
+                    item_pool += [self.create_item(name) for _ in range(0, 4)]
+                else:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "End of the World":
                 if self.options.end_of_the_world_unlock.current_key == "item":
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            else:
+            elif name == "EXP Zero":
+                if self.options.exp_zero_in_pool:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name not in prefilled_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
         for i in range(self.determine_reports_in_pool()):
@@ -142,6 +173,27 @@ class KH1World(World):
             "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2"
         }
         self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
+        if self.options.junk_in_missable_locations:
+            self.multiworld.get_location("Traverse Town 1st District Leon Gift", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Traverse Town 1st District Aerith Gift", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("End of the World World Terminus Hollow Bastion Chest", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 01:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 02:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 03:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 04:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 05:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 06:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 07:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 08:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 09:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 10:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 11:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+            self.multiworld.get_location("Neverland Clock Tower 12:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
+        if self.options.vanilla_emblem_pieces:
+            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)", self.player).place_locked_item(self.create_item("Emblem Piece (Flame)"))
+            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)", self.player).place_locked_item(self.create_item("Emblem Piece (Statue)"))
+            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)", self.player).place_locked_item(self.create_item("Emblem Piece (Fountain)"))
+            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)", self.player).place_locked_item(self.create_item("Emblem Piece (Chest)"))
 
     def get_filler_item_name(self) -> str:
         fillers = {}
@@ -184,6 +236,12 @@ class KH1World(World):
             slot_data["donalddl"] = ""
         if self.options.goofy_death_link:
             slot_data["goofydl"] = ""
+        if self.options.keyblades_unlock_chests:
+            slot_data["chestslocked"] = ""
+        else:
+            slot_data["chestsunlocked"] = ""
+        if self.options.interact_in_battle:
+            slot_data["interactinbattle"] = ""
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:
@@ -199,20 +257,6 @@ class KH1World(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
-        self._place_events()
-    
-    def _place_events(self):
-        self.multiworld.get_location("Traverse Town Item Shop Postcard"                    , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town 1st District Safe Postcard"            , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town Gizmo Shop Postcard 1"                 , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town Gizmo Shop Postcard 2"                 , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town Item Workshop Postcard"                , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town 3rd District Balcony Postcard"         , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town Geppetto's House Postcard"             , self.player).place_locked_item(self.create_event("Vanilla Postcard"))
-        self.multiworld.get_location("Traverse Town Piano Room Return 50 Puppies Torn Page", self.player).place_locked_item(self.create_event("Vanilla Torn Page"))
-        self.multiworld.get_location("Halloween Town Lab Torn Page"                        , self.player).place_locked_item(self.create_event("Vanilla Torn Page"))
-        if self.options.atlantica:
-            self.multiworld.get_location("Atlantica Ariel's Grotto Torn Page"              , self.player).place_locked_item(self.create_event("Vanilla Torn Page"))
     
     def get_numbers_of_reports_to_consider(self) -> int:
         numbers_to_consider = []

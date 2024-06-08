@@ -347,17 +347,17 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
     
     regions["Agrabah"].locations.append("Agrabah Defeat Jafar Genie Ansem's Report 1")
-   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 2")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 2")
     if options.atlantica:
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Ansem's Report 3")
-   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 4")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 4")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Ansem's Report 5")
-   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 6")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 6")
     regions["Halloween Town"].locations.append("Halloween Town Defeat Oogie Boogie Ansem's Report 7")
     if options.cups:
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
     regions["Neverland"].locations.append("Neverland Defeat Hook Ansem's Report 9")
-   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
     if options.super_bosses:
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
     if options.super_bosses or options.goal.current_key == "sephiroth":
@@ -407,7 +407,8 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 20 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 30 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 40 Puppies")
-    regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 50 Puppies")
+    regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 50 Puppies Reward 1")
+    regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 50 Puppies Reward 2")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 60 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 70 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 80 Puppies")
@@ -421,18 +422,18 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     if options.cups:
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
     regions["Halloween Town"].locations.append("Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 01:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 02:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 03:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 04:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 05:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 06:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 07:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 08:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 09:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 10:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 11:00 Door")
-   #regions["Neverland"].locations.append("Neverland Clock Tower 12:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 01:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 02:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 03:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 04:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 05:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 06:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 07:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 08:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 09:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 10:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 11:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 12:00 Door")
     regions["Neverland"].locations.append("Neverland Hold Aero Chest")
     if options.hundred_acre_wood:
         regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 1")
@@ -468,13 +469,21 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
-   #regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Read Book")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Green Trinity")
     if options.super_bosses:
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
     if options.super_bosses or options.goal.current_key == "unknown":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Hero's License Event")
+    if options.atlantica:
+        regions["Atlantica"].locations.append("Atlantica Sunken Ship Crystal Trident Event")
+    regions["Halloween Town"].locations.append("Halloween Town Graveyard Forget-Me-Not Event")
+    regions["Deep Jungle"].locations.append("Deep Jungle Tent Protect-G Event")
+    regions["Deep Jungle"].locations.append("Deep Jungle Cavern of Hearts Navi-G Piece Event")
+    regions["Wonderland"].locations.append("Wonderland Bizarre Room Navi-G Piece Event")
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Entry Pass Event")
     
     regions["Traverse Town"].locations.append("Traverse Town Synth Log")
     regions["Traverse Town"].locations.append("Traverse Town Synth Cloth")
@@ -482,13 +491,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Synth Seagull Egg")
     regions["Traverse Town"].locations.append("Traverse Town Synth Fish")
     regions["Traverse Town"].locations.append("Traverse Town Synth Mushroom")
-
     
-    if options.goal.current_key == "final_ansem":
-        regions["End of the World"].locations.append("Final Ansem")
-    
-    
-    #Set up event locations:
     regions["Traverse Town"].locations.append("Traverse Town Item Shop Postcard")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Safe Postcard")
     regions["Traverse Town"].locations.append("Traverse Town Gizmo Shop Postcard 1")
@@ -496,10 +499,21 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Item Workshop Postcard")
     regions["Traverse Town"].locations.append("Traverse Town 3rd District Balcony Postcard")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Postcard")
-    regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 50 Puppies Torn Page")
     regions["Halloween Town"].locations.append("Halloween Town Lab Torn Page")
-    if options.atlantica:
-        regions["Atlantica"].locations.append("Atlantica Ariel's Grotto Torn Page")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Emblem Piece (Flame)")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Emblem Piece (Chest)")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Emblem Piece (Statue)")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Emblem Piece (Fountain)")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Leon Gift")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Aerith Gift")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Library Speak to Belle Divine Rose")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Library Speak to Aerith Cure")
+    
+    if options.goal.current_key == "final_ansem":
+        regions["End of the World"].locations.append("Final Ansem")
+    
+    
+
 
     # Set up the regions correctly.
     for name, data in regions.items():
