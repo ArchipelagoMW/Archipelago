@@ -106,7 +106,7 @@ def has_oogie_manor(state: CollectionState, player: int, advanced_logic: bool) -
     return (
                 has_item(state, player, "Progressive Fire") 
                 or (advanced_logic and has_at_least(state, player, "High Jump", 2)) 
-                or (advanced_logic and has_item(state, player, "High Jump") and can_glide(state, player))))
+                or (advanced_logic and has_item(state, player, "High Jump") and can_glide(state, player))
            )
 
 def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_reports: int, final_rest_door_required_reports: int, final_rest_door_requirement: str):
