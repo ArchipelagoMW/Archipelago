@@ -968,7 +968,8 @@ class WitnessPlayerLogic:
         self.make_dependency_reduced_checklist()
 
         if world.options.victory_condition == "panel_hunt":
-            self.HUNT_ENTITIES = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES).pick_panel_hunt_panels()
+            picker = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES)
+            self.HUNT_ENTITIES = picker.pick_panel_hunt_panels(world.options.panel_hunt_total.value)
 
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()

@@ -21,16 +21,31 @@ class EntityHuntPicker:
 
         self.ALL_ELIGIBLE_PANELS, self.ELIGIBLE_PANELS_BY_AREA = self._get_eligible_panels()
 
-    def pick_panel_hunt_panels(self) -> Set[str]:
+    def pick_panel_hunt_panels(self, total_amount: int) -> Set[str]:
+        """
+        The process of picking all hunt panels is:
+
+        1. Add pre-defined hunt panels
+        2. Pick random hunt panels to fill out the rest
+        3. Replace unfair panels with fair panels
+
+        Each of these is its own function.
+        """
+
         self.HUNT_ENTITIES = self.PRE_PICKED_HUNT_ENTITIES.copy()
 
-        self._pick_all_hunt_panels()
+        self._pick_all_hunt_panels(total_amount)
         self._replace_unfair_hunt_panels_with_good_hunt_panels()
         self._log_results()
 
         return self.HUNT_ENTITIES
 
     def _get_eligible_panels(self) -> Tuple[List[str], Dict[str, Set[str]]]:
+        """
+        There are some panels that are not allowed for panel hunt for various technical of gameplay reasons.
+        Make a list of all the ones that *are* eligible, plus a lookup of eligible panels per area.
+        """
+
         disallowed_entities_for_panel_hunt = {
             "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
             "0x03505",  # Tutorial Gate Close (same thing)
@@ -119,28 +134,32 @@ class EntityHuntPicker:
 
         return self.random.choices(remaining_panels, weights=remaining_panels_weights, k=amount)
 
-    def _pick_all_hunt_panels(self):
-        total_panels = self.player_options.panel_hunt_total.value
+    def _pick_all_hunt_panels(self, total_amount: int):
+        """
+        The core function of the EntityHuntPicker in which all Hunt Entities are picked,
+        respecting the player's choices for total amount and same area discouragement.
+        """
         same_area_discouragement = self.player_options.panel_hunt_discourage_same_area_factor / 100
 
         # If we're using random picking, just choose all the panels now and return
         if not same_area_discouragement:
-            hunt_panels = self.random.choices(self.ALL_ELIGIBLE_PANELS, k=total_panels - len(self.HUNT_ENTITIES))
+            hunt_panels = self.random.choices(self.ALL_ELIGIBLE_PANELS, k=total_amount - len(self.HUNT_ENTITIES))
             self.HUNT_ENTITIES.update(hunt_panels)
             return
 
         # If we're discouraging panels from the same area being picked, we have to pick panels one at a time
         # For higher total counts, we do them in small batches for performance
-        batch_size = max(1, total_panels // 20)
+        batch_size = max(1, total_amount // 20)
 
-        while len(self.HUNT_ENTITIES) < total_panels:
-            actual_amount_to_pick = min(batch_size, total_panels - len(self.HUNT_ENTITIES))
+        while len(self.HUNT_ENTITIES) < total_amount:
+            actual_amount_to_pick = min(batch_size, total_amount - len(self.HUNT_ENTITIES))
 
             self.HUNT_ENTITIES.update(self._get_next_random_batch(actual_amount_to_pick, same_area_discouragement))
 
     def _replace_unfair_hunt_panels_with_good_hunt_panels(self):
         """
-        Replace some of the connected panels with the one you're guaranteed to be able to see & solve first
+        For connected panels that "solve together", make sure that the one you're guaranteed
+        to be able to see and interact with first is the one that is chosen, so you don't get "surprise panels".
         """
 
         replacements = {
