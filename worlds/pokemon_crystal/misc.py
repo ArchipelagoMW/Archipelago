@@ -8,8 +8,8 @@ else:
 
 def misc_activities(world: PokemonCrystalWorld):
     # Randomize Yes/No answers for Radio Card quiz
-    new_radio_tower = [world.random.choice(["Y", "N"]) for _ in world.generated_misc.radio_tower_questions]
-    world.generated_misc = world.generated_misc._replace(radio_tower_questions=new_radio_tower)
+    for i in range(5):
+        world.generated_misc.radio_tower_questions[i] = world.random.choice(["Y", "N"])
 
     # shuffle positions of trainers in fuchsia gym
     world.random.shuffle(world.generated_misc.fuchsia_gym_trainers)
