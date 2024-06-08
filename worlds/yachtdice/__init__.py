@@ -173,19 +173,19 @@ class YachtDiceWorld(World):
         # calibrate the weights, since the impact of each of the items is different
         weights[0] = weights[0] / 5 * frags_per_dice
         weights[1] = weights[1] / 5 * frags_per_roll
-        
+
         extra_points_added = 0
         multipliers_added = 0
         items_added = 0
-        
+
         def get_item_to_add():
             nonlocal weights
             nonlocal extra_points_added
             nonlocal multipliers_added
             nonlocal items_added
-            
+
             items_added += 1
-                        
+
             all_items = self.itempool + self.precollected
             dice_fragments_in_pool = all_items.count("Dice") * frags_per_dice + all_items.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * frags_per_dice:
@@ -266,13 +266,13 @@ class YachtDiceWorld(World):
                     raise Exception("Unknown point value (Yacht Dice)")
             else:
                 raise Exception("Invalid index when adding new items in Yacht Dice")
-            
+
         # adding 17 items as a start seems like the smartest way to get close to 1000 points
         for _ in range(17):
             self.itempool += [get_item_to_add()]
 
         score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
-        
+
         # if we overshoot, remove items until you get below 1000, then return the last removed item
         if score_in_logic > 1000:
             removed_item = ""
@@ -294,7 +294,6 @@ class YachtDiceWorld(World):
                     score_in_logic += 100
                 else:
                     score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
-        
 
         # count the number of locations in the game.
         already_items = len(self.itempool) + self.extra_plando_items + 1  # +1 because of Victory item
