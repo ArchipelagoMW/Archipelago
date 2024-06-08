@@ -17,9 +17,9 @@ pero no tiene soporte.**
 
 ## Procedimiento de instalación
 
-1. Descarga e instala SNIClient desde el link de arriba, asegurándote de instalar la version más reciente.
+1. Descarga e instala (Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases/latest].
    **El archivo del instalador se encuentra en la sección de assets al final de la información de version**.
-    - Durante la instalación se te preguntará por la localización de tu archivo ROM base. Este es tu archivo ROM de Link to the Past japonés.
+2. La primera vez que realices una generación local o parchees tu juego, se te pedirá que ubiques tu archivo ROM base. Este es su enlace japonés al archivo ROM anterior. Esto sólo debe hacerse una vez.
 
 3. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
    ROM.
