@@ -5,7 +5,7 @@ from BaseClasses import Item, ItemClassification
 
 class ItemData(typing.NamedTuple):
     code: int
-    itemName: str
+    item_name: str
     progression: ItemClassification
 
 
@@ -13,7 +13,7 @@ class GLItem(Item):
     game: str = "Gauntlet Legends"
 
 
-itemList: typing.List[ItemData] = [
+item_list: typing.List[ItemData] = [
     ItemData(77780000, "Key", ItemClassification.filler),
     ItemData(77780001, "Lightning Potion", ItemClassification.filler),
     ItemData(77780002, "Light Potion", ItemClassification.filler),
@@ -113,5 +113,5 @@ item_frequencies: typing.Dict[str, int] = {
     "Gold": 150,
 }
 
-item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in itemList}
-items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in itemList}
+item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list}
+items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in item_list}

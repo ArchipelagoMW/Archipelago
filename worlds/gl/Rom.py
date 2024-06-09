@@ -1,16 +1,18 @@
+import io
 import json
+import os
 import traceback
 import typing
 import zlib
-import io
-import os
+from typing import Dict, List, Tuple
 
 import Utils
-from typing import List, Dict, Tuple
 from BaseClasses import Location
 from settings import get_settings
+
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
-from .Arrays import level_locations, level_size, level_address, item_dict, level_header
+
+from .Arrays import item_dict, level_address, level_header, level_locations, level_size
 from .Items import items_by_id
 from .Locations import location_data
 
@@ -22,7 +24,7 @@ def get_base_rom_as_bytes() -> bytes:
     try:
         with open(get_settings().gl_options.rom_file, "rb") as infile:
             base_rom_bytes = bytes(infile.read())
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
 
     return base_rom_bytes
@@ -57,7 +59,7 @@ class LevelData:
         self.spawners = []
         self.objects = []
         self.chests = []
-        self.end = bytes()
+        self.end = b""
 
 
 class GLPatchExtension(APPatchExtension):
@@ -115,7 +117,7 @@ class GLPatchExtension(APPatchExtension):
                         data.items += [
                             bytearray(data.objects[index][0:6])
                             + bytes(item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4])
-                            + bytes([0x0, 0x0, 0x0, 0x0])
+                            + bytes([0x0, 0x0, 0x0, 0x0]),
                         ]
                         del data.objects[index]
                         data.item += 1
@@ -133,7 +135,7 @@ class GLPatchExtension(APPatchExtension):
                         data.items[j - data.obelisk][6] = 0x27
                         data.items[j - data.obelisk][7] = 0x4
                 else:
-                    if "Obelisk" in items_by_id[item[0]].itemName:
+                    if "Obelisk" in items_by_id[item[0]].item_name:
                         data.objects += [
                             bytearray(data.items[j - data.obelisk][0:6])
                             + bytearray(
@@ -156,8 +158,8 @@ class GLPatchExtension(APPatchExtension):
                                     0x0,
                                     0x0,
                                     0x0,
-                                ]
-                            )
+                                ],
+                            ),
                         ]
                         del data.items[j - data.obelisk]
                         data.obelisk += 1

@@ -1,9 +1,10 @@
 import typing
 
 from worlds.generic.Rules import add_rule, forbid_item
-from .Locations import all_locations, chimerasKeep, dragonsLair, LocationData, gatesOfTheUnderworld
-from .Items import itemList
-from .Arrays import level_locations, difficulty_lambda
+
+from .Arrays import difficulty_lambda, level_locations
+from .Items import item_list
+from .Locations import all_locations, chimeras_keep, dragons_lair, gates_of_the_underworld
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -23,23 +24,23 @@ def set_rules(world: "GauntletLegendsWorld"):
         location
         for location in all_locations
         if "Obelisk" in location.name
-        or "Chest" in location.name
-        or "Mirror" in location.name
-        or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
-        or location in dragonsLair
-        or location in chimerasKeep
-        or location in gatesOfTheUnderworld
+           or "Chest" in location.name
+           or "Mirror" in location.name
+           or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
+           or location in dragons_lair
+           or location in chimeras_keep
+           or location in gates_of_the_underworld
     ]:
-        for item in [item for item in itemList if "Obelisk" in item.itemName]:
+        for item in [item for item in item_list if "Obelisk" in item.item_name]:
             if location.name not in world.disabled_locations:
-                forbid_item(world.get_location(location.name), item.itemName, world.player)
+                forbid_item(world.get_location(location.name), item.item_name, world.player)
 
     for location in [
         location for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name
     ]:
-        for item in [item for item in itemList if "Runestone" in item.itemName]:
+        for item in [item for item in item_list if "Runestone" in item.item_name]:
             if location.name not in world.disabled_locations:
-                forbid_item(world.get_location(location.name), item.itemName, world.player)
+                forbid_item(world.get_location(location.name), item.item_name, world.player)
 
     for level_id, locations in level_locations.items():
         for location in locations:
@@ -48,6 +49,6 @@ def set_rules(world: "GauntletLegendsWorld"):
                     add_rule(
                         world.get_location(location.name),
                         lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1: prog_count(
-                            state, world.player, difficulty_lambda[level_id_][difficulty]
+                            state, world.player, difficulty_lambda[level_id_][difficulty],
                         ),
                     )

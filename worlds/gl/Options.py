@@ -1,5 +1,6 @@
-from Options import StartInventoryPool, PerGameCommonOptions, Choice, Toggle
 from dataclasses import dataclass
+
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle
 
 
 class PermaSpeed(Toggle):

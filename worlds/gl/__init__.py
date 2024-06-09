@@ -1,18 +1,19 @@
 import os
-import threading
 import typing
 
 import settings
-from BaseClasses import Tutorial, ItemClassification
-from .Arrays import item_dict
-from .Options import GLOptions
+from BaseClasses import ItemClassification, Tutorial
+
 from worlds.AutoWorld import WebWorld, World
-from .Locations import all_locations, location_table, LocationData
-from .Items import GLItem, itemList, item_table, item_frequencies
-from .Regions import create_regions, connect_regions
+
+from ..LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from .Arrays import item_dict
+from .Items import GLItem, item_frequencies, item_list, item_table
+from .Locations import LocationData, all_locations, location_table
+from .Options import GLOptions
+from .Regions import connect_regions, create_regions
 from .Rom import GLProcedurePatch, write_files
 from .Rules import set_rules
-from ..LauncherComponents import components, Component, launch_subprocess, Type, SuffixIdentifier
 
 
 def launch_client(*args):
@@ -28,7 +29,7 @@ components.append(
         func=launch_client,
         component_type=Type.CLIENT,
         file_identifier=SuffixIdentifier(".apgl"),
-    )
+    ),
 )
 
 
@@ -43,7 +44,7 @@ class GauntletLegendsWebWorld(WebWorld):
             file_name="setup_en.md",
             link="setup/en",
             authors=["jamesbrq"],
-        )
+        ),
     ]
 
 
@@ -147,33 +148,33 @@ class GauntletLegendsWorld(World):
     def create_items(self) -> None:
         # First add in all progression and useful items
         required_items = []
-        precollected = [item for item in itemList if item in self.multiworld.precollected_items[self.player]]
-        for item in itemList:
+        precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
+        for item in item_list:
             if item.progression != ItemClassification.filler and item not in precollected:
-                if "Obelisk" in item.itemName and self.options.obelisks == 0:
+                if "Obelisk" in item.item_name and self.options.obelisks == 0:
                     continue
-                if "Mirror" in item.itemName and self.options.mirror_shards == 0:
+                if "Mirror" in item.item_name and self.options.mirror_shards == 0:
                     continue
-                if "Key" in item.itemName and self.options.infinite_keys:
+                if "Key" in item.item_name and self.options.infinite_keys:
                     continue
-                freq = item_frequencies.get(item.itemName, 1) + (
+                freq = item_frequencies.get(item.item_name, 1) + (
                     30 if self.options.infinite_keys and item.progression is ItemClassification.filler else 0
                 )
                 if freq is None:
                     freq = 1
-                required_items += [item.itemName for _ in range(freq)]
+                required_items += [item.item_name for _ in range(freq)]
 
-        for itemName in required_items:
-            self.multiworld.itempool.append(self.create_item(itemName))
+        for item_name in required_items:
+            self.multiworld.itempool.append(self.create_item(item_name))
 
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
-        for item in itemList:
+        for item in item_list:
             if item.progression == ItemClassification.filler:
-                freq = item_frequencies.get(item.itemName)
+                freq = item_frequencies.get(item.item_name)
                 if freq is None:
                     freq = 1
-                filler_items += [item.itemName for _ in range(freq)]
+                filler_items += [item.item_name for _ in range(freq)]
 
         remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 2
         if self.options.obelisks == 0:
@@ -189,17 +190,17 @@ class GauntletLegendsWorld(World):
     def set_rules(self) -> None:
         set_rules(self)
         self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-            "Gates of the Underworld", "Region", self.player
+            "Gates of the Underworld", "Region", self.player,
         )
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]
-        return GLItem(item.itemName, item.progression, item.code, self.player)
+        return GLItem(item.item_name, item.progression, item.code, self.player)
 
     def generate_output(self, output_directory: str) -> None:
         patch = GLProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         write_files(self, patch)
         rom_path = os.path.join(
-            output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
+            output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}",
         )
         patch.write(rom_path)

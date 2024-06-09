@@ -1,33 +1,34 @@
 import typing
 
-from BaseClasses import Region, Entrance
+from BaseClasses import Entrance, Region
+
 from .Locations import (
     GLLocation,
-    valleyOfFire,
-    daggerPeak,
-    cliffsOfDesolation,
-    lostCave,
-    volcanicCavern,
-    dragonsLair,
-    castleCourtyard,
-    dungeonOfTorment,
-    towerArmory,
-    castleTreasury,
-    chimerasKeep,
-    poisonedFields,
-    hauntedCemetery,
-    venomousSpire,
-    toxicAirShip,
-    arcticDocks,
-    frozenCamp,
-    crystalMine,
-    eruptingFissure,
-    desecratedTemple,
-    battleTrenches,
-    battleTowers,
-    infernalFortress,
-    gatesOfTheUnderworld,
-    plagueFiend,
+    arctic_docks,
+    battle_towers,
+    battle_trenches,
+    castle_courtyard,
+    castle_treasury,
+    chimeras_keep,
+    cliffs_of_desolation,
+    crystal_mine,
+    dagger_peak,
+    desecrated_temple,
+    dragons_lair,
+    dungeon_of_torment,
+    erupting_fissure,
+    frozen_camp,
+    gates_of_the_underworld,
+    haunted_cemetery,
+    infernal_fortress,
+    lost_cave,
+    plague_fiend,
+    poisoned_fields,
+    tower_armory,
+    toxic_air_ship,
+    valley_of_fire,
+    venomous_spire,
+    volcanic_cavern,
     yeti,
 )
 
@@ -38,57 +39,57 @@ if typing.TYPE_CHECKING:
 def create_regions(world: "GauntletLegendsWorld"):
     world.multiworld.regions.append(Region("Menu", world.player, world.multiworld))
 
-    create_region(world, "Valley of Fire", valleyOfFire)
+    create_region(world, "Valley of Fire", valley_of_fire)
 
-    create_region(world, "Dagger Peak", daggerPeak)
+    create_region(world, "Dagger Peak", dagger_peak)
 
-    create_region(world, "Cliffs of Desolation", cliffsOfDesolation)
+    create_region(world, "Cliffs of Desolation", cliffs_of_desolation)
 
-    create_region(world, "Lost Cave", lostCave)
+    create_region(world, "Lost Cave", lost_cave)
 
-    create_region(world, "Volcanic Caverns", volcanicCavern)
+    create_region(world, "Volcanic Caverns", volcanic_cavern)
 
-    create_region(world, "Dragon's Lair", dragonsLair)
+    create_region(world, "Dragon's Lair", dragons_lair)
 
-    create_region(world, "Castle Courtyard", castleCourtyard)
+    create_region(world, "Castle Courtyard", castle_courtyard)
 
-    create_region(world, "Dungeon of Torment", dungeonOfTorment)
+    create_region(world, "Dungeon of Torment", dungeon_of_torment)
 
-    create_region(world, "Tower Armory", towerArmory)
+    create_region(world, "Tower Armory", tower_armory)
 
-    create_region(world, "Castle Treasury", castleTreasury)
+    create_region(world, "Castle Treasury", castle_treasury)
 
-    create_region(world, "Chimera's Keep", chimerasKeep)
+    create_region(world, "Chimera's Keep", chimeras_keep)
 
-    create_region(world, "Poisonous Fields", poisonedFields)
+    create_region(world, "Poisonous Fields", poisoned_fields)
 
-    create_region(world, "Haunted Cemetery", hauntedCemetery)
+    create_region(world, "Haunted Cemetery", haunted_cemetery)
 
-    create_region(world, "Venomous Spire", venomousSpire)
+    create_region(world, "Venomous Spire", venomous_spire)
 
-    create_region(world, "Toxic Air Ship", toxicAirShip)
+    create_region(world, "Toxic Air Ship", toxic_air_ship)
 
-    create_region(world, "Vat of the Plague Fiend", plagueFiend)
+    create_region(world, "Vat of the Plague Fiend", plague_fiend)
 
-    create_region(world, "Arctic Docks", arcticDocks)
+    create_region(world, "Arctic Docks", arctic_docks)
 
-    create_region(world, "Frozen Camp", frozenCamp)
+    create_region(world, "Frozen Camp", frozen_camp)
 
-    create_region(world, "Crystal Mine", crystalMine)
+    create_region(world, "Crystal Mine", crystal_mine)
 
-    create_region(world, "Erupting Fissure", eruptingFissure)
+    create_region(world, "Erupting Fissure", erupting_fissure)
 
     create_region(world, "Yeti", yeti)
 
-    create_region(world, "Desecrated Temple", desecratedTemple)
+    create_region(world, "Desecrated Temple", desecrated_temple)
 
-    create_region(world, "Battle Trenches", battleTrenches)
+    create_region(world, "Battle Trenches", battle_trenches)
 
-    create_region(world, "Battle Towers", battleTowers)
+    create_region(world, "Battle Towers", battle_towers)
 
-    create_region(world, "Infernal Fortress", infernalFortress)
+    create_region(world, "Infernal Fortress", infernal_fortress)
 
-    create_region(world, "Gates of the Underworld", gatesOfTheUnderworld)
+    create_region(world, "Gates of the Underworld", gates_of_the_underworld)
 
 
 def connect_regions(world: "GauntletLegendsWorld"):
