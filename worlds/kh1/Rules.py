@@ -1881,11 +1881,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Deep Jungle Jungle Slider 50 Fruits"                                          , player).access_rule = lambda state: (
                                                                                                                                                     has_slides(state, player)
                                                                                                                                                  )
-    multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: (
-                                                                                                                                                    has_item(state, player, "Hollow Bastion")
-                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
-                                                                                                                                                    and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
-                                                                                                                                                 )
+   #multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: ()
     multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: (
                                                                                                                                                     has_evidence(state, player)
                                                                                                                                                  )
