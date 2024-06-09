@@ -1,10 +1,12 @@
 import unittest
 from itertools import combinations
+from random import random
 
 from .option_names import all_option_choices
 from .. import SVTestCase, solo_multiworld
 from ..assertion.world_assert import WorldAssertMixin
 from ... import options
+from ...mods.mod_data import ModNames
 
 
 class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
@@ -32,12 +34,14 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
         option_dict = {
-            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla_short,
-            options.Craftsanity.internal_name: options.Craftsanity.option_all,
+            options.Goal.internal_name: options.Goal.option_master_angler,
+            options.QuestLocations.internal_name: -1,
+            options.Fishsanity.internal_name: options.Fishsanity.option_all,
+            options.Mods.internal_name: frozenset({ModNames.sve}),
         }
         for i in range(1):
-            # seed = int(random() * pow(10, 18) - 1)
-            seed = 64936975574258130357
+            seed = int(random() * pow(10, 18) - 1)
+            # seed = 64936975574258130357
             with self.subTest(f"Seed: {seed}"):
                 print(f"Seed: {seed}")
                 with solo_multiworld(option_dict, seed=seed) as (multiworld, _):
