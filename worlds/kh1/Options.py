@@ -304,8 +304,9 @@ class KeybladesUnlockChests(Toggle):
     NL   - Fairy Harp
     HB   - Divine Rose
     EotW - Oblivion
+    HAW  - Oathkeeper
     
-    Note: Does not apply to Atlantica, 100 Acre Wood, The emblem and carousel chests in Hollow Bastion, or the Aero chest in Neverland currently.
+    Note: Does not apply to Atlantica, the emblem and carousel chests in Hollow Bastion, or the Aero chest in Neverland currently.
     """
     display_name = "Keyblades Unlock Chests"
 

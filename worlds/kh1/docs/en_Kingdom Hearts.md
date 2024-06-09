@@ -60,7 +60,7 @@ Find `Footprints` in the multiworld.
 
 ###I can't enter any cups in Olympus Coliseum.
 
-Phil Cup, Pegasus Cup, and Hercules Cup are all multiworld items.  Finding all 3 grant you access to Hades Cup and the Platinum Match.  Clearing all cups lets you challenge Ice Titan.
+`Phil Cup`, `Pegasus Cup`, and `Hercules Cup` are all multiworld items.  Finding all 3 grant you access to Hades Cup and the Platinum Match.  Clearing all cups lets you challenge Ice Titan.
 
 ###The slides aren't spawning in Deep Jungle.
 
