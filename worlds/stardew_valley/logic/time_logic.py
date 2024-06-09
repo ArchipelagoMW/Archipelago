@@ -37,10 +37,18 @@ class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixi
     def has_lived_max_months(self) -> StardewRule:
         return self.logic.time.has_lived_months(MAX_MONTHS)
 
+    @cache_self1
+    def has_lived_year(self, number: int) -> StardewRule:
+        return self.logic.time.has_lived_months(number * ONE_YEAR)
+
+    @cache_self1
+    def has_year(self, number: int) -> StardewRule:
+        return self.logic.time.has_lived_year(number - 1)
+
     @cached_property
     def has_year_two(self) -> StardewRule:
-        return self.logic.time.has_lived_months(ONE_YEAR)
+        return self.logic.time.has_year(2)
 
     @cached_property
     def has_year_three(self) -> StardewRule:
-        return self.logic.time.has_lived_months(2 * ONE_YEAR)
+        return self.logic.time.has_year(3)

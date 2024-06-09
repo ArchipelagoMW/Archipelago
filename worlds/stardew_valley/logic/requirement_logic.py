@@ -7,9 +7,10 @@ from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
+from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data.game_item import Requirement
-from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement
+from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -19,7 +20,7 @@ class RequirementLogicMixin(BaseLogicMixin):
 
 
 class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin,
-SeasonLogicMixin]]):
+SeasonLogicMixin, TimeLogicMixin]]):
 
     def meet_all_requirements(self, requirements: Iterable[Requirement]):
         if not requirements:
@@ -45,3 +46,7 @@ SeasonLogicMixin]]):
     @meet_requirement.register
     def _(self, requirement: SeasonRequirement):
         return self.logic.season.has(requirement.season)
+
+    @meet_requirement.register
+    def _(self, requirement: YearRequirement):
+        return self.logic.time.has_year(requirement.year)

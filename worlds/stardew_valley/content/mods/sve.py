@@ -3,8 +3,15 @@ from ..mod_registry import register_mod_content_pack
 from ..override import override
 from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_content_pack
 from ...data import villagers_data, fish_data
+from ...data.harvest import ForagingSource
+from ...data.requirement import YearRequirement
 from ...mods.mod_data import ModNames
-from ...strings.region_names import Region
+from ...strings.crop_names import Fruit
+from ...strings.fish_names import WaterItem
+from ...strings.flower_names import Flower
+from ...strings.forageable_names import Mushroom, Forageable
+from ...strings.region_names import Region, SVERegion
+from ...strings.season_names import Season
 
 
 class SVEContentPack(ContentPack):
@@ -38,6 +45,37 @@ register_mod_content_pack(SVEContentPack(
         ginger_island_content_pack.name,
         ModNames.jasper,  # To override Marlon and Gunther
     ),
+    harvest_sources={
+        Mushroom.red: (
+            ForagingSource(regions=(SVERegion.forest_west,), seasons=(Season.summer, Season.fall)), ForagingSource(regions=(SVERegion.sprite_spring_cave,), )
+        ),
+        Mushroom.purple: (
+            ForagingSource(regions=(SVERegion.forest_west,), seasons=(Season.fall,)), ForagingSource(regions=(SVERegion.sprite_spring_cave,), )
+        ),
+        Mushroom.morel: (
+            ForagingSource(regions=(SVERegion.forest_west,), seasons=(Season.fall,)), ForagingSource(regions=(SVERegion.sprite_spring_cave,), )
+        ),
+        Mushroom.chanterelle: (
+            ForagingSource(regions=(SVERegion.forest_west,), seasons=(Season.fall,)), ForagingSource(regions=(SVERegion.sprite_spring_cave,), )
+        ),
+        Flower.tulip: (ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.spring,)),),
+        Flower.blue_jazz: (ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.spring,)),),
+        Flower.summer_spangle: (ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.summer,)),),
+        Flower.sunflower: (ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.summer,)),),
+        Flower.fairy_rose: (ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.fall,)),),
+        Fruit.ancient_fruit: (
+            ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.spring, Season.summer, Season.fall), other_requirements=(YearRequirement(3),)),
+            ForagingSource(regions=(SVERegion.sprite_spring_cave,)),
+        ),
+        Fruit.sweet_gem_berry: (
+            ForagingSource(regions=(SVERegion.sprite_spring,), seasons=(Season.spring, Season.summer, Season.fall), other_requirements=(YearRequirement(3),)),
+        ),
+
+        # Fable Reef
+        WaterItem.coral: (ForagingSource(regions=(SVERegion.fable_reef,)),),
+        Forageable.rainbow_shell: (ForagingSource(regions=(SVERegion.fable_reef,)),),
+        WaterItem.sea_urchin: (ForagingSource(regions=(SVERegion.fable_reef,)),),
+    },
     fishes=(
         fish_data.baby_lunaloo,  # Removed when no ginger island
         fish_data.bonefish,

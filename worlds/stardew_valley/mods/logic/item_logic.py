@@ -24,11 +24,10 @@ from ...options import Cropsanity
 from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
-from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop, Fruit
-from ...strings.fish_names import WaterItem, ModTrash
-from ...strings.flower_names import Flower
+from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop
+from ...strings.fish_names import ModTrash
 from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.forageable_names import SVEForage, DistantLandsForageable, Forageable, Mushroom
+from ...strings.forageable_names import SVEForage, DistantLandsForageable
 from ...strings.gift_names import SVEGift
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
@@ -136,27 +135,6 @@ FarmingLogicMixin]]):
             Loot.void_essence: items[Loot.void_essence] | self.logic.region.can_reach(SVERegion.highlands_cavern) | self.logic.region.can_reach(
                 SVERegion.crimson_badlands),
             Loot.solar_essence: items[Loot.solar_essence] | self.logic.region.can_reach(SVERegion.crimson_badlands),
-            Flower.tulip: items[Flower.tulip] | self.logic.tool.can_forage(Season.spring, SVERegion.sprite_spring),
-            Flower.blue_jazz: items[Flower.blue_jazz] | self.logic.tool.can_forage(Season.spring, SVERegion.sprite_spring),
-            Flower.summer_spangle: items[Flower.summer_spangle] | self.logic.tool.can_forage(Season.summer, SVERegion.sprite_spring),
-            Flower.sunflower: items[Flower.sunflower] | self.logic.tool.can_forage((Season.summer, Season.fall), SVERegion.sprite_spring),
-            Flower.fairy_rose: items[Flower.fairy_rose] | self.logic.tool.can_forage(Season.fall, SVERegion.sprite_spring),
-            Fruit.ancient_fruit: items[Fruit.ancient_fruit] | (
-                    self.logic.tool.can_forage((Season.spring, Season.summer, Season.fall), SVERegion.sprite_spring) &
-                    self.logic.time.has_year_three) | self.logic.region.can_reach(SVERegion.sprite_spring_cave),
-            Fruit.sweet_gem_berry: items[Fruit.sweet_gem_berry] | (
-                    self.logic.tool.can_forage((Season.spring, Season.summer, Season.fall), SVERegion.sprite_spring) &
-                    self.logic.time.has_year_three),
-            WaterItem.coral: items[WaterItem.coral] | self.logic.region.can_reach(SVERegion.fable_reef),
-            Forageable.rainbow_shell: items[Forageable.rainbow_shell] | self.logic.region.can_reach(SVERegion.fable_reef),
-            WaterItem.sea_urchin: items[WaterItem.sea_urchin] | self.logic.region.can_reach(SVERegion.fable_reef),
-            Mushroom.red: items[Mushroom.red] | self.logic.tool.can_forage((Season.summer, Season.fall), SVERegion.forest_west) |
-                          self.logic.region.can_reach(SVERegion.sprite_spring_cave),
-            Mushroom.purple: items[Mushroom.purple] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west) |
-                             self.logic.region.can_reach(SVERegion.sprite_spring_cave),
-            Mushroom.morel: items[Mushroom.morel] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west),
-            Mushroom.chanterelle: items[Mushroom.chanterelle] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west) |
-                                  self.logic.region.can_reach(SVERegion.sprite_spring_cave),
             Ore.copper: items[Ore.copper] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &
                                              self.logic.combat.can_fight_at_level(Performance.great)),
             Ore.iron: items[Ore.iron] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &

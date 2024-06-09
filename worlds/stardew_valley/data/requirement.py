@@ -24,3 +24,8 @@ class SkillRequirement(Requirement):
 @dataclass(frozen=True)
 class SeasonRequirement(Requirement):
     season: str
+
+
+@dataclass(frozen=True)
+class YearRequirement(Requirement):
+    year: int
