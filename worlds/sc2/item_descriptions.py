@@ -285,6 +285,9 @@ item_descriptions = {
     item_names.LIBERATOR_360_DEGREE_SENSOR_ARRAY: "Liberators in Defender Mode can attack any target in weapon range.",
     item_names.WIDOW_MINE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.WIDOW_MINE),
     item_names.HERC_GRAPPLE_PULL: "Allows HERCs to use their grappling gun to pull a ground unit towards the HERC.",
+    item_names.COMMAND_CENTER_SCANNER_SWEEP: "Temporarily reveals an area of the map, detecting cloaked and burrowed units.",
+    item_names.COMMAND_CENTER_MULE: "Summons a unit that gathers minerals more quickly than regular SCVs. Has timed life.",
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES: "Drops additional supplies, permanently increasing the supply output of the target Supply Depot by 8.",
     item_names.HELLION_TWIN_LINKED_FLAMETHROWER: "Doubles the width of the Hellion's flame attack.",
     item_names.HELLION_THERMITE_FILAMENTS: "Hellions do an additional 10 damage to Light Armor.",
     item_names.SPIDER_MINE_CERBERUS_MINE: "Increases trigger and blast radius of Spider Mines.",
@@ -425,6 +428,9 @@ item_descriptions = {
     item_names.PREDATOR_PREDATOR_S_FURY: "Predators can use an attack that jumps between targets.",
     item_names.BATTLECRUISER_BEHEMOTH_PLATING: "Increases Battlecruiser armor by 2.",
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES: "Increases Battlecruiser movement speed.",
+    item_names.PLANETARY_FORTRESS_ORBITAL_MODULE: inspect.cleandoc("""
+        Allows Planetary Fortresses to use Scanner Sweep, MULE, and Extra Supplies if those abilities are owned.
+    """),
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
