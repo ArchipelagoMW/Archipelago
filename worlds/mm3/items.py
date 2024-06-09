@@ -38,10 +38,10 @@ stage_access_table = {
     snake_man_stage: ItemData(0x890106, True),
     spark_man_stage: ItemData(0x890107, True),
     shadow_man_stage: ItemData(0x890108, True),
-    doc_needle_stage: ItemData(0x890110, True, True),
-    doc_gemini_stage: ItemData(0x890111, True, True),
-    doc_spark_stage: ItemData(0x890112, True, True),
-    doc_shadow_stage: ItemData(0x890113, True, True),
+    doc_needle_stage: ItemData(0x890111, True, True),
+    doc_gemini_stage: ItemData(0x890113, True, True),
+    doc_spark_stage: ItemData(0x890117, True, True),
+    doc_shadow_stage: ItemData(0x890118, True, True),
 }
 
 rush_item_table = {

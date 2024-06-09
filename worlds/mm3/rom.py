@@ -15,7 +15,7 @@ from .rules import minimum_weakness_requirement, bosses
 if TYPE_CHECKING:
     from . import MM3World
 
-MM3LCHASH = "37f2c36ce7592f1e16b3434b3985c497"
+MM3LCHASH = "5266687de215e790b2008284402f3917"
 PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
 MM3NESHASH = "4a53b6f58067d62c9a43404fe835dd5c"
 MM3VCHASH = "c50008f1ac86fae8d083232cdd3001a5"
@@ -188,11 +188,11 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.name = bytearray(f'MM3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
                            'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
-    patch.write_bytes(0x3F300, patch.name)
+    patch.write_bytes(0x3F330, patch.name)
     deathlink_byte = world.options.death_link.value | (world.options.energy_link.value << 1)
-    patch.write_byte(0x3F316, deathlink_byte)
+    patch.write_byte(0x3F346, deathlink_byte)
 
-    patch.write_bytes(0x3FF1C, world.world_version)
+    patch.write_bytes(0x3F34C, world.world_version)
 
     version_map = {
         "0": 0x90,
@@ -219,7 +219,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
-header = b"\x4E\x45\x53\x1A\x10\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+header = b"\x4E\x45\x53\x1A\x10\x10\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
 
 def read_headerless_nes_rom(rom: bytes) -> bytes:
@@ -255,7 +255,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 def get_base_rom_path(file_name: str = "") -> str:
     options: settings.Settings = settings.get_settings()
     if not file_name:
-        file_name = options["mm2_options"]["rom_file"]
+        file_name = options["mm3_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name

@@ -1,20 +1,23 @@
 norom
 !headersize = 16
 
-!controller_mirror = $16
 !controller_flip = $14 ; only on first frame of input, used by crash man, etc
-!current_stage = $2A
+!controller_mirror = $16
+!current_stage = $22
 !current_state = $60
 !completed_rbm_stages = $61
 !completed_doc_stages = $62
+;!received_items = $63
+!acquired_rush = $64
 !received_rmb_stages = $680
 !received_doc_stages = $681
 ; !deathlink = $30, set to $0E
 !energylink_packet = $682
 !last_wily = $683
 !rbm_strobe = $684
-!doc_robo_kills = $0685
-!wily_stage_completion = $0686
+!sound_effect_strobe = $685
+!doc_robo_kills = $686
+!wily_stage_completion = $687
 
 !current_weapon = $A0
 !current_health = $A2
@@ -49,6 +52,11 @@ macro org(address,bank)
     endif
 endmacro
 
+%org($802F, $0B)
+HookBreakMan:
+  JSR SetBreakMan
+  NOP
+
 %org($9258, $18)
 HookStageSelect:
   JSR ChangeStageMode
@@ -74,6 +82,11 @@ SwapSelectSprites:
   JMP InvertSelectSprites
   NOP
 
+%org($9AFF, $18)
+BreakManSelect:
+  JSR ApplyLastWily
+  NOP
+
 %org($C8F7, $1E)
 RemoveRushCoil:
   NOP #4
@@ -83,9 +96,19 @@ HookController:
   JMP ControllerHook
   NOP
 
-%org($DA1A, $1E)
+%org($DA18, $1E)
 NullWeaponGet:
   NOP #5 ; TODO: see if I can reroute this write instead for nicer timings
+
+%org($DB99, $1E)
+HookMidDoc:
+  JSR SetMidDoc
+  NOP
+
+%org($DBB0, $1E)
+HoodEndDoc:
+  JSR SetEndDoc
+  NOP
 
 %org($DC57, $1E)
 RerouteStageComplete:
@@ -93,7 +116,17 @@ RerouteStageComplete:
   JSR SetStageComplete
   NOP #2
 
-%org($F320, $1F)
+%org($DC6F, $1E)
+RerouteRushMarine:
+  LDA #$01
+  JMP SetRushAcquire
+
+%org($DC6A, $1E)
+RerouteRushJet:
+  LDA #$02
+  JMP SetRushAcquire
+
+%org($F340, $1F)
 RewireDocRobotAccess:
   LDA !current_state
   BNE .DocRobo
@@ -110,9 +143,17 @@ ChangeStageMode:
   ; also handles hot reload of stage select
   ; kinda broken, sprites don't disappear and palettes go wonky with Break Man access
   ; but like, it functions!
+  LDA !sound_effect_strobe
+  BEQ .Continue
+  JSR $F89A
+  LDA #$00
+  STA !sound_effect_strobe
+  .Continue:
   LDA $14
   AND #$20
   BEQ .Next
+  LDA !current_state
+  BNE .Set
   LDA !completed_doc_stages
   CMP #$C5
   BEQ .BreakMan
@@ -251,11 +292,110 @@ SetStageComplete:
   RTS
 
 ControllerHook:
+  ; Jump in here too for sfx
+  LDA !sound_effect_strobe
+  BEQ .Next
+  JSR $F89A
+  LDA #$00
+  STA !sound_effect_strobe
+  .Next:
   LDA !controller_mirror
   CMP !CONTROLLER_ALL_BUTTON
   BNE .Continue
   JMP $CBB1
   .Continue:
   LDA !controller_flip
-  CMP #$10 ; start
+  AND #$10 ; start
   JMP $CA77
+
+SetRushAcquire:
+  ORA $64
+  STA $64
+  RTS
+
+SetWilyStageComplete:
+  LDA !current_stage
+  STA !last_wily
+  SEC
+  SBC #$0C
+  TAX
+  LDA #$01
+  CPX #$00
+  BEQ $F45D
+  DEX
+  ASL A
+  SEC
+  BCS $F454
+  ORA $0687
+  STA $0687
+  LDA #$16
+  STA $22
+  RTS
+
+ApplyLastWily:
+  LDA !controller_mirror
+  AND !CONTROLLER_SELECT
+  BEQ .LastWily
+  LDA #$00
+  SEC
+  BCS .Set
+  .LastWily:
+  LDA !last_wily
+  SEC
+  SBC #$0C
+  .Set:
+  STA $75 ; wily index
+  LDA #$03
+  STA !current_stage
+  RTS
+
+SetMidDoc:
+  LDA $22
+  SEC
+  SBC #$08
+  ASL
+  TAY
+  LDA #$01
+  .Loop:
+  CPY #$00
+  BEQ .Return
+  DEY
+  ASL
+  SEC
+  BCS .Loop
+  .Return:
+  ORA !doc_robo_kills
+  STA !doc_robo_kills
+  LDA #$00
+  STA $30
+  RTS
+
+SetEndDoc:
+  LDA $22
+  SEC
+  SBC #$08
+  ASL
+  TAY
+  INY
+  LDA #$01
+  .Loop:
+  CPY #$00
+  BEQ .Return
+  DEY
+  ASL
+  SEC
+  BCS .Loop
+  .Return:
+  ORA !doc_robo_kills
+  STA !doc_robo_kills
+  LDA #$0D
+  STA $30
+  RTS
+
+SetBreakMan:
+  LDA #$80
+  ORA !wily_stage_completion
+  STA !wily_stage_completion
+  LDA #$16
+  STA $22
+  RTS

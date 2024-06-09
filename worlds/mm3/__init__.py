@@ -12,7 +12,7 @@ from .locations import (MM3Location, mm3_regions, MM3Region, energy_pickups, eta
                         location_groups)
 from .rom import patch_rom, MM3ProcedurePatch, MM3LCHASH, MM3VCHASH, PROTEUSHASH, MM3NESHASH
 from .options import MM3Options
-#from .client import MegaMan3Client
+from .client import MegaMan3Client
 from .rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
 import os
 import threading

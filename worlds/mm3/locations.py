@@ -22,7 +22,7 @@ class MM3Region(Region):
 needle_man_locations: Dict[str, Optional[int]] = {
     needle_man: 0x890001,
     get_needle_cannon: 0x890101,
-    get_rush_marine: 0x890111,
+    get_rush_jet: 0x890112,
 }
 
 magnet_man_locations: Dict[str, Optional[int]] = {
@@ -58,7 +58,7 @@ spark_man_locations: Dict[str, Optional[int]] = {
 shadow_man_locations: Dict[str, Optional[int]] = {
     shadow_man: 0x890008,
     get_shadow_blade: 0x890108,
-    get_rush_jet: 0x890112
+    get_rush_marine: 0x890111
 }
 
 doc_air_locations: Dict[str, Optional[int]] = {
