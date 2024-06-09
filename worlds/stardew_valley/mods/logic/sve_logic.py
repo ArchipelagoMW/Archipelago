@@ -55,9 +55,14 @@ class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixi
             return self.logic.quest.can_complete_quest(ModQuest.GrandpasShed)
         return self.logic.received(SVEQuestItem.grandpa_shed)
 
+    def has_bear_knowledge(self):
+        if self.options.quest_locations < 0:
+            return self.logic.quest.can_complete_quest(Quest.strange_note)
+        return self.logic.received(Wallet.bears_knowledge)
+
     def can_buy_bear_recipe(self):
         access_rule = (self.logic.quest.can_complete_quest(Quest.strange_note) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
                        self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic))
         forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods, Region.mountain))
-        knowledge_rule = self.logic.received(Wallet.bears_knowledge)
+        knowledge_rule = self.has_bear_knowledge()
         return access_rule & forage_rule & knowledge_rule
