@@ -15,7 +15,7 @@ from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_c
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
 from .moves import randomize_tms
-from .options import PokemonCrystalOptions, JohtoOnly, RandomizeBadges, Goal
+from .options import PokemonCrystalOptions, JohtoOnly, RandomizeBadges, Goal, HMBadgeRequirements
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
 from .pokemon import randomize_pokemon, randomize_starters
@@ -95,6 +95,12 @@ class PokemonCrystalWorld(World):
     generated_static: Dict[str, StaticPokemon]
 
     def generate_early(self) -> None:
+        if self.options.early_fly:
+            self.multiworld.local_early_items[self.player]["HM02 Fly"] = 1
+            if (self.options.hm_badge_requirements.value != HMBadgeRequirements.option_no_badges
+                    and self.options.randomize_badges == RandomizeBadges.option_completely_random):
+                self.multiworld.local_early_items[self.player]["Storm Badge"] = 1
+
         if self.options.johto_only:
             if self.options.goal == Goal.option_red and self.options.johto_only == JohtoOnly.option_on:
                 self.options.goal.value = Goal.option_elite_four
@@ -183,6 +189,13 @@ class PokemonCrystalWorld(World):
         if self.options.randomize_badges.value == RandomizeBadges.option_shuffle:
             badge_locs = [loc for loc in self.multiworld.get_locations(self.player) if "Badge" in loc.tags]
             badge_items = [self.create_item_by_code(loc.default_item_code) for loc in badge_locs]
+            if self.options.early_fly:
+                # take one of the 3 early badge locations, set it to storm badge
+                storm_loc = self.random.choice([loc for loc in badge_locs if "EarlyBadge" in loc.tags])
+                storm_badge = [item for item in badge_items if item.name == "Storm Badge"][0]
+                storm_loc.place_locked_item(storm_badge)
+                badge_locs.remove(storm_loc)
+                badge_items.remove(storm_badge)
 
             # 5/8 badge locations in each region do not require a HM to access, so only trying once should be okay.
             # I generated 1000 seeds with shuffled badges and none of them broke here, so it's fine probably

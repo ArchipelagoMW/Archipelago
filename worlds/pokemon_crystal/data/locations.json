@@ -2867,7 +2867,7 @@
 		"label": "Violet Gym - Zephyr Badge from Falkner",
 		"flag": "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
 		"type": "giveitem",
-		"tags": ["Badge"],
+		"tags": ["Badge", "EarlyBadge"],
 		"default_item": "ZEPHYR_BADGE",
 		"script": "AP_Badge_VioletGym_ZEPHYR_BADGE"
 	},
@@ -2875,7 +2875,7 @@
 		"label": "Azalea Gym - Hive Badge from Bugsy",
 		"flag": "EVENT_HIVE_BADGE_FROM_BUGSY",
 		"type": "giveitem",
-		"tags": ["Badge"],
+		"tags": ["Badge", "EarlyBadge"],
 		"default_item": "HIVE_BADGE",
 		"script": "AP_Badge_AzaleaGym_HIVE_BADGE"
 	},
@@ -2883,7 +2883,7 @@
 		"label": "Goldenrod Gym - Plain Badge from Whitney",
 		"flag": "EVENT_PLAIN_BADGE_FROM_WHITNEY",
 		"type": "giveitem",
-		"tags": ["Badge"],
+		"tags": ["Badge", "EarlyBadge"],
 		"default_item": "PLAIN_BADGE",
 		"script": "AP_Badge_GoldenrodGym_PLAIN_BADGE"
 	},

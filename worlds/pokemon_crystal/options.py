@@ -66,7 +66,6 @@ class RandomizeHiddenItems(Toggle):
     Shuffles hidden item locations into the pool
     """
     display_name = "Randomize Hidden Items"
-    default = 0
 
 
 class RequireItemfinder(DefaultOnToggle):
@@ -81,7 +80,6 @@ class Trainersanity(Toggle):
     Adds checks for defeating trainers
     """
     display_name = "Trainersanity"
-    default = 0
 
 
 class TrainersanityAlerts(Choice):
@@ -100,7 +98,6 @@ class RandomizePokegear(Toggle):
     Shuffles the Pokegear and cards into the pool
     """
     display_name = "Randomize Pokegear"
-    default = 0
 
 
 class RandomizeBerryTrees(Toggle):
@@ -108,7 +105,6 @@ class RandomizeBerryTrees(Toggle):
     Shuffles berry tree locations into the pool
     """
     display_name = "Randomize Berry Trees"
-    default = 0
 
 
 class RandomizeStarters(Choice):
@@ -127,7 +123,6 @@ class RandomizeWilds(Toggle):
     Randomizes species of wild Pokemon
     """
     display_name = "Randomize Wilds"
-    default = 0
 
 
 class NormalizeEncounterRates(Toggle):
@@ -135,7 +130,6 @@ class NormalizeEncounterRates(Toggle):
     Normalizes the chance of encountering each wild Pokemon in a given area
     """
     display_name = "Normalize Encounter Rates"
-    default = 0
 
 
 class RandomizeStaticPokemon(Toggle):
@@ -174,7 +168,6 @@ class RandomizeTMMoves(Toggle):
     Randomizes the moves available as TMs
     """
     display_name = "Randomize TM Moves"
-    default = 0
 
 
 class TMCompatibility(NamedRange):
@@ -249,7 +242,6 @@ class RandomizeMusic(Toggle):
     Randomize all music
     """
     display_name = "Randomize Music"
-    default = 0
 
 
 # class RandomizeSFX(Toggle):
@@ -273,6 +265,13 @@ class FreeFlyLocation(Choice):
     option_free_fly_and_map_card = 2
 
 
+class EarlyFly(Toggle):
+    """
+    HM02 Fly will be placed early in the game
+    """
+    display_name = "Early Fly"
+
+
 class HMBadgeRequirements(Choice):
     """
     Vanilla: HMs require their vanilla badges
@@ -291,7 +290,6 @@ class ReusableTMs(Toggle):
     TMs can be used an infinite number of times
     """
     display_name = "Reusable TMs"
-    default = 0
 
 
 class GuaranteedCatch(Toggle):
@@ -299,7 +297,6 @@ class GuaranteedCatch(Toggle):
     Balls have a 100% success rate
     """
     display_name = "Guaranteed Catch"
-    default = 0
 
 
 class MinimumCatchRate(Range):
@@ -317,7 +314,6 @@ class BlindTrainers(Toggle):
     Trainers have no vision and will not start battles unless interacted with
     """
     display_name = "Blind Trainers"
-    default = 0
 
 
 class BetterMarts(Toggle):
@@ -325,7 +321,6 @@ class BetterMarts(Toggle):
     Improves the selection of items at Pokemarts
     """
     display_name = "Better Marts"
-    default = 0
 
 
 class ExpModifier(Range):
@@ -447,6 +442,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_music: RandomizeMusic
     # randomize_sfx: RandomizeSFX
     free_fly_location: FreeFlyLocation
+    early_fly: EarlyFly
     hm_badge_requirements: HMBadgeRequirements
     reusable_tms: ReusableTMs
     guaranteed_catch: GuaranteedCatch
