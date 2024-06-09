@@ -141,7 +141,7 @@ List of supported mods:
 - Skills
     - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
     - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142)
-    - [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793)
+    - [Archaeology](https://www.nexusmods.com/stardewvalley/mods/22199)
     - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073)
 - NPCs
     - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427)
