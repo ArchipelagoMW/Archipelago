@@ -1984,6 +1984,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     (
                                                                                                                                                         has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                         or has_at_least(state, player, "High Jump", 3)
+                                                                                                                                                        or has_emblems(state, player)
                                                                                                                                                     )
                                                                                                                                                     and has_item(state, player, "Progressive Fire")
                                                                                                                                                     and
@@ -1997,17 +1998,20 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                     or has_at_least(state, player, "High Jump", 3)
+                                                                                                                                                    or has_emblems(state, player)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)"                           , player).access_rule = lambda state: (
                                                                                                                                                     (
                                                                                                                                                         has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                         or has_at_least(state, player, "High Jump", 3)
+                                                                                                                                                        or has_emblems(state, player)
                                                                                                                                                     )
                                                                                                                                                     and has_item(state, player, "Red Trinity")
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)"                         , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                     or has_at_least(state, player, "High Jump", 3)
+                                                                                                                                                    or has_emblems(state, player)
                                                                                                                                                  )
    #multiworld.get_location("Traverse Town 1st District Leon Gift"                                         , player).access_rule = lambda state: ()
    #multiworld.get_location("Traverse Town 1st District Aerith Gift"                                       , player).access_rule = lambda state: ()
