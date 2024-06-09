@@ -121,13 +121,12 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
                 if range_type != "bytes" or end != "":
                     return "Unsupported range", 500
                 # NOTE: we skip Content-Range in the response here, which isn't great but works for our JS
-                return Response(_read_log(file_path, int(start)), mimetype="text/plain;charset=UTF-8", status=206)
-            return Response(_read_log(file_path), mimetype="text/plain;charset=UTF-8")
+                return Response(_read_log(file_path, int(start)), mimetype="text/plain", status=206)
+            return Response(_read_log(file_path), mimetype="text/plain")
         except FileNotFoundError:
             return Response(f"Logfile {file_path} does not exist. "
-                            f"Likely a crash during spinup of multiworld instance or it is still spinning up."
-                            .encode("utf-8"),
-                            mimetype="text/plain;charset=UTF-8")
+                            f"Likely a crash during spinup of multiworld instance or it is still spinning up.",
+                            mimetype="text/plain")
 
     return "Access Denied", 403
 
