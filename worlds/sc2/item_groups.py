@@ -275,7 +275,6 @@ item_name_groups[ItemGroupNames.TERRAN_STIMPACKS] = terran_stimpacks = [
 ]
 item_name_groups[ItemGroupNames.TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES] = terran_original_progressive_upgrades = [
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
-    item_names.PROGRESSIVE_ORBITAL_COMMAND,
     item_names.MARINE_PROGRESSIVE_STIMPACK,
     item_names.VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE,
     item_names.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL,
@@ -303,7 +302,6 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,  # Baseline in mission 5
     item_names.BATTLECRUISER_TACTICAL_JUMP,
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES,
-    item_names.PROGRESSIVE_ORBITAL_COMMAND,  # Can be upgraded from mission 2
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,  # Baseline from mission 2
     item_names.ORBITAL_DEPOTS,  # Baseline from mission 2
     item_names.COMMAND_CENTER_SCANNER_SWEEP,  # In NCO you must actually morph Command Center into Orbital Command
