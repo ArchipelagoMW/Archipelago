@@ -5,7 +5,7 @@ from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union
 
 from BaseClasses import CollectionState, Item
 
-from worlds.witness import WitnessWorld
+from .. import WitnessWorld
 
 
 class WitnessTestBase(WorldTestBase):

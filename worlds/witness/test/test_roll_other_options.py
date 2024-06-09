@@ -1,4 +1,4 @@
-from worlds.witness.test import WitnessTestBase
+from ..test import WitnessTestBase
 
 # These are just some random options combinations, just to catch whether I broke anything obvious
 

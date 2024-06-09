@@ -1,5 +1,5 @@
-from worlds.witness.rules import _has_lasers
-from worlds.witness.test import WitnessTestBase
+from ..rules import _has_lasers
+from ..test import WitnessTestBase
 
 
 class TestDisableNonRandomizedLasers(WitnessTestBase):

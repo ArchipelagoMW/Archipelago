@@ -1,4 +1,4 @@
-from worlds.witness.test import WitnessTestBase
+from ..test import WitnessTestBase
 
 
 class TestIndividualDoors(WitnessTestBase):
