@@ -198,7 +198,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         "slateblue": "6D8BE8",
         "plum": "AF99EF",
         "salmon": "FA8072",
-        "white": "FFFFFF"
+        "white": "FFFFFF",
+        "orange": "FF7700",
     }
 
     def __init__(self, ctx):
