@@ -667,6 +667,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         # Route 15
         set_rule(get_location("Route 15 - Item"), can_cut)
 
+        # Fuchsia City
+        set_rule(get_location("Fuchsia City - Berry Tree"), can_cut)
+
         set_rule(get_entrance("REGION_ROUTE_19_FUCHSIA_GATE -> REGION_ROUTE_19"),
                  lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player) and can_surf(state))
 
