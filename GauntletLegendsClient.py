@@ -9,7 +9,7 @@ from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 
-from worlds.gl.Arrays import (
+from .Arrays import (
     base_count,
     boss_level,
     castle_id,
@@ -21,8 +21,8 @@ from worlds.gl.Arrays import (
     spawners,
     timers,
 )
-from worlds.gl.Items import ItemData, items_by_id
-from worlds.gl.Locations import LocationData
+from .Items import ItemData, items_by_id
+from .Locations import LocationData
 
 SYSTEM_MESSAGE_ID = 0
 
