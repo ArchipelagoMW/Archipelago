@@ -39,8 +39,8 @@ class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixi
 
     @cached_property
     def has_year_two(self) -> StardewRule:
-        return self.logic.time.has_lived_months(2 * ONE_YEAR)
+        return self.logic.time.has_lived_months(ONE_YEAR)
 
     @cached_property
     def has_year_three(self) -> StardewRule:
-        return self.logic.time.has_lived_months(3 * ONE_YEAR)
+        return self.logic.time.has_lived_months(2 * ONE_YEAR)
