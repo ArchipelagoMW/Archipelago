@@ -156,7 +156,7 @@ def host_room(room: UUID):
             fragments: List[str] = []
             for block in _read_log(os.path.join("logs", str(room.id) + ".txt")):
                 if raw_size + len(block) > max_size:
-                    fragments += "…"
+                    fragments.append("…")
                     break
                 raw_size += len(block)
                 fragments.append(block.decode("utf-8"))
