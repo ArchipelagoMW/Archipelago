@@ -411,8 +411,6 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     items.append(item_factory(Wallet.iridium_snake_milk))
     items.append(item_factory("Fairy Dust Recipe"))
     items.append(item_factory("Dark Talisman"))
-    create_distant_lands_quest_rewards(item_factory, options, items)
-    create_boarding_house_quest_rewards(item_factory, options, items)
 
 
 def create_help_wanted_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -719,21 +717,6 @@ def create_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewV
     if exclude_ginger_island:
         return
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items_ginger_island])
-
-
-def create_distant_lands_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.quest_locations < 0 or ModNames.distant_lands not in options.mods:
-        return
-    items.append(item_factory("Crayfish Soup Recipe"))
-    if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-        return
-    items.append(item_factory("Ginger Tincture Recipe"))
-
-
-def create_boarding_house_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.quest_locations < 0 or ModNames.boarding_house not in options.mods:
-        return
-    items.append(item_factory("Special Pumpkin Soup Recipe"))
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
