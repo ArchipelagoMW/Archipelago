@@ -15,7 +15,7 @@ html {
   border-radius: 8px;
   padding: 1rem;
   color: #eeffeb;
-  word-break: break-all;
+  word-break: break-word;
 }
 #player-options #player-options-header h1 {
   margin-bottom: 0;
