@@ -78,13 +78,11 @@ def get_shuffled_bundles(random: Random, logic: StardewLogic, content: StardewCo
     valid_bundle_items = [item1 for i, item1 in enumerate(valid_bundle_items)
                           if not any(item1.item_name == item2.item_name and item1.quality == item2.quality for item2 in valid_bundle_items[:i])]
     chosen_bundle_items = random.sample(valid_bundle_items, required_items)
-    # sorted_bundle_items = sorted(chosen_bundle_items, key=lambda x: logic.has(x.item_name).get_difficulty())
-    sorted_bundle_items = chosen_bundle_items
     for room in rooms:
         for bundle in room.bundles:
             num_items = len(bundle.items)
-            bundle.items = sorted_bundle_items[:num_items]
-            sorted_bundle_items = sorted_bundle_items[num_items:]
+            bundle.items = chosen_bundle_items[:num_items]
+            chosen_bundle_items = chosen_bundle_items[num_items:]
 
     vault = vault_remixed.create_bundle_room(options.bundle_price, random, content, options)
     return [*rooms, vault]

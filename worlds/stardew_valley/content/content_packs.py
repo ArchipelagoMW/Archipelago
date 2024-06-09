@@ -1,8 +1,5 @@
-import pkgutil
-
-assert pkgutil
-
 import importlib
+import pkgutil
 
 from . import mods
 from .mod_registry import by_mod
