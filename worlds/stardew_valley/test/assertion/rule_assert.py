@@ -34,7 +34,8 @@ class RuleAssertMixin(TestCase):
     def assert_reach_location_true(self, location: Location, state: CollectionState):
         expl = explain(Reach(location.name, "Location", 1), state)
         try:
-            self.assertTrue(location.can_reach(state), expl)
+            can_reach = location.can_reach(state)
+            self.assertTrue(can_reach, expl)
         except KeyError as e:
             raise AssertionError(f"Error while checking location {location.name}: {e}"
                                  f"\nExplanation: {expl}")
