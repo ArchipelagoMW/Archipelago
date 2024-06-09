@@ -422,11 +422,17 @@ class ValidInventory:
         if not {item_names.MEDIVAC, item_names.HERCULES} & logical_inventory_set:
             inventory = [item for item in inventory if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            locked_items = [item for item in locked_items if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
         if item_names.MEDIVAC not in logical_inventory_set:
             # Don't allow L2 Siege Tank Transport Hook without Medivac
-            inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            inventory_transport_hooks = [item for item in (inventory + locked_items) if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             if len(inventory_transport_hooks) > 1:
-                inventory.remove(inventory_transport_hooks[0])
+                if inventory_transport_hooks[0] in inventory:
+                    inventory.remove(inventory_transport_hooks[0])
+                elif inventory_transport_hooks[1] in inventory:
+                    inventory.remove(inventory_transport_hooks[0])
+                else:
+                    locked_items.remove(inventory_transport_hooks[0])
             if len(inventory_transport_hooks) > 0:
                 # Transport Hook is in inventory, remove from unused_items
                 unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
@@ -439,6 +445,7 @@ class ValidInventory:
             # No orbital Command Spells
             inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
             unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            locked_items = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
 
         # HotS
         # Baneling without sources => remove Baneling and upgrades

@@ -1795,6 +1795,9 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     item_names.MICRO_FILTERING,
     item_names.AUTOMATED_REFINERY,
     item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR,
+    item_names.COMMAND_CENTER_SCANNER_SWEEP,
+    item_names.COMMAND_CENTER_MULE,
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
     item_names.TECH_REACTOR,
     item_names.CELLULAR_REACTOR,
     item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,  # Place only L1
