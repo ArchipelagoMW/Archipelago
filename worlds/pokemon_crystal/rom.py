@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
-from .data import data, BASE_OFFSET
-from .items import reverse_offset_item_value, item_const_name_to_id
+from .data import data
+from .items import item_const_name_to_id
 from .utils import convert_to_ingame_text
 
 if TYPE_CHECKING:
@@ -37,15 +37,16 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
             continue
 
         if location.item and location.item.player == world.player:
-            item_id = reverse_offset_item_value(location.item.code)
+            item_id = location.item.code
             item_id = item_id - 256 if item_id > 256 else item_id
             write_bytes(patch, [item_id], location.rom_address)
         else:
             # for in game text
-            item_flag = location.address - BASE_OFFSET
+            item_flag = location.address
             player_name = world.multiworld.player_name[location.item.player].upper()
             item_name = location.item.name.upper()
             item_texts.append([player_name, item_name, item_flag])
+
             write_bytes(patch, [item_const_name_to_id("AP_ITEM")], location.rom_address)
 
     # table has format: location id (2 bytes), string address (2 bytes), string bank (1 byte),
@@ -302,23 +303,6 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
             else:  # script music is 2 bytes, offset by 1
                 write_bytes(patch, world.generated_music[i].to_bytes(2, "little"), music_address + 1)
 
-    # if world.options.randomize_sfx:
-    #     out_bytes = b''
-    #     for bank_address in world.generated_sfx:
-    #         out_bytes += bank_address.bank.to_bytes(1, "little") + bank_address.address.to_bytes(2, "little")
-    #     sfx_address = data.rom_addresses["AP_Setting_SFX_Pointers"]
-    #     write_bytes(patch, out_bytes, sfx_address)
-    #     cries_pool = [cry for cry_name, cry in data.sfx.cries.items()]
-    #     cries_address = data.rom_addresses["AP_Setting_Cries"]
-    #     for i in range(251):
-    #         cry = world.random.choice(cries_pool)
-    #         pitch = random.randint(-768, 4096)
-    #         length = random.randint(64, 512)
-    #         cry_bytes = cry.to_bytes(2, "little") + \
-    #                     pitch.to_bytes(2, "little", signed=True) + \
-    #                     length.to_bytes(2, "little")
-    #         write_bytes(patch, cry_bytes, cries_address + i * 6)
-
     if world.options.better_marts:
         mart_address = data.rom_addresses["Marts"]
         better_mart_address = data.rom_addresses["MartBetterMart"] - 0x10000
@@ -372,7 +356,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
         if quantity == 0:
             quantity = 1
         while quantity:
-            item_code = reverse_offset_item_value(world.item_name_to_id[item])
+            item_code = world.item_name_to_id[item]
             if item_code > 511:
                 continue
             elif item_code > 255:
@@ -396,7 +380,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
             write_bytes(patch, map_fly_offset, data.rom_addresses["AP_Setting_MapCardFreeFly_Offset"] + 1)
 
     # Set slot name
-    for i, byte in enumerate(world.multiworld.player_name[world.player].encode("utf-8")):
+    for i, byte in enumerate(world.player_name.encode("utf-8")):
         write_bytes(patch, [byte], data.rom_addresses["AP_Seed_Name"] + i)
 
     patch.write_file("token_data.bin", patch.get_token_binary())

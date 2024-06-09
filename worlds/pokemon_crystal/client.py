@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Dict, Set, List
 import worlds._bizhawk as bizhawk
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
-from .data import BASE_OFFSET, data
+from .data import data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -134,7 +134,7 @@ class PokemonCrystalClient(BizHawkClient):
             phone_trap_index = read_result[0][4]
 
             if num_received_items < len(ctx.items_received) and received_item_is_empty:
-                next_item = ctx.items_received[num_received_items].item - BASE_OFFSET
+                next_item = ctx.items_received[num_received_items].item
                 next_item = next_item if next_item < 256 else next_item - 256
                 await bizhawk.write(ctx.bizhawk_ctx, [
                     (data.ram_addresses["wArchipelagoItemReceived"],
@@ -158,27 +158,19 @@ class PokemonCrystalClient(BizHawkClient):
             flag_bytes = read_result[0]
             for byte_i, byte in enumerate(flag_bytes):
                 for i in range(8):
-                    flag_id = byte_i * 8 + i
-                    location_id = flag_id + BASE_OFFSET
+                    location_id = byte_i * 8 + i
                     if byte & (1 << i) != 0:
                         if location_id in ctx.server_locations:
                             local_checked_locations.add(location_id)
 
-                        if self.goal_flag is not None and flag_id == self.goal_flag:
+                        if self.goal_flag is not None and location_id == self.goal_flag:
                             game_clear = True
 
-                        if flag_id in EVENT_FLAG_MAP:
-                            local_set_events[EVENT_FLAG_MAP[flag_id]] = True
+                        if location_id in EVENT_FLAG_MAP:
+                            local_set_events[EVENT_FLAG_MAP[location_id]] = True
 
-                        if flag_id in KEY_ITEM_FLAG_MAP:
-                            local_found_key_items[KEY_ITEM_FLAG_MAP[flag_id]] = True
-                    # else: # TODO: check if item is an overworld itemball
-                    #     if location_id in ctx.checked_locations:
-                    #         write_byte = byte & (1 << i)
-                    #         await bizhawk.write(ctx.bizhawk_ctx, [
-                    #             (data.ram_addresses["wEventFlags"],
-                    #              write_byte.to_bytes(1, "little"), "WRAM")
-                    #         ])
+                        if location_id in KEY_ITEM_FLAG_MAP:
+                            local_found_key_items[KEY_ITEM_FLAG_MAP[location_id]] = True
 
             if local_checked_locations != self.local_checked_locations:
                 self.local_checked_locations = local_checked_locations

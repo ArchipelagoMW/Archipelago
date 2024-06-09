@@ -4,8 +4,6 @@ from typing import Dict, List, NamedTuple, Set, FrozenSet, Any, Union
 
 from BaseClasses import ItemClassification
 
-BASE_OFFSET = 7680000
-
 
 class ItemData(NamedTuple):
     label: str
@@ -119,16 +117,6 @@ class MiscData(NamedTuple):
     ecruteak_gym_warps: List[List[List[int]]]
 
 
-class BankAddress(NamedTuple):
-    bank: int
-    address: int
-
-
-class SfxData(NamedTuple):
-    pointers: List[BankAddress]
-    cries: Dict[str, int]
-
-
 class MusicData(NamedTuple):
     consts: Dict[str, int]
     maps: List[str]
@@ -179,7 +167,6 @@ class PokemonCrystalData:
     tmhm: Dict[str, TMHMData]
     tm_replace_map: List[int]
     misc: MiscData
-    sfx: SfxData
     music: MusicData
     static: Dict[str, StaticPokemon]
 
@@ -296,7 +283,7 @@ def _init() -> None:
                 item_classification,
                 frozenset(attributes["tags"])
             )
-            data.tm_replace_map.append(item_codes[item_constant_name] + BASE_OFFSET)
+            data.tm_replace_map.append(item_codes[item_constant_name])
 
     data.ram_addresses = {}
     for address_name, address in ram_address_data.items():
@@ -435,17 +422,6 @@ def _init() -> None:
             tm_data["is_hm"],
             move_data[tm_name]["id"]
         )
-
-    sfx_pointers = []
-    for sfx in data_json["sfx"]["pointers"]:
-        sfx_pointers.append(BankAddress(sfx[0], sfx[1]))
-
-    sfx_cries = {}
-
-    for cry_name, cry in data_json["sfx"]["cries"].items():
-        sfx_cries[cry_name] = cry
-
-    data.sfx = SfxData(sfx_pointers, sfx_cries)
 
     music_consts = {}
     for music_name, music_id in data_json["music"]["consts"].items():

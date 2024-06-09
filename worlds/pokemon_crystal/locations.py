@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, Optional, Dict, FrozenSet
 
 from BaseClasses import Location, Region
-from .data import data, BASE_OFFSET
-from .items import offset_item_value
+from .data import data
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
@@ -27,28 +26,10 @@ class PokemonCrystalLocation(Location):
             default_item_value: Optional[int] = None,
             tags: FrozenSet[str] = frozenset()
     ) -> None:
-        super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
-        self.default_item_code = None if default_item_value is None else offset_item_value(default_item_value)
+        super().__init__(player, name, flag, parent)
+        self.default_item_code = default_item_value
         self.rom_address = rom_address
         self.tags = tags
-
-
-def offset_flag(flag: int) -> int:
-    """
-    Returns the AP location id (address) for a given flag
-    """
-    if flag is None:
-        return None
-    return flag + BASE_OFFSET
-
-
-def reverse_offset_flag(location_id: int) -> int:
-    """
-    Returns the flag id for a given AP location id (address)
-    """
-    if location_id is None:
-        return None
-    return location_id - BASE_OFFSET
 
 
 def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region]) -> None:
@@ -91,6 +72,6 @@ def create_location_label_to_id_map() -> Dict[str, int]:
     for region_data in data.regions.values():
         for location_name in region_data.locations:
             location_data = data.locations[location_name]
-            label_to_id_map[location_data.label] = offset_flag(location_data.flag)
+            label_to_id_map[location_data.label] = location_data.flag
 
     return label_to_id_map

@@ -8,10 +8,10 @@ from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from .client import PokemonCrystalClient
-from .data import PokemonData, TrainerData, BASE_OFFSET, MiscData, TMHMData, BankAddress, data as crystal_data, \
+from .data import PokemonData, TrainerData, MiscData, TMHMData, data as crystal_data, \
     WildData, StaticPokemon
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
-    reverse_offset_item_value, ITEM_GROUPS, item_const_name_to_id, item_const_name_to_label
+    ITEM_GROUPS, item_const_name_to_id, item_const_name_to_label
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
 from .moves import randomize_tms
@@ -89,7 +89,6 @@ class PokemonCrystalWorld(World):
     generated_misc: MiscData
     generated_tms: Dict[str, TMHMData]
     generated_wild: WildData
-    # generated_sfx: List[BankAddress]
     generated_music: List[int]
     generated_wooper: str
     generated_static: Dict[str, StaticPokemon]
@@ -138,7 +137,7 @@ class PokemonCrystalWorld(World):
         add_badges = []
         # Extra badges to add to the pool in johto only
         if self.options.johto_only and total_badges > 8:
-            kanto_badges = [item_id + BASE_OFFSET for item_id, item_data in crystal_data.items.items() if
+            kanto_badges = [item_id for item_id, item_data in crystal_data.items.items() if
                             "KantoBadge" in item_data.tags]
             self.random.shuffle(kanto_badges)
             add_badges = kanto_badges[:total_badges - 8]
@@ -160,7 +159,7 @@ class PokemonCrystalWorld(World):
 
         for location in item_locations:
             item_code = location.default_item_code
-            if item_code > BASE_OFFSET and get_item_classification(item_code) != ItemClassification.filler:
+            if item_code > 0 and get_item_classification(item_code) != ItemClassification.filler:
                 if item_code in crystal_data.tm_replace_map and self.options.randomize_tm_moves:
                     default_itempool += [self.create_item_by_code(item_code + 256)]
                 else:
@@ -169,7 +168,7 @@ class PokemonCrystalWorld(World):
                 default_itempool += [self.create_item_by_code(add_badges.pop())]
             elif self.random.randint(0, 100) < total_trap_weight:
                 default_itempool += [get_random_trap()]
-            elif item_code == BASE_OFFSET:  # item is NO_ITEM, trainersanity checks
+            elif item_code == 0:  # item is NO_ITEM, trainersanity checks
                 default_itempool += [self.create_item_by_const_name(get_random_filler_item(self.random))]
             else:
                 default_itempool += [self.create_item_by_code(item_code)]
@@ -208,7 +207,6 @@ class PokemonCrystalWorld(World):
         self.generated_phone_indices = []
         self.generated_music = []
         self.generated_wooper = "WOOPER"
-        # self.generated_sfx = copy.deepcopy(crystal_data.sfx.pointers)
 
         randomize_pokemon(self)
 
@@ -236,16 +234,13 @@ class PokemonCrystalWorld(World):
                 new_music = self.random.choice(music_pool)
                 self.generated_music.append(new_music)
 
-        # if self.options.randomize_sfx:
-        #     self.random.shuffle(self.generated_sfx)
-
         if self.options.enable_mischief.value:
             misc_activities(self)
 
-        generate_phone_traps(self)
+        if self.options.phone_trap_weight.value:
+            generate_phone_traps(self)
 
-        player_name = self.multiworld.get_player_name(self.player)
-        patch = PokemonCrystalProcedurePatch(player=self.player, player_name=player_name)
+        patch = PokemonCrystalProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
         generate_output(self, output_directory, patch)
 
@@ -313,7 +308,7 @@ class PokemonCrystalWorld(World):
         return item_const_name_to_label(item)
 
     def create_item_by_const_name(self, item_const: str) -> PokemonCrystalItem:
-        item_code = item_const_name_to_id(item_const) + BASE_OFFSET
+        item_code = item_const_name_to_id(item_const)
         return self.create_item_by_code(item_code)
 
     def create_item_by_code(self, item_code: int) -> PokemonCrystalItem:
