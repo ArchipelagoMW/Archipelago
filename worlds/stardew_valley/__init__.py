@@ -22,7 +22,6 @@ from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
 from .strings.ap_names.event_names import Event
-from .strings.ap_names.received_currency_names import ReceivedCurrency
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
 from .strings.metal_names import Ore
@@ -303,16 +302,11 @@ class StardewValleyWorld(World):
 
         if override_classification == ItemClassification.progression:
             self.total_progression_items += 1
-            # if item.name not in self.all_progression_items:
-            #     self.all_progression_items[item.name] = 0
-            # self.all_progression_items[item.name] += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
 
     def delete_item(self, item: Item):
         if item.classification & ItemClassification.progression:
             self.total_progression_items -= 1
-            # if item.name in self.all_progression_items:
-            #     self.all_progression_items[item.name] -= 1
 
     def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
@@ -428,13 +422,13 @@ class StardewValleyWorld(World):
     def collect(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().collect(state, item)
         if change:
-            state.prog_items[self.player][ReceivedCurrency.walnut] += self.get_walnut_amount(item.name)
+            state.prog_items[self.player][Event.received_walnuts] += self.get_walnut_amount(item.name)
         return change
 
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().remove(state, item)
         if change:
-            state.prog_items[self.player][ReceivedCurrency.walnut] -= self.get_walnut_amount(item.name)
+            state.prog_items[self.player][Event.received_walnuts] -= self.get_walnut_amount(item.name)
         return change
 
     @staticmethod
@@ -446,4 +440,3 @@ class StardewValleyWorld(World):
         if item_name == "5 Golden Walnuts":
             return 5
         return 0
-

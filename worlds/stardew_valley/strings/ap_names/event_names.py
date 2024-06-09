@@ -15,3 +15,5 @@ class Event:
     spring_farming = event("Spring Farming")
     summer_farming = event("Summer Farming")
     fall_farming = event("Fall Farming")
+
+    received_walnuts = event("Received Walnuts")

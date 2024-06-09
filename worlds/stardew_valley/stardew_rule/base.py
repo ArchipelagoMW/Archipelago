@@ -327,9 +327,6 @@ class Or(AggregatingStardewRule):
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         return min(left, right, key=lambda x: x.value)
 
-    def get_difficulty(self):
-        return min(rule.get_difficulty() for rule in self.original_rules)
-
 
 class And(AggregatingStardewRule):
     identity = true_
@@ -355,9 +352,6 @@ class And(AggregatingStardewRule):
     @staticmethod
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         return max(left, right, key=lambda x: x.value)
-
-    def get_difficulty(self):
-        return max(rule.get_difficulty() for rule in self.original_rules)
 
 
 class Count(BaseStardewRule):
@@ -436,12 +430,6 @@ class Count(BaseStardewRule):
     def rules_count(self):
         return len(self.rules)
 
-    def get_difficulty(self):
-        self.rules = sorted(self.rules, key=lambda x: x.get_difficulty())
-        # In an optimal situation, all the simplest rules will be true. Since the rules are sorted, we know that the most difficult rule we might have to do
-        # is the one at the "self.count".
-        return self.rules[self.count - 1].get_difficulty()
-
     def __repr__(self):
         return f"Received {self.count} {repr(self.rules)}"
 
@@ -458,9 +446,6 @@ class Has(BaseStardewRule):
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self.other_rules[self.item].evaluate_while_simplifying(state)
-
-    def get_difficulty(self):
-        return self.other_rules[self.item].get_difficulty() + 1
 
     def __str__(self):
         if self.item not in self.other_rules:

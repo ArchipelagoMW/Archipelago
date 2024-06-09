@@ -5,7 +5,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from .logic_event import all_events
 from ..items import item_table
-from ..stardew_rule import StardewRule, Received, TotalReceived, ReceivedCustom
+from ..stardew_rule import StardewRule, Received, TotalReceived
 
 
 class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
@@ -42,8 +42,3 @@ class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
             assert item_table[item].classification & ItemClassification.progression, f"Item [{item_table[item].name}] has to be progression to be used in logic"
 
         return TotalReceived(count, items, self.player)
-
-    def received_custom(self, item: str, count: Optional[int] = 1) -> StardewRule:
-        assert count >= 0, "Can't receive a negative amount of item."
-
-        return ReceivedCustom(item, self.player, count)

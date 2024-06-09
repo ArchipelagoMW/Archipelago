@@ -43,7 +43,6 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
-from ..strings.ap_names.received_currency_names import ReceivedCurrency
 from ..content.game_content import StardewContent
 from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
@@ -56,8 +55,8 @@ from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.ap_option_names import OptionName
-from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
+from ..strings.ap_names.event_names import Event
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting, WildSeeds
@@ -486,7 +485,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
 
     def can_complete_field_office(self) -> StardewRule:
         return self.can_complete_large_animal_collection() & self.can_complete_snake_collection() & \
-               self.can_complete_frog_collection() & self.can_complete_bat_collection()
+            self.can_complete_frog_collection() & self.can_complete_bat_collection()
 
     def can_finish_grandpa_evaluation(self) -> StardewRule:
         # https://stardewvalleywiki.com/Grandpa
@@ -607,7 +606,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         return self.has_received_walnuts(walnuts_to_receive) & self.can_get_walnuts(walnuts_to_collect)
 
     def has_received_walnuts(self, number: int) -> StardewRule:
-        return self.received_custom(ReceivedCurrency.walnut, number)
+        return self.received(Event.received_walnuts, number)
 
     def can_get_walnuts(self, number: int) -> StardewRule:
         # https://stardewcommunitywiki.com/Golden_Walnut#Walnut_Locations

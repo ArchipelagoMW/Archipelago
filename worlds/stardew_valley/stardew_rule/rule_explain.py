@@ -131,11 +131,14 @@ def _(rule: Reach, state: CollectionState, expected: bool, explored_spots: Set[T
 def _(rule: Received, state: CollectionState, expected: bool, explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     access_rules = None
     if rule.event:
-        spot = state.multiworld.get_location(rule.item, rule.player)
-        if spot.access_rule is true_:
-            access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
-        else:
-            access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
+        try:
+            spot = state.multiworld.get_location(rule.item, rule.player)
+            if spot.access_rule is true_:
+                access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
+            else:
+                access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
+        except KeyError:
+            pass
 
     if not access_rules:
         return RuleExplanation(rule, state, expected, explored_rules_key=explored_spots)

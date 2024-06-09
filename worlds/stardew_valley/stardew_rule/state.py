@@ -34,40 +34,8 @@ class TotalReceived(BaseStardewRule):
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self, self(state)
 
-    def get_difficulty(self):
-        return self.count
-
     def __repr__(self):
         return f"Received {self.count} {self.items}"
-
-
-@dataclass(frozen=True)
-class ReceivedCustom(CombinableStardewRule):
-    item: str
-    player: int
-    count: int
-
-    @property
-    def combination_key(self) -> Hashable:
-        return self.item
-
-    @property
-    def value(self):
-        return self.count
-
-    def __call__(self, state: CollectionState) -> bool:
-        return state.has(self.item, self.player, self.count)
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self(state)
-
-    def __repr__(self):
-        if self.count == 1:
-            return f"Received {self.item}"
-        return f"Received {self.count} {self.item}"
-
-    def get_difficulty(self):
-        return self.count
 
 
 @dataclass(frozen=True)
@@ -97,9 +65,6 @@ class Received(CombinableStardewRule):
             return f"Received {'event ' if self.event else ''}{self.item}"
         return f"Received {'event ' if self.event else ''}{self.count} {self.item}"
 
-    def get_difficulty(self):
-        return self.count
-
 
 @dataclass(frozen=True)
 class Reach(BaseStardewRule):
@@ -117,9 +82,6 @@ class Reach(BaseStardewRule):
 
     def __repr__(self):
         return f"Reach {self.resolution_hint} {self.spot}"
-
-    def get_difficulty(self):
-        return 1
 
 
 @dataclass(frozen=True)
@@ -161,6 +123,3 @@ class HasProgressionPercent(CombinableStardewRule):
 
     def __repr__(self):
         return f"Received {self.percent}% progression items."
-
-    def get_difficulty(self):
-        return self.percent
