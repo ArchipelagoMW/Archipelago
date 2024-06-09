@@ -122,7 +122,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Olympia":                           KH1ItemData("Keyblades",        code = 264_1093, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Lionheart":                         KH1ItemData("Keyblades",        code = 264_1094, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Metal Chocobo":                     KH1ItemData("Keyblades",        code = 264_1095, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
-    "Oathkeeper":                        KH1ItemData("Keyblades",        code = 264_1096, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
+    "Oathkeeper":                        KH1ItemData("Keyblades",        code = 264_1096, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Oblivion":                          KH1ItemData("Keyblades",        code = 264_1097, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Lady Luck":                         KH1ItemData("Keyblades",        code = 264_1098, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Wishing Star":                      KH1ItemData("Keyblades",        code = 264_1099, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),

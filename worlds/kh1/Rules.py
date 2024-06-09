@@ -8,7 +8,7 @@ def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keybla
     for i in range(len(worlds)):
         if state.has(worlds[i], player):
             worlds_acquired = worlds_acquired + 0.5
-        if state.has(worlds[i], player) and has_keyblade(state, player, keyblades_unlock_chests, keyblades[i]):
+        if (state.has(worlds[i], player) and has_keyblade(state, player, keyblades_unlock_chests, keyblades[i])) or (state.has(worlds[i], player) and worlds[i] == "Atlantica"):
             worlds_acquired = worlds_acquired + 0.5
     return worlds_acquired >= num_of_worlds
 
@@ -172,6 +172,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump")
                                                                                                                                                         or (options.advanced_logic and has_item(state, player, "Glide"))
                                                                                                                                                     )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Item Workshop Right Chest"                                      , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
@@ -450,7 +451,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     if options.hundred_acre_wood:
         multiworld.get_location("100 Acre Wood Meadow Inside Log Chest"                                    , player).access_rule = lambda state: (
-                                                                                                                                                    True
+                                                                                                                                                    has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
                                                                                                                                                  )
         multiworld.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_torn_pages(state, player, 4) 
@@ -459,6 +460,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump") 
                                                                                                                                                         or can_glide(state, player)
                                                                                                                                                     )
+                                                                                                                                                    and has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
                                                                                                                                                  )
         multiworld.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"                      , player).access_rule = lambda state: (
                                                                                                                                                     has_torn_pages(state, player, 4) 
@@ -467,9 +469,11 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump") 
                                                                                                                                                         or can_glide(state, player)
                                                                                                                                                     )
+                                                                                                                                                    and has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
                                                                                                                                                  )
         multiworld.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"                        , player).access_rule = lambda state: (
                                                                                                                                                     has_torn_pages(state, player, 4)
+                                                                                                                                                    and has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
                                                                                                                                                  )
     multiworld.get_location("Agrabah Plaza By Storage Chest"                                               , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
@@ -1590,6 +1594,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump")
                                                                                                                                                         or (options.advanced_logic and can_glide(state, player))
                                                                                                                                                     )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 2"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Monstro") 
@@ -1598,6 +1603,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump")
                                                                                                                                                         or (options.advanced_logic and can_glide(state, player))
                                                                                                                                                     )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 3"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Monstro") 
@@ -1606,6 +1612,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump")
                                                                                                                                                         or (options.advanced_logic and can_glide(state, player))
                                                                                                                                                     )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 4"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Monstro") 
@@ -1614,6 +1621,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump")
                                                                                                                                                         or (options.advanced_logic and can_glide(state, player))
                                                                                                                                                     )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 5"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Monstro") 
@@ -1622,15 +1630,26 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         has_item(state, player, "High Jump")
                                                                                                                                                         or (options.advanced_logic and can_glide(state, player))
                                                                                                                                                     )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto All Summons Reward"                   , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Monstro") 
-                                                                                                                                                    and has_item(state, player, "High Jump") 
+                                                                                                                                                    and
+                                                                                                                                                    (
+                                                                                                                                                        has_item(state, player, "High Jump")
+                                                                                                                                                        or (options.advanced_logic and can_glide(state, player))
+                                                                                                                                                    )
                                                                                                                                                     and has_all_summons(state, player)
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Geppetto's House Talk to Pinocchio"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Monstro") 
-                                                                                                                                                    and has_item(state, player, "High Jump")
+                                                                                                                                                    and
+                                                                                                                                                    (
+                                                                                                                                                        has_item(state, player, "High Jump")
+                                                                                                                                                        or (options.advanced_logic and can_glide(state, player))
+                                                                                                                                                    )
+                                                                                                                                                    and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Traverse Town Magician's Study Obtained All Arts Items"                       , player).access_rule = lambda state: (
                                                                                                                                                     has_all_magic_lvx(state, player, 1) 
