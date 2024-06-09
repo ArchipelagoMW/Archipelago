@@ -873,7 +873,7 @@ class WitnessPlayerLogic:
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
-        self.VICTORY_LOCATION = "0x0356B"
+        self.VICTORY_LOCATION: str
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser (Symmetry Laser)",
