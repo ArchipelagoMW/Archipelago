@@ -14,8 +14,7 @@ class TestIndividualDoors(WitnessTestBase):
             ["Swamp Laser Panel"],
             [
                 ["Swamp Laser Shortcut (Door)"],
-                ["Swamp Entry (Door)"],
-                ["Boat"],
+                ["Swamp Red Underwater Exit (Door)"],
             ],
             only_check_listed=True,
         )
