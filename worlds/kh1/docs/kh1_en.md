@@ -20,7 +20,7 @@ BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
     
     Ensure that `Launch via Epic Games` is checked and click `Next`
     
-    Extracting game data for KH1 is not required, you may skip it in the next step.
+    Extract game data for KH1 and any other games you wish to modify.
     
     Click `Finish`
     
