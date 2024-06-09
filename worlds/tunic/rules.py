@@ -304,15 +304,15 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
     # Quarry
     set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Quarry - [West] Upper Area Bombable Wall", player),
-             lambda state: has_mask(state, player, options))
     # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
              lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
-             lambda state: state.has(laurels, player) and state.has(fire_wand, player) and has_sword(state, player))
+             lambda state: (state.has(fire_wand, player) and has_sword(state, player))
+             and (state.has(laurels, player)
+                  or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
     set_rule(multiworld.get_location("Swamp - [Entrance] Above Entryway", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest", player),

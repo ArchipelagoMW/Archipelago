@@ -21,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=7.0.0'
+    requirement = 'cx-Freeze==7.0.0'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -190,7 +190,7 @@ if is_windows:
     c = next(component for component in components if component.script_name == "Launcher")
     exes.append(cx_Freeze.Executable(
         script=f"{c.script_name}.py",
-        target_name=f"{c.frozen_name}(DEBUG).exe",
+        target_name=f"{c.frozen_name}Debug.exe",
         icon=resolve_icon(c.icon),
     ))
 

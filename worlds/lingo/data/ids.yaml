@@ -766,7 +766,6 @@ panels:
     BOUNCE: 445010
     SCRAWL: 445011
     PLUNGE: 445012
-    LEAP: 445013
   Rhyme Room (Circle):
     BIRD: 445014
     LETTER: 445015
@@ -790,6 +789,7 @@ panels:
     GEM: 445031
     INNOVATIVE (Top): 445032
     INNOVATIVE (Bottom): 445033
+    LEAP: 445013
   Room Room:
     DOOR (1): 445034
     DOOR (2): 445035
