@@ -104,20 +104,29 @@
           }
 
           async function postForm(ev) {
+            /** @type {HTMLInputElement} */
+            let cmd = document.getElementById("cmd");
+            if (cmd.value === "") {
+              ev.preventDefault();
+              return;
+            }
             /** @type {HTMLFormElement} */
             let form = document.getElementById("command-form");
-            ev.preventDefault(); // has to happen before first await
-            let response = await fetch(form.action || window.location.href, {
+            let req = fetch(form.action || window.location.href, {
               method: form.method,
               body: new FormData(form),
+              redirect: "manual",
             });
-            if (response.ok) {
+            ev.preventDefault(); // has to happen before first await
+            form.reset();
+            let res = await req;
+            if (res.ok || res.type === 'opaqueredirect') {
               awaitingCommandResponse = true;
               window.clearTimeout(updateLogTimeout);
               updateLogTimeout = window.setTimeout(updateLog, 100);
+            } else {
+              window.alert(res.statusText);
             }
-
-            form.reset();
           }
 
           document.getElementById("command-form").addEventListener("submit", postForm);
