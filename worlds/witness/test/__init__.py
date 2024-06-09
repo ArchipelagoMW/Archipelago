@@ -49,13 +49,14 @@ class WitnessTestBase(WorldTestBase):
 
         # assert that one less copy of any item would result in the multiworld being unbeatable
         for item_name, item_objects in actual_items.items():
-            removed_item = item_objects.pop()
-            self.assertFalse(
-                self.can_beat_game_with_items(item for items in actual_items.values() for item in items),
-                f"Game was beatable despite having {len(item_objects)} copies of {item_name} "
-                f"instead of the specified {required_item_counts[item_name]}",
-            )
-            item_objects.append(removed_item)
+            with self.subTest(f"Verify cannot beat game with one less copy of {item_name}"):
+                removed_item = item_objects.pop()
+                self.assertFalse(
+                    self.can_beat_game_with_items(item for items in actual_items.values() for item in items),
+                    f"Game was beatable despite having {len(item_objects)} copies of {item_name} "
+                    f"instead of the specified {required_item_counts[item_name]}",
+                )
+                item_objects.append(removed_item)
 
 
 class WitnessMultiworldTestBase(MultiworldTestBase):
