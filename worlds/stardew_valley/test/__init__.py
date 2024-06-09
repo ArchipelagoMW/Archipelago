@@ -1,3 +1,4 @@
+import logging
 import os
 import threading
 import unittest
@@ -14,8 +15,10 @@ from .assertion import RuleAssertMixin
 from .. import StardewValleyWorld, options, StardewItem
 from ..options import StardewValleyOptions, StardewValleyOption
 
+logger = logging.getLogger(__name__)
+
 DEFAULT_TEST_SEED = get_seed()
-print(f"Default Test Seed: {DEFAULT_TEST_SEED}")
+logger.info(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
 
 def default_6_x_x():
