@@ -146,10 +146,11 @@ class GLPatchExtension(APPatchExtension):
                         else:
                             data.items[j - data.obelisk][6] = item_dict[item[0]][0]
                             data.items[j - data.obelisk][7] = item_dict[item[0]][1]
-            compressed = zenc(level_data_reformat(data))
+            uncompressed = level_data_reformat(data)
+            compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)
             stream.write(len(compressed).to_bytes(4, byteorder='big'))
-            stream.seek(4, 1)
+            stream.write(len(uncompressed).to_bytes(4, byteorder='big'))
             write_pos = 0xFA1000 + (0x1500 * i)
             stream.write((write_pos - 0x636E0).to_bytes(4, byteorder='big'))
             stream.seek(write_pos, 0)
