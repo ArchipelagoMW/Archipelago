@@ -6,10 +6,6 @@
 #
 # All usernames must be GitHub usernames (and are case sensitive).
 
-###################
-## Active Worlds ##
-###################
-
 # Adventure
 /worlds/adventure/ @JusticePS
 
@@ -19,14 +15,14 @@
 # A Link to the Past
 /worlds/alttp/ @Berserker66
 
+# Sudoku (APSudoku)
+/worlds/apsudoku/ @EmilyV99
+
 # Aquaria
 /worlds/aquaria/ @tioui
 
 # ArchipIDLE
 /worlds/archipidle/ @LegendaryLinux
-
-# Sudoku (BK Sudoku)
-/worlds/bk_sudoku/ @Jarno458
 
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
@@ -66,9 +62,6 @@
 
 # Factorio
 /worlds/factorio/ @Berserker66
-
-# Final Fantasy
-/worlds/ff1/ @jtoyoda
 
 # Final Fantasy Mystic Quest
 /worlds/ffmq/ @Alchav @wildham0
@@ -210,7 +203,7 @@
 /worlds/yoshisisland/ @PinkSwitch
 
 #Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
-/worlds/yugioh06/ @rensen
+/worlds/yugioh06/ @Rensen3
 
 # Zillion
 /worlds/zillion/ @beauxq
@@ -218,9 +211,22 @@
 # Zork Grand Inquisitor
 /worlds/zork_grand_inquisitor/ @nbrochu
 
-##################################
-## Disabled Unmaintained Worlds ##
-##################################
+
+## Active Unmaintained Worlds
+
+# The following worlds in this repo are currently unmaintained, but currently still work in core. If any update breaks
+# compatibility, these worlds may be moved to `worlds_disabled`. If you are interested in stepping up as maintainer for
+# any of these worlds, please review `/docs/world maintainer.md` documentation.
+
+# Final Fantasy (1)
+# /worlds/ff1/
+
+
+## Disabled Unmaintained Worlds
+
+# The following worlds in this repo are currently unmaintained and disabled as they do not work in core. If you are
+# interested in stepping up as maintainer for any of these worlds, please review `/docs/world maintainer.md`
+# documentation.
 
 # Ori and the Blind Forest
-# /worlds_disabled/oribf/ <Unmaintained>
+# /worlds_disabled/oribf/
