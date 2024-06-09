@@ -9,6 +9,10 @@ class DeepWoodsItem:
 
 
 class SkillLevel:
+    cooking = "Cooking Level"
+    binning = "Binning Level"
+    magic = "Magic Level"
+    socializing = "Socializing Level"
     luck = "Luck Level"
     archaeology = "Archaeology Level"
 

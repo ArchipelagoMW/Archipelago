@@ -66,7 +66,7 @@ CookingLogicMixin]]):
                  self.logic.received(DeepWoodsItem.pendant_elder),
                  self.logic.skill.has_total_level(40)]
         if ModNames.luck_skill in self.options.mods:
-            rules.append(self.logic.received(SkillLevel.luck, 7))
+            rules.append(self.logic.skill.has_level(SkillLevel.luck, 7))
         else:
             rules.append(
                 self.logic.has(Meal.magic_rock_candy))  # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
