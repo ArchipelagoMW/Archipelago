@@ -122,7 +122,6 @@ class ColouredMessage:
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
-    echo_commands = True
 
     def formatted_print(self, text: str) -> None:
         """Prints with kivy formatting to the GUI, and also prints to command-line and to all logs"""
