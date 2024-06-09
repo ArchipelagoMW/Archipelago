@@ -1,14 +1,7 @@
-from typing import List
-
-from BaseClasses import ItemClassification, Item
 from . import SVTestBase, allsanity_no_mods_6_x_x, \
     allsanity_mods_6_x_x, minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, get_minsanity_options, default_6_x_x
-from .. import items, location_table, options
+from .. import location_table
 from ..items import Group, item_table
-from ..locations import LocationTags
-from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
-    SkillProgression, Booksanity
-from ..strings.region_names import Region
 
 
 class TestLocationGeneration(SVTestBase):
@@ -20,9 +13,6 @@ class TestLocationGeneration(SVTestBase):
 
 class TestMinLocationAndMaxItem(SVTestBase):
     options = minimal_locations_maximal_items()
-
-    # They do not pass and I don't know why.
-    skip_base_tests = True
 
     def test_minimal_location_maximal_items_still_valid(self):
         valid_locations = self.get_real_locations()
