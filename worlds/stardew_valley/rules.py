@@ -1005,7 +1005,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     set_entrance_rule(multiworld, player, SVEEntrance.outpost_warp_to_outpost, logic.received(SVERunes.nexus_outpost))
     set_entrance_rule(multiworld, player, SVEEntrance.wizard_warp_to_wizard, logic.received(SVERunes.nexus_wizard))
     set_entrance_rule(multiworld, player, SVEEntrance.use_purple_junimo, logic.relationship.has_hearts(ModNPC.apples, 10))
-    set_entrance_rule(multiworld, player, SVEEntrance.grandpa_interior_to_upstairs, logic.received(SVEQuestItem.grandpa_shed))
+    set_entrance_rule(multiworld, player, SVEEntrance.grandpa_interior_to_upstairs, logic.mod.sve.has_grandpa_shed_repaired())
     set_entrance_rule(multiworld, player, SVEEntrance.use_bear_shop, (logic.mod.sve.can_buy_bear_recipe()))
     set_entrance_rule(multiworld, player, SVEEntrance.railroad_to_grampleton_station, logic.received(SVEQuestItem.scarlett_job_offer))
     set_entrance_rule(multiworld, player, SVEEntrance.museum_to_gunther_bedroom, logic.relationship.has_hearts(ModNPC.gunther, 2))
@@ -1020,7 +1020,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
 def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
-    set_entrance_rule(multiworld, player, SVEEntrance.summit_to_highlands, logic.received(SVEQuestItem.marlon_boat_paddle))
+    set_entrance_rule(multiworld, player, SVEEntrance.summit_to_highlands, logic.mod.sve.has_marlon_boat())
     set_entrance_rule(multiworld, player, SVEEntrance.wizard_to_fable_reef, logic.received(SVEQuestItem.fable_reef_portal))
     set_entrance_rule(multiworld, player, SVEEntrance.highlands_to_cave,
                       logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron) & logic.tool.has_tool(Tool.axe, ToolMaterial.iron))

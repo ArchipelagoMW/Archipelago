@@ -261,6 +261,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Golden Egg"))
     items.append(item_factory(CommunityUpgrade.mr_qi_plane_ride))
 
+    create_sve_special_items(item_factory, options, items)
     create_magic_mod_spells(item_factory, options, items)
     create_deepwoods_pendants(item_factory, options, items)
     create_archaeology_items(item_factory, options, items)
@@ -394,6 +395,8 @@ def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValle
     create_special_quest_rewards(item_factory, options, items)
     create_help_wanted_quest_rewards(item_factory, options, items)
 
+    create_quest_rewards_sve(item_factory, options, items)
+
 
 def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     if options.quest_locations < 0:
@@ -408,7 +411,6 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     items.append(item_factory(Wallet.iridium_snake_milk))
     items.append(item_factory("Fairy Dust Recipe"))
     items.append(item_factory("Dark Talisman"))
-    create_special_quest_rewards_sve(item_factory, options, items)
     create_distant_lands_quest_rewards(item_factory, options, items)
     create_boarding_house_quest_rewards(item_factory, options, items)
 
@@ -694,16 +696,25 @@ def create_deepwoods_pendants(item_factory: StardewItemFactory, options: Stardew
     items.extend([item_factory(item) for item in ["Pendant of Elders", "Pendant of Community", "Pendant of Depths"]])
 
 
-def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+def create_sve_special_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     if ModNames.sve not in options.mods:
         return
 
     items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if item.mod_name == ModNames.sve])
 
-    if options.quest_locations < 0:
+
+def create_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if ModNames.sve not in options.mods:
         return
 
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
+    items.extend([item_factory(item) for item in SVEQuestItem.sve_always_quest_items])
+    if not exclude_ginger_island:
+        items.extend([item_factory(item) for item in SVEQuestItem.sve_always_quest_items_ginger_island])
+
+    if options.quest_locations < 0:
+        return
+
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items])
     if exclude_ginger_island:
         return

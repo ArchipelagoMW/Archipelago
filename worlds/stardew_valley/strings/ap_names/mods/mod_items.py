@@ -25,8 +25,10 @@ class SVEQuestItem:
     fable_reef_portal = "Fable Reef Portal"
     grandpa_shed = "Grandpa's Shed"
 
-    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, kittyfish_spell, scarlett_job_offer, morgan_schooling, grandpa_shed]
-    sve_quest_items_ginger_island: List[str] = [marlon_boat_paddle, fable_reef_portal]
+    sve_always_quest_items: List[str] = [kittyfish_spell, scarlett_job_offer, morgan_schooling]
+    sve_always_quest_items_ginger_island: List[str] = [fable_reef_portal]
+    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, grandpa_shed]
+    sve_quest_items_ginger_island: List[str] = [marlon_boat_paddle]
 
 
 class SVELocation:

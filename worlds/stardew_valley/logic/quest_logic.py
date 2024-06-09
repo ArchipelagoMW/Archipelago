@@ -44,7 +44,8 @@ class QuestLogicMixin(BaseLogicMixin):
 
 
 class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMixin, MineLogicMixin, RegionLogicMixin, RelationshipLogicMixin, ToolLogicMixin,
-FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin, BuildingLogicMixin, TimeLogicMixin]]):
+                                 FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin,
+                                 BuildingLogicMixin, TimeLogicMixin]]):
 
     def initialize_rules(self):
         self.update_rules({
@@ -65,7 +66,8 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.jodis_request: self.logic.season.has(Season.spring) & self.logic.has(Vegetable.cauliflower) & self.logic.relationship.can_meet(NPC.jodi),
             Quest.mayors_shorts: self.logic.season.has(Season.summer) & self.logic.relationship.has_hearts(NPC.marnie, 2) &
                                  self.logic.relationship.can_meet(NPC.lewis),
-            Quest.blackberry_basket: self.logic.season.has(Season.fall) & self.logic.relationship.can_meet(NPC.linus) & self.logic.region.can_reach(Region.tunnel_entrance),
+            Quest.blackberry_basket: self.logic.season.has(Season.fall) & self.logic.relationship.can_meet(NPC.linus) & self.logic.region.can_reach(
+                Region.tunnel_entrance),
             Quest.marnies_request: self.logic.relationship.has_hearts(NPC.marnie, 3) & self.logic.has(Forageable.cave_carrot),
             Quest.pam_is_thirsty: self.logic.season.has(Season.summer) & self.logic.has(ArtisanGood.pale_ale) & self.logic.relationship.can_meet(NPC.pam),
             Quest.a_dark_reagent: self.logic.season.has(Season.winter) & self.logic.has(Loot.void_essence) & self.logic.relationship.can_meet(NPC.wizard),
