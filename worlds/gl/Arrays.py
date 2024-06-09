@@ -30,6 +30,7 @@ from .Locations import (
     yeti,
 )
 
+# Item name to ram value conversion
 inv_dict: Dict[Tuple, str] = {
     (0x0, 0x6, 0x0): "Gold",
     (0x0, 0x7, 0x0): "Key",
@@ -92,8 +93,10 @@ inv_dict: Dict[Tuple, str] = {
     (0x0, 0xA5, 0x1): "Sumner",
 }
 
+# Character names used for slot data
 characters = ["Minotaur", "Falconess", "Tigress", "Jackal", "Sumner"]
 
+# Item ID to rom ID conversion
 item_dict: Dict[int, bytes] = {
     77780000: [0x0, 0x0],
     77780001: [0x1, 0x1],
@@ -152,6 +155,7 @@ item_dict: Dict[int, bytes] = {
     77780054: [0x3, 0x2],
 }
 
+# Items that use a timer
 timers = [
     "Light Amulet",
     "Acid Amulet",
@@ -175,6 +179,8 @@ timers = [
     "Invulnerability",
 ]
 
+# Base item charge count per pickup
+# Some items are bitwise
 base_count: Dict[str, int] = {
     "Key": 1,
     "Lightning Potion": 1,
@@ -245,6 +251,7 @@ base_count: Dict[str, int] = {
     "Sumner": 1,
 }
 
+# Level area ID to area name conversion
 levels: Dict[int, str] = {
     0x1: "Castle",
     0x2: "Mountain",
@@ -255,8 +262,10 @@ levels: Dict[int, str] = {
     0x11: "Battlefield",
 }
 
+# Castle level ID order
 castle_id = [1, 6, 3, 4, 5]
 
+# Area ID << 4 + Level ID to raw location list conversion
 level_locations: Dict[int, List[LocationData]] = {
     0x11: castle_courtyard,
     0x12: dungeon_of_torment,
@@ -286,6 +295,9 @@ level_locations: Dict[int, List[LocationData]] = {
     0x113: infernal_fortress,
 }
 
+# Count of all spawners in a level
+# Used for obj_read address offset calculation
+# Vaules are spawner difficulty
 spawners: Dict[int, List[int]] = {
     0x11: [
         0,
@@ -3119,6 +3131,7 @@ spawners: Dict[int, List[int]] = {
     ],
 }
 
+# Compressed level size in ROM
 level_size = [
     0x9E0,
     0x5E0,
@@ -3148,6 +3161,7 @@ level_size = [
     0xB30,
 ]
 
+# Level address in ROM
 level_address = [
     0xF939B0,
     0xF958B0,
@@ -3177,6 +3191,7 @@ level_address = [
     0xF8F110,
 ]
 
+# Level header address in ROM
 level_header = [
     0xF9DD9C,
     0xF9E07C,
@@ -3206,8 +3221,12 @@ level_header = [
     0xF9DB74,
 ]
 
+# Convert area to base level
+# Used for difficulty scaling
 difficulty_convert: Dict[int, int] = {0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35, 0x11: 40, 0x8: 45}
 
+# Runestones required to access difficulties
+# Used in Rules.py for access calculation
 difficulty_lambda: Dict[int, List[int]] = {
     0x2: [0, 0, 1, 2],
     0x1: [0, 2, 3, 4],
@@ -3218,10 +3237,15 @@ difficulty_lambda: Dict[int, List[int]] = {
     0x8: [0, 13, 13, 13],
 }
 
+# Area ID's with bosses in them
 boss_realm = [2, 1, 7, 9]
 
+# Area and Level ID's for boss levels
 boss_level = [bytes([0x6, 0x2]), bytes([0x5, 0x9]), bytes([0x5, 0x1]), bytes([0x5, 0x7])]
 
+# Area ID << 4 + Level ID for boss levels
 mirror_levels = [0x15, 0x26, 0x75, 0x95]
 
+# Levels with obelisks in them in vanilla
+# Values are index of level_locations array
 level_obelisk = [5, 6, 7, 11, 12, 0, 1]

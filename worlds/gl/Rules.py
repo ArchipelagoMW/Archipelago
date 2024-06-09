@@ -19,7 +19,8 @@ def prog_count(state, player, diff):
 
 
 def set_rules(world: "GauntletLegendsWorld"):
-    # runestones = [item.itemName for item in itemList if "Runestone" in item.itemName] # This is for 0.4.7
+    runestones = [item.item_name for item in item_list if "Runestone" in item.item_name]
+    obelisks = [item.item_name for item in item_list if "Obelisk" in item.item_name]
     for location in [
         location
         for location in all_locations
@@ -31,16 +32,16 @@ def set_rules(world: "GauntletLegendsWorld"):
            or location in chimeras_keep
            or location in gates_of_the_underworld
     ]:
-        for item in [item for item in item_list if "Obelisk" in item.item_name]:
+        for item in obelisks:
             if location.name not in world.disabled_locations:
-                forbid_item(world.get_location(location.name), item.item_name, world.player)
+                forbid_item(world.get_location(location.name), item, world.player)
 
     for location in [
         location for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name
     ]:
-        for item in [item for item in item_list if "Runestone" in item.item_name]:
+        for item in runestones:
             if location.name not in world.disabled_locations:
-                forbid_item(world.get_location(location.name), item.item_name, world.player)
+                forbid_item(world.get_location(location.name), item, world.player)
 
     for level_id, locations in level_locations.items():
         for location in locations:

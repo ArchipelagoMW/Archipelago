@@ -36,6 +36,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
+# Contains header info and raw data for level item positions and rotations.
 class LevelData:
     stream: io.BytesIO
     header: bytearray
@@ -65,6 +66,7 @@ class LevelData:
 class GLPatchExtension(APPatchExtension):
     game = "Gauntlet Legends"
 
+    # Patch max item stack values
     @staticmethod
     def patch_counts(caller: APProcedurePatch, rom: bytes) -> bytes:
         stream = io.BytesIO(rom)
@@ -100,6 +102,7 @@ class GLPatchExtension(APPatchExtension):
         stream.write(zenc(data.getvalue()))
         return stream.getvalue()
 
+    # Decompress all levels, place all items in the levels.
     @staticmethod
     def patch_items(caller: APProcedurePatch, rom: bytes):
         stream = io.BytesIO(rom)
@@ -197,6 +200,8 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_as_bytes()
 
 
+# Write data on all placed items into json files.
+# Also save options
 def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     options_dict = {
         "seed": world.multiworld.seed,
@@ -215,6 +220,7 @@ def locations_to_dict(locations: List[Location]) -> Dict[str, Tuple]:
     return {location.name: (location.item.code, location.item.player) for location in locations}
 
 
+# Zlib decompression with wbits set to -15
 def zdec(data):
     """
     Decompresses zlib archives used in Midway titles.
@@ -227,6 +233,7 @@ def zdec(data):
     return output
 
 
+# Zlib compression with compression set to max and wbits set to -15
 def zenc(data):
     """
     Headerless zlib encoding scheme used across games.
@@ -241,6 +248,7 @@ def zenc(data):
     return output
 
 
+# Create a LevelData object from raw decompressed bytes of a level
 def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
     data = LevelData()
     data.stream = io.BytesIO(zdec(stream.read(size)))
@@ -272,6 +280,8 @@ def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
     return (stream, data)
 
 
+# Format a LevelData object back into a bytes object
+# Format is header, items, spawners, objects, barrels/chests, then traps.
 def level_data_reformat(data: LevelData) -> bytes:
     stream = io.BytesIO()
     obelisk_offset = 24 * (data.obelisk - data.item)

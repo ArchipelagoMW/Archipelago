@@ -200,9 +200,11 @@ class GauntletLegendsContext(CommonContext):
         self.location_scouts: list[NetworkItem] = []
         self.character_loaded: bool = False
 
+    # Return number of items in inventory
     def inv_count(self):
         return len(self.inventory)
 
+    # Update self.inventory to current ingame values
     async def inv_read(self):
         _inv: List[InventoryEntry] = []
         b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR, 'x')} 3072")))
@@ -226,6 +228,7 @@ class GauntletLegendsContext(CommonContext):
             addr = new_inv[-1].n_addr
         self.inventory = new_inv
 
+    # Return InventoryEntry if item of name is in inv, else return None
     async def item_from_name(self, name: str) -> InventoryEntry | None:
         await self.inv_read()
         for i in range(0, self.inv_count()):
@@ -233,17 +236,21 @@ class GauntletLegendsContext(CommonContext):
                 return self.inventory[i]
         return None
 
+    # Return True if bitwise and evaluates to non-zero value
     async def inv_bitwise(self, name: str, bit: int) -> bool:
         item = await self.item_from_name(name)
         if item is None:
             return False
         return (item.count & bit) != 0
 
+    # Return pointer of object section of RAM
     async def get_obj_addr(self) -> int:
         return (
             int.from_bytes(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} 4")), "little")
         ) & 0xFFFFF
 
+    # Read a subsection of the objects loaded into RAM
+    # Objects are 0x3C bytes long
     # Modes: 0 = items, 1 = chests/barrels
     async def obj_read(self, mode=0):
         obj_address = await self.get_obj_addr()
@@ -291,6 +298,8 @@ class GauntletLegendsContext(CommonContext):
             _obj = _obj[: len(self.item_locations)]
             self.item_objects = _obj
 
+    # Update item count of an item.
+    # If the item is new, add it to your inventory
     async def inv_update(self, name: str, count: int):
         await self.inv_read()
         if "Runestone" in name:
@@ -322,6 +331,8 @@ class GauntletLegendsContext(CommonContext):
         logger.info(f"Adding new item to inv: {name}")
         await self.inv_add(name, count)
 
+    # Rewrite entire inventory in RAM.
+    # This is necessary since item entries are not cleared after full use until a level is completed.
     async def inv_refactor(self, new=None):
         await self.inv_read()
         if new is not None:
@@ -374,6 +385,8 @@ class GauntletLegendsContext(CommonContext):
 
         await self.socket.write(f"{WRITE} 0xC6BF0 0x{format(self.inv_count(), 'x')}")
 
+    # Add new item to inventory
+    # Call refactor at the end to write it into ram correctly
     async def inv_add(self, name: str, count: int):
         new = InventoryEntry()
         if name == "Key":
@@ -390,6 +403,7 @@ class GauntletLegendsContext(CommonContext):
         new.n_addr = 0
         await self.inv_refactor(new)
 
+    # Write a single item entry into RAM
     async def write_inv(self, item: InventoryEntry):
         b = (
                 int.to_bytes(item.on, 1)
@@ -439,6 +453,8 @@ class GauntletLegendsContext(CommonContext):
         elif cmd == "LocationInfo":
             self.location_scouts = args["locations"]
 
+    # Update inventory based on items received from server
+    # Also adds starting items based on a few yaml options
     async def handle_items(self):
         compass = await self.item_from_name("Compass")
         if compass is not None:
@@ -459,28 +475,36 @@ class GauntletLegendsContext(CommonContext):
                     await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
                 await self.inv_update("Compass", len(self.items_received) + 1)
 
+    # Read current timer in RAM
     async def read_time(self) -> int:
         return int.from_bytes(await self.socket.read(message_format(READ, f"0x{format(TIME, 'x')} 2")), "little")
 
+    # Read player input values in RAM
     async def read_input(self) -> int:
         return int.from_bytes(await self.socket.read(message_format(READ, f"0x{format(INPUT, 'x')} 1")))
 
+    # Read currently loaded level in RAM
     async def read_level(self) -> bytes:
         return await self.socket.read(message_format(READ, f"0x{format(ACTIVE_LEVEL, 'x')} 2"))
 
+    # Read value that is 1 while a level is currently loading
     async def check_loading(self) -> bool:
         if self.in_portal or self.level_loading:
             return await self.read_time() == 0
         return False
 
+    # Read number of loaded players in RAM
     async def active_players(self) -> int:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_COUNT, 'x')} 1"))
         return temp[0]
 
+    # Read level of player 1 in RAM
     async def player_level(self) -> int:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_LEVEL, 'x')} 1"))
         return temp[0]
 
+    # Update value at player count address
+    # This directly impacts the difficulty of the level when it is loaded
     async def scale(self):
         level = await self.read_level()
         if self.movement != 0x12:
@@ -499,6 +523,7 @@ class GauntletLegendsContext(CommonContext):
         )
         self.scaled = True
 
+    # Prepare locations that are going to be in the currently loading level
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         level = await self.read_level()
         if level in boss_level:
@@ -568,6 +593,9 @@ class GauntletLegendsContext(CommonContext):
             f"Locations: {len(self.obelisk_locations + self.item_locations + self.chest_locations)} Difficulty: {self.difficulty}",
         )
 
+    # Compare values of loaded objects to see if they have been collected
+    # Sends locations out to server based on object lists read in obj_read()
+    # Local obelisks and mirror shards have special cases
     async def location_loop(self) -> List[int]:
         await self.obj_read()
         await self.obj_read(1)
@@ -596,22 +624,29 @@ class GauntletLegendsContext(CommonContext):
             return []
         return acquired
 
+    # Returns 1 if players are spinning in a portal
     async def portaling(self) -> int:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_PORTAL, 'x')} 1"))
         return temp[0]
 
+    # Returns a number that shows if the player currently has control or not
     async def limbo_check(self, offset=0) -> int:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_MOVEMENT + offset, 'x')} 1"))
         return temp[0]
 
+    # Returns True of the player is dead
     async def dead(self) -> bool:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_ALIVE, 'x')} 1"))
         return temp[0] == 0x0
 
+    # Returns a number that tells if the player is fighting a boss currently
     async def boss(self) -> int:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_BOSSING, 'x')} 1"))
         return temp[0]
 
+    # Checks if a player is currently exiting a level
+    # Checks for both death and completion
+    # Resets values since level is no longer being played
     async def level_status(self, ctx: "GauntletLegendsContext") -> bool:
         portaling = await self.portaling()
         dead = await self.dead()
@@ -656,6 +691,7 @@ class GauntletLegendsContext(CommonContext):
             return True
         return False
 
+    # Prep arrays with locations and objects
     async def load_objects(self, ctx: "GauntletLegendsContext"):
         await self.scout_locations(ctx)
         await self.obj_read()
@@ -677,6 +713,9 @@ async def _patch_and_run_game(patch_file: str):
     metadata, output_file = Patch.create_rom_file(patch_file)
 
 
+# Sends player items from server
+# Checks for player status to see if they are in/loading a level
+# Checks location status inside of levels
 async def gl_sync_task(ctx: GauntletLegendsContext):
     logger.info("Starting N64 connector. Use /n64 for status information")
     while not ctx.exit_event.is_set():

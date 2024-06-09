@@ -743,16 +743,6 @@ chimeras_keep: typing.List[LocationData] = [
     LocationData("Chimera's Keep - Chimera Mirror Shard", 88870608, 1),
 ]
 
-obelisks = [
-    "Valley of Fire - Obelisk",
-    "Dagger Peak - Obelisk",
-    "Cliffs of Desolation - Obelisk",
-    "Poisoned Fields - Obelisk",
-    "Haunted Cemetery - Obelisk",
-    "Castle Courtyard - Obelisk",
-    "Dungeon of Torment - Obelisk",
-]
-
 poisoned_fields: typing.List[LocationData] = [
     LocationData("Poisoned Fields - Fruit Pile 1", 88870335, 1),
     LocationData("Poisoned Fields - Fruit Pile 2 (Dif. 4)", 88870336, 4),
