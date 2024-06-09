@@ -11,12 +11,12 @@ from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import ElevatorProgression
 from ...stardew_rule import StardewRule, True_, true_
-from ...strings.ap_names.mods.mod_items import DeepWoodsItem, SkillLevel
+from ...strings.ap_names.mods.mod_items import DeepWoodsItem
 from ...strings.ap_names.transport_names import ModTransportation
 from ...strings.craftable_names import Bomb
 from ...strings.food_names import Meal
 from ...strings.performance_names import Performance
-from ...strings.skill_names import Skill
+from ...strings.skill_names import Skill, ModSkill
 from ...strings.tool_names import Tool, ToolMaterial
 
 
@@ -66,7 +66,7 @@ CookingLogicMixin]]):
                  self.logic.received(DeepWoodsItem.pendant_elder),
                  self.logic.skill.has_total_level(40)]
         if ModNames.luck_skill in self.options.mods:
-            rules.append(self.logic.skill.has_level(SkillLevel.luck, 7))
+            rules.append(self.logic.skill.has_level(ModSkill.luck, 7))
         else:
             rules.append(
                 self.logic.has(Meal.magic_rock_candy))  # You need more luck than this, but it'll push the logic down a ways; you can get the rest there.
