@@ -55,18 +55,22 @@
                     Open Log File...
                 </a>
             </div>
-        <div id="logger" style="white-space: pre"></div>
+        {%  set log = get_log() -%}
+        {%- set log_len = log | length - 1 if log.endswith("…") else log | length -%}
+        <div id="logger" style="white-space: pre">{{ log }}</div>
         <script>
           let url = '{{ url_for('display_log', room = room.id) }}';
-          let bytesReceived = 0;
+          let bytesReceived = {{ log_len }};
           let updateLogTimeout;
           let awaitingCommandResponse = false;
+          let logger = document.getElementById("logger");
 
           function scrollToBottom(el) {
             let bot = el.scrollHeight - el.clientHeight;
             el.scrollTop += Math.ceil((bot - el.scrollTop)/10);
             if (bot - el.scrollTop >= 1) {
-              window.setTimeout(() => {
+              window.clearTimeout(el.scrollTimer);
+              el.scrollTimer = window.setTimeout(() => {
                 scrollToBottom(el)
               }, 16);
             }
@@ -83,7 +87,6 @@
                 let text = await res.text();
                 if (text.length > 0) {
                   awaitingCommandResponse = false;
-                  let logger = document.getElementById('logger');
                   if (bytesReceived === 0 || res.status !== 206) {
                     logger.innerHTML = '';
                   }
@@ -91,6 +94,9 @@
                     bytesReceived = 0;
                   } else {
                     bytesReceived += new Blob([text]).size;
+                  }
+                  if (logger.innerHTML.endsWith('…')) {
+                    logger.innerHTML = logger.innerHTML.substring(0, logger.innerHTML.length - 1);
                   }
                   logger.appendChild(document.createTextNode(text));
                   scrollToBottom(logger);
@@ -131,6 +137,7 @@
 
           document.getElementById("command-form").addEventListener("submit", postForm);
           updateLogTimeout = window.setTimeout(updateLog, 1000);
+          logger.scrollTop = logger.scrollHeight;
         </script>
         {% endif %}
     </div>

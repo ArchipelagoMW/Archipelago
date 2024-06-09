@@ -151,7 +151,21 @@ def host_room(room: UUID):
     with db_session:
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
-    return render_template("hostRoom.html", room=room, should_refresh=should_refresh)
+    def get_log(max_size: int = 1024000) -> str:
+        try:
+            raw_size = 0
+            fragments: List[str] = []
+            for block in _read_log(os.path.join("logs", str(room.id) + ".txt")):
+                if raw_size + len(block) > max_size:
+                    fragments += "…"
+                    break
+                raw_size += len(block)
+                fragments.append(block.decode("utf-8"))
+            return "".join(fragments)
+        except FileNotFoundError:
+            return ""
+
+    return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log)
 
 
 @app.route('/favicon.ico')
