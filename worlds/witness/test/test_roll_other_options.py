@@ -1,6 +1,6 @@
 from worlds.witness.test import WitnessTestBase
 
-# These are just some random settings combinations, just to catch whether I broke anything obvious
+# These are just some random options combinations, just to catch whether I broke anything obvious
 
 
 class TestExpertNonRandomizedEPs(WitnessTestBase):
@@ -27,7 +27,7 @@ class TestVanillaAutoElevatorsPanels(WitnessTestBase):
     }
 
 
-class TestMiscSettings(WitnessTestBase):
+class TestMiscOptions(WitnessTestBase):
     options = {
         "death_link": True,
         "death_link_amnesty": 3,
