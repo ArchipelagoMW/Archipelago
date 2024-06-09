@@ -1,13 +1,35 @@
 import typing
 
 from BaseClasses import Region, Entrance
-from .Locations import GLLocation, valleyOfFire, daggerPeak, cliffsOfDesolation, lostCave, volcanicCavern \
-    , dragonsLair, castleCourtyard, dungeonOfTorment, towerArmory \
-    , castleTreasury, chimerasKeep, poisonedFields, hauntedCemetery \
-    , venomousSpire, toxicAirShip, arcticDocks, frozenCamp \
-    , crystalMine, eruptingFissure, desecratedTemple \
-    , battleTrenches, battleTowers, infernalFortress \
-    , gatesOfTheUnderworld, plagueFiend, yeti
+from .Locations import (
+    GLLocation,
+    valleyOfFire,
+    daggerPeak,
+    cliffsOfDesolation,
+    lostCave,
+    volcanicCavern,
+    dragonsLair,
+    castleCourtyard,
+    dungeonOfTorment,
+    towerArmory,
+    castleTreasury,
+    chimerasKeep,
+    poisonedFields,
+    hauntedCemetery,
+    venomousSpire,
+    toxicAirShip,
+    arcticDocks,
+    frozenCamp,
+    crystalMine,
+    eruptingFissure,
+    desecratedTemple,
+    battleTrenches,
+    battleTowers,
+    infernalFortress,
+    gatesOfTheUnderworld,
+    plagueFiend,
+    yeti,
+)
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -78,33 +100,75 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(world, names, "Menu", "Lost Cave")
     connect(world, names, "Menu", "Volcanic Caverns")
     connect(world, names, "Menu", "Dragon's Lair")
-    connect(world, names, "Valley of Fire", "Castle Courtyard", lambda state: state.has("Valley of Fire Obelisk", world.player) and state.has("Dagger Peak Obelisk", world.player) and state.has("Cliffs of Desolation Obelisk", world.player))
+    connect(
+        world,
+        names,
+        "Valley of Fire",
+        "Castle Courtyard",
+        lambda state: state.has("Valley of Fire Obelisk", world.player)
+        and state.has("Dagger Peak Obelisk", world.player)
+        and state.has("Cliffs of Desolation Obelisk", world.player),
+    )
     connect(world, names, "Castle Courtyard", "Dungeon of Torment")
     connect(world, names, "Castle Courtyard", "Tower Armory")
     connect(world, names, "Castle Courtyard", "Castle Treasury")
     connect(world, names, "Castle Courtyard", "Chimera's Keep")
-    connect(world, names, "Valley of Fire", "Poisonous Fields", lambda state: state.has("Castle Courtyard Obelisk", world.player) and state.has("Dungeon of Torment Obelisk", world.player))
+    connect(
+        world,
+        names,
+        "Valley of Fire",
+        "Poisonous Fields",
+        lambda state: state.has("Castle Courtyard Obelisk", world.player)
+        and state.has("Dungeon of Torment Obelisk", world.player),
+    )
     connect(world, names, "Poisonous Fields", "Haunted Cemetery")
     connect(world, names, "Poisonous Fields", "Venomous Spire")
     connect(world, names, "Poisonous Fields", "Toxic Air Ship")
     connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend")
-    connect(world, names, "Valley of Fire", "Arctic Docks", lambda state: state.has("Poisoned Fields Obelisk", world.player) and state.has("Haunted Cemetery Obelisk", world.player))
+    connect(
+        world,
+        names,
+        "Valley of Fire",
+        "Arctic Docks",
+        lambda state: state.has("Poisoned Fields Obelisk", world.player)
+        and state.has("Haunted Cemetery Obelisk", world.player),
+    )
     connect(world, names, "Arctic Docks", "Frozen Camp")
     connect(world, names, "Arctic Docks", "Crystal Mine")
     connect(world, names, "Arctic Docks", "Erupting Fissure")
     connect(world, names, "Erupting Fissure", "Yeti")
-    connect(world, names, "Valley of Fire", "Desecrated Temple", lambda state: state.has("Dragon Mirror Shard", world.player) and state.has("Chimera Mirror Shard", world.player) and state.has("Plague Fiend Mirror Shard", world.player) and state.has("Yeti Mirror Shard", world.player))
+    connect(
+        world,
+        names,
+        "Valley of Fire",
+        "Desecrated Temple",
+        lambda state: state.has("Dragon Mirror Shard", world.player)
+        and state.has("Chimera Mirror Shard", world.player)
+        and state.has("Plague Fiend Mirror Shard", world.player)
+        and state.has("Yeti Mirror Shard", world.player),
+    )
     connect(world, names, "Desecrated Temple", "Battle Trenches")
     connect(world, names, "Desecrated Temple", "Battle Towers")
     connect(world, names, "Desecrated Temple", "Infernal Fortress")
-    connect(world, names, "Valley of Fire", "Gates of the Underworld",
-            lambda state: state.has("Runestone 1", world.player) and state.has("Runestone 2", world.player)
-            and state.has("Runestone 3", world.player) and state.has("Runestone 4", world.player)
-            and state.has("Runestone 5", world.player) and state.has("Runestone 6", world.player)
-            and state.has("Runestone 7", world.player) and state.has("Runestone 8", world.player)
-            and state.has("Runestone 9", world.player) and state.has("Runestone 10", world.player)
-            and state.has("Runestone 11", world.player) and state.has("Runestone 12", world.player)
-            and state.has("Runestone 13", world.player))
+    connect(
+        world,
+        names,
+        "Valley of Fire",
+        "Gates of the Underworld",
+        lambda state: state.has("Runestone 1", world.player)
+        and state.has("Runestone 2", world.player)
+        and state.has("Runestone 3", world.player)
+        and state.has("Runestone 4", world.player)
+        and state.has("Runestone 5", world.player)
+        and state.has("Runestone 6", world.player)
+        and state.has("Runestone 7", world.player)
+        and state.has("Runestone 8", world.player)
+        and state.has("Runestone 9", world.player)
+        and state.has("Runestone 10", world.player)
+        and state.has("Runestone 11", world.player)
+        and state.has("Runestone 12", world.player)
+        and state.has("Runestone 13", world.player),
+    )
 
 
 def create_region(world: "GauntletLegendsWorld", name, locations):
@@ -116,8 +180,13 @@ def create_region(world: "GauntletLegendsWorld", name, locations):
     world.multiworld.regions.append(reg)
 
 
-def connect(world: "GauntletLegendsWorld", used_names: typing.Dict[str, int], source: str, target: str,
-            rule: typing.Optional[typing.Callable] = None):
+def connect(
+    world: "GauntletLegendsWorld",
+    used_names: typing.Dict[str, int],
+    source: str,
+    target: str,
+    rule: typing.Optional[typing.Callable] = None,
+):
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)
 
@@ -126,7 +195,7 @@ def connect(world: "GauntletLegendsWorld", used_names: typing.Dict[str, int], so
         name = target
     else:
         used_names[target] += 1
-        name = target + (' ' * used_names[target])
+        name = target + (" " * used_names[target])
 
     connection = Entrance(world.player, name, source_region)
 

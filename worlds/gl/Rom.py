@@ -113,9 +113,10 @@ class GLPatchExtension(APPatchExtension):
                     try:
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [
-                            bytearray(data.objects[index][0:6]) + bytes(
-                                item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4]) + bytes(
-                                [0x0, 0x0, 0x0, 0x0])]
+                            bytearray(data.objects[index][0:6])
+                            + bytes(item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4])
+                            + bytes([0x0, 0x0, 0x0, 0x0])
+                        ]
                         del data.objects[index]
                         data.item += 1
                     except Exception as e:
@@ -124,7 +125,8 @@ class GLPatchExtension(APPatchExtension):
                     continue
                 if item[1] is not options["player"]:
                     if "Chest" in location_name or (
-                            "Barrel" in location_name and "Barrel of Gold" not in location_name):
+                        "Barrel" in location_name and "Barrel of Gold" not in location_name
+                    ):
                         data.chests[j - (len(data.items) + data.obelisk)][12] = 0x27
                         data.chests[j - (len(data.items) + data.obelisk)][13] = 0x4
                     else:
@@ -132,15 +134,37 @@ class GLPatchExtension(APPatchExtension):
                         data.items[j - data.obelisk][7] = 0x4
                 else:
                     if "Obelisk" in items_by_id[item[0]].itemName:
-                        data.objects += [bytearray(data.items[j - data.obelisk][0:6]) +
-                                         bytearray([0x0, 0x0, 0x26, 0x1, 0x0, location_data[location_name].difficulty, 0x0, 0x0, 0x0,
-                                                    item[0] - 77780054,
-                                                    0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])]
+                        data.objects += [
+                            bytearray(data.items[j - data.obelisk][0:6])
+                            + bytearray(
+                                [
+                                    0x0,
+                                    0x0,
+                                    0x26,
+                                    0x1,
+                                    0x0,
+                                    location_data[location_name].difficulty,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    item[0] - 77780054,
+                                    0x3F,
+                                    0x80,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                    0x0,
+                                ]
+                            )
+                        ]
                         del data.items[j - data.obelisk]
                         data.obelisk += 1
                     else:
                         if "Chest" in location_name or (
-                                "Barrel" in location_name and "Barrel of Gold" not in location_name):
+                            "Barrel" in location_name and "Barrel of Gold" not in location_name
+                        ):
                             data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[item[0]][0]
                             data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[item[0]][1]
                         else:
@@ -149,10 +173,10 @@ class GLPatchExtension(APPatchExtension):
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)
-            stream.write(len(compressed).to_bytes(4, byteorder='big'))
-            stream.write(len(uncompressed).to_bytes(4, byteorder='big'))
+            stream.write(len(compressed).to_bytes(4, byteorder="big"))
+            stream.write(len(uncompressed).to_bytes(4, byteorder="big"))
             write_pos = 0xFA1000 + (0x1500 * i)
-            stream.write((write_pos - 0x636E0).to_bytes(4, byteorder='big'))
+            stream.write((write_pos - 0x636E0).to_bytes(4, byteorder="big"))
             stream.seek(write_pos, 0)
             stream.write(compressed)
         return stream.getvalue()
@@ -164,10 +188,7 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
     patch_file_ending = ".apgl"
     result_file_ending = ".z64"
 
-    procedure = [
-        ("patch_items", []),
-        ("patch_counts", [])
-    ]
+    procedure = [("patch_items", []), ("patch_counts", [])]
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -199,7 +220,7 @@ def zdec(data):
     decomp = zlib.decompressobj(-zlib.MAX_WBITS)
     output = bytearray()
     for i in range(0, len(data), 256):
-        output.extend(decomp.decompress(data[i:i + 256]))
+        output.extend(decomp.decompress(data[i : i + 256]))
     output.extend(decomp.flush())
     return output
 
@@ -213,7 +234,7 @@ def zenc(data):
     compress = zlib.compressobj(zlib.Z_BEST_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS)
     output = bytearray()
     for i in range(0, len(data), 256):
-        output.extend(compress.compress(data[i:i + 256]))
+        output.extend(compress.compress(data[i : i + 256]))
     output.extend(compress.flush())
     return output
 
@@ -251,7 +272,7 @@ def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
 
 def level_data_reformat(data: LevelData) -> bytes:
     stream = io.BytesIO()
-    obelisk_offset = (24 * (data.obelisk - data.item))
+    obelisk_offset = 24 * (data.obelisk - data.item)
     stream.write(int.to_bytes(0x5C, 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk)), 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk)), 4, "big"))

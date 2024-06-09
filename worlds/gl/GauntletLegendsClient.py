@@ -7,13 +7,22 @@ import typing
 import Patch
 import Utils
 from BaseClasses import ItemClassification
-from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
-    get_base_parser
+from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from typing import List
 
 from NetUtils import ClientStatus, NetworkItem
-from worlds.gl.Arrays import inv_dict, timers, base_count, castle_id, level_locations, \
-    difficulty_convert, spawners, mirror_levels, characters, boss_level
+from worlds.gl.Arrays import (
+    inv_dict,
+    timers,
+    base_count,
+    castle_id,
+    level_locations,
+    difficulty_convert,
+    spawners,
+    mirror_levels,
+    characters,
+    boss_level,
+)
 from worlds.gl.Items import items_by_id, ItemData
 from worlds.gl.Locations import LocationData
 
@@ -59,7 +68,7 @@ class RetroSocket:
             raise Exception("Socket receive timed out. No data received within the specified timeout.")
         except ConnectionResetError:
             raise Exception("Retroarch is not open. Please open Retroarch and load the correct ROM.")
-        response = data.decode().split(' ')
+        response = data.decode().split(" ")
         b = bytes()
         for s in response[2:]:
             if "-1" in s:
@@ -86,7 +95,7 @@ class RamChunk:
         self.split = []
 
     def iterate(self, length: int):
-        self.split = [self.raw[i:i + length] for i in range(0, len(self.raw), length)]
+        self.split = [self.raw[i : i + length] for i in range(0, len(self.raw), length)]
 
 
 def type_to_name(arr) -> str:
@@ -112,9 +121,9 @@ class InventoryEntry:
             self.on: int = arr[0]
             self.type: bytes = arr[1:4]
             self.name = type_to_name(self.type)
-            self.count: int = int.from_bytes(arr[4:8], 'little')
-            self.n_addr: int = int.from_bytes(arr[12:15], 'little')
-            self.p_addr: int = int.from_bytes(arr[8:11], 'little')
+            self.count: int = int.from_bytes(arr[4:8], "little")
+            self.n_addr: int = int.from_bytes(arr[12:15], "little")
+            self.p_addr: int = int.from_bytes(arr[8:11], "little")
         else:
             self.raw: bytes
             self.addr: int
@@ -139,7 +148,7 @@ def MessageFormat(arg: str, params: str) -> str:
 
 
 def ParamFormat(adr: int, arr: bytes) -> str:
-    return ' '.join([hex(adr)] + [f'0x{byte:02X}' for byte in arr])
+    return " ".join([hex(adr)] + [f"0x{byte:02X}" for byte in arr])
 
 
 class GauntletLegendsCommandProcessor(ClientCommandProcessor):
@@ -147,7 +156,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         super().__init__(ctx)
 
     async def _cmd_inv(self, *args):
-        await self.ctx.inv_update(' '.join(args[:-1]), int(args[-1]))
+        await self.ctx.inv_update(" ".join(args[:-1]), int(args[-1]))
 
     def _cmd_connected(self):
         logger.info(f"Retroarch Status: {self.retro_connected}")
@@ -155,7 +164,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
 
 class GauntletLegendsContext(CommonContext):
     command_processor = GauntletLegendsCommandProcessor
-    game = 'Gauntlet Legends'
+    game = "Gauntlet Legends"
     items_handling = 0b101
 
     def __init__(self, server_address, password):
@@ -181,7 +190,7 @@ class GauntletLegendsContext(CommonContext):
         self.item_locations: List[LocationData] = []
         self.obelisk_locations: List[LocationData] = []
         self.chest_locations: List[LocationData] = []
-        self.extra_items: int  = 0
+        self.extra_items: int = 0
         self.limbo: bool = False
         self.in_portal: bool = False
         self.scaled: bool = False
@@ -233,7 +242,9 @@ class GauntletLegendsContext(CommonContext):
         return (item.count & bit) != 0
 
     async def get_obj_addr(self) -> int:
-        return (int.from_bytes(await self.socket.read(MessageFormat(READ, f"0x{format(OBJ_ADDR, 'x')} 4")), 'little')) & 0xFFFFF
+        return (
+            int.from_bytes(await self.socket.read(MessageFormat(READ, f"0x{format(OBJ_ADDR, 'x')} 4")), "little")
+        ) & 0xFFFFF
 
     # Modes: 0 = items, 1 = chests/barrels
     async def obj_read(self, mode=0):
@@ -248,7 +259,14 @@ class GauntletLegendsContext(CommonContext):
                     break
         b: RamChunk
         if mode == 0:
-            b = RamChunk(await self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 10) * 0x3C})")))
+            b = RamChunk(
+                await self.socket.read(
+                    MessageFormat(
+                        READ,
+                        f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 10) * 0x3C})",
+                    )
+                )
+            )
             b.iterate(0x3C)
             count = 0
             for obj in b.split:
@@ -256,16 +274,23 @@ class GauntletLegendsContext(CommonContext):
                     count += 1
             self.extra_items = count
         else:
-            b = RamChunk(await self.socket.read(MessageFormat(READ,f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C})")))
+            b = RamChunk(
+                await self.socket.read(
+                    MessageFormat(
+                        READ,
+                        f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C})",
+                    )
+                )
+            )
             b.iterate(0x3C)
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[0] != 0xFF]
         if mode == 1:
-            _obj = _obj[:len(self.chest_locations)]
+            _obj = _obj[: len(self.chest_locations)]
             self.chest_objects = _obj
         else:
-            _obj = _obj[:len(self.item_locations)]
+            _obj = _obj[: len(self.item_locations)]
             self.item_objects = _obj
 
     async def inv_update(self, name: str, count: int):
@@ -306,9 +331,11 @@ class GauntletLegendsContext(CommonContext):
         for i, item in enumerate(self.inventory):
             if item.name is not None:
                 if "Potion" in item.name and item.count != 0:
-                    await self.socket.write(MessageFormat(WRITE, ParamFormat(ACTIVE_POTION,
-                                                                       int.to_bytes(item.type[2] // 0x10, 1,
-                                                                                    'little'))))
+                    await self.socket.write(
+                        MessageFormat(
+                            WRITE, ParamFormat(ACTIVE_POTION, int.to_bytes(item.type[2] // 0x10, 1, "little"))
+                        )
+                    )
             if i == 0:
                 item.p_addr = 0
                 item.addr = INV_ADDR
@@ -327,14 +354,24 @@ class GauntletLegendsContext(CommonContext):
         for item in self.inventory:
             await self.write_inv(item)
 
-        for i, raw in enumerate(self.inventory_raw.split[len(self.inventory):], len(self.inventory)):
+        for i, raw in enumerate(self.inventory_raw.split[len(self.inventory) :], len(self.inventory)):
             item = InventoryEntry(raw, i)
             if item.type != bytes([0, 0, 0]):
-                await self.write_inv(InventoryEntry(bytes([0, 0, 0, 0, 0, 0, 0, 0]) + int.to_bytes(item.addr + 0x10, 3, 'little') + bytes([0xE0, 0, 0, 0, 0]), i))
+                await self.write_inv(
+                    InventoryEntry(
+                        bytes([0, 0, 0, 0, 0, 0, 0, 0])
+                        + int.to_bytes(item.addr + 0x10, 3, "little")
+                        + bytes([0xE0, 0, 0, 0, 0]),
+                        i,
+                    )
+                )
 
-        await self.socket.write(MessageFormat(WRITE, ParamFormat(INV_UPDATE_ADDR, int.to_bytes(self.inventory[-1].addr, 3, 'little'))))
-        await self.socket.write(MessageFormat(WRITE, ParamFormat(INV_LAST_ADDR, int.to_bytes(self.inventory[-1].addr + 0x10, 3, 'little'))))
-
+        await self.socket.write(
+            MessageFormat(WRITE, ParamFormat(INV_UPDATE_ADDR, int.to_bytes(self.inventory[-1].addr, 3, "little")))
+        )
+        await self.socket.write(
+            MessageFormat(WRITE, ParamFormat(INV_LAST_ADDR, int.to_bytes(self.inventory[-1].addr + 0x10, 3, "little")))
+        )
 
         await self.socket.write(f"{WRITE} 0xC6BF0 0x{format(self.inv_count(), 'x')}")
 
@@ -355,13 +392,17 @@ class GauntletLegendsContext(CommonContext):
         await self.inv_refactor(new)
 
     async def write_inv(self, item: InventoryEntry):
-        b = int.to_bytes(item.on, 1) + item.type + int.to_bytes(item.count, 4, 'little') + int.to_bytes(item.p_addr, 3,
-                                                                                                     'little')
+        b = (
+            int.to_bytes(item.on, 1)
+            + item.type
+            + int.to_bytes(item.count, 4, "little")
+            + int.to_bytes(item.p_addr, 3, "little")
+        )
         if item.p_addr != 0:
             b += int.to_bytes(0xE0)
         else:
             b += int.to_bytes(0x0)
-        b += int.to_bytes(item.n_addr, 3, 'little')
+        b += int.to_bytes(item.n_addr, 3, "little")
         if item.n_addr != 0:
             b += int.to_bytes(0xE0)
         await self.socket.write(MessageFormat(WRITE, ParamFormat(item.addr, b)))
@@ -374,8 +415,8 @@ class GauntletLegendsContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
-            self.slot = args['slot']
-            self.glslotdata = args['slot_data']
+            self.slot = args["slot"]
+            self.glslotdata = args["slot_data"]
             if self.socket.status():
                 self.retro_connected = True
             else:
@@ -397,7 +438,7 @@ class GauntletLegendsContext(CommonContext):
         elif cmd == "SetReply":
             logger.info(f"Updated: {args['key']} Value: {args['value']}")
         elif cmd == "LocationInfo":
-            self.location_scouts = args['locations']
+            self.location_scouts = args["locations"]
 
     async def handle_items(self):
         compass = await self.item_from_name("Compass")
@@ -447,17 +488,30 @@ class GauntletLegendsContext(CommonContext):
             level = [0x1, 0xF]
         players = await self.active_players()
         player_level = await self.player_level()
-        scale_value = min(self.clear_counts.get(str(level), 0), 3) if self.glslotdata["scale"] == 1 else min(max(((player_level - difficulty_convert[level[1]]) // 5), 0), 3)
+        scale_value = (
+            min(self.clear_counts.get(str(level), 0), 3)
+            if self.glslotdata["scale"] == 1
+            else min(max(((player_level - difficulty_convert[level[1]]) // 5), 0), 3)
+        )
         if level[1] == 2 and self.clear_counts.get(str(level), 0) != 0:
             scale_value -= min(player_level // 10, 3)
-        await self.socket.write(MessageFormat(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, 4), 'x')}"))
+        await self.socket.write(
+            MessageFormat(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, 4), 'x')}")
+        )
         self.scaled = True
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         level = await self.read_level()
         if level in boss_level:
             for i in range(4):
-                await self.socket.write(MessageFormat(WRITE, ParamFormat(BOSS_ADDR, bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]))))
+                await self.socket.write(
+                    MessageFormat(
+                        WRITE,
+                        ParamFormat(
+                            BOSS_ADDR, bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]])
+                        ),
+                    )
+                )
         if self.movement != 0x12:
             level = [0x1, 0xF]
         self.current_level = level
@@ -469,15 +523,51 @@ class GauntletLegendsContext(CommonContext):
         _id = level[0]
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
-        raw_locations = [location for location in level_locations.get((level[1] << 4) + _id, []) if difficulty >= location.difficulty]
-        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [location.id for location in raw_locations if "Chest" not in location.name and ("Barrel" not in location.name or "Barrel of Gold" in location.name)], "create_as_hint": 0}])
+        raw_locations = [
+            location for location in level_locations.get((level[1] << 4) + _id, []) if difficulty >= location.difficulty
+        ]
+        await ctx.send_msgs(
+            [
+                {
+                    "cmd": "LocationScouts",
+                    "locations": [
+                        location.id
+                        for location in raw_locations
+                        if "Chest" not in location.name
+                        and ("Barrel" not in location.name or "Barrel of Gold" in location.name)
+                    ],
+                    "create_as_hint": 0,
+                }
+            ]
+        )
         while len(self.location_scouts) == 0:
-            await asyncio.sleep(.1)
-        self.obelisks = [item for item in self.location_scouts if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).itemName and item.player == self.slot]
-        self.obelisk_locations = [location for location in raw_locations if location.id in [item.location for item in self.obelisks]]
-        self.item_locations = [location for location in raw_locations if "Chest" not in location.name and ("Barrel" not in location.name or "Barrel of Gold" in location.name) and location not in self.obelisk_locations]
-        self.chest_locations = [location for location in raw_locations if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name) and location not in self.obelisk_locations]
-        logger.info(f"Locations: {len(self.obelisk_locations + self.item_locations + self.chest_locations)} Difficulty: {self.difficulty}")
+            await asyncio.sleep(0.1)
+        self.obelisks = [
+            item
+            for item in self.location_scouts
+            if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).itemName
+            and item.player == self.slot
+        ]
+        self.obelisk_locations = [
+            location for location in raw_locations if location.id in [item.location for item in self.obelisks]
+        ]
+        self.item_locations = [
+            location
+            for location in raw_locations
+            if "Chest" not in location.name
+            and ("Barrel" not in location.name or "Barrel of Gold" in location.name)
+            and location not in self.obelisk_locations
+        ]
+        self.chest_locations = [
+            location
+            for location in raw_locations
+            if "Chest" in location.name
+            or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
+            and location not in self.obelisk_locations
+        ]
+        logger.info(
+            f"Locations: {len(self.obelisk_locations + self.item_locations + self.chest_locations)} Difficulty: {self.difficulty}"
+        )
 
     async def location_loop(self) -> List[int]:
         await self.obj_read()
@@ -532,7 +622,20 @@ class GauntletLegendsContext(CommonContext):
                 if portaling or (self.current_level in boss_level and boss == 0):
                     self.clear_counts[str(self.current_level)] = self.clear_counts.get(str(self.current_level), 0) + 1
                     if (self.current_level[1] << 4) + self.current_level[0] in mirror_levels:
-                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location.id for location in level_locations[(self.current_level[1] << 4) + self.current_level[0]] if "Mirror" in location.name]}])
+                        await ctx.send_msgs(
+                            [
+                                {
+                                    "cmd": "LocationChecks",
+                                    "locations": [
+                                        location.id
+                                        for location in level_locations[
+                                            (self.current_level[1] << 4) + self.current_level[0]
+                                        ]
+                                        if "Mirror" in location.name
+                                    ],
+                                }
+                            ]
+                        )
                 if dead:
                     if self.current_level == bytes([0x2, 0xF]):
                         self.clear_counts[str([0x1, 0xF])] = max(self.clear_counts.get(str([0x1, 0xF]), 0) - 1, 0)
@@ -564,9 +667,7 @@ class GauntletLegendsContext(CommonContext):
         from kvui import GameManager
 
         class GLManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
+            logging_pairs = [("Client", "Archipelago")]
             base_title = "Archipelago Gauntlet Legends Client"
 
         self.ui = GLManager(self)
@@ -596,7 +697,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         ctx.limbo = False
                         await asyncio.sleep(4)
                     else:
-                        await asyncio.sleep(.05)
+                        await asyncio.sleep(0.05)
                         continue
                 except Exception as e:
                     logger.info(traceback.format_exc())
@@ -609,7 +710,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     if not ctx.in_portal:
                         ctx.in_portal = await ctx.portaling()
                     if ctx.in_portal and not ctx.init_refactor:
-                        await asyncio.sleep(.1)
+                        await asyncio.sleep(0.1)
                         ctx.movement = await ctx.limbo_check()
                         await ctx.inv_refactor()
                         ctx.init_refactor = True
@@ -622,7 +723,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     ctx.init_refactor = False
                     if not ctx.scaled:
                         logger.info("Scaling level...")
-                        await asyncio.sleep(.2)
+                        await asyncio.sleep(0.2)
                         await ctx.scale()
                     ctx.in_game = not await ctx.check_loading()
                 except Exception as e:
@@ -636,32 +737,35 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         await asyncio.sleep(1)
                     if await ctx.level_status(ctx):
                         try:
-                            await ctx.send_msgs([{
-                                "cmd": "Set",
-                                "key": cc_str,
-                                "default": {},
-                                "want_reply": True,
-                                "operations": [{
-                                    "operation": "replace",
-                                    "value": ctx.clear_counts,
-                                }],
-                            }])
+                            await ctx.send_msgs(
+                                [
+                                    {
+                                        "cmd": "Set",
+                                        "key": cc_str,
+                                        "default": {},
+                                        "want_reply": True,
+                                        "operations": [
+                                            {
+                                                "operation": "replace",
+                                                "value": ctx.clear_counts,
+                                            }
+                                        ],
+                                    }
+                                ]
+                            )
                         except Exception as e:
                             logger.info(traceback.format_exc())
                         ctx.limbo = True
-                        await asyncio.sleep(.05)
+                        await asyncio.sleep(0.05)
                         continue
                     checking = await ctx.location_loop()
                     if checking:
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
                     if not ctx.finished_game and await ctx.inv_bitwise("Hell", 0x100):
-                        await ctx.send_msgs([{
-                            "cmd": "StatusUpdate",
-                            "status": ClientStatus.CLIENT_GOAL
-                        }])
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 except Exception as e:
                     logger.info(traceback.format_exc())
-            await asyncio.sleep(.1)
+            await asyncio.sleep(0.1)
         else:
             await asyncio.sleep(1)
             continue
@@ -672,8 +776,7 @@ def launch():
 
     async def main():
         parser = get_base_parser()
-        parser.add_argument("patch_file", default="", type=str, nargs="?",
-                            help="Path to an APGL file")
+        parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an APGL file")
         args = parser.parse_args()
         if args.patch_file:
             await asyncio.create_task(_patch_and_run_game(args.patch_file))

@@ -6,6 +6,7 @@ class PermaSpeed(Toggle):
     """
     You will be given speed boots with a permanent duration.
     """
+
     display_name = "Permanent Speed Boots"
 
 
@@ -13,6 +14,7 @@ class InfiniteKeys(Toggle):
     """
     You will be given an absurd amount of keys.
     """
+
     display_name = "Infinite Keys"
 
 
@@ -24,6 +26,7 @@ class ChestBarrels(Choice):
     All Barrels: Barrels will be added as locations, Chests will not.
     All Both: Both Chests and Barrels will be added as locations.
     """
+
     option_none = 0
     option_all_chests = 1
     option_all_barrels = 2
@@ -37,6 +40,7 @@ class Obelisks(Choice):
     None: Obelisks will be placed in their own locations.
     All Obelisks: Obelisks will be shuffled into the item pool.
     """
+
     option_none = 0
     option_all_obelisks = 1
     default = 1
@@ -48,6 +52,7 @@ class MirrorShards(Choice):
     None: Mirror Shards will be placed in their own locations.
     All Shards: Mirror Shards will be shuffled into the item pool.
     """
+
     option_none = 0
     option_all_shards = 1
     default = 1
@@ -59,6 +64,7 @@ class UnlockCharacter(Choice):
     None: No secret characters will be unlocked.
     Chosen Character: The selected character will be available from a new save.
     """
+
     option_none = 0
     option_minotaur = 1
     option_falconess = 2
@@ -66,6 +72,7 @@ class UnlockCharacter(Choice):
     option_jackal = 4
     option_sumner = 5
     default = 0
+
 
 @dataclass
 class GLOptions(PerGameCommonOptions):

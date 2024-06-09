@@ -17,24 +17,32 @@ from ..LauncherComponents import components, Component, launch_subprocess, Type,
 
 def launch_client(*args):
     from .GauntletLegendsClient import launch
+
     launch_subprocess(launch, name="GLClient")
 
 
-components.append(Component("Gauntlet Legends Client", "GLClient", func=launch_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apgl")))
+components.append(
+    Component(
+        "Gauntlet Legends Client",
+        "GLClient",
+        func=launch_client,
+        component_type=Type.CLIENT,
+        file_identifier=SuffixIdentifier(".apgl"),
+    )
+)
 
 
 class GauntletLegendsWebWorld(WebWorld):
     settings_page = "games/gl/info/en"
-    theme = 'partyTime'
+    theme = "partyTime"
     tutorials = [
         Tutorial(
-            tutorial_name='Setup Guide',
-            description='A guide to playing Gauntlet Legends',
-            language='English',
-            file_name='setup_en.md',
-            link='setup/en',
-            authors=['jamesbrq']
+            tutorial_name="Setup Guide",
+            description="A guide to playing Gauntlet Legends",
+            language="English",
+            file_name="setup_en.md",
+            link="setup/en",
+            authors=["jamesbrq"],
         )
     ]
 
@@ -42,6 +50,7 @@ class GauntletLegendsWebWorld(WebWorld):
 class GLSettings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the GL US rom"""
+
         copy_to = "Gauntlet Legends (U) [!].z64"
         description = "Gauntlet Legends ROM File"
 
@@ -53,6 +62,7 @@ class GauntletLegendsWorld(World):
     """
     Gauntlet Legends
     """
+
     game = "Gauntlet Legends"
     web = GauntletLegendsWebWorld()
     options_dataclass = GLOptions
@@ -68,9 +78,17 @@ class GauntletLegendsWorld(World):
     def create_regions(self) -> None:
         self.disabled_locations = []
         if self.options.chests_barrels == 0:
-            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)]
+            self.disabled_locations += [
+                location.name
+                for location in all_locations
+                if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
+            ]
         elif self.options.chests_barrels == 1:
-            self.disabled_locations += [location.name for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name]
+            self.disabled_locations += [
+                location.name
+                for location in all_locations
+                if "Barrel" in location.name and "Barrel of Gold" not in location.name
+            ]
         elif self.options.chests_barrels == 2:
             self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
 
@@ -100,29 +118,31 @@ class GauntletLegendsWorld(World):
             item = self.create_item("Chimera Mirror Shard")
             self.get_location("Chimera's Keep - Chimera Mirror Shard").place_locked_item(item)
             item = self.create_item("Plague Fiend Mirror Shard")
-            self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard", ).place_locked_item(item)
+            self.get_location(
+                "Vat of the Plague Fiend - Plague Fiend Mirror Shard",
+            ).place_locked_item(item)
             item = self.create_item("Yeti Mirror Shard")
             self.get_location("Yeti's Cavern - Yeti Mirror Shard").place_locked_item(item)
-
 
     def fill_slot_data(self) -> dict:
         dshard = self.get_location("Dragon's Lair - Dragon Mirror Shard").item
         yshard = self.get_location("Yeti's Cavern - Yeti Mirror Shard").item
         cshard = self.get_location("Chimera's Keep - Chimera Mirror Shard").item
         fshard = self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard").item
-        shard_values = [item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
-                        item_dict[yshard.code] if yshard.player == self.player else [0x27, 0x4],
-                        item_dict[cshard.code] if cshard.player == self.player else [0x27, 0x4],
-                        item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4]]
+        shard_values = [
+            item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
+            item_dict[yshard.code] if yshard.player == self.player else [0x27, 0x4],
+            item_dict[cshard.code] if cshard.player == self.player else [0x27, 0x4],
+            item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4],
+        ]
         return {
             "player": self.player,
             "scale": 0,
             "shards": shard_values,
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
-            "character": self.options.unlock_character.value
+            "character": self.options.unlock_character.value,
         }
-
 
     def create_items(self) -> None:
         # First add in all progression and useful items
@@ -136,7 +156,9 @@ class GauntletLegendsWorld(World):
                     continue
                 if "Key" in item.itemName and self.options.infinite_keys:
                     continue
-                freq = item_frequencies.get(item.itemName, 1) + (30 if self.options.infinite_keys and item.progression is ItemClassification.filler else  0)
+                freq = item_frequencies.get(item.itemName, 1) + (
+                    30 if self.options.infinite_keys and item.progression is ItemClassification.filler else 0
+                )
                 if freq is None:
                     freq = 1
                 required_items += [item.itemName for _ in range(freq)]
@@ -166,8 +188,9 @@ class GauntletLegendsWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self)
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.can_reach("Gates of the Underworld", "Region", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
+            "Gates of the Underworld", "Region", self.player
+        )
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]

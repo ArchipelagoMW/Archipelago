@@ -62,7 +62,7 @@ valleyOfFire: typing.List[LocationData] = [
     LocationData("Valley of Fire Barrel - Speed Boots 1", 88873517, 1),
     LocationData("Valley of Fire Barrel - Fire Breath 1", 88873518, 1),
     LocationData("Valley of Fire Barrel - Key 2", 88873519, 1),
-    LocationData("Valley of Fire Barrel - Potion 1", 88873520, 1)
+    LocationData("Valley of Fire Barrel - Potion 1", 88873520, 1),
 ]
 
 daggerPeak: typing.List[LocationData] = [
@@ -128,7 +128,7 @@ daggerPeak: typing.List[LocationData] = [
     LocationData("Dagger Peak Chest - Potion 2", 88873623, 1),
     LocationData("Dagger Peak Chest - Death 1 (Dif. 3)", 88873624, 3),
     LocationData("Dagger Peak Chest - Meat 2 (Dif. 4)", 88873625, 4),
-    LocationData("Dagger Peak Chest - Timestop 1 (Dif. 3)", 88873626, 3)
+    LocationData("Dagger Peak Chest - Timestop 1 (Dif. 3)", 88873626, 3),
 ]
 
 cliffsOfDesolation: typing.List[LocationData] = [
@@ -222,7 +222,7 @@ cliffsOfDesolation: typing.List[LocationData] = [
     LocationData("Cliffs of Desolation Chest - Fire Amulet 1", 88873745, 1),
     LocationData("Cliffs of Desolation Chest - Fruit 2", 88873746, 1),
     LocationData("Cliffs of Desolation Barrel - Invulnerability 1", 88873747, 1),
-    LocationData("Cliffs of Desolation Chest - Fruit 3", 88873748, 1)
+    LocationData("Cliffs of Desolation Chest - Fruit 3", 88873748, 1),
 ]
 
 lostCave: typing.List[LocationData] = [
@@ -306,7 +306,7 @@ lostCave: typing.List[LocationData] = [
     LocationData("Lost Cave Chest - 3-Way Shot 1 (Dif. 2)", 88873833, 2),
     LocationData("Lost Cave Barrel - Reflective Shield 1 (Dif. 3)", 88873834, 3),
     LocationData("Lost Cave Barrel - Super Shot 1 (Dif. 4)", 88873835, 4),
-    LocationData("Lost Cave Chest - Gold 6", 88873836, 1)
+    LocationData("Lost Cave Chest - Gold 6", 88873836, 1),
 ]
 
 volcanicCavern: typing.List[LocationData] = [
@@ -399,7 +399,7 @@ volcanicCavern: typing.List[LocationData] = [
     LocationData("Volcanic Cavern Barrel - Nothing 11 (Dif. 3)", 88873953, 3),
     LocationData("Volcanic Cavern Barrel - Scroll 2", 88873954, 1),
     LocationData("Volcanic Cavern Barrel - Nothing 12 (Dif. 3)", 88873955, 3),
-    LocationData("Volcanic Cavern Barrel - Nothing 13 (Dif. 2)", 88873956, 2)
+    LocationData("Volcanic Cavern Barrel - Nothing 13 (Dif. 2)", 88873956, 2),
 ]
 
 dragonsLair: typing.List[LocationData] = [
@@ -409,7 +409,7 @@ dragonsLair: typing.List[LocationData] = [
     LocationData("Dragon's Lair - Speed Boots (Dif. 3)", 88870179, 3),
     LocationData("Dragon's Lair - 3-Way Shot", 88870180, 1),
     LocationData("Dragon's Lair - Drumstick", 88870181, 1),
-    LocationData("Dragon's Lair - Dragon Mirror Shard", 88870607, 1)
+    LocationData("Dragon's Lair - Dragon Mirror Shard", 88870607, 1),
 ]
 
 castleCourtyard: typing.List[LocationData] = [
@@ -508,7 +508,7 @@ castleCourtyard: typing.List[LocationData] = [
     LocationData("Castle Courtyard Barrel - Nothing 10 (Dif. 3)", 88873054, 3),
     LocationData("Castle Courtyard Barrel - Nothing 11 (Dif. 3)", 88873055, 3),
     LocationData("Castle Courtyard Barrel - Nothing 12", 88873056, 1),
-    LocationData("Castle Courtyard Barrel - Key 12 (Dif. 4)", 88873057, 4)
+    LocationData("Castle Courtyard Barrel - Key 12 (Dif. 4)", 88873057, 4),
 ]
 
 dungeonOfTorment: typing.List[LocationData] = [
@@ -564,7 +564,7 @@ dungeonOfTorment: typing.List[LocationData] = [
     LocationData("Dungeon of Torment Barrel - Nothing 6 (Dif. 2)", 88873128, 2),
     LocationData("Dungeon of Torment Barrel - Nothing 7 (Dif. 3)", 88873129, 3),
     LocationData("Dungeon of Torment Barrel - Nothing 8 (Dif. 3)", 88873130, 3),
-    LocationData("Dungeon of Torment Barrel - Scroll 2", 88873131, 1)
+    LocationData("Dungeon of Torment Barrel - Scroll 2", 88873131, 1),
 ]
 
 towerArmory: typing.List[LocationData] = [
@@ -649,7 +649,7 @@ towerArmory: typing.List[LocationData] = [
     LocationData("Tower Armory Barrel - Speed Boots 1", 88873233, 1),
     LocationData("Tower Armory Barrel - Levitate 1 (Dif. 3)", 88873234, 3),
     LocationData("Tower Armory Barrel - Nothing 2 (Dif. 4)", 88873235, 4),
-    LocationData("Tower Armory Chest - Reflective Shield 1 (Dif. 2)", 88873236, 2)
+    LocationData("Tower Armory Chest - Reflective Shield 1 (Dif. 2)", 88873236, 2),
 ]
 
 castleTreasury: typing.List[LocationData] = [
@@ -730,7 +730,7 @@ castleTreasury: typing.List[LocationData] = [
     LocationData("Castle Treasury Barrel - Death 1", 88873329, 1),
     LocationData("Castle Treasury Chest - Fire Shield 1", 88873330, 1),
     LocationData("Castle Treasury Barrel - Levitate 2 (Dif. 2)", 88873331, 2),
-    LocationData("Castle Treasury Chest - Random 1", 88873332, 1)
+    LocationData("Castle Treasury Chest - Random 1", 88873332, 1),
 ]
 
 chimerasKeep: typing.List[LocationData] = [
@@ -740,7 +740,7 @@ chimerasKeep: typing.List[LocationData] = [
     LocationData("Chimera's Keep -  (Dif. 3)", 88870332, 3),
     LocationData("Chimera's Keep - Ham (Dif. 2)", 88870333, 2),
     LocationData("Chimera's Keep - Drumstick", 88870334, 1),
-    LocationData("Chimera's Keep - Chimera Mirror Shard", 88870608, 1)
+    LocationData("Chimera's Keep - Chimera Mirror Shard", 88870608, 1),
 ]
 
 obelisks = [
@@ -750,7 +750,7 @@ obelisks = [
     "Poisoned Fields - Obelisk",
     "Haunted Cemetery - Obelisk",
     "Castle Courtyard - Obelisk",
-    "Dungeon of Torment - Obelisk"
+    "Dungeon of Torment - Obelisk",
 ]
 
 poisonedFields: typing.List[LocationData] = [
@@ -885,7 +885,7 @@ poisonedFields: typing.List[LocationData] = [
     LocationData("Poisoned Fields Barrel - Potion 3 (Dif. 2)", 88871180, 2),
     LocationData("Poisoned Fields Barrel - Death 3 (Dif. 2)", 88871181, 2),
     LocationData("Poisoned Fields Chest - Gold 13 (Dif. 4)", 88871182, 4),
-    LocationData("Poisoned Fields Chest - Gold 14", 88871183, 1)
+    LocationData("Poisoned Fields Chest - Gold 14", 88871183, 1),
 ]
 
 hauntedCemetery: typing.List[LocationData] = [
@@ -951,7 +951,7 @@ hauntedCemetery: typing.List[LocationData] = [
     LocationData("Haunted Cemetery Chest - Death 1 (Dif. 3)", 88871239, 3),
     LocationData("Haunted Cemetery Chest - 3-Way Shot 1 (Dif. 2)", 88871240, 2),
     LocationData("Haunted Cemetery Chest - Gold 3", 88871241, 1),
-    LocationData("Haunted Cemetery Chest - Meat 2 (Dif. 4)", 88871242, 4)
+    LocationData("Haunted Cemetery Chest - Meat 2 (Dif. 4)", 88871242, 4),
 ]
 
 venomousSpire: typing.List[LocationData] = [
@@ -1034,7 +1034,7 @@ venomousSpire: typing.List[LocationData] = [
     LocationData("Venemous Spire Chest - Gold 4", 88871360, 1),
     LocationData("Venemous Spire Barrel - Key 18", 88871361, 1),
     LocationData("Venemous Spire Chest - Gold 5 (Dif. 2)", 88871362, 2),
-    LocationData("Venemous Spire Barrel - Key 19", 88871363, 1)
+    LocationData("Venemous Spire Barrel - Key 19", 88871363, 1),
 ]
 
 toxicAirShip: typing.List[LocationData] = [
@@ -1100,7 +1100,7 @@ toxicAirShip: typing.List[LocationData] = [
     LocationData("Toxic Air Ship Chest - Gold 5", 88871440, 1),
     LocationData("Toxic Air Ship Barrel - Scroll 2", 88871441, 1),
     LocationData("Toxic Air Ship Barrel - Meat 1 (Dif. 3)", 88871442, 3),
-    LocationData("Toxic Air Ship Barrel - Potion 3 (Dif. 4)", 88871443, 4)
+    LocationData("Toxic Air Ship Barrel - Potion 3 (Dif. 4)", 88871443, 4),
 ]
 
 plagueFiend: typing.List[LocationData] = [
@@ -1200,7 +1200,7 @@ arcticDocks: typing.List[LocationData] = [
     LocationData("Arctic Docks Barrel - Key 13", 88871663, 1),
     LocationData("Arctic Docks Chest - Death 2", 88871664, 1),
     LocationData("Arctic Docks Chest - Meat 2 (Dif. 2)", 88871665, 2),
-    LocationData("Arctic Docks Chest - Meat 3 (Dif. 4)", 88871666, 4)
+    LocationData("Arctic Docks Chest - Meat 3 (Dif. 4)", 88871666, 4),
 ]
 
 frozenCamp: typing.List[LocationData] = [
@@ -1317,7 +1317,7 @@ frozenCamp: typing.List[LocationData] = [
     LocationData("Frozen Camp Chest - Gold 12", 88871774, 1),
     LocationData("Frozen Camp Chest - Speed Boots 1 (Dif. 3)", 88871775, 3),
     LocationData("Frozen Camp Chest - Invulnerability 1", 88871776, 1),
-    LocationData("Frozen Camp Barrel - Death 1 (Dif. 2)", 88871777, 2)
+    LocationData("Frozen Camp Barrel - Death 1 (Dif. 2)", 88871777, 2),
 ]
 
 crystalMine: typing.List[LocationData] = [
@@ -1403,7 +1403,7 @@ crystalMine: typing.List[LocationData] = [
     LocationData("Crystal Mine Barrel - Key 17", 88871865, 1),
     LocationData("Crystal Mine Chest - Potion 2", 88871866, 1),
     LocationData("Crystal Mine Chest - Fruit 4 (Dif. 4)", 88871867, 4),
-    LocationData("Crystal Mine Chest - Gold 10 (Dif. 2)", 88871868, 2)
+    LocationData("Crystal Mine Chest - Gold 10 (Dif. 2)", 88871868, 2),
 ]
 
 eruptingFissure: typing.List[LocationData] = [
@@ -1502,12 +1502,10 @@ eruptingFissure: typing.List[LocationData] = [
     LocationData("Erupting Fissure Barrel - Potion 1", 88871974, 1),
     LocationData("Erupting Fissure Barrel - Death 3 (Dif. 2)", 88871975, 2),
     LocationData("Erupting Fissure Chest - Levitate 1", 88871976, 1),
-    LocationData("Erupting Fissure Chest - Gold 8 (Dif. 2)", 88871977, 2)
+    LocationData("Erupting Fissure Chest - Gold 8 (Dif. 2)", 88871977, 2),
 ]
 
-yeti: typing.List[LocationData] = [
-    LocationData("Yeti's Cavern - Yeti Mirror Shard", 88870610, 1)
-]
+yeti: typing.List[LocationData] = [LocationData("Yeti's Cavern - Yeti Mirror Shard", 88870610, 1)]
 
 desecratedTemple: typing.List[LocationData] = [
     LocationData("Desecrated Temple - Death 1", 88870530, 1),
@@ -1548,7 +1546,7 @@ desecratedTemple: typing.List[LocationData] = [
     LocationData("Desecrated Temple Chest - Gold 28", 88872029, 1),
     LocationData("Desecrated Temple Chest - Gold 29", 88872030, 1),
     LocationData("Desecrated Temple Chest - Levitate 1 (Dif. 2)", 88872031, 2),
-    LocationData("Desecrated Temple Chest - Phoenix Familiar 1 (Dif. 3)", 88872032, 3)
+    LocationData("Desecrated Temple Chest - Phoenix Familiar 1 (Dif. 3)", 88872032, 3),
 ]
 
 battleTrenches: typing.List[LocationData] = [
@@ -1631,7 +1629,7 @@ battleTrenches: typing.List[LocationData] = [
     LocationData("Battle Trenches Barrel - Key 20", 88872152, 1),
     LocationData("Battle Trenches Barrel - Key 21", 88872153, 1),
     LocationData("Battle Trenches Chest - Fire Amulet 1 (Dif. 3)", 88872154, 3),
-    LocationData("Battle Trenches Chest - Meat 4 (Dif. 3)", 88872155, 3)
+    LocationData("Battle Trenches Chest - Meat 4 (Dif. 3)", 88872155, 3),
 ]
 
 battleTowers: typing.List[LocationData] = [
@@ -1684,7 +1682,7 @@ battleTowers: typing.List[LocationData] = [
     LocationData("Battle Towers Chest - Fruit 2", 88872239, 1),
     LocationData("Battle Towers Chest - Meat 1 (Dif. 2)", 88872240, 2),
     LocationData("Battle Towers Chest - Meat 2", 88872241, 1),
-    LocationData("Battle Towers Chest - Fire Breath 1", 88872242, 1)
+    LocationData("Battle Towers Chest - Fire Breath 1", 88872242, 1),
 ]
 
 infernalFortress: typing.List[LocationData] = [
@@ -1759,7 +1757,7 @@ infernalFortress: typing.List[LocationData] = [
     LocationData("Infernal Fortress Barrel - Gold 4 (Dif. 3)", 88872351, 3),
     LocationData("Infernal Fortress Chest - 3-Way Shot 1", 88872352, 1),
     LocationData("Infernal Fortress Chest - Potion 2", 88872353, 1),
-    LocationData("Infernal Fortress Chest - Meat 1 (Dif. 3)", 88872354, 3)
+    LocationData("Infernal Fortress Chest - Meat 1 (Dif. 3)", 88872354, 3),
 ]
 
 gatesOfTheUnderworld: typing.List[LocationData] = [
@@ -1785,16 +1783,37 @@ gatesOfTheUnderworld: typing.List[LocationData] = [
     LocationData("Gates of the Underworld - 3-Way Shot (Dif. 4)", 88870603, 4),
     LocationData("Gates of the Underworld - Super Shot", 88870604, 1),
     LocationData("Gates of the Underworld - Speed Boots (Dif. 3)", 88870605, 3),
-    LocationData("Gates of the Underworld - Shrink (Dif. 4)", 88870606, 4)
+    LocationData("Gates of the Underworld - Shrink (Dif. 4)", 88870606, 4),
 ]
 
-all_locations: typing.List[LocationData] = valleyOfFire + daggerPeak + cliffsOfDesolation + lostCave + volcanicCavern \
-                                           + dragonsLair + castleCourtyard + dungeonOfTorment + towerArmory \
-                                           + castleTreasury + chimerasKeep + poisonedFields + hauntedCemetery \
-                                           + venomousSpire + toxicAirShip + arcticDocks + frozenCamp \
-                                           + crystalMine + eruptingFissure + desecratedTemple \
-                                           + battleTrenches + battleTowers + infernalFortress \
-                                           + gatesOfTheUnderworld + plagueFiend + yeti
+all_locations: typing.List[LocationData] = (
+    valleyOfFire
+    + daggerPeak
+    + cliffsOfDesolation
+    + lostCave
+    + volcanicCavern
+    + dragonsLair
+    + castleCourtyard
+    + dungeonOfTorment
+    + towerArmory
+    + castleTreasury
+    + chimerasKeep
+    + poisonedFields
+    + hauntedCemetery
+    + venomousSpire
+    + toxicAirShip
+    + arcticDocks
+    + frozenCamp
+    + crystalMine
+    + eruptingFissure
+    + desecratedTemple
+    + battleTrenches
+    + battleTowers
+    + infernalFortress
+    + gatesOfTheUnderworld
+    + plagueFiend
+    + yeti
+)
 
 
 location_table: typing.Dict[str, int] = {location.name: location.id for location in all_locations}
