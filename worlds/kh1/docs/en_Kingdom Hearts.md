@@ -64,7 +64,7 @@ Phil Cup, Pegasus Cup, and Hercules Cup are all multiworld items.  Finding all 3
 
 ###The slides aren't spawning in Deep Jungle.
 
-Find `Slide 1` in the multiworld.
+Find `Slides` in the multiworld.
 
 ###I can't progress Halloween Town.
 
@@ -77,12 +77,3 @@ Find `Theon Vol. 6` in the multiworld.
 ##How do I enter the End of the World?
 
 Find the required number of Ansem's Reports defined in your settings in the multiworld.
-
-##I am stuck in Hollow Bastion, how do I leave?
-
-You can open the full menu and warp out using `L1` + `L2` + `R2` + `Select`
-
-##I am still receiving vanilla rewards in several locations.
-There are locations that still grant vanilla rewards, as it is currently not known how to remove them.  Such locations include Atlantica Clams, Spinners in the Hollow Bastion Library, Puppy Rewards, and several Postcard Locations.
-
-Where these items are progression, they remain vanilla.  Where they are filler items, they grant a check in addition to the vanilla reward.
