@@ -19,13 +19,13 @@ from .Rules import set_rules
 def launch_client(*args):
     from GauntletLegendsClient import launch
 
-    launch_subprocess(launch, name="GLClient")
+    launch_subprocess(launch, name="GauntletLegendsClient")
 
 
 components.append(
     Component(
         "Gauntlet Legends Client",
-        "GLClient",
+        "GauntletLegendsClient",
         func=launch_client,
         component_type=Type.CLIENT,
         file_identifier=SuffixIdentifier(".apgl"),
