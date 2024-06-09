@@ -21,13 +21,14 @@ def has_evidence(state: CollectionState, player: int) -> bool:
 def can_glide(state: CollectionState, player: int) -> bool:
     return state.has("Glide", player) or state.has("Superglide", player)
 
-def has_emblems(state: CollectionState, player: int) -> bool:
+def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bool) -> bool:
     return (
                 state.has("Emblem Piece (Flame)", player)
                 and state.has("Emblem Piece (Chest)", player)
                 and state.has("Emblem Piece (Statue)", player)
                 and state.has("Emblem Piece (Fountain)", player)
-                and state.has("Hollow Bastion", player) 
+                and state.has("Hollow Bastion", player)
+                and has_x_worlds(state, player, 5, keyblades_unlock_chests)
            )
 
 def has_item(state: CollectionState, player: int, item: str) -> bool:
@@ -88,7 +89,7 @@ def has_final_rest_door(state: CollectionState, player:int, final_rest_door_requ
     if final_rest_door_requirement == "postcards":
         return has_postcards(state, player, 10)
     if final_rest_door_requirement == "superbosses":
-        return state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup"}, player) and has_emblems(state, player) and has_all_magic_lvx(state, player, 2) and has_defensive_tools(state, player)
+        return state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup"}, player) and has_emblems(state, player, options.keyblades_unlock_chests) and has_all_magic_lvx(state, player, 2) and has_defensive_tools(state, player) and has_x_worlds(state, player, 7, keyblades_unlock_chests)
 
 def has_defensive_tools(state: CollectionState, player: int) -> bool:
     return (state.count("Progressive Cure", player) >= 2 and state.has("Leaf Bracer", player) and state.has("Dodge Roll", player)) and (state.has("Second Chance", player) or state.has("MP Rage", player) or state.count("Progressive Aero", player) >= 2)
@@ -982,7 +983,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Rising Falls Under Water 2nd Chest"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Rising Falls Floating Platform Near Save Chest"                , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
@@ -1010,14 +1011,14 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         or has_item(state, player, "Progressive Blizzard")
                                                                                                                                                         or (options.advanced_logic and has_item(state, player, "Combo Master"))
                                                                                                                                                     )
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Castle Gates Gravity Chest"                                    , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and has_item(state, player, "Progressive Gravity") 
                                                                                                                                                     and 
                                                                                                                                                     (
-                                                                                                                                                        has_emblems(state, player)
+                                                                                                                                                        has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                         or (options.advanced_logic and has_at_least(state, player, "High Jump", 2) and can_glide(state,player))
                                                                                                                                                         or (options.advanced_logic and can_dumbo_skip(state, player) and can_glide(state,player))
                                                                                                                                                     )
@@ -1026,7 +1027,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and 
                                                                                                                                                     (
-                                                                                                                                                        has_emblems(state, player)
+                                                                                                                                                        has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                         or has_at_least(state, player, "High Jump", 2)
                                                                                                                                                         or (options.advanced_logic and can_dumbo_skip(state, player))
                                                                                                                                                     )
@@ -1035,32 +1036,32 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and 
                                                                                                                                                     (
-                                                                                                                                                        has_emblems(state, player)
+                                                                                                                                                        has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                         or has_at_least(state, player, "High Jump", 2)
                                                                                                                                                         or (options.advanced_logic and can_dumbo_skip(state, player))
                                                                                                                                                     )
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Great Crest Lower Chest"                                       , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Great Crest After Battle Platform Chest"                       , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion High Tower 2nd Gravity Chest"                                  , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and has_item(state, player, "Progressive Gravity") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion High Tower 1st Gravity Chest"                                  , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and has_item(state, player, "Progressive Gravity") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion High Tower Above Sliding Blocks Chest"                         , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Library Top of Bookshelf Chest"                                , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
@@ -1072,7 +1073,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest"  , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and has_item(state, player, "Progressive Gravity") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Lift Stop Library Node Gravity Chest"                          , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
@@ -1080,7 +1081,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest"               , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player) 
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests) 
                                                                                                                                                     and can_glide(state, player)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"                       , player).access_rule = lambda state: (
@@ -1090,7 +1091,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest"                  , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and has_item(state, player, "Progressive Gravity") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Base Level Bubble Under the Wall Platform Chest"               , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
@@ -1123,15 +1124,15 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Grand Hall Steps Right Side Chest"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Grand Hall Oblivion Chest"                                     , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Grand Hall Left of Gate Chest"                                 , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
    #multiworld.get_location("Hollow Bastion Entrance Hall Push the Statue Chest"                           , player).access_rule = lambda state: ()
     multiworld.get_location("Hollow Bastion Entrance Hall Left of Emblem Door Chest"                       , player).access_rule = lambda state: (
@@ -1143,7 +1144,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         (
                                                                                                                                                             options.advanced_logic
                                                                                                                                                             and can_dumbo_skip(state, player)
-                                                                                                                                                            and has_emblems(state, player)
+                                                                                                                                                            and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                         )
                                                                                                                                                     )
                                                                                                                                                  )
@@ -1265,7 +1266,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
    #multiworld.get_location("Traverse Town Defeat Guard Armor Blue Trinity Event"                          , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Traverse Town Leon Secret Waterway Earthshine Event"                          , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"                         , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player) 
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_item(state, player,"Hollow Bastion") 
                                                                                                                                                     and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
                                                                                                                                                  )
@@ -1353,26 +1354,26 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_item(state, player, "Green Trinity") 
                                                                                                                                                     and has_all_magic_lvx(state, player, 2) 
                                                                                                                                                     and has_defensive_tools(state, player) 
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"                              , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Green Trinity")
                                                                                                                                                  )
    #multiworld.get_location("Hollow Bastion Defeat Riku I White Trinity Event"                             , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"                          , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Defeat Dragon Maleficent Fireglow Event"                       , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Defeat Riku II Ragnarok Event"                                 , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Defeat Behemoth Omega Arts Event"                              , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Speak to Princesses Fire Event"                                , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
    #multiworld.get_location("End of the World Defeat Chernabog Superglide Event"                           , player).access_rule = lambda state: has_item(state, player, "")
     
@@ -1431,7 +1432,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
 
    #multiworld.get_location("Agrabah Defeat Jafar Genie Ansem's Report 1"                                  , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"                            , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     if options.atlantica:
         multiworld.get_location("Atlantica Defeat Ursula II Ansem's Report 3"                              , player).access_rule = lambda state: (
@@ -1440,13 +1441,13 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_offensive_magic(state, player)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 4"                            , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Defeat Maleficent Ansem's Report 5"                            , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 6"                            , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Defeat Oogie Boogie Ansem's Report 7"                          , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Jack-In-The-Box") 
@@ -1464,11 +1465,11 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_item(state, player, "Green Trinity")
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"                           , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     if options.super_bosses:
         multiworld.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"                               , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player) 
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
                                                                                                                                                  )
@@ -1482,7 +1483,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     if options.super_bosses or options.goal.current_key == "unknown":
         multiworld.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"                          , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player) 
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
                                                                                                                                                  )
@@ -1882,7 +1883,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Hollow Bastion")
-                                                                                                                                                    and has_emblems(state, player)
+                                                                                                                                                    and has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                     and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: (
@@ -1892,9 +1893,9 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_item(state, player, "Green Trinity")
                                                                                                                                                  )
     if options.super_bosses:
-        multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
+        multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
     if options.super_bosses or options.goal.current_key == "unknown":
-        multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
+        multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
    #multiworld.get_location("Olympus Coliseum Coliseum Gates Hero's License Event"                         , player).access_rule = lambda state: ()
    #if options.atlantica:
        #multiworld.get_location("Atlantica Sunken Ship Crystal Trident Event"                              , player).access_rule = lambda state: ()
@@ -1984,7 +1985,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     (
                                                                                                                                                         has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                         or has_at_least(state, player, "High Jump", 3)
-                                                                                                                                                        or has_emblems(state, player)
+                                                                                                                                                        or has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                     )
                                                                                                                                                     and has_item(state, player, "Progressive Fire")
                                                                                                                                                     and
@@ -1998,28 +1999,28 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                     or has_at_least(state, player, "High Jump", 3)
-                                                                                                                                                    or has_emblems(state, player)
+                                                                                                                                                    or has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)"                           , player).access_rule = lambda state: (
                                                                                                                                                     (
                                                                                                                                                         has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                         or has_at_least(state, player, "High Jump", 3)
-                                                                                                                                                        or has_emblems(state, player)
+                                                                                                                                                        or has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                     )
                                                                                                                                                     and has_item(state, player, "Red Trinity")
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)"                         , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Theon Vol. 6") 
                                                                                                                                                     or has_at_least(state, player, "High Jump", 3)
-                                                                                                                                                    or has_emblems(state, player)
+                                                                                                                                                    or has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
    #multiworld.get_location("Traverse Town 1st District Leon Gift"                                         , player).access_rule = lambda state: ()
    #multiworld.get_location("Traverse Town 1st District Aerith Gift"                                       , player).access_rule = lambda state: ()
     multiworld.get_location("Hollow Bastion Library Speak to Belle Divine Rose"                            , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Library Speak to Aerith Cure"                                  , player).access_rule = lambda state: (
-                                                                                                                                                    has_emblems(state, player)
+                                                                                                                                                    has_emblems(state, player, options.keyblades_unlock_chests)
                                                                                                                                                  )
     
     
