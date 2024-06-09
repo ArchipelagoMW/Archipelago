@@ -2,9 +2,10 @@ import unittest
 from typing import ClassVar, Set
 
 from . import SVTestBase
+from .assertion import WorldAssertMixin
 from ..content.feature import fishsanity
 from ..mods.mod_data import ModNames
-from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations
+from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations, Goal, QuestLocations
 from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
 
 pelican_town_legendary_fishes = {Fish.angler, Fish.crimsonfish, Fish.glacierfish, Fish.legend, Fish.mutant_carp, }
@@ -387,3 +388,18 @@ class TestFishsanityOnlyEasyFishes_QiBoard(SVFishsanityTestBase):
             pelican_town_easy_normal_fishes |
             pelican_town_crab_pot_fishes
     )
+
+
+class TestFishsanityMasterAnglerSVEWithoutQuests(WorldAssertMixin, SVTestBase):
+    options = {
+        Fishsanity: Fishsanity.option_all,
+        Goal: Goal.option_master_angler,
+        QuestLocations: -1,
+        Mods: (ModNames.sve,),
+    }
+
+    def run_default_tests(self) -> bool:
+        return True
+
+    def test_fill(self):
+        self.assert_basic_checks(self.multiworld)
