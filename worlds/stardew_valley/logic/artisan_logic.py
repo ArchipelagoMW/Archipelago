@@ -22,20 +22,8 @@ class ArtisanLogicMixin(BaseLogicMixin):
 
 class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMixin]]):
     def initialize_rules(self):
-        # self.registry.artisan_good_rules.update({ArtisanGood.specific_wine(fruit): self.can_keg(fruit) for fruit in all_fruits})
-        # self.registry.artisan_good_rules.update({
-        #    ArtisanGood.specific_juice(vegetable.name): self.can_keg(vegetable.name) for vegetable in self.content.find_tagged_items(ItemTag.VEGETABLE)
-        # })
-        # self.registry.artisan_good_rules.update({
-        #    ArtisanGood.specific_jelly(fruit.name): self.can_preserves_jar(fruit.name) for fruit in self.content.find_tagged_items(ItemTag.FRUIT)
-        # })
-        # self.registry.artisan_good_rules.update({
-        #    ArtisanGood.specific_pickles(vegetable.name): self.can_preserves_jar(vegetable.name)
-        #    for vegetable in self.content.find_tagged_items(ItemTag.VEGETABLE)
-        # })
+        # TODO remove this one too once fish are converted to sources
         self.registry.artisan_good_rules.update({ArtisanGood.specific_smoked_fish(fish): self.can_smoke(fish) for fish in all_fish})
-        # self.registry.artisan_good_rules.update({ArtisanGood.specific_dried(fruit): self.can_dehydrate(fruit) for fruit in all_fruits})
-        # self.registry.artisan_good_rules.update({ArtisanGood.specific_dried(mushroom): self.can_dehydrate(mushroom) for mushroom in all_edible_mushrooms})
 
     def has_jelly(self) -> StardewRule:
         return self.logic.artisan.can_preserves_jar(Fruit.any)
