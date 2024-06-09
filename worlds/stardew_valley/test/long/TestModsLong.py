@@ -58,7 +58,6 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
     @unittest.skip
     def test_troubleshoot_option(self):
         seed = get_seed(78709133382876990000)
-        # This seed is also broken 61810967650051856921
 
         world_options = {
             options.EntranceRandomization: options.EntranceRandomization.option_buildings,

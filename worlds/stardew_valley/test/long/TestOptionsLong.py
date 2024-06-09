@@ -1,7 +1,7 @@
 import unittest
 from itertools import combinations
-from random import random
 
+from BaseClasses import get_seed
 from .option_names import all_option_choices
 from .. import SVTestCase, solo_multiworld
 from ..assertion.world_assert import WorldAssertMixin
@@ -40,8 +40,7 @@ class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
             options.Mods.internal_name: frozenset({ModNames.sve}),
         }
         for i in range(1):
-            seed = int(random() * pow(10, 18) - 1)
-            # seed = 64936975574258130357
+            seed = get_seed()
             with self.subTest(f"Seed: {seed}"):
                 print(f"Seed: {seed}")
                 with solo_multiworld(option_dict, seed=seed) as (multiworld, _):
