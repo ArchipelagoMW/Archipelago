@@ -6,6 +6,18 @@
 - The built-in Gauntlet Legends Client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
 - A US copy of Gauntlet Legends for the N64
 
+## Configuring Retroarch
+
+### Enabling Network Commands
+
+You must go to Settings -> User Interface and turn the Show Advanced Settings to On. 
+Then in Settings -> Network, you must also turn On Network Commands. 
+Leave the port as the default.
+
+### Selecting a Core
+
+When selecting a core, make sure to select Mupen64-plus-next core.
+
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
@@ -23,18 +35,22 @@ You can customize your options by visiting the
 
 ### Obtain your N64 patch file
 
-When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done,
-the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
-files. Your data file should have a `.apgl` extension.
+When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting.
+The host generating does not need a copy of Gauntlet Legends to be able to generate with a Gauntlet Legends yaml.
 
-Double-click on your `.apgl` file to start your client and start the ROM patch process. Once the process is finished, the client will be started automatically.
+Once that is done, the host will provide you with either a link to download your data file, 
+or with a zip file containing everyone's data files. Your data file should have a `.apgl` extension.
+
+
+Double-click on your `.apgl` file to start the ROM patch process. Once the process is finished, the client will be started automatically.
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
-menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
+This game uses its own custom client, named Gauntlet Legends Client.
+Retroarch is only emulator this client will accept.
 
-Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
+Once both the client and the emulator are started, you must connect them. Once your ROM is open in Retroach,
+as long as the client is open they will be connected to eachother.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`).

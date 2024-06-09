@@ -11,32 +11,12 @@ Items which the player would normally acquire throughout the game have been move
 always able to be completed, but because of the item shuffle, the player may need to access certain areas before they
 would in the vanilla game.
 
-The game has been changed to an open-world style as opposed to the linear style the vanilla game has.
+## What is the goal of Gauntlet Legends when randomized?
 
-Other Features such as Turbo through textboxes (Hold L/R+A) and Pipe Warping from any room (Hold L+R+SELECT) have been added for convenience.
+Defeat Skorne in the Underworld. This requires gathering all 13 Runestones to gain access to the Underworld, and being strong enough to beat Skorne.
 
-Enemies and Bosses can be randomized, and their stats can be scaled to feel more like the vanilla game's stats.
-
-Other aspects of the game can be randomized as well such as music, sounds, battle backgrounds, Mario and Luigi's Colors, and more.
-
-## What is the goal of Mario & Luigi: Superstar Saga when randomized?
-
-Defeat Cackletta's Soul in Bowser's Castle. This requires you to collect all 4 Beanstar Pieces, restore the Beanstar, and bring Peach's Extra Dress and the Fake Beanstar to Fawful at the end of Jokes End. 
-
-In total, this requires:
-- 4 Beanstar Pieces
-- Peach's Extra Dress
-- Fake Beanstar
-- Ultra Hammers
-- Fire Hand
-- Thunder Hand
-- Red Pearl Bean
-- Green Pearl Bean
-- Green Goblet
-- Peasley's Rose
-- Beanbean Brooch
-- All 3 Chuckola Fruits
-- Membership Card OR Red Goblet
+Along the way, players will need to activate Obelisks to unlock new areas for them to explore.
+They may also need to collect Mirror Shards, which will unlock a 5th area to explore as well as the Cathedral level.
 
 ## What items and locations can get shuffled?
 
