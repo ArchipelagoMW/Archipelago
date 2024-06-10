@@ -1,5 +1,5 @@
 import math
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import List, Optional
 
 from BaseClasses import MultiWorld
@@ -69,12 +69,15 @@ class Category:
         return mean_score * self.quantity
 
 
+
+
 class ListState:
     def __init__(self, state: List[str]):
         self.state = state
+        self.item_counts = Counter(state)
 
     def count(self, item: str, player: Optional[str] = None) -> int:
-        return self.state.count(item)
+        return self.item_counts[item]
 
 
 def extract_progression(state, player, options):
