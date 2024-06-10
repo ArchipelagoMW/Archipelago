@@ -317,5 +317,13 @@ yd_option_groups = [
             PointsSize,
         ],
     ),
-    OptionGroup("Other items", [MinimizeExtraItems, AddExtraPoints, AddStoryChapters, WhichStory]),
+    OptionGroup(
+        "Other items", 
+        [
+            MinimizeExtraItems, 
+            AddExtraPoints, 
+            AddStoryChapters, 
+            WhichStory
+        ]
+    ),
 ]
