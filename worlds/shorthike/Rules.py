@@ -1,5 +1,6 @@
 from worlds.generic.Rules import forbid_items_for_player, add_rule
-from worlds.shorthike.Options import Goal, GoldenFeatherProgression, MinShopCheckLogic, ShopCheckLogic
+from .Options import Goal, GoldenFeatherProgression, MinShopCheckLogic, ShopCheckLogic
+
 
 def create_rules(self, location_table):
     multiworld = self.multiworld
