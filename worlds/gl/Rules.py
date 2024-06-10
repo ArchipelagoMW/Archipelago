@@ -43,13 +43,14 @@ def set_rules(world: "GauntletLegendsWorld"):
             if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(location.name), item, world.player)
 
-    for level_id, locations in level_locations.items():
-        for location in locations:
-            if location.difficulty > 1:
-                if location.name not in world.disabled_locations:
-                    add_rule(
-                        world.get_location(location.name),
-                        lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1: prog_count(
-                            state, world.player, difficulty_lambda[level_id_][difficulty],
-                        ),
-                    )
+    if not world.options.instant_max:
+        for level_id, locations in level_locations.items():
+            for location in locations:
+                if location.difficulty > 1:
+                    if location.name not in world.disabled_locations:
+                        add_rule(
+                            world.get_location(location.name),
+                            lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1: prog_count(
+                                state, world.player, difficulty_lambda[level_id_][difficulty],
+                            ),
+                        )

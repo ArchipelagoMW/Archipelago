@@ -106,9 +106,9 @@ def connect_regions(world: "GauntletLegendsWorld"):
         names,
         "Valley of Fire",
         "Castle Courtyard",
-        lambda state: state.has("Valley of Fire Obelisk", world.player)
-        and state.has("Dagger Peak Obelisk", world.player)
-        and state.has("Cliffs of Desolation Obelisk", world.player),
+        lambda state: state.has("Mountain Obelisk 1", world.player)
+        and state.has("Mountain Obelisk 2", world.player)
+        and state.has("Mountain Obelisk 3", world.player),
     )
     connect(world, names, "Castle Courtyard", "Dungeon of Torment")
     connect(world, names, "Castle Courtyard", "Tower Armory")
@@ -119,8 +119,8 @@ def connect_regions(world: "GauntletLegendsWorld"):
         names,
         "Valley of Fire",
         "Poisonous Fields",
-        lambda state: state.has("Castle Courtyard Obelisk", world.player)
-        and state.has("Dungeon of Torment Obelisk", world.player),
+        lambda state: state.has("Castle Obelisk 1", world.player)
+        and state.has("Castle Obelisk 2", world.player),
     )
     connect(world, names, "Poisonous Fields", "Haunted Cemetery")
     connect(world, names, "Poisonous Fields", "Venomous Spire")
@@ -131,8 +131,8 @@ def connect_regions(world: "GauntletLegendsWorld"):
         names,
         "Valley of Fire",
         "Arctic Docks",
-        lambda state: state.has("Poisoned Fields Obelisk", world.player)
-        and state.has("Haunted Cemetery Obelisk", world.player),
+        lambda state: state.has("Town Obelisk 1", world.player)
+        and state.has("Town Obelisk 2", world.player),
     )
     connect(world, names, "Arctic Docks", "Frozen Camp")
     connect(world, names, "Arctic Docks", "Crystal Mine")

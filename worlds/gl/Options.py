@@ -1,22 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle
-
-
-class PermaSpeed(Toggle):
-    """
-    You will be given speed boots with a permanent duration.
-    """
-
-    display_name = "Permanent Speed Boots"
-
-
-class InfiniteKeys(Toggle):
-    """
-    You will be given an absurd amount of keys.
-    """
-
-    display_name = "Infinite Keys"
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range
 
 
 class ChestBarrels(Choice):
@@ -59,6 +43,54 @@ class MirrorShards(Choice):
     default = 1
 
 
+class MaxDifficultyToggle(Toggle):
+    """
+    Set all stages to have a maximum difficulty.
+    All locations with a difficulty higher than what is set will be excluded from the pool of locations.
+    Default max difficulty is 4.
+    """
+
+    display_name = "Change Max Difficulty"
+
+
+class MaxDifficultyRange(Range):
+    """
+    Select the difficulty value you want to be the maximum.
+    This does nothing if Change Max Difficulty is set to false.
+    """
+
+    display_name = "Max Difficulty Value"
+    range_start = 1
+    range_end = 4
+    default = 4
+
+
+class InstantMaxDifficulty(Toggle):
+    """
+    All stages will load with their max difficulty on the first run through.
+    By default, stages increase in difficulty by 1 every 5 player levels.
+    The starting level for each area increases gradually as you would progress in vanilla.
+    """
+
+    display_name = "Change Max Difficulty"
+
+
+class PermaSpeed(Toggle):
+    """
+    You will be given speed boots with a permanent duration.
+    """
+
+    display_name = "Permanent Speed Boots"
+
+
+class InfiniteKeys(Toggle):
+    """
+    You will be given an absurd amount of keys.
+    """
+
+    display_name = "Infinite Keys"
+
+
 class UnlockCharacter(Choice):
     """
     Unlock a secret character from the start.
@@ -78,9 +110,12 @@ class UnlockCharacter(Choice):
 @dataclass
 class GLOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
-    infinite_keys: InfiniteKeys
-    permanent_speed: PermaSpeed
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards
+    max_difficulty_toggle: MaxDifficultyToggle
+    max_difficulty_value: MaxDifficultyRange
+    instant_max: InstantMaxDifficulty
     unlock_character: UnlockCharacter
+    infinite_keys: InfiniteKeys
+    permanent_speed: PermaSpeed

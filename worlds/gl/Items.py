@@ -69,13 +69,13 @@ item_list: typing.List[ItemData] = [
     ItemData(77780052, "Marker's Javelin", ItemClassification.useful),
     ItemData(77780053, "Soul Savior", ItemClassification.useful),
     ItemData(77780054, "Gold", ItemClassification.filler),
-    ItemData(77780055, "Valley of Fire Obelisk", ItemClassification.progression),
-    ItemData(77780056, "Dagger Peak Obelisk", ItemClassification.progression),
-    ItemData(77780057, "Cliffs of Desolation Obelisk", ItemClassification.progression),
-    ItemData(77780058, "Poisoned Fields Obelisk", ItemClassification.progression),
-    ItemData(77780059, "Haunted Cemetery Obelisk", ItemClassification.progression),
-    ItemData(77780060, "Castle Courtyard Obelisk", ItemClassification.progression),
-    ItemData(77780061, "Dungeon of Torment Obelisk", ItemClassification.progression),
+    ItemData(77780055, "Mountain Obelisk 1", ItemClassification.progression),
+    ItemData(77780056, "Mountain Obelisk 2", ItemClassification.progression),
+    ItemData(77780057, "Mountain Obelisk 3", ItemClassification.progression),
+    ItemData(77780058, "CastleObelisk 1", ItemClassification.progression),
+    ItemData(77780059, "Castle Obelisk 2", ItemClassification.progression),
+    ItemData(77780060, "Town Obelisk 1", ItemClassification.progression),
+    ItemData(77780061, "Town Obelisk 2", ItemClassification.progression),
 ]
 
 item_frequencies: typing.Dict[str, int] = {

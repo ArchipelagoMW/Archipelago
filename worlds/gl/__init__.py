@@ -6,7 +6,7 @@ from BaseClasses import ItemClassification, Tutorial
 
 from worlds.AutoWorld import WebWorld, World
 
-from ..LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 from .Arrays import item_dict
 from .Items import GLItem, item_frequencies, item_list, item_table
 from .Locations import LocationData, all_locations, location_table
@@ -17,7 +17,7 @@ from .Rules import set_rules
 
 
 def launch_client(*args):
-    from GauntletLegendsClient import launch
+    from .GauntletLegendsClient import launch
 
     launch_subprocess(launch, name="GauntletLegendsClient")
 
@@ -93,25 +93,29 @@ class GauntletLegendsWorld(World):
         elif self.options.chests_barrels == 2:
             self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
 
+        if self.options.max_difficulty_toggle:
+            self.disabled_locations += [location.name for location in all_locations
+                                        if location.difficulty > self.options.max_difficulty_value]
+
         create_regions(self)
         connect_regions(self)
         item = self.create_item("Key")
         self.get_location("Valley of Fire - Key 1").place_locked_item(item)
         self.get_location("Valley of Fire - Key 5").place_locked_item(item)
         if self.options.obelisks == 0:
-            item = self.create_item("Valley of Fire Obelisk")
+            item = self.create_item("Mountain Obelisk 1")
             self.get_location("Valley of Fire - Obelisk").place_locked_item(item)
-            item = self.create_item("Dagger Peak Obelisk")
+            item = self.create_item("Mountain Obelisk 2")
             self.get_location("Dagger Peak - Obelisk").place_locked_item(item)
-            item = self.create_item("Cliffs of Desolation Obelisk")
+            item = self.create_item("Mountain Obelisk 3")
             self.get_location("Cliffs of Desolation - Obelisk").place_locked_item(item)
-            item = self.create_item("Castle Courtyard Obelisk")
+            item = self.create_item("Castle Obelisk 1")
             self.get_location("Castle Courtyard - Obelisk").place_locked_item(item)
-            item = self.create_item("Dungeon of Torment Obelisk")
+            item = self.create_item("Castle Obelisk 2")
             self.get_location("Dungeon of Torment - Obelisk").place_locked_item(item)
-            item = self.create_item("Poisoned Fields Obelisk")
+            item = self.create_item("Town Obelisk 1")
             self.get_location("Poisoned Fields - Obelisk").place_locked_item(item)
-            item = self.create_item("Haunted Cemetery Obelisk")
+            item = self.create_item("Town Obelisk 2")
             self.get_location("Haunted Cemetery - Obelisk").place_locked_item(item)
         if self.options.mirror_shards == 0:
             item = self.create_item("Dragon Mirror Shard")
@@ -143,6 +147,8 @@ class GauntletLegendsWorld(World):
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "character": self.options.unlock_character.value,
+            "max_value": self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4,
+            "instant_max": self.options.instant_max.value
         }
 
     def create_items(self) -> None:
