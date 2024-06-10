@@ -376,8 +376,6 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                         parent.sort_key = key
                         parent.reversed = False
                     break
-            else:
-                logging.warning("Did not find clicked header for sorting.")
 
             App.get_running_app().update_hints()
 
