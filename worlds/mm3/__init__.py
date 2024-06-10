@@ -172,20 +172,18 @@ class MM3World(World):
 
     set_rules = set_rules
 
-    #def generate_early(self) -> None:
-    #    if (not self.options.yoku_jumps
-    #        and self.options.starting_robot_master.current_key == "heat_man") or \
-    #            (not self.options.enable_lasers
-    #             and self.options.starting_robot_master.current_key == "quick_man"):
-    #        robot_master_pool = [1, 2, 3, 5, 6, 7, ]
-    #        if self.options.yoku_jumps:
-    #            robot_master_pool.append(0)
-    #        if self.options.enable_lasers:
-    #            robot_master_pool.append(4)
-    #        self.options.starting_robot_master.value = self.random.choice(robot_master_pool)
-    #        logger.warning(
-    #            f"Incompatible starting Robot Master, changing to "
-    #            f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
+    def generate_early(self) -> None:
+        if (self.options.starting_robot_master.current_key == "gemini_man"
+            and not any(item in self.options.start_inventory for item in rush_item_table.keys())) or \
+                (self.options.starting_robot_master.current_key == "hard_man"
+                 and not any(item in self.options.start_inventory for item in [names.rush_coil, names.rush_jet])):
+            robot_master_pool = [0, 1, 4, 5, 6, 7, ]
+            if names.rush_marine in self.options.start_inventory:
+                robot_master_pool.append(2)
+            self.options.starting_robot_master.value = self.random.choice(robot_master_pool)
+            logger.warning(
+                f"Incompatible starting Robot Master, changing to "
+                f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
     def generate_basic(self) -> None:
         goal_location = self.multiworld.get_location(gamma, self.player)

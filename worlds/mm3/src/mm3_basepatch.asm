@@ -7,8 +7,6 @@ norom
 !current_state = $60
 !completed_rbm_stages = $61
 !completed_doc_stages = $62
-;!received_items = $63
-!acquired_rush = $64
 !received_rmb_stages = $680
 !received_doc_stages = $681
 ; !deathlink = $30, set to $0E
@@ -18,6 +16,8 @@ norom
 !sound_effect_strobe = $685
 !doc_robo_kills = $686
 !wily_stage_completion = $687
+;!received_items = $688
+!acquired_rush = $689
 
 !current_weapon = $A0
 !current_health = $A2
@@ -52,6 +52,17 @@ macro org(address,bank)
     endif
 endmacro
 
+%org($A1CB, $02)
+FixPseudoRush:
+  JMP CheckRushWeapon
+  NOP
+
+%org($A17C, $03)
+AdjustWeaponRefill:
+  ; compare vs unreceived instead. Since the stage ends anyways, this just means you aren't granted the weapon if you don't have it already
+  CMP #$1C
+  BCS $A18B
+
 %org($802F, $0B)
 HookBreakMan:
   JSR SetBreakMan
@@ -70,6 +81,11 @@ AccessStage:
   JSR RewireDocRobotAccess
   NOP #2
   BEQ AccessStageTarget
+
+%org($9917, $18)
+GameOverStageSelect:
+  ; fix it returning to Wily 1
+  CMP #$16
 
 %org($9966, $18)
 SwapSelectTiles:
@@ -118,13 +134,17 @@ RerouteStageComplete:
 
 %org($DC6F, $1E)
 RerouteRushMarine:
-  LDA #$01
-  JMP SetRushAcquire
+  JMP SetRushMarine
+  NOP
 
 %org($DC6A, $1E)
 RerouteRushJet:
-  LDA #$02
-  JMP SetRushAcquire
+  JMP SetRushJet
+  NOP
+
+%org($DF81, $1E)
+NullBreak:
+  NOP #5 ; nop break man giving every weapon
 
 %org($F340, $1F)
 RewireDocRobotAccess:
@@ -191,6 +211,21 @@ ChangeStageMode:
   DEX
   CPX #$00
   BNE .Loop
+  ; Break Man Sprites
+  LDX #$24
+  .Loop2:
+  LDA #$00
+  STA $02DB, X
+  DEX
+  STA $02DB, X
+  DEX
+  STA $02DB, X
+  DEX
+  LDA #$F8
+  STA $02DB, X
+  DEX
+  CPX #$00
+  BNE .Loop2
   ; Swap out the tilemap and write sprites
   LDY #$10
   LDA $11
@@ -229,9 +264,12 @@ ChangeStageMode:
   JSR $FF3C
   .B1:
   LDX #$00
+  ; palettes
   .B2:
   LDA $9C33,Y
   STA $0600,X
+  LDA $9C13,Y
+  STA $0610,X
   INY
   INX
   CPX #$10
@@ -308,6 +346,16 @@ ControllerHook:
   AND #$10 ; start
   JMP $CA77
 
+SetRushMarine:
+  LDA #$01
+  SEC
+  BCS SetRushAcquire
+
+SetRushJet:
+  LDA #$02
+  SEC
+  BCS SetRushAcquire
+
 SetRushAcquire:
   ORA $64
   STA $64
@@ -336,11 +384,13 @@ ApplyLastWily:
   LDA !controller_mirror
   AND !CONTROLLER_SELECT
   BEQ .LastWily
+  .Default:
   LDA #$00
   SEC
   BCS .Set
   .LastWily:
   LDA !last_wily
+  BEQ .Default
   SEC
   SBC #$0C
   .Set:
@@ -399,3 +449,12 @@ SetBreakMan:
   LDA #$16
   STA $22
   RTS
+
+CheckRushWeapon:
+  AND #$01
+  BNE .DontHave
+  JMP $A3CF
+  .DontHave:
+  DEC $A1
+  JMP $A477
+  
