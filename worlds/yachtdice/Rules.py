@@ -64,8 +64,8 @@ class Category:
         if num_dice == 0 or num_rolls == 0:
             return 0
         mean_score = 0
-        for key in yacht_weights[self.name, min(8, num_dice), min(8, num_rolls)]:
-            mean_score += key * yacht_weights[self.name, min(8, num_dice), min(8, num_rolls)][key] / 100000
+        for key, value in yacht_weights[self.name, min(8, num_dice), min(8, num_rolls)].items():
+            mean_score += key * value / 100000
         return mean_score * self.quantity
 
 
