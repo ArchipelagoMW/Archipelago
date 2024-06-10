@@ -4,7 +4,7 @@ import zipfile
 from copy import deepcopy
 from .Regions import object_id_table
 from Utils import __version__
-from worlds.Files import APContainer
+from worlds.Files import APPatch
 import pkgutil
 
 settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
@@ -116,7 +116,7 @@ def generate_output(self, output_directory):
         APMQ.write_contents(zf)
 
 
-class APMQFile(APContainer):
+class APMQFile(APPatch):
     game = "Final Fantasy Mystic Quest"
 
     def get_manifest(self):

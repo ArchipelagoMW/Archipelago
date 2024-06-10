@@ -23,14 +23,14 @@ class TestAgahnimsTower(TestDungeon):
             ["Castle Tower - Dark Archer Key Drop", True, ['Progressive Sword', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp']],
 
             ["Castle Tower - Circle of Pots Key Drop", False, []],
-            ["Castle Tower - Circle of Pots Key Drop", False, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)']],
+            ["Castle Tower - Circle of Pots Key Drop", False, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)']],
             ["Castle Tower - Circle of Pots Key Drop", False, [], ['Lamp']],
             ["Castle Tower - Circle of Pots Key Drop", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
-            ["Castle Tower - Circle of Pots Key Drop", True, ['Progressive Sword', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp']],
+            ["Castle Tower - Circle of Pots Key Drop", True, ['Progressive Sword', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp']],
 
             ["Agahnim 1", False, []],
-            ["Agahnim 1", False, ['Small Key (Agahnims Tower)'], ['Small Key (Agahnims Tower)']],
+            ["Agahnim 1", False, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)']],
             ["Agahnim 1", False, [], ['Progressive Sword']],
             ["Agahnim 1", False, [], ['Lamp']],
-            ["Agahnim 1", True, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp', 'Progressive Sword']],
+            ["Agahnim 1", True, ['Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)', 'Lamp', 'Progressive Sword']],
         ])

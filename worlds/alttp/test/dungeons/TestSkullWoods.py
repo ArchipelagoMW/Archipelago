@@ -96,6 +96,6 @@ class TestSkullWoods(TestDungeon):
             ["Skull Woods - Boss", False, []],
             ["Skull Woods - Boss", False, [], ['Fire Rod']],
             ["Skull Woods - Boss", False, [], ['Progressive Sword']],
-            ["Skull Woods - Boss", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
-            ["Skull Woods - Boss", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Fire Rod', 'Progressive Sword']],
+            ["Skull Woods - Boss", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
+            ["Skull Woods - Boss", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Fire Rod', 'Progressive Sword']],
         ])

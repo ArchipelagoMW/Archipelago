@@ -29,7 +29,7 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game settings page](/games/Risk%20of%20Rain%202/player-settings) here on the Archipelago 
+You can use the [game options page](/games/Risk%20of%20Rain%202/player-options) here on the Archipelago 
 website to generate a YAML using a graphical interface.
 
 

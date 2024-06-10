@@ -13,7 +13,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple
+from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -36,38 +36,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger = logging.getLogger()
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     multiworld.plando_options = args.plando_options
-
-    multiworld.shuffle = args.shuffle.copy()
-    multiworld.logic = args.logic.copy()
-    multiworld.mode = args.mode.copy()
-    multiworld.difficulty = args.difficulty.copy()
-    multiworld.item_functionality = args.item_functionality.copy()
-    multiworld.timer = args.timer.copy()
-    multiworld.goal = args.goal.copy()
-    multiworld.boss_shuffle = args.shufflebosses.copy()
-    multiworld.enemy_health = args.enemy_health.copy()
-    multiworld.enemy_damage = args.enemy_damage.copy()
-    multiworld.beemizer_total_chance = args.beemizer_total_chance.copy()
-    multiworld.beemizer_trap_chance = args.beemizer_trap_chance.copy()
-    multiworld.countdown_start_time = args.countdown_start_time.copy()
-    multiworld.red_clock_time = args.red_clock_time.copy()
-    multiworld.blue_clock_time = args.blue_clock_time.copy()
-    multiworld.green_clock_time = args.green_clock_time.copy()
-    multiworld.dungeon_counters = args.dungeon_counters.copy()
-    multiworld.triforce_pieces_available = args.triforce_pieces_available.copy()
-    multiworld.triforce_pieces_required = args.triforce_pieces_required.copy()
-    multiworld.shop_shuffle = args.shop_shuffle.copy()
-    multiworld.shuffle_prizes = args.shuffle_prizes.copy()
-    multiworld.sprite_pool = args.sprite_pool.copy()
-    multiworld.dark_room_logic = args.dark_room_logic.copy()
     multiworld.plando_items = args.plando_items.copy()
     multiworld.plando_texts = args.plando_texts.copy()
     multiworld.plando_connections = args.plando_connections.copy()
-    multiworld.required_medallions = args.required_medallions.copy()
     multiworld.game = args.game.copy()
     multiworld.player_name = args.name.copy()
     multiworld.sprite = args.sprite.copy()
-    multiworld.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
+    multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
     multiworld.set_item_links()
@@ -297,7 +272,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if multiworld.algorithm == 'flood':
         flood_items(multiworld)  # different algo, biased towards early game progress items
     elif multiworld.algorithm == 'balanced':
-        distribute_items_restrictive(multiworld)
+        distribute_items_restrictive(multiworld, get_settings().generator.panic_method)
 
     AutoWorld.call_all(multiworld, 'post_fill')
 
@@ -397,6 +372,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
+                # get spheres -> filter address==None -> skip empty
+                spheres: List[Dict[int, Set[int]]] = []
+                for sphere in multiworld.get_spheres():
+                    current_sphere: Dict[int, Set[int]] = collections.defaultdict(set)
+                    for sphere_location in sphere:
+                        if type(sphere_location.address) is int:
+                            current_sphere[sphere_location.player].add(sphere_location.address)
+
+                    if current_sphere:
+                        spheres.append(dict(current_sphere))
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
@@ -411,6 +397,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": multiworld.seed_name,
+                    "spheres": spheres,
                     "datapackage": data_package,
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
