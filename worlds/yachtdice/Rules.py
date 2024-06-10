@@ -192,16 +192,16 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
     # calculate total distribution
     total_dist = {0: 1}
-    for j in range(len(categories)):
+    for j, category in enumerate(categories):
         if num_dice == 0 or num_rolls == 0:
             dist = {0: 100000}
         else:
-            dist = yacht_weights[categories[j].name, min(8, num_dice), min(8, num_rolls)].copy()
+            dist = yacht_weights[category.name, min(8, num_dice), min(8, num_rolls)].copy()
 
         for key in dist.keys():
             dist[key] /= 100000
 
-        cat_mult = 2 ** (categories[j].quantity - 1)
+        cat_mult = 2 ** (category.quantity - 1)
 
         # for higher difficulties, the simulation gets multiple tries for categories.
         max_tries = j // diff_divide

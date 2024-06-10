@@ -79,7 +79,7 @@ class YachtDiceWorld(World):
         categorylist = [1] * num_ones + [0] * (16 - num_ones)
 
         # Shuffle the list to randomize the order
-        self.multiworld.random.shuffle(categorylist)
+        self.random.shuffle(categorylist)
 
         # A list of all possible categories.
         # Every entry in the list has two categories, one 'default' category and one 'alt'.
@@ -207,7 +207,7 @@ class YachtDiceWorld(World):
                     weights[5] = 1
 
             # Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
-            which_item_to_add = self.multiworld.random.choices([0, 1, 2, 3, 4, 5], weights=weights)[0]
+            which_item_to_add = self.random.choices([0, 1, 2, 3, 4, 5], weights=weights)[0]
             item_to_add = ""
             if which_item_to_add == 0:
                 weights[0] /= 1 + frags_per_dice
@@ -232,7 +232,7 @@ class YachtDiceWorld(World):
             elif which_item_to_add == 4:
                 cat_weights = [2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
                 weights[4] /= 1.1
-                return self.multiworld.random.choices(possible_categories, weights=cat_weights)[0]
+                return self.random.choices(possible_categories, weights=cat_weights)[0]
             elif which_item_to_add == 5:
                 score_dist = self.options.points_size.value
                 probs = [1, 0, 0]
@@ -244,7 +244,7 @@ class YachtDiceWorld(World):
                     probs = [0, 0.3, 0.7]
                 if score_dist == 4:
                     probs = [0.3, 0.4, 0.3]
-                c = self.multiworld.random.choices([0, 1, 2], weights=probs)[0]
+                c = self.random.choices([0, 1, 2], weights=probs)[0]
                 if c == 0:
                     weights[5] /= 1.01
                     extra_points_added += 1
@@ -342,7 +342,7 @@ class YachtDiceWorld(World):
         # probability of Good and Bad rng, based on difficulty for fun :)
         p = 1.1 - 0.25 * self.options.game_difficulty.value
         already_items = len(self.itempool) + 1
-        self.itempool += self.multiworld.random.choices(
+        self.itempool += self.random.choices(
             ["Good RNG", "Bad RNG"], weights=[p, 1 - p], k=self.number_of_locations - already_items
         )
 
