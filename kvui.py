@@ -312,6 +312,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.location_text = ""
         self.entrance_text = ""
         self.found_text = ""
+        self.meta = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
 
@@ -326,7 +327,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = data["finding"]["text"]
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
-        self.found_text = data["found"]["text"]
+        self.found_text = data["status"]["text"]
+        self.meta = data["status"]["meta"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
@@ -334,20 +336,30 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
             return True
+        alt: bool = touch.button == "right" or touch.is_double_tap
         if self.index:  # skip header
             if self.collide_point(*touch.pos):
-                if self.selected:
-                    self.parent.clear_selection()
+                if alt:
+                    ctx = App.get_running_app().ctx
+                    if ctx.slot == int(self.meta["receiving_player"]):  # If this player owns this hint
+                        ctx.update_hint(int(self.meta["location"]),
+                                        int(self.meta["finding_player"]),
+                                        not bool(self.meta["prioritized"]))
                 else:
-                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
-                                    self.finding_text, "\'s World", (" at " + self.entrance_text)
-                                    if self.entrance_text != "Vanilla"
-                                    else "", ". (", self.found_text.lower(), ")"))
-                    temp = MarkupLabel(text).markup
-                    text = "".join(
-                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
-                    return self.parent.select_with_touch(self.index, touch)
+                    if self.selected:
+                        self.parent.clear_selection()
+                    else:
+                        text = "".join(
+                            (self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                             self.finding_text, "\'s World", (" at " + self.entrance_text)
+                             if self.entrance_text != "Vanilla"
+                             else "", ". (", self.found_text.lower(), ")"))
+                        temp = MarkupLabel(text).markup
+                        text = "".join(
+                            part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                        Clipboard.copy(
+                            escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                        return self.parent.select_with_touch(self.index, touch)
         else:
             parent = self.parent
             parent.clear_selection()
@@ -716,7 +728,8 @@ class HintLog(RecycleView):
         "finding": {"text": "[u]Finding Player[/u]"},
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
-        "found": {"text": "[u]Status[/u]"},
+        "status": {"text": "[u]Status[/u]",
+                   "meta": {"receiving_player": -1, "location": -1, "finding_player": -1, "prioritized": False}},
         "striped": True,
     }
 
@@ -748,9 +761,13 @@ class HintLog(RecycleView):
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
-                "found": {
+                "status": {
                     "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
-                                                     "text": "Found" if hint["found"] else "Not Found"})},
+                                                     "text": "Found" if hint["found"] else (
+                                                         "Priority" if hint["prioritized"] else "Non-Priority")}),
+                    "meta": {"receiving_player": hint["receiving_player"], "location": hint["location"],
+                             "finding_player": hint["finding_player"], "prioritized": hint["prioritized"]},
+                },
             })
 
         data.sort(key=self.hint_sorter, reverse=self.reversed)

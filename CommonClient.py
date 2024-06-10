@@ -525,7 +525,14 @@ class CommonContext:
             await self.ui_task
         if self.input_task:
             self.input_task.cancel()
-
+    
+    # Hints
+    def update_hint(self, location: int, finding_player: int, priority: typing.Optional[bool]):
+        msg = {"cmd": "UpdateHint", "location": location, "player": finding_player}
+        if priority is not None:
+            msg["priority"] = priority
+        async_start(self.send_msgs([msg]), name="update_hint")
+    
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
                                    remote_date_package_versions: typing.Dict[str, int],

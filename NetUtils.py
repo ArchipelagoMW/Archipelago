@@ -303,6 +303,7 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    prioritized: bool = True
 
     def re_check(self, ctx, team) -> Hint:
         if self.found:
@@ -310,7 +311,13 @@ class Hint(typing.NamedTuple):
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
             return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
-                        self.item_flags)
+                        self.item_flags, self.prioritized)
+        return self
+    
+    def re_prioritize(self, ctx, priority: bool) -> Hint:
+        if priority != self.prioritized:
+            return Hint(self.receiving_player, self.finding_player, self.location, self.item, self.found, self.entrance,
+                        self.item_flags, priority)
         return self
 
     def __hash__(self):
@@ -334,8 +341,10 @@ class Hint(typing.NamedTuple):
         add_json_text(parts, ". ")
         if self.found:
             add_json_text(parts, "(found)", type="color", color="green")
+        elif self.prioritized:
+            add_json_text(parts, "(priority)", type="color", color="red")
         else:
-            add_json_text(parts, "(not found)", type="color", color="red")
+            add_json_text(parts, "(non-priority)", type="color", color="red")
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
