@@ -60,7 +60,7 @@ def ini_locations(goal_score, max_score, num_locs, dif):
     if goal_score != max_score:
         # if the goal score is not in the list, find the closest one and make it the goal.
         if goal_score not in scores:
-            closest_num = min(scores, key=lambda x: abs(x - 500))
+            closest_num = min(scores, key=lambda x: abs(x - goal_score))
             scores[scores.index(closest_num)] = goal_score
 
     scores += [max_score]
