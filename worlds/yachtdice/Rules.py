@@ -110,14 +110,8 @@ def extract_progression(state, player, options):
     extra_points_in_logic += state.count("10 Points", player) * 10
     extra_points_in_logic += state.count("100 Points", player) * 100
 
-    return [
-        categories,
-        number_of_dice,
-        number_of_rerolls,
-        number_of_fixed_mults * 0.1,
-        number_of_step_mults * 0.01,
-        extra_points_in_logic,
-    ]
+    return categories, number_of_dice, number_of_rerolls, number_of_fixed_mults * 0.1, number_of_step_mults * 0.01, extra_points_in_logic,
+    
 
 
 # We will store the results of this function as it is called often for the same parameters.
