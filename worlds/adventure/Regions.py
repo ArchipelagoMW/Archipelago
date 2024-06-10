@@ -1,4 +1,5 @@
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
+from Options import PerGameCommonOptions
 from .Locations import location_table, LocationData, AdventureLocation, dragon_room_to_region
 
 
@@ -24,7 +25,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
         connect(world, player, target, source, rule, True)
 
 
-def create_regions(multiworld: MultiWorld, player: int, dragon_rooms: []) -> None:
+def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player: int, dragon_rooms: []) -> None:
 
     menu = Region("Menu", player, multiworld)
 
@@ -74,7 +75,7 @@ def create_regions(multiworld: MultiWorld, player: int, dragon_rooms: []) -> Non
     credits_room_far_side.exits.append(Entrance(player, "CreditsFromFarSide", credits_room_far_side))
     multiworld.regions.append(credits_room_far_side)
 
-    dragon_slay_check = multiworld.dragon_slay_check[player].value
+    dragon_slay_check = options.dragon_slay_check.value
     priority_locations = determine_priority_locations(multiworld, dragon_slay_check)
 
     for name, location_data in location_table.items():
