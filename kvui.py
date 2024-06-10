@@ -337,8 +337,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         if super(HintLabel, self).on_touch_down(touch):
             return True
         alt: bool = touch.button == "right" or touch.is_double_tap
-        if self.index:  # skip header
-            if self.collide_point(*touch.pos):
+        if self.collide_point(*touch.pos):
+            if self.index:  # skip header
                 if alt:
                     ctx = App.get_running_app().ctx
                     if ctx.slot == int(self.meta["receiving_player"]):  # If this player owns this hint
@@ -360,24 +360,24 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                         Clipboard.copy(
                             escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                         return self.parent.select_with_touch(self.index, touch)
-        else:
-            parent = self.parent
-            parent.clear_selection()
-            parent: HintLog = parent.parent
-            # find correct column
-            for child in self.children:
-                if child.collide_point(*touch.pos):
-                    key = child.sort_key
-                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
-                    if key == parent.sort_key:
-                        # second click reverses order
-                        parent.reversed = not parent.reversed
-                    else:
-                        parent.sort_key = key
-                        parent.reversed = False
-                    break
+            else:
+                parent = self.parent
+                parent.clear_selection()
+                parent: HintLog = parent.parent
+                # find correct column
+                for child in self.children:
+                    if child.collide_point(*touch.pos):
+                        key = child.sort_key
+                        parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                        if key == parent.sort_key:
+                            # second click reverses order
+                            parent.reversed = not parent.reversed
+                        else:
+                            parent.sort_key = key
+                            parent.reversed = False
+                        break
 
-            App.get_running_app().update_hints()
+                App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
