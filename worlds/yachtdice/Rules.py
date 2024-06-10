@@ -8,6 +8,15 @@ from worlds.generic.Rules import set_rule
 
 from .YachtWeights import yacht_weights
 
+
+# This module adds logic to the apworld.
+# In short, we ran a simulation for every possible combination of dice and rolls you can have, per category.
+# This simulation has a good strategy for locking dice.
+# This gives rise to an approximate discrete distribution per category.
+# We calculate the distribution of the total score.
+# We then pick a correct percentile to reflect the correct score that should be in logic.
+# The score is logic is *much* lower than the actual maximum reachable score.
+
 # List of categories, and the name of the logic class associated with it
 category_mappings = {
     "Category Ones": "Ones",
@@ -44,14 +53,6 @@ category_mappings = {
     "Category 4&5 Full House": "FourAndFiveFullHouse",
 }
 
-# This class adds logic to the apworld.
-# In short, we ran a simulation for every possible combination of dice and rolls you can have, per category.
-# This simulation has a good strategy for locking dice.
-# This gives rise to an approximate discrete distribution per category.
-# We calculate the distribution of the total score.
-# We then pick a correct percentile to reflect the correct score that should be in logic.
-# The score is logic is *much* lower than the actual maximum reachable score.
-
 
 class Category:
     def __init__(self, name, quantity=1):
@@ -77,9 +78,11 @@ class ListState:
 
 
 def extract_progression(state, player, options):
-    # method to obtain a list of what items the player has.
-    # this includes categories, dice, rolls and score multiplier etc.
-    # First, we convert the state if it's a list, so we can use state.count(item, player)
+    """
+    method to obtain a list of what items the player has.
+    this includes categories, dice, rolls and score multiplier etc.
+    First, we convert the state if it's a list, so we can use state.count(item, player)
+    """
     if isinstance(state, list):
         state = ListState(state=state)
 
@@ -117,8 +120,10 @@ def extract_progression(state, player, options):
 yachtdice_cache = {}
 
 
-# Function that returns the feasible score in logic based on items obtained.
 def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, diff):
+    """
+    Function that returns the feasible score in logic based on items obtained.
+    """
     tup = tuple(
         [
             tuple(sorted([c.name + str(c.quantity) for c in categories])),
@@ -213,8 +218,11 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     return yachtdice_cache[tup]
 
 
-# Returns the feasible score that one can reach with the current state, options and difficulty.
+
 def dice_simulation(state, player, options):
+    """
+    Returns the feasible score that one can reach with the current state, options and difficulty.
+    """
     # if the player is called "state_is_a_list", we are filling the itempool and want to calculate anyways.
     if player == "state_is_a_list":
         categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
@@ -238,8 +246,12 @@ def dice_simulation(state, player, options):
     return state.prog_items[player]["maximum_achievable_score"]
 
 
-# Sets rules on entrances and advancements that are always applied
+
 def set_yacht_rules(world: MultiWorld, player: int, options):
+    """
+    Sets rules on entrances and advancements that are always applied
+    """
+
     for location in world.get_locations(player):
         set_rule(
             location,
@@ -248,6 +260,8 @@ def set_yacht_rules(world: MultiWorld, player: int, options):
         )
 
 
-# Sets rules on completion condition
 def set_yacht_completion_rules(world: MultiWorld, player: int):
+    """
+    Sets rules on completion condition
+    """
     world.completion_condition[player] = lambda state: state.has("Victory", player)

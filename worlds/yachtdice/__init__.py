@@ -57,8 +57,10 @@ class YachtDiceWorld(World):
             "race": self.multiworld.is_race,
         }
 
-    # In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
     def generate_early(self):
+        """
+        In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
+        """
         self.itempool = []
         self.precollected = []
 
@@ -397,12 +399,16 @@ class YachtDiceWorld(World):
         self.multiworld.regions += [menu, board]
 
     def set_rules(self):
-        # set rules per location, and add the rule for beating the game
+        """
+        set rules per location, and add the rule for beating the game
+        """
         set_yacht_rules(self.multiworld, self.player, self.options)
         set_yacht_completion_rules(self.multiworld, self.player)
 
     def fill_slot_data(self):
-        # make slot data, which consists of yachtdice_data, options, and some other variables.
+        """
+        make slot data, which consists of yachtdice_data, options, and some other variables.
+        """
         yacht_dice_data = self._get_yachtdice_data()
         yacht_dice_options = self.options.as_dict(
             "game_difficulty",

@@ -21,14 +21,20 @@ all_locations = {}
 starting_index = 16871244500  # 500 more than the starting index for items
 
 
-# Function that is called when this file is loaded, which loads in ALL possible locations, score 1 to 1000
+
 def all_locations_fun(max_score):
+    """
+    Function that is called when this file is loaded, which loads in ALL possible locations, score 1 to 1000
+    """
     return {f"{i} score": LocData(starting_index + i, "Board", i) for i in range(max_score + 1)}
 
 
-# function that loads in all locations necessary for the game, so based on options.
-# will make sure that goal_score and max_score are included locations
+
 def ini_locations(goal_score, max_score, num_locs, dif):
+    """
+    function that loads in all locations necessary for the game, so based on options.
+    will make sure that goal_score and max_score are included locations
+    """
     scaling = 2  # parameter that determines how many low-score location there are.
     # need more low-score locations or lower difficulties:
     if dif == 1:
