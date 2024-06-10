@@ -4,16 +4,18 @@ Archipelago init file for Lingo
 from logging import warning
 
 from BaseClasses import Item, ItemClassification, Tutorial
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from .datatypes import Room, RoomEntrance
 from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, TRAP_ITEMS, LingoItem
 from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
-from .options import LingoOptions
+from .options import LingoOptions, lingo_option_groups
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 
 
 class LingoWebWorld(WebWorld):
+    option_groups = lingo_option_groups
     theme = "grass"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -35,7 +37,6 @@ class LingoWorld(World):
 
     base_id = 444400
     topology_present = True
-    data_version = 1
 
     options_dataclass = LingoOptions
     options: LingoOptions
@@ -52,13 +53,14 @@ class LingoWorld(World):
     player_logic: LingoPlayerLogic
 
     def generate_early(self):
-        if not (self.options.shuffle_doors or self.options.shuffle_colors):
+        if not (self.options.shuffle_doors or self.options.shuffle_colors or self.options.shuffle_sunwarps):
             if self.multiworld.players == 1:
                 warning(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any progression"
-                        f" items. Please turn on Door Shuffle or Color Shuffle if that doesn't seem right.")
+                        f" items. Please turn on Door Shuffle, Color Shuffle, or Sunwarp Shuffle if that doesn't seem"
+                        f" right.")
             else:
-                raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any"
-                                f" progression items. Please turn on Door Shuffle or Color Shuffle.")
+                raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any"
+                                  f" progression items. Please turn on Door Shuffle, Color Shuffle or Sunwarp Shuffle.")
 
         self.player_logic = LingoPlayerLogic(self)
 
@@ -94,7 +96,7 @@ class LingoWorld(World):
                 total_weight = sum(self.options.trap_weights.values())
 
                 if total_weight == 0:
-                    raise Exception("Sum of trap weights must be at least one.")
+                    raise OptionError("Sum of trap weights must be at least one.")
 
                 trap_counts = {name: int(weight * traps / total_weight)
                                for name, weight in self.options.trap_weights.items()}

@@ -3,12 +3,10 @@ Classes and functions related to creating a ROM patch
 """
 import copy
 import os
-import pkgutil
+import struct
 from typing import TYPE_CHECKING, Dict, List, Tuple
 
-import bsdiff4
-
-from worlds.Files import APDeltaPatch
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from settings import get_settings
 
 from .data import TrainerPokemonDataTypeEnum, BASE_OFFSET, data
@@ -96,38 +94,32 @@ CAVE_EVENT_NAME_TO_ID = {
 }
 
 
-def _set_bytes_le(byte_array: bytearray, address: int, size: int, value: int) -> None:
-    offset = 0
-    while size > 0:
-        byte_array[address + offset] = value & 0xFF
-        value = value >> 8
-        offset += 1
-        size -= 1
-
-
-class PokemonEmeraldDeltaPatch(APDeltaPatch):
+class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Pokemon Emerald"
     hash = "605b89b67018abcea91e693a4dd25be3"
     patch_file_ending = ".apemerald"
     result_file_ending = ".gba"
 
+    procedure = [
+        ("apply_bsdiff4", ["base_patch.bsdiff4"]),
+        ("apply_tokens", ["token_data.bin"])
+    ]
+
     @classmethod
     def get_source_data(cls) -> bytes:
-        return get_base_rom_as_bytes()
+        with open(get_settings().pokemon_emerald_settings.rom_file, "rb") as infile:
+            base_rom_bytes = bytes(infile.read())
+
+        return base_rom_bytes
 
 
-def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
-    base_rom = get_base_rom_as_bytes()
-    base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
-    patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
-
+def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
     # Set free fly location
     if world.options.free_fly_location:
-        _set_bytes_le(
-            patched_rom,
+        patch.write_token(
+            APTokenTypes.WRITE,
             data.rom_addresses["gArchipelagoOptions"] + 0x20,
-            1,
-            world.free_fly_location_id
+            struct.pack("<B", world.free_fly_location_id)
         )
 
     location_info: List[Tuple[int, int, str]] = []
@@ -141,26 +133,32 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
         # Set local item values
         if not world.options.remote_items and location.item.player == world.player:
             if type(location.item_address) is int:
-                _set_bytes_le(
-                    patched_rom,
+                patch.write_token(
+                    APTokenTypes.WRITE,
                     location.item_address,
-                    2,
-                    reverse_offset_item_value(location.item.code)
+                    struct.pack("<H", location.item.code - BASE_OFFSET)
                 )
             elif type(location.item_address) is list:
                 for address in location.item_address:
-                    _set_bytes_le(patched_rom, address, 2, reverse_offset_item_value(location.item.code))
+                    patch.write_token(
+                        APTokenTypes.WRITE,
+                        address,
+                        struct.pack("<H", location.item.code - BASE_OFFSET)
+                    )
         else:
             if type(location.item_address) is int:
-                _set_bytes_le(
-                    patched_rom,
+                patch.write_token(
+                    APTokenTypes.WRITE,
                     location.item_address,
-                    2,
-                    data.constants["ITEM_ARCHIPELAGO_PROGRESSION"]
+                    struct.pack("<H", data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
                 )
             elif type(location.item_address) is list:
                 for address in location.item_address:
-                    _set_bytes_le(patched_rom, address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+                    patch.write_token(
+                        APTokenTypes.WRITE,
+                        address,
+                        struct.pack("<H", data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+                    )
 
             # Creates a list of item information to store in tables later. Those tables are used to display the item and
             # player name in a text box. In the case of not enough space, the game will default to "found an ARCHIPELAGO
@@ -186,7 +184,7 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
                 location.item.name
             ) for trainer in alternates)
 
-    player_name_ids: Dict[str, int] = {world.multiworld.player_name[world.player]: 0}
+    player_name_ids: Dict[str, int] = {world.player_name: 0}
     item_name_offsets: Dict[str, int] = {}
     next_item_name_offset = 0
     for i, (flag, item_player, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
@@ -194,11 +192,23 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
         # message (the message for receiving an item will pop up when the client eventually gives it to them).
         # In race mode, no item location data is included, and only recieved (or own) items will show any text box.
         if item_player == world.player or world.multiworld.is_race:
-            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
-            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, 0)
-            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, 0)
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0,
+                struct.pack("<H", flag)
+            )
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2,
+                struct.pack("<H", 0)
+            )
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4,
+                struct.pack("<B", 0)
+            )
         else:
-            player_name = world.multiworld.player_name[item_player]
+            player_name = world.multiworld.get_player_name(item_player)
 
             if player_name not in player_name_ids:
                 # Only space for 50 player names
@@ -207,11 +217,10 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
 
                 player_name_ids[player_name] = len(player_name_ids)
                 for j, b in enumerate(encode_string(player_name, 17)):
-                    _set_bytes_le(
-                        patched_rom,
+                    patch.write_token(
+                        APTokenTypes.WRITE,
                         data.rom_addresses["gArchipelagoPlayerNames"] + (player_name_ids[player_name] * 17) + j,
-                        1,
-                        b
+                        struct.pack("<B", b)
                     )
 
             if item_name not in item_name_offsets:
@@ -224,18 +233,28 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
 
                 item_name_offsets[item_name] = next_item_name_offset
                 next_item_name_offset += len(item_name) + 1
-                for j, b in enumerate(encode_string(item_name) + b"\xFF"):
-                    _set_bytes_le(
-                        patched_rom,
-                        data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]) + j,
-                        1,
-                        b
-                    )
+                patch.write_token(
+                    APTokenTypes.WRITE,
+                    data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]),
+                    encode_string(item_name) + b"\xFF"
+                )
 
             # There should always be enough space for one entry per location
-            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
-            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
-            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0,
+                struct.pack("<H", flag)
+            )
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2,
+                struct.pack("<H", item_name_offsets[item_name])
+            )
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4,
+                struct.pack("<B", player_name_ids[player_name])
+            )
 
     easter_egg = get_easter_egg(world.options.easter_egg.value)
 
@@ -282,40 +301,40 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     for i, slot in enumerate(pc_slots):
         address = data.rom_addresses["sNewGamePCItems"] + (i * 4)
         item = reverse_offset_item_value(world.item_name_to_id[slot[0]])
-        _set_bytes_le(patched_rom, address + 0, 2, item)
-        _set_bytes_le(patched_rom, address + 2, 2, slot[1])
+        patch.write_token(APTokenTypes.WRITE, address + 0, struct.pack("<H", item))
+        patch.write_token(APTokenTypes.WRITE, address + 2, struct.pack("<H", slot[1]))
 
     # Set species data
-    _set_species_info(world, patched_rom, easter_egg)
+    _set_species_info(world, patch, easter_egg)
 
     # Set encounter tables
     if world.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
-        _set_encounter_tables(world, patched_rom)
+        _set_encounter_tables(world, patch)
 
     # Set opponent data
     if world.options.trainer_parties != RandomizeTrainerParties.option_vanilla or easter_egg[0] == 2:
-        _set_opponents(world, patched_rom, easter_egg)
+        _set_opponents(world, patch, easter_egg)
 
     # Set legendary pokemon
-    _set_legendary_encounters(world, patched_rom)
+    _set_legendary_encounters(world, patch)
 
     # Set misc pokemon
-    _set_misc_pokemon(world, patched_rom)
+    _set_misc_pokemon(world, patch)
 
     # Set starters
-    _set_starters(world, patched_rom)
+    _set_starters(world, patch)
 
     # Set TM moves
-    _set_tm_moves(world, patched_rom, easter_egg)
+    _set_tm_moves(world, patch, easter_egg)
 
     # Randomize move tutor moves
-    _randomize_move_tutor_moves(world, patched_rom, easter_egg)
+    _randomize_move_tutor_moves(world, patch, easter_egg)
 
     # Set TM/HM compatibility
-    _set_tmhm_compatibility(world, patched_rom)
+    _set_tmhm_compatibility(world, patch)
 
     # Randomize opponent double or single
-    _randomize_opponent_battle_type(world, patched_rom)
+    _randomize_opponent_battle_type(world, patch)
 
     # Options
     # struct ArchipelagoOptions
@@ -360,73 +379,118 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
     # Set Birch pokemon
-    _set_bytes_le(
-        patched_rom,
+    patch.write_token(
+        APTokenTypes.WRITE,
         options_address + 0x00,
-        2,
-        world.random.choice(list(data.species.keys()))
+        struct.pack("<H", world.random.choice(list(data.species.keys())))
     )
 
     # Set hold A to advance text
-    _set_bytes_le(patched_rom, options_address + 0x02, 1, 1 if world.options.turbo_a else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x02,
+        struct.pack("<B", 1 if world.options.turbo_a else 0)
+    )
 
     # Set receive item messages type
-    _set_bytes_le(patched_rom, options_address + 0x03, 1, world.options.receive_item_messages.value)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x03,
+        struct.pack("<B", world.options.receive_item_messages.value)
+    )
 
     # Set better shops
-    _set_bytes_le(patched_rom, options_address + 0x04, 1, 1 if world.options.better_shops else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x04,
+        struct.pack("<B", 1 if world.options.better_shops else 0)
+    )
 
     # Set reusable TMs
-    _set_bytes_le(patched_rom, options_address + 0x05, 1, 1 if world.options.reusable_tms_tutors else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x05,
+        struct.pack("<B", 1 if world.options.reusable_tms_tutors else 0)
+    )
 
     # Set guaranteed catch
-    _set_bytes_le(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x06,
+        struct.pack("<B", 1 if world.options.guaranteed_catch else 0)
+    )
 
     # Set purge spinners
-    _set_bytes_le(patched_rom, options_address + 0x07, 1, 1 if world.options.purge_spinners else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x07,
+        struct.pack("<B", 1 if world.options.purge_spinners else 0)
+    )
 
     # Set blind trainers
-    _set_bytes_le(patched_rom, options_address + 0x08, 1, 1 if world.options.blind_trainers else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x08,
+        struct.pack("<B", 1 if world.options.blind_trainers else 0)
+    )
 
     # Set exp modifier
-    _set_bytes_le(patched_rom, options_address + 0x09, 2, min(max(world.options.exp_modifier.value, 0), 2**16 - 1))
-    _set_bytes_le(patched_rom, options_address + 0x0B, 2, 100)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x09,
+        struct.pack("<H", min(max(world.options.exp_modifier.value, 0), 2**16 - 1))
+    )
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x0B,
+        struct.pack("<H", 100)
+    )
 
     # Set match trainer levels
-    _set_bytes_le(patched_rom, options_address + 0x0D, 1, 1 if world.options.match_trainer_levels else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x0D,
+        struct.pack("<B", 1 if world.options.match_trainer_levels else 0)
+    )
 
     # Set match trainer levels bonus
     if world.options.match_trainer_levels == MatchTrainerLevels.option_additive:
         match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
-        _set_bytes_le(patched_rom, options_address + 0x0E, 1, match_trainer_levels_bonus)  # Works with negatives
+        patch.write_token(APTokenTypes.WRITE, options_address + 0x0E, struct.pack("<b", match_trainer_levels_bonus))
     elif world.options.match_trainer_levels == MatchTrainerLevels.option_multiplicative:
-        _set_bytes_le(patched_rom, options_address + 0x2E, 2, world.options.match_trainer_levels_bonus.value + 100)
-        _set_bytes_le(patched_rom, options_address + 0x30, 2, 100)
+        patch.write_token(APTokenTypes.WRITE, options_address + 0x2E, struct.pack("<H", world.options.match_trainer_levels_bonus.value + 100))
+        patch.write_token(APTokenTypes.WRITE, options_address + 0x30, struct.pack("<H", 100))
 
     # Set elite four requirement
-    _set_bytes_le(
-        patched_rom,
+    patch.write_token(
+        APTokenTypes.WRITE,
         options_address + 0x0F,
-        1,
-        1 if world.options.elite_four_requirement == EliteFourRequirement.option_gyms else 0
+        struct.pack("<B", 1 if world.options.elite_four_requirement == EliteFourRequirement.option_gyms else 0)
     )
 
     # Set elite four count
-    _set_bytes_le(patched_rom, options_address + 0x10, 1, min(max(world.options.elite_four_count.value, 0), 8))
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x10,
+        struct.pack("<B", min(max(world.options.elite_four_count.value, 0), 8))
+    )
 
     # Set norman requirement
-    _set_bytes_le(
-        patched_rom,
+    patch.write_token(
+        APTokenTypes.WRITE,
         options_address + 0x11,
-        1,
-        1 if world.options.norman_requirement == NormanRequirement.option_gyms else 0
+        struct.pack("<B", 1 if world.options.norman_requirement == NormanRequirement.option_gyms else 0)
     )
 
     # Set norman count
-    _set_bytes_le(patched_rom, options_address + 0x12, 1, min(max(world.options.norman_count.value, 0), 8))
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x12,
+        struct.pack("<B", min(max(world.options.norman_count.value, 0), 8))
+    )
 
     # Set starting badges
-    _set_bytes_le(patched_rom, options_address + 0x13, 1, starting_badges)
+    patch.write_token(APTokenTypes.WRITE, options_address + 0x13, struct.pack("<B", starting_badges))
 
     # Set HM badge requirements
     field_move_order = [
@@ -455,7 +519,7 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     hm_badge_counts = 0
     for i, hm in enumerate(field_move_order):
         hm_badge_counts |= (world.hm_requirements[hm] if isinstance(world.hm_requirements[hm], int) else 0xF) << (i * 4)
-    _set_bytes_le(patched_rom, options_address + 0x14, 4, hm_badge_counts)
+    patch.write_token(APTokenTypes.WRITE, options_address + 0x14, struct.pack("<I", hm_badge_counts))
 
     # Specific badges
     for i, hm in enumerate(field_move_order):
@@ -463,21 +527,37 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
             bitfield = 0
             for badge in world.hm_requirements:
                 bitfield |= badge_to_bit[badge]
-            _set_bytes_le(patched_rom, options_address + 0x18 + i, 1, bitfield)
+            patch.write_token(APTokenTypes.WRITE, options_address + 0x18, struct.pack("<B", bitfield))
 
     # Set terra/marine cave locations
     terra_cave_id = CAVE_EVENT_NAME_TO_ID[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
     marine_cave_id = CAVE_EVENT_NAME_TO_ID[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
-    _set_bytes_le(patched_rom, options_address + 0x21, 1, terra_cave_id | (marine_cave_id << 4))
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x21,
+        struct.pack("<B", terra_cave_id | (marine_cave_id << 4))
+    )
 
     # Set route 115 boulders
-    _set_bytes_le(patched_rom, options_address + 0x22, 1, 1 if world.options.extra_boulders else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x22,
+        struct.pack("<B", 1 if world.options.extra_boulders else 0)
+    )
 
     # Swap route 115 layout if bumpy slope enabled
-    _set_bytes_le(patched_rom, options_address + 0x23, 1, 1 if world.options.extra_bumpy_slope else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x23,
+        struct.pack("<B", 1 if world.options.extra_bumpy_slope else 0)
+    )
 
     # Swap route 115 layout if bumpy slope enabled
-    _set_bytes_le(patched_rom, options_address + 0x24, 1, 1 if world.options.modify_118 else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x24,
+        struct.pack("<B", 1 if world.options.modify_118 else 0)
+    )
 
     # Set removed blockers
     removed_roadblocks = world.options.remove_roadblocks.value
@@ -489,44 +569,72 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     removed_roadblocks_bitfield |= (1 << 4) if "Route 119 Aqua Grunts" in removed_roadblocks else 0
     removed_roadblocks_bitfield |= (1 << 5) if "Route 112 Magma Grunts" in removed_roadblocks else 0
     removed_roadblocks_bitfield |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in removed_roadblocks else 0
-    _set_bytes_le(patched_rom, options_address + 0x25, 2, removed_roadblocks_bitfield)
+    patch.write_token(APTokenTypes.WRITE, options_address + 0x25, struct.pack("<H", removed_roadblocks_bitfield))
 
     # Mark berry trees as randomized
-    _set_bytes_le(patched_rom, options_address + 0x27, 1, 1 if world.options.berry_trees else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x27,
+        struct.pack("<B", 1 if world.options.berry_trees else 0)
+    )
 
     # Mark dexsanity as enabled
-    _set_bytes_le(patched_rom, options_address + 0x28, 1, 1 if world.options.dexsanity else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x28,
+        struct.pack("<B", 1 if world.options.dexsanity else 0)
+    )
 
     # Mark trainersanity as enabled
-    _set_bytes_le(patched_rom, options_address + 0x29, 1, 1 if world.options.trainersanity else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x29,
+        struct.pack("<B", 1 if world.options.trainersanity else 0)
+    )
 
     # Set easter egg data
-    _set_bytes_le(patched_rom, options_address + 0x2B, 1, easter_egg[0])
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x2B,
+        struct.pack("<B", easter_egg[0])
+    )
 
     # Set normalize encounter rates
-    _set_bytes_le(patched_rom, options_address + 0x2C, 1, 1 if world.options.normalize_encounter_rates else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x2C,
+        struct.pack("<B", 1 if world.options.normalize_encounter_rates else 0)
+    )
 
     # Set allow wonder trading
-    _set_bytes_le(patched_rom, options_address + 0x2D, 1, 1 if world.options.enable_wonder_trading else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x2D,
+        struct.pack("<B", 1 if world.options.enable_wonder_trading else 0)
+    )
 
     # Set allowed to skip fanfares
-    _set_bytes_le(patched_rom, options_address + 0x32, 1, 1 if world.options.fanfares else 0)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        options_address + 0x32,
+        struct.pack("<B", 1 if world.options.fanfares else 0)
+    )
 
     if easter_egg[0] == 2:
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_CUT"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLY"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_SURF"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_STRENGTH"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLASH"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_ROCK_SMASH"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_WATERFALL"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIVE"] * 12) + 4, 1, 1)
-        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
+        offset = data.rom_addresses["gBattleMoves"] + 4
+        patch.write_token(APTokenTypes.WRITE, offset + (easter_egg[1] * 12), struct.pack("<B", 50))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_CUT"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_FLY"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_SURF"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_STRENGTH"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_FLASH"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_ROCK_SMASH"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_WATERFALL"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_DIVE"] * 12), struct.pack("<B", 1))
+        patch.write_token(APTokenTypes.WRITE, offset + (data.constants["MOVE_DIG"] * 12), struct.pack("<B", 1))
 
     # Set slot auth
-    for i, byte in enumerate(world.auth):
-        _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
+    patch.write_token(APTokenTypes.WRITE, data.rom_addresses["gArchipelagoInfo"], world.auth)
 
     # Randomize music
     if world.options.music:
@@ -534,11 +642,10 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
         randomized_looping_music = copy.copy(_LOOPING_MUSIC)
         world.random.shuffle(randomized_looping_music)
         for original_music, randomized_music in zip(_LOOPING_MUSIC, randomized_looping_music):
-            _set_bytes_le(
-                patched_rom,
+            patch.write_token(
+                APTokenTypes.WRITE,
                 data.rom_addresses["gRandomizedSoundTable"] + (data.constants[original_music] * 2),
-                2,
-                data.constants[randomized_music]
+                struct.pack("<H", data.constants[randomized_music])
             )
 
     # Randomize fanfares
@@ -547,40 +654,21 @@ def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
         randomized_fanfares = [fanfare_name for fanfare_name in _FANFARES]
         world.random.shuffle(randomized_fanfares)
         for i, fanfare_pair in enumerate(zip(_FANFARES.keys(), randomized_fanfares)):
-            _set_bytes_le(
-                patched_rom,
+            patch.write_token(
+                APTokenTypes.WRITE,
                 data.rom_addresses["gRandomizedSoundTable"] + (data.constants[fanfare_pair[0]] * 2),
-                2,
-                data.constants[fanfare_pair[1]]
+                struct.pack("<H", data.constants[fanfare_pair[1]])
             )
-            _set_bytes_le(
-                patched_rom,
+            patch.write_token(
+                APTokenTypes.WRITE,
                 data.rom_addresses["sFanfares"] + (i * 4) + 2,
-                2,
-                _FANFARES[fanfare_pair[1]]
+                struct.pack("<H", _FANFARES[fanfare_pair[1]])
             )
 
-    # Write Output
-    out_file_name = world.multiworld.get_out_file_name_base(world.player)
-    output_path = os.path.join(output_directory, f"{out_file_name}.gba")
-    with open(output_path, "wb") as out_file:
-        out_file.write(patched_rom)
-    patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=world.player,
-                                     player_name=world.multiworld.get_player_name(world.player),
-                                     patched_path=output_path)
-
-    patch.write()
-    os.unlink(output_path)
+    patch.write_file("token_data.bin", patch.get_token_binary())
 
 
-def get_base_rom_as_bytes() -> bytes:
-    with open(get_settings().pokemon_emerald_settings.rom_file, "rb") as infile:
-        base_rom_bytes = bytes(infile.read())
-
-    return base_rom_bytes
-
-
-def _set_encounter_tables(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+def _set_encounter_tables(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
     """
     Encounter tables are lists of
     struct {
@@ -595,30 +683,31 @@ def _set_encounter_tables(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
             if table is not None:
                 for i, species_id in enumerate(table.slots):
                     address = table.address + 2 + (4 * i)
-                    _set_bytes_le(rom, address, 2, species_id)
+                    patch.write_token(APTokenTypes.WRITE, address, struct.pack("<H", species_id))
 
 
-def _set_species_info(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _set_species_info(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
     for species in world.modified_species.values():
-        _set_bytes_le(rom, species.address + 6, 1, species.types[0])
-        _set_bytes_le(rom, species.address + 7, 1, species.types[1])
-        _set_bytes_le(rom, species.address + 8, 1, species.catch_rate)
-        _set_bytes_le(rom, species.address + 22, 1, species.abilities[0])
-        _set_bytes_le(rom, species.address + 23, 1, species.abilities[1])
+        patch.write_token(APTokenTypes.WRITE, species.address + 6, struct.pack("<B", species.types[0]))
+        patch.write_token(APTokenTypes.WRITE, species.address + 7, struct.pack("<B", species.types[1]))
+        patch.write_token(APTokenTypes.WRITE, species.address + 8, struct.pack("<B", species.catch_rate))
 
         if easter_egg[0] == 3:
-            _set_bytes_le(rom, species.address + 22, 1, easter_egg[1])
-            _set_bytes_le(rom, species.address + 23, 1, easter_egg[1])
+            patch.write_token(APTokenTypes.WRITE, species.address + 22, struct.pack("<B", easter_egg[1]))
+            patch.write_token(APTokenTypes.WRITE, species.address + 23, struct.pack("<B", easter_egg[1]))
+        else:
+            patch.write_token(APTokenTypes.WRITE, species.address + 22, struct.pack("<B", species.abilities[0]))
+            patch.write_token(APTokenTypes.WRITE, species.address + 23, struct.pack("<B", species.abilities[1]))
 
         for i, learnset_move in enumerate(species.learnset):
             level_move = learnset_move.level << 9 | learnset_move.move_id
             if easter_egg[0] == 2:
                 level_move = learnset_move.level << 9 | easter_egg[1]
 
-            _set_bytes_le(rom, species.learnset_address + (i * 2), 2, level_move)
+            patch.write_token(APTokenTypes.WRITE, species.learnset_address + (i * 2), struct.pack("<H", level_move))
 
 
-def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _set_opponents(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
     for trainer in world.modified_trainers:
         party_address = trainer.party.address
 
@@ -632,53 +721,50 @@ def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tup
             pokemon_address = party_address + (i * pokemon_data_size)
 
             # Replace species
-            _set_bytes_le(rom, pokemon_address + 0x04, 2, pokemon.species_id)
+            patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x04, struct.pack("<H", pokemon.species_id))
 
             # Replace custom moves if applicable
             if trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES:
                 if easter_egg[0] == 2:
-                    _set_bytes_le(rom, pokemon_address + 0x06, 2, easter_egg[1])
-                    _set_bytes_le(rom, pokemon_address + 0x08, 2, easter_egg[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, easter_egg[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, easter_egg[1])
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x06, struct.pack("<H", easter_egg[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x08, struct.pack("<H", easter_egg[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0A, struct.pack("<H", easter_egg[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0C, struct.pack("<H", easter_egg[1]))
                 else:
-                    _set_bytes_le(rom, pokemon_address + 0x06, 2, pokemon.moves[0])
-                    _set_bytes_le(rom, pokemon_address + 0x08, 2, pokemon.moves[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, pokemon.moves[2])
-                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, pokemon.moves[3])
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x06, struct.pack("<H", pokemon.moves[0]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x08, struct.pack("<H", pokemon.moves[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0A, struct.pack("<H", pokemon.moves[2]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0C, struct.pack("<H", pokemon.moves[3]))
             elif trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES:
                 if easter_egg[0] == 2:
-                    _set_bytes_le(rom, pokemon_address + 0x08, 2, easter_egg[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, easter_egg[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, easter_egg[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0E, 2, easter_egg[1])
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x08, struct.pack("<H", easter_egg[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0A, struct.pack("<H", easter_egg[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0C, struct.pack("<H", easter_egg[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0E, struct.pack("<H", easter_egg[1]))
                 else:
-                    _set_bytes_le(rom, pokemon_address + 0x08, 2, pokemon.moves[0])
-                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
-                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
-                    _set_bytes_le(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x08, struct.pack("<H", pokemon.moves[0]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0A, struct.pack("<H", pokemon.moves[1]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0C, struct.pack("<H", pokemon.moves[2]))
+                    patch.write_token(APTokenTypes.WRITE, pokemon_address + 0x0E, struct.pack("<H", pokemon.moves[3]))
 
 
-def _set_legendary_encounters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+def _set_legendary_encounters(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
     for encounter in world.modified_legendary_encounters:
-        _set_bytes_le(rom, encounter.address, 2, encounter.species_id)
+        patch.write_token(APTokenTypes.WRITE, encounter.address, struct.pack("<H", encounter.species_id))
 
 
-def _set_misc_pokemon(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+def _set_misc_pokemon(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
     for encounter in world.modified_misc_pokemon:
-        _set_bytes_le(rom, encounter.address, 2, encounter.species_id)
+        patch.write_token(APTokenTypes.WRITE, encounter.address, struct.pack("<H", encounter.species_id))
 
 
-def _set_starters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
-    address = data.rom_addresses["sStarterMon"]
-    (starter_1, starter_2, starter_3) = world.modified_starters
-
-    _set_bytes_le(rom, address + 0, 2, starter_1)
-    _set_bytes_le(rom, address + 2, 2, starter_2)
-    _set_bytes_le(rom, address + 4, 2, starter_3)
+def _set_starters(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
+    patch.write_token(APTokenTypes.WRITE, data.rom_addresses["sStarterMon"] + 0, struct.pack("<H", world.modified_starters[0]))
+    patch.write_token(APTokenTypes.WRITE, data.rom_addresses["sStarterMon"] + 2, struct.pack("<H", world.modified_starters[1]))
+    patch.write_token(APTokenTypes.WRITE, data.rom_addresses["sStarterMon"] + 4, struct.pack("<H", world.modified_starters[2]))
 
 
-def _set_tm_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _set_tm_moves(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
     tmhm_list_address = data.rom_addresses["sTMHMMoves"]
 
     for i, move in enumerate(world.modified_tmhm_moves):
@@ -686,19 +772,24 @@ def _set_tm_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tupl
         if i >= 50:
             break
 
-        _set_bytes_le(rom, tmhm_list_address + (i * 2), 2, move)
         if easter_egg[0] == 2:
-            _set_bytes_le(rom, tmhm_list_address + (i * 2), 2, easter_egg[1])
+            patch.write_token(APTokenTypes.WRITE, tmhm_list_address + (i * 2), struct.pack("<H", easter_egg[1]))
+        else:
+            patch.write_token(APTokenTypes.WRITE, tmhm_list_address + (i * 2), struct.pack("<H", move))
 
 
-def _set_tmhm_compatibility(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+def _set_tmhm_compatibility(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]
 
     for species in world.modified_species.values():
-        _set_bytes_le(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
+        patch.write_token(
+            APTokenTypes.WRITE,
+            learnsets_address + (species.species_id * 8),
+            struct.pack("<Q", species.tm_hm_compatibility)
+        )
 
 
-def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
     probability = world.options.double_battle_chance.value / 100
 
     battle_type_map = {
@@ -710,26 +801,29 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray
 
     for trainer_data in data.trainers:
         if trainer_data.script_address != 0 and len(trainer_data.party.pokemon) > 1:
-            original_battle_type = rom[trainer_data.script_address + 1]
+            original_battle_type = trainer_data.battle_type
             if original_battle_type in battle_type_map:  # Don't touch anything other than regular single battles
                 if world.random.random() < probability:
                     # Set the trainer to be a double battle
-                    _set_bytes_le(rom, trainer_data.address + 0x18, 1, 1)
+                    patch.write_token(APTokenTypes.WRITE, trainer_data.address + 0x18, struct.pack("<B", 1))
 
                     # Swap the battle type in the script for the purpose of loading the right text
                     # and setting data to the right places
-                    _set_bytes_le(
-                        rom,
+                    patch.write_token(
+                        APTokenTypes.WRITE,
                         trainer_data.script_address + 1,
-                        1,
-                        battle_type_map[original_battle_type]
+                        struct.pack("<B", battle_type_map[original_battle_type])
                     )
 
 
-def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
     if easter_egg[0] == 2:
         for i in range(30):
-            _set_bytes_le(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
+            patch.write_token(
+                APTokenTypes.WRITE,
+                data.rom_addresses["gTutorMoves"] + (i * 2),
+                struct.pack("<H", easter_egg[1])
+            )
     else:
         if world.options.tm_tutor_moves:
             new_tutor_moves = []
@@ -737,17 +831,27 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
                 new_move = get_random_move(world.random, set(new_tutor_moves) | world.blacklisted_moves | HM_MOVES)
                 new_tutor_moves.append(new_move)
 
-                _set_bytes_le(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, new_move)
+                patch.write_token(
+                    APTokenTypes.WRITE,
+                    data.rom_addresses["gTutorMoves"] + (i * 2),
+                    struct.pack("<H", new_move)
+                )
 
     # Always set Fortree move tutor to Dig
-    _set_bytes_le(rom, data.rom_addresses["gTutorMoves"] + (24 * 2), 2, data.constants["MOVE_DIG"])
+    patch.write_token(
+        APTokenTypes.WRITE,
+        data.rom_addresses["gTutorMoves"] + (24 * 2),
+        struct.pack("<H", data.constants["MOVE_DIG"])
+    )
 
     # Modify compatibility
     if world.options.tm_tutor_compatibility.value != -1:
         for species in data.species.values():
-            _set_bytes_le(
-                rom,
+            patch.write_token(
+                APTokenTypes.WRITE,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
-                4,
-                bool_array_to_int([world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value for _ in range(32)])
+                struct.pack("<I", bool_array_to_int([
+                    world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
+                    for _ in range(32)
+                ]))
             )

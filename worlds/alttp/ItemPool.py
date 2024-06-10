@@ -276,13 +276,14 @@ def generate_itempool(world):
 
     # set up item pool
     additional_triforce_pieces = 0
+    treasure_hunt_total = 0
     if multiworld.custom:
-        pool, placed_items, precollected_items, clock_mode, treasure_hunt_count = (
+        pool, placed_items, precollected_items, clock_mode, treasure_hunt_required = (
             make_custom_item_pool(multiworld, player))
         multiworld.rupoor_cost = min(multiworld.customitemarray[67], 9999)
     else:
-        pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, additional_triforce_pieces = (
-            get_pool_core(multiworld, player))
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required, treasure_hunt_total,
+         additional_triforce_pieces) = get_pool_core(multiworld, player)
 
     for item in precollected_items:
         multiworld.push_precollected(item_factory(item, world))
@@ -337,7 +338,8 @@ def generate_itempool(world):
     if clock_mode:
         world.clock_mode = clock_mode
 
-    multiworld.worlds[player].treasure_hunt_count = treasure_hunt_count % 999
+    multiworld.worlds[player].treasure_hunt_required = treasure_hunt_required % 999
+    multiworld.worlds[player].treasure_hunt_total = treasure_hunt_total
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world)
                      if item.name not in multiworld.worlds[player].dungeon_local_item_names]
@@ -590,7 +592,8 @@ def get_pool_core(world, player: int):
     placed_items = {}
     precollected_items = []
     clock_mode: str = ""
-    treasure_hunt_count: int = 1
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     diff = difficulties[difficulty]
     pool.extend(diff.alwaysitems)
@@ -679,20 +682,21 @@ def get_pool_core(world, player: int):
     if 'triforce_hunt' in goal:
 
         if world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_extra:
-            triforce_pieces = world.triforce_pieces_available[player].value + world.triforce_pieces_extra[player].value
+            treasure_hunt_total = (world.triforce_pieces_available[player].value
+                                   + world.triforce_pieces_extra[player].value)
         elif world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_percentage:
             percentage = float(world.triforce_pieces_percentage[player].value) / 100
-            triforce_pieces = int(round(world.triforce_pieces_required[player].value * percentage, 0))
+            treasure_hunt_total = int(round(world.triforce_pieces_required[player].value * percentage, 0))
         else:  # available
-            triforce_pieces = world.triforce_pieces_available[player].value
+            treasure_hunt_total = world.triforce_pieces_available[player].value
 
-        triforce_pieces = min(90, max(triforce_pieces, world.triforce_pieces_required[player].value))
+        triforce_pieces = min(90, max(treasure_hunt_total, world.triforce_pieces_required[player].value))
 
         pieces_in_core = min(extraitems, triforce_pieces)
         additional_pieces_to_place = triforce_pieces - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
-        treasure_hunt_count = world.triforce_pieces_required[player].value
+        treasure_hunt_required = world.triforce_pieces_required[player].value
 
     for extra in diff.extras:
         if extraitems >= len(extra):
@@ -733,7 +737,7 @@ def get_pool_core(world, player: int):
                 place_item(key_location, "Small Key (Universal)")
                 pool = pool[:-3]
 
-    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count,
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required, treasure_hunt_total,
             additional_pieces_to_place)
 
 
@@ -749,7 +753,8 @@ def make_custom_item_pool(world, player):
     placed_items = {}
     precollected_items = []
     clock_mode: str = ""
-    treasure_hunt_count: int = 1
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     def place_item(loc, item):
         assert loc not in placed_items, "cannot place item twice"
@@ -844,7 +849,7 @@ def make_custom_item_pool(world, player):
     if "triforce" in world.goal[player]:
         pool.extend(["Triforce Piece"] * world.triforce_pieces_available[player])
         itemtotal += world.triforce_pieces_available[player]
-        treasure_hunt_count = world.triforce_pieces_required[player]
+        treasure_hunt_required = world.triforce_pieces_required[player]
 
     if timer in ['display', 'timed', 'timed_countdown']:
         clock_mode = 'countdown' if timer == 'timed_countdown' else 'stopwatch'
@@ -889,4 +894,4 @@ def make_custom_item_pool(world, player):
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
         logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")
 
-    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count)
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required)

@@ -4,9 +4,8 @@ Functions related to pokemon species and moves
 import functools
 from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
-from Options import Toggle
-
-from .data import NUM_REAL_SPECIES, POSTGAME_MAPS, EncounterTableData, LearnsetMove, MiscPokemonData, SpeciesData, data
+from .data import (NUM_REAL_SPECIES, OUT_OF_LOGIC_MAPS, EncounterTableData, LearnsetMove, MiscPokemonData,
+                   SpeciesData, data)
 from .options import (Goal, HmCompatibility, LevelUpMoves, RandomizeAbilities, RandomizeLegendaryEncounters,
                       RandomizeMiscPokemon, RandomizeStarters, RandomizeTypes, RandomizeWildPokemon,
                       TmTutorCompatibility)
@@ -242,9 +241,9 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
         RandomizeWildPokemon.option_match_type,
         RandomizeWildPokemon.option_match_base_stats_and_type,
     }
-    catch_em_all = world.options.dexsanity == Toggle.option_true
 
-    catch_em_all_placed = set()
+    already_placed = set()
+    num_placeable_species = NUM_REAL_SPECIES - len(world.blacklisted_wilds)
 
     priority_species = [data.constants["SPECIES_WAILORD"], data.constants["SPECIES_RELICANTH"]]
 
@@ -266,7 +265,8 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                 species_old_to_new_map: Dict[int, int] = {}
                 for species_id in table.slots:
                     if species_id not in species_old_to_new_map:
-                        if not placed_priority_species and len(priority_species) > 0:
+                        if not placed_priority_species and len(priority_species) > 0 \
+                                and map_name not in OUT_OF_LOGIC_MAPS:
                             new_species_id = priority_species.pop()
                             placed_priority_species = True
                         else:
@@ -290,8 +290,8 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
 
                             # If dexsanity/catch 'em all mode, blacklist already placed species
                             # until every species has been placed once
-                            if catch_em_all and len(catch_em_all_placed) < NUM_REAL_SPECIES:
-                                blacklists[1].append(catch_em_all_placed)
+                            if world.options.dexsanity and len(already_placed) < num_placeable_species:
+                                blacklists[1].append(already_placed)
 
                             # Blacklist from player options
                             blacklists[2].append(world.blacklisted_wilds)
@@ -329,8 +329,8 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                             new_species_id = world.random.choice(candidates).species_id
                         species_old_to_new_map[species_id] = new_species_id
 
-                        if catch_em_all and map_data.name not in POSTGAME_MAPS:
-                            catch_em_all_placed.add(new_species_id)
+                        if world.options.dexsanity and map_name not in OUT_OF_LOGIC_MAPS:
+                            already_placed.add(new_species_id)
 
                 # Actually create the new list of slots and encounter table
                 new_slots: List[int] = []
