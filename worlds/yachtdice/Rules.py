@@ -124,15 +124,13 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     """
     Function that returns the feasible score in logic based on items obtained.
     """
-    tup = tuple(
-        [
-            tuple(sorted([c.name + str(c.quantity) for c in categories])),
-            num_dice,
-            num_rolls,
-            fixed_mult,
-            step_mult,
-            diff,
-        ]
+    tup = (
+        tuple(sorted([c.name + str(c.quantity) for c in categories])),
+        num_dice,
+        num_rolls,
+        fixed_mult,
+        step_mult,
+        diff,
     )  # identifier
 
     # if already computed, return the result
