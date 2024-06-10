@@ -665,7 +665,7 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
     def update_hints(self):
-        hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
+        hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.log_panels["Hints"].refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
