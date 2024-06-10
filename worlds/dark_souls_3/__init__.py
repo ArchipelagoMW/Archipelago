@@ -13,7 +13,7 @@ from worlds.generic.Rules import CollectionRule, ItemRule, add_rule, add_item_ru
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_descriptions, item_dictionary, item_name_groups
 from .Locations import DarkSouls3Location, DS3LocationData, location_tables, location_descriptions, location_dictionary, location_name_groups, region_order
-from .Options import DarkSouls3Options, EarlySmallLothricBanner
+from .Options import DarkSouls3Options, EarlySmallLothricBanner, option_groups
 
 
 class DarkSouls3Web(WebWorld):
@@ -38,7 +38,7 @@ class DarkSouls3Web(WebWorld):
     )
 
     tutorials = [setup_en, setup_fr]
-
+    option_groups = option_groups
     item_descriptions = item_descriptions
 
 
@@ -63,8 +63,8 @@ class DarkSouls3World(World):
     }
     location_name_groups = location_name_groups
     item_name_groups = item_name_groups
-    location_descriptions = location_descriptions
-    item_descriptions = item_descriptions
+    # location_descriptions = location_descriptions
+    # item_descriptions = item_descriptions
 
     yhorm_location: Optional[DS3BossInfo]
     """If enemy randomization is enabled, this is the boss who Yhorm the Giant should replace.
