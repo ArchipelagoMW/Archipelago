@@ -197,14 +197,16 @@ class CMWorld(World):
         # add items player really wants
         yaml_locked_items: dict[str, int] = self.options.locked_items.value
         locked_items = dict(yaml_locked_items)
+        # ensure locked items have enough parents
+        player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
+                              self.items_used[self.player].get("Progressive Major To Queen", 0))
+        locked_items["Progressive Major Piece"] = max(
+            player_queens, locked_items.get("Progressive Major Piece", 0))
         # ensure castling
         if self.options.accessibility.value != self.options.accessibility.option_minimal:
-            player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
-                                  self.items_used[self.player].get("Progressive Major To Queen", 0))
             required_majors: int = 2 - self.items_used[self.player].get("Progressive Major Piece", 0) + player_queens
             locked_items["Progressive Major Piece"] = max(
                 required_majors, locked_items.get("Progressive Major Piece", 0))
-        # TODO(chesslogic): Validate locked items has enough parents
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
         #  locations, e.g. because the locked_items might contain some filler items like Progressive Pocket Range.
