@@ -19,9 +19,9 @@ class TimespinnerLogic:
                  precalculated_weights: Optional[PreCalculatedWeights]):
         self.player = player
 
-        self.flag_specific_keycards = options and options.specific_keycards.value
-        self.flag_eye_spy = options and options.eye_spy.value
-        self.flag_unchained_keys = options and options.unchained_keys.value
+        self.flag_specific_keycards = bool(options and options.specific_keycards)
+        self.flag_eye_spy = bool(options and options.eye_spy)
+        self.flag_unchained_keys = bool(options and options.unchained_keys)
 
         if precalculated_weights:
             if self.flag_unchained_keys:

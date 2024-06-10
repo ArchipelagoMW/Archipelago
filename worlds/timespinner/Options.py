@@ -4,7 +4,6 @@ from typing import Dict
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions
 from schema import Schema, And, Optional, Or
-import logging
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
@@ -425,6 +424,10 @@ class OptionsHider:
         new_option.visibility = Visibility.none
         new_option.__doc__ = option.__doc__
         return new_option
+    
+class HasReplacedCamelCase(Toggle):
+    """For internal use will display a warning message if true"""
+    visibility = Visibility.none
 
 @dataclass
 class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
@@ -463,151 +466,146 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     TrapChance: OptionsHider.hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
     DeathLink: OptionsHider.hidden(DeathLink) # type: ignore
+    has_replaced_options: HasReplacedCamelCase
 
     def handle_backward_compatibility(self) -> None:
-        has_replaced_options: bool = False
-
         if self.StartWithJewelryBox != StartWithJewelryBox.default and \
             self.start_with_jewelry_box == StartWithJewelryBox.default:
             self.start_with_jewelry_box.value = self.StartWithJewelryBox.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.DownloadableItems != DownloadableItems.default and \
             self.downloadable_items == DownloadableItems.default:
             self.downloadable_items.value = self.DownloadableItems.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.EyeSpy != EyeSpy.default and \
             self.eye_spy == EyeSpy.default:
             self.eye_spy.value = self.EyeSpy.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.StartWithMeyef != StartWithMeyef.default and \
             self.start_with_meyef == StartWithMeyef.default:
             self.start_with_meyef.value = self.StartWithMeyef.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.QuickSeed != QuickSeed.default and \
             self.quick_seed == QuickSeed.default:
             self.quick_seed.value = self.QuickSeed.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.SpecificKeycards != SpecificKeycards.default and \
             self.specific_keycards == SpecificKeycards.default:
             self.specific_keycards.value = self.SpecificKeycards.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.Inverted != Inverted.default and \
             self.inverted == Inverted.default:
             self.inverted.value = self.Inverted.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.GyreArchives != GyreArchives.default and \
             self.gyre_archives == GyreArchives.default:
             self.gyre_archives.value = self.GyreArchives.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.Cantoran != Cantoran.default and \
             self.cantoran == Cantoran.default:
             self.cantoran.value = self.Cantoran.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.LoreChecks != LoreChecks.default and \
             self.lore_checks == LoreChecks.default:
             self.lore_checks.value = self.LoreChecks.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.BossRando != BossRando.default and \
             self.boss_rando == BossRando.default:
             self.boss_rando.value = self.BossRando.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.DamageRando != DamageRando.default and \
             self.damage_rando == DamageRando.default:
             self.damage_rando.value = self.DamageRando.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.DamageRandoOverrides != DamageRandoOverrides.default and \
             self.damage_rando_overrides == DamageRandoOverrides.default:
             self.damage_rando_overrides.value = self.DamageRandoOverrides.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.HpCap != HpCap.default and \
             self.hp_cap == HpCap.default:
             self.hp_cap.value = self.HpCap.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.LevelCap != LevelCap.default and \
             self.level_cap == LevelCap.default:
             self.level_cap.value = self.LevelCap.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.ExtraEarringsXP != ExtraEarringsXP.default and \
             self.extra_earrings_xp == ExtraEarringsXP.default:
             self.extra_earrings_xp.value = self.ExtraEarringsXP.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.BossHealing != BossHealing.default and \
             self.boss_healing == BossHealing.default:
             self.boss_healing.value = self.BossHealing.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.ShopFill != ShopFill.default and \
             self.shop_fill == ShopFill.default:
             self.shop_fill.value = self.ShopFill.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.ShopWarpShards != ShopWarpShards.default and \
             self.shop_warp_shards == ShopWarpShards.default:
             self.shop_warp_shards.value = self.ShopWarpShards.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.ShopMultiplier != ShopMultiplier.default and \
             self.shop_multiplier == ShopMultiplier.default:
             self.shop_multiplier.value = self.ShopMultiplier.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.LootPool != LootPool.default and \
             self.loot_pool == LootPool.default:
             self.loot_pool.value = self.LootPool.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.DropRateCategory != DropRateCategory.default and \
             self.drop_rate_category == DropRateCategory.default:
             self.drop_rate_category.value = self.DropRateCategory.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.FixedDropRate != FixedDropRate.default and \
             self.fixed_drop_rate == FixedDropRate.default:
             self.fixed_drop_rate.value = self.FixedDropRate.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.LootTierDistro != LootTierDistro.default and \
             self.loot_tier_distro == LootTierDistro.default:
             self.loot_tier_distro.value = self.LootTierDistro.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.ShowBestiary != ShowBestiary.default and \
             self.show_bestiary == ShowBestiary.default:
             self.show_bestiary.value = self.ShowBestiary.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.ShowDrops != ShowDrops.default and \
             self.show_drops == ShowDrops.default:
             self.show_drops.value = self.ShowDrops.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.EnterSandman != EnterSandman.default and \
             self.enter_sandman == EnterSandman.default:
             self.enter_sandman.value = self.EnterSandman.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.DadPercent != DadPercent.default and \
             self.dad_percent == DadPercent.default:
             self.dad_percent.value = self.DadPercent.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.RisingTides != RisingTides.default and \
             self.rising_tides == RisingTides.default:
             self.rising_tides.value = self.RisingTides.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.RisingTidesOverrides != RisingTidesOverrides.default and \
             self.rising_tides_overrides == RisingTidesOverrides.default:
             self.rising_tides_overrides.value = self.RisingTidesOverrides.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.UnchainedKeys != UnchainedKeys.default and \
             self.unchained_keys == UnchainedKeys.default:
             self.unchained_keys.value = self.UnchainedKeys.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.PresentAccessWithWheelAndSpindle != PresentAccessWithWheelAndSpindle.default and \
             self.back_to_the_future == PresentAccessWithWheelAndSpindle.default:
             self.back_to_the_future.value = self.PresentAccessWithWheelAndSpindle.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.TrapChance != TrapChance.default and \
             self.trap_chance == TrapChance.default:
             self.trap_chance.value = self.TrapChance.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.Traps != Traps.default and \
             self.traps == Traps.default:
             self.traps.value = self.Traps.value
-            has_replaced_options = True
+            self.has_replaced_options.value = Toggle.option_true
         if self.DeathLink != DeathLink.default and \
             self.death_link == DeathLink.default:
             self.death_link.value = self.DeathLink.value
-            has_replaced_options = True
-
-        if has_replaced_options:
-            logging.warning("Timespinner options where renamed from PasCalCase to snake_case, plz update your yaml")
-            
+            self.has_replaced_options.value = Toggle.option_true

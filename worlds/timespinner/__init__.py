@@ -7,6 +7,7 @@ from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
+import logging
 
 class TimespinnerWebWorld(WebWorld):
     theme = "ice"
@@ -49,6 +50,8 @@ class TimespinnerWorld(World):
     precalculated_weights: PreCalculatedWeights
 
     def generate_early(self) -> None:
+        self.options.handle_backward_compatibility()
+
         self.precalculated_weights = PreCalculatedWeights(self.options, self.random)
 
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
@@ -58,8 +61,6 @@ class TimespinnerWorld(World):
             self.options.quick_seed.value = Toggle.option_true
         if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
             self.options.start_with_jewelry_box.value = Toggle.option_true
-
-        self.options.handle_backward_compatibility()
 
     def create_regions(self) -> None: 
         create_regions_and_locations(self.multiworld, self.player, self.options, self.precalculated_weights)
@@ -187,6 +188,15 @@ class TimespinnerWorld(World):
 
             spoiler_handle.write(f'Flooded Areas:                   {flooded_areas_string}\n')
 
+        if self.options.has_replaced_options:
+            warning = \
+                f"NOTICE: Timespinner options for player '{self.player_name}' where renamed from PasCalCase to snake_case, " \
+                "please update your yaml"
+
+            spoiler_handle.write("\n")
+            spoiler_handle.write(warning)
+            logging.warning(warning)
+
     def create_item(self, name: str) -> Item:
         data = item_table[name]
 
@@ -245,9 +255,9 @@ class TimespinnerWorld(World):
             excluded_items.add('Modern Warp Beacon')
             excluded_items.add('Mysterious Warp Beacon')
 
-        for item_name in self.options.start_inventory.value.keys():
-            if item_name not in self.item_name_groups['UseItem']:
-                excluded_items.add(item_name)
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name not in self.item_name_groups['UseItem']:
+                excluded_items.add(item.name)
 
         return excluded_items
 
