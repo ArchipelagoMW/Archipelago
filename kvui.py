@@ -311,7 +311,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = ""
         self.location_text = ""
         self.entrance_text = ""
-        self.found_text = ""
+        self.status_text = ""
         self.meta = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
@@ -327,7 +327,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = data["finding"]["text"]
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
-        self.found_text = data["status"]["text"]
+        self.status_text = data["status"]["text"]
         self.meta = data["status"]["meta"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
@@ -353,7 +353,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                             (self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                              self.finding_text, "\'s World", (" at " + self.entrance_text)
                              if self.entrance_text != "Vanilla"
-                             else "", ". (", self.found_text.lower(), ")"))
+                             else "", ". (", self.status_text.lower(), ")"))
                         temp = MarkupLabel(text).markup
                         text = "".join(
                             part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
