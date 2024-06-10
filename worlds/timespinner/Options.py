@@ -609,4 +609,5 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
             has_replaced_options = True
 
         if has_replaced_options:
-            logging.warning("Timespinner options where renamed from PasCalCase to snake_case, plz update your yml")
+            logging.warning("Timespinner options where renamed from PasCalCase to snake_case, plz update your yaml")
+            
