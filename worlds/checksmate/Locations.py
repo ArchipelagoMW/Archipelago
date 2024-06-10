@@ -97,8 +97,8 @@ location_table = {
     "Fork, True Triple": CMLocationData(4_902_056, 3450),
     "Fork, True Royal": CMLocationData(4_902_057, 4020),  # I sincerely believe this should be filler
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
-    "O-O Castle": CMLocationData(4_902_058, 0),
-    "O-O-O Castle": CMLocationData(4_902_059, 0),
+    "O-O Castle": CMLocationData(4_902_058, 0, 2),
+    "O-O-O Castle": CMLocationData(4_902_059, 0, 2),
     # "Discovered Attack": CMLocationData(4_902_060, 0),
     # "Pin": CMLocationData(4_902_061, 600),
     # "Skewer": CMLocationData(4_902_062, 600),
