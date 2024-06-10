@@ -4,15 +4,15 @@ import subprocess
 import sys
 import tempfile
 
-WORLD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.dirname(WORLD_DIR))
+AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(AP_DIR))
 
 # pylint: disable=import-error, wrong-import-position
-from tits_the_3rd.util import (
+from worlds.tits_the_3rd.util import (
     get_tooling_path,
     read_dev_config_and_assert_contents
 )
-from tits_the_3rd.dev_util.items.item import read_new_weapons, Weapon
+from worlds.tits_the_3rd.dev_util.items.item import read_new_weapons, Weapon
 
 def _get_base_dt22(source_dir: str, temp_dir: str):
     factoria_path = get_tooling_path("factoria.exe")

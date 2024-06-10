@@ -4,11 +4,11 @@ import subprocess
 import sys
 import time
 
-WORLD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.dirname(WORLD_DIR))
+AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(AP_DIR))
 
 # pylint: disable=import-error, wrong-import-position
-from tits_the_3rd.util import (
+from worlds.tits_the_3rd.util import (
     assert_path_exists,
     get_tooling_path,
     read_dev_config_and_assert_contents

@@ -1,11 +1,11 @@
 import os
 import sys
 
-WORLD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.dirname(WORLD_DIR))
+AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(AP_DIR))
 
 # pylint: disable=import-error, wrong-import-position
-from tits_the_3rd.patch.patch import (
+from worlds.tits_the_3rd.patch.patch import (
     create_patch,
     apply_patch,
     diff

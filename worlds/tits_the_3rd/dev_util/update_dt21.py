@@ -2,11 +2,11 @@ import os
 import subprocess
 import sys
 
-WORLD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.dirname(WORLD_DIR))
+AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(AP_DIR))
 
 # pylint: disable=import-error, wrong-import-position
-from tits_the_3rd.util import (
+from worlds.tits_the_3rd.util import (
     delete_contents,
     get_tooling_path,
     move_contents_with_file_ending,
