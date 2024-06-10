@@ -1,8 +1,14 @@
-from functools import lru_cache
 from math import floor
 from pkgutil import get_data
 from random import random
-from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple
+from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple
+
+# A WitnessRule is just an or-chain of and-conditions.
+# It represents the set of all options that could fulfill this requirement.
+# E.g. if something requires "Dots or (Shapers and Stars)", it'd be represented as: {{"Dots"}, {"Shapers, "Stars"}}
+# {} is an unusable requirement.
+# {{}} is an always usable requirement.
+WitnessRule = FrozenSet[FrozenSet[str]]
 
 
 def weighted_sample(world_random: random, population: List, weights: List[float], k: int) -> List:
@@ -48,7 +54,7 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     return rounded_output
 
 
-def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str, FrozenSet[FrozenSet[str]]]]]:
+def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
     """
     Returns a region object by parsing a line in the logic file
     """
@@ -76,12 +82,13 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "panels": list()
+        "entities": list(),
+        "physical_entities": list(),
     }
     return region_obj, options
 
 
-def parse_lambda(lambda_string) -> FrozenSet[FrozenSet[str]]:
+def parse_lambda(lambda_string) -> WitnessRule:
     """
     Turns a lambda String literal like this: a | b & c
     into a set of sets like this: {{a}, {b, c}}
@@ -95,10 +102,15 @@ def parse_lambda(lambda_string) -> FrozenSet[FrozenSet[str]]:
     return lambda_set
 
 
-@lru_cache(maxsize=None)
+_adjustment_file_cache = dict()
+
+
 def get_adjustment_file(adjustment_file: str) -> List[str]:
-    data = get_data(__name__, adjustment_file).decode("utf-8")
-    return [line.strip() for line in data.split("\n")]
+    if adjustment_file not in _adjustment_file_cache:
+        data = get_data(__name__, adjustment_file).decode("utf-8")
+        _adjustment_file_cache[adjustment_file] = [line.strip() for line in data.split("\n")]
+
+    return _adjustment_file_cache[adjustment_file]
 
 
 def get_disable_unrandomized_list() -> List[str]:
@@ -181,36 +193,8 @@ def get_discard_exclusion_list() -> List[str]:
     return get_adjustment_file("settings/Exclusions/Discards.txt")
 
 
-def get_caves_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Caves.txt")
-
-
-def get_beyond_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Beyond_Challenge.txt")
-
-
-def get_bottom_floor_discard_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard.txt")
-
-
-def get_bottom_floor_discard_nondoors_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard_NonDoors.txt")
-
-
-def get_mountain_upper_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Mountain_Upper.txt")
-
-
-def get_challenge_vault_box_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Challenge_Vault_Box.txt")
-
-
-def get_path_to_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Path_To_Challenge.txt")
-
-
-def get_mountain_lower_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Mountain_Lower.txt")
+def get_caves_except_path_to_challenge_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Exclusions/Caves_Except_Path_To_Challenge.txt")
 
 
 def get_elevators_come_to_you() -> List[str]:
@@ -233,21 +217,21 @@ def get_items() -> List[str]:
     return get_adjustment_file("WitnessItems.txt")
 
 
-def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> FrozenSet[FrozenSet[str]]:
+def optimize_witness_rule(witness_rule: WitnessRule) -> WitnessRule:
     """Removes any redundant terms from a logical formula in disjunctive normal form.
     This means removing any terms that are a superset of any other term get removed.
     This is possible because of the boolean absorption law: a | (a & b) = a"""
     to_remove = set()
 
-    for option1 in dnf_requirement:
-        for option2 in dnf_requirement:
+    for option1 in witness_rule:
+        for option2 in witness_rule:
             if option2 < option1:
                 to_remove.add(option1)
 
-    return dnf_requirement - to_remove
+    return witness_rule - to_remove
 
 
-def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[FrozenSet[str]]:
+def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
     """
     performs the "and" operator on a list of logical formula in disjunctive normal form, represented as a set of sets.
     A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
@@ -255,7 +239,7 @@ def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[Froz
     """
     current_overall_requirement = frozenset({frozenset()})
 
-    for next_dnf_requirement in dnf_requirements:
+    for next_dnf_requirement in witness_rules:
         new_requirement: Set[FrozenSet[str]] = set()
 
         for option1 in current_overall_requirement:
@@ -264,4 +248,8 @@ def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[Froz
 
         current_overall_requirement = frozenset(new_requirement)
 
-    return dnf_remove_redundancies(current_overall_requirement)
+    return optimize_witness_rule(current_overall_requirement)
+
+
+def logical_or_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
+    return optimize_witness_rule(frozenset.union(*witness_rules))
