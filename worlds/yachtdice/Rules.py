@@ -99,10 +99,13 @@ def extract_progression(state, player, options):
     )
     number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
     number_of_step_mults = state.count("Step Score Multiplier", player)
-    categories = []
-    for category_name, category_value in category_mappings.items():
-        if state.count(category_name, player) >= 1:
-            categories += [Category(category_value, state.count(category_name, player))]
+    
+    categories = [
+        Category(category_value, state.count(category_name, player))
+        for category_name, category_value in category_mappings.items()
+        if state.count(category_name, player)  # want all categories that have count >= 1
+    ]        
+            
     extra_points_in_logic = state.count("1 Point", player)
     extra_points_in_logic += state.count("10 Points", player) * 10
     extra_points_in_logic += state.count("100 Points", player) * 100
