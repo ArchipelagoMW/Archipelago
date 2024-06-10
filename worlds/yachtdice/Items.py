@@ -71,7 +71,10 @@ item_table = {
 
 # item groups for better hinting
 item_groups = {
-    "Score Multiplier": {"Step Score Multiplier", "Fixed Score Multiplier"},
+    "Score Multiplier": {
+        "Step Score Multiplier", 
+        "Fixed Score Multiplier"
+    },
     "Categories": {
         "Category Ones",
         "Category Twos",
