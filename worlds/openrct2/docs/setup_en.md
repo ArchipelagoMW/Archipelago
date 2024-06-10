@@ -1,4 +1,5 @@
-# OpenRCT2 Setup Guide
+# OpenRCT2 Setup Guide: THIS IS ONLY FOR THE OFFICIAL RELEASE. IF YOU'RE READING THIS, DO NOT FOLLOW THIS GUIDE! 
+# Instead, [use the one here that Solidus Snake put together:](https://docs.google.com/document/d/1V8LpYx22jcInNGSt6AXOIyuFwzx3Xn0oSMumrnsbqfE/edit)
 
 
 ## Quick Links
