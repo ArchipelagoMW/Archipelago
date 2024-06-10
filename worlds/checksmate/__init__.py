@@ -295,6 +295,20 @@ class CMWorld(World):
                 my_useful_items.remove(chosen_item)
 
         my_filler_items = list(filler_items.keys())
+        # get whether any item mentions "pocket" in the current items pool
+        has_pocket = False
+        for item in list(locked_items.keys()):
+            if "Pocket" in item:
+                has_pocket = True
+                break
+        if not has_pocket:
+            for item in items:
+                if "Pocket" in item.name:
+                    has_pocket = True
+                    break
+        # remove "pocket" fillers from the list of filler items
+        if not has_pocket:
+            my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         while (len(items) + user_location_count + sum(locked_items.values())) < len(location_table):
             chosen_item = self.random.choice(my_filler_items)
             if not self.has_prereqs(chosen_item):
@@ -397,18 +411,19 @@ class CMWorld(World):
         victory_item = create_item_with_correct_settings(self.player, "Victory")
         self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
-    def fewest_parents(self, chosen_item: str):
-        parents = get_parents(chosen_item)
-        if parents:
-            return min([self.items_used[self.player].get(item, 0) for item in parents])
+    def fewest_parents(self, parents: list[list[str, int]]):
+        # TODO: this concept doesn't work if a parent can have multiple children and another can't, e.g. forwardness
+        return min([self.items_used[self.player].get(item[0], 0) for item in parents])
 
     def has_prereqs(self, chosen_item: str) -> bool:
-        fewest_parents = self.fewest_parents(chosen_item)
-        if fewest_parents is None:
-            return True
-        enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
-        if not enough_parents:
-            return False
+        parents = get_parents(chosen_item)
+        if parents:
+            fewest_parents = self.fewest_parents(parents) * get_parents(chosen_item)[0][1]
+            if fewest_parents is None:
+                return True
+            enough_parents = fewest_parents > self.items_used[self.player].get(chosen_item, 0)
+            if not enough_parents:
+                return False
         return self.under_piece_limit(chosen_item, self.PieceLimitCascade.ACTUAL_CHILDREN)
 
     class PieceLimitCascade(Enum):
@@ -501,7 +516,7 @@ class CMWorld(World):
             if not local_basic_unit:
                 raise Exception("At least one early chessman must be local")
 
-            item = create_item_with_correct_settings(player, multiworld.per_slot_randoms[player].choice(local_basic_unit))
+            item = create_item_with_correct_settings(player, self.random.choice(local_basic_unit))
             multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
             locked_locations.append("King to E2/E7 Early")
 
@@ -532,8 +547,9 @@ class CMWorld(World):
             material += item_table[item.name].material
         else:
             # this is an upgrade, so we can only apply it if it can find an unsatisfied parent
-            fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
-            if item_count < fewest_parents:
+            fewest_parents = min([state.prog_items[self.player].get(parent[0], 0) for parent in parents])
+            # TODO: when a parent could have multiple children, check that this is also the least child
+            if item_count < fewest_parents * parents[0][1]:
                 # found a piece we could upgrade, so apply the upgrade
                 material += item_table[item.name].material
                 logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be tried")
@@ -568,7 +584,7 @@ class CMWorld(World):
         if len(parents) == 0 or item_table[item.name].material == 0:
             material -= item_table[item.name].material
         else:
-            fewest_parents = min([state.prog_items[self.player].get(parent, 0) for parent in parents])
+            fewest_parents = min([state.prog_items[self.player].get(parent[0], 0) for parent in parents])
             if item_count <= fewest_parents:
                 material -= item_table[item.name].material
                 logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be removed")
@@ -586,13 +602,14 @@ def get_limit_multiplier_for_item(item_dictionary: Dict[str, int]) -> Callable[[
     return lambda item_name: item_dictionary[item_name]
 
 
-def get_parents(chosen_item: str) -> list[str]:
+def get_parents(chosen_item: str) -> list[list[str, int]]:
     return item_table[chosen_item].parents
 
 
 def get_children(chosen_item: str) -> list[str]:
     return [item for item in item_table
-            if item_table[item].parents is not None and chosen_item in item_table[item].parents]
+            if item_table[item].parents is not None and chosen_item in map(
+                lambda x: x[0], item_table[item].parents)]
 
 
 def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:

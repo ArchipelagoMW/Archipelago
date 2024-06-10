@@ -248,7 +248,7 @@ def remaining_fill(multiworld: MultiWorld,
                 # number of times we will swap an individual item to prevent this
 
                 if swapped_items[placed_item.player,
-                                 placed_item.name] > 1:
+                                 placed_item.name] > 2:
                     continue
 
                 location.item = None
