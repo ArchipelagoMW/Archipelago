@@ -39,6 +39,8 @@ class DarkSouls3Web(WebWorld):
 
     tutorials = [setup_en, setup_fr]
 
+    item_descriptions = item_descriptions
+
 
 class DarkSouls3World(World):
     """
@@ -79,7 +81,6 @@ class DarkSouls3World(World):
     local_itempool: Optional[List[DarkSouls3Item]]
     """The pool of all items within this particular world. This is a subset of
     `self.multiworld.itempool`."""
-
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)

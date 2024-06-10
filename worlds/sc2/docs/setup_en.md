@@ -23,20 +23,20 @@ Yaml files are configuration files that tell Archipelago how you'd like your gam
 When you're setting up a multiworld, every world needs its own yaml file.
 
 There are three basic ways to get a yaml:
-* You can go to the [Player Options](https://archipelago.gg/games/Starcraft%202/player-options) page, set your options in the GUI, and export the yaml.
-* You can generate a template, either by downloading it from the [Player Options](https://archipelago.gg/games/Starcraft%202/player-options) page or by generating it from the Launcher (ArchipelagoLauncher.exe). The template includes descriptions of each option, you just have to edit it in your text editor of choice.
+* You can go to the [Player Options](/games/Starcraft%202/player-options) page, set your options in the GUI, and export the yaml.
+* You can generate a template, either by downloading it from the [Player Options](/games/Starcraft%202/player-options) page or by generating it from the Launcher (ArchipelagoLauncher.exe). The template includes descriptions of each option, you just have to edit it in your text editor of choice.
 * You can ask someone else to share their yaml to use it for yourself or adjust it as you wish.
 
 Remember the name you enter in the options page or in the yaml file, you'll need it to connect later!
 
-Note that the basic Player Options page doesn't allow you to change all advanced options, such as excluding particular units or upgrades. Go through the [Weighted Options](https://archipelago.gg/weighted-options) page for that.
-
-Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
+Check out [Creating a YAML](/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
 
 ### Common yaml questions
 #### How do I know I set my yaml up correctly?
 
-The simplest way to check is to test it out. Save your yaml to the Players/ folder within your Archipelago installation and run ArchipelagoGenerate.exe. You should see a new .zip file within the output/ folder of your Archipelago installation if things worked correctly. It's advisable to run ArchipelagoGenerate through a terminal so that you can see the printout, which will include any errors and the precise output file name if it's successful. If you don't like terminals, you can also check the log file in the logs/ folder.
+The simplest way to check is to use the website [validator](/check). 
+
+You can also test it by attempting to generate a multiworld with your yaml. Save your yaml to the Players/ folder within your Archipelago installation and run ArchipelagoGenerate.exe. You should see a new .zip file within the output/ folder of your Archipelago installation if things worked correctly. It's advisable to run ArchipelagoGenerate through a terminal so that you can see the printout, which will include any errors and the precise output file name if it's successful. If you don't like terminals, you can also check the log file in the logs/ folder.
 
 #### What does Progression Balancing do?
 
@@ -66,9 +66,15 @@ start_inventory:
 
 An empty mapping is just a matching pair of curly braces: `{}`. That's the default value in the template, which should let you know to use this syntax.
 
-#### How do I know the exact names of items?
+#### How do I know the exact names of items and locations?
 
-You can look up a complete list if item names in the [Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/).
+The [*datapackage*](/datapackage) page of the Archipelago website provides a complete list of the items and locations for each game that it currently supports, including StarCraft 2.
+
+You can also look up a complete list of the item names in the [Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/) page.
+This page also contains supplementary information of each item.
+However, the items shown in that page might differ from those shown in the datapackage page of Archipelago since the former is generated, most of the time, from beta versions of StarCraft 2 Archipelago undergoing development.
+
+As for the locations, you can see all the locations associated to a mission in your world by placing your cursor over the mission in the 'StarCraft 2 Launcher' tab in the client.
 
 ## How do I join a MultiWorld game?
 
@@ -88,7 +94,7 @@ specific description of what's going wrong and attach your log file to your mess
 
 ## Running in macOS
 
-To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `python3 Starcraft2Client.py`.
+To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](/tutorial/Archipelago/mac/en). Note: to launch the client, you will need to run the command `python3 Starcraft2Client.py`.
 
 ## Running in Linux
 
