@@ -1,10 +1,22 @@
-from typing import Dict, Tuple
-from zilliandomizer.logic_components.items import Item as ZzItem, \
-    item_name_to_id as zz_item_name_to_zz_id, items as zz_items, \
-    item_name_to_item as zz_item_name_to_zz_item
+from collections import defaultdict
+from typing import Dict, Iterable, Mapping, Tuple, TypedDict
+
+from zilliandomizer.logic_components.items import (
+    Item as ZzItem,
+    KEYWORD,
+    NORMAL,
+    RESCUE,
+    item_name_to_id as zz_item_name_to_zz_id,
+    items as zz_items,
+    item_name_to_item as zz_item_name_to_zz_item,
+)
+from zilliandomizer.logic_components.regions import RegionData
+from zilliandomizer.low_resources.item_rooms import item_room_codes
 from zilliandomizer.options import Chars
 from zilliandomizer.utils.loc_name_maps import loc_to_id as pretty_loc_name_to_id
-from zilliandomizer.utils import parse_reg_name
+from zilliandomizer.utils import parse_loc_name, parse_reg_name
+from zilliandomizer.zri.memory import RescueInfo
+
 from .config import base_id as base_id
 
 item_name_to_id = {
@@ -91,3 +103,56 @@ def zz_reg_name_to_reg_name(zz_reg_name: str) -> str:
         end = zz_reg_name[5:]
         return f"{make_room_name(row, col)} {end.upper()}"
     return zz_reg_name
+
+
+class ClientRescue(TypedDict):
+    start_char: Chars
+    room_code: int
+    mask: int
+
+
+class ZillionSlotInfo(TypedDict):
+    start_char: Chars
+    rescues: Dict[str, ClientRescue]
+    loc_mem_to_id: Dict[int, int]
+    """ memory location of canister to Archipelago location id number """
+
+
+def get_slot_info(regions: Iterable[RegionData],
+                  start_char: Chars,
+                  loc_name_to_pretty: Mapping[str, str]) -> ZillionSlotInfo:
+    items_placed_in_map_index: Dict[int, int] = defaultdict(int)
+    rescue_locations: Dict[int, RescueInfo] = {}
+    loc_memory_to_loc_id: Dict[int, int] = {}
+    for region in regions:
+        for loc in region.locations:
+            assert loc.item, ("There should be an item placed in every location before "
+                              f"writing slot info. {loc.name} is missing item.")
+            if loc.item.code in {KEYWORD, NORMAL, RESCUE}:
+                row, col, _y, _x = parse_loc_name(loc.name)
+                map_index = row * 8 + col
+                item_no = items_placed_in_map_index[map_index]
+                room_code = item_room_codes[map_index]
+
+                r = room_code
+                m = 1 << item_no
+                if loc.item.code == RESCUE:
+                    rescue_locations[loc.item.id] = RescueInfo(start_char, r, m)
+                loc_memory = (r << 7) | m
+                loc_memory_to_loc_id[loc_memory] = pretty_loc_name_to_id[loc_name_to_pretty[loc.name]]
+                items_placed_in_map_index[map_index] += 1
+
+    rescues: Dict[str, ClientRescue] = {}
+    for i in (0, 1):
+        if i in rescue_locations:
+            ri = rescue_locations[i]
+            rescues[str(i)] = {
+                "start_char": ri.start_char,
+                "room_code": ri.room_code,
+                "mask": ri.mask
+            }
+    return {
+        "start_char": start_char,
+        "rescues": rescues,
+        "loc_mem_to_id": loc_memory_to_loc_id
+    }

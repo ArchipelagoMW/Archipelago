@@ -43,8 +43,8 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-you can customize your settings by visiting
-the [Slay the Spire Settings Page](/games/Slay%20the%20Spire/player-settings).
+you can customize your options by visiting
+the [Slay the Spire Options Page](/games/Slay%20the%20Spire/player-options).
 
 ### Connect to the MultiServer
 
