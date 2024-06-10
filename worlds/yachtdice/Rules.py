@@ -134,7 +134,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     )  # identifier
 
     # if already computed, return the result
-    if tup in yachtdice_cache.keys():
+    if tup in yachtdice_cache:
         return yachtdice_cache[tup]
 
     # sort categories because for the step multiplier, you will want low-scoring categories first
