@@ -2517,6 +2517,11 @@ if "Hollow Knight" in network_data_package["games"]:
     }
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        randomizeElevatorPass = bool(tracker_data.get_slot_data(team, player)["options"]["RandomizeElevatorPass"])
+
+        if not randomizeElevatorPass:
+            inventory["Elevator_Pass"] = 1
+
         # Creating logic for splittet cloak
         #         Right 0                 1                  2
         # Left 0  no dash                 right dash        right shade, no left
