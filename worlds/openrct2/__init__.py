@@ -364,7 +364,10 @@ class OpenRCT2World(World):
                               and (self.options.scenario_length.value == 0 or self.options.scenario_length.value == 1)):
                             unlock["RidePrereq"] = [self.random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                         else:
-                            unlock["RidePrereq"] = [self.random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
+                            if number > 100:
+                                unlock["RidePrereq"] = [self.random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
+                            else: #Even in async games, don't require too many rides too early
+                                unlock["RidePrereq"] = [self.random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                     else:  # Prereq is not a specific ride
                         category = "ride"
                         category_selected = False
