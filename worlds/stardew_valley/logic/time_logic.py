@@ -3,9 +3,7 @@ from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
-from .book_logic import BookLogicMixin
 from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, HasProgressionPercent
 
 ONE_YEAR = 4
@@ -24,7 +22,7 @@ class TimeLogicMixin(BaseLogicMixin):
         self.time = TimeLogic(*args, **kwargs)
 
 
-class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin, ReceivedLogicMixin, BookLogicMixin]]):
+class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin]]):
 
     @cache_self1
     def has_lived_months(self, number: int) -> StardewRule:
