@@ -154,7 +154,6 @@ class HKWorld(World):
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
     cached_filler_items = {}
-    data_version = 2
 
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
@@ -406,7 +405,7 @@ class HKWorld(World):
                     continue
                 if setting == CostSanity.option_shopsonly and location.basename not in multi_locations:
                     continue
-                if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
+                if location.basename in {'Grubfather', 'Seer', 'Egg_Shop'}:
                     our_weights = dict(weights_geoless)
                 else:
                     our_weights = dict(weights)
@@ -659,6 +658,8 @@ class HKItem(Item):
     def __init__(self, name, advancement, code, type: str, player: int = None):
         if name == "Mimic_Grub":
             classification = ItemClassification.trap
+        elif name == "Godtuner":
+            classification = ItemClassification.progression
         elif type in ("Grub", "DreamWarrior", "Root", "Egg", "Dreamer"):
             classification = ItemClassification.progression_skip_balancing
         elif type == "Charm" and name not in progression_charms:

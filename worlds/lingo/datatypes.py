@@ -63,6 +63,7 @@ class Panel(NamedTuple):
     exclude_reduce: bool
     achievement: bool
     non_counting: bool
+    location_name: Optional[str]
 
 
 class Painting(NamedTuple):

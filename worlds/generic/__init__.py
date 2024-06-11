@@ -40,7 +40,6 @@ class GenericWorld(World):
     }
     hidden = True
     web = GenericWeb()
-    data_version = 1
 
     def generate_early(self):
         self.multiworld.player_types[self.player] = SlotType.spectator  # mark as spectator
@@ -69,9 +68,3 @@ class PlandoItem(NamedTuple):
             raise exception(warning)
         else:
             self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both
