@@ -69,8 +69,5 @@ def ini_locations(goal_score, max_score, number_of_locations, dif):
 
     return location_table, scores.index(goal_score)
 
-
-lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in all_locations.items() if data.id}
-
 # we need to run this function to initialize all scores from 1 to 1000, even though not all are used
 all_locations = all_locations_fun(1000)
