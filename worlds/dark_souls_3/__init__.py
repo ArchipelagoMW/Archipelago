@@ -63,8 +63,8 @@ class DarkSouls3World(World):
     }
     location_name_groups = location_name_groups
     item_name_groups = item_name_groups
-    # location_descriptions = location_descriptions
-    # item_descriptions = item_descriptions
+    location_descriptions = location_descriptions
+    item_descriptions = item_descriptions
 
     yhorm_location: Optional[DS3BossInfo]
     """If enemy randomization is enabled, this is the boss who Yhorm the Giant should replace.
@@ -332,10 +332,6 @@ class DarkSouls3World(World):
         injectable_mandatory = [
             item for item in all_injectable_items
             if item.classification == ItemClassification.progression
-        ] + [
-            item
-            for (item, count) in self.options.guaranteed_items.items()
-            for _ in range(0, count)
         ]
         injectable_optional = [
             item for item in all_injectable_items

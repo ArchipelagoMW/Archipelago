@@ -192,6 +192,9 @@ The following options have been removed:
   excluded locations, you can set `excluded_locations: unrandomized` to preserve
   the default vanilla item placements for all excluded locations.
 
+* `guaranteed_items`: In almost all cases, all items from the base game are now
+  included somewhere in the multiworld.
+
 In addition, the following options have changed:
 
 * The location names used in options like `exclude_locations` have changed. See
