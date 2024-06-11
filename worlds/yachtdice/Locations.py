@@ -26,7 +26,7 @@ def all_locations_fun(max_score):
     """
     Function that is called when this file is loaded, which loads in ALL possible locations, score 1 to 1000
     """
-    return {f"{i} score": LocData(starting_index + i, "Board", i) for i in range(max_score + 1)}
+    return {f"{i} score": LocData(starting_index + i, "Board", i) for i in range(1, max_score + 1)}
 
 
 
