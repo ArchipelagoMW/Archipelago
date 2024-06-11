@@ -2445,10 +2445,13 @@ if "Hollow Knight" in network_data_package["games"]:
         "Descending_Dark"       : ("Progressive Dive", 2),
 
         "Howling_Wraiths"       : ("Progressive Shriek", 1),
-        "Abyss_Shriek"          : ("Progressive Shriek", 2),
+        "Abyss_Shriek"          : ("Progressive Shriek", 2)
+    }
 
+    non_progressive_items_ordering = {
         "Dream_Nail"            : ("Progressive Dreamnail", 1),
-        "Awoken_Dream_Nail"     : ("Progressive Dreamnail", 2)
+        "Dream_Gate"            : ("Progressive Dreamnail", 2),
+        "Awoken_Dream_Nail"     : ("Progressive Dreamnail", 3)
     }
 
     progressive_item_max = {
@@ -2465,7 +2468,7 @@ if "Hollow Knight" in network_data_package["games"]:
         "Progressive Fireball"      : 2,
         "Progressive Dive"          : 2,
         "Progressive Shriek"        : 2,
-        "Progressive Dreamnail"     : 2
+        "Progressive Dreamnail"     : 3
     }
 
     essences = {
@@ -2568,6 +2571,12 @@ if "Hollow Knight" in network_data_package["games"]:
         for item, (prog_item, level) in non_progressive_items.items():
             if item in inventory:
                 inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        # add progressive items
+        # Some items are progressing in order and not by the received one
+        for item, (prog_item, level) in non_progressive_items_ordering.items():
+            if item in inventory:
+                inventory[prog_item] += 1
                 
         # add progressive charms
         # Charms are progressing in order, not by the one which was actually got.
