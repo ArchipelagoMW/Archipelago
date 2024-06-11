@@ -196,7 +196,18 @@
 {% macro OptionTitle(option_name, option) %}
     <label for="{{ option_name }}">
         {{ option.display_name|default(option_name) }}:
-        <span class="interactive tooltip-container">(?)<div class="tooltip">{{ option.__doc__ | default("**Please document me!**") | rst_to_html | safe }}</div></span>
+        <span
+            class="interactive tooltip-container"
+            {% if option.plain_text_doc %}
+              data-tooltip="{{option.__doc__ | default("**Please document me!**") | dedent}}"
+            {% endif %}>
+          (?)
+          {% if not option.plain_text_doc %}
+            <div class="tooltip">
+              {{ option.__doc__ | default("**Please document me!**") | rst_to_html | safe }}
+            </div>
+          {% endif %}
+        </span>
     </label>
 {% endmacro %}
 

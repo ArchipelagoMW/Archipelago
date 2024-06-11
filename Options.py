@@ -126,6 +126,23 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
+    plain_text_doc = False
+    """Whether the WebHost should interpret the option's docstring as plain.
+
+    By default, a docstring is interpreted as reStructuredText_, the standard
+    Python markup format. In the WebHost, it's rendered to HTML so that lists,
+    emphasis, and other rich text features are displayed properly.
+
+    However, before reStructuredText support was added, the WebHost rendered all
+    Option documentation as plain text with preserved whitespace. Most worlds'
+    Options were documented in a way to make this look good, which doesn't
+    necessarily look good when rendered as reStructuredText. This flag is set to
+    False for those Options so they can update their documentation at their
+    leisure.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
     # filled by AssembleOptions:
     name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
     # https://github.com/python/typing/discussions/1460 the reason for this type: ignore

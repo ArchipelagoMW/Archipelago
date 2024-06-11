@@ -62,6 +62,11 @@ def send_yaml(player_name: str, formatted_options: dict) -> Response:
     return response
 
 
+@app.template_filter("dedent")
+def filter_dedent(text: str) -> str:
+    return dedent(text).strip("\n ")
+
+
 @app.template_filter("rst_to_html")
 def filter_rst_to_html(text: str) -> str:
     """Converts reStructuredText (such as a Python docstring) to HTML."""

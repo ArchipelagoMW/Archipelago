@@ -125,6 +125,10 @@ for world_source in world_sources:
 # Build the data package for each game.
 from .AutoWorld import AutoWorldRegister
 
+# Set legacy features
+import worlds.legacy_world_features
+
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
+
