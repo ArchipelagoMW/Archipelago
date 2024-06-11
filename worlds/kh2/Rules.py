@@ -1415,29 +1415,34 @@ class KH2FightRules(KH2Rules):
     def get_axel_two_rules() -> bool:
         return True
 
-    def get_data_roxas_rules(self, state: CollectionState) -> bool:
+    def get_easy_data_roxas_rules(self, state: CollectionState) -> bool:
         # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
+        return self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1
+
+    def get_normal_data_roxas_rules(self, state: CollectionState) -> bool:
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
+
+        return self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2
+
+    def get_hard_data_roxas_rules(self, state: CollectionState) -> bool:
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-        data_roxas_rules = {
-            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
-        }
-        return data_roxas_rules[self.fight_logic]
 
-    def get_data_axel_rules(self, state: CollectionState) -> bool:
+        return self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
+
+    def get_easy_data_axel_rules(self, state: CollectionState) -> bool:
         # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,blizzaga
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
-        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
-        data_axel_rules = {
-            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
-        }
-        return data_axel_rules[self.fight_logic]
+        return self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1
 
-    def get_roxas_rules(self, state: CollectionState) -> bool:
+    def get_normal_data_axel_rules(self, state: CollectionState) -> bool:
+        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
+        return self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2
+
+    def get_hard_data_axel_rules(self, state: CollectionState) -> bool:
+        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
+
+        return self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
+
+    def get_easy_roxas_rules(self, state: CollectionState) -> bool:
         # easy:aerial dodge 1,glide 1, limit form,thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
         # normal:thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
         # hard:guard
@@ -1448,27 +1453,35 @@ class KH2FightRules(KH2Rules):
         }
         return roxas_rules[self.fight_logic]
 
-    def get_xigbar_rules(self, state: CollectionState) -> bool:
-        # easy:final 4,horizontal slash,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
-        # normal:final 4,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
-        # hard:guard,quick run,finishing plus
-        xigbar_rules = {
-            "easy":   self.kh2_dict_count(easy_xigbar_tools, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 2),
-            "normal": self.kh2_dict_count(normal_xigbar_tools, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 2),
-            "hard":   self.kh2_has_all([ItemName.Guard, ItemName.QuickRun, ItemName.FinishingPlus], state),
-        }
-        return xigbar_rules[self.fight_logic]
+    def get_normal_roxas_rules(self, state: CollectionState) -> bool:
+        # normal:thunder,reflera,guard break,2 gap closers,finishing plus,blizzard
+        return self.kh2_dict_count(normal_roxas_tools, state)
 
-    def get_luxord_rules(self, state: CollectionState) -> bool:
+    def get_hard_roxas_rules(self, state: CollectionState) -> bool:
+        # hard:guard
+        return state.has(ItemName.Guard, self.player)
+
+    def get_easy_xigbar_rules(self, state: CollectionState) -> bool:
+        # easy:final 4,horizontal slash,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
+        return self.kh2_dict_count(easy_xigbar_tools, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 2)
+
+    def get_normal_xigbar_rules(self, state: CollectionState) -> bool:
+        # normal:final 4,fira,finishing plus,glide 2,aerial dodge 2,quick run 2,guard,reflect
+        return self.kh2_dict_count(normal_xigbar_tools, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 2)
+
+    def get_hard_xigbar_rules(self, state: CollectionState) -> bool:
+        # hard:guard,quick run,finishing plus
+        return self.kh2_has_all([ItemName.Guard, ItemName.QuickRun, ItemName.FinishingPlus], state)
+
+    def get_easy_luxord_rules(self, state: CollectionState) -> bool:
         # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
+        return self.kh2_dict_count(easy_luxord_tools, state) and self.kh2_has_any(ground_finisher, state)
+    def get_normal_luxord_rules(self, state: CollectionState) -> bool:
         # normal:aerial dodge 1,glide 1,quickrun 2,guard,reflera,1 gap closers,ground finisher
+        return self.kh2_dict_count(normal_luxord_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
+    def get_hard_luxord_rules(self, state: CollectionState) -> bool:
         # hard:quick run,guard
-        luxord_rules = {
-            "easy":   self.kh2_dict_count(easy_luxord_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_luxord_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
-            "hard":   self.kh2_has_all([ItemName.Guard, ItemName.QuickRun], state)
-        }
-        return luxord_rules[self.fight_logic]
+        return self.kh2_has_all([ItemName.Guard, ItemName.QuickRun], state)
 
     def get_saix_rules(self, state: CollectionState) -> bool:
         # easy:aerial dodge 1,glide 1,quickrun 2,guard,reflera,2 gap closers,ground finisher,limit form
