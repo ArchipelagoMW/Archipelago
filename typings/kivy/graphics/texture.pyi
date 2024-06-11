@@ -10,4 +10,4 @@ class FillType_Drawable:
 
 
 class Texture:
-    pass
+    size: FillType_Vec

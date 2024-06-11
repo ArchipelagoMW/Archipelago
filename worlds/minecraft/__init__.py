@@ -37,7 +37,7 @@ class MinecraftWebWorld(WebWorld):
     bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
 
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
         "single-player, multiworld, and related software.",
         "English",
@@ -91,8 +91,6 @@ class MinecraftWorld(World):
 
     item_name_to_id = Constants.item_name_to_id
     location_name_to_id = Constants.location_name_to_id
-
-    data_version = 7
 
     def _get_mc_data(self) -> Dict[str, Any]:
         exits = [connection[0] for connection in Constants.region_info["default_connections"]]
