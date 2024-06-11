@@ -166,9 +166,8 @@
 ] %}
 
 {% set inventory_order_skills = [
-    "Progressive Cloak", "Progressive Left Cloak", "Progressive Right Cloak", "Progressive Crystal Heart",
-    "Progressive Claw", "Monarch_Wings", "Progressive Dreamnail", "Cyclone_Slash",
-    "Dash_Slash", "Great_Slash", "Progressive Fireball", "Progressive Dive", "Progressive Shriek", "Isma's_Tear"
+    "Progressive Cloak", "Progressive Crystal Heart", "Progressive Claw", "Monarch_Wings", "Progressive Dreamnail",
+    "Cyclone_Slash", "Dash_Slash", "Great_Slash", "Progressive Fireball", "Progressive Dive", "Progressive Shriek", "Isma's_Tear"
 ] %}
 
 {# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
@@ -255,21 +254,36 @@
                             {% for item in randomizerGroups[option] %}
                                 {% if item in progressive_order %}
                                     {% set non_prog_item = progressive_order[item][inventory[item]] %}
+
+                                    {# Exception for cloak. Handling of splitted Mothwing/Shade Cloak and also the non splitted one. #}
+                                    {# Same in the CSS class below #}
+                                    {% if item == 'Progressive Cloak' and options["SplitMothwingCloak"] == 1 %}
+                                        {% if inventory["Progressive Left Cloak"] >= 1 %}
+                                            {% set non_prog_item = progressive_order[item][inventory["Progressive Left Cloak"]] %}
+                                        {% endif %}
+                                        {% if inventory["Progressive Right Cloak"] >= 1 %}
+                                            {% set non_prog_item = progressive_order[item][inventory["Progressive Right Cloak"]] %}
+                                        {% endif %}
+                                    {% endif %}
+
                                     {# Show either just cloak or the splitted ones (rules in Python part) #}
-                                    <div class="item {{ 'hidden' if
-                                                            (item == 'Progressive Cloak' and inventory["ShowCloakSplitted"]) or
-                                                            (item in ('Progressive Left Cloak', 'Progressive Right Cloak') and not inventory["ShowCloakSplitted"])
-                                                    }}">
+                                    <div class="item">
                                         <img
                                             src="{{ icons[non_prog_item] }}"
                                             alt="{{ non_prog_item }}"
                                             title="{{ non_prog_item }}"
-                                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 else 'item-aquired' }}"
+                                            class="{{ 'missing' if
+                                                        (item != 'Progressive Cloak' and (item not in inventory or inventory[item] == 0)) or
+                                                        (item == 'Progressive Cloak' and inventory[item] == 0 and options["SplitMothwingCloak"] == 0) or
+                                                        (item == 'Progressive Cloak' and options["SplitMothwingCloak"] == 1 and
+                                                            (inventory["Progressive Left Cloak"] == 0 and inventory["Progressive Right Cloak"] == 0)
+                                                        )
+                                                        else 'item-aquired' }}"
                                         />
         
                                         {# Show L/R indicator for splitted skill #}
                                         {% if
-                                            item == 'Progressive Left Cloak' and options["SplitMothwingCloak"] == 1 or
+                                            item == 'Progressive Cloak' and inventory[item] == 0 and inventory["Progressive Left Cloak"] >= 1 and options["SplitMothwingCloak"] == 1 or
                                             item == 'Progressive Claw' and inventory["Left_Mantis_Claw"] == 1 and inventory["Mantis_Claw"] == 0 and options["SplitMantisClaw"] == 1 or
                                             item == 'Progressive Crystal Heart' and inventory["Left_Crystal_Heart"] and inventory["Crystal_Heart"] == 0 and options["SplitCrystalHeart"] == 1
                                         %}
@@ -277,7 +291,7 @@
                                         {% endif %}
         
                                         {% if
-                                            item == 'Progressive Right Cloak' and options["SplitMothwingCloak"] == 1 or
+                                            item == 'Progressive Cloak' and inventory[item] == 0 and inventory["Progressive Right Cloak"] >= 1 and options["SplitMothwingCloak"] == 1 or
                                             item == 'Progressive Claw' and inventory["Right_Mantis_Claw"] == 1and inventory["Mantis_Claw"] == 0 and options["SplitMantisClaw"] == 1 or
                                             item == 'Progressive Crystal Heart' and inventory["Right_Crystal_Heart"] and inventory["Crystal_Heart"] == 0 and options["SplitCrystalHeart"] == 1
                                         %}
