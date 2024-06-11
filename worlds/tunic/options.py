@@ -205,11 +205,11 @@ class LadderStorage(Choice):
     """
     Choose whether Ladder Storage is in logic.
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty.
-    Medium includes changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
-    Hard includes going behind the map to enter closed doors from behind.
+    Medium includes the above as well as changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
+    Hard includes the above as well as going behind the map to enter closed doors from behind.
+    Tedious includes the above as well as opening individual chests mid-LS.
     Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks.
     Checks that require you to get softlocked are not in logic. Needing to death warp or quit to menu to escape a situation is not considered a softlock.
-    Opening a chest mid-LS is not considered in logic to avoid tedium.
     """
     internal_name = "ladder_storage"
     display_name = "Ladder Storage Logic"
@@ -217,6 +217,7 @@ class LadderStorage(Choice):
     option_easy = 1
     option_medium = 2
     option_hard = 3
+    option_tedious = 4
     default = 0
 
 
