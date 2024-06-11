@@ -271,6 +271,16 @@
     "Stag"                          : "RandomizeStags"
 } %}
 
+{% set headerMapping = {
+    "Progressive Fireball"      : "Fireball",
+    "Progressive Dive"          : "Quake",
+    "Progressive Shriek"        : "Scream",
+    "Progressive Dreamnail"     : "Dreamnail",
+    "Progressive Cloak"         : "Mothwing/Shade Cloak",
+    "Progressive Claw"          : "Mantis Claw",
+    "Progressive Crystal Heart" : "Crystal Heart"
+}%}
+
 {%- block custom_table_headers %}
     {#- macro that creates a table header with display name and image -#}
     {%- macro make_header(name, img_src) %}
@@ -283,7 +293,13 @@
     {%- for item in inventory_order %}
         {%- if item in icons -%}
             <th class="center-column">
-                <img class="icon-sprite {{ 'elevatorPass' if item == "Elevator_Pass" }} {{ 'fullNail' if item == "Nail" }}" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}" />
+                {% set header = item %}
+
+                {% if header in headerMapping %}
+                    {% set header = headerMapping[header] %}
+                {% endif %}
+
+                <img class="icon-sprite {{ 'elevatorPass' if item == "Elevator_Pass" }} {{ 'fullNail' if item == "Nail" }}" src="{{ icons[item] }}" alt="{{ header | e }}" title="{{ header | e }}" />
             </th>
         {%- endif %}
     {% endfor -%}
