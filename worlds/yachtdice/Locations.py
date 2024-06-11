@@ -18,7 +18,7 @@ class YachtDiceLocation(Location):
 
 
 all_locations = {}
-starting_index = 16871244500  # 500 more than the starting index for items
+starting_index = 16871244500  # 500 more than the starting index for items (not necessary, but this is what it is now)
 
 
 

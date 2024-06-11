@@ -107,30 +107,30 @@ class YachtDiceWorld(World):
         possible_categories = []
 
         for index, cats in enumerate(all_categories):
-            possible_categories += [cats[categorylist[index]]]
+            possible_categories.append(cats[categorylist[index]])
 
             # Add Choice and Inverse choice (or their alts) to the precollected list.
             if index == 0 or index == 1:
-                self.precollected += [cats[categorylist[index]]]
+                self.precollected.append(cats[categorylist[index]])
             else:
-                self.itempool += [cats[categorylist[index]]]
+                self.itempool.append(cats[categorylist[index]])
 
         # Also start with one Roll and one Dice
-        self.precollected += ["Roll"]
-        self.precollected += ["Dice"]
+        self.precollected.append("Roll")
+        self.precollected.append("Dice")
 
         # if one fragment per dice, just add "Dice" objects
         if frags_per_dice == 1:
             self.itempool += ["Dice"] * (num_of_dice - 1)  # minus one because one is in start inventory
         else:
-            self.itempool += ["Dice"]  # always add a full dice to make generation easier (will be early)
+            self.itempool.append("Dice")  # always add a full dice to make generation easier (will be early)
             self.itempool += ["Dice Fragment"] * (frags_per_dice * (num_of_dice - 2))
 
         # if one fragment per roll, just add "Roll" objects
         if frags_per_roll == 1:
             self.itempool += ["Roll"] * (num_of_rolls - 1)  # minus one because one is in start inventory
         else:
-            self.itempool += ["Roll"]  # always add a full roll to make generation easier (will be early)
+            self.itempool.append()"Roll")  # always add a full roll to make generation easier (will be early)
             self.itempool += ["Roll Fragment"] * (frags_per_roll * (num_of_rolls - 2))
 
         already_items = len(self.itempool)
@@ -211,16 +211,10 @@ class YachtDiceWorld(World):
             item_to_add = ""
             if which_item_to_add == 0:
                 weights[0] /= 1 + frags_per_dice
-                if frags_per_dice == 1:
-                    return "Dice"
-                else:
-                    return "Dice Fragment"
+                return "Dice" if frags_per_dice == 1 else "Dice Fragment"
             elif which_item_to_add == 1:
                 weights[1] /= 1 + frags_per_roll
-                if frags_per_roll == 1:
-                    return "Roll"
-                else:
-                    return "Roll Fragment"
+                return "Roll" if frags_per_roll == 1 else "Roll Fragment"
             elif which_item_to_add == 2:
                 weights[2] /= 1.05
                 multipliers_added += 1
@@ -264,7 +258,7 @@ class YachtDiceWorld(World):
 
         # adding 17 items as a start seems like the smartest way to get close to 1000 points
         for _ in range(17):
-            self.itempool += [get_item_to_add()]
+            self.itempool.append(get_item_to_add())
 
         score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
 
@@ -279,7 +273,7 @@ class YachtDiceWorld(World):
             # Keep adding items until a score of 1000 is in logic
             while score_in_logic < 1000:
                 item_to_add = get_item_to_add()
-                self.itempool += [item_to_add]
+                self.itempool.append(item_to_add)
                 if item_to_add == "1 Point":
                     score_in_logic += 1
                 elif item_to_add == "10 Points":
@@ -380,8 +374,6 @@ class YachtDiceWorld(World):
             for loc_name, loc_data in location_table.items()
             if loc_data.region == board.name
         ]
-
-        # which index of all locations should have the Victory item.
 
         # Add the victory item to the correct location.
         # The website declares that the game is complete when the victory item is obtained.

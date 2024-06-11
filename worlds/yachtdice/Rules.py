@@ -173,16 +173,14 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     def percentile_distribution(dist, percentile):
         sorted_values = sorted(dist.keys())
         cumulative_prob = 0
-        prev_val = None
 
         for val in sorted_values:
-            prev_val = val
             cumulative_prob += dist[val]
             if cumulative_prob >= percentile:
-                return prev_val  # Return the value before reaching the desired percentile
+                return val
 
-        # Return the first value if percentile is lower than all probabilities
-        return prev_val if prev_val is not None else sorted_values[0]
+        # Return the last value if percentile is higher than all probabilities
+        return sorted_values[-1]
 
     # parameters for logic.
     # perc_return is, per difficulty, the percentages of total score it returns (it averages out the values)
