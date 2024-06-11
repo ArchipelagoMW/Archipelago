@@ -91,12 +91,6 @@ class FullPots(Choice):
     option_complete = 1
     option_mixed = 2
 
-class IxupiCapturesPriority(DefaultOnToggle):
-    """
-    Ixupi captures are set to priority locations. This forces a progression item into these locations if possible.
-    """
-    display_name = "Ixupi Captures are Priority"
-
 
 @dataclass
 class ShiversOptions(PerGameCommonOptions):
@@ -109,5 +103,4 @@ class ShiversOptions(PerGameCommonOptions):
     early_beth: EarlyBeth
     early_lightning: EarlyLightning
     location_pot_pieces: LocationPotPieces
-    ixupi_captures_priority: IxupiCapturesPriority
     full_pots: FullPots

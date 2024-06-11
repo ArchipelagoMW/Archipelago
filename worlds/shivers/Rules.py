@@ -53,7 +53,7 @@ def metal_capturable(state: CollectionState, player: int) -> bool:
 
 
 def lightning_capturable(state: CollectionState, player: int) -> bool:
-    return (first_nine_ixupi_capturable or state.multiworld.worlds[player].options.early_lightning.value) \
+    return (first_nine_ixupi_capturable(state, player) or state.multiworld.worlds[player].options.early_lightning.value) \
         and (state.has_all({"Lightning Pot Bottom", "Lightning Pot Top", "Lightning Pot Bottom DUPE", "Lightning Pot Top DUPE"}, player) or \
              state.has_all({"Lightning Pot Complete", "Lightning Pot Complete DUPE"}, player))
 
@@ -123,8 +123,8 @@ def get_rules_lookup(player: int):
             "To Burial From Egypt": lambda state: state.can_reach("Egypt", "Region", player),
             "To Gods Room From Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
             "To Slide Room": lambda state: all_skull_dials_available(state, player),
-            "To Lobby From Slide Room": lambda state: (beths_body_available(state, player)),
-            "To Water Capture From Janitor Closet": lambda state: (cloth_capturable(state, player))
+            "To Lobby From Slide Room": lambda state: beths_body_available(state, player),
+            "To Water Capture From Janitor Closet": lambda state: cloth_capturable(state, player)
         },
         "locations_required": {
             "Puzzle Solved Anansi Musicbox": lambda state: state.can_reach("Clock Tower", "Region", player),
