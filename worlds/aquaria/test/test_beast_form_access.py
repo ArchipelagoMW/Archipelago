@@ -20,7 +20,7 @@ class BeastFormAccessTest(AquariaTestBase):
             "Mithalas City, second bulb at the end of the top path",
             "Mithalas City, bulb in the top path",
             "Mithalas City, Mithalas Pot",
-            "Mithalas City, urn in the Cathedral flower tube entrance",
+            "Mithalas City, urn in the Castle flower tube entrance",
             "Mermog cave, Piranha Egg",
             "Mithalas Cathedral, Mithalan Dress",
             "Turtle cave, bulb in Bubble Cliff",

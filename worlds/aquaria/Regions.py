@@ -984,7 +984,7 @@ class AquariaRegions:
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas City, third urn in the city reserve", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, urn in the Cathedral flower tube entrance", self.player),
+        add_rule(self.multiworld.get_location("Mithalas City, urn in the Castle flower tube entrance", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas City Castle, urn in the bedroom", self.player),
                  lambda state: _has_damaging_item(state, self.player))
