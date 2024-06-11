@@ -180,6 +180,59 @@ class TunicPlandoConnections(PlandoConnections):
     duplicate_exits = True
 
 
+class LaurelsZips(Toggle):
+    """
+    Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
+    """
+    internal_name = "laurels_zips"
+    display_name = "Laurels Zips Logic"
+
+
+class IceGrappling(Choice):
+    """
+    Choose whether grappling frozen enemies is in logic.
+    Easy includes ice grappling enemies that are in range without luring them.
+    Medium includes using ice grapples to push enemies through doors or off ledges. Also includes bringing an enemy over to the Temple Door to grapple through it.
+    Hard includes luring or grappling enemies to get to where you want to go.
+    Note: You will still be expected to ice grapple to the slime in East Forest.
+    """
+    internal_name = "ice_grappling"
+    display_name = "Ice Grapple Logic"
+    option_off = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    default = 0
+
+
+class LadderStorage(Choice):
+    """
+    Choose whether Ladder Storage is in logic.
+    Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty.
+    Medium includes changing your elevation using the environment.
+    Hard includes going behind the map to enter closed doors from behind.
+    """
+    internal_name = "ladder_storage"
+    display_name = "Ladder Storage Logic"
+    option_off = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    default = 0
+
+
+class LadderStorageWithoutItems(Toggle):
+    """
+    If disabled, you logically require Stick, Sword, or Magic Orb to Ladder Storage.
+    If enabled, you will be expected to Ladder Storage without items.
+    This can be done with a Golden Coin, Prayer, rolling, the plushie code, and many other options.
+
+    This option has no effect if you do not have Ladder Storage Logic enabled
+    """
+    internal_name = "ladder_storage_without_items"
+    display_name = "Ladder Storage without Items"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -199,6 +252,10 @@ class TunicOptions(PerGameCommonOptions):
     maskless: Maskless
     laurels_location: LaurelsLocation
     plando_connections: TunicPlandoConnections
+    laurels_zips: LaurelsZips
+    ice_grappling: IceGrappling
+    ladder_storage: LadderStorage
+    ladder_storage_without_items: LadderStorageWithoutItems
       
 
 tunic_option_groups = [
@@ -206,26 +263,32 @@ tunic_option_groups = [
         LogicRules,
         Lanternless,
         Maskless,
+        LaurelsZips,
+        IceGrappling,
+        LadderStorage,
+        LadderStorageWithoutItems
     ])
 ]
 
 tunic_option_presets: Dict[str, Dict[str, Any]] = {
     "Sync": {
-        "ability_shuffling": True,
+        AbilityShuffling.internal_name: True,
     },
     "Async": {
         "progression_balancing": 0,
-        "ability_shuffling": True,
-        "shuffle_ladders": True,
-        "laurels_location": "10_fairies",
+        AbilityShuffling.internal_name: True,
+        ShuffleLadders.internal_name: True,
+        LaurelsLocation.internal_name: LaurelsLocation.option_10_fairies,
     },
     "Glace Mode": {
         "accessibility": "minimal",
-        "ability_shuffling": True,
-        "entrance_rando": "yes",
-        "fool_traps": "onslaught",
-        "logic_rules": "unrestricted",
-        "maskless": True,
-        "lanternless": True,
+        AbilityShuffling.internal_name: True,
+        EntranceRando.internal_name: EntranceRando.option_yes,
+        FoolTraps.internal_name: FoolTraps.option_onslaught,
+        IceGrappling.internal_name: IceGrappling.option_hard,
+        LadderStorage.internal_name: LadderStorage.option_hard,
+        LadderStorageWithoutItems: True,
+        Maskless.internal_name: True,
+        Lanternless.internal_name: True,
     },
 }
