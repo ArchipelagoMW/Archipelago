@@ -130,7 +130,7 @@ class YachtDiceWorld(World):
         if frags_per_roll == 1:
             self.itempool += ["Roll"] * (num_of_rolls - 1)  # minus one because one is in start inventory
         else:
-            self.itempool.append()"Roll")  # always add a full roll to make generation easier (will be early)
+            self.itempool.append("Roll")  # always add a full roll to make generation easier (will be early)
             self.itempool += ["Roll Fragment"] * (frags_per_roll * (num_of_rolls - 2))
 
         already_items = len(self.itempool)
