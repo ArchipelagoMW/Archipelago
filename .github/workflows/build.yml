@@ -65,6 +65,12 @@ jobs:
           cmp setup-player-templates.txt generated-player-templates.txt \
             || diff setup-player-templates.txt generated-player-templates.txt
           mv meta.yaml Players/Templates/
+      - name: Test Generate
+        shell: bash
+        run: |
+          cd build/exe*
+          cp Players/Templates/Clique.yaml Players/
+          timeout 30 ./ArchipelagoGenerate
       - name: Store 7z
         uses: actions/upload-artifact@v4
         with:
@@ -138,6 +144,7 @@ jobs:
           source venv/bin/activate
           python setup.py build_exe --yes
       - name: Check build loads expected worlds
+        shell: bash
         run: |
           cd build/exe*
           mv Players/Templates/meta.yaml .
@@ -148,6 +155,12 @@ jobs:
           cmp setup-player-templates.txt generated-player-templates.txt \
             || diff setup-player-templates.txt generated-player-templates.txt
           mv meta.yaml Players/Templates/
+      - name: Test Generate
+        shell: bash
+        run: |
+          cd build/exe*
+          cp Players/Templates/Clique.yaml Players/
+          timeout 30 ./ArchipelagoGenerate
       - name: Store AppImage
         uses: actions/upload-artifact@v4
         with:
