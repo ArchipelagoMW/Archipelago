@@ -53,6 +53,18 @@ jobs:
           Rename-Item "exe.$NAME" Archipelago
           7z a -mx=9 -mhe=on -ms "../dist/$ZIP_NAME" Archipelago
           Rename-Item Archipelago "exe.$NAME"  # inno_setup.iss expects the original name
+      - name: Check build loads expected worlds
+        shell: bash
+        run: |
+          cd build/exe*
+          mv Players/Templates/meta.yaml .
+          ls -1 Players/Templates | sort > setup-player-templates.txt
+          rm -R Players/Templates
+          timeout 30 ./ArchipelagoLauncher "Generate Template Options" || true
+          ls -1 Players/Templates | sort > generated-player-templates.txt
+          cmp setup-player-templates.txt generated-player-templates.txt \
+            || diff setup-player-templates.txt generated-player-templates.txt
+          mv meta.yaml Players/Templates/
       - name: Store 7z
         uses: actions/upload-artifact@v4
         with:
@@ -125,6 +137,17 @@ jobs:
         run: |
           source venv/bin/activate
           python setup.py build_exe --yes
+      - name: Check build loads expected worlds
+        run: |
+          cd build/exe*
+          mv Players/Templates/meta.yaml .
+          ls -1 Players/Templates | sort > setup-player-templates.txt
+          rm -R Players/Templates
+          timeout 30 ./ArchipelagoLauncher "Generate Template Options" || true
+          ls -1 Players/Templates | sort > generated-player-templates.txt
+          cmp setup-player-templates.txt generated-player-templates.txt \
+            || diff setup-player-templates.txt generated-player-templates.txt
+          mv meta.yaml Players/Templates/
       - name: Store AppImage
         uses: actions/upload-artifact@v4
         with:
