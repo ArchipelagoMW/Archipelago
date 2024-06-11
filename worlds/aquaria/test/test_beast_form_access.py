@@ -27,7 +27,7 @@ class BeastFormAccessTest(AquariaTestBase):
             "Turtle cave, Urchin Costume",
             "Sun Worm path, first cliff bulb",
             "Sun Worm path, second cliff bulb",
-            "The Veil top right area, bulb in the top of the waterfall",
+            "The Veil top right area, bulb at the top of the waterfall",
             "Bubble Cave, bulb in the left cave wall",
             "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
             "Bubble Cave, Verse Egg",

@@ -125,7 +125,7 @@ after_home_water_locations = [
     "Turtle cave, Urchin Costume",
     "The Veil top right area, bulb in the middle of the wall jump cliff",
     "The Veil top right area, Golden Starfish",
-    "The Veil top right area, bulb in the top of the waterfall",
+    "The Veil top right area, bulb at the top of the waterfall",
     "The Veil top right area, Transturtle",
     "The Veil bottom area, bulb in the left path",
     "The Veil bottom area, bulb in the spirit path",

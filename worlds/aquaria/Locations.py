@@ -332,7 +332,7 @@ class AquariaLocations:
     }
 
     locations_veil_tr_l = {
-        "The Veil top right area, bulb in the top of the waterfall": 698080,
+        "The Veil top right area, bulb at the top of the waterfall": 698080,
         "The Veil top right area, Transturtle": 698210,
     }
 
