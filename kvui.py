@@ -312,7 +312,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.location_text = ""
         self.entrance_text = ""
         self.status_text = ""
-        self.meta = {}
+        self.hint = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
 
@@ -328,7 +328,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
         self.status_text = data["status"]["text"]
-        self.meta = data["status"]["meta"]
+        self.hint = data["status"]["hint"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
@@ -341,10 +341,10 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             if self.index:  # skip header
                 if alt:
                     ctx = App.get_running_app().ctx
-                    if ctx.slot == int(self.meta["receiving_player"]):  # If this player owns this hint
-                        ctx.update_hint(int(self.meta["location"]),
-                                        int(self.meta["finding_player"]),
-                                        not bool(self.meta["prioritized"]))
+                    if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                        ctx.update_hint(self.hint["location"],
+                                        self.hint["finding_player"],
+                                        not self.hint["prioritized"])
                 else:
                     if self.selected:
                         self.parent.clear_selection()
@@ -727,7 +727,7 @@ class HintLog(RecycleView):
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
         "status": {"text": "[u]Status[/u]",
-                   "meta": {"receiving_player": -1, "location": -1, "finding_player": -1, "prioritized": False}},
+                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "prioritized": False}},
         "striped": True,
     }
 
@@ -763,8 +763,7 @@ class HintLog(RecycleView):
                     "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
                                                      "text": "Found" if hint["found"] else (
                                                          "Priority" if hint["prioritized"] else "Non-Priority")}),
-                    "meta": {"receiving_player": hint["receiving_player"], "location": hint["location"],
-                             "finding_player": hint["finding_player"], "prioritized": hint["prioritized"]},
+                    "hint": hint,
                 },
             })
 
