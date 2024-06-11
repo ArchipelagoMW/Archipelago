@@ -1121,9 +1121,11 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 
 class Accessibility(Choice):
     """Set rules for reachability of your items/locations.
-    Locations: ensure everything can be reached and acquired.
-    Items: ensure all logically relevant items can be acquired.
-    Minimal: ensure what is needed to reach your goal can be acquired."""
+
+    - **Locations:** ensure everything can be reached and acquired.
+    - **Items:** ensure all logically relevant items can be acquired.
+    - **Minimal:** ensure what is needed to reach your goal can be acquired.
+    """
     display_name = "Accessibility"
     option_locations = 0
     option_items = 1
@@ -1133,9 +1135,12 @@ class Accessibility(Choice):
 
 
 class ProgressionBalancing(NamedRange):
-    """
-    A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    A lower setting means more getting stuck. A higher setting means less getting stuck.
+    """Move progression items earlier.
+
+    This helps prevent the player from getting stuck and bored early. A lower
+    setting means items are more random and the player is more likely to get
+    stuck, a higher setting means more progression items are available early and
+    the player is less likely to get stuck.
     """
     default = 50
     range_start = 0
@@ -1220,13 +1225,15 @@ class StartInventory(ItemDict):
 
 class StartInventoryPool(StartInventory):
     """Start with these items and don't place them in the world.
-    The game decides what the replacement items will be."""
+
+    The game decides what the replacement items will be.
+    """
     verify_item_name = True
     display_name = "Start Inventory from Pool"
 
 
 class StartHints(ItemSet):
-    """Start with these item's locations prefilled into the !hint command."""
+    """Start with these item's locations prefilled into the ``!hint`` command."""
     display_name = "Start Hints"
 
 
@@ -1236,17 +1243,17 @@ class LocationSet(OptionSet):
 
 
 class StartLocationHints(LocationSet):
-    """Start with these locations and their item prefilled into the !hint command"""
+    """Start with these locations and their item prefilled into the ``!hint`` command."""
     display_name = "Start Location Hints"
 
 
 class ExcludeLocations(LocationSet):
-    """Prevent these locations from having an important item"""
+    """Prevent these locations from having an important item."""
     display_name = "Excluded Locations"
 
 
 class PriorityLocations(LocationSet):
-    """Prevent these locations from having an unimportant item"""
+    """Prevent these locations from having an unimportant item."""
     display_name = "Priority Locations"
 
 
