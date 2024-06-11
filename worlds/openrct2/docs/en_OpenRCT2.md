@@ -30,6 +30,6 @@ Roller Coasters: Requires a minimum number of roller coasters to win. Additional
 
 Pay off loan: Requires the loan to be paid off to win.
 
-Unique Rides: A new objective. A list of unlockable rides will be given to you. At least 1 of each must be built to win. (Rides count as built once they have posted stats)
+Unique Rides: An Archipelago exclusive objective. A list of unlockable rides will be given to you. At least 1 of each must be built to win. (Rides count as built once they have posted stats)
 
 Monopoly Mode: An Archipelago exclusive objective. (Nearly) Every unowned tile in the park will be purchasable. (Tiles with paths will have construction rights instead) Once you own the entire map, you win! 40 more items will be added to the item pool, 20 land purchase discounts and 20 construction rights discounts. Each one will reduce the cost of their respective tiles by $10, down to the price of free.

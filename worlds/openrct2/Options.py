@@ -1,6 +1,6 @@
 from enum import IntEnum
 from typing import TypedDict
-from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet, PerGameCommonOptions
+from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet, PerGameCommonOptions, OptionGroup
 from dataclasses import dataclass
 
 class Scenario(IntEnum):
@@ -471,6 +471,8 @@ class SelectedIntensity(Choice):
     """Choose a prefered intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
     to a minimum of 8 intensity in most circumstances. Normal is reccommended for most players.
     """
+    auto_display_name = True
+    display_name = "Preferred Intensity"
     option_less_intense = Preferred_Intensity.less_intense.value
     option_normal = Preferred_Intensity.normal.value
     option_more_intense = Preferred_Intensity.more_intense.value
@@ -611,21 +613,21 @@ class Roller_Coaster_Excitement(Range):
     """Select the minimum excitement 😀 for a coaster to count towards your objective. 0 will disable a minimum excitement rating."""
     display_name = "Excitement Requirement"
     range_start = 0
-    range_end = 10
+    range_end = 9
     default = 5
 
 class Roller_Coaster_Intensity(Range):
     """Select the minimum intensity 😬 for a coaster to count towards your objective. 0 will disable a minimum intensity rating."""
     display_name = "Intensity Requirement"
     range_start = 0
-    range_end = 10
+    range_end = 9
     default = 5
 
 class Roller_Coaster_Nausea(Range):
     """Select the minimum nausea 🤢 for a coaster to count towards your objective. 0 will disable a minimum nausea rating."""
     display_name = "Nausea Requirement"
     range_start = 0
-    range_end = 10
+    range_end = 6
     default = 4
 
 class Shop_Minimum_Excitement(Range):
@@ -736,11 +738,11 @@ class Filler(Range):
     default = 10
 
 class Include_ATM(OpenRCT2OnToggle):
-    """Includes an ATM in the item list, regardless of whether it appears in the chosen scenario"""
+    """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario"""
     display_name = "Include ATM"
 
 class Include_First_Aid(OpenRCT2OnToggle):
-    """Includes a First Aid Room in the item list, regardless of whether it appears in the chosen scenario"""
+    """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario"""
     display_name = "Include First Aid Room"
 
 class Skips(Range):
@@ -750,6 +752,58 @@ class Skips(Range):
     range_start = 0
     range_end = 10
     default = 3
+
+openrct2_option_groups = [
+    OptionGroup("Goal Options", [
+        Guest_Objective,
+        Park_Value_Objective,
+        Roller_Coaster_Objective,
+        Roller_Coaster_Excitement,
+        Roller_Coaster_Intensity,
+        Roller_Coaster_Nausea,
+        Required_Unique_Rides,
+        Park_Rating_Objective,
+        Pay_Off_Loan,
+        Monopoly_Mode
+    ]),
+    OptionGroup("Rules", [
+        SelectedDifficultGuestGeneration,
+        SelectedDifficultParkRating,
+        SelectedForbidHighConstruction,
+        SelectedForbidLandscapeChanges,
+        SelectedForbidMarketingCampaigns,
+        SelectedForbidTreeRemoval
+    ]),
+    OptionGroup("Shop Options", [
+        Shop_Minimum_Excitement,
+        Shop_Maximum_Excitement,
+        Shop_Minimum_Intensity,
+        Shop_Maximum_Intensity,
+        Shop_Minimum_Nausea,
+        Shop_Maximum_Nausea,
+        SelectedVisibility
+    ]),
+    OptionGroup("Item & Trap Options", [
+        Filler,
+        Include_ATM,
+        Include_First_Aid,
+        Include_Gamespeed_Items,
+        Skips,
+        Furry_Convention_Traps,
+        Bathroom_Traps,
+        Spam_Traps
+    ]),
+     OptionGroup("Scenario Options", [
+        SelectedScenario,
+        SelectedDifficulty,
+        SelectedScenarioLength,
+        SelectedRandomizationRange,
+        Randomize_Park_Values,
+        SelectedIntensity,
+        SelectedStatReRolls
+    ]),
+]
+
 @dataclass
 class openRCT2Options(PerGameCommonOptions):
     # generator options

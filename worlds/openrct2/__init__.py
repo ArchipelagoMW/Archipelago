@@ -2,15 +2,28 @@ import math
 from typing import TextIO
 
 import worlds.LauncherComponents as LauncherComponents
-from BaseClasses import ItemClassification, Region, Item, Location
+from BaseClasses import ItemClassification, Region, Item, Location, Tutorial
 from worlds.generic.Rules import add_rule
 
 from .Constants import base_id, item_info, location_info, scenario_info
 from .Items import OpenRCT2Item, set_openRCT2_items
-from .Options import openRCT2Options, Scenario
+from .Options import openRCT2Options, Scenario, openrct2_option_groups
 from worlds.AutoWorld import World, WebWorld
 class OpenRCT2WebWorld(WebWorld):
-    tutorials = []
+    theme = "partyTime"
+
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the OpenRCT2 randomizer on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Crazycolbster"]
+    )
+
+    tutorials = [setup_en]
+    option_groups = openrct2_option_groups
+
 
 class OpenRCT2Location(Location):
     game = "OpenRCT2"
@@ -49,6 +62,7 @@ class OpenRCT2World(World):
     """
 
     game = "OpenRCT2"
+    web = OpenRCT2WebWorld()
 
     options_dataclass = openRCT2Options
     options: openRCT2Options

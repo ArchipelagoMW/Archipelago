@@ -22,7 +22,7 @@ This will first entail installing OpenRCT2, the plugin, and finally connecting t
 
 ### Install
 
-If you haven't installed OpenRCT2 or the base game(s), follow the guide for your operating system on the official [OpenRCT2 Website](https://openrct2.io/)
+If you haven't installed OpenRCT2 or the base game(s), follow the guide for your operating system on the official [OpenRCT2 Website](https://openrct2.io/getting-started/index.html)
 
 ### Install the Roller Coaster Tycoon Randomizer Plugin
 
