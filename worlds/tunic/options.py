@@ -178,7 +178,7 @@ class TunicPlandoConnections(PlandoConnections):
 class LaurelsZips(Toggle):
     """
     Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
-    Notable inclusions are the Monastery gate, Ruined Passage door, Forest Grave Path gate, and getting from the Back of Swamp to the Middle of Swamp.
+    Notable inclusions are the Monastery gate, Ruined Passage door, Old House gate, Forest Grave Path gate, and getting from the Back of Swamp to the Middle of Swamp.
     """
     internal_name = "laurels_zips"
     display_name = "Laurels Zips Logic"
