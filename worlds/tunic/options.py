@@ -41,14 +41,9 @@ class AbilityShuffling(Toggle):
 
 class LogicRules(Choice):
     """
-    Set which logic rules to use for your world.
-    Restricted: Standard logic, no glitches.
-    No Major Glitches: Sneaky Laurels zips, ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
-    * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer.
-    Unrestricted: Logic in No Major Glitches, as well as ladder storage to get to certain places early.
-    * Torch is given to the player at the start of the game due to the high softlock potential with various tricks. Using the torch is not required in logic.
-    * Using Ladder Storage to get to individual chests is not in logic to avoid tedium.
-    * Getting knocked out of the air by enemies during Ladder Storage to reach places is not in logic, except for in Rooted Ziggurat Lower. This is so you're not punished for playing with enemy rando on.
+    Deprecated, and will be removed in a later version.
+    If you have this set to NMG, it will set Laurels Zips on and Ice Grappling to medium.
+    If you have this set to Unrestricted, it will set Laurels Zips on, Ice Grappling to hard, and Ladder Storage to medium.
     """
     internal_name = "logic_rules"
     display_name = "Logic Rules"
@@ -183,6 +178,7 @@ class TunicPlandoConnections(PlandoConnections):
 class LaurelsZips(Toggle):
     """
     Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
+    Notable inclusions are the Monastery gate, Ruined Passage door, Forest Grave Path gate, and getting from the Back of Swamp to the Middle of Swamp.
     """
     internal_name = "laurels_zips"
     display_name = "Laurels Zips Logic"
@@ -211,6 +207,8 @@ class LadderStorage(Choice):
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty.
     Medium includes changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
     Hard includes going behind the map to enter closed doors from behind.
+    Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint, to avoid softlocks.
+    Checks that require you to get softlocked are not in logic. Needing to death warp or quit to menu to escape a situation is not considered a softlock.
     """
     internal_name = "ladder_storage"
     display_name = "Ladder Storage Logic"
@@ -225,7 +223,7 @@ class LadderStorageWithoutItems(Toggle):
     """
     If disabled, you logically require Stick, Sword, or Magic Orb to Ladder Storage.
     If enabled, you will be expected to Ladder Storage without items.
-    This can be done with a Golden Coin, Prayer, rolling, the plushie code, and many other options.
+    This can be done with a Golden Coin, Prayer, the plushie code, and many other options.
 
     This option has no effect if you do not have Ladder Storage Logic enabled
     """
@@ -272,23 +270,23 @@ tunic_option_groups = [
 
 tunic_option_presets: Dict[str, Dict[str, Any]] = {
     "Sync": {
-        AbilityShuffling.internal_name: True,
+        "ability_shuffling": True,
     },
     "Async": {
         "progression_balancing": 0,
-        AbilityShuffling.internal_name: True,
-        ShuffleLadders.internal_name: True,
-        LaurelsLocation.internal_name: LaurelsLocation.option_10_fairies,
+        "ability_shuffling": True,
+        "shuffle_ladders": True,
+        "laurels_location": "10_fairies",
     },
     "Glace Mode": {
         "accessibility": "minimal",
-        AbilityShuffling.internal_name: True,
-        EntranceRando.internal_name: EntranceRando.option_yes,
-        FoolTraps.internal_name: FoolTraps.option_onslaught,
-        IceGrappling.internal_name: IceGrappling.option_hard,
-        LadderStorage.internal_name: LadderStorage.option_hard,
-        LadderStorageWithoutItems: True,
-        Maskless.internal_name: True,
-        Lanternless.internal_name: True,
+        "ability_shuffling": True,
+        "entrance_rando": True,
+        "fool_traps": "onslaught",
+        "ice_grappling": "hard",
+        "ladder_storage": "hard",
+        "ladder_storage_without_items": True,
+        "maskless": True,
+        "lanternless": True,
     },
 }
