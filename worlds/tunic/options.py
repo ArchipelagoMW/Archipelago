@@ -189,7 +189,7 @@ class IceGrappling(Choice):
     Choose whether grappling frozen enemies is in logic.
     Easy includes ice grappling enemies that are in range without luring them.
     Medium includes using ice grapples to push enemies through doors or off ledges. Also includes bringing an enemy over to the Temple Door to grapple through it.
-    Hard includes luring or grappling enemies to get to where you want to go.
+    Hard includes luring or grappling enemies to get to where you want to go. Hard difficulty will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks.
     Note: You will still be expected to ice grapple to the slime in East Forest.
     """
     internal_name = "ice_grappling"
@@ -207,8 +207,9 @@ class LadderStorage(Choice):
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty.
     Medium includes changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
     Hard includes going behind the map to enter closed doors from behind.
-    Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint, to avoid softlocks.
+    Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks.
     Checks that require you to get softlocked are not in logic. Needing to death warp or quit to menu to escape a situation is not considered a softlock.
+    Opening a chest mid-LS is not considered in logic to avoid tedium.
     """
     internal_name = "ladder_storage"
     display_name = "Ladder Storage Logic"
@@ -222,8 +223,8 @@ class LadderStorage(Choice):
 class LadderStorageWithoutItems(Toggle):
     """
     If disabled, you logically require Stick, Sword, or Magic Orb to Ladder Storage.
-    If enabled, you will be expected to Ladder Storage without items.
-    This can be done with a Golden Coin, Prayer, the plushie code, and many other options.
+    If enabled, you will be expected to Ladder Storage without progression items.
+    This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 
     This option has no effect if you do not have Ladder Storage Logic enabled
     """
