@@ -1,0 +1,77 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
+{% endblock %}
+
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Strawberry"            : "https://static.wikia.nocookie.net/celestegame/images/6/6d/Strawberry.png",
+    "Breakable Blocks"      : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Breakable%20Wall.png?raw=true",
+    "Cassettes"             : "https://static.wikia.nocookie.net/celestegame/images/4/4d/Cassette_BSide.png",
+    "Coins"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Coin.png?raw=true",
+    "Dash Refills"          : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Dash%20Refill.png?raw=true",
+    "Double Dash Refills"   : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Double%20Dash%20Refill.png?raw=true",
+    "Feathers"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Feather.png?raw=true",
+    "Springs"               : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Spring.png?raw=true",
+    "Traffic Blocks"        : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Movable%20Platform.png?raw=true",
+    "IsCompleted"           : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Badeline.png?raw=true"
+} %}
+
+{% set inventory_order = [
+    "Strawberry",
+    "Breakable Blocks",
+    "Cassettes",
+    "Coins",
+    "Dash Refills",
+    "Double Dash Refills",
+    "Feathers",
+    "Springs",
+    "Traffic Blocks",
+    "IsCompleted"
+] %}
+
+{% set multi_items = [
+    "Strawberry"
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    
+} %}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        {%- if item in icons -%}
+            <th class="center-column">
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}">
+            </th>
+        {%- endif %}
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {{ inventories[(team, player)][item] }}
+                {% else %}
+                    ✔️
+                {% endif %}
+            </td>
+        {%- else -%}
+            <td></td>
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
