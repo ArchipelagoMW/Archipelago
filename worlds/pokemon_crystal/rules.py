@@ -329,6 +329,14 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Radio Tower 4F - Pink Bow from Mary"),
              lambda state: state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
 
+    if trainersanity():
+        set_rule(get_location("Radio Tower 1F - Grunt"), has_rocket_badges)
+
+        set_rule(get_location("Radio Tower 2F - Grunt 1"), has_rocket_badges)
+        set_rule(get_location("Radio Tower 2F - Grunt 2"), has_rocket_badges)
+        set_rule(get_location("Radio Tower 2F - Grunt 3"), has_rocket_badges)
+        set_rule(get_location("Radio Tower 2F - Grunt 4"), has_rocket_badges)
+
     # Route 35
     set_rule(get_location("Route 35 - HP Up After Delivering Kenya"),
              lambda state: state.has("EVENT_GAVE_KENYA", world.player))
