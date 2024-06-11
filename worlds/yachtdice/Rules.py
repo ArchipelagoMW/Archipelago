@@ -58,6 +58,10 @@ class Category:
     def __init__(self, name, quantity=1):
         self.name = name
         self.quantity = quantity  # how many times you have the category
+        
+    def __hash__(self):
+        return hash((self.name, self.quantity))
+
 
     # return mean score of a category
     def mean_score(self, num_dice, num_rolls):
@@ -100,17 +104,17 @@ def extract_progression(state, player, options):
     number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
     number_of_step_mults = state.count("Step Score Multiplier", player)
     
-    categories = [
+    categories = tuple(
         Category(category_value, state.count(category_name, player))
         for category_name, category_value in category_mappings.items()
         if state.count(category_name, player)  # want all categories that have count >= 1
-    ]        
+    )   
             
     extra_points_in_logic = state.count("1 Point", player)
     extra_points_in_logic += state.count("10 Points", player) * 10
     extra_points_in_logic += state.count("100 Points", player) * 100
 
-    return categories, number_of_dice, number_of_rerolls, number_of_fixed_mults * 0.1, number_of_step_mults * 0.01, extra_points_in_logic,
+    return (categories, number_of_dice, number_of_rerolls, number_of_fixed_mults * 0.1, number_of_step_mults * 0.01, extra_points_in_logic)
     
 
 
@@ -125,7 +129,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     Function that returns the feasible score in logic based on items obtained.
     """
     tup = (
-        tuple([c.name + str(c.quantity) for c in categories]),
+        categories,
         num_dice,
         num_rolls,
         fixed_mult,
@@ -138,7 +142,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         return yachtdice_cache[tup]
 
     # sort categories because for the step multiplier, you will want low-scoring categories first
-    categories.sort(key=lambda category: category.mean_score(num_dice, num_rolls))
+    categories = sorted(categories, key=lambda category: category.mean_score(num_dice, num_rolls))
 
     # function to add two discrete distribution.
     # defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
