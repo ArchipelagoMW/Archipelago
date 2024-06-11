@@ -390,27 +390,31 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
                              lambda state, loc_rule=get_aggression_rule(option, creature_name): loc_rule(state, player))
 
     # Victory locations
-    set_rule(multiworld.get_location("Neptune Launch", player),
-             lambda state:
-             get_max_depth(state, player, subnautica_world.options) >= 1444 and
-             has_mobile_vehicle_bay(state, player) and
-             state.has("Neptune Launch Platform", player) and
-             state.has("Neptune Gantry", player) and
-             state.has("Neptune Boosters", player) and
-             state.has("Neptune Fuel Reserve", player) and
-             state.has("Neptune Cockpit", player) and
-             state.has("Ion Power Cell", player) and
-             state.has("Ion Battery", player) and
-             has_cyclops_shield(state, player, subnautica_world.options))
+    if multiworld.goal[player].get_event_name() == "Neptune Launch":
+        set_rule(multiworld.get_location("Neptune Launch", player),
+                 lambda state:
+                 get_max_depth(state, player, subnautica_world.options) >= 1444 and
+                 has_mobile_vehicle_bay(state, player) and
+                 state.has("Neptune Launch Platform", player) and
+                 state.has("Neptune Gantry", player) and
+                 state.has("Neptune Boosters", player) and
+                 state.has("Neptune Fuel Reserve", player) and
+                 state.has("Neptune Cockpit", player) and
+                 state.has("Ion Power Cell", player) and
+                 state.has("Ion Battery", player) and
+                 has_cyclops_shield(state, player, subnautica_world.options))
 
-    set_rule(multiworld.get_location("Disable Quarantine", player),
-             lambda state: get_max_depth(state, player, subnautica_world.options) >= 1444)
+    if multiworld.goal[player].get_event_name() == "Disable Quarantine":
+        set_rule(multiworld.get_location("Disable Quarantine", player),
+                 lambda state: get_max_depth(state, player, subnautica_world.options) >= 1444)
 
-    set_rule(multiworld.get_location("Full Infection", player),
-             lambda state: get_max_depth(state, player, subnautica_world.options) >= 900)
+    if multiworld.goal[player].get_event_name() == "Full Infection":
+        set_rule(multiworld.get_location("Full Infection", player),
+                 lambda state: get_max_depth(state, player, subnautica_world.options) >= 900)
 
-    room = multiworld.get_location("Aurora Drive Room - Upgrade Console", player)
-    set_rule(multiworld.get_location("Repair Aurora Drive", player),
-             lambda state: room.can_reach(state))
+    if multiworld.goal[player].get_event_name() == "Repair Aurora Drive":
+        room = multiworld.get_location("Aurora Drive Room - Upgrade Console", player)
+        set_rule(multiworld.get_location("Repair Aurora Drive", player),
+                 lambda state: room.can_reach(state))
 
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
