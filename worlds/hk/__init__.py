@@ -5,6 +5,7 @@ import typing
 from copy import deepcopy
 import itertools
 import operator
+from collections import defaultdict, Counter
 
 logger = logging.getLogger("Hollow Knight")
 
@@ -12,7 +13,7 @@ from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules, cost_terms, _hk_can_beat_thk, _hk_siblings_ending, _hk_can_beat_radiance
 from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
-    shop_to_option, HKOptions
+    shop_to_option, HKOptions, GrubHuntGoal
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
@@ -453,39 +454,56 @@ class HKWorld(World):
 
     def stage_pre_fill(multiworld: "MultiWorld"):
         cls = HKWorld
+
+        def set_goal(player, grub_rule: typing.Callable[[CollectionState], bool]):
+            world = multiworld.worlds[player]
+
+            if world.options.Goal == "grub_hunt":
+                multiworld.completion_condition[player] = grub_rule
+            else:
+                old_rule = multiworld.completion_condition[player]
+                multiworld.completion_condition[player] = lambda state: old_rule(state) and grub_rule(state)
+
         worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.Goal in ["any", "grub_hunt"]]
         if worlds:
             grubs = [item for item in multiworld.get_items() if item.name == "Grub"]
+        all_grub_players = [world.player for world in multiworld.worlds.values() if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]]
+
+        if all_grub_players:
+            group_lookup = defaultdict(set)
+            for group_id, group in multiworld.groups.items():
+                for player in group["players"]:
+                    group_lookup[group_id].add(player)
+
+            grub_count_per_player = Counter()
+            per_player_grubs_per_player = defaultdict(Counter)
+
+            for grub in grubs:
+                player = grub.player
+                if player in group_lookup:
+                    for real_player in group_lookup[player]:
+                        per_player_grubs_per_player[real_player][player] += 1
+                else:
+                    per_player_grubs_per_player[player][player] += 1
+
+                if grub.location and grub.location.player in group_lookup.keys():
+                    for real_player in group_lookup[grub.location.player]:
+                        grub_count_per_player[real_player] += 1
+                else:
+                    grub_count_per_player[player] += 1
+
+            for player, count in grub_count_per_player.items():
+                multiworld.worlds[player].grub_count = count
+
+            for player, grub_player_count in per_player_grubs_per_player.items():
+                if player in all_grub_players:
+                    set_goal(player, lambda state, g=grub_player_count: all([state.has("Grub", owner, count) for owner, count in g.items()]))
 
         for world in worlds:
-            player = world.player
-            grub_hunt_goal = world.options.GrubHuntGoal
-
-            def set_goal(grub_rule: typing.Callable[[CollectionState], bool]):
-                if world.options.Goal == "grub_hunt":
-                    multiworld.completion_condition[player] = grub_rule
-                else:
-                    old_rule = multiworld.completion_condition[player]
-                    multiworld.completion_condition[player] = lambda state: old_rule(state) and grub_rule(state)
-
-            if grub_hunt_goal == grub_hunt_goal.special_range_names["all"]:
-                from collections import Counter
-                relevant_groups = multiworld.get_player_groups(player)
-                grub_player_count = Counter()
-
-                for grub in grubs:
-                    if grub.player in relevant_groups or grub.player == player:
-                        grub_player_count[grub.player] += 1
-                        if grub.location and grub.location.player in relevant_groups:
-                            # not counting our grubs stuck in item links because we also will count the group's copy
-                            pass
-                        else:
-                            world.grub_count += 1
-
-                set_goal(lambda state, g=grub_player_count: all([state.has("Grub", player, count) for player, count in g.items()]))
-            else:
-                world.grub_count = grub_hunt_goal.value
-                set_goal(lambda state: state.has("Grub", player, world.grub_count))
+            if world.player not in all_grub_players:
+                world.grub_count = world.options.GrubHuntGoal.value
+                player = world.player
+                set_goal(player, lambda state, p=player, c=world.grub_count: state.has("Grub", p, c))
 
     def fill_slot_data(self):
         slot_data = {}
