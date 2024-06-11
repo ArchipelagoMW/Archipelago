@@ -18,6 +18,9 @@ class SunFormAccessTest(AquariaTestBase):
             "Abyss right area, bulb behind the rock in the whale room",
             "Octopus Cave, Dumbo Egg",
             "Beating Octopus Prime",
+            "Sunken City, bulb on top of the boss area",
+            "Beating the Golem",
+            "Sunken City cleared",
             "Final Boss area, bulb in the boss third form room",
             "Objective complete"
         ]

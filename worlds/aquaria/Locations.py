@@ -185,7 +185,7 @@ class AquariaLocations:
         "Mithalas City, second bulb at the end of the top path": 698040,
         "Mithalas City, bulb in the top path": 698036,
         "Mithalas City, Mithalas Pot": 698174,
-        "Mithalas City, urn in the Cathedral flower tube entrance": 698128,
+        "Mithalas City, urn in the Castle flower tube entrance": 698128,
     }
 
     locations_mithalas_city_fishpass = {
@@ -246,7 +246,7 @@ class AquariaLocations:
         "Kelp Forest top left area, bulb in the bottom left clearing": 698044,
         "Kelp Forest top left area, bulb in the path down from the top left clearing": 698045,
         "Kelp Forest top left area, bulb in the top left clearing": 698046,
-        "Kelp Forest top left, Jelly Egg": 698185,
+        "Kelp Forest top left area, Jelly Egg": 698185,
     }
 
     locations_forest_tl_fp = {
@@ -332,7 +332,7 @@ class AquariaLocations:
     }
 
     locations_veil_tr_l = {
-        "The Veil top right area, bulb in the top of the waterfall": 698080,
+        "The Veil top right area, bulb at the top of the waterfall": 698080,
         "The Veil top right area, Transturtle": 698210,
     }
 
