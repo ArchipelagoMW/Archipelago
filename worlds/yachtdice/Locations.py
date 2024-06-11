@@ -30,7 +30,7 @@ def all_locations_fun(max_score):
 
 
 
-def ini_locations(goal_score, max_score, num_locs, dif):
+def ini_locations(goal_score, max_score, number_of_locations, dif):
     """
     function that loads in all locations necessary for the game, so based on options.
     will make sure that goal_score and max_score are included locations
@@ -43,19 +43,19 @@ def ini_locations(goal_score, max_score, num_locs, dif):
         scaling = 2.3
 
     scores = []
-    # the scores follow the function int( 1 + (perc ** scaling) * (max_score-1) )
+    # the scores follow the function int( 1 + (percentage ** scaling) * (max_score-1) )
     # however, this will have many low values, sometimes repeating.
-    # to avoid repeating scores, hiscore keeps tracks of the highest score location
-    # and the next score will always be at least hiscore + 1
-    # note that curscore is at most max_score-1
-    hiscore = 0
-    for i in range(num_locs - 1):
-        perc = i / num_locs
-        curscore = int(1 + (perc**scaling) * (max_score - 2))
-        if curscore <= hiscore:
-            curscore = hiscore + 1
-        hiscore = curscore
-        scores += [curscore]
+    # to avoid repeating scores, highest_score keeps tracks of the highest score location
+    # and the next score will always be at least highest_score + 1
+    # note that current_score is at most max_score-1
+    highest_score = 0
+    for i in range(number_of_locations - 1):
+        percentage = i / number_of_locations
+        current_score = int(1 + (percentage ** scaling) * (max_score - 2))
+        if current_score <= highest_score:
+            current_score = highest_score + 1
+        highest_score = current_score
+        scores += [current_score]
 
     if goal_score != max_score:
         # if the goal score is not in the list, find the closest one and make it the goal.

@@ -272,8 +272,7 @@ class YachtDiceWorld(World):
         if score_in_logic > 1000:
             removed_item = ""
             while score_in_logic > 1000:
-                removed_item = self.itempool[-1]
-                self.itempool.pop()
+                removed_item = self.itempool.pop()
                 score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
             self.itempool.append(removed_item)
         else:
