@@ -3,7 +3,7 @@ from collections.abc import Sequence
 from collections import defaultdict
 import json
 from logging import warning
-from typing import Callable, Dict, Set, List, Optional, TextIO, Union
+from typing import Any, Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
 
@@ -93,8 +93,19 @@ class DarkSouls3World(World):
     def generate_early(self):
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
+        # Inform Universal Tracker where Yhorm is being randomized to.
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Dark Souls III" in self.multiworld.re_gen_passthrough:
+                if self.multiworld.re_gen_passthrough["Dark Souls III"]["options"]["randomize_enemies"]:
+                    yhorm_data = self.multiworld.re_gen_passthrough["Dark Souls III"]["yhorm"]
+                    for boss in all_bosses:
+                        if yhorm_data.startswith(boss.name):
+                            self.yhorm_location = boss
+                else:
+                    self.yhorm_location = default_yhorm_location
+
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
-        if self.options.randomize_enemies:
+        elif self.options.randomize_enemies:
             self.yhorm_location = self.random.choice(
                 [boss for boss in all_bosses if self._allow_boss_for_yhorm(boss)])
 
@@ -1529,4 +1540,8 @@ class DarkSouls3World(World):
             "locationIdsToKeys": location_ids_to_keys,
         }
 
+        return slot_data
+
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         return slot_data
