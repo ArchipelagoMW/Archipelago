@@ -240,15 +240,26 @@ class DarkSouls3World(World):
                 if (
                     location.missable and self.options.missable_locations == "unimportant"
                 ) or (
-                    # Mark Red Eye Orb as missable if Lift Chamber Key isn't randomized, because
-                    # the latter is missable by default.
+                    # Lift Chamber Key is missable. Exclude Lift-Chamber-Key-Locked locations if it isn't randomized
                     not self._is_location_available("FS: Lift Chamber Key - Leonhard")
                     and location.name == "HWL: Red Eye Orb - wall tower, miniboss"
+                ) or (
+                    # Chameleon is missable. Exclude Chameleon-locked locations if it isn't randomized
+                    not self._is_location_available("AL: Chameleon - tomb after marrying Anri")
+                    and location.name in {"RC: Dragonhead Shield - streets monument, across bridge",
+                                          "RC: Large Soul of a Crestfallen Knight - streets monument, across bridge",
+                                          "RC: Divine Blessing - streets monument, mob drop", "RC: Lapp's Helm - Lapp",
+                                          "RC: Lapp's Armor - Lapp",
+                                          "RC: Lapp's Gauntlets - Lapp",
+                                          "RC: Lapp's Leggings - Lapp"}
                 ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
-                # Don't allow Siegward's Storm Ruler to mark Yhorm as defeatable.
-                if location.name == "PC: Storm Ruler - Siegward": continue
+                # Don't allow missable duplicates of progression items to be expected progression.
+                if location.name in {"PC: Storm Ruler - Siegward",
+                                     "US: Pyromancy Flame - Cornyx",
+                                     "US: Tower Key - kill Irina"}:
+                    continue
 
                 # Replace non-randomized items with events that give the default item
                 event_item = (
@@ -264,10 +275,9 @@ class DarkSouls3World(World):
                 )
                 event_item.code = None
                 new_location.place_locked_item(event_item)
-                if location.name in excluded: excluded.remove(location.name)
-
-            if region_name == "Menu":
-                add_item_rule(new_location, lambda item: not item.advancement)
+                if location.name in excluded:
+                    excluded.remove(location.name)
+                    self.all_excluded_locations.remove(location.name)
 
             new_region.locations.append(new_location)
 
@@ -354,7 +364,7 @@ class DarkSouls3World(World):
                 self.multiworld.push_precollected(self.create_item(item))
                 warning(
                     f"Couldn't add \"{item.name}\" to the item pool for " + 
-                    f"{self.multiworld.get_player_name(self.player)}. Adding it to the starting " +
+                    f"{self.player_name}. Adding it to the starting " +
                     f"inventory instead."
                 )
 
@@ -466,7 +476,7 @@ class DarkSouls3World(World):
         self.local_itempool.remove(item)
 
         if not candidate_locations:
-            warning(f"Couldn't place \"{name}\" in a valid location for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
+            warning(f"Couldn't place \"{name}\" in a valid location for {self.player_name}. Adding it to starting inventory instead.")
             location = next(
                 (location for location in self.multiworld.get_locations() if location.item == item),
                 None
@@ -705,11 +715,7 @@ class DarkSouls3World(World):
         for location in self.yhorm_location.locations:
             self._add_location_rule(location, "Storm Ruler")
 
-        self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
-            state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
-            state.has("Cinders of a Lord - Aldrich", self.player) and \
-            state.has("Cinders of a Lord - Lothric Prince", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: self._can_get(state, "KFF: Soul of the Lords")
 
     def _add_shop_rules(self) -> None:
         """Adds rules for items unlocked in shops."""
@@ -1252,8 +1258,8 @@ class DarkSouls3World(World):
         locations = location if type(location) is list else [location]
         for location in locations:
             data = location_dictionary[location]
-            if data.dlc and not self.options.enable_dlc: return False
-            if data.ngp and not self.options.enable_ngp: return False
+            if data.dlc and not self.options.enable_dlc: return
+            if data.ngp and not self.options.enable_ngp: return
 
             if not self._is_location_available(location): return
             if isinstance(rule, str):
@@ -1278,11 +1284,11 @@ class DarkSouls3World(World):
 
     def _can_go_to(self, state, region) -> None:
         """Returns whether state can access the given region name."""
-        return state.can_reach(f"Go To {region}", "Entrance", self.player)
+        return state.can_reach_entrance(f"Go To {region}", self.player)
 
     def _can_get(self, state, location) -> None:
         """Returns whether state can access the given location name."""
-        return state.can_reach(location, "Location", self.player)
+        return state.can_reach_location(location, self.player)
 
     def _is_location_available(
         self,
@@ -1311,10 +1317,17 @@ class DarkSouls3World(World):
         )
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        text = ""
+
         if self.yhorm_location != default_yhorm_location:
-            spoiler_handle.write(
-                f"Yhorm takes the place of {self.yhorm_location.name} in " +
-                f"{self.multiworld.get_player_name(self.player)}'s world\n")
+            text += f"\nYhorm takes the place of {self.yhorm_location.name} in {self.player_name}'s world\n"
+
+        if self.options.excluded_locations == "unnecessary":
+            text += f"\n{self.player_name}'s world excluded: {sorted(self.all_excluded_locations)}\n"
+
+        if text:
+            text = "\n" + text + "\n"
+            spoiler_handle.write(text)
 
     def post_fill(self):
         """If item smoothing is enabled, rearrange items so they scale up smoothly through the run.

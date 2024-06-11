@@ -1752,7 +1752,7 @@ location_tables = {
         DS3LocationData("PC: Shriving Stone - swamp, by chapel door", "Shriving Stone"),
         DS3LocationData("PC: Poison Arrow - chapel roof", "Poison Arrow x18"),
         DS3LocationData("PC: Rubbish - chapel, down stairs from second floor", "Rubbish"),
-        DS3LocationData("PC: Monolayers Greatarrow - bridge", "Onislayer Greatarrow x8"),
+        DS3LocationData("PC: Onislayer Greatarrow - bridge", "Onislayer Greatarrow x8"),
         DS3LocationData("PC: Large Soul of a Weary Warrior - bridge, far end",
                         "Large Soul of a Weary Warrior"),
         DS3LocationData("PC: Rusted Coin - below bridge #1", "Rusted Coin"),
