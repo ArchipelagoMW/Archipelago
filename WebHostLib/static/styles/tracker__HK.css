@@ -1,35 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
 
 .tracker-container {
-    width: 600px;
     box-sizing: border-box;
     font-family: "Lexend Deca", Arial, Helvetica, sans-serif;
-    border: 2px solid black;
     border-radius: 4px;
     resize: both;
 
-    background-color: #000000;
     color: white;
 }
-
-/* .tracker-container.charms {
-    width: 600px;
-} */
-
-/* .tracker-container ::before {
-    background-image: url('https://cdn.wikimg.net/en/hkwiki/images/9/96/Dialogue_Top.png');
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    top: 0;
-}
-
-.tracker-container ::before {
-    position: absolute;
-    content: "";
-    height: 2rem;
-    width: calc(100% - 2rem);
-} */
 
 .hidden {
     display: none !important;
@@ -73,16 +51,10 @@ h3 {
     transform: rotate(225deg);
 }
 
-/* html::before {
-    background-image: url('https://cdn.wikimg.net/en/hkwiki/images/thumb/2/2f/VHpromo6.png/624px-VHpromo6.png?20190823174122');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-} */
-
 /** Tracker Grid **/
 .grid {
-    background-color: black;
+    background-color: #1a1625;
+    width: 600px;
     display: grid;
     grid-template-columns: repeat(1fr, 1);
     grid-template-rows: repeat(1fr, 9);
@@ -123,7 +95,6 @@ h3 {
     display: table;
 }
 
-
 /** Inventory Grid ****************************************************************************************************/
 .inventory-grid {
     display: grid;
@@ -149,6 +120,7 @@ h3 {
     display: flex;
     justify-content: center;
     height: 48px;
+    min-width: 48px;
 }
 
 .inventory-grid .dual-item {
@@ -162,6 +134,18 @@ h3 {
     filter: grayscale(100%) contrast(75%) brightness(75%);
 }
 
+.item:has(.item-aquired) {
+    /* background: radial-gradient(circle at center, #23bc2b 100%, #23bc2b 100%, #23bc2b 100%,#23bc2b 100%,#23bc2b 100%); */
+    border-radius: 50%;
+    background-color: #90ee9040;
+}
+
+.item:has(.missing) {
+    /* background: radial-gradient(circle at center, #23bc2b 100%, #23bc2b 100%, #23bc2b 100%,#23bc2b 100%,#23bc2b 100%); */
+    border-radius: 50%;
+    background-color: #f0808040;
+}
+
 .inventory-grid .item img,
 .inventory-grid .dual-item img {
     display: flex;
@@ -173,6 +157,8 @@ h3 {
     image-rendering: crisp-edges;
     background-size: contain;
     background-repeat: no-repeat;
+    height: 40px;
+    margin-top: 4px;
 }
 
 .inventory-grid .dual-item img {

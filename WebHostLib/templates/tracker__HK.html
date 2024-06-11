@@ -264,7 +264,7 @@
                                             src="{{ icons[non_prog_item] }}"
                                             alt="{{ non_prog_item }}"
                                             title="{{ non_prog_item }}"
-                                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
+                                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 else 'item-aquired' }}"
                                         />
         
                                         {# Show L/R indicator for splitted skill #}
@@ -290,7 +290,7 @@
                                             src="{{ icons[item] }}"
                                             alt="{{ item }}"
                                             title="{{ item }}"
-                                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 }} {{ 'elevatorPass' if item == 'Elevator_Pass' }}
+                                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 else 'item-aquired' }} {{ 'elevatorPass' if item == 'Elevator_Pass' }}
                                                    {{ item if item.endswith('slash') }}"
                                         />
         
