@@ -209,7 +209,7 @@ class LadderStorage(Choice):
     """
     Choose whether Ladder Storage is in logic.
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty.
-    Medium includes changing your elevation using the environment.
+    Medium includes changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
     Hard includes going behind the map to enter closed doors from behind.
     """
     internal_name = "ladder_storage"
