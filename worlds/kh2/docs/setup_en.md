@@ -2,7 +2,7 @@
 <h2 style="text-transform:none";>Quick Links</h2>
 
 - [Game Info Page](../../../../games/Kingdom%20Hearts%202/info/en)
-- [Player Settings Page](../../../../games/Kingdom%20Hearts%202/player-settings)
+- [Player Options Page](../../../../games/Kingdom%20Hearts%202/player-options)
 
 <h2 style="text-transform:none";>Required Software:</h2>
  `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts)
@@ -13,9 +13,10 @@
 
 - Needed for Archipelago 
     1. [`ArchipelagoKH2Client.exe`](https://github.com/ArchipelagoMW/Archipelago/releases)<br>
-    2. `Install the mod from JaredWeakStrike/APCompanion using OpenKH Mod Manager`<br>
-    3. `Install the mod from KH2FM-Mods-equations19/auto-save using OpenKH Mod Manager`<br>
-    4. `AP Randomizer Seed`
+    2. `Install the Archipelago Companion mod from JaredWeakStrike/APCompanion using OpenKH Mod Manager`<br>
+    3. `Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager` <br>
+    4.  `Install the mod from KH2FM-Mods-equations19/auto-save using OpenKH Mod Manager`<br>
+    5. `AP Randomizer Seed`
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
 Load this mod just like the <b>GoA ROM</b> you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion`<br> 
@@ -23,7 +24,7 @@ Have this mod second-highest priority below the .zip seed.<br>
 This mod is based upon Num's Garden of Assemblege Mod and requires it to work. Without Num this could not be possible. 
 
 <h3 style="text-transform:none";>Required: Auto Save Mod</h3>
-Load this mod just like the GoA ROM you did during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` Location doesn't matter, required in case of crashes.
+Load this mod just like the GoA ROM you did during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` Location doesn't matter, required in case of crashes. See [Best Practices](en#best-practices) on how to load the auto save
 
 <h3 style="text-transform:none";>Installing A Seed</h3>
 
@@ -32,7 +33,7 @@ Make sure the seed is on the top of the list (Highest Priority)<br>
 After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot is a unique mod to install and will be needed be repatched for different slots/rooms.
 
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
-![image](https://i.imgur.com/QgRfjP1.png)
+![image](https://i.imgur.com/Si4oZ8w.png)
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
 
@@ -60,7 +61,7 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
   - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Panacea and Lua Backend Steps.
 
 
-<h2 style="text-transform:none";>Best Practices</h2>
+<h2 style="text-transform:none"; >Best Practices</h2>
 
 - Make a save at the start of the GoA before opening anything. This will be the file to select when loading an autosave if/when your game crashes.
     - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
@@ -71,7 +72,8 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
 <h2 style="text-transform:none";>Logic Sheet</h2>
 Have any questions on what's in logic? This spreadsheet made by Bulcon has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1nNi8ohEs1fv-sDQQRaP45o6NoRcMlLJsGckBonweDMY/edit?usp=sharing)
 <h2 style="text-transform:none";>F.A.Q.</h2>
-
+- Why is my Client giving me a "Cannot Open Process: " error?
+    - Due to how the client reads kingdom hearts 2 memory some people's computer flags it as a virus. Run the client as admin.
 - Why is my HP/MP continuously increasing without stopping?
     - You do not have `JaredWeakStrike/APCompanion` set up correctly. Make sure it is above the `GoA ROM Mod` in the mod manager.
 - Why is my HP/MP continuously increasing without stopping when I have the APCompanion Mod?
