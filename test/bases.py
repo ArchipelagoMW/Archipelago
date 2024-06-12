@@ -301,7 +301,6 @@ class WorldTestBase(unittest.TestCase):
                             with self.subTest("Location should be reached", location=location):
                                 reachable = location.can_reach(state)
                                 self.assertTrue(reachable, f"{location.name} unreachable")
-                                self.fail(f"Failed through {location}, reachable: {reachable}")
                 except Exception as ex:
                     self.fail(f"Failed from exception: {ex}")
                 with self.subTest("Beatable"):
