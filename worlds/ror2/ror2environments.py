@@ -7,6 +7,7 @@ environment_vanilla_orderedstage_1_table: Dict[str, int] = {
     "Distant Roost (2)":                        8,  # blackbeach2
     "Titanic Plains":                          15,  # golemplains
     "Titanic Plains (2)":                      16,  # golemplains2
+    "Verdant Falls":                           28,  # lakes
 }
 environment_vanilla_orderedstage_2_table: Dict[str, int] = {
     "Abandoned Aqueduct":                      17,  # goolake
