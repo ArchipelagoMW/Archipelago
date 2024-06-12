@@ -66,13 +66,15 @@ def get_seed_name(random_source) -> str:
 
 
 def main(args=None):
+    # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
+    if __name__ == "__main__" and "worlds" in sys.modules:
+        raise Exception("Worlds system should not be loaded before logging init.")
+
     if not args:
         args = mystery_argparse()
 
     seed = get_seed(args.seed)
-    # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
-    if __name__ == "__main__" and "worlds" in sys.modules:
-        raise Exception("Worlds system should not be loaded before logging init.")
+
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
     random.seed(seed)
     seed_name = get_seed_name(random)
