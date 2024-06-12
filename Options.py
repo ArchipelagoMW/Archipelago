@@ -126,19 +126,19 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
-    plain_text_doc = False
-    """Whether the WebHost should interpret the option's docstring as plain.
+    rich_text_doc: Option[bool] = None
+    """Whether the WebHost should render the Option's docstring as rich text.
 
-    By default, a docstring is interpreted as reStructuredText_, the standard
-    Python markup format. In the WebHost, it's rendered to HTML so that lists,
-    emphasis, and other rich text features are displayed properly.
+    If this is True, the Option's docstring is interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, it's rendered to HTML so
+    that lists, emphasis, and other rich text features are displayed properly.
 
-    However, before reStructuredText support was added, the WebHost rendered all
-    Option documentation as plain text with preserved whitespace. Most worlds'
-    Options were documented in a way to make this look good, which doesn't
-    necessarily look good when rendered as reStructuredText. This flag is set to
-    False for those Options so they can update their documentation at their
-    leisure.
+    If this is False, the docstring is instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved.
+
+    If this is None, it inherits the value of `World.rich_text_options_doc`. For
+    backwards compatibility, this defaults to False, but worlds are encouraged to
+    set it to True and use reStructuredText for their Option documentation.
 
     .. _reStructuredText: https://docutils.sourceforge.io/rst.html
     """
@@ -1144,6 +1144,7 @@ class Accessibility(Choice):
     - **Minimal:** ensure what is needed to reach your goal can be acquired.
     """
     display_name = "Accessibility"
+    rich_text_doc = True
     option_locations = 0
     option_items = 1
     option_minimal = 2
@@ -1160,6 +1161,7 @@ class ProgressionBalancing(NamedRange):
     range_start = 0
     range_end = 99
     display_name = "Progression Balancing"
+    rich_text_doc = True
     special_range_names = {
         "disabled": 0,
         "normal": 50,
@@ -1224,17 +1226,20 @@ class CommonOptions(metaclass=OptionsMetaProperty):
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
     display_name = "Local Items"
+    rich_text_doc = True
 
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
     display_name = "Non-local Items"
+    rich_text_doc = True
 
 
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
+    rich_text_doc = True
 
 
 class StartInventoryPool(StartInventory):
@@ -1244,11 +1249,13 @@ class StartInventoryPool(StartInventory):
     """
     verify_item_name = True
     display_name = "Start Inventory from Pool"
+    rich_text_doc = True
 
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the ``!hint`` command."""
     display_name = "Start Hints"
+    rich_text_doc = True
 
 
 class LocationSet(OptionSet):
@@ -1259,26 +1266,31 @@ class LocationSet(OptionSet):
 class StartLocationHints(LocationSet):
     """Start with these locations and their item prefilled into the ``!hint`` command."""
     display_name = "Start Location Hints"
+    rich_text_doc = True
 
 
 class ExcludeLocations(LocationSet):
     """Prevent these locations from having an important item."""
     display_name = "Excluded Locations"
+    rich_text_doc = True
 
 
 class PriorityLocations(LocationSet):
     """Prevent these locations from having an unimportant item."""
     display_name = "Priority Locations"
+    rich_text_doc = True
 
 
 class DeathLink(Toggle):
     """When you die, everyone dies. Of course the reverse is true too."""
     display_name = "Death Link"
+    rich_text_doc = True
 
 
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
+    rich_text_doc = True
     default = []
     schema = Schema([
         {
@@ -1345,6 +1357,7 @@ class ItemLinks(OptionList):
 
 class Removed(FreeText):
     """This Option has been Removed."""
+    rich_text_doc = True
     default = ""
     visibility = Visibility.none
 

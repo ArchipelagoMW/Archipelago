@@ -198,11 +198,11 @@
         {{ option.display_name|default(option_name) }}:
         <span
             class="interactive tooltip-container"
-            {% if option.plain_text_doc %}
+            {% if not option.rich_text_doc %}
               data-tooltip="{{option.__doc__ | default("**Please document me!**") | dedent}}"
             {% endif %}>
           (?)
-          {% if not option.plain_text_doc %}
+          {% if option.rich_text_doc %}
             <div class="tooltip">
               {{ option.__doc__ | default("**Please document me!**") | rst_to_html | safe }}
             </div>
