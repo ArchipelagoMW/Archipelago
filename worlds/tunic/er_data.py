@@ -1536,3 +1536,22 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
 }
+
+# groups for ladders at the same elevation, for use in determing whether you can ls to entrances in diff rulesets
+# need to consider the case of overworld beach -> somewhere with atoll ladder but no town ladders
+overworld_ladder_groups: Dict[str, List[str]] = {
+    # lowest elevation
+    "Group 1": ["Ladders in Overworld Town", "Ladder to Ruined Atoll", "Ladder to Swamp"],
+    "Group 2": ["Ladders in Overworld Town", ]
+}
+
+
+# ladders accessible within different regions, only those that are relevant
+region_ladders: Dict[str, List[str]] = {
+    "Overworld": ["Ladders in Overworld Town", "Ladder to Swamp", "Ladders near Weathervane", "Ladder to Quarry",
+                  "Ladders in Well", "Ladders near Dark Tomb", "Ladders near Overworld Checkpoint", ],
+    "Overworld Beach": ["Ladder to Ruined Atoll"],
+    "Overworld at Patrol Cave": ["Ladders near Patrol Cave"],
+    "Overworld Quarry Entry": ["Ladder to Quarry"],
+    "Overworld Belltower": ["Ladders to West Bell"],
+}
