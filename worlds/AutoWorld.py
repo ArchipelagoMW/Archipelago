@@ -123,8 +123,8 @@ class WebWorldRegister(type):
             assert group.options, "A custom defined Option Group must contain at least one Option."
             # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
             title_name = group.name.title()
-            if title_name in prebuilt_options:
-                group.name = title_name
+            assert title_name not in prebuilt_options or title_name == group.name, \
+                f"Prebuilt group name \"{group.name}\" must be \"{title_name}\""
 
             if group.name == "Item & Location Options":
                 assert not any(option in item_and_loc_options for option in group.options), \
