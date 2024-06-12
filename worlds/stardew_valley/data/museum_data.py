@@ -103,8 +103,7 @@ class Artifact:
                                     geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     ornamental_fan = create_artifact("Ornamental Fan", 7.4, (Region.beach, Region.forest, Region.town),
                                      geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
-    dinosaur_egg = create_artifact("Dinosaur Egg", 11.4, (Region.mountain, Region.skull_cavern),
-                                   geodes=WaterChest.fishing_chest,
+    dinosaur_egg = create_artifact("Dinosaur Egg", 11.4, (Region.skull_cavern),
                                    monsters=Monster.pepper_rex)
     rare_disc = create_artifact("Rare Disc", 5.6, Region.stardew_valley,
                                 geodes=(Geode.artifact_trove, WaterChest.fishing_chest),
