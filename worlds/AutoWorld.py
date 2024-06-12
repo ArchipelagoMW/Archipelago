@@ -78,16 +78,6 @@ class AutoWorldRegister(type):
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
-        if "options_dataclass" in dct:
-            common_options = set(option for option in PerGameCommonOptions.type_hints.values())
-            rich_text_options_doc = (
-                bool(dct["rich_text_options_doc"]) if "rich_text_options_doc" in dct
-                else World.rich_text_options_doc
-            )
-            for option in dct["options_dataclass"].type_hints.values():
-                if option not in common_options and option.rich_text_doc is None:
-                    option.rich_text_doc = rich_text_options_doc
-
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
@@ -233,6 +223,21 @@ class WebWorld(metaclass=WebWorldRegister):
     option_groups: ClassVar[List[OptionGroup]] = []
     """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
+    rich_text_options_doc = False
+    """Whether the WebHost should render Options' docstrings as rich text.
+
+    If this is True, Options' docstrings are interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, they're rendered to HTML
+    so that lists, emphasis, and other rich text features are displayed
+    properly.
+
+    If this is False, the docstrings are instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved. For backwards
+    compatibility, this is the default.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
     location_descriptions: Dict[str, str] = {}
     """An optional map from location names (or location group names) to brief descriptions for users."""
 
@@ -248,21 +253,6 @@ class World(metaclass=AutoWorldRegister):
     """link your Options mapping"""
     options: PerGameCommonOptions
     """resulting options for the player of this world"""
-
-    rich_text_options_doc = False
-    """Whether the WebHost should render Options' docstrings as rich text.
-
-    If this is True, Options' docstrings are interpreted as reStructuredText_,
-    the standard Python markup format. In the WebHost, they're rendered to HTML
-    so that lists, emphasis, and other rich text features are displayed
-    properly.
-
-    If this is False, the docstrings are instead interpreted as plain text, and
-    displayed as-is on the WebHost with whitespace preserved. For backwards
-    compatibility, this is the default.
-
-    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
-    """
 
     game: ClassVar[str]
     """name the game"""
