@@ -304,7 +304,7 @@ class WorldTestBase(unittest.TestCase):
                 with self.subTest("Beatable"):
                     self.multiworld.state = state
                     self.assertBeatable(True)
-                self.fail()
+                self.fail(f"Failed through {location.name}")
             except Exception as ex:
                 self.fail(f"Test failed with exception: {ex}")
 
