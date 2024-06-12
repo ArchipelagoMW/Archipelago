@@ -1152,12 +1152,9 @@ class Accessibility(Choice):
 
 
 class ProgressionBalancing(NamedRange):
-    """Move progression items earlier.
+    """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
 
-    This helps prevent the player from getting stuck and bored early. A lower
-    setting means items are more random and the player is more likely to get
-    stuck, a higher setting means more progression items are available early and
-    the player is less likely to get stuck.
+    A lower setting means more getting stuck. A higher setting means less getting stuck.
     """
     default = 50
     range_start = 0

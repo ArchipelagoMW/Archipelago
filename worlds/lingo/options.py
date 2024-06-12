@@ -38,7 +38,7 @@ class ProgressiveColorful(DefaultOnToggle):
     - **Off:** There is an item for each room of The Colorful, meaning that
       random rooms in the middle of the sequence can open up without giving you
       access to them.
-    - **On:** Tthere are ten progressive items, which open up the sequence from
+    - **On:** There are ten progressive items, which open up the sequence from
       White forward.
     """
     display_name = "Progressive Colorful"
@@ -118,9 +118,9 @@ class SunwarpAccess(Choice):
     - **Normal:** All sunwarps are enabled from the start.
     - **Disabled:** All sunwarps are disabled. Pilgrimage must be disabled when
       this is used.
-    - **Unlock: Aunwarps start off disabled, and all six activate once you
+    - **Unlock:** Sunwarps start off disabled, and all six activate once you
       receive an item.
-    - **Iindividual:** Sunwarps start off disabled, and each has a corresponding
+    - **Individual:** Sunwarps start off disabled, and each has a corresponding
       item that unlocks it.
     - **Progressive:** Sunwarps start off disabled, and they unlock in order
       using a progressive item.
