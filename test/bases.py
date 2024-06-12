@@ -292,7 +292,7 @@ class WorldTestBase(unittest.TestCase):
         """Ensure all state can reach everything and complete the game with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
-        with self.subTest("Game", game=self.game):
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
             state = self.multiworld.get_all_state(False)
             for location in self.multiworld.get_locations():
@@ -308,7 +308,7 @@ class WorldTestBase(unittest.TestCase):
         """Ensure empty state can reach at least one location with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
-        with self.subTest("Game", game=self.game):
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             state = CollectionState(self.multiworld)
             locations = self.multiworld.get_reachable_locations(state, self.player)
             self.assertGreater(len(locations), 0,
