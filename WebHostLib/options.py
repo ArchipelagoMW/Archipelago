@@ -77,6 +77,8 @@ def filter_rst_to_html(text: str) -> str:
         text = lines[0] + "\n" + dedent("\n".join(lines[1:]))
 
     return publish_parts(text, writer_name='html', settings=None, settings_overrides={
+        'raw_enable': False,
+        'file_insertion_enabled': False,
         'output_encoding': 'unicode'
     })['body']
 
