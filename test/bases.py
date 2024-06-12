@@ -293,16 +293,20 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
-            state = self.multiworld.get_all_state(False)
-            for location in self.multiworld.get_locations():
-                if location.name not in excluded:
-                    with self.subTest("Location should be reached", location=location):
-                        reachable = location.can_reach(state)
-                        self.assertTrue(reachable, f"{location.name} unreachable")
-            with self.subTest("Beatable"):
-                self.multiworld.state = state
-                self.assertBeatable(True)
+            try:
+                excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
+                state = self.multiworld.get_all_state(False)
+                for location in self.multiworld.get_locations():
+                    if location.name not in excluded:
+                        with self.subTest("Location should be reached", location=location):
+                            reachable = location.can_reach(state)
+                            self.assertTrue(reachable, f"{location.name} unreachable")
+                with self.subTest("Beatable"):
+                    self.multiworld.state = state
+                    self.assertBeatable(True)
+                self.fail()
+            except Exception as ex:
+                self.fail(f"Test failed with exception: {ex}")
 
     def test_empty_state_can_reach_something(self):
         """Ensure empty state can reach at least one location with the defined options"""
