@@ -1,3 +1,4 @@
+import bisect
 import logging
 import pathlib
 import weakref
@@ -94,9 +95,10 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
 
     apworld_path = pathlib.Path(apworld_src)
 
+    module_name = pathlib.Path(apworld_path.name).stem
     try:
         import zipfile
-        zipfile.ZipFile(apworld_path).open(pathlib.Path(apworld_path.name).stem + "/__init__.py")
+        zipfile.ZipFile(apworld_path).open(module_name + "/__init__.py")
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
     except KeyError as e:
@@ -107,6 +109,9 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
         raise Exception("Custom Worlds directory appears to not be writable.")
     for world_source in worlds.world_sources:
         if apworld_path.samefile(world_source.resolved_path):
+            # Note that this doesn't check if the same world is already installed.
+            # It only checks if the user is trying to install the apworld file
+            # that comes from the installation location (worlds or custom_worlds)
             raise Exception(f"APWorld is already installed at {world_source.resolved_path}.")
 
     # TODO: run generic test suite over the apworld.
@@ -115,6 +120,22 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     target = pathlib.Path(worlds.user_folder) / apworld_path.name
     import shutil
     shutil.copyfile(apworld_path, target)
+
+    # If a module with this name is already loaded, then we can't load it now.
+    # TODO: We need to be able to unload a world module,
+    # so the user can update a world without restarting the application.
+    found_already_loaded = False
+    for loaded_world in worlds.world_sources:
+        loaded_name = pathlib.Path(loaded_world.path).stem
+        if module_name == loaded_name:
+            found_already_loaded = True
+            break
+    if found_already_loaded:
+        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded,\n"
+                        "so a Launcher restart is required to use the new installation.")
+    world_source = worlds.WorldSource(str(target), is_zip=True)
+    bisect.insort(worlds.world_sources, world_source)
+    world_source.load()
 
     return apworld_path, target
 
