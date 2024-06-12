@@ -7905,27 +7905,74 @@ yacht_weights = {
     ("FourAndFiveFullHouse", 8, 8): {50: 98916, 0: 1084},
 }
 
-def round_down_to_nearest(n, k):
-    return n - (n % k)
+import time
 
-def combine_rounded_keys(yacht_weights, change_category):
+def process_dictionary(input_dict):
+    # Sort the dictionary by keys
+    sorted_dict = dict(sorted(input_dict.items()))
+    keep = sorted_dict
+
+    added_to_keys = {}  # Dictionary to keep track of keys and their addition counts
+    # Function to process the dictionary
+    def process_dict(d):
+        keys = list(d.keys())
+        modified = False
+        
+        a = mean_value(input_dict)
+        b = mean_value(sorted_dict)
+        
+        if abs(a-b) < 1:
+            for i in range(len(keys) - 1):
+                key1, key2 = keys[i], keys[i + 1]
+                val1, val2 = d[key1], d[key2]
+
+                # if added_to_keys.get(key1, 0) < 3 or added_to_keys.get(key2, 0) < 3:
+                #     continue  # Skip if either key has already been added to 3 times
+                
+                if val1 < val2 and val1 * (key2 - key1) < 1000 and (len(keys) > 3 or i > 0):
+                    d[key2] += val1
+                    added_to_keys[key2] = added_to_keys.get(key2, 0) + 1  # Mark key2 as added to
+                    del d[key1]
+                    modified = True
+                    break
+                elif val2 <= val1 and val2 * (key2 - key1) < 30000 and i < len(keys) - 2:
+                    d[key1] += val2
+                    added_to_keys[key1] = added_to_keys.get(key1, 0) + 1  # Mark key1 as added to
+                    del d[key2]
+                    modified = True
+                    break
+
+        return d, modified
+
+
+    modified = True
+    while modified:
+        sorted_dict, modified = process_dict(sorted_dict)
+    
+    # Check if the sum of all values is 100000
+    total_sum = sum(sorted_dict.values())
+    if total_sum != 100000:
+        raise ValueError(f"The total sum of values is {total_sum}, which does not equal 100000.")
+    if input_dict != sorted_dict:
+        a = mean_value(input_dict)
+        b = mean_value(sorted_dict)
+        if abs(a-b) > 2:
+            print(f"{dict(sorted(input_dict.items()))} -> {sorted_dict}\n {mean_value(input_dict)} {mean_value(sorted_dict)}\n\n")
+    
+    return sorted_dict
+
+def mean_value(dictt):
+    summ = 0
+    for key, value in dictt.items():
+        summ += key * value
+    return summ/100000
+
+
+def combine_rounded_keys(yacht_weights):
     new_yacht_weights = {}
     for main_key, sub_dict in yacht_weights.items():
-        if main_key[0] in change_category:
-            new_sub_dict = {}
-            for key, value in sub_dict.items():
-                rounded_key = round_down_to_nearest(key, 2)
-                if rounded_key in new_sub_dict:
-                    new_sub_dict[rounded_key] += value
-                else:
-                    new_sub_dict[rounded_key] = value
-            new_yacht_weights[main_key] = new_sub_dict
-        else:
-            new_yacht_weights[main_key] = sub_dict
+        new_yacht_weights[main_key] = process_dictionary(sub_dict)
     return new_yacht_weights
 
-change_category = ['SumOfEvens', 'DoubleThreesAndFours', 'TinyStraight', 'MicroStraight', 'TwosAndThrees', 'TwoOneTwoConsecutive', 'TwoPair', 'FiveDistinctDice', 'Threes', 'ThreeOdds', 'Ones', 'FourAndFiveFullHouse', 'Pair', 'OneTwoOneConsecutive', 'Distincts', 'SmallStraight', 'Yacht', 'QuadrupleOnesAndTwos', 'Fours', 'LargeStraight', 'Fives', 'FullHouse', 'SumOfOdds', 'Sixes', 'ThreeOfAKind', 'Twos', 'FourOfAKind', 'Choice', 'ThreeDistinctDice']
 
-
-
-yacht_weights = combine_rounded_keys(yacht_weights, change_category)
+yacht_weights = combine_rounded_keys(yacht_weights)

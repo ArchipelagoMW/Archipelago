@@ -159,6 +159,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
             for val1, prob1 in c.items():
                 for val2, prob2 in dist1.items():
                     new_val = int(max(val1, val2 * mult))
+                    new_val = new_val - new_val % 2
                     new_prob = prob1 * prob2
 
                     # Update the probability for the new value
