@@ -23,6 +23,48 @@ norom
 !current_health = $A2
 !received_weapons = $A3
 
+'0' = $00
+'1' = $01
+'2' = $02
+'3' = $03
+'4' = $04
+'5' = $05
+'6' = $06
+'7' = $07
+'8' = $08
+'9' = $09
+'A' = $0A
+'B' = $0B
+'C' = $0C
+'D' = $0D
+'E' = $0E
+'F' = $0F
+'G' = $10
+'H' = $11
+'I' = $12
+'J' = $13
+'K' = $14
+'L' = $15
+'M' = $16
+'N' = $17
+'O' = $18
+'P' = $19
+'Q' = $1A
+'R' = $1B
+'S' = $1C
+'T' = $1D
+'U' = $1E
+'V' = $1F
+'W' = $20
+'X' = $21
+'Y' = $22
+'Z' = $23
+' ' = $25
+'.' = $26
+',' = $27
+'!' = $29
+'r' = $2A
+':' = $2B
 
 ; !consumable_checks = $0F80 ; have to find in-stage solutions for this, there's literally not enough ram
 
@@ -46,22 +88,129 @@ macro org(address,bank)
           org <address>-$E000+($2000*<bank>)+!headersize ; org sets the position in the output file to write to (in norom, at least)
           base <address> ; base sets the position that all labels are relative to - this is necessary so labels will still start from $8000, instead of $0000 or somewhere
       else
+        if <address> >= $A000
+          org <address>-$A000+($2000*<bank>)+!headersize
+          base <address>
+        else
           org <address>-$8000+($2000*<bank>)+!headersize
           base <address>
+        endif
       endif
     endif
 endmacro
 
-%org($A1CB, $02)
+%org($A17C, $02)
+AdjustWeaponRefill:
+  ; compare vs unreceived instead. Since the stage ends anyways, this just means you aren't granted the weapon if you don't have it already
+  CMP #$1C
+  BCS WeaponRefillJump
+
+%org($A18B, $02)
+WeaponRefillJump:
+  ; just as a branch target
+
+%org($A3BF, $02)
+FixPseudoSnake:
+  JMP CheckFirstWep
+  NOP
+
+%org($A3CB, $02)
 FixPseudoRush:
   JMP CheckRushWeapon
   NOP
 
-%org($A17C, $03)
-AdjustWeaponRefill:
-  ; compare vs unreceived instead. Since the stage ends anyways, this just means you aren't granted the weapon if you don't have it already
-  CMP #$1C
-  BCS $A18B
+%org($AB74, $03)
+ShowItemString:
+  STY $04
+  STX $05
+  LDA $F5
+  PHA
+  LDA #$03
+  STA $F5
+  JSR $FF6B
+  LDX $05
+  LDA ItemLower,X
+  STA $02
+  LDA ItemUpper,X
+  STA $03
+  LDY #$00
+  .LoadString:
+  LDA ($02),Y
+  ORA $10
+  STA $0780,Y
+  BMI .Return
+  INY
+  LDA ($02),Y
+  STA $0780,Y
+  INY
+  LDA ($02),Y
+  STA $0780,Y
+  STA $00
+  INY
+  .LoadCharacters:
+  LDA ($02),Y
+  STA $0780,Y
+  INY
+  DEC $00
+  BPL .LoadCharacters
+  BMI .LoadString
+  .Return:
+  STA $19
+  PLA
+  STA $F5
+  JSR $FF6B
+  LDY $04
+  RTS
+
+ItemUpper:
+  db $AC, $AC, $AD, $AD, $AD, $AD, $AE, $AE, $AE
+
+ItemLower:
+  db $30, $C1, $02, $43, $84, $C5, $06, $47, $88
+
+%org($AC30, $03)
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P"
+db $22, $21, $0C, "     AND     "
+db $22, $41, $0C, "PLACEHOLDER 1"
+db $22, $61, $0C, "PLACEHOLDER 2"
+db $22, $81, $0C, "PLACEHOLDER 3"
+db $22, $A1, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P", $FF
+db $21, $A1, $0C, "PLACEHOLDER 1"
+db $21, $C1, $0C, "PLACEHOLDER 2"
+db $21, $E1, $0C, "PLACEHOLDER 3"
+db $22, $01, $0C, "PLACEHOLDER P"
+db $22, $21, $0C, "     AND     "
+db $22, $41, $0C, "PLACEHOLDER 1"
+db $22, $61, $0C, "PLACEHOLDER 2"
+db $22, $81, $0C, "PLACEHOLDER 3"
+db $22, $A1, $0C, "PLACEHOLDER P", $FF
 
 %org($802F, $0B)
 HookBreakMan:
@@ -81,6 +230,11 @@ AccessStage:
   JSR RewireDocRobotAccess
   NOP #2
   BEQ AccessStageTarget
+
+%org($9468, $18)
+HookWeaponGet:
+  JSR WeaponReceived
+  NOP #4
 
 %org($9917, $18)
 GameOverStageSelect:
@@ -145,6 +299,12 @@ RerouteRushJet:
 %org($DF81, $1E)
 NullBreak:
   NOP #5 ; nop break man giving every weapon
+
+%org($E15F, $1F)
+Wily4:
+  JMP Wily4Comparison
+  NOP
+
 
 %org($F340, $1F)
 RewireDocRobotAccess:
@@ -268,7 +428,7 @@ ChangeStageMode:
   .B2:
   LDA $9C33,Y
   STA $0600,X
-  LDA $9C13,Y
+  LDA $9C23,Y
   STA $0610,X
   INY
   INX
@@ -357,8 +517,8 @@ SetRushJet:
   BCS SetRushAcquire
 
 SetRushAcquire:
-  ORA $64
-  STA $64
+  ORA !acquired_rush
+  STA !acquired_rush
   RTS
 
 SetWilyStageComplete:
@@ -374,8 +534,8 @@ SetWilyStageComplete:
   ASL A
   SEC
   BCS $F454
-  ORA $0687
-  STA $0687
+  ORA !wily_stage_completion
+  STA !wily_stage_completion
   LDA #$16
   STA $22
   RTS
@@ -458,3 +618,75 @@ CheckRushWeapon:
   DEC $A1
   JMP $A477
   
+CheckFirstWep:
+  LDA $B4
+  BEQ .SetNone
+  TAY
+  .Loop:
+  LDA $00A2,Y
+  BMI .SetNew
+  INY
+  CPY #$0C
+  BEQ .SetSame
+  BCC .Loop
+  .SetSame:
+  LDA #$80
+  STA $A1
+  JMP $A3A1
+  .SetNew:
+  TYA
+  SEC
+  SBC $B4
+  BCS .Set
+  .SetNone:
+  LDA #$00
+  .Set:
+  STA $A1
+  JMP $A3DE
+
+Wily4Comparison:
+  TYA
+  PHA
+  TXA
+  PHA
+  LDY #$00
+  LDX #$08
+  LDA #$01
+  .Loop:
+  PHA
+  AND $6E
+  BEQ .Skip
+  INY
+  .Skip:
+  PLA
+  ASL
+  DEX
+  BNE .Loop
+  print "Wily 4 Requirement:", hex(realbase())
+  CPY #$08
+  BCC .Return
+  LDA #$FF
+  STA $6E
+  .Return:
+  PLA
+  TAX
+  PLA
+  TAY
+  LDA #$0C
+  STA $EC
+  RTS
+
+%org($FDBA, $1F)
+WeaponReceived:
+  TAX
+  LDA $F5
+  PHA
+  LDA #$03
+  STA $F5
+  JSR $FF6B
+  TXA
+  JSR ShowItemString
+  PLA
+  STA $F5
+  JSR $FF6B
+  RTS

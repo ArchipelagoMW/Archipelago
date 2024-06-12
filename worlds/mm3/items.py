@@ -1,6 +1,6 @@
 from BaseClasses import Item
 from typing import NamedTuple, Dict
-from .names import (needle_cannon, magnet_missile, gemini_laser, hard_knuckle, top_spin, search_snake, spark_shot,
+from .names import (needle_cannon, magnet_missile, gemini_laser, hard_knuckle, top_spin, search_snake, spark_shock,
                     shadow_blade, rush_coil, rush_marine, rush_jet, needle_man_stage, magnet_man_stage,
                     gemini_man_stage, hard_man_stage, top_man_stage, snake_man_stage, spark_man_stage, shadow_man_stage,
                     doc_needle_stage, doc_gemini_stage, doc_spark_stage, doc_shadow_stage, e_tank, weapon_energy,
@@ -25,7 +25,7 @@ robot_master_weapon_table = {
     hard_knuckle: ItemData(0x890004, True),
     top_spin: ItemData(0x890005, True, True),
     search_snake: ItemData(0x890006, True),
-    spark_shot: ItemData(0x890007, True),
+    spark_shock: ItemData(0x890007, True),
     shadow_blade: ItemData(0x890008, True, True),
 }
 

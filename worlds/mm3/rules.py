@@ -69,7 +69,7 @@ weapons_to_name: Dict[int, str] = {
     4: names.hard_knuckle,
     5: names.top_spin,
     6: names.search_snake,
-    7: names.spark_shot,
+    7: names.spark_shock,
     8: names.shadow_blade
 }
 
@@ -146,7 +146,7 @@ def set_rules(world: "MM3World") -> None:
             world.weapon_damage[8][world.random.choice(range(8))] = 2
         elif world.options.random_weakness == world.options.random_weakness.option_randomized:
             world.weapon_damage = {i: [] for i in range(9)}
-            for boss in [*range(16), *range(17, 22)]:
+            for boss in range(22):
                 for weapon in world.weapon_damage:
                     world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
                 if not any([world.weapon_damage[weapon][boss] >= 4
@@ -157,14 +157,16 @@ def set_rules(world: "MM3World") -> None:
             # handle Break Man
             boss = 16
             for weapon in world.weapon_damage:
-                world.weapon_damage[weapon].insert(boss, 0)
+                world.weapon_damage[weapon][boss] = 0
             weapon = world.random.choice(list(world.weapon_damage.keys()))
             world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
         if world.options.strict_weakness:
             for weapon in weapon_damage:
                 for i in range(22):
-                    if weapon == 0:
+                    if i == 16:
+                        continue  # Break is only weak to buster on non-random, and minimal damage on random
+                    elif weapon == 0:
                         world.weapon_damage[weapon][i] = 0
                     elif i in (20, 21) and not world.options.random_weakness:
                         continue

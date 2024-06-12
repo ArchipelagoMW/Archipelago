@@ -2,7 +2,7 @@ from BaseClasses import Location, Region
 from typing import Dict, Tuple, Optional
 from .names import (needle_man, magnet_man, gemini_man, hard_man, top_man, snake_man, spark_man, shadow_man,
                     get_needle_cannon, get_magnet_missile, get_gemini_laser, get_hard_knuckle, get_top_spin,
-                    get_search_snake, get_spark_shot, get_shadow_blade, get_rush_marine, get_rush_jet,
+                    get_search_snake, get_spark_shock, get_shadow_blade, get_rush_marine, get_rush_jet,
                     doc_air, doc_crash, doc_flash, doc_bubble, doc_wood, doc_heat, doc_metal, doc_quick,
                     doc_needle, doc_gemini, doc_spark, doc_shadow, break_man, break_stage, wily_1_boss, wily_2_boss,
                     wily_3_boss, wily_5_boss, wily_stage_1, wily_stage_2, wily_stage_3, wily_stage_4, wily_stage_5,
@@ -52,7 +52,7 @@ snake_man_locations: Dict[str, Optional[int]] = {
 
 spark_man_locations: Dict[str, Optional[int]] = {
     spark_man: 0x890007,
-    get_spark_shot: 0x890107
+    get_spark_shock: 0x890107
 }
 
 shadow_man_locations: Dict[str, Optional[int]] = {
@@ -207,7 +207,7 @@ location_groups = {
         get_hard_knuckle,
         get_top_spin,
         get_search_snake,
-        get_spark_shot,
+        get_spark_shock,
         get_shadow_blade,
         get_rush_marine,
         get_rush_jet,

@@ -9,8 +9,8 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from . import names
 from .rules import minimum_weakness_requirement, bosses
 
-#from .text import MM3TextEntry
-#from .color import get_colors_for_item, write_palette_shuffle
+from .text import MM3TextEntry
+from .color import get_colors_for_item, write_palette_shuffle
 
 if TYPE_CHECKING:
     from . import MM3World
@@ -33,15 +33,88 @@ enemy_weakness_ptrs: Dict[int, int] = {
 }
 
 enemy_addresses: Dict[str, int] = {
-    "Snake Man": 0xD4,
-    "Gemini Man": 0xD6,
-    "Gemini Man (Clone)": 0xD7, # Capcom why
+    "Dada": 0x12,
+    "Potton": 0x13,
+    "New Shotman": 0x15,
+    "Hammer Joe": 0x16,
+    "Peterchy": 0x17,
+    "Bubukan": 0x18,
+    "Vault Pole": 0x19,  # Capcom..., why did you name an enemy Pole?
+    "Bomb Flier": 0x1A,
+    "Yambow": 0x1D,
+    "Metall 2": 0x1E,
+    "Cannon": 0x22,
+    "Jamacy": 0x25,
+    "Jamacy 2": 0x26,  # dunno what this is, but I won't question
+    "Jamacy 3": 0x27,
+    "Jamacy 4": 0x28,  # tf is this Capcom
+    "Mag Fly": 0x2A,
+    "Egg": 0x2D,
+    "Gyoraibo 2": 0x2E,
+    "Junk Golem": 0x2F,
+    "Pickelman Bull": 0x30,
+    "Nitron": 0x35,
+    "Pole": 0x37,
+    "Gyoraibo": 0x38,
+    "Hari Harry": 0x3A,
+    "Penpen Maker": 0x3B,
+    "Returning Monking": 0x3C,
+    "Have 'Su' Bee": 0x3E,
+    "Hive": 0x3F,
+    "Bolton-Nutton": 0x40,
+    "Walking Bomb": 0x44,
+    "Elec'n": 0x45,
+    "Mechakkero": 0x47,
+    "Chibee": 0x4B,
+    "Swimming Penpen": 0x4D,
+    "Top": 0x52,
+    "Penpen": 0x56,
+    "Komasaburo": 0x57,
+    "Parasyu": 0x59,
+    "Hologran (Static)": 0x5A,
+    "Hologran (Moving)": 0x5B,
+    "Bomber Pepe": 0x5C,
+    "Metall DX": 0x5D,
+    "Petit Snakey": 0x5E,
+    "Proto Man": 0x62,
+    "Break Man": 0x63,
+    "Metall": 0x7D,
+    "Giant Springer": 0x83,
+    "Springer Missile": 0x85,
+    "Big Snakey": 0x99,
+    "Tama": 0x9A,
+    "Doc Robot (Flash)": 0xB0,
+    "Doc Robot (Wood)": 0xB1,
+    "Doc Robot (Crash)": 0xB2,
+    "Doc Robot (Metal)": 0xB3,
+    "Doc Robot (Bubble)": 0xC0,
+    "Doc Robot (Heat)": 0xC1,
+    "Doc Robot (Quick)": 0xC2,
+    "Doc Robot (Air)": 0xC3,
+    "Snake": 0xCA,
+    "Needle Man": 0xD0,
+    "Magnet Man": 0xD1,
+    "Top Man": 0xD2,
+    "Shadow Man": 0xD3,
+    "Top Man's Top": 0xD5,
+    "Hard Man": 0xE0,
+    "Spark Man": 0xE2,
+    "Snake Man": 0xE4,
+    "Gemini Man": 0xE6,
+    "Gemini Man (Clone)": 0xE7,  # Capcom why
+    "Yellow Devil MK-II": 0xF1,
+    "Wily Machine 3": 0xF3,
+    "Gamma": 0xF8,
+    "Kamegoro": 0x101,
+    "Kamegoro Shell": 0x102,
+    "Holograph Mega Man": 0x105,
+    "Giant Metall": 0x10C,  # This is technically FC but we're +16 from the rom header
 }
 
 # addresses printed when assembling basepatch
-consumables_ptr: int = 0x3F2FE
-wily_4_ptr: int = 0x3F3A1
-energylink_ptr: int = 0x3F46B
+#consumables_ptr: int = 0x3F2FE
+wily_4_ptr: int = 0x3F578
+#energylink_ptr: int = 0x3F46B
 
 
 class RomData:
@@ -91,72 +164,98 @@ class MM3ProcedurePatch(APProcedurePatch, APTokenMixin):
 def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("mm3_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm3_basepatch.bsdiff4")))
     # text writing
-    #patch.write_bytes(0x37E2A, MM2TextEntry("FOR           ", 0xCB).resolve())
-    #patch.write_bytes(0x37EAA, MM2TextEntry("GET EQUIPPED  ", 0x0B).resolve())
-    #patch.write_bytes(0x37EBA, MM2TextEntry("WITH          ", 0x2B).resolve())
 
-    base_address = 0x3F650
-    color_address = 0x37F6C
-    for i, location in zip(range(11), [
+    base_address = 0x6C40
+    color_address = 0x31BC7
+    for i, offset, location in zip([0, 8, 1, 2, 3, 4, 5, 6, 7, 9], [
+        0x0,
+        0x50,
+        0x91,
+        0xD2,
+        0x113,
+        0x154,
+        0x195,
+        0x1D6,
+        0x217,
+        0x258,
+        0x2A8
+    ], [
         names.get_needle_cannon,
+        names.get_rush_jet,
         names.get_magnet_missile,
         names.get_gemini_laser,
         names.get_hard_knuckle,
         names.get_top_spin,
         names.get_search_snake,
-        names.get_spark_shot,
+        names.get_spark_shock,
         names.get_shadow_blade,
         names.get_rush_marine,
-        names.get_rush_jet
     ]):
-        continue
-        #item = world.multiworld.get_location(location, world.player).item
-        #if item:
-        #    if len(item.name) <= 14:
-        #        # we want to just place it in the center
-        #        first_str = ""
-        #        second_str = item.name
-        #        third_str = ""
-        #    elif len(item.name) <= 28:
-        #        # spread across second and third
-        #        first_str = ""
-        #        second_str = item.name[:14]
-        #        third_str = item.name[14:]
-        #    else:
-        #        # all three
-        #        first_str = item.name[:14]
-        #        second_str = item.name[14:28]
-        #        third_str = item.name[28:]
-        #        if len(third_str) > 16:
-        #            third_str = third_str[:16]
-        #    player_str = world.multiworld.get_player_name(item.player)
-        #    if len(player_str) > 14:
-        #        player_str = player_str[:14]
-        #    patch.write_bytes(base_address + (64 * i), MM2TextEntry(first_str, 0x4B).resolve())
-        #    patch.write_bytes(base_address + (64 * i) + 16, MM2TextEntry(second_str, 0x6B).resolve())
-        #    patch.write_bytes(base_address + (64 * i) + 32, MM2TextEntry(third_str, 0x8B).resolve())
-        #    patch.write_bytes(base_address + (64 * i) + 48, MM2TextEntry(player_str, 0xEB).resolve())
+         item = world.multiworld.get_location(location, world.player).item
+         if item:
+            if len(item.name) <= 13:
+                # we want to just place it in the center
+                first_str = ""
+                second_str = item.name
+                third_str = ""
+            elif len(item.name) <= 26:
+                # spread across second and third
+                first_str = ""
+                second_str = item.name[:13]
+                third_str = item.name[13:]
+            else:
+                # all three
+                first_str = item.name[:13]
+                second_str = item.name[13:26]
+                third_str = item.name[26:]
+                if len(third_str) > 13:
+                    third_str = third_str[:13]
+            player_str = world.multiworld.get_player_name(item.player)
+            if len(player_str) > 13:
+                player_str = player_str[:13]
+            y_coords = 0xA1
+            row = 0x21
+            if location in [names.get_rush_marine, names.get_rush_jet]:
+                y_coords = 0x41
+                row = 0x22
+            patch.write_bytes(base_address + offset, MM3TextEntry(first_str, y_coords, row).resolve())
+            patch.write_bytes(base_address + 16 + offset, MM3TextEntry(second_str, y_coords+0x20, row).resolve())
+            patch.write_bytes(base_address + 32 + offset, MM3TextEntry(third_str, y_coords+0x40, row).resolve())
+            if y_coords + 0x60 > 0xFF:
+                row += 1
+                y_coords = 0x01
+                patch.write_bytes(base_address + 48 + offset, MM3TextEntry(player_str, y_coords, row).resolve())
+                colors_high, colors_low = get_colors_for_item(item.name)
+                patch.write_bytes(color_address + (i * 8) + 1, colors_high)
+                patch.write_bytes(color_address + (i * 8) + 5, colors_low)
+            else:
+                patch.write_bytes(base_address + 48 + offset, MM3TextEntry(player_str, y_coords+0x60, row).resolve())
 
-        #    colors = get_colors_for_item(item.name)
-        #    if i > 7:
-        #        patch.write_bytes(color_address + 27 + ((i - 8) * 2), colors)
-        #    else:
-        #        patch.write_bytes(color_address + (i * 2), colors)
-
-    # write_palette_shuffle(world, patch)
+    write_palette_shuffle(world, patch)
 
     enemy_weaknesses: Dict[str, Dict[int, int]] = {}
 
     if world.options.strict_weakness or world.options.random_weakness or world.options.plando_weakness:
         # we need to write boss weaknesses
-        output = bytearray()
-        pass
+        for boss in bosses:
+            if boss == "Kamegoro Maker":
+                enemy_weaknesses["Kamegoro"] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
+                enemy_weaknesses["Kamegoro Shell"] = {i: world.weapon_damage[i][bosses[boss]] for i in
+                                                        world.weapon_damage}
+            elif boss == "Gemini Man":
+                enemy_weaknesses[boss] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
+                enemy_weaknesses["Gemini Man (Clone)"] = {i: world.weapon_damage[i][bosses[boss]] for i in
+                                                          world.weapon_damage}
+            else:
+                enemy_weaknesses[boss] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
 
     if world.options.enemy_weakness:
         for enemy in enemy_addresses:
-            if enemy in bosses:
+            if enemy in [*bosses.keys(), "Kamegoro", "Kamegoro Shell", "Gemini Man (Clone)"]:
                 continue
             enemy_weaknesses[enemy] = {weapon: world.random.randint(-4, 4) for weapon in enemy_weakness_ptrs}
+            if enemy in ["Tama", "Giant Snakey", "Proto Man", "Giant Metall"] and enemy_weaknesses[enemy][0] <= 0:
+                enemy_weaknesses[enemy][0] = 1
 
     for enemy, damage in enemy_weaknesses.items():
         for weapon in enemy_weakness_ptrs:
@@ -166,23 +265,33 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
 
     if world.options.consumables != world.options.consumables.option_all:
         pass
-        #value_a = 0x7C
-        #value_b = 0x76
-        #if world.options.consumables == world.options.consumables.option_1up_etank:
+        # value_a = 0x7C
+        # value_b = 0x76
+        # if world.options.consumables == world.options.consumables.option_1up_etank:
         #    value_b = 0x7A
-        #else:
+        # else:
         #    value_a = 0x7A
-        #patch.write_byte(consumables_ptr - 3, value_a)
-        #patch.write_byte(consumables_ptr + 1, value_b)
+        # patch.write_byte(consumables_ptr - 3, value_a)
+        # patch.write_byte(consumables_ptr + 1, value_b)
 
-    #patch.write_byte(wily_4_ptr + 1, world.options.wily_4_requirement.value)
+    patch.write_byte(wily_4_ptr + 1, world.options.wily_4_requirement.value)
 
     if world.options.energy_link:
         pass
-        #patch.write_byte(energylink_ptr + 1, 1)
+        # patch.write_byte(energylink_ptr + 1, 1)
 
     if world.options.reduce_flashing:
         pass
+
+    if world.options.music_shuffle:
+        if world.options.music_shuffle.current_key == "no_music":
+            pool = [0] * 18
+        elif world.options.music_shuffle.current_key == "randomized":
+            pool = world.random.choices(range(1, 0xC), k=18)
+        else:
+            pool = [1, 2, 3, 4, 5, 6, 7, 8, 1, 3, 7, 8, 9, 9, 10, 10, 11, 11]
+        world.random.shuffle(pool)
+        patch.write_bytes(0x3CD1C, pool)
 
     from Utils import __version__
     patch.name = bytearray(f'MM3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
@@ -195,26 +304,27 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_bytes(0x3F34C, world.world_version)
 
     version_map = {
-        "0": 0x90,
-        "1": 0x91,
-        "2": 0x92,
-        "3": 0x93,
-        "4": 0x94,
-        "5": 0x95,
-        "6": 0x96,
-        "7": 0x97,
-        "8": 0x98,
-        "9": 0x99,
-        ".": 0xDC
+        "0": 0x00,
+        "1": 0x01,
+        "2": 0x02,
+        "3": 0x03,
+        "4": 0x04,
+        "5": 0x05,
+        "6": 0x06,
+        "7": 0x07,
+        "8": 0x08,
+        "9": 0x09,
+        ".": 0x26
     }
-    #patch.write_token(APTokenTypes.RLE, 0x36EE0, (11, 0))
-    #patch.write_token(APTokenTypes.RLE, 0x36EEE, (25, 0))
+    patch.write_token(APTokenTypes.RLE, 0x653B, (11, 0x25))
+    patch.write_token(APTokenTypes.RLE, 0x6549, (25, 0x25))
 
     # BY SILVRIS
-    #patch.write_bytes(0x36EE0, [0xC2, 0xD9, 0xC0, 0xD3, 0xC9, 0xCC, 0xD6, 0xD2, 0xC9, 0xD3])
+    patch.write_bytes(0x653B, [0x0B, 0x22, 0x25, 0x1C, 0x12, 0x15, 0x1F, 0x1B, 0x12, 0x1C])
     # ARCHIPELAGO x.x.x
-    #patch.write_bytes(0x36EF2, [0xC1, 0xD2, 0xC3, 0xC8, 0xC9, 0xD0, 0xC5, 0xCC, 0xC1, 0xC7, 0xCF, 0xC0])
-    #patch.write_bytes(0x36EFE, list(map(lambda c: version_map[c], __version__)))
+    patch.write_bytes(0x654D,
+                      [0x0A, 0x1B, 0x0C, 0x11, 0x12, 0x19, 0x0E, 0x15, 0x0A, 0x10, 0x18])
+    patch.write_bytes(0x6559, list(map(lambda c: version_map[c], __version__)))
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

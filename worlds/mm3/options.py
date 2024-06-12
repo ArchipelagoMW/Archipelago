@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, OptionDict, PerGameCommonOptions
+from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, OptionDict, PerGameCommonOptions, \
+    Visibility
 from schema import Schema, And, Use, Optional
 from .rules import bosses, weapons_to_id
 
@@ -13,6 +14,7 @@ class EnergyLink(Toggle):
     Some of the energy sent to the pool will be lost on transfer.
     """
     display_name = "EnergyLink"
+    visibility = Visibility.none
 
 
 class StartingRobotMaster(Choice):
@@ -29,22 +31,6 @@ class StartingRobotMaster(Choice):
     option_spark_man = 6
     option_shadow_man = 7
     default = "random"
-
-
-class YokuJumps(Toggle):
-    """
-    When enabled, the player is expected to be able to perform the yoku block sequence in Heat Man's
-    stage without Item 2.
-    """
-    display_name = "Yoku Block Jumps"
-
-
-class EnableLasers(Toggle):
-    """
-    When enabled, the player is expected to complete (and acquire items within) the laser sections of Quick Man's
-    stage without the Time Stopper.
-    """
-    display_name = "Enable Lasers"
 
 
 class Consumables(Choice):
@@ -67,6 +53,7 @@ class Consumables(Choice):
         elif value == 2:
             return "Weapon/Health Energy"
         return super().get_option_name(value)
+    visibility = Visibility.none
 
 
 class PaletteShuffle(TextChoice):
@@ -98,14 +85,13 @@ class EnemyWeaknesses(Toggle):
 
 class StrictWeaknesses(Toggle):
     """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
-    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Gamma)."""
+    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Wily/Gamma)."""
     display_name = "Strict Boss Weaknesses"
 
 
 class RandomWeaknesses(Choice):
     """None: Bosses will have their regular weaknesses.
-    Shuffled: Weapon damage will be shuffled amongst the weapons, so Metal Blade may do Bubble Lead damage.
-    Time Stopper will deplete half of a random Robot Master's HP.
+    Shuffled: Weapon damage will be shuffled amongst the weapons, so Shadow Blade may do Top Spin damage.
     Randomized: Weapon damage will be fully randomized.
     """
     display_name = "Random Boss Weaknesses"
@@ -118,7 +104,7 @@ class RandomWeaknesses(Choice):
 
 class Wily4Requirement(Range):
     """Change the amount of Robot Masters that are required to be defeated for
-    the teleporter to the Wily Machine to appear."""
+    the door to the Wily Machine to open."""
     display_name = "Wily 4 Requirement"
     default = 8
     range_start = 1
@@ -150,6 +136,19 @@ class ReduceFlashing(Choice):
     option_virtual_console = 1
     option_full = 2
     default = 1
+    visibility = Visibility.none
+
+
+class MusicShuffle(Choice):
+    """
+    Shuffle the music that plays in every stage
+    """
+    display_name = "Music Shuffle"
+    option_none = 0
+    option_shuffled = 1
+    option_randomized = 2
+    option_no_music = 3
+    default = 0
 
 
 @dataclass
@@ -158,8 +157,6 @@ class MM3Options(PerGameCommonOptions):
     energy_link: EnergyLink
     starting_robot_master: StartingRobotMaster
     consumables: Consumables
-    yoku_jumps: YokuJumps
-    enable_lasers: EnableLasers
     enemy_weakness: EnemyWeaknesses
     strict_weakness: StrictWeaknesses
     random_weakness: RandomWeaknesses
@@ -167,3 +164,4 @@ class MM3Options(PerGameCommonOptions):
     plando_weakness: WeaknessPlando
     palette_shuffle: PaletteShuffle
     reduce_flashing: ReduceFlashing
+    music_shuffle: MusicShuffle
