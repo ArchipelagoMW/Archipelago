@@ -235,8 +235,7 @@ def main(args=None):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    from Main import main as ERmain
-    return ERmain(erargs, seed)
+    return erargs, seed
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -545,7 +544,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    multiworld = main()
+    erargs, seed = main()
+    from Main import main as ERmain
+    multiworld = ERmain(erargs, seed)
     if __debug__:
         import gc
         import sys
