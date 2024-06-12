@@ -178,6 +178,7 @@ dmypy.json
 cython_debug/
 
 # Cython intermediates
+_speedups.c
 _speedups.cpp
 _speedups.html
 
