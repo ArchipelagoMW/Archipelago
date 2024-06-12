@@ -32,6 +32,7 @@ DISPLAY_NAME_BROOD_LORD = "Brood Lord"
 DISPLAY_NAME_CLOAKED_ASSASSIN = "Dark Templar, Avenger, and Blood Hunter"
 
 resource_efficiency_cost_reduction = {
+    item_names.REAPER:        (0, 50, 0),
     item_names.MEDIC:         (25, 25, 1),
     item_names.FIREBAT:       (50, 0, 1),
     item_names.GOLIATH:       (50, 0, 1),
@@ -45,6 +46,7 @@ resource_efficiency_cost_reduction = {
     item_names.SPECTRE:       (125, 75, 1),
     item_names.RAVEN:         (0, 50, 0),
     item_names.CYCLONE:       (25, 50, 1),
+    item_names.WIDOW_MINE:    (0, 25, 1),
     item_names.LIBERATOR:     (25, 25, 0),
     item_names.VALKYRIE:      (100, 25, 1),
     item_names.SCOURGE:       (0, 50, 0),
@@ -53,12 +55,13 @@ resource_efficiency_cost_reduction = {
     item_names.ULTRALISK:     (100, 0, 2),
     item_names.ABERRATION:    (50, 25, 0),
     item_names.CORRUPTOR:     (50, 25, 0),
-    DISPLAY_NAME_BROOD_LORD: (0, 75, 0),
+    DISPLAY_NAME_BROOD_LORD:  (0, 75, 0),
     item_names.SWARM_QUEEN:   (0, 50, 0),
     item_names.ARBITER:       (50, 0, 0),
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
 }
+
 
 def _get_resource_efficiency_desc(item_name: str) -> str:
     cost = resource_efficiency_cost_reduction[item_name]
@@ -74,8 +77,10 @@ def _get_resource_efficiency_desc(item_name: str) -> str:
         amount = ", ".join(parts[:-1]) + ", and " + parts[-1]
     return (f"Reduces {item_name} cost by {amount}.")
 
+
 def _get_start_and_max_energy_desc(unit_name_plural: str, starting_amount_increase: int = 150, maximum_amount_increase: int = 50) -> str:
     return f"{unit_name_plural} gain +{starting_amount_increase} starting energy and +{maximum_amount_increase} maximum energy."
+
 
 def _ability_desc(unit_name_plural: str, ability_name: str, ability_description: str = '') -> str:
     if ability_description:
@@ -99,41 +104,41 @@ item_descriptions = {
     item_names.MEDIVAC: "Air transport. Heals nearby biological units.",
     item_names.WRAITH: "Highly mobile flying unit. Excellent at surgical strikes.",
     item_names.VIKING: inspect.cleandoc("""
-                     Durable support flyer. Loaded with strong anti-capital air missiles. 
-                     Can switch into Assault Mode to attack ground units.
-                     """),
+        Durable support flyer. Loaded with strong anti-capital air missiles. 
+        Can switch into Assault Mode to attack ground units.
+    """),
     item_names.BANSHEE: "Tactical-strike aircraft.",
     item_names.BATTLECRUISER: "Powerful warship.",
     item_names.GHOST: inspect.cleandoc("""
-                     Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.
-                     """),
+        Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.
+    """),
     item_names.SPECTRE: inspect.cleandoc("""
-                     Infiltration unit. Can use Ultrasonic Pulse, Psionic Lash, and Cloak. 
-                     Can also call down Tactical Nukes.
-                     """),
+        Infiltration unit. Can use Ultrasonic Pulse, Psionic Lash, and Cloak. 
+        Can also call down Tactical Nukes.
+    """),
     item_names.THOR: "Heavy assault mech.",
     item_names.LIBERATOR: inspect.cleandoc("""
-                     Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. 
-                     Can switch into Defender Mode to provide siege support.
-                     """),
+        Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. 
+        Can switch into Defender Mode to provide siege support.
+    """),
     item_names.VALKYRIE: inspect.cleandoc("""
-                     Advanced anti-aircraft fighter. 
-                     Able to use cluster missiles that deal area damage to air targets.
-                     """),
+        Advanced anti-aircraft fighter. 
+        Able to use cluster missiles that deal area damage to air targets.
+    """),
     item_names.WIDOW_MINE: inspect.cleandoc("""
-                     Robotic mine. Launches missiles at nearby enemy units while burrowed. 
-                     Attacks deal splash damage in a small area around the target. 
-                     Widow Mine is revealed when Sentinel Missile is on cooldown.
-                     """),
+        Robotic mine. Launches missiles at nearby enemy units while burrowed. 
+        Attacks deal splash damage in a small area around the target. 
+        Widow Mine is revealed when Sentinel Missile is on cooldown.
+    """),
     item_names.CYCLONE: inspect.cleandoc("""
-                     Mobile assault vehicle. Can use Lock On to quickly fire while moving.
-                     """),
+        Mobile assault vehicle. Can use Lock On to quickly fire while moving.
+    """),
     item_names.HERC: inspect.cleandoc("""
-                     Front-line infantry. Can use Grapple.
-                     """),
+        Front-line infantry. Can use Grapple.
+    """),
     item_names.WARHOUND: inspect.cleandoc("""
-                     Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
-                     """),
+        Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
+    """),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),
@@ -153,13 +158,14 @@ item_descriptions = {
     item_names.SCV_ADVANCED_CONSTRUCTION: "Multiple SCVs can construct a structure, reducing its construction time.",
     item_names.SCV_DUAL_FUSION_WELDERS: "SCVs repair twice as fast.",
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: inspect.cleandoc("""
-                     Level 1: While on low health, Terran structures are repaired to half health instead of burning down.
-                     Level 2: Terran structures are repaired to full health instead of half health.
-                     """),
+        Level 1: While on low health, Terran structures are repaired to half health instead of burning down.
+        Level 2: Terran structures are repaired to full health instead of half health.
+    """),
     item_names.PROGRESSIVE_ORBITAL_COMMAND: inspect.cleandoc("""
-                     Level 1: Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities.
-                     Level 2: Orbital Command abilities work even in Planetary Fortress mode.
-                     """),
+        Deprecated. Replaced by Scanner Sweep, MULE, and Orbital Module (Planetary Fortress)
+        Level 1: Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities.
+        Level 2: Orbital Command abilities work even in Planetary Fortress mode.
+    """),
     item_names.MARINE_PROGRESSIVE_STIMPACK: STIMPACK_SMALL_DESCRIPTION,
     item_names.MARINE_COMBAT_SHIELD: "Increases Marine life by 10.",
     item_names.MEDIC_ADVANCED_MEDIC_FACILITIES: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Medics", "Barracks"),
@@ -169,9 +175,9 @@ item_descriptions = {
     item_names.MARAUDER_CONCUSSIVE_SHELLS: "Marauder attack temporarily slows all units in target area.",
     item_names.MARAUDER_KINETIC_FOAM: "Increases Marauder life by 25.",
     item_names.REAPER_U238_ROUNDS: inspect.cleandoc("""
-                     Increases Reaper pistol attack range by 1.
-                     Reaper pistols do additional 3 damage to Light Armor.
-                     """),
+        Increases Reaper pistol attack range by 1.
+        Reaper pistols do additional 3 damage to Light Armor.
+    """),
     item_names.REAPER_G4_CLUSTERBOMB: "Timed explosive that does heavy area damage.",
     item_names.CYCLONE_MAG_FIELD_ACCELERATORS: "Increases Cyclone Lock-On damage.",
     item_names.CYCLONE_MAG_FIELD_LAUNCHERS: "Increases Cyclone attack range by 2.",
@@ -195,9 +201,9 @@ item_descriptions = {
     item_names.FIREBAT_NANO_PROJECTORS: "Increases Firebat attack range by 2.",
     item_names.MARAUDER_JUGGERNAUT_PLATING: "Increases Marauder's armor by 2.",
     item_names.REAPER_JET_PACK_OVERDRIVE: inspect.cleandoc("""
-                     Allows the Reaper to fly for 10 seconds.
-                     While flying, the Reaper can attack air units.
-                     """),
+        Allows the Reaper to fly for 10 seconds.
+        While flying, the Reaper can attack air units.
+    """),
     item_names.HELLION_INFERNAL_PLATING: "Increases Hellion and Hellbat armor by 2.",
     item_names.VULTURE_AUTO_REPAIR: "Vultures regenerate life.",
     item_names.GOLIATH_SHAPED_HULL: "Increases Goliath life by 25.",
@@ -217,9 +223,9 @@ item_descriptions = {
     item_names.HELLION_SMART_SERVOS: "Transforms faster between modes. Hellions can attack while moving.",
     item_names.HELLION_OPTIMIZED_LOGISTICS: "Increases Hellion training speed.",
     item_names.HELLION_JUMP_JETS: inspect.cleandoc("""
-                     Increases movement speed in Hellion mode.
-                     In Hellbat mode, launches the Hellbat toward enemy ground units and briefly stuns them.
-                     """),
+        Increases movement speed in Hellion mode.
+        In Hellbat mode, launches the Hellbat toward enemy ground units and briefly stuns them.
+    """),
     item_names.HELLION_PROGRESSIVE_STIMPACK: STIMPACK_LARGE_DESCRIPTION,
     item_names.VULTURE_ION_THRUSTERS: "Increases Vulture movement speed.",
     item_names.VULTURE_AUTO_LAUNCHERS: "Allows Vultures to attack while moving.",
@@ -228,23 +234,23 @@ item_descriptions = {
     item_names.GOLIATH_OPTIMIZED_LOGISTICS: "Increases Goliath training speed.",
     item_names.DIAMONDBACK_HYPERFLUXOR: "Increases Diamondback attack speed.",
     item_names.DIAMONDBACK_BURST_CAPACITORS: inspect.cleandoc("""
-                     While not attacking, the Diamondback charges its weapon. 
-                     The next attack does 10 additional damage.
-                     """),
+        While not attacking, the Diamondback charges its weapon. 
+        The next attack does 10 additional damage.
+    """),
     item_names.DIAMONDBACK_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DIAMONDBACK),
     item_names.SIEGE_TANK_JUMP_JETS: inspect.cleandoc("""
-                     Repositions Siege Tank to a target location. 
-                     Can be used in either mode and to jump up and down cliffs. 
-                     """),
+        Repositions Siege Tank to a target location. 
+        Can be used in either mode and to jump up and down cliffs. 
+    """),
     item_names.SIEGE_TANK_SPIDER_MINES: inspect.cleandoc("""
-                     Allows Siege Tanks to lay Spider Mines. 
-                     Lays 3 Spider Mines at once. 3 charges.
-                     """),
+        Allows Siege Tanks to lay Spider Mines. 
+        Lays 3 Spider Mines at once. 3 charges.
+    """),
     item_names.SIEGE_TANK_SMART_SERVOS: SMART_SERVOS_DESCRIPTION,
     item_names.SIEGE_TANK_GRADUATING_RANGE: inspect.cleandoc("""
-                     Increases the Siege Tank's attack range by 1 every 3 seconds while in Siege Mode, 
-                     up to a maximum of 5 additional range.
-                     """),
+        Increases the Siege Tank's attack range by 1 every 3 seconds while in Siege Mode, 
+        up to a maximum of 5 additional range.
+    """),
     item_names.SIEGE_TANK_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     item_names.SIEGE_TANK_ADVANCED_SIEGE_TECH: "Siege Tanks gain +3 armor in Siege Mode.",
     item_names.SIEGE_TANK_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Siege Tanks", "Factory"),
@@ -252,9 +258,9 @@ item_descriptions = {
     item_names.MEDIVAC_EXPANDED_HULL: "Increases Medivac cargo space by 4.",
     item_names.MEDIVAC_AFTERBURNERS: "Ability. Temporarily increases the Medivac's movement speed by 70%.",
     item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY: inspect.cleandoc("""
-                     Burst Lasers do more damage and can hit both ground and air targets.
-                     Replaces Gemini Missiles weapon.
-                     """),
+        Burst Lasers do more damage and can hit both ground and air targets.
+        Replaces Gemini Missiles weapon.
+    """),
     item_names.VIKING_SMART_SERVOS: SMART_SERVOS_DESCRIPTION,
     item_names.VIKING_ANTI_MECHANICAL_MUNITION: "Increases Viking damage to mechanical units while in Assault Mode.",
     item_names.DIAMONDBACK_ION_THRUSTERS: "Increases Diamondback movement speed.",
@@ -263,53 +269,72 @@ item_descriptions = {
     item_names.HERC_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.HERC),
     item_names.HERC_JUGGERNAUT_PLATING: "Increases HERC armor by 2.",
     item_names.HERC_KINETIC_FOAM: "Increases HERC life by 50.",
+    item_names.REAPER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.REAPER),
+    item_names.REAPER_KINETIC_FOAM: "Increases Reaper life by 10.",
+    item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK: inspect.cleandoc("""
+        Level 1: Allows Siege Tanks to be transported in Siege Mode.
+        Level 2: Siege Tanks in Siege Mode can attack air units while transported by a Medivac.
+    """),
+    item_names.SIEGE_TANK_ENHANCED_COMBUSTION_ENGINES: "Increases movement speed of Siege Tanks in Tank Mode.",
+    item_names.MEDIVAC_RAPID_REIGNITION_SYSTEMS: inspect.cleandoc("""
+        Increases slightly Medivac movement speed.
+        Reduces Medivac's Afterburners ability cooldown.
+    """),
+    item_names.BATTLECRUISER_BEHEMOTH_REACTOR: "All Battlecruiser spells require 25 less energy to cast.",
+    item_names.THOR_RAPID_RELOAD: "Increases Thor's ground attack speed.",
+    item_names.LIBERATOR_360_DEGREE_SENSOR_ARRAY: "Liberators in Defender Mode can attack any target in weapon range.",
+    item_names.WIDOW_MINE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.WIDOW_MINE),
+    item_names.HERC_GRAPPLE_PULL: "Allows HERCs to use their grappling gun to pull a ground unit towards the HERC.",
+    item_names.COMMAND_CENTER_SCANNER_SWEEP: "Temporarily reveals an area of the map, detecting cloaked and burrowed units.",
+    item_names.COMMAND_CENTER_MULE: "Summons a unit that gathers minerals more quickly than regular SCVs. Has timed life.",
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES: "Drops additional supplies, permanently increasing the supply output of the target Supply Depot by 8.",
     item_names.HELLION_TWIN_LINKED_FLAMETHROWER: "Doubles the width of the Hellion's flame attack.",
     item_names.HELLION_THERMITE_FILAMENTS: "Hellions do an additional 10 damage to Light Armor.",
     item_names.SPIDER_MINE_CERBERUS_MINE: "Increases trigger and blast radius of Spider Mines.",
     item_names.VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE: inspect.cleandoc("""
-                     Level 1: Allows Vultures to replace used Spider Mines. Costs 15 minerals.
-                     Level 2: Replacing used Spider Mines no longer costs minerals.
-                     """),
+        Level 1: Allows Vultures to replace used Spider Mines. Costs 15 minerals.
+        Level 2: Replacing used Spider Mines no longer costs minerals.
+    """),
     item_names.GOLIATH_MULTI_LOCK_WEAPONS_SYSTEM: "Goliaths can attack both ground and air targets simultaneously.",
     item_names.GOLIATH_ARES_CLASS_TARGETING_SYSTEM: "Increases Goliath ground attack range by 1 and air by 3.",
     item_names.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL: inspect.cleandoc("""
-                     Level 1: Tri-Lithium Power Cell: Increases Diamondback attack range by 1.
-                     Level 2: Tungsten Spikes: Increases Diamondback attack range by 3.
-                     """),
+        Level 1: Tri-Lithium Power Cell: Increases Diamondback attack range by 1.
+        Level 2: Tungsten Spikes: Increases Diamondback attack range by 3.
+    """),
     item_names.DIAMONDBACK_SHAPED_HULL: "Increases Diamondback life by 50.",
     item_names.SIEGE_TANK_MAELSTROM_ROUNDS: "Siege Tanks do an additional 40 damage to the primary target in Siege Mode.",
     item_names.SIEGE_TANK_SHAPED_BLAST: "Reduces splash damage to friendly targets while in Siege Mode by 75%.",
     item_names.MEDIVAC_RAPID_DEPLOYMENT_TUBE: "Medivacs deploy loaded troops almost instantly.",
     item_names.MEDIVAC_ADVANCED_HEALING_AI: "Medivacs can heal two targets at once.",
     item_names.WRAITH_PROGRESSIVE_TOMAHAWK_POWER_CELLS: inspect.cleandoc("""
-                     Level 1: Tomahawk Power Cells: Increases Wraith starting energy by 100.
-                     Level 2: Unregistered Cloaking Module: Wraiths do not require energy to cloak and remain cloaked.
-                     """),
+        Level 1: Tomahawk Power Cells: Increases Wraith starting energy by 100.
+        Level 2: Unregistered Cloaking Module: Wraiths do not require energy to cloak and remain cloaked.
+    """),
     item_names.WRAITH_DISPLACEMENT_FIELD: "Wraiths evade 20% of incoming attacks while cloaked.",
     item_names.VIKING_RIPWAVE_MISSILES: "Vikings do area damage while in Fighter Mode.",
     item_names.VIKING_PHOBOS_CLASS_WEAPONS_SYSTEM: "Increases Viking attack range by 1 in Assault mode and 2 in Fighter mode.",
     item_names.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS: inspect.cleandoc("""
-                     Level 1: Banshees can remain cloaked twice as long.
-                     Level 2: Banshees do not require energy to cloak and remain cloaked.
-                     """),
+        Level 1: Banshees can remain cloaked twice as long.
+        Level 2: Banshees do not require energy to cloak and remain cloaked.
+    """),
     item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY: "Banshees do area damage in a straight line.",
     item_names.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS: "Spell. Missile Pods do damage to air targets in a target area.",
     item_names.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX: inspect.cleandoc("""
-                     Level 1: Spell. For 20 seconds the Battlecruiser gains a shield that can absorb up to 200 damage.
-                     Level 2: Passive. Battlecruiser gets 200 shields.
-                     """),
+        Level 1: Spell. For 20 seconds the Battlecruiser gains a shield that can absorb up to 200 damage.
+        Level 2: Passive. Battlecruiser gets 200 shields.
+    """),
     item_names.GHOST_OCULAR_IMPLANTS: "Increases Ghost sight range by 3 and attack range by 2.",
     item_names.GHOST_CRIUS_SUIT: "Cloak no longer requires energy to activate or maintain.",
     item_names.SPECTRE_PSIONIC_LASH: "Spell. Deals 200 damage to a single target.",
     item_names.SPECTRE_NYX_CLASS_CLOAKING_MODULE: "Cloak no longer requires energy to activate or maintain.",
     item_names.THOR_330MM_BARRAGE_CANNON: inspect.cleandoc("""
-                     Improves 250mm Strike Cannons ability to deal area damage and stun units in a small area.
-                     Can be also freely aimed on ground.
-                     """),
+        Improves 250mm Strike Cannons ability to deal area damage and stun units in a small area.
+        Can be also freely aimed on ground.
+    """),
     item_names.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL: inspect.cleandoc("""
-                 Level 1: Allows destroyed Thors to be reconstructed on the field. Costs Vespene Gas.
-                 Level 2: Thors are automatically reconstructed after falling for free.
-                 """),
+        Level 1: Allows destroyed Thors to be reconstructed on the field. Costs Vespene Gas.
+        Level 2: Thors are automatically reconstructed after falling for free.
+    """),
     item_names.LIBERATOR_ADVANCED_BALLISTICS: "Increases Liberator range by 3 in Defender Mode.",
     item_names.LIBERATOR_RAID_ARTILLERY: "Allows Liberators to attack structures while in Defender Mode.",
     item_names.WIDOW_MINE_DRILLING_CLAWS: "Allows Widow Mines to burrow and unburrow faster.",
@@ -338,41 +363,40 @@ item_descriptions = {
     item_names.BANSHEE_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     item_names.BANSHEE_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Banshees", "Starport"),
     item_names.BATTLECRUISER_TACTICAL_JUMP: inspect.cleandoc("""
-                     Allows Battlecruisers to warp to a target location anywhere on the map.
-                     """),
+        Allows Battlecruisers to warp to a target location anywhere on the map.
+    """),
     item_names.BATTLECRUISER_CLOAK: CLOAK_DESCRIPTION_TEMPLATE.format("Battlecruisers"),
     item_names.BATTLECRUISER_ATX_LASER_BATTERY: inspect.cleandoc("""
-                     Battlecruisers can attack while moving, 
-                     do the same damage to both ground and air targets, and fire faster.
-                     """),
+        Battlecruisers can attack while moving, 
+        do the same damage to both ground and air targets, and fire faster.
+    """),
     item_names.BATTLECRUISER_OPTIMIZED_LOGISTICS: "Increases Battlecruiser training speed.",
     item_names.BATTLECRUISER_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Battlecruisers", "Starport"),
     item_names.GHOST_EMP_ROUNDS: inspect.cleandoc("""
-                     Spell. Does 100 damage to shields and drains all energy from units in the targeted area. 
-                     Cloaked units hit by EMP are revealed for a short time.
-                     """),
+        Spell. Does 100 damage to shields and drains all energy from units in the targeted area. 
+        Cloaked units hit by EMP are revealed for a short time.
+    """),
     item_names.GHOST_LOCKDOWN: "Spell. Stuns a target mechanical unit for a long time.",
     item_names.SPECTRE_IMPALER_ROUNDS: "Spectres do additional damage to armored targets.",
     item_names.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD: inspect.cleandoc(f"""
-                     Level 1: Allows Thors to transform in order to use an alternative air attack.
-                     Level 2: {SMART_SERVOS_DESCRIPTION}
-                     """),
+        Level 1: Allows Thors to transform in order to use an alternative air attack.
+        Level 2: {SMART_SERVOS_DESCRIPTION}
+    """),
     item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE: "Spell. Deploys a drone that can heal biological or mechanical units.",
     item_names.RAVEN_SPIDER_MINES: "Spell. Deploys 3 Spider Mines to a target location.",
     item_names.RAVEN_RAILGUN_TURRET: inspect.cleandoc("""
-                     Spell. Allows Ravens to deploy an advanced Auto-Turret, 
-                     that can attack enemy ground units in a straight line.
-                     """),
+        Spell. Allows Ravens to deploy an advanced Auto-Turret, that can attack enemy ground units in a straight line.
+    """),
     item_names.RAVEN_HUNTER_SEEKER_WEAPON: "Allows Ravens to attack with a Hunter-Seeker weapon.",
     item_names.RAVEN_INTERFERENCE_MATRIX: inspect.cleandoc("""
-                     Spell. Target enemy Mechanical or Psionic unit can't attack or use abilities for a short duration.
-                     """),
+        Spell. Target enemy Mechanical or Psionic unit can't attack or use abilities for a short duration.
+    """),
     item_names.RAVEN_ANTI_ARMOR_MISSILE: "Spell. Decreases target and nearby enemy units armor by 2.",
     item_names.RAVEN_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Ravens", "Starport"),
     item_names.SCIENCE_VESSEL_EMP_SHOCKWAVE: "Spell. Depletes all energy and shields of all units in a target area.",
     item_names.SCIENCE_VESSEL_DEFENSIVE_MATRIX: inspect.cleandoc("""
-                     Spell. Provides a target unit with a defensive barrier that can absorb up to 250 damage.
-                     """),
+        Spell. Provides a target unit with a defensive barrier that can absorb up to 250 damage.
+    """),
     item_names.CYCLONE_TARGETING_OPTICS: "Increases Cyclone Lock On casting range and the range while Locked On.",
     item_names.CYCLONE_RAPID_FIRE_LAUNCHERS: "The first 12 shots of Lock On are fired more quickly.",
     item_names.LIBERATOR_CLOAK: CLOAK_DESCRIPTION_TEMPLATE.format("Liberators"),
@@ -380,9 +404,9 @@ item_descriptions = {
     item_names.LIBERATOR_OPTIMIZED_LOGISTICS: "Increases Liberator training speed.",
     item_names.WIDOW_MINE_BLACK_MARKET_LAUNCHERS: "Increases Widow Mine Sentinel Missile range.",
     item_names.WIDOW_MINE_EXECUTIONER_MISSILES: inspect.cleandoc("""
-                     Reduces Sentinel Missile cooldown.
-                     When killed, Widow Mines will launch several missiles at random enemy targets.
-                     """),
+        Reduces Sentinel Missile cooldown.
+        When killed, Widow Mines will launch several missiles at random enemy targets.
+    """),
     item_names.VALKYRIE_ENHANCED_CLUSTER_LAUNCHERS: "Valkyries fire 2 additional rockets each volley.",
     item_names.VALKYRIE_SHAPED_HULL: "Increases Valkyrie life by 50.",
     item_names.VALKYRIE_FLECHETTE_MISSILES: "Equips Valkyries with Air-to-Surface missiles to attack ground units.",
@@ -392,18 +416,21 @@ item_descriptions = {
     item_names.LIBERATOR_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.LIBERATOR),
     item_names.HERCULES_INTERNAL_FUSION_MODULE: "Hercules can be trained from a Starport without having a Fusion Core.",
     item_names.HERCULES_TACTICAL_JUMP: inspect.cleandoc("""
-                     Allows Hercules to warp to a target location anywhere on the map.
-                     """),
+        Allows Hercules to warp to a target location anywhere on the map.
+    """),
     item_names.PLANETARY_FORTRESS_PROGRESSIVE_AUGMENTED_THRUSTERS: inspect.cleandoc("""
-                    Level 1: Lift Off - Planetary Fortress can lift off.
-                    Level 2: Armament Stabilizers - Planetary Fortress can attack while lifted off.
-                    """),
+        Level 1: Lift Off - Planetary Fortress can lift off.
+        Level 2: Armament Stabilizers - Planetary Fortress can attack while lifted off.
+    """),
     item_names.PLANETARY_FORTRESS_ADVANCED_TARGETING: "Planetary Fortress can attack air units.",
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
     item_names.VALKYRIE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.VALKYRIE),
     item_names.PREDATOR_PREDATOR_S_FURY: "Predators can use an attack that jumps between targets.",
     item_names.BATTLECRUISER_BEHEMOTH_PLATING: "Increases Battlecruiser armor by 2.",
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES: "Increases Battlecruiser movement speed.",
+    item_names.PLANETARY_FORTRESS_ORBITAL_MODULE: inspect.cleandoc("""
+        Allows Planetary Fortresses to use Scanner Sweep, MULE, and Extra Supplies if those abilities are owned.
+    """),
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
@@ -426,7 +453,7 @@ item_descriptions = {
     item_names.ORBITAL_DEPOTS: "Supply depots are built instantly.",
     item_names.MICRO_FILTERING: "Refineries produce Vespene gas 25% faster.",
     item_names.AUTOMATED_REFINERY: "Eliminates the need for SCVs in vespene gas production.",
-    item_names.COMMAND_CENTER_REACTOR: "Command Centers can train two SCVs at once.",
+    item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR: "Command Centers can train two SCVs at once.",
     item_names.RAVEN: "Aerial Caster unit.",
     item_names.SCIENCE_VESSEL: "Aerial Caster unit. Can repair mechanical units.",
     item_names.TECH_REACTOR: "Merges Tech Labs and Reactors into one add on structure to provide both functions.",
@@ -434,17 +461,17 @@ item_descriptions = {
     item_names.BUNKER_SHRIKE_TURRET: "Adds an automated turret to Bunkers.",
     item_names.BUNKER_FORTIFIED_BUNKER: "Bunkers have more life.",
     item_names.PLANETARY_FORTRESS: inspect.cleandoc("""
-                     Allows Command Centers to upgrade into a defensive structure with a turret and additional armor.
-                     Planetary Fortresses cannot Lift Off, or cast Orbital Command spells.
-                     """),
+        Allows Command Centers to upgrade into a defensive structure with a turret and additional armor.
+        Planetary Fortresses cannot Lift Off, or cast Orbital Command spells.
+    """),
     item_names.PERDITION_TURRET: "Automated defensive turret. Burrows down while no enemies are nearby.",
     item_names.PREDATOR: "Anti-infantry specialist that deals area damage with each attack.",
     item_names.HERCULES: "Massive transport ship.",
     item_names.CELLULAR_REACTOR: "All Terran spellcasters get +100 starting and maximum energy.",
     item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL: inspect.cleandoc("""
-                     Allows Terran mechanical units to regenerate health while not in combat.
-                     Each level increases life regeneration speed.
-                     """),
+        Allows Terran mechanical units to regenerate health while not in combat.
+        Each level increases life regeneration speed.
+    """),
     item_names.HIVE_MIND_EMULATOR: "Defensive structure. Can permanently Mind Control Zerg units.",
     item_names.PSI_DISRUPTER: "Defensive structure. Slows the attack and movement speeds of all nearby Zerg units.",
     item_names.STRUCTURE_ARMOR: "Increases armor of all Terran structures by 2.",
@@ -469,9 +496,9 @@ item_descriptions = {
     item_names.NOVA_DOMINATION: "Gives Nova the ability to mind-control a target enemy unit.",
     item_names.NOVA_BLINK: "Gives Nova the ability to teleport a short distance and cloak for 10s.",
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: inspect.cleandoc("""
-                     Level 1: Gives Nova the ability to cloak.
-                     Level 2: Nova is permanently cloaked.
-                     """),
+        Level 1: Gives Nova the ability to cloak.
+        Level 2: Nova is permanently cloaked.
+    """),
     item_names.NOVA_ENERGY_SUIT_MODULE: "Increases Nova's maximum energy and energy regeneration rate.",
     item_names.NOVA_ARMORED_SUIT_MODULE: "Increases Nova's health by 100 and armour by 1. Nova also regenerates life quickly out of combat.",
     item_names.NOVA_JUMP_SUIT_MODULE: "Increases Nova's movement speed and allows her to jump up and down cliffs.",

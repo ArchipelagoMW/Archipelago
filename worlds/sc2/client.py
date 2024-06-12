@@ -49,8 +49,9 @@ from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from worlds.sc2.items import (
-    lookup_id_to_name, get_full_item_list, ItemData, upgrade_numbers, upgrade_numbers_all,
-    race_to_item_type, upgrade_item_types, ZergItemType,
+    lookup_id_to_name, get_full_item_list, ItemData,
+    race_to_item_type, upgrade_item_types, ZergItemType, upgrade_bundles, upgrade_included_names,
+    WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from worlds.sc2.locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
@@ -829,6 +830,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.slot_data_version < 3:
         for compat_item in API2_TO_API3_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
+    # API < 4 Orbital Command Count (Deprecated item)
+    orbital_command_count: int = 0
 
     network_item: NetworkItem
     accumulators: typing.Dict[SC2Race, typing.List[int]] = {
@@ -854,14 +857,14 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             flaggroup = item_data.type.flag_word
 
             # Generic upgrades apply only to Weapon / Armor upgrades
-            if item_data.type not in upgrade_item_types or ctx.generic_upgrade_items == 0:
+            if item_data.number >= 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
                 if name == item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
                     shields_from_ground_upgrade += 1
                 if name == item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
                     shields_from_air_upgrade += 1
-                for bundled_number in upgrade_numbers[item_data.number]:
+                for bundled_number in get_bundle_upgrade_member_numbers(name):
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
             # Regen bio-steel nerf with API3 - undo for older games
@@ -872,7 +875,9 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
-            if name == item_names.STARTING_MINERALS:
+            if name == item_names.PROGRESSIVE_ORBITAL_COMMAND:
+                orbital_command_count += 1
+            elif name == item_names.STARTING_MINERALS:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.minerals_per_item
             elif name == item_names.STARTING_VESPENE:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
@@ -886,31 +891,58 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
-            accumulators[shield_upgrade_item.race][item_data.type.flag_word] += 1 << shield_upgrade_item.number
+            accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
+
+    # Deprecated Orbital Command handling (Backwards compatibility):
+    if orbital_command_count > 0:
+        orbital_command_replacement_items: typing.List[str] = [
+            item_names.COMMAND_CENTER_SCANNER_SWEEP,
+            item_names.COMMAND_CENTER_MULE,
+            item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
+            item_names.PLANETARY_FORTRESS_ORBITAL_MODULE
+        ]
+        replacement_item_ids = [get_full_item_list()[item_name].code for item_name in orbital_command_replacement_items]
+        if sum(item_id in replacement_item_ids for item_id in items) > 0:
+            logger.warning(inspect.cleandoc("""
+                Both old Orbital Command and its replacements are present in the world. Skipping compatibility handling.
+            """))
+        else:
+            # None of replacement items are present
+            # L1: MULE and Scanner Sweep
+            scanner_sweep_data = get_full_item_list()[item_names.COMMAND_CENTER_SCANNER_SWEEP]
+            mule_data = get_full_item_list()[item_names.COMMAND_CENTER_MULE]
+            accumulators[scanner_sweep_data.race][scanner_sweep_data.type.flag_word] += 1 << scanner_sweep_data.number
+            accumulators[mule_data.race][mule_data.type.flag_word] += 1 << mule_data.number
+            if orbital_command_count >= 2:
+                # L2 MULE and Scanner Sweep usable even in Planetary Fortress Mode
+                planetary_orbital_module_data = get_full_item_list()[item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+                accumulators[planetary_orbital_module_data.race][planetary_orbital_module_data.type.flag_word] += \
+                    1 << planetary_orbital_module_data.number
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
         total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
-        for race in SC2Race:
-            if race == SC2Race.ANY:
-                continue
+        num_missions = (ctx.generic_upgrade_missions // 100) * total_missions
+        completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
+        upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
+
+        # Equivalent to "Progressive Weapon/Armor Upgrade" item
+        global_upgrades: typing.Set[str] = upgrade_included_names[GenericUpgradeItems.option_bundle_all]
+        for global_upgrade in global_upgrades:
+            race = get_full_item_list()[global_upgrade].race
             upgrade_flaggroup = race_to_item_type[race]["Upgrade"].flag_word
-            num_missions = ctx.generic_upgrade_missions * total_missions
-            amounts = [
-                num_missions // 100,
-                2 * num_missions // 100,
-                3 * num_missions // 100
-            ]
-            upgrade_count = 0
-            completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
-            for amount in amounts:
-                if completed >= amount:
-                    upgrade_count += 1
-            # Equivalent to "Progressive Weapon/Armor Upgrade" item
-            for bundled_number in upgrade_numbers[upgrade_numbers_all[race]]:
+            for bundled_number in get_bundle_upgrade_member_numbers(global_upgrade):
                 accumulators[race][upgrade_flaggroup] += upgrade_count << bundled_number
 
     return accumulators
+
+
+def get_bundle_upgrade_member_numbers(bundled_item: str) -> typing.List[int]:
+    upgrade_elements: typing.List[str] = upgrade_bundles[bundled_item]
+    if bundled_item in (item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE, item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE):
+        # Shields are handled as a maximum of those two
+        upgrade_elements = [item_name for item_name in upgrade_elements if item_name != item_names.PROGRESSIVE_PROTOSS_SHIELDS]
+    return [get_full_item_list()[item_name].number for item_name in upgrade_elements]
 
 
 def calc_difficulty(difficulty: int):

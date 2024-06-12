@@ -221,7 +221,7 @@ item_name_groups[ItemGroupNames.WOL_MERCS] = wol_mercs = [
     item_names.HELS_ANGELS, item_names.DUSK_WINGS, item_names.JACKSONS_REVENGE,
 ]
 item_name_groups[ItemGroupNames.WOL_BUILDINGS] = wol_buildings = [
-    item_names.BUNKER, item_names.SENSOR_TOWER, item_names.PROGRESSIVE_ORBITAL_COMMAND,
+    item_names.BUNKER, item_names.SENSOR_TOWER, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_SCANNER_SWEEP,
     item_names.PERDITION_TURRET, item_names.PLANETARY_FORTRESS,
     item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER,
 ]
@@ -232,7 +232,7 @@ item_name_groups[ItemGroupNames.WOL_UPGRADES] = wol_upgrades = [
     item_names.BUNKER_PROJECTILE_ACCELERATOR, item_names.BUNKER_NEOSTEEL_BUNKER,
     item_names.MISSILE_TURRET_TITANIUM_HOUSING, item_names.MISSILE_TURRET_HELLSTORM_BATTERIES,
     item_names.SCV_ADVANCED_CONSTRUCTION, item_names.SCV_DUAL_FUSION_WELDERS,
-    item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM, item_names.PROGRESSIVE_ORBITAL_COMMAND,
+    item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_SCANNER_SWEEP,
     # Armory Infantry
     item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_COMBAT_SHIELD,
     item_names.MEDIC_ADVANCED_MEDIC_FACILITIES, item_names.MEDIC_STABILIZER_MEDPACKS,
@@ -262,7 +262,7 @@ item_name_groups[ItemGroupNames.WOL_UPGRADES] = wol_upgrades = [
     # Lab Protoss
     item_names.VANADIUM_PLATING, item_names.ULTRA_CAPACITORS,
     item_names.AUTOMATED_REFINERY, item_names.MICRO_FILTERING,
-    item_names.ORBITAL_DEPOTS, item_names.COMMAND_CENTER_REACTOR,
+    item_names.ORBITAL_DEPOTS, item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR,
     item_names.ORBITAL_STRIKE, item_names.TECH_REACTOR,
     # Other level is units (Raven, Science Vessel)
 ]
@@ -275,7 +275,6 @@ item_name_groups[ItemGroupNames.TERRAN_STIMPACKS] = terran_stimpacks = [
 ]
 item_name_groups[ItemGroupNames.TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES] = terran_original_progressive_upgrades = [
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
-    item_names.PROGRESSIVE_ORBITAL_COMMAND,
     item_names.MARINE_PROGRESSIVE_STIMPACK,
     item_names.VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE,
     item_names.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL,
@@ -292,6 +291,7 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.MARINE_COMBAT_SHIELD,   # Baseline from mission 2
     item_names.MARAUDER_KINETIC_FOAM,  # Baseline outside WOL
     item_names.MARAUDER_CONCUSSIVE_SHELLS,  # Baseline from mission 2
+    item_names.REAPER_KINETIC_FOAM, # Baseline from mission 2
     item_names.HELLION_HELLBAT_ASPECT,  # Baseline from mission 3
     item_names.GOLIATH_INTERNAL_TECH_MODULE,  # Baseline from mission 4
     item_names.GOLIATH_SHAPED_HULL,
@@ -302,9 +302,10 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,  # Baseline in mission 5
     item_names.BATTLECRUISER_TACTICAL_JUMP,
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES,
-    item_names.PROGRESSIVE_ORBITAL_COMMAND,  # Can be upgraded from mission 2
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,  # Baseline from mission 2
     item_names.ORBITAL_DEPOTS,  # Baseline from mission 2
+    item_names.COMMAND_CENTER_SCANNER_SWEEP,  # In NCO you must actually morph Command Center into Orbital Command
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES,  # But in AP this works WoL-style
 ] + nco_buildings
 item_name_groups[ItemGroupNames.NCO_UNIT_TECHNOLOGY] = nco_unit_technology = [
     item_names.MARINE_LASER_TARGETING_SYSTEM,
