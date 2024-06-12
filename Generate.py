@@ -65,7 +65,7 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None):
+def main(args=None) -> Tuple[argparse.Namespace, int]:
     if not args:
         args = mystery_argparse()
 
