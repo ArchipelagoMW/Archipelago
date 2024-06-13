@@ -4,6 +4,7 @@ from .options import IceGrappling, LadderStorage
 from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip)
 from .er_data import Portal
+from .ladder_storage_data import ow_ladder_groups, region_ladders
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -998,6 +999,61 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
                             state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)))
+
+    if options.ladder_storage:
+        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
+            for portal1, portal2 in portal_pairs.items():
+                if portal1.scene_destination() == portal_sd:
+                    return portal1.name, portal2.region
+                if portal2.scene_destination() == portal_sd:
+                    return portal2.name, portal1.region
+            raise Exception("no matches found in get_paired_region")
+
+        def ls_connect(ladder_elev: str, portal_sdt: str) -> None:
+            p_name, paired_region_name = get_portal_info(portal_sdt)
+            ladder_regions[ladder_elev].connect(
+                regions[paired_region_name],
+                name=p_name + " (LS) " + ladder_elev)
+
+        # create the ls elevation regions
+        ladder_regions: Dict[str, Region] = {}
+        for name in ow_ladder_groups.keys():
+            ladder_regions[name] = Region(name, player, world.multiworld)
+
+        # connect the ls elevations to each other where applicable
+        if options.ladder_storage >= LadderStorage.option_medium:
+            for i in range(len(ow_ladder_groups) - 1):
+                ladder_regions[f"LS Elev {i}"].connect(ladder_regions[f"LS Elev {i + 1}"])
+
+        # connect the applicable overworld regions to the ls elevation regions
+        for origin_region, ladders in region_ladders.items():
+            for ladder_region, region_info in ow_ladder_groups.items():
+                common_ladders: Set[str] = ladders.intersection(region_info.ladders)
+                if common_ladders:
+                    regions[origin_region].connect(ladder_regions[ladder_region],
+                                                   rule=lambda state: state.has_any(common_ladders, player))
+
+        # connect ls elevation regions to the region on the other side of the portals
+        for ladder_region, region_info in ow_ladder_groups.items():
+            for portal_dest in region_info.portals:
+                ls_connect(ladder_region, "Overworld Redux, " + portal_dest)
+
+        # connect ls elevation regions to regions where you can get an enemy to knock you down
+        if options.ladder_storage >= LadderStorage.option_medium:
+            for ladder_region, region_info in ow_ladder_groups.items():
+                for dest_region in region_info.regions:
+                    ladder_regions[ladder_region].connect(
+                        connecting_region=regions[dest_region],
+                        name=ladder_region + " (LS) " + dest_region)
+
+        # connect ls elevation regions to portals where you need to get behind the map to enter it
+        if options.ladder_storage >= LadderStorage.option_hard:
+            ls_connect("LS Elev 1", "Overworld Redux, EastFiligreeCache_")
+            ls_connect("LS Elev 2", "Overworld Redux, Town_FiligreeRoom_")
+            ls_connect("LS Elev 3", "Overworld Redux, Overworld Interiors_house")
+            ls_connect("LS Elev 5", "Overworld Redux, Temple_main")
+            # todo: add ls in other areas
+        # todo: add rules when er is off
 
     # connecting the regions portals are in to other portals you can access via ladder storage
     # using has_stick instead of can_ladder_storage since it's already checking the logic rules
