@@ -7904,5 +7904,3 @@ yacht_weights = {
     ("FourAndFiveFullHouse", 8, 7): {50: 97782, 0: 2218},
     ("FourAndFiveFullHouse", 8, 8): {50: 98916, 0: 1084},
 }
-
-

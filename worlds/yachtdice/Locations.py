@@ -21,13 +21,11 @@ all_locations = {}
 starting_index = 16871244500  # 500 more than the starting index for items (not necessary, but this is what it is now)
 
 
-
 def all_locations_fun(max_score):
     """
     Function that is called when this file is loaded, which loads in ALL possible locations, score 1 to 1000
     """
     return {f"{i} score": LocData(starting_index + i, "Board", i) for i in range(1, max_score + 1)}
-
 
 
 def ini_locations(goal_score, max_score, number_of_locations, dif):
@@ -51,7 +49,7 @@ def ini_locations(goal_score, max_score, number_of_locations, dif):
     highest_score = 0
     for i in range(number_of_locations - 1):
         percentage = i / number_of_locations
-        current_score = int(1 + (percentage ** scaling) * (max_score - 2))
+        current_score = int(1 + (percentage**scaling) * (max_score - 2))
         if current_score <= highest_score:
             current_score = highest_score + 1
         highest_score = current_score
@@ -68,6 +66,7 @@ def ini_locations(goal_score, max_score, number_of_locations, dif):
     location_table = {f"{score} score": LocData(starting_index + score, "Board", score) for score in scores}
 
     return location_table, scores.index(goal_score)
+
 
 # we need to run this function to initialize all scores from 1 to 1000, even though not all are used
 all_locations = all_locations_fun(1000)
