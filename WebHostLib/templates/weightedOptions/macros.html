@@ -41,7 +41,7 @@
             The following values have special meanings, and may fall outside the normal range.
             <ul>
                 {% for name, value in option.special_range_names.items() %}
-                    <li>{{ value }}: {{ name }}</li>
+                    <li>{{ value }}: {{ name|replace("_", " ")|title }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
