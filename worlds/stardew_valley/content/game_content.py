@@ -84,9 +84,9 @@ class ContentPack:
     def fish_hook(self, content: StardewContent):
         ...
 
-    artisan_equipment_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+    crafting_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
 
-    def artisan_equipment_hook(self, content: StardewContent):
+    def crafting_hook(self, content: StardewContent):
         ...
 
     artisan_good_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)

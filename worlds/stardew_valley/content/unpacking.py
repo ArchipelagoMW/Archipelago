@@ -54,7 +54,7 @@ def register_pack(content: StardewContent, pack: ContentPack):
 
     register_sources_and_call_hook(content, pack.harvest_sources, pack.harvest_source_hook)
     register_sources_and_call_hook(content, pack.shop_sources, pack.shop_source_hook)
-    register_sources_and_call_hook(content, pack.artisan_equipment_sources, pack.artisan_equipment_hook)
+    register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
     register_sources_and_call_hook(content, pack.artisan_good_sources, pack.artisan_good_hook)
 
     for fish in pack.fishes:
