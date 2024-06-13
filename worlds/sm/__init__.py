@@ -120,11 +120,6 @@ class SMWorld(World):
         self.locations = {}
         super().__init__(world, player)
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        # don't need rom anymore
-        pass
-
     def generate_early(self):
         Logic.factory('vanilla')
 
