@@ -107,10 +107,10 @@ class ColouredMessage:
     def coloured(self, text: str, colour: str) -> 'ColouredMessage':
         add_json_text(self.parts, text, type="color", color=colour)
         return self
-    def location(self, location_id: int, player_id: int = 0) -> 'ColouredMessage':
+    def location(self, location_id: int, player_id: int) -> 'ColouredMessage':
         add_json_location(self.parts, location_id, player_id)
         return self
-    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> 'ColouredMessage':
+    def item(self, item_id: int, player_id: int, flags: int = 0) -> 'ColouredMessage':
         add_json_item(self.parts, item_id, player_id, flags)
         return self
     def player(self, player_id: int) -> 'ColouredMessage':
@@ -122,7 +122,6 @@ class ColouredMessage:
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
-    echo_commands = True
 
     def formatted_print(self, text: str) -> None:
         """Prints with kivy formatting to the GUI, and also prints to command-line and to all logs"""
@@ -257,7 +256,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     for item in received_items_of_this_type:
                         print_faction_title()
                         has_printed_faction_title = True
-                        (ColouredMessage('* ').item(item.item, flags=item.flags)
+                        (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
@@ -278,7 +277,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         received_items_of_this_type = items_received.get(child_item, [])
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
-                            (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                            (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
                                 (" from ").location(item.location, self.ctx.slot)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
