@@ -48,7 +48,7 @@
 
 7. Install protontricks, on the Steam Deck this can be done via the Discover store, on other distros instructions vary, [see its github page](https://github.com/Matoking/protontricks).
 
-8. Download the [.NET 7 Desktop Runtime for x64 Windows](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.17-windows-x64-installer}. If this link does not work, the download can be found on [this page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
+8. Download the [.NET 7 Desktop Runtime for x64 Windows](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.17-windows-x64-installer). If this link does not work, the download can be found on [this page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
 
 9. Right click the .NET 7 Desktop Runtime exe, and assuming protontricks was installed correctly, the option to "Open with Protontricks Launcher" should be available. Click that, and in the popup window that opens, select SAModManager.exe. Follow the prompts after this to install the .NET 7 Desktop Runtime for SAModManager. Once it is done, you should be able to successfully launch SAModManager to steam.
 
