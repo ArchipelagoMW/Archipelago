@@ -159,7 +159,6 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
             for val1, prob1 in c.items():
                 for val2, prob2 in dist1.items():
                     new_val = int(max(val1, val2 * mult))
-                    new_val = new_val - new_val % 2
                     new_prob = prob1 * prob2
 
                     # Update the probability for the new value
@@ -212,6 +211,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     # save result into the cache, then return it
     outcome = sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return)
     yachtdice_cache[tup] = max(5, math.floor(outcome))  # at least 5.
+    
     return yachtdice_cache[tup]
 
 
@@ -262,3 +262,4 @@ def set_yacht_completion_rules(world: MultiWorld, player: int):
     Sets rules on completion condition
     """
     world.completion_condition[player] = lambda state: state.has("Victory", player)
+    

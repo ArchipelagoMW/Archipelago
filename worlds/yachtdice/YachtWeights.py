@@ -7905,27 +7905,4 @@ yacht_weights = {
     ("FourAndFiveFullHouse", 8, 8): {50: 98916, 0: 1084},
 }
 
-def round_down_to_nearest(n, k):
-    return n - (n % k)
 
-def combine_rounded_keys(yacht_weights, change_category):
-    new_yacht_weights = {}
-    for main_key, sub_dict in yacht_weights.items():
-        if main_key[0] in change_category:
-            new_sub_dict = {}
-            for key, value in sub_dict.items():
-                rounded_key = round_down_to_nearest(key, 2)
-                if rounded_key in new_sub_dict:
-                    new_sub_dict[rounded_key] += value
-                else:
-                    new_sub_dict[rounded_key] = value
-            new_yacht_weights[main_key] = new_sub_dict
-        else:
-            new_yacht_weights[main_key] = sub_dict
-    return new_yacht_weights
-
-change_category = ['SumOfEvens', 'DoubleThreesAndFours', 'TinyStraight', 'MicroStraight', 'TwosAndThrees', 'TwoOneTwoConsecutive', 'TwoPair', 'FiveDistinctDice', 'Threes', 'ThreeOdds', 'Ones', 'FourAndFiveFullHouse', 'Pair', 'OneTwoOneConsecutive', 'Distincts', 'SmallStraight', 'Yacht', 'QuadrupleOnesAndTwos', 'Fours', 'LargeStraight', 'Fives', 'FullHouse', 'SumOfOdds', 'Sixes', 'ThreeOfAKind', 'Twos', 'FourOfAKind', 'Choice', 'ThreeDistinctDice']
-
-
-
-yacht_weights = combine_rounded_keys(yacht_weights, change_category)
