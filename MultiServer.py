@@ -634,13 +634,29 @@ class Context:
             return max(1, int(self.hint_cost * 0.01 * len(self.locations[slot])))
         return 0
 
-    def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None):
+    def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None,
+                      changed: typing.Set[tuple[int,int]] = None, already_updated: typing.Set[tuple[int,int]] = None):
+        if not already_updated:
+            already_updated = set()
+        needs_updating = set()
         for hint_team, hint_slot in self.hints:
+            if (hint_team, hint_slot) in already_updated:
+                continue
             if (team is None or team == hint_team) and (slot is None or slot == hint_slot):
-                self.hints[hint_team, hint_slot] = {
-                    hint.re_check(self, hint_team) for hint in
-                    self.hints[hint_team, hint_slot]
-                }
+                new_hints: typing.Set[NetUtils.Hint] = set()
+                for hint in self.hints[hint_team, hint_slot]:
+                    new_hint = hint.re_check(self, hint_team)
+                    new_hints.add(new_hint)
+                    if hint != new_hint:
+                        if changed is not None:
+                            changed.add((hint_team,hint_slot))
+                        for player in (hint.finding_player, hint.receiving_player):
+                            if slot is not None and slot != player:
+                                needs_updating.add((hint_team, player))
+                self.hints[hint_team, hint_slot] = new_hints
+                already_updated.add((hint_team, hint_slot))
+        for hint_team, hint_slot in needs_updating:
+            self.recheck_hints(hint_team, hint_slot, already_updated, changed)
 
     def get_rechecked_hints(self, team: int, slot: int):
         self.recheck_hints(team, slot)
@@ -1037,10 +1053,10 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "hint_points": get_slot_points(ctx, team, slot),
             "checked_locations": new_locations,  # send back new checks only
         }])
-        old_hints = ctx.hints[team, slot].copy()
-        ctx.recheck_hints(team, slot)
-        if old_hints != ctx.hints[team, slot]:
-            ctx.on_changed_hints(team, slot)
+        updated_slots: typing.Set[tuple[int, int]] = set()
+        ctx.recheck_hints(team, slot, updated_slots)
+        for hint_team, hint_slot in updated_slots:
+            ctx.on_changed_hints(hint_team, hint_slot)
         ctx.save()
 
 
@@ -1839,9 +1855,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if priority is not None:
                 new_hint = new_hint.re_prioritize(ctx, priority)
             if hint != new_hint:
-                ctx.replace_hint(client.team, client.slot, hint, new_hint)
+                ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
+                ctx.replace_hint(client.team, hint.receiving_player, hint, new_hint)
                 ctx.save()
-                ctx.on_changed_hints(client.team, player)
+                ctx.on_changed_hints(client.team, hint.finding_player)
+                ctx.on_changed_hints(client.team, hint.receiving_player)
         
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
