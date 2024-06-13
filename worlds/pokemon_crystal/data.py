@@ -117,9 +117,16 @@ class MiscData(NamedTuple):
     ecruteak_gym_warps: List[List[List[int]]]
 
 
+class MusicConst(NamedTuple):
+    id: int
+    loop: bool
+
+
 class MusicData(NamedTuple):
-    consts: Dict[str, int]
-    maps: List[str]
+    consts: Dict[str, MusicConst]
+    maps: Dict[str, str]
+    encounters: List[str]
+    scripts: Dict[str, str]
 
 
 class EncounterMon(NamedTuple):
@@ -403,7 +410,6 @@ def _init() -> None:
     data.wild = WildData(grass_dict, water_dict, fish_dict, tree_dict)
 
     saffron_warps = {}
-    # print(sa_data)
     for warp_name, warp_data in saffron_data["warps"].items():
         saffron_warps[warp_name] = MiscWarp(warp_data["coords"], warp_data["id"])
 
@@ -424,52 +430,21 @@ def _init() -> None:
         )
 
     music_consts = {}
-    for music_name, music_id in data_json["music"]["consts"].items():
-        music_consts[music_name] = music_id
+    for music_name, music_data in data_json["music"]["consts"].items():
+        music_consts[music_name] = MusicConst(music_data["id"], music_data["loop"])
 
-    data.music = MusicData(music_consts, data_json["music"]["maps"])
+    music_maps = {}
+    for map_name in data_json["music"]["maps"]:
+        music_maps[map_name] = ""
 
-    data.static = {
-        "UnionCaveLapras": StaticPokemon("LAPRAS", [
-            "AP_Static_UnionCaveLapras_1",
-            "AP_Static_UnionCaveLapras_2"]),
-        "EggTogepi": StaticPokemon("TOGEPI", ["AP_Static_Togepi"]),
-        "RocketHQTrap1": StaticPokemon("VOLTORB", ["AP_Static_RocketHQTrap_1"]),
-        "RocketHQTrap2": StaticPokemon("GEODUDE", ["AP_Static_RocketHQTrap_2"]),
-        "RocketHQTrap3": StaticPokemon("KOFFING", ["AP_Static_RocketHQTrap_3"]),
-        "RocketHQElectrode1": StaticPokemon("ELECTRODE",
-                                            ["AP_Static_RocketHQElectrode_1_1", "AP_Static_RocketHQElectrode_1_2", ]),
-        "RocketHQElectrode2": StaticPokemon("ELECTRODE",
-                                            ["AP_Static_RocketHQElectrode_2_1", "AP_Static_RocketHQElectrode_2_2", ]),
-        "RocketHQElectrode3": StaticPokemon("ELECTRODE",
-                                            ["AP_Static_RocketHQElectrode_3_1", "AP_Static_RocketHQElectrode_3_2", ]),
-        "RedGyarados": StaticPokemon("GYARADOS", ["AP_Static_RedGyarados_1",
-                                                  "AP_Static_RedGyarados_2", ]),
-        "Ho_Oh": StaticPokemon("HO_OH", ["AP_Static_Ho_Oh_1",
-                                         "AP_Static_Ho_Oh_2", ]),
-        "Suicune": StaticPokemon("SUICUNE", ["AP_Static_Suicune_1",
-                                             "AP_Static_Suicune_2",
-                                             "AP_Static_Suicune_3",
-                                             "AP_Static_Suicune_4"]),
-        "Lugia": StaticPokemon("LUGIA", ["AP_Static_Lugia_1",
-                                         "AP_Static_Lugia_2", ]),
-        "Raikou": StaticPokemon("RAIKOU", ["AP_Static_Raikou_1",
-                                           "AP_Static_Raikou_2",
-                                           "AP_Static_Raikou_3",
-                                           "AP_Static_Raikou_4",
-                                           "AP_Static_Raikou_5", ]),
-        "Entei": StaticPokemon("ENTEI", ["AP_Static_Entei_1",
-                                         "AP_Static_Entei_2",
-                                         "AP_Static_Entei_3",
-                                         "AP_Static_Entei_4",
-                                         "AP_Static_Entei_5", ]),
-        "Sudowoodo": StaticPokemon("SUDOWOODO", ["AP_Static_Sudowoodo", ]),
-        "Snorlax": StaticPokemon("SNORLAX", ["AP_Static_Snorlax_1",
-                                             "AP_Static_Snorlax_2"]),
-        "CatchTutorial1": StaticPokemon("RATATTA", ["AP_Static_CatchTutorial_1", ]),
-        "CatchTutorial2": StaticPokemon("RATATTA", ["AP_Static_CatchTutorial_2", ]),
-        "CatchTutorial3": StaticPokemon("RATATTA", ["AP_Static_CatchTutorial_3", ])
-    }
+    data.music = MusicData(music_consts,
+                           music_maps,
+                           data_json["music"]["encounters"],
+                           data_json["music"]["scripts"])
+
+    data.static = {}
+    for static_name, static_data in data_json["static"].items():
+        data.static[static_name] = StaticPokemon(static_data["pokemon"], static_data["addresses"])
 
 
 _init()

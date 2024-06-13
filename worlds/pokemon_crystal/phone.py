@@ -1,4 +1,3 @@
-import random
 from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification
@@ -7,36 +6,34 @@ from .phone_data import get_shuffled_basic_calls, template_call_bike_shop, templ
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def generate_phone_traps(world: PokemonCrystalWorld):
-    bike_shop_location = world.multiworld.get_location(data.locations["BICYCLE"].label, world.player)
-    if world.options.johto_only:
-        psychic_location = None
-    else:
-        psychic_location = world.multiworld.get_location(data.locations["TM29_PSYCHIC"].label, world.player)
+def generate_phone_traps(world: "PokemonCrystalWorld"):
+    if world.options.phone_trap_weight.value:
+        bike_shop_location = world.multiworld.get_location(data.locations["BICYCLE"].label, world.player)
+        if world.options.johto_only:
+            psychic_location = None
+        else:
+            psychic_location = world.multiworld.get_location(data.locations["TM29_PSYCHIC"].label, world.player)
+        remote_locs = []
+        for location in world.multiworld.get_locations():
+            if len(remote_locs) > 3:
+                break
+            if (location.address is not None and location.item and location.item.player != world.player
+                    and location.item.classification == ItemClassification.progression):
+                remote_locs.append(location)
 
-    remote_locs = []
-    for location in world.multiworld.get_locations():
-        if len(remote_locs) > 3:
-            break
-        if (location.address is not None and location.item and location.item.player != world.player
-                and location.item.classification == ItemClassification.progression):
-            remote_locs.append(location)
+        phone_traps_list = []
+        if psychic_location is not None and world.random.random() < 0.75:
+            phone_traps_list.append("psychic")
+        if world.random.random() < 0.75:
+            phone_traps_list.append("bike_shop")
+        remote_count = min(len(remote_locs), 3)
+        phone_traps_list += ["remote"] * remote_count
+        phone_traps_list += ["basic"] * (16 - len(phone_traps_list))
+        world.random.shuffle(phone_traps_list)
 
-    phone_traps_list = []
-    if psychic_location is not None and world.random.random() < 0.75:
-        phone_traps_list.append("psychic")
-    if world.random.random() < 0.75:
-        phone_traps_list.append("bike_shop")
-    remote_count = min(len(remote_locs), 3)
-    phone_traps_list += ["remote"] * remote_count
-    phone_traps_list += ["basic"] * (16 - len(phone_traps_list))
-
-    random.shuffle(phone_traps_list)
-    basic_calls = get_shuffled_basic_calls(world.random)
+        basic_calls = get_shuffled_basic_calls(world.random)
 
     location_call_indices = [0] * 16
     phone_traps = []

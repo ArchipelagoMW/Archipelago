@@ -3,77 +3,87 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .data import data
+from .options import JohtoOnly
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def can_map_card_fly(state: CollectionState, world: PokemonCrystalWorld):
+def can_map_card_fly(state: CollectionState, world: "PokemonCrystalWorld"):
     if world.options.randomize_pokegear:
         return state.has("Map Card", world.player) and state.has("Pokegear", world.player)
     return state.has("EVENT_GOT_MAP_CARD", world.player) and state.has("EVENT_GOT_POKEGEAR", world.player)
 
 
-def set_rules(world: PokemonCrystalWorld) -> None:
-    def can_cut(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
+def set_rules(world: "PokemonCrystalWorld") -> None:
+    if world.options.hm_badge_requirements == 0:
+        def can_cut(state: CollectionState):
             return state.has("HM01 Cut", world.player) and has_badge(state, "hive")
-        elif world.options.hm_badge_requirements == 1:
-            return state.has("HM01 Cut", world.player)
-        else:
-            return state.has("HM01 Cut", world.player) and (has_badge(state, "hive") or has_badge(state, "cascade"))
 
-    def can_fly(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
+        def can_fly(state: CollectionState):
             return state.has("HM02 Fly", world.player) and has_badge(state, "storm")
-        elif world.options.hm_badge_requirements == 1:
+
+        def can_surf(state: CollectionState):
+            return state.has("HM03 Surf", world.player) and has_badge(state, "fog")
+
+        def can_strength(state: CollectionState):
+            return state.has("HM04 Strength", world.player) and has_badge(state, "plain")
+
+        def can_flash(state: CollectionState):
+            return state.has("HM05 Flash", world.player) and has_badge(state, "zephyr")
+
+        def can_whirlpool(state: CollectionState):
+            return state.has("HM06 Whirlpool", world.player) and has_badge(state, "glacier") and can_surf(state)
+
+        def can_waterfall(state: CollectionState):
+            return state.has("HM07 Waterfall", world.player) and has_badge(state, "rising") and can_surf(state)
+    elif world.options.hm_badge_requirements == 1:
+        def can_cut(state: CollectionState):
+            return state.has("HM01 Cut", world.player)
+
+        def can_fly(state: CollectionState):
             return state.has("HM02 Fly", world.player)
-        else:
+
+        def can_surf(state: CollectionState):
+            return state.has("HM03 Surf", world.player)
+
+        def can_strength(state: CollectionState):
+            return state.has("HM04 Strength", world.player)
+
+        def can_flash(state: CollectionState):
+            return state.has("HM05 Flash", world.player)
+
+        def can_whirlpool(state: CollectionState):
+            return state.has("HM06 Whirlpool", world.player) and can_surf(state)
+
+        def can_waterfall(state: CollectionState):
+            return state.has("HM07 Waterfall", world.player) and can_surf(state)
+    else:
+        def can_cut(state: CollectionState):
+            return state.has("HM01 Cut", world.player) and (
+                    has_badge(state, "hive") or has_badge(state, "cascade"))
+
+        def can_fly(state: CollectionState):
             return state.has("HM02 Fly", world.player) and (
                     has_badge(state, "storm") or has_badge(state, "thunder"))
 
-    def can_surf(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
-            return state.has("HM03 Surf", world.player) and has_badge(state, "fog")
-        elif world.options.hm_badge_requirements == 1:
-            return state.has("HM03 Surf", world.player)
-        else:
-            return state.has("HM03 Surf", world.player) and (has_badge(state, "fog") or has_badge(state, "soul"))
+        def can_surf(state: CollectionState):
+            return state.has("HM03 Surf", world.player) and (
+                    has_badge(state, "fog") or has_badge(state, "soul"))
 
-    def can_strength(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
-            return state.has("HM04 Strength", world.player) and has_badge(state, "plain")
-        elif world.options.hm_badge_requirements == 1:
-            return state.has("HM04 Strength", world.player)
-        else:
+        def can_strength(state: CollectionState):
             return state.has("HM04 Strength", world.player) and (
                     has_badge(state, "plain") or has_badge(state, "rainbow"))
 
-    def can_flash(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
-            return state.has("HM05 Flash", world.player) and has_badge(state, "zephyr")
-        elif world.options.hm_badge_requirements == 1:
-            return state.has("HM05 Flash", world.player)
-        else:
-            return state.has("HM05 Flash", world.player) and (has_badge(state, "zephyr") or has_badge(state, "boulder"))
+        def can_flash(state: CollectionState):
+            return state.has("HM05 Flash", world.player) and (
+                    has_badge(state, "zephyr") or has_badge(state, "boulder"))
 
-    def can_whirlpool(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
-            return state.has("HM06 Whirlpool", world.player) and has_badge(state, "glacier") and can_surf(state)
-        elif world.options.hm_badge_requirements == 1:
-            return state.has("HM06 Whirlpool", world.player) and can_surf(state)
-        else:
+        def can_whirlpool(state: CollectionState):
             return state.has("HM06 Whirlpool", world.player) and (
                     has_badge(state, "glacier") or has_badge(state, "volcano")) and can_surf(state)
 
-    def can_waterfall(state: CollectionState):
-        if world.options.hm_badge_requirements == 0:
-            return state.has("HM07 Waterfall", world.player) and has_badge(state, "rising") and can_surf(state)
-        elif world.options.hm_badge_requirements == 1:
-            return state.has("HM07 Waterfall", world.player) and can_surf(state)
-        else:
+        def can_waterfall(state: CollectionState):
             return state.has("HM07 Waterfall", world.player) and (
                     has_badge(state, "rising") or has_badge(state, "earth")) and can_surf(state)
 
@@ -329,6 +339,14 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Radio Tower 4F - Pink Bow from Mary"),
              lambda state: state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
 
+    if trainersanity():
+        set_rule(get_location("Radio Tower 1F - Grunt"), has_rocket_badges)
+
+        set_rule(get_location("Radio Tower 2F - Grunt 1"), has_rocket_badges)
+        set_rule(get_location("Radio Tower 2F - Grunt 2"), has_rocket_badges)
+        set_rule(get_location("Radio Tower 2F - Grunt 3"), has_rocket_badges)
+        set_rule(get_location("Radio Tower 2F - Grunt 4"), has_rocket_badges)
+
     # Route 35
     set_rule(get_location("Route 35 - HP Up After Delivering Kenya"),
              lambda state: state.has("EVENT_GAVE_KENYA", world.player))
@@ -517,11 +535,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), has_elite_four_badges)
 
-    # set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"), has_elite_four_badges)
-
     # Victory Road
 
-    if johto_only() != 1:
+    if johto_only() != JohtoOnly.option_on:
         set_rule(get_entrance("REGION_ROUTE_28 -> REGION_VICTORY_ROAD_GATE"),
                  lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
 

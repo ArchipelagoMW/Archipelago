@@ -65,7 +65,7 @@ def split_location(location_name):
         return [line_cmd, location_name]
     if len(location_name) < 33:
         return [line_cmd, location_name[:15] + "-", cont_cmd, location_name[15:]]
-    return [line_cmd, location_name[:15] + "-", cont_cmd, location_name[15:-1] + "…"]
+    return [line_cmd, location_name[:15] + "-", cont_cmd, location_name[15:33] + "…"]
 
 
 def template_call_remote(location: Location, world):

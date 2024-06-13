@@ -5,8 +5,6 @@ from .data import data
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
 class PokemonCrystalLocation(Location):
@@ -32,7 +30,7 @@ class PokemonCrystalLocation(Location):
         self.tags = tags
 
 
-def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region]) -> None:
+def create_locations(world: "PokemonCrystalWorld", regions: Dict[str, Region]) -> None:
     exclude = set()
     if not world.options.randomize_hidden_items:
         exclude.add("Hidden")

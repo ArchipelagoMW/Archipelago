@@ -8,11 +8,9 @@ from .utils import get_random_filler_item
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def randomize_pokemon(world: PokemonCrystalWorld):
+def randomize_pokemon(world: "PokemonCrystalWorld"):
     # follow_evolutions can change types after the pokemon has already been randomized,
     # so we randomize types before all else
     if world.options.randomize_types.value:
@@ -61,7 +59,7 @@ def randomize_pokemon(world: PokemonCrystalWorld):
                                                                                          base_stats=new_base_stats)
 
 
-def randomize_starters(world: PokemonCrystalWorld):
+def randomize_starters(world: "PokemonCrystalWorld"):
     def get_starter_rival_fights(starter_name):
         return [(rival_name, rival) for rival_name, rival in world.generated_trainers.items() if
                 rival_name.startswith("RIVAL_" + starter_name)]
@@ -110,7 +108,7 @@ def randomize_starters(world: PokemonCrystalWorld):
     world.generated_starter_helditems = new_helditems
 
 
-def get_random_pokemon(world: PokemonCrystalWorld, types=None, base_only=False):
+def get_random_pokemon(world: "PokemonCrystalWorld", types=None, base_only=False):
     # unown is excluded because it has a tendency to crash the game
     if types is None or types[0] is None:
         pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in world.generated_pokemon.items() if

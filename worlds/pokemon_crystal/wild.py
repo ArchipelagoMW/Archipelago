@@ -5,11 +5,9 @@ from .pokemon import get_random_pokemon
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def randomize_wild_pokemon(world: PokemonCrystalWorld):
+def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
     world.generated_wooper = get_random_pokemon(world)
 
     for grass_name, grass_encounters in world.generated_wild.grass.items():
@@ -50,6 +48,6 @@ def randomize_wild_pokemon(world: PokemonCrystalWorld):
             new_rare.append(encounter._replace(pokemon=get_random_pokemon(world)))
 
 
-def randomize_static_pokemon(world: PokemonCrystalWorld):
+def randomize_static_pokemon(world: "PokemonCrystalWorld"):
     for static_name, pkmn_data in world.generated_static.items():
         world.generated_static[static_name] = pkmn_data._replace(pokemon=get_random_pokemon(world))
