@@ -16,6 +16,9 @@ the_mines = ContentPack(
         Forageable.cave_carrot: (
             ForagingSource(regions=(Region.mines_floor_10,), other_requirements=(ToolRequirement(Tool.hoe),)),
         ),
+        Mushroom.red: (
+            ForagingSource(regions=(Region.mines_floor_95,)),
+        ),
         Mushroom.purple: (
             ForagingSource(regions=(Region.mines_floor_95,)),
         )
