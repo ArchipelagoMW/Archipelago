@@ -1142,9 +1142,9 @@ class ProgressionBalancing(NamedRange):
     range_end = 99
     display_name = "Progression Balancing"
     special_range_names = {
-        "disabled": 0,
-        "normal": 50,
-        "extreme": 99,
+        "Disabled": 0,
+        "Normal": 50,
+        "Extreme": 99,
     }
 
 
