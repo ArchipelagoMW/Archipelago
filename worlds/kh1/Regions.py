@@ -441,14 +441,12 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 3")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 4")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 5")
-        if options.atlantica:
-            regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Owl Cheer")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Owl Cheer")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 1")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 2")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 3")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 4")
-        if options.atlantica:
-            regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 5")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 5")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Start Fire")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Cabinet")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Chimney")
