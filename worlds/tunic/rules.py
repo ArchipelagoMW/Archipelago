@@ -58,6 +58,12 @@ def has_sword(state: CollectionState, player: int) -> bool:
     return state.has("Sword", player) or state.has("Sword Upgrade", player, 2)
 
 
+def laurels_zip(state: CollectionState, world: "TunicWorld") -> bool:
+    if not world.options.laurels_zips:
+        return False
+    return state.has(laurels, world.player)
+
+
 def has_ice_grapple_logic(long_range: bool, state: CollectionState, world: "TunicWorld") -> bool:
     if not world.options.ice_grappling:
         return False
@@ -195,18 +201,18 @@ def set_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(house_key, player)
              or (has_ice_grapple_logic(False, state, world)
                  and options.ice_grappling >= IceGrappling.option_medium)
-             or (state.has(laurels, player) and options.laurels_zips))
+             or laurels_zip(state, world))
     set_rule(multiworld.get_location("Old House - Holy Cross Chest", player),
              lambda state: has_ability(holy_cross, state, world) and (
                      state.has(house_key, player)
                      or (has_ice_grapple_logic(False, state, world)
                          and options.ice_grappling >= IceGrappling.option_medium)
-                     or (state.has(laurels, player) and options.laurels_zips)))
+                     or laurels_zip(state, world)))
     set_rule(multiworld.get_location("Old House - Shield Pickup", player),
              lambda state: state.has(house_key, player)
              or (has_ice_grapple_logic(False, state, world)
                  and options.ice_grappling >= IceGrappling.option_medium)
-             or (state.has(laurels, player) and options.laurels_zips))
+             or laurels_zip(state, world))
     set_rule(multiworld.get_location("Overworld - [Northwest] Page on Pillar by Dark Tomb", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Overworld - [Southwest] From West Garden", player),

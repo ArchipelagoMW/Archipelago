@@ -1,6 +1,8 @@
 from typing import Dict, Set, List, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
-from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
+from .options import IceGrappling, LadderStorage
+from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
+                    laurels_zip)
 from .er_data import Portal
 from BaseClasses import Region, CollectionState
 
@@ -236,7 +238,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # ice grapple through the gate
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
-        rule=lambda state: has_ice_grapple_logic(False, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, state, world)
+        and options.ice_grappling >= IceGrappling.option_medium)
     regions["Overworld Quarry Entry"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ice_grapple_logic(False, state, world))
@@ -273,7 +276,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Old House Door"],
         rule=lambda state: state.has(house_key, player)
-        or has_ice_grapple_logic(False, state, world))
+        or (has_ice_grapple_logic(False, state, world)
+            and options.ice_grappling >= IceGrappling.option_medium))
 
     # not including ice grapple through this because it's very tedious to get an enemy here
     regions["Overworld"].connect(
@@ -306,7 +310,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Temple Door"],
         rule=lambda state: state.has_all({"Ring Eastern Bell", "Ring Western Bell"}, player)
-        or has_ice_grapple_logic(False, state, world))
+        or (has_ice_grapple_logic(False, state, world)
+            and options.ice_grappling >= IceGrappling.option_medium))
 
     regions["Overworld Temple Door"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
@@ -323,8 +328,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
-        rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        rule=lambda state: state.has(laurels, player))
     regions["Overworld Tunnel Turret"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
@@ -428,7 +432,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Forest Grave Path by Grave"].connect(
         connecting_region=regions["Forest Grave Path Main"],
         rule=lambda state: has_ice_grapple_logic(False, state, world)
-        or (state.has(laurels, player) and options.logic_rules))
+        or laurels_zip(state, world))
 
     regions["Forest Grave Path by Grave"].connect(
         connecting_region=regions["Forest Hero's Grave"],
@@ -519,7 +523,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(True, state, world))
     regions["West Garden"].connect(
         connecting_region=regions["West Garden Portal Item"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, state, world)
+        and options.ice_grappling == IceGrappling.option_medium)
 
     # Atoll and Frog's Domain
     # nmg: ice grapple the bird below the portal
@@ -731,7 +736,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         or has_ice_grapple_logic(False, state, world))
     regions["Eastern Vault Fortress Gold Door"].connect(
         connecting_region=regions["Eastern Vault Fortress"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, state, world)
+        or (has_ice_grapple_logic(False, state, world)
+            and options.ice_grappling >= IceGrappling.option_medium))
 
     regions["Fortress Grave Path"].connect(
         connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
@@ -813,12 +820,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Even Lower Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: state.has("Activate Quarry Fuse", player)
-        or (has_ice_grapple_logic(False, state, world) and options.entrance_rando))
+        or ((has_ice_grapple_logic(False, state, world) and options.ice_grappling == IceGrappling.option_hard)
+            and (has_ability(prayer, state, world) or options.entrance_rando)))
 
     # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask only with ER on
     regions["Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world) and options.entrance_rando)
+        rule=lambda state: has_ice_grapple_logic(True, state, world)
+        and options.ice_grappling >= IceGrappling.option_hard
+        and (has_ability(prayer, state, world) or options.entrance_rando))
 
     regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
@@ -858,7 +868,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: ((state.has(laurels, player) or has_ice_grapple_logic(True, state, world))
                             and has_ability(prayer, state, world)
                             and has_sword(state, player))
-        or can_ladder_storage(state, world))
+        or (can_ladder_storage(state, world) and options.ladder_storage >= LadderStorage.option_medium))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
@@ -881,21 +891,23 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ladder("Ladders in Swamp", state, world)
         or state.has(laurels, player)
-        or has_ice_grapple_logic(False, state, world))  # nmg: ice grapple through gate
+        or (has_ice_grapple_logic(False, state, world) and options.ice_grappling == IceGrappling.option_hard))
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Front"],
         rule=lambda state: has_ladder("Ladders in Swamp", state, world)
         or state.has(laurels, player)
-        or has_ice_grapple_logic(False, state, world))  # nmg: ice grapple through gate
+        or (has_ice_grapple_logic(False, state, world) and options.ice_grappling == IceGrappling.option_hard))
 
     # nmg: ice grapple through cathedral door, can do it both ways
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
         rule=lambda state: (has_ability(prayer, state, world) and state.has(laurels, player))
-        or has_ice_grapple_logic(False, state, world))
+        or (has_ice_grapple_logic(False, state, world)
+            and options.ice_grappling >= IceGrappling.option_medium))
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: has_ice_grapple_logic(False, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, state, world)
+        and options.ice_grappling >= IceGrappling.option_medium)
 
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Ledge under Cathedral Door"],
@@ -903,7 +915,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ladder("Ladders in Swamp", state, world)
-        or has_ice_grapple_logic(True, state, world))  # nmg: ice grapple the enemy at door
+        or has_ice_grapple_logic(True, state, world))  # ice grapple the enemy at door
 
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp to Cathedral Treasure Room"],
