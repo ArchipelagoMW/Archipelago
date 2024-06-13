@@ -1810,7 +1810,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if client_player != desired_player:
                     # Only allow scouting other players' locations if the item is for client_player,
                     # or if the target_player is an item links group that the client_player is a part of.
-                    if not (client_player == target_player or client_player in ctx.groups.get(target_player, set())):
+                    if client_player not in ctx.groups.get(target_player, {target_player}):
                         continue
 
                 if create_as_hint:
