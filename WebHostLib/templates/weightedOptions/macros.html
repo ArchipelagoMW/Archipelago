@@ -47,7 +47,7 @@
         {% endif %}
         <div class="add-option-div">
             <input type="number" class="range-option-value" data-option="{{ option_name }}" />
-            <button class="add-range-option-button" data-option="{{ option_name }}">Add</button>
+            <button type="button" class="add-range-option-button" data-option="{{ option_name }}">Add</button>
         </div>
     </div>
     <table class="range-rows" data-option="{{ option_name }}">
@@ -72,7 +72,7 @@
         This option allows custom values only. Please enter your desired values below.
         <div class="custom-value-wrapper">
             <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
-            <button data-option="{{ option_name }}">Add</button>
+            <button type="button" data-option="{{ option_name }}">Add</button>
         </div>
         <table>
             <tbody>
@@ -89,7 +89,7 @@
         Custom values are also allowed for this option. To create one, enter it into the input box below.
         <div class="custom-value-wrapper">
             <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
-            <button data-option="{{ option_name }}">Add</button>
+            <button type="button" data-option="{{ option_name }}">Add</button>
         </div>
     </div>
     <table>
