@@ -58,6 +58,10 @@ class FriendsanityFeature(ABC):
     def get_randomized_hearts(self, villager: Villager) -> Tuple[int, ...]:
         ...
 
+    @property
+    def is_pet_randomized(self):
+        return bool(self.get_pet_randomized_hearts())
+
     @abstractmethod
     def get_pet_randomized_hearts(self) -> Tuple[int, ...]:
         ...

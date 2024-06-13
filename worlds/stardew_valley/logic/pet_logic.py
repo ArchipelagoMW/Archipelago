@@ -23,7 +23,7 @@ class PetLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, TimeLogicMi
         if hearts == 0:
             return True_()
 
-        if self.content.features.friendsanity.is_enabled:
+        if self.content.features.friendsanity.is_pet_randomized:
             return self.received_pet_hearts(hearts)
 
         return self.can_befriend_pet(hearts)
