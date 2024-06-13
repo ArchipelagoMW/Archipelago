@@ -84,7 +84,6 @@ class MM3EnergyLinkType(IntEnum):
     RushJet = 0x13
 
 
-
 request_to_name: Dict[str, str] = {
     "HP": "health",
     "NE": "Needle Cannon energy",
@@ -283,7 +282,7 @@ class MegaMan3Client(BizHawkClient):
 
         # get our relevant bytes
         (robot_masters_unlocked, robot_masters_defeated, doc_robo_unlocked, doc_robo_defeated,
-         rush_acquired, received_items, completed_stages, #consumable_checks,
+         rush_acquired, received_items, completed_stages, # consumable_checks,
             e_tanks, lives, weapon_energy, health, state,
             energy_link_packet, last_wily) = await read(ctx.bizhawk_ctx, [
                 (MM3_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
@@ -293,7 +292,7 @@ class MegaMan3Client(BizHawkClient):
                 (MM3_RUSH_RECEIVED, 1, "RAM"),
                 (MM3_RECEIVED_ITEMS, 1, "RAM"),
                 (MM3_COMPLETED_STAGES, 0x1, "RAM"),
-                #(MM3_CONSUMABLES, 52, "RAM"),
+                # (MM3_CONSUMABLES, 1, "RAM"),
                 (MM3_E_TANKS, 1, "RAM"),
                 (MM3_LIVES, 1, "RAM"),
                 (MM3_WEAPON_ENERGY, 11, "RAM"),
@@ -303,7 +302,7 @@ class MegaMan3Client(BizHawkClient):
                 (MM3_LAST_WILY, 1, "RAM"),
             ])
 
-        #if difficulty[0] not in (0, 1):
+        # if difficulty[0] not in (0, 1):
         #    return  # Game is not initialized
         # TODO: find/make a good initialization guard
 
@@ -547,7 +546,7 @@ class MegaMan3Client(BizHawkClient):
         if completed_stages[0] & 0x80 and 0x89000F not in ctx.checked_locations:
             new_checks.append(0x89000F)
 
-        #for consumable in MM3_CONSUMABLE_TABLE:
+        # for consumable in MM3_CONSUMABLE_TABLE:
         #    if consumable not in ctx.checked_locations:
         #        is_checked = consumable_checks[MM2_CONSUMABLE_TABLE[consumable][0]] \
         #                     & MM2_CONSUMABLE_TABLE[consumable][1]
