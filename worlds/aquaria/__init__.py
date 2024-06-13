@@ -167,14 +167,10 @@ class AquariaWorld(World):
             self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Arnassi Ruins", "Simon Says area, Transturtle", precollected)
         for name, data in item_table.items():
-            if name in precollected:
-                precollected.remove(name)
-                self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
-            else:
-                if name not in self.exclude:
-                    for i in range(data.count):
-                        item = self.create_item(name)
-                        self.multiworld.itempool.append(item)
+            if name not in self.exclude:
+                for i in range(data.count):
+                    item = self.create_item(name)
+                    self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
         """
