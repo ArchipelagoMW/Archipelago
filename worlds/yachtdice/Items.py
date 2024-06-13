@@ -109,4 +109,10 @@ item_groups = {
         "Category Five Distinct Dice",
         "Category 4&5 Full House",
     },
+    "Points": {
+        "100 Points",
+        "10 Points",
+        "1 Point",
+        "Bonus Point"
+    }
 }
