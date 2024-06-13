@@ -138,12 +138,10 @@ def set_rules(world: "MM3World") -> None:
         world.weapon_damage = slot_data["weapon_damage"]
     else:
         if world.options.random_weakness == world.options.random_weakness.option_shuffled:
-            weapon_tables = [table for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
+            weapon_tables = [table for weapon, table in weapon_damage.items() if weapon != 0]
             world.random.shuffle(weapon_tables)
-            for i in range(1, 8):
+            for i in range(1, 9):
                 world.weapon_damage[i] = weapon_tables.pop()
-            world.weapon_damage[8] = [0 for _ in range(14)]
-            world.weapon_damage[8][world.random.choice(range(8))] = 2
         elif world.options.random_weakness == world.options.random_weakness.option_randomized:
             world.weapon_damage = {i: [] for i in range(9)}
             for boss in range(22):
