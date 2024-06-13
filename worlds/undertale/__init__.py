@@ -190,11 +190,11 @@ class UndertaleWorld(World):
         exclusion_checks.update(["Nicecream Punch Card", "Hush Trade"])
         exclusion_rules(self.multiworld, self.player, exclusion_checks)
 
+        # Convert itempool into real items
+        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
         # Fill remaining items with randomly generated junk or Temmie Flakes
         while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
             itempool += [self.create_filler()]
-        # Convert itempool into real items
-        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
         self.multiworld.itempool += itempool
 
