@@ -526,7 +526,7 @@ class Context:
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
             "random_state": self.random.getstate(),
             "group_collected": dict(self.group_collected),
-            "stored_data": self.stored_data,
+            "data_storage": self.data_storage.data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password,
                              "release_mode": self.release_mode,
@@ -571,8 +571,12 @@ class Context:
         if "group_collected" in savedata:
             self.group_collected = savedata["group_collected"]
 
-        if "stored_data" in savedata:
+        if "data_storage" in savedata:
+            self.data_storage = DataStorage(savedata["data_storage"])
+        # backwards compatibility, load data_storage from `stored_data` in old saves
+        elif "stored_data" in savedata:
             self.data_storage = DataStorage(savedata["stored_data"])
+
         # count items and slots from lists for items_handling = remote
         self.logger.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
