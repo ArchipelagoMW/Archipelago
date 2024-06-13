@@ -451,7 +451,7 @@ class AquariaLocations:
 
     locations_body_c = {
         "The Body center area, breaking Li's cage": 698201,
-        "The Body main area, bulb on the main path blocking tube": 698097,
+        "The Body center area, bulb on the main path blocking tube": 698097,
     }
 
     locations_body_l = {

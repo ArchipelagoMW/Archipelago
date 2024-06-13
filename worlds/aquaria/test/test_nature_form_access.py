@@ -38,7 +38,7 @@ class NatureFormAccessTest(AquariaTestBase):
             "Beating the Golem",
             "Sunken City cleared",
             "The Body center area, breaking Li's cage",
-            "The Body main area, bulb on the main path blocking tube",
+            "The Body center area, bulb on the main path blocking tube",
             "The Body left area, first bulb in the top face room",
             "The Body left area, second bulb in the top face room",
             "The Body left area, bulb below the water stream",
