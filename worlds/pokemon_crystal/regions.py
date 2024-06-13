@@ -4,13 +4,11 @@ from BaseClasses import Region, ItemClassification, Entrance
 from .data import data
 from .items import PokemonCrystalItem
 from .locations import PokemonCrystalLocation
-from .options import FreeFlyLocation
+from .options import FreeFlyLocation, JohtoOnly
 from .rules import can_map_card_fly
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
 class RegionData:
@@ -34,13 +32,19 @@ FLY_REGIONS = {22: "REGION_ECRUTEAK_CITY",
                11: "REGION_FUCHSIA_CITY"}
 
 
-def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
+def create_regions(world: "PokemonCrystalWorld") -> Dict[str, Region]:
     regions: Dict[str, Region] = {}
     connections: List[Tuple[str, str, str]] = []
     johto_only = world.options.johto_only.value
 
+    def should_include_region(region):
+        # check if region should be included per selected Johto Only option
+        return (region.johto
+                or johto_only == JohtoOnly.option_off
+                or (region.silver_cave and johto_only == JohtoOnly.option_include_silver_cave))
+
     for region_name, region_data in data.regions.items():
-        if region_data.johto or not johto_only or (region_data.silver_cave and johto_only == 2):
+        if should_include_region(region_data):
             new_region = Region(region_name, world.player, world.multiworld)
 
             regions[region_name] = new_region
@@ -56,9 +60,7 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
                 connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
 
     for name, source, dest in connections:
-        src_ok = data.regions[source].johto or (data.regions[source].silver_cave and johto_only > 1) or not johto_only
-        dest_ok = data.regions[dest].johto or (data.regions[dest].silver_cave and johto_only > 1) or not johto_only
-        if src_ok and dest_ok:
+        if should_include_region(data.regions[source]) and should_include_region(data.regions[dest]):
             regions[source].connect(regions[dest], name)
 
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
@@ -68,7 +70,7 @@ def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
     return regions
 
 
-def setup_free_fly(world: PokemonCrystalWorld):
+def setup_free_fly(world: "PokemonCrystalWorld"):
     fly = world.get_region("REGION_FLY")
     free_fly_location = FLY_REGIONS[world.free_fly_location]
     fly_region = world.get_region(free_fly_location)

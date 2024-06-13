@@ -6,11 +6,9 @@ from .options import RandomizeLearnsets
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def randomize_learnset(world: PokemonCrystalWorld, pkmn_name):
+def randomize_learnset(world: "PokemonCrystalWorld", pkmn_name):
     pkmn_data = world.generated_pokemon[pkmn_name]
     learn_levels = []
     for move in pkmn_data.learnset:
@@ -48,7 +46,7 @@ def get_random_move(random, move_type=None, attacking=None):
     return random.choice(move_pool)
 
 
-def get_tmhm_compatibility(world: PokemonCrystalWorld, pkmn_name):
+def get_tmhm_compatibility(world: "PokemonCrystalWorld", pkmn_name):
     pkmn_data = world.generated_pokemon[pkmn_name]
     tm_value = world.options.tm_compatibility.value
     hm_value = world.options.hm_compatibility.value
@@ -68,7 +66,7 @@ def get_tmhm_compatibility(world: PokemonCrystalWorld, pkmn_name):
     return tmhms
 
 
-def randomize_tms(world: PokemonCrystalWorld):
+def randomize_tms(world: "PokemonCrystalWorld"):
     move_pool = [move_data for move_name, move_data in copy.deepcopy(crystal_data.moves).items() if
                  not move_data.is_hm and move_name not in ["ROCK_SMASH", "NO_MOVE", "STRUGGLE"]]
     world.random.shuffle(move_pool)
@@ -79,7 +77,7 @@ def randomize_tms(world: PokemonCrystalWorld):
         world.generated_tms[tm_name] = TMHMData(tm_data.tm_num, new_move.type, False, new_move.id)
 
 
-def get_random_move_from_learnset(world: PokemonCrystalWorld, pokemon, level):
+def get_random_move_from_learnset(world: "PokemonCrystalWorld", pokemon, level):
     move_pool = [move.move for move in world.generated_pokemon[pokemon].learnset if
                  move.level <= level and move.move != "NO_MOVE"]
     # double learnset pool to dilute HMs slightly

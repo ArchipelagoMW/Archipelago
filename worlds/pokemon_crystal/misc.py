@@ -2,11 +2,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def misc_activities(world: PokemonCrystalWorld):
+def misc_activities(world: "PokemonCrystalWorld"):
     # Randomize Yes/No answers for Radio Card quiz
     for i in range(5):
         world.generated_misc.radio_tower_questions[i] = world.random.choice(["Y", "N"])
@@ -33,7 +31,7 @@ def misc_activities(world: PokemonCrystalWorld):
             pair[i] = f"{direction}_{new_number}"
 
 
-def get_misc_spoiler_log(world: PokemonCrystalWorld, write):
+def get_misc_spoiler_log(world: "PokemonCrystalWorld", write):
     radio_tower_answers = " -> ".join(
         ["YES" if answer == "Y" else "NO" for answer in world.generated_misc.radio_tower_questions])
     write(f"Radio Tower Quiz Answers:\n\n{radio_tower_answers}\n\n")

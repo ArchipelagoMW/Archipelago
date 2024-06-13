@@ -34,15 +34,7 @@ class PokemonCrystalSettings(settings.Group):
         copy_to = "Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc"
         md5s = ["9f2922b235a5eeb78d65594e82ef5dde"]
 
-    class RomStart(str):
-        """
-        Set this to false to never autostart a rom (such as after patching)
-        True for operating system default program
-        Alternatively, a path to a program to open the .gb file with
-        """
-
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: Union[RomStart, bool] = True
 
 
 class PokemonCrystalWebWorld(WebWorld):
@@ -193,7 +185,7 @@ class PokemonCrystalWorld(World):
             if self.options.early_fly:
                 # take one of the 3 early badge locations, set it to storm badge
                 storm_loc = self.random.choice([loc for loc in badge_locs if "EarlyBadge" in loc.tags])
-                storm_badge = [item for item in badge_items if item.name == "Storm Badge"][0]
+                storm_badge = next(item for item in badge_items if item.name == "Storm Badge")
                 storm_loc.place_locked_item(storm_badge)
                 badge_locs.remove(storm_loc)
                 badge_items.remove(storm_badge)

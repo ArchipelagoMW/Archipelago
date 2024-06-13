@@ -8,8 +8,6 @@ from .utils import get_random_filler_item
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
 def is_rival_starter_pokemon(trainer_name, trainer_data, index):
@@ -19,7 +17,7 @@ def is_rival_starter_pokemon(trainer_name, trainer_data, index):
     return index == len(trainer_data.pokemon) - 1
 
 
-def randomize_trainers(world: PokemonCrystalWorld):
+def randomize_trainers(world: "PokemonCrystalWorld"):
     for trainer_name, trainer_data in world.generated_trainers.items():
         new_party = trainer_data.pokemon
         for i, pkmn_data in enumerate(trainer_data.pokemon):
@@ -43,7 +41,7 @@ def randomize_trainers(world: PokemonCrystalWorld):
         world.generated_trainers[trainer_name] = world.generated_trainers[trainer_name]._replace(pokemon=new_party)
 
 
-def vanilla_trainer_movesets(world: PokemonCrystalWorld):
+def vanilla_trainer_movesets(world: "PokemonCrystalWorld"):
     # if trainers parties are vanilla but learnsets are randomized,
     # we need to change the predefined trainer movesets to account for this
     for trainer_name, trainer_data in world.generated_trainers.items():

@@ -10,8 +10,6 @@ from .utils import convert_to_ingame_text
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
 class PokemonCrystalProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -30,7 +28,7 @@ class PokemonCrystalProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_as_bytes()
 
 
-def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: PokemonCrystalProcedurePatch) -> None:
+def generate_output(world: "PokemonCrystalWorld", output_directory: str, patch: PokemonCrystalProcedurePatch) -> None:
     item_texts = []
     for location in world.multiworld.get_locations(world.player):
         if location.address is None:

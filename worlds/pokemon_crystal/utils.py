@@ -4,8 +4,6 @@ from .options import FreeFlyLocation
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
 def get_random_filler_item(random):
@@ -24,7 +22,7 @@ def get_random_filler_item(random):
     return random.choice(group)
 
 
-def get_free_fly_location(world: PokemonCrystalWorld):
+def get_free_fly_location(world: "PokemonCrystalWorld"):
     # Ecruteak, Olivine, Cianwood, Mahogany, Blackthorn
     location_pool = [22, 21, 19, 23, 25]
     if not world.options.johto_only:

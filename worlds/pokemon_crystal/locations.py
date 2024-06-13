@@ -6,8 +6,6 @@ from .items import offset_item_value
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
 class PokemonCrystalLocation(Location):
@@ -51,7 +49,7 @@ def reverse_offset_flag(location_id: int) -> int:
     return location_id - BASE_OFFSET
 
 
-def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region]) -> None:
+def create_locations(world: "PokemonCrystalWorld", regions: Dict[str, Region]) -> None:
     exclude = set()
     if not world.options.randomize_hidden_items:
         exclude.add("Hidden")
