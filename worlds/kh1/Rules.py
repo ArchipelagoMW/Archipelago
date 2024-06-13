@@ -89,7 +89,13 @@ def has_final_rest_door(state: CollectionState, player:int, final_rest_door_requ
     if final_rest_door_requirement == "postcards":
         return has_postcards(state, player, 10)
     if final_rest_door_requirement == "superbosses":
-        return state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup"}, player) and has_emblems(state, player, options.keyblades_unlock_chests) and has_all_magic_lvx(state, player, 2) and has_defensive_tools(state, player) and has_x_worlds(state, player, 7, keyblades_unlock_chests)
+        return (
+                    state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup", "Entry Pass"}, player) 
+                    and has_emblems(state, player, keyblades_unlock_chests) 
+                    and has_all_magic_lvx(state, player, 2) 
+                    and has_defensive_tools(state, player) 
+                    and has_x_worlds(state, player, 7, keyblades_unlock_chests) 
+               )
 
 def has_defensive_tools(state: CollectionState, player: int) -> bool:
     return (state.count("Progressive Cure", player) >= 2 and state.has("Leaf Bracer", player) and state.has("Dodge Roll", player)) and (state.has("Second Chance", player) or state.has("MP Rage", player) or state.count("Progressive Aero", player) >= 2)
@@ -692,6 +698,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
         multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                         , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Progressive Fire")
+                                                                                                                                                    and has_item(state, player, "Crystal Trident")
                                                                                                                                                  )
         multiworld.get_location("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"                  , player).access_rule = lambda state: (
                                                                                                                                                     True
@@ -702,17 +709,21 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Halloween Town Moonlight Hill White Trinity Chest"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "White Trinity")
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Bridge Under Bridge"                                           , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box")
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Boneyard Tombstone Puzzle Chest"                               , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Bridge Right of Gate Chest"                                    , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and 
                                                                                                                                                     (
                                                                                                                                                         can_glide(state, player)
@@ -722,36 +733,43 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Halloween Town Cemetary Behind Grave Chest"                                   , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Cemetary By Cat Shape Chest"                                   , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Cemetary Between Graves Chest"                                 , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Oogie's Manor Lower Iron Cage Chest"                           , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Oogie's Manor Upper Iron Cage Chest"                           , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Oogie's Manor Hollow Chest"                                    , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Oogie's Manor Grounds Red Trinity Chest"                       , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_item(state, player, "Red Trinity")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Guillotine Square High Tower Chest"                            , player).access_rule = lambda state: (
@@ -780,14 +798,17 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Halloween Town Oogie's Manor Entrance Steps Chest"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box")
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Oogie's Manor Inside Entrance Chest"                           , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box")
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Bridge Left of Gate Chest"                                     , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and 
                                                                                                                                                     (
                                                                                                                                                         can_glide(state, player) 
@@ -798,6 +819,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_location("Halloween Town Cemetary By Striped Grave Chest"                               , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
                                                                                                                                                     and has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Guillotine Square Under Jack's House Stairs Chest"             , player).access_rule = lambda state: (
@@ -1284,8 +1306,12 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_slides(state, player)
                                                                                                                                                  )
    #multiworld.get_location("Olympus Coliseum Clear Phil's Training Thunder Event"                         , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"                          , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Olympus Coliseum Cloud Sonic Blade Event"                                     , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"                          , player).access_rule = lambda state: (
+                                                                                                                                                    has_item(state, player, "Entry Pass")
+                                                                                                                                                 )
+    multiworld.get_location("Olympus Coliseum Cloud Sonic Blade Event"                                     , player).access_rule = lambda state: (
+                                                                                                                                                    has_item(state, player, "Entry Pass")
+                                                                                                                                                 )
     multiworld.get_location("Wonderland Defeat Trickmaster Blizzard Event"                                 , player).access_rule = lambda state: (
                                                                                                                                                     has_evidence(state, player)
                                                                                                                                                  )
@@ -1311,27 +1337,33 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
         multiworld.get_location("Atlantica Defeat Ursula I Mermaid Kick Event"                             , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
                                                                                                                                                     and has_offensive_magic(state, player)
+                                                                                                                                                    and has_item(state, player, "Crystal Trident")
                                                                                                                                                  )
         multiworld.get_location("Atlantica Defeat Ursula II Thunder Event"                                 , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
                                                                                                                                                     and has_item(state, player, "Mermaid Kick") 
                                                                                                                                                     and has_offensive_magic(state, player)
+                                                                                                                                                    and has_item(state, player, "Crystal Trident")
                                                                                                                                                  )
         multiworld.get_location("Atlantica Seal Keyhole Crabclaw Event"                                    , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
                                                                                                                                                     and has_item(state, player, "Mermaid Kick") 
                                                                                                                                                     and has_offensive_magic(state, player)
+                                                                                                                                                    and has_item(state, player, "Crystal Trident")
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Defeat Oogie Boogie Holy Circlet Event"                        , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Defeat Oogie's Manor Gravity Event"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Seal Keyhole Pumpkinhead Event"                                , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_oogie_manor(state, player, options.advanced_logic)
                                                                                                                                                  )
     multiworld.get_location("Neverland Defeat Anti Sora Raven's Claw Event"                                , player).access_rule = lambda state: (
@@ -1425,7 +1457,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
        #multiworld.get_location("Atlantica Triton's Palace Wall Right Clam"                                , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Triton's Palace Near Path Clam"                                 , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Triton's Palace Wall Left Clam"                                 , player).access_rule = lambda state: has_item(state, player, "")
-       #multiworld.get_location("Atlantica Cavern Nook Clam"                                               , player).access_rule = lambda state: has_item(state, player, "")
+        multiworld.get_location("Atlantica Cavern Nook Clam"                                               , player).access_rule = lambda state: has_item(state, player, "Crystal Trident")
        #multiworld.get_location("Atlantica Below Deck Clam"                                                , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Undersea Garden Clam"                                           , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Undersea Cave Clam"                                             , player).access_rule = lambda state: has_item(state, player, "")
@@ -1439,6 +1471,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
                                                                                                                                                     and has_item(state, player, "Mermaid Kick") 
                                                                                                                                                     and has_offensive_magic(state, player)
+                                                                                                                                                    and has_item(state, player, "Crystal Trident")
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 4"                            , player).access_rule = lambda state: (
                                                                                                                                                     has_emblems(state, player, options.keyblades_unlock_chests)
@@ -1451,6 +1484,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                  )
     multiworld.get_location("Halloween Town Defeat Oogie Boogie Ansem's Report 7"                          , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Jack-In-The-Box") 
+                                                                                                                                                    and has_item(state, player, "Forget-Me-Not")
                                                                                                                                                     and has_item(state, player, "Progressive Fire")
                                                                                                                                                  )
     if options.cups:
@@ -1460,6 +1494,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
     multiworld.get_location("Neverland Defeat Hook Ansem's Report 9"                                       , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Green Trinity")
@@ -1480,6 +1515,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
     if options.super_bosses or options.goal.current_key == "unknown":
         multiworld.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"                          , player).access_rule = lambda state: (
@@ -1491,33 +1527,42 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     if options.cups:
         multiworld.get_location("Complete Phil Cup"                                                        , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup")
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Phil Cup Solo"                                                   , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup")
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Phil Cup Time Trial"                                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup")
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Pegasus Cup"                                                     , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Pegasus Cup")
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Pegasus Cup Solo"                                                , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Pegasus Cup")
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Pegasus Cup Time Trial"                                          , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Pegasus Cup")
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Hercules Cup"                                                    , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Hercules Cup Solo"                                               , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Hercules Cup Time Trial"                                         , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Hades Cup"                                                       , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1525,6 +1570,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Hades Cup Solo"                                                  , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1532,6 +1578,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Complete Hades Cup Time Trial"                                            , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1539,6 +1586,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hades Cup Defeat Cloud and Leon Event"                                    , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1546,6 +1594,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hades Cup Defeat Yuffie Event"                                            , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1553,6 +1602,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hades Cup Defeat Cerberus Event"                                          , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1560,6 +1610,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hades Cup Defeat Behemoth Event"                                          , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1567,6 +1618,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hades Cup Defeat Hades Event"                                             , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1574,14 +1626,17 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hercules Cup Defeat Cloud Event"                                          , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Hercules Cup Yellow Trinity Event"                                        , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         
    #multiworld.get_location("Traverse Town Magician's Study Turn in Naturespark"                           , player).access_rule = lambda state: has_item(state, player, "Naturespark") and has_item(state, player, "Progressive Fire")
@@ -1706,6 +1761,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
     if options.cups:
         multiworld.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"                     , player).access_rule = lambda state: (
@@ -1715,6 +1771,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_item(state, player, "Guard") 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
         multiworld.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"                  , player).access_rule = lambda state: (
                                                                                                                                                     has_item(state, player, "Phil Cup") 
@@ -1722,6 +1779,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
                                                                                                                                                     and has_defensive_tools(state, player)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
    #multiworld.get_location("Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times"                , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Neverland Clock Tower 01:00 Door"                                             , player).access_rule = lambda state: (
@@ -1835,8 +1893,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                         or can_glide(state, player)
                                                                                                                                                     )
                                                                                                                                                  )
-        if options.atlantica:
-            multiworld.get_location("100 Acre Wood Pooh's House Owl Cheer"                                 , player).access_rule = lambda state: (
+        multiworld.get_location("100 Acre Wood Pooh's House Owl Cheer"                                     , player).access_rule = lambda state: (
                                                                                                                                                     has_torn_pages(state, player, 5)
                                                                                                                                                  )
         multiworld.get_location("100 Acre Wood Convert Torn Page 1"                                        , player).access_rule = lambda state: (
@@ -1851,8 +1908,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
         multiworld.get_location("100 Acre Wood Convert Torn Page 4"                                        , player).access_rule = lambda state: (
                                                                                                                                                     has_torn_pages(state, player, 4)
                                                                                                                                                  )
-        if options.atlantica:
-            multiworld.get_location("100 Acre Wood Convert Torn Page 5"                                    , player).access_rule = lambda state: (
+        multiworld.get_location("100 Acre Wood Convert Torn Page 5"                                        , player).access_rule = lambda state: (
                                                                                                                                                     has_torn_pages(state, player, 5)
                                                                                                                                                  )
         multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                    , player).access_rule = lambda state: (
@@ -1901,6 +1957,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and has_item(state, player, "Pegasus Cup") 
                                                                                                                                                     and has_item(state, player, "Hercules Cup") 
                                                                                                                                                     and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                                                                                                                                                    and has_item(state, player, "Entry Pass")
                                                                                                                                                  )
     multiworld.get_location("Deep Jungle Jungle Slider 10 Fruits"                                          , player).access_rule = lambda state: (
                                                                                                                                                     has_slides(state, player)
@@ -1928,7 +1985,9 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
         multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
     if options.super_bosses or options.goal.current_key == "unknown":
         multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player)
-   #multiworld.get_location("Olympus Coliseum Coliseum Gates Hero's License Event"                         , player).access_rule = lambda state: ()
+    multiworld.get_location("Olympus Coliseum Coliseum Gates Hero's License Event"                         , player).access_rule = lambda state: (
+                                                                                                                                                    has_item(state, player, "Entry Pass")
+                                                                                                                                                 )
    #if options.atlantica:
        #multiworld.get_location("Atlantica Sunken Ship Crystal Trident Event"                              , player).access_rule = lambda state: ()
    #multiworld.get_location("Halloween Town Graveyard Forget-Me-Not Event"                                 , player).access_rule = lamdba state: ()
@@ -1940,7 +1999,6 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_evidence(state, player)
                                                                                                                                                  )
    #multiworld.get_location("Olympus Coliseum Coliseum Gates Entry Pass Event"                             , player).access_rule = lambda state: ()
-    
     
     multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: (
                                                                                                                                                     has_at_least(state, player, "Empty Bottle", 6) 

@@ -119,6 +119,9 @@ class KH1World(World):
                         item_pool += [self.create_item(name) for _ in range(0, 2)]
                     else:
                         item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Crystal Trident":
+                if self.options.atlantica:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "High Jump":
                 if self.options.extra_shared_abilities:
                     item_pool += [self.create_item(name) for _ in range(0, 3)]

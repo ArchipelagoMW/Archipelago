@@ -236,7 +236,7 @@ item_table: Dict[str, KH1ItemData] = {
    #"Naturespark":                       KH1ItemData("Key",              code = 264_1207, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Fireglow":                          KH1ItemData("Key",              code = 264_1208, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Earthshine":                        KH1ItemData("Key",              code = 264_1209, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-   #"Crystal Trident":                   KH1ItemData("Key",              code = 264_1210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "Crystal Trident":                   KH1ItemData("Key",              code = 264_1210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Postcard":                          KH1ItemData("Key",              code = 264_1211, classification = ItemClassification.progression, max_quantity = 10, weight = 10),
     "Torn Page 1":                       KH1ItemData("Torn Pages",       code = 264_1212, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Torn Page 2":                       KH1ItemData("Torn Pages",       code = 264_1213, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
@@ -253,9 +253,9 @@ item_table: Dict[str, KH1ItemData] = {
    #"Claw Marks":                        KH1ItemData("Key",              code = 264_1224, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Stench":                            KH1ItemData("Key",              code = 264_1225, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Antenna":                           KH1ItemData("Key",              code = 264_1226, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-   #"Forget-Me-Not":                     KH1ItemData("Key",              code = 264_1227, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "Forget-Me-Not":                     KH1ItemData("Key",              code = 264_1227, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Jack-In-The-Box":                   KH1ItemData("Key",              code = 264_1228, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-   #"Entry Pass":                        KH1ItemData("Key",              code = 264_1229, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "Entry Pass":                        KH1ItemData("Key",              code = 264_1229, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Hero License":                      KH1ItemData("Key",              code = 264_1230, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Pretty Stone":                      KH1ItemData("Synthesis",        code = 264_1231, classification = ItemClassification.filler,      max_quantity = 1,  weight = 10),
    #"N41":                               KH1ItemData("Synthesis",        code = 264_1232, classification = ItemClassification.filler,      max_quantity = 1,  weight = 10),
@@ -522,10 +522,7 @@ item_table: Dict[str, KH1ItemData] = {
    #"Hades Cup":                         KH1ItemData("Cups",             code = 264_9004, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
 }
 
-event_item_table: Dict[str, KH1ItemData] = {
-    "Vanilla Postcard":                  KH1ItemData("Event",            classification = ItemClassification.progression),
-    "Vanilla Torn Page":                 KH1ItemData("Event",            classification = ItemClassification.progression),
-}
+event_item_table: Dict[str, KH1ItemData] = {}
 
 #Make item categories
 item_name_groups: Dict[str, Set[str]] = {}
