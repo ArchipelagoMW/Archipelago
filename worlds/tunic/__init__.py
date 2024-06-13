@@ -90,7 +90,10 @@ class TunicWorld(World):
                 self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
                 self.options.sword_progression.value = passthrough["sword_progression"]
                 self.options.ability_shuffling.value = passthrough["ability_shuffling"]
-                self.options.logic_rules.value = passthrough["logic_rules"]
+                self.options.laurels_zips.value = passthrough["laurels_zips"]
+                self.options.ice_grappling.value = passthrough["ice_grappling"]
+                self.options.ladder_storage.value = passthrough["ladder_storage"]
+                self.options.ladder_storage_without_items = passthrough["ladder_storage_without_items"]
                 self.options.lanternless.value = passthrough["lanternless"]
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
@@ -355,7 +358,10 @@ class TunicWorld(World):
             "ability_shuffling": self.options.ability_shuffling.value,
             "hexagon_quest": self.options.hexagon_quest.value,
             "fool_traps": self.options.fool_traps.value,
-            "logic_rules": self.options.logic_rules.value,
+            "laurels_zips": self.options.laurels_zips.value,
+            "ice_grappling": self.options.ice_grappling.value,
+            "ladder_storage": self.options.ladder_storage.value,
+            "ladder_storage_without_items": self.options.ladder_storage_without_items.value,
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
