@@ -733,9 +733,8 @@ class Context:
                 return hint
         return None
     
-    
     def replace_hint(self, team: int, slot: int, old_hint: NetUtils.Hint, new_hint: NetUtils.Hint) -> None:
-        self.hints[team, slot] = [new_hint if hint == old_hint else hint for hint in self.hints[team, slot]]
+        self.hints[team, slot] = {new_hint if hint == old_hint else hint for hint in self.hints[team, slot]}
     
     # "events"
 
@@ -1086,7 +1085,7 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-    return text + (". (found)" if hint.found else ("." if hint.prioritize else ". (non-priority)"))
+    return text + (". (found)" if hint.found else ("." if hint.prioritized else ". (non-priority)"))
 
 
 def json_format_send_event(net_item: NetworkItem, receiving_player: int):
@@ -1829,10 +1828,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                       "original_cmd": cmd}])
                 return
             hint = ctx.get_hint(client.team, player, location)
-            new_hint = hint
+            if hint.receiving_player != client.slot:
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
+                                      "original_cmd": cmd}])
+                return
             if not hint:
                 return  # Ignored safely
-            needs_update: bool = False
+            new_hint = hint
             if priority is not None:
                 new_hint = new_hint.re_prioritize(ctx, priority)
             if hint != new_hint:

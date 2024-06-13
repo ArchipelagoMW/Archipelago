@@ -340,6 +340,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         if self.collide_point(*touch.pos):
             if self.index:  # skip header
                 if alt:
+                    if self.hint["found"]:
+                        return
                     ctx = App.get_running_app().ctx
                     if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
                         ctx.update_hint(self.hint["location"],
@@ -740,6 +742,8 @@ class HintLog(RecycleView):
         self.parser = parser
 
     def refresh_hints(self, hints):
+        if not hints:  # Fix the scrolling looking visually wrong in some edge cases
+            self.scroll_y = 1.0
         data = []
         for hint in hints:
             data.append({
