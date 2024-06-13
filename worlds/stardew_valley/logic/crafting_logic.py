@@ -82,9 +82,9 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         if isinstance(recipe.source, QuestSource):
             return self.logic.quest.can_complete_quest(recipe.source.quest)
         if isinstance(recipe.source, SpecialOrderSource):
-            if not (self.options.special_order_locations & SpecialOrderLocations.option_board):
-                return self.logic.special_order.can_complete_special_order(recipe.source.special_order)
-            return self.logic.crafting.received_recipe(recipe.item)
+            if self.options.special_order_locations & SpecialOrderLocations.option_board:
+                return self.logic.crafting.received_recipe(recipe.item)
+            return self.logic.special_order.can_complete_special_order(recipe.source.special_order)
         if isinstance(recipe.source, LogicSource):
             if recipe.source.logic_rule == "Cellar":
                 return self.logic.region.can_reach(Region.cellar)
