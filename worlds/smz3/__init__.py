@@ -179,11 +179,6 @@ class SMZ3World(World):
                             }
         return itemType in progressionTypes
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        # don't need rom anymore
-        pass
-
     def generate_early(self):
         self.config = Config()
         self.config.GameMode = GameMode.Multiworld
