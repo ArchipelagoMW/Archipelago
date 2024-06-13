@@ -119,12 +119,16 @@ class EquipmentScaling(Choice):
     Vanilla: Swords/Armor follow the vanilla 1/2/3/4/6/8/10/12 strength/defense progression.
     Improved: Swords/Armor follow an improved 1/3/5/7/9/12/12/12 strength/defense progression.
     Strong: Swords/Armor follow a strong 2/4/6/9/12/12/12/12 strength/defense progression.
+    Weak: Swords/Armor follow a weak 1/1/2/2/3/4/5/6 strength/defense progression.
+    Broken: Swords/Armor strength is set to 1/1/1/1/1/1/1/1 strength/defense progression.
     """
 
     display_name = "Equipment Scaling"
     option_vanilla = 0
     option_improved = 1
     option_strong = 2
+    option_weak = 3
+    option_broken = 4
     default = 0
 
 
