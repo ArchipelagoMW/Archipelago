@@ -9,12 +9,13 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from .client import PokemonCrystalClient
 from .data import PokemonData, TrainerData, BASE_OFFSET, MiscData, TMHMData, BankAddress, data as crystal_data, \
-    WildData, StaticPokemon
+    WildData, StaticPokemon, MusicData
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, \
     reverse_offset_item_value, ITEM_GROUPS, item_const_name_to_id, item_const_name_to_label
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .misc import misc_activities, get_misc_spoiler_log
 from .moves import randomize_tms
+from .music import randomize_music
 from .options import PokemonCrystalOptions, JohtoOnly, RandomizeBadges, Goal, HMBadgeRequirements
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
@@ -90,7 +91,7 @@ class PokemonCrystalWorld(World):
     generated_tms: Dict[str, TMHMData]
     generated_wild: WildData
     # generated_sfx: List[BankAddress]
-    generated_music: List[int]
+    generated_music: MusicData
     generated_wooper: str
     generated_static: Dict[str, StaticPokemon]
 
@@ -216,10 +217,10 @@ class PokemonCrystalWorld(World):
         self.generated_tms = copy.deepcopy(crystal_data.tmhm)
         self.generated_wild = copy.deepcopy(crystal_data.wild)
         self.generated_static = copy.deepcopy(crystal_data.static)
+        self.generated_music = copy.deepcopy(crystal_data.music)
         self.generated_palettes = {}
         self.generated_phone_traps = []
         self.generated_phone_indices = []
-        self.generated_music = []
         self.generated_wooper = "WOOPER"
         # self.generated_sfx = copy.deepcopy(crystal_data.sfx.pointers)
 
@@ -243,11 +244,7 @@ class PokemonCrystalWorld(World):
             randomize_static_pokemon(self)
 
         if self.options.randomize_music.value:
-            music_pool = [music_id for music_name, music_id in crystal_data.music.consts.items() if
-                          music_name != "MUSIC_NONE"]
-            for _music in crystal_data.music.maps:
-                new_music = self.random.choice(music_pool)
-                self.generated_music.append(new_music)
+            randomize_music(self)
 
         # if self.options.randomize_sfx:
         #     self.random.shuffle(self.generated_sfx)

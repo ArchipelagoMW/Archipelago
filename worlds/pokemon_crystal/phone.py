@@ -1,4 +1,3 @@
-import random
 from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification
@@ -7,11 +6,9 @@ from .phone_data import get_shuffled_basic_calls, template_call_bike_shop, templ
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
-else:
-    PokemonCrystalWorld = object
 
 
-def generate_phone_traps(world: PokemonCrystalWorld):
+def generate_phone_traps(world: "PokemonCrystalWorld"):
     if world.options.phone_trap_weight.value:
         bike_shop_location = world.multiworld.get_location(data.locations["BICYCLE"].label, world.player)
         if world.options.johto_only:
@@ -34,7 +31,7 @@ def generate_phone_traps(world: PokemonCrystalWorld):
         remote_count = min(len(remote_locs), 3)
         phone_traps_list += ["remote"] * remote_count
         phone_traps_list += ["basic"] * (16 - len(phone_traps_list))
-        random.shuffle(phone_traps_list)
+        world.random.shuffle(phone_traps_list)
 
         basic_calls = get_shuffled_basic_calls(world.random)
 

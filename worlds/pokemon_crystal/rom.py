@@ -295,12 +295,17 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str, patch: Po
         write_bytes(patch, [world.options.minimum_catch_rate], address)
 
     if world.options.randomize_music:
-        for i, music in enumerate(data.music.maps):
-            music_address = data.rom_addresses["AP_Music_" + music]
-            if music.startswith("MAP_"):  # map music uses a single byte
-                write_bytes(patch, [world.generated_music[i]], music_address)
-            else:  # script music is 2 bytes, offset by 1
-                write_bytes(patch, world.generated_music[i].to_bytes(2, "little"), music_address + 1)
+        for map_name, map_music in world.generated_music.maps.items():
+            music_address = data.rom_addresses["AP_Music_" + map_name]
+            # map music uses a single byte
+            write_bytes(patch, [world.generated_music.consts[map_music].id], music_address)
+        for i, music_name in enumerate(world.generated_music.encounters):
+            music_address = data.rom_addresses["AP_EncounterMusic"] + i
+            write_bytes(patch, [world.generated_music.consts[music_name].id], music_address)
+        for script_name, script_music in world.generated_music.scripts.items():
+            music_address = data.rom_addresses["AP_Music_" + script_name] + 1
+            # script music is 2 bytes LE
+            write_bytes(patch, world.generated_music.consts[script_music].id.to_bytes(2, "little"), music_address)
 
     # if world.options.randomize_sfx:
     #     out_bytes = b''
