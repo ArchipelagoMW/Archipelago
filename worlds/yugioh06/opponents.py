@@ -3,8 +3,8 @@ from typing import Dict, List, NamedTuple, Optional, Union
 from BaseClasses import MultiWorld
 from worlds.generic.Rules import CollectionRule
 
-from worlds.yugioh06 import item_to_index, tier_1_opponents, yugioh06_difficulty
-from worlds.yugioh06.locations import special
+from . import item_to_index, tier_1_opponents, yugioh06_difficulty
+from .locations import special
 
 
 class OpponentData(NamedTuple):
