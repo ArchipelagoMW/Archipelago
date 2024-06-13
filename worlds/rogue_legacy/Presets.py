@@ -40,7 +40,7 @@ rl_options_presets: Dict[str, Dict[str, Any]] = {
     },
     # A preset I actually use, using some literal values and some from the option itself.
     "Limited Potential": {
-        "progression_balancing":    "Disabled",
+        "progression_balancing":    0,
         "fairy_chests_per_zone":    2,
         "starting_class":           "random",
         "chests_per_zone":          30,
