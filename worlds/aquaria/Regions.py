@@ -771,6 +771,7 @@ class AquariaRegions:
         self.__connect_regions("Sunken City left area", "Sunken City boss area",
                                self.sunken_city_l, self.sunken_city_boss,
                                lambda state: _has_beast_form(state, self.player) and
+                                             _has_sun_form(state, self.player) and
                                              _has_energy_form(state, self.player) and
                                              _has_bind_song(state, self.player))
 
@@ -983,7 +984,7 @@ class AquariaRegions:
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas City, third urn in the city reserve", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, urn in the Cathedral flower tube entrance", self.player),
+        add_rule(self.multiworld.get_location("Mithalas City, urn in the Castle flower tube entrance", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas City Castle, urn in the bedroom", self.player),
                  lambda state: _has_damaging_item(state, self.player))
@@ -1023,7 +1024,7 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location("The Veil top right area, bulb in the top of the waterfall", self.player),
+        add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
 
     def __adjusting_under_rock_location(self) -> None:
@@ -1175,7 +1176,7 @@ class AquariaRegions:
         self.multiworld.get_location("Sun Worm path, second cliff bulb",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("The Veil top right area, bulb in the top of the waterfall",
+        self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble Cave, bulb in the left cave wall",

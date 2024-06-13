@@ -91,7 +91,7 @@ def option_presets(game: str) -> Response:
                     f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
 
                 presets[preset_name][preset_option_name] = option.value
-            elif isinstance(option, Options.Range):
+            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.ItemDict)):
                 presets[preset_name][preset_option_name] = option.value
             elif isinstance(preset_option, str):
                 # Ensure the option value is valid for Choice and Toggle options
