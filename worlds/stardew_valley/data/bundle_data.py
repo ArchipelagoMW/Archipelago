@@ -70,7 +70,7 @@ stone = BundleItem(Material.stone, 99)
 hardwood = BundleItem(Material.hardwood, 10)
 clay = BundleItem(Material.clay, 10)
 fiber = BundleItem(Material.fiber, 99)
-moss = BundleItem(Material.moss)
+moss = BundleItem(Material.moss, 10)
 
 mixed_seeds = BundleItem(Seed.mixed)
 acorn = BundleItem(TreeSeed.acorn)
@@ -451,7 +451,7 @@ raccoon_food_items_thematic = [*all_specific_dried_mushrooms, *raccoon_food_item
 raccoon_food_bundle_vanilla = DeepBundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_food, raccoon_food_items_vanilla, 2, 2)
 raccoon_food_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_food, raccoon_food_items_thematic, 3, 2)
 
-raccoon_foraging_items = [moss.as_amount(10), rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
+raccoon_foraging_items = [moss, rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
                           frozen_geode.as_amount(5), magma_geode.as_amount(3), coral.as_amount(4), sea_urchin.as_amount(2), bug_meat.as_amount(10),
                           diamond, topaz.as_amount(3), ghostfish.as_amount(3)]
 raccoon_foraging_bundle_vanilla = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_foraging, raccoon_foraging_items, 2, 2)
@@ -511,7 +511,7 @@ island_foraging_bundle = IslandBundleTemplate(CCRoom.crafts_room, BundleName.isl
 sticky_items = [sap.as_amount(500), sap.as_amount(500)]
 sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_items, 1, 1)
 
-forest_items = [moss.as_amount(10), fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
+forest_items = [moss, fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
                 mushroom_tree_seed, mossy_seed.as_amount(5), mystic_tree_seed]
 forest_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.forest, forest_items, 4, 2)
 
