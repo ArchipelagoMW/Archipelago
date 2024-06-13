@@ -148,8 +148,8 @@ Sent to clients when they receive an item.
 ### LocationInfo
 Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) packet and responds with the item in the location(s) being scouted.
 #### Arguments
-| Name      | Type                                | Notes                                                   |
-|-----------|-------------------------------------|---------------------------------------------------------|
+| Name      | Type                       | Notes                                                   |
+|-----------|----------------------------|---------------------------------------------------------|
 | locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted.    |
 | player    | int                        | The player number for the slot the locations belong to. |
 
