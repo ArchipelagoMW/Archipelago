@@ -142,12 +142,11 @@ class GauntletLegendsWorld(World):
         ]
         return {
             "player": self.player,
-            "scale": 0,
             "shards": shard_values,
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "character": self.options.unlock_character.value,
-            "max_value": self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4,
+            "max": self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4,
             "instant_max": self.options.instant_max.value
         }
 
