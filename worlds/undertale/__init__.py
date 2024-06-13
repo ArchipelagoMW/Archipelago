@@ -55,7 +55,7 @@ class UndertaleWorld(World):
 
     def _get_undertale_data(self):
         return {
-            "world_seed": self.multiworld.per_slot_randoms[self.player].getrandbits(32),
+            "world_seed": self.random.getrandbits(32),
             "seed_name": self.multiworld.seed_name,
             "player_name": self.multiworld.get_player_name(self.player),
             "player_id": self.player,
@@ -74,6 +74,22 @@ class UndertaleWorld(World):
             "prog_weapons": bool(self.options.prog_weapons.value),
             "rando_item_button": bool(self.options.rando_item_button.value)
         }
+
+    def get_filler_item_name(self):
+        if self.options.route_required == "all_routes":
+            junk_pool = junk_weights_all.copy()
+        elif self.options.route_required == "genocide":
+            junk_pool = junk_weights_genocide.copy()
+        elif self.options.route_required == "neutral":
+            junk_pool = junk_weights_neutral.copy()
+        elif self.options.route_required == "pacifist":
+            junk_pool = junk_weights_pacifist.copy()
+        else:
+            junk_pool = junk_weights_all.copy()
+        if not self.options.only_flakes:
+            return self.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))[0]
+        else:
+            return "Temmie Flakes"
 
     def create_items(self):
         self.multiworld.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
@@ -175,19 +191,16 @@ class UndertaleWorld(World):
         exclusion_rules(self.multiworld, self.player, exclusion_checks)
 
         # Fill remaining items with randomly generated junk or Temmie Flakes
-        if not self.options.only_flakes:
-            itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                                       k=len(self.location_names)-len(itempool)-len(exclusion_pool))
-        else:
-            itempool += ["Temmie Flakes"] * (len(self.location_names) - len(itempool) - len(exclusion_pool))
+        while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
+            itempool += [self.create_filler()]
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
         self.multiworld.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
-        set_completion_rules(self.multiworld, self.player)
+        set_rules(self)
+        set_completion_rules(self)
 
     def create_regions(self):
         def UndertaleRegion(region_name: str, exits=[]):
