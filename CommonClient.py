@@ -528,7 +528,7 @@ class CommonContext:
             self.input_task.cancel()
     
     # Hints
-    def update_hint(self, location: int, finding_player: int, priority: typing.Optional[bool]):
+    def update_hint(self, location: int, finding_player: int, priority: typing.Optional[bool]) -> None:
         msg = {"cmd": "UpdateHint", "location": location, "player": finding_player}
         if priority is not None:
             msg["priority"] = priority

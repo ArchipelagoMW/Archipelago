@@ -346,7 +346,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                     if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
                         ctx.update_hint(self.hint["location"],
                                         self.hint["finding_player"],
-                                        not self.hint["prioritized"])
+                                        not self.hint["priority"])
                 else:
                     if self.selected:
                         self.parent.clear_selection()
@@ -729,7 +729,7 @@ class HintLog(RecycleView):
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
         "status": {"text": "[u]Status[/u]",
-                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "prioritized": False}},
+                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "priority": False}},
         "striped": True,
     }
 
@@ -764,9 +764,9 @@ class HintLog(RecycleView):
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
                 "status": {
-                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
+                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else ("red" if hint["priority"] else "gold"),
                                                      "text": "Found" if hint["found"] else (
-                                                         "Priority" if hint["prioritized"] else "Non-Priority")}),
+                                                         "Priority" if hint["priority"] else "Non-Priority")}),
                     "hint": hint,
                 },
             })

@@ -635,7 +635,8 @@ class Context:
         return 0
 
     def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None,
-                      changed: typing.Set[tuple[int,int]] = None, already_updated: typing.Set[tuple[int,int]] = None):
+                      changed: typing.Optional[typing.Set[team_slot]] = None,
+                      already_updated: typing.Optional[typing.Set[team_slot]] = None) -> None:
         if not already_updated:
             already_updated = set()
         needs_updating = set()
@@ -1060,7 +1061,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         ctx.save()
 
 
-def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str], prioritize: bool) -> typing.List[NetUtils.Hint]:
+def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str], priority: bool) -> typing.List[NetUtils.Hint]:
     hints = []
     slots: typing.Set[int] = {slot}
     for group_id, group in ctx.groups.items():
@@ -1073,24 +1074,24 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
         found = location_id in ctx.location_checks[team, finding_player]
         entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
         hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                   item_flags, prioritize))
+                                   item_flags, priority))
 
     return hints
 
 
-def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str, prioritize: bool) -> typing.List[NetUtils.Hint]:
+def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str, priority: bool) -> typing.List[NetUtils.Hint]:
     seeked_location: int = ctx.location_names_for_game(ctx.games[slot])[location]
-    return collect_hint_location_id(ctx, team, slot, seeked_location, prioritize)
+    return collect_hint_location_id(ctx, team, slot, seeked_location, priority)
 
 
-def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int, prioritize: bool) -> typing.List[NetUtils.Hint]:
+def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int, priority: bool) -> typing.List[NetUtils.Hint]:
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
     if any(result):
         item_id, receiving_player, item_flags = result
 
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags, prioritize)]
+        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags, priority)]
     return []
 
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
@@ -1101,7 +1102,7 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-    return text + (". (found)" if hint.found else ("." if hint.prioritized else ". (non-priority)"))
+    return text + (". (found)" if hint.found else ("." if hint.priority else ". (non-priority)"))
 
 
 def json_format_send_event(net_item: NetworkItem, receiving_player: int):
@@ -1844,22 +1845,24 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                       "original_cmd": cmd}])
                 return
             hint = ctx.get_hint(client.team, player, location)
+            if not hint:
+                return  # Ignored safely
             if hint.receiving_player != client.slot:
                 await ctx.send_msgs(client,
                                     [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
                                       "original_cmd": cmd}])
                 return
-            if not hint:
-                return  # Ignored safely
             new_hint = hint
-            if priority is not None:
-                new_hint = new_hint.re_prioritize(ctx, priority)
-            if hint != new_hint:
-                ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
-                ctx.replace_hint(client.team, hint.receiving_player, hint, new_hint)
-                ctx.save()
-                ctx.on_changed_hints(client.team, hint.finding_player)
-                ctx.on_changed_hints(client.team, hint.receiving_player)
+            if priority is None:
+                return
+            new_hint = new_hint.re_prioritize(ctx, priority)
+            if hint == new_hint:
+                return
+            ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
+            ctx.replace_hint(client.team, hint.receiving_player, hint, new_hint)
+            ctx.save()
+            ctx.on_changed_hints(client.team, hint.finding_player)
+            ctx.on_changed_hints(client.team, hint.receiving_player)
         
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
