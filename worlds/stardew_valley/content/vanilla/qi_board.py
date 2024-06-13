@@ -24,7 +24,7 @@ qi_board_content_pack = QiBoardContentPack(
     harvest_sources={
         # This one is a bit special, because it's only available during the special order, but it can be found from like, everywhere.
         Seed.qi_bean: (GenericSource(regions=(Region.qi_walnut_room,)),),
-        Fruit.qi_fruit: (HarvestCropSource(seed=Seed.qi_bean, seasons=(Season.spring, Season.summer, Season.fall, Season.winter,)),),
+        Fruit.qi_fruit: (HarvestCropSource(seed=Seed.qi_bean),),
     },
     fishes=(
         fish_data.ms_angler,

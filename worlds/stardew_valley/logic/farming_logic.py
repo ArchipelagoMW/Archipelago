@@ -20,6 +20,7 @@ farming_event_by_season = {
     Season.spring: Event.spring_farming,
     Season.summer: Event.summer_farming,
     Season.fall: Event.fall_farming,
+    Season.winter: Event.winter_farming,
 }
 
 

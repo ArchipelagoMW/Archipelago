@@ -214,6 +214,8 @@ class StardewValleyWorld(World):
         self.create_event_location(summer_farming, true_, Event.summer_farming)
         fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
         self.create_event_location(fall_farming, true_, Event.fall_farming)
+        winter_farming = LocationData(None, LogicRegion.winter_farming, Event.winter_farming)
+        self.create_event_location(winter_farming, true_, Event.winter_farming)
 
     def setup_logic_events(self):
         def register_event(name: str, region: str, rule: StardewRule):
