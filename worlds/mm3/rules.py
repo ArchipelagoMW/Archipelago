@@ -148,7 +148,7 @@ def set_rules(world: "MM3World") -> None:
             world.weapon_damage = {i: [] for i in range(9)}
             for boss in range(22):
                 for weapon in world.weapon_damage:
-                    world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
+                    world.weapon_damage[weapon].append(min(14, max(0, int(world.random.normalvariate(3, 3)))))
                 if not any([world.weapon_damage[weapon][boss] >= 4
                             for weapon in range(1, 9)]):
                     # failsafe, there should be at least one defined non-Buster weakness
