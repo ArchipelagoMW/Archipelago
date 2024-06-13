@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle, Range, CommonOptions
+from Options import Choice, Option, Toggle, Range, PerGameCommonOptions
 from dataclasses import dataclass
 
 
@@ -88,7 +88,7 @@ class RandoBattleOptions(Toggle):
 
 
 @dataclass
-class UndertaleOptions(CommonOptions):
+class UndertaleOptions(PerGameCommonOptions):
     route_required:                           RouteRequired
     starting_area:                            StartingArea
     key_hunt:                                 KeyHunt
