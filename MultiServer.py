@@ -1793,6 +1793,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationScouts':
             locs = []
             create_as_hint: int = int(args.get("create_as_hint", 0))
+            client_player = client.slot
+            desired_player = client_player
+            if "player" in args:
+                desired_player = int(args["player"])
+
             hints = []
             for location in args["locations"]:
                 if type(location) is not int:
@@ -1800,15 +1805,20 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                         [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
-
                 target_item, target_player, flags = ctx.locations[client.slot][location]
+
+                # Only allow scouting other players' locations if the item is for the slot that sent the scout
+                # TODO: Allow scouting Item Links items that *lead* to an item for client_player?
+                if client_player != desired_player and client_player != target_player:
+                    continue
+
                 if create_as_hint:
-                    hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
+                    hints.extend(collect_hint_location_id(ctx, client.team, desired_player, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
             if locs and create_as_hint:
                 ctx.save()
-            await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
+            await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs, 'player': desired_player}])
 
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])

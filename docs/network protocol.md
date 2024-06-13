@@ -148,9 +148,10 @@ Sent to clients when they receive an item.
 ### LocationInfo
 Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) packet and responds with the item in the location(s) being scouted.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted. |
+| Name      | Type                                | Notes                                                   |
+|-----------|-------------------------------------|---------------------------------------------------------|
+| locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted.    |
+| player    | int                        | The player number for the slot the locations belong to. |
 
 ### RoomUpdate
 Sent when there is a need to update information about the present game session.
@@ -335,11 +336,16 @@ Fully remote clients without a patch file may use this to "place" items onto the
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
 This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
 
+For the purpose of in-game hints, it is also possible to scout other slots' locations. You can do this by setting the `player` parameter. 
+Only locations that contain items for your slot will actually be processed if you set the `player` parameter to a different slot's player number than your own.
+
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
-| create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+| Name           | Type        | Notes                                                                                                                                                                                           |
+|----------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| locations      | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server.                            |
+| create_as_hint | int         | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+| player         | int         | Determines the player whose locations will be scouted. If this is a different player than the requesting slot, only locations that contain their items will be processed.                       |
+
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
