@@ -33,8 +33,8 @@ randomized mode. For more info see the [ReadMe](https://github.com/Jarno458/TsRa
 
 ## Where do I get a config file?
 
-The [Player Settings](/games/Timespinner/player-settings) page on the website allows you to
-configure your personal settings and export them into a config file
+The [Player Options](/games/Timespinner/player-options) page on the website allows you to
+configure your personal options and export them into a config file
 
 * The Timespinner Randomizer option "StinkyMaw" is currently always enabled for Archipelago generated seeds
 * The Timespinner Randomizer options "ProgressiveVerticalMovement" & "ProgressiveKeycards" are currently not supported

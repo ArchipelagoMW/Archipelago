@@ -1,0 +1,8 @@
+Disabled Locations:
+0x033D4 (Outside Tutorial Vault)
+0x0CC7B (Desert Vault)
+0x00AFB (Shipwreck Vault)
+0x15ADD (Jungle Vault)
+0x002A6 (Mountainside Vault)
+0x2FAF6 (Tunnels Vault Box)
+0x00815 (Theater Video Input)

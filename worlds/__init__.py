@@ -1,46 +1,56 @@
 import importlib
+import importlib.util
+import logging
 import os
 import sys
-import typing
 import warnings
 import zipimport
+import time
+import dataclasses
+from typing import Dict, List, TypedDict
 
-from Utils import user_path, local_path
+from Utils import local_path, user_path
 
 local_folder = os.path.dirname(__file__)
-user_folder = user_path("worlds") if user_path() != local_path() else None
+user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
+try:
+    os.makedirs(user_folder, exist_ok=True)
+except OSError:  # can't access/write?
+    user_folder = None
 
-__all__ = (
-    "lookup_any_item_id_to_name",
-    "lookup_any_location_id_to_name",
+__all__ = {
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
-)
+    "GamesPackage",
+    "DataPackage",
+    "failed_world_loads",
+}
 
 
-class GamesData(typing.TypedDict):
-    item_name_groups: typing.Dict[str, typing.List[str]]
-    item_name_to_id: typing.Dict[str, int]
-    location_name_groups: typing.Dict[str, typing.List[str]]
-    location_name_to_id: typing.Dict[str, int]
-    version: int
+failed_world_loads: List[str] = []
 
 
-class GamesPackage(GamesData, total=False):
+class GamesPackage(TypedDict, total=False):
+    item_name_groups: Dict[str, List[str]]
+    item_name_to_id: Dict[str, int]
+    location_name_groups: Dict[str, List[str]]
+    location_name_to_id: Dict[str, int]
     checksum: str
 
 
-class DataPackage(typing.TypedDict):
-    games: typing.Dict[str, GamesPackage]
+class DataPackage(TypedDict):
+    games: Dict[str, GamesPackage]
 
 
-class WorldSource(typing.NamedTuple):
+@dataclasses.dataclass(order=True)
+class WorldSource:
     path: str  # typically relative path from this module
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
+    time_taken: float = -1.0
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
@@ -53,6 +63,7 @@ class WorldSource(typing.NamedTuple):
 
     def load(self) -> bool:
         try:
+            start = time.perf_counter()
             if self.is_zip:
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
@@ -72,6 +83,7 @@ class WorldSource(typing.NamedTuple):
                         importer.exec_module(mod)
             else:
                 importlib.import_module(f".{self.path}", "worlds")
+            self.time_taken = time.perf_counter()-start
             return True
 
         except Exception:
@@ -82,13 +94,13 @@ class WorldSource(typing.NamedTuple):
             print(f"Could not load world {self}:", file=file_like)
             traceback.print_exc(file=file_like)
             file_like.seek(0)
-            import logging
             logging.exception(file_like.read())
+            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
 
 # find potential world containers, currently folders and zip-importable .apworld's
-world_sources: typing.List[WorldSource] = []
+world_sources: List[WorldSource] = []
 for folder in (folder for folder in (user_folder, local_folder) if folder):
     relative = folder == local_folder
     for entry in os.scandir(folder):
@@ -96,7 +108,12 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
         if not entry.name.startswith(("_", ".")):
             file_name = entry.name if relative else os.path.join(folder, entry.name)
             if entry.is_dir():
-                world_sources.append(WorldSource(file_name, relative=relative))
+                if os.path.isfile(os.path.join(entry.path, '__init__.py')):
+                    world_sources.append(WorldSource(file_name, relative=relative))
+                elif os.path.isfile(os.path.join(entry.path, '__init__.pyc')):
+                    world_sources.append(WorldSource(file_name, relative=relative))
+                else:
+                    logging.warning(f"excluding {entry.name} from world sources because it has no __init__.py")
             elif entry.is_file() and entry.name.endswith(".apworld"):
                 world_sources.append(WorldSource(file_name, is_zip=True, relative=relative))
 
@@ -105,25 +122,9 @@ world_sources.sort()
 for world_source in world_sources:
     world_source.load()
 
-lookup_any_item_id_to_name = {}
-lookup_any_location_id_to_name = {}
-games: typing.Dict[str, GamesPackage] = {}
-
-from .AutoWorld import AutoWorldRegister  # noqa: E402
-
 # Build the data package for each game.
-for world_name, world in AutoWorldRegister.world_types.items():
-    games[world_name] = world.get_data_package_data()
-    lookup_any_item_id_to_name.update(world.item_id_to_name)
-    lookup_any_location_id_to_name.update(world.location_id_to_name)
+from .AutoWorld import AutoWorldRegister
 
 network_data_package: DataPackage = {
-    "games": games,
+    "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
-
-# Set entire datapackage to version 0 if any of them are set to 0
-if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
-    import logging
-
-    logging.warning(f"Datapackage is in custom mode. Custom Worlds: "
-                    f"{[world for world in AutoWorldRegister.world_types.values() if not world.data_version]}")

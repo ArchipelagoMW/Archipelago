@@ -7,15 +7,16 @@ from Options import Toggle
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
-from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
+from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names, item_descriptions
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
+from .Options import RandomizeWeaponLevelOption, PoolTypeOption, EarlySmallLothricBanner, dark_souls_options
 
 
 class DarkSouls3Web(WebWorld):
     bug_report_page = "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/issues"
+    theme = "stone"
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Dark Souls III randomizer on your computer.",
         "English",
         "setup_en.md",
@@ -34,6 +35,8 @@ class DarkSouls3Web(WebWorld):
 
     tutorials = [setup_en, setup_fr]
 
+    item_descriptions = item_descriptions
+
 
 class DarkSouls3World(World):
     """
@@ -46,7 +49,6 @@ class DarkSouls3World(World):
     option_definitions = dark_souls_options
     topology_present: bool = True
     web = DarkSouls3Web()
-    data_version = 8
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
@@ -60,7 +62,6 @@ class DarkSouls3World(World):
             "Cinders of a Lord - Lothric Prince"
         }
     }
-
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -85,6 +86,10 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.NPC)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
+            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
+                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
+            elif self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_local:
+                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:

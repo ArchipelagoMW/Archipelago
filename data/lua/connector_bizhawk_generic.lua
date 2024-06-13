@@ -22,6 +22,10 @@ SOFTWARE.
 
 local SCRIPT_VERSION = 1
 
+-- Set to log incoming requests
+-- Will cause lag due to large console output
+local DEBUG = false
+
 --[[
 This script expects to receive JSON and will send JSON back. A message should
 be a list of 1 or more requests which will be executed in order. Each request
@@ -249,15 +253,31 @@ Response:
     - `err` (`string`): A description of the problem
 ]]
 
+local bizhawk_version = client.getversion()
+local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
+bizhawk_major = tonumber(bizhawk_major)
+bizhawk_minor = tonumber(bizhawk_minor)
+if bizhawk_patch == "" then
+    bizhawk_patch = 0
+else
+    bizhawk_patch = tonumber(bizhawk_patch)
+end
+
+local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
+lua_major = tonumber(lua_major)
+lua_minor = tonumber(lua_minor)
+
+if lua_major > 5 or (lua_major == 5 and lua_minor >= 3) then
+    require("lua_5_3_compat")
+end
+
 local base64 = require("base64")
 local socket = require("socket")
 local json = require("json")
 
--- Set to log incoming requests
--- Will cause lag due to large console output
-local DEBUG = false
-
-local SOCKET_PORT = 43055
+local SOCKET_PORT_FIRST = 43055
+local SOCKET_PORT_RANGE_SIZE = 5
+local SOCKET_PORT_LAST = SOCKET_PORT_FIRST + SOCKET_PORT_RANGE_SIZE
 
 local STATE_NOT_CONNECTED = 0
 local STATE_CONNECTED = 1
@@ -276,24 +296,6 @@ local current_time = 0
 local locked = false
 
 local rom_hash = nil
-
-local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
-lua_major = tonumber(lua_major)
-lua_minor = tonumber(lua_minor)
-
-if lua_major > 5 or (lua_major == 5 and lua_minor >= 3) then
-    require("lua_5_3_compat")
-end
-
-local bizhawk_version = client.getversion()
-local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
-bizhawk_major = tonumber(bizhawk_major)
-bizhawk_minor = tonumber(bizhawk_minor)
-if bizhawk_patch == "" then
-    bizhawk_patch = 0
-else
-    bizhawk_patch = tonumber(bizhawk_patch)
-end
 
 function queue_push (self, value)
     self[self.right] = value
@@ -328,18 +330,28 @@ function unlock ()
     client_socket:settimeout(0)
 end
 
-function process_request (req)
-    local res = {}
+request_handlers = {
+    ["PING"] = function (req)
+        local res = {}
 
-    if req["type"] == "PING" then
         res["type"] = "PONG"
 
-    elseif req["type"] == "SYSTEM" then
+        return res
+    end,
+
+    ["SYSTEM"] = function (req)
+        local res = {}
+
         res["type"] = "SYSTEM_RESPONSE"
         res["value"] = emu.getsystemid()
 
-    elseif req["type"] == "PREFERRED_CORES" then
+        return res
+    end,
+
+    ["PREFERRED_CORES"] = function (req)
+        local res = {}
         local preferred_cores = client.getconfig().PreferredCores
+
         res["type"] = "PREFERRED_CORES_RESPONSE"
         res["value"] = {}
         res["value"]["NES"] = preferred_cores.NES
@@ -352,14 +364,21 @@ function process_request (req)
         res["value"]["PCECD"] = preferred_cores.PCECD
         res["value"]["SGX"] = preferred_cores.SGX
 
-    elseif req["type"] == "HASH" then
+        return res
+    end,
+
+    ["HASH"] = function (req)
+        local res = {}
+
         res["type"] = "HASH_RESPONSE"
         res["value"] = rom_hash
 
-    elseif req["type"] == "GUARD" then
-        res["type"] = "GUARD_RESPONSE"
-        local expected_data = base64.decode(req["expected_data"])
+        return res
+    end,
 
+    ["GUARD"] = function (req)
+        local res = {}
+        local expected_data = base64.decode(req["expected_data"])
         local actual_data = memory.read_bytes_as_array(req["address"], #expected_data, req["domain"])
 
         local data_is_validated = true
@@ -370,39 +389,83 @@ function process_request (req)
             end
         end
 
+        res["type"] = "GUARD_RESPONSE"
         res["value"] = data_is_validated
         res["address"] = req["address"]
 
-    elseif req["type"] == "LOCK" then
+        return res
+    end,
+
+    ["LOCK"] = function (req)
+        local res = {}
+
         res["type"] = "LOCKED"
         lock()
 
-    elseif req["type"] == "UNLOCK" then
+        return res
+    end,
+
+    ["UNLOCK"] = function (req)
+        local res = {}
+
         res["type"] = "UNLOCKED"
         unlock()
 
-    elseif req["type"] == "READ" then
+        return res
+    end,
+
+    ["READ"] = function (req)
+        local res = {}
+
         res["type"] = "READ_RESPONSE"
         res["value"] = base64.encode(memory.read_bytes_as_array(req["address"], req["size"], req["domain"]))
 
-    elseif req["type"] == "WRITE" then
+        return res
+    end,
+
+    ["WRITE"] = function (req)
+        local res = {}
+
         res["type"] = "WRITE_RESPONSE"
         memory.write_bytes_as_array(req["address"], base64.decode(req["value"]), req["domain"])
 
-    elseif req["type"] == "DISPLAY_MESSAGE" then
+        return res
+    end,
+
+    ["DISPLAY_MESSAGE"] = function (req)
+        local res = {}
+
         res["type"] = "DISPLAY_MESSAGE_RESPONSE"
         message_queue:push(req["message"])
 
-    elseif req["type"] == "SET_MESSAGE_INTERVAL" then
+        return res
+    end,
+
+    ["SET_MESSAGE_INTERVAL"] = function (req)
+        local res = {}
+
         res["type"] = "SET_MESSAGE_INTERVAL_RESPONSE"
         message_interval = req["value"]
 
-    else
+        return res
+    end,
+
+    ["default"] = function (req)
+        local res = {}
+
         res["type"] = "ERROR"
         res["err"] = "Unknown command: "..req["type"]
-    end
 
-    return res
+        return res
+    end,
+}
+
+function process_request (req)
+    if request_handlers[req["type"]] then
+        return request_handlers[req["type"]](req)
+    else
+        return request_handlers["default"](req)
+    end
 end
 
 -- Receive data from AP client and send message back
@@ -435,7 +498,7 @@ function send_receive ()
     end
 
     if message == "VERSION" then
-        local result, err client_socket:send(tostring(SCRIPT_VERSION).."\n")
+        client_socket:send(tostring(SCRIPT_VERSION).."\n")
     else
         local res = {}
         local data = json.decode(message)
@@ -454,6 +517,7 @@ function send_receive ()
                         failed_guard_response = response
                     end
                 else
+                    if type(response) ~= "string" then response = "Unknown error" end
                     res[i] = {type = "ERROR", err = response}
                 end
             end
@@ -463,14 +527,45 @@ function send_receive ()
     end
 end
 
-function main ()
-    server, err = socket.bind("localhost", SOCKET_PORT)
+function initialize_server ()
+    local err
+    local port = SOCKET_PORT_FIRST
+    local res = nil
+
+    server, err = socket.socket.tcp4()
+    while res == nil and port <= SOCKET_PORT_LAST do
+        res, err = server:bind("localhost", port)
+        if res == nil and err ~= "address already in use" then
+            print(err)
+            return
+        end
+
+        if res == nil then
+            port = port + 1
+        end
+    end
+
+    if port > SOCKET_PORT_LAST then
+        print("Too many instances of connector script already running. Exiting.")
+        return
+    end
+
+    res, err = server:listen(0)
+
     if err ~= nil then
         print(err)
         return
     end
 
+    server:settimeout(0)
+end
+
+function main ()
     while true do
+        if server == nil then
+            initialize_server()
+        end
+
         current_time = socket.socket.gettime()
         timeout_timer = timeout_timer - (current_time - prev_time)
         message_timer = message_timer - (current_time - prev_time)
@@ -482,16 +577,16 @@ function main ()
         end
 
         if current_state == STATE_NOT_CONNECTED then
-            if emu.framecount() % 60 == 0 then
-                server:settimeout(2)
+            if emu.framecount() % 30 == 0 then
+                print("Looking for client...")
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print("Client connected")
                     current_state = STATE_CONNECTED
                     client_socket = client
+                    server:close()
+                    server = nil
                     client_socket:settimeout(0)
-                else
-                    print("No client found. Trying again...")
                 end
             end
         else
@@ -527,37 +622,37 @@ else
             emu.frameadvance()
         end
     end
-    
+
     rom_hash = gameinfo.getromhash()
 
-    print("Waiting for client to connect. Emulation will freeze intermittently until a client is found.\n")
+    print("Waiting for client to connect. This may take longer the more instances of this script you have open at once.\n")
 
     local co = coroutine.create(main)
     function tick ()
         local status, err = coroutine.resume(co)
-    
-        if not status then
+
+        if not status and err ~= "cannot resume dead coroutine" then
             print("\nERROR: "..err)
             print("Consider reporting this crash.\n")
     
             if server ~= nil then
                 server:close()
             end
-    
+
             co = coroutine.create(main)
         end
     end
-    
+
     -- Gambatte has a setting which can cause script execution to become
     -- misaligned, so for GB and GBC we explicitly set the callback on
     -- vblank instead.
     -- https://github.com/TASEmulators/BizHawk/issues/3711
-    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" then
+    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" or emu.getsystemid() == "SGB" then
         event.onmemoryexecute(tick, 0x40, "tick", "System Bus")
     else
         event.onframeend(tick)
     end
-    
+
     while true do
         emu.frameadvance()
     end

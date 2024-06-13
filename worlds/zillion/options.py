@@ -1,17 +1,18 @@
 from collections import Counter
 from dataclasses import dataclass
-from typing import Dict, Tuple
+from typing import ClassVar, Dict, Tuple
 from typing_extensions import TypeGuard  # remove when Python >= 3.10
 
-from Options import DefaultOnToggle, PerGameCommonOptions, Range, SpecialRange, Toggle, Choice
+from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCommonOptions, Range, Toggle
 
-from zilliandomizer.options import \
-    Options as ZzOptions, char_to_gun, char_to_jump, ID, \
-    VBLR as ZzVBLR, chars, Chars, ItemCounts as ZzItemCounts
+from zilliandomizer.options import (
+    Options as ZzOptions, char_to_gun, char_to_jump, ID,
+    VBLR as ZzVBLR, Chars, ItemCounts as ZzItemCounts
+)
 from zilliandomizer.options.parsing import validate as zz_validate
 
 
-class ZillionContinues(SpecialRange):
+class ZillionContinues(NamedRange):
     """
     number of continues before game over
 
@@ -106,6 +107,15 @@ class ZillionStartChar(Choice):
     option_champ = 2
     display_name = "start character"
     default = "random"
+
+    _name_capitalization: ClassVar[Dict[int, Chars]] = {
+        option_jj: "JJ",
+        option_apple: "Apple",
+        option_champ: "Champ",
+    }
+
+    def get_char(self) -> Chars:
+        return ZillionStartChar._name_capitalization[self.value]
 
 
 class ZillionIDCardCount(Range):
@@ -212,13 +222,20 @@ class ZillionEarlyScope(Toggle):
 
 
 class ZillionSkill(Range):
-    """ the difficulty level of the game """
+    """
+    the difficulty level of the game
+
+    higher skill:
+    - can require more precise platforming movement
+    - lowers your defense
+    - gives you less time to escape at the end
+    """
     range_start = 0
     range_end = 5
     default = 2
 
 
-class ZillionStartingCards(SpecialRange):
+class ZillionStartingCards(NamedRange):
     """
     how many ID Cards to start the game with
 
@@ -260,6 +277,14 @@ class ZillionOptions(PerGameCommonOptions):
     skill: ZillionSkill
     starting_cards: ZillionStartingCards
     room_gen: ZillionRoomGen
+
+
+z_option_groups = [
+    OptionGroup("item counts", [
+        ZillionIDCardCount, ZillionBreadCount, ZillionOpaOpaCount, ZillionZillionCount,
+        ZillionFloppyDiskCount, ZillionScopeCount, ZillionRedIDCardCount
+    ])
+]
 
 
 def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
@@ -348,16 +373,6 @@ def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
 
     # that should be all of the level requirements met
 
-    name_capitalization: Dict[str, Chars] = {
-        "jj": "JJ",
-        "apple": "Apple",
-        "champ": "Champ",
-    }
-
-    start_char = options.start_char
-    start_char_name = name_capitalization[start_char.current_key]
-    assert start_char_name in chars
-
     starting_cards = options.starting_cards
 
     room_gen = options.room_gen
@@ -371,7 +386,7 @@ def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
         max_level.value,
         False,  # tutorial
         skill,
-        start_char_name,
+        options.start_char.get_char(),
         floppy_req.value,
         options.continues.value,
         bool(options.randomize_alarms.value),

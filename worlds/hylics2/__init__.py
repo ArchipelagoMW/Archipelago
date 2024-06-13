@@ -1,8 +1,9 @@
 from typing import Dict, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.generic.Rules import set_rule
-from . import Exits, Items, Locations, Options, Rules
-from ..AutoWorld import WebWorld, World
+from . import Exits, Items, Locations, Rules
+from .Options import Hylics2Options
+from worlds.AutoWorld import WebWorld, World
 
 
 class Hylics2Web(WebWorld):
@@ -32,13 +33,9 @@ class Hylics2World(World):
 
     item_name_to_id = {data["name"]: item_id for item_id, data in all_items.items()}
     location_name_to_id = {data["name"]: loc_id for loc_id, data in all_locations.items()}
-    option_definitions = Options.hylics2_options
 
-    topology_present: bool = True
-
-    data_version = 3
-
-    start_location = "Waynehouse"
+    options_dataclass = Hylics2Options
+    options: Hylics2Options
 
 
     def set_rules(self):
@@ -51,52 +48,35 @@ class Hylics2World(World):
         return Hylics2Item(name, self.all_items[item_id]["classification"], item_id, player=self.player)
 
 
-    def add_item(self, name: str, classification: ItemClassification, code: int) -> "Item":
-        return Hylics2Item(name, classification, code, self.player)
-
-
     def create_event(self, event: str):
         return Hylics2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
-
-    # set random starting location if option is enabled
-    def generate_early(self):
-        if self.multiworld.random_start[self.player]:
-            i = self.multiworld.random.randint(0, 3)
-            if i == 0:
-                self.start_location = "Waynehouse"
-            elif i == 1:
-                self.start_location = "Viewax's Edifice"
-            elif i == 2:
-                self.start_location = "TV Island"
-            elif i == 3:
-                self.start_location = "Shield Facility"
 
     def create_items(self):
         # create item pool
         pool = []
 
         # add regular items
-        for i, data in Items.item_table.items():
-            if data["count"] > 0:
-                for j in range(data["count"]):
-                    pool.append(self.add_item(data["name"], data["classification"], i))
+        for item in Items.item_table.values():
+            if item["count"] > 0:
+                for _ in range(item["count"]):
+                    pool.append(self.create_item(item["name"]))
 
         # add party members if option is enabled
-        if self.multiworld.party_shuffle[self.player]:
-            for i, data in Items.party_item_table.items():
-                pool.append(self.add_item(data["name"], data["classification"], i))
+        if self.options.party_shuffle:
+            for item in Items.party_item_table.values():
+                pool.append(self.create_item(item["name"]))
 
         # handle gesture shuffle
-        if not self.multiworld.gesture_shuffle[self.player]: # add gestures to pool like normal
-            for i, data in Items.gesture_item_table.items():
-                pool.append(self.add_item(data["name"], data["classification"], i))
+        if not self.options.gesture_shuffle: # add gestures to pool like normal
+            for item in Items.gesture_item_table.values():
+                pool.append(self.create_item(item["name"]))
 
         # add '10 Bones' items if medallion shuffle is enabled
-        if self.multiworld.medallion_shuffle[self.player]:
-            for i, data in Items.medallion_item_table.items():
-                for j in range(data["count"]):
-                    pool.append(self.add_item(data["name"], data["classification"], i))
+        if self.options.medallion_shuffle:
+            for item in Items.medallion_item_table.values():
+                for _ in range(item["count"]):
+                    pool.append(self.create_item(item["name"]))
 
         # add to world's pool
         self.multiworld.itempool += pool
@@ -104,60 +84,57 @@ class Hylics2World(World):
 
     def pre_fill(self):
         # handle gesture shuffle options
-        if self.multiworld.gesture_shuffle[self.player] == 2: # vanilla locations
+        if self.options.gesture_shuffle == 2: # vanilla locations
             gestures = Items.gesture_item_table
             self.multiworld.get_location("Waynehouse: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200678]["name"], gestures[200678]["classification"], 200678))
+                .place_locked_item(self.create_item("POROMER BLEB"))
             self.multiworld.get_location("Afterlife: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200683]["name"], gestures[200683]["classification"], 200683))
+                .place_locked_item(self.create_item("TELEDENUDATE"))
             self.multiworld.get_location("New Muldul: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200679]["name"], gestures[200679]["classification"], 200679))
+                .place_locked_item(self.create_item("SOUL CRISPER"))
             self.multiworld.get_location("Viewax's Edifice: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200680]["name"], gestures[200680]["classification"], 200680))
+                .place_locked_item(self.create_item("TIME SIGIL"))
             self.multiworld.get_location("TV Island: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200681]["name"], gestures[200681]["classification"], 200681))
+                .place_locked_item(self.create_item("CHARGE UP"))
             self.multiworld.get_location("Juice Ranch: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200682]["name"], gestures[200682]["classification"], 200682))
+                .place_locked_item(self.create_item("FATE SANDBOX"))
             self.multiworld.get_location("Foglast: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200684]["name"], gestures[200684]["classification"], 200684))
+                .place_locked_item(self.create_item("LINK MOLLUSC"))
             self.multiworld.get_location("Drill Castle: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200688]["name"], gestures[200688]["classification"], 200688))
+                .place_locked_item(self.create_item("NEMATODE INTERFACE"))
             self.multiworld.get_location("Sage Airship: TV", self.player)\
-                .place_locked_item(self.add_item(gestures[200685]["name"], gestures[200685]["classification"], 200685))
+                .place_locked_item(self.create_item("BOMBO - GENESIS"))
 
-        elif self.multiworld.gesture_shuffle[self.player] == 1: # TVs only
-            gestures = list(Items.gesture_item_table.items())
-            tvs = list(Locations.tv_location_table.items())
+        elif self.options.gesture_shuffle == 1: # TVs only
+            gestures = [gesture["name"] for gesture in Items.gesture_item_table.values()]
+            tvs = [tv["name"] for tv in Locations.tv_location_table.values()]
 
             # if Extra Items in Logic is enabled place CHARGE UP first and make sure it doesn't get
             # placed at Sage Airship: TV or Foglast: TV
-            if self.multiworld.extra_items_in_logic[self.player]:
-                tv = self.multiworld.random.choice(tvs)
-                gest = gestures.index((200681, Items.gesture_item_table[200681]))
-                while tv[1]["name"] == "Sage Airship: TV" or tv[1]["name"] == "Foglast: TV":
-                    tv = self.multiworld.random.choice(tvs)
-                self.multiworld.get_location(tv[1]["name"], self.player)\
-                    .place_locked_item(self.add_item(gestures[gest][1]["name"], gestures[gest][1]["classification"],
-                    gestures[gest]))
-                gestures.remove(gestures[gest])
+            if self.options.extra_items_in_logic:
+                tv = self.random.choice(tvs)
+                while tv == "Sage Airship: TV" or tv == "Foglast: TV":
+                    tv = self.random.choice(tvs)
+                self.multiworld.get_location(tv, self.player)\
+                    .place_locked_item(self.create_item("CHARGE UP"))
+                gestures.remove("CHARGE UP")
                 tvs.remove(tv)
 
-            for i in range(len(gestures)):
-                gest = self.multiworld.random.choice(gestures)
-                tv = self.multiworld.random.choice(tvs)
-                self.multiworld.get_location(tv[1]["name"], self.player)\
-                    .place_locked_item(self.add_item(gest[1]["name"], gest[1]["classification"], gest[0]))
-                gestures.remove(gest)
-                tvs.remove(tv)
+            self.random.shuffle(gestures)
+            self.random.shuffle(tvs)
+            while gestures:
+                gesture = gestures.pop()
+                tv = tvs.pop()
+                self.get_location(tv).place_locked_item(self.create_item(gesture))
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "party_shuffle": self.multiworld.party_shuffle[self.player].value,
-            "medallion_shuffle": self.multiworld.medallion_shuffle[self.player].value,
-            "random_start" : self.multiworld.random_start[self.player].value,
-            "start_location" : self.start_location,
-            "death_link": self.multiworld.death_link[self.player].value
+            "party_shuffle": self.options.party_shuffle.value,
+            "medallion_shuffle": self.options.medallion_shuffle.value,
+            "random_start": int(self.options.start_location != "waynehouse"),
+            "start_location" : self.options.start_location.current_option_name,
+            "death_link": self.options.death_link.value
         }
         return slot_data
 
@@ -193,16 +170,16 @@ class Hylics2World(World):
                 if j == i:
                     for k in exits:
                         # create entrance and connect it to parent and destination regions
-                        ent = Entrance(self.player, k, reg)
+                        ent = Entrance(self.player, f"{reg.name} {k}", reg)
                         reg.exits.append(ent)
-                        if k == "New Game" and self.multiworld.random_start[self.player]:
-                            if self.start_location == "Waynehouse":
+                        if k == "New Game":
+                            if self.options.start_location == "waynehouse":
                                 ent.connect(region_table[2])
-                            elif self.start_location == "Viewax's Edifice":
+                            elif self.options.start_location == "viewaxs_edifice":
                                 ent.connect(region_table[6])
-                            elif self.start_location == "TV Island":
+                            elif self.options.start_location == "tv_island":
                                 ent.connect(region_table[9])
-                            elif self.start_location == "Shield Facility":
+                            elif self.options.start_location == "shield_facility":
                                 ent.connect(region_table[11])
                         else:
                             for name, num in Exits.exit_lookup_table.items():
@@ -218,13 +195,13 @@ class Hylics2World(World):
                 .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # add party member locations if option is enabled
-        if self.multiworld.party_shuffle[self.player]:
+        if self.options.party_shuffle:
             for i, data in Locations.party_location_table.items():
                 region_table[data["region"]].locations\
                     .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # add medallion locations if option is enabled
-        if self.multiworld.medallion_shuffle[self.player]:
+        if self.options.medallion_shuffle:
             for i, data in Locations.medallion_location_table.items():
                 region_table[data["region"]].locations\
                     .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))

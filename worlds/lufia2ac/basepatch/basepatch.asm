@@ -145,7 +145,7 @@ TX:
     BEQ +
     JSR ReportLocationCheck
     SEP #$20
-    JML $8EC331             ; skip item get process
+    JML $8EC2DC             ; skip item get process; consider chest emptied
 +:  BIT.w #$4200            ; test for blue chest flag
     BEQ +
     LDA $F02048             ; load total blue chests checked
@@ -155,7 +155,7 @@ TX:
     INC                     ; increment check counter
     STA $F02040             ; store check counter
     SEP #$20
-    JML $8EC331             ; skip item get process
+    JML $8EC2DC             ; skip item get process; consider chest emptied
 +:  SEP #$20
     JML $8EC1EF             ; continue item get process
 
@@ -170,6 +170,9 @@ pullpc
 
 ScriptTX:
     STA $7FD4F1             ; (overwritten instruction)
+    LDA $05AC               ; load map number
+    CMP.b #$F1              ; check if ancient cave final floor
+    BNE +
     REP #$20
     LDA $7FD4EF             ; read script item id
     CMP.w #$01C2            ; test for ancient key
@@ -261,6 +264,9 @@ SpecialItemGet:
     BRA ++
 +:  CMP.w #$01C2            ; ancient key
     BNE +
+    LDA.w #$0008
+    ORA $0796
+    STA $0796               ; set ancient key EV flag ($C3)
     LDA.w #$0200
     ORA $0797
     STA $0797               ; set boss item EV flag ($D1)
@@ -303,6 +309,12 @@ org $8EFD2E  ; unused region at the end of bank $8E
     DB $1E,$0B,$01,$2B,$05,$1A,$05,$00  ; add dekar
     DB $1E,$0B,$01,$2B,$04,$1A,$06,$00  ; add tia
     DB $1E,$0B,$01,$2B,$06,$1A,$07,$00  ; add lexis
+    DB $1F,$0B,$01,$2C,$01,$1B,$02,$00  ; remove selan
+    DB $1F,$0B,$01,$2C,$02,$1B,$03,$00  ; remove guy
+    DB $1F,$0B,$01,$2C,$03,$1B,$04,$00  ; remove arty
+    DB $1F,$0B,$01,$2C,$05,$1B,$05,$00  ; remove dekar
+    DB $1F,$0B,$01,$2C,$04,$1B,$06,$00  ; remove tia
+    DB $1F,$0B,$01,$2C,$06,$1B,$07,$00  ; remove lexis
 pullpc
 
 SpecialItemUse:
@@ -322,11 +334,15 @@ SpecialItemUse:
     SEP #$20
     LDA $8ED8C7,X           ; load predefined bitmask with a single bit set
     BIT $077E               ; check against EV flags $02 to $07 (party member flags)
-    BNE +                   ; abort if character already present
-    LDA $07A9               ; load EV register $11 (party counter)
+    BEQ ++
+    LDA.b #$30              ; character already present; modify pointer to point to L2SASM leave script
+    ADC $09B7
+    STA $09B7
+    BRA +++
+++: LDA $07A9               ; character not present; load EV register $0B (party counter)
     CMP.b #$03
     BPL +                   ; abort if party full
-    LDA.b #$8E
++++ LDA.b #$8E
     STA $09B9
     PHK
     PEA ++
@@ -334,7 +350,6 @@ SpecialItemUse:
     JML $83BB76             ; initialize parser variables
 ++: NOP
     JSL $809CB8             ; call L2SASM parser
-    JSL $81F034             ; consume the item
     TSX
     INX #13
     TXS
@@ -481,6 +496,73 @@ org $9EDC88  ; names
     DB "SULLY       "       ; overwrites "Basement key"
     DB "BLAZE       "       ; overwrites "Narcysus key"
 pullpc
+
+
+
+; allow inactive characters to gain exp
+pushpc
+org $81DADD
+    ; DB=$81, x=0, m=1
+    NOP                     ; overwrites BNE $81DAE2 : JMP $DBED
+    JML HandleActiveExp
+AwardExp:
+    ; isolate exp distribution into a subroutine, to be reused for both active party members and inactive characters
+org $81DAE9
+    NOP #2                  ; overwrites JMP $DBBD
+    RTL
+org $81DB42
+    NOP #2                  ; overwrites JMP $DBBD
+    RTL
+org $81DD11
+    ; DB=$81, x=0, m=1
+    JSL HandleInactiveExp    ; overwrites LDA $0A8A : CLC
+pullpc
+
+HandleActiveExp:
+    BNE +                   ; (overwritten instruction; modified) check if statblock not empty
+    JML $81DBED             ; (overwritten instruction; modified) abort
++:  JSL AwardExp            ; award exp (X=statblock pointer, Y=position in battle order, $00=position in menu order)
+    JML $81DBBD             ; (overwritten instruction; modified) continue to next level text
+
+HandleInactiveExp:
+    LDA $F0201B             ; load inactive exp gain rate
+    BEQ +                   ; zero gain; skip everything
+    CMP.b #$64
+    BCS ++                  ; full gain
+    LSR $1607
+    ROR $1606               ; half gain
+    ROR $1605
+++: LDY.w #$0000            ; start looping through all characters
+-:  TDC
+    TYA
+    LDX.w #$0003            ; start looping through active party
+--: CMP $0A7B,X
+    BEQ ++                  ; skip if character in active party
+    DEX
+    BPL --                  ; continue looping through active party
+    STA $153D               ; inactive character detected; overwrite character index of 1st slot in party battle order
+    ASL
+    TAX
+    REP #$20
+    LDA $859EBA,X           ; convert character index to statblock pointer
+    SEP #$20
+    TAX
+    PHY                     ; stash character loop index
+    LDY $0A80
+    PHY                     ; stash 1st (in menu order) party member statblock pointer
+    STX $0A80               ; overwrite 1st (in menu order) party member statblock pointer
+    LDY.w #$0000            ; set to use 1st position (in battle order)
+    STY $00                 ; set to use 1st position (in menu order)
+    JSL AwardExp            ; award exp (X=statblock pointer, Y=position in battle order, $00=position in menu order)
+    PLY                     ; restore 1st (in menu order) party member statblock pointer
+    STY $0A80
+    PLY                     ; restore character loop index
+++: INY
+    CPY.w #$0007
+    BCC -                   ; continue looping through all characters
++:  LDA $0A8A               ; (overwritten instruction) load current gold
+    CLC                     ; (overwritten instruction)
+    RTL
 
 
 
@@ -870,7 +952,7 @@ Shop:
     STZ $05A9
     PHB
     PHP
-    JML $80A33A             ; open shop menu
+    JML $80A33A             ; open shop menu (eventually causes return by reaching existing PLP : PLB : RTL at $809DB0)
 +:  RTL
 
 ; shop item select
@@ -1220,6 +1302,7 @@ pullpc
 ; $F02018   1   party members available
 ; $F02019   1   capsule monsters available
 ; $F0201A   1   shop interval
+; $F0201B   1   inactive exp gain rate
 ; $F02030   1   selected goal
 ; $F02031   1   goal completion: boss
 ; $F02032   1   goal completion: iris_treasure_hunt

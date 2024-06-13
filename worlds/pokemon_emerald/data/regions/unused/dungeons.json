@@ -1,0 +1,14 @@
+{
+  "REGION_ALTERING_CAVE/MAIN": {
+    "parent_map": "MAP_ALTERING_CAVE",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ALTERING_CAVE:0/MAP_ROUTE103:0"
+    ]
+  }
+}

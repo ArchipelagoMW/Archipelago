@@ -1,0 +1,3315 @@
+{
+  "REGION_ROUTE101/MAIN": {
+    "parent_map": "MAP_ROUTE101",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_LITTLEROOT_TOWN/MAIN",
+      "REGION_OLDALE_TOWN/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE102/MAIN": {
+    "parent_map": "MAP_ROUTE102",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_102_POTION",
+      "BERRY_TREE_01",
+      "BERRY_TREE_02",
+      "TRAINER_CALVIN_1_REWARD",
+      "TRAINER_RICK_REWARD",
+      "TRAINER_ALLEN_REWARD",
+      "TRAINER_TIANA_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_OLDALE_TOWN/MAIN",
+      "REGION_PETALBURG_CITY/MAIN",
+      "REGION_ROUTE102/POND"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE102/POND": {
+    "parent_map": "MAP_ROUTE102",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE103/WEST": {
+    "parent_map": "MAP_ROUTE103",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE103/WATER",
+      "REGION_OLDALE_TOWN/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE103/WATER": {
+    "parent_map": "MAP_ROUTE103",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_ISABELLE_REWARD",
+      "TRAINER_PETE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE103/WEST",
+      "REGION_ROUTE103/EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE103/EAST": {
+    "parent_map": "MAP_ROUTE103",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_ANDREW_REWARD",
+      "TRAINER_MIGUEL_1_REWARD",
+      "TRAINER_AMY_AND_LIV_1_REWARD",
+      "TRAINER_DAISY_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE103/WATER",
+      "REGION_ROUTE103/EAST_TREE_MAZE",
+      "REGION_ROUTE110/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE103/EAST_TREE_MAZE": {
+    "parent_map": "MAP_ROUTE103",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_103_GUARD_SPEC",
+      "ITEM_ROUTE_103_PP_UP",
+      "BERRY_TREE_05",
+      "BERRY_TREE_06",
+      "BERRY_TREE_07",
+      "TRAINER_MARCOS_REWARD",
+      "TRAINER_RHETT_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE103/EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE104/SOUTH": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_104_POTION",
+      "HIDDEN_ITEM_ROUTE_104_HEART_SCALE",
+      "HIDDEN_ITEM_ROUTE_104_ANTIDOTE",
+      "BERRY_TREE_11",
+      "BERRY_TREE_12",
+      "BERRY_TREE_13",
+      "TRAINER_BILLY_REWARD",
+      "TRAINER_DARIAN_REWARD",
+      "TRAINER_CINDY_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_PETALBURG_CITY/MAIN",
+      "REGION_ROUTE104/SOUTH_WATER"
+    ],
+    "warps": [
+      "MAP_ROUTE104:0/MAP_ROUTE104_MR_BRINEYS_HOUSE:0",
+      "MAP_ROUTE104:4,5/MAP_PETALBURG_WOODS:2,3"
+    ]
+  },
+  "REGION_ROUTE104/SOUTH_WATER": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE104/SOUTH",
+      "REGION_ROUTE105/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE104/SOUTH_LEDGE": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_104_POKE_BALL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE104/SOUTH"
+    ],
+    "warps": [
+      "MAP_ROUTE104:6,7/MAP_PETALBURG_WOODS:4,5"
+    ]
+  },
+  "REGION_ROUTE104/NORTH": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_104_POTION",
+      "HIDDEN_ITEM_ROUTE_104_SUPER_POTION",
+      "HIDDEN_ITEM_ROUTE_104_POKE_BALL",
+      "NPC_GIFT_RECEIVED_TM_BULLET_SEED",
+      "NPC_GIFT_RECEIVED_WHITE_HERB",
+      "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104",
+      "BERRY_TREE_03",
+      "BERRY_TREE_04",
+      "BERRY_TREE_08",
+      "BERRY_TREE_09",
+      "BERRY_TREE_10",
+      "BERRY_TREE_75",
+      "BERRY_TREE_76",
+      "TRAINER_WINSTON_1_REWARD",
+      "TRAINER_HALEY_1_REWARD",
+      "TRAINER_IVAN_REWARD",
+      "TRAINER_GINA_AND_MIA_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_RUSTBORO_CITY/MAIN",
+      "REGION_ROUTE104/NORTH_POND",
+      "REGION_ROUTE104/TREE_ALCOVE_2"
+    ],
+    "warps": [
+      "MAP_ROUTE104:1/MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP:0",
+      "MAP_ROUTE104:2,3/MAP_PETALBURG_WOODS:0,1"
+    ]
+  },
+  "REGION_ROUTE104/NORTH_POND": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE104/NORTH",
+      "REGION_ROUTE104/TREE_ALCOVE_1",
+      "REGION_ROUTE104/TREE_ALCOVE_2"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE104/TREE_ALCOVE_1": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_104_PP_UP"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE104/TREE_ALCOVE_2": {
+    "parent_map": "MAP_ROUTE104",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_104_X_ACCURACY"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE104_MR_BRINEYS_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_DEWFORD_TOWN/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE104_MR_BRINEYS_HOUSE:0,1/MAP_ROUTE104:0"
+    ]
+  },
+  "REGION_ROUTE104_PRETTY_PETAL_FLOWER_SHOP/MAIN": {
+    "parent_map": "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_WAILMER_PAIL",
+      "NPC_GIFT_FLOWER_SHOP_RECEIVED_BERRY"
+    ],
+    "events": [
+      "EVENT_MEET_FLOWER_SHOP_OWNER"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP:0,1/MAP_ROUTE104:1"
+    ]
+  },
+  "REGION_ROUTE105/MAIN": {
+    "parent_map": "MAP_ROUTE105",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_105_IRON",
+      "HIDDEN_ITEM_ROUTE_105_HEART_SCALE",
+      "HIDDEN_ITEM_ROUTE_105_BIG_PEARL",
+      "TRAINER_IMANI_REWARD",
+      "TRAINER_DOMINIK_REWARD",
+      "TRAINER_LUIS_REWARD",
+      "TRAINER_FOSTER_REWARD",
+      "TRAINER_JOSUE_REWARD",
+      "TRAINER_ANDRES_1_REWARD",
+      "TRAINER_BEVERLY_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE104/SOUTH",
+      "REGION_ROUTE106/SEA",
+      "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2"
+    ],
+    "warps": [
+      "MAP_ROUTE105:0/MAP_ISLAND_CAVE:0"
+    ]
+  },
+  "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE105",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE105/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE105",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE105/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE106/WEST": {
+    "parent_map": "MAP_ROUTE106",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_106_PROTEIN"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE106/SEA"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE106/SEA": {
+    "parent_map": "MAP_ROUTE106",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_DOUGLAS_REWARD",
+      "TRAINER_KYLA_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE105/MAIN",
+      "REGION_ROUTE106/EAST",
+      "REGION_ROUTE106/WEST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE106/EAST": {
+    "parent_map": "MAP_ROUTE106",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_106_POKE_BALL",
+      "HIDDEN_ITEM_ROUTE_106_STARDUST",
+      "HIDDEN_ITEM_ROUTE_106_HEART_SCALE",
+      "TRAINER_ELLIOT_1_REWARD",
+      "TRAINER_NED_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE106/SEA",
+      "REGION_DEWFORD_TOWN/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE106:0/MAP_GRANITE_CAVE_1F:0"
+    ]
+  },
+  "REGION_ROUTE107/MAIN": {
+    "parent_map": "MAP_ROUTE107",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_DENISE_REWARD",
+      "TRAINER_TONY_1_REWARD",
+      "TRAINER_DARRIN_REWARD",
+      "TRAINER_CAMRON_REWARD",
+      "TRAINER_BETH_REWARD",
+      "TRAINER_LISA_AND_RAY_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_DEWFORD_TOWN/MAIN",
+      "REGION_ROUTE108/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE108/MAIN": {
+    "parent_map": "MAP_ROUTE108",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_108_STAR_PIECE",
+      "HIDDEN_ITEM_ROUTE_108_RARE_CANDY",
+      "TRAINER_MISSY_REWARD",
+      "TRAINER_MATTHEW_REWARD",
+      "TRAINER_TARA_REWARD",
+      "TRAINER_CAROLINA_REWARD",
+      "TRAINER_CORY_1_REWARD",
+      "TRAINER_JEROME_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE107/MAIN",
+      "REGION_ROUTE109/SEA"
+    ],
+    "warps": [
+      "MAP_ROUTE108:0/MAP_ABANDONED_SHIP_DECK:0"
+    ]
+  },
+  "REGION_ROUTE109/SEA": {
+    "parent_map": "MAP_ROUTE109",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_109_PP_UP",
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3",
+      "TRAINER_AUSTINA_REWARD",
+      "TRAINER_GWEN_REWARD",
+      "TRAINER_ELIJAH_REWARD",
+      "TRAINER_CARTER_REWARD",
+      "TRAINER_ALICE_REWARD",
+      "TRAINER_DAVID_REWARD",
+      "TRAINER_MEL_AND_PAUL_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE109/BEACH",
+      "REGION_ROUTE108/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE109/BEACH": {
+    "parent_map": "MAP_ROUTE109",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_109_POTION",
+      "HIDDEN_ITEM_ROUTE_109_REVIVE",
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1",
+      "HIDDEN_ITEM_ROUTE_109_GREAT_BALL",
+      "HIDDEN_ITEM_ROUTE_109_ETHER",
+      "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2",
+      "NPC_GIFT_RECEIVED_SOFT_SAND",
+      "TRAINER_HUEY_REWARD",
+      "TRAINER_HAILEY_REWARD",
+      "TRAINER_EDMOND_REWARD",
+      "TRAINER_RICKY_1_REWARD",
+      "TRAINER_LOLA_1_REWARD",
+      "TRAINER_CHANDLER_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE109/SEA",
+      "REGION_SLATEPORT_CITY/MAIN",
+      "REGION_DEWFORD_TOWN/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE109:0/MAP_ROUTE109_SEASHORE_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE109_SEASHORE_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE109_SEASHORE_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_6_SODA_POP",
+      "TRAINER_DWAYNE_REWARD",
+      "TRAINER_JOHANNA_REWARD",
+      "TRAINER_SIMON_REWARD"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE109_SEASHORE_HOUSE:0,1/MAP_ROUTE109:0"
+    ]
+  },
+  "REGION_ROUTE110/MAIN": {
+    "parent_map": "MAP_ROUTE110",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_110_DIRE_HIT",
+      "ITEM_ROUTE_110_ELIXIR",
+      "HIDDEN_ITEM_ROUTE_110_REVIVE",
+      "HIDDEN_ITEM_ROUTE_110_GREAT_BALL",
+      "HIDDEN_ITEM_ROUTE_110_POKE_BALL",
+      "HIDDEN_ITEM_ROUTE_110_FULL_HEAL",
+      "NPC_GIFT_RECEIVED_ITEMFINDER",
+      "BERRY_TREE_16",
+      "BERRY_TREE_17",
+      "BERRY_TREE_18",
+      "TRAINER_KALEB_REWARD",
+      "TRAINER_ISABEL_1_REWARD",
+      "TRAINER_TIMMY_REWARD",
+      "TRAINER_JOSEPH_REWARD",
+      "TRAINER_EDWIN_1_REWARD",
+      "TRAINER_ALYSSA_REWARD",
+      "TRAINER_EDWARD_REWARD",
+      "TRAINER_DALE_REWARD",
+      "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110/SOUTH",
+      "REGION_ROUTE110/SOUTH_WATER",
+      "REGION_ROUTE110/NORTH_WATER",
+      "REGION_MAUVILLE_CITY/MAIN",
+      "REGION_ROUTE103/EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE110:1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0",
+      "MAP_ROUTE110:2/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE110/SOUTH": {
+    "parent_map": "MAP_ROUTE110",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110/MAIN",
+      "REGION_SLATEPORT_CITY/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE110:4/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE110/CYCLING_ROAD": {
+    "parent_map": "MAP_ROUTE110",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_JACOB_REWARD",
+      "TRAINER_JASMINE_REWARD",
+      "TRAINER_BENJAMIN_1_REWARD",
+      "TRAINER_ANTHONY_REWARD",
+      "TRAINER_ABIGAIL_1_REWARD",
+      "TRAINER_JACLYN_REWARD"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE110:3/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:2",
+      "MAP_ROUTE110:5/MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE110/SOUTH_WATER": {
+    "parent_map": "MAP_ROUTE110",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_110_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110/NORTH_WATER": {
+    "parent_map": "MAP_ROUTE110",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE110:0/MAP_NEW_MAUVILLE_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE"
+    ],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0,1/MAP_ROUTE110:1",
+      "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2/MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS"
+    ],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0,1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_1",
+      "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_1"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:2/MAP_ROUTE110_TRICK_HOUSE_END:0"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_2",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_2"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_3",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_3"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_4",
+      "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_4"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_5"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_5"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_6",
+      "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_6"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7",
+      "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_7"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_END/MAIN": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_END",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_END:1/MAP_ROUTE110_TRICK_HOUSE_CORRIDOR:0",
+      "MAP_ROUTE110_TRICK_HOUSE_END:0/MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:2"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_CORRIDOR/MAIN": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_CORRIDOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_CORRIDOR:2,3/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2!",
+      "MAP_ROUTE110_TRICK_HOUSE_CORRIDOR:0,1/MAP_ROUTE110_TRICK_HOUSE_END:1"
+    ]
+  },
+  "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/WEST": {
+    "parent_map": "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:0,1/MAP_ROUTE110:2"
+    ]
+  },
+  "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/EAST": {
+    "parent_map": "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/WEST"
+    ],
+    "warps": [
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE:2,3/MAP_ROUTE110:3"
+    ]
+  },
+  "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST": {
+    "parent_map": "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:0,1/MAP_ROUTE110:4"
+    ]
+  },
+  "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST": {
+    "parent_map": "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST"
+    ],
+    "warps": [
+      "MAP_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE:2,3/MAP_ROUTE110:5"
+    ]
+  },
+  "REGION_ROUTE111/MIDDLE": {
+    "parent_map": "MAP_ROUTE111",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_IRENE_REWARD",
+      "TRAINER_TRAVIS_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/DESERT",
+      "REGION_ROUTE111/SOUTH",
+      "REGION_ROUTE112/SOUTH_EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE111/SOUTH": {
+    "parent_map": "MAP_ROUTE111",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_111_ELIXIR",
+      "TRAINER_CELINA_REWARD",
+      "TRAINER_TYRON_REWARD",
+      "TRAINER_BIANCA_REWARD",
+      "TRAINER_HAYDEN_REWARD",
+      "TRAINER_VICTOR_REWARD",
+      "TRAINER_VICKY_REWARD",
+      "TRAINER_VICTORIA_REWARD",
+      "TRAINER_VIVI_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/SOUTH_POND",
+      "REGION_ROUTE111/MIDDLE",
+      "REGION_MAUVILLE_CITY/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE111:0/MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE:0",
+      "MAP_ROUTE111:4/MAP_TRAINER_HILL_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE111/SOUTH_POND": {
+    "parent_map": "MAP_ROUTE111",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_111_HP_UP"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE111/DESERT": {
+    "parent_map": "MAP_ROUTE111",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_111_TM_SANDSTORM",
+      "ITEM_ROUTE_111_STARDUST",
+      "HIDDEN_ITEM_ROUTE_111_STARDUST",
+      "HIDDEN_ITEM_ROUTE_111_PROTEIN",
+      "HIDDEN_ITEM_ROUTE_111_RARE_CANDY",
+      "TRAINER_CELIA_REWARD",
+      "TRAINER_BRYAN_REWARD",
+      "TRAINER_BRANDEN_REWARD",
+      "TRAINER_DUSTY_1_REWARD",
+      "TRAINER_BECKY_REWARD",
+      "TRAINER_HEIDI_REWARD",
+      "TRAINER_BEAU_REWARD",
+      "TRAINER_DREW_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/NORTH",
+      "REGION_ROUTE111/MIDDLE"
+    ],
+    "warps": [
+      "MAP_ROUTE111:1/MAP_DESERT_RUINS:0",
+      "MAP_ROUTE111:3/MAP_MIRAGE_TOWER_1F:0"
+    ]
+  },
+  "REGION_ROUTE111/NORTH": {
+    "parent_map": "MAP_ROUTE111",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_SECRET_POWER",
+      "NPC_GIFT_ROUTE_111_RECEIVED_BERRY",
+      "BERRY_TREE_19",
+      "BERRY_TREE_20",
+      "BERRY_TREE_80",
+      "BERRY_TREE_81",
+      "TRAINER_WILTON_1_REWARD",
+      "TRAINER_BROOKE_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE113/MAIN",
+      "REGION_ROUTE112/NORTH",
+      "REGION_ROUTE111/ABOVE_SLOPE",
+      "REGION_ROUTE111/DESERT"
+    ],
+    "warps": [
+      "MAP_ROUTE111:2/MAP_ROUTE111_OLD_LADYS_REST_STOP:0"
+    ]
+  },
+  "REGION_ROUTE111/ABOVE_SLOPE": {
+    "parent_map": "MAP_ROUTE111",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_DAISUKE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/NORTH"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE111_OLD_LADYS_REST_STOP/MAIN": {
+    "parent_map": "MAP_ROUTE111_OLD_LADYS_REST_STOP",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE111_OLD_LADYS_REST_STOP:0,1/MAP_ROUTE111:2"
+    ]
+  },
+  "REGION_ROUTE111_WINSTRATE_FAMILYS_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_MACHO_BRACE"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE:0,1/MAP_ROUTE111:0"
+    ]
+  },
+  "REGION_ROUTE112/SOUTH_EAST": {
+    "parent_map": "MAP_ROUTE112",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_LARRY_REWARD",
+      "TRAINER_CAROL_REWARD",
+      "TRAINER_TRENT_1_REWARD",
+      "TRAINER_BRICE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE",
+      "REGION_ROUTE111/MIDDLE"
+    ],
+    "warps": [
+      "MAP_ROUTE112:4/MAP_FIERY_PATH:0"
+    ]
+  },
+  "REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE": {
+    "parent_map": "MAP_ROUTE112",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE112/SOUTH_EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE112:0,1/MAP_ROUTE112_CABLE_CAR_STATION:0,1"
+    ]
+  },
+  "REGION_ROUTE112/SOUTH_WEST": {
+    "parent_map": "MAP_ROUTE112",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_112_NUGGET"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE112/SOUTH_EAST",
+      "REGION_LAVARIDGE_TOWN/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE112:2,3/MAP_JAGGED_PASS:0,1"
+    ]
+  },
+  "REGION_ROUTE112/NORTH": {
+    "parent_map": "MAP_ROUTE112",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "BERRY_TREE_21",
+      "BERRY_TREE_22",
+      "BERRY_TREE_23",
+      "BERRY_TREE_24",
+      "TRAINER_SHAYLA_REWARD",
+      "TRAINER_BRYANT_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE111/NORTH"
+    ],
+    "warps": [
+      "MAP_ROUTE112:5/MAP_FIERY_PATH:1"
+    ]
+  },
+  "REGION_ROUTE112_CABLE_CAR_STATION/MAIN": {
+    "parent_map": "MAP_ROUTE112_CABLE_CAR_STATION",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MT_CHIMNEY_CABLE_CAR_STATION/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE112_CABLE_CAR_STATION:0,1/MAP_ROUTE112:0,1"
+    ]
+  },
+  "REGION_MT_CHIMNEY_CABLE_CAR_STATION/MAIN": {
+    "parent_map": "MAP_MT_CHIMNEY_CABLE_CAR_STATION",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE112_CABLE_CAR_STATION/MAIN"
+    ],
+    "warps": [
+      "MAP_MT_CHIMNEY_CABLE_CAR_STATION:0,1/MAP_MT_CHIMNEY:0,1"
+    ]
+  },
+  "REGION_MT_CHIMNEY/MAIN": {
+    "parent_map": "MAP_MT_CHIMNEY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_METEORITE",
+      "TRAINER_SHIRLEY_REWARD",
+      "TRAINER_SHEILA_REWARD",
+      "TRAINER_SHELBY_1_REWARD",
+      "TRAINER_SAWYER_1_REWARD",
+      "TRAINER_MELISSA_REWARD",
+      "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD",
+      "TRAINER_GRUNT_MT_CHIMNEY_2_REWARD",
+      "TRAINER_TABITHA_MT_CHIMNEY_REWARD",
+      "TRAINER_MAXIE_MT_CHIMNEY_REWARD"
+    ],
+    "events": [
+      "EVENT_RECOVER_METEORITE"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_MT_CHIMNEY:0,1/MAP_MT_CHIMNEY_CABLE_CAR_STATION:0,1",
+      "MAP_MT_CHIMNEY:2,3/MAP_JAGGED_PASS:2,3"
+    ]
+  },
+  "REGION_JAGGED_PASS/TOP": {
+    "parent_map": "MAP_JAGGED_PASS",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL",
+      "TRAINER_ERIC_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_JAGGED_PASS/MIDDLE"
+    ],
+    "warps": [
+      "MAP_JAGGED_PASS:2,3/MAP_MT_CHIMNEY:2,3"
+    ]
+  },
+  "REGION_JAGGED_PASS/MIDDLE": {
+    "parent_map": "MAP_JAGGED_PASS",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_JAGGED_PASS_BURN_HEAL",
+      "HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL",
+      "TRAINER_DIANA_1_REWARD",
+      "TRAINER_AUTUMN_REWARD",
+      "TRAINER_JULIO_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_JAGGED_PASS/TOP",
+      "REGION_JAGGED_PASS/BOTTOM"
+    ],
+    "warps": [
+      "MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"
+    ]
+  },
+  "REGION_JAGGED_PASS/BOTTOM": {
+    "parent_map": "MAP_JAGGED_PASS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_ETHAN_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_JAGGED_PASS/MIDDLE"
+    ],
+    "warps": [
+      "MAP_JAGGED_PASS:0,1/MAP_ROUTE112:2,3"
+    ]
+  },
+  "REGION_ROUTE113/MAIN": {
+    "parent_map": "MAP_ROUTE113",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_113_MAX_ETHER",
+      "ITEM_ROUTE_113_SUPER_REPEL",
+      "ITEM_ROUTE_113_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_113_ETHER",
+      "HIDDEN_ITEM_ROUTE_113_TM_DOUBLE_TEAM",
+      "HIDDEN_ITEM_ROUTE_113_NUGGET",
+      "TRAINER_WYATT_REWARD",
+      "TRAINER_LAWRENCE_REWARD",
+      "TRAINER_LUNG_REWARD",
+      "TRAINER_JAYLEN_REWARD",
+      "TRAINER_MADELINE_1_REWARD",
+      "TRAINER_LAO_1_REWARD",
+      "TRAINER_TORI_AND_TIA_REWARD",
+      "TRAINER_DILLON_REWARD",
+      "TRAINER_COBY_REWARD",
+      "TRAINER_SOPHIE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_FALLARBOR_TOWN/MAIN",
+      "REGION_ROUTE111/NORTH"
+    ],
+    "warps": [
+      "MAP_ROUTE113:0/MAP_ROUTE113_GLASS_WORKSHOP:0"
+    ]
+  },
+  "REGION_ROUTE113_GLASS_WORKSHOP/MAIN": {
+    "parent_map": "MAP_ROUTE113_GLASS_WORKSHOP",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_SOOT_SACK"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE113_GLASS_WORKSHOP:0,1/MAP_ROUTE113:0"
+    ]
+  },
+  "REGION_ROUTE114/MAIN": {
+    "parent_map": "MAP_ROUTE114",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_114_PROTEIN",
+      "ITEM_ROUTE_114_ENERGY_POWDER",
+      "HIDDEN_ITEM_ROUTE_114_REVIVE",
+      "HIDDEN_ITEM_ROUTE_114_CARBOS",
+      "NPC_GIFT_RECEIVED_TM_ROAR",
+      "NPC_GIFT_ROUTE_114_RECEIVED_BERRY",
+      "BERRY_TREE_68",
+      "BERRY_TREE_77",
+      "BERRY_TREE_78",
+      "TRAINER_NOLAN_REWARD",
+      "TRAINER_KAI_REWARD",
+      "TRAINER_CHARLOTTE_REWARD",
+      "TRAINER_CLAUDE_REWARD",
+      "TRAINER_NANCY_REWARD",
+      "TRAINER_SHANE_REWARD",
+      "TRAINER_STEVE_1_REWARD",
+      "TRAINER_BERNIE_1_REWARD",
+      "TRAINER_LUCAS_1_REWARD",
+      "TRAINER_ANGELINA_REWARD",
+      "TRAINER_LENNY_REWARD",
+      "TRAINER_TYRA_AND_IVY_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE114/WATER",
+      "REGION_FALLARBOR_TOWN/MAIN",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE114:0/MAP_METEOR_FALLS_1F_1R:0",
+      "MAP_ROUTE114:1/MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:0",
+      "MAP_ROUTE114:2/MAP_ROUTE114_LANETTES_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE114/WATER": {
+    "parent_map": "MAP_ROUTE114",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE114/MAIN",
+      "REGION_ROUTE114/ABOVE_WATERFALL"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE114/ABOVE_WATERFALL": {
+    "parent_map": "MAP_ROUTE114",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_114_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE114/WATER",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE114_FOSSIL_MANIACS_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_RECEIVED_TM_DIG"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:0,1/MAP_ROUTE114:1",
+      "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:2/MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:0"
+    ]
+  },
+  "REGION_ROUTE114_FOSSIL_MANIACS_TUNNEL/MAIN": {
+    "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:0,1/MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:2",
+      "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0"
+    ]
+  },
+  "REGION_DESERT_UNDERPASS/MAIN": {
+    "parent_map": "MAP_DESERT_UNDERPASS",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_DESERT_UNDERPASS:0/MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2"
+    ]
+  },
+  "REGION_ROUTE114_LANETTES_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE114_LANETTES_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE114_LANETTES_HOUSE:0,1/MAP_ROUTE114:2"
+    ]
+  },
+  "REGION_ROUTE115/SOUTH_BELOW_LEDGE": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_115_SUPER_POTION"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SEA",
+      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE",
+      "REGION_RUSTBORO_CITY/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_115_HEART_SCALE",
+      "TRAINER_CYNDY_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE",
+      "REGION_ROUTE115/SEA"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE115/SOUTH_ABOVE_LEDGE": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_115_PP_UP",
+      "TRAINER_NOB_1_REWARD",
+      "TRAINER_MARLENE_REWARD",
+      "TRAINER_HECTOR_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE",
+      "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
+      "REGION_ROUTE115/SOUTH_BEHIND_ROCK"
+    ],
+    "warps": [
+      "MAP_ROUTE115:0/MAP_METEOR_FALLS_1F_1R:1"
+    ]
+  },
+  "REGION_ROUTE115/SOUTH_BEHIND_ROCK": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_115_GREAT_BALL",
+      "BERRY_TREE_55",
+      "BERRY_TREE_56"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE115/NORTH_BELOW_SLOPE": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_115_HEAL_POWDER",
+      "ITEM_ROUTE_115_TM_FOCUS_PUNCH",
+      "BERRY_TREE_69",
+      "BERRY_TREE_70",
+      "BERRY_TREE_71",
+      "TRAINER_TIMOTHY_1_REWARD",
+      "TRAINER_KYRA_REWARD",
+      "TRAINER_KOICHI_REWARD",
+      "TRAINER_JAIDEN_REWARD",
+      "TRAINER_ALIX_REWARD",
+      "TRAINER_HELENE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/NORTH_ABOVE_SLOPE",
+      "REGION_ROUTE115/SEA",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE115/NORTH_ABOVE_SLOPE": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_115_IRON"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/NORTH_BELOW_SLOPE",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE115/SEA": {
+    "parent_map": "MAP_ROUTE115",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
+      "REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE",
+      "REGION_ROUTE115/NORTH_BELOW_SLOPE"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE116/WEST": {
+    "parent_map": "MAP_ROUTE116",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_116_REPEL",
+      "ITEM_ROUTE_116_X_SPECIAL",
+      "NPC_GIFT_RECEIVED_REPEAT_BALL",
+      "TRAINER_JOSE_REWARD",
+      "TRAINER_JOEY_REWARD",
+      "TRAINER_KAREN_1_REWARD",
+      "TRAINER_CLARK_REWARD",
+      "TRAINER_JOHNSON_REWARD",
+      "TRAINER_DEVAN_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE116/WEST_ABOVE_LEDGE",
+      "REGION_RUSTBORO_CITY/MAIN",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE116:0/MAP_RUSTURF_TUNNEL:0",
+      "MAP_ROUTE116:1/MAP_ROUTE116_TUNNELERS_REST_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE116/WEST_ABOVE_LEDGE": {
+    "parent_map": "MAP_ROUTE116",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_116_ETHER",
+      "ITEM_ROUTE_116_POTION",
+      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION",
+      "BERRY_TREE_25",
+      "BERRY_TREE_26",
+      "BERRY_TREE_66",
+      "BERRY_TREE_67",
+      "TRAINER_JANICE_REWARD",
+      "TRAINER_JERRY_1_REWARD",
+      "TRAINER_SARAH_REWARD",
+      "TRAINER_DAWSON_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE116/WEST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE116/EAST": {
+    "parent_map": "MAP_ROUTE116",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_116_HP_UP",
+      "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE116:2/MAP_RUSTURF_TUNNEL:2"
+    ]
+  },
+  "REGION_ROUTE116_TUNNELERS_REST_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE116_TUNNELERS_REST_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE116_TUNNELERS_REST_HOUSE:0,1/MAP_ROUTE116:1"
+    ]
+  },
+  "REGION_ROUTE117/MAIN": {
+    "parent_map": "MAP_ROUTE117",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_117_GREAT_BALL",
+      "ITEM_ROUTE_117_REVIVE",
+      "HIDDEN_ITEM_ROUTE_117_REPEL",
+      "BERRY_TREE_27",
+      "BERRY_TREE_28",
+      "BERRY_TREE_29",
+      "TRAINER_LYDIA_1_REWARD",
+      "TRAINER_DEREK_REWARD",
+      "TRAINER_BRANDI_REWARD",
+      "TRAINER_MELINA_REWARD",
+      "TRAINER_AISHA_REWARD",
+      "TRAINER_MARIA_1_REWARD",
+      "TRAINER_ISAAC_1_REWARD",
+      "TRAINER_DYLAN_1_REWARD",
+      "TRAINER_ANNA_AND_MEG_1_REWARD"
+    ],
+    "events": [
+      "EVENT_ENCOUNTER_LATIOS"
+    ],
+    "exits": [
+      "REGION_VERDANTURF_TOWN/MAIN",
+      "REGION_MAUVILLE_CITY/MAIN",
+      "REGION_ROUTE117/PONDS"
+    ],
+    "warps": [
+      "MAP_ROUTE117:0/MAP_ROUTE117_POKEMON_DAY_CARE:0"
+    ]
+  },
+  "REGION_ROUTE117/PONDS": {
+    "parent_map": "MAP_ROUTE117",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE117_POKEMON_DAY_CARE/MAIN": {
+    "parent_map": "MAP_ROUTE117_POKEMON_DAY_CARE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE117_POKEMON_DAY_CARE:0,1/MAP_ROUTE117:0"
+    ]
+  },
+  "REGION_ROUTE118/WEST": {
+    "parent_map": "MAP_ROUTE118",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_118_HEART_SCALE",
+      "TRAINER_DEANDRE_REWARD",
+      "TRAINER_ROSE_1_REWARD",
+      "TRAINER_WADE_REWARD",
+      "TRAINER_DALTON_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_MAUVILLE_CITY/MAIN",
+      "REGION_ROUTE118/WEST_WATER",
+      "REGION_ROUTE118/EAST",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE118/WEST_WATER": {
+    "parent_map": "MAP_ROUTE118",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE118/WEST",
+      "REGION_ROUTE118/EAST_WATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE118/EAST_WATER": {
+    "parent_map": "MAP_ROUTE118",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE118/WEST_WATER",
+      "REGION_ROUTE118/EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE118/EAST": {
+    "parent_map": "MAP_ROUTE118",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_118_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_118_IRON",
+      "NPC_GIFT_RECEIVED_GOOD_ROD",
+      "BERRY_TREE_31",
+      "BERRY_TREE_32",
+      "BERRY_TREE_33",
+      "TRAINER_BARNY_REWARD",
+      "TRAINER_CHESTER_REWARD",
+      "TRAINER_PERRY_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE118/EAST_WATER",
+      "REGION_ROUTE118/WEST",
+      "REGION_ROUTE119/LOWER",
+      "REGION_ROUTE123/WEST",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119/LOWER": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_119_SUPER_REPEL",
+      "ITEM_ROUTE_119_HYPER_POTION_1",
+      "HIDDEN_ITEM_ROUTE_119_FULL_HEAL",
+      "BERRY_TREE_85",
+      "BERRY_TREE_86",
+      "TRAINER_DONALD_REWARD",
+      "TRAINER_KENT_REWARD",
+      "TRAINER_TAYLOR_REWARD",
+      "TRAINER_GREG_REWARD",
+      "TRAINER_DOUG_REWARD",
+      "TRAINER_BRENT_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/MIDDLE",
+      "REGION_ROUTE119/LOWER_WATER",
+      "REGION_ROUTE119/LOWER_ACROSS_RAILS",
+      "REGION_ROUTE118/EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE119:1/MAP_ROUTE119_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE119/LOWER_WATER": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/LOWER",
+      "REGION_ROUTE119/LOWER_ACROSS_WATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119/LOWER_ACROSS_WATER": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_119_ZINC",
+      "TRAINER_CHRIS_REWARD"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE119/LOWER_ACROSS_RAILS": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_119_CALCIUM"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/LOWER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119/MIDDLE": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_119_ELIXIR_1",
+      "ITEM_ROUTE_119_HYPER_POTION_2",
+      "TRAINER_CATHERINE_1_REWARD",
+      "TRAINER_JACKSON_1_REWARD",
+      "TRAINER_RACHEL_REWARD",
+      "TRAINER_PHIL_REWARD",
+      "TRAINER_HUGH_REWARD",
+      "TRAINER_DAYTON_REWARD",
+      "TRAINER_TAKASHI_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/LOWER",
+      "REGION_ROUTE119/UPPER"
+    ],
+    "warps": [
+      "MAP_ROUTE119:0/MAP_ROUTE119_WEATHER_INSTITUTE_1F:0"
+    ]
+  },
+  "REGION_ROUTE119/UPPER": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_119_ELIXIR_2",
+      "NPC_GIFT_RECEIVED_HM_FLY",
+      "BERRY_TREE_34",
+      "BERRY_TREE_35",
+      "BERRY_TREE_36",
+      "TRAINER_FABIAN_REWARD",
+      "TRAINER_YASU_REWARD",
+      "TRAINER_HIDEO_REWARD",
+      "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/MIDDLE",
+      "REGION_ROUTE119/MIDDLE_RIVER",
+      "REGION_FORTREE_CITY/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119/MIDDLE_RIVER": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": true,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_119_LEAF_STONE",
+      "HIDDEN_ITEM_ROUTE_119_ULTRA_BALL",
+      "HIDDEN_ITEM_ROUTE_119_MAX_ETHER"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/UPPER",
+      "REGION_ROUTE119/ABOVE_WATERFALL"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119/ABOVE_WATERFALL": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "BERRY_TREE_83",
+      "BERRY_TREE_84"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/MIDDLE_RIVER",
+      "REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS": {
+    "parent_map": "MAP_ROUTE119",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_119_RARE_CANDY",
+      "ITEM_ROUTE_119_NUGGET"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE119/ABOVE_WATERFALL"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE119_WEATHER_INSTITUTE_1F/MAIN": {
+    "parent_map": "MAP_ROUTE119_WEATHER_INSTITUTE_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_GRUNT_WEATHER_INST_1_REWARD",
+      "TRAINER_GRUNT_WEATHER_INST_4_REWARD"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE119_WEATHER_INSTITUTE_1F:0,1/MAP_ROUTE119:0",
+      "MAP_ROUTE119_WEATHER_INSTITUTE_1F:2/MAP_ROUTE119_WEATHER_INSTITUTE_2F:0"
+    ]
+  },
+  "REGION_ROUTE119_WEATHER_INSTITUTE_2F/MAIN": {
+    "parent_map": "MAP_ROUTE119_WEATHER_INSTITUTE_2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "TRAINER_GRUNT_WEATHER_INST_2_REWARD",
+      "TRAINER_GRUNT_WEATHER_INST_3_REWARD",
+      "TRAINER_GRUNT_WEATHER_INST_5_REWARD",
+      "TRAINER_SHELLY_WEATHER_INSTITUTE_REWARD"
+    ],
+    "events": [
+      "EVENT_DEFEAT_SHELLY"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE119_WEATHER_INSTITUTE_2F:0/MAP_ROUTE119_WEATHER_INSTITUTE_1F:2"
+    ]
+  },
+  "REGION_ROUTE119_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE119_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE119_HOUSE:0,1/MAP_ROUTE119:1"
+    ]
+  },
+  "REGION_ROUTE120/NORTH": {
+    "parent_map": "MAP_ROUTE120",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1",
+      "HIDDEN_ITEM_ROUTE_120_REVIVE",
+      "NPC_GIFT_RECEIVED_DEVON_SCOPE",
+      "TRAINER_CLARISSA_REWARD",
+      "TRAINER_ROBERT_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_FORTREE_CITY/MAIN",
+      "REGION_ROUTE120/NORTH_POND_SHORE",
+      "REGION_ROUTE120/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE120/NORTH_POND_SHORE": {
+    "parent_map": "MAP_ROUTE120",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_120_NEST_BALL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE120/NORTH",
+      "REGION_ROUTE120/NORTH_POND"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE120/NORTH_POND": {
+    "parent_map": "MAP_ROUTE120",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE120/NORTH_POND_SHORE"
+    ],
+    "warps": [
+      "MAP_ROUTE120:1/MAP_SCORCHED_SLAB:0"
+    ]
+  },
+  "REGION_ROUTE120/SOUTH": {
+    "parent_map": "MAP_ROUTE120",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_120_NUGGET",
+      "ITEM_ROUTE_120_REVIVE",
+      "ITEM_ROUTE_120_HYPER_POTION",
+      "HIDDEN_ITEM_ROUTE_120_ZINC",
+      "NPC_GIFT_ROUTE_120_RECEIVED_BERRY",
+      "BERRY_TREE_40",
+      "BERRY_TREE_41",
+      "BERRY_TREE_42",
+      "BERRY_TREE_43",
+      "BERRY_TREE_44",
+      "BERRY_TREE_45",
+      "BERRY_TREE_46",
+      "TRAINER_COLIN_REWARD",
+      "TRAINER_LEONEL_REWARD",
+      "TRAINER_ANGELICA_REWARD",
+      "TRAINER_CALLIE_REWARD",
+      "TRAINER_RILEY_REWARD",
+      "TRAINER_JENNIFER_REWARD",
+      "TRAINER_JENNA_REWARD",
+      "TRAINER_LORENZO_REWARD",
+      "TRAINER_JEFFREY_1_REWARD",
+      "TRAINER_KEIGO_REWARD",
+      "TRAINER_CHIP_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE120/NORTH",
+      "REGION_ROUTE120/SOUTH_ALCOVE",
+      "REGION_ROUTE120/SOUTH_PONDS",
+      "REGION_ROUTE121/WEST"
+    ],
+    "warps": [
+      "MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0"
+    ]
+  },
+  "REGION_ROUTE120/SOUTH_ALCOVE": {
+    "parent_map": "MAP_ROUTE120",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "BERRY_TREE_37",
+      "BERRY_TREE_38",
+      "BERRY_TREE_39"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE120/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE120/SOUTH_PONDS": {
+    "parent_map": "MAP_ROUTE120",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
+      "ITEM_ROUTE_120_FULL_HEAL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE121/WEST": {
+    "parent_map": "MAP_ROUTE121",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_121_HP_UP",
+      "BERRY_TREE_47",
+      "BERRY_TREE_48",
+      "BERRY_TREE_49",
+      "BERRY_TREE_50",
+      "TRAINER_CALE_REWARD",
+      "TRAINER_TAMMY_REWARD",
+      "TRAINER_JESSICA_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE121/EAST",
+      "REGION_ROUTE120/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE121/EAST": {
+    "parent_map": "MAP_ROUTE121",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_121_CARBOS",
+      "ITEM_ROUTE_121_REVIVE",
+      "ITEM_ROUTE_121_ZINC",
+      "HIDDEN_ITEM_ROUTE_121_NUGGET",
+      "HIDDEN_ITEM_ROUTE_121_FULL_HEAL",
+      "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE",
+      "BERRY_TREE_51",
+      "BERRY_TREE_52",
+      "BERRY_TREE_53",
+      "BERRY_TREE_54",
+      "TRAINER_KATE_AND_JOY_REWARD",
+      "TRAINER_WALTER_1_REWARD",
+      "TRAINER_PAT_REWARD",
+      "TRAINER_MYLES_REWARD",
+      "TRAINER_VANESSA_REWARD",
+      "TRAINER_MARCEL_REWARD",
+      "TRAINER_CRISTIN_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE121/WEST",
+      "REGION_ROUTE121/WATER",
+      "REGION_LILYCOVE_CITY/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE121:0/MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE121/WATER": {
+    "parent_map": "MAP_ROUTE121",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE121/EAST",
+      "REGION_ROUTE122/SEA"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE121_SAFARI_ZONE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:0,1/MAP_SAFARI_ZONE_SOUTH:0",
+      "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:2,3/MAP_ROUTE121:0"
+    ]
+  },
+  "REGION_SAFARI_ZONE_NORTH/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTH",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_CALCIUM"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTH/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_NORTHWEST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_NORTHWEST/POND",
+      "REGION_SAFARI_ZONE_SOUTHWEST/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_NORTHWEST/POND": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_WEST_TM_SOLAR_BEAM"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_NORTHEAST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTHEAST",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET",
+      "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_RARE_CANDY",
+      "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_ZINC"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTHEAST/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_SOUTH/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTH",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_NORTH/MAIN",
+      "REGION_SAFARI_ZONE_SOUTHEAST/MAIN",
+      "REGION_SAFARI_ZONE_SOUTHWEST/MAIN"
+    ],
+    "warps": [
+      "MAP_SAFARI_ZONE_SOUTH:0/MAP_ROUTE121_SAFARI_ZONE_ENTRANCE:0"
+    ]
+  },
+  "REGION_SAFARI_ZONE_SOUTHWEST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHWEST",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTHWEST/POND",
+      "REGION_SAFARI_ZONE_SOUTH/MAIN",
+      "REGION_SAFARI_ZONE_NORTHWEST/MAIN"
+    ],
+    "warps": [
+      "MAP_SAFARI_ZONE_SOUTHWEST:0/MAP_SAFARI_ZONE_REST_HOUSE:0"
+    ]
+  },
+  "REGION_SAFARI_ZONE_SOUTHWEST/POND": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHWEST",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_SOUTHEAST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHEAST",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP",
+      "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTHEAST/WATER",
+      "REGION_SAFARI_ZONE_SOUTH/MAIN",
+      "REGION_SAFARI_ZONE_NORTHEAST/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_SOUTHEAST/WATER": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHEAST",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SAFARI_ZONE_SOUTHEAST/MAIN",
+      "REGION_SAFARI_ZONE_SOUTHEAST/ISLAND"
+    ],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_SOUTHEAST/ISLAND": {
+    "parent_map": "MAP_SAFARI_ZONE_SOUTHEAST",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_SAFARI_ZONE_REST_HOUSE/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_REST_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_SAFARI_ZONE_REST_HOUSE:0,1/MAP_SAFARI_ZONE_SOUTHWEST:0"
+    ]
+  },
+  "REGION_ROUTE122/SEA": {
+    "parent_map": "MAP_ROUTE122",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE122/MT_PYRE_ENTRANCE",
+      "REGION_ROUTE121/WATER",
+      "REGION_ROUTE123/EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE122/MT_PYRE_ENTRANCE": {
+    "parent_map": "MAP_ROUTE122",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE122/SEA"
+    ],
+    "warps": [
+      "MAP_ROUTE122:0/MAP_MT_PYRE_1F:0"
+    ]
+  },
+  "REGION_ROUTE123/WEST": {
+    "parent_map": "MAP_ROUTE123",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "ITEM_ROUTE_123_ULTRA_BALL",
+      "HIDDEN_ITEM_ROUTE_123_REVIVE",
+      "BERRY_TREE_14",
+      "BERRY_TREE_15",
+      "BERRY_TREE_30",
+      "BERRY_TREE_58",
+      "BERRY_TREE_59",
+      "BERRY_TREE_60",
+      "BERRY_TREE_61",
+      "BERRY_TREE_65",
+      "BERRY_TREE_72",
+      "BERRY_TREE_73",
+      "BERRY_TREE_74",
+      "BERRY_TREE_79",
+      "TRAINER_JAZMYN_REWARD",
+      "TRAINER_DAVIS_REWARD",
+      "TRAINER_VIOLET_REWARD",
+      "TRAINER_MIU_AND_YUKI_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE118/EAST"
+    ],
+    "warps": [
+      "MAP_ROUTE123:0/MAP_ROUTE123_BERRY_MASTERS_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE123/EAST": {
+    "parent_map": "MAP_ROUTE123",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_123_CALCIUM",
+      "ITEM_ROUTE_123_ELIXIR",
+      "ITEM_ROUTE_123_PP_UP",
+      "ITEM_ROUTE_123_REVIVAL_HERB",
+      "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
+      "HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
+      "NPC_GIFT_RECEIVED_TM_GIGA_DRAIN",
+      "BERRY_TREE_57",
+      "BERRY_TREE_62",
+      "BERRY_TREE_63",
+      "BERRY_TREE_64",
+      "BERRY_TREE_87",
+      "BERRY_TREE_88",
+      "TRAINER_JACKI_1_REWARD",
+      "TRAINER_FREDRICK_REWARD",
+      "TRAINER_BRAXTON_REWARD",
+      "TRAINER_FERNANDO_1_REWARD",
+      "TRAINER_ALBERTO_REWARD",
+      "TRAINER_WENDY_REWARD",
+      "TRAINER_KINDRA_REWARD",
+      "TRAINER_ED_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE123/WEST",
+      "REGION_ROUTE123/EAST_BEHIND_TREE",
+      "REGION_ROUTE123/POND",
+      "REGION_ROUTE122/SEA"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE123/POND": {
+    "parent_map": "MAP_ROUTE123",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE123/EAST_BEHIND_TREE": {
+    "parent_map": "MAP_ROUTE123",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_123_PP_UP",
+      "HIDDEN_ITEM_ROUTE_123_RARE_CANDY",
+      "TRAINER_CAMERON_1_REWARD",
+      "TRAINER_JONAS_REWARD",
+      "TRAINER_KAYLEY_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE123/EAST"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE123_BERRY_MASTERS_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE123_BERRY_MASTERS_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_1",
+      "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_2",
+      "NPC_GIFT_BERRY_MASTERS_WIFE"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE123_BERRY_MASTERS_HOUSE:0,1/MAP_ROUTE123:0"
+    ]
+  },
+  "REGION_ROUTE124/MAIN": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_DECLAN_REWARD",
+      "TRAINER_GRACE_REWARD",
+      "TRAINER_LILA_AND_ROY_1_REWARD",
+      "TRAINER_SPENCER_REWARD",
+      "TRAINER_JENNY_1_REWARD",
+      "TRAINER_CHAD_REWARD",
+      "TRAINER_ROLAND_REWARD",
+      "TRAINER_ISABELLA_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY/SEA",
+      "REGION_MOSSDEEP_CITY/MAIN",
+      "REGION_UNDERWATER_ROUTE124/BIG_AREA",
+      "REGION_UNDERWATER_ROUTE124/SMALL_AREA_1",
+      "REGION_UNDERWATER_ROUTE124/SMALL_AREA_2",
+      "REGION_UNDERWATER_ROUTE124/SMALL_AREA_3",
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_1",
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_2",
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_3",
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_4"
+    ],
+    "warps": [
+      "MAP_ROUTE124:0/MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE:0"
+    ]
+  },
+  "REGION_ROUTE124/NORTH_ENCLOSED_AREA_1": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_124_RED_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_1"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE124/NORTH_ENCLOSED_AREA_2": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_1"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE124/NORTH_ENCLOSED_AREA_3": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_124_YELLOW_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_2"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_1": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_124_BLUE_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_3"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_2": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_3"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_3": {
+    "parent_map": "MAP_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE126/NEAR_ROUTE_124",
+      "REGION_UNDERWATER_ROUTE124/TUNNEL_4"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/BIG_AREA": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/SMALL_AREA_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_PEARL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/SMALL_AREA_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/SMALL_AREA_3": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/TUNNEL_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_CALCIUM",
+      "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/NORTH_ENCLOSED_AREA_1",
+      "REGION_ROUTE124/NORTH_ENCLOSED_AREA_2",
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/TUNNEL_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/NORTH_ENCLOSED_AREA_3",
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/TUNNEL_3": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_124_CARBOS"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_1",
+      "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_2",
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE124/TUNNEL_4": {
+    "parent_map": "MAP_UNDERWATER_ROUTE124",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_3",
+      "REGION_ROUTE124/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE:0,1/MAP_ROUTE124:0"
+    ]
+  },
+  "REGION_ROUTE125/SEA": {
+    "parent_map": "MAP_ROUTE125",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_125_BIG_PEARL",
+      "TRAINER_NOLEN_REWARD",
+      "TRAINER_ERNEST_1_REWARD",
+      "TRAINER_SHARON_REWARD",
+      "TRAINER_TANYA_REWARD",
+      "TRAINER_PRESLEY_REWARD",
+      "TRAINER_AURON_REWARD",
+      "TRAINER_STAN_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE125/SHOAL_CAVE_ENTRANCE",
+      "REGION_MOSSDEEP_CITY/MAIN",
+      "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE125/SHOAL_CAVE_ENTRANCE": {
+    "parent_map": "MAP_ROUTE125",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_KIM_AND_IRIS_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE125/SEA"
+    ],
+    "warps": [
+      "MAP_ROUTE125:0/MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:0"
+    ]
+  },
+  "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE125",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE125/SEA",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE125",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE125/SEA",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE126/MAIN": {
+    "parent_map": "MAP_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_NIKKI_REWARD",
+      "TRAINER_BARRY_REWARD",
+      "TRAINER_SIENNA_REWARD",
+      "TRAINER_PABLO_1_REWARD",
+      "TRAINER_DEAN_REWARD",
+      "TRAINER_LEONARDO_REWARD",
+      "TRAINER_ISOBEL_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_UNDERWATER_ROUTE126/MAIN",
+      "REGION_UNDERWATER_ROUTE126/SMALL_AREA_2"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE126/NEAR_ROUTE_124": {
+    "parent_map": "MAP_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE124/SOUTH_ENCLOSED_AREA_3",
+      "REGION_UNDERWATER_ROUTE126/TUNNEL"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE126/NORTH_WEST_CORNER": {
+    "parent_map": "MAP_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_126_GREEN_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE126/TUNNEL"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE126/WEST": {
+    "parent_map": "MAP_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_BRENDA_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE126/SMALL_AREA_1",
+      "REGION_UNDERWATER_ROUTE126/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE126/MAIN": {
+    "parent_map": "MAP_UNDERWATER_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE",
+      "HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL",
+      "HIDDEN_ITEM_UNDERWATER_126_STARDUST",
+      "HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE126/MAIN",
+      "REGION_ROUTE126/WEST"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_ROUTE126:0/MAP_UNDERWATER_SOOTOPOLIS_CITY:0"
+    ]
+  },
+  "REGION_UNDERWATER_ROUTE126/TUNNEL": {
+    "parent_map": "MAP_UNDERWATER_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE126/NORTH_WEST_CORNER",
+      "REGION_ROUTE126/NEAR_ROUTE_124"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE126/SMALL_AREA_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_126_PEARL",
+      "HIDDEN_ITEM_UNDERWATER_126_IRON",
+      "HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE126/WEST"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE126/SMALL_AREA_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE126",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE126/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE127/MAIN": {
+    "parent_map": "MAP_ROUTE127",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_127_ZINC",
+      "ITEM_ROUTE_127_RARE_CANDY",
+      "TRAINER_CAMDEN_REWARD",
+      "TRAINER_ATHENA_REWARD",
+      "TRAINER_AIDAN_REWARD",
+      "TRAINER_JONAH_REWARD",
+      "TRAINER_HENRY_REWARD",
+      "TRAINER_ROGER_REWARD",
+      "TRAINER_DONNY_REWARD",
+      "TRAINER_KOJI_1_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE126/MAIN",
+      "REGION_MOSSDEEP_CITY/MAIN",
+      "REGION_ROUTE128/MAIN",
+      "REGION_UNDERWATER_ROUTE127/MAIN",
+      "REGION_UNDERWATER_ROUTE127/TUNNEL",
+      "REGION_UNDERWATER_ROUTE127/AREA_1",
+      "REGION_UNDERWATER_ROUTE127/AREA_2",
+      "REGION_UNDERWATER_ROUTE127/AREA_3",
+      "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE127/ENCLOSED_AREA": {
+    "parent_map": "MAP_ROUTE127",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_127_CARBOS"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_ROUTE127/TUNNEL"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/MAIN": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_UNDERWATER_ROUTE128/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/TUNNEL": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_ROUTE127/ENCLOSED_AREA"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/AREA_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/AREA_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_127_HP_UP"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/AREA_3": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_127_RED_SHARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE128/MAIN": {
+    "parent_map": "MAP_ROUTE128",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1",
+      "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2",
+      "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3",
+      "TRAINER_ALEXA_REWARD",
+      "TRAINER_RUBEN_REWARD",
+      "TRAINER_ISAIAH_1_REWARD",
+      "TRAINER_WAYNE_REWARD",
+      "TRAINER_KATELYN_1_REWARD",
+      "TRAINER_HARRISON_REWARD",
+      "TRAINER_CARLEE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_ROUTE129/MAIN",
+      "REGION_EVER_GRANDE_CITY/SEA",
+      "REGION_UNDERWATER_ROUTE128/MAIN",
+      "REGION_UNDERWATER_ROUTE128/AREA_1",
+      "REGION_UNDERWATER_ROUTE128/AREA_2"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE128/MAIN": {
+    "parent_map": "MAP_UNDERWATER_ROUTE128",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE128/MAIN",
+      "REGION_UNDERWATER_ROUTE127/MAIN"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_ROUTE128:0/MAP_UNDERWATER_SEAFLOOR_CAVERN:0"
+    ]
+  },
+  "REGION_UNDERWATER_ROUTE128/AREA_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE128",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_128_PROTEIN"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE128/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE128/AREA_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE128",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_UNDERWATER_128_PEARL"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE128/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE129/MAIN": {
+    "parent_map": "MAP_ROUTE129",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_REED_REWARD",
+      "TRAINER_CHASE_REWARD",
+      "TRAINER_ALLISON_REWARD",
+      "TRAINER_TISHA_REWARD",
+      "TRAINER_CLARENCE_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE130/MAIN",
+      "REGION_ROUTE128/MAIN",
+      "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE129",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE129/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE129",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE129/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE130/MAIN": {
+    "parent_map": "MAP_ROUTE130",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_RODNEY_REWARD",
+      "TRAINER_KATIE_REWARD",
+      "TRAINER_SANTIAGO_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE130/MIRAGE_ISLAND",
+      "REGION_ROUTE129/MAIN",
+      "REGION_ROUTE131/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE130/MIRAGE_ISLAND": {
+    "parent_map": "MAP_ROUTE130",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [
+      "BERRY_TREE_82"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE131/MAIN": {
+    "parent_map": "MAP_ROUTE131",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "TRAINER_KEVIN_REWARD",
+      "TRAINER_TALIA_REWARD",
+      "TRAINER_RICHARD_REWARD",
+      "TRAINER_KARA_REWARD",
+      "TRAINER_HERMAN_REWARD",
+      "TRAINER_SUSIE_REWARD",
+      "TRAINER_RELI_AND_IAN_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_PACIFIDLOG_TOWN/MAIN",
+      "REGION_ROUTE130/MAIN"
+    ],
+    "warps": [
+      "MAP_ROUTE131:0/MAP_SKY_PILLAR_ENTRANCE:0"
+    ]
+  },
+  "REGION_ROUTE132/EAST": {
+    "parent_map": "MAP_ROUTE132",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE132/WEST",
+      "REGION_PACIFIDLOG_TOWN/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE132/WEST": {
+    "parent_map": "MAP_ROUTE132",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_132_RARE_CANDY",
+      "ITEM_ROUTE_132_PROTEIN",
+      "TRAINER_GILBERT_REWARD",
+      "TRAINER_RONALD_REWARD",
+      "TRAINER_DARCY_REWARD",
+      "TRAINER_PAXTON_REWARD",
+      "TRAINER_JONATHAN_REWARD",
+      "TRAINER_MAKAYLA_REWARD",
+      "TRAINER_KIYO_REWARD",
+      "TRAINER_DANA_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE133/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE133/MAIN": {
+    "parent_map": "MAP_ROUTE133",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_133_BIG_PEARL",
+      "ITEM_ROUTE_133_STAR_PIECE",
+      "ITEM_ROUTE_133_MAX_REVIVE",
+      "TRAINER_LINDA_REWARD",
+      "TRAINER_FRANKLIN_REWARD",
+      "TRAINER_DEBRA_REWARD",
+      "TRAINER_MOLLIE_REWARD",
+      "TRAINER_CONOR_REWARD",
+      "TRAINER_WARREN_REWARD",
+      "TRAINER_BECK_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE134/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE134/MAIN": {
+    "parent_map": "MAP_ROUTE134",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [
+      "ITEM_ROUTE_134_CARBOS",
+      "ITEM_ROUTE_134_STAR_PIECE",
+      "TRAINER_ALEX_REWARD",
+      "TRAINER_KELVIN_REWARD",
+      "TRAINER_HUDSON_REWARD",
+      "TRAINER_REYNA_REWARD",
+      "TRAINER_HITOSHI_REWARD",
+      "TRAINER_MARLEY_REWARD",
+      "TRAINER_AARON_REWARD",
+      "TRAINER_LAUREL_REWARD",
+      "TRAINER_JACK_REWARD"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE134/WEST",
+      "REGION_UNDERWATER_ROUTE134/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE134/WEST": {
+    "parent_map": "MAP_ROUTE134",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SLATEPORT_CITY/WATER"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE134/MAIN": {
+    "parent_map": "MAP_UNDERWATER_ROUTE134",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE134/MAIN"
+    ],
+    "warps": [
+      "MAP_UNDERWATER_ROUTE134:0/MAP_UNDERWATER_SEALED_CHAMBER:0"
+    ]
+  }
+}
