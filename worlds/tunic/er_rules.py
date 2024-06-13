@@ -1,10 +1,10 @@
-from typing import Dict, Set, List, Tuple, TYPE_CHECKING
+from typing import Dict, Set, Tuple, Optional, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from .options import IceGrappling, LadderStorage
 from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip)
 from .er_data import Portal
-from .ladder_storage_data import ow_ladder_groups, region_ladders
+from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -1009,11 +1009,25 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     return portal2.name, portal1.region
             raise Exception("no matches found in get_paired_region")
 
-        def ls_connect(ladder_elev: str, portal_sdt: str) -> None:
+        def ls_connect(origin_name: str, portal_sdt: str, ladder_req: Optional[str] = None) -> None:
             p_name, paired_region_name = get_portal_info(portal_sdt)
-            ladder_regions[ladder_elev].connect(
-                regions[paired_region_name],
-                name=p_name + " (LS) " + ladder_elev)
+            if ladder_req:
+                ladder_regions[origin_name].connect(
+                    regions[paired_region_name],
+                    name=p_name + " (LS) " + origin_name,
+                    rule=lambda state: can_ladder_storage(state, world) and state.has(ladder_req, player))
+            else:
+                ladder_regions[origin_name].connect(
+                    regions[paired_region_name],
+                    name=p_name + " (LS) " + origin_name,
+                    rule=lambda state: can_ladder_storage(state, world))
+
+        non_ow_ls_list = []
+        non_ow_ls_list.extend(easy_ls)
+        if options.ladder_storage >= LadderStorage.option_medium:
+            non_ow_ls_list.extend(medium_ls)
+            if options.ladder_storage >= LadderStorage.option_hard:
+                non_ow_ls_list.extend(hard_ls)
 
         # create the ls elevation regions
         ladder_regions: Dict[str, Region] = {}
@@ -1031,7 +1045,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 common_ladders: Set[str] = ladders.intersection(region_info.ladders)
                 if common_ladders:
                     regions[origin_region].connect(ladder_regions[ladder_region],
-                                                   rule=lambda state: state.has_any(common_ladders, player))
+                                                   rule=lambda state: state.has_any(common_ladders, player)
+                                                   and can_ladder_storage(state, world))
 
         # connect ls elevation regions to the region on the other side of the portals
         for ladder_region, region_info in ow_ladder_groups.items():
@@ -1052,335 +1067,40 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             ls_connect("LS Elev 2", "Overworld Redux, Town_FiligreeRoom_")
             ls_connect("LS Elev 3", "Overworld Redux, Overworld Interiors_house")
             ls_connect("LS Elev 5", "Overworld Redux, Temple_main")
-            # todo: add ls in other areas
-        # todo: add rules when er is off
 
-    # connecting the regions portals are in to other portals you can access via ladder storage
-    # using has_stick instead of can_ladder_storage since it's already checking the logic rules
-    if options.logic_rules == "unrestricted":
-        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.scene_destination() == portal_sd:
-                    return portal1.name, portal2.region
-                if portal2.scene_destination() == portal_sd:
-                    return portal2.name, portal1.region
-            raise Exception("no matches found in get_paired_region")
-
-        ladder_storages: List[Tuple[str, str, Set[str]]] = [
-            # LS from Overworld main
-            # The upper Swamp entrance
-            ("Overworld", "Overworld Redux, Swamp Redux 2_wall",
-             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Upper atoll entrance
-            ("Overworld", "Overworld Redux, Atoll Redux_upper",
-             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Furnace entrance, next to the sign that leads to West Garden
-            ("Overworld", "Overworld Redux, Furnace_gyro_west",
-             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Upper West Garden entry, by the belltower
-            ("Overworld", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Ruined Passage
-            ("Overworld", "Overworld Redux, Ruins Passage_east",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
-            ("Overworld", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladder to Quarry"}),
-            # Well rail, east side. Need some height from the temple stairs
-            ("Overworld", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladder to Quarry"}),
-            # Quarry entry
-            ("Overworld", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well"}),
-            # East Forest entry
-            ("Overworld", "Overworld Redux, Forest Belltower_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-            # Fortress entry
-            ("Overworld", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-            # Patrol Cave entry
-            ("Overworld", "Overworld Redux, PatrolCave_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Overworld Checkpoint", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-            # Special Shop entry, excluded in non-ER due to soft lock potential
-            ("Overworld", "Overworld Redux, ShopSpecial_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Overworld Checkpoint", "Ladders near Patrol Cave", "Ladder to Quarry",
-                 "Ladders near Dark Tomb"}),
-            # Temple Rafters, excluded in non-ER + ladder rando due to soft lock potential
-            ("Overworld", "Overworld Redux, Temple_rafters",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Overworld Checkpoint", "Ladders near Patrol Cave", "Ladder to Quarry",
-                 "Ladders near Dark Tomb"}),
-            # Spot above the Quarry entrance,
-            # only gets you to the mountain stairs
-            ("Overworld above Quarry Entrance", "Overworld Redux, Mountain_",
-                {"Ladders near Dark Tomb"}),
-
-            # LS from the Overworld Beach
-            # West Garden entry by the Furnace
-            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lower",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # West Garden laurels entry
-            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lowest",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # Swamp lower entrance
-            ("Overworld Beach", "Overworld Redux, Swamp Redux 2_conduit",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # Rotating Lights entrance
-            ("Overworld Beach", "Overworld Redux, Overworld Cave_",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # Swamp upper entrance
-            ("Overworld Beach", "Overworld Redux, Swamp Redux 2_wall",
-                {"Ladder to Ruined Atoll"}),
-            # Furnace entrance, next to the sign that leads to West Garden
-            ("Overworld Beach", "Overworld Redux, Furnace_gyro_west",
-                {"Ladder to Ruined Atoll"}),
-            # Upper West Garden entry, by the belltower
-            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladder to Ruined Atoll"}),
-            # Ruined Passage
-            ("Overworld Beach", "Overworld Redux, Ruins Passage_east",
-                {"Ladder to Ruined Atoll"}),
-            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
-            ("Overworld Beach", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladder to Ruined Atoll"}),
-            # Well rail, east side. Need some height from the temple stairs
-            ("Overworld Beach", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladder to Ruined Atoll"}),
-            # Quarry entry
-            ("Overworld Beach", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladder to Ruined Atoll"}),
-
-            # LS from that low spot where you normally walk to swamp
-            # Only has low ones you can't get to from main Overworld
-            # West Garden main entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lower",
-                {"Ladder to Swamp"}),
-            # Maze Cave entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Maze Room_",
-                {"Ladder to Swamp"}),
-            # Hourglass Cave entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Town Basement_beach",
-                {"Ladder to Swamp"}),
-            # Lower Atoll entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Atoll Redux_lower",
-                {"Ladder to Swamp"}),
-            # Lowest West Garden entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lowest",
-                {"Ladder to Swamp"}),
-
-            # from the ladders by the belltower
-            # Ruined Passage
-            ("Overworld to West Garden Upper", "Overworld Redux, Ruins Passage_east",
-                {"Ladders to West Bell"}),
-            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
-            ("Overworld to West Garden Upper", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders to West Bell"}),
-            # Well rail, east side. Need some height from the temple stairs
-            ("Overworld to West Garden Upper", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders to West Bell"}),
-            # Quarry entry
-            ("Overworld to West Garden Upper", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders to West Bell"}),
-            # East Forest entry
-            ("Overworld to West Garden Upper", "Overworld Redux, Forest Belltower_",
-                {"Ladders to West Bell"}),
-            # Fortress entry
-            ("Overworld to West Garden Upper", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders to West Bell"}),
-            # Patrol Cave entry
-            ("Overworld to West Garden Upper", "Overworld Redux, PatrolCave_",
-                {"Ladders to West Bell"}),
-            # Special Shop entry, excluded in non-ER due to soft lock potential
-            ("Overworld to West Garden Upper", "Overworld Redux, ShopSpecial_",
-                {"Ladders to West Bell"}),
-            # Temple Rafters, excluded in non-ER and ladder rando due to soft lock potential
-            ("Overworld to West Garden Upper", "Overworld Redux, Temple_rafters",
-                {"Ladders to West Bell"}),
-
-            # In the furnace
-            # Furnace ladder to the fuse entrance
-            ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_upper_north", set()),
-            # Furnace ladder to Dark Tomb
-            ("Furnace Ladder Area", "Furnace, Crypt Redux_", set()),
-            # Furnace ladder to the West Garden connector
-            ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_west", set()),
-
-            # West Garden
-            # exit after Garden Knight
-            ("West Garden", "Archipelagos Redux, Overworld Redux_upper", set()),
-            # West Garden laurels exit
-            ("West Garden", "Archipelagos Redux, Overworld Redux_lowest", set()),
-
-            # Atoll, use the little ladder you fix at the beginning
-            ("Ruined Atoll", "Atoll Redux, Overworld Redux_lower", set()),
-            ("Ruined Atoll", "Atoll Redux, Frog Stairs_mouth", set()),
-            ("Ruined Atoll", "Atoll Redux, Frog Stairs_eye", set()),
-
-            # East Forest
-            # Entrance by the dancing fox holy cross spot
-            ("East Forest", "East Forest Redux, East Forest Redux Laddercave_upper", set()),
-
-            # From the west side of Guard House 1 to the east side
-            ("Guard House 1 West", "East Forest Redux Laddercave, East Forest Redux_gate", set()),
-            ("Guard House 1 West", "East Forest Redux Laddercave, Forest Boss Room_", set()),
-
-            # Upper exit from the Forest Grave Path, use LS at the ladder by the gate switch
-            ("Forest Grave Path Main", "Sword Access, East Forest Redux_upper", set()),
-
-            # Fortress Exterior
-            # shop, ls at the ladder by the telescope
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Shop_", set()),
-            # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Main_Big Door", set()),
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Lower", set()),
-            # Upper exits from the courtyard. Use the ramp in the courtyard, then the blocks north of the first fuse
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Upper", set()),
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress East_", set()),
-
-            # same as above, except from the east side of the area
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Overworld Redux_", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Shop_", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Main_Big Door", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Lower", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Upper", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress East_", set()),
-
-            # same as above, except from the Beneath the Vault entrance ladder
-            ("Fortress Exterior near cave", "Fortress Courtyard, Overworld Redux_",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Main_Big Door",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Lower",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Upper",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_",
-             {"Ladder to Beneath the Vault"}),
-
-            # ls at the ladder, need to gain a little height to get up the stairs
-            # excluded in non-ER due to soft lock potential
-            ("Lower Mountain", "Mountain, Mountaintop_", set()),
-
-            # Where the rope is behind Monastery. Connecting here since, if you have this region, you don't need a sword
-            ("Quarry Monastery Entry", "Quarry Redux, Monastery_back", set()),
-
-            # Swamp to Gauntlet
-            ("Swamp Mid", "Swamp Redux 2, Cathedral Arena_",
-                {"Ladders in Swamp"}),
-            # Swamp to Overworld upper
-            ("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall",
-                {"Ladders in Swamp"}),
-            # Ladder by the hero grave
-            ("Back of Swamp", "Swamp Redux 2, Overworld Redux_conduit", set()),
-            ("Back of Swamp", "Swamp Redux 2, Shop_", set()),
-            # Need to put the cathedral HC code mid-flight
-            ("Back of Swamp", "Swamp Redux 2, Cathedral Redux_secret", set()),
-        ]
-
-        for region_name, scene_dest, ladders in ladder_storages:
-            portal_name, paired_region = get_portal_info(scene_dest)
-            # this is the only exception, requiring holy cross as well
-            if portal_name == "Swamp to Cathedral Secret Legend Room Entrance" and region_name == "Back of Swamp":
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and has_ability(holy_cross, state, world)
-                    and (has_ladder("Ladders in Swamp", state, world)
-                         or has_ice_grapple_logic(True, state, world)
-                         or not options.entrance_rando))
-            # soft locked without this ladder
-            elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and (state.has("Ladders to West Bell", player)))
-            # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
-            elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
-                    and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
-            # soft locked for the same reasons as above
-            elif portal_name in {"Entrance to Furnace near West Garden", "West Garden Entrance from Furnace"} \
-                    and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
-            # soft locked if you can't get past garden knight backwards or up the belltower ladders
-            elif portal_name == "West Garden Entrance near Belltower" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has_any({"Ladders to West Bell", laurels}, player))
-            # soft locked if you can't get back out
-            elif portal_name == "Fortress Courtyard to Beneath the Vault" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has("Ladder to Beneath the Vault", player)
-                    and has_lantern(state, world))
-            elif portal_name == "Atoll Lower Entrance" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and (state.has_any({"Ladders in Overworld Town", grapple}, player)
-                         or has_ice_grapple_logic(True, state, world)))
-            elif portal_name == "Atoll Upper Entrance" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has(grapple, player) or has_ability(prayer, state, world))
-            # soft lock potential
-            elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain", "Swamp Upper Entrance",
-                                 "Swamp Lower Entrance", "Caustic Light Cave Entrance"} and not options.entrance_rando:
+        # connect the non-overworld ones
+        for ls_info in non_ow_ls_list:
+            if ls_info.dest_is_region:
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[ls_info.destination],
+                    name=ls_info.destination + " (LS) " + ls_info.origin,
+                    rule=lambda state: can_ladder_storage(state, world))
                 continue
-            # soft lock if you don't have the ladder, I regret writing unrestricted logic
-            elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
-                    and (state.has("Ladder near Temple Rafters", player)
-                         or (state.has_all({laurels, grapple}, player)
-                             and ((state.has("Ladders near Patrol Cave", player)
-                                   and (state.has("Ladders near Dark Tomb", player)
-                                        or state.has("Ladder to Quarry", player)
-                                        and (state.has(fire_wand, player) or has_sword(state, player))))
-                                  or state.has("Ladders near Overworld Checkpoint", player)
-                                  or has_ice_grapple_logic(True, state, world)))))
-            # if no ladder items are required, just do the basic stick only lambda
-            elif not ladders or not options.shuffle_ladders:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player))
-            # one ladder required
-            elif len(ladders) == 1:
-                ladder = ladders.pop()
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has(ladder, player))
-            # if multiple ladders can be used
+
+            portal_name, dest_region = get_portal_info(ls_info.destination)
+            if ls_info.destination == "Atoll Redux, Frog Stairs_mouth":
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[dest_region],
+                    name=portal_name + " (LS) " + ls_info.origin,
+                    rule=lambda state: can_ladder_storage(state, world)
+                    and (state.has("Ladders in South Atoll", player)
+                         or state.has(key, player, 2)  # can do it from the rope
+                         or options.ladder_storage >= LadderStorage.option_medium))
+            # holy cross mid-ls to get in here
+            elif ls_info.destination == "Swamp Redux 2, Cathedral Redux_secret":
+                if ls_info.origin == "Swamp Mid":
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[dest_region],
+                        name=portal_name + " (LS) " + ls_info.origin,
+                        rule=lambda state: can_ladder_storage(state, world) and has_ability(prayer, state, world)
+                        and state.has(ls_info.ladders_req))
+                else:
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[dest_region],
+                        name=portal_name + " (LS) " + ls_info.origin,
+                        rule=lambda state: can_ladder_storage(state, world) and has_ability(prayer, state, world))
             else:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player))
+                ls_connect(ls_info.origin, ls_info.destination, ls_info.ladders_req)
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
