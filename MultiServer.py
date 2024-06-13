@@ -1807,10 +1807,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     return
                 target_item, target_player, flags = ctx.locations[client.slot][location]
 
-                # Only allow scouting other players' locations if the item is for the slot that sent the scout
-                # TODO: Allow scouting Item Links items that *lead* to an item for client_player?
-                if client_player != desired_player and client_player != target_player:
-                    continue
+                if client_player != desired_player:
+                    # Only allow scouting other players' locations if the item is for client_player,
+                    # or if the target_player is an item links group that the client_player is a part of.
+                    if not (client_player == target_player or client_player in ctx.groups.get(target_player, set())):
+                        continue
 
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, desired_player, location))
