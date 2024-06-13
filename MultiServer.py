@@ -1839,7 +1839,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             location = args["location"]
             player = args["player"]
             priority = args["priority"]
-            if type(player) is not int or type(location) is not int or (priority is not None and type(priority) != bool):
+            if not isinstance(player, int) or not isinstance(location, int) \
+                    or (priority is not None and not isinstance(priority, bool)):
                 await ctx.send_msgs(client,
                                     [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint',
                                       "original_cmd": cmd}])
