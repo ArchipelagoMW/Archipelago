@@ -19,7 +19,7 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
                     {% if option.default != 'random' %}
-                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
                     {% else %}
                         {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
                     {% endif %}
@@ -97,7 +97,7 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
                     {% if option.default != 'random' %}
-                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
                     {% else %}
                         {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
                     {% endif %}
