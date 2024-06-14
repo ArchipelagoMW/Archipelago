@@ -443,12 +443,11 @@ item_name_groups[ItemGroupNames.KERRIGAN_TIER_7] = [
 ]
 item_name_groups[ItemGroupNames.OVERLORD_UPGRADES] = [
     item_names.OVERLORD_ANTENNAE,
-    item_names.OVERLORD_CONTAMINATE,
     item_names.OVERLORD_VENTRAL_SACS,
     item_names.OVERLORD_GENERATE_CREEP,
-    item_names.OVERLORD_SPAWN_CHANGELING,
     item_names.OVERLORD_PNEUMATIZED_CARAPACE,
-    item_names.OVERLORD_IMPROVED_OVERLORDS
+    item_names.OVERLORD_IMPROVED_OVERLORDS,
+    item_names.OVERLORD_OVERSEER_ASPECT,
 ]
 
 # Zerg Upgrades

@@ -440,6 +440,11 @@ CORRUPTOR_MONSTROUS_RESILIENCE          = "Monstrous Resilience (Corruptor)"
 CORRUPTOR_CONSTRUCT_REGENERATION        = "Construct Regeneration (Corruptor)"
 CORRUPTOR_SCOURGE_INCUBATION            = "Scourge Incubation (Corruptor)"
 CORRUPTOR_RESOURCE_EFFICIENCY           = "Resource Efficiency (Corruptor)"
+OVERLORD_IMPROVED_OVERLORDS             = "Improved Overlords (Overlord)"
+OVERLORD_VENTRAL_SACS                   = "Ventral Sacs (Overlord)"
+OVERLORD_GENERATE_CREEP                 = "Generate Creep (Overlord)"
+OVERLORD_PNEUMATIZED_CARAPACE           = "Pneumatized Carapace (Overlord)"
+OVERLORD_ANTENNAE                       = "Antennae (Overlord)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
@@ -462,6 +467,7 @@ MUTALISK_CORRUPTOR_VIPER_ASPECT         = "Viper Aspect (Mutalisk/Corruptor)"
 MUTALISK_CORRUPTOR_GUARDIAN_ASPECT      = "Guardian Aspect (Mutalisk/Corruptor)"
 MUTALISK_CORRUPTOR_DEVOURER_ASPECT      = "Devourer Aspect (Mutalisk/Corruptor)"
 ROACH_RAVAGER_ASPECT                    = "Ravager Aspect (Roach)"
+OVERLORD_OVERSEER_ASPECT                = "Overseer Aspect (Overlord)"
 
 # Zerg Mercs
 INFESTED_MEDICS      = "Infested Medics"
@@ -492,13 +498,6 @@ AUTOMATED_EXTRACTORS             = "Automated Extractors"
 TWIN_DRONES                      = "Twin Drones"
 MALIGNANT_CREEP                  = "Malignant Creep"
 VESPENE_EFFICIENCY               = "Vespene Efficiency"
-OVERLORD_IMPROVED_OVERLORDS      = "Improved Overlords (Overlord)"
-OVERLORD_VENTRAL_SACS            = "Ventral Sacs (Overlord)"
-OVERLORD_GENERATE_CREEP          = "Generate Creep (Overlord)"
-OVERLORD_SPAWN_CHANGELING        = "Spawn Changeling (Overlord)"
-OVERLORD_CONTAMINATE             = "Contaminate (Overlord)"
-OVERLORD_PNEUMATIZED_CARAPACE    = "Pneumatized Carapace (Overlord)"
-OVERLORD_ANTENNAE                = "Antennae (Overlord)"
 
 # Kerrigan Levels
 KERRIGAN_LEVELS_1  = "1 Kerrigan Level"
