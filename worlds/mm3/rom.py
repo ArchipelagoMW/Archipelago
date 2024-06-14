@@ -167,7 +167,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("mm3_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm3_basepatch.bsdiff4")))
     # text writing
 
-    base_address = 0x3C000
+    base_address = 0x3C010
     color_address = 0x31BC7
     for i, offset, location in zip([0, 8, 1, 2, 3, 4, 5, 6, 7, 9], [
         0x0,
@@ -179,8 +179,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
         0x195,
         0x1D6,
         0x217,
-        0x258,
-        0x2A8
+        0x268
     ], [
                                        names.get_needle_cannon,
                                        names.get_rush_jet,
@@ -331,7 +330,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
-header = b"\x4E\x45\x53\x1A\x11\x10\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+header = b"\x4E\x45\x53\x1A\x10\x10\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
 
 def read_headerless_nes_rom(rom: bytes) -> bytes:
