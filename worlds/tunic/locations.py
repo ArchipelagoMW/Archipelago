@@ -47,7 +47,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Guardhouse 1 - Upper Floor": TunicLocationData("East Forest", "Guard House 1 East"),
     "East Forest - Dancing Fox Spirit Holy Cross": TunicLocationData("East Forest", "East Forest Dance Fox Spot", location_group="Holy Cross"),
     "East Forest - Golden Obelisk Holy Cross": TunicLocationData("East Forest", "Lower Forest", location_group="Holy Cross"),
-    "East Forest - Ice Rod Grapple Chest": TunicLocationData("East Forest", "East Forest"),
+    "East Forest - Ice Rod Grapple Chest": TunicLocationData("East Forest", "Lower Forest"),
     "East Forest - Above Save Point": TunicLocationData("East Forest", "East Forest"),
     "East Forest - Above Save Point Obscured": TunicLocationData("East Forest", "East Forest"),
     "East Forest - From Guardhouse 1 Chest": TunicLocationData("East Forest", "East Forest Dance Fox Spot"),
