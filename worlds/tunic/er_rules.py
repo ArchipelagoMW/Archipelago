@@ -684,6 +684,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: state.has(laurels, player) or has_ability(prayer, state, world))
 
     regions["Fortress Exterior near cave"].connect(
+        connecting_region=regions["Fortress Courtyard"],
+        rule=lambda state: has_ice_grapple_logic(True, state, world)
+        and options.ice_grappling >= IceGrappling.option_hard)  # shoot far fire pot, enemy gets aggro'd
+
+    regions["Fortress Exterior near cave"].connect(
         connecting_region=regions["Beneath the Vault Entry"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
     regions["Beneath the Vault Entry"].connect(
@@ -869,8 +874,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Rooted Ziggurat Lower Front"],
         rule=lambda state: ((state.has(laurels, player) or has_ice_grapple_logic(True, state, world))
                             and has_ability(prayer, state, world)
-                            and has_sword(state, player))
-        or (can_ladder_storage(state, world) and options.ladder_storage >= LadderStorage.option_medium))
+                            and has_sword(state, player)))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],

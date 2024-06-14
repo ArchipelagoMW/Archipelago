@@ -187,7 +187,7 @@ class LaurelsZips(Toggle):
 class IceGrappling(Choice):
     """
     Choose whether grappling frozen enemies is in logic.
-    Easy includes ice grappling enemies that are in range without luring them.
+    Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
     Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
     Hard includes luring or grappling enemies to get to where you want to go. Hard difficulty will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks.
     Note: You will still be expected to ice grapple to the slime in East Forest.

@@ -762,9 +762,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Quarry Entry":
             [["IG2"], ["LS1"]],
         "Overworld Tunnel Turret":
-            [["IG1"], ["Hyperdash"]],
+            [["IG1"], ["LS1"], ["Hyperdash"]],
         "Overworld Temple Door":
-            [["NMG"], ["Forest Belltower Upper", "Overworld Belltower"]],
+            [["IG2"], ["LS3"], ["Forest Belltower Upper", "Overworld Belltower"]],
         "Overworld Southeast Cross Door":
             [],
         "Overworld Fountain Cross Door":
@@ -774,7 +774,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Spawn Portal":
             [],
         "Overworld Well to Furnace Rail":
-            [["UR"]], 
+            [["LS2"]],
         "Overworld Old House Door":
             [],
     },
@@ -782,7 +782,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Above Ruined Passage":
             [],
         "After Ruined Passage":
-            [["NMG"]],
+            [["IG1"], ["LS1"]],
         "Overworld":
             [],
         "Overworld at Patrol Cave":
@@ -790,7 +790,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld above Patrol Cave":
             [],
         "Overworld Special Shop Entry":
-            [["Hyperdash"], ["UR"]]
+            [["Hyperdash"], ["LS1"]]
     },
     "Overworld Special Shop Entry": {
         "East Overworld":
@@ -820,7 +820,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld":
             [],
         "Overworld West Garden Laurels Entry":
-            [["Hyperdash"]],
+            [["Hyperdash"], ["LS1"]],
         "Overworld to Atoll Upper":
             [],
         "Overworld Tunnel Turret":
@@ -848,7 +848,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Overworld at Patrol Cave": {
         "East Overworld":
-            [["Hyperdash"]],
+            [["Hyperdash"], ["LS1"], ["IG1"]],
         "Overworld above Patrol Cave":
             [],
     },
@@ -861,8 +861,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Overworld at Patrol Cave":
             [],
-        "Overworld Belltower at Bell":
-            [["NMG"]],
+        # readd long dong if we ever do a misc tricks option
     },
     "Upper Overworld": {
         "Overworld above Patrol Cave":
@@ -886,7 +885,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld after Envoy":
             [],
         "Overworld":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Overworld after Envoy": {
         "Overworld":
@@ -900,7 +899,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Above Ruined Passage":
             [],
         "East Overworld":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Above Ruined Passage": {
         "Overworld":
@@ -912,7 +911,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Overworld Ruined Passage Door": {
         "Overworld":
-            [["Hyperdash", "NMG"]],
+            [["Hyperdash", "Zip"]],
     },
     "Overworld Town Portal": {
         "Overworld":
@@ -928,7 +927,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Old House Back": {
         "Old House Front":
-            [["Hyperdash", "NMG"]],
+            [["Hyperdash", "Zip"]],
     },
     "Furnace Fuse": {
         "Furnace Ladder Area":
@@ -936,9 +935,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Furnace Ladder Area": {
         "Furnace Fuse":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
         "Furnace Walking Path":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
     },
     "Furnace Walking Path": {
         "Furnace Ladder Area":
@@ -966,7 +965,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "East Forest": {
         "East Forest Dance Fox Spot":
-            [["Hyperdash"], ["NMG"]],
+            [["Hyperdash"], ["IG1"], ["LS1"]],
         "East Forest Portal":
             [],
         "Lower Forest":
@@ -974,7 +973,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "East Forest Dance Fox Spot": {
         "East Forest":
-            [["Hyperdash"], ["NMG"]],
+            [["Hyperdash"], ["IG1"]],
     },
     "East Forest Portal": {
         "East Forest":
@@ -990,7 +989,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Guard House 1 West": {
         "Guard House 1 East":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
     },
     "Guard House 2 Upper": {
         "Guard House 2 Lower":
@@ -1002,19 +1001,19 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Forest Grave Path Main": {
         "Forest Grave Path Upper":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS2"]],
         "Forest Grave Path by Grave":
             [],
     },
     "Forest Grave Path Upper": {
         "Forest Grave Path Main":
-            [["Hyperdash"], ["NMG"]],
+            [["Hyperdash"], ["IG1"]],
     },
     "Forest Grave Path by Grave": {
         "Forest Hero's Grave":
             [], 
         "Forest Grave Path Main":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Forest Hero's Grave": {
         "Forest Grave Path by Grave":
@@ -1046,7 +1045,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Dark Tomb Checkpoint": {
         "Well Boss":
-            [["Hyperdash", "NMG"]],
+            [["Hyperdash", "Zip"]],
     },
     "Dark Tomb Entry Point": {
         "Dark Tomb Upper":
@@ -1070,13 +1069,13 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "West Garden": {
         "West Garden Laurels Exit Region":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
         "West Garden after Boss":
             [], 
         "West Garden Hero's Grave Region":
             [],
         "West Garden Portal Item":
-            [["NMG"]],
+            [["IG2"]],
     },
     "West Garden Laurels Exit Region": {
         "West Garden":
@@ -1088,7 +1087,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "West Garden Portal Item": {
         "West Garden":
-            [["NMG"]], 
+            [["IG1"]],
         "West Garden Portal":
             [["Hyperdash", "West Garden"]],
     },
@@ -1102,7 +1101,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Ruined Atoll": {
         "Ruined Atoll Lower Entry Area":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
         "Ruined Atoll Ladder Tops":
             [],
         "Ruined Atoll Frog Mouth":
@@ -1233,11 +1232,11 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Exterior from Overworld":
             [], 
         "Fortress Courtyard Upper":
-            [["UR"]], 
+            [["LS2"]],
         "Fortress Exterior near cave":
-            [["UR"]],
+            [["LS1"]],
         "Fortress Courtyard":
-            [["UR"]],
+            [["LS1"]],
     },
     "Fortress Exterior from Overworld": {
         "Fortress Exterior from East Forest":
@@ -1245,15 +1244,15 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Exterior near cave":
             [], 
         "Fortress Courtyard":
-            [["Hyperdash"], ["NMG"]],
+            [["Hyperdash"], ["IG1"], ["LS1"]],
     },
     "Fortress Exterior near cave": {
         "Fortress Exterior from Overworld":
-            [["Hyperdash"], ["UR"]], 
-        "Fortress Courtyard":
-            [["UR"]], 
+            [["Hyperdash"], ["LS1"]],
+        "Fortress Courtyard":  # ice grapple hard: shoot far fire pot, it aggros one of the enemies over to you
+            [["IG3"], ["LS1"]],
         "Fortress Courtyard Upper":
-            [["UR"]],
+            [["LS2"]],
         "Beneath the Vault Entry":
             [],
     },
@@ -1263,7 +1262,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Courtyard": {
         "Fortress Courtyard Upper":
-            [["NMG"]],
+            [["IG1"]],
         "Fortress Exterior from Overworld":
             [["Hyperdash"]],
     },
@@ -1289,7 +1288,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress East Shortcut Lower": {
         "Fortress East Shortcut Upper":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Fortress East Shortcut Upper": {
         "Fortress East Shortcut Lower":
@@ -1297,11 +1296,11 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Eastern Vault Fortress": {
         "Eastern Vault Fortress Gold Door":
-            [["NMG"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
+            [["IG2"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
     },
     "Eastern Vault Fortress Gold Door": {
         "Eastern Vault Fortress":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Fortress Grave Path": {
         "Fortress Hero's Grave Region":
@@ -1311,7 +1310,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Grave Path Upper": {
         "Fortress Grave Path":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Fortress Grave Path Dusty Entrance Region": {
         "Fortress Grave Path":
@@ -1339,7 +1338,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Monastery Back": {
         "Monastery Front":
-            [["Hyperdash", "NMG"]], 
+            [["Hyperdash", "Zip"]],
         "Monastery Hero's Grave Region":
             [],
     },
@@ -1356,6 +1355,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Quarry Connector"]],
         "Quarry":
             [],
+        "Monastery Rope":
+            [["LS2"]]
     },
     "Quarry Portal": {
         "Quarry Entry":
@@ -1367,7 +1368,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Quarry Back":
             [["Hyperdash"]],
         "Monastery Rope":
-            [["UR"]],
+            [["LS2"]],
     },
     "Quarry Back": {
         "Quarry":
@@ -1385,7 +1386,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Quarry Monastery Entry":
             [],
         "Lower Quarry Zig Door":
-            [["NMG"]],
+            [["IG3"]],
     },
     "Lower Quarry": {
         "Even Lower Quarry":
@@ -1395,7 +1396,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Lower Quarry":
             [],
         "Lower Quarry Zig Door":
-            [["Quarry", "Quarry Connector"], ["NMG"]],
+            [["Quarry", "Quarry Connector"], ["IG3"]],
     },
     "Monastery Rope": {
         "Quarry Back":
@@ -1423,7 +1424,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Rooted Ziggurat Lower Back": {
         "Rooted Ziggurat Lower Front":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"], ["IG1"]],
         "Rooted Ziggurat Portal Room Entrance":
             [],
     },
@@ -1451,11 +1452,11 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Swamp Front":
             [],
         "Swamp to Cathedral Main Entrance Region":
-            [["Hyperdash"], ["NMG"]],
+            [["Hyperdash"], ["IG2"], ["LS3"]],
         "Swamp Ledge under Cathedral Door":
             [],
         "Back of Swamp":
-            [["UR"]],
+            [["LS1"]],  # ig3 later?
     },
     "Swamp Ledge under Cathedral Door": {
         "Swamp Mid":
@@ -1469,11 +1470,11 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Swamp to Cathedral Main Entrance Region": {
         "Swamp Mid":
-            [["NMG"]],
+            [["IG1"]],
     },
     "Back of Swamp": {
         "Back of Swamp Laurels Area":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS2"]],
         "Swamp Hero's Grave Region":
             [],
     },
@@ -1481,7 +1482,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Back of Swamp":
             [["Hyperdash"]],
         "Swamp Mid":
-            [["NMG", "Hyperdash"]],
+            [["IG1", "Hyperdash"]],
     },
     "Swamp Hero's Grave Region": {
         "Back of Swamp":
