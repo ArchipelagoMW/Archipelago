@@ -350,7 +350,20 @@ Sent to the server to update the status of a Hint. The client must be the 'recei
 | ---- | ---- | ----- |
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
-| priority | bool | Optional. If included, sets the priority of the hint to this status. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. |
+
+#### HintStatus
+An enumeration containing the possible hint states.
+
+```python
+import enum
+class HintStatus(enum.IntEnum):
+    HINT_FOUND = 0
+    HINT_UNSPECIFIED = 1
+    HINT_NO_PRIORITY = 10
+    HINT_AVOID = 20
+    HINT_PRIORITY = 30
+```
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)

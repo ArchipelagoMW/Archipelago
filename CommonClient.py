@@ -528,10 +528,10 @@ class CommonContext:
             self.input_task.cancel()
     
     # Hints
-    def update_hint(self, location: int, finding_player: int, priority: typing.Optional[bool]) -> None:
+    def update_hint(self, location: int, finding_player: int, status: typing.Optional[NetUtils.HintStatus]) -> None:
         msg = {"cmd": "UpdateHint", "location": location, "player": finding_player}
-        if priority is not None:
-            msg["priority"] = priority
+        if status is not None:
+            msg["status"] = status
         async_start(self.send_msgs([msg]), name="update_hint")
     
     # DataPackage

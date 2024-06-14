@@ -29,6 +29,14 @@ class ClientStatus(ByValue, enum.IntEnum):
     CLIENT_GOAL = 30
 
 
+class HintStatus(enum.IntEnum):
+    HINT_FOUND = 0
+    HINT_UNSPECIFIED = 1
+    HINT_NO_PRIORITY = 10
+    HINT_AVOID = 20
+    HINT_PRIORITY = 30
+
+
 class SlotType(ByValue, enum.IntFlag):
     spectator = 0b00
     player = 0b01
@@ -200,7 +208,6 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         "salmon": "FA8072",
         "white": "FFFFFF",
         "orange": "FF7700",
-        "gold": "EDED2D",
     }
 
     def __init__(self, ctx):
@@ -304,19 +311,19 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
-    priority: bool = True
+    status: HintStatus = HintStatus.HINT_UNSPECIFIED
 
     def re_check(self, ctx, team) -> Hint:
         if self.found:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return self._replace(found=found)
+            return self._replace(found=found, status=HintStatus.HINT_FOUND)
         return self
     
-    def re_prioritize(self, ctx, priority: bool) -> Hint:
-        if priority != self.priority:
-            return self._replace(priority=priority)
+    def re_prioritize(self, ctx, status: HintStatus) -> Hint:
+        if status != self.status:
+            return self._replace(status=status)
         return self
 
     def __hash__(self):
@@ -338,12 +345,22 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, "'s World")
         add_json_text(parts, ". ")
-        if self.found:
-            add_json_text(parts, "(found)", type="color", color="green")
-        elif self.priority:
-            add_json_text(parts, "(priority)", type="color", color="red")
-        else:
-            add_json_text(parts, "(non-priority)", type="color", color="gold")
+        status_names: typing.Dict[HintStatus, str] = {
+            HintStatus.HINT_FOUND: "(found)",
+            HintStatus.HINT_UNSPECIFIED: "(unspecified)",
+            HintStatus.HINT_NO_PRIORITY: "(no priority)",
+            HintStatus.HINT_AVOID: "(avoid)",
+            HintStatus.HINT_PRIORITY: "(priority)",
+        }
+        status_colors: typing.Dict[HintStatus, str] = {
+            HintStatus.HINT_FOUND: "green",
+            HintStatus.HINT_UNSPECIFIED: "white",
+            HintStatus.HINT_NO_PRIORITY: "slateblue",
+            HintStatus.HINT_AVOID: "salmon",
+            HintStatus.HINT_PRIORITY: "plum",
+        }
+        add_json_text(parts, status_names.get(self.status, "(unknown)"), type="color",
+                      color=status_colors.get(self.status, "red"))
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,

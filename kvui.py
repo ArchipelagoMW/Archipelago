@@ -64,7 +64,7 @@ from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -340,13 +340,19 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         if self.collide_point(*touch.pos):
             if self.index:  # skip header
                 if alt:
-                    if self.hint["found"]:
+                    if self.hint["status"] == HintStatus.HINT_FOUND:
                         return
                     ctx = App.get_running_app().ctx
                     if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                        status_chain: typing.Dict[HintStatus, HintStatus] = {
+                            HintStatus.HINT_UNSPECIFIED: HintStatus.HINT_NO_PRIORITY,
+                            HintStatus.HINT_NO_PRIORITY: HintStatus.HINT_AVOID,
+                            HintStatus.HINT_AVOID: HintStatus.HINT_PRIORITY,
+                            HintStatus.HINT_PRIORITY: HintStatus.HINT_NO_PRIORITY,
+                        }
                         ctx.update_hint(self.hint["location"],
                                         self.hint["finding_player"],
-                                        not self.hint["priority"])
+                                        status_chain.get(self.hint["status"], HintStatus.HINT_UNSPECIFIED))
                 else:
                     if self.selected:
                         self.parent.clear_selection()
@@ -370,7 +376,9 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                 for child in self.children:
                     if child.collide_point(*touch.pos):
                         key = child.sort_key
-                        parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                        if key == "status":
+                            parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
+                        else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
                         if key == parent.sort_key:
                             # second click reverses order
                             parent.reversed = not parent.reversed
@@ -729,12 +737,12 @@ class HintLog(RecycleView):
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
         "status": {"text": "[u]Status[/u]",
-                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "priority": False}},
+                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "status": ""}},
         "striped": True,
     }
 
     sort_key: str = ""
-    reversed: bool = False
+    reversed: bool = True
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
@@ -745,6 +753,20 @@ class HintLog(RecycleView):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
             self.scroll_y = 1.0
         data = []
+        status_names: typing.Dict[HintStatus, str] = {
+            HintStatus.HINT_FOUND: "Found",
+            HintStatus.HINT_UNSPECIFIED: "Unspecified",
+            HintStatus.HINT_NO_PRIORITY: "No Priority",
+            HintStatus.HINT_AVOID: "Avoid",
+            HintStatus.HINT_PRIORITY: "Priority",
+        }
+        status_colors: typing.Dict[HintStatus, str] = {
+            HintStatus.HINT_FOUND: "green",
+            HintStatus.HINT_UNSPECIFIED: "white",
+            HintStatus.HINT_NO_PRIORITY: "cyan",
+            HintStatus.HINT_AVOID: "salmon",
+            HintStatus.HINT_PRIORITY: "plum",
+        }
         for hint in hints:
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
@@ -764,9 +786,8 @@ class HintLog(RecycleView):
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
                 "status": {
-                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else ("red" if hint["priority"] else "gold"),
-                                                     "text": "Found" if hint["found"] else (
-                                                         "Priority" if hint["priority"] else "Non-Priority")}),
+                    "text": self.parser.handle_node({"type": "color", "color": status_colors.get(hint["status"], "red"),
+                                                     "text": status_names.get(hint["status"], "Unknown")}),
                     "hint": hint,
                 },
             })
@@ -779,7 +800,7 @@ class HintLog(RecycleView):
 
     @staticmethod
     def hint_sorter(element: dict) -> str:
-        return ""
+        return element["status"]["hint"]["status"]  # By status by default
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
