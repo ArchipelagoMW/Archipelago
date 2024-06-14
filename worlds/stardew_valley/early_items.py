@@ -23,7 +23,8 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     if options.building_progression & stardew_options.BuildingProgression.option_progressive:
         early_forced.append(Building.shipping_bin)
-        early_candidates.append("Progressive Coop")
+        if options.farm_type != stardew_options.FarmType.option_meadowlands:
+            early_candidates.append("Progressive Coop")
         early_candidates.append("Progressive Barn")
 
     if options.backpack_progression == stardew_options.BackpackProgression.option_early_progressive:
