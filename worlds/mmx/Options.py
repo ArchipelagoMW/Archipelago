@@ -57,7 +57,7 @@ class BossWeaknessRando(Choice):
     chaotic_single: Bosses will have one random weakness under the chaotic set
 
     The chaotic set makes every weapon charge level a separate weakness instead of keeping
-    them together, meaning that a boss can be weak to Charged Frost Shield but not its
+    them together, meaning that a boss can be weak to Charged Rolling Shield but not its
     uncharged version.
     """
     display_name = "Boss Weakness Randomization"
@@ -72,7 +72,7 @@ class BossWeaknessStrictness(Choice):
     How strict boss weaknesses will be.
     not_strict: Allow every weapon to deal damage to the bosses
     weakness_and_buster: Only allow the weakness and buster to deal damage to the bosses
-    weakness_and_upgraded_buster: Only allow the weakness and buster charge levels 3 & 4 to deal damage to the bosses
+    weakness_and_upgraded_buster: Only allow the weakness and buster charge level 3 to deal damage to the bosses
     only_weakness: Only the weakness will deal damage to the bosses
     """
     display_name = "Boss Weakness Strictness"
