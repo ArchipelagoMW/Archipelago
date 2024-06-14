@@ -362,10 +362,10 @@ weapons_chaotic = {
     ],
 }
 
-
 def handle_weaknesses(world):
     shuffle_type = world.options.boss_weakness_rando.value
     strictness_type = world.options.boss_weakness_strictness.value
+    boss_weakness_plando = world.options.boss_weakness_plando.value
 
     if shuffle_type != "vanilla":
         weapon_list = weapons.keys()
@@ -385,6 +385,20 @@ def handle_weaknesses(world):
         else:
             damage_table = damage_templates["Only Weakness"].copy()
 
+        if boss in boss_weakness_plando.keys():
+            if shuffle_type != "vanilla":
+                chosen_weapon = boss_weakness_plando[boss]
+                if chosen_weapon not in boss_excluded_weapons[boss]:
+                    data = weapons_chaotic[chosen_weapon].copy()
+                    for entry in data:
+                        world.boss_weaknesses[boss].append(entry)
+                        damage = entry[2]
+                        damage_table[entry[1]] = damage
+                    world.boss_weakness_data[boss] = damage_table.copy()
+                    continue
+
+                print (f"[{world.multiworld.player_name[world.player]}] Weakness plando failed for {boss}, contains an excluded weapon. Choosing an alternate weapon...")
+
         if shuffle_type != "vanilla":
             copied_weapon_list = weapon_list.copy()
             for weapon in boss_excluded_weapons[boss]:
@@ -400,8 +414,8 @@ def handle_weaknesses(world):
                 damage_table[entry[1]] = damage
             world.boss_weakness_data[boss] = damage_table.copy()
 
-        elif shuffle_type == 2:
-            for _ in range(2):
+        elif shuffle_type >= 2:
+            for _ in range(shuffle_type - 1):
                 chosen_weapon = world.random.choice(copied_weapon_list)
                 data = weapons_chaotic[chosen_weapon].copy()
                 copied_weapon_list.remove(chosen_weapon)
@@ -409,15 +423,6 @@ def handle_weaknesses(world):
                     world.boss_weaknesses[boss].append(entry)
                     damage = entry[2]
                     damage_table[entry[1]] = damage
-            world.boss_weakness_data[boss] = damage_table.copy()
-
-        elif shuffle_type == 3:
-            chosen_weapon = world.random.choice(copied_weapon_list)
-            data = weapons_chaotic[chosen_weapon].copy()
-            for entry in data:
-                world.boss_weaknesses[boss].append(entry)
-                damage = entry[2]
-                damage_table[entry[1]] = damage
             world.boss_weakness_data[boss] = damage_table.copy()
 
         else:

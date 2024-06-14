@@ -1,8 +1,12 @@
 from dataclasses import dataclass
 import typing
 
-#from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
-from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+#from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, DeathLink, PerGameCommonOptions, StartInventoryPool
+from schema import Schema, And, Use, Optional
+
+from .Rom import action_buttons, action_names
+from .Weaknesses import boss_weaknesses, weapons_chaotic
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -59,8 +63,8 @@ class BossWeaknessRando(Choice):
     display_name = "Boss Weakness Randomization"
     option_vanilla = 0
     option_shuffled = 1
-    option_chaotic_double = 2
-    option_chaotic_single = 3
+    option_chaotic_double = 3
+    option_chaotic_single = 2
     default = 0
 
 class BossWeaknessStrictness(Choice):
@@ -214,6 +218,53 @@ class SigmaSubTankCount(Range):
     range_end = 4
     default = 4
 
+class ButtonConfiguration(OptionDict):
+    """
+    Default buttons for every action.
+    """
+    display_name = "Button Configuration"
+    schema = Schema({action_name: And(str, Use(str.upper), lambda s: s in action_buttons) for action_name in action_names})
+    default = {
+        "SHOT": "Y",
+        "JUMP": "B",
+        "DASH": "A",
+        "SELECT_L": "L",
+        "SELECT_R": "R",
+        "MENU": "START"
+    }
+
+class PlandoWeaknesses(OptionDict):
+    """
+    Forces bosses to have a specific weakness. Uses the names that appear on the chaotic weakness set.
+
+    Format: 
+      Boss Name: Weakness Name
+    """
+    display_name = "Button Configuration"
+    schema = Schema({
+        Optional(boss_name): 
+            And(str, lambda weapon: weapon in weapons_chaotic.keys()) for boss_name in boss_weaknesses.keys()
+    })
+    default = {}
+
+class BetterWallJump(Toggle):
+    """
+    Enables performing a dash wall jump by holding down the button instead of pressing it every time.
+    """
+    display_name = "Better Wall Jump"
+
+class AirDash(Toggle):
+    """
+    Adds another Legs Upgrade that allows X to perform an Air Dash.
+    """
+    display_name = "Air Dash"
+
+class LongJumps(Toggle):
+    """
+    Allows X to perform longer jumps when holding down the Dash button. Only works after getting a Legs Upgrade.
+    """
+    display_name = "Long Jumps"
+
 mmx_option_groups = [
     """
     OptionGroup("Sigma Fortress Options", [
@@ -235,6 +286,7 @@ mmx_option_groups = [
         StartingHP,
         HeartTankEffectiveness,
         JammedBuster,
+        BetterWallJump,
     ]),
     OptionGroup("Logic", [
         LogicBossWeakness,
@@ -249,13 +301,18 @@ class MMXOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     energy_link: EnergyLink
+    button_configuration: ButtonConfiguration
     starting_life_count: StartingLifeCount
     starting_hp: StartingHP
     heart_tank_effectiveness: HeartTankEffectiveness
     boss_weakness_rando: BossWeaknessRando
     boss_weakness_strictness: BossWeaknessStrictness
+    boss_weakness_plando: PlandoWeaknesses
     boss_randomize_hp: BossRandomizedHP
     jammed_buster: JammedBuster
+    better_walljump: BetterWallJump
+    air_dash: AirDash
+    long_jumps: LongJumps
     hadouken_in_pool: HadoukenInPool
     pickupsanity: PickupSanity
     early_legs: EarlyLegs

@@ -14,6 +14,9 @@ HASH_LEGACY = 'f1dfbbcdc3d8cdeafa4b4b9aa51a56d6'
 
 STARTING_ID = 0xBE0800
 
+action_names = ("SHOT", "JUMP", "DASH", "SELECT_L", "SELECT_R", "MENU")
+action_buttons = ("Y", "B", "A", "L", "R", "X", "START", "SELECT")
+
 weapon_rom_data = {
     STARTING_ID + 0x000E: [0x1F88, 0xFF],
     STARTING_ID + 0x0010: [0x1F8A, 0xFF],
@@ -196,6 +199,29 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x014FF, world.options.starting_hp.value)
     patch.write_byte(0x01DDC, 0x7F)
 
+    # Remap buttons
+    button_values = {
+        "A": 0x20,
+        "B": 0x80,
+        "X": 0x10,
+        "Y": 0x40,
+        "L": 0x08,
+        "R": 0x04,
+        "START": 0x01,
+        "SELECT": 0x02,
+    }
+    action_offsets = {
+        "SHOT": 0x36E20,
+        "JUMP": 0x36E21,
+        "DASH": 0x36E22,
+        "SELECT_L": 0x36E23,
+        "SELECT_R": 0x36E24,
+        "MENU": 0x36E25,
+    }
+    button_config = world.options.button_configuration.value
+    for action, button in button_config.items():
+        patch.write_byte(action_offsets[action], button_values[button])
+
     # Edit the ROM header
     from Utils import __version__
     patch.name = bytearray(f'MMX1{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
@@ -232,6 +258,15 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x17FFEE, world.options.heart_tank_effectiveness.value)
     patch.write_byte(0x17FFEF, world.options.sigma_all_levels.value)
     patch.write_byte(0x17FFF0, world.options.boss_weakness_strictness.value)
+
+    value = 0
+    if world.options.better_walljump.value:
+        value |= 0x01
+    if world.options.air_dash.value:
+        value |= 0x02
+    if world.options.long_jumps.value:
+        value |= 0x04
+    patch.write_byte(0x17FFF1, value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

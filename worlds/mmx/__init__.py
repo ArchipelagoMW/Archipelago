@@ -141,11 +141,19 @@ class MMXWorld(World):
             itempool += [self.create_item(ItemName.body)]
         else:
             itempool += [self.create_item(ItemName.body, ItemClassification.useful)]
+        
         itempool += [self.create_item(ItemName.arms)]
         if self.options.jammed_buster.value:
             itempool += [self.create_item(ItemName.arms)]
+
         itempool += [self.create_item(ItemName.helmet)]
+
         itempool += [self.create_item(ItemName.legs)]
+        if self.options.air_dash.value:
+            if "Armor Upgrades" in sigma_open and self.options.sigma_upgrade_count.value > 0:
+                itempool += [self.create_item(ItemName.legs)]
+            else:
+                itempool += [self.create_item(ItemName.legs, ItemClassification.useful)]
 
         # Add heart tanks into the pool
         if "Heart Tanks" in sigma_open and self.options.sigma_heart_tank_count.value > 0:
@@ -226,6 +234,7 @@ class MMXWorld(World):
     def fill_slot_data(self):
         slot_data = {}
         # Write options to slot_data
+        slot_data["energy_link"] = self.options.energy_link.value
         slot_data["boss_weakness_rando"] = self.options.boss_weakness_rando.value
         slot_data["boss_weakness_strictness"] = self.options.boss_weakness_strictness.value
         slot_data["pickupsanity"] = self.options.pickupsanity.value
@@ -266,15 +275,12 @@ class MMXWorld(World):
 
 
     def generate_early(self):
-        if self.options.early_legs:
+        if ItemName.legs not in self.options.start_inventory_from_pool and self.options.early_legs:
             self.multiworld.early_items[self.player][ItemName.legs] = 1
             
         self.boss_weaknesses = {}
         self.boss_weakness_data = {}
         handle_weaknesses(self)
-    
-        early_stage = self.random.choice(list(item_groups["Access Codes"]))
-        self.multiworld.local_early_items[self.player][early_stage] = 1
 
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
