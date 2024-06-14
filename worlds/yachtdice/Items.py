@@ -114,5 +114,5 @@ item_groups = {
         "10 Points", 
         "1 Point", 
         "Bonus Point"
-    }
+    },
 }
