@@ -736,13 +736,13 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld to Atoll Upper":
             [["Hyperdash"]],
         "Overworld Belltower":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
         "Overworld Swamp Upper Entry":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
         "Overworld Swamp Lower Entry":
             [],
         "Overworld Special Shop Entry":
-            [["Hyperdash"], ["UR"]],
+            [["Hyperdash"], ["LS1"]],
         "Overworld Well Ladder":
             [],
         "Overworld Ruined Passage Door":
@@ -760,9 +760,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld after Envoy":
             [],
         "Overworld Quarry Entry":
-            [["NMG"]],
+            [["IG2"], ["LS1"]],
         "Overworld Tunnel Turret":
-            [["NMG"], ["Hyperdash"]],
+            [["IG1"], ["Hyperdash"]],
         "Overworld Temple Door":
             [["NMG"], ["Forest Belltower Upper", "Overworld Belltower"]],
         "Overworld Southeast Cross Door":

@@ -1060,6 +1060,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     ladder_regions[ladder_region].connect(
                         connecting_region=regions[dest_region],
                         name=ladder_region + " (LS) " + dest_region)
+            # well rail, need height off portal pad for one side, and a tiny extra from stairs on the other
+            ls_connect("LS Elev 3", "Overworld Redux, Sewer_west_aqueduct")
+            ls_connect("LS Elev 3", "Overworld Redux, Furnace_gyro_upper_north")
 
         # connect ls elevation regions to portals where you need to get behind the map to enter it
         if options.ladder_storage >= LadderStorage.option_hard:

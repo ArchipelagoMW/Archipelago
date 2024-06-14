@@ -133,6 +133,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     player_name = world.multiworld.get_player_name(world.player)
     portal_map = portal_mapping.copy()
     logic_rules = world.options.logic_rules.value
+    ice_grappling = world.options.ice_grappling.value
+    ladder_storage = world.options.ladder_storage.value
     fixed_shop = world.options.fixed_shop
     laurels_location = world.options.laurels_location
     traversal_reqs = deepcopy(traversal_requirements)
@@ -175,7 +177,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         elif dead_end_status == DeadEnd.all_cats:
             dead_ends.append(portal)
         elif dead_end_status == DeadEnd.restricted:
-            if logic_rules:
+            if ice_grappling:
                 two_plus.append(portal)
             else:
                 dead_ends.append(portal)
