@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, TYPE_CHECKING
+from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd
@@ -132,7 +132,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     two_plus: List[Portal] = []
     player_name = world.multiworld.get_player_name(world.player)
     portal_map = portal_mapping.copy()
-    logic_rules = world.options.logic_rules.value
+    laurels_zips = world.options.laurels_zips.value
     ice_grappling = world.options.ice_grappling.value
     ladder_storage = world.options.ladder_storage.value
     fixed_shop = world.options.fixed_shop
@@ -144,9 +144,13 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # if it's not one of the EntranceRando options, it's a custom seed
     if world.options.entrance_rando.value not in EntranceRando.options.values():
         seed_group = world.seed_groups[world.options.entrance_rando.value]
-        logic_rules = seed_group["logic_rules"]
+        laurels_zips = seed_group["laurels_zips"]
+        ice_grappling = seed_group["ice_grappling"]
+        ladder_storage = seed_group["ladder_storage"]
         fixed_shop = seed_group["fixed_shop"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
+
+    logic_tricks: Tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
 
     # marking that you don't immediately have laurels
     if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
@@ -198,7 +202,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # make better start region stuff when/if implementing random start
     start_region = "Overworld"
     connected_regions.add(start_region)
-    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
+    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
     if world.options.entrance_rando.value in EntranceRando.options.values():
         plando_connections = world.options.plando_connections.value
@@ -230,9 +234,11 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     for region_name, region_info in tunic_er_regions.items():
         if not region_info.dead_end:
             non_dead_end_regions.add(region_name)
-        elif region_info.dead_end == 2 and logic_rules:
+        # if ice grappling to places is in logic, both places stop being dead ends
+        elif region_info.dead_end == DeadEnd.restricted and ice_grappling:
             non_dead_end_regions.add(region_name)
-        elif region_info.dead_end == 3:
+        # secret gathering place and zig skip get weird, special handling
+        elif region_info.dead_end == DeadEnd.special:
             if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
                     or (region_name == "Zig Skip Exit" and fixed_shop):
                 non_dead_end_regions.add(region_name)
@@ -333,7 +339,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             portal_pairs[portal1] = portal2
 
         # if we have plando connections, our connected regions may change somewhat
-        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
     if fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
@@ -395,7 +401,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         if waterfall_plando:
                             cr = connected_regions.copy()
                             cr.add(portal.region)
-                            if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_rules):
+                            if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_tricks):
                                 continue
                         elif portal.region != "Secret Gathering Place":
                             continue
@@ -407,7 +413,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if check_success == 2:
-            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
+            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
             if "Secret Gathering Place" in connected_regions:
                 has_laurels = True
             portal_pairs[portal1] = portal2
@@ -468,7 +474,8 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
-                             has_laurels: bool, logic: int) -> Set[str]:
+                             has_laurels: bool, logic: Tuple[bool, int, int]) -> Set[str]:
+    zips, ice_grapples, ls = logic
     # starting count, so we can run it again if this changes
     region_count = len(connected_regions)
     for origin, destinations in traversal_reqs.items():
@@ -487,11 +494,15 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
                     if req == "Hyperdash":
                         if not has_laurels:
                             break
-                    elif req == "NMG":
-                        if not logic:
+                    elif req == "Zip":
+                        if not zips:
                             break
-                    elif req == "UR":
-                        if logic < 2:
+                    # if req is higher than logic option, then it breaks since it's not a valid connection
+                    elif req.startswith("IG"):
+                        if int(req[-1]) > ice_grapples:
+                            break
+                    elif req.startswith("LS"):
+                        if int(req[-1]) > ls:
                             break
                     elif req not in connected_regions:
                         break

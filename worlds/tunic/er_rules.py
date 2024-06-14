@@ -1104,7 +1104,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
     multiworld = world.multiworld
-    options = world.options
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 

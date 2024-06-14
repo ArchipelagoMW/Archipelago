@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup)
+                     PerGameCommonOptions, OptionGroup, Removed)
 from .er_data import portal_mapping
 
 
@@ -37,22 +37,6 @@ class AbilityShuffling(Toggle):
     """
     internal_name = "ability_shuffling"
     display_name = "Shuffle Abilities"
-
-
-class LogicRules(Choice):
-    """
-    Deprecated, and will be removed in a later version.
-    If you have this set to NMG, it will set Laurels Zips on and Ice Grappling to medium.
-    If you have this set to Unrestricted, it will set Laurels Zips on, Ice Grappling to hard, and Ladder Storage to medium.
-    """
-    internal_name = "logic_rules"
-    display_name = "Logic Rules"
-    option_restricted = 0
-    option_no_major_glitches = 1
-    alias_nmg = 1
-    option_unrestricted = 2
-    alias_ur = 2
-    default = 0
 
 
 class Lanternless(Toggle):
@@ -189,8 +173,9 @@ class IceGrappling(Choice):
     Choose whether grappling frozen enemies is in logic.
     Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
     Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
-    Hard includes luring or grappling enemies to get to where you want to go. Hard difficulty will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks.
-    Note: You will still be expected to ice grapple to the slime in East Forest.
+    Hard includes luring or grappling enemies to get to where you want to go.
+    The Medium and Hard options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks.
+    Note: You will still be expected to ice grapple to the slime in East Forest even with this option off.
     """
     internal_name = "ice_grappling"
     display_name = "Ice Grapple Logic"
@@ -241,7 +226,6 @@ class TunicOptions(PerGameCommonOptions):
     shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
     fixed_shop: FixedShop
-    logic_rules: LogicRules
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
@@ -254,11 +238,12 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+
+    logic_rules: Removed
       
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
-        LogicRules,
         Lanternless,
         Maskless,
         LaurelsZips,
@@ -283,6 +268,7 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
         "ability_shuffling": True,
         "entrance_rando": True,
         "fool_traps": "onslaught",
+        "laurels_zips": True,
         "ice_grappling": "hard",
         "ladder_storage": "hard",
         "ladder_storage_without_items": True,

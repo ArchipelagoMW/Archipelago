@@ -8,7 +8,8 @@ from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
-from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections
+from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
+                      LaurelsLocation)
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -40,10 +41,12 @@ class TunicLocation(Location):
 
 
 class SeedGroup(TypedDict):
-    logic_rules: int  # logic rules value
+    laurels_zips: bool  # laurels_zips value
+    ice_grappling: int  # ice_grappling value
+    ladder_storage: int  # ls value
     laurels_at_10_fairies: bool  # laurels location value
     fixed_shop: bool  # fixed shop value
-    plando: TunicPlandoConnections  # consolidated of plando connections for the seed group
+    plando: TunicPlandoConnections  # consolidated plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -112,19 +115,28 @@ class TunicWorld(World):
             group = tunic.options.entrance_rando.value
             # if this is the first world in the group, set the rules equal to its rules
             if group not in cls.seed_groups:
-                cls.seed_groups[group] = SeedGroup(logic_rules=tunic.options.logic_rules.value,
-                                                   laurels_at_10_fairies=tunic.options.laurels_location == 3,
-                                                   fixed_shop=bool(tunic.options.fixed_shop),
-                                                   plando=multiworld.plando_connections[tunic.player])
+                cls.seed_groups[group] = \
+                    SeedGroup(laurels_zips=bool(tunic.options.laurels_zips),
+                              ice_grappling=tunic.options.ice_grappling.value,
+                              ladder_storage=tunic.options.ladder_storage.value,
+                              laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
+                              fixed_shop=bool(tunic.options.fixed_shop),
+                              plando=multiworld.plando_connections[tunic.player])
                 continue
-                
+
+            # off is more restrictive
+            if not tunic.options.laurels_zips:
+                cls.seed_groups[group]["laurels_zips"] = False
             # lower value is more restrictive
-            if tunic.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
-                cls.seed_groups[group]["logic_rules"] = tunic.options.logic_rules.value
+            if tunic.options.ice_grappling < cls.seed_groups[group]["ice_grappling"]:
+                cls.seed_groups[group]["ice_grappling"] = tunic.options.ice_grappling.value
+            # lower value is more restrictive
+            if tunic.options.ladder_storage.value < cls.seed_groups[group]["ladder_storage"]:
+                cls.seed_groups[group]["ladder_storage"] = tunic.options.ladder_storage.value
             # laurels at 10 fairies changes logic for secret gathering place placement
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
-            # fewer shops, one at windmill
+            # more restrictive, overrides the option for others in the same group, which is better than failing imo
             if tunic.options.fixed_shop:
                 cls.seed_groups[group]["fixed_shop"] = True
 

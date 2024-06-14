@@ -65,7 +65,7 @@ def laurels_zip(state: CollectionState, world: "TunicWorld") -> bool:
 
 
 # todo: find and put proper typing on ice_grapple
-def has_ice_grapple_logic(long_range: bool, difficulty, state: CollectionState, world: "TunicWorld") -> bool:
+def has_ice_grapple_logic(long_range: bool, difficulty: IceGrappling, state: CollectionState, world: "TunicWorld") -> bool:
     if world.options.ice_grappling < difficulty:
         return False
     if not long_range:
@@ -149,7 +149,6 @@ def set_region_rules(world: "TunicWorld") -> None:
 def set_location_rules(world: "TunicWorld") -> None:
     multiworld = world.multiworld
     player = world.player
-    options = world.options
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 
@@ -160,11 +159,13 @@ def set_location_rules(world: "TunicWorld") -> None:
              lambda state: has_ability(prayer, state, world)
              or state.has(laurels, player)
              or can_ladder_storage(state, world)
-             or (has_ice_grapple_logic(True, IceGrappling.option_easy, state, world) and has_lantern(state, world)))
+             or (has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+                 and has_lantern(state, world)))
     set_rule(multiworld.get_location("Fortress Courtyard - Page Near Cave", player),
              lambda state: has_ability(prayer, state, world) or state.has(laurels, player)
              or can_ladder_storage(state, world)
-             or (has_ice_grapple_logic(True, IceGrappling.option_easy, state, world) and has_lantern(state, world)))
+             or (has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+                 and has_lantern(state, world)))
     set_rule(multiworld.get_location("East Forest - Dancing Fox Spirit Holy Cross", player),
              lambda state: has_ability(holy_cross, state, world))
     set_rule(multiworld.get_location("Forest Grave Path - Holy Cross Code by Grave", player),
@@ -317,7 +318,7 @@ def set_location_rules(world: "TunicWorld") -> None:
 
     # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
+             lambda state: has_sword(state, player))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
