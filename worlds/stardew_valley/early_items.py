@@ -31,7 +31,8 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
         early_forced.append("Progressive Backpack")
 
     if options.tool_progression & stardew_options.ToolProgression.option_progressive:
-        early_forced.append("Progressive Fishing Rod")
+        if options.fishsanity != stardew_options.Fishsanity.option_none:
+            early_candidates.append("Progressive Fishing Rod")
         early_forced.append("Progressive Pickaxe")
 
     if options.skill_progression == stardew_options.SkillProgression.option_progressive:
@@ -45,6 +46,9 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     if options.cooksanity != stardew_options.Cooksanity.option_none or options.chefsanity & stardew_options.Chefsanity.option_queen_of_sauce:
         early_candidates.append(Channel.queen_of_sauce)
+
+    if options.craftsanity != stardew_options.Craftsanity.option_none:
+        early_candidates.append("Furnace Recipe")
 
     if options.monstersanity == stardew_options.Monstersanity.option_none:
         early_candidates.append(APWeapon.weapon)
