@@ -1,7 +1,7 @@
-# for making rules for ladder storage in overworld
 from typing import Dict, List, Set, NamedTuple, Optional
 
 
+# ladders in overworld, since it is the most complex area for ladder storage
 class OWLadderInfo(NamedTuple):
     ladders: Set[str]  # ladders where the top or bottom is at the same elevation
     portals: List[str]  # portals at the same elevation, only those without doors
