@@ -100,10 +100,10 @@ reStructuredText and enable rich text rendering by setting `World.rich_text_opti
 [reStructuredText]: https://docutils.sourceforge.io/rst.html
 
 ```python
-from worlds.AutoWorld import World
+from worlds.AutoWorld import WebWorld
 
 
-class ExampleWorldWeb(World):
+class ExampleWebWorld(WebWorld):
     # Render all this world's options as rich text.
     rich_text_options_doc = True
 ```
