@@ -268,7 +268,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld Well Ladder"],
         rule=lambda state: has_ladder("Ladders in Well", state, player, options))
     regions["Overworld Well Ladder"].connect(
-        connecting_region=regions["Overworld"])
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
 
     # nmg: can ice grapple through the door
     regions["Overworld"].connect(
@@ -706,17 +707,18 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Fortress Exterior from Overworld"])
 
     regions["Beneath the Vault Ladder Exit"].connect(
-        connecting_region=regions["Beneath the Vault Front"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
-    regions["Beneath the Vault Front"].connect(
+        connecting_region=regions["Beneath the Vault Main"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options)
+        and has_lantern(state, player, options))
+    regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
-    regions["Beneath the Vault Front"].connect(
-        connecting_region=regions["Beneath the Vault Back"],
-        rule=lambda state: has_lantern(state, player, options))
+    regions["Beneath the Vault Main"].connect(
+        connecting_region=regions["Beneath the Vault Back"])
     regions["Beneath the Vault Back"].connect(
-        connecting_region=regions["Beneath the Vault Front"])
+        connecting_region=regions["Beneath the Vault Main"],
+        rule=lambda state: has_lantern(state, player, options))
 
     regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
@@ -869,6 +871,9 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
+
+    regions["Zig Skip Exit"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
 
     regions["Rooted Ziggurat Portal"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
@@ -1453,14 +1458,10 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     # Beneath the Vault
     set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
              lambda state: state.has_group("Melee Weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
-    set_rule(multiworld.get_location("Beneath the Fortress - Obscured Behind Waterfall", player),
-             lambda state: has_lantern(state, player, options))
 
     # Quarry
     set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Quarry - [West] Upper Area Bombable Wall", player),
-             lambda state: has_mask(state, player, options))
 
     # Ziggurat
     set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
