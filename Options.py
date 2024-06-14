@@ -126,7 +126,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
-    rich_text_doc: Option[bool] = None
+    rich_text_doc: typing.Optional[bool] = None
     """Whether the WebHost should render the Option's docstring as rich text.
 
     If this is True, the Option's docstring is interpreted as reStructuredText_,
