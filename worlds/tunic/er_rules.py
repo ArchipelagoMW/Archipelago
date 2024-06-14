@@ -79,13 +79,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Belltower"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player) 
+        or (has_ice_grapple_logic(False, state, world)
+            and options.ice_grappling >= IceGrappling.option_medium))
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld"])
 
+    # ice grapple rudeling across rubble, drop bridge, ice grapple rudeling down
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld to West Garden Upper"],
-        rule=lambda state: has_ladder("Ladders to West Bell", state, world))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, world) 
+        or (has_ice_grapple_logic(False, state, world)
+            and options.ice_grappling >= IceGrappling.option_hard)))
     regions["Overworld to West Garden Upper"].connect(
         connecting_region=regions["Overworld Belltower"],
         rule=lambda state: has_ladder("Ladders to West Bell", state, world))
@@ -94,19 +99,19 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Belltower at Bell"],
         rule=lambda state: has_ladder("Ladders to West Bell", state, world))
 
-    # long dong, do not make a reverse connection here or to belltower
-    regions["Overworld above Patrol Cave"].connect(
-        connecting_region=regions["Overworld Belltower at Bell"],
-        rule=lambda state: options.logic_rules and state.has(fire_wand, player))
+    # long dong, do not make a reverse connection here or to belltower, maybe readd later
+    # regions["Overworld above Patrol Cave"].connect(
+    #     connecting_region=regions["Overworld Belltower at Bell"],
+    #     rule=lambda state: options.logic_rules and state.has(fire_wand, player))
 
-    # nmg: can laurels through the ruined passage door
+    # can laurels through the ruined passage door at either corner
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Ruined Passage Door"],
         rule=lambda state: state.has(key, player, 2)
-        or (state.has(laurels, player) and options.logic_rules))
+        or laurels_zip(state, world))
     regions["Overworld Ruined Passage Door"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["After Ruined Passage"],
@@ -221,13 +226,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
         rule=lambda state: state.has_any({laurels, grapple}, player) 
-        or state.has("Sword Upgrade", player, 4)
-        or options.logic_rules)
+        or state.has("Sword Upgrade", player, 4))
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({laurels, grapple}, player) 
-        or state.has("Sword Upgrade", player, 4)
-        or options.logic_rules)
+        or state.has("Sword Upgrade", player, 4))
 
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
@@ -292,7 +295,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Fountain Cross Door"],
         rule=lambda state: has_ability(holy_cross, state, world)
-        or (has_ice_grapple_logic(False, state, world) and options.ice_grappling == IceGrappling.option_hard))
+        or (has_ice_grapple_logic(False, state, world) 
+            and options.ice_grappling == IceGrappling.option_hard))
     regions["Overworld Fountain Cross Door"].connect(
         connecting_region=regions["Overworld"])
 
@@ -338,10 +342,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # Overworld side areas
     regions["Old House Front"].connect(
         connecting_region=regions["Old House Back"])
-    # nmg: laurels through the gate
+    # laurels through the gate, use left wall to space yourself
     regions["Old House Back"].connect(
         connecting_region=regions["Old House Front"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Sealed Temple"].connect(
         connecting_region=regions["Sealed Temple Rafters"])
@@ -401,7 +405,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["East Forest"].connect(
         connecting_region=regions["Lower Forest"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world)
-        or (state.has_all({grapple, fire_wand, ice_dagger}, player) and has_ability(icebolt, state, world)))
+        or (has_ice_grapple_logic(True, state, world) 
+            and options.ice_grappling >= IceGrappling.option_easy))
     regions["Lower Forest"].connect(
         connecting_region=regions["East Forest"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
@@ -467,10 +472,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Well Boss"].connect(
         connecting_region=regions["Dark Tomb Checkpoint"])
-    # nmg: can laurels through the gate
+    # can laurels through the gate, no setup needed
     regions["Dark Tomb Checkpoint"].connect(
         connecting_region=regions["Well Boss"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Dark Tomb Entry Point"].connect(
         connecting_region=regions["Dark Tomb Upper"],
@@ -834,15 +839,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: has_ice_grapple_logic(True, state, world)
-        and options.ice_grappling >= IceGrappling.option_hard
-        and (has_ability(prayer, state, world) or options.entrance_rando))
+        and options.ice_grappling >= IceGrappling.option_hard)
 
     regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
-    # nmg: can laurels through the gate
+    # laurels through the gate, no setup needed
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Front"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Hero's Grave Region"],
@@ -1256,13 +1260,12 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     # Bosses
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
              lambda state: has_sword(state, player))
-    # nmg - kill Librarian with a lure, or gun I guess
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: (has_sword(state, player) or options.logic_rules)
+             lambda state: (has_sword(state, player))
              and has_ladder("Ladders in Library", state, world))
     # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
+             lambda state: has_sword(state, player))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
@@ -1271,7 +1274,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest", player),
              lambda state: state.has(laurels, player))
-    # these two swamp checks really want you to kill the big skeleton first
+    # really hard to do 4 skulls with a big skeleton chasing you around
     set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
              lambda state: has_sword(state, player))
 
