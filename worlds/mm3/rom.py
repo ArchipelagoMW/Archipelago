@@ -112,9 +112,11 @@ enemy_addresses: Dict[str, int] = {
 }
 
 # addresses printed when assembling basepatch
-#consumables_ptr: int = 0x3F2FE
-wily_4_ptr: int = 0x3F578
-#energylink_ptr: int = 0x3F46B
+# consumables_ptr: int = 0x3F2FE
+wily_4_ptr: int = 0x43578
+
+
+# energylink_ptr: int = 0x3F46B
 
 
 class RomData:
@@ -165,7 +167,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("mm3_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm3_basepatch.bsdiff4")))
     # text writing
 
-    base_address = 0x6C40
+    base_address = 0x3C000
     color_address = 0x31BC7
     for i, offset, location in zip([0, 8, 1, 2, 3, 4, 5, 6, 7, 9], [
         0x0,
@@ -180,19 +182,19 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
         0x258,
         0x2A8
     ], [
-        names.get_needle_cannon,
-        names.get_rush_jet,
-        names.get_magnet_missile,
-        names.get_gemini_laser,
-        names.get_hard_knuckle,
-        names.get_top_spin,
-        names.get_search_snake,
-        names.get_spark_shock,
-        names.get_shadow_blade,
-        names.get_rush_marine,
-    ]):
-         item = world.multiworld.get_location(location, world.player).item
-         if item:
+                                       names.get_needle_cannon,
+                                       names.get_rush_jet,
+                                       names.get_magnet_missile,
+                                       names.get_gemini_laser,
+                                       names.get_hard_knuckle,
+                                       names.get_top_spin,
+                                       names.get_search_snake,
+                                       names.get_spark_shock,
+                                       names.get_shadow_blade,
+                                       names.get_rush_marine,
+                                   ]):
+        item = world.multiworld.get_location(location, world.player).item
+        if item:
             if len(item.name) <= 13:
                 # we want to just place it in the center
                 first_str = ""
@@ -213,14 +215,14 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
             player_str = world.multiworld.get_player_name(item.player)
             if len(player_str) > 13:
                 player_str = player_str[:13]
-            y_coords = 0xA1
+            y_coords = 0xA2
             row = 0x21
             if location in [names.get_rush_marine, names.get_rush_jet]:
-                y_coords = 0x41
+                y_coords = 0x42
                 row = 0x22
             patch.write_bytes(base_address + offset, MM3TextEntry(first_str, y_coords, row).resolve())
-            patch.write_bytes(base_address + 16 + offset, MM3TextEntry(second_str, y_coords+0x20, row).resolve())
-            patch.write_bytes(base_address + 32 + offset, MM3TextEntry(third_str, y_coords+0x40, row).resolve())
+            patch.write_bytes(base_address + 16 + offset, MM3TextEntry(second_str, y_coords + 0x20, row).resolve())
+            patch.write_bytes(base_address + 32 + offset, MM3TextEntry(third_str, y_coords + 0x40, row).resolve())
             if y_coords + 0x60 > 0xFF:
                 row += 1
                 y_coords = 0x01
@@ -229,7 +231,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
                 patch.write_bytes(color_address + (i * 8) + 1, colors_high)
                 patch.write_bytes(color_address + (i * 8) + 5, colors_low)
             else:
-                patch.write_bytes(base_address + 48 + offset, MM3TextEntry(player_str, y_coords+0x60, row).resolve())
+                patch.write_bytes(base_address + 48 + offset, MM3TextEntry(player_str, y_coords + 0x60, row).resolve())
 
     write_palette_shuffle(world, patch)
 
@@ -241,7 +243,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
             if boss == "Kamegoro Maker":
                 enemy_weaknesses["Kamegoro"] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
                 enemy_weaknesses["Kamegoro Shell"] = {i: world.weapon_damage[i][bosses[boss]] for i in
-                                                        world.weapon_damage}
+                                                      world.weapon_damage}
             elif boss == "Gemini Man":
                 enemy_weaknesses[boss] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
                 enemy_weaknesses["Gemini Man (Clone)"] = {i: world.weapon_damage[i][bosses[boss]] for i in
@@ -297,7 +299,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.name = bytearray(f'MM3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
                            'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
-    patch.write_bytes(0x3F330, patch.name)
+    patch.write_bytes(0x3F330, patch.name)  # We changed this section, but this pointer is still valid!
     deathlink_byte = world.options.death_link.value | (world.options.energy_link.value << 1)
     patch.write_byte(0x3F346, deathlink_byte)
 
@@ -329,7 +331,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
-header = b"\x4E\x45\x53\x1A\x10\x10\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+header = b"\x4E\x45\x53\x1A\x11\x10\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
 
 def read_headerless_nes_rom(rom: bytes) -> bytes:
