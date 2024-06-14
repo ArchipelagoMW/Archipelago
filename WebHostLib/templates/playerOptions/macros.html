@@ -57,9 +57,9 @@
         <select id="{{ option_name }}-select" data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
             {% for key, val in option.special_range_names.items() %}
                 {% if option.default == val %}
-                    <option value="{{ val }}" selected>{{ key }} ({{ val }})</option>
+                    <option value="{{ val }}" selected>{{ key|replace("_", " ")|title }} ({{ val }})</option>
                 {% else %}
-                    <option value="{{ val }}">{{ key }} ({{ val }})</option>
+                    <option value="{{ val }}">{{ key|replace("_", " ")|title }} ({{ val }})</option>
                 {% endif %}
             {% endfor %}
             <option value="custom" hidden>Custom</option>
@@ -196,7 +196,7 @@
 {% macro OptionTitle(option_name, option) %}
     <label for="{{ option_name }}">
         {{ option.display_name|default(option_name) }}:
-        <span class="interactive" data-tooltip="{% filter dedent %}{{(option.__doc__ | default("Please document me!"))|escape }}{% endfilter %}">(?)</span>
+        <span class="interactive" data-tooltip="{{(option.__doc__ | default("Please document me!"))|replace('\n    ', '\n')|escape|trim}}">(?)</span>
     </label>
 {% endmacro %}
 
