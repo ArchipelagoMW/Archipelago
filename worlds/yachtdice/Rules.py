@@ -154,18 +154,18 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     def max_dist(dist1, mults):
         new_dist = {0: 1}
         for mult in mults:
-            c = new_dist.copy()
-            new_dist = {}
-            for val1, prob1 in c.items():
+            temp_dist = {}
+            for val1, prob1 in new_dist.items():
                 for val2, prob2 in dist1.items():
                     new_val = int(max(val1, val2 * mult))
                     new_prob = prob1 * prob2
 
                     # Update the probability for the new value
-                    if new_val in new_dist:
-                        new_dist[new_val] += new_prob
+                    if new_val in temp_dist:
+                        temp_dist[new_val] += new_prob
                     else:
-                        new_dist[new_val] = new_prob
+                        temp_dist[new_val] = new_prob
+            new_dist = temp_dist
 
         return new_dist
 
@@ -215,20 +215,22 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     return yachtdice_cache[tup]
 
 
-
-def dice_simulation(state, player, options):
+def dice_simulation_fill_pool(state, options):
     """
     Returns the feasible score that one can reach with the current state, options and difficulty.
     """
-    # if the player is called "state_is_a_list", we are filling the itempool and want to calculate anyways.
-    if player == "state_is_a_list":
-        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
-        return (
-            dice_simulation_strings(
-                categories, num_dice, num_rolls, fixed_mult, step_mult, options.game_difficulty.value
-            )
-            + expoints
+    categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, "state_is_a_list", options)
+    return (
+        dice_simulation_strings(
+            categories, num_dice, num_rolls, fixed_mult, step_mult, options.game_difficulty.value
         )
+        + expoints
+    )
+
+def dice_simulation_state_change(state, player, options):
+    """
+    Returns the feasible score that one can reach with the current state, options and difficulty.
+    """
 
     if state.prog_items[player]["state_is_fresh"] == 0:
         state.prog_items[player]["state_is_fresh"] = 1
@@ -252,7 +254,7 @@ def set_yacht_rules(world: MultiWorld, player: int, options):
     for location in world.get_locations(player):
         set_rule(
             location,
-            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation(state, player, options)
+            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation_state_change(state, player, options)
             >= curscore,
         )
 

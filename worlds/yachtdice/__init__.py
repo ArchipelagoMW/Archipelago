@@ -7,7 +7,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import YachtDiceItem, item_groups, item_table
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import YachtDiceOptions, yd_option_groups
-from .Rules import dice_simulation, set_yacht_completion_rules, set_yacht_rules
+from .Rules import dice_simulation_fill_pool, dice_simulation_state_change, set_yacht_completion_rules, set_yacht_rules
 
 
 class YachtDiceWeb(WebWorld):
@@ -260,14 +260,14 @@ class YachtDiceWorld(World):
         for _ in range(17):
             self.itempool.append(get_item_to_add())
 
-        score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
+        score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.options)
 
         # if we overshoot, remove items until you get below 1000, then return the last removed item
         if score_in_logic > 1000:
             removed_item = ""
             while score_in_logic > 1000:
                 removed_item = self.itempool.pop()
-                score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
+                score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.options)
             self.itempool.append(removed_item)
         else:
             # Keep adding items until a score of 1000 is in logic
@@ -281,7 +281,7 @@ class YachtDiceWorld(World):
                 elif item_to_add == "100 Points":
                     score_in_logic += 100
                 else:
-                    score_in_logic = dice_simulation(self.itempool + self.precollected, "state_is_a_list", self.options)
+                    score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.options)
 
         # count the number of locations in the game.
         already_items = len(self.itempool) + 1  # +1 because of Victory item
