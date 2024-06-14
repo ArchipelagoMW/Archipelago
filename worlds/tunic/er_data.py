@@ -783,8 +783,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "After Ruined Passage":
             [["IG1"], ["LS1"]],
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Overworld at Patrol Cave":
             [],
         "Overworld above Patrol Cave":
@@ -799,8 +799,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Overworld Belltower": {
         "Overworld Belltower at Bell":
             [],
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Overworld to West Garden Upper":
             [],
     },
@@ -808,17 +808,17 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Belltower":
             [],
     },
-    "Overworld Swamp Upper Entry": {
-        "Overworld":
-            [],
-    },
-    "Overworld Swamp Lower Entry": {
-        "Overworld":
-            [],
-    },
+    # "Overworld Swamp Upper Entry": {
+    #     "Overworld":
+    #         [],
+    # },
+    # "Overworld Swamp Lower Entry": {
+    #     "Overworld":
+    #         [],
+    # },
     "Overworld Beach": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Overworld West Garden Laurels Entry":
             [["Hyperdash"], ["LS1"]],
         "Overworld to Atoll Upper":
@@ -831,20 +831,20 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"]],
     },
     "Overworld to Atoll Upper": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Overworld Beach":
             [],
     },
     "Overworld Tunnel Turret": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Overworld Beach":
             [],
     },
     "Overworld Well Ladder": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
     },
     "Overworld at Patrol Cave": {
         "East Overworld":
@@ -853,8 +853,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
     "Overworld above Patrol Cave": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "East Overworld":
             [],
         "Upper Overworld":
@@ -876,51 +876,49 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
     "Overworld above Quarry Entrance": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Upper Overworld":
             [],
     },
     "Overworld Quarry Entry": {
         "Overworld after Envoy":
             [],
-        "Overworld":
-            [["IG1"]],
+    #     "Overworld":
+    #         [["IG1"]],
     },
     "Overworld after Envoy": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Overworld Quarry Entry":
             [],
     },
     "After Ruined Passage": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "Above Ruined Passage":
             [],
-        "East Overworld":
-            [["IG1"]],
     },
     "Above Ruined Passage": {
-        "Overworld":
-            [],
+    #     "Overworld":
+    #         [],
         "After Ruined Passage":
             [],
         "East Overworld":
             [],
     },
-    "Overworld Ruined Passage Door": {
-        "Overworld":
-            [["Hyperdash", "Zip"]],
-    },
-    "Overworld Town Portal": {
-        "Overworld":
-            [],
-    },
-    "Overworld Spawn Portal": {
-        "Overworld":
-            [],
-    },
+    # "Overworld Ruined Passage Door": {
+    #     "Overworld":
+    #         [["Hyperdash", "Zip"]],
+    # },
+    # "Overworld Town Portal": {
+    #     "Overworld":
+    #         [],
+    # },
+    # "Overworld Spawn Portal": {
+    #     "Overworld":
+    #         [],
+    # },
     "Old House Front": {
         "Old House Back":
             [],
