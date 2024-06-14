@@ -735,6 +735,12 @@ class NamedRange(Range):
         elif value > self.range_end and value not in self.special_range_names.values():
             raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
                             f"and is also not one of the supported named special values: {self.special_range_names}")
+        
+        # See docstring
+        for key in self.special_range_names:
+            if key != key.lower():
+                raise Exception(f"{self.__class__.__name__} has an invalid special_range_names key: {key}. "
+                                f"NamedRange keys must use only lowercase letters, and ideally should be snake_case.")
         self.value = value
 
     @classmethod
