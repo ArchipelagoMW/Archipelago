@@ -1,22 +1,21 @@
 import math
+from typing import Dict
 
 from BaseClasses import CollectionState, Entrance, Item, Region, Tutorial
-
-from typing import Dict
 
 from worlds.AutoWorld import WebWorld, World
 
 from .Items import YachtDiceItem, item_groups, item_table
 from .Locations import YachtDiceLocation, all_locations, ini_locations
 from .Options import (
-    YachtDiceOptions,
-    yd_option_groups,
+    AddExtraPoints,
+    AddStoryChapters,
     GameDifficulty,
     MinimalNumberOfDiceAndRolls,
-    PointsSize,
     MinimizeExtraItems,
-    AddExtraPoints,
-    AddStoryChapters
+    PointsSize,
+    YachtDiceOptions,
+    yd_option_groups,
 )
 from .Rules import dice_simulation_fill_pool, set_yacht_completion_rules, set_yacht_rules
 
@@ -311,7 +310,11 @@ class YachtDiceWorld(World):
             while score_in_logic > 1000:
                 removed_item = self.itempool.pop()
                 score_in_logic = dice_simulation_fill_pool(
-                    self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty, self.player
+                    self.itempool + self.precollected,
+                    self.frags_per_dice,
+                    self.frags_per_roll,
+                    self.difficulty,
+                    self.player,
                 )
             self.itempool.append(removed_item)
         else:
@@ -327,7 +330,11 @@ class YachtDiceWorld(World):
                     score_in_logic += 100
                 else:
                     score_in_logic = dice_simulation_fill_pool(
-                        self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty, self.player
+                        self.itempool + self.precollected,
+                        self.frags_per_dice,
+                        self.frags_per_roll,
+                        self.difficulty,
+                        self.player,
                     )
 
         # count the number of locations in the game.

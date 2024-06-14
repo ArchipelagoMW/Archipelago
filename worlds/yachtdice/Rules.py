@@ -8,7 +8,6 @@ from worlds.generic.Rules import set_rule
 
 from .YachtWeights import yacht_weights
 
-
 # This module adds logic to the apworld.
 # In short, we ran a simulation for every possible combination of dice and rolls you can have, per category.
 # This simulation has a good strategy for locking dice.
@@ -233,7 +232,9 @@ def dice_simulation_fill_pool(state, frags_per_dice, frags_per_roll, difficulty,
     categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(
         state, "state_is_a_list", frags_per_dice, frags_per_roll
     )
-    return dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty, player) + expoints
+    return (
+        dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty, player) + expoints
+    )
 
 
 def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, difficulty):
@@ -248,7 +249,8 @@ def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, 
             state, player, frags_per_dice, frags_per_roll
         )
         state.prog_items[player]["maximum_achievable_score"] = (
-            dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty, player) + expoints
+            dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty, player)
+            + expoints
         )
 
     return state.prog_items[player]["maximum_achievable_score"]

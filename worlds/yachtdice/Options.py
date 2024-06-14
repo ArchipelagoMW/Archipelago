@@ -315,7 +315,7 @@ yd_option_groups = [
             ChanceOfDoubleCategory,
             ChanceOfPoints,
             PointsSize,
-        ]
+        ],
     ),
     OptionGroup(
         "Other items", 
@@ -324,6 +324,6 @@ yd_option_groups = [
             AddExtraPoints, 
             AddStoryChapters, 
             WhichStory
-        ]
+        ],
     )
 ]
