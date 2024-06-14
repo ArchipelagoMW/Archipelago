@@ -69,8 +69,6 @@ class Category:
         return mean_score * self.quantity
 
 
-
-
 class ListState:
     def __init__(self, state: List[str]):
         self.state = state
@@ -89,29 +87,29 @@ def extract_progression(state, player, frags_per_dice, frags_per_roll):
     if isinstance(state, list):
         state = ListState(state=state)
 
-    number_of_dice = (
-        state.count("Dice", player)
-        + state.count("Dice Fragment", player) // frags_per_dice
-    )
-    number_of_rerolls = (
-        state.count("Roll", player)
-        + state.count("Roll Fragment", player) // frags_per_roll
-    )
+    number_of_dice = state.count("Dice", player) + state.count("Dice Fragment", player) // frags_per_dice
+    number_of_rerolls = state.count("Roll", player) + state.count("Roll Fragment", player) // frags_per_roll
     number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
     number_of_step_mults = state.count("Step Score Multiplier", player)
-    
+
     categories = [
         Category(category_value, state.count(category_name, player))
         for category_name, category_value in category_mappings.items()
         if state.count(category_name, player)  # want all categories that have count >= 1
-    ]        
-            
+    ]
+
     extra_points_in_logic = state.count("1 Point", player)
     extra_points_in_logic += state.count("10 Points", player) * 10
     extra_points_in_logic += state.count("100 Points", player) * 100
 
-    return categories, number_of_dice, number_of_rerolls, number_of_fixed_mults * 0.1, number_of_step_mults * 0.01, extra_points_in_logic,
-    
+    return (
+        categories,
+        number_of_dice,
+        number_of_rerolls,
+        number_of_fixed_mults * 0.1,
+        number_of_step_mults * 0.01,
+        extra_points_in_logic,
+    )
 
 
 # We will store the results of this function as it is called often for the same parameters.
@@ -211,7 +209,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     # save result into the cache, then return it
     outcome = sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return)
     yachtdice_cache[tup] = max(5, math.floor(outcome))  # at least 5.
-    
+
     return yachtdice_cache[tup]
 
 
@@ -220,13 +218,11 @@ def dice_simulation_fill_pool(state, frags_per_dice, frags_per_roll, difficulty)
     Returns the feasible score that one can reach with the current state, options and difficulty.
     This function is called with state being a list, during filling of item pool.
     """
-    categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, "state_is_a_list", frags_per_dice, frags_per_roll)
-    return (
-        dice_simulation_strings(
-            categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty
-        )
-        + expoints
+    categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(
+        state, "state_is_a_list", frags_per_dice, frags_per_roll
     )
+    return dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty) + expoints
+
 
 def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, difficulty):
     """
@@ -236,16 +232,14 @@ def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, 
 
     if state.prog_items[player]["state_is_fresh"] == 0:
         state.prog_items[player]["state_is_fresh"] = 1
-        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, frags_per_dice, frags_per_roll)
+        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(
+            state, player, frags_per_dice, frags_per_roll
+        )
         state.prog_items[player]["maximum_achievable_score"] = (
-            dice_simulation_strings(
-                categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty
-            )
-            + expoints
+            dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty) + expoints
         )
 
     return state.prog_items[player]["maximum_achievable_score"]
-
 
 
 def set_yacht_rules(world: MultiWorld, player: int, frags_per_dice, frags_per_roll, difficulty):
@@ -256,7 +250,9 @@ def set_yacht_rules(world: MultiWorld, player: int, frags_per_dice, frags_per_ro
     for location in world.get_locations(player):
         set_rule(
             location,
-            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, difficulty)
+            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation_state_change(
+                state, player, frags_per_dice, frags_per_roll, difficulty
+            )
             >= curscore,
         )
 
@@ -266,4 +262,3 @@ def set_yacht_completion_rules(world: MultiWorld, player: int):
     Sets rules on completion condition
     """
     world.completion_condition[player] = lambda state: state.has("Victory", player)
-    

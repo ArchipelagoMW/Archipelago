@@ -6,7 +6,18 @@ from worlds.AutoWorld import WebWorld, World
 
 from .Items import YachtDiceItem, item_groups, item_table
 from .Locations import YachtDiceLocation, all_locations, ini_locations
-from .Options import YachtDiceOptions, yd_option_groups, GameDifficulty,MinimalNumberOfDiceAndRolls,PointsSize,MinimizeExtraItems,AddExtraPoints,AddStoryChapters,WhichStory,AllowManual
+from .Options import (
+    YachtDiceOptions,
+    yd_option_groups,
+    GameDifficulty,
+    MinimalNumberOfDiceAndRolls,
+    PointsSize,
+    MinimizeExtraItems,
+    AddExtraPoints,
+    AddStoryChapters,
+    WhichStory,
+    AllowManual,
+)
 from .Rules import dice_simulation_fill_pool, set_yacht_completion_rules, set_yacht_rules
 
 
@@ -66,7 +77,7 @@ class YachtDiceWorld(World):
 
         # number of dice and rolls in the pull
         opt_dice_and_rolls = self.options.minimal_number_of_dice_and_rolls
-        
+
         if opt_dice_and_rolls == MinimalNumberOfDiceAndRolls.option_5_dice_and_3_rolls:
             num_of_dice = 5
             num_of_rolls = 3
@@ -84,12 +95,11 @@ class YachtDiceWorld(World):
             num_of_rolls = 2
         else:
             raise Exception(f"[Yacht Dice] Unknown MinimalNumberOfDiceAndRolls options {opt_dice_and_rolls}")
-            
 
         # amount of dice and roll fragments needed to get a dice or roll
         self.frags_per_dice = self.options.number_of_dice_fragments_per_dice.value
         self.frags_per_roll = self.options.number_of_roll_fragments_per_roll.value
-        
+
         # set difficulty
         diff_value = self.options.game_difficulty
         if diff_value == GameDifficulty.option_easy:
@@ -187,7 +197,7 @@ class YachtDiceWorld(World):
             "Fixed Score Multiplier": self.options.weight_of_fixed_score_multiplier.value,
             "Step Score Multiplier": self.options.weight_of_step_score_multiplier.value,
             "Double category": self.options.weight_of_double_category.value,
-            "Points":   self.options.weight_of_points.value,
+            "Points": self.options.weight_of_points.value,
         }
 
         # if the player wants extra rolls or dice, fill the pool with fragments until close to an extra roll/dice
@@ -235,7 +245,6 @@ class YachtDiceWorld(World):
             # Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
             which_item_to_add = self.random.choices(list(weights.keys()), weights=list(weights.values()))[0]
 
-            
             if which_item_to_add == "Dice":
                 weights["Dice"] /= 1 + self.frags_per_dice
                 return "Dice" if self.frags_per_dice == 1 else "Dice Fragment"
@@ -259,15 +268,15 @@ class YachtDiceWorld(World):
                 return self.random.choices(possible_categories, weights=cat_weights)[0]
             elif which_item_to_add == "Points":
                 score_dist = self.options.points_size
-                probs = { "1 Point": 1, "10 Points": 0, "100 Points": 0}
+                probs = {"1 Point": 1, "10 Points": 0, "100 Points": 0}
                 if score_dist == PointsSize.option_small:
-                    probs = { "1 Point": 0.9, "10 Points": 0.1, "100 Points": 0}
+                    probs = {"1 Point": 0.9, "10 Points": 0.1, "100 Points": 0}
                 elif score_dist == PointsSize.option_medium:
-                    probs = { "1 Point": 0, "10 Points": 1, "100 Points": 0}
+                    probs = {"1 Point": 0, "10 Points": 1, "100 Points": 0}
                 elif score_dist == PointsSize.option_large:
-                    probs = { "1 Point": 0, "10 Points": 0.3, "100 Points": 0.7}
+                    probs = {"1 Point": 0, "10 Points": 0.3, "100 Points": 0.7}
                 elif score_dist == PointsSize.option_mix:
-                    probs = { "1 Point": 0.3, "10 Points": 0.4, "100 Points": 0.3}
+                    probs = {"1 Point": 0.3, "10 Points": 0.4, "100 Points": 0.3}
                 else:
                     raise Exception(f"[Yacht Dice] Unknown PointsSize options {score_dist}")
                 choice = self.random.choices(list(probs.keys()), weights=list(probs.values()))[0]
@@ -292,14 +301,18 @@ class YachtDiceWorld(World):
         for _ in range(17):
             self.itempool.append(get_item_to_add(weights, extra_points_added, multipliers_added, items_added))
 
-        score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty)
+        score_in_logic = dice_simulation_fill_pool(
+            self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty
+        )
 
         # if we overshoot, remove items until you get below 1000, then return the last removed item
         if score_in_logic > 1000:
             removed_item = ""
             while score_in_logic > 1000:
                 removed_item = self.itempool.pop()
-                score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty)
+                score_in_logic = dice_simulation_fill_pool(
+                    self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty
+                )
             self.itempool.append(removed_item)
         else:
             # Keep adding items until a score of 1000 is in logic
@@ -313,7 +326,9 @@ class YachtDiceWorld(World):
                 elif item_to_add == "100 Points":
                     score_in_logic += 100
                 else:
-                    score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty)
+                    score_in_logic = dice_simulation_fill_pool(
+                        self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty
+                    )
 
         # count the number of locations in the game.
         already_items = len(self.itempool) + 1  # +1 because of Victory item
@@ -365,7 +380,7 @@ class YachtDiceWorld(World):
         # these items are filler and do not do anything.
 
         # probability of Good and Bad rng, based on difficulty for fun :)
-                   
+
         p = 1.1 - 0.25 * self.difficulty
         already_items = len(self.itempool) + 1
         self.itempool += self.random.choices(
@@ -393,9 +408,7 @@ class YachtDiceWorld(World):
 
     def create_regions(self):
         # call the ini_locations function, that generates locations based on the inputs.
-        location_table = ini_locations(
-            self.goal_score, self.max_score, self.number_of_locations, self.difficulty
-        )
+        location_table = ini_locations(self.goal_score, self.max_score, self.number_of_locations, self.difficulty)
 
         # simple menu-board construction
         menu = Region("Menu", self.player, self.multiworld)
