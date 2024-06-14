@@ -103,7 +103,7 @@ reStructuredText and enable rich text rendering by setting `World.rich_text_opti
 from worlds.AutoWorld import World
 
 
-class ExampleWorld(World):
+class ExampleWorldWeb(World):
     # Render all this world's options as rich text.
     rich_text_options_doc = True
 ```
