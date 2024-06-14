@@ -643,19 +643,23 @@ class Context:
         for hint_team, hint_slot in self.hints:
             if (hint_team, hint_slot) in already_updated:
                 continue
-            if (team is None or team == hint_team) and (slot is None or slot == hint_slot):
-                new_hints: typing.Set[NetUtils.Hint] = set()
-                for hint in self.hints[hint_team, hint_slot]:
-                    new_hint = hint.re_check(self, hint_team)
-                    new_hints.add(new_hint)
-                    if hint != new_hint:
-                        if changed is not None:
-                            changed.add((hint_team,hint_slot))
-                        for player in (hint.finding_player, hint.receiving_player):
-                            if slot is not None and slot != player:
-                                needs_updating.add((hint_team, player))
-                self.hints[hint_team, hint_slot] = new_hints
-                already_updated.add((hint_team, hint_slot))
+            if (team != hint_team and team is not None):
+                continue
+            if (slot != hint_slot and slot is not None):
+                continue
+            new_hints: typing.Set[NetUtils.Hint] = set()
+            for hint in self.hints[hint_team, hint_slot]:
+                new_hint = hint.re_check(self, hint_team)
+                new_hints.add(new_hint)
+                if hint == new_hint:
+                    continue
+                if changed is not None:
+                    changed.add((hint_team,hint_slot))
+                for player in (hint.finding_player, hint.receiving_player):
+                    if slot is not None and slot != player:
+                        needs_updating.add((hint_team, player))
+            self.hints[hint_team, hint_slot] = new_hints
+            already_updated.add((hint_team, hint_slot))
         for hint_team, hint_slot in needs_updating:
             self.recheck_hints(hint_team, hint_slot, already_updated, changed)
 

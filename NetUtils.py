@@ -311,14 +311,12 @@ class Hint(typing.NamedTuple):
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
-                        self.item_flags, self.priority)
+            return self._replace(found=found)
         return self
     
     def re_prioritize(self, ctx, priority: bool) -> Hint:
         if priority != self.priority:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, self.found, self.entrance,
-                        self.item_flags, priority)
+            return self._replace(priority=priority)
         return self
 
     def __hash__(self):
