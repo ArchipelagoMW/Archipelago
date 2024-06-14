@@ -39,7 +39,7 @@ class EnergyFormAccessTest(AquariaTestBase):
             "Mithalas Cathedral, third urn in the path behind the flesh vein",
             "Mithalas Cathedral, fourth urn in the top right room",
             "Mithalas Cathedral, Mithalan Dress",
-            "Mithalas Cathedral right area, urn below the left entrance",
+            "Mithalas Cathedral, urn below the left entrance",
             "Cathedral boss area, beating Mithalan God",
             "Kelp Forest top left area, bulb close to the Verse Egg",
             "Kelp Forest top left area, Verse Egg",

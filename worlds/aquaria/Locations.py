@@ -195,7 +195,7 @@ class AquariaLocations:
 
     locations_cathedral_l = {
         "Mithalas City Castle, bulb in the flesh hole": 698042,
-        "Mithalas City Castle, Blue banner": 698165,
+        "Mithalas City Castle, Blue Banner": 698165,
         "Mithalas City Castle, urn in the bedroom": 698130,
         "Mithalas City Castle, first urn of the single lamp path": 698131,
         "Mithalas City Castle, second urn of the single lamp path": 698132,
@@ -226,7 +226,7 @@ class AquariaLocations:
         "Mithalas Cathedral, third urn in the path behind the flesh vein": 698146,
         "Mithalas Cathedral, fourth urn in the top right room": 698147,
         "Mithalas Cathedral, Mithalan Dress": 698189,
-        "Mithalas Cathedral right area, urn below the left entrance": 698198,
+        "Mithalas Cathedral, urn below the left entrance": 698198,
     }
 
     locations_cathedral_underground = {
@@ -269,7 +269,7 @@ class AquariaLocations:
 
     locations_forest_bl = {
         "Kelp Forest bottom left area, bulb close to the spirit crystals": 698054,
-        "Kelp Forest bottom left area, Walker baby": 698186,
+        "Kelp Forest bottom left area, Walker Baby": 698186,
         "Kelp Forest bottom left area, Transturtle": 698212,
     }
 

@@ -1099,7 +1099,7 @@ class AquariaRegions:
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Open Water bottom left area, bulb inside the lowest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
-        add_rule(self.multiworld.get_location("Kelp Forest bottom left area, Walker baby", self.player),
+        add_rule(self.multiworld.get_location("Kelp Forest bottom left area, Walker Baby", self.player),
                  lambda state: _has_spirit_form(state, self.player))
         add_rule(self.multiworld.get_location("The Veil top left area, bulb hidden behind the blocking rock", self.player),
                  lambda state: _has_bind_song(state, self.player))
@@ -1191,7 +1191,7 @@ class AquariaRegions:
         self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit crystals",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Kelp Forest bottom left area, Walker baby",
+        self.multiworld.get_location("Kelp Forest bottom left area, Walker Baby",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun Temple, Sun Key",

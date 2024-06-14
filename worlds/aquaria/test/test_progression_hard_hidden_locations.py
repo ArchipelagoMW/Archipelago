@@ -35,7 +35,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
         "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
         "Bubble Cave, Verse Egg",
         "Kelp Forest bottom left area, bulb close to the spirit crystals",
-        "Kelp Forest bottom left area, Walker baby",
+        "Kelp Forest bottom left area, Walker Baby",
         "Sun Temple, Sun Key",
         "The Body bottom area, Mutant Costume",
         "Sun Temple, bulb in the hidden room of the right part",
