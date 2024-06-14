@@ -223,6 +223,21 @@ class WebWorld(metaclass=WebWorldRegister):
     option_groups: ClassVar[List[OptionGroup]] = []
     """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
+    rich_text_options_doc = False
+    """Whether the WebHost should render Options' docstrings as rich text.
+
+    If this is True, Options' docstrings are interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, they're rendered to HTML
+    so that lists, emphasis, and other rich text features are displayed
+    properly.
+
+    If this is False, the docstrings are instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved. For backwards
+    compatibility, this is the default.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
     location_descriptions: Dict[str, str] = {}
     """An optional map from location names (or location group names) to brief descriptions for users."""
 
