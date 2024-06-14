@@ -520,6 +520,7 @@ class RegionInfo(NamedTuple):
     dead_end: int = 0  # if a region has only one exit
 
 
+# todo: make this work with the new options
 class DeadEnd(IntEnum):
     free = 0  # not a dead end
     all_cats = 1  # dead end in every logic category
