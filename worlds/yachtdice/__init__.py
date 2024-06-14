@@ -220,7 +220,10 @@ class YachtDiceWorld(World):
                 multipliers_added += 1
                 return "Step Score Multiplier"
             elif which_item_to_add == "Double category":
-                cat_weights = [2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
+                # Below entries are the weights to add each category.
+                # Prefer to add choice or number categories, because the other categories are too "all or nothing",
+                # which often don't give any points, until you get overpowered, and then they give all points.
+                cat_weights = [2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
                 weights["Double category"] /= 1.1
                 return self.random.choices(possible_categories, weights=cat_weights)[0]
             elif which_item_to_add == "Points":
@@ -356,7 +359,7 @@ class YachtDiceWorld(World):
 
     def create_regions(self):
         # call the ini_locations function, that generates locations based on the inputs.
-        location_table, goal_index = ini_locations(
+        location_table = ini_locations(
             self.goal_score, self.max_score, self.number_of_locations, self.options.game_difficulty.value
         )
 
@@ -373,11 +376,8 @@ class YachtDiceWorld(World):
 
         # Add the victory item to the correct location.
         # The website declares that the game is complete when the victory item is obtained.
-        board.locations[goal_index].place_locked_item(self.create_item("Victory"))
-
-        # these will be slot_data input
-        self.goal_score = board.locations[goal_index].yacht_dice_score
-        self.max_score = board.locations[-1].yacht_dice_score
+        victory_location_name = f"{self.goal_score} score"
+        self.get_location(victory_location_name).place_locked_item(self.create_item("Victory"))
 
         # add the regions
         connection = Entrance(self.player, "New Board", menu)

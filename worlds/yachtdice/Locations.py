@@ -65,7 +65,7 @@ def ini_locations(goal_score, max_score, number_of_locations, dif):
 
     location_table = {f"{score} score": LocData(starting_index + score, "Board", score) for score in scores}
 
-    return location_table, scores.index(goal_score)
+    return location_table
 
 
 # we need to run this function to initialize all scores from 1 to 1000, even though not all are used
