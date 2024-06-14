@@ -80,7 +80,7 @@ class ListState:
         return self.item_counts[item]
 
 
-def extract_progression(state, player, options):
+def extract_progression(state, player, frags_per_dice, frags_per_roll):
     """
     method to obtain a list of what items the player has.
     this includes categories, dice, rolls and score multiplier etc.
@@ -91,11 +91,11 @@ def extract_progression(state, player, options):
 
     number_of_dice = (
         state.count("Dice", player)
-        + state.count("Dice Fragment", player) // options.number_of_dice_fragments_per_dice.value
+        + state.count("Dice Fragment", player) // frags_per_dice
     )
     number_of_rerolls = (
         state.count("Roll", player)
-        + state.count("Roll Fragment", player) // options.number_of_roll_fragments_per_roll.value
+        + state.count("Roll Fragment", player) // frags_per_roll
     )
     number_of_fixed_mults = state.count("Fixed Score Multiplier", player)
     number_of_step_mults = state.count("Step Score Multiplier", player)
@@ -215,20 +215,20 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     return yachtdice_cache[tup]
 
 
-def dice_simulation_fill_pool(state, options):
+def dice_simulation_fill_pool(state, frags_per_dice, frags_per_roll, difficulty):
     """
     Returns the feasible score that one can reach with the current state, options and difficulty.
     This function is called with state being a list, during filling of item pool.
     """
-    categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, "state_is_a_list", options)
+    categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, "state_is_a_list", frags_per_dice, frags_per_roll)
     return (
         dice_simulation_strings(
-            categories, num_dice, num_rolls, fixed_mult, step_mult, options.game_difficulty.value
+            categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty
         )
         + expoints
     )
 
-def dice_simulation_state_change(state, player, options):
+def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, difficulty):
     """
     Returns the feasible score that one can reach with the current state, options and difficulty.
     This function is called with state being a AP state object, while doing access rules.
@@ -236,10 +236,10 @@ def dice_simulation_state_change(state, player, options):
 
     if state.prog_items[player]["state_is_fresh"] == 0:
         state.prog_items[player]["state_is_fresh"] = 1
-        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, options)
+        categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, player, frags_per_dice, frags_per_roll)
         state.prog_items[player]["maximum_achievable_score"] = (
             dice_simulation_strings(
-                categories, num_dice, num_rolls, fixed_mult, step_mult, options.game_difficulty.value
+                categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty
             )
             + expoints
         )
@@ -248,7 +248,7 @@ def dice_simulation_state_change(state, player, options):
 
 
 
-def set_yacht_rules(world: MultiWorld, player: int, options):
+def set_yacht_rules(world: MultiWorld, player: int, frags_per_dice, frags_per_roll, difficulty):
     """
     Sets rules on entrances and advancements that are always applied
     """
@@ -256,7 +256,7 @@ def set_yacht_rules(world: MultiWorld, player: int, options):
     for location in world.get_locations(player):
         set_rule(
             location,
-            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation_state_change(state, player, options)
+            lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, difficulty)
             >= curscore,
         )
 
