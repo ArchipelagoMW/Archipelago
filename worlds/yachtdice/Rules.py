@@ -218,6 +218,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 def dice_simulation_fill_pool(state, options):
     """
     Returns the feasible score that one can reach with the current state, options and difficulty.
+    This function is called with state being a list, during filling of item pool.
     """
     categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(state, "state_is_a_list", options)
     return (
@@ -230,6 +231,7 @@ def dice_simulation_fill_pool(state, options):
 def dice_simulation_state_change(state, player, options):
     """
     Returns the feasible score that one can reach with the current state, options and difficulty.
+    This function is called with state being a AP state object, while doing access rules.
     """
 
     if state.prog_items[player]["state_is_fresh"] == 0:

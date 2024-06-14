@@ -173,12 +173,7 @@ class YachtDiceWorld(World):
         multipliers_added = 0
         items_added = 0
 
-        def get_item_to_add():
-            nonlocal weights
-            nonlocal extra_points_added
-            nonlocal multipliers_added
-            nonlocal items_added
-
+        def get_item_to_add(weights, extra_points_added, multipliers_added, items_added):
             items_added += 1
 
             all_items = self.itempool + self.precollected
@@ -258,7 +253,7 @@ class YachtDiceWorld(World):
 
         # adding 17 items as a start seems like the smartest way to get close to 1000 points
         for _ in range(17):
-            self.itempool.append(get_item_to_add())
+            self.itempool.append(get_item_to_add(weights, extra_points_added, multipliers_added, items_added))
 
         score_in_logic = dice_simulation_fill_pool(self.itempool + self.precollected, self.options)
 
@@ -272,7 +267,7 @@ class YachtDiceWorld(World):
         else:
             # Keep adding items until a score of 1000 is in logic
             while score_in_logic < 1000:
-                item_to_add = get_item_to_add()
+                item_to_add = get_item_to_add(weights, extra_points_added, multipliers_added, items_added)
                 self.itempool.append(item_to_add)
                 if item_to_add == "1 Point":
                     score_in_logic += 1
