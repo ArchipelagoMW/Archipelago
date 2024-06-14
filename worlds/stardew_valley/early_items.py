@@ -63,9 +63,6 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     early_forced.extend(random.sample(early_candidates, len(early_candidates) // early_candidate_rate))
 
-    print(early_candidates)
-    print(early_forced)
-
     for item_name in early_forced:
         if item_name in multiworld.early_items[player]:
             continue
