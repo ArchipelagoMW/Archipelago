@@ -116,12 +116,14 @@ class KH2Context(CommonContext):
         # self.inBattle = 0x2A0EAC4 + 0x40
         # self.onDeath = 0xAB9078
         # PC Address anchors
-        self.Now = 0x0714DB8
+        # self.Now = 0x0714DB8 old address
+        self.Now = 0x0716DF8
         self.Save = 0x09A70B0
         # self.Sys3 = 0x2A59DF0
         # self.Bt10 = 0x2A74880
         # self.BtlEnd = 0x2A0D3E0
-        self.Slot1 = 0x2A20C98
+        # self.Slot1 = 0x2A20C98 old address
+        self.Slot1 = 0x2A22FD8
 
         self.chest_set = set(exclusion_table["Chests"])
         self.keyblade_set = set(CheckDupingItems["Weapons"]["Keyblades"])
