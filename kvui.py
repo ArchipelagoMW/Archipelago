@@ -38,7 +38,7 @@ from kivy.core.text.markup import MarkupLabel
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty
 from kivy.metrics import dp
 from kivy.effects.scroll import ScrollEffect
 from kivy.uix.widget import Widget
@@ -61,6 +61,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
+from kivy.uix.dropdown import DropDown
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -299,6 +300,39 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         self.selected = is_selected
 
 
+class AutocompleteHintInput(TextInput):
+    min_chars = NumericProperty(3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.dropdown = DropDown()
+        self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
+        self.bind(on_text_validate=self.on_message)
+
+    def on_message(self, instance):
+        App.get_running_app().commandprocessor("!hint "+instance.text)
+
+    def on_text(self, instance, value):
+        if len(value) >= self.min_chars:
+            self.dropdown.clear_widgets()
+            ctx: context_type = App.get_running_app().ctx
+            item_names = ctx.item_names._game_store[ctx.game].values()
+
+            def on_press(button: Button):
+                return self.dropdown.select(button.text)
+            lowered = value.lower()
+            for item_name in item_names:
+                if lowered in item_name.lower():
+                    btn = Button(text=item_name, size_hint_y=None, height=dp(30))
+                    btn.bind(on_release=on_press)
+                    self.dropdown.add_widget(btn)
+            if not self.dropdown.attach_to:
+                self.dropdown.open(self)
+        else:
+            self.dropdown.dismiss()
+
+
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
@@ -535,7 +569,9 @@ class GameManager(App):
                 self.tabs.add_widget(panel)
 
         hint_panel = TabbedPanelItem(text="Hints")
-        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
+        self.hint_log = HintLog(self.json_to_kivy_parser)
+        self.log_panels["Hints"] = hint_panel.content = HintLayout()
+        hint_panel.content.add_widget(self.hint_log)
         self.tabs.add_widget(hint_panel)
 
         if len(self.logging_pairs) == 1:
@@ -654,7 +690,7 @@ class GameManager(App):
 
     def update_hints(self):
         hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
-        self.log_panels["Hints"].refresh_hints(hints)
+        self.hint_log.refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
@@ -707,6 +743,17 @@ class UILog(RecycleView):
         for element in self.children[0].children:
             if element.height != element.texture_size[1]:
                 element.height = element.texture_size[1]
+
+
+class HintLayout(BoxLayout):
+    orientation = "vertical"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        boxlayout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        boxlayout.add_widget(Label(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(30)))
+        boxlayout.add_widget(AutocompleteHintInput())
+        self.add_widget(boxlayout)
 
 
 class HintLog(RecycleView):
