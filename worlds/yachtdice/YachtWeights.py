@@ -7904,3 +7904,33 @@ yacht_weights = {
     ("FourAndFiveFullHouse", 8, 7): {50: 97782, 0: 2218},
     ("FourAndFiveFullHouse", 8, 8): {50: 98916, 0: 1084},
 }
+
+import time
+total_changed = 0
+for key, value_dict in yacht_weights.items():
+    per_cat_changed = 0
+    # Sort the dictionary by key
+    sorted_items = sorted(value_dict.items())
+    sorted_keys = [item[0] for item in sorted_items]
+    sorted_values = [item[1] for item in sorted_items]
+    leng = len(sorted_values)
+    
+    changed = False
+    for i in range(leng - 1, 0, -1):
+        #sorted_keys[i-1]: sorted_values[i-1] 
+        #sorted_keys[i]  : sorted_values[i]
+        if sorted_values[i] * (sorted_keys[i] - sorted_keys[i-1]) < 6500:
+            total_changed += sorted_values[i] * (sorted_keys[i] - sorted_keys[i-1])
+            per_cat_changed += sorted_values[i] * (sorted_keys[i] - sorted_keys[i-1])
+            sorted_values[i-1] += sorted_values[i]
+            del sorted_keys[i]
+            del sorted_values[i]
+            changed = True
+    
+    leng = len(sorted_values)
+    yacht_weights[key] = {sorted_keys[i]: sorted_values[i] for i in range(leng)}
+    if per_cat_changed > 100000:
+        print(f"{key}: {per_cat_changed}")
+print(total_changed)
+with open('weightsNN.txt', 'w') as weightFile:
+        weightFile.write(str(yacht_weights))
