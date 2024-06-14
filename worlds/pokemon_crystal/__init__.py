@@ -140,18 +140,18 @@ class PokemonCrystalWorld(World):
             self.random.shuffle(kanto_badges)
             add_badges = kanto_badges[:total_badges - 8]
 
-        traps_pool = []
-        traps_pool += ["Phone Trap"] * self.options.phone_trap_weight.value
-        traps_pool += ["Sleep Trap"] * self.options.sleep_trap_weight.value
-        traps_pool += ["Poison Trap"] * self.options.poison_trap_weight.value
-        traps_pool += ["Burn Trap"] * self.options.burn_trap_weight.value
-        traps_pool += ["Freeze Trap"] * self.options.freeze_trap_weight.value
-        traps_pool += ["Paralysis Trap"] * self.options.paralysis_trap_weight.value
-
-        total_trap_weight = len(traps_pool)
+        trap_names, trap_weights = zip(
+            ("Phone Trap", self.options.phone_trap_weight.value),
+            ("Sleep Trap", self.options.sleep_trap_weight.value),
+            ("Poison Trap", self.options.poison_trap_weight.value),
+            ("Burn Trap", self.options.burn_trap_weight.value),
+            ("Freeze Trap", self.options.freeze_trap_weight.value),
+            ("Paralysis Trap", self.options.paralysis_trap_weight.value),
+        )
+        total_trap_weight = sum(trap_weights)
 
         def get_random_trap():
-            return self.create_item(self.random.choice(traps_pool))
+            return self.create_item(self.random.choices(trap_names, trap_weights)[0])
 
         default_itempool = []
 

@@ -7,8 +7,6 @@ from .data import data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
 
 TRACKER_EVENT_FLAGS = [
     "EVENT_GOT_KENYA",
@@ -73,7 +71,7 @@ class PokemonCrystalClient(BizHawkClient):
         self.phone_trap_locations = []
         self.current_map = [0, 0]
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
@@ -109,12 +107,12 @@ class PokemonCrystalClient(BizHawkClient):
         ctx.watcher_timeout = 0.125
         return True
 
-    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["AP_Seed_Name"], 64, "ROM")]))[0]
         print(bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8"))
         ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
-    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == 0:
                 self.goal_flag = data.event_flags["EVENT_BEAT_ELITE_FOUR"]
