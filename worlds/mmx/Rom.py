@@ -124,7 +124,7 @@ def adjust_boss_damage_table(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x12E62, 0x01)
 
     # Write weaknesses to a table
-    offset = 0x17EC00
+    offset = 0x17E9A2
     for _, entries in world.boss_weaknesses.items():
         data = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
         i = 0
