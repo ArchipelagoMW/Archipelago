@@ -77,6 +77,7 @@ def generate_output(world: "PokemonCrystalWorld", output_directory: str, patch: 
             # if we somehow run out of capacity in both banks, just finish the table and break,
             # there is a fallback string in the ROM, so it should handle this gracefully.
             write_bytes(patch, [0xFF], item_name_table_adr + table_offset_adr)
+            print("oopsie")
             break
         if i + 1 < item_name_bank1_capacity:
             text_offset = i * 34
