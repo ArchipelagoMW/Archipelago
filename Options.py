@@ -1432,14 +1432,18 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
         return data, notes
 
+    def yaml_dump_scalar(scalar) -> str:
+        # yaml dump may add end of document marker and newlines.
+        return yaml.dump(scalar).replace("...\n", "").strip()
+
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            grouped_options = get_option_groups(world)
+            option_groups = get_option_groups(world)
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
             res = Template(file_data).render(
-                option_groups=grouped_options,
-                __version__=__version__, game=game_name, yaml_dump=yaml.dump,
+                option_groups=option_groups,
+                __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
             )
 

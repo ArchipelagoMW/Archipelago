@@ -68,21 +68,21 @@ requires:
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
-    {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
+    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
     {%- endfor -%}
 
     {%- if option.name_lookup[option.default] not in option.options %}
-    {{ option.default }}: 50
+    {{ yaml_dump(option.default) }}: 50
     {%- endif -%}
 
     {%- elif option.default is string %}
-    {{ option.default }}: 50
+    {{ yaml_dump(option.default) }}: 50
 
     {%- elif option.default is iterable and option.default is not mapping %}
     {{ option.default | list }}
 
     {%- else %}
-    {{ yaml_dump(option.default) | trim | indent(4, first=false) }}
+    {{ yaml_dump(option.default) | indent(4, first=false) }}
     {%- endif -%}
     {{ "\n" }}
   {%- endfor %}
