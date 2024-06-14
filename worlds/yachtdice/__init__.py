@@ -150,24 +150,24 @@ class YachtDiceWorld(World):
         # Yacht Dice adds items into the pool until a score of at least 1000 is reached.
         # the yaml contains weights, which determine how likely it is that specific items get added.
         # If all weights are 0, some of them will be made to be non-zero later.
-        weights = [
-            self.options.weight_of_dice.value,
-            self.options.weight_of_roll.value,
-            self.options.weight_of_fixed_score_multiplier.value,
-            self.options.weight_of_step_score_multiplier.value,
-            self.options.weight_of_double_category.value,
-            self.options.weight_of_points.value,
-        ]
+        weights: Dict[str, float] = {
+            "Dice": self.options.weight_of_dice.value,
+            "Roll": self.options.weight_of_roll.value,
+            "Fixed Score Multiplier": self.options.weight_of_fixed_score_multiplier.value,
+            "Step Score Multiplier": self.options.weight_of_step_score_multiplier.value,
+            "Double category": self.options.weight_of_double_category.value,
+            "Points":   self.options.weight_of_points.value,
+        }
 
         # if the player wants extra rolls or dice, fill the pool with fragments until close to an extra roll/dice
-        if weights[0] > 0 and frags_per_dice > 1:
+        if weights["Dice"] > 0 and frags_per_dice > 1:
             self.itempool += ["Dice Fragment"] * (frags_per_dice - 1)
-        if weights[1] > 0 and frags_per_roll > 1:
+        if weights["Roll"] > 0 and frags_per_roll > 1:
             self.itempool += ["Roll Fragment"] * (frags_per_roll - 1)
 
         # calibrate the weights, since the impact of each of the items is different
-        weights[0] = weights[0] / 5 * frags_per_dice
-        weights[1] = weights[1] / 5 * frags_per_roll
+        weights["Dice"] = weights["Dice"] / 5 * frags_per_dice
+        weights["Roll"] = weights["Roll"] / 5 * frags_per_roll
 
         extra_points_added = 0
         multipliers_added = 0
@@ -179,77 +179,78 @@ class YachtDiceWorld(World):
             all_items = self.itempool + self.precollected
             dice_fragments_in_pool = all_items.count("Dice") * frags_per_dice + all_items.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * frags_per_dice:
-                weights[0] = 0  # don't allow >=9 dice
+                weights["Dice"] = 0  # don't allow >=9 dice
             roll_fragments_in_pool = all_items.count("Roll") * frags_per_roll + all_items.count("Roll Fragment")
             if roll_fragments_in_pool + 1 >= 6 * frags_per_roll:
-                weights[1] = 0  # don't allow >= 6 rolls
+                weights["Roll"] = 0  # don't allow >= 6 rolls
 
             # Don't allow too many multipliers
             if multipliers_added > 50:
-                weights[2] = 0
-                weights[3] = 0
+                weights["Fixed Score Multiplier"] = 0
+                weights["Step Score Multiplier"] = 0
 
             # Don't allow too many extra points
             if extra_points_added > 300:
-                weights[5] = 0
+                weights["Points"] = 0
 
             # if all weights are zero, allow to add fixed score multiplier, double category, points.
-            if sum(weights) == 0:
+            if sum(weights.values()) == 0:
                 if multipliers_added <= 50:
-                    weights[2] = 1
-                weights[4] = 1
+                    weights["Fixed Score Multiplier"] = 1
+                weights["Double category"] = 1
                 if extra_points_added <= 300:
-                    weights[5] = 1
+                    weights["Points"] = 1
 
             # Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
-            which_item_to_add = self.random.choices([0, 1, 2, 3, 4, 5], weights=weights)[0]
-            item_to_add = ""
-            if which_item_to_add == 0:
-                weights[0] /= 1 + frags_per_dice
+            which_item_to_add = self.random.choices(list(weights.keys()), weights=list(weights.values()))[0]
+
+            
+            if which_item_to_add == "Dice":
+                weights["Dice"] /= 1 + frags_per_dice
                 return "Dice" if frags_per_dice == 1 else "Dice Fragment"
-            elif which_item_to_add == 1:
-                weights[1] /= 1 + frags_per_roll
+            elif which_item_to_add == "Roll":
+                weights["Roll"] /= 1 + frags_per_roll
                 return "Roll" if frags_per_roll == 1 else "Roll Fragment"
-            elif which_item_to_add == 2:
-                weights[2] /= 1.05
+            elif which_item_to_add == "Fixed Score Multiplier":
+                weights["Fixed Score Multiplier"] /= 1.05
                 multipliers_added += 1
                 return "Fixed Score Multiplier"
-            elif which_item_to_add == 3:
-                weights[3] /= 1.1
+            elif which_item_to_add == "Step Score Multiplier":
+                weights["Step Score Multiplier"] /= 1.1
                 multipliers_added += 1
                 return "Step Score Multiplier"
-            elif which_item_to_add == 4:
+            elif which_item_to_add == "Double category":
                 cat_weights = [2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
-                weights[4] /= 1.1
+                weights["Double category"] /= 1.1
                 return self.random.choices(possible_categories, weights=cat_weights)[0]
-            elif which_item_to_add == 5:
+            elif which_item_to_add == "Points":
                 score_dist = self.options.points_size.value
-                probs = [1, 0, 0]
+                probs = { "1 Point": 1, "10 Points": 0, "100 Points": 0}
                 if score_dist == 1:
-                    probs = [0.9, 0.08, 0]
+                    probs = { "1 Point": 0.9, "10 Points": 0.1, "100 Points": 0}
                 if score_dist == 2:
-                    probs = [0, 1, 0]
+                    probs = { "1 Point": 0, "10 Points": 1, "100 Points": 0}
                 if score_dist == 3:
-                    probs = [0, 0.3, 0.7]
+                    probs = { "1 Point": 0, "10 Points": 0.3, "100 Points": 0.7}
                 if score_dist == 4:
-                    probs = [0.3, 0.4, 0.3]
-                c = self.random.choices([0, 1, 2], weights=probs)[0]
-                if c == 0:
-                    weights[5] /= 1.01
+                    probs = { "1 Point": 0.3, "10 Points": 0.4, "100 Points": 0.3}
+                choice = self.random.choices(list(probs.keys()), weights=list(probs.values()))[0]
+                if choice == "1 Point":
+                    weights["Points"] /= 1.01
                     extra_points_added += 1
                     return "1 Point"
-                elif c == 1:
-                    weights[5] /= 1.1
+                elif choice == "10 Points":
+                    weights["Points"] /= 1.1
                     extra_points_added += 10
                     return "10 Points"
-                elif c == 2:
-                    weights[5] /= 2
+                elif choice == "100 Points":
+                    weights["Points"] /= 2
                     extra_points_added += 100
                     return "100 Points"
                 else:
                     raise Exception("Unknown point value (Yacht Dice)")
             else:
-                raise Exception("Invalid index when adding new items in Yacht Dice")
+                raise Exception(f"Invalid index when adding new items in Yacht Dice: {which_item_to_add}")
 
         # adding 17 items as a start seems like the smartest way to get close to 1000 points
         for _ in range(17):
