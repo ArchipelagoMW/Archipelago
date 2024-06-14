@@ -16,9 +16,7 @@ from .Options import (
     PointsSize,
     MinimizeExtraItems,
     AddExtraPoints,
-    AddStoryChapters,
-    WhichStory,
-    AllowManual,
+    AddStoryChapters
 )
 from .Rules import dice_simulation_fill_pool, set_yacht_completion_rules, set_yacht_rules
 
@@ -304,7 +302,7 @@ class YachtDiceWorld(World):
             self.itempool.append(get_item_to_add(weights, extra_points_added, multipliers_added, items_added))
 
         score_in_logic = dice_simulation_fill_pool(
-            self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty
+            self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty, self.player
         )
 
         # if we overshoot, remove items until you get below 1000, then return the last removed item
@@ -313,7 +311,7 @@ class YachtDiceWorld(World):
             while score_in_logic > 1000:
                 removed_item = self.itempool.pop()
                 score_in_logic = dice_simulation_fill_pool(
-                    self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty
+                    self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty, self.player
                 )
             self.itempool.append(removed_item)
         else:
@@ -329,7 +327,7 @@ class YachtDiceWorld(World):
                     score_in_logic += 100
                 else:
                     score_in_logic = dice_simulation_fill_pool(
-                        self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty
+                        self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty, self.player
                     )
 
         # count the number of locations in the game.

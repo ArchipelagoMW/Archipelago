@@ -118,7 +118,7 @@ def extract_progression(state, player, frags_per_dice, frags_per_roll):
 yachtdice_cache = {}
 
 
-def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, diff):
+def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, diff, player):
     """
     Function that returns the feasible score in logic based on items obtained.
     """
@@ -131,9 +131,14 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         diff,
     )  # identifier
 
+    if player not in yachtdice_cache:
+        yachtdice_cache[player] = {}
+
     # if already computed, return the result
-    if tup in yachtdice_cache:
-        return yachtdice_cache[tup]
+    if tup in yachtdice_cache[player]:
+        # index = list(yachtdice_cache[player].keys()).index(tup)  # Get the index of tup in the keys list
+        # print(f"Using cache {player} {index} / {len(yachtdice_cache[player])}")
+        return yachtdice_cache[player][tup]
 
     # sort categories because for the step multiplier, you will want low-scoring categories first
     categories.sort(key=lambda category: category.mean_score(num_dice, num_rolls))
@@ -208,12 +213,19 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
     # save result into the cache, then return it
     outcome = sum([percentile_distribution(total_dist, perc) for perc in perc_return]) / len(perc_return)
-    yachtdice_cache[tup] = max(5, math.floor(outcome))  # at least 5.
+    yachtdice_cache[player][tup] = max(5, math.floor(outcome))  # at least 5.
 
-    return yachtdice_cache[tup]
+    # cache management; we rarely/never need more than 400 entries. But if for some reason it became large,
+    # delete the first entry of the player cache.
+    if len(yachtdice_cache[player]) > 400:
+        # Remove the oldest item
+        oldest_tup = next(iter(yachtdice_cache[player]))
+        del yachtdice_cache[player][oldest_tup]
+
+    return yachtdice_cache[player][tup]
 
 
-def dice_simulation_fill_pool(state, frags_per_dice, frags_per_roll, difficulty):
+def dice_simulation_fill_pool(state, frags_per_dice, frags_per_roll, difficulty, player):
     """
     Returns the feasible score that one can reach with the current state, options and difficulty.
     This function is called with state being a list, during filling of item pool.
@@ -221,7 +233,7 @@ def dice_simulation_fill_pool(state, frags_per_dice, frags_per_roll, difficulty)
     categories, num_dice, num_rolls, fixed_mult, step_mult, expoints = extract_progression(
         state, "state_is_a_list", frags_per_dice, frags_per_roll
     )
-    return dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty) + expoints
+    return dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty, player) + expoints
 
 
 def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, difficulty):
@@ -236,7 +248,7 @@ def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, 
             state, player, frags_per_dice, frags_per_roll
         )
         state.prog_items[player]["maximum_achievable_score"] = (
-            dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty) + expoints
+            dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mult, difficulty, player) + expoints
         )
 
     return state.prog_items[player]["maximum_achievable_score"]
