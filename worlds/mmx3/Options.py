@@ -2,7 +2,11 @@ from dataclasses import dataclass
 import typing
 
 #from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
-from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionDict, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+from schema import Schema, And, Use, Optional
+
+from .Rom import action_buttons, action_names
+from .Weaknesses import boss_weaknesses, weapons_chaotic
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -64,8 +68,8 @@ class BossWeaknessRando(Choice):
     display_name = "Boss Weakness Randomization"
     option_vanilla = 0
     option_shuffled = 1
-    option_chaotic_double = 2
-    option_chaotic_single = 3
+    option_chaotic_double = 3
+    option_chaotic_single = 2
     default = 0
 
 class BossWeaknessStrictness(Choice):
@@ -114,6 +118,12 @@ class DisableChargeFreeze(DefaultOnToggle):
     Allows X and Zero to move while shooting a level 3 charged shot.
     """
     display_name = "Disable Level 3 Charge freeze after shooting"
+
+class LongJumps(Toggle):
+    """
+    Allows X to perform longer jumps when holding down the Dash button. Only works after getting a Legs Upgrade.
+    """
+    display_name = "Long Jumps"
 
 class LogicBossWeakness(DefaultOnToggle):
     """
@@ -331,6 +341,35 @@ class ByteMedalCount(Range):
     range_end = 6
     default = 5
 
+class ButtonConfiguration(OptionDict):
+    """
+    Default buttons for every action.
+    """
+    display_name = "Button Configuration"
+    schema = Schema({action_name: And(str, Use(str.upper), lambda s: s in action_buttons) for action_name in action_names})
+    default = {
+        "SHOT": "Y",
+        "JUMP": "B",
+        "DASH": "A",
+        "SELECT_L": "L",
+        "SELECT_R": "R",
+        "MENU": "START"
+    }
+
+class PlandoWeaknesses(OptionDict):
+    """
+    Forces bosses to have a specific weakness. Uses the names that appear on the chaotic weakness set.
+
+    Format: 
+      Boss Name: Weakness Name
+    """
+    display_name = "Button Configuration"
+    schema = Schema({
+        Optional(boss_name): 
+            And(str, lambda weapon: weapon in weapons_chaotic.keys()) for boss_name in boss_weaknesses.keys()
+    })
+    default = {}
+
 mmx3_option_groups = [
     """
     OptionGroup("Gameplay Options", [
@@ -339,6 +378,7 @@ mmx3_option_groups = [
         HeartTankEffectiveness,
         JammedBuster,
         DisableChargeFreeze,
+        LongJumps,
     ]),
     OptionGroup("Boss Weakness Options", [
         BossWeaknessRando,
@@ -378,16 +418,19 @@ class MMX3Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     energy_link: EnergyLink
+    button_configuration: ButtonConfiguration
     starting_life_count: StartingLifeCount
     starting_hp: StartingHP
     heart_tank_effectiveness: HeartTankEffectiveness
     boss_weakness_rando: BossWeaknessRando
     boss_weakness_strictness: BossWeaknessStrictness
+    boss_weakness_plando: PlandoWeaknesses
     boss_randomize_hp: BossRandomizedHP
     pickupsanity: PickupSanity
     jammed_buster: JammedBuster
     zsaber_in_pool: ZSaberInPool
     disable_charge_freeze: DisableChargeFreeze
+    long_jumps: LongJumps
     doppler_open: DopplerOpen
     doppler_medal_count: DopplerMedalCount
     doppler_weapon_count: DopplerWeaponCount

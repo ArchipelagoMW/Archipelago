@@ -241,6 +241,7 @@ class MMX3World(World):
         slot_data = {}
 
         # Write options to slot_data
+        slot_data["energy_link"] = self.options.energy_link.value
         slot_data["boss_weakness_rando"] = self.options.boss_weakness_rando.value
         slot_data["boss_weakness_strictness"] = self.options.boss_weakness_strictness.value
         slot_data["pickupsanity"] = self.options.pickupsanity.value
@@ -357,8 +358,6 @@ class MMX3World(World):
         self.boss_weaknesses = {}
         self.boss_weakness_data = {}
         handle_weaknesses(self)
-        early_stage = self.random.choice(list(item_groups["Access Codes"]))
-        self.multiworld.local_early_items[self.player][early_stage] = 1
 
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:

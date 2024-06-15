@@ -9,7 +9,8 @@ from pkgutil import get_data
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
-from .Weaknesses import boss_weakness_data
+action_names = ("SHOT", "JUMP", "DASH", "SELECT_L", "SELECT_R", "MENU")
+action_buttons = ("Y", "B", "A", "L", "R", "X", "START", "SELECT")
 
 HASH_US = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
 HASH_LEGACY = 'ff683b75e75e9b59f0c713c7512a016b'
@@ -224,6 +225,29 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x7FC0, patch.name)
 
+    # Remap buttons
+    button_values = {
+        "A": 0x20,
+        "B": 0x80,
+        "X": 0x10,
+        "Y": 0x40,
+        "L": 0x08,
+        "R": 0x04,
+        "START": 0x01,
+        "SELECT": 0x02,
+    }
+    action_offsets = {
+        "SHOT": 0x360E3,
+        "JUMP": 0x360E4,
+        "DASH": 0x360E5,
+        "SELECT_L": 0x360E6,
+        "SELECT_R": 0x360E7,
+        "MENU": 0x360E8,
+    }
+    button_config = world.options.button_configuration.value
+    for action, button in button_config.items():
+        patch.write_byte(action_offsets[action], button_values[button])
+
     # Setup starting HP
     patch.write_byte(0x007487, world.options.starting_hp.value)
     patch.write_byte(0x0019B6, world.options.starting_hp.value)
@@ -281,7 +305,6 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x17FFE8, value)
 
     #patch.write_byte(0x17FFF1, world.options.doppler_lab_1_boss.value)
-    patch.write_byte(0x17FFF1, 0x00)
     patch.write_byte(0x17FFF2, world.options.doppler_lab_2_boss.value)
     patch.write_byte(0x17FFF3, world.options.doppler_lab_3_boss_rematch_count.value)
     patch.write_byte(0x17FFF4, world.options.bit_medal_count.value)
@@ -302,6 +325,11 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x17FFFC, world.options.starting_hp.value)
     patch.write_byte(0x17FFFD, world.options.heart_tank_effectiveness.value)
     patch.write_byte(0x17FFFE, world.options.doppler_all_labs.value)
+
+    value = 0
+    if world.options.long_jumps.value:
+        value |= 0x01
+    patch.write_byte(0x17FFF1, value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

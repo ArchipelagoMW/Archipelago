@@ -96,6 +96,8 @@ class MMX3SNIClient(SNIClient):
         self.energy_link_enabled = False
         self.heal_request_command = None
         self.weapon_refill_request_command = None
+        self.using_newer_client = False
+        self.energy_link_details = False
         self.trade_request = None
         self.item_queue = []
 
@@ -148,6 +150,8 @@ class MMX3SNIClient(SNIClient):
                 ctx.command_processor.commands.pop("heal")
             if "refill" in ctx.command_processor.commands:
                 ctx.command_processor.commands.pop("refill")
+            if "details" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("details")
             return False
         
         ctx.game = self.game
@@ -164,6 +168,8 @@ class MMX3SNIClient(SNIClient):
                 ctx.command_processor.commands["heal"] = cmd_heal
             if "refill" not in ctx.command_processor.commands:
                 ctx.command_processor.commands["refill"] = cmd_refill
+            if "details" not in ctx.command_processor.commands:
+                ctx.command_processor.commands["details"] = cmd_details
         if "trade" not in ctx.command_processor.commands:
             ctx.command_processor.commands["trade"] = cmd_trade
 
@@ -236,7 +242,8 @@ class MMX3SNIClient(SNIClient):
                     {"operation": "max", "value": 0}],
             }])
             pool = ((ctx.stored_data[f'EnergyLink{ctx.team}'] or 0) / EXCHANGE_RATE) + (energy_packet_raw / 16)
-            logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the energy pool. Energy available: {pool:.2f}")
+            if self.energy_link_details:
+                logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the energy pool. Energy available: {pool:.2f}")
             snes_buffered_write(ctx, MMX3_ENERGY_LINK_PACKET, bytearray([0x00, 0x00]))
             await snes_flush_writes(ctx)
 
@@ -354,12 +361,6 @@ class MMX3SNIClient(SNIClient):
 
         next_item = self.item_queue[0]
         item_id = next_item[1]
-
-        if next_item[0] == "boss access":
-            snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
-            snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1D]))
-            self.item_queue.pop(0)
-            return
         
         # Do not give items if you can't move, are in pause state, not in the correct mode or not in gameplay state
         receiving_item = await snes_read(ctx, MMX3_RECEIVING_ITEM, 0x1)
@@ -466,6 +467,7 @@ class MMX3SNIClient(SNIClient):
                 if bit == 0x01:
                     snes_buffered_write(ctx, WRAM_START + 0x09EE, bytearray([0x18]))
                     snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0F4ED, bytearray([0x80]))
                 elif bit == 0x02:
                     jam_check = await snes_read(ctx, MMX3_JAMMED_BUSTER_ACTIVE, 0x1)
                     charge_shot_unlocked = await snes_read(ctx, MMX3_UNLOCKED_CHARGED_SHOT, 0x1)
@@ -566,14 +568,20 @@ class MMX3SNIClient(SNIClient):
 
         # This is going to be rewritten whenever SNIClient supports on_package
         energy_link = await snes_read(ctx, MMX3_ENERGY_LINK_ENABLED, 0x1)
-        if energy_link[0] != 0:
-            if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
+        if self.using_newer_client:
+            if energy_link[0] != 0:
                 await self.handle_energy_link(ctx)
+        else:
+            if energy_link[0] != 0:
+                if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
+                    await self.handle_energy_link(ctx)
 
-            if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
-                self.energy_link_enabled = True
-                ctx.set_notify(f"EnergyLink{ctx.team}")
-                logger.info(f"Initialized EnergyLink{ctx.team}")
+                if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
+                    self.energy_link_enabled = True
+                    ctx.set_notify(f"EnergyLink{ctx.team}")
+                    logger.info(f"Initialized EnergyLink{ctx.team}")
+                    self.energy_link_details = True
+                    logger.info(f"EnergyLink detailed deposit activity enabled.")
 
         from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
         from worlds.mmx3.Levels import location_id_to_level_id
@@ -764,12 +772,14 @@ class MMX3SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX3_UNLOCKED_LEVELS, boss_access)
                 if item.item == 0xBD000A:
                     snes_buffered_write(ctx, MMX3_DOPPLER_ACCESS, bytearray([0x00]))
-                self.add_item_to_queue("boss access", item.item)
+                snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1D]))
 
             elif item.item == 0xBD0019:
                 # Unlock vile stage
                 snes_buffered_write(ctx, MMX3_VILE_ACCESS, bytearray([0x00]))
-                self.add_item_to_queue("boss access", item.item)
+                snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1D]))
                 
             elif item.item in refill_rom_data:
                 self.add_item_to_queue(refill_rom_data[item.item][0], item.item, refill_rom_data[item.item][1])
@@ -898,6 +908,29 @@ class MMX3SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX3_COLLECTED_RIDE_CHIPS, bytearray([collected_ride_chips_data]))
             await snes_flush_writes(ctx)
 
+    def on_package(self, ctx, cmd: str, args: dict):
+        super().on_package(ctx, cmd, args)
+
+        if cmd == "Connected":
+            slot_data = args.get("slot_data", None)
+            self.using_newer_client = True
+            if slot_data["energy_link"]:
+                ctx.set_notify(f"EnergyLink{ctx.team}")
+                if ctx.ui:
+                    ctx.ui.enable_energy_link()
+                    ctx.ui.energy_link_label.text = "Energy: Standby"
+                    logger.info(f"Initialized EnergyLink{ctx.team}")
+
+        elif cmd == "SetReply" and args["key"].startswith("EnergyLink"):
+            if ctx.ui:
+                pool = (args["value"] or 0) / EXCHANGE_RATE
+                ctx.ui.energy_link_label.text = f"Energy: {pool:.2f}"
+
+        elif cmd == "Retrieved":
+            if f"EnergyLink{ctx.team}" in args["keys"] and args["keys"][f"EnergyLink{ctx.team}"] and ctx.ui:
+                pool = (args["keys"][f"EnergyLink{ctx.team}"] or 0) / EXCHANGE_RATE
+                ctx.ui.energy_link_label.text = f"Energy: {pool:.2f}"
+
 
 def cmd_pool(self):
     """
@@ -1008,4 +1041,20 @@ def cmd_trade(self, amount: str = ""):
             logger.info(f"Set up trade for {amount} Weapon Energy. Pause the game to process the trade.")
         else:
             logger.info(f"You need to specify how much Weapon Energy you will request.")
+
+def cmd_details(self):
+    """
+    Toggles displaying energy deposit activity into the console when EnergyLink is active.
+    """
+    if self.ctx.game != "Mega Man X3":
+        logger.warning("This command can only be used while playing Mega Man X3")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.energy_link_details:
+            self.ctx.client_handler.energy_link_details = False
+            logger.info(f"EnergyLink detailed deposit activity disabled.")
+        else:
+            self.ctx.client_handler.energy_link_details = True
+            logger.info(f"EnergyLink detailed deposit activity enabled.")
         
