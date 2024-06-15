@@ -47,7 +47,7 @@ resource_efficiency_cost_reduction = {
     item_names.RAVEN:         (0, 50, 0),
     item_names.CYCLONE:       (25, 50, 1),
     item_names.WIDOW_MINE:    (0, 25, 1),
-    item_names.LIBERATOR:     (25, 25, 0),
+    item_names.LIBERATOR:     (0, 25, 0),
     item_names.VALKYRIE:      (100, 25, 1),
     item_names.SCOURGE:       (0, 50, 0),
     item_names.HYDRALISK:     (25, 25, 1),
@@ -60,6 +60,7 @@ resource_efficiency_cost_reduction = {
     item_names.ARBITER:       (50, 0, 0),
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
+    item_names.SCOUT:         (125, 25, 1),
 }
 
 
@@ -748,6 +749,7 @@ item_descriptions = {
     item_names.SCOUT_APIAL_SENSORS: "Scouts gain increased sight range.",
     item_names.SCOUT_GRAVITIC_THRUSTERS: "Scouts gain increased movement speed.",
     item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: "Scouts gain increased damage against ground targets.",
+    item_names.SCOUT_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
     item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets.",
