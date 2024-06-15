@@ -423,16 +423,16 @@ def compare_triggers(option_set: dict, currently_targeted_weights: dict) -> bool
     result = result and compare_results(currently_targeted_weights[advanced[0][0]], advanced[0][2], advanced[0][1])
     # Cycle through remaining conditions, if any, in union + condition pairs.
     for x in range(1, len(advanced), 2):
-        if advanced[x] in ["|", 1, "or", "OR", "Or"]:
+        if str(advanced[x]).lower() in ["|", "1", "or"]:
             if result:
                 return True
             else:
                 result = True
-        elif advanced[x] in ["&", 0, "and", "AND", "And"]:
+        elif str(advanced[x]).lower() in ["&", "0", "and"]:
             if not result:
                 continue
         else:
-            raise Exception(f"Unions must be chosen from: &, 0, |, 1. Please check trigger entry {x+1}")
+            raise Exception(f"Unions must be chosen from: [&, 0, 'and', |, 1, 'or']. Please check trigger entry {x+1}")
         entry = advanced[x+1]
         result = result and compare_results(currently_targeted_weights[entry[0]], entry[2], entry[1])
     return result
