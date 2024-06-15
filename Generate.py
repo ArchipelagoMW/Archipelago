@@ -399,30 +399,91 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
+def compare_results(
+        yaml_value: Union[str, int, bool, dict, list],
+        trigger_value: Union[str, int, bool, dict, list],
+        comparator: str):
+    if comparator == "=":
+        return yaml_value == trigger_value
+    elif comparator == "!=":
+        return yaml_value != trigger_value
+    if type(yaml_value) is int and type(trigger_value) is int:
+        if comparator == "<":
+            return yaml_value < trigger_value
+        elif comparator == ">":
+            return yaml_value > trigger_value
+    else:
+        raise Exception("Comparing non-integer values is not possible with < or >")
+
+
+def compare_triggers(option_set: dict, currently_targeted_weights: dict) -> bool:
+    result = True
+    advanced = copy.deepcopy(option_set["option_advanced"])
+    # Check whether first trigger condition is true.
+    result = result and compare_results(currently_targeted_weights[advanced[0][0]], advanced[0][2], advanced[0][1])
+    # Cycle through remaining conditions, if any, in union + condition pairs.
+    for x in range(1, len(advanced), 2):
+        if advanced[x] in ["|", 1, "or", "OR", "Or"]:
+            if result:
+                return True
+            else:
+                result = True
+        elif advanced[x] in ["&", 0, "and", "AND", "And"]:
+            if not result:
+                continue
+        else:
+            raise Exception(f"Unions must be chosen from: &, 0, |, 1. Please check trigger entry {x+1}")
+        entry = advanced[x+1]
+        result = result and compare_results(currently_targeted_weights[entry[0]], entry[2], entry[1])
+    return result
+
+
 def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
+            if "option_advanced" not in option_set:
+                option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
-            key = get_choice("option_name", option_set)
-            if key not in currently_targeted_weights:
-                logging.warning(f'Specified option name {option_set["option_name"]} did not '
-                                f'match with a root option. '
-                                f'This is probably in error.')
-            trigger_result = get_choice("option_result", option_set)
-            result = get_choice(key, currently_targeted_weights)
-            currently_targeted_weights[key] = result
-            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+            advanced = option_set["option_advanced"]
+            if len(advanced) % 2 != 1:
+                raise Exception("option_advanced has an illegal number of entries. Please check trigger and fix.")
+            for x in range(0, len(advanced), 2):
+                result = get_choice(advanced[x][0], currently_targeted_weights)
+                if advanced[x][0] not in currently_targeted_weights:
+                    logging.warning(f"Specified option name {advanced[x][0]} did not "
+                                    f"match with a root option. "
+                                    f"This is probably in error.")
+                if type(result) is str:
+                    if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) == 4:
+                        result = result.split("-")
+                        result_min = int(result[2])
+                        result_max = int(result[3])
+                        result = random.randrange(result_min, result_max)
+                currently_targeted_weights[advanced[x][0]] = result
+                if len(advanced[x]) == 2:
+                    advanced[x].insert(1, "=")
+                if len(advanced[x]) == 3:
+                    if advanced[x][1] not in ["<", ">", "=", "!="]:
+                        raise Exception(f"option_advanced has an illegal comparator in block {x}. "
+                                        f"Please check trigger and fix.")
+                else:
+                    raise Exception(f"options_advanced is malformed. "
+                                    f"Block {x} should have either 2 or 3 entries, but had {len(advanced[x])}.\n")
+            if (compare_triggers(option_set, currently_targeted_weights)
+                    and roll_percentage(get_choice("percentage", option_set, 100))):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
-                    update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
-            valid_keys.add(key)
+                    update_weights(currently_targeted_weights, category_options, "Triggered",
+                             f"Trigger {i + 1}")
+            for x in range(0, len(advanced), 2):
+                valid_keys.add(advanced[x][0])
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
