@@ -84,6 +84,9 @@ class ColorPickerApp(App):
         defaults_button = Button(text="Restore Defaults")
         defaults_button.bind(on_release=lambda _: self.restore_defaults())
         self.options_layout.add_widget(defaults_button)
+        current_button = Button(text="Restore Current")
+        current_button.bind(on_release=lambda _: self.restore_current())
+        self.options_layout.add_widget(current_button)
         self.presets_button = Button(text="Preset Loaded: None")
         self.preset_dropdown = DropDown()
         self.populate_dropdown(self.preset_dropdown)
@@ -140,6 +143,12 @@ class ColorPickerApp(App):
 
     def restore_defaults(self):
         self.set_colors(default_colors)
+        setattr(self.presets_button, "text", "Preset Loaded: None")
+
+    def restore_current(self):
+        user_colors = Utils.local_path("data", "user.kv")
+        self.parse_preset_kv(user_colors)
+        setattr(self.presets_button, "text", "Preset Loaded: None")
 
     def set_colors(self, colors):
         self.text_colors = colors.copy()
