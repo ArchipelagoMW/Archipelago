@@ -129,6 +129,7 @@ class DungeonItemShuffle(Choice):
     # option_start_with = 6
     alias_true = 3
     alias_false = 0
+    ladxr_item: str
 
 
 class ShuffleNightmareKeys(DungeonItemShuffle):

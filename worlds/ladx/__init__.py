@@ -181,8 +181,8 @@ class LinksAwakeningWorld(World):
         # For any and different world, set item rule instead
         
         for dungeon_item_type in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
-            option = "shuffle_" + dungeon_item_type
-            option = getattr(self.options, option)
+            option_name = "shuffle_" + dungeon_item_type
+            option: DungeonItemShuffle = getattr(self.options, option_name)
 
             dungeon_item_types[option.ladxr_item] = option.value
 
