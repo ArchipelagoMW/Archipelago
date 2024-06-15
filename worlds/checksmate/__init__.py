@@ -13,7 +13,7 @@ from .Items import (CMItem, item_table, create_item_with_correct_settings, fille
                     useful_items, item_name_groups, CMItemData)
 from .Locations import CMLocation, location_table, highest_chessmen_requirement
 from .Presets import checksmate_option_presets
-from .Rules import set_rules, determine_difficulty
+from .Rules import set_rules, determine_difficulty, determine_relaxation
 
 
 class CMWeb(WebWorld):
@@ -179,8 +179,9 @@ class CMWorld(World):
             progression_items[item].material * self.items_used[self.player][item]
             for item in self.items_used[self.player] if item in progression_items])
         difficulty = determine_difficulty(self.options)
-        min_material_option = self.options.min_material.value * 100 * difficulty
-        max_material_option = self.options.max_material.value * 100 * difficulty
+        absolute_relaxation = determine_relaxation(self.options)
+        min_material_option = self.options.min_material.value * 100 * difficulty + absolute_relaxation
+        max_material_option = self.options.max_material.value * 100 * difficulty + absolute_relaxation
         if max_material_option < min_material_option:
             max_material_option = min_material_option
         max_material_interval = self.random.random() * (max_material_option - min_material_option)

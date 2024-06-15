@@ -25,6 +25,27 @@ class Goal(Choice):
     default = 0
 
 
+class Difficulty(Choice):
+    """
+    Which kinds of checks to expect of the player. Lower difficulty means the player will not be required to do a given
+    check unless they
+
+    Grandmaster: All checks are baseline. You will generally hope for equal material, and may find yourself struggling.
+
+    Daily: The player may expect some difficulty with early checks, but complex game states will be relaxed.
+
+    Bullet: All checks are relaxed. Material expectations are raised, so the player will have more material earlier.
+
+    Relaxed: Most checks require almost twice as much material, so the player will have overwhelming forces.
+    """
+    display_name = "Difficulty"
+    option_grandmaster = 0
+    option_daily = 1
+    option_bullet = 2
+    option_relaxed = 3
+    default = 0
+
+
 class PieceLocations(Choice):
     """
     When you start a new match, chooses how to distribute player pieces.
@@ -375,6 +396,7 @@ class DeathLink(Toggle):
 @dataclass
 class CMOptions(PerGameCommonOptions):
     goal: Goal
+    difficulty: Difficulty
     piece_locations: PieceLocations
     piece_types: PieceTypes
     enemy_piece_types: EnemyPieceTypes

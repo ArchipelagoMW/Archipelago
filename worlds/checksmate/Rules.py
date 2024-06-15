@@ -72,11 +72,32 @@ def determine_difficulty(opts: CMOptions):
     fairy_pieces = opts.fairy_chess_pieces.value
     difficulty *= 0.99 + (0.01 * len(fairy_pieces))
     # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
+
+    if opts.difficulty.value == opts.difficulty.option_daily:
+        difficulty *= 1.05
+    if opts.difficulty.value == opts.difficulty.option_bullet:
+        difficulty *= 1.15
+    if opts.difficulty.value == opts.difficulty.option_relaxed:
+        difficulty *= 1.3
     return difficulty
+
+
+def determine_relaxation(opts: CMOptions):
+    if opts.difficulty.value == opts.difficulty.option_bullet:
+        return 120
+    if opts.difficulty.value == opts.difficulty.option_relaxed:
+        return 200
+    return 0
+
+
+def meets_material_expectations(state: CollectionState,
+                                material: int, player: int, difficulty: float, absolute_relaxation: int) -> bool:
+    return state.prog_items[player]["Material"] >= (material * difficulty) + absolute_relaxation if material > 90 else 0
 
 
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     difficulty = determine_difficulty(opts)
+    absolute_relaxation = determine_relaxation(opts)
 
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
@@ -84,7 +105,8 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     # AI avoids making trades except where it wins material or secures victory, so require that much material
     for name, item in checksmate.Locations.location_table.items():
         set_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.material_expectations: state.prog_items[player]["Material"] >= (v * difficulty))
+                 lambda state, v=item.material_expectations: meets_material_expectations(
+                     state, v, player, difficulty, absolute_relaxation))
     # player must have (a king plus) that many chessmen to capture any given number of chessmen
     for name, item in checksmate.Locations.location_table.items():
         add_rule(multiworld.get_location(name, player),
