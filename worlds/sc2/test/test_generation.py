@@ -423,6 +423,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertTrue(itempool)
         aspects_in_pool = list(set(itempool).intersection(set(item_groups.zerg_morphs)))
+        if item_names.OVERLORD_OVERSEER_ASPECT in aspects_in_pool:
+            # Overseer morphs from Overlord, that's available always
+            aspects_in_pool.remove(item_names.OVERLORD_OVERSEER_ASPECT)
         self.assertFalse(aspects_in_pool)
         units_in_pool = list(set(itempool).intersection(set(item_groups.zerg_units))
                              .difference(set(item_groups.zerg_morphs)))

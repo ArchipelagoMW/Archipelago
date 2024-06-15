@@ -121,8 +121,16 @@ class ItemGroupNames:
     HOTS_MORPHS = "HotS Morphs"
     KERRIGAN_ABILITIES = "Kerrigan Abilities"
     KERRIGAN_PASSIVES = "Kerrigan Passives"
+    KERRIGAN_TIER_1 = "Kerrigan Tier 1"
+    KERRIGAN_TIER_2 = "Kerrigan Tier 2"
+    KERRIGAN_TIER_3 = "Kerrigan Tier 3"
+    KERRIGAN_TIER_4 = "Kerrigan Tier 4"
+    KERRIGAN_TIER_5 = "Kerrigan Tier 5"
+    KERRIGAN_TIER_6 = "Kerrigan Tier 6"
+    KERRIGAN_TIER_7 = "Kerrigan Tier 7"
     HOTS_ITEMS = "HotS Items"
     """All items from vanilla HotS"""
+    OVERLORD_UPGRADES = "Overlord Upgrades"
     ZERG_MORPHS = "Zerg Morphs"
     ZERG_MERCS = "Zerg Mercenaries"
     ZERG_BUILDINGS = "Zerg Buildings"
@@ -412,6 +420,35 @@ item_name_groups[ItemGroupNames.KERRIGAN_PASSIVES] = kerrigan_passives = [
     item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_CHAIN_REACTION,
     item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY, item_names.KERRIGAN_ABILITY_EFFICIENCY,
 ]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_1] = [
+    item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
+]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_2] = [
+    item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_PSIONIC_SHIFT
+]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_3] = [
+    item_names.TWIN_DRONES, item_names.AUTOMATED_EXTRACTORS, item_names.ZERGLING_RECONSTITUTION
+]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_4] = [
+    item_names.KERRIGAN_MEND, item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_WILD_MUTATION
+]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_5] = [
+    item_names.MALIGNANT_CREEP, item_names.VESPENE_EFFICIENCY, item_names.OVERLORD_IMPROVED_OVERLORDS
+]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_6] = [
+    item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY, item_names.KERRIGAN_ABILITY_EFFICIENCY
+]
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_7] = [
+    item_names.KERRIGAN_APOCALYPSE, item_names.KERRIGAN_SPAWN_LEVIATHAN, item_names.KERRIGAN_DROP_PODS
+]
+item_name_groups[ItemGroupNames.OVERLORD_UPGRADES] = [
+    item_names.OVERLORD_ANTENNAE,
+    item_names.OVERLORD_VENTRAL_SACS,
+    item_names.OVERLORD_GENERATE_CREEP,
+    item_names.OVERLORD_PNEUMATIZED_CARAPACE,
+    item_names.OVERLORD_IMPROVED_OVERLORDS,
+    item_names.OVERLORD_OVERSEER_ASPECT,
+]
 
 # Zerg Upgrades
 item_name_groups[ItemGroupNames.HOTS_STRAINS] = hots_strains = [
@@ -427,12 +464,12 @@ item_name_groups[ItemGroupNames.HOTS_MUTATIONS] = hots_mutations = [
     item_names.ULTRALISK_BURROW_CHARGE, item_names.ULTRALISK_TISSUE_ASSIMILATION, item_names.ULTRALISK_MONARCH_BLADES,
 ]
 item_name_groups[ItemGroupNames.HOTS_GLOBAL_UPGRADES] = hots_global_upgrades = [
-    item_names.KERRIGAN_ZERGLING_RECONSTITUTION,
-    item_names.KERRIGAN_IMPROVED_OVERLORDS,
-    item_names.KERRIGAN_AUTOMATED_EXTRACTORS,
-    item_names.KERRIGAN_TWIN_DRONES,
-    item_names.KERRIGAN_MALIGNANT_CREEP,
-    item_names.KERRIGAN_VESPENE_EFFICIENCY,
+    item_names.ZERGLING_RECONSTITUTION,
+    item_names.OVERLORD_IMPROVED_OVERLORDS,
+    item_names.AUTOMATED_EXTRACTORS,
+    item_names.TWIN_DRONES,
+    item_names.MALIGNANT_CREEP,
+    item_names.VESPENE_EFFICIENCY,
 ]
 item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
     hots_units

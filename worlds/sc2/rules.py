@@ -379,7 +379,7 @@ class SC2Logic:
         return vespene_unit and state.has_any({item_names.ZERGLING, item_names.SWARM_QUEEN}, self.player)
 
     def spread_creep(self, state: CollectionState) -> bool:
-        return self.advanced_tactics or state.has(item_names.SWARM_QUEEN, self.player)
+        return self.advanced_tactics or state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player)
     
     def zerg_competent_defense(self, state: CollectionState) -> bool:
         return (
