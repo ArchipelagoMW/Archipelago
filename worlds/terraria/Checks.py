@@ -564,6 +564,7 @@ def read_data() -> Tuple[
                     "Getfixedboi",
                     "Not Getfixedboi",
                     "Calamity",
+                    "Not Calamity Getfixedboi",
                 }:
                     raise Exception(
                         f"rule `{name}` on line `{line + 1}` has unrecognized flag `{flag}`"
