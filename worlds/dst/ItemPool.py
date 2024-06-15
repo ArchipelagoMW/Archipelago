@@ -1,4 +1,4 @@
-from typing import List, Set
+from typing import List, Set, FrozenSet
 from worlds.AutoWorld import World
 from BaseClasses import ItemClassification as IC
 import random
@@ -17,22 +17,31 @@ class DSTItemPool:
         "Before generating, decide what items go in itempool categories"
         options:DSTOptions = world.options
         self.nonfiller_itempool = list()
+        start_inventory:FrozenSet = frozenset(options.start_inventory.value.keys())
+        nonshuffled:FrozenSet = frozenset() # TODO: Support for nonshuffled options
         for name, item in item_data_table.items():
-            # Do not include things that are deprecated or disabled by options
+            # Don't shuffle nonshuffled items
             if (
-                not item.code
-                or "deprecated" in item.tags
+                name in nonshuffled
                 or "progressive" in item.tags # Add these somewhere else
-                or (not options.shuffle_no_unlock_recipes.value and "nounlock" in item.tags)
-                or (not options.season_change_helper_items.value and "seasonhelper" in item.tags)
             ):
                 continue
 
-            # Add basic items as dummy event items so we can do logic with them
-            if not options.shuffle_starting_recipes.value and "basic" in item.tags:
-                if item.type == IC.progression:
-                    world.multiworld.push_precollected(DSTItem(name, IC.progression, None, world.player))
-                continue
+            if not name in start_inventory:
+                # Do not include things that are deprecated or disabled by options
+                if (
+                    not item.code
+                    or "deprecated" in item.tags
+                    or (not options.shuffle_no_unlock_recipes.value and "nounlock" in item.tags)
+                    or (not options.season_change_helper_items.value and "seasonhelper" in item.tags)
+                ):
+                    continue
+
+                # Add basic items as dummy event items so we can do logic with them
+                if not options.shuffle_starting_recipes.value and "basic" in item.tags:
+                    if item.type == IC.progression:
+                        world.multiworld.push_precollected(DSTItem(name, IC.progression, None, world.player))
+                    continue
 
             # Put junk items in the filler pool
             if "junk" in item.tags:
@@ -48,8 +57,9 @@ class DSTItemPool:
             if not "physical" in item.tags:
                 self.locked_items_local_id.add(item.code-ITEM_ID_OFFSET)
 
-            # Add as nonfiller
-            self.nonfiller_itempool.append(name)
+            # Add into the nonfiller pool
+            if not name in start_inventory:
+                self.nonfiller_itempool.append(name)
         
         # Handle progressive items here
         for _ in range(options.extra_damage_against_bosses.value):
