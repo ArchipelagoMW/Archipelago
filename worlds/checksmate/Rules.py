@@ -74,11 +74,11 @@ def determine_difficulty(opts: CMOptions):
     # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
 
     if opts.difficulty.value == opts.difficulty.option_daily:
-        difficulty *= 1.05
+        difficulty *= 1.1  # results in, for example, the 4000 checkmate requirement becoming 4400
     if opts.difficulty.value == opts.difficulty.option_bullet:
-        difficulty *= 1.15
+        difficulty *= 1.2  # results in, for example, the 4000 checkmate requirement becoming 4800
     if opts.difficulty.value == opts.difficulty.option_relaxed:
-        difficulty *= 1.3
+        difficulty *= 1.35  # results in, for example, the 4000 checkmate requirement becoming 5400
     return difficulty
 
 
@@ -92,7 +92,8 @@ def determine_relaxation(opts: CMOptions):
 
 def meets_material_expectations(state: CollectionState,
                                 material: int, player: int, difficulty: float, absolute_relaxation: int) -> bool:
-    return state.prog_items[player]["Material"] >= (material * difficulty) + absolute_relaxation if material > 90 else 0
+    return state.prog_items[player]["Material"] >= (
+            (material * difficulty) + (absolute_relaxation if material > 90 else 0))
 
 
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
