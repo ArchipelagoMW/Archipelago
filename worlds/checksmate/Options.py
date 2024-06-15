@@ -27,16 +27,20 @@ class Goal(Choice):
 
 class Difficulty(Choice):
     """
-    Which kinds of checks to expect of the player. Lower difficulty means the player will not be required to do a given
-    check unless they
+    Which kinds of checks to expect of the player. In general, this mostly affects later checks (like Checkmate Maxima,
+    the victory condition).
 
     Grandmaster: All checks are baseline. You will generally hope for equal material, and may find yourself struggling.
+    You will have about the same material as the AI for Checkmate Maxima to be considered in logic.
 
-    Daily: The player may expect some difficulty with early checks, but complex game states will be relaxed.
+    Daily: The player may expect some difficulty with early checks, but complex game states will be relaxed. You will
+    have about an extra Bishop and an extra Pawn for Checkmate Maxima to be considered in logic.
 
-    Bullet: All checks are relaxed. Material expectations are raised, so the player will have more material earlier.
+    Bullet: All checks are relaxed. Material expectations are raised, so the player will have more material earlier. You
+    will have about an extra Rook and an extra Bishop for Checkmate Maxima to be considered in logic.
 
-    Relaxed: Most checks require almost twice as much material, so the player will have overwhelming forces.
+    Relaxed: Most checks require almost twice as much material, so the player will have overwhelming forces. You will
+    have about an extra Queen and an extra Rook and an extra Pawn for Checkmate Maxima to be considered in logic.
     """
     display_name = "Difficulty"
     option_grandmaster = 0
