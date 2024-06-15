@@ -53,8 +53,8 @@ class AssembleOptions(abc.ABCMeta):
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
         # apply aliases, without name_lookup
-        aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
-                   name.startswith("alias_")}
+        aliases = attrs["aliases"] = {name[6:].lower(): option_id for name, option_id in attrs.items() if
+                                      name.startswith("alias_")}
 
         assert (
             name in {"Option", "VerifyKeys"} or  # base abstract classes don't need default
@@ -147,6 +147,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
     # https://github.com/python/typing/discussions/1460 the reason for this type: ignore
     options: typing.ClassVar[typing.Dict[str, int]]
+    aliases: typing.ClassVar[typing.Dict[str, int]]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
