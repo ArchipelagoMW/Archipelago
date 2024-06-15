@@ -349,14 +349,14 @@ ChangeStageMode:
   LDX #$98
   .Loop:
   LDA #$00
-  STA $021F, X
+  STA $01FF, X
   DEX
-  STA $021F, X
+  STA $01FF, X
   DEX
-  STA $021F, X
+  STA $01FF, X
   DEX
   LDA #$F8
-  STA $021F, X
+  STA $01FF, X
   DEX
   CPX #$00
   BNE .Loop
