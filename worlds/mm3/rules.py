@@ -5,7 +5,7 @@ from .locations import (needle_man_locations, magnet_man_locations, gemini_man_l
                         top_man_locations, snake_man_locations, spark_man_locations, shadow_man_locations,
                         doc_air_locations, doc_crash_locations, doc_flash_locations, doc_bubble_locations,
                         doc_wood_locations, doc_heat_locations, doc_metal_locations, doc_quick_locations,
-                        wily_1_locations, wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations,
+                        wily_1_locations, wily_2_locations, wily_3_locations, wily_5_locations,
                         wily_6_locations, energy_pickups, etank_1ups)
 from worlds.generic.Rules import add_rule
 
@@ -281,9 +281,9 @@ def set_rules(world: "MM3World") -> None:
 
     # Handle Doc Robo stage connections
     for entrance, location in (("To Doc Robot (Needle) - Crash", names.doc_air),
-                                 ("To Doc Robot (Gemini) - Bubble", names.doc_flash),
-                                 ("To Doc Robot (Shadow) - Heat", names.doc_wood),
-                                 ("To Doc Robot (Spark) - Quick", names.doc_metal)):
+                               ("To Doc Robot (Gemini) - Bubble", names.doc_flash),
+                               ("To Doc Robot (Shadow) - Heat", names.doc_wood),
+                               ("To Doc Robot (Spark) - Quick", names.doc_metal)):
         entrance_object = world.get_entrance(entrance)
         add_rule(entrance_object, lambda state, loc=location: state.can_reach(loc, "Location", world.player))
 
@@ -297,7 +297,8 @@ def set_rules(world: "MM3World") -> None:
                                                                            world.player))
 
     add_rule(world.get_entrance("To Doc Robot (Spark) - Metal"),
-             lambda state: has_rush_vertical(state, world.player))
+             lambda state: has_rush_vertical(state, world.player) and
+                           state.has_any([names.shadow_blade, names.gemini_laser], world.player))
     add_rule(world.get_entrance("To Doc Robot (Needle) - Air"),
              lambda state: has_rush_vertical(state, world.player))
     add_rule(world.get_entrance("To Doc Robot (Needle) - Crash"),

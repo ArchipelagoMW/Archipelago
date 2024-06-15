@@ -113,9 +113,7 @@ enemy_addresses: Dict[str, int] = {
 
 # addresses printed when assembling basepatch
 # consumables_ptr: int = 0x3F2FE
-wily_4_ptr: int = 0x43578
-
-
+wily_4_ptr: int = 0x7F578
 # energylink_ptr: int = 0x3F46B
 
 
@@ -257,6 +255,12 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
             enemy_weaknesses[enemy] = {weapon: world.random.randint(-4, 4) for weapon in enemy_weakness_ptrs}
             if enemy in ["Tama", "Giant Snakey", "Proto Man", "Giant Metall"] and enemy_weaknesses[enemy][0] <= 0:
                 enemy_weaknesses[enemy][0] = 1
+            elif enemy == "Jamacy 2":
+                # bruh
+                if not enemy_weaknesses[enemy][8]:
+                    enemy_weaknesses[enemy][8] = 1
+                if not enemy_weaknesses[enemy][3]:
+                    enemy_weaknesses[enemy][3] = 1
 
     for enemy, damage in enemy_weaknesses.items():
         for weapon in enemy_weakness_ptrs:

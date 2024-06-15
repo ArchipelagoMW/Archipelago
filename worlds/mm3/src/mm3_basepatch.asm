@@ -53,8 +53,8 @@ norom
 'R' = $1B
 'S' = $1C
 'T' = $1D
-'U' = $20
-'V' = $21
+'U' = $1E
+'V' = $1F
 'W' = $20
 'X' = $21
 'Y' = $22
@@ -80,11 +80,11 @@ norom
 ;!LOAD_BANK = $C000
 
 macro org(address,bank)
-    if <bank> == $20
+    if <bank> == $3E
         org <address>-$C000+($2000*<bank>)+!headersize ; org sets the position in the output file to write to (in norom, at least)
         base <address> ; base sets the position that all labels are relative to - this is necessary so labels will still start from $8000, instead of $0000 or somewhere
     else 
-      if <bank> == $21
+      if <bank> == $3F
           org <address>-$E000+($2000*<bank>)+!headersize ; org sets the position in the output file to write to (in norom, at least)
           base <address> ; base sets the position that all labels are relative to - this is necessary so labels will still start from $8000, instead of $0000 or somewhere
       else
@@ -246,56 +246,56 @@ ItemUpper:
 ItemLower:
   db $00, $91, $D2, $13, $54, $95, $D6, $17, $58
 
-%org($C8F7, $20)
+%org($C8F7, $3E)
 RemoveRushCoil:
   NOP #4
 
-%org($CA73, $20)
+%org($CA73, $3E)
 HookController:
   JMP ControllerHook
   NOP
 
-%org($DA18, $20)
+%org($DA18, $3E)
 NullWeaponGet:
   NOP #5 ; TODO: see if I can reroute this write instead for nicer timings
 
-%org($DB99, $20)
+%org($DB99, $3E)
 HookMidDoc:
   JSR SetMidDoc
   NOP
 
-%org($DBB0, $20)
+%org($DBB0, $3E)
 HoodEndDoc:
   JSR SetEndDocAndWily
   NOP
 
-%org($DC57, $20)
+%org($DC57, $3E)
 RerouteStageComplete:
   LDA $60
   JSR SetStageComplete
   NOP #2
 
-%org($DC6F, $20)
+%org($DC6F, $3E)
 RerouteRushMarine:
   JMP SetRushMarine
   NOP
 
-%org($DC6A, $20)
+%org($DC6A, $3E)
 RerouteRushJet:
   JMP SetRushJet
   NOP
 
-%org($DF81, $20)
+%org($DF81, $3E)
 NullBreak:
   NOP #5 ; nop break man giving every weapon
 
-%org($E15F, $21)
+%org($E15F, $3F)
 Wily4:
   JMP Wily4Comparison
   NOP
 
 
-%org($F340, $21)
+%org($F340, $3F)
 RewireDocRobotAccess:
   LDA !current_state
   BNE .DocRobo
@@ -667,7 +667,7 @@ Wily4Comparison:
   STA $EC
   RTS
 
-%org($FDBA, $21)
+%org($FDBA, $3F)
 WeaponReceived:
   TAX
   LDA $F5
