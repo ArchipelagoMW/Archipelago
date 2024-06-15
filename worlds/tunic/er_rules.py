@@ -254,7 +254,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Lower Entry"],
-        rule=lambda state: has_ladder("Ladder to Swamp", state, world))
+        rule=lambda state: has_ladder("Ladder to Swamp", state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld Swamp Lower Entry"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladder to Swamp", state, world))
@@ -279,10 +280,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: state.has(house_key, player)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
-    # not including ice grapple through this because it's very tedious to get an enemy here
+    # lure enemy over and ice grapple through
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Southeast Cross Door"],
-        rule=lambda state: has_ability(holy_cross, state, world))
+        rule=lambda state: has_ability(holy_cross, state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld Southeast Cross Door"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ability(holy_cross, state, world))
@@ -291,7 +293,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Fountain Cross Door"],
         rule=lambda state: has_ability(holy_cross, state, world)
-        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Overworld Fountain Cross Door"].connect(
         connecting_region=regions["Overworld"])
 
