@@ -1,4 +1,4 @@
-from typing import Dict, Set, Tuple, Optional, TYPE_CHECKING
+from typing import Dict, FrozenSet, Tuple, Optional, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from .options import IceGrappling, LadderStorage
 from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
@@ -1004,19 +1004,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     return portal2.name, portal1.region
             raise Exception("no matches found in get_paired_region")
 
-        def ls_connect(origin_name: str, portal_sdt: str, ladder_req: Optional[str] = None) -> None:
+        # connect ls elevation regions to their destinations
+        def ls_connect(origin_name: str, portal_sdt: str) -> None:
             p_name, paired_region_name = get_portal_info(portal_sdt)
-            if ladder_req:
-                ladder_regions[origin_name].connect(
-                    regions[paired_region_name],
-                    name=p_name + " (LS) " + origin_name,
-                    rule=lambda state: can_ladder_storage(state, world) and state.has(ladder_req, player))
-            else:
-                ladder_regions[origin_name].connect(
-                    regions[paired_region_name],
-                    name=p_name + " (LS) " + origin_name,
-                    rule=lambda state: can_ladder_storage(state, world))
+            ladder_regions[origin_name].connect(
+                regions[paired_region_name],
+                name=p_name + " (LS) " + origin_name)
 
+        # get what non-overworld ladder storage connections we want together
         non_ow_ls_list = []
         non_ow_ls_list.extend(easy_ls)
         if options.ladder_storage >= LadderStorage.option_medium:
@@ -1037,18 +1032,25 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         # connect the applicable overworld regions to the ls elevation regions
         for origin_region, ladders in region_ladders.items():
             for ladder_region, region_info in ow_ladder_groups.items():
-                common_ladders: Set[str] = ladders.intersection(region_info.ladders)
+                common_ladders: FrozenSet[str] = frozenset(ladders.intersection(region_info.ladders))
+                # checking if that region has a ladder or ladders for that elevation
                 if common_ladders:
-                    regions[origin_region].connect(ladder_regions[ladder_region],
-                                                   rule=lambda state: state.has_any(common_ladders, player)
-                                                   and can_ladder_storage(state, world))
+                    if options.shuffle_ladders:
+                        regions[origin_region].connect(
+                            ladder_regions[ladder_region],
+                            rule=lambda state, lads=common_ladders: state.has_any(lads, player)
+                            and can_ladder_storage(state, world))
+                    else:
+                        regions[origin_region].connect(
+                            ladder_regions[ladder_region],
+                            rule=lambda state: can_ladder_storage(state, world))
 
         # connect ls elevation regions to the region on the other side of the portals
         for ladder_region, region_info in ow_ladder_groups.items():
             for portal_dest in region_info.portals:
                 ls_connect(ladder_region, "Overworld Redux, " + portal_dest)
 
-        # connect ls elevation regions to regions where you can get an enemy to knock you down
+        # connect ls elevation regions to regions where you can get an enemy to knock you down, also well rail
         if options.ladder_storage >= LadderStorage.option_medium:
             for ladder_region, region_info in ow_ladder_groups.items():
                 for dest_region in region_info.regions:
@@ -1082,8 +1084,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     name=portal_name + " (LS) " + ls_info.origin,
                     rule=lambda state: can_ladder_storage(state, world)
                     and (state.has("Ladders in South Atoll", player)
+                         or not options.shuffle_ladders  # if ladder shuffle is off, don't gotta worry about ladders
                          or state.has(key, player, 2)  # can do it from the rope
-                         or options.ladder_storage >= LadderStorage.option_medium))
+                         or options.ladder_storage >= LadderStorage.option_medium))  # use the little ladder
             # holy cross mid-ls to get in here
             elif ls_info.destination == "Swamp Redux 2, Cathedral Redux_secret":
                 if ls_info.origin == "Swamp Mid":
@@ -1091,14 +1094,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                         connecting_region=regions[dest_region],
                         name=portal_name + " (LS) " + ls_info.origin,
                         rule=lambda state: can_ladder_storage(state, world) and has_ability(prayer, state, world)
-                        and state.has(ls_info.ladders_req))
+                        and (state.has(ls_info.ladders_req, player) or not options.shuffle_ladders))
                 else:
                     regions[ls_info.origin].connect(
                         connecting_region=regions[dest_region],
                         name=portal_name + " (LS) " + ls_info.origin,
                         rule=lambda state: can_ladder_storage(state, world) and has_ability(prayer, state, world))
             else:
-                ls_connect(ls_info.origin, ls_info.destination, ls_info.ladders_req)
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[dest_region],
+                    name=portal_name + " (LS) " + ls_info.origin,
+                    rule=lambda state: can_ladder_storage(state, world))
+
+        for region in ladder_regions.values():
+            world.multiworld.regions.append(region)
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:

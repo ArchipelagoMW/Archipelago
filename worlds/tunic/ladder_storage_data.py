@@ -146,7 +146,7 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Upper",
                "Ladder to Beneath the Vault"),
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_", "Ladder to Beneath the Vault"),
-    LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_", "Ladder to Beneath the Vault",
+    LadderInfo("Fortress Exterior near cave", "Fortress Courtyard Upper", "Ladder to Beneath the Vault",
                dest_is_region=True),
 
     # need to gain height to get up the stairs
