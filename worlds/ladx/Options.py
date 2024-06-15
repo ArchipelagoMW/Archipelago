@@ -1,7 +1,8 @@
 import os.path
 import typing
 import logging
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
+from dataclasses import dataclass
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText, DeathLink, OptionGroup, PerGameCommonOptions
 from collections import defaultdict
 import Utils
 
@@ -461,44 +462,77 @@ class AdditionalWarpPoints(DefaultOffToggle):
     [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
     [Off] No change
     """
-     
 
-links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
-    'logic': Logic,
-    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
-    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
-    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
-    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
-    'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
-    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
-    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
-    # 'boomerang': Boomerang,
-    # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
-    'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
-    'experimental_entrance_shuffle': EntranceShuffle,
-    # 'bossshuffle': BossShuffle,
-    # 'minibossshuffle': BossShuffle,
-    'goal': Goal,
-    'instrument_count': InstrumentCount,
-    # 'itempool': ItemPool,
-    # 'bowwow': Bowwow,
-    # 'overworld': Overworld,
-    'link_palette': LinkPalette,
-    'warp_improvements': WarpImprovements,
-    'additional_warp_points': AdditionalWarpPoints,
-    'trendy_game': TrendyGame,
-    'gfxmod': GfxMod,
-    'palette': Palette,
-    'text_shuffle': TextShuffle,
-    'shuffle_nightmare_keys': ShuffleNightmareKeys,
-    'shuffle_small_keys': ShuffleSmallKeys,
-    'shuffle_maps': ShuffleMaps,
-    'shuffle_compasses': ShuffleCompasses,
-    'shuffle_stone_beaks': ShuffleStoneBeaks,
-    'music': Music,
-    'shuffle_instruments': ShuffleInstruments,
-    'music_change_condition': MusicChangeCondition,
-    'nag_messages': NagMessages,
-    'ap_title_screen': APTitleScreen,
-    'boots_controls': BootsControls,   
-}
+ladx_option_groups = [
+    OptionGroup("Goal Options", [
+        Goal,
+        InstrumentCount,
+    ]),
+    OptionGroup("Shuffles", [
+        ShuffleInstruments,
+        ShuffleNightmareKeys,
+        ShuffleSmallKeys,
+        ShuffleMaps,
+        ShuffleCompasses,
+        ShuffleStoneBeaks
+    ]),
+    OptionGroup("Warp Points", [
+        WarpImprovements,
+        AdditionalWarpPoints,
+    ]),
+    OptionGroup("Experimental", [
+        DungeonShuffle,
+        EntranceShuffle
+    ]),
+    OptionGroup("Visuals & Sound", [
+        LinkPalette,
+        Palette,
+        TextShuffle,
+        APTitleScreen,
+        GfxMod,
+        Music,
+        MusicChangeCondition
+    ]),
+    OptionGroup("Miscellaneous", [
+        TradeQuest,
+        Rooster,
+        TrendyGame,
+        NagMessages,
+        BootsControls
+    ])
+]
+     
+@dataclass
+class LinksAwakeningOptions(PerGameCommonOptions):
+    death_link: DeathLink
+    logic: Logic
+
+    goal: Goal
+    instrument_count: InstrumentCount
+    
+    shuffle_instruments: ShuffleInstruments
+    shuffle_nightmare_keys: ShuffleNightmareKeys
+    shuffle_small_keys: ShuffleSmallKeys
+    shuffle_maps: ShuffleMaps
+    shuffle_compasses: ShuffleCompasses
+    shuffle_stone_beaks: ShuffleStoneBeaks
+    
+    warp_improvements: WarpImprovements
+    additional_warp_points: AdditionalWarpPoints
+    
+    experimental_dungeon_shuffle: DungeonShuffle # 'Randomizes the dungeon that each dungeon entrance leads to'),
+    experimental_entrance_shuffle: EntranceShuffle
+    
+    link_palette: LinkPalette
+    palette: Palette
+    text_shuffle: TextShuffle
+    ap_title_screen: APTitleScreen
+    gfxmod: GfxMod
+    music: Music
+    music_change_condition: MusicChangeCondition
+    
+    tradequest: TradeQuest # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
+    rooster: Rooster # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
+    trendy_game: TrendyGame
+    nag_messages: NagMessages
+    boots_controls: BootsControls

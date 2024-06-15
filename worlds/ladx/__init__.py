@@ -23,7 +23,7 @@ from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import DungeonItemShuffle, links_awakening_options, ShuffleInstruments
+from .Options import DungeonItemShuffle, LinksAwakeningOptions, ladx_option_groups, ShuffleInstruments
 from .Rom import LADXDeltaPatch
 
 DEVELOPER_MODE = False
@@ -64,7 +64,7 @@ class LinksAwakeningWebWorld(WebWorld):
         ["zig"]
     )]
     theme = "dirt"
-
+    option_groups = ladx_option_groups
 
 class LinksAwakeningWorld(World):
     """
@@ -74,7 +74,8 @@ class LinksAwakeningWorld(World):
     game = LINKS_AWAKENING  # name of the game/world
     web = LinksAwakeningWebWorld()
     
-    option_definitions = links_awakening_options  # options the player can set
+    options_dataclass = LinksAwakeningOptions
+    options: LinksAwakeningOptions # options the player can set
     settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
 
@@ -114,7 +115,7 @@ class LinksAwakeningWorld(World):
 
     def convert_ap_options_to_ladxr_logic(self):
         self.player_options = {
-            option: getattr(self.multiworld, option)[self.player] for option in self.option_definitions
+            option: getattr(self.options, option) for option in dir(self.options) if not option.startswith("__") and option != "as_dict" # it's easier to also exclude the collection in the dict as using that [dir(self.options) is a list of elements]
         }
 
         self.laxdr_options = LADXRSettings(self.player_options)
@@ -215,7 +216,8 @@ class LinksAwakeningWorld(World):
                 else:
                     item = self.create_item(item_name)
 
-                    if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
+                    if not self.player_options["tradequest"] and isinstance(item.item_data, TradeItemData):
+                    #if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
                         location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
                         location.place_locked_item(item)
                         location.show_in_spoiler = False
@@ -476,7 +478,7 @@ class LinksAwakeningWorld(World):
             self.multi_key,
             self.multiworld.seed_name,
             self.ladxr_logic,
-            rnd=self.multiworld.per_slot_randoms[self.player],
+            rnd=self.random,
             player_name=name_for_rom,
             player_names=all_names,
             player_id = self.player,
