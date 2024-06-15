@@ -185,6 +185,30 @@ class FairyKings(Range):
     default = 0
 
 
+class FairyChessPieceCollection(Choice):
+    """
+    Which collection of fairy pieces to allow, if any. Choose FIDE to disable fairy chess pieces. Choose Configure to
+    disable this option in favor of the more precise FairyChessPieces option.
+
+    FIDE: The default, which only allows the standard pieces defined by FIDE (Queen, Rook, Knight, Bishop).
+
+    Betza: Adds the pieces from Ralph Betza's Chess With Different Armies, being the Remarkable Rookies, Colorbound
+    Clobberers, and Nutty Knights.
+
+    Full: Adds every implemented army, including Eurasian and custom pieces. The Cannon and Vao capture by jumping over
+    an intervening chessman.
+
+    Configure: Allows you to specify your own pieces using the FairyChessPieces option. See also FairyChessPieces (an
+    OptionSet, which is not typically visible on the Archipelago Settings UI) for advanced, specific configuration.
+    """
+    display_name = "Fairy Chess Piece Types"
+    option_fide = 0
+    option_betza = 1
+    option_full = 2
+    option_configure = 3
+    default = 0
+
+
 class FairyChessPieces(OptionSet):
     """
     Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies. If omitted,
@@ -217,6 +241,7 @@ class FairyChessPieces(OptionSet):
     default = valid_keys
 
 
+# TODO: Rename to ...Mixed/Mercs
 class FairyChessArmy(Choice):
     """
     Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Cannon pieces, which
@@ -360,6 +385,7 @@ class CMOptions(PerGameCommonOptions):
     max_pocket: MaximumPocket
     max_kings: MaximumKings
     fairy_kings: FairyKings
+    fairy_chess_piece_collection: FairyChessPieceCollection
     fairy_chess_pieces: FairyChessPieces
     fairy_chess_army: FairyChessArmy
     fairy_chess_pawns: FairyChessPawns

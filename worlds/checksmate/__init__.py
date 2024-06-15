@@ -78,32 +78,40 @@ class CMWorld(World):
 
     # TODO: this probably can go in some other method now??
     def generate_early(self) -> None:
-        which_pieces = self.options.fairy_chess_pieces
-        # TODO: I am not ok with this
-        if (which_pieces.value is None or which_pieces.value == 'None' or
-                None in which_pieces.value or 'None' in which_pieces.value):
-            raise Exception("This ChecksMate YAML is invalid! Add text after fairy_chess_pieces.")
+        piece_collection = self.options.fairy_chess_piece_collection
         army_options = []
-        # FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
-        if "FIDE" in which_pieces.value:
-            army_options += [0]
-        # CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies.
-        if "Clobberers" in which_pieces.value:
-            army_options += [1]
-        if "Rookies" in which_pieces.value:
-            army_options += [2]
-        if "Nutty" in which_pieces.value:
-            army_options += [3]
-        # Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening
-        # chessman, and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
-        if "Cannon" in which_pieces.value:
-            army_options += [4]
-        # Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0).
-        if "Camel" in which_pieces.value:
-            army_options += [5]
-        # An empty set disables fairy chess pieces completely.
-        if not army_options:
+        if piece_collection.value == self.options.fairy_chess_piece_collection.option_fide:
             army_options = [0]
+        elif piece_collection.value == self.options.fairy_chess_piece_collection.option_betza:
+            army_options = [0, 1, 2, 3]
+        elif piece_collection.value == self.options.fairy_chess_piece_collection.option_full:
+            army_options = [0, 1, 2, 3, 4, 5]
+        elif piece_collection.value == self.options.fairy_chess_piece_collection.option_configure:
+            which_pieces = self.options.fairy_chess_pieces
+            # TODO: I am not ok with this
+            if (which_pieces.value is None or which_pieces.value == 'None' or
+                    None in which_pieces.value or 'None' in which_pieces.value):
+                raise Exception("This ChecksMate YAML is invalid! Add text after fairy_chess_pieces.")
+            # FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
+            if "FIDE" in which_pieces.value:
+                army_options += [0]
+            # CwDA: Adds the pieces from Ralph Betza's 12 Chess With Different Armies.
+            if "Clobberers" in which_pieces.value:
+                army_options += [1]
+            if "Rookies" in which_pieces.value:
+                army_options += [2]
+            if "Nutty" in which_pieces.value:
+                army_options += [3]
+            # Cannon: Adds the Rook-like Cannon, which captures a distal chessman by leaping over an intervening
+            # chessman, and the Vao, a Bishop-like Cannon, in that it moves and captures diagonally.
+            if "Cannon" in which_pieces.value:
+                army_options += [4]
+            # Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0).
+            if "Camel" in which_pieces.value:
+                army_options += [5]
+            # An empty set disables fairy chess pieces completely.
+            if not army_options:
+                army_options = [0]
         army_constraint = self.options.fairy_chess_army
         if army_constraint != 0:
             self.armies[self.player] = [self.random.choice(army_options)]
@@ -311,9 +319,9 @@ class CMWorld(World):
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         while (len(items) + user_location_count + sum(locked_items.values())) < len(location_table):
             chosen_item = self.random.choice(my_filler_items)
-            if not self.has_prereqs(chosen_item):
+            if len(my_filler_items) > 1 and not self.has_prereqs(chosen_item):
                 continue
-            if self.can_add_more(chosen_item):
+            if len(my_filler_items) == 1 or self.can_add_more(chosen_item):
                 self.consume_item(chosen_item, locked_items)
                 try_item = self.create_item(chosen_item)
                 items.append(try_item)
