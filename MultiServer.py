@@ -1102,6 +1102,13 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
     return []
 
 
+status_names: typing.Dict[NetUtils.HintStatus, str] = {
+    NetUtils.HintStatus.HINT_FOUND: "(found)",
+    NetUtils.HintStatus.HINT_UNSPECIFIED: "(unspecified)",
+    NetUtils.HintStatus.HINT_NO_PRIORITY: "(no priority)",
+    NetUtils.HintStatus.HINT_AVOID: "(avoid)",
+    NetUtils.HintStatus.HINT_PRIORITY: "(priority)",
+}
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item]} is " \
@@ -1111,13 +1118,6 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     if hint.entrance:
         text += f" at {hint.entrance}"
     
-    status_names: typing.Dict[NetUtils.HintStatus, str] = {
-        NetUtils.HintStatus.HINT_FOUND: "(found)",
-        NetUtils.HintStatus.HINT_UNSPECIFIED: "(unspecified)",
-        NetUtils.HintStatus.HINT_NO_PRIORITY: "(no priority)",
-        NetUtils.HintStatus.HINT_AVOID: "(avoid)",
-        NetUtils.HintStatus.HINT_PRIORITY: "(priority)",
-    }
     return text + ". " + status_names.get(hint.status, "(unknown)")
 
 

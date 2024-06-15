@@ -303,6 +303,20 @@ def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) 
     parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "(found)",
+    HintStatus.HINT_UNSPECIFIED: "(unspecified)",
+    HintStatus.HINT_NO_PRIORITY: "(no priority)",
+    HintStatus.HINT_AVOID: "(avoid)",
+    HintStatus.HINT_PRIORITY: "(priority)",
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_UNSPECIFIED: "white",
+    HintStatus.HINT_NO_PRIORITY: "slateblue",
+    HintStatus.HINT_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY: "plum",
+}
 class Hint(typing.NamedTuple):
     receiving_player: int
     finding_player: int
@@ -345,20 +359,6 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, "'s World")
         add_json_text(parts, ". ")
-        status_names: typing.Dict[HintStatus, str] = {
-            HintStatus.HINT_FOUND: "(found)",
-            HintStatus.HINT_UNSPECIFIED: "(unspecified)",
-            HintStatus.HINT_NO_PRIORITY: "(no priority)",
-            HintStatus.HINT_AVOID: "(avoid)",
-            HintStatus.HINT_PRIORITY: "(priority)",
-        }
-        status_colors: typing.Dict[HintStatus, str] = {
-            HintStatus.HINT_FOUND: "green",
-            HintStatus.HINT_UNSPECIFIED: "white",
-            HintStatus.HINT_NO_PRIORITY: "slateblue",
-            HintStatus.HINT_AVOID: "salmon",
-            HintStatus.HINT_PRIORITY: "plum",
-        }
         add_json_text(parts, status_names.get(self.status, "(unknown)"), type="color",
                       color=status_colors.get(self.status, "red"))
 

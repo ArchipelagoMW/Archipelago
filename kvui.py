@@ -728,7 +728,20 @@ class UILog(RecycleView):
             if element.height != element.texture_size[1]:
                 element.height = element.texture_size[1]
 
-
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "Found",
+    HintStatus.HINT_UNSPECIFIED: "Unspecified",
+    HintStatus.HINT_NO_PRIORITY: "No Priority",
+    HintStatus.HINT_AVOID: "Avoid",
+    HintStatus.HINT_PRIORITY: "Priority",
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_UNSPECIFIED: "white",
+    HintStatus.HINT_NO_PRIORITY: "cyan",
+    HintStatus.HINT_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY: "plum",
+}
 class HintLog(RecycleView):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
@@ -753,20 +766,6 @@ class HintLog(RecycleView):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
             self.scroll_y = 1.0
         data = []
-        status_names: typing.Dict[HintStatus, str] = {
-            HintStatus.HINT_FOUND: "Found",
-            HintStatus.HINT_UNSPECIFIED: "Unspecified",
-            HintStatus.HINT_NO_PRIORITY: "No Priority",
-            HintStatus.HINT_AVOID: "Avoid",
-            HintStatus.HINT_PRIORITY: "Priority",
-        }
-        status_colors: typing.Dict[HintStatus, str] = {
-            HintStatus.HINT_FOUND: "green",
-            HintStatus.HINT_UNSPECIFIED: "white",
-            HintStatus.HINT_NO_PRIORITY: "cyan",
-            HintStatus.HINT_AVOID: "salmon",
-            HintStatus.HINT_PRIORITY: "plum",
-        }
         for hint in hints:
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
