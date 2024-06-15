@@ -109,7 +109,7 @@ class BombRushCyberfunkWorld(World):
     def create_items(self):
         rep_locations: int = 87
         if self.options.skip_polo_photos:
-            rep_locations -= 18
+            rep_locations -= 17
 
         self.options.total_rep.round_to_nearest_step()
         rep_counts = self.options.total_rep.get_rep_item_counts(self.random, rep_locations)
@@ -157,7 +157,7 @@ class BombRushCyberfunkWorld(World):
             self.get_region(n).add_exits(region_exits[n])
 
         for index, loc in enumerate(location_table):
-            if self.options.skip_polo_photos and "Polo" in loc["name"]:
+            if self.options.skip_polo_photos and "Polo" in loc["game_id"]:
                 continue
             stage: Region = self.get_region(loc["stage"])
             stage.add_locations({loc["name"]: base_id + index})
