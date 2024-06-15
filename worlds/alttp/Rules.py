@@ -10,7 +10,7 @@ from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
 from .Items import item_factory, item_name_groups, item_table, progression_items
 from .Options import small_key_shuffle
-from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
+from .OverworldGlitchRules import overworld_glitches_rules
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
@@ -33,7 +33,6 @@ def set_rules(world):
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
-            no_logic_rules(world, player)
             for exit in world.get_region('Menu', player).exits:
                 exit.hide_path = True
             return
