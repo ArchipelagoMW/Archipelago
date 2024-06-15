@@ -564,6 +564,7 @@ def read_data() -> Tuple[
                     "Getfixedboi",
                     "Not Getfixedboi",
                     "Calamity",
+                    "Not Calamity",
                     "Not Calamity Getfixedboi",
                 }:
                     raise Exception(

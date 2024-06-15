@@ -106,7 +106,12 @@ class TerrariaWorld(World):
                 (not self.getfixedboi and "Getfixedboi" in rule.flags)
                 or (self.getfixedboi and "Not Getfixedboi" in rule.flags)
                 or (not self.calamity and "Calamity" in rule.flags)
-                or (self.getfixedboi and self.calamity and "Not Calamity Getfixedboi" in rule.flags)
+                or (self.calamity and "Not Calamity" in rule.flags)
+                or (
+                    self.getfixedboi
+                    and self.calamity
+                    and "Not Calamity Getfixedboi" in rule.flags
+                )
                 or (not self.options.early_achievements.value and early)
                 or (
                     not self.options.normal_achievements.value
