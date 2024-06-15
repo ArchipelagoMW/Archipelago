@@ -1076,10 +1076,14 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
-        found = location_id in ctx.location_checks[team, finding_player]
-        entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-        hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                   item_flags, status))
+        prev_hint = ctx.get_hint(team, slot, location_id)
+        if prev_hint:
+            hints.append(prev_hint)
+        else:
+            found = location_id in ctx.location_checks[team, finding_player]
+            entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
+            hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
+                                       item_flags, status))
 
     return hints
 
@@ -1092,6 +1096,9 @@ def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str
 
 def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int, status: NetUtils.HintStatus) \
         -> typing.List[NetUtils.Hint]:
+    prev_hint = ctx.get_hint(team, slot, seeked_location)
+    if prev_hint:
+        return [prev_hint]
     result = ctx.locations[slot].get(seeked_location, (None, None, None))
     if any(result):
         item_id, receiving_player, item_flags = result
