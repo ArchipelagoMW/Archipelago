@@ -604,6 +604,7 @@ CORSAIR_NEUTRON_SHIELDS                                 = "Neutron Shields (Cors
 ORACLE_STEALTH_DRIVE                                    = "Stealth Drive (Oracle)"
 ORACLE_STASIS_CALIBRATION                               = "Stasis Calibration (Oracle)"
 ORACLE_TEMPORAL_ACCELERATION_BEAM                       = "Temporal Acceleration Beam (Oracle)"
+ORACLE_BOSONIC_CORE                                     = "Bosonic Core (Oracle)"
 ARBITER_CHRONOSTATIC_REINFORCEMENT                      = "Chronostatic Reinforcement (Arbiter)"
 ARBITER_KHAYDARIN_CORE                                  = "Khaydarin Core (Arbiter)"
 ARBITER_SPACETIME_ANCHOR                                = "Spacetime Anchor (Arbiter)"
