@@ -5,11 +5,12 @@
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - [SNI](https://github.com/alttpo/sni/releases). Esto está incluido automáticamente en la instalación de Archipelago.
 - SNI no es compatible con (Q)Usb2Snes.
-- Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
+- Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES, por ejemplo:
     - Un emulador capaz de conectarse a SNI
-      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x-rr](https://github.com/gocha/snes9x-rr/releases),
+       [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
        [BizHawk](https://tasvideos.org/BizHawk), o
-       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 o más nuevo). O,
+       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 o más nuevo).
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), u otro hardware compatible. **nota:
 Las SNES minis modificadas no tienen soporte de SNI. Algunos usuarios dicen haber tenido éxito con Qusb2Snes para esta consola,
 pero no tiene soporte.**
@@ -19,15 +20,16 @@ pero no tiene soporte.**
 
 1. Descarga e instala (Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases/latest].
    **El archivo del instalador se encuentra en la sección de assets al final de la información de version**.
-2. La primera vez que realices una generación local o parchees tu juego, se te pedirá que ubiques tu archivo ROM base. Este es tu archivo ROM de Link to the Past japonés. Esto sólo debe hacerse una vez.
-
-3. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
+2. La primera vez que realices una generación local o parchees tu juego, se te pedirá que ubiques tu archivo ROM base.
+   Este es tu archivo ROM de Link to the Past japonés. Esto sólo debe hacerse una vez.
+   
+4. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
    ROM.
-    i. Extrae la carpeta de tu emulador al Escritorio, o algún otro sitio que vayas a recordar.
-    ii. Haz click derecho en un archivo ROM y selecciona **Abrir con...**
-    iii. Marca la casilla junto a **Usar siempre este programa para abrir archivos .sfc**
-    iv. Baja al final de la lista y haz click en el texto gris **Buscar otro programa en este PC**
-    v. Busca el archivo `.exe` de tu emulador y haz click en **Abrir**. Este archivo debería de encontrarse dentro de la carpeta que
+    1. Extrae la carpeta de tu emulador al Escritorio, o algún otro sitio que vayas a recordar.
+    2. Haz click derecho en un archivo ROM y selecciona **Abrir con...**
+    3. Marca la casilla junto a **Usar siempre este programa para abrir archivos .sfc**
+    4. Baja al final de la lista y haz click en el texto gris **Buscar otro programa en este PC**
+    5. Busca el archivo `.exe` de tu emulador y haz click en **Abrir**. Este archivo debería de encontrarse dentro de la carpeta que
       extrajiste en el paso uno. 
 
 ### Obtener el fichero de parche y crea tu ROM
@@ -47,6 +49,7 @@ Cuando el cliente se lance automáticamente, SNI debería de ejecutarse en segun
 primera vez que se ejecuta, tal vez se te pida permitir que se comunique a través del firewall de Windows
 
 #### snes9x-nwa
+
 1. Haz click en el menu Network y marca 'Enable Emu Network Control
 2. Carga tu archivo ROM si no lo habías hecho antes
 
