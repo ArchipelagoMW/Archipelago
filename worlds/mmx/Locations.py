@@ -123,7 +123,23 @@ all_locations = {
 location_table = {}
 
 location_groups = {
-    "Bosses": {location for location in all_locations.keys() if "Defeated" in location},
+    "Bosses": {
+        LocationName.armored_armadillo_boss,
+        LocationName.chill_penguin_boss,
+        LocationName.spark_mandrill_boss,
+        LocationName.launch_octopus_boss,
+        LocationName.boomer_kuwanger_boss,
+        LocationName.sting_chameleon_boss,
+        LocationName.storm_eagle_boss,
+        LocationName.flame_mammoth_boss,
+        LocationName.sigma_fortress_1_vile,
+        LocationName.sigma_fortress_1_bospider,
+        LocationName.sigma_fortress_2_rangda_bangda,
+        LocationName.sigma_fortress_3_d_rex,
+        LocationName.sigma_fortress_4_velguarder,
+        LocationName.sigma_fortress_4_sigma,
+        LocationName.spark_mandrill_mini_boss,
+    },
     "Heart Tanks": {location for location in all_locations.keys() if "- Heart Tank" in location},
     "Sub Tanks": {location for location in all_locations.keys() if "- Sub Tank" in location},
     "Upgrade Capsules": {location for location in all_locations.keys() if "Capsule" in location},
