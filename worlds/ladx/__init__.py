@@ -1,4 +1,5 @@
 import binascii
+import dataclasses
 import os
 import pkgutil
 import tempfile
@@ -118,7 +119,7 @@ class LinksAwakeningWorld(World):
     }
 
     def convert_ap_options_to_ladxr_logic(self):
-        self.ladxr_options = LADXRSettings(self.options.as_dict())
+        self.ladxr_options = LADXRSettings(dataclasses.asdict(self.options))
         
         self.ladxr_options.validate()
         world_setup = LADXRWorldSetup()
