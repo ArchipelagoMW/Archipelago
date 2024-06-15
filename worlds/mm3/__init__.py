@@ -5,7 +5,7 @@ from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
 from .names import (gamma, gemini_man_stage, needle_man_stage, hard_man_stage, magnet_man_stage, top_man_stage,
-                    snake_man_stage, spark_man_stage, shadow_man_stage)
+                    snake_man_stage, spark_man_stage, shadow_man_stage, rush_marine, rush_jet, rush_coil)
 from .items import (item_table, item_names, MM3Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, rush_item_table, lookup_item_to_id)
 from .locations import (MM3Location, mm3_regions, MM3Region, energy_pickups, etank_1ups, lookup_location_to_id,
@@ -176,9 +176,9 @@ class MM3World(World):
         if (self.options.starting_robot_master.current_key == "gemini_man"
             and not any(item in self.options.start_inventory for item in rush_item_table.keys())) or \
                 (self.options.starting_robot_master.current_key == "hard_man"
-                 and not any(item in self.options.start_inventory for item in [names.rush_coil, names.rush_jet])):
+                 and not any(item in self.options.start_inventory for item in [rush_coil, rush_jet])):
             robot_master_pool = [0, 1, 4, 5, 6, 7, ]
-            if names.rush_marine in self.options.start_inventory:
+            if rush_marine in self.options.start_inventory:
                 robot_master_pool.append(2)
             self.options.starting_robot_master.value = self.random.choice(robot_master_pool)
             logger.warning(
