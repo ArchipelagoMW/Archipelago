@@ -22,17 +22,17 @@ class TunicERLocation(Location):
 
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
+    for region_name, region_data in tunic_er_regions.items():
+        regions[region_name] = Region(region_name, world.player, world.multiworld)
+
     if world.options.entrance_rando:
-        portal_pairs = pair_portals(world)
+        portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
         for portal1, portal2 in portal_pairs.items():
             world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
     else:
-        portal_pairs = vanilla_portals()
-
-    for region_name, region_data in tunic_er_regions.items():
-        regions[region_name] = Region(region_name, world.player, world.multiworld)
+        portal_pairs = vanilla_portals(world, regions)
 
     set_er_region_rules(world, regions, portal_pairs)
 
@@ -51,6 +51,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     victory_region = regions["Spirit Arena Victory"]
     victory_location = TunicERLocation(world.player, "The Heir", None, victory_region)
     victory_location.place_locked_item(TunicERItem("Victory", ItemClassification.progression, None, world.player))
+    # todo: set the victory condition back
     world.multiworld.completion_condition[world.player] = lambda state: True  # state.has("Victory", world.player)
     victory_region.locations.append(victory_location)
 
@@ -93,7 +94,17 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
         region.locations.append(location)
 
 
-def vanilla_portals() -> Dict[Portal, Portal]:
+# all shops are the same shop. however, you cannot get to all shops from the same shop entrance.
+# so, we need a bunch of shop regions that connect to the actual shop, but the actual shop cannot connect back
+def create_shop_region(world: "TunicWorld", regions: Dict[str, Region]) -> None:
+    new_shop_name = f"Shop {world.shop_num}"
+    new_shop_region = Region(new_shop_name, world.player, world.multiworld)
+    new_shop_region.connect(regions["Shop"])
+    regions[new_shop_name] = new_shop_region
+    world.shop_num += 1
+
+
+def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
     portal_map = [portal for portal in portal_mapping if portal.name != "Ziggurat Lower Falling Entrance"]
@@ -105,8 +116,9 @@ def vanilla_portals() -> Dict[Portal, Portal]:
         portal2_sdt = portal1.destination_scene()
 
         if portal2_sdt.startswith("Shop,"):
-            portal2 = Portal(name="Shop", region="Shop",
+            portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                              destination="Previous Region", tag="_")
+            create_shop_region(world, regions)
 
         elif portal2_sdt == "Purgatory, Purgatory_bottom":
             portal2_sdt = "Purgatory, Purgatory_top"
@@ -125,8 +137,7 @@ def vanilla_portals() -> Dict[Portal, Portal]:
 
 
 # pairing off portals, starting with dead ends
-def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
-    # separate the portals into dead ends and non-dead ends
+def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
@@ -156,6 +167,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         has_laurels = False
 
+    # need to keep track of which scenes have shops, since you shouldn't have multiple shops connected to the same scene
     shop_scenes: Set[str] = set()
     shop_count = 6
     if fixed_shop:
@@ -293,8 +305,9 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         break
                 # if it's not a dead end, it might be a shop
                 if p_exit == "Shop Portal":
-                    portal2 = Portal(name="Shop Portal", region="Shop",
+                    portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                                      destination="Previous Region", tag="_")
+                    create_shop_region(world, regions)
                     shop_count -= 1
                     # need to maintain an even number of portals total
                     if shop_count < 0:
@@ -351,7 +364,9 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             raise Exception(f"Failed to do Fixed Shop option. "
                             f"Did {player_name} plando connection the Windmill Shop entrance?")
 
-        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region", tag="_")
+        portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
+                         destination="Previous Region", tag="_")
+        create_shop_region(world, regions)
 
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
@@ -435,7 +450,9 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
-        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region", tag="_")
+        portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
+                         destination="Previous Region", tag="_")
+        create_shop_region(world, regions)
         
         portal_pairs[portal1] = portal2
 
@@ -468,9 +485,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
         region1.connect(connecting_region=region2, name=portal1.name)
-        # prevent the logic from thinking you can get to any shop-connected region from the shop
-        if portal2.name not in {"Shop", "Shop Portal"}:
-            region2.connect(connecting_region=region1, name=portal2.name)
+        region2.connect(connecting_region=region1, name=portal2.name)
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],

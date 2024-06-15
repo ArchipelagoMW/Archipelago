@@ -71,6 +71,7 @@ class TunicWorld(World):
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
+    shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
 
     def generate_early(self) -> None:
         if self.options.plando_connections:
@@ -362,6 +363,13 @@ class TunicWorld(World):
                     hint_data[self.player][location.address] = hint_text
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        # todo: remove this
+        # if self.player_name == "Player22":
+        #     import Utils
+        #     state = self.multiworld.get_all_state(False)
+        #     state.update_reachable_regions(self.player)
+        #     Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), "tunctest.puml",
+        #                             show_entrance_names=True, highlight_regions=state.reachable_regions[self.player])
         slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
             "start_with_sword": self.options.start_with_sword.value,

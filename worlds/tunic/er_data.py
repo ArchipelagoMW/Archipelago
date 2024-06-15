@@ -10,6 +10,8 @@ class Portal(NamedTuple):
     elevation: Optional[int] = None  # elevation of the entrance, for ladder storage rule generation
 
     def scene(self) -> str:  # the actual scene name in Tunic
+        if self.region.startswith("Shop"):
+            return tunic_er_regions["Shop"].game_scene
         return tunic_er_regions[self.region].game_scene
 
     def scene_destination(self) -> str:  # full, nonchanging name to interpret by the mod
