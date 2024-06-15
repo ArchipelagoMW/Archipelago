@@ -13,7 +13,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
     # lowest elevation
     "LS Elev 0": OWLadderInfo({"Ladders in Overworld Town", "Ladder to Ruined Atoll", "Ladder to Swamp"},
                               ["Swamp Redux 2_conduit", "Overworld Cave_", "Atoll Redux_lower", "Maze Room_",
-                              "Town Basement_beach", "Archipelagos Redux_lowest"],
+                              "Town Basement_beach", "Archipelagos Redux_lower", "Archipelagos Redux_lowest"],
                               ["Overworld Beach"]),
     # also the east filigree room
     "LS Elev 1": OWLadderInfo({"Ladders near Weathervane", "Ladders in Overworld Town", "Ladder to Swamp"},
@@ -21,7 +21,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
                               ["Overworld Tunnel Turret"]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
-                              ["Archipelagos Redux_lower", "Ruins Passage_east"],
+                              ["Archipelagos Redux_upper", "Ruins Passage_east"],
                               ["After Ruined Passage"]),
     # also old house door
     "LS Elev 3": OWLadderInfo({"Ladders near Weathervane", "Ladder to Quarry", "Ladders to West Bell",
@@ -89,7 +89,6 @@ easy_ls: List[LadderInfo] = [
     # East Forest
     # Entrance by the dancing fox holy cross spot
     LadderInfo("East Forest", "East Forest Redux, East Forest Redux Laddercave_upper"),
-    LadderInfo("East Forest", "East Forest Dance Fox Spot", dest_is_region=True),
 
     # From the west side of Guard House 1 to the east side
     LadderInfo("Guard House 1 West", "East Forest Redux Laddercave, East Forest Redux_gate"),
@@ -101,14 +100,12 @@ easy_ls: List[LadderInfo] = [
     # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
     LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Main_Big Door"),
     LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Lower"),
-    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard", dest_is_region=True),
 
     # same as above, except from the east side of the area
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Overworld Redux_"),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Shop_"),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Main_Big Door"),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Lower"),
-    LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard", dest_is_region=True),
 
     # same as above, except from the Beneath the Vault entrance ladder
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Overworld Redux_", "Ladder to Beneath the Vault"),
@@ -116,7 +113,6 @@ easy_ls: List[LadderInfo] = [
                "Ladder to Beneath the Vault"),
     LadderInfo("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Lower",
                "Ladder to Beneath the Vault"),
-    LadderInfo("Fortress Exterior near cave", "Fortress Courtyard", "Ladder to Beneath the Vault", dest_is_region=True),
 
     # Swamp to Gauntlet
     LadderInfo("Swamp Mid", "Swamp Redux 2, Cathedral Arena_", "Ladders in Swamp"),
@@ -124,12 +120,18 @@ easy_ls: List[LadderInfo] = [
     # Ladder by the hero grave
     LadderInfo("Back of Swamp", "Swamp Redux 2, Overworld Redux_conduit"),
     LadderInfo("Back of Swamp", "Swamp Redux 2, Shop_"),
-    LadderInfo("Back of Swamp", "Swamp Mid", dest_is_region=True),
-    LadderInfo("Back of Swamp", "Swamp Front", dest_is_region=True),
 ]
 
-# if we can gain elevation, add the harder ones
+# if we can gain elevation or get knocked down, add the harder ones
 medium_ls: List[LadderInfo] = [
+    # region-destination versions of easy ls spots
+    LadderInfo("East Forest", "East Forest Dance Fox Spot", dest_is_region=True),
+    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard", dest_is_region=True),
+    LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard", dest_is_region=True),
+    LadderInfo("Fortress Exterior near cave", "Fortress Courtyard", "Ladder to Beneath the Vault", dest_is_region=True),
+    LadderInfo("Back of Swamp", "Swamp Mid", dest_is_region=True),
+    LadderInfo("Back of Swamp", "Swamp Front", dest_is_region=True),
+
     # gain height off the northeast fuse ramp
     LadderInfo("Ruined Atoll", "Atoll Redux, Frog Stairs_eye"),
 
@@ -153,6 +155,7 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Lower Mountain", "Mountain, Mountaintop_"),
 
     # Where the rope is behind Monastery
+    LadderInfo("Quarry Entry", "Quarry Redux, Monastery_back"),
     LadderInfo("Quarry Monastery Entry", "Quarry Redux, Monastery_back"),
     LadderInfo("Quarry Back", "Quarry Redux, Monastery_back"),
 

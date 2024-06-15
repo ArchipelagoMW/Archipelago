@@ -1034,17 +1034,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         # connect the applicable overworld regions to the ls elevation regions
         for origin_region, ladders in region_ladders.items():
             for ladder_region, region_info in ow_ladder_groups.items():
-                common_ladders: FrozenSet[str] = frozenset(ladders.intersection(region_info.ladders))
                 # checking if that region has a ladder or ladders for that elevation
+                common_ladders: FrozenSet[str] = frozenset(ladders.intersection(region_info.ladders))
                 if common_ladders:
                     if options.shuffle_ladders:
                         regions[origin_region].connect(
-                            ladder_regions[ladder_region],
+                            connecting_region=ladder_regions[ladder_region],
                             rule=lambda state, lads=common_ladders: state.has_any(lads, player)
                             and can_ladder_storage(state, world))
                     else:
                         regions[origin_region].connect(
-                            ladder_regions[ladder_region],
+                            connecting_region=ladder_regions[ladder_region],
                             rule=lambda state: can_ladder_storage(state, world))
 
         # connect ls elevation regions to the region on the other side of the portals
@@ -1072,14 +1072,24 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
         # connect the non-overworld ones
         for ls_info in non_ow_ls_list:
+            # for places where the destination is a region (so you have to get knocked down)
             if ls_info.dest_is_region:
-                regions[ls_info.origin].connect(
-                    connecting_region=regions[ls_info.destination],
-                    name=ls_info.destination + " (LS) " + ls_info.origin,
-                    rule=lambda state: can_ladder_storage(state, world))
+                # none of the non-ow ones have multiple ladders that can be used, so don't need has_any
+                if options.shuffle_ladders and ls_info.ladders_req:
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[ls_info.destination],
+                        name=ls_info.destination + " (LS) " + ls_info.origin,
+                        rule=lambda state, lad=ls_info.ladders_req: can_ladder_storage(state, world)
+                        and state.has(lad, player))
+                else:
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[ls_info.destination],
+                        name=ls_info.destination + " (LS) " + ls_info.origin,
+                        rule=lambda state: can_ladder_storage(state, world))
                 continue
 
             portal_name, dest_region = get_portal_info(ls_info.destination)
+            # these two are special cases
             if ls_info.destination == "Atoll Redux, Frog Stairs_mouth":
                 regions[ls_info.origin].connect(
                     connecting_region=regions[dest_region],
@@ -1095,13 +1105,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     regions[ls_info.origin].connect(
                         connecting_region=regions[dest_region],
                         name=portal_name + " (LS) " + ls_info.origin,
-                        rule=lambda state: can_ladder_storage(state, world) and has_ability(prayer, state, world)
-                        and (state.has(ls_info.ladders_req, player) or not options.shuffle_ladders))
+                        rule=lambda state: can_ladder_storage(state, world) and has_ability(holy_cross, state, world)
+                        and (state.has("Ladders in Swamp", player) or not options.shuffle_ladders))
                 else:
                     regions[ls_info.origin].connect(
                         connecting_region=regions[dest_region],
                         name=portal_name + " (LS) " + ls_info.origin,
-                        rule=lambda state: can_ladder_storage(state, world) and has_ability(prayer, state, world))
+                        rule=lambda state: can_ladder_storage(state, world) and has_ability(holy_cross, state, world))
+
+            elif options.shuffle_ladders and ls_info.ladders_req:
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[dest_region],
+                    name=portal_name + " (LS) " + ls_info.origin,
+                    rule=lambda state, lad=ls_info.ladders_req: can_ladder_storage(state, world)
+                    and state.has(lad, player))
             else:
                 regions[ls_info.origin].connect(
                     connecting_region=regions[dest_region],

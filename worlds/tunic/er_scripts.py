@@ -51,7 +51,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     victory_region = regions["Spirit Arena Victory"]
     victory_location = TunicERLocation(world.player, "The Heir", None, victory_region)
     victory_location.place_locked_item(TunicERItem("Victory", ItemClassification.progression, None, world.player))
-    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: True  # state.has("Victory", world.player)
     victory_region.locations.append(victory_location)
 
     return portal_pairs

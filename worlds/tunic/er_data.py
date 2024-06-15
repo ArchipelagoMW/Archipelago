@@ -729,6 +729,16 @@ tunic_er_regions: Dict[str, RegionInfo] = {
 }
 
 
+# this is essentially a pared down version of the region connections in rules.py, with some minor differences
+# the main purpose of this is to make it so that you can access every region
+# most items are excluded from the rules here, since we can assume Archipelago will properly place them
+# laurels (hyperdash) can be locked at 10 fairies, requiring access to secret gathering place
+# so until secret gathering place has been paired, you do not have hyperdash, so you cannot use hyperdash entrances
+# Zip means you need the laurels zips option enabled
+# IG# refers to ice grappling difficulties
+# LS# refers to ladder storage difficulties
+# LS rules are used for region connections here regardless of whether you have being knocked out of the air in logic
+# this is because it just means you can reach the entrances in that region via ladder storage
 traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Overworld": {
         "Overworld Beach":
@@ -1231,8 +1241,6 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [], 
         "Fortress Courtyard Upper":
             [["LS2"]],
-        "Fortress Exterior near cave":
-            [["LS1"]],
         "Fortress Courtyard":
             [["LS1"]],
     },
@@ -1354,7 +1362,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Quarry":
             [],
         "Monastery Rope":
-            [["LS2"]]
+            [["LS2"]],
     },
     "Quarry Portal": {
         "Quarry Entry":

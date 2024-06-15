@@ -150,8 +150,8 @@ class ShuffleLadders(Toggle):
     """
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
-    
-    
+
+
 class TunicPlandoConnections(PlandoConnections):
     entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
     exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
@@ -230,14 +230,14 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
+    laurels_location: LaurelsLocation
     lanternless: Lanternless
     maskless: Maskless
-    laurels_location: LaurelsLocation
-    plando_connections: TunicPlandoConnections
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+    plando_connections: TunicPlandoConnections
 
     logic_rules: Removed
       
