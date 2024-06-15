@@ -538,7 +538,7 @@ Martian Madness;                    Location | Item;                            
 Influx Waver;                       ;                                           #Martian Madness;
 
 // The Plaguebringer Goliath
-Plague Cell Canister;               Calamity;                                   Golem | Alchemical Flask;
+Plague Cell Canister;               Calamity;                                   Golem | Alchemical Flask | (@getfixedboi & #Queen Bee);
 Alchemical Flask;                   Calamity;                                   (Hardmode Anvil & Bee Wax & Plague Cell Canister) | (@getfixedboi & #Queen Bee);
 The Plaguebringer Goliath;          Calamity | Location | Item;                 Hardmode Anvil & Plague Cell Canister;
 Infected Armor Plating;             Calamity;                                   #The Plaguebringer Goliath;
