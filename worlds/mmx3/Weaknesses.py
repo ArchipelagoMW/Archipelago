@@ -449,7 +449,7 @@ weapons = {
     ],
     "Spinning Blade": [
         [[ItemName.spinning_blade], 0x0A, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.spinning_blade], 0x12, WEAKNESS_CHARGED_DMG],
+        [[ItemName.spinning_blade], 0x13, WEAKNESS_CHARGED_DMG],
     ],
     "Ray Splasher": [
         [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
@@ -510,7 +510,7 @@ weapons_chaotic = {
         [[ItemName.spinning_blade], 0x0A, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Spinning Blade": [
-        [["Check Charge 2", ItemName.spinning_blade], 0x12, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.spinning_blade], 0x13, WEAKNESS_CHARGED_DMG],
     ],
     "Ray Splasher": [
         [[ItemName.ray_splasher], 0x1C, WEAKNESS_UNCHARGED_DMG],
