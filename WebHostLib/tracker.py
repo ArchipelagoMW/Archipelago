@@ -2459,3 +2459,212 @@ if "Starcraft 2" in network_data_package["games"]:
         )
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
+
+if "Super Mario World" in network_data_package["games"]:
+    # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_items = {
+        "No Yellow Switch Palace"   : ("Progressive Yellow Switch Palace" , 1),
+        "Yellow Switch Palace"      : ("Progressive Yellow Switch Palace" , 2),
+
+        "No Green Switch Palace"    : ("Progressive Green Switch Palace" , 1),
+        "Green Switch Palace"       : ("Progressive Green Switch Palace" , 2),
+
+        "No Red Switch Palace"      : ("Progressive Red Switch Palace" , 1),
+        "Red Switch Palace"         : ("Progressive Red Switch Palace" , 2),
+
+        "No Blue Switch Palace"     : ("Progressive Blue Switch Palace" , 1),
+        "Blue Switch Palace"        : ("Progressive Blue Switch Palace" , 2)
+    }
+
+    progressive_item_max = {
+        "Progressive Yellow Switch Palace"  : 2,
+        "Progressive Green Switch Palace"   : 2,
+        "Progressive Red Switch Palace"     : 2,
+        "Progressive Blue Switch Palace"    : 2
+    }
+
+    REGION_RUINS        = "Ruins"
+    REGION_SNOWDIN      = "Snowdin"
+    REGION_WATERFALL    = "Waterfall"
+    REGION_HOTLAND      = "Hotland"
+    REGION_CORE         = "Core"
+
+    REGION_NEW_HOME     = "New Home"
+    REGION_TRUE_LAB     = "True Lab"
+
+    known_regions = []
+
+    # Data from worlds/Undertale/Locations.py to show locations with names on tracker page
+    # Slightly changed and reduced to the needed ones for tracker
+    advancement_table = {
+        "Snowman"               : (79100, REGION_SNOWDIN),
+        "Snowman 2"             : (79101, REGION_SNOWDIN),
+        "Snowman 3"             : (79102, REGION_SNOWDIN),
+        "Nicecream Snowdin"     : (79001, REGION_SNOWDIN),
+        "Nicecream Waterfall"   : (79002, REGION_WATERFALL),
+        "Nicecream Punch Card"  : (79003, REGION_WATERFALL),
+        "Quiche Bench"          : (79004, REGION_WATERFALL),
+        "Tutu Hidden"           : (79005, REGION_WATERFALL),
+        "Card Reward"           : (79006, REGION_WATERFALL),
+        "Grass Shoes"           : (79007, REGION_WATERFALL),
+        "Noodles Fridge"        : (79008, REGION_HOTLAND),
+        "Pan Hidden"            : (79009, REGION_HOTLAND),
+        "Apron Hidden"          : (79010, REGION_HOTLAND),
+        "Trash Burger"          : (79011, REGION_CORE),
+        "Present Knife"         : (79012, REGION_NEW_HOME),
+        "Present Locket"        : (79013, REGION_NEW_HOME),
+        "Candy 1"               : (79014, REGION_RUINS),
+        "Candy 2"               : (79015, REGION_RUINS),
+        "Candy 3"               : (79016, REGION_RUINS),
+        "Candy 4"               : (79017, REGION_RUINS),
+        "Donut Sale"            : (79018, REGION_RUINS),
+        "Cider Sale"            : (79019, REGION_RUINS),
+        "Ribbon Cracks"         : (79020, REGION_RUINS),
+        "Toy Knife Edge"        : (79021, REGION_RUINS),
+        "B.Scotch Pie Given"    : (79022, REGION_RUINS),
+        "Astro 1"               : (79023, REGION_WATERFALL),
+        "Astro 2"               : (79024, REGION_WATERFALL),
+        "Dog Sale 1"            : (79026, REGION_HOTLAND),
+        "Cat Sale"              : (79027, REGION_HOTLAND),
+        "Dog Sale 2"            : (79028, REGION_HOTLAND),
+        "Dog Sale 3"            : (79029, REGION_HOTLAND),
+        "Dog Sale 4"            : (79030, REGION_HOTLAND),
+        "Chisps Machine"        : (79031, REGION_TRUE_LAB),
+        "Hush Trade"            : (79032, REGION_HOTLAND),
+        "Letter Quest"          : (79033, REGION_SNOWDIN),
+        "Bunny 1"               : (79034, REGION_SNOWDIN),
+        "Bunny 2"               : (79035, REGION_SNOWDIN),
+        "Bunny 3"               : (79036, REGION_SNOWDIN),
+        "Bunny 4"               : (79037, REGION_SNOWDIN),
+        "Gerson 1"              : (79038, REGION_WATERFALL),
+        "Gerson 2"              : (79039, REGION_WATERFALL),
+        "Gerson 3"              : (79040, REGION_WATERFALL),
+        "Gerson 4"              : (79041, REGION_WATERFALL),
+        "Bratty Catty 1"        : (79042, REGION_HOTLAND),
+        "Bratty Catty 2"        : (79043, REGION_HOTLAND),
+        "Bratty Catty 3"        : (79044, REGION_HOTLAND),
+        "Bratty Catty 4"        : (79045, REGION_HOTLAND),
+        "Burgerpants 1"         : (79046, REGION_HOTLAND),
+        "Burgerpants 2"         : (79047, REGION_HOTLAND),
+        "Burgerpants 3"         : (79048, REGION_HOTLAND),
+        "Burgerpants 4"         : (79049, REGION_HOTLAND),
+        "TemmieShop 1"          : (79050, REGION_WATERFALL),
+        "TemmieShop 2"          : (79051, REGION_WATERFALL),
+        "TemmieShop 3"          : (79052, REGION_WATERFALL),
+        "TemmieShop 4"          : (79053, REGION_WATERFALL),
+        "Papyrus Plot"          : (79056, REGION_SNOWDIN),
+        "Undyne Plot"           : (79057, REGION_WATERFALL),
+        "Mettaton Plot"         : (79062, REGION_CORE),
+        "True Lab Plot"         : (79063, REGION_HOTLAND),
+        "Left New Home Key"     : (79064, REGION_NEW_HOME),
+        "Right New Home Key"    : (79065, REGION_NEW_HOME),
+
+        # Remove this locations from here because they has no location ids
+        # Maybe at some point that might change
+        #"Undyne Date"           : (None , REGION_WATERFALL), # "Undyne\"s Home"
+        #"Alphys Date"           : (None , REGION_HOTLAND),
+        #"Papyrus Date"          : (None , REGION_SNOWDIN) # "Papyrus\" Home"
+    }
+
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        # Prepare for the progression handling of some items to handle an own
+        # not collected/active icon instead of the default gray filter css class
+        if inventory["Yellow Switch Palace"]    == 0 : inventory["No Yellow Switch Palace"] = 1
+        if inventory["Green Switch Palace"]     == 0 : inventory["No Green Switch Palace"]  = 1
+        if inventory["Red Switch Palace"]       == 0 : inventory["No Red Switch Palace"]    = 1
+        if inventory["Blue Switch Palace"]      == 0 : inventory["No Blue Switch Palace"]   = 1
+
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory and inventory[item] > 0:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+            
+        # Completed item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["IsCompleted"] = 1
+
+    def render_SMW_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
+            (team, player): collections.Counter({
+                tracker_data.item_id_to_name["Super Mario World"][code]: count
+                for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+            })
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "Super Mario World"
+        }
+
+        # Translate non-progression items to progression items for tracker simplicity.
+        for (team, player), inventory in inventories.items():
+            prepare_inventories(team, player, inventory, tracker_data)
+
+        return render_template(
+            "multitracker__SMW.html",
+            enabled_trackers=enabled_trackers,
+            current_tracker="Super Mario World",
+            room=tracker_data.room,
+            all_slots=tracker_data.get_all_slots(),
+            room_players=tracker_data.get_all_players(),
+            locations=tracker_data.get_room_locations(),
+            locations_complete=tracker_data.get_room_locations_complete(),
+            total_team_locations=tracker_data.get_team_locations_total_count(),
+            total_team_locations_complete=tracker_data.get_team_locations_checked_count(),
+            player_names_with_alias=tracker_data.get_room_long_player_names(),
+            completed_worlds=tracker_data.get_team_completed_worlds_count(),
+            games=tracker_data.get_room_games(),
+            states=tracker_data.get_room_client_statuses(),
+            hints=tracker_data.get_team_hints(),
+            activity_timers=tracker_data.get_room_last_activity(),
+            videos=tracker_data.get_room_videos(),
+            item_id_to_name=tracker_data.item_id_to_name,
+            location_id_to_name=tracker_data.location_id_to_name,
+            inventories=inventories,
+            progressive_item_max=progressive_item_max
+        )
+
+    def render_SMW_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["Super Mario World"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
+        
+        # Translate non-progression items to progression items for tracker simplicity.
+        prepare_inventories(team, player, inventory, tracker_data)
+
+        #route = tracker_data.get_slot_data(team, player)["route"]
+
+        regions = {
+            region_name: {
+                "checked": sum(
+                    1 for location, (id, region) in locations_to_check.items()
+                    if region == region_name and id in tracker_data.get_player_checked_locations(team, player)
+                ),
+                "locations": [
+                    (
+                        tracker_data.location_id_to_name["Super Mario World"][id],
+                        id in tracker_data.get_player_checked_locations(team, player)
+                    )
+                    for location, (id, region) in locations_to_check.items()
+                        if region == region_name
+                ],
+            }
+            for region_name in known_regions
+        }
+
+        # Sort locations in regions by name
+        for region in regions:
+            regions[region]["locations"].sort()
+
+        return render_template(
+            template_name_or_list="tracker__SMW.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            inventory=inventory,
+            player_name=tracker_data.get_player_name(team, player),
+            slot_data=tracker_data.get_slot_data(team, player),
+            tracker_data=tracker_data,
+            regions=regions,
+            known_regions=known_regions
+        )
+
+    _multiworld_trackers["Super Mario World"] = render_SMW_multiworld_tracker
+    _player_trackers["Super Mario World"] = render_SMW_tracker

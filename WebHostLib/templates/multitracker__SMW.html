@@ -1,0 +1,144 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
+{% endblock %}
+
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Big Mario"                         : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/big_mario.png?raw=true",
+    "Fire Mario"                        : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/fire_mario.png?raw=true",
+    "Cape Mario"                        : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/cape_mario.png?raw=true",
+    "Progressive Powerup"               : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/cape_mario.png?raw=true",
+    "Carry"                             : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/carry.png?raw=true",
+    "Climb"                             : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/climb.png?raw=true",
+    "Run"                               : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/run.png?raw=true",
+    "Swim"                              : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/swim.png?raw=true",
+    "Spin Jump"                         : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/spin_jump.png?raw=true",
+    "Yoshi"                             : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/yoshi.png?raw=true",
+    "Yoshi Egg"                         : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/yoshi_egg.png?raw=true",
+    "Boss Token"                        : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/larry.png?raw=true",
+    "Yoshi Eggs Required"               : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/yoshi_egg.png?raw=true",
+    "Bosses Required"                   : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/larry.png?raw=true",
+    "Special Zone Clear"                : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/special_world.png?raw=true",
+    "Super Star Activate"               : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/star.png?raw=true",
+    "P-Balloon"                         : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/p_balloon.png?raw=true",
+    "P-Switch"                          : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/p_switch.png?raw=true",
+
+    "Progressive Yellow Switch Palace"  : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/ysp_pressed.png?raw=true",
+    "No Yellow Switch Palace"           : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/ysp_full.png?raw=true",
+    "Progressive Green Switch Palace"   : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/gsp_pressed.png?raw=true",
+    "No Green Switch Palace"            : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/gsp_full.png?raw=true",
+    "Progressive Red Switch Palace"     : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/rsp_pressed.png?raw=true",
+    "No Red Switch Palace"              : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/rsp_full.png?raw=true",
+    "Progressive Blue Switch Palace"    : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/bsp_pressed.png?raw=true",
+    "No Blue Switch Palace"             : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/items/bsp_full.png?raw=true",
+    
+    "IsCompleted"                       : "https://github.com/PoryGone/SMW_AP_Tracker/blob/main/super_mario_world_randomizer_porygone/images/checks/goal_sphere.png?raw=true"
+} %}
+
+{% set inventory_order = [
+    "Progressive Powerup",
+    "Yoshi",
+    "Super Star Activate",
+    "P-Balloon",
+    "P-Switch",
+    "Carry",
+    "Climb",
+    "Run",
+    "Swim",
+    "Spin Jump",
+    "Progressive Yellow Switch Palace",
+    "Progressive Green Switch Palace",
+    "Progressive Red Switch Palace",
+    "Progressive Blue Switch Palace",
+    "Special Zone Clear",
+    "Boss Token",
+    "Yoshi Egg",
+    "IsCompleted"
+] %}
+
+{% set multi_items = [
+    "Boss Token",
+    "Yoshi Egg",
+    "Progressive Powerup",
+    "Progressive Yellow Switch Palace",
+    "Progressive Green Switch Palace",
+    "Progressive Red Switch Palace",
+    "Progressive Blue Switch Palace"
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    "Progressive Powerup"               : ["Big Mario", "Big Mario", "Fire Mario", "Cape Mario"],
+    "Progressive Yellow Switch Palace"  : ["No Yellow Switch Palace", "No Yellow Switch Palace", "Yellow Switch Palace"],
+    "Progressive Green Switch Palace"   : ["No Green Switch Palace", "No Green Switch Palace", "Green Switch Palace"],
+    "Progressive Red Switch Palace"     : ["No Red Switch Palace", "No Red Switch Palace", "Red Switch Palace"],
+    "Progressive Blue Switch Palace"    : ["No Blue Switch Palace", "No Blue Switch Palace", "Blue Switch Palace"]
+} %}
+
+{% set headerMapping = {
+    "Progressive Yellow Switch Palace"  : "Yellow Switch Palace",
+    "Progressive Green Switch Palace"   : "Green Switch Palace",
+    "Progressive Red Switch Palace"     : "Red Switch Palace",
+    "Progressive Blue Switch Palace"    : "Blue Switch Palace"
+}%}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        <th class="center-column">
+            {% set header = item %}
+
+            {% if header in headerMapping %}
+                {% set header = headerMapping[header] %}
+            {% endif %}
+
+            {%- if item in icons -%}
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ header | e }}" title="{{ header | e }}">
+            {% else %}
+                {{ header }}
+            {%- endif %}
+        </th>
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {% if item in progressive_order %}
+                        {% if progressive_item_max[item] == inventories[(team, player)][item] %}
+                            ✔️
+                        {% else %}
+                            {% set non_prog_item = progressive_order[item][inventories[(team, player)][item]] %}
+                            <img
+                                height="24"
+                                src="{{ icons[non_prog_item] }}"
+                                alt="{{ non_prog_item }}"
+                                title="{{ non_prog_item }}"
+                            />
+                        {% endif %}
+                    {% else %}
+                        {{ inventories[(team, player)][item] }}
+                    {% endif %}
+                {% else %}
+                    ✔️
+                {% endif %}
+            </td>
+        {%- else -%}
+            <td class="center-column">
+            </td>
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
