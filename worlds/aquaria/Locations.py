@@ -122,6 +122,7 @@ class AquariaLocations:
         "Open Water top right area, second urn in the Mithalas exit": 698149,
         "Open Water top right area, third urn in the Mithalas exit": 698150,
     }
+
     locations_openwater_tr_turtle = {
         "Open Water top right area, bulb in the turtle room": 698009,
         "Open Water top right area, Transturtle": 698211,
