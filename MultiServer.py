@@ -1805,6 +1805,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                         [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
+
                 target_item, target_player, flags = ctx.locations[client.slot][location]
 
                 if client_player != desired_player:
