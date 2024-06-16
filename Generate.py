@@ -438,6 +438,27 @@ def compare_triggers(option_set: dict, currently_targeted_weights: dict) -> bool
     return result
 
 
+def handle_random_range_in_triggers(value: str) -> int:
+    if len(value.split("-")) == 4:
+        value = value.split("-")
+        value_min = int(value[2])
+        value_max = int(value[3])
+        result = random.randrange(value_min, value_max)
+    else:
+        value = value.split("-")
+        value_min = int(value[3])
+        value_max = int(value[4])
+        if value[2] == "low":
+            result = int(round(random.triangular(value_min, value_max, value_min)))
+        elif value[2] == "medium":
+            result = int(round(random.triangular(value_min, value_max)))
+        elif value[2] == "high":
+            result = int(round(random.triangular(value_min, value_max, value_max)))
+        else:
+            raise Exception(f"Invalid weighting in random-range-x-min-max, x must be low, medium, or high. It is: {value[2]}")
+    return result
+
+
 def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
@@ -459,11 +480,8 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                                     f"match with a root option. "
                                     f"This is probably in error.")
                 if type(result) is str:
-                    if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) == 4:
-                        result = result.split("-")
-                        result_min = int(result[2])
-                        result_max = int(result[3])
-                        result = random.randrange(result_min, result_max)
+                    if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4,5]:
+                        result = handle_random_range_in_triggers(result)
                 currently_targeted_weights[advanced[x][0]] = result
                 if len(advanced[x]) == 2:
                     advanced[x].insert(1, "=")
