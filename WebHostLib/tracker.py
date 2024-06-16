@@ -2506,6 +2506,7 @@ if "Super Mario World" in network_data_package["games"]:
         REGION_SPECIAL_ZONE
     ]
 
+    # mapping table
     location_regions_table = {
         f"{REGION_YOSHIS_ISLAND} 1"     : REGION_YOSHIS_ISLAND,
         f"{REGION_YOSHIS_ISLAND} 2"     : REGION_YOSHIS_ISLAND,
@@ -2658,8 +2659,9 @@ if "Super Mario World" in network_data_package["games"]:
         # Translate non-progression items to progression items for tracker simplicity.
         prepare_inventories(team, player, inventory, tracker_data)
 
-        #route = tracker_data.get_slot_data(team, player)["route"]
-
+        # Mapping check to region/level
+        # This way we can use the actual checkes for the player and
+        #   don't need to implement the available locations based on settings.
         locations_to_check = {
             tracker_data.location_id_to_name["Super Mario World"][id] : (id, region)
             for id in tracker_data.get_player_locations(team, player).keys()
