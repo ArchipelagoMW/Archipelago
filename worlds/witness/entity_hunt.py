@@ -9,6 +9,33 @@ if TYPE_CHECKING:
     from . import WitnessPlayerLogic, WitnessWorld
 
 
+DISALLOWED_ENTITIES_FOR_PANEL_HUNT = {
+    "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
+    "0x03505",  # Tutorial Gate Close (same thing)
+    "0x3352F",  # Gate EP (same thing)
+    "0x00CDB",  # Challenge Reallocating
+    "0x0051F",  # Challenge Reallocating
+    "0x00524",  # Challenge Reallocating
+    "0x00CD4",  # Challenge Reallocating
+    "0x00CB9",  # Challenge May Be Unsolvable
+    "0x00CA1",  # Challenge May Be Unsolvable
+    "0x00C80",  # Challenge May Be Unsolvable
+    "0x00C68",  # Challenge May Be Unsolvable
+    "0x00C59",  # Challenge May Be Unsolvable
+    "0x00C22",  # Challenge May Be Unsolvable
+    "0x0A3A8",  # Reset PP
+    "0x0A3B9",  # Reset PP
+    "0x0A3BB",  # Reset PP
+    "0x0A3AD",  # Reset PP
+}
+
+ALL_HUNTABLE_PANELS = [
+    entity_hex
+    for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+    if entity_obj["entityType"] == "Panel" and entity_hex not in DISALLOWED_ENTITIES_FOR_PANEL_HUNT
+]
+
+
 class EntityHuntPicker:
     def __init__(self, player_logic: "WitnessPlayerLogic", world: "WitnessWorld", pre_picked_entities: Set[str]):
         self.player_logic = player_logic
@@ -46,38 +73,18 @@ class EntityHuntPicker:
         Make a list of all the ones that *are* eligible, plus a lookup of eligible panels per area.
         """
 
-        disallowed_entities_for_panel_hunt = {
-            "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
-            "0x03505",  # Tutorial Gate Close (same thing)
-            "0x3352F",  # Gate EP (same thing)
-            "0x00CDB",  # Challenge Reallocating
-            "0x0051F",  # Challenge Reallocating
-            "0x00524",  # Challenge Reallocating
-            "0x00CD4",  # Challenge Reallocating
-            "0x00CB9",  # Challenge May Be Unsolvable
-            "0x00CA1",  # Challenge May Be Unsolvable
-            "0x00C80",  # Challenge May Be Unsolvable
-            "0x00C68",  # Challenge May Be Unsolvable
-            "0x00C59",  # Challenge May Be Unsolvable
-            "0x00C22",  # Challenge May Be Unsolvable
-            "0x0A3A8",  # Reset PP
-            "0x0A3B9",  # Reset PP
-            "0x0A3BB",  # Reset PP
-            "0x0A3AD",  # Reset PP
-        }
-
         all_eligible_panels = [
-            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
-            if entity_obj["entityType"] == "Panel" and self.player_logic.solvability_guaranteed(entity_hex)
+            panel
+            for panel in ALL_HUNTABLE_PANELS
+            if self.player_logic.solvability_guaranteed(panel)
             and not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
                 # However, I don't think they should be hunt panels in this case.
                 self.player_options.disable_non_randomized_puzzles
                 and not self.player_options.shuffle_discarded_panels
-                and entity_obj["locationType"] == "Discard"
+                and panel["locationType"] == "Discard"
             )
-            and entity_hex not in disallowed_entities_for_panel_hunt
-            and entity_hex not in self.HUNT_ENTITIES
+            and panel not in self.HUNT_ENTITIES
         ]
 
         eligible_panels_by_area = defaultdict(set)
@@ -119,8 +126,9 @@ class EntityHuntPicker:
                 for area, weight in allowance_per_area.items()
             }
 
-        assert min(allowance_per_area.values()) >= 0, (f"Somehow, an area had a negative weight when picking"
-                                                       f" hunt entities: {allowance_per_area}")
+        assert min(allowance_per_area.values()) >= 0, (
+            f"Somehow, an area had a negative weight when picking hunt entities: {allowance_per_area}"
+        )
 
         remaining_entities, remaining_entity_weights = [], []
         for area, eligible_entities in self.ELIGIBLE_ENTITIES_PER_AREA.items():
@@ -169,10 +177,12 @@ class EntityHuntPicker:
         }
 
         if self.player_options.shuffle_doors < 2:
-            replacements.update({
-                "0x334DC": "0x334DB",  # In door shuffle, the Shadows Timer Panels are disconnected
-                "0x17CBC": "0x2700B",  # In door shuffle, the Laser Timer Panels are disconnected
-            })
+            replacements.update(
+                {
+                    "0x334DC": "0x334DB",  # In door shuffle, the Shadows Timer Panels are disconnected
+                    "0x17CBC": "0x2700B",  # In door shuffle, the Laser Timer Panels are disconnected
+                }
+            )
 
         for bad_entitiy, good_entity in replacements.items():
             # If the bad entity was picked as a hunt entity ...
