@@ -85,6 +85,50 @@ class ExampleWorld(World):
     options: ExampleGameOptions
 ```
 
+### Option Documentation
+
+Options' [docstrings] are used as their user-facing documentation. They're displayed on the WebHost setup page when a
+user hovers over the yellow "(?)" icon, and included in the YAML templates generated for each game.
+
+[docstrings]: /docs/world%20api.md#docstrings
+
+The WebHost can display Option documentation either as plain text with all whitespace preserved (other than the base
+indentation), or as HTML generated from the standard Python [reStructuredText] format. Although plain text is the
+default for backwards compatibility, world authors are encouraged to write their Option documentation as
+reStructuredText and enable rich text rendering by setting `World.rich_text_options_doc = True`.
+
+[reStructuredText]: https://docutils.sourceforge.io/rst.html
+
+```python
+from worlds.AutoWorld import WebWorld
+
+
+class ExampleWebWorld(WebWorld):
+    # Render all this world's options as rich text.
+    rich_text_options_doc = True
+```
+
+You can set a single option to use rich or plain text by setting
+`Option.rich_text_doc`.
+
+```python
+from Options import Toggle, Range, Choice, PerGameCommonOptions
+
+
+class Difficulty(Choice):
+    """Sets overall game difficulty.
+
+    - **Easy:** All enemies die in one hit.
+    - **Normal:** Enemies and the player both have normal health bars.
+    - **Hard:** The player dies in one hit."""
+    display_name = "Difficulty"
+    rich_text_doc = True
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    default = 1
+```
+
 ### Option Groups
 Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order specified
 by your world on the player-options and weighted-options pages. In the generated template files, there will be a comment
