@@ -142,13 +142,13 @@ class MaterialMinLimit(Range):
 
 class MaterialMaxLimit(Range):
     """
-    The maximum material value of your army, once all items are collected. A FIDE army has value 39 (8+6+6+10+9).
+    The maximum material value of your army, once all items are collected. A FIDE army has value 40 (8+6.5+6.5+10+9).
 
     Due to an ongoing issue, you may go over this maximum (by one piece) if your minimum and maximum are very close
     (within 4).
     """
     display_name = "Maximum Material"
-    range_start = 39
+    range_start = 40
     range_end = 100
     default = 46
 
