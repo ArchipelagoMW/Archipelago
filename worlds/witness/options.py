@@ -2,10 +2,11 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, LocationSet
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
+from .entity_hunt import ALL_HUNTABLE_PANELS
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -233,6 +234,16 @@ class PanelHuntDiscourageSameAreaFactor(Range):
     default = 40
 
 
+class PanelHuntPlando(LocationSet):
+    """
+    Specify specific hunt panels you want for your panel hunt game.
+    """
+
+    display = "Panel Hunt Plando"
+
+    valid_keys = ALL_HUNTABLE_PANELS
+
+
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
@@ -385,6 +396,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     panel_hunt_required_percentage: PanelHuntRequiredPercentage
     panel_hunt_postgame: PanelHuntPostgame
     panel_hunt_discourage_same_area_factor: PanelHuntDiscourageSameAreaFactor
+    panel_hunt_plando: PanelHuntPlando
     early_caves: EarlyCaves
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
@@ -409,6 +421,7 @@ witness_option_groups = [
         PanelHuntTotal,
         PanelHuntPostgame,
         PanelHuntDiscourageSameAreaFactor,
+        PanelHuntPlando,
     ], start_collapsed=True),
     OptionGroup("Locations", [
         ShuffleDiscardedPanels,
