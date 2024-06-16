@@ -300,10 +300,14 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         self.selected = is_selected
 
 
+class AutocompleteHintDropdownButton(Button):
+    pass
+
+
 class AutocompleteHintInput(TextInput):
     min_chars = NumericProperty(3)
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.dropdown = DropDown()
@@ -319,7 +323,7 @@ class AutocompleteHintInput(TextInput):
             ctx: context_type = App.get_running_app().ctx
             item_names = ctx.item_names._game_store[ctx.game].values()
 
-            def on_press(button: Button):
+            def on_press(button: AutocompleteHintDropdownButton):
                 split_text = MarkupLabel(text=button.text).markup
                 return self.dropdown.select("".join(text_frag for text_frag in split_text
                                                     if not text_frag.startswith("[")))
@@ -332,7 +336,7 @@ class AutocompleteHintInput(TextInput):
                 else:
                     text = escape_markup(item_name)
                     text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
-                    btn = Button(text=text, size_hint_y=None, height=dp(30), markup=True)
+                    btn = AutocompleteHintDropdownButton(text=text)
                     btn.bind(on_release=on_press)
                     self.dropdown.add_widget(btn)
             if not self.dropdown.attach_to:
