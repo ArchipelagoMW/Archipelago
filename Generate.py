@@ -464,18 +464,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
-    ret.game = get_choice("game", weights)
-    if ret.game not in AutoWorldRegister.world_types:
-        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
-        if picks[0] in failed_world_loads:
-            raise Exception(f"No functional world found to handle game {ret.game}. "
-                            f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
-                            f"If so, it appears the world failed to initialize correctly.")
-        raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
-                        f"Check your spelling or installation of that world.")
+    ret.game = Options.Game.from_any(get_choice("game", weights))
 
     if ret.game not in weights:
-        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+        raise Exception(f"No game options for \"{ret.game}\" found.")
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
@@ -495,6 +487,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
+        if option_key in Options.RootOnlyOptions.type_hints:
+            continue
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
     for option_key in game_weights:
