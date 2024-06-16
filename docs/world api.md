@@ -310,7 +310,7 @@ An access rule can be assigned through `set_rule(location, rule)`.
 
 Access rules usually check for one of two things.
 - Items that have been collected (e.g. `state.has("Sword", player)`)
-- Locations, Regions or Entrances that have been reached (e.g. `state.can_reach_region("Boss Room"))
+- Locations, Regions or Entrances that have been reached (e.g. `state.can_reach_region("Boss Room")`)
 
 Keep in mind that entrances and locations implicitly check for the accessibility of their parent region, so you do not need to check explicitly for it.
 
