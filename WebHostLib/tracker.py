@@ -2483,87 +2483,115 @@ if "Super Mario World" in network_data_package["games"]:
         "Progressive Blue Switch Palace"    : 2
     }
 
-    REGION_RUINS        = "Ruins"
-    REGION_SNOWDIN      = "Snowdin"
-    REGION_WATERFALL    = "Waterfall"
-    REGION_HOTLAND      = "Hotland"
-    REGION_CORE         = "Core"
+    REGION_YOSHIS_ISLAND        = "Yoshi's Island"
+    REGION_DONUT_PLAINS         = "Donut Plains"
+    REGION_VANILLA_DOME         = "Vanilla Dome"
+    REGION_TWIN_BRIDGES         = "Twin Bridges"
+    REGION_FOREST_OF_ILLUSION   = "Forest of Illusion"
+    REGION_CHOCOLATE_ISLAND     = "Chocolate Island"
+    REGION_VALLEY_OF_BOWSER     = "Valley of Bowser"
+    REGION_STAR_ROAD            = "Star Road"
+    REGION_SPECIAL_ZONE         = "Special Zone"
 
-    REGION_NEW_HOME     = "New Home"
-    REGION_TRUE_LAB     = "True Lab"
+    known_regions = [
+        REGION_YOSHIS_ISLAND,
+        REGION_DONUT_PLAINS,
+        REGION_VANILLA_DOME,
+        REGION_TWIN_BRIDGES,
+        REGION_FOREST_OF_ILLUSION,
+        REGION_CHOCOLATE_ISLAND,
+        REGION_VALLEY_OF_BOWSER,
+        REGION_STAR_ROAD,
+        REGION_SPECIAL_ZONE
+    ]
 
-    known_regions = []
+    location_regions_table = {
+        f"{REGION_YOSHIS_ISLAND} 1"     : REGION_YOSHIS_ISLAND,
+        f"{REGION_YOSHIS_ISLAND} 2"     : REGION_YOSHIS_ISLAND,
+        f"{REGION_YOSHIS_ISLAND} 3"     : REGION_YOSHIS_ISLAND,
+        f"{REGION_YOSHIS_ISLAND} 4"     : REGION_YOSHIS_ISLAND,
+        "#1 Iggy's Castle"              : REGION_YOSHIS_ISLAND,
+        "Yellow Switch Palace"          : REGION_YOSHIS_ISLAND,
+        "Yoshi's House"                 : REGION_YOSHIS_ISLAND,
 
-    # Data from worlds/Undertale/Locations.py to show locations with names on tracker page
-    # Slightly changed and reduced to the needed ones for tracker
-    advancement_table = {
-        "Snowman"               : (79100, REGION_SNOWDIN),
-        "Snowman 2"             : (79101, REGION_SNOWDIN),
-        "Snowman 3"             : (79102, REGION_SNOWDIN),
-        "Nicecream Snowdin"     : (79001, REGION_SNOWDIN),
-        "Nicecream Waterfall"   : (79002, REGION_WATERFALL),
-        "Nicecream Punch Card"  : (79003, REGION_WATERFALL),
-        "Quiche Bench"          : (79004, REGION_WATERFALL),
-        "Tutu Hidden"           : (79005, REGION_WATERFALL),
-        "Card Reward"           : (79006, REGION_WATERFALL),
-        "Grass Shoes"           : (79007, REGION_WATERFALL),
-        "Noodles Fridge"        : (79008, REGION_HOTLAND),
-        "Pan Hidden"            : (79009, REGION_HOTLAND),
-        "Apron Hidden"          : (79010, REGION_HOTLAND),
-        "Trash Burger"          : (79011, REGION_CORE),
-        "Present Knife"         : (79012, REGION_NEW_HOME),
-        "Present Locket"        : (79013, REGION_NEW_HOME),
-        "Candy 1"               : (79014, REGION_RUINS),
-        "Candy 2"               : (79015, REGION_RUINS),
-        "Candy 3"               : (79016, REGION_RUINS),
-        "Candy 4"               : (79017, REGION_RUINS),
-        "Donut Sale"            : (79018, REGION_RUINS),
-        "Cider Sale"            : (79019, REGION_RUINS),
-        "Ribbon Cracks"         : (79020, REGION_RUINS),
-        "Toy Knife Edge"        : (79021, REGION_RUINS),
-        "B.Scotch Pie Given"    : (79022, REGION_RUINS),
-        "Astro 1"               : (79023, REGION_WATERFALL),
-        "Astro 2"               : (79024, REGION_WATERFALL),
-        "Dog Sale 1"            : (79026, REGION_HOTLAND),
-        "Cat Sale"              : (79027, REGION_HOTLAND),
-        "Dog Sale 2"            : (79028, REGION_HOTLAND),
-        "Dog Sale 3"            : (79029, REGION_HOTLAND),
-        "Dog Sale 4"            : (79030, REGION_HOTLAND),
-        "Chisps Machine"        : (79031, REGION_TRUE_LAB),
-        "Hush Trade"            : (79032, REGION_HOTLAND),
-        "Letter Quest"          : (79033, REGION_SNOWDIN),
-        "Bunny 1"               : (79034, REGION_SNOWDIN),
-        "Bunny 2"               : (79035, REGION_SNOWDIN),
-        "Bunny 3"               : (79036, REGION_SNOWDIN),
-        "Bunny 4"               : (79037, REGION_SNOWDIN),
-        "Gerson 1"              : (79038, REGION_WATERFALL),
-        "Gerson 2"              : (79039, REGION_WATERFALL),
-        "Gerson 3"              : (79040, REGION_WATERFALL),
-        "Gerson 4"              : (79041, REGION_WATERFALL),
-        "Bratty Catty 1"        : (79042, REGION_HOTLAND),
-        "Bratty Catty 2"        : (79043, REGION_HOTLAND),
-        "Bratty Catty 3"        : (79044, REGION_HOTLAND),
-        "Bratty Catty 4"        : (79045, REGION_HOTLAND),
-        "Burgerpants 1"         : (79046, REGION_HOTLAND),
-        "Burgerpants 2"         : (79047, REGION_HOTLAND),
-        "Burgerpants 3"         : (79048, REGION_HOTLAND),
-        "Burgerpants 4"         : (79049, REGION_HOTLAND),
-        "TemmieShop 1"          : (79050, REGION_WATERFALL),
-        "TemmieShop 2"          : (79051, REGION_WATERFALL),
-        "TemmieShop 3"          : (79052, REGION_WATERFALL),
-        "TemmieShop 4"          : (79053, REGION_WATERFALL),
-        "Papyrus Plot"          : (79056, REGION_SNOWDIN),
-        "Undyne Plot"           : (79057, REGION_WATERFALL),
-        "Mettaton Plot"         : (79062, REGION_CORE),
-        "True Lab Plot"         : (79063, REGION_HOTLAND),
-        "Left New Home Key"     : (79064, REGION_NEW_HOME),
-        "Right New Home Key"    : (79065, REGION_NEW_HOME),
+        f"{REGION_DONUT_PLAINS} 1"      : REGION_DONUT_PLAINS,
+        f"{REGION_DONUT_PLAINS} 2"      : REGION_DONUT_PLAINS,
+        f"{REGION_DONUT_PLAINS} 3"      : REGION_DONUT_PLAINS,
+        f"{REGION_DONUT_PLAINS} 4"      : REGION_DONUT_PLAINS,
+        "#2 Morton's Castle"            : REGION_DONUT_PLAINS,
+        "Donut Ghost House"             : REGION_DONUT_PLAINS,
+        "Donut Secret 1"                : REGION_DONUT_PLAINS,
+        "Donut Secret 2"                : REGION_DONUT_PLAINS,
+        "Donut Secret House"            : REGION_DONUT_PLAINS,
+        "Green Switch Palace"           : REGION_DONUT_PLAINS,
 
-        # Remove this locations from here because they has no location ids
-        # Maybe at some point that might change
-        #"Undyne Date"           : (None , REGION_WATERFALL), # "Undyne\"s Home"
-        #"Alphys Date"           : (None , REGION_HOTLAND),
-        #"Papyrus Date"          : (None , REGION_SNOWDIN) # "Papyrus\" Home"
+        f"{REGION_VANILLA_DOME} 1"      : REGION_VANILLA_DOME,
+        f"{REGION_VANILLA_DOME} 2"      : REGION_VANILLA_DOME,
+        f"{REGION_VANILLA_DOME} 3"      : REGION_VANILLA_DOME,
+        f"{REGION_VANILLA_DOME} 4"      : REGION_VANILLA_DOME,
+        "#3 Lemmy's Castle"             : REGION_VANILLA_DOME,
+        "Vanilla Fortress"              : REGION_VANILLA_DOME,
+        "Vanilla Ghost House"           : REGION_VANILLA_DOME,
+        "Vanilla Secret 1"              : REGION_VANILLA_DOME,
+        "Vanilla Secret 2"              : REGION_VANILLA_DOME,
+        "Vanilla Secret 3"              : REGION_VANILLA_DOME,
+        "Red Switch Palace"             : REGION_VANILLA_DOME,
+
+        "Butter Bridge 1"               : REGION_TWIN_BRIDGES,
+        "Butter Bridge 2"               : REGION_TWIN_BRIDGES,
+        "Cheese Bridge"                 : REGION_TWIN_BRIDGES,
+        "Cheese Bridge Area"            : REGION_TWIN_BRIDGES,
+        "Cookie Mountain"               : REGION_TWIN_BRIDGES,
+        "#4 Ludwig Castle"              : REGION_TWIN_BRIDGES,
+        "#4 Ludwig's Castle"            : REGION_TWIN_BRIDGES,
+        "Soda Lake"                     : REGION_TWIN_BRIDGES,
+
+        f"{REGION_FOREST_OF_ILLUSION} 1"    : REGION_FOREST_OF_ILLUSION,
+        f"{REGION_FOREST_OF_ILLUSION} 2"    : REGION_FOREST_OF_ILLUSION,
+        f"{REGION_FOREST_OF_ILLUSION} 3"    : REGION_FOREST_OF_ILLUSION,
+        f"{REGION_FOREST_OF_ILLUSION} 4"    : REGION_FOREST_OF_ILLUSION,
+        "#5 Roy's Castle"                   : REGION_FOREST_OF_ILLUSION,
+        "Forest Fortress"                   : REGION_FOREST_OF_ILLUSION,
+        "Forest Ghost House"                : REGION_FOREST_OF_ILLUSION,
+        "Forest Secret"                     : REGION_FOREST_OF_ILLUSION,
+        "Forest Secret Area"                : REGION_FOREST_OF_ILLUSION,
+        "Blue Switch Palace"                : REGION_FOREST_OF_ILLUSION,
+
+        f"{REGION_CHOCOLATE_ISLAND} 1"      : REGION_CHOCOLATE_ISLAND,
+        f"{REGION_CHOCOLATE_ISLAND} 2"      : REGION_CHOCOLATE_ISLAND,
+        f"{REGION_CHOCOLATE_ISLAND} 3"      : REGION_CHOCOLATE_ISLAND,
+        f"{REGION_CHOCOLATE_ISLAND} 4"      : REGION_CHOCOLATE_ISLAND,
+        f"{REGION_CHOCOLATE_ISLAND} 5"      : REGION_CHOCOLATE_ISLAND,
+        "#6 Wendy's Castle"                 : REGION_CHOCOLATE_ISLAND,
+        "Chocolate Fortress"                : REGION_CHOCOLATE_ISLAND,
+        "Choco Ghost House"                 : REGION_CHOCOLATE_ISLAND,
+        "Choco-Ghost House"                 : REGION_CHOCOLATE_ISLAND,
+        "Chocolate Secret"                  : REGION_CHOCOLATE_ISLAND,
+        "Sunken Ghost Ship"                 : REGION_CHOCOLATE_ISLAND,
+
+        f"{REGION_VALLEY_OF_BOWSER} 1"      : REGION_VALLEY_OF_BOWSER,
+        f"{REGION_VALLEY_OF_BOWSER} 2"      : REGION_VALLEY_OF_BOWSER,
+        f"{REGION_VALLEY_OF_BOWSER} 3"      : REGION_VALLEY_OF_BOWSER,
+        f"{REGION_VALLEY_OF_BOWSER} 4"      : REGION_VALLEY_OF_BOWSER,
+        "#7 Larry's Castle"                 : REGION_VALLEY_OF_BOWSER,
+        "Valley Fortress"                   : REGION_VALLEY_OF_BOWSER,
+        "Valley Ghost House"                : REGION_VALLEY_OF_BOWSER,
+        "Bowser"                            : REGION_VALLEY_OF_BOWSER,
+
+        f"{REGION_STAR_ROAD} 1"         : REGION_STAR_ROAD,
+        f"{REGION_STAR_ROAD} 2"         : REGION_STAR_ROAD,
+        f"{REGION_STAR_ROAD} 3"         : REGION_STAR_ROAD,
+        f"{REGION_STAR_ROAD} 4"         : REGION_STAR_ROAD,
+        f"{REGION_STAR_ROAD} 5"         : REGION_STAR_ROAD,
+
+        "Gnarly"                        : REGION_SPECIAL_ZONE,
+        "Tubular"                       : REGION_SPECIAL_ZONE,
+        "Way Cool"                      : REGION_SPECIAL_ZONE,
+        "Awesome"                       : REGION_SPECIAL_ZONE,
+        "Groovy"                        : REGION_SPECIAL_ZONE,
+        "Mondo"                         : REGION_SPECIAL_ZONE,
+        "Outrageous"                    : REGION_SPECIAL_ZONE,
+        "Funky"                         : REGION_SPECIAL_ZONE
     }
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
@@ -2631,6 +2659,13 @@ if "Super Mario World" in network_data_package["games"]:
 
         #route = tracker_data.get_slot_data(team, player)["route"]
 
+        locations_to_check = {
+            tracker_data.location_id_to_name["Super Mario World"][id] : (id, region)
+            for id in tracker_data.get_player_locations(team, player).keys()
+            for level, region in location_regions_table.items()
+                if tracker_data.location_id_to_name["Super Mario World"][id].split(' - ')[0].startswith(level)
+        }
+
         regions = {
             region_name: {
                 "checked": sum(
@@ -2661,6 +2696,7 @@ if "Super Mario World" in network_data_package["games"]:
             inventory=inventory,
             player_name=tracker_data.get_player_name(team, player),
             slot_data=tracker_data.get_slot_data(team, player),
+            player_locations=tracker_data.get_player_locations(team, player).keys(),
             tracker_data=tracker_data,
             regions=regions,
             known_regions=known_regions
