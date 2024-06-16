@@ -102,7 +102,7 @@ class EntityHuntPicker:
         panels_to_plando = sorted(self.player_options.panel_hunt_plando.value)
         self.random.shuffle(panels_to_plando)
 
-        for location_name in self.player_options.panel_hunt_plando.value:
+        for location_name in panels_to_plando:
             entity_hex = static_witness_logic.ENTITIES_BY_NAME[location_name]["entity_hex"]
 
             if entity_hex in self.PRE_PICKED_HUNT_ENTITIES:
