@@ -727,5 +727,5 @@ Primordial Wyrm;                    Calamity | Location | Item | Goal;          
 # primordial_wyrm
 
 // Boss Rush
-Boss Rush;                          Calamity | Location | Item | Goal;          Diving Gear | Neptune's Shell | (Aquatic Heart & Skeletron) // >:D
+Boss Rush;                          Calamity | Location | Item | Goal;          Diving Gear | Neptune's Shell | (Aquatic Heart & Skeletron); // >:D
 # boss_rush
