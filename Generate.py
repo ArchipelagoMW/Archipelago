@@ -65,7 +65,7 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None):
+def main(args=None) -> Tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded before logging init.")
@@ -237,8 +237,7 @@ def main(args=None):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    from Main import main as ERmain
-    return ERmain(erargs, seed)
+    return erargs, seed
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -547,7 +546,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    multiworld = main()
+    erargs, seed = main()
+    from Main import main as ERmain
+    multiworld = ERmain(erargs, seed)
     if __debug__:
         import gc
         import sys
