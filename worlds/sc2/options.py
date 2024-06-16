@@ -1025,6 +1025,8 @@ def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     # filter out no-build missions
     if not get_option_value(world, "shuffle_no_build"):
         excluded |= MissionFlag.NoBuild
+    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_disabled:
+        excluded |= MissionFlag.RaceSwap
     # TODO: add more flags to potentially exclude once we have a way to get that from the player
     return MissionFlag(excluded)
 
@@ -1034,6 +1036,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     excluded_mission_names = world.options.excluded_missions.value
     disabled_campaigns = get_disabled_campaigns(world)
     disabled_flags = get_disabled_flags(world)
+    just_one_variant = get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_pick_one
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
@@ -1048,12 +1051,13 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
             [mission for mission in SC2Mission if
              mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE]
         )
-    # Omitting No-Build missions if not shuffling no-build
+    # Omitting missions with flags we don't want
     if disabled_flags:
         excluded_missions = excluded_missions.union(get_missions_with_any_flags_in_list(disabled_flags))
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
+    # TODO: if just_one_variant:
 
     return excluded_missions
 
