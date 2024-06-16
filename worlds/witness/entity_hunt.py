@@ -67,7 +67,10 @@ class EntityHuntPicker:
 
         return self.HUNT_ENTITIES
 
-    def _panel_is_eligible(self, panel_hex: str) -> bool:
+    def _entity_is_eligible(self, panel_hex: str) -> bool:
+        """
+        Determine whether an entity is eligible for entity hunt based on player options.
+        """
         panel_obj = static_witness_logic.ENTITIES_BY_HEX[panel_hex]
 
         return (
@@ -90,7 +93,7 @@ class EntityHuntPicker:
 
         all_eligible_panels = [
             panel for panel in ALL_HUNTABLE_PANELS
-            if self._panel_is_eligible(panel)
+            if self._entity_is_eligible(panel)
         ]
 
         eligible_panels_by_area = defaultdict(set)
