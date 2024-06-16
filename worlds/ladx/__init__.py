@@ -8,7 +8,7 @@ import typing
 import bsdiff4
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -434,6 +434,12 @@ class LinksAwakeningWorld(World):
                 return self.name_cache[name]
         
         return "TRADING_ITEM_LETTER"
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_output(self, output_directory: str):
         # copy items back to locations
