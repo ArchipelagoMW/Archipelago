@@ -2514,7 +2514,6 @@ if "Super Mario World" in network_data_package["games"]:
         f"{REGION_YOSHIS_ISLAND} 4"         : REGION_YOSHIS_ISLAND,
         "#1 Iggy's Castle"                  : REGION_YOSHIS_ISLAND,
         "Yellow Switch Palace"              : REGION_YOSHIS_ISLAND,
-        "Yoshi's House"                     : REGION_YOSHIS_ISLAND,
 
         f"{REGION_DONUT_PLAINS} 1"          : REGION_DONUT_PLAINS,
         f"{REGION_DONUT_PLAINS} 2"          : REGION_DONUT_PLAINS,
@@ -2526,6 +2525,7 @@ if "Super Mario World" in network_data_package["games"]:
         "Donut Secret 2"                    : REGION_DONUT_PLAINS,
         "Donut Secret House"                : REGION_DONUT_PLAINS,
         "Green Switch Palace"               : REGION_DONUT_PLAINS,
+        "Yoshi's House"                     : REGION_DONUT_PLAINS,
 
         f"{REGION_VANILLA_DOME} 1"          : REGION_VANILLA_DOME,
         f"{REGION_VANILLA_DOME} 2"          : REGION_VANILLA_DOME,
