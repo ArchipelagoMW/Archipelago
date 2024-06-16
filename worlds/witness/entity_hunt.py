@@ -74,8 +74,7 @@ class EntityHuntPicker:
         """
 
         all_eligible_panels = [
-            panel
-            for panel in ALL_HUNTABLE_PANELS
+            panel for panel in ALL_HUNTABLE_PANELS
             if self.player_logic.solvability_guaranteed(panel)
             and not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
