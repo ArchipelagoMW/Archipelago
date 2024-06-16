@@ -20,7 +20,7 @@ For more information on plando, you can reference the [general plando guide](/tu
 Triggers may be defined in either the root or in the relevant game sections. Generally, the best place to do this is the
 bottom of the YAML for clear organization.
 
-Each trigger consists of four parts:
+Each trigger consists of four parts plus one optional part:
 - `option_category` specifies the section which the triggering option is defined in.
     - Example: `A Link to the Past`
     - This is the category the option is located in. If the option you're triggering off of is in root then you
@@ -32,6 +32,7 @@ Each trigger consists of four parts:
     - Example: `15`
     - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
       results, you would need multiple triggers for this.
+
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
   another option also gets selected or placing an item in a certain location. It is possible to have multiple things
   happen in this section.
@@ -49,6 +50,11 @@ The general format is:
     option to change:
       desired result
   ```
+
+- `option_compare` is an optional 5th part which specifies how you wish to compare the named option and the result,
+  this defaults to "=" if you do not include this option.
+    - Example: `<`
+    - Values can be any item from this list: ['<', '>', '!=', '=']
 
 ### Examples
 
@@ -81,6 +87,22 @@ For example:
   ```
 
 In this example, if your world happens to roll SpecificKeycards, then your game will also start in inverted.
+
+If you wish to the trigger to activate when under conditions OTHER than an exact match, you should include option_compare:
+
+  ```yaml
+  triggers:
+    - option_category: A Link to the Past
+      option_name: shop_item_slots
+      option_result: 15
+      option_compare: ">"
+      options:
+        A Link to the Past:
+          start_inventory:
+            Rupees(300): 2
+  ```
+
+In this example, if there are MORE than 15 shop item slots, you'll be granted 600 rupees at the beginning.
 
 It is also possible to use imaginary values in options to trigger specific settings. You can use these made-up values in
 either your main options or to trigger from another trigger. Currently, this is the only way to trigger on "setting 1
@@ -163,8 +185,9 @@ Ball.
 
 ## Advanced Trigger Options
 
-If you feel that you need more control, you can replace option_name and option_result with a new category: 'option_advanced'.
-This allows for comparison operators [<, >, =, !=], and comparing combinations of settings (A & B OR C & D).
+If you feel that you need more control, you can instead create a trigger using "option_category: game" and "options:"
+as in the previous sections, but replace option_name, option_result, and option_compare with 'option_advanced: list of options'.
+This allows for comparing combinations of settings (A & B OR C & D).
 
 Each entry in option_advanced is a list made up of the option name, and the value you wish to compare that value to, with an 
 optional comparison entry between them (this defaults to = if you do not include it.)
@@ -174,11 +197,41 @@ If you want to trigger off of multiple options, you must specify whether you wan
 or to only require that EITHER be true (|, 1, 'or').
 'And' always takes precedence over 'or', so A & B & C | D & E | F is the same as (A & B & C) | (D & E) | F
 
-The format will always be alternating conditions and 'unitors' (&/|), and each entry should be prefaced with a '-'
+The format will always be alternating conditions and 'unitors' (&/|), and each entry should be prefaced with a '-' in the following
+format:
+  ```yaml
+game name:
+  game options
+  .
+  .
+  .
+  triggers:
+    - option_category: "game name"
+      option_advanced:
+        - ["option_name1", "comparison1", "result1"]
+        - "unitor1"
+        - ["option_name2", "comparison2", "result2"]
+        - "unitor2"
+          .
+          .
+          .
+        - ["option_nameN", "comparisonN", "resultN"]
+      options:
+        "game name":
+          "option_to_change_1": value
+          "option_to_change_2": value
+          .
+          .
+          .
+    - option_category: "game_name"
+      .
+      .
+      .
+  ```
 
 
 Here is an example:
-```yaml
+  ```yaml
 A Link to the Past:
   goal: "ganon"
   crystals_needed_for_gt: "random-range-0-7"
@@ -207,7 +260,7 @@ A Link to the Past:
     options:
       A Link to the Past:
         goal: "crystals"
-```
+  ```
 
 This will change the goal to "crystals" if either of the following conditions are met:
 1. crystals_needed_for_gt rolls higher than 5 AND crystals_needed_for_ganon rolls lower than 4

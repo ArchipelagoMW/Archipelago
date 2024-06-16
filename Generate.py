@@ -463,7 +463,11 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     for i, option_set in enumerate(triggers):
         try:
             if "option_advanced" not in option_set:
-                option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
+                if "option_compare" in option_set:
+                    option_set["option_advanced"] = [[option_set["option_name"], option_set["option_compare"],
+                                                      option_set["option_result"]]]
+                else:
+                    option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
             if category:
