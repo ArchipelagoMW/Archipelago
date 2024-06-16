@@ -1,4 +1,4 @@
-# Archipelago API
+![image](https://github.com/ArchipelagoMW/Archipelago/assets/57900059/b3f5499b-229b-4562-a8f7-5e7f171fa716)# Archipelago API
 
 This document tries to explain some aspects of the Archipelago World API used when implementing the generation logic of
 a game.
@@ -302,6 +302,27 @@ generation (entrance randomization).
 
 An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based on the current `state`
 (items that have been collected).
+
+The two possible ways to make a CollectionRule are:
+- `def rule(state: CollectionState) -> bool:`
+- `lambda state: ... boolean expression ...`
+An access rule can be assigned through `set_rule(location, rule)`.
+
+Access rules usually check for one of two things.
+- Items that have been collected (e.g. `state.has("Sword", player)`)
+- Locations, Regions or Entrances that have been reached (e.g. `state.can_reach_region("Boss Room"))
+
+Keep in mind that entrances and locations implicitly check for the accessibility of their parent region, so you do not need to check explicitly for it.
+
+#### An important note on Entrance access rules:
+For efficiency reasons, every time reachable regions are searched, every entrance is only checked once in a somewhat non-deterministic order.
+This is fine when checking for items using `state.has`, because items do not change during a region sweep.
+However, `state.can_reach` checks for the very same thing we are updating: Regions. Even doing `state.can_reach_location` or `state.can_reach_entrance` will also check that location's or entrance's parent region.
+This can lead to non-deterministic behavior and, in the worst case, even generation failures.
+
+**Hence, it is considered unsafe to perform `state.can_reach` from within an access condition for an entrance**, unless you are checking for something that sits in the source region of the entrance.
+There is a solution to this issue: `multiworld.register_indirect_condition(region, entrance)`. It is an explicit way to tell the generator that when a given region becomes accessible, it is necessary to re-check a specific entrance.
+You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the issue and can reason why it can never lead to issues in your case.
 
 ### Item Rules
 
