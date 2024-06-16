@@ -111,7 +111,7 @@ class EntityHuntPicker:
             if self._entity_is_eligible(entity_hex, plando=True):
                 if len(self.PRE_PICKED_HUNT_ENTITIES) == self.player_options.panel_hunt_total:
                     warning(
-                        f"Panel {location_name} could not be plandoed for {self.player_name}'s world "
+                        f"Panel {location_name} could not be plandoed as a hunt panel for {self.player_name}'s world "
                         f"because it would exceed their panel hunt total."
                     )
                     continue
