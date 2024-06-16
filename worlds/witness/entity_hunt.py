@@ -1,7 +1,7 @@
 from collections import defaultdict
 from logging import debug
 from pprint import pformat
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple, Any
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple
 
 from .data import static_logic as static_witness_logic
 
