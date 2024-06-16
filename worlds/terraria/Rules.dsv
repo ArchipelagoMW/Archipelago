@@ -59,6 +59,7 @@ Glorious Golden Pole;               Achievement | Fishing;                      
 Fast and Fishious;                  Achievement | Fishing;                      Angler;
 Supreme Helper Minion!;             Achievement | Fishing;                      Angler;
 Water Walking Boots;
+Aquatic Heart;                      Calamity;
 
 // Sky exploration
 Into Orbit;                         Achievement | Early;
@@ -234,6 +235,7 @@ GPS;                                ;                                           
 Goblin Tech;                        ;                                           Tinkerer's Workshop & DPS Meter & Stopwatch & Metal Detector;
 Fish Finder;                        ;                                           Tinkerer's Workshop & Fisherman's Pocket Guide & Weather Radio & Sextant;
 Boots of the Hero;                  Achievement | Grindy;                       Terraspark Boots;
+Diving Gear;                        ;                                           Tinkerer's Workshop;
 
 // Queen Bee
 Where's My Honey?;                  Achievement;
@@ -503,6 +505,7 @@ Solar Eclipse;                      ;                                           
 Broken Hero Sword;                  ;                                           (Solar Eclipse & Plantera & @mech_boss(3)) | (@calamity & #Calamitas Clone);
 Terra Blade;                        ;                                           Hardmode Anvil & True Night's Edge & True Excalibur & Broken Hero Sword & (~@calamity | Living Shard);
 Sword of the Hero;                  Achievement;                                Terra Blade;
+Neptune's Shell;                    ;                                           Solar Eclipse;
 Kill the Sun;                       Achievement;                                Solar Eclipse;
 
 // Great Sand Shark
@@ -724,5 +727,5 @@ Primordial Wyrm;                    Calamity | Location | Item | Goal;          
 # primordial_wyrm
 
 // Boss Rush
-Boss Rush;                          Calamity | Location | Item | Goal; // >:D
+Boss Rush;                          Calamity | Location | Item | Goal;          Diving Gear | Neptune's Shell | (Aquatic Heart & Skeletron) // >:D
 # boss_rush
