@@ -104,7 +104,7 @@ class LinksAwakeningWorld(World):
 
     prefill_dungeon_items = None
 
-    ladxr_options: LADXRSettings
+    ladxr_settings: LADXRSettings
     ladxr_logic: LADXRLogic
     ladxr_itempool: LADXRItemPool
 
@@ -119,13 +119,13 @@ class LinksAwakeningWorld(World):
     }
 
     def convert_ap_options_to_ladxr_logic(self):
-        self.ladxr_options = LADXRSettings(dataclasses.asdict(self.options))
-        
-        self.ladxr_options.validate()
+        self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
+
+        self.ladxr_settings.validate()
         world_setup = LADXRWorldSetup()
-        world_setup.randomize(self.ladxr_options, self.random)
-        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_options, world_setup=world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_options, self.random).toDict()
+        world_setup.randomize(self.ladxr_settings, self.random)
+        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
+        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
 
     def create_regions(self) -> None:
         # Initialize
