@@ -405,12 +405,12 @@ def compare_results(
         comparator: str):
     if comparator == "=":
         return yaml_value == trigger_value
-    elif comparator == "!=":
+    if comparator == "!=":
         return yaml_value != trigger_value
-    if type(yaml_value) is int and type(trigger_value) is int:
+    if isinstance(yaml_value, int) and isinstance(trigger_value, int):
         if comparator == "<":
             return yaml_value < trigger_value
-        elif comparator == ">":
+        if comparator == ">":
             return yaml_value > trigger_value
     else:
         raise Exception("Comparing non-integer values is not possible with < or >")
@@ -419,15 +419,12 @@ def compare_results(
 def compare_triggers(option_set: dict, currently_targeted_weights: dict) -> bool:
     result = True
     advanced = copy.deepcopy(option_set["option_advanced"])
-    # Check whether first trigger condition is true.
     result = result and compare_results(currently_targeted_weights[advanced[0][0]], advanced[0][2], advanced[0][1])
-    # Cycle through remaining conditions, if any, in union + condition pairs.
     for x in range(1, len(advanced), 2):
         if str(advanced[x]).lower() in ["|", "1", "or"]:
             if result:
                 return True
-            else:
-                result = True
+            result = True
         elif str(advanced[x]).lower() in ["&", "0", "and"]:
             if not result:
                 continue
@@ -455,7 +452,8 @@ def handle_random_range_in_triggers(value: str) -> int:
         elif value[2] == "high":
             result = int(round(random.triangular(value_min, value_max, value_max)))
         else:
-            raise Exception(f"Invalid weighting in random-range-x-min-max, x must be low, medium, or high. It is: {value[2]}")
+            raise Exception(f"Invalid weighting in random-range-x-min-max, "
+                            f"x must be low, medium, or high. It is: {value[2]}")
     return result
 
 
@@ -480,7 +478,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                                     f"match with a root option. "
                                     f"This is probably in error.")
                 if type(result) is str:
-                    if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4,5]:
+                    if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4, 5]:
                         result = handle_random_range_in_triggers(result)
                 currently_targeted_weights[advanced[x][0]] = result
                 if len(advanced[x]) == 2:
@@ -499,7 +497,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     update_weights(currently_targeted_weights, category_options, "Triggered",
-                             f"Trigger {i + 1}")
+                                   f"Trigger {i + 1}")
             for x in range(0, len(advanced), 2):
                 valid_keys.add(advanced[x][0])
         except Exception as e:
