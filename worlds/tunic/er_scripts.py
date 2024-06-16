@@ -427,9 +427,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if check_success == 2:
-            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
             if "Secret Gathering Place" in connected_regions:
                 has_laurels = True
+            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
             portal_pairs[portal1] = portal2
             check_success = 0
             random_object.shuffle(two_plus)
