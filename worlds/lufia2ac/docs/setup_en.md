@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Lufia II Ancient Cave Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
@@ -14,11 +14,12 @@ modded SNES minis are currently not supported by SNI**
 
 ## Installation Procedures
 
-1. Download and install SNIClient from the link above, making sure to install the most recent version.
-   **The installer file is located in the assets section at the bottom of the version information**.
-    - During setup, you will be asked to locate your base ROM file. This is your American Lufia II - Rise of the Sinistrals ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. 
+   This is your American Lufia II - Rise of the Sinistrals ROM file. This only needs to be done once.
 
-2. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
+3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
     2. Right-click on a ROM file and select **Open with...**
@@ -38,8 +39,8 @@ options.
 
 ### Where do I get a config file?
 
-The [Player Settings](/games/Lufia%20II%20Ancient%20Cave/player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
+The [Player Options](/games/Lufia%20II%20Ancient%20Cave/player-options) page on the website allows you to configure
+your personal options and export a config file from them.
 
 ### Verifying your config file
 
@@ -48,7 +49,7 @@ If you would like to validate your config file to make sure it works, you may do
 
 ## Generating a Single-Player Game
 
-1. Navigate to the [Player Settings](/games/Lufia%20II%20Ancient%20Cave/player-settings) page, configure your options,
+1. Navigate to the [Player Options](/games/Lufia%20II%20Ancient%20Cave/player-options) page, configure your options,
    and click the "Generate Game" button.
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.

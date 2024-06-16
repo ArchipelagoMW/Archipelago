@@ -59,7 +59,7 @@ stage_table: Dict[str, RiskOfRainItemData] = {
     "Stage 2":              RiskOfRainItemData("Stage", 2 + stage_offset, ItemClassification.progression),
     "Stage 3":              RiskOfRainItemData("Stage", 3 + stage_offset, ItemClassification.progression),
     "Stage 4":              RiskOfRainItemData("Stage", 4 + stage_offset, ItemClassification.progression),
-
+    "Progressive Stage":    RiskOfRainItemData("Stage", 5 + stage_offset, ItemClassification.progression),
 }
 
 item_table = {**upgrade_table, **other_table, **filler_table, **trap_table, **stage_table}

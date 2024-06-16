@@ -5,7 +5,6 @@
 - ChecksFinder from
   the [Github releases Page for the game](https://github.com/jonloveslegos/ChecksFinder/releases) (latest version)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (select `ChecksFinder Client` during installation.)
 
 ## Configuring your YAML file
 
@@ -16,7 +15,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [ChecksFinder Player Settings Page](/games/ChecksFinder/player-settings)
+You can customize your options by visiting the [ChecksFinder Player Options Page](/games/ChecksFinder/player-options)
 
 ### Generating a ChecksFinder game
 
