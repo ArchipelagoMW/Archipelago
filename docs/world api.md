@@ -319,11 +319,11 @@ For efficiency reasons, every time reachable regions are searched, every entranc
 This is fine when checking for items using `state.has`, because items do not change during a region sweep.
 However, `state.can_reach` checks for the very same thing we are updating: Regions.
 This can lead to non-deterministic behavior and, in the worst case, even generation failures.
-Even doing `state.can_reach_location` or `state.can_reach_entrance` is problematic, as these functions call `state.can_reach_region` on the location's/entrance's parent region.
+Even doing `state.can_reach_location` or `state.can_reach_entrance` is problematic, as these functions call `state.can_reach_region` on the respective parent region.
 
 **Hence, it is considered unsafe to perform `state.can_reach` from within an access condition for an entrance**, unless you are checking for something that sits in the source region of the entrance.
 There is a solution to this issue: `multiworld.register_indirect_condition(region, entrance)`. It is an explicit way to tell the generator that when a given region becomes accessible, it is necessary to re-check a specific entrance.
-You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the issue and can reason why it can never lead to issues in your case.
+You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
 
 ### Item Rules
 
