@@ -1,7 +1,7 @@
 from collections import defaultdict
 from logging import debug
 from pprint import pformat
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple, Any
 
 from .data import static_logic as static_witness_logic
 
@@ -67,6 +67,21 @@ class EntityHuntPicker:
 
         return self.HUNT_ENTITIES
 
+    def _panel_is_eligible(self, panel_hex: str) -> bool:
+        panel_obj = static_witness_logic.ENTITIES_BY_HEX[panel_hex]
+
+        return (
+            self.player_logic.solvability_guaranteed(panel_hex)
+            and not (
+                # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
+                # However, I don't think they should be hunt panels in this case.
+                self.player_options.disable_non_randomized_puzzles
+                and not self.player_options.shuffle_discarded_panels
+                and panel_obj["locationType"] == "Discard"
+            )
+            and panel_hex not in self.HUNT_ENTITIES
+        )
+
     def _get_eligible_panels(self) -> Tuple[List[str], Dict[str, Set[str]]]:
         """
         There are some entities that are not allowed for panel hunt for various technical of gameplay reasons.
@@ -75,15 +90,7 @@ class EntityHuntPicker:
 
         all_eligible_panels = [
             panel for panel in ALL_HUNTABLE_PANELS
-            if self.player_logic.solvability_guaranteed(panel)
-            and not (
-                # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
-                # However, I don't think they should be hunt panels in this case.
-                self.player_options.disable_non_randomized_puzzles
-                and not self.player_options.shuffle_discarded_panels
-                and panel["locationType"] == "Discard"
-            )
-            and panel not in self.HUNT_ENTITIES
+            if self._panel_is_eligible(panel)
         ]
 
         eligible_panels_by_area = defaultdict(set)
