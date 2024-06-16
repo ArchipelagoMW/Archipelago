@@ -320,11 +320,19 @@ class AutocompleteHintInput(TextInput):
             item_names = ctx.item_names._game_store[ctx.game].values()
 
             def on_press(button: Button):
-                return self.dropdown.select(button.text)
+                split_text = MarkupLabel(text=button.text).markup
+                return self.dropdown.select("".join(text_frag for text_frag in split_text
+                                                    if not text_frag.startswith("[")))
             lowered = value.lower()
             for item_name in item_names:
-                if lowered in item_name.lower():
-                    btn = Button(text=item_name, size_hint_y=None, height=dp(30))
+                try:
+                    index = item_name.lower().index(lowered)
+                except ValueError:
+                    pass  # substring not found
+                else:
+                    text = escape_markup(item_name)
+                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    btn = Button(text=text, size_hint_y=None, height=dp(30), markup=True)
                     btn.bind(on_release=on_press)
                     self.dropdown.add_widget(btn)
             if not self.dropdown.attach_to:
