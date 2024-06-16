@@ -10,6 +10,12 @@ from .Constants import base_id, item_info, location_info, scenario_info
 from .Items import OpenRCT2Item, set_openRCT2_items
 from .Options import openRCT2Options, Scenario, openrct2_option_groups
 from worlds.AutoWorld import World, WebWorld
+
+import requests
+import pathlib
+from PIL import Image
+from io import BytesIO
+
 class OpenRCT2WebWorld(WebWorld):
     theme = "partyTime"
 
@@ -45,6 +51,23 @@ LauncherComponents.components.append(
         icon='openrct2icon' 
     )
 )
+
+# URL of the PNG image
+url = 'https://github.com/OpenRCT2/OpenRCT2/blob/7ba17812d84d036164bc0657ba720346ff20859b/resources/logo/icon_x96.png?raw=true'
+
+# Fetch the image
+response = requests.get(url)
+
+# Check if the request was successful
+if response.status_code == 200:
+    # Open the image using Pillow
+    openrct2icon = Image.open(BytesIO(response.content))
+
+    # Save the image locally
+    openrct2icon.save(pathlib.Path('data/openrct2icon.png'))
+    print("Image successfully downloaded and saved as 'openrct2icon.png'")
+else:
+    print(f"Failed to retrieve OpenRCT2 Icon. HTTP Status code: {response.status_code}")
 
 LauncherComponents.icon_paths['openrct2icon'] = local_path('data', 'openrct2icon.png')
 
