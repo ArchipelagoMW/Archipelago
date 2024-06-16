@@ -1,4 +1,4 @@
-![image](https://github.com/ArchipelagoMW/Archipelago/assets/57900059/b3f5499b-229b-4562-a8f7-5e7f171fa716)# Archipelago API
+# Archipelago API
 
 This document tries to explain some aspects of the Archipelago World API used when implementing the generation logic of
 a game.
