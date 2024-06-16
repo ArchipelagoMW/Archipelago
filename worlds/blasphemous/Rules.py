@@ -1,4 +1,4 @@
-from typing import Dict, Any, Callable, TYPE_CHECKING
+from typing import Dict, List, Tuple, Any, Callable, TYPE_CHECKING
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -16,6 +16,7 @@ class BlasRules:
         self.player = world.player
         self.world = world
         self.multiworld = world.multiworld
+        self.indirect_conditions: List[Tuple[str, str]] = []
 
         # BrandenEK/Blasphemous.Randomizer/ItemRando/BlasphemousInventory.cs
         self.string_rules = {
@@ -280,18 +281,20 @@ class BlasRules:
             "canBeatLegionary": self.can_beat_legionary
         }
 
-    def is_region(self, string: str) -> bool:
+    def req_is_region(self, string: str) -> bool:
         if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
         or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
             return True
         return False
 
-    def load_rule(self, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
+    def load_rule(self, obj_is_region: bool, name: str, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
         clauses = []
         for clause in obj["logic"]:
             reqs = []
             for req in clause["item_requirements"]:
-                if self.is_region(req):
+                if self.req_is_region(req):
+                    if obj_is_region:
+                        self.indirect_conditions.append((req, f"{name} -> {obj['target']}"))
                     reqs.append(lambda state, req=req: state.can_reach_region(req, self.player))
                 else:
                     reqs.append(self.string_rules[req])

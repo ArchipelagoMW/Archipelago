@@ -256,7 +256,7 @@ class BlasphemousWorld(World):
             region = multiworld.get_region(r["name"], player)
 
             for e in r["exits"]:
-                region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(e)})
+                region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(True, r["name"], e)})
 
             for l in r["locations"]:
                 if not self.options.boots_of_pleading and l == "RE401":
@@ -281,8 +281,10 @@ class BlasphemousWorld(World):
             if not self.options.purified_hand and l["name"] == "RE402":
                 continue
             location = self.get_location(location_names[l["name"]])
-            set_rule(location, blas_logic.load_rule(l))
+            set_rule(location, blas_logic.load_rule(False, l["name"], l))
 
+        for rname, ename in blas_logic.indirect_conditions:
+            self.multiworld.register_indirect_condition(self.get_region(rname), self.get_entrance(ename))
         #from Utils import visualize_regions
         #visualize_regions(self.get_region("Menu"), "blasphemous_regions.puml")
         
