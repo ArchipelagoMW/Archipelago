@@ -317,8 +317,9 @@ Keep in mind that entrances and locations implicitly check for the accessibility
 #### An important note on Entrance access rules:
 For efficiency reasons, every time reachable regions are searched, every entrance is only checked once in a somewhat non-deterministic order.
 This is fine when checking for items using `state.has`, because items do not change during a region sweep.
-However, `state.can_reach` checks for the very same thing we are updating: Regions. Even doing `state.can_reach_location` or `state.can_reach_entrance` will also check that location's or entrance's parent region.
+However, `state.can_reach` checks for the very same thing we are updating: Regions.
 This can lead to non-deterministic behavior and, in the worst case, even generation failures.
+Even doing `state.can_reach_location` or `state.can_reach_entrance` is problematic, as these functions call `state.can_reach_region` on the location's/entrance's parent region.
 
 **Hence, it is considered unsafe to perform `state.can_reach` from within an access condition for an entrance**, unless you are checking for something that sits in the source region of the entrance.
 There is a solution to this issue: `multiworld.register_indirect_condition(region, entrance)`. It is an explicit way to tell the generator that when a given region becomes accessible, it is necessary to re-check a specific entrance.
