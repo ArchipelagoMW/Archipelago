@@ -2480,7 +2480,8 @@ if "Super Mario World" in network_data_package["games"]:
         "Progressive Yellow Switch Palace"  : 2,
         "Progressive Green Switch Palace"   : 2,
         "Progressive Red Switch Palace"     : 2,
-        "Progressive Blue Switch Palace"    : 2
+        "Progressive Blue Switch Palace"    : 2,
+        "Progressive Powerup"               : 3
     }
 
     REGION_YOSHIS_ISLAND        = "Yoshi's Island"
