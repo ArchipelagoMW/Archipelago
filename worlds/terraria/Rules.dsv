@@ -364,7 +364,7 @@ Pirate Invasion;                    Location | Item;                            
 Pirate;                             Npc;                                        Pirate Invasion;
 
 // Queen Slime
-Queen Slime;                        Location | Item;                            Hallow | (@getfixedboi & ((@calamity & #The Slime God) | #Supreme Alchemist, Cirrus));
+Queen Slime;                        Location | Item;                            Hallow | (@getfixedboi & @calamity & #Supreme Alchemist, Cirrus);
 Sparkle Slime Balloon;              ;                                           #Queen Slime;
 Diva Slime;                         Npc;                                        Sparkle Slime Balloon;
 The Great Slime Mitosis;            Achievement;                                Nerdy Slime & Cool Slime & Elder Slime & Clumsy Slime & Diva Slime & Surly Slime & Mystic Slime & Squire Slime;
