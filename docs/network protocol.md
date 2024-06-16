@@ -340,11 +340,11 @@ For the purpose of in-game hints, it is also possible to scout other slots' loca
 Only locations that contain items for your slot will actually be processed if you set the `player` parameter to a different slot's player number than your own.
 
 #### Arguments
-| Name           | Type        | Notes                                                                                                                                                                                           |
-|----------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| locations      | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server.                            |
-| create_as_hint | int         | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
-| player         | int         | Determines the player whose locations will be scouted. If this is a different player than the requesting slot, only locations that contain the requesting slot's items will be processed. Optional; defaults to the requesting slot.                       |
+| Name           | Type        | Notes                                                                                                                                                                                                                                |
+|----------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| locations      | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server.                                                                 |
+| create_as_hint | int         | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply.                                      |
+| player         | int         | Determines the player whose locations will be scouted. If this is a different player than the requesting slot, only locations that contain the requesting slot's items will be processed. Optional; defaults to the requesting slot. |
 
 
 ### StatusUpdate
