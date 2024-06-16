@@ -243,10 +243,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     self.formatted_print(f" [u]{faction.name}[/u] ")
             
             for item_id in categorized_items[faction]:
-                item_name = self.ctx.item_names.lookup_in_slot(item_id)
+                item_name = self.ctx.item_names.lookup_in_game(item_id)
                 received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
                 matching_children = [child for child in received_child_items
-                                     if item_matches_filter(self.ctx.item_names.lookup_in_slot(child))]
+                                     if item_matches_filter(self.ctx.item_names.lookup_in_game(child))]
                 received_items_of_this_type = items_received.get(item_id, [])
                 item_is_match = item_matches_filter(item_name)
                 if item_is_match or len(matching_children) > 0:
@@ -1164,7 +1164,7 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
             objectives = set(ctx.locations_for_mission(mission))
             if objectives:
                 remaining_objectives = objectives.difference(ctx.checked_locations)
-                unfinished_locations[mission] = [ctx.location_names.lookup_in_slot(location_id) for location_id in remaining_objectives]
+                unfinished_locations[mission] = [ctx.location_names.lookup_in_game(location_id) for location_id in remaining_objectives]
             else:
                 unfinished_locations[mission] = []
 
