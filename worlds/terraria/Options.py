@@ -10,14 +10,18 @@ class Calamity(Toggle):
 
 
 class Getfixedboi(Toggle):
-    """Generation accomodates the secret "getfixedboi" seed"""
+    """Generation accomodates the secret, very difficult "getfixedboi" seed"""
 
     display_name = """"getfixedboi" seed"""
     default = False
 
 
 class Goal(Choice):
-    """The victory condition for your run. Stuff after the goal will not be shuffled."""
+    """
+    The victory condition for your run. Stuff after the goal will not be shuffled.
+    Primordial Wyrm and Boss Rush are accessible relatively early, so consider "Items" or
+    "Locations" accessibility to avoid getting stuck on the goal.
+    """
 
     display_name = "Goal"
     option_mechanical_bosses = 0
