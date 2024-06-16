@@ -503,7 +503,7 @@ item_table = {
     item_names.THOR_RAPID_RELOAD:
         ItemData(293 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 23, SC2Race.TERRAN,
                  parent_item=item_names.THOR, origin={"lotv"}),
-    item_names.LIBERATOR_360_DEGREE_SENSOR_ARRAY:
+    item_names.LIBERATOR_GUERILLA_MISSILES:
         ItemData(294 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 24, SC2Race.TERRAN,
                  parent_item=item_names.LIBERATOR, origin={"ext"}),
     item_names.WIDOW_MINE_RESOURCE_EFFICIENCY:
