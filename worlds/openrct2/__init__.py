@@ -1,5 +1,6 @@
 import math
 from typing import TextIO
+from Utils import local_path
 
 import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region, Item, Location, Tutorial
@@ -38,10 +39,14 @@ LauncherComponents.components.append(
     LauncherComponents.Component(
         "OpenRCT2 Client",
         func=launch_client,
-        component_type=LauncherComponents.Type.CLIENT
+        component_type=LauncherComponents.Type.CLIENT,
+        # OpenRCT2 icon credit to the OpenRCT2 team: 
+        # https://github.com/OpenRCT2/OpenRCT2/blob/develop/resources/logo/icon_x96.png
+        icon='openrct2icon' 
     )
 )
 
+LauncherComponents.icon_paths['openrct2icon'] = local_path('data', 'openrct2icon.png')
 
 def get_previous_region_from_OpenRCT2_location(location_number: int):
     if location_number <= 2:

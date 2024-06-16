@@ -754,6 +754,15 @@ class Skips(Range):
     default = 3
 
 openrct2_option_groups = [
+    OptionGroup("Scenario Options", [
+        SelectedScenario,
+        SelectedDifficulty,
+        SelectedScenarioLength,
+        SelectedRandomizationRange,
+        Randomize_Park_Values,
+        SelectedIntensity,
+        SelectedStatReRolls
+    ]),
     OptionGroup("Goal Options", [
         Guest_Objective,
         Park_Value_Objective,
@@ -792,15 +801,6 @@ openrct2_option_groups = [
         Furry_Convention_Traps,
         Bathroom_Traps,
         Spam_Traps
-    ]),
-     OptionGroup("Scenario Options", [
-        SelectedScenario,
-        SelectedDifficulty,
-        SelectedScenarioLength,
-        SelectedRandomizationRange,
-        Randomize_Park_Values,
-        SelectedIntensity,
-        SelectedStatReRolls
     ]),
 ]
 
