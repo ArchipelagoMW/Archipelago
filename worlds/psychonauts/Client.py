@@ -146,7 +146,7 @@ class PsychonautsContext(CommonContext):
 
     async def connection_closed(self):
         await super(PsychonautsContext, self).connection_closed()
-        if self.game_communication_path != None:
+        if self.game_communication_path is not None:
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
                     if "Items" not in file and "Deathlink" not in file:
@@ -161,7 +161,7 @@ class PsychonautsContext(CommonContext):
 
     async def shutdown(self):
         await super(PsychonautsContext, self).shutdown()
-        if self.game_communication_path != None:
+        if self.game_communication_path is not None:
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
                     if "Items" not in file and "Deathlink" not in file:
@@ -370,7 +370,7 @@ async def game_watcher(ctx: PsychonautsContext):
     while not ctx.exit_event.is_set():
         # seed_name and slot are retrieved on connection, game_communication_path won't be set until then
         # don't check game for items to send and receive until this is done
-        if ctx.seed_name == None or ctx.slot == None:
+        if ctx.seed_name is None or ctx.slot is None:
             await asyncio.sleep(0.1)
         else:
 
