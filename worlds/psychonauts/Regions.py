@@ -28,6 +28,582 @@ from .Locations import (
 from .Names import LocationName
 from . import Options
 
+DEFAULT_REGIONS = {
+    # Starting region for Archipelago
+    "Menu": [],
+
+    # --- Real World ----
+    # Sasha's Lab
+    RegionName.CASA: [
+        LocationName.BehindFurnitureCard,
+        LocationName.StaircaseLedgesCard,
+        LocationName.UpperLedgeFossil,
+    ],
+
+    # Wilderness and GPC
+    RegionName.CAGP: [
+        LocationName.TopofGPCCard,
+        LocationName.UnderGPCCard,
+        LocationName.MountainLionLogBridgeCard,
+        LocationName.AboveEntranceLakeCard,
+        LocationName.RockWallBehindTreeCard,
+        LocationName.RockWallTopPirateScope,
+        LocationName.TreeNearFenceCard,
+        LocationName.TreeNearGeyserCard,
+        LocationName.FenceBehindGPCCard,
+        LocationName.NeartheBearCard,
+        LocationName.RockyPlatformsBehindGPCRightCard,
+        LocationName.RockyPlatformsBehindGPCLeftCard,
+        LocationName.TopofLogFlumeCard,
+        LocationName.RidetheLogFlumeCard,
+        LocationName.BottomofLogFlumeCard,
+        LocationName.BigRockNearFordCard,
+        LocationName.RuinedCabinChallengeMarker,
+        LocationName.BranchSwingingCourseStartCard,
+        LocationName.BranchSwingingCourseMidCard,
+        LocationName.BranchSwingingCourseEndChallengeMarker,
+        LocationName.BranchAboveSquirrelCard,
+        LocationName.CreekGrateGlassEye,
+    ],
+    RegionName.CAGPSquirrel: [
+        LocationName.SquirrelsAcornGoldenAcorn,
+    ],
+    RegionName.CAGPGeyser: [
+        LocationName.GeyserMinersSkull,
+    ],
+
+    # Main Campgrounds
+    RegionName.CAMA: [
+        LocationName.FenceNearKidsCabinsCard,
+        LocationName.UnderLodgeFrontStepsCard,
+        LocationName.BehindTreeNearLodgeCard,
+        LocationName.UndertheLodgeGoldDoubloon,
+        LocationName.Loudspeaker1PlatformCard,
+        LocationName.UnderLodgeMetalRoofCard,
+        LocationName.LoudspeakerTightropeWalkCard,
+        LocationName.Loudspeaker2PlatformCard,
+        LocationName.LodgeRoofChallengeMarker,
+        LocationName.MetalRoofOutcroppingCard,
+        LocationName.LoudspeakerAboveStumpCard,
+        LocationName.TreePlatformLeftCard,
+        LocationName.TreePlatformRightEagleClaw,
+        LocationName.RockWallTopCard,
+        LocationName.ParkingLotArchCard,
+        LocationName.ParkingLotSmallLogCard,
+        LocationName.OleandersCarCard,
+        LocationName.ParkingLotBasketballHoopCard,
+        LocationName.ParkingLotOuthouseCard,
+        LocationName.RockNearBenchCard,
+    ],
+    RegionName.CAMALev: [
+        LocationName.ParkingLotHistoryBoardCard,
+    ],
+
+    # Kids' Cabins
+    RegionName.CAKC: [
+        LocationName.GrindingontheRootsCard,
+        LocationName.UnderStairsCard,
+        LocationName.TopotheLoudspeakerCard,
+        LocationName.CabinRoof1Card,
+        LocationName.TrampolineAboveOuthouseCard,
+        LocationName.TrampolinePlatformChallengeMarker,
+        LocationName.CabinsOuthouseCard,
+        LocationName.BehindCabinCard,
+        LocationName.RoofofCabin2Card,
+        LocationName.CaveEntranceCard,
+        LocationName.DeepCavePathCard,
+        LocationName.DeepCaveLadderCard,
+    ],
+    RegionName.CAKCLev: [
+        LocationName.HighUpTightropeCard,
+    ],
+    RegionName.CAKCPyro: [
+        LocationName.CaveRefrigeratorTurkeySandwich,
+    ],
+
+    # Reception Area
+    RegionName.CARE: [
+        LocationName.GraveyardBearCard,
+        LocationName.NearBeehiveCard,
+        LocationName.MineshaftTrailerEntranceCard,
+        LocationName.TightropeStartCard,
+        LocationName.TightropeEndCard,
+        LocationName.RocksNearTrailerCard,
+        LocationName.FireplaceTreeRockCard,
+        LocationName.BigLogPlatformCard,
+        LocationName.AboveWaterfallLeftCard,
+        LocationName.AboveWaterfallRightCard,
+        LocationName.BehindtheWaterfallCard,
+        LocationName.WeirdTreeLeftCherryWoodPipe,
+        LocationName.WeirdTreeRightCard,
+        LocationName.LogHillTopCard,
+        LocationName.LogHillBehindCard,
+        LocationName.MineshaftGrindRailCard,
+        LocationName.MineshaftUpperEntranceCard,
+        LocationName.MineshaftAboveUpperEntranceCard,
+        LocationName.InsideMineshaftCard,
+        LocationName.MineshaftBearCard,
+        LocationName.SwampBirdsNestCondorEgg,
+        LocationName.CollapsedCaveChallengeMarker,
+    ],
+    RegionName.CARELev: [
+        LocationName.FireplaceTreeLowerCard,
+        LocationName.FireplaceTreeTopDinosaurBone,
+        LocationName.SwampSkinnyPolesCard,
+
+    ],
+    RegionName.CAREMark: [
+        LocationName.HornetNestFertilityIdol,
+    ],
+
+    # Boathouse and Lake
+    RegionName.CABH: [
+        LocationName.UndertheFirstBridgeCard,
+        LocationName.BehindStumpCard,
+        LocationName.LeftofEntranceRockWallCard,
+        LocationName.PolesonLakeCard,
+        LocationName.BathysphereRoofCard,
+        LocationName.BathysphereDockCard,
+        LocationName.MetalRoofAboveFordCard,
+        LocationName.AboveFordRopesCard,
+        LocationName.AboveFordCabinPlatformCard,
+        LocationName.OutsideCougarCaveCard,
+        LocationName.InsideCougarCaveDiversHelmet,
+        LocationName.BulletinBoardBushesCard,
+        LocationName.PinkTreesPlatformLeftCard,
+        LocationName.PinkTreesPlatformRightCard,
+        LocationName.RockWallUpperCard,
+        LocationName.LakeShoreCard,
+        LocationName.TinyIslandCard,
+        LocationName.RockWallGapPsychonautsComic1,
+        LocationName.LungfishBossComplete,
+    ],
+    RegionName.CABHLev: [
+        LocationName.TopofBigRockChallengeMarker,
+    ],
+
+    # Main Lodge
+    RegionName.CALI: [
+        LocationName.MainLodgeRaftersVoodooDoll,
+    ],
+
+    # Ford's Sanctuary
+    RegionName.CAJA: [
+        LocationName.TopofSanctuaryCard,
+        LocationName.BottomofSanctuaryCard,
+    ],
+    RegionName.RANK5to20: [
+        LocationName.PSIRank05,
+        LocationName.PSIRank10,
+        LocationName.PSIRank15,
+        LocationName.PSIRank20,
+    ],
+    RegionName.RANK25to40: [
+        LocationName.PSIRank25,
+        LocationName.PSIRank30,
+        LocationName.PSIRank35,
+        LocationName.PSIRank40,
+    ],
+    RegionName.RANK45to60: [
+        LocationName.PSIRank45,
+        LocationName.PSIRank50,
+        LocationName.PSIRank55,
+        LocationName.PSIRank60,
+    ],
+    RegionName.RANK65to80: [
+        LocationName.PSIRank65,
+        LocationName.PSIRank70,
+        LocationName.PSIRank75,
+        LocationName.PSIRank80,
+    ],
+    RegionName.RANK85to101: [
+        LocationName.PSIRank85,
+        LocationName.PSIRank90,
+        LocationName.PSIRank95,
+        LocationName.PSIRank101,
+    ],
+
+    # Asylum Grounds
+    RegionName.ASGR: [
+        LocationName.RockWallBottom,
+        LocationName.RockWallLadder,
+        LocationName.FountainTop,
+        LocationName.HedgeAlcove,
+        LocationName.AsylumDoorsRight,
+        LocationName.AsylumDoorsLeft,
+        LocationName.CornerNearFence,
+        LocationName.LedgeBeforeGloria,
+    ],
+    RegionName.ASGRLev: [
+        LocationName.OutsideFrontGate,
+        LocationName.PillarAboveGate,
+    ],
+
+    # Asylum Courtyard
+    RegionName.ASCO: [
+        LocationName.AboveElevator,
+        LocationName.LedgeAboveFredLeft,
+        LocationName.LedgeAboveFredRight,
+        LocationName.LedgeOppositeElevator,
+        LocationName.EdgarsRoom,
+        LocationName.BehindElevator,
+        LocationName.JunkCorner,
+    ],
+    RegionName.ASCOLev: [
+        LocationName.AboveEdgar,
+    ],
+    RegionName.ASCOInvis: [
+        LocationName.CrowsBasket,
+    ],
+
+    # Asylum Upper Floors
+    RegionName.ASUP: [
+        LocationName.BehindMattressWall,
+        LocationName.CheckeredBathroom,
+        LocationName.RoomNearCheckeredBathroom,
+        LocationName.ElevatorShaft,
+        LocationName.RoomLeftOfPipeSlide,
+        LocationName.FloatingInHole,
+        LocationName.NextToHole,
+        LocationName.CrumblingOuterWallPlanks,
+        LocationName.CrumblingOuterWallPillar,
+        LocationName.CrumblingOuterWallBelowPlatform,
+    ],
+    RegionName.ASUPLev: [
+        LocationName.CrumblingOuterWallPlatform,
+        LocationName.RoomAboveTiltedStairs,
+        LocationName.AcidRoomFloor,
+        LocationName.AcidRoomTable,
+        LocationName.AcidRoomWindow,
+        LocationName.AcidRoomOverhang,
+        LocationName.SmallWindowsLedge,
+        LocationName.RoundWoodPlatform,
+        LocationName.GrateClimbBottom,
+        LocationName.GrateClimbMid,
+        LocationName.SinkPlatformLeft,
+        LocationName.SinkPlatformRight,
+        LocationName.PipesBelowChairDoor,
+    ],
+    RegionName.ASUPTele: [
+        LocationName.RoomOppositeChairDoor,
+        LocationName.PipeSlideNearChairDoor,
+        LocationName.RaftersAboveChairDoor,
+    ],
+
+    # Asylum Lab
+    RegionName.ASLB: [
+        LocationName.LabCagedCrowLeft,
+        LocationName.LabCagedCrowRight,
+        LocationName.NextToPokeylope,
+        LocationName.LabTopRailingLeft1,
+        LocationName.LabTopRailingLeft2,
+        LocationName.LabTopElevator,
+        LocationName.LabTopRailingRight,
+        LocationName.TeaRoom,
+    ],
+
+    # --- Mental Worlds ----
+    # Basic Braining
+    RegionName.BBA1: [
+        LocationName.JumpingTutorial1,
+        LocationName.JumpingTutorial2,
+        LocationName.PoleClimbingTutorialFloor,
+        LocationName.BelowTheTripleTrampolines,
+    ],
+    RegionName.BBA2: [
+        LocationName.GiantSoldierCutOut,
+        LocationName.DodgingBullets1,
+        LocationName.DodgingBullets2,
+        LocationName.MachineGunTurret,
+        LocationName.PoleSwingingTutorial,
+        LocationName.TrapezePlatform,
+        LocationName.InsidePlaneWreckage,
+        LocationName.EndOfObstacleCourseLeft,
+        LocationName.EndOfObstacleCourseRight,
+        LocationName.BasicBrainingComplete,
+    ],
+    RegionName.BBA2Duster: [
+        LocationName.TrapezeCobweb,
+    ],
+
+    # Sasha's Shooting Gallery
+    RegionName.SACU: [
+        LocationName.OnTheBed,
+        LocationName.OnThePillow,
+        LocationName.BuildingBlocksLeft,
+        LocationName.BuildingBlocksBelow,
+        LocationName.BuildingBlocksRight,
+        LocationName.TopOfBedFrame,
+        LocationName.RoundPlatformsBottom,
+        LocationName.RoundPlatformsNearValve,
+        LocationName.SideOfCubeFace3,
+        LocationName.BottomOfShoeboxLadder,
+        LocationName.ShoeboxPedestal,
+        LocationName.ShoeboxTowerTop,
+        LocationName.FlameTowerSteps,
+        LocationName.FlameTowerTop1,
+        LocationName.FlameTowerTop2,
+        LocationName.SashasShootingGalleryComplete,
+    ],
+    RegionName.SACULev: [
+        LocationName.RoundPlatformsFarFromValve,
+    ],
+
+    # Milla's Dance Party
+    RegionName.MIFL: [
+        LocationName.IntroRingsTutorial,
+        LocationName.DancingCamperPlatform1,
+        LocationName.DemonRoom,
+        LocationName.WindyLadderBottom,
+        LocationName.PinballPlunger,
+        LocationName.PlungerPartyLedge,
+        LocationName.GrindrailRings,
+        LocationName.CensorHallway,
+        LocationName.PinkBowlBottom,
+        LocationName.PinkBowlSmallPlatform,
+        LocationName.BubblyFanBottom,
+        LocationName.BubblyFanPlatform,
+        LocationName.BubblyFanTop,
+        LocationName.MillasPartyRoom,
+        LocationName.MillasDancePartyComplete,
+    ],
+
+    # Brain Tumbler Experiment (Nightmare in the Brain Tumbler)
+    RegionName.NIMP: [
+        LocationName.OutsideCaravan,
+        LocationName.BehindTheEgg,
+        LocationName.ShadowMonsterPath,
+    ],
+    RegionName.NIMPMark: [
+        LocationName.ShadowMonsterBlueMushrooms,
+        LocationName.LedgeBehindShadowMonster,
+        LocationName.BelowTheSteepLedge,
+        LocationName.ForestPathBlueMushrooms,
+        LocationName.ForestBlueLedge,
+        LocationName.ForestHighPlatform,
+        LocationName.ForestPathThorns,
+        LocationName.BehindThornTowerLeft,
+        LocationName.BehindThornTowerMid,
+        LocationName.BehindThornTowerRight,
+    ],
+    RegionName.NIBA: [
+        LocationName.BrainTumblerExperimentComplete,
+    ],
+
+    # Lungfishopolis
+    RegionName.LOMA: [
+        LocationName.SkyscraperStart,
+        LocationName.CornerNearJail,
+        LocationName.SkyscraperBeforeDam,
+    ],
+    RegionName.LOMAShield: [
+        LocationName.BehindLasersLeft1,
+        LocationName.BehindLasersLeft2,
+        LocationName.BehindLasersRight,
+        LocationName.BlimpHop,
+        LocationName.EndOfDam,
+        LocationName.EndOfDamPlatform,
+        LocationName.SkyscraperAfterDam,
+        LocationName.NearBattleships,
+        LocationName.OnTheBridge,
+        LocationName.GroundAfterBridge,
+        LocationName.SkyscraperAfterBridge,
+        LocationName.TunnelSuitcaseTag,
+        LocationName.FinalSkyscrapersLeft,
+        LocationName.FinalSkyscrapersRight,
+        LocationName.KochamaraIntroLeft,
+        LocationName.KochamaraIntroRight,
+        LocationName.LungfishopolisComplete,
+    ],
+
+    # The Milkman Conspiracy
+    RegionName.MMI1Fridge: [
+        LocationName.BoydsFridgeClv,
+    ],
+    RegionName.MMI1BeforeSign: [
+        LocationName.FirstHouseDufflebagTag,
+        LocationName.SecondHouseRollingPin,
+        LocationName.CarTrunk1StopSign,
+    ],
+    RegionName.MMI1AfterSign: [
+        LocationName.RoofAfterRoadCrewPurseTag,
+        LocationName.CarTrunk2HedgeTrimmers,
+        LocationName.CarHouseBackyardSteamertrunkTag,
+        LocationName.GraveyardPatioVault,
+        LocationName.GraveyardBehindTreeOneUp,
+        LocationName.BehindGraveyardDufflebag,
+        LocationName.HedgeMazeFlowers,
+        LocationName.CarTrunk3WateringCan,
+        LocationName.PostOfficeRoofOneUp,
+        LocationName.PostOfficeLobbySuitcase,
+    ],
+    RegionName.MMI1Hedgetrimmers: [
+        LocationName.LandscapersHouseBackyardSuitcaseTag,
+        LocationName.LandscapersHouseTablePurse,
+    ],
+    RegionName.MMI1RollingPin: [
+        LocationName.LandscapersHouseKitchenAmmoUp,
+    ],
+    RegionName.MMI1Powerlines: [
+        LocationName.PowerlineIslandSandboxHatboxTag,
+        LocationName.PowerlineIslandLeftMemoryVault,
+        LocationName.PowerlineIslandRightMaxLives,
+    ],
+    RegionName.MMI1Duster: [
+        LocationName.InsideWebbedGarageHatbox,
+        LocationName.PostOfficeBasementPlunger,
+    ],
+    RegionName.MMI2: [
+        LocationName.BehindBookDepositorySteamerTrunk,
+    ],
+    RegionName.MMDM: [
+        LocationName.MilkmanComplete,
+    ],
+
+    # Gloria's Theater
+    RegionName.THMS: [
+        LocationName.NearTheCriticPurse,
+        LocationName.BelowTheSpotlightSteamertrunkTag,
+        LocationName.BehindStagePurseTag,
+    ],
+    RegionName.THMSLev: [
+        LocationName.InTheAudienceAmmoUp,
+    ],
+    RegionName.THMSDuster: [
+        LocationName.BehindStageCobwebSuitcase,
+    ],
+    RegionName.THMSStorage: [
+        LocationName.StorageRoomFloorVault,
+        LocationName.StorageRoomLeftSteamertrunk,
+        LocationName.StorageRoomRightLowerSuitcaseTag,
+        LocationName.StorageRoomRightUpperCandle1,
+        LocationName.BonitasRoom,
+    ],
+    RegionName.THCW: [
+        LocationName.DoghouseSlicersDufflebagTag,
+        LocationName.BigPlatform1Hatbox,
+        LocationName.BigPlatform2Vault,
+        LocationName.BigPlatform3OneUp,
+        LocationName.BigPlatformAboveHatboxTag,
+        LocationName.NextToOatmealDufflebag,
+        LocationName.CandleBasketCandle2,
+        LocationName.CurtainSlideConfusionAmmoUp,
+    ],
+    RegionName.THFB: [
+        LocationName.GloriasTheaterComplete,
+    ],
+
+    # Waterloo World
+    RegionName.WWMA: [
+        LocationName.FredsRoomHatboxTag,
+        LocationName.TheFireplacePricelessCoin,
+        LocationName.GameBoardSuitcaseTag,
+        LocationName.OutsideVillager1HouseOneUp,
+        LocationName.SmallArchTopMaxLives,
+        LocationName.SmallArchBelowPurseTag,
+        LocationName.TopOfVillager2sHouseDufflebagTag,
+        LocationName.CastleTowerOneUp,
+        LocationName.CastleInsideVault,
+        LocationName.CastleWallSteamertrunk,
+        LocationName.HelpTheCarpenter,
+    ],
+    RegionName.WWMALev: [
+        LocationName.TopOfVillager3sHouseAmmoUp,
+        LocationName.TopOfKnightsHouseConfusionAmmoUp,
+    ],
+    RegionName.WWMACarpRoof: [
+        LocationName.CarpentersRoofVault,
+        LocationName.TightropeRoomDufflebag,
+    ],
+    RegionName.WWMADuster: [
+        LocationName.UnderTheGuillotineSuitcase,
+        LocationName.FredsHouseBasementHatbox,
+        LocationName.BlacksmithsLeftBuildingPurse,
+    ],
+    RegionName.WWMADusterLev: [
+        LocationName.BlacksmithsRightBuildingSteamertrunkTag,
+    ],
+    RegionName.WWMADusterLevPyro: [
+        LocationName.BlacksmithsHaybaleTheMusket,
+    ],
+    RegionName.WWMAV1: [
+        LocationName.HelpVillager1,
+    ],
+    RegionName.WWMAKnight: [
+        LocationName.HelpTheKnight,
+    ],
+    RegionName.WWMAV2: [
+        LocationName.HelpVillager2,
+    ],
+    RegionName.WWMAV3: [
+        LocationName.HelpVillager3,
+    ],
+    RegionName.WWMADone: [
+        LocationName.WaterlooWorldComplete,
+    ],
+
+    # Black Velvetopia
+    RegionName.BVRB: [
+        LocationName.ClubStreetLadySteamertrunk,
+        LocationName.AlleywaysLedgeHatboxTag,
+        LocationName.SewersMainVault,
+        LocationName.NearDiegosHouseMaxLives,
+    ],
+    RegionName.BVRBLev: [
+        LocationName.ClubStreetMetalBalconyDufflebagTag,
+        LocationName.HeartStreetHIGHBalconyAmmoUp,
+    ],
+    RegionName.BVRBTele: [
+        LocationName.ClubStreetGatedSteamerTrunkTag,
+        LocationName.TheGardenVault,
+    ],
+    RegionName.BVRBDuster: [
+        LocationName.DiegosBedSuitcaseTag,
+        LocationName.DiegosRoomHatbox,
+        LocationName.DiegosHouseGrindrailSuitcase,
+        LocationName.GrindrailBalconyConfusionAmmoUp,
+    ],
+    RegionName.BVRBLogs: [
+        LocationName.BurnTheLogsDufflebag,
+    ],
+    RegionName.BVES: [
+        LocationName.SanctuaryGroundPurse,
+        LocationName.TigerWrestler,
+        LocationName.DragonWrestler,
+        LocationName.EagleWrestler,
+
+    ],
+    RegionName.BVESLev: [
+        LocationName.SanctuaryBalconyPurseTag,
+    ],
+    RegionName.BVESCobra: [
+        LocationName.CobraWrestler,
+    ],
+    RegionName.BVESBoss: [
+        LocationName.BlackVelvetopiaComplete,
+    ],
+
+    # Meat Circus
+    RegionName.MCTC: [
+        LocationName.CrumblingPathSteamertrunk,
+        LocationName.CrumblingPathEndRightHatboxTag,
+        LocationName.CrumblingPathEndLeftConfusionAmmoUp,
+        LocationName.OllieEscortFloorSuitcaseTag,
+    ],
+    RegionName.MCTCLev: [
+        LocationName.EntranceAwningSteamertrunkTag,
+    ],
+    RegionName.MCTCEscort: [
+        LocationName.OllieEscortMiddleHatbox,
+        LocationName.OllieEscortTopLeftVault,
+        LocationName.OllieEscortTopRightPurseTag,
+        LocationName.TunnelOfLoveStartPurse,
+        LocationName.TunnelOfLoveCornerSuitcase,
+        LocationName.TunnelOfLoveRailDufflebagTag,
+        LocationName.NextToTheFatLadyDufflebag,
+    ],
+}
+
 
 def place_events(self: "PSYWorld"):
     final_boss_location = self.multiworld.get_location(LocationName.FinalBossEvent, self.player)
@@ -130,702 +706,16 @@ def create_psyregions(world: MultiWorld, player: int):
                                 for loc_name in location_names)
         world.regions.append(region)
 
-    loc_menu_names = []
-    create_region("Menu", loc_menu_names)
-
-    loc_casa_names = [
-        LocationName.BehindFurnitureCard,
-        LocationName.StaircaseLedgesCard,
-        LocationName.UpperLedgeFossil,
-    ]
-    create_region(RegionName.CASA, loc_casa_names)
-
-    loc_cagp_names = [
-        LocationName.TopofGPCCard,
-        LocationName.UnderGPCCard,
-        LocationName.MountainLionLogBridgeCard,
-        LocationName.AboveEntranceLakeCard,
-        LocationName.RockWallBehindTreeCard,
-        LocationName.RockWallTopPirateScope,
-        LocationName.TreeNearFenceCard,
-        LocationName.TreeNearGeyserCard,
-        LocationName.FenceBehindGPCCard,
-        LocationName.NeartheBearCard,
-        LocationName.RockyPlatformsBehindGPCRightCard,
-        LocationName.RockyPlatformsBehindGPCLeftCard,
-        LocationName.TopofLogFlumeCard,
-        LocationName.RidetheLogFlumeCard,
-        LocationName.BottomofLogFlumeCard,
-        LocationName.BigRockNearFordCard,
-        LocationName.RuinedCabinChallengeMarker,
-        LocationName.BranchSwingingCourseStartCard,
-        LocationName.BranchSwingingCourseMidCard,
-        LocationName.BranchSwingingCourseEndChallengeMarker,
-        LocationName.BranchAboveSquirrelCard,
-        LocationName.CreekGrateGlassEye,
-    ]
-    create_region(RegionName.CAGP, loc_cagp_names)
-
-    loc_cagp_squirrel_names = [
-        LocationName.SquirrelsAcornGoldenAcorn,
-    ]
-    create_region(RegionName.CAGPSquirrel, loc_cagp_squirrel_names)
-
-    loc_cagp_geyser_names = [
-        LocationName.GeyserMinersSkull,
-    ]
-    create_region(RegionName.CAGPGeyser, loc_cagp_geyser_names)
-
-    loc_cama_names = [
-        LocationName.FenceNearKidsCabinsCard,
-        LocationName.UnderLodgeFrontStepsCard,
-        LocationName.BehindTreeNearLodgeCard,
-        LocationName.UndertheLodgeGoldDoubloon,
-        LocationName.Loudspeaker1PlatformCard,
-        LocationName.UnderLodgeMetalRoofCard,
-        LocationName.LoudspeakerTightropeWalkCard,
-        LocationName.Loudspeaker2PlatformCard,
-        LocationName.LodgeRoofChallengeMarker,
-        LocationName.MetalRoofOutcroppingCard,
-        LocationName.LoudspeakerAboveStumpCard,
-        LocationName.TreePlatformLeftCard,
-        LocationName.TreePlatformRightEagleClaw,
-        LocationName.RockWallTopCard,
-        LocationName.ParkingLotArchCard,
-        LocationName.ParkingLotSmallLogCard,
-        LocationName.OleandersCarCard,
-        LocationName.ParkingLotBasketballHoopCard,
-        LocationName.ParkingLotOuthouseCard,
-        LocationName.RockNearBenchCard,
-    ]
-    create_region(RegionName.CAMA, loc_cama_names)
-
-    loc_cama_lev_names = [
-        LocationName.ParkingLotHistoryBoardCard,
-    ]
-    create_region(RegionName.CAMALev, loc_cama_lev_names)
-
-    loc_cakc_names = [
-        LocationName.GrindingontheRootsCard,
-        LocationName.UnderStairsCard,
-        LocationName.TopotheLoudspeakerCard,
-        LocationName.CabinRoof1Card,
-        LocationName.TrampolineAboveOuthouseCard,
-        LocationName.TrampolinePlatformChallengeMarker,
-        LocationName.CabinsOuthouseCard,
-        LocationName.BehindCabinCard,
-        LocationName.RoofofCabin2Card,
-        LocationName.CaveEntranceCard,
-        LocationName.DeepCavePathCard,
-        LocationName.DeepCaveLadderCard,
-    ]
-    create_region(RegionName.CAKC, loc_cakc_names)
-
-    loc_cakc_lev_names = [
-        LocationName.HighUpTightropeCard,
-    ]
-    create_region(RegionName.CAKCLev, loc_cakc_lev_names)
-
-    loc_cakc_pyro_names = [
-        LocationName.CaveRefrigeratorTurkeySandwich,
-    ]
-    create_region(RegionName.CAKCPyro, loc_cakc_pyro_names)
-
-    loc_care_names = [
-        LocationName.GraveyardBearCard,
-        LocationName.NearBeehiveCard,
-        LocationName.MineshaftTrailerEntranceCard,
-        LocationName.TightropeStartCard,
-        LocationName.TightropeEndCard,
-        LocationName.RocksNearTrailerCard,
-        LocationName.FireplaceTreeRockCard,
-        LocationName.BigLogPlatformCard,
-        LocationName.AboveWaterfallLeftCard,
-        LocationName.AboveWaterfallRightCard,
-        LocationName.BehindtheWaterfallCard,
-        LocationName.WeirdTreeLeftCherryWoodPipe,
-        LocationName.WeirdTreeRightCard,
-        LocationName.LogHillTopCard,
-        LocationName.LogHillBehindCard,
-        LocationName.MineshaftGrindRailCard,
-        LocationName.MineshaftUpperEntranceCard,
-        LocationName.MineshaftAboveUpperEntranceCard,
-        LocationName.InsideMineshaftCard,
-        LocationName.MineshaftBearCard,
-        LocationName.SwampBirdsNestCondorEgg,
-        LocationName.CollapsedCaveChallengeMarker,
-    ]
-    create_region(RegionName.CARE, loc_care_names)
-
-    loc_care_lev_names = [
-        LocationName.FireplaceTreeLowerCard,
-        LocationName.FireplaceTreeTopDinosaurBone,
-        LocationName.SwampSkinnyPolesCard,
-
-    ]
-    create_region(RegionName.CARELev, loc_care_lev_names)
-
-    loc_care_mark_names = [
-        LocationName.HornetNestFertilityIdol,
-    ]
-    create_region(RegionName.CAREMark, loc_care_mark_names)
-
-    loc_cabh_names = [
-        LocationName.UndertheFirstBridgeCard,
-        LocationName.BehindStumpCard,
-        LocationName.LeftofEntranceRockWallCard,
-        LocationName.PolesonLakeCard,
-        LocationName.BathysphereRoofCard,
-        LocationName.BathysphereDockCard,
-        LocationName.MetalRoofAboveFordCard,
-        LocationName.AboveFordRopesCard,
-        LocationName.AboveFordCabinPlatformCard,
-        LocationName.OutsideCougarCaveCard,
-        LocationName.InsideCougarCaveDiversHelmet,
-        LocationName.BulletinBoardBushesCard,
-        LocationName.PinkTreesPlatformLeftCard,
-        LocationName.PinkTreesPlatformRightCard,
-        LocationName.RockWallUpperCard,
-        LocationName.LakeShoreCard,
-        LocationName.TinyIslandCard,
-        LocationName.RockWallGapPsychonautsComic1,
-        LocationName.LungfishBossComplete,
-    ]
-    create_region(RegionName.CABH, loc_cabh_names)
-
-    loc_cabh_lev_names = [
-        LocationName.TopofBigRockChallengeMarker,
-    ]
-    create_region(RegionName.CABHLev, loc_cabh_lev_names)
-
-    loc_cali_names = [
-        LocationName.MainLodgeRaftersVoodooDoll,
-    ]
-    create_region(RegionName.CALI, loc_cali_names)
-
-    loc_caja_names = [
-        LocationName.TopofSanctuaryCard,
-        LocationName.BottomofSanctuaryCard,
-    ]
-    create_region(RegionName.CAJA, loc_caja_names)
+    for region_name, location_names in DEFAULT_REGIONS.items():
+        create_region(region_name, location_names)
 
     reg_caja_brains = Region(RegionName.CAJABrains, player, world)
     reg_caja_brains.locations += [PSYLocation(player, LocationName.RedeemedBrainsEvent, None, reg_caja_brains)]
     world.regions.append(reg_caja_brains)
 
-    loc_rank5to20_names = [
-        LocationName.PSIRank05,
-        LocationName.PSIRank10,
-        LocationName.PSIRank15,
-        LocationName.PSIRank20,
-
-    ]
-    create_region(RegionName.RANK5to20, loc_rank5to20_names)
-
-    loc_rank25to40_names = [
-        LocationName.PSIRank25,
-        LocationName.PSIRank30,
-        LocationName.PSIRank35,
-        LocationName.PSIRank40,
-
-    ]
-    create_region(RegionName.RANK25to40, loc_rank25to40_names)
-
-    loc_rank45to60_names = [
-        LocationName.PSIRank45,
-        LocationName.PSIRank50,
-        LocationName.PSIRank55,
-        LocationName.PSIRank60,
-    ]
-    create_region(RegionName.RANK45to60, loc_rank45to60_names)
-
-    loc_rank65to80_names = [
-        LocationName.PSIRank65,
-        LocationName.PSIRank70,
-        LocationName.PSIRank75,
-        LocationName.PSIRank80,
-    ]
-    create_region(RegionName.RANK65to80, loc_rank65to80_names)
-
-    loc_rank85to101_names = [
-        LocationName.PSIRank85,
-        LocationName.PSIRank90,
-        LocationName.PSIRank95,
-        LocationName.PSIRank101,
-    ]
-    create_region(RegionName.RANK85to101, loc_rank85to101_names)
-
-    loc_asgr_names = [
-        LocationName.RockWallBottom,
-        LocationName.RockWallLadder,
-        LocationName.FountainTop,
-        LocationName.HedgeAlcove,
-        LocationName.AsylumDoorsRight,
-        LocationName.AsylumDoorsLeft,
-        LocationName.CornerNearFence,
-        LocationName.LedgeBeforeGloria,
-    ]
-    create_region(RegionName.ASGR, loc_asgr_names)
-
-    loc_asgr_lev_names = [
-        LocationName.OutsideFrontGate,
-        LocationName.PillarAboveGate,
-    ]
-    create_region(RegionName.ASGRLev, loc_asgr_lev_names)
-
-    loc_asco_names = [
-        LocationName.AboveElevator,
-        LocationName.LedgeAboveFredLeft,
-        LocationName.LedgeAboveFredRight,
-        LocationName.LedgeOppositeElevator,
-        LocationName.EdgarsRoom,
-        LocationName.BehindElevator,
-        LocationName.JunkCorner,
-    ]
-    create_region(RegionName.ASCO, loc_asco_names)
-
-    loc_asco_lev_names = [
-        LocationName.AboveEdgar,
-    ]
-    create_region(RegionName.ASCOLev, loc_asco_lev_names)
-
-    loc_asco_invis_names = [
-        LocationName.CrowsBasket,
-    ]
-    create_region(RegionName.ASCOInvis, loc_asco_invis_names)
-
-    loc_asup_names = [
-        LocationName.BehindMattressWall,
-        LocationName.CheckeredBathroom,
-        LocationName.RoomNearCheckeredBathroom,
-        LocationName.ElevatorShaft,
-        LocationName.RoomLeftOfPipeSlide,
-        LocationName.FloatingInHole,
-        LocationName.NextToHole,
-        LocationName.CrumblingOuterWallPlanks,
-        LocationName.CrumblingOuterWallPillar,
-        LocationName.CrumblingOuterWallBelowPlatform,
-    ]
-    create_region(RegionName.ASUP, loc_asup_names)
-
-    loc_asup_lev_names = [
-        LocationName.CrumblingOuterWallPlatform,
-        LocationName.RoomAboveTiltedStairs,
-        LocationName.AcidRoomFloor,
-        LocationName.AcidRoomTable,
-        LocationName.AcidRoomWindow,
-        LocationName.AcidRoomOverhang,
-        LocationName.SmallWindowsLedge,
-        LocationName.RoundWoodPlatform,
-        LocationName.GrateClimbBottom,
-        LocationName.GrateClimbMid,
-        LocationName.SinkPlatformLeft,
-        LocationName.SinkPlatformRight,
-        LocationName.PipesBelowChairDoor,
-    ]
-    create_region(RegionName.ASUPLev, loc_asup_lev_names)
-
-    loc_asup_tele_names = [
-        LocationName.RoomOppositeChairDoor,
-        LocationName.PipeSlideNearChairDoor,
-        LocationName.RaftersAboveChairDoor,
-    ]
-    create_region(RegionName.ASUPTele, loc_asup_tele_names)
-
-    loc_aslb_names = [
-        LocationName.LabCagedCrowLeft,
-        LocationName.LabCagedCrowRight,
-        LocationName.NextToPokeylope,
-        LocationName.LabTopRailingLeft1,
-        LocationName.LabTopRailingLeft2,
-        LocationName.LabTopElevator,
-        LocationName.LabTopRailingRight,
-        LocationName.TeaRoom,
-    ]
-    create_region(RegionName.ASLB, loc_aslb_names)
-
     reg_aslb_boss = Region(RegionName.ASLBBoss, player, world)
     reg_aslb_boss.locations += [PSYLocation(player, LocationName.OleanderBossEvent, None, reg_aslb_boss)]
     world.regions.append(reg_aslb_boss)
-
-    loc_bba1_names = [
-        LocationName.JumpingTutorial1,
-        LocationName.JumpingTutorial2,
-        LocationName.PoleClimbingTutorialFloor,
-        LocationName.BelowTheTripleTrampolines,
-    ]
-    create_region(RegionName.BBA1, loc_bba1_names)
-
-    loc_bba2_names = [
-        LocationName.GiantSoldierCutOut,
-        LocationName.DodgingBullets1,
-        LocationName.DodgingBullets2,
-        LocationName.MachineGunTurret,
-        LocationName.PoleSwingingTutorial,
-        LocationName.TrapezePlatform,
-        LocationName.InsidePlaneWreckage,
-        LocationName.EndOfObstacleCourseLeft,
-        LocationName.EndOfObstacleCourseRight,
-        LocationName.BasicBrainingComplete,
-    ]
-    create_region(RegionName.BBA2, loc_bba2_names)
-
-    loc_bba2_duster_names = [
-        LocationName.TrapezeCobweb,
-    ]
-    create_region(RegionName.BBA2Duster, loc_bba2_duster_names)
-
-    loc_sacu_names = [
-        LocationName.OnTheBed,
-        LocationName.OnThePillow,
-        LocationName.BuildingBlocksLeft,
-        LocationName.BuildingBlocksBelow,
-        LocationName.BuildingBlocksRight,
-        LocationName.TopOfBedFrame,
-        LocationName.RoundPlatformsBottom,
-        LocationName.RoundPlatformsNearValve,
-        LocationName.SideOfCubeFace3,
-        LocationName.BottomOfShoeboxLadder,
-        LocationName.ShoeboxPedestal,
-        LocationName.ShoeboxTowerTop,
-        LocationName.FlameTowerSteps,
-        LocationName.FlameTowerTop1,
-        LocationName.FlameTowerTop2,
-        LocationName.SashasShootingGalleryComplete,
-    ]
-    create_region(RegionName.SACU, loc_sacu_names)
-
-    loc_sacu_lev_names = [
-        LocationName.RoundPlatformsFarFromValve,
-    ]
-    create_region(RegionName.SACULev, loc_sacu_lev_names)
-
-    loc_mifl_names = [
-        LocationName.IntroRingsTutorial,
-        LocationName.DancingCamperPlatform1,
-        LocationName.DemonRoom,
-        LocationName.WindyLadderBottom,
-        LocationName.PinballPlunger,
-        LocationName.PlungerPartyLedge,
-        LocationName.GrindrailRings,
-        LocationName.CensorHallway,
-        LocationName.PinkBowlBottom,
-        LocationName.PinkBowlSmallPlatform,
-        LocationName.BubblyFanBottom,
-        LocationName.BubblyFanPlatform,
-        LocationName.BubblyFanTop,
-        LocationName.MillasPartyRoom,
-        LocationName.MillasDancePartyComplete,
-    ]
-    create_region(RegionName.MIFL, loc_mifl_names)
-
-    loc_nimp_names = [
-        LocationName.OutsideCaravan,
-        LocationName.BehindTheEgg,
-        LocationName.ShadowMonsterPath,
-    ]
-    create_region(RegionName.NIMP, loc_nimp_names)
-
-    loc_nimp_mark_names = [
-        LocationName.ShadowMonsterBlueMushrooms,
-        LocationName.LedgeBehindShadowMonster,
-        LocationName.BelowTheSteepLedge,
-        LocationName.ForestPathBlueMushrooms,
-        LocationName.ForestBlueLedge,
-        LocationName.ForestHighPlatform,
-        LocationName.ForestPathThorns,
-        LocationName.BehindThornTowerLeft,
-        LocationName.BehindThornTowerMid,
-        LocationName.BehindThornTowerRight,
-    ]
-    create_region(RegionName.NIMPMark, loc_nimp_mark_names)
-
-    loc_niba_names = [
-        LocationName.BrainTumblerExperimentComplete,
-    ]
-    create_region(RegionName.NIBA, loc_niba_names)
-
-    loc_loma_names = [
-        LocationName.SkyscraperStart,
-        LocationName.CornerNearJail,
-        LocationName.SkyscraperBeforeDam,
-
-    ]
-    create_region(RegionName.LOMA, loc_loma_names)
-
-    loc_loma_shield_names = [
-        LocationName.BehindLasersLeft1,
-        LocationName.BehindLasersLeft2,
-        LocationName.BehindLasersRight,
-        LocationName.BlimpHop,
-        LocationName.EndOfDam,
-        LocationName.EndOfDamPlatform,
-        LocationName.SkyscraperAfterDam,
-        LocationName.NearBattleships,
-        LocationName.OnTheBridge,
-        LocationName.GroundAfterBridge,
-        LocationName.SkyscraperAfterBridge,
-        LocationName.TunnelSuitcaseTag,
-        LocationName.FinalSkyscrapersLeft,
-        LocationName.FinalSkyscrapersRight,
-        LocationName.KochamaraIntroLeft,
-        LocationName.KochamaraIntroRight,
-        LocationName.LungfishopolisComplete,
-    ]
-    create_region(RegionName.LOMAShield, loc_loma_shield_names)
-
-    loc_mmi1_fridge_names = [
-        LocationName.BoydsFridgeClv,
-    ]
-    create_region(RegionName.MMI1Fridge, loc_mmi1_fridge_names)
-
-    loc_mmi1_before_sign_names = [
-        LocationName.FirstHouseDufflebagTag,
-        LocationName.SecondHouseRollingPin,
-        LocationName.CarTrunk1StopSign,
-    ]
-    create_region(RegionName.MMI1BeforeSign, loc_mmi1_before_sign_names)
-
-    loc_mmi1_after_sign_names = [
-        LocationName.RoofAfterRoadCrewPurseTag,
-        LocationName.CarTrunk2HedgeTrimmers,
-        LocationName.CarHouseBackyardSteamertrunkTag,
-        LocationName.GraveyardPatioVault,
-        LocationName.GraveyardBehindTreeOneUp,
-        LocationName.BehindGraveyardDufflebag,
-        LocationName.HedgeMazeFlowers,
-        LocationName.CarTrunk3WateringCan,
-        LocationName.PostOfficeRoofOneUp,
-        LocationName.PostOfficeLobbySuitcase,
-    ]
-    create_region(RegionName.MMI1AfterSign, loc_mmi1_after_sign_names)
-
-    loc_mmi1_hedge_trimmers_names = [
-        LocationName.LandscapersHouseBackyardSuitcaseTag,
-        LocationName.LandscapersHouseTablePurse,
-    ]
-    create_region(RegionName.MMI1Hedgetrimmers, loc_mmi1_hedge_trimmers_names)
-
-    loc_mmi1_rolling_pin_names = [
-        LocationName.LandscapersHouseKitchenAmmoUp,
-    ]
-    create_region(RegionName.MMI1RollingPin, loc_mmi1_rolling_pin_names)
-
-    loc_mmi1_powerlines_names = [
-        LocationName.PowerlineIslandSandboxHatboxTag,
-        LocationName.PowerlineIslandLeftMemoryVault,
-        LocationName.PowerlineIslandRightMaxLives,
-    ]
-    create_region(RegionName.MMI1Powerlines, loc_mmi1_powerlines_names)
-
-    loc_mmi1_duster_names = [
-        LocationName.InsideWebbedGarageHatbox,
-        LocationName.PostOfficeBasementPlunger,
-    ]
-    create_region(RegionName.MMI1Duster, loc_mmi1_duster_names)
-
-    loc_mmi2_names = [
-        LocationName.BehindBookDepositorySteamerTrunk,
-    ]
-    create_region(RegionName.MMI2, loc_mmi2_names)
-
-    loc_mmdm_names = [
-        LocationName.MilkmanComplete,
-    ]
-    create_region(RegionName.MMDM, loc_mmdm_names)
-
-    loc_thms_names = [
-        LocationName.NearTheCriticPurse,
-        LocationName.BelowTheSpotlightSteamertrunkTag,
-        LocationName.BehindStagePurseTag,
-    ]
-    create_region(RegionName.THMS, loc_thms_names)
-
-    loc_thms_lev_names = [
-        LocationName.InTheAudienceAmmoUp,
-    ]
-    create_region(RegionName.THMSLev, loc_thms_lev_names)
-
-    loc_thms_duster_names = [
-        LocationName.BehindStageCobwebSuitcase,
-    ]
-    create_region(RegionName.THMSDuster, loc_thms_duster_names)
-
-    loc_thms_storage_names = [
-        LocationName.StorageRoomFloorVault,
-        LocationName.StorageRoomLeftSteamertrunk,
-        LocationName.StorageRoomRightLowerSuitcaseTag,
-        LocationName.StorageRoomRightUpperCandle1,
-        LocationName.BonitasRoom,
-    ]
-    create_region(RegionName.THMSStorage, loc_thms_storage_names)
-
-    loc_thcw_names = [
-        LocationName.DoghouseSlicersDufflebagTag,
-        LocationName.BigPlatform1Hatbox,
-        LocationName.BigPlatform2Vault,
-        LocationName.BigPlatform3OneUp,
-        LocationName.BigPlatformAboveHatboxTag,
-        LocationName.NextToOatmealDufflebag,
-        LocationName.CandleBasketCandle2,
-        LocationName.CurtainSlideConfusionAmmoUp,
-    ]
-    create_region(RegionName.THCW, loc_thcw_names)
-
-    loc_thfb_names = [
-        LocationName.GloriasTheaterComplete,
-    ]
-    create_region(RegionName.THFB, loc_thfb_names)
-
-    loc_wwma_names = [
-        LocationName.FredsRoomHatboxTag,
-        LocationName.TheFireplacePricelessCoin,
-        LocationName.GameBoardSuitcaseTag,
-        LocationName.OutsideVillager1HouseOneUp,
-        LocationName.SmallArchTopMaxLives,
-        LocationName.SmallArchBelowPurseTag,
-        LocationName.TopOfVillager2sHouseDufflebagTag,
-        LocationName.CastleTowerOneUp,
-        LocationName.CastleInsideVault,
-        LocationName.CastleWallSteamertrunk,
-        LocationName.HelpTheCarpenter,
-    ]
-    create_region(RegionName.WWMA, loc_wwma_names)
-
-    loc_wwma_lev_names = [
-        LocationName.TopOfVillager3sHouseAmmoUp,
-        LocationName.TopOfKnightsHouseConfusionAmmoUp,
-    ]
-    create_region(RegionName.WWMALev, loc_wwma_lev_names)
-
-    loc_wwma_carp_roof_names = [
-        LocationName.CarpentersRoofVault,
-        LocationName.TightropeRoomDufflebag,
-    ]
-    create_region(RegionName.WWMACarpRoof, loc_wwma_carp_roof_names)
-
-    loc_wwma_duster_names = [
-        LocationName.UnderTheGuillotineSuitcase,
-        LocationName.FredsHouseBasementHatbox,
-        LocationName.BlacksmithsLeftBuildingPurse,
-    ]
-    create_region(RegionName.WWMADuster, loc_wwma_duster_names)
-
-    loc_wwma_duster_lev_names = [
-        LocationName.BlacksmithsRightBuildingSteamertrunkTag,
-    ]
-    create_region(RegionName.WWMADusterLev, loc_wwma_duster_lev_names)
-
-    loc_wwma_duster_lev_pyro_names = [
-        LocationName.BlacksmithsHaybaleTheMusket,
-    ]
-    create_region(RegionName.WWMADusterLevPyro, loc_wwma_duster_lev_pyro_names)
-
-    loc_wwmav1_names = [
-        LocationName.HelpVillager1,
-    ]
-    create_region(RegionName.WWMAV1, loc_wwmav1_names)
-
-    loc_wwma_knight_names = [
-        LocationName.HelpTheKnight,
-    ]
-    create_region(RegionName.WWMAKnight, loc_wwma_knight_names)
-
-    loc_wwmav2_names = [
-        LocationName.HelpVillager2,
-    ]
-    create_region(RegionName.WWMAV2, loc_wwmav2_names)
-
-    loc_wwmav3_names = [
-        LocationName.HelpVillager3,
-    ]
-    create_region(RegionName.WWMAV3, loc_wwmav3_names)
-
-    loc_wwma_done_names = [
-        LocationName.WaterlooWorldComplete,
-    ]
-    create_region(RegionName.WWMADone, loc_wwma_done_names)
-
-    loc_bvrb_names = [
-        LocationName.ClubStreetLadySteamertrunk,
-        LocationName.AlleywaysLedgeHatboxTag,
-        LocationName.SewersMainVault,
-        LocationName.NearDiegosHouseMaxLives,
-    ]
-    create_region(RegionName.BVRB, loc_bvrb_names)
-
-    loc_bvrb_lev_names = [
-        LocationName.ClubStreetMetalBalconyDufflebagTag,
-        LocationName.HeartStreetHIGHBalconyAmmoUp,
-    ]
-    create_region(RegionName.BVRBLev, loc_bvrb_lev_names)
-
-    loc_bvrb_tele_names = [
-        LocationName.ClubStreetGatedSteamerTrunkTag,
-        LocationName.TheGardenVault,
-    ]
-    create_region(RegionName.BVRBTele, loc_bvrb_tele_names)
-
-    loc_bvrb_duster_names = [
-        LocationName.DiegosBedSuitcaseTag,
-        LocationName.DiegosRoomHatbox,
-        LocationName.DiegosHouseGrindrailSuitcase,
-        LocationName.GrindrailBalconyConfusionAmmoUp,
-    ]
-    create_region(RegionName.BVRBDuster, loc_bvrb_duster_names)
-
-    loc_bvrb_logs_names = [
-        LocationName.BurnTheLogsDufflebag,
-    ]
-    create_region(RegionName.BVRBLogs, loc_bvrb_logs_names)
-
-    loc_bves_names = [
-        LocationName.SanctuaryGroundPurse,
-        LocationName.TigerWrestler,
-        LocationName.DragonWrestler,
-        LocationName.EagleWrestler,
-
-    ]
-    create_region(RegionName.BVES, loc_bves_names)
-
-    loc_bves_lev_names = [
-        LocationName.SanctuaryBalconyPurseTag,
-    ]
-    create_region(RegionName.BVESLev, loc_bves_lev_names)
-
-    loc_bves_cobra_names = [
-        LocationName.CobraWrestler,
-    ]
-    create_region(RegionName.BVESCobra, loc_bves_cobra_names)
-
-    loc_bves_boss_names = [
-        LocationName.BlackVelvetopiaComplete,
-    ]
-    create_region(RegionName.BVESBoss, loc_bves_boss_names)
-
-    loc_mctc_names = [
-        LocationName.CrumblingPathSteamertrunk,
-        LocationName.CrumblingPathEndRightHatboxTag,
-        LocationName.CrumblingPathEndLeftConfusionAmmoUp,
-        LocationName.OllieEscortFloorSuitcaseTag,
-    ]
-    create_region(RegionName.MCTC, loc_mctc_names)
-
-    loc_mctc_lev_names = [
-        LocationName.EntranceAwningSteamertrunkTag,
-    ]
-    create_region(RegionName.MCTCLev, loc_mctc_lev_names)
-
-    loc_mctc_escort_names = [
-        LocationName.OllieEscortMiddleHatbox,
-        LocationName.OllieEscortTopLeftVault,
-        LocationName.OllieEscortTopRightPurseTag,
-        LocationName.TunnelOfLoveStartPurse,
-        LocationName.TunnelOfLoveCornerSuitcase,
-        LocationName.TunnelOfLoveRailDufflebagTag,
-        LocationName.NextToTheFatLadyDufflebag,
-    ]
-    create_region(RegionName.MCTCEscort, loc_mctc_escort_names)
 
     reg_mctc_boss = Region(RegionName.MCTCBoss, player, world)
     reg_mctc_boss.locations += [PSYLocation(player, LocationName.FinalBossEvent, None, reg_mctc_boss)]
@@ -833,14 +723,14 @@ def create_psyregions(world: MultiWorld, player: int):
 
     # should only have an item if Cobweb Duster vanilla
     # RegionName.FordShop: [
-    #    LocationName.ShopCobwebDuster, 
+    #    LocationName.ShopCobwebDuster,
     # ],
 
     # RegionName.DUMMYLOCATIONS
     # NOT COLLECTIBLE
-    #    LocationName.DUMMYLOCATION1NOTCOLLECTIBLE, 
-    #    LocationName.DUMMYLOCATION2NOTCOLLECTIBLE, 
-    #    LocationName.DUMMYLOCATION3NOTCOLLECTIBLE, 
+    #    LocationName.DUMMYLOCATION1NOTCOLLECTIBLE,
+    #    LocationName.DUMMYLOCATION2NOTCOLLECTIBLE,
+    #    LocationName.DUMMYLOCATION3NOTCOLLECTIBLE,
 
 
 def connect_regions(multiworld: MultiWorld, player: int):
