@@ -369,68 +369,69 @@ async def game_watcher(ctx: PsychonautsContext):
         game_communication_path = ctx.game_communication_path
         if game_communication_path is None:
             await asyncio.sleep(0.1)
-        else:
-            # Check for DeathLink toggle
-            await ctx.update_death_link(ctx.deathlink_status)
+            continue
 
-            if ctx.syncing:
-                sync_msg = [{'cmd': 'Sync'}]
-                if ctx.locations_checked:
-                    sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-                await ctx.send_msgs(sync_msg)
-                ctx.syncing = False
+        # Check for DeathLink toggle
+        await ctx.update_death_link(ctx.deathlink_status)
 
-            # Check for Deathlink to send to player
-            if ctx.got_deathlink:
-                ctx.got_deathlink = False
-                with open(os.path.join(game_communication_path, "DeathlinkIn.txt"), 'a') as f:
-                    f.write("DEATH\n")
+        if ctx.syncing:
+            sync_msg = [{'cmd': 'Sync'}]
+            if ctx.locations_checked:
+                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
+            await ctx.send_msgs(sync_msg)
+            ctx.syncing = False
 
-            # Check for Deathlinks from player
-            with open(os.path.join(game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
-                raz_died = f.read()
-                if raz_died:
-                    # Move the file pointer to the beginning
-                    f.seek(0)
-                    # Empty the file by writing an empty string
-                    f.truncate(0)
-                    if "DeathLink" in ctx.tags:
-                        await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
+        # Check for Deathlink to send to player
+        if ctx.got_deathlink:
+            ctx.got_deathlink = False
+            with open(os.path.join(game_communication_path, "DeathlinkIn.txt"), 'a') as f:
+                f.write("DEATH\n")
 
-            # Initialize an empty list and set.
-            # The list maintains the order and the set provides fast comparisons and __contains__() checks.
-            sending = []
-            sending_set = set()
-            victory = False
+        # Check for Deathlinks from player
+        with open(os.path.join(game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
+            raz_died = f.read()
+            if raz_died:
+                # Move the file pointer to the beginning
+                f.seek(0)
+                # Empty the file by writing an empty string
+                f.truncate(0)
+                if "DeathLink" in ctx.tags:
+                    await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
 
-            # Open the file in read mode
-            with open(os.path.join(game_communication_path, "ItemsCollected.txt"), 'r') as f:
-                collected_items = f.readlines()
-                # Iterate over each line in the file
-                for line in collected_items:
-                    # Convert the line to an int, add the offset to convert to AP, and add it to the list and set
-                    value = int(line.strip()) + AP_LOCATION_OFFSET
-                    # Keep track of already collected values to ensure there are no duplicates.
-                    if value not in sending_set:
-                        sending.append(value)
-                        sending_set.add(value)
+        # Initialize an empty list and set.
+        # The list maintains the order and the set provides fast comparisons and __contains__() checks.
+        sending = []
+        sending_set = set()
+        victory = False
 
-            for root, dirs, files in os.walk(game_communication_path):
-                for file in files:
-                    if file.find("victory.txt") > -1:
-                        victory = True
+        # Open the file in read mode
+        with open(os.path.join(game_communication_path, "ItemsCollected.txt"), 'r') as f:
+            collected_items = f.readlines()
+            # Iterate over each line in the file
+            for line in collected_items:
+                # Convert the line to an int, add the offset to convert to AP, and add it to the list and set
+                value = int(line.strip()) + AP_LOCATION_OFFSET
+                # Keep track of already collected values to ensure there are no duplicates.
+                if value not in sending_set:
+                    sending.append(value)
+                    sending_set.add(value)
 
-            if ctx.locations_checked != sending_set:
-                # The checked locations differ from before, so message the server and update the checked locations for
-                # the next loop.
-                ctx.locations_checked = sending_set
-                message = [{"cmd": 'LocationChecks', "locations": sending}]
-                await ctx.send_msgs(message)
+        for root, dirs, files in os.walk(game_communication_path):
+            for file in files:
+                if file.find("victory.txt") > -1:
+                    victory = True
 
-            if not ctx.finished_game and victory:
-                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                ctx.finished_game = True
-            await asyncio.sleep(0.1)
+        if ctx.locations_checked != sending_set:
+            # The checked locations differ from before, so message the server and update the checked locations for the
+            # next loop.
+            ctx.locations_checked = sending_set
+            message = [{"cmd": 'LocationChecks', "locations": sending}]
+            await ctx.send_msgs(message)
+
+        if not ctx.finished_game and victory:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+        await asyncio.sleep(0.1)
 
 
 def launch():
