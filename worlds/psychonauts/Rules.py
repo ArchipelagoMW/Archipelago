@@ -1,7 +1,7 @@
-from typing import Dict, Callable, TYPE_CHECKING, Set
+from typing import Dict, TYPE_CHECKING, Set
 
 from BaseClasses import CollectionState, Item
-from worlds.generic.Rules import add_item_rule, add_rule
+from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
 from .Items import BRAIN_JARS, LOCAL_SET
 from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import LocationName, ItemName, RegionName
@@ -17,7 +17,7 @@ class PsyRules:
     player: int
     world: "PSYWorld"
 
-    region_rules: Dict[str, Callable[[CollectionState], bool]]
+    region_rules: Dict[str, CollectionRule]
 
     def __init__(self, world: "PSYWorld") -> None:
         self.player = world.player
