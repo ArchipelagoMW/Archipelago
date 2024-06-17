@@ -202,7 +202,7 @@ class PSYWorld(World):
             item_pool.append(self.create_item(ItemName.Feather))
             num_locations_to_fill -= 1
             if excess >= 2:
-                item_pool.append(self.create_item(ItemName.PropWaterCan))
+                item_pool.append(self.create_item(ItemName.WaterCan))
                 num_locations_to_fill -= 1
 
         # Create filler for the remaining locations.

@@ -177,15 +177,15 @@ class PsyRules:
 
             RegionName.MMI1BeforeSign: self.has_clairvoyance,
 
-            RegionName.MMI1AfterSign: self.has_prop_sign,
+            RegionName.MMI1AfterSign: self.has_sign,
 
-            RegionName.MMI1Hedgetrimmers: self.has_prop_hedge_trimmers,
+            RegionName.MMI1Hedgetrimmers: self.has_hedge_trimmers,
 
-            RegionName.MMI1RollingPin: self.has_prop_rolling_pin,
+            RegionName.MMI1RollingPin: self.has_rolling_pin,
 
             RegionName.MMI1Duster: self.has_cobweb_duster,
 
-            RegionName.MMI2: lambda state: self.has_prop_flowers(state) and self.has_prop_plunger(
+            RegionName.MMI2: lambda state: self.has_flowers(state) and self.has_plunger(
                 state) and self.has_pyrokinesis(state) and self.has_shield(state),
 
             RegionName.MMI1Powerlines: self.has_cobweb_duster,
@@ -296,20 +296,20 @@ class PsyRules:
     def has_oly_mind(self, state: CollectionState) -> bool:
         return state.has(ItemName.OlyMind, self.player)
 
-    def has_prop_sign(self, state: CollectionState) -> bool:
-        return state.has(ItemName.PropSign, self.player)
+    def has_sign(self, state: CollectionState) -> bool:
+        return state.has(ItemName.Sign, self.player)
 
-    def has_prop_flowers(self, state: CollectionState) -> bool:
-        return state.has(ItemName.PropFlowers, self.player)
+    def has_flowers(self, state: CollectionState) -> bool:
+        return state.has(ItemName.Flowers, self.player)
 
-    def has_prop_plunger(self, state: CollectionState) -> bool:
-        return state.has(ItemName.PropPlunger, self.player)
+    def has_plunger(self, state: CollectionState) -> bool:
+        return state.has(ItemName.Plunger, self.player)
 
-    def has_prop_hedge_trimmers(self, state: CollectionState) -> bool:
-        return state.has(ItemName.PropHedgeTrimmers, self.player)
+    def has_hedge_trimmers(self, state: CollectionState) -> bool:
+        return state.has(ItemName.HedgeTrimmers, self.player)
 
-    def has_prop_rolling_pin(self, state: CollectionState) -> bool:
-        return state.has(ItemName.PropRollingPin, self.player)
+    def has_rolling_pin(self, state: CollectionState) -> bool:
+        return state.has(ItemName.RollingPin, self.player)
 
     def has_candle(self, state: CollectionState) -> bool:
         return state.has(ItemName.Candle, self.player)

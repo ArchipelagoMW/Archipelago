@@ -18,11 +18,11 @@ PROPS = {
     ItemName.SquirrelDinner: 10,
 
     # The Milkman Conspiracy
-    ItemName.PropSign: 11,
-    ItemName.PropFlowers: 12,
-    ItemName.PropPlunger: 13,
-    ItemName.PropHedgeTrimmers: 14,
-    ItemName.PropRollingPin: 15,
+    ItemName.Sign: 11,
+    ItemName.Flowers: 12,
+    ItemName.Plunger: 13,
+    ItemName.HedgeTrimmers: 14,
+    ItemName.RollingPin: 15,
 
     # Gloria's Theater
     ItemName.Candle: 16,
@@ -132,7 +132,7 @@ BAGGAGE = {
 
 OTHER_ITEMS = {
     ItemName.Feather: 91,
-    ItemName.PropWaterCan: 92,
+    ItemName.WaterCan: 92,
 }
 
 ITEM_DICTIONARY = {

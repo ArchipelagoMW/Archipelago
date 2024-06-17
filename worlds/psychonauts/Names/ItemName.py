@@ -7,12 +7,12 @@ Cake = "Birthday Cake"
 LilisBracelet = "Lili's Bracelet"
 
 # Props from MM 6 total
-PropSign = "Stop Sign"
-PropFlowers = "Flowers"
-PropPlunger = "Plunger"
-PropHedgeTrimmers = "Hedge Trimmers"
-PropRollingPin = "Rolling Pin"
-PropWaterCan = "Watering Can"
+Sign = "Stop Sign"
+Flowers = "Flowers"
+Plunger = "Plunger"
+HedgeTrimmers = "Hedge Trimmers"
+RollingPin = "Rolling Pin"
+WaterCan = "Watering Can"
 
 # Current Props from TH 3 total
 # 2 Candles
