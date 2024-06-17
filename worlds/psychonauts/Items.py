@@ -49,7 +49,7 @@ MindUnlocks_Table = {
     ItemName.EdgarMind: 28,
     ItemName.OlyMind: 29,
 }
-    
+
 PsiPowers_Table = {
     ItemName.Marksmanship: 30,
     ItemName.Pyrokinesis: 31,

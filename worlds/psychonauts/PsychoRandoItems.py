@@ -1,8 +1,8 @@
-from typing import Dict
 from itertools import accumulate
+from typing import Dict
 
-from .Names import ItemName
 from .ItemUtils import repeated_item_names_gen
+from .Names import ItemName
 
 # Items in PsychoRando order with the count that can be placed into the Psychonauts world before placing the items as AP
 # placeholder item instead. The order and counts must exactly match ShuffleItems.lua in PsychoRando, so that the IDs

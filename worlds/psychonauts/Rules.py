@@ -2,10 +2,9 @@ from typing import Dict, Callable, TYPE_CHECKING, Set
 
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule
-
-from .Names import LocationName, ItemName, RegionName
 from .Items import BrainJar_Table, local_set
 from .Locations import deep_arrowhead_locations, mental_cobweb_locations
+from .Names import LocationName, ItemName, RegionName
 
 # I don't know what is going on here, but it works???
 # Thanks Jared :)
@@ -17,7 +16,7 @@ if TYPE_CHECKING:
 class PsyRules:
     player: int
     world: "PSYWorld"
-    
+
     region_rules: Dict[str, Callable[[CollectionState], bool]]
 
     def __init__(self, world: "PSYWorld") -> None:
@@ -36,7 +35,7 @@ class PsyRules:
                 self.has_lindamind(state),
                 self.has_fredmind(state),
                 self.has_edgarmind(state) and self.has_cobwebduster(state),
-            ]) >=3,
+            ]) >= 3,
 
             RegionName.RANK25to40: lambda state: sum([
                 self.has_button(state),
@@ -45,10 +44,15 @@ class PsyRules:
                 self.has_marksmanship(state) and self.has_sashamind(state),
                 self.has_cobwebduster(state) and (self.has_edgarmind(state) or self.has_olymind(state)),
                 self.has_clairvoyance(state) and self.has_propsign(state) and self.has_boydmind(state),
-                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
-                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(state),
-                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(state) and self.has_musket(state),
-            ]) >= 3, # Meeting four of these conditions adds ranks to logic
+                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(
+                    state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
+                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(
+                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
+                    state),
+                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(
+                    state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(
+                    state) and self.has_musket(state),
+            ]) >= 3,  # Meeting four of these conditions adds ranks to logic
 
             RegionName.RANK45to60: lambda state: self.has_button(state) and sum([
                 self.has_oarsmansbadge(state) and self.has_squirreldinner(state) and self.has_lilibracelet(state),
@@ -57,10 +61,15 @@ class PsyRules:
                 self.has_marksmanship(state) and self.has_sashamind(state),
                 self.has_cobwebduster(state) and (self.has_edgarmind(state) or self.has_olymind(state)),
                 self.has_clairvoyance(state) and self.has_propsign(state) and self.has_boydmind(state),
-                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
-                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(state),
-                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(state) and self.has_musket(state),
-            ]) >= 4, # Having the Button AND Meeting five of these conditions adds ranks to logic
+                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(
+                    state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
+                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(
+                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
+                    state),
+                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(
+                    state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(
+                    state) and self.has_musket(state),
+            ]) >= 4,  # Having the Button AND Meeting five of these conditions adds ranks to logic
 
             RegionName.RANK65to80: lambda state: sum([
                 self.has_oarsmansbadge(state) and self.has_squirreldinner(state) and self.has_lilibracelet(state),
@@ -69,10 +78,15 @@ class PsyRules:
                 self.has_marksmanship(state) and self.has_sashamind(state),
                 self.has_cobwebduster(state) and self.has_edgarmind(state) and self.has_olymind(state),
                 self.has_clairvoyance(state) and self.has_propsign(state) and self.has_boydmind(state),
-                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
-                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(state),
-                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(state) and self.has_musket(state),
-            ]) >= 6, # Meeting six of these conditions adds ranks to logic
+                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(
+                    state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
+                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(
+                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
+                    state),
+                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(
+                    state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(
+                    state) and self.has_musket(state),
+            ]) >= 6,  # Meeting six of these conditions adds ranks to logic
 
             RegionName.RANK85to101: lambda state: sum([
                 self.has_oarsmansbadge(state) and self.has_squirreldinner(state) and self.has_lilibracelet(state),
@@ -81,10 +95,15 @@ class PsyRules:
                 self.has_marksmanship(state) and self.has_sashamind(state),
                 self.has_cobwebduster(state) and self.has_edgarmind(state) and self.has_olymind(state),
                 self.has_clairvoyance(state) and self.has_propsign(state) and self.has_boydmind(state),
-                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
-                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(state),
-                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(state) and self.has_musket(state),
-            ]) >= 7, # Meeting seven of these conditions adds ranks to logic
+                self.has_telekinesis(state) and self.has_levitation(state) and self.has_oarsmansbadge(
+                    state) and self.has_lungfishcall(state) and self.has_upperasylumaccess(state),
+                self.has_cobwebduster(state) and self.has_gloriamind(state) and self.has_candle(
+                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
+                    state),
+                self.has_cobwebduster(state) and self.has_fredmind(state) and self.has_pyrokinesis(
+                    state) and self.has_telekinesis(state) and self.has_fredsletter(state) and self.has_pricelesscoin(
+                    state) and self.has_musket(state),
+            ]) >= 7,  # Meeting seven of these conditions adds ranks to logic
 
             RegionName.CAGPSquirrel: self.has_invisibility,
 
@@ -154,7 +173,8 @@ class PsyRules:
 
             RegionName.MMI1Duster: self.has_cobwebduster,
 
-            RegionName.MMI2: lambda state: self.has_propflowers(state) and self.has_propplunger(state) and self.has_pyrokinesis(state) and self.has_shield(state), 
+            RegionName.MMI2: lambda state: self.has_propflowers(state) and self.has_propplunger(
+                state) and self.has_pyrokinesis(state) and self.has_shield(state),
 
             RegionName.MMI1Powerlines: self.has_cobwebduster,
 
@@ -168,7 +188,8 @@ class PsyRules:
 
             RegionName.THMSStorage: self.has_invisibility,
 
-            RegionName.THCW: lambda state: self.has_pyrokinesis(state) and self.has_candle(state) and self.has_levitation(state) and self.has_megaphone(state),
+            RegionName.THCW: lambda state: self.has_pyrokinesis(state) and self.has_candle(
+                state) and self.has_levitation(state) and self.has_megaphone(state),
 
             RegionName.THFB: lambda state: self.has_bothcandles(state),
 
@@ -220,64 +241,85 @@ class PsyRules:
 
     def has_button(self, state: CollectionState) -> bool:
         return state.has(ItemName.SashaButton, self.player)
+
     def has_lilibracelet(self, state: CollectionState) -> bool:
         return state.has(ItemName.LilisBracelet, self.player)
+
     def has_squirreldinner(self, state: CollectionState) -> bool:
         return state.has(ItemName.SquirrelDinner, self.player)
+
     def has_oarsmansbadge(self, state: CollectionState) -> bool:
         return state.has(ItemName.OarsmansBadge, self.player)
+
     def has_lungfishcall(self, state: CollectionState) -> bool:
         return state.has(ItemName.LungfishCall, self.player)
+
     def has_cake(self, state: CollectionState) -> bool:
         return state.has(ItemName.Cake, self.player)
-    
+
     def has_coachmind(self, state: CollectionState) -> bool:
         return state.has(ItemName.CoachMind, self.player)
+
     def has_sashamind(self, state: CollectionState) -> bool:
         return state.has(ItemName.SashaMind, self.player)
+
     def has_millamind(self, state: CollectionState) -> bool:
         return state.has(ItemName.MillaMind, self.player)
+
     def has_lindamind(self, state: CollectionState) -> bool:
         return state.has(ItemName.LindaMind, self.player)
+
     def has_boydmind(self, state: CollectionState) -> bool:
         return state.has(ItemName.BoydMind, self.player)
+
     def has_gloriamind(self, state: CollectionState) -> bool:
         return state.has(ItemName.GloriaMind, self.player)
+
     def has_fredmind(self, state: CollectionState) -> bool:
         return state.has(ItemName.FredMind, self.player)
+
     def has_edgarmind(self, state: CollectionState) -> bool:
         return state.has(ItemName.EdgarMind, self.player)
+
     def has_olymind(self, state: CollectionState) -> bool:
         return state.has(ItemName.OlyMind, self.player)
-    
+
     def has_propsign(self, state: CollectionState) -> bool:
         return state.has(ItemName.PropSign, self.player)
+
     def has_propflowers(self, state: CollectionState) -> bool:
         return state.has(ItemName.PropFlowers, self.player)
+
     def has_propplunger(self, state: CollectionState) -> bool:
         return state.has(ItemName.PropPlunger, self.player)
+
     def has_prophedgetrimmers(self, state: CollectionState) -> bool:
         return state.has(ItemName.PropHedgeTrimmers, self.player)
+
     def has_proprollingpin(self, state: CollectionState) -> bool:
         return state.has(ItemName.PropRollingPin, self.player)
 
     def has_candle(self, state: CollectionState) -> bool:
         return state.has(ItemName.Candle, self.player)
+
     def has_bothcandles(self, state: CollectionState) -> bool:
         return state.has(ItemName.Candle, self.player, 2)
+
     def has_megaphone(self, state: CollectionState) -> bool:
         return state.has(ItemName.Megaphone, self.player)
-    
+
     def has_fredsletter(self, state: CollectionState) -> bool:
         return state.has(ItemName.FredsLetter, self.player)
+
     def has_pricelesscoin(self, state: CollectionState) -> bool:
         return state.has(ItemName.PricelessCoin, self.player)
+
     def has_musket(self, state: CollectionState) -> bool:
         return state.has(ItemName.Musket, self.player)
-    
+
     def has_cobwebduster(self, state: CollectionState) -> bool:
-        return state.has(ItemName.CobwebDuster, self.player)  
-    
+        return state.has(ItemName.CobwebDuster, self.player)
+
     def has_levitation(self, state: CollectionState) -> bool:
         if self.world.options.StartingLevitation == True:
             return True
@@ -309,11 +351,13 @@ class PsyRules:
         return state.has_all([ItemName.LobotoPainting, ItemName.GloriasTrophy, ItemName.StraightJacket], self.player)
 
     def has_oleanderbossaccess(self, state: CollectionState) -> bool:
-        return state.has_all([ItemName.SashaButton, ItemName.LobotoPainting, ItemName.GloriasTrophy, ItemName.StraightJacket, ItemName.LungfishCall, ItemName.Cake, ItemName.OarsmansBadge], self.player)
-    
+        return state.has_all(
+            [ItemName.SashaButton, ItemName.LobotoPainting, ItemName.GloriasTrophy, ItemName.StraightJacket,
+             ItemName.LungfishCall, ItemName.Cake, ItemName.OarsmansBadge], self.player)
+
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.count(item_name, self.player) for item_name in BrainJar_Table])
-            
+
     def set_psy_rules(self) -> None:
         multiworld = self.world.multiworld
         player = self.player
@@ -369,19 +413,24 @@ class PsyRules:
         oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
         redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
         # Brain Tank Boss
-        if self.world.options.Goal == "braintank":    
-            final_boss_location.access_rule = lambda state: self.has_oleanderbossaccess(state) and self.has_pyrokinesis(state)
+        if self.world.options.Goal == "braintank":
+            final_boss_location.access_rule = lambda state: self.has_oleanderbossaccess(state) and self.has_pyrokinesis(
+                state)
 
         # Brain Hunt
         elif self.world.options.Goal == "brainhunt":
-            final_boss_location.access_rule = lambda state: self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value )
-            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value )
+            final_boss_location.access_rule = lambda state: self.redeemed_brain_goal(state,
+                                                                                     self.world.options.BrainsRequired.value)
+            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state,
+                                                                                          self.world.options.BrainsRequired.value)
 
         # Brain Tank Boss AND Brain Hunt
-        else: 
-            final_boss_location.access_rule = lambda state: self.has_oleanderbossaccess(state) and self.has_pyrokinesis(state) and self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value )
-            oleander_boss_location.access_rule = lambda state: self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value )
-            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value )
+        else:
+            final_boss_location.access_rule = lambda state: self.has_oleanderbossaccess(state) and self.has_pyrokinesis(
+                state) and self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value)
+            oleander_boss_location.access_rule = lambda state: self.redeemed_brain_goal(state,
+                                                                                        self.world.options.BrainsRequired.value)
+            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state,
+                                                                                          self.world.options.BrainsRequired.value)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player)
-            

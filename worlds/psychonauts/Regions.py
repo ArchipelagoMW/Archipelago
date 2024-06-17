@@ -121,7 +121,6 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, mctc_escort_cobwebs)
 
 
-
 def create_psyregions(world: MultiWorld, player: int):
     # Helper function to reduce duplicate code
     def create_region(name: str, location_names: Iterable[str]):
@@ -495,12 +494,10 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.SACU, locSACU_names)
 
-
     locSACULev_names = [
         LocationName.RoundPlatformsFarFromValve,
     ]
     create_region(RegionName.SACULev, locSACULev_names)
-
 
     locMIFL_names = [
         LocationName.IntroRingsTutorial,
@@ -528,7 +525,6 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.NIMP, locNIMP_names)
 
-
     locNIMPMark_names = [
         LocationName.ShadowMonsterBlueMushrooms,
         LocationName.LedgeBehindShadowMonster,
@@ -543,7 +539,6 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.NIMPMark, locNIMPMark_names)
 
-
     locNIBA_names = [
         LocationName.BrainTumblerExperimentComplete,
     ]
@@ -556,7 +551,6 @@ def create_psyregions(world: MultiWorld, player: int):
 
     ]
     create_region(RegionName.LOMA, locLOMA_names)
-
 
     locLOMAShield_names = [
         LocationName.BehindLasersLeft1,
@@ -579,12 +573,10 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.LOMAShield, locLOMAShield_names)
 
-
     locMMI1Fridge_names = [
         LocationName.BoydsFridgeClv,
     ]
     create_region(RegionName.MMI1Fridge, locMMI1Fridge_names)
-
 
     locMMI1BeforeSign_names = [
         LocationName.FirstHouseDufflebagTag,
@@ -592,7 +584,6 @@ def create_psyregions(world: MultiWorld, player: int):
         LocationName.CarTrunk1StopSign,
     ]
     create_region(RegionName.MMI1BeforeSign, locMMI1BeforeSign_names)
-
 
     locMMI1AfterSign_names = [
         LocationName.RoofAfterRoadCrewPurseTag,
@@ -608,19 +599,16 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.MMI1AfterSign, locMMI1AfterSign_names)
 
-
     locMMI1Hedgetrimmers_names = [
         LocationName.LandscapersHouseBackyardSuitcaseTag,
         LocationName.LandscapersHouseTablePurse,
     ]
     create_region(RegionName.MMI1Hedgetrimmers, locMMI1Hedgetrimmers_names)
 
-
     locMMI1RollingPin_names = [
         LocationName.LandscapersHouseKitchenAmmoUp,
     ]
     create_region(RegionName.MMI1RollingPin, locMMI1RollingPin_names)
-
 
     locMMI1Powerlines_names = [
         LocationName.PowerlineIslandSandboxHatboxTag,
@@ -629,25 +617,21 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.MMI1Powerlines, locMMI1Powerlines_names)
 
-
     locMMI1Duster_names = [
         LocationName.InsideWebbedGarageHatbox,
         LocationName.PostOfficeBasementPlunger,
     ]
     create_region(RegionName.MMI1Duster, locMMI1Duster_names)
 
-
     locMMI2_names = [
         LocationName.BehindBookDepositorySteamerTrunk,
     ]
     create_region(RegionName.MMI2, locMMI2_names)
 
-
     locMMDM_names = [
         LocationName.MilkmanComplete,
     ]
     create_region(RegionName.MMDM, locMMDM_names)
-
 
     locTHMS_names = [
         LocationName.NearTheCriticPurse,
@@ -656,18 +640,15 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.THMS, locTHMS_names)
 
-
     locTHMSLev_names = [
         LocationName.InTheAudienceAmmoUp,
     ]
     create_region(RegionName.THMSLev, locTHMSLev_names)
 
-
     locTHMSDuster_names = [
         LocationName.BehindStageCobwebSuitcase,
     ]
     create_region(RegionName.THMSDuster, locTHMSDuster_names)
-
 
     locTHMSStorage_names = [
         LocationName.StorageRoomFloorVault,
@@ -677,7 +658,6 @@ def create_psyregions(world: MultiWorld, player: int):
         LocationName.BonitasRoom,
     ]
     create_region(RegionName.THMSStorage, locTHMSStorage_names)
-
 
     locTHCW_names = [
         LocationName.DoghouseSlicersDufflebagTag,
@@ -691,12 +671,10 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.THCW, locTHCW_names)
 
-
     locTHFB_names = [
         LocationName.GloriasTheaterComplete,
     ]
     create_region(RegionName.THFB, locTHFB_names)
-
 
     locWWMA_names = [
         LocationName.FredsRoomHatboxTag,
@@ -713,20 +691,17 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.WWMA, locWWMA_names)
 
-
     locWWMALev_names = [
         LocationName.TopOfVillager3sHouseAmmoUp,
         LocationName.TopOfKnightsHouseConfusionAmmoUp,
     ]
     create_region(RegionName.WWMALev, locWWMALev_names)
 
-
     locWWMACarpRoof_names = [
         LocationName.CarpentersRoofVault,
         LocationName.TightropeRoomDufflebag,
     ]
     create_region(RegionName.WWMACarpRoof, locWWMACarpRoof_names)
-
 
     locWWMADuster_names = [
         LocationName.UnderTheGuillotineSuitcase,
@@ -735,48 +710,40 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.WWMADuster, locWWMADuster_names)
 
-
     locWWMADusterLev_names = [
         LocationName.BlacksmithsRightBuildingSteamertrunkTag,
     ]
     create_region(RegionName.WWMADusterLev, locWWMADusterLev_names)
-
 
     locWWMADusterLevPyro_names = [
         LocationName.BlacksmithsHaybaleTheMusket,
     ]
     create_region(RegionName.WWMADusterLevPyro, locWWMADusterLevPyro_names)
 
-
     locWWMAV1_names = [
         LocationName.HelpVillager1,
     ]
     create_region(RegionName.WWMAV1, locWWMAV1_names)
-
 
     locWWMAKnight_names = [
         LocationName.HelpTheKnight,
     ]
     create_region(RegionName.WWMAKnight, locWWMAKnight_names)
 
-
     locWWMAV2_names = [
         LocationName.HelpVillager2,
     ]
     create_region(RegionName.WWMAV2, locWWMAV2_names)
-
 
     locWWMAV3_names = [
         LocationName.HelpVillager3,
     ]
     create_region(RegionName.WWMAV3, locWWMAV3_names)
 
-
     locWWMADone_names = [
         LocationName.WaterlooWorldComplete,
     ]
     create_region(RegionName.WWMADone, locWWMADone_names)
-
 
     locBVRB_names = [
         LocationName.ClubStreetLadySteamertrunk,
@@ -786,20 +753,17 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.BVRB, locBVRB_names)
 
-
     locBVRBLev_names = [
         LocationName.ClubStreetMetalBalconyDufflebagTag,
         LocationName.HeartStreetHIGHBalconyAmmoUp,
     ]
     create_region(RegionName.BVRBLev, locBVRBLev_names)
 
-
     locBVRBTele_names = [
         LocationName.ClubStreetGatedSteamerTrunkTag,
         LocationName.TheGardenVault,
     ]
     create_region(RegionName.BVRBTele, locBVRBTele_names)
-
 
     locBVRBDuster_names = [
         LocationName.DiegosBedSuitcaseTag,
@@ -814,7 +778,6 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.BVRBLogs, locBVRBLogs_names)
 
-
     locBVES_names = [
         LocationName.SanctuaryGroundPurse,
         LocationName.TigerWrestler,
@@ -824,24 +787,20 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.BVES, locBVES_names)
 
-
     locBVESLev_names = [
         LocationName.SanctuaryBalconyPurseTag,
     ]
     create_region(RegionName.BVESLev, locBVESLev_names)
-
 
     locBVESCobra_names = [
         LocationName.CobraWrestler,
     ]
     create_region(RegionName.BVESCobra, locBVESCobra_names)
 
-
     locBVESBoss_names = [
         LocationName.BlackVelvetopiaComplete,
     ]
     create_region(RegionName.BVESBoss, locBVESBoss_names)
-
 
     locMCTC_names = [
         LocationName.CrumblingPathSteamertrunk,
@@ -851,12 +810,10 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.MCTC, locMCTC_names)
 
-
     locMCTCLev_names = [
         LocationName.EntranceAwningSteamertrunkTag,
     ]
     create_region(RegionName.MCTCLev, locMCTCLev_names)
-
 
     locMCTCEscort_names = [
         LocationName.OllieEscortMiddleHatbox,
@@ -869,19 +826,17 @@ def create_psyregions(world: MultiWorld, player: int):
     ]
     create_region(RegionName.MCTCEscort, locMCTCEscort_names)
 
-
     regMCTCBoss = Region(RegionName.MCTCBoss, player, world)
     regMCTCBoss.locations += [PSYLocation(player, LocationName.FinalBossEvent, None, regMCTCBoss)]
     world.regions.append(regMCTCBoss)
 
-
     # should only have an item if Cobweb Duster vanilla
-    #RegionName.FordShop: [
+    # RegionName.FordShop: [
     #    LocationName.ShopCobwebDuster, 
-    #],
+    # ],
 
     # RegionName.DUMMYLOCATIONS
-        # NOT COLLECTIBLE
+    # NOT COLLECTIBLE
     #    LocationName.DUMMYLOCATION1NOTCOLLECTIBLE, 
     #    LocationName.DUMMYLOCATION2NOTCOLLECTIBLE, 
     #    LocationName.DUMMYLOCATION3NOTCOLLECTIBLE, 
@@ -889,11 +844,12 @@ def create_psyregions(world: MultiWorld, player: int):
 
 def connect_regions(multiworld: MultiWorld, player: int):
     PSYRegionConnections: Dict[str, Set[str]] = {
-        "Menu":                        {RegionName.CASA},
-        #Collective Unconscious connections to everything else
-        RegionName.CASA: {RegionName.CAGP, RegionName.CAJA, RegionName.CAJABrains, RegionName.RANK5to20, RegionName.BBA1, RegionName.SACU, RegionName.MIFL, 
-            RegionName.NIMP, RegionName.LOMA, RegionName.MMI1Fridge, RegionName.THMS, RegionName.WWMA,
-            RegionName.BVRB, RegionName.MCTC, },
+        "Menu": {RegionName.CASA},
+        # Collective Unconscious connections to everything else
+        RegionName.CASA: {RegionName.CAGP, RegionName.CAJA, RegionName.CAJABrains, RegionName.RANK5to20,
+                          RegionName.BBA1, RegionName.SACU, RegionName.MIFL,
+                          RegionName.NIMP, RegionName.LOMA, RegionName.MMI1Fridge, RegionName.THMS, RegionName.WWMA,
+                          RegionName.BVRB, RegionName.MCTC, },
 
         RegionName.RANK5to20: {RegionName.RANK25to40, },
 
@@ -903,8 +859,9 @@ def connect_regions(multiworld: MultiWorld, player: int):
 
         RegionName.RANK65to80: {RegionName.RANK85to101, },
 
-        RegionName.CAGP: {RegionName.CAGPSquirrel, RegionName.CAGPGeyser, RegionName.CAMA, RegionName.CAKC, RegionName.CARE, 
-            RegionName.CABH, RegionName.CALI, },
+        RegionName.CAGP: {RegionName.CAGPSquirrel, RegionName.CAGPGeyser, RegionName.CAMA, RegionName.CAKC,
+                          RegionName.CARE,
+                          RegionName.CABH, RegionName.CALI, },
 
         RegionName.CAMA: {RegionName.CAMALev, },
 
@@ -939,7 +896,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.MMI1Fridge: {RegionName.MMI1BeforeSign, },
 
         RegionName.MMI1BeforeSign: {RegionName.MMI1AfterSign, },
-        
+
         RegionName.MMI1AfterSign: {RegionName.MMI1Hedgetrimmers, RegionName.MMI1Duster, RegionName.MMI2, },
 
         RegionName.MMI1Hedgetrimmers: {RegionName.MMI1RollingPin, },
@@ -956,23 +913,24 @@ def connect_regions(multiworld: MultiWorld, player: int):
 
         RegionName.THCW: {RegionName.THFB, },
 
-        RegionName.WWMA: {RegionName.WWMALev, RegionName.WWMACarpRoof, RegionName.WWMADuster, RegionName.WWMAV1, RegionName.WWMAKnight,},
+        RegionName.WWMA: {RegionName.WWMALev, RegionName.WWMACarpRoof, RegionName.WWMADuster, RegionName.WWMAV1,
+                          RegionName.WWMAKnight, },
 
         RegionName.WWMADuster: {RegionName.WWMADusterLev, },
 
         RegionName.WWMADusterLev: {RegionName.WWMADusterLevPyro, },
 
-        RegionName.WWMAV1: {RegionName.WWMAV2,},
+        RegionName.WWMAV1: {RegionName.WWMAV2, },
 
         RegionName.WWMAV2: {RegionName.WWMAV3, },
 
         RegionName.WWMAV3: {RegionName.WWMADone, },
 
-        RegionName.BVRB: {RegionName.BVRBLev, RegionName.BVRBTele, RegionName.BVRBDuster, RegionName.BVES,},
+        RegionName.BVRB: {RegionName.BVRBLev, RegionName.BVRBTele, RegionName.BVRBDuster, RegionName.BVES, },
 
         RegionName.BVRBTele: {RegionName.BVRBLogs, },
 
-        RegionName.BVES: {RegionName.BVESLev, RegionName.BVESCobra,},
+        RegionName.BVES: {RegionName.BVESLev, RegionName.BVESCobra, },
 
         RegionName.BVESCobra: {RegionName.BVESBoss, },
 
@@ -982,13 +940,8 @@ def connect_regions(multiworld: MultiWorld, player: int):
 
         RegionName.MCTCEscort: {RegionName.MCTCBoss, },
 
-
-    }                         
+    }
 
     for source, target in PSYRegionConnections.items():
         source_region = multiworld.get_region(source, player)
         source_region.add_exits(target)
-
-
-
-

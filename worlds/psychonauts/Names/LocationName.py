@@ -536,6 +536,5 @@ CobwebEntranceHall1 = "(MC Main Cobweb) Entrance Hall 1"
 CobwebEntranceHall2 = "(MC Main Cobweb) Entrance Hall 2"
 FinalBossEvent = "(MC Boss) Final Boss Defeated"
 
-#Ford's Shop, only a location if Cobweb Duster vanilla
+# Ford's Shop, only a location if Cobweb Duster vanilla
 ShopCobwebDuster = "(CA Lodge) Ford's Shop Cobweb Duster"
-

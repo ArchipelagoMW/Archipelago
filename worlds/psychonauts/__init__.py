@@ -1,11 +1,13 @@
 from typing import Mapping, Any, ClassVar, Dict
 
 import settings
-from BaseClasses import Tutorial, ItemClassification
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item
-
+from BaseClasses import Tutorial, ItemClassification
+from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from . import Regions
+from . import Rules
+from .ItemUtils import repeated_item_names_gen
 from .Items import (
     item_dictionary_table,
     MindUnlocks_Table,
@@ -17,20 +19,20 @@ from .Items import (
     item_counts,
     AP_ITEM_OFFSET
 )
-from .ItemUtils import repeated_item_names_gen
 from .Locations import all_locations, AP_LOCATION_OFFSET, deep_arrowhead_locations, mental_cobweb_locations
 from .Names import ItemName, LocationName
 from .Options import Goal, PsychonautsOptions, slot_data_options
-from . import Regions
-from . import Rules
-from .Subclasses import PSYItem
 from .PsychoSeed import gen_psy_seed
+from .Subclasses import PSYItem
+
 
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="PSYClient")
 
+
 components.append(Component("Psychonauts Client", "PSYClient", func=launch_client, component_type=Type.CLIENT))
+
 
 # borrowed from Wargroove
 class PsychonautsSettings(settings.Group):
@@ -41,16 +43,18 @@ class PsychonautsSettings(settings.Group):
         """
         description = "Psychonauts root directory"
 
-    root_directory: RootDirectory = RootDirectory("C:\\\\Program Files (x86)\\\\Steam\\\\steamapps\\\\common\\\\Psychonauts")
+    root_directory: RootDirectory = RootDirectory(
+        "C:\\\\Program Files (x86)\\\\Steam\\\\steamapps\\\\common\\\\Psychonauts")
+
 
 class PsychonautsWeb(WebWorld):
     tutorials = [Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to playing Psychonauts with Archipelago.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["Akashortstack"]
+        "Multiworld Setup Guide",
+        "A guide to playing Psychonauts with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Akashortstack"]
     )]
 
 
@@ -75,15 +79,13 @@ class PSYWorld(World):
 
     location_name_to_id = {item: id + AP_LOCATION_OFFSET for item, id in all_locations.items()}
 
-    
-
     def generate_early(self) -> None:
         """
         Using this to make Baggage local only.
-        """ 
+        """
         for item in local_set:
             self.options.local_items.value.add(item)
-       
+
     def create_item(self, name: str) -> Item:
         """
         Returns created PSYItem
@@ -100,8 +102,6 @@ class PSYWorld(World):
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
-
-        
 
         created_item = PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
 
@@ -214,7 +214,7 @@ class PSYWorld(World):
         """
         Creates the Regions and Connects them.
         """
-        
+
         Regions.create_psyregions(self.multiworld, self.player)
         Regions.connect_regions(self.multiworld, self.player)
         Regions.place_events(self)
@@ -234,7 +234,6 @@ class PSYWorld(World):
         # self.multiworld.get_location(LocationName.FinalBossEvent, self.player).place_locked_item(self.create_event_item("Victory"))
         # self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)   
 
-    
     def generate_output(self, output_directory: str):
         """
         Generates the seed file for Randomizer Scripts folder 

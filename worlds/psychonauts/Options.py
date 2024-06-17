@@ -1,12 +1,14 @@
-from typing import List
 from dataclasses import dataclass
+from typing import List
 
 from Options import Choice, Range, Toggle, PerGameCommonOptions
+
 
 class StartingLevitation(Toggle):
     """Start with Levitation Level 1"""
     display_name = "Start with Levitation"
     default = False
+
 
 class StartingMentalMagnet(Toggle):
     """Start with Mental Magnet, pulling health, ammo, and arrowhead drops towards you."""
@@ -27,6 +29,7 @@ class RandomStartingMinds(Range):
     range_end = 10
     default = 3
 
+
 class LootboxVaults(Toggle):
     """Turns all Memory Vaults into Lootboxes! Vaults will contain 10-50 Arrowheads, with a 50% chance to recieve a rank up.
     If you get really lucky, you can even win jackpots of up to 250 Arrowheads or Five Ranks Up!
@@ -34,16 +37,19 @@ class LootboxVaults(Toggle):
     display_name = "Lootbox Vaults"
     default = True
 
+
 class EasyMillaRace(Toggle):
     """Make the race in Milla's Mind easier by removing Bobby from the race, and increasing player speed to 1.5x"""
     display_name = "Easy Milla Race"
     default = False
+
 
 class EasyFlightMode(Toggle):
     """Replicate the Levitation Flight Glitch by simply holding down float in the air. No more button mashing.
     WARNING: Makes getting locations out of logic VERY easy."""
     display_name = "Easy Flight Mode"
     default = False
+
 
 class EnemyDamageMultiplier(Range):
     """Adjust how much damage Raz takes from enemies for an additional challenge.
@@ -53,10 +59,12 @@ class EnemyDamageMultiplier(Range):
     range_end = 5
     default = 1
 
+
 class InstantDeathMode(Toggle):
     """Take any amount of damage, die instantly. Has priority over Enemy Damage Multiplier."""
     display_name = "Instant Death Mode"
     default = False
+
 
 class Goal(Choice):
     """Win Condition
@@ -71,6 +79,7 @@ class Goal(Choice):
     option_braintank_and_brainhunt = 2
     default = 0
 
+
 class BrainsRequired(Range):
     """Number of Brains required to collect to Win, or open final door to Meat Circus Final Bosses.
 
@@ -79,6 +88,7 @@ class BrainsRequired(Range):
     range_start = 1
     range_end = 19
     default = 10
+
 
 class RequireMeatCircus(Toggle):
     """Require finishing Meat Circus Final Bosses in addition to your goal."""

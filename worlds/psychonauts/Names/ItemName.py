@@ -1,31 +1,30 @@
-
-#Props from AS 6 total
-LungfishCall = "Lungfish Call" 
-GloriasTrophy = "Gloria's Trophy" 
-StraightJacket = "Straight Jacket" 
-LobotoPainting = "Loboto Painting" 
-Cake = "Birthday Cake" 
+# Props from AS 6 total
+LungfishCall = "Lungfish Call"
+GloriasTrophy = "Gloria's Trophy"
+StraightJacket = "Straight Jacket"
+LobotoPainting = "Loboto Painting"
+Cake = "Birthday Cake"
 LilisBracelet = "Lili's Bracelet"
 
-#Props from MM 6 total
-PropSign = "Stop Sign" 
-PropFlowers = "Flowers" 
+# Props from MM 6 total
+PropSign = "Stop Sign"
+PropFlowers = "Flowers"
 PropPlunger = "Plunger"
 PropHedgeTrimmers = "Hedge Trimmers"
 PropRollingPin = "Rolling Pin"
 PropWaterCan = "Watering Can"
 
-#Current Props from TH 3 total
+# Current Props from TH 3 total
 # 2 Candles
 Candle = "Candle"
 Megaphone = "Megaphone"
 
-#Props from WW 3 total
-FredsLetter = "Fred's Letter" # PeasantItem1
-PricelessCoin = "Priceless Coin" # PeasantItem2
-Musket = "Musket" #PeasantItem3
+# Props from WW 3 total
+FredsLetter = "Fred's Letter"  # PeasantItem1
+PricelessCoin = "Priceless Coin"  # PeasantItem2
+Musket = "Musket"  # PeasantItem3
 
-#19 Psi Powers
+# 19 Psi Powers
 # 3 Marksmanship
 Marksmanship = "Progressive Marksmanship"
 # 2 Pyrokinesis
@@ -43,19 +42,19 @@ Clairvoyance = "Progressive Clairvoyance"
 # 3 Shield
 Shield = "Progressive Shield"
 
-#6 Max Ammo Up
+# 6 Max Ammo Up
 AmmoUp = "Max Ammo Up"
 
-#6 Max Lives Up
+# 6 Max Lives Up
 MaxLivesUp = "Max Lives Up"
 
-#4 Confusion Ammo Up
+# 4 Confusion Ammo Up
 ConfusionUp = "Confusion Ammo Up"
 
-#10 Psi Challenge Markers
+# 10 Psi Challenge Markers
 ChallengeMarker = "PsiChallengeMarker"
 
-#19 Brain Jars, Unique Names
+# 19 Brain Jars, Unique Names
 BrainJarElton = "Elton's Brain"
 BrainJarBobby = "Bobby's Brain"
 BrainJarDogen = "Dogen's Brain"
@@ -76,7 +75,7 @@ BrainJarMikhail = "Mikhail's Brain"
 BrainJarPhoebe = "Phoebe's Brain"
 BrainJarChops = "Chops' Brain"
 
-#16 Scavenger Hunt Items, Unique Names, in Order
+# 16 Scavenger Hunt Items, Unique Names, in Order
 GoldDoubloon = "Gold Doubloon"
 EagleClaw = "Eagle Claw"
 DiversHelmet = "Diver's Helmet"
@@ -94,7 +93,7 @@ DinosaurBone = "Dinosaur Bone"
 Fossil = "Fossil"
 GoldWatch = "Gold Watch"
 
-#50 Emotional Baggage Tags, 10 of each Type
+# 50 Emotional Baggage Tags, 10 of each Type
 SuitcaseTag = "Suitcase Tag"
 
 PurseTag = "Purse Tag"
@@ -105,7 +104,7 @@ SteamerTag = "Steamertrunk Tag"
 
 DuffleTag = "Dufflebag Tag"
 
-#50 Emotional Baggage, 10 of each Type
+# 50 Emotional Baggage, 10 of each Type
 Suitcase = "Suitcase"
 
 Purse = "Purse"
@@ -116,13 +115,13 @@ Steamertrunk = "Steamertrunk"
 
 Dufflebag = "Dufflebag"
 
-#19 Vaults
+# 19 Vaults
 Vault = "Memory Vault"
 
-#30 Rando Arrowhead Bundles Small
+# 30 Rando Arrowhead Bundles Small
 AHSmall = "Small Arrowhead Bundle"
 
-#5 Rando Arrowhead Bundles Large
+# 5 Rando Arrowhead Bundles Large
 AHLarge = "Large Arrowhead Bundle"
 
 # 9 Mind Unlocks
@@ -136,11 +135,11 @@ FredMind = "Fred's Mind"
 EdgarMind = "Edgar's Mind"
 OlyMind = "Kid Coach's Mind"
 
-#98 to 107 PsiCards (extras replace starting minds). Treated as a "Filler" item but rando uses unique names and IDs, so
+# 98 to 107 PsiCards (extras replace starting minds). Treated as a "Filler" item but rando uses unique names and IDs, so
 # only a finite number can be sent.
 PsiCard = "PsiCard"
 
-#Other Items
+# Other Items
 OarsmansBadge = "Oarsman's Badge"
 SashaButton = "Sasha's Button"
 Feather = "Crow Feather"
@@ -149,6 +148,6 @@ SquirrelDinner = "Squirrel Roast Dinner"
 DowsingRod = "Dowsing Rod"
 SuperPalmBomb = "Super Palm Bomb"
 
-#Needed for Victory!
+# Needed for Victory!
 Victory = "Victory"
 Filler = "Filler"

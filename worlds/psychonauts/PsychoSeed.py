@@ -1,14 +1,14 @@
 import os
-from typing import List, Tuple, Iterable, Union, Dict, TYPE_CHECKING
 import zipfile
+from typing import List, Tuple, Iterable, Union, Dict, TYPE_CHECKING
 
 import Utils
 from worlds.Files import APContainer
-
-from .PsychoRandoItems import PSYCHORANDO_BASE_ITEM_IDS, PSYCHORANDO_ITEM_TABLE, MAX_PSY_ITEM_ID
 from .Items import item_dictionary_table, AP_ITEM_OFFSET
 from .Locations import all_locations, PSYCHOSEED_LOCATION_IDS
 from .Options import Goal
+from .PsychoRandoItems import PSYCHORANDO_BASE_ITEM_IDS, PSYCHORANDO_ITEM_TABLE, MAX_PSY_ITEM_ID
+
 if TYPE_CHECKING:
     from . import PSYWorld
 
@@ -19,7 +19,7 @@ class PSYContainer(APContainer):
     game: str = 'Psychonauts'
 
     def __init__(self, patch_data: str, base_path: str, output_directory: str,
-        player=None, player_name: str = "", server: str = ""):
+                 player=None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
         container_path = os.path.join(output_directory, base_path + ".zip")
@@ -95,7 +95,6 @@ def gen_psy_ids_from_filled_locations(self) -> List[Tuple[int, int]]:
     location_tuples = []
 
     for location in self.multiworld.get_filled_locations(self.player):
-
         location_id = all_locations[location.name]
 
         is_local = location.item and location.item.player == self.player
@@ -184,7 +183,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     # append Brain Jar Requirement
     brainsrequired = self.options.BrainsRequired.value
     randoseed_parts.append(f"           Ob.brainsrequired = {brainsrequired}\n")
-    
+
     # Section where default settings booleans are written to RandoSeed.lua
     # adding new settings will remove from this list
     default_seed_settings = '''
@@ -227,7 +226,6 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
         else:
             randoseed_parts.append(", ")
 
-
     formattedtext3 = ''' }
         self.seed = SEED_GOES_HERE
         end
@@ -240,9 +238,9 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
 
     # Combine all the parts into one long piece of text
     randoseed = ''.join(randoseed_parts)
-    
+
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     mod = PSYContainer(randoseed, mod_dir, output_directory, self.player,
-            self.multiworld.get_file_safe_player_name(self.player))
+                       self.multiworld.get_file_safe_player_name(self.player))
     mod.write()

@@ -1,12 +1,14 @@
 from __future__ import annotations
+
+import asyncio
+import logging
 import os
 import shutil
 import sys
-import asyncio
-import logging
 from typing import Dict, Any, List, Tuple
 
 import ModuleUpdate
+
 ModuleUpdate.update()
 import Utils
 
@@ -24,7 +26,6 @@ from NetUtils import NetworkItem, ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
 
-
 # Included when sending items to Psychonauts specify whether the item is from a local or non-local source.
 LOCAL_ITEM_IDENTIFIER = 0
 NON_LOCAL_ITEM_IDENTIFIER = 1
@@ -38,7 +39,7 @@ def find_moddata_folder(root_directory):
         return moddata_folder
     else:
         print_error_and_close("PsychonautsClient couldn't find ModData folder. "
-                                  "Unable to infer required game_communication_path")
+                              "Unable to infer required game_communication_path")
 
 
 def print_error_and_close(msg):
@@ -46,12 +47,13 @@ def print_error_and_close(msg):
     Utils.messagebox("Error", msg, error=True)
     sys.exit(1)
 
+
 class PsychonautsClientCommandProcessor(ClientCommandProcessor):
     def _cmd_resync(self):
         """Manually trigger a resync."""
         self.output(f"Syncing items.")
         self.ctx.syncing = True
-    
+
     def _cmd_deathlink(self):
         """Toggles Deathlink"""
         if isinstance(self.ctx, PsychonautsContext):
@@ -60,7 +62,7 @@ class PsychonautsClientCommandProcessor(ClientCommandProcessor):
                 self.output(f"Deathlink enabled.")
             else:
                 self.output(f"Deathlink disabled.")
-    
+
     def _cmd_clearmoddata(self):
         """Empty your Psychonauts ModData Folder"""
         if isinstance(self.ctx, PsychonautsContext):
@@ -72,8 +74,9 @@ class PsychonautsClientCommandProcessor(ClientCommandProcessor):
             elif self.ctx.clear_mod_data_warning == True:
                 self.output(f"Emptying ModData folder.")
                 self.ctx.clear_mod_data()
-                           
+
             self.ctx.clear_mod_data_warning = not self.ctx.clear_mod_data_warning
+
 
 class PsychonautsContext(CommonContext):
     command_processor: int = PsychonautsClientCommandProcessor
@@ -121,10 +124,10 @@ class PsychonautsContext(CommonContext):
 
         options = Utils.get_settings()
         root_directory = options["psychonauts_options"]["root_directory"]
-        
+
         # save our root_directory for later use
         self.moddata_folder = find_moddata_folder(root_directory)
-        
+
     def reset_server_state(self):
         super().reset_server_state()
         # Disconnecting and reconnecting aside, the client could instead get connected to a different server to before,
@@ -147,7 +150,7 @@ class PsychonautsContext(CommonContext):
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
                     if "Items" not in file and "Deathlink" not in file:
-                        os.remove(root+"/"+file)
+                        os.remove(root + "/" + file)
 
     @property
     def endpoints(self):
@@ -162,7 +165,7 @@ class PsychonautsContext(CommonContext):
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
                     if "Items" not in file and "Deathlink" not in file:
-                        os.remove(root+"/"+file)
+                        os.remove(root + "/" + file)
 
     def calc_psy_ids_from_scouted_local_locations(self):
         # Attempt to figure out the Psychonauts IDs for all locally placed items at locations used in PsychoSeed
@@ -269,7 +272,7 @@ class PsychonautsContext(CommonContext):
         for root, dirs, files in os.walk(self.moddata_folder):
             for dir in dirs:
                 if "AP-" in dir:
-                    shutil.rmtree(os.path.join(root, dir)) 
+                    shutil.rmtree(os.path.join(root, dir))
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
@@ -279,7 +282,7 @@ class PsychonautsContext(CommonContext):
 
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
-                
+
             # Path to the ItemsCollected.txt file inside the ModData folder
             items_collected_path = os.path.join(self.game_communication_path, "ItemsCollected.txt")
             if not os.path.exists(items_collected_path):
@@ -362,6 +365,7 @@ class PsychonautsContext(CommonContext):
         self.got_deathlink = True
         super().on_deathlink(data)
 
+
 async def game_watcher(ctx: PsychonautsContext):
     from worlds.psychonauts.Locations import all_locations
     while not ctx.exit_event.is_set():
@@ -384,14 +388,14 @@ async def game_watcher(ctx: PsychonautsContext):
                     sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
                 await ctx.send_msgs(sync_msg)
                 ctx.syncing = False
-            
+
             # Check for Deathlink to send to player
             if ctx.got_deathlink:
                 ctx.got_deathlink = False
                 with open(os.path.join(ctx.game_communication_path, "DeathlinkIn.txt"), 'a') as f:
                     f.write("DEATH\n")
                     f.close()
-            
+
             # Check for Deathlinks from player
             with open(os.path.join(ctx.game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
                 RazDied = f.read()
@@ -401,15 +405,15 @@ async def game_watcher(ctx: PsychonautsContext):
                     # Empty the file by writing an empty string
                     f.truncate(0)
                     if "DeathLink" in ctx.tags:
-                        await ctx.send_death(death_text = f"{ctx.player_names[ctx.slot]} became lost in thought!")
-                f.close
+                        await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
+                f.close()
 
             # Initialize an empty list and set.
             # The list maintains the order and the set provides fast comparisons and __contains__() checks.
             sending = []
             sending_set = set()
             victory = False
-            
+
             # Open the file in read mode
             with open(os.path.join(ctx.game_communication_path, "ItemsCollected.txt"), 'r') as f:
                 collected_items = f.readlines()
@@ -439,6 +443,7 @@ async def game_watcher(ctx: PsychonautsContext):
                 ctx.finished_game = True
             await asyncio.sleep(0.1)
 
+
 def launch():
     async def main(args):
         ctx = PsychonautsContext(args.connect, args.password)
@@ -464,6 +469,3 @@ def launch():
     colorama.init()
     asyncio.run(main(args))
     colorama.deinit()
-
-
-
