@@ -699,16 +699,14 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
 
 
 def create_psyregions(world: MultiWorld, player: int):
-    # Helper function to reduce duplicate code
-    def create_region(name: str, location_names: Iterable[str]):
-        region = Region(name, player, world)
+    # Create all default regions.
+    for region_name, location_names in DEFAULT_REGIONS.items():
+        region = Region(region_name, player, world)
         region.locations.extend(PSYLocation(player, loc_name, ALL_LOCATIONS[loc_name] + AP_LOCATION_OFFSET, region)
                                 for loc_name in location_names)
         world.regions.append(region)
 
-    for region_name, location_names in DEFAULT_REGIONS.items():
-        create_region(region_name, location_names)
-
+    # Add the regions for event locations.
     reg_caja_brains = Region(RegionName.CAJABrains, player, world)
     reg_caja_brains.locations += [PSYLocation(player, LocationName.RedeemedBrainsEvent, None, reg_caja_brains)]
     world.regions.append(reg_caja_brains)
