@@ -65,7 +65,7 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None):
+def main(args=None) -> Tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded before logging init.")
@@ -171,7 +171,13 @@ def main(args=None):
                                 for category in yaml:
                                     if category in AutoWorldRegister.world_types and \
                                             key in Options.CommonOptions.type_hints:
-                                        yaml[category][key] = option
+                                        if key == "triggers":
+                                            if "triggers" not in yaml[category_name]:
+                                                yaml[category_name][key] = []
+                                            for x in range(0, len(option)):
+                                                yaml[category_name][key].append(option[x])
+                                        else:
+                                            yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
@@ -237,8 +243,7 @@ def main(args=None):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    from Main import main as ERmain
-    return ERmain(erargs, seed)
+    return erargs, seed
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -373,6 +378,8 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
             return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
@@ -547,7 +554,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    multiworld = main()
+    erargs, seed = main()
+    from Main import main as ERmain
+    multiworld = ERmain(erargs, seed)
     if __debug__:
         import gc
         import sys
