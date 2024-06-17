@@ -371,7 +371,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             # Add new conveyor to "push" yoshi (it's only a visual)
             room_editor.objects.append(Object(5, 3, 0xD0))
 
-            if int(world.options.trendy_game) >= TrendyGame.option_harder:
+            if world.options.trendy_game >= TrendyGame.option_harder:
                 """
                 Data_004_76A0::
                     db   $FC, $00, $04, $00, $00
