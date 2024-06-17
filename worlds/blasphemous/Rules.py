@@ -281,6 +281,217 @@ class BlasRules:
             "canBeatLegionary": self.can_beat_legionary
         }
 
+        boss_strength_indirect_regions: List[str] = [
+            # flasks
+            "D01Z05S05[SW]",
+            "D02Z02S04[W]",
+            "D03Z02S08[W]",
+            "D03Z03S04[SW]",
+            "D04Z02S13[W]",
+            "D05Z01S08[NW]",
+            "D20Z01S07[NE]",
+            # quicksilver
+            "D01Z05S01[W]"
+        ]
+
+        guilt_indirect_regions: List[str] = [
+            "D01Z04S01[NE]",
+            "D02Z02S11[W]",
+            "D03Z03S02[NE]",
+            "D04Z02S02[SE]",
+            "D05Z01S05[NE]",
+            "D09Z01S05[W]",
+            "D17Z01S04[W]"
+        ]
+
+        sword_indirect_regions: List[str] = [
+            "D01Z02S07[E]",
+            "D01Z02S02[SW]",
+            "D20Z01S04[E]",
+            "D01Z05S23[W]",
+            "D02Z03S02[NE]",
+            "D04Z02S21[NE]",
+            "D05Z01S21[NW]",
+            "D06Z01S15[NE]",
+            "D17Z01S07[SW]"
+        ]
+
+        redento_indirect_regions: List[str] = [
+            "D03Z01S04[E]",
+            "D03Z02S10[N]",
+            "D17Z01S05[S]",
+            "D17BZ02S01[FrontR]",
+            "D01Z03S04[E]",
+            "D08Z01S01[W]",
+            "D04Z01S03[E]",
+            "D04Z02S01[W]",
+            "D06Z01S18[-Cherubs]",
+            "D04Z02S08[E]",
+            "D04BZ02S01[Redento]",
+            "D17Z01S07[NW]"
+        ]
+
+        miriam_indirect_regions: List[str] = [
+            "D02Z03S07[NWW]",
+            "D03Z03S07[NW]",
+            "D04Z04S01[E]",
+            "D05Z01S06[W]",
+            "D06Z01S17[E]"
+        ]
+
+        chalice_indirect_regions: List[str] = [
+            "D03Z01S02[E]",
+            "D01Z05S02[W]",
+            "D20Z01S03[N]",
+            "D05Z01S11[SE]",
+            "D05Z02S02[NW]",
+            "D09Z01S09[E]",
+            "D09Z01S10[W]",
+            "D09Z01S08[SE]",
+            "D09Z01S02[SW]"
+        ]
+
+        self.indirect_regions: Dict[str, List[str]] = {
+            "openedDCGateW":          ["D20Z01S04[E]",
+                                       "D01Z05S23[W]"],
+            "openedDCGateE":          ["D01Z05S10[SE]",
+                                       "D01Z04S09[W]"],
+            "openedDCLadder":         ["D01Z05S25[NE]",
+                                       "D01Z05S02[S]"],
+            "openedWOTWCave":         ["D02Z01S01[SW]",
+                                       "D02Z01S08[E]",
+                                       "D02Z01S02[]"],
+            "rodeGotPElevator":       ["D02Z03S14[E]",
+                                       "D02Z02S13[W]",
+                                       "D02Z02S06[E]",
+                                       "D02Z02S12[W]",
+                                       "D02Z02S08[W]"],
+            "openedConventLadder":    ["D02Z03S02[N]",
+                                       "D02Z03S15[E]",
+                                       "D02Z03S19[E]",
+                                       "D02Z03S10[W]",
+                                       "D02Z03S22[W]"],
+            "brokeJondoBellW":        ["D03Z02S08[N]",
+                                       "D03Z02S12[E]",
+                                       "D03Z02S10[S]",
+                                       "D03Z02S10[-Cherubs]"],
+            "brokeJondoBellE":        ["D03Z02S04[NE]",
+                                       "D03Z02S11[W]",
+                                       "D03Z02S03[E]"],
+            "openedMoMLadder":        ["D04Z02S11[E]",
+                                       "D04Z02S09[W]",
+                                       "D06Z01S23[S]",
+                                       "D04Z02S04[N]"],
+            "openedTSCGate":          ["D05Z02S06[SE]",
+                                       "D05Z01S21[-Cherubs]"],
+            "openedARLadder":         ["D06Z01S22[Sword]",
+                                       "D06Z01S20[W]",
+                                       "D04Z02S06[N]",
+                                       "D06Z01S01[-Cherubs]"],
+            "brokeBotTCStatue":       ["D08Z03S03[W]",
+                                       "D08Z02S03[W]"],
+            "openedWotHPGate":        ["D09Z01S13[E]",
+                                       "D09Z01S03[W]",
+                                       "D09Z01S08[W]"],
+            "openedBotSSLadder":      ["D17Z01S05[S]",
+                                       "D17BZ02S01[FrontR]"],
+            "canBeatBrotherhoodBoss": [*boss_strength_indirect_regions,
+                                       "D17Z01S05[E]",
+                                       "D17Z01S03[W]"],
+            "canBeatMercyBoss":       [*boss_strength_indirect_regions,
+                                       "D01Z04S19[E]",
+                                       "D01Z04S12[W]"],
+            "canBeatConventBoss":     [*boss_strength_indirect_regions,
+                                       "D02Z03S09[E]",
+                                       "D02Z03S21[W]"],
+            "canBeatGrievanceBoss":   [*boss_strength_indirect_regions,
+                                       "D03Z03S11[E]",
+                                       "D03Z03S16[W]"],
+            "canBeatBridgeBoss":      [*boss_strength_indirect_regions,
+                                       "D01Z03S06[E]",
+                                       "D08Z02S01[W]"],
+            "canBeatMothersBoss":     [*boss_strength_indirect_regions,
+                                       "D04Z02S15[E]",
+                                       "D04Z02S21[W]"],
+            "canBeatCanvasesBoss":    [*boss_strength_indirect_regions,
+                                       "D05Z02S06[NE]",
+                                       "D05Z01S21[SW]"],
+            "canBeatPrisonBoss":      [*boss_strength_indirect_regions,
+                                       "D09Z01S05[SE]",
+                                       "D09Z01S08[S]"],
+            "canBeatRooftopsBoss":    [*boss_strength_indirect_regions,
+                                       "D06Z01S19[E]",
+                                       "D07Z01S01[W]"],
+            "canBeatOssuaryBoss":     [*boss_strength_indirect_regions,
+                                       "D01BZ06S01[E]"],
+            "canBeatMourningBoss":    [*boss_strength_indirect_regions,
+                                       "D20Z02S07[W]"],
+            "canBeatGraveyardBoss":   [*boss_strength_indirect_regions,
+                                       "D01Z06S01[Santos]",
+                                       "D02Z03S18[NW]",
+                                       "D02Z02S03[NE]"],
+            "canBeatJondoBoss":       [*boss_strength_indirect_regions,
+                                       "D01Z06S01[Santos]",
+                                       "D20Z01S06[NE]",
+                                       "D20Z01S04[W]",
+                                       "D03Z01S04[E]",
+                                       "D03Z02S10[N]"],
+            "canBeatPatioBoss":       [*boss_strength_indirect_regions,
+                                       "D01Z06S01[Santos]",
+                                       "D06Z01S02[W]",
+                                       "D04Z01S03[E]",
+                                       "D04Z01S01[W]",
+                                       "D06Z01S18[-Cherubs]"],
+            "canBeatWallBoss":        [*boss_strength_indirect_regions,
+                                       "D01Z06S01[Santos]",
+                                       "D09Z01S09[Cell24]",
+                                       "D09Z01S11[E]",
+                                       "D06Z01S13[W]"],
+            "canBeatHallBoss":        [*boss_strength_indirect_regions,
+                                       "D08Z01S02[NE]",
+                                       "D08Z03S02[NW]"],
+            "canBeatPerpetua":        boss_strength_indirect_regions,
+            "canBeatLegionary":       boss_strength_indirect_regions,
+            "guiltRooms1":            guilt_indirect_regions,
+            "guiltRooms2":            guilt_indirect_regions,
+            "guiltRooms3":            guilt_indirect_regions,
+            "guiltRooms4":            guilt_indirect_regions,
+            "guiltRooms5":            guilt_indirect_regions,
+            "guiltRooms6":            guilt_indirect_regions,
+            "guiltRooms7":            guilt_indirect_regions,
+            "swordRooms1":            sword_indirect_regions,
+            "swordRooms2":            sword_indirect_regions,
+            "swordRooms3":            sword_indirect_regions,
+            "swordRooms4":            sword_indirect_regions,
+            "swordRooms5":            sword_indirect_regions,
+            "swordRooms6":            sword_indirect_regions,
+            "swordRooms7":            sword_indirect_regions,
+            "redentoRooms2":          redento_indirect_regions,
+            "redentoRooms3":          redento_indirect_regions,
+            "redentoRooms4":          redento_indirect_regions,
+            "redentoRooms5":          redento_indirect_regions,
+            "miriamRooms5":           miriam_indirect_regions,
+            "chaliceRooms3":          chalice_indirect_regions
+        }
+
+        self.indirect_regions["amanecidaRooms1"] = [*self.indirect_regions["canBeatGraveyardBoss"],
+                                                    *self.indirect_regions["canBeatJondoBoss"],
+                                                    *self.indirect_regions["canBeatPatioBoss"],
+                                                    *self.indirect_regions["canBeatWallBoss"]]
+        self.indirect_regions["amanecidaRooms2"] = [*self.indirect_regions["canBeatGraveyardBoss"],
+                                                    *self.indirect_regions["canBeatJondoBoss"],
+                                                    *self.indirect_regions["canBeatPatioBoss"],
+                                                    *self.indirect_regions["canBeatWallBoss"]]
+        self.indirect_regions["amanecidaRooms3"] = [*self.indirect_regions["canBeatGraveyardBoss"],
+                                                    *self.indirect_regions["canBeatJondoBoss"],
+                                                    *self.indirect_regions["canBeatPatioBoss"],
+                                                    *self.indirect_regions["canBeatWallBoss"]]
+        self.indirect_regions["amanecidaRooms4"] = [*self.indirect_regions["canBeatGraveyardBoss"],
+                                                    *self.indirect_regions["canBeatJondoBoss"],
+                                                    *self.indirect_regions["canBeatPatioBoss"],
+                                                    *self.indirect_regions["canBeatWallBoss"]]
+
+
     def req_is_region(self, string: str) -> bool:
         if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
         or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
@@ -294,9 +505,14 @@ class BlasRules:
             for req in clause["item_requirements"]:
                 if self.req_is_region(req):
                     if obj_is_region:
+                        # add to indirect conditions if object and requirement are doors
                         self.indirect_conditions.append((req, f"{name} -> {obj['target']}"))
                     reqs.append(lambda state, req=req: state.can_reach_region(req, self.player))
                 else:
+                    if obj_is_region and req in self.indirect_regions:
+                        # add to indirect conditions if object is door and requirement has list of regions
+                        for region in self.indirect_regions[req]:
+                            self.indirect_conditions.append((region, f"{name} -> {obj['target']}"))
                     reqs.append(self.string_rules[req])
             clauses.append(lambda state, reqs=reqs: all(req(state) for req in reqs))
         return lambda state: True if not clauses else any(clause(state) for clause in clauses)
