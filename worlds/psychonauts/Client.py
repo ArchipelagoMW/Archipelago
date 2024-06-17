@@ -89,7 +89,7 @@ class PsychonautsContext(CommonContext):
     pending_received_items: List[Tuple[int, NetworkItem]]  # server state
 
     def __init__(self, server_address, password):
-        super(PsychonautsContext, self).__init__(server_address, password)
+        super().__init__(server_address, password)
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
@@ -140,12 +140,12 @@ class PsychonautsContext(CommonContext):
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(PsychonautsContext, self).server_auth(password_requested)
+            await super().server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
 
     async def connection_closed(self):
-        await super(PsychonautsContext, self).connection_closed()
+        await super().connection_closed()
         if self.game_communication_path is not None:
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
@@ -160,7 +160,7 @@ class PsychonautsContext(CommonContext):
             return []
 
     async def shutdown(self):
-        await super(PsychonautsContext, self).shutdown()
+        await super().shutdown()
         if self.game_communication_path is not None:
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
