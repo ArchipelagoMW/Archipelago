@@ -366,7 +366,8 @@ async def game_watcher(ctx: PsychonautsContext):
         # `ctx.game_communication_path`: files go in this path to pass data between the AP Client and the actual game.
         # `ctx.game_communication_path` is set when connecting to the AP server and cleared when disconnecting, so don't
         # check game for items to send and receive until this is done.
-        if ctx.game_communication_path is None:
+        game_communication_path = ctx.game_communication_path
+        if game_communication_path is None:
             await asyncio.sleep(0.1)
         else:
             # Check for DeathLink toggle
@@ -382,11 +383,11 @@ async def game_watcher(ctx: PsychonautsContext):
             # Check for Deathlink to send to player
             if ctx.got_deathlink:
                 ctx.got_deathlink = False
-                with open(os.path.join(ctx.game_communication_path, "DeathlinkIn.txt"), 'a') as f:
+                with open(os.path.join(game_communication_path, "DeathlinkIn.txt"), 'a') as f:
                     f.write("DEATH\n")
 
             # Check for Deathlinks from player
-            with open(os.path.join(ctx.game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
+            with open(os.path.join(game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
                 raz_died = f.read()
                 if raz_died:
                     # Move the file pointer to the beginning
@@ -403,7 +404,7 @@ async def game_watcher(ctx: PsychonautsContext):
             victory = False
 
             # Open the file in read mode
-            with open(os.path.join(ctx.game_communication_path, "ItemsCollected.txt"), 'r') as f:
+            with open(os.path.join(game_communication_path, "ItemsCollected.txt"), 'r') as f:
                 collected_items = f.readlines()
                 # Iterate over each line in the file
                 for line in collected_items:
@@ -414,7 +415,7 @@ async def game_watcher(ctx: PsychonautsContext):
                         sending.append(value)
                         sending_set.add(value)
 
-            for root, dirs, files in os.walk(ctx.game_communication_path):
+            for root, dirs, files in os.walk(game_communication_path):
                 for file in files:
                     if file.find("victory.txt") > -1:
                         victory = True
