@@ -270,9 +270,9 @@ class PsychonautsContext(CommonContext):
 
     def clear_mod_data(self):
         for root, dirs, files in os.walk(self.moddata_folder):
-            for dir in dirs:
-                if "AP-" in dir:
-                    shutil.rmtree(os.path.join(root, dir))
+            for directory in dirs:
+                if "AP-" in directory:
+                    shutil.rmtree(os.path.join(root, directory))
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
