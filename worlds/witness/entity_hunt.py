@@ -125,7 +125,7 @@ class EntityHuntPicker:
         """
 
         all_eligible_panels = [
-            panel for panel in ALL_HUNTABLE_PANELS if self._entity_is_eligible(panel) if panel not in self.HUNT_ENTITIES
+            panel for panel in ALL_HUNTABLE_PANELS if self._entity_is_eligible(panel)
         ]
 
         eligible_panels_by_area = defaultdict(set)
