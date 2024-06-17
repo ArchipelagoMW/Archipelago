@@ -56,10 +56,10 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None):
+def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()):
     global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name)
+    process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
 
