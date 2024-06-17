@@ -564,7 +564,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(prayer, state, world)
-        and has_ladder("Ladders in South Atoll", state, world))
+        and (has_ladder("Ladders in South Atoll", state, world)
+             # shoot fuse and have the shot hit you mid-LS
+             or (can_ladder_storage(state, world) and state.has(fire_wand, player) 
+                 and options.ladder_storage >= LadderStorage.option_hard)))
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
 
