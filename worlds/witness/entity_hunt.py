@@ -240,6 +240,10 @@ class EntityHuntPicker:
             if good_entity in self.HUNT_ENTITIES or good_entity not in self.ALL_ELIGIBLE_ENTITIES:
                 continue
 
+            # ... and it's not a forced pick that should stay the same ...
+            if bad_entitiy in self.PRE_PICKED_HUNT_ENTITIES:
+                continue
+
             # ... replace the bad entity with the good entity.
             self.HUNT_ENTITIES.remove(bad_entitiy)
             self.HUNT_ENTITIES.add(good_entity)
