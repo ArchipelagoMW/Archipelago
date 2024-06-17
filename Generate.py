@@ -480,7 +480,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                     logging.warning(f"Specified option name {advanced[x][0]} did not "
                                     f"match with a root option. "
                                     f"This is probably in error.")
-                if type(result) is str:
+                if isinstance(result, str):
                     if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4, 5]:
                         result = handle_random_range_in_triggers(result)
                 currently_targeted_weights[advanced[x][0]] = result
