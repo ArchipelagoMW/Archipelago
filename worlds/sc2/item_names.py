@@ -493,11 +493,12 @@ KERRIGAN_DROP_PODS               = "Drop-Pods (Kerrigan Ability)"
 KERRIGAN_PRIMAL_FORM             = "Primal Form (Kerrigan)"
 
 # Misc Upgrades
-ZERGLING_RECONSTITUTION          = "Zergling Reconstitution"
-AUTOMATED_EXTRACTORS             = "Automated Extractors"
-TWIN_DRONES                      = "Twin Drones"
-MALIGNANT_CREEP                  = "Malignant Creep"
-VESPENE_EFFICIENCY               = "Vespene Efficiency"
+ZERGLING_RECONSTITUTION          = "Zergling Reconstitution (Zerg)"
+AUTOMATED_EXTRACTORS             = "Automated Extractors (Zerg)"
+TWIN_DRONES                      = "Twin Drones (Zerg)"
+MALIGNANT_CREEP                  = "Malignant Creep (Zerg)"
+VESPENE_EFFICIENCY               = "Vespene Efficiency (Zerg)"
+ZERG_CREEP_STOMACH               = "Creep Stomach (Zerg)"
 
 # Kerrigan Levels
 KERRIGAN_LEVELS_1  = "1 Kerrigan Level"

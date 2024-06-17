@@ -659,6 +659,7 @@ item_descriptions = {
     item_names.TWIN_DRONES: "Drones morph in groups of two at no additional cost and require less supply.",
     item_names.MALIGNANT_CREEP: "Your units and structures gain increased life regeneration and 30% increased attack speed while on creep. Creep Tumors also spread creep faster and farther.",
     item_names.VESPENE_EFFICIENCY: "Extractors produce Vespene gas 25% faster.",
+    item_names.ZERG_CREEP_STOMACH: "Zerg buildings no longer take damage off-creep. Spore and Spine Crawlers can now root off-creep.",
     item_names.KERRIGAN_INFEST_BROODLINGS: "Enemies damaged by Kerrigan become infested and will spawn Broodlings with timed life if killed quickly.",
     item_names.KERRIGAN_FURY: "Each of Kerrigan's attacks temporarily increase her attack speed by 15%. Can stack up to 75%.",
     item_names.KERRIGAN_ABILITY_EFFICIENCY: "Kerrigan's abilities have their cooldown and energy cost reduced by 20%.",
