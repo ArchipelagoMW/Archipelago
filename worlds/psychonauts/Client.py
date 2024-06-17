@@ -137,6 +137,7 @@ class PsychonautsContext(CommonContext):
         self.local_items_placed_as_ap_items = {}
         self.has_local_location_data = False
         self.pending_received_items = []
+        self.game_communication_path = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -362,16 +363,12 @@ class PsychonautsContext(CommonContext):
 
 async def game_watcher(ctx: PsychonautsContext):
     while not ctx.exit_event.is_set():
-        # seed_name and slot are retrieved on connection, game_communication_path won't be set until then
-        # don't check game for items to send and receive until this is done
-        if ctx.seed_name is None or ctx.slot is None:
+        # `ctx.game_communication_path`: files go in this path to pass data between the AP Client and the actual game.
+        # `ctx.game_communication_path` is set when connecting to the AP server and cleared when disconnecting, so don't
+        # check game for items to send and receive until this is done.
+        if ctx.game_communication_path is None:
             await asyncio.sleep(0.1)
         else:
-
-            # ctx.game_communication_path: files go in this path to pass data between us and the actual game
-            seed_folder = f"AP-{ctx.seed_name}-P{ctx.slot}"
-            ctx.game_communication_path = os.path.join(ctx.moddata_folder, seed_folder)
-
             # Check for DeathLink toggle
             await ctx.update_death_link(ctx.deathlink_status)
 
