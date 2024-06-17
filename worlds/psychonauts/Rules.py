@@ -27,15 +27,27 @@ class PsyRules:
         self.region_rules = {
             RegionName.CAGP: self.has_button,
 
+            # The true logic for ranks would be exceedingly complicated if not impossible due to the many different ways
+            # to gain Ranks:
+            # 1) +1 for purchasing a PSI Challenge Core from the Main Lodge Store with Arrowheads (farmable)
+            # 2) +1 for collecting a PSI Challenge Marker
+            # 3) +1 for combining 9 PSI Cards into a PSI Challenge Marker at Ford's Sanctuary
+            # 4) +1 for reuniting Emotional Baggage with its Tag
+            # 5) +5 for each half of the Scavenger Hunt Completed
+            # 6) +1 for every 100 Figment Points collected
+            # 7) +? for each Memory Vault collected (the rewards from Memory Vaults are typically randomized)
+            # Technically, all that is required to reach Rank 101 is Sasha's Button because Arrowheads can be farmed and
+            # then Ranks can be purchased at the Main Lodge Store. However, this would be incredibly slow in practice.
+
             # Meeting four of these conditions adds ranks 5-20 to logic
             RegionName.RANK5to20: lambda state: sum([
                 self.has_button(state),
                 self.has_coach_mind(state),
-                self.has_sasha_mind(state) and self.has_marksmanship(state),
-                self.has_milla_mind(state) and self.has_levitation(state),
+                self.has_most_sasha_mind_access(state),
+                self.has_most_milla_mind_access(state),
                 self.has_linda_mind(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
-                self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_invisibility(state),
+                self.has_most_boyd_mind_access(state),
+                self.has_half_gloria_mind_access(state),
                 self.has_fred_mind(state),
                 self.has_edgar_mind(state),
             ]) >= 4,
@@ -43,78 +55,65 @@ class PsyRules:
             # Meeting five of these conditions adds ranks 25-40 to logic
             RegionName.RANK25to40: lambda state: sum([
                 self.has_button(state) and (
-                            self.has_oarsmans_badge(state) or self.has_squirrel_dinner(state) or self.has_lili_bracelet(
-                            state)),
+                            self.has_oarsmans_badge(state)
+                            or self.has_squirrel_dinner(state)
+                            or self.has_lili_bracelet(state)),
                 self.has_coach_mind(state),
-                self.has_sasha_mind(state) and self.has_marksmanship(state),
-                self.has_milla_mind(state) and self.has_levitation(state),
-                self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
-                self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_invisibility(state),
-                self.has_fred_mind(state) and self.has_cobweb_duster(state),
+                self.has_most_sasha_mind_access(state),
+                self.has_most_milla_mind_access(state),
+                self.has_most_linda_mind_access(state),
+                self.has_most_boyd_mind_access(state),
+                self.has_half_gloria_mind_access(state),
+                self.has_most_fred_mind_access(state),
                 self.has_edgar_mind(state),
-                self.has_oly_mind(state) and self.has_cobweb_duster(state),
+                self.has_half_oly_mind_access(state),
             ]) >= 5,
 
             # Having Sasha's Button AND Meeting six of these conditions adds ranks 45-60 to logic
             RegionName.RANK45to60: lambda state: self.has_button(state) and sum([
-                self.has_oarsmans_badge(state) and self.has_squirrel_dinner(state) and self.has_lili_bracelet(state),
+                self.has_all_extra_campground_access(state),
                 self.has_coach_mind(state),
-                self.has_sasha_mind(state) and self.has_marksmanship(state),
-                self.has_milla_mind(state) and self.has_levitation(state),
-                self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
-                self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_candle(
-                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
-                    state) and self.has_levitation(state),
-                self.has_fred_mind(state) and self.has_cobweb_duster(state),
+                self.has_most_sasha_mind_access(state),
+                self.has_most_milla_mind_access(state),
+                self.has_most_linda_mind_access(state),
+                self.has_most_boyd_mind_access(state),
+                self.has_most_gloria_mind_access(state),
+                self.has_most_fred_mind_access(state),
                 self.has_edgar_mind(state),
-                self.has_upper_asylum_access(state) and self.has_telekinesis(state) and self.has_levitation(
-                    state) and self.has_oarsmans_badge(
-                    state) and self.has_lungfish_call(state),
-                self.has_oly_mind(state) and self.has_cobweb_duster(state) and self.has_levitation(
-                    state) and self.has_telekinesis(state),
+                self.has_most_asylum_access(state),
+                self.has_most_oly_mind_access(state),
 
             ]) >= 6,
 
+            # Rank Regions form a dependent sequence, so ranks 45 and higher all require Sasha's Button.
             # Meeting seven of these conditions adds ranks 65-80 to logic
             RegionName.RANK65to80: lambda state: sum([
-                self.has_oarsmans_badge(state) and self.has_squirrel_dinner(state) and self.has_lili_bracelet(state),
+                self.has_all_extra_campground_access(state),
                 self.has_coach_mind(state),
-                self.has_sasha_mind(state) and self.has_marksmanship(state),
-                self.has_milla_mind(state) and self.has_levitation(state),
-                self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
-                self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_candle(
-                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
-                    state) and self.has_levitation(state),
-                self.has_fred_mind(state) and self.has_cobweb_duster(state),
-                self.has_edgar_mind(state) and self.has_cobweb_duster(state),
-                self.has_upper_asylum_access(state) and self.has_telekinesis(state) and self.has_levitation(
-                    state) and self.has_oarsmans_badge(
-                    state) and self.has_lungfish_call(state),
-                self.has_oly_mind(state) and self.has_cobweb_duster(state) and self.has_levitation(
-                    state) and self.has_telekinesis(state),
+                self.has_most_sasha_mind_access(state),
+                self.has_most_milla_mind_access(state),
+                self.has_most_linda_mind_access(state),
+                self.has_most_boyd_mind_access(state),
+                self.has_most_gloria_mind_access(state),
+                self.has_most_fred_mind_access(state),
+                self.has_most_edgar_mind_access(state),
+                self.has_most_asylum_access(state),
+                self.has_most_oly_mind_access(state),
             ]) >= 7,
 
             # Meeting eight of these conditions adds ranks 85-101 to logic
             RegionName.RANK85to101: lambda state: sum([
-                self.has_oarsmans_badge(state) and self.has_squirrel_dinner(state) and self.has_lili_bracelet(state),
+                self.has_all_extra_campground_access(state),
                 self.has_coach_mind(state),
-                self.has_sasha_mind(state) and self.has_marksmanship(state),
-                self.has_milla_mind(state) and self.has_levitation(state),
-                self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
-                self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_candle(
-                    state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
-                    state) and self.has_levitation(state),
-                self.has_fred_mind(state) and self.has_cobweb_duster(state),
-                self.has_edgar_mind(state) and self.has_cobweb_duster(state),
-                self.has_upper_asylum_access(state) and self.has_telekinesis(state) and self.has_levitation(
-                    state) and self.has_oarsmans_badge(
-                    state) and self.has_lungfish_call(state),
-                self.has_oly_mind(state) and self.has_cobweb_duster(state) and self.has_levitation(
-                    state) and self.has_telekinesis(state),
+                self.has_most_sasha_mind_access(state),
+                self.has_most_milla_mind_access(state),
+                self.has_most_linda_mind_access(state),
+                self.has_most_boyd_mind_access(state),
+                self.has_most_gloria_mind_access(state),
+                self.has_most_fred_mind_access(state),
+                self.has_most_edgar_mind_access(state),
+                self.has_most_asylum_access(state),
+                self.has_most_oly_mind_access(state),
             ]) >= 8,
 
             RegionName.CAGPSquirrel: self.has_invisibility,
@@ -295,6 +294,53 @@ class PsyRules:
 
     def has_oly_mind(self, state: CollectionState) -> bool:
         return state.has(ItemName.OlyMind, self.player)
+
+    def has_most_sasha_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.SashaMind, ItemName.Marksmanship], self.player)
+
+    def has_most_milla_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.MillaMind, ItemName.Levitation], self.player)
+
+    def has_most_linda_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.LindaMind, ItemName.Shield], self.player)
+
+    def has_most_boyd_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.BoydMind, ItemName.Clairvoyance, ItemName.StopSign], self.player)
+
+    def has_half_gloria_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.CobwebDuster, ItemName.GloriaMind, ItemName.Invisibility], self.player)
+
+    def has_most_gloria_mind_access(self, state: CollectionState) -> bool:
+        items = [
+            ItemName.CobwebDuster,
+            ItemName.GloriaMind,
+            ItemName.Candle,
+            ItemName.Pyrokinesis,
+            ItemName.Levitation,
+            ItemName.Invisibility,
+            ItemName.Megaphone
+        ]
+        return state.has_all(items, self.player)
+
+    def has_most_fred_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.CobwebDuster, ItemName.FredMind], self.player)
+
+    def has_most_edgar_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.EdgarMind, ItemName.CobwebDuster], self.player)
+
+    def has_half_oly_mind_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.OlyMind, ItemName.CobwebDuster], self.player)
+
+    def has_most_oly_mind_access(self, state: CollectionState) -> bool:
+        items = [ItemName.OlyMind, ItemName.CobwebDuster, ItemName.Levitation, ItemName.Telekinesis]
+        return state.has_all(items, self.player)
+
+    def has_all_extra_campground_access(self, state: CollectionState) -> bool:
+        return state.has_all([ItemName.OarsmansBadge, ItemName.SquirrelDinner, ItemName.LilisBracelet], self.player)
+
+    def has_most_asylum_access(self, state: CollectionState) -> bool:
+        items = [ItemName.Telekinesis, ItemName.Levitation, ItemName.OarsmansBadge, ItemName.LungfishCall]
+        return state.has_all(items, self.player) and self.has_upper_asylum_access(state)
 
     def has_stop_sign(self, state: CollectionState) -> bool:
         return state.has(ItemName.StopSign, self.player)
