@@ -34,7 +34,7 @@ class PsyRules:
                 self.has_sasha_mind(state) and self.has_marksmanship(state),
                 self.has_milla_mind(state) and self.has_levitation(state),
                 self.has_linda_mind(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_prop_sign(state),
+                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
                 self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_invisibility(state),
                 self.has_fred_mind(state),
                 self.has_edgar_mind(state),
@@ -49,7 +49,7 @@ class PsyRules:
                 self.has_sasha_mind(state) and self.has_marksmanship(state),
                 self.has_milla_mind(state) and self.has_levitation(state),
                 self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_prop_sign(state),
+                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
                 self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_invisibility(state),
                 self.has_fred_mind(state) and self.has_cobweb_duster(state),
                 self.has_edgar_mind(state),
@@ -63,7 +63,7 @@ class PsyRules:
                 self.has_sasha_mind(state) and self.has_marksmanship(state),
                 self.has_milla_mind(state) and self.has_levitation(state),
                 self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_prop_sign(state),
+                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
                 self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_candle(
                     state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
                     state) and self.has_levitation(state),
@@ -84,7 +84,7 @@ class PsyRules:
                 self.has_sasha_mind(state) and self.has_marksmanship(state),
                 self.has_milla_mind(state) and self.has_levitation(state),
                 self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_prop_sign(state),
+                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
                 self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_candle(
                     state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
                     state) and self.has_levitation(state),
@@ -104,7 +104,7 @@ class PsyRules:
                 self.has_sasha_mind(state) and self.has_marksmanship(state),
                 self.has_milla_mind(state) and self.has_levitation(state),
                 self.has_linda_mind(state) and self.has_shield(state),
-                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_prop_sign(state),
+                self.has_boyd_mind(state) and self.has_clairvoyance(state) and self.has_stop_sign(state),
                 self.has_gloria_mind(state) and self.has_cobweb_duster(state) and self.has_candle(
                     state) and self.has_pyrokinesis(state) and self.has_invisibility(state) and self.has_megaphone(
                     state) and self.has_levitation(state),
@@ -177,7 +177,7 @@ class PsyRules:
 
             RegionName.MMI1BeforeSign: self.has_clairvoyance,
 
-            RegionName.MMI1AfterSign: self.has_sign,
+            RegionName.MMI1AfterSign: self.has_stop_sign,
 
             RegionName.MMI1Hedgetrimmers: self.has_hedge_trimmers,
 
@@ -296,8 +296,8 @@ class PsyRules:
     def has_oly_mind(self, state: CollectionState) -> bool:
         return state.has(ItemName.OlyMind, self.player)
 
-    def has_sign(self, state: CollectionState) -> bool:
-        return state.has(ItemName.Sign, self.player)
+    def has_stop_sign(self, state: CollectionState) -> bool:
+        return state.has(ItemName.StopSign, self.player)
 
     def has_flowers(self, state: CollectionState) -> bool:
         return state.has(ItemName.Flowers, self.player)

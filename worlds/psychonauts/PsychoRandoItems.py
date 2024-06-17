@@ -18,7 +18,7 @@ PSYCHORANDO_ITEM_TABLE = {
     ItemName.LilisBracelet: 1,
 
     # Current Props from MM, 6 total
-    ItemName.Sign: 1,
+    ItemName.StopSign: 1,
     ItemName.Flowers: 1,
     ItemName.Plunger: 1,
     ItemName.HedgeTrimmers: 1,

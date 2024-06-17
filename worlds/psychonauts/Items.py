@@ -18,7 +18,7 @@ PROPS = {
     ItemName.SquirrelDinner: 10,
 
     # The Milkman Conspiracy
-    ItemName.Sign: 11,
+    ItemName.StopSign: 11,
     ItemName.Flowers: 12,
     ItemName.Plunger: 13,
     ItemName.HedgeTrimmers: 14,

@@ -7,7 +7,7 @@ Cake = "Birthday Cake"
 LilisBracelet = "Lili's Bracelet"
 
 # Props from MM 6 total
-Sign = "Stop Sign"
+StopSign = "Stop Sign"
 Flowers = "Flowers"
 Plunger = "Plunger"
 HedgeTrimmers = "Hedge Trimmers"
