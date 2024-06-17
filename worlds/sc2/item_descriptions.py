@@ -283,7 +283,7 @@ item_descriptions = {
     """),
     item_names.BATTLECRUISER_BEHEMOTH_REACTOR: "All Battlecruiser spells require 25 less energy to cast.",
     item_names.THOR_RAPID_RELOAD: "Increases Thor's ground attack speed.",
-    item_names.LIBERATOR_360_DEGREE_SENSOR_ARRAY: "Liberators in Defender Mode can attack any target in weapon range.",
+    item_names.LIBERATOR_GUERILLA_MISSILES: "Liberators in Fighter Mode apply an attack and movement debuff to enemies they attack.",
     item_names.WIDOW_MINE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.WIDOW_MINE),
     item_names.HERC_GRAPPLE_PULL: "Allows HERCs to use their grappling gun to pull a ground unit towards the HERC.",
     item_names.COMMAND_CENTER_SCANNER_SWEEP: "Temporarily reveals an area of the map, detecting cloaked and burrowed units.",
