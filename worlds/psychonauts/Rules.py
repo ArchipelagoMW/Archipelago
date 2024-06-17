@@ -413,16 +413,7 @@ class PsyRules:
         return state.has_all([ItemName.LobotoPainting, ItemName.GloriasTrophy, ItemName.StraightJacket], self.player)
 
     def has_oleander_boss_access(self, state: CollectionState) -> bool:
-        items = [
-            ItemName.SashaButton,
-            ItemName.LobotoPainting,
-            ItemName.GloriasTrophy,
-            ItemName.StraightJacket,
-            ItemName.LungfishCall,
-            ItemName.Cake,
-            ItemName.OarsmansBadge
-        ]
-        return state.has_all(items, self.player)
+        return state.has_all([ItemName.Cake, ItemName.Telekinesis, ItemName.Pyrokinesis], self.player)
 
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.count(item_name, self.player) for item_name in BRAIN_JARS])
@@ -478,28 +469,28 @@ class PsyRules:
                 add_item_rule(location, forbid_local_only)
 
     def set_psy_goal(self):
-        final_boss_location = self.multiworld.get_location(LocationName.FinalBossEvent, self.player)
-        oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
-        redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
-        # Brain Tank Boss
-        if self.world.options.Goal == "braintank":
-            final_boss_location.access_rule = lambda state: self.has_oleander_boss_access(state) and self.has_pyrokinesis(
-                state)
+        goal_option = self.world.options.Goal
 
-        # Brain Hunt
-        elif self.world.options.Goal == "brainhunt":
-            final_boss_location.access_rule = lambda state: self.redeemed_brain_goal(state,
-                                                                                     self.world.options.BrainsRequired.value)
-            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state,
-                                                                                          self.world.options.BrainsRequired.value)
-
-        # Brain Tank Boss AND Brain Hunt
+        # Brain Tank Goal is enabled
+        if goal_option == "braintank" or goal_option == "braintank_and_brainhunt":
+            oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
+            oleander_boss_location.access_rule = self.has_oleander_boss_access
         else:
-            final_boss_location.access_rule = lambda state: self.has_oleander_boss_access(state) and self.has_pyrokinesis(
-                state) and self.redeemed_brain_goal(state, self.world.options.BrainsRequired.value)
-            oleander_boss_location.access_rule = lambda state: self.redeemed_brain_goal(state,
-                                                                                        self.world.options.BrainsRequired.value)
-            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state,
-                                                                                          self.world.options.BrainsRequired.value)
+            oleander_boss_location = None
+
+        # Brain Hunt Goal is enabled
+        if goal_option == "brainhunt" or goal_option == "braintank_and_brainhunt":
+            redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
+            brains_required = self.world.options.BrainsRequired.value
+            redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state, brains_required)
+        else:
+            redeemed_required_brains = None
+
+        if self.world.options.RequireMeatCircus:
+            # The Meat Circus Final Boss can only be accessed after completing the other goal/goals.
+            final_boss_location = self.multiworld.get_location(LocationName.FinalBossEvent, self.player)
+            for sub_goal_location in (oleander_boss_location, redeemed_required_brains):
+                if sub_goal_location is not None:
+                    add_rule(final_boss_location, sub_goal_location.can_reach)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player)
