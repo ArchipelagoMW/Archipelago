@@ -72,7 +72,7 @@ class InstantMaxDifficulty(Toggle):
     The starting level for each area increases gradually as you would progress in vanilla.
     """
 
-    display_name = "Change Max Difficulty"
+    display_name = "Instant Max Difficulty"
 
 
 class PermaSpeed(Toggle):

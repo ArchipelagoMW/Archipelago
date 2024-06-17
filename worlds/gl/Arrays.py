@@ -48,7 +48,7 @@ inv_dict: Dict[Tuple, str] = {
     (0x18, 0x80, 0x8): "Acid Amulet",
     (0x18, 0xF0, 0x8): "Lightning Amulet",
     (0x18, 0x60, 0x8): "Fire Amulet",
-    (0x14, 0xF0, 0xC): "Electric Shield",
+    (0x14, 0xF0, 0xC): "Lightning Shield",
     (0x14, 0x60, 0xC): "Fire Shield",
     (0x10, 0xE0, 0x0): "Invisibility",
     (0x10, 0x30, 0x0): "Levitate",
@@ -161,7 +161,7 @@ timers = [
     "Acid Amulet",
     "Lightning Amulet",
     "Fire Amulet",
-    "Electric Shield",
+    "Lightning Shield",
     "Fire Shield",
     "Invisibility",
     "Levitate",
@@ -194,7 +194,7 @@ base_count: Dict[str, int] = {
     "Acid Amulet": 30,
     "Lightning Amulet": 30,
     "Fire Amulet": 30,
-    "Electric Shield": 10,
+    "Lightning Shield": 10,
     "Fire Shield": 10,
     "Invisibility": 30,
     "Levitate": 30,
@@ -3228,12 +3228,12 @@ difficulty_convert: Dict[int, int] = {0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
 difficulty_lambda: Dict[int, List[int]] = {
-    0x2: [0, 0, 1, 2],
-    0x1: [0, 2, 3, 4],
-    0x7: [0, 4, 5, 6],
-    0x9: [0, 5, 6, 7],
-    0xF: [0, 6, 7, 8],
-    0x11: [0, 8, 9, 10],
+    0x2: [0, 1, 2, 3],
+    0x1: [0, 3, 4, 5],
+    0x7: [0, 6, 7, 8],
+    0x9: [0, 6, 7, 8],
+    0xF: [0, 7, 8, 9],
+    0x11: [0, 9, 10, 11],
     0x8: [0, 13, 13, 13],
 }
 

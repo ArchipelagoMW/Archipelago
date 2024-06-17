@@ -82,8 +82,6 @@ class RetroSocket:
             data, addr = self.socket.recvfrom(1000)
         except ConnectionResetError:
             raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
-        data = data.decode()
-        logger.info(data)
         return True
 
 
@@ -204,7 +202,7 @@ class GauntletLegendsContext(CommonContext):
     def inv_count(self):
         return len(self.inventory)
 
-    # Update self.inventory to current ingame values
+    # Update self.inventory to current in-game values
     async def inv_read(self):
         _inv: List[InventoryEntry] = []
         b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR, 'x')} 3072")))
@@ -240,6 +238,7 @@ class GauntletLegendsContext(CommonContext):
     async def inv_bitwise(self, name: str, bit: int) -> bool:
         item = await self.item_from_name(name)
         if item is None:
+            logger.info("NONE")
             return False
         return (item.count & bit) != 0
 
@@ -467,9 +466,9 @@ class GauntletLegendsContext(CommonContext):
                 await self.inv_update("Key", 9000)
             temp = await self.item_from_name("Speed Boots")
             if temp is None and self.glslotdata["speed"] == 1:
-                await self.inv_update("Speed Boots", 200)
+                await self.inv_update("Speed Boots", 2000)
             i = compass.count
-            if i - 1 != len(self.items_received):
+            if i - 1 < len(self.items_received):
                 for index in range(i - 1, len(self.items_received)):
                     item = self.items_received[index].item
                     await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
@@ -605,7 +604,9 @@ class GauntletLegendsContext(CommonContext):
                     self.locations_checked += [self.item_locations[i].id]
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
-            if await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name]):
+            ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name])
+            logger.info(ob)
+            if ob:
                 self.locations_checked += [self.obelisk_locations[j].id]
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):

@@ -14,7 +14,7 @@ from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
 from .Arrays import item_dict, level_address, level_header, level_locations, level_size
 from .Items import items_by_id
-from .Locations import location_data
+from .Locations import location_data, GLLocation
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -72,6 +72,36 @@ class GLPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         stream.seek(0x67E7E0)
         data = io.BytesIO(zdec(stream.read(0x380)))
+
+        data.seek(0x778, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x794, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x7B0, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x7CC, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x7E8, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x804, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x802, 0)
+        data.write(bytes([0x40, 0x1D]))
+        data.seek(0x820, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x83C, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x858, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x874, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x890, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x8AC, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+        data.seek(0x8C8, 0)
+        data.write(bytes([0x0, 0x80, 0x9, 0x40]))
+
         data.seek(0x1A, 0)
         data.write(bytes([0xFF, 0xFF]))
         data.seek(0x37, 0)
@@ -112,6 +142,8 @@ class GLPatchExtension(APPatchExtension):
             stream.seek(level_address[i], 0)
             stream, data = get_level_data(stream, level_size[i])
             for j, (location_name, item) in enumerate(level.items()):
+                if item[0] == 0:
+                    continue
                 if "Mirror" in location_name:
                     continue
                 if "Obelisk" in location_name:
@@ -211,13 +243,15 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     for i, level in enumerate(level_locations.values()):
         locations: List[Location] = []
         for location in level:
-            if location.name not in world.disabled_locations:
+            if location.name in world.disabled_locations:
+                locations += [GLLocation(world.player, location.name, location.id)]
+            else:
                 locations += [world.get_location(location.name)]
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
 
 
 def locations_to_dict(locations: List[Location]) -> Dict[str, Tuple]:
-    return {location.name: (location.item.code, location.item.player) for location in locations}
+    return {location.name: (location.item.code, location.item.player) if location.item is not None else (0, 0) for location in locations}
 
 
 # Zlib decompression with wbits set to -15

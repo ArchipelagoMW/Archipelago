@@ -26,7 +26,7 @@ item_list: typing.List[ItemData] = [
     ItemData(77780009, "Acid Amulet", ItemClassification.filler),
     ItemData(77780010, "Lightning Amulet", ItemClassification.filler),
     ItemData(77780011, "Fire Amulet", ItemClassification.filler),
-    ItemData(77780012, "Electric Shield", ItemClassification.filler),
+    ItemData(77780012, "Lightning Shield", ItemClassification.filler),
     ItemData(77780013, "Fire Shield", ItemClassification.filler),
     ItemData(77780014, "Invisibility", ItemClassification.filler),
     ItemData(77780015, "Levitate", ItemClassification.filler),
@@ -72,10 +72,10 @@ item_list: typing.List[ItemData] = [
     ItemData(77780055, "Mountain Obelisk 1", ItemClassification.progression),
     ItemData(77780056, "Mountain Obelisk 2", ItemClassification.progression),
     ItemData(77780057, "Mountain Obelisk 3", ItemClassification.progression),
-    ItemData(77780058, "CastleObelisk 1", ItemClassification.progression),
-    ItemData(77780059, "Castle Obelisk 2", ItemClassification.progression),
-    ItemData(77780060, "Town Obelisk 1", ItemClassification.progression),
-    ItemData(77780061, "Town Obelisk 2", ItemClassification.progression),
+    ItemData(77780058, "Town Obelisk 1", ItemClassification.progression),
+    ItemData(77780059, "Town Obelisk 2", ItemClassification.progression),
+    ItemData(77780060, "Castle Obelisk 1", ItemClassification.progression),
+    ItemData(77780061, "Castle Obelisk 2", ItemClassification.progression),
 ]
 
 item_frequencies: typing.Dict[str, int] = {
@@ -85,7 +85,7 @@ item_frequencies: typing.Dict[str, int] = {
     "Acid Potion": 40,
     "Fire Potion": 42,
     "Acid Breath": 33,
-    "Electric Breath": 33,
+    "Lightning Breath": 33,
     "Fire Breath": 33,
     "Light Amulet": 32,
     "Acid Amulet": 32,

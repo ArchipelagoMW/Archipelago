@@ -24,14 +24,13 @@ def set_rules(world: "GauntletLegendsWorld"):
     for location in [
         location
         for location in all_locations
-        if "Obelisk" in location.name
-           or "Chest" in location.name
+           if "Chest" in location.name
            or "Mirror" in location.name
            or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
            or location in dragons_lair
            or location in chimeras_keep
            or location in gates_of_the_underworld
-    ]:
+    ] + [location for location in all_locations if "Obelisk" in location.name and world.options.obelisks == 1]:
         for item in obelisks:
             if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(location.name), item, world.player)
