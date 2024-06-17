@@ -12,7 +12,7 @@ import ModuleUpdate
 ModuleUpdate.update()
 import Utils
 
-from .Items import AP_ITEM_OFFSET, reverse_item_dictionary_table
+from .Items import AP_ITEM_OFFSET, REVERSE_ITEM_DICTIONARY
 from .Locations import AP_LOCATION_OFFSET, PSYCHOSEED_LOCATION_IDS
 from .PsychoSeed import gen_psy_ids, PSY_NON_LOCAL_ID_START
 from .PsychoRandoItems import PSYCHORANDO_ITEM_LOOKUP, PSYCHORANDO_BASE_ITEM_IDS
@@ -181,7 +181,7 @@ class PsychonautsContext(CommonContext):
                 return False
             is_local_item = scouted_network_item.player == self.slot
             if is_local_item:
-                local_item_name = reverse_item_dictionary_table[scouted_network_item.item - AP_ITEM_OFFSET]
+                local_item_name = REVERSE_ITEM_DICTIONARY[scouted_network_item.item - AP_ITEM_OFFSET]
             else:
                 local_item_name = None
             location_tuples.append((is_local_item, local_item_name, psy_location_id))
@@ -229,7 +229,7 @@ class PsychonautsContext(CommonContext):
             return
 
         # Check that the PsychoRando item at this location matches the item AP thinks is at this location.
-        ap_item_name = reverse_item_dictionary_table.get(ap_item_id - AP_ITEM_OFFSET)
+        ap_item_name = REVERSE_ITEM_DICTIONARY.get(ap_item_id - AP_ITEM_OFFSET)
         expected_item_name = PSYCHORANDO_ITEM_LOOKUP.get(local_item_psy_id)
         if ap_item_name and ap_item_name == expected_item_name:
             # Tell Psychonauts it has received the item.
@@ -250,7 +250,7 @@ class PsychonautsContext(CommonContext):
         Receive an item from another world.
         """
         # Subtract the AP item offset and get the item name.
-        item_name = reverse_item_dictionary_table[ap_item_id - AP_ITEM_OFFSET]
+        item_name = REVERSE_ITEM_DICTIONARY[ap_item_id - AP_ITEM_OFFSET]
         # Get the first PsychoRando ID for this item name. If there are duplicate PsychoRando IDs for this item, sending
         # any of them should work, but for consistency, we'll always send the first PsychoRando ID.
         base_psy_item_id = PSYCHORANDO_BASE_ITEM_IDS[item_name]

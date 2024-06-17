@@ -8,22 +8,22 @@ from BaseClasses import MultiWorld, Region
 from .Names import RegionName, ItemName
 from .Subclasses import PSYLocation
 from .Locations import (
-    all_locations,
+    ALL_LOCATIONS,
     AP_LOCATION_OFFSET,
-    CAGP_Deep_Arrowhead_Checks,
-    CAMA_Deep_Arrowhead_Checks,
-    CARE_Deep_Arrowhead_Checks,
-    CABH_Deep_Arrowhead_Checks,
-    BB_Cobweb_Checks,
-    SA_Cobweb_Checks,
-    MI_Cobweb_Checks,
-    BT_Cobweb_Checks,
-    LO_Cobweb_Checks,
-    MM_Cobweb_Checks,
-    TH_Cobweb_Checks,
-    WW_Cobweb_Checks,
-    BV_Cobweb_Checks,
-    MC_Cobweb_Checks,
+    CAGP_DEEP_ARROWHEAD_CHECKS,
+    CAMA_DEEP_ARROWHEAD_CHECKS,
+    CARE_DEEP_ARROWHEAD_CHECKS,
+    CABH_DEEP_ARROWHEAD_CHECKS,
+    BB_COBWEB_CHECKS,
+    SA_COBWEB_CHECKS,
+    MI_COBWEB_CHECKS,
+    BT_COBWEB_CHECKS,
+    LO_COBWEB_CHECKS,
+    MM_COBWEB_CHECKS,
+    TH_COBWEB_CHECKS,
+    WW_COBWEB_CHECKS,
+    BV_COBWEB_CHECKS,
+    MC_COBWEB_CHECKS,
 )
 from .Names import LocationName
 from . import Options
@@ -56,27 +56,27 @@ def _add_locations_to_existing_region(multiworld: MultiWorld, player: int, regio
                                       locations: Iterable[str]):
     region = multiworld.get_region(region_name, player)
     region.locations.extend(
-        PSYLocation(player, name, all_locations[name] + AP_LOCATION_OFFSET, region) for name in locations
+        PSYLocation(player, name, ALL_LOCATIONS[name] + AP_LOCATION_OFFSET, region) for name in locations
     )
 
 
 def create_deep_arrowhead_locations(multiworld: MultiWorld, player: int):
-    _add_locations_to_existing_region(multiworld, player, RegionName.CAGP, CAGP_Deep_Arrowhead_Checks)
-    _add_locations_to_existing_region(multiworld, player, RegionName.CAMA, CAMA_Deep_Arrowhead_Checks)
-    _add_locations_to_existing_region(multiworld, player, RegionName.CARE, CARE_Deep_Arrowhead_Checks)
-    _add_locations_to_existing_region(multiworld, player, RegionName.CABH, CABH_Deep_Arrowhead_Checks)
+    _add_locations_to_existing_region(multiworld, player, RegionName.CAGP, CAGP_DEEP_ARROWHEAD_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.CAMA, CAMA_DEEP_ARROWHEAD_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.CARE, CARE_DEEP_ARROWHEAD_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.CABH, CABH_DEEP_ARROWHEAD_CHECKS)
 
 
 def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
-    _add_locations_to_existing_region(multiworld, player, RegionName.BBA2, BB_Cobweb_Checks)
-    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, SA_Cobweb_Checks)
-    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, MI_Cobweb_Checks)
-    _add_locations_to_existing_region(multiworld, player, RegionName.NIMPMark, BT_Cobweb_Checks)
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA2, BB_COBWEB_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, SA_COBWEB_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, MI_COBWEB_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIMPMark, BT_COBWEB_CHECKS)
 
     # Lungfishopolis cobwebs are split across two regions.
     loma_cobwebs = {LocationName.CobwebSkyscraperBeforeDam}
     # All remaining cobwebs are in LOMAShield.
-    lomashield_cobwebs = set(LO_Cobweb_Checks).difference(loma_cobwebs)
+    lomashield_cobwebs = set(LO_COBWEB_CHECKS).difference(loma_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, loma_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.LOMAShield, lomashield_cobwebs)
 
@@ -84,7 +84,7 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     mmi2_cobwebs = {LocationName.CobwebBookDepository}
     mmi1_before_sign_cobwebs = {LocationName.CobwebThirdHouse}
     # All remaining cobwebs are in MMI1AfterSign.
-    mmi1_after_sign_cobwebs = set(MM_Cobweb_Checks) - mmi2_cobwebs - mmi1_before_sign_cobwebs
+    mmi1_after_sign_cobwebs = set(MM_COBWEB_CHECKS) - mmi2_cobwebs - mmi1_before_sign_cobwebs
     _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, mmi1_before_sign_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.MMI1AfterSign, mmi1_after_sign_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.MMI2, mmi2_cobwebs)
@@ -93,7 +93,7 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     thmslev_cobwebs = {LocationName.CobwebInTheAudience}
     thmsstorage_cobwebs = {LocationName.CobwebStorageRoomLeft, LocationName.CobwebStorageRoomRight}
     # All remaining cobwebs are in THMS.
-    thms_cobwebs = set(TH_Cobweb_Checks) - thmslev_cobwebs - thmsstorage_cobwebs
+    thms_cobwebs = set(TH_COBWEB_CHECKS) - thmslev_cobwebs - thmsstorage_cobwebs
     _add_locations_to_existing_region(multiworld, player, RegionName.THMS, thms_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.THMSLev, thmslev_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.THMSStorage, thmsstorage_cobwebs)
@@ -101,7 +101,7 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     # Waterloo World cobwebs are split across two regions.
     wwmadusterlev_cobwebs = {LocationName.CobwebBlacksmithsRightBuildingRoof}
     # All the remaining cobwebs are in WWMA.
-    wwma_cobwebs = set(WW_Cobweb_Checks) - wwmadusterlev_cobwebs
+    wwma_cobwebs = set(WW_COBWEB_CHECKS) - wwmadusterlev_cobwebs
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, wwma_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLev, wwmadusterlev_cobwebs)
 
@@ -110,13 +110,13 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     # cobwebs into the physical regions they are located in.
     bvrbduster_cobwebs = {LocationName.CobwebDiegosHouseFireplace, LocationName.CobwebDiegosHouseGrindrail}
     # All the remaining cobwebs are in BVRB.
-    bvrb_cobwebs = set(BV_Cobweb_Checks) - bvrbduster_cobwebs
+    bvrb_cobwebs = set(BV_COBWEB_CHECKS) - bvrbduster_cobwebs
     _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, bvrb_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.BVRBDuster, bvrbduster_cobwebs)
 
     # Meat Circus cobwebs are split across two regions.
     mctc_escort_cobwebs = {LocationName.CobwebTunnelOfLoveOllieEscortExit}
-    mctc_cobwebs = set(MC_Cobweb_Checks) - mctc_escort_cobwebs
+    mctc_cobwebs = set(MC_COBWEB_CHECKS) - mctc_escort_cobwebs
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, mctc_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, mctc_escort_cobwebs)
 
@@ -125,7 +125,7 @@ def create_psyregions(world: MultiWorld, player: int):
     # Helper function to reduce duplicate code
     def create_region(name: str, location_names: Iterable[str]):
         region = Region(name, player, world)
-        region.locations.extend(PSYLocation(player, loc_name, all_locations[loc_name] + AP_LOCATION_OFFSET, region)
+        region.locations.extend(PSYLocation(player, loc_name, ALL_LOCATIONS[loc_name] + AP_LOCATION_OFFSET, region)
                                 for loc_name in location_names)
         world.regions.append(region)
 

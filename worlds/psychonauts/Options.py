@@ -135,7 +135,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     MentalCobwebShuffle: MentalCobwebShuffle
 
 
-slot_data_options: List[str] = [
+SLOT_DATA_OPTIONS: List[str] = [
     "StartingLevitation",
     "StartingMentalMagnet",
     "LootboxVaults",

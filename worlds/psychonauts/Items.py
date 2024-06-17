@@ -6,7 +6,7 @@ from .PsychoRandoItems import PSYCHORANDO_ITEM_TABLE
 # Offset added to Psychonauts IDs to produce AP IDs.
 AP_ITEM_OFFSET = 42690000
 
-Props_Table = {
+PROPS = {
     ItemName.LungfishCall: 1,
     ItemName.GloriasTrophy: 2,
     ItemName.StraightJacket: 3,
@@ -37,7 +37,7 @@ Props_Table = {
     ItemName.DowsingRod: 93,
 }
 
-MindUnlocks_Table = {
+MINDS = {
     ItemName.SashaButton: 8,
     ItemName.CoachMind: 21,
     ItemName.SashaMind: 22,
@@ -50,7 +50,7 @@ MindUnlocks_Table = {
     ItemName.OlyMind: 29,
 }
 
-PsiPowers_Table = {
+PSI_POWERS = {
     ItemName.Marksmanship: 30,
     ItemName.Pyrokinesis: 31,
     ItemName.Confusion: 32,
@@ -61,7 +61,7 @@ PsiPowers_Table = {
     ItemName.Shield: 37,
 }
 
-General_Table = {
+GENERAL_ITEMS = {
     ItemName.AmmoUp: 38,
     ItemName.MaxLivesUp: 39,
     ItemName.ConfusionUp: 40,
@@ -73,7 +73,7 @@ General_Table = {
     ItemName.SuperPalmBomb: 94,
 }
 
-BrainJar_Table = {
+BRAIN_JARS = {
     ItemName.BrainJarElton: 46,
     ItemName.BrainJarBobby: 47,
     ItemName.BrainJarDogen: 48,
@@ -95,7 +95,7 @@ BrainJar_Table = {
     ItemName.BrainJarChops: 64,
 }
 
-ScavHunt_Table = {
+SCAVENGER_HUNT_ITEMS = {
     ItemName.GoldDoubloon: 65,
     ItemName.EagleClaw: 66,
     ItemName.DiversHelmet: 67,
@@ -114,7 +114,7 @@ ScavHunt_Table = {
     ItemName.GoldWatch: 80,
 }
 
-BaggageTags_Table = {
+BAGGAGE_TAGS = {
     ItemName.SuitcaseTag: 81,
     ItemName.PurseTag: 82,
     ItemName.HatboxTag: 83,
@@ -122,7 +122,7 @@ BaggageTags_Table = {
     ItemName.DuffleTag: 85,
 }
 
-Baggage_Table = {
+BAGGAGE = {
     ItemName.Suitcase: 86,
     ItemName.Purse: 87,
     ItemName.Hatbox: 88,
@@ -130,71 +130,71 @@ Baggage_Table = {
     ItemName.Dufflebag: 90,
 }
 
-OtherItems_Table = {
+OTHER_ITEMS = {
     ItemName.Feather: 91,
     ItemName.PropWaterCan: 92,
 }
 
-item_dictionary_table = {
-    **Props_Table,
-    **MindUnlocks_Table,
-    **PsiPowers_Table,
-    **BrainJar_Table,
-    **ScavHunt_Table,
-    **BaggageTags_Table,
-    **Baggage_Table,
-    **General_Table,
-    **OtherItems_Table,
+ITEM_DICTIONARY = {
+    **PROPS,
+    **MINDS,
+    **PSI_POWERS,
+    **BRAIN_JARS,
+    **SCAVENGER_HUNT_ITEMS,
+    **BAGGAGE_TAGS,
+    **BAGGAGE,
+    **GENERAL_ITEMS,
+    **OTHER_ITEMS,
 }
 # Assert that there are no gaps in the item IDs
-assert max(item_dictionary_table.values()) == len(item_dictionary_table), "There should not be gaps in the AP item IDs"
+assert max(ITEM_DICTIONARY.values()) == len(ITEM_DICTIONARY), "There should not be gaps in the AP item IDs"
 
 # Reverse mapping of all items, from item ID to item name.
-reverse_item_dictionary_table = {v: k for k, v in item_dictionary_table.items()}
+REVERSE_ITEM_DICTIONARY = {v: k for k, v in ITEM_DICTIONARY.items()}
 
-progression_set = {
-    *Props_Table,
-    *MindUnlocks_Table,
-    *PsiPowers_Table,
+PROGRESSION_SET = {
+    *PROPS,
+    *MINDS,
+    *PSI_POWERS,
 }
 
-useful_set = {
+USEFUL_SET = {
     ItemName.Vault,
     ItemName.ChallengeMarker,
     ItemName.MaxLivesUp,
-    *ScavHunt_Table,
-    *BaggageTags_Table,
-    *Baggage_Table,
+    *SCAVENGER_HUNT_ITEMS,
+    *BAGGAGE_TAGS,
+    *BAGGAGE,
     ItemName.AHLarge,
     ItemName.SuperPalmBomb,
 }
 
-local_set = {
+LOCAL_SET = {
     # Baggage must be local only
-    *Baggage_Table,
+    *BAGGAGE,
 }
 
-item_groups: Dict[str, List[str]] = {
-    "Mind": list(MindUnlocks_Table.keys()),
-    "Brain": list(BrainJar_Table.keys()),
-    "Scavenger Hunt": list(ScavHunt_Table.keys()),
+ITEM_GROUPS: Dict[str, List[str]] = {
+    "Mind": list(MINDS.keys()),
+    "Brain": list(BRAIN_JARS.keys()),
+    "Scavenger Hunt": list(SCAVENGER_HUNT_ITEMS.keys()),
 }
 
 # Skip creating the set if assertions are disabled.
 if __debug__:
     # Every AP item must be present in PsychoRando, but not necessarily the other way around.
-    _items_not_in_psychorando = set(item_dictionary_table).difference(PSYCHORANDO_ITEM_TABLE)
+    _items_not_in_psychorando = set(ITEM_DICTIONARY).difference(PSYCHORANDO_ITEM_TABLE)
     assert not _items_not_in_psychorando, f"Some AP items are not present in PsychoRando: {_items_not_in_psychorando}"
     del _items_not_in_psychorando
 
 # The number of each AP item in the item pool, typically matching the maximum number of each item that can be placed
 # into the Psychonauts game world.
-item_counts = {
+ITEM_COUNT = {
     **PSYCHORANDO_ITEM_TABLE,
     # Automatically added as filler items, so none are added to the item pool directly.
     ItemName.PsiCard: 0,
     # These items are unused.
-    **{item: 0 for item in OtherItems_Table},
+    **{item: 0 for item in OTHER_ITEMS},
     # Only added when DeepArrowheadShuffle is enabled.
     ItemName.DowsingRod: 0,
     # The extra available Arrowhead Bundles are only used when DeepArrowheadShuffle is enabled.

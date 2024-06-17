@@ -1,7 +1,7 @@
 from .Names import LocationName
 
 # eventid matches Randomizer Seed index in table
-CA_Checks = {
+CA_CHECKS = {
     LocationName.BehindFurnitureCard: 1,
     LocationName.StaircaseLedgesCard: 2,
     LocationName.UpperLedgeFossil: 3,
@@ -118,7 +118,7 @@ CA_Checks = {
     # LocationName.ShopCobwebDuster: 366,
 }
 
-Rank_Checks = {
+RANK_CHECKS = {
     LocationName.PSIRank05: 111,
     LocationName.PSIRank10: 112,
     LocationName.PSIRank15: 113,
@@ -141,7 +141,7 @@ Rank_Checks = {
     LocationName.PSIRank101: 130,
 }
 
-AS_Checks = {
+AS_CHECKS = {
     LocationName.RockWallBottom: 131,
     LocationName.RockWallLadder: 132,
     LocationName.OutsideFrontGate: 133,
@@ -198,7 +198,7 @@ AS_Checks = {
 
 }
 
-BB_Checks = {
+BB_CHECKS = {
     LocationName.JumpingTutorial1: 184,
     LocationName.JumpingTutorial2: 185,
     LocationName.PoleClimbingTutorialFloor: 186,
@@ -216,7 +216,7 @@ BB_Checks = {
     LocationName.BasicBrainingComplete: 198,
 }
 
-SA_Checks = {
+SA_CHECKS = {
     LocationName.OnTheBed: 199,
     LocationName.OnThePillow: 200,
     LocationName.BuildingBlocksLeft: 201,
@@ -237,7 +237,7 @@ SA_Checks = {
 
 }
 
-MI_Checks = {
+MI_CHECKS = {
     LocationName.IntroRingsTutorial: 216,
     LocationName.DancingCamperPlatform1: 217,
     LocationName.DemonRoom: 218,
@@ -255,7 +255,7 @@ MI_Checks = {
     LocationName.MillasDancePartyComplete: 230,
 }
 
-NI_Checks = {
+NI_CHECKS = {
     LocationName.OutsideCaravan: 231,
     LocationName.BehindTheEgg: 232,
     LocationName.ShadowMonsterPath: 233,
@@ -273,7 +273,7 @@ NI_Checks = {
 
 }
 
-LO_Checks = {
+LO_CHECKS = {
     LocationName.SkyscraperStart: 245,
     LocationName.CornerNearJail: 246,
     LocationName.SkyscraperBeforeDam: 247,
@@ -297,7 +297,7 @@ LO_Checks = {
 
 }
 
-MM_Checks = {
+MM_CHECKS = {
     LocationName.BoydsFridgeClv: 265,
     LocationName.FirstHouseDufflebagTag: 266,
     LocationName.SecondHouseRollingPin: 267,
@@ -325,7 +325,7 @@ MM_Checks = {
 
 }
 
-TH_Checks = {
+TH_CHECKS = {
     LocationName.NearTheCriticPurse: 289,
     LocationName.InTheAudienceAmmoUp: 290,
     LocationName.BelowTheSpotlightSteamertrunkTag: 291,
@@ -348,7 +348,7 @@ TH_Checks = {
 
 }
 
-WW_Checks = {
+WW_CHECKS = {
     LocationName.FredsRoomHatboxTag: 308,
     LocationName.TheFireplacePricelessCoin: 309,
     LocationName.GameBoardSuitcaseTag: 310,
@@ -378,7 +378,7 @@ WW_Checks = {
 
 }
 
-BV_Checks = {
+BV_CHECKS = {
     LocationName.ClubStreetLadySteamertrunk: 333,
     LocationName.ClubStreetMetalBalconyDufflebagTag: 334,
     LocationName.HeartStreetHIGHBalconyAmmoUp: 335,
@@ -404,7 +404,7 @@ BV_Checks = {
 
 }
 
-MC_Checks = {
+MC_CHECKS = {
     LocationName.EntranceAwningSteamertrunkTag: 353,
     LocationName.CrumblingPathSteamertrunk: 354,
     LocationName.CrumblingPathEndRightHatboxTag: 355,
@@ -421,7 +421,7 @@ MC_Checks = {
 
 # Leave a gap in the IDs so that more locations can be added that place items into the game world without having to
 # adjust the IDs of all locations that don't place items into the game world.
-event_locations = {
+EVENT_LOCATIONS = {
     # for beating Meat Circus
     LocationName.FinalBossEvent: 500,
     # for Brain Jar Goal
@@ -434,7 +434,7 @@ event_locations = {
 # These are not included in PsychoRando seed generation so the IDs must be greater than all locations which are included
 # in PsychoRando seed generation.
 # Main Campgrounds
-CAMA_Deep_Arrowhead_Checks = {
+CAMA_DEEP_ARROWHEAD_CHECKS = {
     LocationName.DeepAHTrashCanNorthOfLodge: 503,
     LocationName.DeepAHMainLodgeWalkway: 504,
     LocationName.DeepAHUnderStartOfLakeBridge: 505,
@@ -447,7 +447,7 @@ CAMA_Deep_Arrowhead_Checks = {
 }
 
 # GPC and Wilderness
-CAGP_Deep_Arrowhead_Checks = {
+CAGP_DEEP_ARROWHEAD_CHECKS = {
     # GPC (CAGP)
     LocationName.DeepAHInRiverBeforeGrate: 512,
     LocationName.DeepAHInsideGPCFenceNorth: 513,
@@ -467,7 +467,7 @@ CAGP_Deep_Arrowhead_Checks = {
 }
 
 # Reception Area
-CARE_Deep_Arrowhead_Checks = {
+CARE_DEEP_ARROWHEAD_CHECKS = {
     LocationName.DeepAHMineshaftBear: 527,
     LocationName.DeepAHShallowWaterEast: 528,
     LocationName.DeepAHShallowWaterWest: 529,
@@ -489,7 +489,7 @@ CARE_Deep_Arrowhead_Checks = {
 }
 
 # Lake and Boathouse
-CABH_Deep_Arrowhead_Checks = {
+CABH_DEEP_ARROWHEAD_CHECKS = {
     LocationName.DeepAHByStumpCABH: 545,
     LocationName.DeepAHLakeShore: 546,
     LocationName.DeepAHBathysphereRock: 547,
@@ -499,11 +499,11 @@ CABH_Deep_Arrowhead_Checks = {
     LocationName.DeepAHRightOfEntrance: 551,
 }
 
-deep_arrowhead_locations = {
-    **CAGP_Deep_Arrowhead_Checks,
-    **CAMA_Deep_Arrowhead_Checks,
-    **CARE_Deep_Arrowhead_Checks,
-    **CABH_Deep_Arrowhead_Checks,
+DEEP_ARROWHEAD_LOCATIONS = {
+    **CAGP_DEEP_ARROWHEAD_CHECKS,
+    **CAMA_DEEP_ARROWHEAD_CHECKS,
+    **CARE_DEEP_ARROWHEAD_CHECKS,
+    **CABH_DEEP_ARROWHEAD_CHECKS,
 }
 
 # Mental Cobweb locations.
@@ -511,7 +511,7 @@ deep_arrowhead_locations = {
 # in PsychoRando seed generation.
 # The Cobwebs for each level are ordered by their internal names in Psychonauts, so sometimes the order of the Cobwebs
 # is a bit weird.
-BB_Cobweb_Checks = {
+BB_COBWEB_CHECKS = {
     LocationName.CobwebTrapezeCobweb: 552,
     LocationName.CobwebTightropeTutorial: 553,
     LocationName.CobwebGrindrailWall: 554,
@@ -519,7 +519,7 @@ BB_Cobweb_Checks = {
     LocationName.CobwebTunnelOfLogsEnd: 556,
 }
 
-SA_Cobweb_Checks = {
+SA_COBWEB_CHECKS = {
     LocationName.CobwebBlockArchLeft: 557,
     LocationName.CobwebBlockArchRight: 558,
     LocationName.CobwebBackOfShoeboxTower: 559,
@@ -527,7 +527,7 @@ SA_Cobweb_Checks = {
     LocationName.CobwebFlameTowerArch: 561,
 }
 
-MI_Cobweb_Checks = {
+MI_COBWEB_CHECKS = {
     LocationName.CobwebIntroStatueCorner: 562,
     LocationName.CobwebBehindPinballLadder: 563,
     LocationName.CobwebGrindrailRings: 564,
@@ -535,7 +535,7 @@ MI_Cobweb_Checks = {
     LocationName.CobwebPartyRoomFloor: 566,
 }
 
-BT_Cobweb_Checks = {
+BT_COBWEB_CHECKS = {
     LocationName.CobwebBathtubDrain: 567,
     LocationName.CobwebForestPathThorns: 568,
     LocationName.CobwebForestHighPlatform: 569,
@@ -543,7 +543,7 @@ BT_Cobweb_Checks = {
     LocationName.CobwebThornTowerRight: 571,
 }
 
-LO_Cobweb_Checks = {
+LO_COBWEB_CHECKS = {
     LocationName.CobwebSkyscraperBeforeDam: 572,
     LocationName.CobwebSkyscrapersBeforeTunnel: 573,
     LocationName.CobwebBehindLasers: 574,
@@ -551,7 +551,7 @@ LO_Cobweb_Checks = {
     LocationName.CobwebGroundAfterBridge: 576,
 }
 
-MM_Cobweb_Checks = {
+MM_COBWEB_CHECKS = {
     LocationName.CobwebThirdHouse: 577,
     LocationName.CobwebPostOfficeLobby: 578,
     LocationName.CobwebRightHouseBeforePostOffice: 579,
@@ -559,7 +559,7 @@ MM_Cobweb_Checks = {
     LocationName.CobwebBookDepository: 581,
 }
 
-TH_Cobweb_Checks = {
+TH_COBWEB_CHECKS = {
     LocationName.CobwebBackstageCorridor: 582,
     LocationName.CobwebBelowTeleporter: 583,
     LocationName.CobwebStorageRoomLeft: 584,
@@ -569,7 +569,7 @@ TH_Cobweb_Checks = {
     LocationName.CobwebStorageRoomRight: 588,
 }
 
-WW_Cobweb_Checks = {
+WW_COBWEB_CHECKS = {
     LocationName.CobwebBeneathSmallArch: 589,
     LocationName.CobwebBlacksmithsRightBuildingWindow: 590,
     LocationName.CobwebBlacksmithsLeftBuilding: 591,
@@ -579,7 +579,7 @@ WW_Cobweb_Checks = {
     LocationName.CobwebUnderTheGuillotine: 595,
 }
 
-BV_Cobweb_Checks = {
+BV_COBWEB_CHECKS = {
     LocationName.CobwebDiegosHouseGrindrail: 596,
     LocationName.CobwebDiegosHouse: 597,
     LocationName.CobwebSewerShowerTunnel: 598,
@@ -589,58 +589,58 @@ BV_Cobweb_Checks = {
     LocationName.CobwebNearDiegosHouse: 602,
 }
 
-MC_Cobweb_Checks = {
+MC_COBWEB_CHECKS = {
     LocationName.CobwebTunnelOfLoveOllieEscortExit: 603,
     LocationName.CobwebEntranceHall1: 604,
     LocationName.CobwebEntranceHall2: 605,
 }
 
-mental_cobweb_locations = {
-    **BB_Cobweb_Checks,
-    **SA_Cobweb_Checks,
-    **MI_Cobweb_Checks,
-    **BT_Cobweb_Checks,
-    **LO_Cobweb_Checks,
-    **MM_Cobweb_Checks,
-    **TH_Cobweb_Checks,
-    **WW_Cobweb_Checks,
-    **BV_Cobweb_Checks,
-    **MC_Cobweb_Checks,
+MENTAL_COBWEB_LOCATIONS = {
+    **BB_COBWEB_CHECKS,
+    **SA_COBWEB_CHECKS,
+    **MI_COBWEB_CHECKS,
+    **BT_COBWEB_CHECKS,
+    **LO_COBWEB_CHECKS,
+    **MM_COBWEB_CHECKS,
+    **TH_COBWEB_CHECKS,
+    **WW_COBWEB_CHECKS,
+    **BV_COBWEB_CHECKS,
+    **MC_COBWEB_CHECKS,
 }
 
 # Includes locations that may not be enabled.
-all_fillable_locations = {
-    **CA_Checks,
-    **Rank_Checks,
-    **AS_Checks,
-    **BB_Checks,
-    **SA_Checks,
-    **MI_Checks,
-    **NI_Checks,
-    **LO_Checks,
-    **MM_Checks,
-    **TH_Checks,
-    **WW_Checks,
-    **BV_Checks,
-    **MC_Checks,
-    **deep_arrowhead_locations,
-    **mental_cobweb_locations
+ALL_FILLABLE_LOCATIONS = {
+    **CA_CHECKS,
+    **RANK_CHECKS,
+    **AS_CHECKS,
+    **BB_CHECKS,
+    **SA_CHECKS,
+    **MI_CHECKS,
+    **NI_CHECKS,
+    **LO_CHECKS,
+    **MM_CHECKS,
+    **TH_CHECKS,
+    **WW_CHECKS,
+    **BV_CHECKS,
+    **MC_CHECKS,
+    **DEEP_ARROWHEAD_LOCATIONS,
+    **MENTAL_COBWEB_LOCATIONS
 }
 
-all_locations = {
-    **all_fillable_locations,
-    **event_locations,
+ALL_LOCATIONS = {
+    **ALL_FILLABLE_LOCATIONS,
+    **EVENT_LOCATIONS,
 }
 
 # Locations which do not place items into the game world. When such a location contains a local item, the AP server will
 # tell the client to receive the item and the client will send the item to Psychonauts as if the item was non-locally
 # placed.
 _FULLY_REMOTE_LOCATION_IDS = {
-    *deep_arrowhead_locations.values(),
-    *mental_cobweb_locations.values()
+    *DEEP_ARROWHEAD_LOCATIONS.values(),
+    *MENTAL_COBWEB_LOCATIONS.values()
 }
 # IDs of locations that place items into the game world, and are therefore used in PsychoSeed generation.
-PSYCHOSEED_LOCATION_IDS = set(all_fillable_locations.values())
+PSYCHOSEED_LOCATION_IDS = set(ALL_FILLABLE_LOCATIONS.values())
 PSYCHOSEED_LOCATION_IDS.difference_update(_FULLY_REMOTE_LOCATION_IDS)
 
 # Offset added to Psychonauts IDs to produce AP IDs.

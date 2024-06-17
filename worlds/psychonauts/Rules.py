@@ -2,8 +2,8 @@ from typing import Dict, Callable, TYPE_CHECKING, Set
 
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule
-from .Items import BrainJar_Table, local_set
-from .Locations import deep_arrowhead_locations, mental_cobweb_locations
+from .Items import BRAIN_JARS, LOCAL_SET
+from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import LocationName, ItemName, RegionName
 
 # I don't know what is going on here, but it works???
@@ -368,7 +368,7 @@ class PsyRules:
              ItemName.LungfishCall, ItemName.Cake, ItemName.OarsmansBadge], self.player)
 
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
-        return amount <= sum([state.count(item_name, self.player) for item_name in BrainJar_Table])
+        return amount <= sum([state.count(item_name, self.player) for item_name in BRAIN_JARS])
 
     def set_psy_rules(self) -> None:
         multiworld = self.world.multiworld
@@ -388,19 +388,19 @@ class PsyRules:
 
         if self.world.options.DeepArrowheadShuffle:
             # Deep Arrowhead Shuffle locations do not place items into the world.
-            local_only_forbidden.update(deep_arrowhead_locations.keys())
+            local_only_forbidden.update(DEEP_ARROWHEAD_LOCATIONS.keys())
 
             def has_dowsing_rod(state: CollectionState):
                 return state.has(ItemName.DowsingRod, player)
 
-            for deep_ah_location_name in deep_arrowhead_locations:
+            for deep_ah_location_name in DEEP_ARROWHEAD_LOCATIONS:
                 location = multiworld.get_location(deep_ah_location_name, player)
                 add_rule(location, has_dowsing_rod)
 
         if self.world.options.MentalCobwebShuffle:
-            local_only_forbidden.update(mental_cobweb_locations.keys())
+            local_only_forbidden.update(MENTAL_COBWEB_LOCATIONS.keys())
 
-            for mental_cobweb_location_name in mental_cobweb_locations:
+            for mental_cobweb_location_name in MENTAL_COBWEB_LOCATIONS:
                 location = multiworld.get_location(mental_cobweb_location_name, player)
                 # For simplicity, the rule is currently added to all mental cobweb locations, but it might be worth
                 # considering skipping adding the rule if the location's region already requires the Cobweb Duster to
@@ -414,7 +414,7 @@ class PsyRules:
 
         if local_only_forbidden:
             def forbid_local_only(item: Item):
-                return item.player != player or item.name not in local_set
+                return item.player != player or item.name not in LOCAL_SET
 
             for location_name in local_only_forbidden:
                 location = multiworld.get_location(location_name, player)

@@ -4,8 +4,8 @@ from typing import List, Tuple, Iterable, Union, Dict, TYPE_CHECKING
 
 import Utils
 from worlds.Files import APContainer
-from .Items import item_dictionary_table, AP_ITEM_OFFSET
-from .Locations import all_locations, PSYCHOSEED_LOCATION_IDS
+from .Items import ITEM_DICTIONARY, AP_ITEM_OFFSET
+from .Locations import ALL_LOCATIONS, PSYCHOSEED_LOCATION_IDS
 from .Options import Goal
 from .PsychoRandoItems import PSYCHORANDO_BASE_ITEM_IDS, PSYCHORANDO_ITEM_TABLE, MAX_PSY_ITEM_ID
 
@@ -76,7 +76,7 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
                 # There aren't any Psychonauts IDs left to place this item into the Psychonauts game world, so place
                 # it as an AP placeholder item and receive the item as if it were placed non-locally.
                 itemcode = non_local_id
-                ap_item_id = item_dictionary_table[local_item_name] + AP_ITEM_OFFSET
+                ap_item_id = ITEM_DICTIONARY[local_item_name] + AP_ITEM_OFFSET
                 local_items_placed_as_ap_items[itemcode] = ap_item_id
                 non_local_id += 1
         else:
@@ -95,7 +95,7 @@ def gen_psy_ids_from_filled_locations(self) -> List[Tuple[int, int]]:
     location_tuples = []
 
     for location in self.multiworld.get_filled_locations(self.player):
-        location_id = all_locations[location.name]
+        location_id = ALL_LOCATIONS[location.name]
 
         is_local = location.item and location.item.player == self.player
         local_item_name = location.item.name if is_local else None
