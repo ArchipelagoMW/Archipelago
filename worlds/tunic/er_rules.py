@@ -902,9 +902,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
     # nmg: ice grapple through cathedral door, can do it both ways
+    # todo: add can_reach for beach and the ladder to atoll
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: (has_ability(prayer, state, world) and state.has(laurels, player))
+        rule=lambda state: (has_ability(prayer, state, world) 
+                            and (state.has(laurels, player) 
+                                 or (can_ladder_storage(state, world) and state.has(fire_wand, player)
+                                     and options.ladder_storage >= LadderStorage.option_hard 
+                                     and (not options.shuffle_ladders 
+                                          or state.has_any({"Ladders in Overworld Town", 
+                                                            "Ladder to Swamp",
+                                                            "Ladders near Weathervane"}, player)))))
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
