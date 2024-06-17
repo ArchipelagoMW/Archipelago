@@ -171,17 +171,17 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                                 for category in yaml:
                                     if category in AutoWorldRegister.world_types and \
                                             key in Options.CommonOptions.type_hints:
-                                        if key == "triggers":
-                                            if "triggers" not in yaml[category_name]:
-                                                yaml[category_name][key] = []
-                                            for x in range(0, len(option)):
-                                                yaml[category_name][key].append(option[x])
-                                        else:
-                                            yaml[category][key] = option
+                                        yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
-                                yaml[category_name][key] = option
+                                if key == "triggers":
+                                    if "triggers" not in yaml[category_name]:
+                                        yaml[category_name][key] = []
+                                    for trigger in option:
+                                        yaml[category_name][key].append(trigger)
+                                else:
+                                    yaml[category_name][key] = option
 
     player_path_cache = {}
     for player in range(1, args.multi + 1):
