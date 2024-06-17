@@ -367,7 +367,6 @@ class PsychonautsContext(CommonContext):
 
 
 async def game_watcher(ctx: PsychonautsContext):
-    from worlds.psychonauts.Locations import all_locations
     while not ctx.exit_event.is_set():
         # seed_name and slot are retrieved on connection, game_communication_path won't be set until then
         # don't check game for items to send and receive until this is done
