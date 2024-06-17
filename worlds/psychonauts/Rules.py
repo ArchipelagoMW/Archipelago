@@ -184,8 +184,10 @@ class PsyRules:
 
             RegionName.MMI1Duster: self.has_cobweb_duster,
 
-            RegionName.MMI2: lambda state: self.has_flowers(state) and self.has_plunger(
-                state) and self.has_pyrokinesis(state) and self.has_shield(state),
+            RegionName.MMI2: lambda state: (self.has_flowers(state)
+                                            and self.has_plunger(state)
+                                            and self.has_pyrokinesis(state)
+                                            and self.has_shield(state)),
 
             RegionName.MMI1Powerlines: self.has_cobweb_duster,
 
@@ -199,8 +201,10 @@ class PsyRules:
 
             RegionName.THMSStorage: self.has_invisibility,
 
-            RegionName.THCW: lambda state: self.has_pyrokinesis(state) and self.has_candle(
-                state) and self.has_levitation(state) and self.has_megaphone(state),
+            RegionName.THCW: lambda state: (self.has_pyrokinesis(state)
+                                            and self.has_candle(state)
+                                            and self.has_levitation(state)
+                                            and self.has_megaphone(state)),
 
             RegionName.THFB: lambda state: self.has_both_candles(state),
 
@@ -409,9 +413,16 @@ class PsyRules:
         return state.has_all([ItemName.LobotoPainting, ItemName.GloriasTrophy, ItemName.StraightJacket], self.player)
 
     def has_oleander_boss_access(self, state: CollectionState) -> bool:
-        return state.has_all(
-            [ItemName.SashaButton, ItemName.LobotoPainting, ItemName.GloriasTrophy, ItemName.StraightJacket,
-             ItemName.LungfishCall, ItemName.Cake, ItemName.OarsmansBadge], self.player)
+        items = [
+            ItemName.SashaButton,
+            ItemName.LobotoPainting,
+            ItemName.GloriasTrophy,
+            ItemName.StraightJacket,
+            ItemName.LungfishCall,
+            ItemName.Cake,
+            ItemName.OarsmansBadge
+        ]
+        return state.has_all(items, self.player)
 
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.count(item_name, self.player) for item_name in BRAIN_JARS])
