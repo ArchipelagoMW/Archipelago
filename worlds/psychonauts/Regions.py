@@ -708,15 +708,15 @@ def create_psyregions(world: MultiWorld, player: int):
 
     # Add the regions for event locations.
     reg_caja_brains = Region(RegionName.CAJABrains, player, world)
-    reg_caja_brains.locations += [PSYLocation(player, LocationName.RedeemedBrainsEvent, None, reg_caja_brains)]
+    reg_caja_brains.locations.append(PSYLocation(player, LocationName.RedeemedBrainsEvent, None, reg_caja_brains))
     world.regions.append(reg_caja_brains)
 
     reg_aslb_boss = Region(RegionName.ASLBBoss, player, world)
-    reg_aslb_boss.locations += [PSYLocation(player, LocationName.OleanderBossEvent, None, reg_aslb_boss)]
+    reg_aslb_boss.locations.append(PSYLocation(player, LocationName.OleanderBossEvent, None, reg_aslb_boss))
     world.regions.append(reg_aslb_boss)
 
     reg_mctc_boss = Region(RegionName.MCTCBoss, player, world)
-    reg_mctc_boss.locations += [PSYLocation(player, LocationName.FinalBossEvent, None, reg_mctc_boss)]
+    reg_mctc_boss.locations.append(PSYLocation(player, LocationName.FinalBossEvent, None, reg_mctc_boss))
     world.regions.append(reg_mctc_boss)
 
 
