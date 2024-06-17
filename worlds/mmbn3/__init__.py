@@ -57,8 +57,6 @@ class MMBN3World(World):
     settings: typing.ClassVar[MMBN3Settings]
     topology_present = False
 
-    data_version = 1
-
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     
