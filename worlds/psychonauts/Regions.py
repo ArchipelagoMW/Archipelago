@@ -719,17 +719,6 @@ def create_psyregions(world: MultiWorld, player: int):
     reg_mctc_boss.locations += [PSYLocation(player, LocationName.FinalBossEvent, None, reg_mctc_boss)]
     world.regions.append(reg_mctc_boss)
 
-    # should only have an item if Cobweb Duster vanilla
-    # RegionName.FordShop: [
-    #    LocationName.ShopCobwebDuster,
-    # ],
-
-    # RegionName.DUMMYLOCATIONS
-    # NOT COLLECTIBLE
-    #    LocationName.DUMMYLOCATION1NOTCOLLECTIBLE,
-    #    LocationName.DUMMYLOCATION2NOTCOLLECTIBLE,
-    #    LocationName.DUMMYLOCATION3NOTCOLLECTIBLE,
-
 
 def connect_regions(multiworld: MultiWorld, player: int):
     psy_region_connections: Dict[str, Set[str]] = {
