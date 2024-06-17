@@ -221,7 +221,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     for index, (location_id, itemcode) in enumerate(location_tuples):
         randoseed_parts.append(str(itemcode))
         # Format so that each line has 10 values, for readability
-        if index > 0 and (index + 1) % 10 == 0:
+        if index % 10 == 9:
             randoseed_parts.append(",\n")
         else:
             randoseed_parts.append(", ")
