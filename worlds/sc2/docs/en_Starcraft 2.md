@@ -1,4 +1,4 @@
-# Starcraft 2
+# StarCraft 2
 
 ## Game page in other languages:
 * [Français](/games/Starcraft%202/info/fr)
@@ -19,6 +19,13 @@ You find items by making progress in these categories:
 * Completing bonus objectives (like by gathering lab research material in Wings of Liberty)
 * Reaching milestones in the mission, such as completing part of a main objective
 * Completing challenges based on achievements in the base game, such as clearing all Zerg on Devil's Playground
+
+In Archipelago's nomenclature, these are the locations where items can be found.
+Each location, including mission completion, has a set of rules that specify the items required to access it.
+These rules were designed assuming that StarCraft 2 is played on the Brutal difficulty.
+Since each location has its own rule, it's possible that an item required for progression is in a mission where you 
+can't reach all of its locations or complete it. 
+However, mission completion is always required to gain access to new missions.
 
 Except for mission completion, these categories can be disabled in the game's settings. 
 For instance, you can disable getting items for reaching required milestones.
