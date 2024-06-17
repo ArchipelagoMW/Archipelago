@@ -22,9 +22,11 @@ Les *items* sont trouvés en accomplissant du progrès dans les catégories suiv
 *Devil's Playground*
 
 Dans la nomenclature d'Archipelago, il s'agit des *locations* où l'on peut trouver des *items*.
-Pour chaque *location*, incluant le fait de terminer une mission, il y a des règles qui définissent les *items* nécessaires pour y accéder.
+Pour chaque *location*, incluant le fait de terminer une mission, il y a des règles qui définissent les *items* 
+nécessaires pour y accéder.
 Ces règles ont été conçues en assumant que *StarCraft 2* est joué à la difficulté *Brutal*.
-Étant donné que chaque *location* a ses propres règles, il est possible qu'un *item* nécessaire à la progression se trouve dans une mission dont vous ne pouvez pas atteindre toutes les *locations* ou que vous ne pouvez pas terminer. 
+Étant donné que chaque *location* a ses propres règles, il est possible qu'un *item* nécessaire à la progression se 
+trouve dans une mission dont vous ne pouvez pas atteindre toutes les *locations* ou que vous ne pouvez pas terminer. 
 Cependant, il est toujours nécessaire de terminer une mission pour pouvoir accéder à de nouvelles missions.
 
 Ces catégories, outre la première, peuvent être désactivées dans les options du jeu. 
