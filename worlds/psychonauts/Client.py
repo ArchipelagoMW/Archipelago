@@ -275,7 +275,7 @@ class PsychonautsContext(CommonContext):
                     shutil.rmtree(os.path.join(root, dir))
 
     def on_package(self, cmd: str, args: dict):
-        if cmd in {"Connected"}:
+        if cmd == "Connected":
             # self.game_communication_path: files go in this path to pass data between us and the actual game
             seed_folder = f"AP-{self.seed_name}-P{self.slot}"
             self.game_communication_path = os.path.join(self.moddata_folder, seed_folder)
@@ -310,10 +310,10 @@ class PsychonautsContext(CommonContext):
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
         # used to get seed name for writing to the proper folder
-        if cmd in {"RoomInfo"}:
+        if cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
 
-        if cmd in {"ReceivedItems"}:
+        if cmd == "ReceivedItems":
             start_index = args["index"]
             if start_index != len(self.items_received):
                 items = args['items']
@@ -327,7 +327,7 @@ class PsychonautsContext(CommonContext):
                     for i, item in enumerate(items):
                         self.pending_received_items.append((start_index + i, NetworkItem(*item)))
 
-        if cmd in {"RoomUpdate"}:
+        if cmd == "RoomUpdate":
 
             if "checked_locations" in args:
                 for ss in self.checked_locations:
