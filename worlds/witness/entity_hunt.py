@@ -82,7 +82,6 @@ class EntityHuntPicker:
                 and not self.player_options.shuffle_discarded_panels
                 and panel_obj["locationType"] == "Discard"
             )
-            and panel_hex not in self.HUNT_ENTITIES
         )
 
     def _get_eligible_panels(self) -> Tuple[List[str], Dict[str, Set[str]]]:
