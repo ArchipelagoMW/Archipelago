@@ -201,6 +201,7 @@ class LadderStorage(Choice):
     Hard includes the above as well as going behind the map to enter closed doors from behind. Also includes getting into the Cathedral Secret Legend room mid-LS.
     Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Opening individual chests while doing ladder storage is excluded due to tedium.
+    Knocking yourself out of LS with a bomb is excluded due to the problematic nature of consumables in logic.
     """
     internal_name = "ladder_storage"
     display_name = "Ladder Storage Logic"
