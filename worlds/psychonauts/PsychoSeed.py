@@ -70,23 +70,23 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
             max_count = PSYCHORANDO_ITEM_TABLE[local_item_name]
             if count_placed < max_count:
                 base_item_code = PSYCHORANDO_BASE_ITEM_IDS[local_item_name]
-                itemcode = base_item_code + count_placed
+                item_code = base_item_code + count_placed
                 placed_item_counts[local_item_name] = count_placed + 1
             else:
                 # There aren't any Psychonauts IDs left to place this item into the Psychonauts game world, so place
                 # it as an AP placeholder item and receive the item as if it were placed non-locally.
-                itemcode = non_local_id
+                item_code = non_local_id
                 ap_item_id = ITEM_DICTIONARY[local_item_name] + AP_ITEM_OFFSET
-                local_items_placed_as_ap_items[itemcode] = ap_item_id
+                local_items_placed_as_ap_items[item_code] = ap_item_id
                 non_local_id += 1
         else:
             # item from another game
-            itemcode = non_local_id
+            item_code = non_local_id
             non_local_id += 1
 
         # Append the location ID and item code tuple to the list
 
-        location_tuples.append((location_id, itemcode))
+        location_tuples.append((location_id, item_code))
 
     return location_tuples, local_items_placed_as_ap_items
 
@@ -127,12 +127,12 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     randoseed_parts = []
 
     # First part of lua code structure
-    formattedtext1 = '''function RandoSeed(Ob)
+    formatted_text1 = '''function RandoSeed(Ob)
         if ( not Ob ) then
             Ob = CreateObject('ScriptBase')
             Ob.seed = {}
         '''
-    randoseed_parts.append(formattedtext1)
+    randoseed_parts.append(formatted_text1)
 
     # append seed_folder_name for APfoldername
     randoseed_parts.append(f"       Ob.APfoldername = '{seed_folder_name}'\n")
@@ -150,8 +150,8 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     randoseed_parts.append(f"           Ob.lootboxvaults = {_lua_bool(self.options.LootboxVaults)}\n")
 
     # append enemydamagemultiplier setting
-    enemydamagemultiplier = self.options.EnemyDamageMultiplier.value
-    randoseed_parts.append(f"           Ob.enemydamagemultiplier = {enemydamagemultiplier}\n")
+    enemy_damage_multiplier = self.options.EnemyDamageMultiplier.value
+    randoseed_parts.append(f"           Ob.enemydamagemultiplier = {enemy_damage_multiplier}\n")
 
     # append instantdeath setting
     randoseed_parts.append(f"           Ob.instantdeath = {_lua_bool(self.options.InstantDeathMode)}\n")
@@ -173,16 +173,16 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     randoseed_parts.append(f"           Ob.cobwebShuffle = {_lua_bool(self.options.MentalCobwebShuffle)}\n")
 
     # append Goal settings
-    beatoleander = _lua_bool(self.options.Goal == Goal.option_braintank
-                             or self.options.Goal == Goal.option_braintank_and_brainhunt)
-    requirebrainhunt = _lua_bool(self.options.Goal == Goal.option_brainhunt
-                                 or self.options.Goal == Goal.option_braintank_and_brainhunt)
-    randoseed_parts.append(f"           Ob.beatoleander = {beatoleander}\n")
-    randoseed_parts.append(f"           Ob.brainhunt = {requirebrainhunt}\n")
+    beat_oleander = _lua_bool(self.options.Goal == Goal.option_braintank
+                              or self.options.Goal == Goal.option_braintank_and_brainhunt)
+    require_brain_hunt = _lua_bool(self.options.Goal == Goal.option_brainhunt
+                                   or self.options.Goal == Goal.option_braintank_and_brainhunt)
+    randoseed_parts.append(f"           Ob.beatoleander = {beat_oleander}\n")
+    randoseed_parts.append(f"           Ob.brainhunt = {require_brain_hunt}\n")
 
     # append Brain Jar Requirement
-    brainsrequired = self.options.BrainsRequired.value
-    randoseed_parts.append(f"           Ob.brainsrequired = {brainsrequired}\n")
+    brains_required = self.options.BrainsRequired.value
+    randoseed_parts.append(f"           Ob.brainsrequired = {brains_required}\n")
 
     # Section where default settings booleans are written to RandoSeed.lua
     # adding new settings will remove from this list
@@ -207,7 +207,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     location_tuples = gen_psy_ids_from_filled_locations(self)
 
     # attach more lua code structure first
-    formattedtext2 = '''
+    formatted_text2 = '''
     end
     
     function Ob:fillTable()
@@ -215,7 +215,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     
     
     '''
-    randoseed_parts.append(formattedtext2)
+    randoseed_parts.append(formatted_text2)
 
     # Iterate through the sorted list of tuples and append item codes to randoseed_parts
     for index, (location_id, itemcode) in enumerate(location_tuples):
@@ -226,7 +226,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
         else:
             randoseed_parts.append(", ")
 
-    formattedtext3 = ''' }
+    formatted_text3 = ''' }
         self.seed = SEED_GOES_HERE
         end
         return Ob
@@ -234,7 +234,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
 
     '''
 
-    randoseed_parts.append(formattedtext3)
+    randoseed_parts.append(formatted_text3)
 
     # Combine all the parts into one long piece of text
     randoseed = ''.join(randoseed_parts)

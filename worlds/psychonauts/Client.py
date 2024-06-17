@@ -393,8 +393,8 @@ async def game_watcher(ctx: PsychonautsContext):
 
             # Check for Deathlinks from player
             with open(os.path.join(ctx.game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
-                RazDied = f.read()
-                if RazDied:
+                raz_died = f.read()
+                if raz_died:
                     # Move the file pointer to the beginning
                     f.seek(0)
                     # Empty the file by writing an empty string
