@@ -73,5 +73,6 @@ items = {
     **{f"{i} Coins": ItemClassification.filler for i in range(2, 169)}
 }
 
-for level in {"Turtle Zone Secret", "Macro Zone Secret", "Turtle Zone 3", "Scenic Course", "Mario Zone 2"}:
+for level in {"Turtle Zone Secret Course", "Macro Zone Secret Course", "Turtle Zone 3", "Scenic Course",
+              "Mario Zone 2"}:
     items[f"Cancel Auto Scroll - {level}"] = ItemClassification.useful

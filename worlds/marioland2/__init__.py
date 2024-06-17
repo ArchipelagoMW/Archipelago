@@ -57,8 +57,9 @@ class MarioLand2World(World):
     web = MarioLand2WebWorld()
 
     item_name_groups = {
-        "Level Progression": {item_name for item_name in items if item_name.endswith("Progression")
-                              or item_name.endswith("Secret")},
+        "Level Progression": {item_name for item_name in items if item_name.endswith(("Progression", "Secret",
+                                                                                      "Secret 1", "Secret 2"))
+                              and "Auto Scroll" not in item_name},
         "Bells": {item_name for item_name in items if "Bell" in item_name},
         "Golden Coins": {"Mario Coin", "Macro Coin", "Space Coin", "Tree Coin", "Turtle Coin", "Pumpkin Coin"},
         "Coins": {"1 Coin", *{f"{i} Coins" for i in range(2, 169)}},
