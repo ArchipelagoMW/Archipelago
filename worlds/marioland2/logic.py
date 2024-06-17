@@ -289,6 +289,10 @@ def turtle_zone_secret_course_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def turtle_zone_3_coins(state, player, coins):
+    return state.has_any(["Water Physics", "Mushroom", "Fire Flower", "Carrot"], player) or coins <= 51
+
+
 def space_zone_1_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Space Zone 1")
     if auto_scroll:
