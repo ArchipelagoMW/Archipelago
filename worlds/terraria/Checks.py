@@ -733,8 +733,7 @@ def read_data() -> Tuple[
             next_id += 1
 
     item_name_to_id["Reward: Coins"] = next_id
-    item_name_to_id["Victory"] = next_id + 1
-    next_id += 2
+    next_id += 1
 
     location_name_to_id = {}
 
