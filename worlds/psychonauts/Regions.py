@@ -1,4 +1,4 @@
-from typing import Dict, Set, Iterable, TYPE_CHECKING
+from typing import Dict, Set, Iterable, TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from . import PSYWorld
@@ -28,7 +28,7 @@ from .Locations import (
 from .Names import LocationName
 from . import Options
 
-DEFAULT_REGIONS = {
+DEFAULT_REGIONS: Dict[str, List[str]] = {
     # Starting region for Archipelago
     "Menu": [],
 
@@ -609,7 +609,7 @@ def place_events(self: "PSYWorld"):
     final_boss_location = self.multiworld.get_location(LocationName.FinalBossEvent, self.player)
     oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
     redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
-    # Brain Tank Boss
+    # Meat Circus Bosses
     if self.options.RequireMeatCircus:
         victory = final_boss_location
     else:
@@ -617,6 +617,8 @@ def place_events(self: "PSYWorld"):
         if self.options.Goal == Options.Goal.option_brainhunt:
             victory = redeemed_required_brains
         # Brain Tank or Brain Tank AND Brain Hunt
+        # For the Brain Tank AND Brain Hunt goal, both must be completed for victory. While the player can complete both
+        # goals in any order, logically, the Brain Tank goal can only be completed after the Brain Hunt goal.
         else:
             victory = oleander_boss_location
 
@@ -628,8 +630,7 @@ def place_events(self: "PSYWorld"):
         location.place_locked_item(self.create_event_item(event_name))
 
 
-def _add_locations_to_existing_region(multiworld: MultiWorld, player: int, region_name: str,
-                                      locations: Iterable[str]):
+def _add_locations_to_existing_region(multiworld: MultiWorld, player: int, region_name: str, locations: Iterable[str]):
     region = multiworld.get_region(region_name, player)
     region.locations.extend(
         PSYLocation(player, name, ALL_LOCATIONS[name] + AP_LOCATION_OFFSET, region) for name in locations
@@ -644,6 +645,8 @@ def create_deep_arrowhead_locations(multiworld: MultiWorld, player: int):
 
 
 def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
+    # Each of the Basic Braining, Sasha's Shooting Gallery, Milla's Dance Party and Brain Tumbler Experiment cobwebs
+    # are within a single region in their game level.
     _add_locations_to_existing_region(multiworld, player, RegionName.BBA2, BB_COBWEB_CHECKS)
     _add_locations_to_existing_region(multiworld, player, RegionName.SACU, SA_COBWEB_CHECKS)
     _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, MI_COBWEB_CHECKS)
@@ -722,102 +725,112 @@ def create_psyregions(world: MultiWorld, player: int):
 
 def connect_regions(multiworld: MultiWorld, player: int):
     psy_region_connections: Dict[str, Set[str]] = {
+        # The player starts from the Collective Unconscious/Sasha's Lab, which are two sides of the same level, one in
+        # the real world and one in the mental world. The Brain Tumbler, existing in both sides, transfers the player
+        # to the other side.
         "Menu": {RegionName.CASA},
-        # Collective Unconscious connections to everything else
-        RegionName.CASA: {RegionName.CAGP, RegionName.CAJA, RegionName.CAJABrains, RegionName.RANK5to20,
-                          RegionName.BBA1, RegionName.SACU, RegionName.MIFL,
-                          RegionName.NIMP, RegionName.LOMA, RegionName.MMI1Fridge, RegionName.THMS, RegionName.WWMA,
-                          RegionName.BVRB, RegionName.MCTC, },
+        # Collective Unconscious/Sasha's Lab (CASA) connects to everything else and is always accessible via a teleport
+        # item (Smelling Salts) in the player's inventory.
+        RegionName.CASA: {
+            # GPC/Wilderness is the main connection to the outside, real world.
+            RegionName.CAGP,
+            # CAJA and RANK regions are all within the same physical location (Ford's Sanctuary) and are always
+            # accessible via fast travel in Sasha's Lab and other CA regions, as well as via a teleport item (Bacon) in
+            # the player's inventory.
+            RegionName.CAJA,
+            RegionName.CAJABrains,
+            RegionName.RANK5to20,
+            # The remaining regions are the first region into each mind, accessed from the Collective Unconscious.
+            RegionName.BBA1,
+            RegionName.SACU,
+            RegionName.MIFL,
+            RegionName.NIMP,
+            RegionName.LOMA,
+            RegionName.MMI1Fridge,
+            RegionName.THMS,
+            RegionName.WWMA,
+            RegionName.BVRB,
+            RegionName.MCTC,
+        },
+        # Rank regions connect to each other in sequence.
+        RegionName.RANK5to20: {RegionName.RANK25to40},
+        RegionName.RANK25to40: {RegionName.RANK45to60},
+        RegionName.RANK45to60: {RegionName.RANK65to80},
+        RegionName.RANK65to80: {RegionName.RANK85to101},
 
-        RegionName.RANK5to20: {RegionName.RANK25to40, },
-
-        RegionName.RANK25to40: {RegionName.RANK45to60, },
-
-        RegionName.RANK45to60: {RegionName.RANK65to80, },
-
-        RegionName.RANK65to80: {RegionName.RANK85to101, },
-
-        RegionName.CAGP: {RegionName.CAGPSquirrel, RegionName.CAGPGeyser, RegionName.CAMA, RegionName.CAKC,
-                          RegionName.CARE,
-                          RegionName.CABH, RegionName.CALI, },
-
-        RegionName.CAMA: {RegionName.CAMALev, },
-
-        RegionName.CAKC: {RegionName.CAKCLev, RegionName.CAKCPyro, },
-
-        RegionName.CARE: {RegionName.CARELev, RegionName.CAREMark, },
-
-        RegionName.CABH: {RegionName.CABHLev, RegionName.ASGR, },
-
+        # Outside, real world:
+        RegionName.CAGP: {
+            RegionName.CAGPSquirrel,
+            RegionName.CAGPGeyser,
+            RegionName.CAMA,
+            RegionName.CAKC,
+            RegionName.CARE,
+            RegionName.CABH,
+            RegionName.CALI,
+        },
+        RegionName.CAMA: {RegionName.CAMALev},
+        RegionName.CAKC: {RegionName.CAKCLev, RegionName.CAKCPyro},
+        RegionName.CARE: {RegionName.CARELev, RegionName.CAREMark},
+        RegionName.CABH: {RegionName.CABHLev, RegionName.ASGR},
         RegionName.ASGR: {RegionName.ASGRLev, RegionName.ASCO, RegionName.ASCOLev, RegionName.ASCOInvis},
+        RegionName.ASCO: {RegionName.ASUP},
+        RegionName.ASUP: {RegionName.ASUPLev},
+        RegionName.ASUPLev: {RegionName.ASUPTele},
+        RegionName.ASUPTele: {RegionName.ASLB},
+        RegionName.ASLB: {RegionName.ASLBBoss},
 
-        RegionName.ASCO: {RegionName.ASUP, },
+        # Mental worlds:
+        # Basic Braining
+        RegionName.BBA1: {RegionName.BBA2, RegionName.BBA2Duster},
 
-        RegionName.ASUP: {RegionName.ASUPLev, },
+        # Sasha's Shooting Gallery
+        RegionName.SACU: {RegionName.SACULev},
 
-        RegionName.ASUPLev: {RegionName.ASUPTele, },
+        # Brain Tumbler Experiment (Nightmare in the Brain Tumbler)
+        RegionName.NIMP: {RegionName.NIMPMark},
+        RegionName.NIMPMark: {RegionName.NIBA},
 
-        RegionName.ASUPTele: {RegionName.ASLB, },
+        # Lungfishopolis
+        RegionName.LOMA: {RegionName.LOMAShield},
 
-        RegionName.ASLB: {RegionName.ASLBBoss, },
+        # The Milkman Conspiracy
+        RegionName.MMI1Fridge: {RegionName.MMI1BeforeSign},
+        RegionName.MMI1BeforeSign: {RegionName.MMI1AfterSign},
+        RegionName.MMI1AfterSign: {RegionName.MMI1Hedgetrimmers, RegionName.MMI1Duster, RegionName.MMI2},
+        RegionName.MMI1Hedgetrimmers: {RegionName.MMI1RollingPin},
+        RegionName.MMI2: {RegionName.MMI1Powerlines},
+        RegionName.MMI1Powerlines: {RegionName.MMDM},
 
-        RegionName.BBA1: {RegionName.BBA2, RegionName.BBA2Duster, },
+        # Gloria's Theater
+        RegionName.THMS: {RegionName.THMSLev, RegionName.THMSDuster},
+        RegionName.THMSDuster: {RegionName.THMSStorage},
+        RegionName.THMSStorage: {RegionName.THCW},
+        RegionName.THCW: {RegionName.THFB},
 
-        RegionName.SACU: {RegionName.SACULev, },
+        # Waterloo World
+        RegionName.WWMA: {
+            RegionName.WWMALev,
+            RegionName.WWMACarpRoof,
+            RegionName.WWMADuster,
+            RegionName.WWMAV1,
+            RegionName.WWMAKnight,
+        },
+        RegionName.WWMADuster: {RegionName.WWMADusterLev},
+        RegionName.WWMADusterLev: {RegionName.WWMADusterLevPyro},
+        RegionName.WWMAV1: {RegionName.WWMAV2},
+        RegionName.WWMAV2: {RegionName.WWMAV3},
+        RegionName.WWMAV3: {RegionName.WWMADone},
 
-        RegionName.NIMP: {RegionName.NIMPMark, },
+        # Black Velvetopia
+        RegionName.BVRB: {RegionName.BVRBLev, RegionName.BVRBTele, RegionName.BVRBDuster, RegionName.BVES},
+        RegionName.BVRBTele: {RegionName.BVRBLogs},
+        RegionName.BVES: {RegionName.BVESLev, RegionName.BVESCobra},
+        RegionName.BVESCobra: {RegionName.BVESBoss},
 
-        RegionName.NIMPMark: {RegionName.NIBA, },
-
-        RegionName.LOMA: {RegionName.LOMAShield, },
-
-        RegionName.MMI1Fridge: {RegionName.MMI1BeforeSign, },
-
-        RegionName.MMI1BeforeSign: {RegionName.MMI1AfterSign, },
-
-        RegionName.MMI1AfterSign: {RegionName.MMI1Hedgetrimmers, RegionName.MMI1Duster, RegionName.MMI2, },
-
-        RegionName.MMI1Hedgetrimmers: {RegionName.MMI1RollingPin, },
-
-        RegionName.MMI2: {RegionName.MMI1Powerlines, },
-
-        RegionName.MMI1Powerlines: {RegionName.MMDM, },
-
-        RegionName.THMS: {RegionName.THMSLev, RegionName.THMSDuster, },
-
-        RegionName.THMSDuster: {RegionName.THMSStorage, },
-
-        RegionName.THMSStorage: {RegionName.THCW, },
-
-        RegionName.THCW: {RegionName.THFB, },
-
-        RegionName.WWMA: {RegionName.WWMALev, RegionName.WWMACarpRoof, RegionName.WWMADuster, RegionName.WWMAV1,
-                          RegionName.WWMAKnight, },
-
-        RegionName.WWMADuster: {RegionName.WWMADusterLev, },
-
-        RegionName.WWMADusterLev: {RegionName.WWMADusterLevPyro, },
-
-        RegionName.WWMAV1: {RegionName.WWMAV2, },
-
-        RegionName.WWMAV2: {RegionName.WWMAV3, },
-
-        RegionName.WWMAV3: {RegionName.WWMADone, },
-
-        RegionName.BVRB: {RegionName.BVRBLev, RegionName.BVRBTele, RegionName.BVRBDuster, RegionName.BVES, },
-
-        RegionName.BVRBTele: {RegionName.BVRBLogs, },
-
-        RegionName.BVES: {RegionName.BVESLev, RegionName.BVESCobra, },
-
-        RegionName.BVESCobra: {RegionName.BVESBoss, },
-
-        RegionName.MCTC: {RegionName.MCTCLev, },
-
-        RegionName.MCTCLev: {RegionName.MCTCEscort, },
-
-        RegionName.MCTCEscort: {RegionName.MCTCBoss, },
-
+        # Meat Circus
+        RegionName.MCTC: {RegionName.MCTCLev},
+        RegionName.MCTCLev: {RegionName.MCTCEscort},
+        RegionName.MCTCEscort: {RegionName.MCTCBoss},
     }
 
     for source, target in psy_region_connections.items():
