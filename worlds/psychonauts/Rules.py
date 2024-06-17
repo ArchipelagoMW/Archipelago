@@ -333,7 +333,7 @@ class PsyRules:
         return state.has(ItemName.CobwebDuster, self.player)
 
     def has_levitation(self, state: CollectionState) -> bool:
-        if self.world.options.StartingLevitation == True:
+        if self.world.options.StartingLevitation:
             return True
         else:
             return state.has(ItemName.Levitation, self.player)

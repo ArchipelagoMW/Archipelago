@@ -66,12 +66,12 @@ class PsychonautsClientCommandProcessor(ClientCommandProcessor):
     def _cmd_clearmoddata(self):
         """Empty your Psychonauts ModData Folder"""
         if isinstance(self.ctx, PsychonautsContext):
-            if self.ctx.clear_mod_data_warning == False:
+            if not self.ctx.clear_mod_data_warning:
                 self.output(f"WARNING: This will empty all Archipelago files from your Psychonauts ModData folder.\n"
                             "If you are currently playing a multiworld, have other unfinished multiworlds,\n"
                             "or don't know why you're using this command, DO NOT DO THIS!!!\n"
                             "Run this command again to confirm and clear all contents.")
-            elif self.ctx.clear_mod_data_warning == True:
+            elif self.ctx.clear_mod_data_warning:
                 self.output(f"Emptying ModData folder.")
                 self.ctx.clear_mod_data()
 
@@ -381,7 +381,7 @@ async def game_watcher(ctx: PsychonautsContext):
             # Check for DeathLink toggle
             await ctx.update_death_link(ctx.deathlink_status)
 
-            if ctx.syncing == True:
+            if ctx.syncing:
                 sync_msg = [{'cmd': 'Sync'}]
                 if ctx.locations_checked:
                     sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
@@ -437,7 +437,7 @@ async def game_watcher(ctx: PsychonautsContext):
                 message = [{"cmd": 'LocationChecks', "locations": sending}]
                 await ctx.send_msgs(message)
 
-            if not ctx.finished_game and victory == True:
+            if not ctx.finished_game and victory:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
             await asyncio.sleep(0.1)
