@@ -7,7 +7,7 @@ import typing
 import bsdiff4
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -24,7 +24,7 @@ from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
 from .Options import DungeonItemShuffle, links_awakening_options, ShuffleInstruments
-from .Rom import LADXDeltaPatch
+from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
 
@@ -77,11 +77,6 @@ class LinksAwakeningWorld(World):
     option_definitions = links_awakening_options  # options the player can set
     settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
-
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
 
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.
@@ -437,6 +432,12 @@ class LinksAwakeningWorld(World):
                 return self.name_cache[name]
         
         return "TRADING_ITEM_LETTER"
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_output(self, output_directory: str):
         # copy items back to locations

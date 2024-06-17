@@ -87,7 +87,6 @@ class PokemonEmeraldWorld(World):
     item_name_groups = ITEM_GROUPS
     location_name_groups = LOCATION_GROUPS
 
-    data_version = 2
     required_client_version = (0, 4, 6)
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
@@ -175,26 +174,26 @@ class PokemonEmeraldWorld(World):
         # In race mode we don't patch any item location information into the ROM
         if self.multiworld.is_race and not self.options.remote_items:
             logging.warning("Pokemon Emerald: Forcing Player %s (%s) to use remote items due to race mode.",
-                            self.player, self.multiworld.player_name[self.player])
+                            self.player, self.player_name)
             self.options.remote_items.value = Toggle.option_true
 
         if self.options.goal == Goal.option_legendary_hunt:
             # Prevent turning off all legendary encounters
             if len(self.options.allowed_legendary_hunt_encounters.value) == 0:
-                raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) "
-                                  "needs to allow at least one legendary encounter when goal is legendary hunt.")
+                raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.player_name}) needs to allow at "
+                                   "least one legendary encounter when goal is legendary hunt.")
 
             # Prevent setting the number of required legendaries higher than the number of enabled legendaries
             if self.options.legendary_hunt_count.value > len(self.options.allowed_legendary_hunt_encounters.value):
                 logging.warning("Pokemon Emerald: Legendary hunt count for Player %s (%s) higher than number of allowed "
                                 "legendary encounters. Reducing to number of allowed encounters.", self.player,
-                                self.multiworld.player_name[self.player])
+                                self.player_name)
                 self.options.legendary_hunt_count.value = len(self.options.allowed_legendary_hunt_encounters.value)
 
         # Require random wild encounters if dexsanity is enabled
         if self.options.dexsanity and self.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
-            raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
-                              "not leave wild encounters vanilla if enabling dexsanity.")
+            raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.player_name}) must not leave wild "
+                               "encounters vanilla if enabling dexsanity.")
 
         # If badges or HMs are vanilla, Norman locks you from using Surf,
         # which means you're not guaranteed to be able to reach Fortree Gym,
@@ -224,7 +223,7 @@ class PokemonEmeraldWorld(World):
 
         if self.options.norman_count.value > max_norman_count:
             logging.warning("Pokemon Emerald: Norman requirements for Player %s (%s) are unsafe in combination with "
-                            "other settings. Reducing to 4.", self.player, self.multiworld.get_player_name(self.player))
+                            "other settings. Reducing to 4.", self.player, self.player_name)
             self.options.norman_count.value = max_norman_count
 
     def create_regions(self) -> None:
@@ -589,7 +588,7 @@ class PokemonEmeraldWorld(World):
         randomize_opponent_parties(self)
         randomize_starters(self)
 
-        patch = PokemonEmeraldProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        patch = PokemonEmeraldProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "data/base_patch.bsdiff4"))
         write_tokens(self, patch)
 
@@ -608,7 +607,7 @@ class PokemonEmeraldWorld(World):
         if self.options.dexsanity:
             from collections import defaultdict
 
-            spoiler_handle.write(f"\n\nWild Pokemon ({self.multiworld.player_name[self.player]}):\n\n")
+            spoiler_handle.write(f"\n\nWild Pokemon ({self.player_name}):\n\n")
 
             species_maps = defaultdict(set)
             for map in self.modified_maps.values():
@@ -670,7 +669,7 @@ class PokemonEmeraldWorld(World):
 
     def modify_multidata(self, multidata: Dict[str, Any]):
         import base64
-        multidata["connect_names"][base64.b64encode(self.auth).decode("ascii")] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        multidata["connect_names"][base64.b64encode(self.auth).decode("ascii")] = multidata["connect_names"][self.player_name]
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
