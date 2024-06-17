@@ -288,27 +288,24 @@ class PsychonautsContext(CommonContext):
             if not os.path.exists(items_collected_path):
                 with open(items_collected_path, 'w') as f:
                     f.write(f"")
-                    f.close()
             # Path to the DeathlinkIn.txt file inside the ModData folder
             deathlink_in_path = os.path.join(self.game_communication_path, "DeathlinkIn.txt")
             if not os.path.exists(deathlink_in_path):
                 with open(deathlink_in_path, 'w') as f:
                     f.write(f"")
-                    f.close()
             # Path to the DeathlinkOut.txt file inside the ModData folder
             deathlink_out_path = os.path.join(self.game_communication_path, "DeathlinkOut.txt")
             if not os.path.exists(deathlink_out_path):
                 with open(deathlink_out_path, 'w') as f:
                     f.write(f"")
-                    f.close()
             # empty ItemsReceived.txt to avoid appending duplicate items lists
             with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'w') as f:
                 f.write(f"")
-                f.close()
             for ss in self.checked_locations:
                 filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.close()
+                with open(os.path.join(self.game_communication_path, filename), 'w'):
+                    # Only need to create/truncate the file.
+                    pass
         # used to get seed name for writing to the proper folder
         elif cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
@@ -329,8 +326,9 @@ class PsychonautsContext(CommonContext):
             if "checked_locations" in args:
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        f.close()
+                    with open(os.path.join(self.game_communication_path, filename), 'w'):
+                        # Only need to create/truncate the file.
+                        pass
         elif cmd == "LocationInfo":
             if not self.has_local_location_data:
                 # It could be the response to the initial LocationScouts request that was sent out to get all local
@@ -389,7 +387,6 @@ async def game_watcher(ctx: PsychonautsContext):
                 ctx.got_deathlink = False
                 with open(os.path.join(ctx.game_communication_path, "DeathlinkIn.txt"), 'a') as f:
                     f.write("DEATH\n")
-                    f.close()
 
             # Check for Deathlinks from player
             with open(os.path.join(ctx.game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
@@ -401,7 +398,6 @@ async def game_watcher(ctx: PsychonautsContext):
                     f.truncate(0)
                     if "DeathLink" in ctx.tags:
                         await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
-                f.close()
 
             # Initialize an empty list and set.
             # The list maintains the order and the set provides fast comparisons and __contains__() checks.
