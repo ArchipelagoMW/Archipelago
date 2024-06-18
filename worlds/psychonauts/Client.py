@@ -284,24 +284,25 @@ class PsychonautsContext(CommonContext):
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
 
+            # Create empty game communication files if they don't exist.
             # Path to the ItemsCollected.txt file inside the ModData folder
             items_collected_path = os.path.join(self.game_communication_path, "ItemsCollected.txt")
             if not os.path.exists(items_collected_path):
-                with open(items_collected_path, 'w') as f:
-                    f.write(f"")
+                with open(items_collected_path, 'w'):
+                    pass
             # Path to the DeathlinkIn.txt file inside the ModData folder
             deathlink_in_path = os.path.join(self.game_communication_path, "DeathlinkIn.txt")
             if not os.path.exists(deathlink_in_path):
-                with open(deathlink_in_path, 'w') as f:
-                    f.write(f"")
+                with open(deathlink_in_path, 'w'):
+                    pass
             # Path to the DeathlinkOut.txt file inside the ModData folder
             deathlink_out_path = os.path.join(self.game_communication_path, "DeathlinkOut.txt")
             if not os.path.exists(deathlink_out_path):
-                with open(deathlink_out_path, 'w') as f:
-                    f.write(f"")
-            # empty ItemsReceived.txt to avoid appending duplicate items lists
-            with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'w') as f:
-                f.write(f"")
+                with open(deathlink_out_path, 'w'):
+                    pass
+            # Always create or truncate ItemsReceived.txt to avoid appending duplicate items lists.
+            with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'w'):
+                pass
         # used to get seed name for writing to the proper folder
         elif cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
