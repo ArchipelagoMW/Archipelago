@@ -510,6 +510,13 @@ ladx_option_groups = [
         WarpImprovements,
         AdditionalWarpPoints,
     ]),
+    OptionGroup("Miscellaneous", [
+        TradeQuest,
+        Rooster,
+        TrendyGame,
+        NagMessages,
+        BootsControls
+    ]),
     OptionGroup("Experimental", [
         DungeonShuffle,
         EntranceShuffle
@@ -522,13 +529,6 @@ ladx_option_groups = [
         GfxMod,
         Music,
         MusicChangeCondition
-    ]),
-    OptionGroup("Miscellaneous", [
-        TradeQuest,
-        Rooster,
-        TrendyGame,
-        NagMessages,
-        BootsControls
     ])
 ]
 
