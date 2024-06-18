@@ -407,7 +407,7 @@ def verify_hm_moves(multiworld, world, player):
         # as you will require cut to access celadon gyn
         elif ((not logic.can_learn_hm(test_state, "Cut", world)) and
                 (world.accessibility != "minimal" or ((not
-                world.badgesanity) and max(
+                world.options.badgesanity) and max(
                 world.elite_four_badges_condition,
                 world.options.route_22_gate_condition,
                 world.victory_road_condition)

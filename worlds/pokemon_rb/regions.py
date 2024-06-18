@@ -1523,10 +1523,12 @@ def create_regions(world):
     for location in location_data:
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
-        if location.inclusion(world) and (isinstance(location.original_item, list) or
-                not (world.options.key_items_only and item_table[location.original_item].classification
-                not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
-                location.event)):
+        included = location.inclusion(world)
+        original_item = location.original_item
+        item_is_list = isinstance(original_item, list)
+        key_items_only = world.options.key_items_only
+        progression_classifications = (ItemClassification.progression, ItemClassification.progression_skip_balancing)
+        if included and (item_is_list or (not key_items_only) or item_table[original_item].classification in progression_classifications or location.event):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
                                                 location.type, location.level, location.level_address)
             locations_per_region[location.region].append(location_object)
@@ -2033,7 +2035,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             forced_connections.update(simple_mandatory_connections)
         else:
             usable_safe_rooms += pokemarts
-            if world.key_items_only:
+            if world.options.key_items_only:
                 usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
         if world.options.door_shuffle in ("full", "insanity", "decoupled"):
             forced_connections.update(full_mandatory_connections)
@@ -2095,7 +2097,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
             forced_pokemarts = world.random.sample(pokemart_entrances, 8)
-            if world.key_items_only:
+            if world.options.key_items_only:
                 forced_pokemarts.sort(key=lambda i: i[0] != "Viridian Pokemart to Viridian City")
             for a, b in zip(forced_pokemarts, pokemarts):
                 forced_connections.add((a, b))
@@ -2107,7 +2109,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             for a, b in zip(world.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 one_way_forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
-            if world.key_items_only:
+            if world.options.key_items_only:
                 one_way_forced_connections.add((world.random.choice(initial_doors),
                                                 "Viridian Pokemart to Viridian City"))
 
@@ -2242,7 +2244,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                      or interiors[12] in connecting_interiors[13:17]))  # Saffron Gate at Rt 18 Gate
                 and interiors[15] in connecting_interiors[13:17]  # Saffron Gate at Rt 7 Gate
                 and interiors[1] in connecting_interiors[13:17]  # Saffron Gate at Rt 7-8 Underground Path
-                and (not world.tea) and world.fly_map != "Celadon City"
+                and (not world.options.tea) and world.fly_map != "Celadon City"
                 and world.town_map_fly_map != "Celadon City"):
             world.random.shuffle(interiors)
 
@@ -2254,7 +2256,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         # could make badge placement impossible
         def celadon_gym_problem():
             # Badgesanity or no badges needed for HM moves means gyms can go anywhere
-            if world.badgesanity or not world.badges_needed_for_hm_moves:
+            if world.options.badgesanity or not world.options.badges_needed_for_hm_moves:
                 return False
 
             # Celadon Gym in Pewter City and need one or more badges for Viridian City gym.
@@ -2305,8 +2307,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
                     and interiors[13] in connecting_interiors[13:17]  # Saffron Gate at Route 5 Saffron Gate
                     and multi_purpose_dungeons[0] == placed_connecting_interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
-                    and (not world.tea)                                         # not traversable backwards
-                    and multiworld.route_3_condition[player] == "defeat_brock"
+                    and (not world.options.tea)                                         # not traversable backwards
+                    and world.options.route_3_condition == "defeat_brock"
                     and world.fly_map != "Cerulean City"
                     and world.town_map_fly_map != "Cerulean City"):
                 return True
@@ -2386,9 +2388,9 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                                               + safe_connecting_interior_dungeons, 2)]
             entrances.remove(loop_out_interiors[0][1])
             entrances.remove(loop_out_interiors[1][1])
-        if not world.badgesanity:
+        if not world.options.badgesanity:
             world.random.shuffle(badges)
-            while badges[3].name == "Cascade Badge" and world.badges_needed_for_hm_moves:
+            while badges[3].name == "Cascade Badge" and world.options.badges_needed_for_hm_moves:
                 world.random.shuffle(badges)
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
@@ -2396,7 +2398,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         state = multiworld.state.copy()
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
-                    and ("Badge" not in item or world.badgesanity):
+                    and ("Badge" not in item or world.options.badgesanity):
                 state.collect(world.create_item(item))
 
         world.random.shuffle(entrances)
@@ -2415,13 +2417,13 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             "Victory Road Boulder",
             "Silph Co Liberated",
         ]
-        if world.robbed_house_officer:
+        if world.options.robbed_house_officer:
             relevant_events.append("Help Bill")
-        if world.tea:
+        if world.options.tea:
             relevant_events.append("Vending Machine Drinks")
-        if multiworld.route_3_condition[player] == "defeat_brock":
+        if world.options.route_3_condition == "defeat_brock":
             relevant_events.append("Defeat Brock")
-        elif multiworld.route_3_condition[player] == "defeat_any_gym":
+        elif world.options.route_3_condition == "defeat_any_gym":
             relevant_events += [
                 "Defeat Brock",
                 "Defeat Misty",
