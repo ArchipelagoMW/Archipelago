@@ -53,6 +53,7 @@ You can also use the Universal Tracker (by Faris and qwint) to find a complete l
 ## What should I know regarding logic?
 In general:
 - Nighttime is not considered in logic. Every check in the game is obtainable during the day.
+- Bushes are not considered in logic. It is assumed that the player will find a way past them, whether it is with a sword, a bomb, fire, luring an enemy, etc. There is also an option in the in-game randomizer settings menu to clear some of the early bushes.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
 
