@@ -439,7 +439,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
     except Exception as e:
-        raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
+        raise Options.OptionError(f"Error generating option {option_key} in {ret.game}.") from e
     else:
         from worlds import AutoWorldRegister
         player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
@@ -495,8 +495,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
-        if option_key in Options.RootOnlyOptions.type_hints:
-            continue
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
     for option_key in game_weights:

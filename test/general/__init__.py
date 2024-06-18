@@ -2,6 +2,7 @@ from argparse import Namespace
 from typing import List, Optional, Tuple, Type, Union
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
+from Options import Game
 from worlds import network_data_package
 from worlds.AutoWorld import World, call_all
 
@@ -38,7 +39,7 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
         worlds = [worlds]
     players = len(worlds)
     multiworld = MultiWorld(players)
-    multiworld.game = {player: world_type.game for player, world_type in enumerate(worlds, 1)}
+    multiworld.game = {player: Game.from_any(world_type.game) for player, world_type in enumerate(worlds, 1)}
     multiworld.player_name = {player: f"Tester{player}" for player in multiworld.player_ids}
     multiworld.set_seed(seed)
     multiworld.state = CollectionState(multiworld)

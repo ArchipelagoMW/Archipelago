@@ -1222,7 +1222,7 @@ class RootOnlyOptions(metaclass=OptionsMetaProperty):
 
 
 @dataclass
-class CommonOptions(RootOnlyOptions):
+class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
