@@ -528,7 +528,7 @@ class PokemonRedBlueWorld(World):
         self.town_map_fly_map_code = town_map_fly_map_code
 
         create_regions(self)
-        self.options.completion_condition = lambda state, player=self.player: state.has("Become Champion", player=player)
+        self.multiworld.completion_condition[self.player] = lambda state, player=self.player: state.has("Become Champion", player=player)
 
     def set_rules(self):
         set_rules(self)
