@@ -146,6 +146,19 @@ class MultiworldSend(Choice):
     default = option_immediately
 
 
+class TrapBehavior(Choice):
+    '''
+    What happens if multiple traps get sent to you while you aren't playing a level.
+    Accumulate: Every trap you receive will be applied the next time you enter.
+    Apply Once: You will be forcibly transformed or hurt only once.
+    If you die in a level with several traps accumulated, they will be limited to one each the next time you enter.
+    '''
+    display_name = 'Trap Behavior'
+    option_accumulate = 0
+    option_apply_once = 1
+    default = option_accumulate
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
