@@ -2532,6 +2532,15 @@ if "Celeste 64" in network_data_package["games"]:
     }
 
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        # These settings were added in v1.2.
+        # That this tracker also work for generated seeds on earlier versions is a check if the option is even available in the slot data.
+        if not ("move_shuffle" in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["move_shuffle"])):
+            # If moves are not shuffled add these abilities to the inventory to avoid extra handling for the collected items.
+            inventory["Climb"] = 1
+            inventory["Skid Jump"] = 1
+            inventory["Air Dash"] = 1
+            inventory["Ground Dash"] = 1
+
         for item, (prog_item, level) in non_progressive_items.items():
             if item in inventory:
                 inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
@@ -2586,9 +2595,11 @@ if "Celeste 64" in network_data_package["games"]:
         # Translate non-progression items to progression items for tracker simplicity.
         prepare_inventories(team, player, inventory, tracker_data)
 
-        friendSanity = bool(tracker_data.get_slot_data(team, player)["friendsanity"])
-        signSanity = bool(tracker_data.get_slot_data(team, player)["signsanity"])
-        carSanity = bool(tracker_data.get_slot_data(team, player)["carsanity"])
+        # These settings were added in v1.2.
+        # That this tracker also work for generated seeds on earlier versions is a check if the option is even available in the slot data.
+        friendSanity = "friendsanity" in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["friendsanity"])
+        signSanity   = "signsanity"   in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["signsanity"])
+        carSanity    = "carsanity"    in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["carsanity"])
         knowRegionsCopy = known_regions.copy() # lifecycle thing
 
         if not friendSanity : knowRegionsCopy.remove(REGION_FRIENDS)

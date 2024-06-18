@@ -1,23 +1,38 @@
 {% set icons = {
-    "Strawberry"            : "https://static.wikia.nocookie.net/celestegame/images/6/6d/Strawberry.png",
-    "Breakable Blocks"      : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Breakable%20Wall.png?raw=true",
-    "Cassettes"             : "https://static.wikia.nocookie.net/celestegame/images/4/4d/Cassette_BSide.png",
-    "Coins"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Coin.png?raw=true",
-    "Dash Refills"          : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Dash%20Refill.png?raw=true",
-    "Double Dash Refills"   : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Double%20Dash%20Refill.png?raw=true",
-    "Feathers"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Feather.png?raw=true",
-    "Springs"               : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Spring.png?raw=true",
-    "Traffic Blocks"        : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/Movable%20Platform.png?raw=true"
+    "Strawberry"            : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/strawberry.png?raw=true",
+    
+    "Air Dash"              : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/AirDash.png?raw=true",
+    "Breakable Blocks"      : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Breakables_Filled.PNG?raw=true",
+    "Cassettes"             : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Cassettes_Filled.PNG?raw=true",
+    "Climb"                 : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Climb.png?raw=true",
+    "Coins"                 : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Coins_Filled.PNG?raw=true",
+    "Dash Refills"          : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Dash_Filled.png?raw=true",
+    "Double Dash Refills"   : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/DoubleDash_Filled.png?raw=true",
+    "Feathers"              : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Feather_Filled.png?raw=true",
+    "Ground Dash"           : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/GroundDash.png?raw=true",
+    "Skid Jump"             : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/SkidJump.png?raw=true",
+    "Springs"               : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Springs_Filled.png?raw=true",
+    "Traffic Blocks"        : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Traffic_Filled.png?raw=true"
 } %}
 
 {% set inventory_order = [
     "Strawberry",
-    "Breakable Blocks",
+    "Empty",
+    "Empty",
+    "Empty",
+
+    "Climb",
+    "Skid Jump",
+    "Air Dash",
+    "Ground Dash",
+    
     "Cassettes",
-    "Coins",
     "Dash Refills",
     "Double Dash Refills",
     "Feathers",
+    
+    "Coins",
+    "Breakable Blocks",
     "Springs",
     "Traffic Blocks"
 ] %}
@@ -73,14 +88,17 @@
                     </div>
                 {% else %}
                     <div class="item">
-                        <img
-                            src="{{ icons[item] }}"
-                            alt="{{ item }}"
-                            title="{{ item }}"
-                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
-                        />
-                        {% if item in multi_items %}
-                            <div class="quantity">{{ inventory[item] }}</div>
+                        {% if item != "Empty" %}
+                            <img
+                                src="{{ icons[item] }}"
+                                alt="{{ item }}"
+                                title="{{ item }}"
+                                class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
+                            />
+
+                            {% if item in multi_items %}
+                                <div class="quantity">{{ inventory[item] }}</div>
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endif %}
