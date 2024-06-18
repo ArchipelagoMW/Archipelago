@@ -302,11 +302,6 @@ class PsychonautsContext(CommonContext):
             # empty ItemsReceived.txt to avoid appending duplicate items lists
             with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'w') as f:
                 f.write(f"")
-            for ss in self.checked_locations:
-                filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w'):
-                    # Only need to create/truncate the file.
-                    pass
         # used to get seed name for writing to the proper folder
         elif cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
@@ -323,13 +318,6 @@ class PsychonautsContext(CommonContext):
                     # because the server will immediately send all items received so far.
                     for i, item in enumerate(items):
                         self.pending_received_items.append((start_index + i, NetworkItem(*item)))
-        elif cmd == "RoomUpdate":
-            if "checked_locations" in args:
-                for ss in self.checked_locations:
-                    filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w'):
-                        # Only need to create/truncate the file.
-                        pass
         elif cmd == "LocationInfo":
             if not self.has_local_location_data:
                 # It could be the response to the initial LocationScouts request that was sent out to get all local
