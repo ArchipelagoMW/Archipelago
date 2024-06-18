@@ -147,6 +147,7 @@ class WL4Client(BizHawkClient):
     patch_suffix = '.apwl4'
     local_checked_locations: List[int]
     local_set_events: Dict[str, bool]
+    local_room: int
     rom_slot_name: str
 
     death_link: DeathLinkCtx
@@ -157,6 +158,7 @@ class WL4Client(BizHawkClient):
         super().__init__()
         self.local_checked_locations = []
         self.local_set_events = {}
+        self.local_room = (1 << 24) - 1
         self.rom_slot_name = None
         self.death_link = None
 
@@ -237,6 +239,7 @@ class WL4Client(BizHawkClient):
         multiworld_send_address = get_symbol('SendMultiworldItemsImmediately')
         passage_address = get_symbol('PassageID')
         level_address = get_symbol('InPassageLevelID')
+        room_address = get_symbol('CurrentRoomId')
         gem_1_address = get_symbol('Has1stGemPiece')
         gem_2_address = get_symbol('Has2ndGemPiece')
         gem_3_address = get_symbol('Has3rdGemPiece')
@@ -259,6 +262,7 @@ class WL4Client(BizHawkClient):
                 read8(multiworld_send_address),
                 read8(passage_address),
                 read8(level_address),
+                read8(room_address),
                 read8(gem_1_address),
                 read8(gem_2_address),
                 read8(gem_3_address),
@@ -282,6 +286,7 @@ class WL4Client(BizHawkClient):
         send_level_locations = next_int(read_result)
         passage_id = next_int(read_result)
         in_passage_level_id = next_int(read_result)
+        room_id = next_int(read_result)
         level_items = list(next_int(read_result) for _ in range(7))
         level_items.insert(5, 0)
 
@@ -365,6 +370,21 @@ class WL4Client(BizHawkClient):
                 'operations': [{'operation': 'or', 'value': event_bitfield}]
             }])
             self.local_set_events = events
+
+        # Send Wario's location
+        if game_mode not in (2, 4):
+            room = (1 << 24) - 1
+        else:
+            room = (passage_id << 16) | (in_passage_level_id << 8) | room_id
+        if self.local_room != room and client_ctx.slot is not None:
+            await client_ctx.send_msgs([{
+                'cmd': 'Set',
+                'key': f'wl4_room_{client_ctx.team}_{client_ctx.slot}',
+                'default': 0,
+                'want_reply': False,
+                'operations': [{'operation': 'replace', 'value': room}]
+            }])
+            self.local_room = room
 
         # Send death link
         if self.death_link.enabled:
