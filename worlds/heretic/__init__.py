@@ -10,7 +10,6 @@ from .Options import HereticOptions
 logger = logging.getLogger("Heretic")
 
 HERETIC_TYPE_LEVEL_COMPLETE = -2
-HERETIC_TYPE_BAG_OF_HOLDING = 8
 HERETIC_TYPE_MAP_SCROLL = 35
 
 
@@ -197,9 +196,6 @@ class HereticWorld(World):
         for item_id, item in Items.item_table.items():
             if item["doom_type"] == HERETIC_TYPE_LEVEL_COMPLETE:
                 continue # We'll fill it manually later
-
-            if item["doom_type"] == HERETIC_TYPE_BAG_OF_HOLDING:
-                continue # See the code directly after this section
 
             if item["doom_type"] == HERETIC_TYPE_MAP_SCROLL and start_with_map_scrolls:
                 continue # We'll fill it manually, and we will put fillers in place
