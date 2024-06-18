@@ -23,8 +23,14 @@ if __name__ == "__main__":
     Utils.init_logging("PsychonautsClient", exception_logger="Client")
 
 from NetUtils import NetworkItem, ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
-    CommonContext, server_loop
+from CommonClient import (
+    gui_enabled,
+    logger,
+    get_base_parser,
+    ClientCommandProcessor,
+    CommonContext,
+    server_loop
+)
 
 # Included when sending items to Psychonauts specify whether the item is from a local or non-local source.
 LOCAL_ITEM_IDENTIFIER = 0
