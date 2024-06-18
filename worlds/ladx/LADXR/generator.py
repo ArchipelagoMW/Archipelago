@@ -390,7 +390,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
-                if int(world.options.trendy_game) >= TrendyGame.option_hardest:
+                if world.options.trendy_game >= TrendyGame.option_hardest:
                     rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
