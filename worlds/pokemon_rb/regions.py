@@ -2260,11 +2260,11 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             # Celadon Gym in Pewter City and need one or more badges for Viridian City gym.
             # No gym leaders would be reachable.
-            if gyms[3] == placed_gyms[0] and world.viridian_gym_condition > 0:
+            if gyms[3] == placed_gyms[0] and world.options.viridian_gym_condition > 0:
                 return True
 
             # Celadon Gym not on Cinnabar Island or can access Viridian City gym with one badge
-            if not gyms[3] == placed_gyms[6] and world.viridian_gym_condition > 1:
+            if not gyms[3] == placed_gyms[6] and world.options.viridian_gym_condition > 1:
                 return False
 
             # At this point we need to see if we can get beyond Pewter/Cinnabar with just one badge
@@ -2276,15 +2276,15 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 return False
 
             # Route 3 condition is boulder badge but Mt Moon entrance leads to safe dungeons or Rock Tunnel
-            if multiworld.route_3_condition[player] == "boulder_badge" and placed_connecting_interior_dungeons[2] not \
+            if world.options.route_3_condition == "boulder_badge" and placed_connecting_interior_dungeons[2] not \
                     in (unsafe_connecting_interior_dungeons[0], unsafe_connecting_interior_dungeons[2]):
                 return False
 
             # Route 3 condition is Defeat Brock and he is in Pewter City, or any other condition besides Boulder Badge.
             # Any badge can land in Pewter City, so the only problematic dungeon at Mt Moon is Seafoam Islands since
             # it requires two badges
-            if (((multiworld.route_3_condition[player] == "defeat_brock" and gyms[0] == placed_gyms[0])
-                    or multiworld.route_3_condition[player] not in ("defeat_brock", "boulder_badge"))
+            if (((world.options.route_3_condition == "defeat_brock" and gyms[0] == placed_gyms[0])
+                    or world.options.route_3_condition not in ("defeat_brock", "boulder_badge"))
                     and placed_connecting_interior_dungeons[2] != unsafe_connecting_interior_dungeons[0]):
                 return False
 
@@ -2622,7 +2622,7 @@ class PokemonRBWarp(Entrance):
         if self.connected_region is None:
             return False
         if "Elevator" in self.parent_region.name and (
-                (state.options.all_elevators_locked
+                (state.multiworld.worlds[self.player].options.all_elevators_locked
                  or "Rocket Hideout" in self.parent_region.name)
                 and not state.has("Lift Key", self.player)):
             return False
