@@ -379,9 +379,6 @@ class MessengerHardRules(MessengerRules):
                     self.has_dart,
                 "Autumn Hills - Climbing Claws Shop -> Autumn Hills - Key of Hope Checkpoint":
                     self.true,  # super easy normal clip - also possible with moderately difficult cloud stepping
-                "Autumn Hills Seal - Double Swing Saws":
-                    lambda state: self.has_vertical(state) or self.has_windmill(state) or
-                                  self.can_destroy_projectiles(state),
                 # Howling Grotto
                 "Howling Grotto - Portal -> Howling Grotto - Crushing Pits Shop":
                     self.true,
@@ -435,6 +432,9 @@ class MessengerHardRules(MessengerRules):
             {
                 "Autumn Hills Seal - Spike Ball Darts":
                     lambda state: self.has_vertical(state) and self.has_windmill(state) or self.is_aerobatic(state),
+                "Autumn Hills Seal - Double Swing Saws":
+                    lambda state: self.has_vertical(state) or self.has_windmill(state) or
+                                  self.can_destroy_projectiles(state),
                 "Bamboo Creek - Claustro":
                     self.has_wingsuit,
                 "Bamboo Creek Seal - Spike Ball Pits":
