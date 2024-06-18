@@ -92,7 +92,7 @@ class PSYWorld(World):
         """
         if name in BRAIN_JARS:
             # make brains filler if BrainHunt not a selected option
-            if self.options.Goal == 0:
+            if self.options.Goal == Goal.option_braintank:
                 item_classification = ItemClassification.filler
             else:
                 item_classification = ItemClassification.progression
