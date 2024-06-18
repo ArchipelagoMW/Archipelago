@@ -139,35 +139,59 @@ function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
     if event.tick % 60 == 30 then
-        local surface = game.get_surface(1)
+        if storage.energy_link_bridges == nil then
+            storage.energy_link_bridges = {}
+        end
         local force = "player"
-        local bridges = surface.find_entities_filtered({name="ap-energy-bridge", force=force})
-        local bridgecount = table_size(bridges)
-        storage.forcedata[force].energy_bridges = bridgecount
+        local bridges = storage.energy_link_bridges
+		local bridgecount = 0
+		for i, bridge in pairs(bridges) do
+			if bridge and bridge.valid then
+				bridgecount = bridgecount + 1
+			end
+		end
+		storage.forcedata[force].energy_bridges = bridgecount
         if storage.forcedata[force].energy == nil then
             storage.forcedata[force].energy = 0
         end
         if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
-            for i, bridge in ipairs(bridges) do
-                if bridge.energy > ENERGY_INCREMENT*3 then
-                    storage.forcedata[force].energy = storage.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
-                    bridge.energy = bridge.energy - ENERGY_INCREMENT
+            for i, bridge in pairs(bridges) do
+                if bridge and bridge.valid then
+                    if bridge.energy > ENERGY_INCREMENT*3 then
+                        storage.forcedata[force].energy = storage.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
+                        bridge.energy = bridge.energy - ENERGY_INCREMENT
+                    end
                 end
             end
         end
-        for i, bridge in ipairs(bridges) do
-            if storage.forcedata[force].energy < ENERGY_INCREMENT then
-                break
-            end
-            if bridge.energy < ENERGY_INCREMENT*2 and storage.forcedata[force].energy > ENERGY_INCREMENT then
-                storage.forcedata[force].energy = storage.forcedata[force].energy - ENERGY_INCREMENT
-                bridge.energy = bridge.energy + ENERGY_INCREMENT
+        for i, bridge in pairs(bridges) do
+            if bridge and bridge.valid then
+                if storage.forcedata[force].energy < ENERGY_INCREMENT then
+                    break
+                end
+                if bridge.energy < ENERGY_INCREMENT*2 and storage.forcedata[force].energy > ENERGY_INCREMENT then
+                    storage.forcedata[force].energy = storage.forcedata[force].energy - ENERGY_INCREMENT
+                    bridge.energy = bridge.energy + ENERGY_INCREMENT
+                end
             end
         end
     end
 end
+function on_energy_bridge_constructed(event)
+    if event.created_entity and event.created_entity.valid then
+        storage.energy_link_bridges[event.created_entity.unit_number] = event.created_entity
+    end
+end
+function on_energy_bridge_removed(event)
+	storage.energy_link_bridges[event.entity.unit_number] = nil
+end
 if (ENERGY_INCREMENT) then
     script.on_event(defines.events.on_tick, on_check_energy_link)
+    script.on_event(defines.events.on_built_entity, on_energy_bridge_constructed)
+    script.on_event(defines.events.on_robot_built_entity, on_energy_bridge_constructed)
+    script.on_event(defines.events.on_player_mined_entity, on_energy_bridge_removed)
+    script.on_event(defines.events.on_robot_mined_entity, on_energy_bridge_removed)
+    script.on_event(defines.events.on_entity_died, on_energy_bridge_removed)
 end
 
 {% if not imported_blueprints -%}
