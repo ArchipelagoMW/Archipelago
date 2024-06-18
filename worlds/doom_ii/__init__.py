@@ -10,7 +10,6 @@ from .Options import DOOM2Options
 logger = logging.getLogger("DOOM II")
 
 DOOM_TYPE_LEVEL_COMPLETE = -2
-DOOM_TYPE_BACKPACK = 8
 DOOM_TYPE_COMPUTER_AREA_MAP = 2026
 
 
@@ -187,9 +186,6 @@ class DOOM2World(World):
         for item_id, item in Items.item_table.items():
             if item["doom_type"] == DOOM_TYPE_LEVEL_COMPLETE:
                 continue # We'll fill it manually later
-
-            if item["doom_type"] == DOOM_TYPE_BACKPACK:
-                continue # See the code directly after this section
 
             if item["doom_type"] == DOOM_TYPE_COMPUTER_AREA_MAP and start_with_computer_area_maps:
                 continue # We'll fill it manually, and we will put fillers in place
