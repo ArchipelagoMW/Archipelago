@@ -231,6 +231,8 @@ class MessengerRules:
                 self.is_aerobatic,
             "Autumn Hills Seal - Trip Saws":
                 self.has_wingsuit,
+            "Autumn Hills Seal - Double Swing Saws":
+                self.has_vertical,
             # forlorn temple
             "Forlorn Temple Seal - Rocket Maze":
                 self.has_vertical,
@@ -377,6 +379,9 @@ class MessengerHardRules(MessengerRules):
                     self.has_dart,
                 "Autumn Hills - Climbing Claws Shop -> Autumn Hills - Key of Hope Checkpoint":
                     self.true,  # super easy normal clip - also possible with moderately difficult cloud stepping
+                "Autumn Hills Seal - Double Swing Saws":
+                    lambda state: self.has_vertical(state) or self.has_windmill(state) or
+                                  self.can_destroy_projectiles(state),
                 # Howling Grotto
                 "Howling Grotto - Portal -> Howling Grotto - Crushing Pits Shop":
                     self.true,
