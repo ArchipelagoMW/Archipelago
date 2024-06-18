@@ -416,10 +416,10 @@ async def game_watcher(ctx: PsychonautsContext):
                     sending.append(value)
                     sending_set.add(value)
 
-        for root, dirs, files in os.walk(game_communication_path):
-            for file in files:
-                if file.find("victory.txt") > -1:
-                    victory = True
+        # Psychonauts sends victory to the AP client by writing a specifically named file to the game communication
+        # directory.
+        if os.path.exists(os.path.join(game_communication_path, "victory.txt")):
+            victory = True
 
         if ctx.locations_checked != sending_set:
             # The checked locations differ from before, so message the server and update the checked locations for the
