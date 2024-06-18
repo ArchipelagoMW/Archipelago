@@ -1094,7 +1094,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
-            mission_variant = 0  # temp value until generator logic is done
+            # TODO: Add logic to determine which variant, based on selected map ID
+            mission_variant = 0  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
