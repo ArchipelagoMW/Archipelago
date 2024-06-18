@@ -153,13 +153,6 @@ class PsychonautsContext(CommonContext):
                     if "Items" not in file and "Deathlink" not in file:
                         os.remove(root + "/" + file)
 
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
-
     async def shutdown(self):
         await super().shutdown()
         if self.game_communication_path is not None:
