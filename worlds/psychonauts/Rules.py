@@ -455,7 +455,7 @@ class PsyRules:
 
             # Extra per-cobweb rules that are not covered by the Region the cobweb is in:
             # BB Grindrail Wall requires Levitation because the ground around the cobweb is sloped and Raz bounces off
-            # it when falling onto it too fast, so Levitation is need to float down slowly.
+            # it when falling onto it too fast, so Levitation is needed to float down slowly.
             add_rule(multiworld.get_location(LocationName.CobwebGrindrailWall, player), self.has_levitation)
 
         if local_only_forbidden:

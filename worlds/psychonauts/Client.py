@@ -5,7 +5,8 @@ import logging
 import os
 import shutil
 import sys
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, NoReturn
+from argparse import Namespace
 
 import ModuleUpdate
 
@@ -39,7 +40,7 @@ NON_LOCAL_ITEM_IDENTIFIER = 1
 
 # using this to find the folder game was launched from
 # then find ModData folder there
-def find_moddata_folder(root_directory):
+def find_moddata_folder(root_directory: str) -> str:
     moddata_folder = os.path.join(root_directory, "ModData")
     if os.path.exists(moddata_folder):
         return moddata_folder
@@ -48,7 +49,7 @@ def find_moddata_folder(root_directory):
                               "Unable to infer required game_communication_path")
 
 
-def print_error_and_close(msg):
+def print_error_and_close(msg: str) -> NoReturn:
     logger.error("Error: " + msg)
     Utils.messagebox("Error", msg, error=True)
     sys.exit(1)
@@ -167,9 +168,13 @@ class PsychonautsContext(CommonContext):
                     if "Items" not in file and "Deathlink" not in file:
                         os.remove(root + "/" + file)
 
-    def calc_psy_ids_from_scouted_local_locations(self):
-        # Attempt to figure out the Psychonauts IDs for all locally placed items at locations used in PsychoSeed
-        # generation.
+    def calc_psy_ids_from_scouted_local_locations(self) -> bool:
+        """
+        Attempt to figure out the Psychonauts IDs for all locally placed items at locations used in PsychoSeed
+        generation.
+
+        :returns: True on success, False otherwise.
+        """
         location_tuples = []
         for psy_location_id in PSYCHOSEED_LOCATION_IDS:
             ap_location_id = psy_location_id + AP_LOCATION_OFFSET
@@ -205,7 +210,7 @@ class PsychonautsContext(CommonContext):
 
         return True
 
-    def receive_local_item(self, index, ap_location_id, ap_item_id):
+    def receive_local_item(self, index: int, ap_location_id: int, ap_item_id: int):
         """
         Receive an item from the local world.
         """
@@ -245,7 +250,7 @@ class PsychonautsContext(CommonContext):
             logger.error("Error: Tried to receive item '%s' from local location '%i', but the item should be '%s'"
                          " according to scouted location info.", ap_item_name, ap_location_id, expected_item_name)
 
-    def receive_non_local_item(self, index, ap_item_id):
+    def receive_non_local_item(self, index: int, ap_item_id: int):
         """
         Receive an item from another world.
         """
@@ -258,7 +263,12 @@ class PsychonautsContext(CommonContext):
         with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'a') as f:
             f.write(f"{index},{base_psy_item_id},{NON_LOCAL_ITEM_IDENTIFIER}\n")
 
-    def receive_item(self, index, network_item: NetworkItem):
+    def receive_item(self, index: int, network_item: NetworkItem):
+        """
+        Tell Psychonauts to receive an item.
+
+        Must not be called until the AP client has received and processed local location data.
+        """
         if not self.has_local_location_data:
             raise RuntimeError("receive_item() was called before local location data has been received and processed")
 
@@ -269,6 +279,9 @@ class PsychonautsContext(CommonContext):
             self.receive_non_local_item(index, network_item.item)
 
     def clear_mod_data(self):
+        """
+        Remove all files and directories within the ModData directory.
+        """
         for root, dirs, files in os.walk(self.moddata_folder):
             for directory in dirs:
                 if "AP-" in directory:
@@ -423,7 +436,7 @@ async def game_watcher(ctx: PsychonautsContext):
 
 
 def launch():
-    async def main(args):
+    async def main(args: Namespace):
         ctx = PsychonautsContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:

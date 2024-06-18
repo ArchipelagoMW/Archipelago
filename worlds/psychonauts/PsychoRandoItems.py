@@ -8,7 +8,7 @@ from .Names import ItemName
 # placeholder item instead. The order and counts must exactly match ShuffleItems.lua in PsychoRando, so that the IDs
 # will match.
 # Used to map locally placed AP items to PsychoRando item IDs.
-PSYCHORANDO_ITEM_TABLE = {
+PSYCHORANDO_ITEM_TABLE: Dict[str, int] = {
     # Current Props from AS, 6 total
     ItemName.LungfishCall: 1,
     ItemName.GloriasTrophy: 1,

@@ -212,7 +212,6 @@ class PSYWorld(World):
         """
         Creates the Regions and Connects them.
         """
-
         Regions.create_psyregions(self.multiworld, self.player)
         Regions.connect_regions(self.multiworld, self.player)
         Regions.place_events(self)

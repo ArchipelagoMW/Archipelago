@@ -91,7 +91,7 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
     return location_tuples, local_items_placed_as_ap_items
 
 
-def gen_psy_ids_from_filled_locations(self) -> List[Tuple[int, int]]:
+def gen_psy_ids_from_filled_locations(self: "PSYWorld") -> List[Tuple[int, int]]:
     location_tuples = []
 
     for location in self.multiworld.get_filled_locations(self.player):
@@ -116,7 +116,7 @@ def _lua_bool(option):
     return "TRUE" if option else "FALSE"
 
 
-def gen_psy_seed(self: "PSYWorld", output_directory):
+def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # Mod name for Zip Folder
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     # Folder name for Client and Game to Read/Write to
