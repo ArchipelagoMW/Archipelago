@@ -315,7 +315,7 @@ Access rules usually check for one of two things.
 Keep in mind that entrances and locations implicitly check for the accessibility of their parent region, so you do not need to check explicitly for it.
 
 #### An important note on Entrance access rules:
-When using `state.can_reach` on an entrance access condition, you must also use `multiworld.register_indirect_condition`.
+When using `state.can_reach` within an entrance access condition, you must also use `multiworld.register_indirect_condition`.
 
 For efficiency reasons, every time reachable regions are searched, every entrance is only checked once in a somewhat non-deterministic order.
 This is fine when checking for items using `state.has`, because items do not change during a region sweep.
