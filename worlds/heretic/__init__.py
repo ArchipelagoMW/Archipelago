@@ -10,6 +10,7 @@ from .Options import HereticOptions
 logger = logging.getLogger("Heretic")
 
 HERETIC_TYPE_LEVEL_COMPLETE = -2
+HERETIC_TYPE_BAG_OF_HOLDING = 8
 HERETIC_TYPE_MAP_SCROLL = 35
 
 
@@ -197,6 +198,9 @@ class HereticWorld(World):
             if item["doom_type"] == HERETIC_TYPE_LEVEL_COMPLETE:
                 continue # We'll fill it manually later
 
+            if item["doom_type"] == HERETIC_TYPE_BAG_OF_HOLDING:
+                continue # See the code directly after this section
+
             if item["doom_type"] == HERETIC_TYPE_MAP_SCROLL and start_with_map_scrolls:
                 continue # We'll fill it manually, and we will put fillers in place
 
@@ -205,6 +209,17 @@ class HereticWorld(World):
 
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
+
+        # Bag(s) of Holding based on options
+        if self.options.split_bag_of_holding.value:
+            itempool += [self.create_item("Crystal Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Ethereal Arrow Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Claw Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Rune Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Flame Orb Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+            itempool += [self.create_item("Mace Sphere Capacity") for _ in range(self.options.bag_of_holding_count.value)]
+        else:
+            itempool += [self.create_item("Bag of Holding") for _ in range(self.options.bag_of_holding_count.value)]
 
         # Place end level items in locked locations
         for map_name in Maps.map_names:
@@ -289,5 +304,19 @@ class HereticWorld(World):
         slot_data["episode3"] = self.included_episodes[2]
         slot_data["episode4"] = self.included_episodes[3]
         slot_data["episode5"] = self.included_episodes[4]
+
+        # Send slot data for ammo capacity values; this must be generic because Doom uses it too
+        slot_data["ammo1start"] = self.options.wand_crystal_capacity.value
+        slot_data["ammo2start"] = self.options.ethereal_arrow_capacity.value
+        slot_data["ammo3start"] = self.options.claw_orb_capacity.value
+        slot_data["ammo4start"] = self.options.rune_capacity.value
+        slot_data["ammo5start"] = self.options.flame_orb_capacity.value
+        slot_data["ammo6start"] = self.options.mace_sphere_capacity.value
+        slot_data["ammo1add"] = self.options.wand_crystal_boh_increase.value
+        slot_data["ammo2add"] = self.options.ethereal_arrow_boh_increase.value
+        slot_data["ammo3add"] = self.options.claw_orb_boh_increase.value
+        slot_data["ammo4add"] = self.options.rune_boh_increase.value
+        slot_data["ammo5add"] = self.options.flame_orb_boh_increase.value
+        slot_data["ammo6add"] = self.options.mace_sphere_boh_increase.value
 
         return slot_data

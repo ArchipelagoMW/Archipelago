@@ -1,4 +1,4 @@
-from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -144,6 +144,116 @@ class Episode5(Toggle):
     display_name = "Episode 5"
 
 
+class SplitBagOfHolding(Toggle):
+    """Split the Bag of Holding into six individual items, each one increasing ammo capacity for one type of weapon only."""
+    display_name = "Split Bag of Holding"
+
+
+class BagOfHoldingCount(Range):
+    """How many Bags of Holding will be available.
+    If Split Bag of Holding is set, this will be the number of each capacity upgrade available."""
+    display_name = "Bag of Holding Count"
+    range_start = 0
+    range_end = 10
+    default = 1
+
+
+class WandCrystalCapacity(Range):
+    """Set the starting ammo capacity for Wand crystals."""
+    display_name = "Wand Crystal Capacity"
+    range_start = 100
+    range_end = 999
+    default = 100
+
+
+class EtherealArrowCapacity(Range):
+    """Set the starting ammo capacity for Ethereal arrows."""
+    display_name = "Ethereal Arrow Capacity"
+    range_start = 50
+    range_end = 999
+    default = 50
+
+
+class ClawOrbCapacity(Range):
+    """Set the starting ammo capacity for Claw orbs."""
+    display_name = "Claw Orb Capacity"
+    range_start = 200
+    range_end = 999
+    default = 200
+
+
+class RuneCapacity(Range):
+    """Set the starting ammo capacity for Runes."""
+    display_name = "Rune Capacity"
+    range_start = 200
+    range_end = 999
+    default = 200
+
+
+class FlameOrbCapacity(Range):
+    """Set the starting ammo capacity for Flame orbs."""
+    display_name = "Flame Orb Capacity"
+    range_start = 20
+    range_end = 999
+    default = 20
+
+
+class MaceSphereCapacity(Range):
+    """Set the starting ammo capacity for Mace spheres."""
+    display_name = "Mace Sphere Capacity"
+    range_start = 150
+    range_end = 999
+    default = 150
+
+
+class WandCrystalIncrease(Range):
+    """Set the amount of Wand crystal capacity gained when collecting a bag of holding."""
+    display_name = "Wand Crystal BoH Increase"
+    range_start = 10
+    range_end = 999
+    default = 100
+
+
+class EtherealArrowIncrease(Range):
+    """Set the amount of Ethereal arrow capacity gained when collecting a bag of holding."""
+    display_name = "Ethereal Arrow BoH Increase"
+    range_start = 5
+    range_end = 999
+    default = 50
+
+
+class ClawOrbIncrease(Range):
+    """Set the amount of Claw orb capacity gained when collecting a bag of holding."""
+    display_name = "Claw Orb BoH Increase"
+    range_start = 20
+    range_end = 999
+    default = 200
+
+
+class RuneIncrease(Range):
+    """Set the amount of Rune capacity gained when collecting a bag of holding."""
+    display_name = "Rune BoH Increase"
+    range_start = 20
+    range_end = 999
+    default = 200
+
+
+class FlameOrbIncrease(Range):
+    """Set the amount of Flame orb capacity gained when collecting a bag of holding."""
+    display_name = "Flame Orb BoH Increase"
+    range_start = 2
+    range_end = 999
+    default = 20
+
+
+class MaceSphereIncrease(Range):
+    """Set the amount of Mace sphere capacity gained when collecting a bag of holding."""
+    display_name = "Mace Sphere BoH Increase"
+    range_start = 15
+    range_end = 999
+    default = 150
+
+
 @dataclass
 class HereticOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -163,3 +273,19 @@ class HereticOptions(PerGameCommonOptions):
     episode3: Episode3
     episode4: Episode4
     episode5: Episode5
+
+    split_bag_of_holding: SplitBagOfHolding
+    bag_of_holding_count: BagOfHoldingCount
+    wand_crystal_capacity: WandCrystalCapacity
+    wand_crystal_boh_increase: WandCrystalIncrease
+    ethereal_arrow_capacity: EtherealArrowCapacity
+    ethereal_arrow_boh_increase: EtherealArrowIncrease
+    claw_orb_capacity: ClawOrbCapacity
+    claw_orb_boh_increase: ClawOrbIncrease
+    rune_capacity: RuneCapacity
+    rune_boh_increase: RuneIncrease
+    flame_orb_capacity: FlameOrbCapacity
+    flame_orb_boh_increase: FlameOrbIncrease
+    mace_sphere_capacity: MaceSphereCapacity
+    mace_sphere_boh_increase: MaceSphereIncrease
+

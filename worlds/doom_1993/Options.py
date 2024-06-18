@@ -1,4 +1,4 @@
-from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -144,6 +144,84 @@ class Episode4(Toggle):
     display_name = "Episode 4"
 
 
+class SplitBackpack(Toggle):
+    """Split the Backpack into four individual items, each one increasing ammo capacity for one type of weapon only."""
+    display_name = "Split Bag of Holding"
+
+
+class BackpackCount(Range):
+    """How many Backpacks will be available.
+    If Split Backpack is set, this will be the number of each capacity upgrade available."""
+    display_name = "Backpack Count"
+    range_start = 0
+    range_end = 10
+    default = 1
+
+
+class BulletCapacity(Range):
+    """Set the starting ammo capacity for bullets."""
+    display_name = "Bullet Capacity"
+    range_start = 200
+    range_end = 999
+    default = 200
+
+
+class ShellCapacity(Range):
+    """Set the starting ammo capacity for shotgun shells."""
+    display_name = "Shotgun Shell Capacity"
+    range_start = 50
+    range_end = 999
+    default = 50
+
+
+class RocketCapacity(Range):
+    """Set the starting ammo capacity for rockets."""
+    display_name = "Rocket Capacity"
+    range_start = 50
+    range_end = 999
+    default = 50
+
+
+class EnergyCellCapacity(Range):
+    """Set the starting ammo capacity for energy cells."""
+    display_name = "Energy Cell Capacity"
+    range_start = 300
+    range_end = 999
+    default = 300
+
+
+class BulletIncrease(Range):
+    """Set the amount of bullet capacity gained when collecting a backpack."""
+    display_name = "Bullet Backpack Increase"
+    range_start = 20
+    range_end = 999
+    default = 200
+
+
+class ShellIncrease(Range):
+    """Set the amount of shotgun shell capacity gained when collecting a backpack."""
+    display_name = "Shotgun Shell Backpack Increase"
+    range_start = 5
+    range_end = 999
+    default = 50
+
+
+class RocketIncrease(Range):
+    """Set the amount of rocket capacity gained when collecting a backpack."""
+    display_name = "Rocket Backpack Increase"
+    range_start = 5
+    range_end = 999
+    default = 50
+
+
+class EnergyCellIncrease(Range):
+    """Set the amount of energy cell capacity gained when collecting a backpack."""
+    display_name = "Energy Cell Backpack Increase"
+    range_start = 30
+    range_end = 999
+    default = 300
+
+
 @dataclass
 class DOOM1993Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -162,4 +240,15 @@ class DOOM1993Options(PerGameCommonOptions):
     episode2: Episode2
     episode3: Episode3
     episode4: Episode4
+
+    split_backpack: SplitBackpack
+    backpack_count: BackpackCount
+    bullet_capacity: BulletCapacity
+    bullet_backpack_increase: BulletIncrease
+    shell_capacity: ShellCapacity
+    shell_backpack_increase: ShellIncrease
+    rocket_capacity: RocketCapacity
+    rocket_backpack_increase: RocketIncrease
+    energy_cell_capacity: EnergyCellCapacity
+    energy_cell_backpack_increase: EnergyCellIncrease
 

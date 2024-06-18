@@ -695,13 +695,11 @@ def set_episode5_rules(player, multiworld, pro):
         state.has("Phoenix Rod", player, 1) and
         state.has("Firemace", player, 1) and
         state.has("Hellstaff", player, 1) and
-        state.has("Gauntlets of the Necromancer", player, 1) and
-        state.has("Bag of Holding", player, 1))
+        state.has("Gauntlets of the Necromancer", player, 1))
 
     # Skein of D'Sparil (E5M9)
     set_rule(multiworld.get_entrance("Hub -> Skein of D'Sparil (E5M9) Main", player), lambda state:
         state.has("Skein of D'Sparil (E5M9)", player, 1) and
-        state.has("Bag of Holding", player, 1) and
         state.has("Hellstaff", player, 1) and
         state.has("Phoenix Rod", player, 1) and
         state.has("Dragon Claw", player, 1) and
