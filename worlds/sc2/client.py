@@ -1094,6 +1094,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
+            # TODO: Add logic to determine which variant, based on selected map ID
+            mission_variant = 0  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -1102,7 +1104,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -1116,7 +1118,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.mission_order,
                 1 if self.ctx.nova_covert_ops_only else 0,
                 self.ctx.grant_story_levels,
-                self.ctx.enable_morphling
+                self.ctx.enable_morphling,
+                mission_variant
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
