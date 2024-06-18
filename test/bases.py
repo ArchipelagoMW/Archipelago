@@ -221,7 +221,7 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            if item.location and item.location.event and item.location in self.multiworld.state.events:
+            if item.location and item.advancement and item.location in self.multiworld.state.events:
                 self.multiworld.state.events.remove(item.location)
             self.multiworld.state.remove(item)
 
@@ -329,7 +329,7 @@ class WorldTestBase(unittest.TestCase):
                 for n in range(len(locations) - 1, -1, -1):
                     if locations[n].can_reach(state):
                         sphere.append(locations.pop(n))
-                self.assertTrue(sphere or self.multiworld.accessibility[1] == "minimal",
+                self.assertTrue(sphere or self.multiworld.worlds[1].options.accessibility == "minimal",
                                 f"Unreachable locations: {locations}")
                 if not sphere:
                     break

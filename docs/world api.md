@@ -56,6 +56,12 @@ webhost:
 
 * `options_page` can be changed to a link instead of an AP-generated options page.
 
+* `rich_text_options_doc` controls whether [Option documentation] uses plain text (`False`) or rich text (`True`). It
+  defaults to `False`, but world authors are encouraged to set it to `True` for nicer-looking documentation that looks
+  good on both the WebHost and the YAML template.
+
+  [Option documentation]: /docs/options%20api.md#option-documentation
+
 * `theme` to be used for your game-specific AP pages. Available themes:
 
   | dirt                                       | grass (default)                             | grassFlowers                                       | ice                                       | jungle                                       | ocean                                       | partyTime                                       | stone                                       |
@@ -121,6 +127,53 @@ class RLWeb(WebWorld):
     # ...
 ```
 
+* `location_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of locations 
+or location groups.
+
+  ```python
+  # locations.py
+  location_descriptions = {
+      "Red Potion #6": "In a secret destructible block under the second stairway",
+      "L2 Spaceship": """
+        The group of all items in the spaceship in Level 2.
+  
+        This doesn't include the item on the spaceship door, since it can be
+        accessed without the Spaceship Key.
+      """
+  }
+  
+  # __init__.py
+  from worlds.AutoWorld import WebWorld
+  from .locations import location_descriptions
+  
+  
+  class MyGameWeb(WebWorld):
+      location_descriptions = location_descriptions
+  ```
+
+* `item_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of items or item 
+groups.
+
+  ```python
+  # items.py
+  item_descriptions = {
+      "Red Potion": "A standard health potion",
+      "Spaceship Key": """
+        The key to the spaceship in Level 2.
+  
+        This is necessary to get to the Star Realm.
+      """,
+  }
+  
+  # __init__.py
+  from worlds.AutoWorld import WebWorld
+  from .items import item_descriptions
+  
+  
+  class MyGameWeb(WebWorld):
+      item_descriptions = item_descriptions
+  ```
+
 ### MultiWorld Object
 
 The `MultiWorld` object references the whole multiworld (all items and locations for all players) and is accessible
@@ -178,37 +231,6 @@ Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED
 The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
 required, and will prevent progression and useful items from being placed at excluded locations.
 
-#### Documenting Locations
-
-Worlds can optionally provide a `location_descriptions` map which contains human-friendly descriptions of locations and
-location groups. These descriptions will show up in location-selection options on the Weighted Options page. Extra
-indentation and single newlines will be collapsed into spaces.
-
-```python
-# locations.py
-
-location_descriptions = {
-    "Red Potion #6": "In a secret destructible block under the second stairway",
-    "L2 Spaceship":
-        """
-        The group of all items in the spaceship in Level 2.
-
-        This doesn't include the item on the spaceship door, since it can be accessed without the Spaceship Key.
-        """
-}
-```
-
-```python
-# __init__.py
-
-from worlds.AutoWorld import World
-from .locations import location_descriptions
-
-
-class MyGameWorld(World):
-    location_descriptions = location_descriptions
-```
-
 ### Items
 
 Items are all things that can "drop" for your game. This may be RPG items like weapons, or technologies you normally
@@ -232,37 +254,6 @@ Other classifications include:
   combined with `progression`; see below)
 * `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
   will not be moved around by progression balancing; used, e.g., for currency or tokens, to not flood early spheres
-
-#### Documenting Items
-
-Worlds can optionally provide an `item_descriptions` map which contains human-friendly descriptions of items and item
-groups. These descriptions will show up in item-selection options on the Weighted Options page. Extra indentation and
-single newlines will be collapsed into spaces.
-
-```python
-# items.py
-
-item_descriptions = {
-    "Red Potion": "A standard health potion",
-    "Spaceship Key":
-        """
-        The key to the spaceship in Level 2.
-
-        This is necessary to get to the Star Realm.
-        """
-}
-```
-
-```python
-# __init__.py
-
-from worlds.AutoWorld import World
-from .items import item_descriptions
-
-
-class MyGameWorld(World):
-    item_descriptions = item_descriptions
-```
 
 ### Events
 
@@ -380,11 +371,6 @@ from BaseClasses import Location
 
 class MyGameLocation(Location):
     game: str = "My Game"
-
-    # override constructor to automatically mark event locations as such
-    def __init__(self, player: int, name="", code=None, parent=None) -> None:
-        super(MyGameLocation, self).__init__(player, name, code, parent)
-        self.event = code is None
 ```
 
 in your `__init__.py` or your `locations.py`.

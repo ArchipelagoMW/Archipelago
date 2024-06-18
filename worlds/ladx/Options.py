@@ -1,7 +1,9 @@
+from dataclasses import dataclass
+
 import os.path
 import typing
 import logging
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions
 from collections import defaultdict
 import Utils
 
@@ -14,7 +16,7 @@ class LADXROption:
     def to_ladxr_option(self, all_options):
         if not self.ladxr_name:
             return None, None
-        
+
         return (self.ladxr_name, self.name_lookup[self.value].replace("_", ""))
 
 
@@ -32,8 +34,9 @@ class Logic(Choice, LADXROption):
     option_hard = 2
     option_glitched = 3
     option_hell = 4
-    
+
     default = option_normal
+
 
 class TradeQuest(DefaultOffToggle, LADXROption):
     """
@@ -43,11 +46,13 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     display_name = "Trade Quest"
     ladxr_name = "tradequest"
 
+
 class TextShuffle(DefaultOffToggle):
     """
     [On] Shuffles all the text in the game
     [Off] (default) doesn't shuffle them.
     """
+
 
 class Rooster(DefaultOnToggle, LADXROption):
     """
@@ -56,6 +61,7 @@ class Rooster(DefaultOnToggle, LADXROption):
     """
     display_name = "Rooster"
     ladxr_name = "rooster"
+
 
 class Boomerang(Choice):
     """
@@ -67,6 +73,7 @@ class Boomerang(Choice):
     gift = 1
     default = gift
 
+
 class EntranceShuffle(Choice, LADXROption):
     """
     [WARNING] Experimental, may fail to fill
@@ -75,18 +82,19 @@ class EntranceShuffle(Choice, LADXROption):
     If random start location and/or dungeon shuffle is enabled, then these will be shuffled with all the non-connector entrance pool.
     Note, some entrances can lead into water, use the warp-to-home from the save&quit menu to escape this."""
 
-    #[Advanced] Simple, but two-way connector caves are shuffled in their own pool as well.
-    #[Expert] Advanced, but caves/houses without items are also shuffled into the Simple entrance pool.
-    #[Insanity] Expert, but the Raft Minigame hut and Mamu's cave are added to the non-connector pool.
+    # [Advanced] Simple, but two-way connector caves are shuffled in their own pool as well.
+    # [Expert] Advanced, but caves/houses without items are also shuffled into the Simple entrance pool.
+    # [Insanity] Expert, but the Raft Minigame hut and Mamu's cave are added to the non-connector pool.
 
     option_none = 0
     option_simple = 1
-    #option_advanced = 2
-    #option_expert = 3    
-    #option_insanity = 4
+    # option_advanced = 2
+    # option_expert = 3
+    # option_insanity = 4
     default = option_none
     display_name = "Experimental Entrance Shuffle"
     ladxr_name = "entranceshuffle"
+
 
 class DungeonShuffle(DefaultOffToggle, LADXROption):
     """
@@ -96,11 +104,13 @@ class DungeonShuffle(DefaultOffToggle, LADXROption):
     display_name = "Experimental Dungeon Shuffle"
     ladxr_name = "dungeonshuffle"
 
+
 class APTitleScreen(DefaultOnToggle):
     """
     Enables AP specific title screen and disables the intro cutscene
     """
     display_name = "AP Title Screen"
+
 
 class BossShuffle(Choice):
     none = 0
@@ -115,10 +125,12 @@ class DungeonItemShuffle(Choice):
     option_own_world = 2
     option_any_world = 3
     option_different_world = 4
-    #option_delete = 5
-    #option_start_with = 6
+    # option_delete = 5
+    # option_start_with = 6
     alias_true = 3
     alias_false = 0
+    ladxr_item: str
+
 
 class ShuffleNightmareKeys(DungeonItemShuffle):
     """
@@ -132,6 +144,7 @@ class ShuffleNightmareKeys(DungeonItemShuffle):
     display_name = "Shuffle Nightmare Keys"
     ladxr_item = "NIGHTMARE_KEY"
 
+
 class ShuffleSmallKeys(DungeonItemShuffle):
     """
     Shuffle Small Keys
@@ -143,6 +156,8 @@ class ShuffleSmallKeys(DungeonItemShuffle):
     """
     display_name = "Shuffle Small Keys"
     ladxr_item = "KEY"
+
+
 class ShuffleMaps(DungeonItemShuffle):
     """
     Shuffle Dungeon Maps
@@ -154,6 +169,7 @@ class ShuffleMaps(DungeonItemShuffle):
     """
     display_name = "Shuffle Maps"
     ladxr_item = "MAP"
+
 
 class ShuffleCompasses(DungeonItemShuffle):
     """
@@ -167,6 +183,7 @@ class ShuffleCompasses(DungeonItemShuffle):
     display_name = "Shuffle Compasses"
     ladxr_item = "COMPASS"
 
+
 class ShuffleStoneBeaks(DungeonItemShuffle):
     """
     Shuffle Owl Beaks
@@ -178,6 +195,7 @@ class ShuffleStoneBeaks(DungeonItemShuffle):
     """
     display_name = "Shuffle Stone Beaks"
     ladxr_item = "STONE_BEAK"
+
 
 class ShuffleInstruments(DungeonItemShuffle):
     """
@@ -195,6 +213,7 @@ class ShuffleInstruments(DungeonItemShuffle):
     option_vanilla = 100
     alias_false = 100
 
+
 class Goal(Choice, LADXROption):
     """
     The Goal of the game
@@ -207,7 +226,7 @@ class Goal(Choice, LADXROption):
     option_instruments = 1
     option_seashells = 2
     option_open = 3
-    
+
     default = option_instruments
 
     def to_ladxr_option(self, all_options):
@@ -215,6 +234,7 @@ class Goal(Choice, LADXROption):
             return ("goal", all_options["instrument_count"])
         else:
             return LADXROption.to_ladxr_option(self, all_options)
+
 
 class InstrumentCount(Range, LADXROption):
     """
@@ -226,12 +246,14 @@ class InstrumentCount(Range, LADXROption):
     range_end = 8
     default = 8
 
+
 class NagMessages(DefaultOffToggle, LADXROption):
     """
     Controls if nag messages are shown when rocks and crystals are touched. Useful for glitches, annoying for everyone else.
     """
     display_name = "Nag Messages"
     ladxr_name = "nagmessages"
+
 
 class MusicChangeCondition(Choice):
     """
@@ -243,6 +265,8 @@ class MusicChangeCondition(Choice):
     option_sword = 0
     option_always = 1
     default = option_always
+
+
 #             Setting('hpmode', 'Gameplay', 'm', 'Health mode', options=[('default', '', 'Normal'), ('inverted', 'i', 'Inverted'), ('1', '1', 'Start with 1 heart'), ('low', 'l', 'Low max')], default='default',
 #                 description="""
 # [Normal} health works as you would expect.
@@ -271,6 +295,7 @@ class Bowwow(Choice):
     swordless = 1
     default = normal
 
+
 class Overworld(Choice, LADXROption):
     """
     [Dungeon Dive] Create a different overworld where all the dungeons are directly accessible and almost no chests are located in the overworld.
@@ -284,9 +309,10 @@ class Overworld(Choice, LADXROption):
     # option_shuffled = 3
     default = option_normal
 
-#Setting('superweapons', 'Special', 'q', 'Enable super weapons', default=False,
+
+# Setting('superweapons', 'Special', 'q', 'Enable super weapons', default=False,
 #    description='All items will be more powerful, faster, harder, bigger stronger. You name it.'),
-#Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
+# Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
 #    description='Adds that the select button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.',
 #    aesthetic=True),
 #             Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('default', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
@@ -316,6 +342,21 @@ class Overworld(Choice, LADXROption):
 # [Disable] no music in the whole game""",
 #                 aesthetic=True),
 
+class BootsControls(Choice):
+    """
+    Adds additional button to activate Pegasus Boots (does nothing if you haven't picked up your boots!)
+    [Vanilla] Nothing changes, you have to equip the boots to use them
+    [Bracelet] Holding down the button for the bracelet also activates boots (somewhat like Link to the Past)
+    [Press A] Holding down A activates boots
+    [Press B] Holding down B activates boots
+    """
+    display_name = "Boots Controls"
+    option_vanilla = 0
+    option_bracelet = 1
+    option_press_a = 2
+    option_press_b = 3
+
+
 class LinkPalette(Choice, LADXROption):
     """
     Sets link's palette
@@ -337,6 +378,7 @@ class LinkPalette(Choice, LADXROption):
     def to_ladxr_option(self, all_options):
         return self.ladxr_name, str(self.value)
 
+
 class TrendyGame(Choice):
     """
     [Easy] All of the items hold still for you
@@ -355,6 +397,7 @@ class TrendyGame(Choice):
     option_impossible = 5
     default = option_normal
 
+
 class GfxMod(FreeText, LADXROption):
     """
     Sets the sprite for link, among other things
@@ -365,7 +408,7 @@ class GfxMod(FreeText, LADXROption):
     normal = ''
     default = 'Link'
 
-    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites','ladx'))
+    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites', 'ladx'))
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
@@ -374,16 +417,15 @@ class GfxMod(FreeText, LADXROption):
         name, extension = os.path.splitext(file)
         if extension in extensions:
             __spriteFiles[name].append(file)
-            
+
     def __init__(self, value: str):
         super().__init__(value)
 
-                    
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.value == "Link" or self.value in GfxMod.__spriteFiles:
             return
-        raise Exception(f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
-            
+        raise Exception(
+            f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
 
     def to_ladxr_option(self, all_options):
         if self.value == -1 or self.value == "Link":
@@ -392,9 +434,11 @@ class GfxMod(FreeText, LADXROption):
         assert self.value in GfxMod.__spriteFiles
 
         if len(GfxMod.__spriteFiles[self.value]) > 1:
-            logger.warning(f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
+            logger.warning(
+                f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
 
         return self.ladxr_name, self.__spriteDir + "/" + GfxMod.__spriteFiles[self.value][0]
+
 
 class Palette(Choice):
     """
@@ -415,6 +459,7 @@ class Palette(Choice):
     option_pink = 4
     option_inverted = 5
 
+
 class Music(Choice, LADXROption):
     """
     [Vanilla] Regular Music
@@ -426,7 +471,6 @@ class Music(Choice, LADXROption):
     option_shuffled = 1
     option_off = 2
 
-    
     def to_ladxr_option(self, all_options):
         s = ""
         if self.value == self.option_shuffled:
@@ -435,55 +479,57 @@ class Music(Choice, LADXROption):
             s = "off"
         return self.ladxr_name, s
 
+
 class WarpImprovements(DefaultOffToggle):
     """
     [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
     [Off] No change
     """
 
+
 class AdditionalWarpPoints(DefaultOffToggle):
     """
     [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
     [Off] No change
     """
-     
 
-links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
-    'logic': Logic,
+
+@dataclass
+class LinksAwakeningOptions(PerGameCommonOptions):
+    logic: Logic
     # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
     # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
     # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
     # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
-    'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
+    tradequest: TradeQuest  # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),
     # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
-    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
+    rooster: Rooster  # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
-    'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
-    'experimental_entrance_shuffle': EntranceShuffle,
+    experimental_dungeon_shuffle: DungeonShuffle  # 'Randomizes the dungeon that each dungeon entrance leads to'),
+    experimental_entrance_shuffle: EntranceShuffle
     # 'bossshuffle': BossShuffle,
     # 'minibossshuffle': BossShuffle,
-    'goal': Goal,
-    'instrument_count': InstrumentCount,
+    goal: Goal
+    instrument_count: InstrumentCount
     # 'itempool': ItemPool,
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
-    'link_palette': LinkPalette,
-    'warp_improvements': WarpImprovements,
-    'additional_warp_points': AdditionalWarpPoints,
-    'trendy_game': TrendyGame,
-    'gfxmod': GfxMod,
-    'palette': Palette,
-    'text_shuffle': TextShuffle,
-    'shuffle_nightmare_keys': ShuffleNightmareKeys,
-    'shuffle_small_keys': ShuffleSmallKeys,
-    'shuffle_maps': ShuffleMaps,
-    'shuffle_compasses': ShuffleCompasses,
-    'shuffle_stone_beaks': ShuffleStoneBeaks,
-    'music': Music,
-    'shuffle_instruments': ShuffleInstruments,
-    'music_change_condition': MusicChangeCondition,
-    'nag_messages': NagMessages,
-    'ap_title_screen': APTitleScreen,
-    
-}
+    link_palette: LinkPalette
+    warp_improvements: WarpImprovements
+    additional_warp_points: AdditionalWarpPoints
+    trendy_game: TrendyGame
+    gfxmod: GfxMod
+    palette: Palette
+    text_shuffle: TextShuffle
+    shuffle_nightmare_keys: ShuffleNightmareKeys
+    shuffle_small_keys: ShuffleSmallKeys
+    shuffle_maps: ShuffleMaps
+    shuffle_compasses: ShuffleCompasses
+    shuffle_stone_beaks: ShuffleStoneBeaks
+    music: Music
+    shuffle_instruments: ShuffleInstruments
+    music_change_condition: MusicChangeCondition
+    nag_messages: NagMessages
+    ap_title_screen: APTitleScreen
+    boots_controls: BootsControls

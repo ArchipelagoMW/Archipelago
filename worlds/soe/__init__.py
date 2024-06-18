@@ -13,7 +13,7 @@ from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
 from .logic import SoEPlayerLogic
-from .options import Difficulty, EnergyCore, SoEOptions
+from .options import Difficulty, EnergyCore, Sniffamizer, SniffIngredients, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path
 
 if typing.TYPE_CHECKING:
@@ -64,20 +64,28 @@ _id_offset: typing.Dict[int, int] = {
     pyevermizer.CHECK_BOSS: _id_base + 50,  # bosses 64050..6499
     pyevermizer.CHECK_GOURD: _id_base + 100,  # gourds 64100..64399
     pyevermizer.CHECK_NPC: _id_base + 400,  # npc 64400..64499
-    # TODO: sniff 64500..64799
+    # blank 64500..64799
     pyevermizer.CHECK_EXTRA: _id_base + 800,  # extra items 64800..64899
     pyevermizer.CHECK_TRAP: _id_base + 900,  # trap 64900..64999
+    pyevermizer.CHECK_SNIFF: _id_base + 1000  # sniff 65000..65592
 }
 
 # cache native evermizer items and locations
 _items = pyevermizer.get_items()
+_sniff_items = pyevermizer.get_sniff_items()  # optional, not part of the default location pool
 _traps = pyevermizer.get_traps()
 _extras = pyevermizer.get_extra_items()  # items that are not placed by default
 _locations = pyevermizer.get_locations()
+_sniff_locations = pyevermizer.get_sniff_locations()  # optional, not part of the default location pool
 # fix up texts for AP
 for _loc in _locations:
     if _loc.type == pyevermizer.CHECK_GOURD:
-        _loc.name = f'{_loc.name} #{_loc.index}'
+        _loc.name = f"{_loc.name} #{_loc.index}"
+for _loc in _sniff_locations:
+    if _loc.type == pyevermizer.CHECK_SNIFF:
+        _loc.name = f"{_loc.name} Sniff #{_loc.index}"
+del _loc
+
 # item helpers
 _ingredients = (
     'Wax', 'Water', 'Vinegar', 'Root', 'Oil', 'Mushroom', 'Mud Pepper', 'Meteorite', 'Limestone', 'Iron',
@@ -97,7 +105,7 @@ def _match_item_name(item: pyevermizer.Item, substr: str) -> bool:
 def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Location]]:
     name_to_id = {}
     id_to_raw = {}
-    for loc in _locations:
+    for loc in itertools.chain(_locations, _sniff_locations):
         ap_id = _id_offset[loc.type] + loc.index
         id_to_raw[ap_id] = loc
         name_to_id[loc.name] = ap_id
@@ -108,7 +116,7 @@ def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[i
 def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Item]]:
     name_to_id = {}
     id_to_raw = {}
-    for item in itertools.chain(_items, _extras, _traps):
+    for item in itertools.chain(_items, _sniff_items, _extras, _traps):
         if item.name in name_to_id:
             continue
         ap_id = _id_offset[item.type] + item.index
@@ -168,9 +176,8 @@ class SoEWorld(World):
     options: SoEOptions
     settings: typing.ClassVar[SoESettings]
     topology_present = False
-    data_version = 4
     web = SoEWebWorld()
-    required_client_version = (0, 3, 5)
+    required_client_version = (0, 4, 4)
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
@@ -238,16 +245,26 @@ class SoEWorld(World):
             spheres.setdefault(get_sphere_index(loc), {}).setdefault(loc.type, []).append(
                 SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], ingame,
                             loc.difficulty > max_difficulty))
+        # extend pool if feature and setting enabled
+        if hasattr(Sniffamizer, "option_everywhere") and self.options.sniffamizer == Sniffamizer.option_everywhere:
+            for loc in _sniff_locations:
+                spheres.setdefault(get_sphere_index(loc), {}).setdefault(loc.type, []).append(
+                    SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], ingame,
+                                loc.difficulty > max_difficulty))
 
         # location balancing data
         trash_fills: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int, int]]] = {
-            0: {pyevermizer.CHECK_GOURD: (20, 40, 40, 40)},  # remove up to 40 gourds from sphere 1
-            1: {pyevermizer.CHECK_GOURD: (70, 90, 90, 90)},  # remove up to 90 gourds from sphere 2
+            0: {pyevermizer.CHECK_GOURD: (20, 40, 40, 40),  # remove up to 40 gourds from sphere 1
+                pyevermizer.CHECK_SNIFF: (100, 130, 130, 130)},  # remove up to 130 sniff spots from sphere 1
+            1: {pyevermizer.CHECK_GOURD: (70, 90, 90, 90),  # remove up to 90 gourds from sphere 2
+                pyevermizer.CHECK_SNIFF: (160, 200, 200, 200)},  # remove up to 200 sniff spots from sphere 2
         }
 
         # mark some as excluded based on numbers above
         for trash_sphere, fills in trash_fills.items():
             for typ, counts in fills.items():
+                if typ not in spheres[trash_sphere]:
+                    continue  # e.g. player does not have sniff locations
                 count = counts[self.options.difficulty.value]
                 for location in self.random.sample(spheres[trash_sphere][typ], count):
                     assert location.name != "Energy Core #285", "Error in sphere generation"
@@ -299,6 +316,15 @@ class SoEWorld(World):
         # remove one pair of wings that will be placed in generate_basic
         items.remove(self.create_item("Wings"))
 
+        # extend pool if feature and setting enabled
+        if hasattr(Sniffamizer, "option_everywhere") and self.options.sniffamizer == Sniffamizer.option_everywhere:
+            if self.options.sniff_ingredients == SniffIngredients.option_vanilla_ingredients:
+                # vanilla ingredients
+                items += list(map(lambda item: self.create_item(item), _sniff_items))
+            else:
+                # random ingredients
+                items += [self.create_item(self.get_filler_item_name()) for _ in _sniff_items]
+
         def is_ingredient(item: pyevermizer.Item) -> bool:
             for ingredient in _ingredients:
                 if _match_item_name(item, ingredient):
@@ -345,7 +371,12 @@ class SoEWorld(World):
         set_rule(self.multiworld.get_location('Done', self.player),
                  lambda state: self.logic.has(state, pyevermizer.P_FINAL_BOSS))
         set_rule(self.multiworld.get_entrance('New Game', self.player), lambda state: True)
-        for loc in _locations:
+        locations: typing.Iterable[pyevermizer.Location]
+        if hasattr(Sniffamizer, "option_everywhere") and self.options.sniffamizer == Sniffamizer.option_everywhere:
+            locations = itertools.chain(_locations, _sniff_locations)
+        else:
+            locations = _locations
+        for loc in locations:
             location = self.multiworld.get_location(loc.name, self.player)
             set_rule(location, self.make_rule(loc.requires))
 
@@ -454,4 +485,3 @@ class SoELocation(Location):
         super().__init__(player, name, address, parent)
         # unconditional assignments favor a split dict, saving memory
         self.progress_type = LocationProgressType.EXCLUDED if exclude else LocationProgressType.DEFAULT
-        self.event = not address

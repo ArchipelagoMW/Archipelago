@@ -25,7 +25,7 @@ class SwordLocation(Choice):
     Randomized - The sword can be placed anywhere.
     Early - The sword will be placed in a location accessible from the start of
     the game.
-    Unce assured - The sword will always be placed on Link's Uncle."""
+    Uncle - The sword will always be placed on Link's Uncle."""
     display_name = "Sword Location"
     option_Randomized = 0
     option_Early = 1
@@ -48,7 +48,7 @@ class MorphLocation(Choice):
     
 class Goal(Choice):
     """This option decides what goal is required to finish the randomizer.
-    Defeat Ganon and Mother Brain - Find the required crystals and boss tokens kill both bosses.
+    Defeat Ganon and Mother Brain - Find the required crystals and boss tokens to kill both bosses.
     Fast Ganon and Defeat Mother Brain - The hole to ganon is open without having to defeat Agahnim in 
                                          Ganon's Tower and Ganon can be defeat as soon you have the required 
                                          crystals to make Ganon vulnerable. For keysanity, this mode also removes 
