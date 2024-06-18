@@ -242,8 +242,4 @@ class PSYWorld(World):
         gen_psy_seed(self, output_directory)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        slot_data = {}
-        for name, value in self.options.as_dict(*self.options_dataclass.type_hints).items():
-            if name in SLOT_DATA_OPTIONS:
-                slot_data[name] = value
-        return slot_data
+        return self.options.as_dict(*SLOT_DATA_OPTIONS)
