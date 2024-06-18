@@ -140,7 +140,7 @@ function on_check_energy_link(event)
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
     if event.tick % 60 == 30 then
         if storage.energy_link_bridges == nil then
-            storage.energy_link_bridges = {}
+            return
         end
         local force = "player"
         local bridges = storage.energy_link_bridges
@@ -177,13 +177,30 @@ function on_check_energy_link(event)
         end
     end
 end
+function string_starts_with(str, start)
+	return str:sub(1, #start) == start
+end
 function on_energy_bridge_constructed(event)
     if event.created_entity and event.created_entity.valid then
-        storage.energy_link_bridges[event.created_entity.unit_number] = event.created_entity
-    end
+		if string_starts_with(event.created_entity.prototype.name, "ap-energy-bridge") then
+		    if storage.energy_link_bridges == nil then
+                storage.energy_link_bridges = {}
+            end
+			storage.energy_link_bridges[event.created_entity.unit_number] = event.created_entity
+		end
+	end
 end
 function on_energy_bridge_removed(event)
-	storage.energy_link_bridges[event.entity.unit_number] = nil
+	if string_starts_with(event.entity.prototype.name, "ap-energy-bridge") then
+	    if storage.energy_link_bridges == nil then
+            return
+        end
+		if storage.energy_link_bridges[event.entity.unit_number] == nil then
+			-- This should never happen, but just in case it does.
+			return
+		end
+		storage.energy_link_bridges[event.entity.unit_number] = nil
+	end
 end
 if (ENERGY_INCREMENT) then
     script.on_event(defines.events.on_tick, on_check_energy_link)
