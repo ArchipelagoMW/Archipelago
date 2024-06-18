@@ -10,6 +10,7 @@ from .Options import DOOM2Options
 logger = logging.getLogger("DOOM II")
 
 DOOM_TYPE_LEVEL_COMPLETE = -2
+DOOM_TYPE_BACKPACK = 8
 DOOM_TYPE_COMPUTER_AREA_MAP = 2026
 
 
@@ -187,6 +188,9 @@ class DOOM2World(World):
             if item["doom_type"] == DOOM_TYPE_LEVEL_COMPLETE:
                 continue # We'll fill it manually later
 
+            if item["doom_type"] == DOOM_TYPE_BACKPACK:
+                continue # See the code directly after this section
+
             if item["doom_type"] == DOOM_TYPE_COMPUTER_AREA_MAP and start_with_computer_area_maps:
                 continue # We'll fill it manually, and we will put fillers in place
 
@@ -195,6 +199,15 @@ class DOOM2World(World):
 
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
+
+        # Backpack(s) based on options
+        if self.options.split_backpack.value:
+            itempool += [self.create_item("Bullet capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Shell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Energy cell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Rocket capacity") for _ in range(self.options.backpack_count.value)]
+        else:
+            itempool += [self.create_item("Backpack") for _ in range(self.options.backpack_count.value)]
 
         # Place end level items in locked locations
         for map_name in Maps.map_names:
@@ -265,4 +278,16 @@ class DOOM2World(World):
             itempool.append(self.create_item(item_name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return self.options.as_dict("difficulty", "random_monsters", "random_pickups", "random_music", "flip_levels", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "episode1", "episode2", "episode3", "episode4")
+        slot_data = self.options.as_dict("difficulty", "random_monsters", "random_pickups", "random_music", "flip_levels", "allow_death_logic", "pro", "death_link", "reset_level_on_death", "episode1", "episode2", "episode3", "episode4")
+
+        # Send slot data for ammo capacity values; this must be generic because Heretic uses it too
+        slot_data["ammo1start"] = self.options.bullet_capacity.value
+        slot_data["ammo2start"] = self.options.shell_capacity.value
+        slot_data["ammo3start"] = self.options.energy_cell_capacity.value
+        slot_data["ammo4start"] = self.options.rocket_capacity.value
+        slot_data["ammo1add"] = self.options.bullet_backpack_increase.value
+        slot_data["ammo2add"] = self.options.shell_backpack_increase.value
+        slot_data["ammo3add"] = self.options.energy_cell_backpack_increase.value
+        slot_data["ammo4add"] = self.options.rocket_backpack_increase.value
+
+        return slot_data
