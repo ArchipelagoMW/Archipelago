@@ -3,6 +3,7 @@ import json
 import os
 from textwrap import dedent
 from typing import Dict, Union
+from docutils.core import publish_parts
 
 import yaml
 from flask import redirect, render_template, request, Response
@@ -66,6 +67,22 @@ def filter_dedent(text: str) -> str:
     return dedent(text).strip("\n ")
 
 
+@app.template_filter("rst_to_html")
+def filter_rst_to_html(text: str) -> str:
+    """Converts reStructuredText (such as a Python docstring) to HTML."""
+    if text.startswith(" ") or text.startswith("\t"):
+        text = dedent(text)
+    elif "\n" in text:
+        lines = text.splitlines()
+        text = lines[0] + "\n" + dedent("\n".join(lines[1:]))
+
+    return publish_parts(text, writer_name='html', settings=None, settings_overrides={
+        'raw_enable': False,
+        'file_insertion_enabled': False,
+        'output_encoding': 'unicode'
+    })['body']
+
+
 @app.template_test("ordered")
 def test_ordered(obj):
     return isinstance(obj, collections.abc.Sequence)
@@ -91,7 +108,7 @@ def option_presets(game: str) -> Response:
                     f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
 
                 presets[preset_name][preset_option_name] = option.value
-            elif isinstance(option, Options.Range):
+            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.ItemDict)):
                 presets[preset_name][preset_option_name] = option.value
             elif isinstance(preset_option, str):
                 # Ensure the option value is valid for Choice and Toggle options
