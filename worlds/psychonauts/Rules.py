@@ -7,9 +7,6 @@ from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import LocationName, ItemName, RegionName
 from .Options import Goal
 
-# I don't know what is going on here, but it works???
-# Thanks Jared :)
-
 if TYPE_CHECKING:
     from . import PSYWorld
 
