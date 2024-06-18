@@ -43,8 +43,7 @@ class PsychonautsSettings(settings.Group):
         """
         description = "Psychonauts root directory"
 
-    root_directory: RootDirectory = RootDirectory(
-        "C:\\\\Program Files (x86)\\\\Steam\\\\steamapps\\\\common\\\\Psychonauts")
+    root_directory: RootDirectory = RootDirectory(r"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Psychonauts")
 
 
 class PsychonautsWeb(WebWorld):
