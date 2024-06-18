@@ -1524,8 +1524,8 @@ def create_regions(world):
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
         if location.inclusion(world) and (isinstance(location.original_item, list) or
-                not (world.options.key_items_only and (location.original_item is None or item_table[location.original_item].classification
-                not in (ItemClassification.progression, ItemClassification.progression_skip_balancing)) and not
+                not (world.options.key_items_only and item_table[location.original_item].classification
+                not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
                 location.event)):
 
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,

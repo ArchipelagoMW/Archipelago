@@ -142,7 +142,7 @@ class PokemonRedBlueWorld(World):
             self.options.non_local_items.value -= self.item_name_groups["Badges"]
 
         if self.options.key_items_only:
-            self.options.trainersanity.from_text("off")
+            self.options.trainersanity = self.options.trainersanity.from_text("off")
             self.options.dexsanity.value = 0
             self.options.randomize_hidden_items = \
                 self.options.randomize_hidden_items.from_text("off")
