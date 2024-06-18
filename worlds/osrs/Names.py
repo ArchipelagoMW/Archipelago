@@ -25,6 +25,7 @@ class RegionNames(str, Enum):
     Falador = "Falador"
     Falador_Farm = "Falador Farms"
     Crafting_Guild = "Crafting Guild"
+    Cooks_Guild = "Cook's Guild"
     Rimmington = "Rimmington"
     Port_Sarim = "Port Sarim"
     Mudskipper_Point = "Mudskipper Point"
@@ -54,7 +55,7 @@ class RegionNames(str, Enum):
     Fly_Fish = "Fly Fishing Spot"
     Lobster = "Lobster Spot"
     Mind_Runes = "Mind Runes"
-
+    Canoe_Tree = "Canoe Tree"
     __str__ = str.__str__
 
 
@@ -204,6 +205,7 @@ class LocationNames(str, Enum):
     Combat_Level_5 = "Combat Level 5"
     Combat_Level_15 = "Combat Level 15"
     Combat_Level_25 = "Combat Level 25"
+    Travel_on_a_Canoe = "Travel on a Canoe"
     Q_Dragon_Slayer = "Quest: Dragon Slayer"
 
     __str__ = str.__str__

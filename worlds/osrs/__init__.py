@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, CollectionRule
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
@@ -150,19 +150,19 @@ class OSRSWorld(World):
 
     def generate_special_rules_for(self, entrance, region_row, outbound_region_name):
         # print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
-        if outbound_region_name == "Cook's Guild":
+        if outbound_region_name == RegionNames.Cooks_Guild:
             item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
             cooking_level_rule = self.get_skill_rule("cooking", 32)
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
                                                  cooking_level_rule(state)
             return
-        if outbound_region_name == "Crafting Guild":
+        if outbound_region_name == RegionNames.Crafting_Guild:
             item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
             crafting_level_rule = self.get_skill_rule("crafting", 40)
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
                                                  crafting_level_rule(state)
             return
-        if outbound_region_name == "Corsair Cove":
+        if outbound_region_name == RegionNames.Corsair_Cove:
             item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
             # Need to be able to start Corsair Curse in addition to having the item
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
@@ -179,6 +179,165 @@ class OSRSWorld(World):
         if region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
             entrance.access_rule = lambda state: state.has(ItemNames.QP_Dorics_Quest, self.player)
             return
+        # Special logic for canoes
+        canoe_regions = [RegionNames.Lumbridge, RegionNames.South_Of_Varrock, RegionNames.Barbarian_Village, RegionNames.Edgeville, RegionNames.Wilderness]
+        if region_row.name in canoe_regions:
+            # Skill rules for greater distances
+            woodcutting_rule_d1 = self.get_skill_rule("woodcutting", 12)
+            woodcutting_rule_d2 = self.get_skill_rule("woodcutting", 27)
+            woodcutting_rule_d3 = self.get_skill_rule("woodcutting", 42)
+            woodcutting_rule_all = self.get_skill_rule("woodcutting", 57)
+
+            if region_row.name == RegionNames.Lumbridge:
+                # Canoe Tree access for the Location
+                if outbound_region_name == RegionNames.Canoe_Tree:
+                    entrance.access_rule = \
+                        lambda state: (state.can_reach_region(RegionNames.South_Of_Varrock, self.player)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
+                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
+                                      (state.can_reach_region(RegionNames.Edgeville)
+                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
+                                      (state.can_reach_region(RegionNames.Wilderness)
+                                       and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
+                # Access to other chunks based on woodcutting settings
+                # South of Varrock does not need to be checked, because it's already adjacent
+                if outbound_region_name == RegionNames.Barbarian_Village:
+                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
+                                                         and self.options.max_woodcutting_level >= 27
+                if outbound_region_name == RegionNames.Edgeville:
+                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
+                                                         and self.options.max_woodcutting_level >= 42
+                if outbound_region_name == RegionNames.Wilderness:
+                    entrance.access_rule = lambda state: woodcutting_rule_all(state) \
+                                                         and self.options.max_woodcutting_level >= 57
+
+            if region_row.name == RegionNames.South_Of_Varrock:
+                if outbound_region_name == RegionNames.Canoe_Tree:
+                    entrance.access_rule = \
+                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
+                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
+                                      (state.can_reach_region(RegionNames.Edgeville)
+                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
+                                      (state.can_reach_region(RegionNames.Wilderness)
+                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
+                # Access to other chunks based on woodcutting settings
+                # Lumbridge does not need to be checked, because it's already adjacent
+                if outbound_region_name == RegionNames.Barbarian_Village:
+                    entrance.access_rule = lambda state: woodcutting_rule_d1(state) \
+                                                         and self.options.max_woodcutting_level >= 12
+                if outbound_region_name == RegionNames.Edgeville:
+                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
+                                                         and self.options.max_woodcutting_level >= 27
+                if outbound_region_name == RegionNames.Wilderness:
+                    entrance.access_rule = lambda state: woodcutting_rule_all(state) \
+                                                         and self.options.max_woodcutting_level >= 42
+            if region_row.name == RegionNames.Barbarian_Village:
+                if outbound_region_name == RegionNames.Canoe_Tree:
+                    entrance.access_rule = \
+                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
+                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
+                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
+                                      (state.can_reach_region(RegionNames.Edgeville)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
+                                      (state.can_reach_region(RegionNames.Wilderness)
+                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
+                # Access to other chunks based on woodcutting settings
+                if outbound_region_name == RegionNames.Lumbridge:
+                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
+                                                         and self.options.max_woodcutting_level >= 27
+                if outbound_region_name == RegionNames.South_Of_Varrock:
+                    entrance.access_rule = lambda state: woodcutting_rule_d1(state) \
+                                                         and self.options.max_woodcutting_level >= 12
+                # Edgeville does not need to be checked, because it's already adjacent
+                if outbound_region_name == RegionNames.Wilderness:
+                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
+                                                         and self.options.max_woodcutting_level >= 42
+            if region_row.name == RegionNames.Edgeville:
+                if outbound_region_name == RegionNames.Canoe_Tree:
+                    entrance.access_rule = \
+                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
+                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
+                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
+                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
+                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
+                                      (state.can_reach_region(RegionNames.Wilderness)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
+                # Access to other chunks based on woodcutting settings
+                if outbound_region_name == RegionNames.Lumbridge:
+                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
+                                                         and self.options.max_woodcutting_level >= 42
+                if outbound_region_name == RegionNames.South_Of_Varrock:
+                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
+                                                         and self.options.max_woodcutting_level >= 27
+                # Barbarian Village does not need to be checked, because it's already adjacent
+                # Wilderness does not need to be checked, because it's already adjacent
+            if region_row.name == RegionNames.Wilderness:
+                if outbound_region_name == RegionNames.Canoe_Tree:
+                    entrance.access_rule = \
+                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
+                                       and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57) or \
+                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
+                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
+                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
+                                      (state.can_reach_region(RegionNames.Edgeville)
+                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
+                    self.multiworld.register_indirect_condition(
+                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
+                # Access to other chunks based on woodcutting settings
+                if outbound_region_name == RegionNames.Lumbridge:
+                    entrance.access_rule = lambda state: woodcutting_rule_all(state) \
+                                                         and self.options.max_woodcutting_level >= 57
+                if outbound_region_name == RegionNames.South_Of_Varrock:
+                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
+                                                         and self.options.max_woodcutting_level >= 42
+                if outbound_region_name == RegionNames.Barbarian_Village:
+                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
+                                                         and self.options.max_woodcutting_level >= 27
+                # Edgeville does not need to be checked, because it's already adjacent
 
     def roll_locations(self):
         locations_required = 0
