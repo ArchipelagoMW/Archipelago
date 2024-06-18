@@ -1,6 +1,7 @@
 import unittest
 
 from Fill import distribute_items_restrictive
+from worlds import network_data_package
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
@@ -84,3 +85,4 @@ class TestIDs(unittest.TestCase):
                                           f"{loc_name} is not a valid item name for location_name_to_id")
                     self.assertIsInstance(loc_id, int,
                                           f"{loc_id} for {loc_name} should be an int")
+                self.assertEqual(datapackage["checksum"], network_data_package["games"][gamename]["checksum"])

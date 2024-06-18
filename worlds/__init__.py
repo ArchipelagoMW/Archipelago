@@ -1,4 +1,5 @@
 import importlib
+import importlib.util
 import logging
 import os
 import sys
@@ -107,8 +108,9 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
         if not entry.name.startswith(("_", ".")):
             file_name = entry.name if relative else os.path.join(folder, entry.name)
             if entry.is_dir():
-                init_file_path = os.path.join(entry.path, '__init__.py')
-                if os.path.isfile(init_file_path):
+                if os.path.isfile(os.path.join(entry.path, '__init__.py')):
+                    world_sources.append(WorldSource(file_name, relative=relative))
+                elif os.path.isfile(os.path.join(entry.path, '__init__.pyc')):
                     world_sources.append(WorldSource(file_name, relative=relative))
                 else:
                     logging.warning(f"excluding {entry.name} from world sources because it has no __init__.py")
@@ -126,3 +128,4 @@ from .AutoWorld import AutoWorldRegister
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
+
