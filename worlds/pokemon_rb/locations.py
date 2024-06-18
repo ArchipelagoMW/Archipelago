@@ -5,46 +5,46 @@ from . import poke_data
 loc_id_start = 172000000
 
 
-def trainersanity(multiworld, player):
-    return multiworld.trainersanity[player]
+def trainersanity(world):
+    return world.options.trainersanity
 
 
-def dexsanity(multiworld, player):
-    include = multiworld.worlds[player].dexsanity_table.pop(0)
-    multiworld.worlds[player].dexsanity_table.append(include)
+def dexsanity(world):
+    include = world.dexsanity_table.pop(0)
+    world.dexsanity_table.append(include)
     return include
 
 
-def hidden_items(multiworld, player):
-    return multiworld.randomize_hidden_items[player]
+def hidden_items(world):
+    return world.options.randomize_hidden_items
 
 
-def hidden_moon_stones(multiworld, player):
-    return multiworld.randomize_hidden_items[player] or multiworld.stonesanity[player]
+def hidden_moon_stones(world):
+    return world.options.randomize_hidden_items or world.options.stonesanity
 
 
-def tea(multiworld, player):
-    return multiworld.tea[player]
+def tea(world):
+    return world.options.tea
 
 
-def extra_key_items(multiworld, player):
-    return multiworld.extra_key_items[player]
+def extra_key_items(world):
+    return world.options.extra_key_items
 
 
-def always_on(multiworld, player):
+def always_on(world):
     return True
 
 
-def prizesanity(multiworld, player):
-    return multiworld.prizesanity[player]
+def prizesanity(world):
+    return world.options.prizesanity
 
 
-def split_card_key(multiworld, player):
-    return multiworld.split_card_key[player].value > 0
+def split_card_key(world):
+    return world.options.split_card_key.value > 0
 
 
-def not_stonesanity(multiworld, player):
-    return not multiworld.stonesanity[player]
+def not_stonesanity(world):
+    return not world.options.stonesanity
 
 
 class LocationData:

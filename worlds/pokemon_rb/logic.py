@@ -1,49 +1,49 @@
 from . import poke_data
 
 
-def can_surf(state, player):
-    return (((state.has("HM03 Surf", player) and can_learn_hm(state, "Surf", player))
-             or state.has("Flippers", player)) and (state.has("Soul Badge", player) or
-             state.has(state.multiworld.worlds[player].extra_badges.get("Surf"), player)
-             or state.multiworld.badges_needed_for_hm_moves[player].value == 0))
+def can_surf(state, world):
+    return (((state.has("HM03 Surf", world.player) and can_learn_hm(state, "Surf", world))
+             or state.has("Flippers", world.player)) and (state.has("Soul Badge", world.player) or
+             state.has(world.extra_badges.get("Surf"), world.player)
+             or world.options.badges_needed_for_hm_moves.value == 0))
 
 
-def can_cut(state, player):
-    return ((state.has("HM01 Cut", player) and can_learn_hm(state, "Cut", player) or state.has("Master Sword", player))
-             and (state.has("Cascade Badge", player) or
-             state.has(state.multiworld.worlds[player].extra_badges.get("Cut"), player) or
-             state.multiworld.badges_needed_for_hm_moves[player].value == 0))
+def can_cut(state, world):
+    return ((state.has("HM01 Cut", world.player) and can_learn_hm(state, "Cut", world) or state.has("Master Sword", world.player))
+             and (state.has("Cascade Badge", world.player) or
+             state.has(world.extra_badges.get("Cut"), world.player) or
+             world.options.badges_needed_for_hm_moves.value == 0))
 
 
-def can_fly(state, player):
-    return (((state.has("HM02 Fly", player) and can_learn_hm(state, "Fly", player)) or state.has("Flute", player)) and
-           (state.has("Thunder Badge", player) or state.has(state.multiworld.worlds[player].extra_badges.get("Fly"), player)
-            or state.multiworld.badges_needed_for_hm_moves[player].value == 0))
+def can_fly(state, world):
+    return (((state.has("HM02 Fly", world.player) and can_learn_hm(state, "Fly", world)) or state.has("Flute", world.player)) and
+           (state.has("Thunder Badge", world.player) or state.has(world.extra_badges.get("Fly"), world.player)
+            or world.options.badges_needed_for_hm_moves.value == 0))
 
 
-def can_strength(state, player):
-    return ((state.has("HM04 Strength", player) and can_learn_hm(state, "Strength", player)) or
-            state.has("Titan's Mitt", player)) and (state.has("Rainbow Badge", player) or
-            state.has(state.multiworld.worlds[player].extra_badges.get("Strength"), player)
-            or state.multiworld.badges_needed_for_hm_moves[player].value == 0)
+def can_strength(state, world):
+    return ((state.has("HM04 Strength", world.player) and can_learn_hm(state, "Strength", world)) or
+            state.has("Titan's Mitt", world.player)) and (state.has("Rainbow Badge", world.player) or
+            state.has(world.extra_badges.get("Strength"), world.player)
+            or world.options.badges_needed_for_hm_moves.value == 0)
 
 
-def can_flash(state, player):
-    return (((state.has("HM05 Flash", player) and can_learn_hm(state, "Flash", player)) or state.has("Lamp", player))
-             and (state.has("Boulder Badge", player) or state.has(state.multiworld.worlds[player].extra_badges.get("Flash"),
-             player) or state.multiworld.badges_needed_for_hm_moves[player].value == 0))
+def can_flash(state, world):
+    return (((state.has("HM05 Flash", world.player) and can_learn_hm(state, "Flash", world)) or state.has("Lamp", world.player))
+             and (state.has("Boulder Badge", world.player) or state.has(world.extra_badges.get("Flash"),
+             world.player) or world.options.badges_needed_for_hm_moves.value == 0))
 
 
-def can_learn_hm(state, move, player):
-    for pokemon, data in state.multiworld.worlds[player].local_poke_data.items():
-        if state.has(pokemon, player) and data["tms"][6] & 1 << (["Cut", "Fly", "Surf", "Strength",
+def can_learn_hm(state, move, world):
+    for pokemon, data in world.local_poke_data.items():
+        if state.has(pokemon, world.player) and data["tms"][6] & 1 << (["Cut", "Fly", "Surf", "Strength",
                                                                   "Flash"].index(move) + 2):
             return True
     return False
 
 
-def can_get_hidden_items(state, player):
-    return state.has("Item Finder", player) or not state.multiworld.require_item_finder[player].value
+def can_get_hidden_items(state, world):
+    return state.has("Item Finder", world.player) or not world.options.require_item_finder.value
 
 
 def has_key_items(state, count, player):
@@ -58,11 +58,11 @@ def has_key_items(state, count, player):
     return key_items >= count
 
 
-def can_pass_guards(state, player):
-    if state.multiworld.tea[player]:
-        return state.has("Tea", player)
+def can_pass_guards(state, world):
+    if world.options.tea:
+        return state.has("Tea", world.player)
     else:
-        return state.has("Vending Machine Drinks", player)
+        return state.has("Vending Machine Drinks", world.player)
 
 
 def has_badges(state, count, player):
@@ -70,9 +70,9 @@ def has_badges(state, count, player):
                                   "Soul Badge", "Volcano Badge", "Earth Badge"] if state.has(item, player)]) >= count
 
 
-def oaks_aide(state, count, player):
-    return ((not state.multiworld.require_pokedex[player] or state.has("Pokedex", player))
-            and has_pokemon(state, count, player))
+def oaks_aide(state, count, world):
+    return ((not world.options.require_pokedex or state.has("Pokedex", world.player))
+            and has_pokemon(state, count, world.player))
 
 
 def has_pokemon(state, count, player):
@@ -96,21 +96,21 @@ def card_key(state, floor, player):
            state.has("Progressive Card Key", player, floor - 1)
 
 
-def rock_tunnel(state, player):
-    return can_flash(state, player) or not state.multiworld.dark_rock_tunnel_logic[player]
+def rock_tunnel(state, world):
+    return can_flash(state, world) or not world.options.dark_rock_tunnel_logic
 
 
-def route_3(state, player):
-    if state.multiworld.route_3_condition[player] == "defeat_brock":
-        return state.has("Defeat Brock", player)
-    elif state.multiworld.route_3_condition[player] == "defeat_any_gym":
+def route_3(state, world):
+    if world.options.route_3_condition == "defeat_brock":
+        return state.has("Defeat Brock", world.player)
+    elif world.options.route_3_condition == "defeat_any_gym":
         return state.has_any(["Defeat Brock", "Defeat Misty", "Defeat Lt. Surge", "Defeat Erika", "Defeat Koga",
-                              "Defeat Blaine", "Defeat Sabrina", "Defeat Viridian Gym Giovanni"], player)
-    elif state.multiworld.route_3_condition[player] == "boulder_badge":
-        return state.has("Boulder Badge", player)
-    elif state.multiworld.route_3_condition[player] == "any_badge":
+                              "Defeat Blaine", "Defeat Sabrina", "Defeat Viridian Gym Giovanni"], world.player)
+    elif world.options.route_3_condition == "boulder_badge":
+        return state.has("Boulder Badge", world.player)
+    elif world.options.route_3_condition == "any_badge":
         return state.has_any(["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
-                              "Soul Badge", "Volcano Badge", "Earth Badge"], player)
+                              "Soul Badge", "Volcano Badge", "Earth Badge"], world.player)
     # open
     return True
 
