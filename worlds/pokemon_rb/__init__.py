@@ -13,8 +13,8 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
+from .options import PokemonRedBlueOptions
 from .regions import create_regions
-from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, RedDeltaPatch, BlueDeltaPatch
@@ -71,7 +71,10 @@ class PokemonRedBlueWorld(World):
     Elite Four to become the champion!"""
     # -MuffinJets#4559
     game = "Pokemon Red and Blue"
-    option_definitions = pokemon_rb_options
+
+    options_dataclass = PokemonRedBlueOptions
+    options: PokemonRedBlueOptions
+
     settings: typing.ClassVar[PokemonSettings]
 
     required_client_version = (0, 4, 2)
