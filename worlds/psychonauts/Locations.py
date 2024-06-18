@@ -423,11 +423,11 @@ MC_CHECKS = {
 # adjust the IDs of all locations that don't place items into the game world.
 EVENT_LOCATIONS = {
     # for beating Meat Circus
-    LocationName.FinalBossEvent: 500,
+    LocationName.MeatCircusFinalBossEvent: 500,
     # for Brain Jar Goal
     LocationName.RedeemedBrainsEvent: 501,
     # for Coach Oleander Brain Tank Boss
-    LocationName.OleanderBossEvent: 502,
+    LocationName.OleanderBrainTankBossEvent: 502,
 }
 
 # Deep Arrowhead locations.

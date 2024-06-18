@@ -606,8 +606,8 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
 
 
 def place_events(self: "PSYWorld"):
-    final_boss_location = self.multiworld.get_location(LocationName.FinalBossEvent, self.player)
-    oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
+    final_boss_location = self.multiworld.get_location(LocationName.MeatCircusFinalBossEvent, self.player)
+    oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBrainTankBossEvent, self.player)
     redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
     # Meat Circus Bosses
     if self.options.RequireMeatCircus:
@@ -715,11 +715,11 @@ def create_psyregions(world: MultiWorld, player: int):
     world.regions.append(reg_caja_brains)
 
     reg_aslb_boss = Region(RegionName.ASLBBoss, player, world)
-    reg_aslb_boss.locations.append(PSYLocation(player, LocationName.OleanderBossEvent, None, reg_aslb_boss))
+    reg_aslb_boss.locations.append(PSYLocation(player, LocationName.OleanderBrainTankBossEvent, None, reg_aslb_boss))
     world.regions.append(reg_aslb_boss)
 
     reg_mctc_boss = Region(RegionName.MCTCBoss, player, world)
-    reg_mctc_boss.locations.append(PSYLocation(player, LocationName.FinalBossEvent, None, reg_mctc_boss))
+    reg_mctc_boss.locations.append(PSYLocation(player, LocationName.MeatCircusFinalBossEvent, None, reg_mctc_boss))
     world.regions.append(reg_mctc_boss)
 
 
