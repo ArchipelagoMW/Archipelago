@@ -225,6 +225,9 @@ class CommonContext:
         def lookup_in_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
             """Returns the name for an item/location id in the context of a specific slot or own slot if `slot` is
             omitted.
+
+            Use of `lookup_in_slot` should not be used when not connected to a server. If looking in own game, set
+            `ctx.game` and use `lookup_in_game` method instead.
             """
             if slot is None:
                 slot = self.ctx.slot

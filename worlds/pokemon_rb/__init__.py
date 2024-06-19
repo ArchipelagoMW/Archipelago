@@ -700,6 +700,10 @@ class PokemonRedBlueWorld(World):
             "dark_rock_tunnel_logic": self.options.dark_rock_tunnel_logic.value,
             "split_card_key": self.options.split_card_key.value,
             "all_elevators_locked": self.options.all_elevators_locked.value,
+            "require_pokedex": self.options.require_pokedex.value,
+            "area_1_to_1_mapping": self.options.area_1_to_1_mapping.value,
+            "blind_trainers": self.options.blind_trainers.value,
+
         }
         if self.options.type_chart_seed == "random" or self.options.type_chart_seed.value.isdigit():
             ret["type_chart"] = self.type_chart
