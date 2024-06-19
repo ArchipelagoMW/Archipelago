@@ -132,7 +132,7 @@ def write_quizzes(world, data, random):
                 else:
                     state = "New Hampshire"
                 return encode_text(
-                    f"As of 2023,<LINE>{state}<CONT>has a law<CONT>requiring all<CONT>front seat vehicle<CONT>occupants to use<CONT>seatbelts?<DONE>")
+                    f"As of 2024,<LINE>{state}<CONT>has a law<CONT>requiring all<CONT>front seat vehicle<CONT>occupants to use<CONT>seatbelts?<DONE>")
             elif q2 == 2:
                 if a:
                     country = random.choice(["The United States", "Mexico", "Canada", "Germany", "France", "China",
