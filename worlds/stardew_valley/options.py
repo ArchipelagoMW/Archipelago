@@ -779,8 +779,8 @@ class Mods(OptionSet):
 
 
 class BundlePlando(OptionSet):
-    """If using Remixed bundles, this garantees some of them will show up in your community center.
-    If more bundles are specified than what fits in a given room, they will be randomly picked but only from the plando ones"""
+    """If using Remixed bundles, this guarantees some of them will show up in your community center.
+    If more bundles are specified than what fits in their parent room, that room will randomly pick from only the plando ones"""
     internal_name = "bundle_plando"
     display_name = "Bundle Plando"
     visibility = Visibility.template | Visibility.spoiler

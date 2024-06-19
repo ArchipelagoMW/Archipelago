@@ -9,7 +9,7 @@ from .options import (Goal, StartingMoney, ProfitMargin, BundleRandomization, Bu
                       NumberOfMovementBuffs, EnabledFillerBuffs, ExcludeGingerIsland, TrapItems,
                       MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier,
                       FriendshipMultiplier, DebrisMultiplier, QuickStart, Gifting, FarmType,
-                      Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Mods, Booksanity, Walnutsanity)
+                      Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Mods, Booksanity, Walnutsanity, BundlePlando)
 
 sv_option_groups = []
 try:
@@ -69,6 +69,7 @@ else:
             Gifting,
             DeathLink,
             Mods,
+            BundlePlando,
             ProgressionBalancing,
             Accessibility,
         ]),
