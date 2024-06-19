@@ -294,7 +294,9 @@ class DarkSouls3World(World):
                 new_location.place_locked_item(event_item)
                 if location.name in excluded:
                     excluded.remove(location.name)
-                    self.all_excluded_locations.remove(location.name)
+                    # Only remove from all_excluded if excluded does not have priority over missable
+                    if not (self.options.missable_location_behavior < self.options.excluded_location_behavior):
+                        self.all_excluded_locations.remove(location.name)
 
             new_region.locations.append(new_location)
 
@@ -1216,15 +1218,25 @@ class DarkSouls3World(World):
         manually add item rules to exclude important items.
         """
 
+        all_locations = self.multiworld.get_locations(self.player)
+
         unnecessary_locations = (
-            self.all_excluded_locations
+            {
+                location.name
+                for location in all_locations
+                if location.name in self.all_excluded_locations
+                and not (
+                    location.data.missable
+                    and self.options.excluded_location_behavior < self.options.missable_location_behavior
+                )
+            }
             if self.options.excluded_location_behavior == "unnecessary"
             else set()
         ).union(
             {
                 location.name
-                for location in self.multiworld.get_locations()
-                if location.player == self.player and location.data.missable
+                for location in all_locations
+                if location.data.missable
                 and not (
                     location.name in self.all_excluded_locations
                     and self.options.missable_location_behavior < self.options.excluded_location_behavior
