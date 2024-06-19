@@ -3,9 +3,10 @@ import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility
 from .mods.mod_data import ModNames
 from .strings.ap_names.ap_option_names import OptionName
+from .strings.bundle_names import all_cc_bundle_names
 
 
 class StardewValleyOption(Protocol):
@@ -777,6 +778,15 @@ class Mods(OptionSet):
                   ModNames.alecto, ModNames.lacey, ModNames.boarding_house}.difference(disabled_mods)
 
 
+class BundlePlando(OptionSet):
+    """If using Remixed bundles, this garantees some of them will show up in your community center.
+    If more bundles are specified than what fits in a given room, they will be randomly picked but only from the plando ones"""
+    internal_name = "bundle_plando"
+    display_name = "Bundle Plando"
+    visibility = Visibility.template | Visibility.spoiler
+    valid_keys = set(all_cc_bundle_names)
+
+
 @dataclass
 class StardewValleyOptions(PerGameCommonOptions):
     goal: Goal
@@ -820,4 +830,5 @@ class StardewValleyOptions(PerGameCommonOptions):
     multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
     mods: Mods
+    bundle_plando: BundlePlando
     death_link: DeathLink

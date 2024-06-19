@@ -41,9 +41,8 @@ class BundleTemplate:
         return BundleTemplate(template.room, template.name, items, template.number_possible_items,
                               template.number_required_items)
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, content: StardewContent,
-                      options: StardewValleyOptions) -> Bundle:
-        number_required, price_multiplier = get_bundle_final_prices(bundle_price_option, self.number_required_items, False)
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
         filtered_items = [item for item in self.items if item.can_appear(content, options)]
         number_items = len(filtered_items)
         number_chosen_items = self.number_possible_items
@@ -68,9 +67,8 @@ class CurrencyBundleTemplate(BundleTemplate):
         super().__init__(room, name, [item], 1, 1)
         self.item = item
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, content: StardewContent,
-                      options: StardewValleyOptions) -> Bundle:
-        currency_amount = self.get_currency_amount(bundle_price_option)
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        currency_amount = self.get_currency_amount(options.bundle_price)
         return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
     def get_currency_amount(self, bundle_price_option: BundlePrice):
@@ -93,9 +91,8 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
     def __init__(self, room: str, item: BundleItem):
         super().__init__(room, "", item)
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, content: StardewContent,
-                      options: StardewValleyOptions) -> Bundle:
-        currency_amount = self.get_currency_amount(bundle_price_option)
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        currency_amount = self.get_currency_amount(options.bundle_price)
         currency_name = "g"
         if currency_amount >= 1000:
             unit_amount = currency_amount % 1000
@@ -130,9 +127,8 @@ class DeepBundleTemplate(BundleTemplate):
         super().__init__(room, name, [], number_possible_items, number_required_items)
         self.categories = categories
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, content: StardewContent,
-                      options: StardewValleyOptions) -> Bundle:
-        number_required, price_multiplier = get_bundle_final_prices(bundle_price_option, self.number_required_items, False)
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
         number_categories = len(self.categories)
         number_chosen_categories = self.number_possible_items
         if number_chosen_categories < number_required:

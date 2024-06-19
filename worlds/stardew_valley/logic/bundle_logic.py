@@ -10,6 +10,7 @@ from .quest_logic import QuestLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
+from .time_logic import TimeLogicMixin
 from ..bundles.bundle import Bundle
 from ..stardew_rule import StardewRule, True_
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -26,22 +27,26 @@ class BundleLogicMixin(BaseLogicMixin):
         self.bundle = BundleLogic(*args, **kwargs)
 
 
-class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, QualityLogicMixin, FishingLogicMixin, SkillLogicMixin,
+class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, TimeLogicMixin, RegionLogicMixin, MoneyLogicMixin, QualityLogicMixin, FishingLogicMixin, SkillLogicMixin,
 QuestLogicMixin]]):
     # Should be cached
     def can_complete_bundle(self, bundle: Bundle) -> StardewRule:
         item_rules = []
         qualities = []
+        time_to_grind = 0
         can_speak_junimo = self.logic.region.can_reach(Region.wizard_tower)
         for bundle_item in bundle.items:
             if Currency.is_currency(bundle_item.get_item()):
                 return can_speak_junimo & self.logic.money.can_trade(bundle_item.get_item(), bundle_item.amount)
 
             item_rules.append(bundle_item.get_item())
+            if bundle_item.amount > 50:
+                time_to_grind = bundle_item.amount // 50
             qualities.append(bundle_item.quality)
         quality_rules = self.get_quality_rules(qualities)
         item_rules = self.logic.has_n(*item_rules, count=bundle.number_required)
-        return can_speak_junimo & item_rules & quality_rules
+        time_rule = True_() if time_to_grind <= 0 else self.logic.time.has_lived_months(time_to_grind)
+        return can_speak_junimo & item_rules & quality_rules & time_rule
 
     def get_quality_rules(self, qualities: List[str]) -> StardewRule:
         crop_quality = CropQuality.get_highest(qualities)

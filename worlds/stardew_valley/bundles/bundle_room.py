@@ -19,12 +19,25 @@ class BundleRoomTemplate:
     bundles: List[BundleTemplate]
     number_bundles: int
 
-    def create_bundle_room(self, bundle_price_option: BundlePrice, random: Random, content: StardewContent, options: StardewValleyOptions):
+    def create_bundle_room(self, random: Random, content: StardewContent, options: StardewValleyOptions):
         filtered_bundles = [bundle for bundle in self.bundles if bundle.can_appear(options)]
 
-        if self.number_bundles > len(filtered_bundles):
-            chosen_bundles = random.choices(filtered_bundles, k=self.number_bundles)
-        else:
-            chosen_bundles = random.sample(filtered_bundles, self.number_bundles)
+        priority_bundles = []
+        unpriority_bundles = []
+        for bundle in filtered_bundles:
+            if bundle.name in options.bundle_plando:
+                priority_bundles.append(bundle)
+            else:
+                unpriority_bundles.append(bundle)
 
-        return BundleRoom(self.name, [bundle.create_bundle(bundle_price_option, random, content, options) for bundle in chosen_bundles])
+        if self.number_bundles <= len(priority_bundles):
+            chosen_bundles = random.sample(priority_bundles, self.number_bundles)
+        else:
+            chosen_bundles = priority_bundles
+            num_remaining_bundles = self.number_bundles - len(priority_bundles)
+            if num_remaining_bundles > len(unpriority_bundles):
+                chosen_bundles.extend(random.choices(unpriority_bundles, k=num_remaining_bundles))
+            else:
+                chosen_bundles.extend(random.sample(unpriority_bundles, num_remaining_bundles))
+
+        return BundleRoom(self.name, [bundle.create_bundle(random, content, options) for bundle in chosen_bundles])
