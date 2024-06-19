@@ -328,7 +328,7 @@ class Hint(typing.NamedTuple):
     status: HintStatus = HintStatus.HINT_UNSPECIFIED
 
     def re_check(self, ctx, team) -> Hint:
-        if self.found:
+        if self.found and self.status == HintStatus.HINT_FOUND:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
@@ -336,6 +336,8 @@ class Hint(typing.NamedTuple):
         return self
     
     def re_prioritize(self, ctx, status: HintStatus) -> Hint:
+        if self.found and status != HintStatus.HINT_FOUND:
+            status = HintStatus.HINT_FOUND
         if status != self.status:
             return self._replace(status=status)
         return self

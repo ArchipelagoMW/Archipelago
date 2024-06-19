@@ -767,6 +767,8 @@ class HintLog(RecycleView):
             self.scroll_y = 1.0
         data = []
         for hint in hints:
+            if not hint.get("status"): # Allows connecting to old servers
+                hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node({
