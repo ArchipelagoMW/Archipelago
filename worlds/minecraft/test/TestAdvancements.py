@@ -658,6 +658,7 @@ class TestAdvancements(MCTestBase):
             ["Monsters Hunted", False, [], ['Progressive Tools']],
             ["Monsters Hunted", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']],
             ["Monsters Hunted", False, [], ['Progressive Armor']],
+            ["Monsters Hunted", False, [], ['Shield']],
             ["Monsters Hunted", False, [], ['Brewing']],
             ["Monsters Hunted", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']],
             ["Monsters Hunted", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -666,7 +667,7 @@ class TestAdvancements(MCTestBase):
             ["Monsters Hunted", False, [], ['Lead']],
             ["Monsters Hunted", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools',
                                        'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Archery',
-                                       'Progressive Armor', 'Progressive Armor', 'Enchanting',
+                                       'Progressive Armor', 'Progressive Armor', 'Enchanting', 'Shield',
                                        'Lead', 'Brewing', 'Bottles', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 

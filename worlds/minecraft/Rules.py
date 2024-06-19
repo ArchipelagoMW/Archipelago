@@ -197,9 +197,8 @@ def get_rules_lookup(player: int):
             "Sweet Dreams": lambda state: state.has("Bed", player) or state.can_reach('Village', 'Region', player),
             "You Need a Mint": lambda state: can_respawn_ender_dragon(state, player) and has_bottle(state, player),
             "Monsters Hunted": lambda state: (can_respawn_ender_dragon(state, player) and can_kill_ender_dragon(state, player) and 
-                can_kill_wither(state, player) and state.has("Lead", player)) and state.can_reach("Village", "Region", player) and
-                state.can_reach("Pillager Outpost", "Region", player) and state.can_reach("Bastion Remnant", "Region", player) and
-                state.can_reach("End City", "Region", player),
+                can_kill_wither(state, player) and complete_raid(state, player) and state.has("Lead", player)) and
+                state.can_reach("Bastion Remnant", "Region", player) and state.can_reach("End City", "Region", player),
             "Enchanter": lambda state: can_enchant(state, player),
             "Voluntary Exile": lambda state: basic_combat(state, player),
             "Eye Spy": lambda state: enter_stronghold(state, player),
