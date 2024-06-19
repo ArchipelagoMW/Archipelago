@@ -92,8 +92,8 @@ def determine_relaxation(opts: CMOptions):
 
 def meets_material_expectations(state: CollectionState,
                                 material: int, player: int, difficulty: float, absolute_relaxation: int) -> bool:
-    return state.prog_items[player]["Material"] >= (
-            (material * difficulty) + (absolute_relaxation if material > 90 else 0))
+    target = (material * difficulty) + (absolute_relaxation if material > 90 else 0)
+    return state.prog_items[player]["Material"] >= target
 
 
 def meets_chessmen_expectations(state: CollectionState,
@@ -101,7 +101,6 @@ def meets_chessmen_expectations(state: CollectionState,
     chessmen_count = state.count_group("Chessmen", player)
     pocket_count = ceil(state.count("Progressive Pocket", player) / pocket_limit_by_pocket)
     return chessmen_count + pocket_count >= count
-
 
 
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):

@@ -63,15 +63,15 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": 2,
+        "fairy_chess_piece_collection": "configure",
         "minor_piece_limit_by_type": 1,
         "major_piece_limit_by_type": 1,
         "queen_piece_limit_by_type": 1,
     }
 
     def test_limit(self):
-        expected_minors = 9
-        expected_majors = 5
+        expected_minors = 11
+        expected_majors = 7
         expected_queens = 4
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
@@ -81,16 +81,16 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": 2,
+        "fairy_chess_piece_collection": "configure",
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 2,
     }
 
     def test_limit(self):
-        expected_minors = 18
-        expected_majors = 10
-        expected_queens = 8
+        expected_minors = 22
+        expected_majors = 14
+        expected_queens = 10
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
@@ -99,25 +99,24 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": 2,
+        "fairy_chess_piece_collection": "configure",
         "minor_piece_limit_by_type": 5,
         "major_piece_limit_by_type": 1,
         "queen_piece_limit_by_type": 3,
     }
 
     def test_limit(self):
-        expected_minors = 45
-        expected_majors = 5
-        expected_queens = 12
+        expected_minors = 55
+        expected_majors = 7
+        expected_queens = 18
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
 
-class TestLimitedPieceLimits(PieceLimitTestBase):
+class TestStablePieceLimits(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
-        "fairy_chess_army": "limited",
-        "fairy_chess_piece_collection": 2,
+        "fairy_chess_piece_collection": "configure",
     }
 
     def test_no_options(self):
@@ -127,11 +126,9 @@ class TestLimitedPieceLimits(PieceLimitTestBase):
         self.assert_matches(expected_minors, expected_majors, expected_queens)
 
 
-class TestLimitedPieceLimitsOfVanilla(PieceLimitTestBase):
+class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
-        "fairy_chess_army": "limited",
-        "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 1,
@@ -145,11 +142,9 @@ class TestLimitedPieceLimitsOfVanilla(PieceLimitTestBase):
         self.assert_actuals(expected_majors, expected_queens)
 
 
-class TestLimitedPieceLimitsOfThree(PieceLimitTestBase):
+class TestStablePieceLimitsOfThree(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
-        "fairy_chess_army": "limited",
-        "fairy_chess_piece_collection": 0,
         "minor_piece_limit_by_type": 3,
         "major_piece_limit_by_type": 3,
         "queen_piece_limit_by_type": 3,
@@ -163,11 +158,9 @@ class TestLimitedPieceLimitsOfThree(PieceLimitTestBase):
         self.assert_actuals(expected_majors, expected_queens)
 
 
-class TestLimitedPieceLimitsByVariety(PieceLimitTestBase):
+class TestStablePieceLimitsByVariety(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
-        "fairy_chess_army": "limited",
-        "fairy_chess_piece_collection": 0,
         "minor_piece_limit_by_type": 4,
         "major_piece_limit_by_type": 1,
         "queen_piece_limit_by_type": 3,

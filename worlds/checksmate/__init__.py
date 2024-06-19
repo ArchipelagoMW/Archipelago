@@ -50,7 +50,6 @@ class CMWorld(World):
     items_used: Dict[int, Dict[str, int]] = {}
     items_remaining: Dict[int, Dict[str, int]] = {}
     armies: Dict[int, List[int]] = {}
-    army_piece_types_by_player: Dict[int, Dict[str, int]] = {}
 
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
@@ -471,11 +470,10 @@ class CMWorld(World):
             return 0
 
         piece_limit: int = self.piece_limit_of(chosen_item)
-        if self.player not in self.army_piece_types_by_player:
-            self.army_piece_types_by_player[self.player] = \
-                {piece: sum([self.piece_types_by_army[army][piece] for army in self.armies[self.player]])
-                 for piece in set().union(*self.piece_types_by_army.values())}
-        limit_multiplier = get_limit_multiplier_for_item(self.army_piece_types_by_player[self.player])
+        army_piece_types = {
+            piece: sum([self.piece_types_by_army[army][piece] for army in self.armies[self.player]])
+            for piece in set().union(*self.piece_types_by_army.values())}
+        limit_multiplier = get_limit_multiplier_for_item(army_piece_types)
         piece_limit = piece_limit * limit_multiplier(chosen_item)
         if piece_limit > 0 and with_children != self.PieceLimitCascade.NO_CHILDREN:
             children = get_children(chosen_item)
