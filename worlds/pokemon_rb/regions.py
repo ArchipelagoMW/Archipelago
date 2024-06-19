@@ -1562,7 +1562,8 @@ def create_regions(self):
                             <= self.options.trap_percentage.value and combined_traps != 0):
                         item = self.create_item(self.select_trap())
 
-                if self.options.key_items_only and (not location.event) and (not item.advancement):
+                if (self.options.key_items_only and (location.original_item != "Exp. All")
+                        and not (location.event or item.advancement)):
                     continue
 
                 if item.name in start_inventory and start_inventory[item.name] > 0 and \
@@ -1950,7 +1951,7 @@ def create_regions(self):
                 for entrance in reversed(region.exits):
                     if isinstance(entrance, PokemonRBWarp):
                         region.exits.remove(entrance)
-            multiworld.regions.entrance_cache[self.player] = cache
+            multiworld.regions.entrance_cache[self.player] = cache.copy()
             if badge_locs:
                 for loc in badge_locs:
                     loc.item = None

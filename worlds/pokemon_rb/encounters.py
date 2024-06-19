@@ -197,7 +197,6 @@ def process_pokemon_locations(self):
                 mon = randomize_pokemon(self, original_mon, mons_list, 2, self.random)
             placed_mons[mon] += 1
             location.item = self.create_item(mon)
-            location.event = True
             location.locked = True
             location.item.location = location
             locations.append(location)
@@ -269,7 +268,6 @@ def process_pokemon_locations(self):
         for slot in encounter_slots:
             location = self.multiworld.get_location(slot.name, self.player)
             location.item = self.create_item(slot.original_item)
-            location.event = True
             location.locked = True
             location.item.location = location
             placed_mons[location.item.name] += 1

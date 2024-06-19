@@ -68,7 +68,6 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 3
     option_definitions = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
@@ -284,55 +283,89 @@ class SMZ3World(World):
         return offworldSprites
 
     def convert_to_sm_item_name(self, itemName):
-        charMap = { "A" : 0x3CE0, 
-                    "B" : 0x3CE1,
-                    "C" : 0x3CE2,
-                    "D" : 0x3CE3,
-                    "E" : 0x3CE4,
-                    "F" : 0x3CE5,
-                    "G" : 0x3CE6,
-                    "H" : 0x3CE7,
-                    "I" : 0x3CE8,
-                    "J" : 0x3CE9,
-                    "K" : 0x3CEA,
-                    "L" : 0x3CEB,
-                    "M" : 0x3CEC,
-                    "N" : 0x3CED,
-                    "O" : 0x3CEE,
-                    "P" : 0x3CEF,
-                    "Q" : 0x3CF0,
-                    "R" : 0x3CF1,
-                    "S" : 0x3CF2,
-                    "T" : 0x3CF3,
-                    "U" : 0x3CF4,
-                    "V" : 0x3CF5,
-                    "W" : 0x3CF6,
-                    "X" : 0x3CF7,
-                    "Y" : 0x3CF8,
-                    "Z" : 0x3CF9,
-                    " " : 0x3C4E,
-                    "!" : 0x3CFF,
-                    "?" : 0x3CFE,
-                    "'" : 0x3CFD,
-                    "," : 0x3CFB,
-                    "." : 0x3CFA,
-                    "-" : 0x3CCF,
-                    "_" : 0x000E,
-                    "1" : 0x3C00,
-                    "2" : 0x3C01,
-                    "3" : 0x3C02,
-                    "4" : 0x3C03,
-                    "5" : 0x3C04,
-                    "6" : 0x3C05,
-                    "7" : 0x3C06,
-                    "8" : 0x3C07,
-                    "9" : 0x3C08,
-                    "0" : 0x3C09,
-                    "%" : 0x3C0A}
+        # SMZ3 uses a different font; this map is not compatible with just SM alone.
+        charMap = {
+            "A": 0x3CE0,
+            "B": 0x3CE1,
+            "C": 0x3CE2,
+            "D": 0x3CE3,
+            "E": 0x3CE4,
+            "F": 0x3CE5,
+            "G": 0x3CE6,
+            "H": 0x3CE7,
+            "I": 0x3CE8,
+            "J": 0x3CE9,
+            "K": 0x3CEA,
+            "L": 0x3CEB,
+            "M": 0x3CEC,
+            "N": 0x3CED,
+            "O": 0x3CEE,
+            "P": 0x3CEF,
+            "Q": 0x3CF0,
+            "R": 0x3CF1,
+            "S": 0x3CF2,
+            "T": 0x3CF3,
+            "U": 0x3CF4,
+            "V": 0x3CF5,
+            "W": 0x3CF6,
+            "X": 0x3CF7,
+            "Y": 0x3CF8,
+            "Z": 0x3CF9,
+            " ": 0x3C4E,
+            "!": 0x3CFF,
+            "?": 0x3CFE,
+            "'": 0x3CFD,
+            ",": 0x3CFB,
+            ".": 0x3CFA,
+            "-": 0x3CCF,
+            "1": 0x3C80,
+            "2": 0x3C81,
+            "3": 0x3C82,
+            "4": 0x3C83,
+            "5": 0x3C84,
+            "6": 0x3C85,
+            "7": 0x3C86,
+            "8": 0x3C87,
+            "9": 0x3C88,
+            "0": 0x3C89,
+            "%": 0x3C0A,
+            "a": 0x3C90,
+            "b": 0x3C91,
+            "c": 0x3C92,
+            "d": 0x3C93,
+            "e": 0x3C94,
+            "f": 0x3C95,
+            "g": 0x3C96,
+            "h": 0x3C97,
+            "i": 0x3C98,
+            "j": 0x3C99,
+            "k": 0x3C9A,
+            "l": 0x3C9B,
+            "m": 0x3C9C,
+            "n": 0x3C9D,
+            "o": 0x3C9E,
+            "p": 0x3C9F,
+            "q": 0x3CA0,
+            "r": 0x3CA1,
+            "s": 0x3CA2,
+            "t": 0x3CA3,
+            "u": 0x3CA4,
+            "v": 0x3CA5,
+            "w": 0x3CA6,
+            "x": 0x3CA7,
+            "y": 0x3CA8,
+            "z": 0x3CA9,
+            '"': 0x3CAA,
+            ":": 0x3CAB,
+            "~": 0x3CAC,
+            "@": 0x3CAD,
+            "#": 0x3CAE,
+            "+": 0x3CAF,
+            "_": 0x000E
+        }
         data = []
 
-        itemName = itemName.upper()[:26]
-        itemName = itemName.strip()
+        itemName = itemName.replace("_", "-").strip()[:26]
         itemName = itemName.center(26, " ")    
         itemName = "___" + itemName + "___"
 
@@ -527,7 +560,6 @@ class SMZ3World(World):
                 if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
                     loc.item.classification = ItemClassification.filler
                     loc.item.item.Progression = False
-                    loc.item.location.event = False
                     self.unreachable.append(loc)
 
     def get_filler_item_name(self) -> str:
@@ -573,7 +605,6 @@ class SMZ3World(World):
                         break
                 assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
                 self.multiworld.push_item(loc, itemFromPool, False)
-                loc.event = False
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)

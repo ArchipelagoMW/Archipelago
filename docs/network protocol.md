@@ -31,6 +31,9 @@ There are also a number of community-supported libraries available that implemen
 | GameMaker: Studio 2.x+        | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
 
 ## Synchronizing Items
+After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may have already processed in a previous play session.  
+To ensure the client is able to reject those items if it needs to, each item in the packet has an associated `index` argument. You will need to find a way to save the "last processed item index" to the player's local savegame, a local file, or something to that effect. Before connecting, you should load that "last processed item index" value and compare against it in your received items handling.
+
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
 
 Even if the client detects a desync, it can still accept the items provided in this packet to prevent gameplay interruption.
@@ -50,7 +53,7 @@ Example:
 ```
 
 ## (Server -> Client)
-These packets are are sent from the multiworld server to the client. They are not messages which the server accepts.
+These packets are sent from the multiworld server to the client. They are not messages which the server accepts.
 * [RoomInfo](#RoomInfo)
 * [ConnectionRefused](#ConnectionRefused)
 * [Connected](#Connected)
@@ -77,7 +80,6 @@ Sent to clients when they connect to an Archipelago server.
 | hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
-| datapackage_versions  | dict\[str, int\]                              | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). **Deprecated. Use `datapackage_checksums` instead.** |
 | datapackage_checksums | dict[str, str]                                | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information.                | 
 | seed_name             | str                                           | Uniquely identifying name of this generation                                                                                                                                                                                          |
 | time                  | float                                         | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce.                                                                                                                               |
@@ -497,9 +499,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are in the range of ± 2<sup>53</sup>-1.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are in the range of ± 2<sup>53</sup>-1.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
@@ -643,15 +645,47 @@ class Hint(typing.NamedTuple):
 ```
 
 ### Data Package Contents
-A data package is a JSON object which may contain arbitrary metadata to enable a client to interact with the Archipelago server most easily. Currently, this package is used to send ID to name mappings so that clients need not maintain their own mappings.
+A data package is a JSON object which may contain arbitrary metadata to enable a client to interact with the Archipelago
+server most easily and not maintain their own mappings. Some contents include:
 
-We encourage clients to cache the data package they receive on disk, or otherwise not tied to a session. You will know when your cache is outdated if the [RoomInfo](#RoomInfo) packet or the datapackage itself denote a different version. A special case is datapackage version 0, where it is expected the package is custom and should not be cached.
+   - Name to ID mappings for items and locations.
+   - A checksum of each game's data package for clients to tell if a cached package is invalid.
 
-Note: 
- * Any ID is unique to its type across AP: Item 56 only exists once and Location 56 only exists once.
- * Any Name is unique to its type across its own Game only: Single Arrow can exist in two games.
- * The IDs from the game "Archipelago" may be used in any other game. 
-   Especially Location ID -1: Cheat Console and -2: Server (typically Remote Start Inventory)
+We encourage clients to cache the data package they receive on disk, or otherwise not tied to a session. You will know 
+when your cache is outdated if the [RoomInfo](#RoomInfo) packet or the datapackage itself denote a different checksum
+than any locally cached ones.
+
+**Important Notes about IDs and Names**: 
+
+* IDs ≤ 0 are reserved for "Archipelago" and should not be used by other world implementations.
+* The IDs from the game "Archipelago" (in `worlds/generic`) may be used in any world.
+  * Especially Location ID `-1`: `Cheat Console` and `-2`: `Server` (typically Remote Start Inventory)
+* Any names and IDs are only unique in its own world data package, but different games may reuse these names or IDs.
+  * At runtime, you will need to look up the game of the player to know which item or location ID/Name to lookup in the
+    data package. This can be easily achieved by reviewing the `slot_info` for a particular player ID prior to lookup.
+  * For example, a data package like this is valid (Some properties such as `checksum` were omitted):
+    ```json
+    {
+      "games": {
+        "Game A": {
+          "location_name_to_id": {
+            "Boss Chest": 40
+          },
+          "item_name_to_id": {
+            "Item X": 12
+          }
+        },
+        "Game B": {
+          "location_name_to_id": {
+            "Minigame Prize": 40
+          },
+          "item_name_to_id": {
+            "Item X": 40
+          }
+        }
+      }
+    }
+    ```
 
 #### Contents
 | Name | Type | Notes |
@@ -665,7 +699,6 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 |---------------------|----------------|-------------------------------------------------------------------------------------------------------------------------------|
 | item_name_to_id     | dict[str, int] | Mapping of all item names to their respective ID.                                                                             |
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
-| version             | int            | Version number of this game's data. Deprecated. Used by older clients to request an updated datapackage if cache is outdated. |
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
 
 ### Tags

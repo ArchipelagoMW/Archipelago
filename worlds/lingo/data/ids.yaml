@@ -140,13 +140,9 @@ panels:
     PURPLE: 444502
     FIVE (1): 444503
     FIVE (2): 444504
-    OUT: 444505
     HIDE: 444506
     DAZE: 444507
-    WALL: 444508
-    KEEP: 444509
-    BAILEY: 444510
-    TOWER: 444511
+  Compass Room:
     NORTH: 444512
     DIAMONDS: 444513
     FIRE: 444514
@@ -165,7 +161,7 @@ panels:
     THAT: 444525
     STRESSED: 444526
     STAR: 444527
-    TAME: 444528
+    TUBE: 444528
     CAT: 444529
   Hedge Maze:
     DOWN: 444530
@@ -689,6 +685,12 @@ panels:
   Arrow Garden:
     MASTERY: 444948
     SHARP: 444949
+  Hallway Room (1):
+    OUT: 444505
+    WALL: 444508
+    KEEP: 444509
+    BAILEY: 444510
+    TOWER: 444511
   Hallway Room (2):
     WISE: 444950
     CLOCK: 444951
@@ -764,7 +766,6 @@ panels:
     BOUNCE: 445010
     SCRAWL: 445011
     PLUNGE: 445012
-    LEAP: 445013
   Rhyme Room (Circle):
     BIRD: 445014
     LETTER: 445015
@@ -788,6 +789,7 @@ panels:
     GEM: 445031
     INNOVATIVE (Top): 445032
     INNOVATIVE (Bottom): 445033
+    LEAP: 445013
   Room Room:
     DOOR (1): 445034
     DOOR (2): 445035
@@ -995,9 +997,19 @@ doors:
     Traveled Entrance:
       item: 444433
       location: 444438
-    Lost Door:
-      item: 444435
-      location: 444440
+  Sunwarps:
+    1 Sunwarp:
+      item: 444581
+    2 Sunwarp:
+      item: 444588
+    3 Sunwarp:
+      item: 444586
+    4 Sunwarp:
+      item: 444585
+    5 Sunwarp:
+      item: 444587
+    6 Sunwarp:
+      item: 444584
   Pilgrim Antechamber:
     Sun Painting:
       item: 444436
@@ -1070,9 +1082,7 @@ doors:
       location: 444501
     Purple Barrier:
       item: 444457
-    Hallway Door:
-      item: 444459
-      location: 445214
+  Compass Room:
     Lookout Entrance:
       item: 444579
       location: 445271
@@ -1345,6 +1355,10 @@ doors:
     Exit:
       item: 444552
       location: 444947
+  Hallway Room (1):
+    Exit:
+      item: 444459
+      location: 445214
   Hallway Room (2):
     Exit:
       item: 444553
@@ -1455,9 +1469,11 @@ door_groups:
   Colorful Doors: 444498
   Directional Gallery Doors: 444531
   Artistic Doors: 444545
+  Sunwarps: 444582
 progression:
   Progressive Hallway Room: 444461
   Progressive Fearless: 444470
   Progressive Orange Tower: 444482
   Progressive Art Gallery: 444563
   Progressive Colorful: 444580
+  Progressive Pilgrimage: 444583

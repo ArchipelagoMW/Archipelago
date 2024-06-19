@@ -3,11 +3,12 @@
 ## Required Software
 
 - [TUNIC](https://tunicgame.com/) for PC (Steam Deck also supported)
-- [BepInEx (Unity IL2CPP)](https://github.com/BepInEx/BepInEx/releases/tag/v6.0.0-pre.1)
 - [TUNIC Randomizer Mod](https://github.com/silent-destroyer/tunic-randomizer/releases/latest)
+- [BepInEx 6.0.0-pre.1 (Unity IL2CPP x64)](https://github.com/BepInEx/BepInEx/releases/tag/v6.0.0-pre.1)
 
 ## Optional Software
-- [TUNIC Randomizer Map Tracker](https://github.com/SapphireSapphic/TunicTracker/releases/latest) (For use with EmoTracker/PopTracker)
+- [TUNIC Randomizer Map Tracker](https://github.com/SapphireSapphic/TunicTracker/releases/latest) 
+  - Requires [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 - [TUNIC Randomizer Item Auto-tracker](https://github.com/radicoon/tunic-rando-tracker/releases/latest)
 - [Archipelago Text Client](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
@@ -27,9 +28,11 @@ Find your TUNIC game installation directory:
 
 BepInEx is a general purpose framework for modding Unity games, and is used to run the TUNIC Randomizer.
 
-Download [BepInEx](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x64_6.0.0-pre.1.zip).
+Download [BepInEx 6.0.0-pre.1 (Unity IL2CPP x64)](https://github.com/BepInEx/BepInEx/releases/tag/v6.0.0-pre.1).
 
 If playing on Steam Deck, follow this [guide to set up BepInEx via Proton](https://docs.bepinex.dev/articles/advanced/proton_wine.html).
+
+If playing on Linux, you may be able to add `WINEDLLOVERRIDES="winhttp=n,b" %command%` to your Steam launch options. If this does not work, follow the guide for Steam Deck above.
 
 Extract the contents of the BepInEx .zip file into your TUNIC game directory:<br>
 - **Steam**: Steam\steamapps\common\TUNIC<br>
@@ -54,7 +57,7 @@ Launch the game, and if everything was installed correctly you should see `Rando
 
 ### Configure Your YAML File
 
-Visit the [TUNIC options page](/games/Tunic/player-options) to generate a YAML with your selected options.
+Visit the [TUNIC options page](/games/TUNIC/player-options) to generate a YAML with your selected options.
 
 ### Configure Your Mod Settings
 Launch the game, and using the menu on the Title Screen select `Archipelago` under `Randomizer Mode`. 

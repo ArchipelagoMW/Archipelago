@@ -103,8 +103,6 @@ shuffle_structures:
   off: 0
 ```
 
-För mer detaljer om vad varje inställning gör, kolla standardinställningen `PlayerSettings.yaml` som kommer med
-Archipelago-installationen.
 
 ## Gå med i ett Multivärld-spel
 
