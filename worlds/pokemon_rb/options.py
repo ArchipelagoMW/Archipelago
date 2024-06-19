@@ -293,19 +293,19 @@ class AllPokemonSeen(Toggle):
 
 
 class DexSanity(NamedRange):
-    """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify a percentage of Pokemon to
-    have checks added. If Accessibility is set to locations, this will be the percentage of all logically reachable
-    Pokemon that will get a location check added to it. With items or minimal Accessibility, it will be the percentage
-    of all 151 Pokemon.
-    If Pokedex is required, the items for Pokemon acquired before acquiring the Pokedex can be found by talking to
-    Professor Oak or evaluating the Pokedex via Oak's PC."""
+    """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify the exact number of Dexsanity
+    checks to add, and they will be distributed to Pokemon randomly.
+    If Accessibility is set to locations, Dexsanity checks for Pokemon that are not logically reachable will be removed,
+    so the number could be lower than you specified.
+    If Pokedex is required, the Dexsanity checks for Pokemon you acquired before acquiring the Pokedex can be found by
+    talking to Professor Oak or evaluating the Pokedex via Oak's PC."""
     display_name = "Dexsanity"
     default = 0
     range_start = 0
-    range_end = 100
+    range_end = 151
     special_range_names = {
         "disabled": 0,
-        "full": 100
+        "full": 151
     }
 
 

@@ -263,8 +263,8 @@ class PokemonRedBlueWorld(World):
         process_pokemon_data(self)
 
         self.dexsanity_table = [
-            *(True for _ in range(round(self.options.dexsanity.value * 1.51))),
-            *(False for _ in range(151 - round(self.options.dexsanity.value * 1.51)))
+            *(True for _ in range(round(self.options.dexsanity.value))),
+            *(False for _ in range(151 - round(self.options.dexsanity.value)))
         ]
         self.random.shuffle(self.dexsanity_table)
 
