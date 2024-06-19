@@ -509,3 +509,26 @@ class LinksAwakeningWorld(World):
         if change and item.name in self.rupees:
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
+
+    def fill_slot_data(self):
+        slot_data = {}
+
+        if not self.multiworld.is_race:
+            # all of these option are NOT used by the LADX- or Text-Client.
+            # they are used by Magpie tracker (https://github.com/kbranch/Magpie/wiki/Autotracker-API)
+            # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
+
+            slot_options = [
+                "goal", "logic", "tradequest", "rooster",
+                "experimental_dungeon_shuffle", "experimental_entrance_shuffle", "trendy_game", "gfxmod",
+                "shuffle_nightmare_keys", "shuffle_small_keys", "shuffle_maps",
+                "shuffle_compasses", "shuffle_stone_beaks", "shuffle_instruments", "nag_messages"
+            ] #"instrument_count", 
+
+            #slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
+            slot_data = { option: value.current_key for option, value in dataclasses.asdict(self.options).items() if option in slot_options }
+            #slot_data = self.options.as_dict(*slot_options) # { option: getattr(self.options, option) for option in slot_options }
+            
+            print(slot_data)
+
+        return slot_data
