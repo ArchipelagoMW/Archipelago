@@ -64,8 +64,8 @@ keys in order from Card Key 2F to Card Key 11F.
 will be randomly selected to be given checks. Does not include scripted trainers, most of which disappear
 after battling them, but also includes Gym Leaders. You must talk to the trainer after defeating them to receive
 your prize. Adds random filler items to the item pool.
-* Dexsanity: Location checks occur when registering Pokémon as owned in the Pokédex. You can choose a percentage
-of Pokémon to have checks added to, chosen randomly. You can identify which Pokémon have location checks by an empty
+* Dexsanity: Location checks occur when registering Pokémon as owned in the Pokédex. You can choose between 0 and 151
+Pokémon to have checks added to, chosen randomly. You can identify which Pokémon have location checks by an empty
 Poké Ball icon shown in battle or in the Pokédex menu.
 
 ## Which items can be in another player's world?
