@@ -1217,7 +1217,7 @@ class DarkSouls3World(World):
         """
 
         unnecessary_locations = (
-            self.options.all_excluded_locations
+            self.all_excluded_locations
             if self.options.excluded_location_behavior == "unnecessary"
             else set()
         ).union(
