@@ -96,6 +96,14 @@ def meets_material_expectations(state: CollectionState,
             (material * difficulty) + (absolute_relaxation if material > 90 else 0))
 
 
+def meets_chessmen_expectations(state: CollectionState,
+                                count: int, player: int, pocket_limit_by_pocket: int) -> bool:
+    chessmen_count = state.count_group("Chessmen", player)
+    pocket_count = ceil(state.count("Progressive Pocket", player) / pocket_limit_by_pocket)
+    return chessmen_count + pocket_count >= count
+
+
+
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
@@ -106,14 +114,13 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     # AI avoids making trades except where it wins material or secures victory, so require that much material
     for name, item in checksmate.Locations.location_table.items():
         set_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.material_expectations: meets_material_expectations(
+                 lambda state, v=item.material_expectations: v <= 0 or meets_material_expectations(
                      state, v, player, difficulty, absolute_relaxation))
     # player must have (a king plus) that many chessmen to capture any given number of chessmen
     for name, item in checksmate.Locations.location_table.items():
         add_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.chessmen_expectations: (state.count_group("Chessmen", player) + ceil(
-                     state.count("Progressive Pocket", player) /
-                     opts.pocket_limit_by_pocket)) >= v)
+                 lambda state, v=item.chessmen_expectations: v <= 0 or meets_chessmen_expectations(
+                     state, v, player, opts.pocket_limit_by_pocket.value))
 
     for i in range(1, 7):
         add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),
