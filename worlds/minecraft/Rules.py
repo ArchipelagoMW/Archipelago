@@ -206,7 +206,7 @@ def get_rules_lookup(player: int):
             "Serious Dedication": lambda state: (state.can_reach("Hidden in the Depths", "Location", player) and
                 state.has("8 Netherite Scrap", player, 3) and has_gold_ingots(state, player)),
             "Postmortal": lambda state: complete_raid(state, player),
-            "Adventuring Time": lambda state: can_adventure(state, player),
+            "Adventuring Time": lambda state: can_adventure(state, player) and has_iron_ingots(state, player) and state.has("Progressive Tools", player, 2),
             "Hero of the Village": lambda state: complete_raid(state, player),
             "Hidden in the Depths": lambda state: can_brew_potions(state, player) and state.has("Bed", player) and has_diamond_pickaxe(state, player),
             "Beaconator": lambda state: (can_kill_wither(state, player) and has_diamond_pickaxe(state, player) and

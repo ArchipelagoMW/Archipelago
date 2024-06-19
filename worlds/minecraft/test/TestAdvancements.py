@@ -776,9 +776,10 @@ class TestAdvancements(MCTestBase):
         self.run_location_tests([
             ["Adventuring Time", False, []],
             ["Adventuring Time", False, [], ['Progressive Weapons']],
-            ["Adventuring Time", False, [], ['Campfire', 'Progressive Resource Crafting']],
-            ["Adventuring Time", True, ['Progressive Weapons', 'Campfire']],
-            ["Adventuring Time", True, ['Progressive Weapons', 'Progressive Resource Crafting']],
+            ["Adventuring Time", False, [], ['Progressive Resource Crafting']],
+            ["Adventuring Time", False, [], ['Progressive Tools', 'Progressive Tools']],
+            ["Adventuring Time", True, ['Progressive Weapons', 'Progressive Resource Crafting',
+                                        'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42057(self):
