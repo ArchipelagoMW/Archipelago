@@ -41,6 +41,7 @@ import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore, Hint, HintStatus
+from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
 colorama.init()
@@ -1082,8 +1083,13 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
         else:
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
+            new_status = status
+            if found:
+                new_status = HintStatus.HINT_FOUND
+            elif item_flags & ItemClassification.trap:
+                new_status = HintStatus.HINT_AVOID
             hints.append(Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                       item_flags, HintStatus.HINT_FOUND if found else status))
+                                       item_flags, new_status))
 
     return hints
 
@@ -1105,8 +1111,13 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
 
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
+        new_status = status
+        if found:
+            new_status = HintStatus.HINT_FOUND
+        elif item_flags & ItemClassification.trap:
+            new_status = HintStatus.HINT_AVOID
         return [Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags,
-                              HintStatus.HINT_FOUND if found else status)]
+                              new_status)]
     return []
 
 
