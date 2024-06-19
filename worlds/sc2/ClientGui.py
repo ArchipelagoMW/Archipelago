@@ -269,7 +269,7 @@ class SC2Manager(GameManager):
         for loc in self.ctx.locations_for_mission(mission_name):
             if loc in self.ctx.missing_locations:
                 count += 1
-                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
+                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names.lookup_in_game(loc))
 
         plando_locations = []
         for plando_loc in self.ctx.plando_locations:

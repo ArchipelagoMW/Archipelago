@@ -1,5 +1,5 @@
 from . import KDL3TestBase
-from worlds.generic import PlandoConnection
+from Options import PlandoConnection
 from ..Names import LocationName
 import typing
 
@@ -49,12 +49,10 @@ class TestShiro(KDL3TestBase):
     options = {
         "open_world": False,
         "plando_connections": [
-            [],
-            [
                 PlandoConnection("Grass Land 1", "Iceberg 5", "both"),
                 PlandoConnection("Grass Land 2", "Ripple Field 5", "both"),
                 PlandoConnection("Grass Land 3", "Grass Land 1", "both")
-            ]],
+            ],
         "stage_shuffle": "shuffled",
         "plando_options": "connections"
     }

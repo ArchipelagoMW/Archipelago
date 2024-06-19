@@ -10,7 +10,7 @@ from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
 from .Items import item_factory, item_name_groups, item_table, progression_items
 from .Options import small_key_shuffle
-from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
+from .OverworldGlitchRules import overworld_glitches_rules
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
@@ -33,7 +33,6 @@ def set_rules(world):
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
-            no_logic_rules(world, player)
             for exit in world.get_region('Menu', player).exits:
                 exit.hide_path = True
             return
@@ -399,8 +398,8 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
     if not multiworld.small_key_shuffle[player] and multiworld.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         forbid_item(multiworld.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
-    set_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    set_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     if multiworld.pot_shuffle[player]:
         # key can (and probably will) be moved behind bombable wall
         set_rule(multiworld.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
