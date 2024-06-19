@@ -518,17 +518,22 @@ class LinksAwakeningWorld(World):
             # they are used by Magpie tracker (https://github.com/kbranch/Magpie/wiki/Autotracker-API)
             # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
 
-            slot_options = [
+            slot_options = ["instrument_count"]
+
+            slot_options_display_name = [
                 "goal", "logic", "tradequest", "rooster",
                 "experimental_dungeon_shuffle", "experimental_entrance_shuffle", "trendy_game", "gfxmod",
                 "shuffle_nightmare_keys", "shuffle_small_keys", "shuffle_maps",
                 "shuffle_compasses", "shuffle_stone_beaks", "shuffle_instruments", "nag_messages"
-            ] #"instrument_count", 
+            ]
 
-            #slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
-            slot_data = { option: value.current_key for option, value in dataclasses.asdict(self.options).items() if option in slot_options }
-            #slot_data = self.options.as_dict(*slot_options) # { option: getattr(self.options, option) for option in slot_options }
-            
-            print(slot_data)
+            # use the default behaviour to grab options
+            slot_data = self.options.as_dict(*slot_options)
+
+            # for options which should not get the internal int value but the display name use the extra handling
+            slot_data.update({
+                option: value.current_key
+                for option, value in dataclasses.asdict(self.options).items() if option in slot_options_display_name
+            })
 
         return slot_data
