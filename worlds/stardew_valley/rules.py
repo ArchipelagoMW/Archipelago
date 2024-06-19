@@ -208,7 +208,7 @@ def set_vanilla_skill_rule(logic: StardewLogic, multiworld, player, skill: str, 
 
 
 def set_modded_skill_rule(logic: StardewLogic, multiworld, player, skill: str, level: int):
-    rule = logic.mod.skill.can_earn_mod_skill_level(skill, level)
+    rule = logic.skill.can_earn_level(skill, level)
     MultiWorldRules.set_rule(get_skill_level_location(multiworld, player, skill, level), rule)
 
 

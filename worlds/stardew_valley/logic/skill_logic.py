@@ -70,7 +70,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
         elif skill in all_mod_skills:
             # Ideal solution would be to add a logic registry, but I'm too lazy.
-            return self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
+            return previous_level_rule & months_rule & self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
         else:
             raise Exception(f"Unknown skill: {skill}")
 
