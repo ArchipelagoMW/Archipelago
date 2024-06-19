@@ -277,6 +277,7 @@ def remaining_fill(multiworld: MultiWorld,
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     total = min(len(itempool),  len(locations))
+    fill_log = FillLogger(total)
     placed = 0
     while locations and itempool:
         item_to_place = itempool.pop()
