@@ -61,7 +61,7 @@ class FillLogger():
             logging.StreamHandler.terminator = '\r'
 
         pct: float = round(100 * (placed / self.total_items), 2)
-        elapsed: str = time.strftime("%H:%M:%S", time.gmtime(round(self.cur_time - self.start_time)))
+        elapsed: str = time.strftime("%Hh:%Mm:%Ss", time.gmtime(round(self.cur_time - self.start_time)))
         logging.info(f"Current fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed [{elapsed} elapsed].")
 
         # restore the terminator
