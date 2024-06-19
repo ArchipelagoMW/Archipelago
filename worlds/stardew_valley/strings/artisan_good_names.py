@@ -57,6 +57,10 @@ class ArtisanGood:
     def specific_smoked_fish(cls, fish: str) -> str:
         return f"{cls.smoked_fish} [{fish}]"
 
+    @classmethod
+    def specific_bait(cls, fish: str) -> str:
+        return f"{cls.targeted_bait} [{fish}]"
+
 
 class ModArtisanGood:
     pterodactyl_egg = "Pterodactyl Egg"

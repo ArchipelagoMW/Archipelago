@@ -24,6 +24,7 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
     def initialize_rules(self):
         # TODO remove this one too once fish are converted to sources
         self.registry.artisan_good_rules.update({ArtisanGood.specific_smoked_fish(fish): self.can_smoke(fish) for fish in all_fish})
+        self.registry.artisan_good_rules.update({ArtisanGood.specific_bait(fish): self.can_bait(fish) for fish in all_fish})
 
     def has_jelly(self) -> StardewRule:
         return self.logic.artisan.can_preserves_jar(Fruit.any)

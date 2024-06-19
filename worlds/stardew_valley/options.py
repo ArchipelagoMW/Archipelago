@@ -123,14 +123,16 @@ class BundleRandomization(Choice):
     Vanilla: Standard bundles from the vanilla game
     Thematic: Every bundle will require random items compatible with their original theme
     Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones
+    Remixed Anywhere: Remixed, but bundles are not locked to specific rooms.
     Shuffled: Every bundle will require random items and follow no particular structure"""
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
-    default = 2
     option_vanilla = 0
     option_thematic = 1
-    option_remixed = 2
-    option_shuffled = 3
+    option_remixed = 3
+    option_remixed_anywhere = 4
+    option_shuffled = 6
+    default = option_remixed
 
 
 class BundlePrice(Choice):

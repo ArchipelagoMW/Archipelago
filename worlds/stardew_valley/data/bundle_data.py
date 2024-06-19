@@ -1,6 +1,7 @@
 from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate, MoneyBundleTemplate, FestivalBundleTemplate
 from ..bundles.bundle_item import BundleItem
 from ..bundles.bundle_room import BundleRoomTemplate
+from ..content import content_packs
 from ..content.vanilla.base import all_fruits, all_vegetables, all_edible_mushrooms
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
@@ -692,8 +693,9 @@ tackle_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle_items
 bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait, deluxe_bait, targeted_bait]
 bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 3, 2)
 
-specific_bait_items = [BundleItem(ArtisanGood.targeted_bait, flavor=fish).as_amount(10) for fish in all_fish]
-specific_bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.specific_bait, specific_bait_items, 6, 4)
+# This bundle could change based on content packs, once the fish are properly in it. Until then, I'm not sure how, so pelican town only
+specific_bait_items = [BundleItem(ArtisanGood.targeted_bait, flavor=fish.name).as_amount(10) for fish in content_packs.pelican_town.fishes]
+specific_bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.specific_bait, specific_bait_items, 6, 3)
 
 deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
 deep_fishing_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.deep_fishing, deep_fishing_items, 4, 3)
@@ -708,7 +710,8 @@ fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
 fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, trash_bundle,
-                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle, fish_smoker_bundle]
+                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle,
+                             specific_bait_bundle, fish_smoker_bundle]
 
 # In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
 fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
@@ -888,6 +891,10 @@ vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_
 vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles_vanilla, 4)
 vault_thematic = BundleRoomTemplate(CCRoom.vault, vault_bundles_thematic, 4)
 vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)
+
+all_cc_remixed_bundles = [*crafts_room_bundles_remixed, *pantry_bundles_remixed, *fish_tank_bundles_remixed,
+                          *boiler_room_bundles_remixed, *bulletin_board_bundles_remixed]
+community_center_remixed_anywhere = BundleRoomTemplate("Community Center", all_cc_remixed_bundles, 26)
 
 all_bundle_items_except_money = []
 all_remixed_bundles = [*crafts_room_bundles_remixed, *pantry_bundles_remixed, *fish_tank_bundles_remixed,

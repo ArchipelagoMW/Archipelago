@@ -1,6 +1,10 @@
 import unittest
 
+from . import SVTestBase
+from .. import BundleRandomization
 from ..data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, quality_foraging_items, quality_fish_items
+from ..options import BundlePlando
+from ..strings.bundle_names import BundleName
 from ..strings.crop_names import Fruit
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality
 
@@ -46,4 +50,21 @@ class TestBundles(unittest.TestCase):
         for bundle_item in quality_fish_items:
             with self.subTest(bundle_item.item_name):
                 self.assertEqual(bundle_item.quality, FishQuality.gold)
+
+
+class TestRemixedAnywhereBundlesLogic(SVTestBase):
+    fish_bundle_names = {BundleName.spring_fish, BundleName.summer_fish, BundleName.fall_fish, BundleName.winter_fish, BundleName.ocean_fish,
+                         BundleName.lake_fish, BundleName.river_fish, BundleName.night_fish, BundleName.legendary_fish, BundleName.specialty_fish,
+                         BundleName.bait, BundleName.specific_bait, BundleName.crab_pot, BundleName.tackle, BundleName.quality_fish,
+                         BundleName.rain_fish, BundleName.master_fisher}
+    options = {
+        BundleRandomization: BundleRandomization.option_remixed_anywhere,
+        BundlePlando: frozenset(fish_bundle_names)
+    }
+
+    def test_all_plando_bundles_are_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        for bundle_name in self.fish_bundle_names:
+            with self.subTest(f"{bundle_name}"):
+                self.assertIn(bundle_name, location_names)
 
