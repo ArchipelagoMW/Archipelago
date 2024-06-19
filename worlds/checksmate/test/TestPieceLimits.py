@@ -35,7 +35,6 @@ class PieceLimitTestBase(CMTestBase):
 class TestChaosPieceLimits(PieceLimitTestBase):
     def test_no_options(self):
         self.options["fairy_chess_army"] = "chaos"
-        self.options["fairy_chess_pieces"] = 0
         expected_minors = 0
         expected_majors = 0
         expected_queens = 0
@@ -46,7 +45,7 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 1,
@@ -64,7 +63,7 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 1,
         "major_piece_limit_by_type": 1,
         "queen_piece_limit_by_type": 1,
@@ -82,7 +81,7 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 2,
@@ -100,7 +99,7 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "chaos",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 5,
         "major_piece_limit_by_type": 1,
         "queen_piece_limit_by_type": 3,
@@ -118,7 +117,7 @@ class TestLimitedPieceLimits(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "limited",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 2,
     }
 
     def test_no_options(self):
@@ -132,7 +131,7 @@ class TestLimitedPieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "limited",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 1,
@@ -150,7 +149,7 @@ class TestLimitedPieceLimitsOfThree(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "limited",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 0,
         "minor_piece_limit_by_type": 3,
         "major_piece_limit_by_type": 3,
         "queen_piece_limit_by_type": 3,
@@ -168,7 +167,7 @@ class TestLimitedPieceLimitsByVariety(PieceLimitTestBase):
     options = {
         "accessibility": "minimal",
         "fairy_chess_army": "limited",
-        "fairy_chess_pieces": 0,
+        "fairy_chess_piece_collection": 0,
         "minor_piece_limit_by_type": 4,
         "major_piece_limit_by_type": 1,
         "queen_piece_limit_by_type": 3,

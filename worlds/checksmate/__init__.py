@@ -78,15 +78,15 @@ class CMWorld(World):
 
     # TODO: this probably can go in some other method now??
     def generate_early(self) -> None:
-        piece_collection = self.options.fairy_chess_piece_collection
+        piece_collection = self.options.fairy_chess_piece_collection.value
         army_options = []
-        if piece_collection.value == self.options.fairy_chess_piece_collection.option_fide:
+        if piece_collection == self.options.fairy_chess_piece_collection.option_fide:
             army_options = [0]
-        elif piece_collection.value == self.options.fairy_chess_piece_collection.option_betza:
+        elif piece_collection == self.options.fairy_chess_piece_collection.option_betza:
             army_options = [0, 1, 2, 3]
-        elif piece_collection.value == self.options.fairy_chess_piece_collection.option_full:
+        elif piece_collection == self.options.fairy_chess_piece_collection.option_full:
             army_options = [0, 1, 2, 3, 4, 5]
-        elif piece_collection.value == self.options.fairy_chess_piece_collection.option_configure:
+        elif piece_collection == self.options.fairy_chess_piece_collection.option_configure:
             which_pieces = self.options.fairy_chess_pieces
             # TODO: I am not ok with this
             if (which_pieces.value is None or which_pieces.value == 'None' or
@@ -131,7 +131,7 @@ class CMWorld(World):
         if self.player in self.armies:
             cursed_knowledge["army"] = self.armies[self.player]
         # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
-        option_names = ["goal", "enemy_piece_types", "piece_locations", "piece_types",
+        option_names = ["goal", "difficulty", "enemy_piece_types", "piece_locations", "piece_types",
                         "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pawns",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
                         "pocket_limit_by_pocket"]
@@ -622,7 +622,9 @@ def get_children(chosen_item: str) -> list[str]:
 
 
 def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:
-    return len([item for item in items if item.name in item_name_groups["Chessmen"]]) + \
-        (0 if pocket_limit <= 0 else
+    pocket_amount = (0 if pocket_limit <= 0 else
             math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
+    chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
+    logging.debug("Found {} chessmen and {} pocket men".format(chessmen_amount, pocket_amount))
+    return chessmen_amount + pocket_amount
 
