@@ -146,7 +146,7 @@ class DarkSouls3World(World):
         # allow Yhorm as Iudex Gundyr if there's at least one available location.
         return any(
             self._is_location_available(location)
-            and location.name not in self.options.exclude_locations.value
+            and location.name not in self.all_excluded_locations
             and location.name != "CA: Coiled Sword - boss drop"
             for location in location_tables["Cemetery of Ash"]
         )
@@ -249,7 +249,13 @@ class DarkSouls3World(World):
             if self._is_location_available(location):
                 new_location = DarkSouls3Location(self.player, location, new_region)
                 if (
+                    # Exclude missable, unimportant locations
                     location.missable and self.options.missable_locations == "unimportant"
+                    and not (
+                        # Unless they are excluded to a higher degree already
+                        location.name in self.all_excluded_locations
+                        and self.options.missable_locations < self.options.excluded_locations
+                    )
                 ) or (
                     # Lift Chamber Key is missable. Exclude Lift-Chamber-Key-Locked locations if it isn't randomized
                     not self._is_location_available("FS: Lift Chamber Key - Leonhard")
@@ -1211,7 +1217,7 @@ class DarkSouls3World(World):
         """
 
         unnecessary_locations = (
-            self.options.exclude_locations.value
+            self.options.all_excluded_locations
             if self.options.excluded_locations == "unnecessary"
             else set()
         ).union(
@@ -1219,6 +1225,10 @@ class DarkSouls3World(World):
                 location.name
                 for location in self.multiworld.get_locations()
                 if location.player == self.player and location.data.missable
+                and not (
+                    location.name in self.all_excluded_locations
+                    and self.options.missable_locations < self.options.excluded_locations
+                )
             }
             if self.options.missable_locations == "unnecessary"
             else set()
