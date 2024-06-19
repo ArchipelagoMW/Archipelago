@@ -1173,10 +1173,33 @@ class OOTWorld(World):
 
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
-        return {
+
+        slot_data = {
             'collectible_override_flags': self.collectible_override_flags,
             'collectible_flag_offsets': self.collectible_flag_offsets
         }
+        slot_data.update(self.options.as_dict("open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
+                                              "bridge", "trials", "starting_age",
+                                              "shuffle_interior_entrances", "shuffle_grotto_entrances", "shuffle_dungeon_entrances", "shuffle_overworld_entrances",
+                                              "owl_drops", "warp_songs", "spawn_positions", "shuffle_bosses",
+                                              "triforce_hunt", "triforce_goal", "extra_triforce_percentage",
+                                              "bombchus_in_logic", "dungeon_shortcuts",
+                                              "dungeon_shortcuts_list", "mq_dungeons_mode", "mq_dungeons_list", "mq_dungeons_count",
+                                              "bridge_stones", "bridge_medallions", "bridge_rewards", "bridge_tokens", "bridge_hearts", "shuffle_song_items",
+                                              "shopsanity", "shop_slots", "shopsanity_prices", "tokensanity",
+                                              "shuffle_scrubs", "shuffle_child_trade", "shuffle_freestanding_items", "shuffle_pots", "shuffle_crates",
+                                              "shuffle_cows", "shuffle_beehives", "shuffle_kokiri_sword", "shuffle_ocarinas", "shuffle_gerudo_card", "shuffle_beans",
+                                              "shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
+                                              "shuffle_mapcompass", "shuffle_smallkeys", "shuffle_hideoutkeys", "shuffle_bosskeys", "enhance_map_compass", "shuffle_ganon_bosskey",
+                                              "ganon_bosskey_medallions", "ganon_bosskey_stones", "ganon_bosskey_rewards", "ganon_bosskey_tokens", "ganon_bosskey_hearts",
+                                              "key_rings", "key_rings_list", "no_epona_race", "skip_some_minigame_phases", "complete_mask_quest", "free_scarecrow", "plant_beans",
+                                              "chicken_count", "big_poe_count", "fae_torch_count", "damage_multiplier", "deadly_bonks", "starting_tod",
+                                              "blue_fire_arrows", "start_with_consumables", "junk_ice_traps", "adult_trade_start",
+                                              "logic_rules", "logic_no_night_tokens_without_suns_song", "logic_tricks",
+                                              "plando_connections"
+                                              )
+                         )
+        return slot_data
 
 
     def modify_multidata(self, multidata: dict):
