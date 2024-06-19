@@ -94,6 +94,7 @@ class PsychonautsContext(CommonContext):
     local_items_placed_as_ap_items: Dict[int, int]  # server state
     has_local_location_data: bool  # server state
     pending_received_items: List[Tuple[int, NetworkItem]]  # server state
+    current_level_name: str  # server state, but set by the client
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -104,6 +105,7 @@ class PsychonautsContext(CommonContext):
         self.deathlink_status = False
         self.clear_mod_data_warning = False
         self.game_communication_path = None
+        self.current_level_name = ""
 
         # When connecting to a server, the contents of self.locations_scouted are sent in a LocationScouts request,
         # filling self.locations_info once the LocationsInfo response is received.
@@ -398,6 +400,26 @@ async def game_watcher(ctx: PsychonautsContext):
                 f.truncate(0)
                 if "DeathLink" in ctx.tags:
                     await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
+
+        # Check for a change in the current level name
+        try:
+            with open(os.path.join(game_communication_path, "CurrentLevel.txt"), "r") as f:
+                # Psychonauts level names are always 4 characters long
+                current_level_name = f.read(4)
+                if ctx.current_level_name != current_level_name:
+                    ctx.current_level_name = current_level_name
+                    # Send a Bounced message to all trackers connected to the current slot
+                    data_to_send = {"psychonauts_level_name": current_level_name}
+                    message = {
+                        "cmd": "Bounce",
+                        "slots": [ctx.slot],
+                        "tags": ["Tracker"],
+                        "data": data_to_send,
+                    }
+                    await ctx.send_msgs([message])
+        except FileNotFoundError:
+            # File might not exist if the client has been opened before the game.
+            pass
 
         # Initialize an empty list and set.
         # The list maintains the order and the set provides fast comparisons and __contains__() checks.
