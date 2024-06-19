@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, Set
 
 from .Names import ItemName
 from .PsychoRandoItems import PSYCHORANDO_ITEM_TABLE
@@ -174,10 +174,10 @@ LOCAL_SET: Set[str] = {
     *BAGGAGE,
 }
 
-ITEM_GROUPS: Dict[str, List[str]] = {
-    "Mind": list(MINDS.keys()),
-    "Brain": list(BRAIN_JARS.keys()),
-    "Scavenger Hunt": list(SCAVENGER_HUNT_ITEMS.keys()),
+ITEM_GROUPS: Dict[str, Set[str]] = {
+    "Mind": set(MINDS.keys()),
+    "Brain": set(BRAIN_JARS.keys()),
+    "Scavenger Hunt": set(SCAVENGER_HUNT_ITEMS.keys()),
 }
 
 # Skip creating the set if assertions are disabled.
