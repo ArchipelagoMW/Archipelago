@@ -250,11 +250,11 @@ class DarkSouls3World(World):
                 new_location = DarkSouls3Location(self.player, location, new_region)
                 if (
                     # Exclude missable, unimportant locations
-                    location.missable and self.options.missable_locations_behavior == "unimportant"
+                    location.missable and self.options.missable_location_behavior == "unimportant"
                     and not (
                         # Unless they are excluded to a higher degree already
                         location.name in self.all_excluded_locations
-                        and self.options.missable_locations_behavior < self.options.excluded_locations_behavior
+                        and self.options.missable_location_behavior < self.options.excluded_location_behavior
                     )
                 ) or (
                     # Lift Chamber Key is missable. Exclude Lift-Chamber-Key-Locked locations if it isn't randomized
@@ -1218,7 +1218,7 @@ class DarkSouls3World(World):
 
         unnecessary_locations = (
             self.options.all_excluded_locations
-            if self.options.excluded_locations_behavior == "unnecessary"
+            if self.options.excluded_location_behavior == "unnecessary"
             else set()
         ).union(
             {
@@ -1227,10 +1227,10 @@ class DarkSouls3World(World):
                 if location.player == self.player and location.data.missable
                 and not (
                     location.name in self.all_excluded_locations
-                    and self.options.missable_locations_behavior < self.options.excluded_locations_behavior
+                    and self.options.missable_location_behavior < self.options.excluded_location_behavior
                 )
             }
-            if self.options.missable_locations_behavior == "unnecessary"
+            if self.options.missable_location_behavior == "unnecessary"
             else set()
         )
         for location in unnecessary_locations:
@@ -1239,7 +1239,7 @@ class DarkSouls3World(World):
                 lambda item: not item.advancement
             )
 
-        if self.options.excluded_locations_behavior == "unnecessary":
+        if self.options.excluded_location_behavior == "unnecessary":
             self.options.exclude_locations.value.clear()
 
     def _add_early_item_rules(self, randomized_items: Set[str]) -> None:
@@ -1328,11 +1328,11 @@ class DarkSouls3World(World):
             and (not data.dlc or self.options.enable_dlc)
             and (not data.ngp or self.options.enable_ngp)
             and not (
-                self.options.excluded_locations_behavior == "unrandomized"
+                self.options.excluded_location_behavior == "unrandomized"
                 and data.name in self.all_excluded_locations
             )
             and not (
-                self.options.missable_locations_behavior == "unrandomized"
+                self.options.missable_location_behavior == "unrandomized"
                 and data.missable
             )
         )
@@ -1343,7 +1343,7 @@ class DarkSouls3World(World):
         if self.yhorm_location != default_yhorm_location:
             text += f"\nYhorm takes the place of {self.yhorm_location.name} in {self.player_name}'s world\n"
 
-        if self.options.excluded_locations_behavior == "unnecessary":
+        if self.options.excluded_location_behavior == "unnecessary":
             text += f"\n{self.player_name}'s world excluded: {sorted(self.all_excluded_locations)}\n"
 
         if text:
