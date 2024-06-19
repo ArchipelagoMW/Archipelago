@@ -41,7 +41,7 @@ def write_quizzes(world, data, random):
             for location in world.multiworld.get_filled_locations():
                 if location.item.name == "Secret Key" and location.item.player == world.player:
                     break
-            player_name = world.multiworld.player_name[world.player]
+            player_name = world.player_name
             if not a:
                 if len(world.multiworld.player_name) > 1:
                     old_name = player_name
@@ -49,7 +49,7 @@ def write_quizzes(world, data, random):
                         player_name = random.choice(list(world.multiworld.player_name.values()))
                 else:
                     return encode_text("You're playing<LINE>in a multiworld<CONT>with other<CONT>players?<DONE>")
-            if player_name == world.multiworld.player_name[world.player]:
+            if player_name == world.player_name:
                 player_name = "yourworld"
             player_name = encode_text(player_name, force=True, safety=True)
             return encode_text(f"The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("<DONE>")
@@ -534,7 +534,7 @@ def generate_output(world, output_directory: str):
                   2 if mon == world.multiworld.get_location("Oak's Lab - Starter 3", world.player).item.name else 3)
     write_bytes(data, encode_text(world.multiworld.seed_name[-20:], 20, True), rom_addresses['Title_Seed'])
 
-    slot_name = world.multiworld.player_name[world.player]
+    slot_name = world.player_name
     slot_name.replace("@", " ")
     slot_name.replace("<", " ")
     slot_name.replace(">", " ")
@@ -555,7 +555,7 @@ def generate_output(world, output_directory: str):
     rom_name.extend([0] * (21 - len(rom_name)))
     write_bytes(data, rom_name, 0xFFC6)
     write_bytes(data, world.multiworld.seed_name.encode(), 0xFFDB)
-    write_bytes(data, world.multiworld.player_name[world.player].encode(), 0xFFF0)
+    write_bytes(data, world.player_name.encode(), 0xFFF0)
 
     world.finished_level_scaling.wait()
 
@@ -615,16 +615,16 @@ def generate_output(world, output_directory: str):
 
     outfilepname = f'_P{world.player}'
     outfilepname += f"_{world.multiworld.get_file_safe_player_name(world.player).replace(' ', '_')}" \
-        if world.multiworld.player_name[world.player] != 'Player%d' % world.player else ''
+        if world.player_name != 'Player%d' % world.player else ''
     rompath = os.path.join(output_directory, f'AP_{world.multiworld.seed_name}{outfilepname}.gb')
     with open(rompath, 'wb') as outfile:
         outfile.write(data)
     if world.options.game_version.current_key == "red":
         patch = RedDeltaPatch(os.path.splitext(rompath)[0] + RedDeltaPatch.patch_file_ending, player=world.player,
-                              player_name=world.multiworld.player_name[world.player], patched_path=rompath)
+                              player_name=world.player_name, patched_path=rompath)
     else:
         patch = BlueDeltaPatch(os.path.splitext(rompath)[0] + BlueDeltaPatch.patch_file_ending, player=world.player,
-                               player_name=world.multiworld.player_name[world.player], patched_path=rompath)
+                               player_name=world.player_name, patched_path=rompath)
 
     patch.write()
     os.unlink(rompath)
