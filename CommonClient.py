@@ -1034,7 +1034,8 @@ def run_as_textclient():
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
+        if url.netloc:
+            args.connect = url.netloc
         if url.username:
             args.name = urllib.parse.unquote(url.username)
         if url.password:
