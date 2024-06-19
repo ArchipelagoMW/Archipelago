@@ -33,7 +33,7 @@ class FillLogger():
         if self.total_items < self.min_size:
             return
 
-        if sys.stdin.isatty():
+        if sys.stdin.isatty() and sys.stdout.isatty():
             self.log_tty(name, placed, final)
         else:
             self.log_nontty(name, placed, final)
