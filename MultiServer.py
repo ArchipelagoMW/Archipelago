@@ -1083,7 +1083,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
             hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                       item_flags, status))
+                                       item_flags, NetUtils.HintStatus.HINT_FOUND if found else status))
 
     return hints
 
@@ -1105,7 +1105,8 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
 
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags, status)]
+        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags,
+                              NetUtils.HintStatus.HINT_FOUND if found else status)]
     return []
 
 
