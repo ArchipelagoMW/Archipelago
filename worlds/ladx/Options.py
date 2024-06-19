@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup
 from collections import defaultdict
 import Utils
 
@@ -493,6 +493,44 @@ class AdditionalWarpPoints(DefaultOffToggle):
     [Off] No change
     """
 
+ladx_option_groups = [
+    OptionGroup("Goal Options", [
+        Goal,
+        InstrumentCount,
+    ]),
+    OptionGroup("Shuffles", [
+        ShuffleInstruments,
+        ShuffleNightmareKeys,
+        ShuffleSmallKeys,
+        ShuffleMaps,
+        ShuffleCompasses,
+        ShuffleStoneBeaks
+    ]),
+    OptionGroup("Warp Points", [
+        WarpImprovements,
+        AdditionalWarpPoints,
+    ]),
+    OptionGroup("Miscellaneous", [
+        TradeQuest,
+        Rooster,
+        TrendyGame,
+        NagMessages,
+        BootsControls
+    ]),
+    OptionGroup("Experimental", [
+        DungeonShuffle,
+        EntranceShuffle
+    ]),
+    OptionGroup("Visuals & Sound", [
+        LinkPalette,
+        Palette,
+        TextShuffle,
+        APTitleScreen,
+        GfxMod,
+        Music,
+        MusicChangeCondition
+    ])
+]
 
 @dataclass
 class LinksAwakeningOptions(PerGameCommonOptions):
