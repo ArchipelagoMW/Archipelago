@@ -331,15 +331,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for player, world_precollected in multiworld.precollected_items.items():
                     if not world_precollected:
                         continue
+
                     if player in multiworld.groups:
                         targets = multiworld.groups[player]["players"]
                     else:
                         targets = [player]
 
-                    current_list = []
-                    for item in world_precollected:
-                        if type(item.code) == int:
-                            current_list.append(item.code)
+                    current_list = [item.code for item in world_precollected if type(item.code) == int]
 
                     for target_player in targets:
                         precollected_items[target_player].extend(current_list)
