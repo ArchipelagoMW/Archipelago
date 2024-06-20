@@ -168,6 +168,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
                 ctx.auth = None
                 ctx.username = None
                 ctx.client_handler = None
+                ctx.finished_game = False
                 await ctx.disconnect(False)
             ctx.rom_hash = rom_hash
 
@@ -177,7 +178,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
                 if ctx.client_handler is None:
                     if not showed_no_handler_message:
-                        logger.info("No handler was found for this game")
+                        logger.info("No handler was found for this game. Double-check that the apworld is installed "
+                                    "correctly and that you loaded the right ROM file.")
                         showed_no_handler_message = True
                     continue
                 else:

@@ -129,7 +129,7 @@ List, set, and dict options can additionally have values added to or removed fro
 option value by prefixing the option name in the trigger block with `+` (add) or `-` (remove). The exact behavior for 
 each will depend on the option type.
 
-- For sets, `+` will add the value(s) to the set and `-` will remove any value(s) of the set. Sets do not allow 
+- For sets, `+` will add the value(s) to the set and `-` will remove the value(s) from the set. Sets do not allow 
   duplicates.
 - For lists, `+` will add new values(s) to the list and `-` will remove the first matching values(s) it comes across. 
   Lists allow duplicate values.
@@ -160,6 +160,3 @@ Super Metroid:
 In this example, if the `start_location` option rolls `landing_site`, only a starting hint for Morph Ball will be 
 created. If `aqueduct` is rolled, a starting hint for Gravity Suit will also be created alongside the hint for Morph 
 Ball.
-
-Note that for lists, items can only be added, not removed or replaced. For dicts, defining a value for a present key 
-will replace that value within the dict.
