@@ -785,6 +785,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     verify_item_name: bool = False
     verify_location_name: bool = False
     value: typing.Any
+    display_valid_keys: bool = False  # Should the full list of keys appear in templates
 
     @classmethod
     def verify_keys(cls, data: typing.Iterable[str]) -> None:
