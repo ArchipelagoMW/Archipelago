@@ -159,7 +159,10 @@ class EntityHuntPicker:
 
         # If we're using random picking, just choose all the entities now and return
         if not same_area_discouragement:
-            hunt_entities = self.random.choices(self.ALL_ELIGIBLE_ENTITIES, k=total_amount - len(self.HUNT_ENTITIES))
+            hunt_entities = self.random.sample(
+                [entity for entity in self.ALL_ELIGIBLE_ENTITIES if entity not in self.HUNT_ENTITIES],
+                k=total_amount - len(self.HUNT_ENTITIES),
+            )
             self.HUNT_ENTITIES.update(hunt_entities)
             return
 
