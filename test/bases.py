@@ -24,7 +24,7 @@ class TestBase(unittest.TestCase):
         for item in items:
             item.classification = ItemClassification.progression
             state.collect(item, event=True)
-        state.sweep_for_events()
+        state.sweep_for_advancements()
         state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
         return state

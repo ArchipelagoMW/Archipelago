@@ -24,7 +24,7 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
-    new_state.sweep_for_events(locations=locations)
+    new_state.sweep_for_advancements(locations=locations)
     return new_state
 
 
@@ -358,7 +358,7 @@ def distribute_early_items(multiworld: MultiWorld,
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
         base_state = multiworld.state.copy()
-        base_state.sweep_for_events(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
+        base_state.sweep_for_advancements(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
             if loc.can_reach(base_state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
@@ -551,7 +551,7 @@ def flood_items(multiworld: MultiWorld) -> None:
     progress_done = False
 
     # sweep once to pick up preplaced items
-    multiworld.state.sweep_for_events()
+    multiworld.state.sweep_for_advancements()
 
     # fill multiworld from top of itempool while we can
     while not progress_done:
@@ -646,7 +646,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
         def get_sphere_locations(sphere_state: CollectionState,
                                  locations: typing.Set[Location]) -> typing.Set[Location]:
-            sphere_state.sweep_for_events(key_only=True, locations=locations)
+            sphere_state.sweep_for_advancements(key_only=True, locations=locations)
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:
@@ -740,7 +740,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                             ), items_to_test):
                                 reducing_state.collect(location.item, True, location)
 
-                            reducing_state.sweep_for_events(locations=locations_to_test)
+                            reducing_state.sweep_for_advancements(locations=locations_to_test)
 
                             if multiworld.has_beaten_game(balancing_state):
                                 if not multiworld.has_beaten_game(reducing_state):
@@ -823,7 +823,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
             warn(warning, force)
 
     swept_state = multiworld.state.copy()
-    swept_state.sweep_for_events()
+    swept_state.sweep_for_advancements()
     reachable = frozenset(multiworld.get_reachable_locations(swept_state))
     early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)

@@ -248,7 +248,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                     pass
             for item in pre_fill_items:
                 multiworld.worlds[item.player].collect(all_state_base, item)
-            all_state_base.sweep_for_events()
+            all_state_base.sweep_for_advancements()
 
             # Remove completion condition so that minimal-accessibility worlds place keys properly
             for player in {item.player for item in in_dungeon_items}:

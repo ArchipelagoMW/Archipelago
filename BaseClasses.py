@@ -351,7 +351,7 @@ class MultiWorld():
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
                 subworld.collect(ret, item)
-        ret.sweep_for_events()
+        ret.sweep_for_advancements()
 
         if use_cache:
             self._all_state = ret
@@ -680,7 +680,7 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
+    def sweep_for_advancements(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.multiworld.get_filled_locations()
         reachable_events = True
@@ -801,7 +801,7 @@ class CollectionState():
         self.stale[item.player] = True
 
         if changed and not event:
-            self.sweep_for_events()
+            self.sweep_for_advancements()
 
         return changed
 
@@ -1291,7 +1291,7 @@ class Spoiler:
         state = CollectionState(multiworld)
         collection_spheres = []
         while required_locations:
-            state.sweep_for_events(key_only=True)
+            state.sweep_for_advancements(key_only=True)
 
             sphere = set(filter(state.can_reach, required_locations))
 
