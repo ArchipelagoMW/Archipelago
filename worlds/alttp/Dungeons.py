@@ -262,8 +262,8 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                         all_state_base.remove(item_factory(key_data[3], multiworld.worlds[player]))
                         loc = multiworld.get_location(key_loc, player)
 
-                        if loc in all_state_base.events:
-                            all_state_base.events.remove(loc)
+                        if loc in all_state_base.advancements:
+                            all_state_base.advancements.remove(loc)
             fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, lock=True, allow_excluded=True,
                              name="LttP Dungeon Items")
 

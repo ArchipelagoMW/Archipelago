@@ -324,8 +324,8 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
             pool.append(location.item)
             state.remove(location.item)
             location.item = None
-            if location in state.events:
-                state.events.remove(location)
+            if location in state.advancements:
+                state.advancements.remove(location)
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)

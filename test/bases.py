@@ -221,8 +221,8 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            if item.location and item.advancement and item.location in self.multiworld.state.events:
-                self.multiworld.state.events.remove(item.location)
+            if item.location and item.advancement and item.location in self.multiworld.state.advancements:
+                self.multiworld.state.advancements.remove(item.location)
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
