@@ -471,14 +471,15 @@ class PsyRules:
     def set_psy_goal(self):
         goal_option = self.world.options.Goal
 
-        # Brain Tank Goal is enabled
-        if goal_option == "braintank" or goal_option == "braintank_and_brainhunt":
-            oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
-            oleander_boss_location.access_rule = self.has_oleander_boss_access
-        else:
-            oleander_boss_location = None
+        # Goals are always logically completed in sequence:
+        # 1) Brain Hunt
+        # 2) Brain Tank
+        # 3) Meat Circus
+        # Victory is achieved upon completing the last goal in the sequence that is enabled.
 
-        # Brain Hunt Goal is enabled
+        # Either the Brain Hunt goal or the Brain Tank goal will always be enabled.
+
+        # Brain Hunt goal
         if goal_option == "brainhunt" or goal_option == "braintank_and_brainhunt":
             redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
             brains_required = self.world.options.BrainsRequired.value
@@ -486,11 +487,24 @@ class PsyRules:
         else:
             redeemed_required_brains = None
 
+        # Brain Tank goal
+        if goal_option == "braintank" or goal_option == "braintank_and_brainhunt":
+            oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBossEvent, self.player)
+            oleander_boss_location.access_rule = self.has_oleander_boss_access
+            # With Brain Hunt also enabled, accessing the Brain Tank is set to logically require completing the Brain
+            # Hunt first, though this is not currently enforced by Psychonauts.
+            if redeemed_required_brains:
+                add_rule(oleander_boss_location, redeemed_required_brains.can_reach)
+        else:
+            oleander_boss_location = None
+
+        # Meat Circus Final Boss goal
         if self.world.options.RequireMeatCircus:
-            # The Meat Circus Final Boss can only be accessed after completing the other goal/goals.
+            # The Meat Circus Final Boss can only be accessed after completing the previous enabled goal(s). This is
+            # enforced by Psychonauts.
             final_boss_location = self.multiworld.get_location(LocationName.FinalBossEvent, self.player)
-            for sub_goal_location in (oleander_boss_location, redeemed_required_brains):
-                if sub_goal_location is not None:
-                    add_rule(final_boss_location, sub_goal_location.can_reach)
+            # If enabled, the Brain Tank will be the previous goal, otherwise it will be the Brain Hunt.
+            previous_goal_location = oleander_boss_location or redeemed_required_brains
+            final_boss_location.access_rule = previous_goal_location.can_reach
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player)
