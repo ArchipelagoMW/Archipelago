@@ -234,7 +234,7 @@ def generate_yaml(game: str):
         # Detect random-* keys and set their options accordingly
         for key, val in options.copy().items():
             if key.startswith("random-"):
-                options[key.removeprefix("random-")] = "random"
+                options[key[len("random-"):]] = "random"
                 del options[key]
 
         # Error checking
