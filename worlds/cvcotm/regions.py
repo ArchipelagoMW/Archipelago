@@ -149,10 +149,10 @@ cvcotm_region_info = {
                                                 lname.uy8,
                                                 lname.uy9,
                                                 lname.uy9b,
-                                                lname.uy12b],
+                                                lname.uy12],
                                   "entrances": ["Onward to Waterway End"]},
 
-    "Underground Waterway End": {"locations": [lname.uy12,
+    "Underground Waterway End": {"locations": [lname.uy12b,
                                                lname.uy13,
                                                lname.uy17,
                                                lname.uy18]},
