@@ -185,6 +185,7 @@ class CMWorld(World):
             max_material_option = min_material_option
         max_material_interval = self.random.random() * (max_material_option - min_material_option)
         max_material_actual = max_material_interval + min_material_option
+        min_material_option += progression_items["Play as White"].material * difficulty
         max_material_actual += progression_items["Play as White"].material * difficulty
 
         # remove items player does not want
