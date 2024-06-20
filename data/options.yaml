@@ -63,13 +63,17 @@ requires:
     #
     {%- endif -%}
 
+    {%- if option.valid_keys is defined and option.display_valid_keys %}
+    # Valid keys are {{ option.valid_keys }}
+    {%- endif -%}
+
     {%- if option.range_start is defined and option.range_start is number %}
     {{- range_option(option) -}}
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
-    {%- endfor -%}
+    {%- endfor -%}    
 
     {%- if option.name_lookup[option.default] not in option.options %}
     {{ yaml_dump(option.default) }}: 50
