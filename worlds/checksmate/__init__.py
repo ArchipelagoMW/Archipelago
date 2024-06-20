@@ -248,8 +248,8 @@ class CMWorld(World):
                material < max_material_actual and len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
-            if (self.wont_fit(chosen_item, material, max_material_actual, items, my_progression_items, locked_items) or
-                    not self.has_prereqs(chosen_item)):
+            if (self.should_remove(chosen_item, material, min_material_option, max_material_actual,
+                                   items, my_progression_items, locked_items)):
                 my_progression_items.remove(chosen_item)
                 continue
             # add item
@@ -262,7 +262,7 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
-            else:
+            elif material >= min_material_option:
                 my_progression_items.remove(chosen_item)
         logging.debug(str(self.player) + " granted total material of " + str(material) +
                       " toward " + str(max_material_actual) + " via items " + str(self.items_used[self.player]) +
@@ -319,9 +319,9 @@ class CMWorld(World):
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         while (len(items) + user_location_count + sum(locked_items.values())) < len(location_table):
             chosen_item = self.random.choice(my_filler_items)
-            if len(my_filler_items) > 1 and not self.has_prereqs(chosen_item):
+            if not has_pocket and not self.has_prereqs(chosen_item):
                 continue
-            if len(my_filler_items) == 1 or self.can_add_more(chosen_item):
+            if has_pocket or self.can_add_more(chosen_item):
                 self.consume_item(chosen_item, locked_items)
                 try_item = self.create_item(chosen_item)
                 items.append(try_item)
@@ -355,9 +355,10 @@ class CMWorld(World):
 
     # this method assumes we cannot run out of pawns... we don't support excluded_items{pawn}
     # there is no maximum number of chessmen... just minimum chessmen and maximum material.
-    def wont_fit(self,
+    def should_remove(self,
                  chosen_item: str,
                  material: int,
+                 min_material: float,
                  max_material: float,
                  items: list[CMItem],
                  my_progression_items: list[str | CMItemData],
@@ -368,6 +369,8 @@ class CMWorld(World):
 
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
+        if chosen_material <= 200 and material + remaining_material < min_material:
+            return False
         if material + remaining_material + chosen_material > max_material:
             return True
 

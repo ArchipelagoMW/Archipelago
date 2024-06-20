@@ -52,9 +52,9 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
     }
 
     def test_limit(self):
-        expected_minors = 18
-        expected_majors = 10
-        expected_queens = 4
+        expected_minors = 22
+        expected_majors = 14
+        expected_queens = 6
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
@@ -72,7 +72,7 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
     def test_limit(self):
         expected_minors = 11
         expected_majors = 7
-        expected_queens = 4
+        expected_queens = 6
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
@@ -90,7 +90,7 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
     def test_limit(self):
         expected_minors = 22
         expected_majors = 14
-        expected_queens = 10
+        expected_queens = 12
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
 
