@@ -73,7 +73,7 @@ requires:
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
-    {%- endfor -%}    
+    {%- endfor -%}
 
     {%- if option.name_lookup[option.default] not in option.options %}
     {{ yaml_dump(option.default) }}: 50
