@@ -451,7 +451,7 @@ Chlorophyte Warhammer;              Hammer(90);                                 
 
 // Calamitas Clone
 Calamitas Clone;                    Calamity | Location | Item | Goal;          Hardmode Anvil & Hellstone Bar & Essence of Havoc;
-Plantera;                           Location | Item | Goal;                     Wall of Flesh & (@mech_boss(3) | (@calamity & Hardmode Anvil & Trapper Bulb));
+Plantera;                           Location | Item | Goal;                     Wall of Flesh & (@mech_boss(3) | @calamity);
 # calamitas_clone
 # plantera
 Ashes of Calamity;                  Calamity;                                   #Calamitas Clone | Sigil of Calamitas;
