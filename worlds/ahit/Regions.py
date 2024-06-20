@@ -699,9 +699,12 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
         # Needs to be at least moderate to cross the big dweller wall
         if act.name == "Queen Vanessa's Manor" and diff < Difficulty.MODERATE:
             return False
-        elif act.name == "Your Contract has Expired" and diff < Difficulty.EXPERT:  # Snatcher Hover
-            return False
         elif act.name == "Heating Up Mafia Town":  # Straight up impossible
+            return False
+
+    # Need to be able to hover
+    if act.name == "Your Contract has Expired":
+        if diff < Difficulty.EXPERT or world.options.ShuffleSubconPaintings and world.options.NoPaintingSkips:
             return False
 
     if act.name == "Dead Bird Studio":
@@ -718,14 +721,9 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
         return False
 
     if world.options.ShuffleSubconPaintings and act_chapters.get(act.name, "") == "Subcon Forest":
-        # This requires a cherry hover to enter Subcon
-        if act.name == "Your Contract has Expired":
-            if diff < Difficulty.EXPERT or world.options.NoPaintingSkips:
-                return False
-        else:
-            # Only allow Subcon levels if paintings can be skipped
-            if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
-                return False
+        # Only allow Subcon levels if painting skips are allowed
+        if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
+            return False
 
     return True
 

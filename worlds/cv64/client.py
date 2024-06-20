@@ -146,7 +146,7 @@ class Castlevania64Client(BizHawkClient):
                         text_color = bytearray([0xA2, 0x0B])
                     else:
                         text_color = bytearray([0xA2, 0x02])
-                    received_text, num_lines = cv64_text_wrap(f"{ctx.item_names[next_item.item]}\n"
+                    received_text, num_lines = cv64_text_wrap(f"{ctx.item_names.lookup_in_game(next_item.item)}\n"
                                                               f"from {ctx.player_names[next_item.player]}", 96)
                     await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                                 [(0x389BE1, [next_item.item & 0xFF], "RDRAM"),

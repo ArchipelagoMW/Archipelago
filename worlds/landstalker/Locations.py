@@ -1,8 +1,9 @@
 from typing import Dict, Optional
 
-from BaseClasses import Location
+from BaseClasses import Location, ItemClassification, Item
 from .Regions import LandstalkerRegion
 from .data.item_source import ITEM_SOURCES_JSON
+from .data.world_path import WORLD_PATHS_JSON
 
 BASE_LOCATION_ID = 4000
 BASE_GROUND_LOCATION_ID = BASE_LOCATION_ID + 256
@@ -27,6 +28,18 @@ def create_locations(player: int, regions_table: Dict[str, LandstalkerRegion], n
         region = regions_table[region_id]
         new_location = LandstalkerLocation(player, data["name"], name_to_id_table[data["name"]], region, data["type"])
         region.locations.append(new_location)
+
+    # Create fake event locations that will be used to determine if some key regions has been visited
+    regions_with_entrance_checks = []
+    for data in WORLD_PATHS_JSON:
+        if "requiredNodes" in data:
+            regions_with_entrance_checks.extend([region_id for region_id in data["requiredNodes"]])
+    regions_with_entrance_checks = list(set(regions_with_entrance_checks))
+    for region_id in regions_with_entrance_checks:
+        region = regions_table[region_id]
+        location = LandstalkerLocation(player, 'event_visited_' + region_id, None, region, "event")
+        location.place_locked_item(Item("event_visited_" + region_id, ItemClassification.progression, None, player))
+        region.locations.append(location)
 
     # Create a specific end location that will contain a fake win-condition item
     end_location = LandstalkerLocation(player, "End", None, regions_table["end"], "reward")
