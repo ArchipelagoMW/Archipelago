@@ -77,15 +77,15 @@ class UndertaleWorld(World):
 
     def get_filler_item_name(self):
         if self.options.route_required == "all_routes":
-            junk_pool = junk_weights_all.copy()
+            junk_pool = junk_weights_all
         elif self.options.route_required == "genocide":
-            junk_pool = junk_weights_genocide.copy()
+            junk_pool = junk_weights_genocide
         elif self.options.route_required == "neutral":
-            junk_pool = junk_weights_neutral.copy()
+            junk_pool = junk_weights_neutral
         elif self.options.route_required == "pacifist":
-            junk_pool = junk_weights_pacifist.copy()
+            junk_pool = junk_weights_pacifist
         else:
-            junk_pool = junk_weights_all.copy()
+            junk_pool = junk_weights_all
         if not self.options.only_flakes:
             return self.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))[0]
         else:
@@ -129,8 +129,7 @@ class UndertaleWorld(World):
         elif self.options.route_required == "neutral":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Hot Cat" and
                         item != "Hot Dog...?"]
-        if self.options.route_required == "pacifist" or \
-                self.options.route_required == "all_routes":
+        if self.options.route_required == "pacifist" or self.options.route_required == "all_routes":
             itempool += ["Undyne Letter EX"]
         else:
             itempool.remove("Complete Skeleton")
@@ -143,12 +142,10 @@ class UndertaleWorld(World):
             itempool += ["Left Home Key"]
             itempool += ["Right Home Key"]
         if not self.options.rando_love or \
-                (self.options.route_required != "genocide" and
-                 self.options.route_required != "all_routes"):
+                (self.options.route_required != "genocide" and self.options.route_required != "all_routes"):
             itempool = [item for item in itempool if not item == "LOVE"]
         if not self.options.rando_stats or \
-                (self.options.route_required != "genocide" and
-                 self.options.route_required != "all_routes"):
+                (self.options.route_required != "genocide" and self.options.route_required != "all_routes"):
             itempool = [item for item in itempool if not (item == "ATK Up" or item == "DEF Up" or item == "HP Up")]
         if self.options.temy_include:
             itempool += ["temy armor"]
@@ -177,12 +174,10 @@ class UndertaleWorld(World):
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.options.route_required.current_key])
         if not self.options.rando_love or \
-                (self.options.route_required != "genocide" and
-                 self.options.route_required != "all_routes"):
+                (self.options.route_required != "genocide" and self.options.route_required != "all_routes"):
             exclusion_pool.update(exclusion_table["NoLove"])
         if not self.options.rando_stats or \
-                (self.options.route_required != "genocide" and
-                 self.options.route_required != "all_routes"):
+                (self.options.route_required != "genocide" and self.options.route_required != "all_routes"):
             exclusion_pool.update(exclusion_table["NoStats"])
 
         # Choose locations to automatically exclude based on settings
@@ -194,7 +189,7 @@ class UndertaleWorld(World):
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
         # Fill remaining items with randomly generated junk or Temmie Flakes
         while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
-            itempool += [self.create_filler()]
+            itempool.append(self.create_filler())
 
         self.multiworld.itempool += itempool
 
