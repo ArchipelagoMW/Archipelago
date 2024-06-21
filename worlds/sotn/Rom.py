@@ -154,7 +154,12 @@ class SOTNDeltaPatch(APDeltaPatch):
 
             if seed_options & (1 << 2):
                 # Wing smash timer
+                # Thanks Forat Negre for the info on that
                 write_word(patched_rom, 0x00134990, 0x00000000)
+
+            if patched_rom[0x438d48a] >= 4:
+                # Talisman farm on, remove item quantity limitation
+                write_char(patched_rom, 0x1171f4, 0xff)
 
             with open(target[:-4] + ".bin", "wb") as stream:
                 stream.write(patched_rom)
@@ -286,30 +291,10 @@ def patch_rom(world: World, output_directory: str) -> None:
     player_xp = world.options.xp_mod
     player_att = world.options.att_mod
     player_hp = world.options.hp_mod
-    bonus_luck = world.options.bonus_luck
+    player_drp = world.options.drop_mod
     goal = world.options.goal
-    #tt = world.options.num_talisman
-    #talisman = world.options.per_talisman
     wing_smash = world.options.infinite_wing
     rules = world.options.rand_rules
-
-    # Convert exploration to rooms
-    exp = int((exp * 10) / 0.107)
-    # Normalize Total talismans
-    #total_location = 405
-
-    #if rules > 0:
-    #    total_location = 100
-
-    # Extra locations Enemy 140 / Drops 109
-    #if esanity and rules != 1:
-    #    total_location += 140
-    #if dsanity and rules != 1:
-    #    total_location += 107
-
-    # Max 60% of talisman
-    #if rules != 1 and int(total_location * 0.6) < tt:
-    #    tt = int(total_location * 0.6)
 
     relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -601,10 +586,7 @@ def patch_rom(world: World, output_directory: str) -> None:
 
     if no2:
         write_word(patched_rom, 0x046c0968, 0x1400000b)
-    # Write bosses need it on index -1 of RNO0
-    # write_char(patched_rom, 0x04f85ae3, bosses)
-    # Write exploration need it on index -3 of RNO0
-    # write_short(patched_rom, 0x04f85ae1, exp)
+
     """
     The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
     branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
@@ -623,32 +605,37 @@ def patch_rom(world: World, output_directory: str) -> None:
 
     randomize_candles(patched_rom, candles, candles_prog, goal)
 
-    xp_mod, mon_atk, mon_hp = 1, 1, 1
+    xp_mod, mon_atk, mon_hp, mon_drp = 1, 1, 1, 1
     if difficult == 0:
         xp_mod = 1.5
         mon_atk = 0.7
         mon_hp = 0.7
+        mon_drp = 2
     elif difficult == 2:
         xp_mod = 0.8
         mon_atk = 1.3
         mon_hp = 1.3
+        mon_drp = 0
     elif difficult == 3:
         xp_mod = 0.5
         mon_atk = 1.5
         mon_hp = 2
+        mon_drp = 0
     if player_xp != 0:
         xp_mod = player_xp / 100
     if player_att != 0:
         mon_atk = player_att / 100
     if player_hp != 0:
         mon_hp = player_hp / 100
+    if player_drp != 0:
+        mon_drp = player_drp
 
     # Replace talisman from Bone Musket on talisman farm mode and rng_drops off for a Magic missile
     if 4 <= goal <= 5 and drops == 0:
         enemy = Enemy_dict["Bone musket"]
         write_short(patched_rom, enemy.drop_addresses[0], item_value(25, 1))
 
-    randomize_enemy(patched_rom, drops, drops_prog, xp_mod, mon_atk, mon_hp, goal)
+    randomize_enemy(patched_rom, drops, drops_prog, xp_mod, mon_atk, mon_hp, mon_drp, goal)
 
     sanity = 0
 
@@ -665,7 +652,7 @@ def patch_rom(world: World, output_directory: str) -> None:
     seed_num = world.multiworld.seed_name
     tt = world.total_talisman
     talisman = world.required_talisman
-    write_seed(patched_rom, seed_num, player_num, player_name, sanity, bonus_luck, goal, bosses, exp, tt, talisman)
+    write_seed(patched_rom, seed_num, player_num, player_name, sanity, 0xffff, goal, bosses, exp, tt, talisman)
 
     music_slice = original_rom[0x000affd0:0x000b9ea5]
     music_patched = patched_rom[0x000affd0:0x000b9ea5]
@@ -690,6 +677,7 @@ def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_l
     seed_text = []
 
     # Seed number occupies 10 bytes total line have 22 + 0xFF 0x00 at end
+    # There are 2 unused bytes from bonus luck
     for i, num in enumerate(str(seed)):
         if i % 2 != 0:
             byte = (byte | int(num))
@@ -947,7 +935,7 @@ def randomize_candles(buffer, rng_choice, prog, goal):
             write_short(buffer, a, item_id)
 
 
-def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, goal):
+def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, mon_drp, goal):
     forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
@@ -1007,7 +995,19 @@ def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, goal):
         new_value = clamp(new_value, 1, 65535)
         if k != "Galamoth":
             write_short(buffer, v.drop_addresses[0] - 22, new_value)
+
         for i, drop in enumerate(v.vanilla_drop):
+            # Drop increase
+            if mon_drp != 0:
+                if mon_drp == 1 or mon_drp == 2:
+                    write_char(buffer, v.drop_addresses[0] + 5, mon_drp)
+                else:
+                    cur_value = int.from_bytes(buffer[v.drop_addresses[0] + 4:v.drop_addresses[0] + 6],
+                                               byteorder='little')
+                    new_value = int(mon_drp * cur_value)
+                    new_value = clamp(new_value, 2, 65535)
+                    write_short(buffer, v.drop_addresses[0] + 4, new_value)
+
             if rng_choice == 1:
                 if drop == "Axe":
                     continue
