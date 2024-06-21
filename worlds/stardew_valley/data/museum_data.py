@@ -171,18 +171,18 @@ class Artifact:
 
 
 class Mineral:
-    quartz = create_mineral(Mineral.quartz, Region.mines_floor_20)
+    quartz = create_mineral(Mineral.quartz, Region.mines_floor_20, difficulty=100.0 / 5.0)
     fire_quartz = create_mineral("Fire Quartz", Region.mines_floor_100,
                                  geodes=(Geode.magma, Geode.omni, WaterChest.fishing_chest),
-                                 difficulty=100.0 / 12.0)
+                                 difficulty=100.0 / 5.0)
     frozen_tear = create_mineral("Frozen Tear", Region.mines_floor_60,
                                  geodes=(Geode.frozen, Geode.omni, WaterChest.fishing_chest),
                                  monsters=unlikely,
-                                 difficulty=100.0 / 12.0)
+                                 difficulty=100.0 / 5.0)
     earth_crystal = create_mineral("Earth Crystal", Region.mines_floor_20,
                                    geodes=(Geode.geode, Geode.omni, WaterChest.fishing_chest),
                                    monsters=Monster.duggy,
-                                   difficulty=100.0 / 12.0)
+                                   difficulty=100.0 / 5.0)
     emerald = create_mineral("Emerald", Region.mines_floor_100,
                              geodes=WaterChest.fishing_chest)
     aquamarine = create_mineral("Aquamarine", Region.mines_floor_60,
