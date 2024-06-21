@@ -41,8 +41,9 @@ class FillLogger():
     # any non-CLI logging; just log 10x times (or fewer), no need for anything fancy
     def log_nontty(self, name: str, placed: int, final: bool) -> None:
         if final or placed % self.step == 0:
+            status: str = "Finished" if final else "Current"
             pct: float = round(100 * (placed / self.total_items), 2)
-            logging.info(f"Current fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed.")
+            logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed.")
 
     # on CLI, be a little friendlier
     def log_tty(self, name: str, placed: int, final: bool) -> None:
@@ -60,9 +61,10 @@ class FillLogger():
         if not final:
             logging.StreamHandler.terminator = '\r'
 
+        status: str = "Finished" if final else "Current"
         pct: float = round(100 * (placed / self.total_items), 2)
         elapsed: str = time.strftime("%Hh:%Mm:%Ss", time.gmtime(round(self.cur_time - self.start_time)))
-        logging.info(f"Current fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed [{elapsed} elapsed].")
+        logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed [{elapsed} elapsed].")
 
         # restore the terminator
         logging.StreamHandler.terminator = old_term
