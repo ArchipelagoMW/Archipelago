@@ -418,6 +418,8 @@ trap_table = {
     "Fall damage 10": ItemData(367, IType.TRAP, 0x0, ItemClassification.trap),
     "Ice floor 5": ItemData(368, IType.TRAP, 0x0, ItemClassification.trap),
     "Ice floor 10": ItemData(369, IType.TRAP, 0x0, ItemClassification.trap),
+    "Axe Lord 1": ItemData(370, IType.TRAP, 0x0, ItemClassification.trap),
+    "Axe Lord 2": ItemData(371, IType.TRAP, 0x0, ItemClassification.trap)
 }
 
 item_table = {
