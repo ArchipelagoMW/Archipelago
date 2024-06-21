@@ -18,7 +18,6 @@ from .Items import ItemData, IType, base_item_id, item_table, trap_table
 #  Sometimes RNO1 vase near Creature is missing. Research
 #  Visual glitches on Richter dialog
 #  Visual glitch on sliding door after defeating Lesser Demon
-#  Fall damage soft lock when poison and curse
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -57,7 +56,6 @@ class SotNClient(BizHawkClient):
         self.last_zone = ("UNK", "UNKNOWN")
         self.cur_zone = ("UNK", "UNKNOWN")
         self.just_died = False
-        self.title_screen = False
         self.dracula_loaded = False
         self.zone_loaded = False
         self.door_patched = False
@@ -89,11 +87,13 @@ class SotNClient(BizHawkClient):
         self.trap_start_time = 0
         self.misplaced_file_name = ""
         self.read_sanity = 0
-        self.read_luck = 0
         self.goal = []
         self.talisman_completed = False
         self.last_talisman_read = 0
         self.ko_backup = []
+        self.equipped_chest = b'\x00'
+        self.equipped_right = b'\x00'
+        self.equipped_left = b'\x00'
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -114,7 +114,8 @@ class SotNClient(BizHawkClient):
                 if read_result2[0] != b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00':
                     # First Maria Meeting
                     # 26 49 52 53 54 00 2d 41 52 49 47 00
-                    if read_result2[0] == b'\x26\x49\x52\x53\x54\x00\x2d\x41\x52\x49\x47\x00':
+                    # b'\x26\x49\x52\x53\x54\x00\x2d\x41\x52\x49\x47\x00'
+                    if read_result2[0] == b'&IRST\x00-ARIA\x00':
                         # Vanilla ROM
                         messagebox("Error", "Looks like a vanilla ROM is loaded!", error=True)
                         return False
@@ -157,6 +158,14 @@ class SotNClient(BizHawkClient):
                                          self.player_status == STATUS.ON_ALUCARD):
                     await bizhawk.write(ctx.bizhawk_ctx, [(0x3Bde0, b'\x02', "MainRAM")])
                     self.not_patched = False
+
+                # Check game_time
+                time_now = await bizhawk.read(ctx.bizhawk_ctx, [(0x097c30, 12, "MainRAM")])
+                cur_time = list(bytes(time_now[0]))
+                hour_now = cur_time[0] * 3600
+                min_now = cur_time[4] * 60
+                sec_now = cur_time[8]
+                now = hour_now + min_now + sec_now
 
                 if self.player_status == STATUS.ON_ALUCARD:
                     zone_value = int.from_bytes(
@@ -251,10 +260,11 @@ class SotNClient(BizHawkClient):
                                 return
                             goal = self.check_completion()
                             logger.info(
-                                f"Secondary goal: {self.goal[1]} Boss tokens / {self.goal[2]} Rooms explored")
+                                f"Secondary goal: {self.goal[1]} Boss tokens / {int((self.goal[2] * 10) / 0.107)}"
+                                f" Rooms explored")
                             logger.info(f"Total: {goal[0]} / {goal[1]}")
                             if self.goal[0] == 4 or self.goal[0] == 5:
-                                logger.info(f"Talisman -> Required: {self.goal[3]} Total: {self.goal[4]}")
+                                logger.info(f"Talisman -> Required: {self.goal[3]} Available: {self.goal[4]}")
                             self.zone_loaded = True
                             self.load_timer = 0
                             if goal[0] >= self.goal[1] and goal[1] >= self.goal[2]:
@@ -317,14 +327,6 @@ class SotNClient(BizHawkClient):
                                     self.trap_paused = False
                         self.last_zone = self.cur_zone
 
-                    # Check game_time
-                    time_now = await bizhawk.read(ctx.bizhawk_ctx, [(0x097c30, 12, "MainRAM")])
-                    cur_time = list(bytes(time_now[0]))
-                    hour_now = cur_time[0] * 3600
-                    min_now = cur_time[4] * 60
-                    sec_now = cur_time[8]
-                    now = hour_now + min_now + sec_now
-
                     if self.cur_zone[0] not in ["UNK", "ST0", "RCEN", "RBO6"]:
                         await self.process_locations(ctx)
                         sanity_options = self.read_sanity
@@ -337,12 +339,6 @@ class SotNClient(BizHawkClient):
                         if sanity_options & (1 << 1):
                             await self.process_dropsanity(ctx)
 
-                        luck_value = self.read_luck
-                        if luck_value != 0:
-                            await bizhawk.write(ctx.bizhawk_ctx, [(0x97bc4,
-                                                                   luck_value.to_bytes(2, "little"),
-                                                                   "MainRAM")])
-                        # Fall trap need constant calling
                         await self.process_traps(ctx, now)
 
                     if self.last_misplaced < len(self.misplaced_load):
@@ -370,7 +366,7 @@ class SotNClient(BizHawkClient):
                             await bizhawk.unlock(ctx.bizhawk_ctx)
                             self.new_items = []
 
-                    if (not self.title_screen and self.cur_zone[0] != "UNK" and self.last_time != 0 and
+                    if (self.cur_zone[0] != "UNK" and self.last_time != 0 and
                             self.last_time - now > 2):
                         logger.info("State loaded")
                         self.load_once = False
@@ -378,8 +374,6 @@ class SotNClient(BizHawkClient):
                         self.received_traps = []
                         self.trap_active = False
                         self.player_status = STATUS.START
-                    self.last_time = now
-                    self.title_screen = False
 
                     if self.misplaced_changed:
                         await bizhawk.write(ctx.bizhawk_ctx,
@@ -391,7 +385,7 @@ class SotNClient(BizHawkClient):
                     for i, item_received in enumerate(ctx.items_received):
                         received = ItemData.get_item_info(item_received.item)
                         if received[1].type == IType.TRAP:
-                            received_trap.append(item_received)
+                            received_trap.append(received[1])
                         if i + 1 > self.last_item_received:
                             if received[1].type != IType.TRAP:
                                 self.received_queue.append(received[1])
@@ -404,7 +398,7 @@ class SotNClient(BizHawkClient):
                         # It's a new trap?
                         end = len(received_trap)
                         for i in range(self.total_received_traps, end):
-                            received = ItemData.get_item_info(received_trap[i].item)
+                            received = ItemData.get_item_info(received_trap[i].index)
                             self.add_misplaced(received[1].index + 200000)
                             self.message_queue.append(f"Trap: {received[0]}")
                             self.total_received_traps += 1
@@ -446,7 +440,28 @@ class SotNClient(BizHawkClient):
                     if ZoneData.get_zone_data(zone_value)[1].abrev != "UNK":
                         # We restart the game
                         self.player_status = STATUS.START
-                        self.title_screen = True
+
+                # Check for load state after dying
+                if self.player_status == STATUS.DEAD or self.player_status == STATUS.DEATH_FLAG:
+                    if self.last_time != 0 and self.last_time - now > 2:
+                        logger.info("State loaded")
+                        self.load_once = False
+                        self.just_died = False
+                        self.received_traps = []
+                        self.trap_active = False
+                        self.player_status = STATUS.START
+
+                self.last_time = now
+
+                # Fail safe
+                game_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x3c734, 1, "MainRAM")])
+                if game_state == b'\x01':
+                    # We are at title screen
+                    self.load_once = False
+                    self.just_died = False
+                    self.received_traps = []
+                    self.trap_active = False
+                    self.player_status = STATUS.START
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -556,7 +571,7 @@ class SotNClient(BizHawkClient):
                                         self.received_traps.append(item_data[1].index - base_item_id)
                                         self.add_misplaced(item_data[1].index + 200000)
                                         self.total_received_traps += 1
-                elif message_type == "ItemSend" and ctx.slot != player:
+                elif message_type == "ItemSend" and ctx.slot != player and received.player == ctx.slot:
                     try:
                         player_name = ctx.player_names[player]
                     except KeyError:
@@ -994,7 +1009,7 @@ class SotNClient(BizHawkClient):
                 if "Save" in line:
                     continue
                 line_check = line[0:3] + '0' + line[4:]
-                if 350 + base_item_id <= int(line_check) <= 369 + base_item_id:
+                if 350 + base_item_id <= int(line_check) <= 371 + base_item_id:
                     if line[3] == '2':
                         self.total_received_traps += 1
                     self.received_traps.append(int(line_check) - base_item_id)
@@ -1138,11 +1153,6 @@ class SotNClient(BizHawkClient):
         pause = await bizhawk.read(ctx.bizhawk_ctx, [(0x09794c, 1, "MainRAM")])
         cur_trap = self.received_traps[self.last_trap_processed]
 
-        if cur_trap == 366 or cur_trap == 367:
-            # Remove poison and curse when fall damage trap is active
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x072F00, b'\x00\x00', "MainRAM"),
-                                                  (0x072F03, b'\x00\x00', "MainRAM")])
-
         # Don't apply traps during bat, mist and wolf de-transformation or turned to stone or paused
         if status == b'\x09' or status == b'\x0e' or status == b'\x19' or status == b'\x0b' or pause == b'\x00':
             return
@@ -1151,12 +1161,16 @@ class SotNClient(BizHawkClient):
 
         if cur_trap == 364:
             total_trap_time = 30
-        if cur_trap == 365:
+        elif cur_trap == 365:
             total_trap_time = 60
-        if cur_trap == 368 or cur_trap == 366:
+        elif cur_trap == 368 or cur_trap == 366:
             total_trap_time = 5 * 60
-        if cur_trap == 369 or cur_trap == 367:
+        elif cur_trap == 369 or cur_trap == 367:
             total_trap_time = 10 * 60
+        elif cur_trap == 370:
+            total_trap_time = 1 * 60
+        elif cur_trap == 371:
+            total_trap_time = 2 * 60
 
         if self.trap_active:
             active_time = cur_time - self.trap_start_time
@@ -1180,9 +1194,7 @@ class SotNClient(BizHawkClient):
                         ctx.bizhawk_ctx, [(0x03bf21, self.last_trap_processed.to_bytes(2, "little"), "MainRAM")])
                     return
             elif cur_trap == 367 or cur_trap == 366:
-                if active_time < total_trap_time:
-                    await self.apply_fall_damage(ctx)
-                else:
+                if active_time >= total_trap_time:
                     self.trap_active = False
                     self.trap_start_time = 0
                     self.last_trap_processed += 1
@@ -1223,10 +1235,36 @@ class SotNClient(BizHawkClient):
                     player_hp = await bizhawk.read(ctx.bizhawk_ctx, [(0x097ba0, 4, "MainRAM")])
                     if player_hp[0] > b'\x01\x00\x00\x00':
                         await bizhawk.write(ctx.bizhawk_ctx, [(0x097ba0, b'\x01\x00\x00\x00', "MainRAM")])
+            elif cur_trap == 370 or cur_trap == 371:
+                if active_time > total_trap_time:
+                    self.trap_active = False
+                    self.trap_start_time = 0
+                    self.last_trap_processed += 1
+                    trap_name = item_id_to_name[cur_trap]
+                    logger.info(f"Trap: {trap_name} ended")
+                    remaining_traps = ""
+                    if self.last_trap_processed <= len(self.received_traps):
+                        for i in range(self.last_trap_processed + 1, len(self.received_traps)):
+                            remaining_traps += f"{item_id_to_name[self.received_traps[i]]}, "
+                    if len(remaining_traps) > 0:
+                        logger.info(f"Remaining trap: {remaining_traps[:-2]}")
+                    # Restore RAM values
+                    await bizhawk.lock(ctx.bizhawk_ctx)
+                    await bizhawk.write(ctx.bizhawk_ctx, [(0x3c9a4, b'\x02', "MainRAM")])
+                    await bizhawk.write(ctx.bizhawk_ctx, [(0x978f8, b'\x00', "MainRAM")])
+                    await bizhawk.write(ctx.bizhawk_ctx, [(0x97c0c, self.equipped_chest[0], "MainRAM")])
+                    await bizhawk.write(ctx.bizhawk_ctx, [(0x800fa1ae, b'\xe2\xac', "System Bus")])
+                    await bizhawk.write(ctx.bizhawk_ctx, [(0x800fa0d2, b'\xe2\xac', "System Bus")])
+                    await bizhawk.unlock(ctx.bizhawk_ctx)
+                    # Update last trap processed on RAM
+                    await bizhawk.write(
+                        ctx.bizhawk_ctx, [(0x03bf21, self.last_trap_processed.to_bytes(2, "little"), "MainRAM")])
+                    return
         else:
             # Disable transformation
             await bizhawk.write(ctx.bizhawk_ctx, [(0x073404, b'\x00', "MainRAM")])
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x073404, b'\x30', "MainRAM")])
+            # await bizhawk.write(ctx.bizhawk_ctx, [(0x073404, b'\x30', "MainRAM")])
+            await self.play_sfx(ctx, 0xf2)
             await bizhawk.write(ctx.bizhawk_ctx, [(0x073406, b'\x00', "MainRAM")])
             # Normal traps
             if 350 <= cur_trap <= 362:
@@ -1280,7 +1318,6 @@ class SotNClient(BizHawkClient):
                     else:
                         logger.info("Not safe to teleport. Trap supressed!")
                 elif "Close" in trap_name:
-
                     await self.close_teleport(ctx)
 
                 # Update last trap processed
@@ -1327,6 +1364,7 @@ class SotNClient(BizHawkClient):
                                                                             (0x111D10, 8, "MainRAM"),
                                                                             (0x11007C, 108, "MainRAM"),
                                                                             (0x110068, 4, "MainRAM")])
+                await self.apply_fall_damage(ctx)
             elif cur_trap == 364 or cur_trap == 365:
                 trap_name = item_id_to_name[cur_trap]
                 logger.info(f"Trap: {trap_name} active")
@@ -1334,6 +1372,45 @@ class SotNClient(BizHawkClient):
                 self.trap_start_time = cur_time
                 self.ko_backup = await bizhawk.read(ctx.bizhawk_ctx, [(0x097ba0, 4, "MainRAM")])
                 await bizhawk.write(ctx.bizhawk_ctx, [(0x097ba0, b'\x01\x00\x00\x00', "MainRAM")])
+            elif cur_trap == 370 or cur_trap == 371:
+                trap_name = item_id_to_name[cur_trap]
+                logger.info(f"Trap: {trap_name} active")
+                self.trap_active = True
+                self.trap_start_time = cur_time
+                quantity = 0
+                self.equipped_chest = await bizhawk.read(ctx.bizhawk_ctx, [(0x97c0c, 1, "MainRAM")])
+                equipped_hand = await bizhawk.read(ctx.bizhawk_ctx, [(0x97c00, 1, "MainRAM")])
+                equipped_hand_int = int.from_bytes(equipped_hand[0], "little")
+                hand_qty = await bizhawk.read(ctx.bizhawk_ctx, [(equipped_hand_int + 0x09798a, 1, "MainRAM")])
+                hand_qty_int = int.from_bytes(hand_qty[0], "little")
+                if hand_qty_int == 0:
+                    quantity += 1
+                    self.new_items.append(equipped_hand_int)
+                    await bizhawk.write(ctx.bizhawk_ctx, [(equipped_hand_int + 0x09798a, b'\x01', "MainRAM")])
+                equipped_hand = await bizhawk.read(ctx.bizhawk_ctx, [(0x97c04, 1, "MainRAM")])
+                equipped_hand_int = int.from_bytes(equipped_hand[0], "little")
+                hand_qty = await bizhawk.read(ctx.bizhawk_ctx, [(equipped_hand_int + 0x09798a, 1, "MainRAM")])
+                hand_qty_int = int.from_bytes(hand_qty[0], "little")
+                if hand_qty_int == 0:
+                    quantity += 1
+                    self.new_items.append(equipped_hand_int)
+                    await bizhawk.write(ctx.bizhawk_ctx, [(equipped_hand_int + 0x09798a, b'\x01', "MainRAM")])
+                # Prevent changing equipment during the trap
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x3c9a8, b'\x01', "MainRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x800fa1ae, b'\x00\x00', "System Bus")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x800fa0d2, b'\x00\x00', "System Bus")])
+                # Force open pause. Thanks for eldri7ch and bismurphy from Long Library discord for all info on that
+                await bizhawk.lock(ctx.bizhawk_ctx)
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x3c9a4, b'\x02', "MainRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x978f8, b'\x00', "MainRAM")])
+                # Equip Axe lord and remove hands
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x97c00, b'\x00', "MainRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x97c04, b'\x00', "MainRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x97c0c, b'\x19', "MainRAM")])
+                if quantity > 0:
+                    await self.sort_inventory(ctx)
+                    self.new_items = []
+                await bizhawk.unlock(ctx.bizhawk_ctx)
 
     @staticmethod
     async def close_teleport(ctx: "BizHawkClientContext"):
@@ -1428,6 +1505,10 @@ class SotNClient(BizHawkClient):
                        b'\x10\x00\x06\x34\x07\x80\x09\x3C\x04\x34\x26\xA1\x5B\x40\x04\x08', "MainRAM"),
             (0x110068, b'\x1F\x00\x40\x10', "MainRAM")])
 
+        # Remove poison and curse instructions
+        await bizhawk.write(ctx.bizhawk_ctx, [(0x80114534, b'\x00\x00\x10\x21', "System Bus")])
+        await bizhawk.write(ctx.bizhawk_ctx, [(0x801144ec, b'\x00\x00\x10\x21', "System Bus")])
+
     async def restore_ram(self, ctx: "BizHawkClientContext", trap):
         if trap == 368 or trap == 369:
             await bizhawk.write(ctx.bizhawk_ctx, [(0x10E39C, self.trap_ram_backup[0], "MainRAM"),
@@ -1458,6 +1539,10 @@ class SotNClient(BizHawkClient):
                                                   (0x111D10, self.trap_ram_backup[7], "MainRAM"),
                                                   (0x11007C, self.trap_ram_backup[8], "MainRAM"),
                                                   (0x110068, self.trap_ram_backup[9], "MainRAM")])
+
+            # Restore poison and curse instructions
+            await bizhawk.write(ctx.bizhawk_ctx, [(0x80114534, b'\x00\x2f\x22\xa4', "System Bus")])
+            await bizhawk.write(ctx.bizhawk_ctx, [(0x801144ec, b'\x02\x2f\x22\xa4', "System Bus")])
         self.trap_ram_backup = []
 
     @staticmethod
@@ -1531,9 +1616,6 @@ class SotNClient(BizHawkClient):
 
         self.misplaced_file_name = f"AP_{seed}_{player}_{utf_name}.txt"
         self.read_sanity = int(sanity_list[0])
-        hex_luck = f"{int(luck_list[0]):02x} {int(luck_list[1]):02x}"
-        luck = int.from_bytes(bytes.fromhex(hex_luck), byteorder="little")
-        self.read_luck = luck
         self.goal.append(int(goal_list[0]))
         self.goal.append(int(bosses_list[0]))
         self.goal.append(int(exp_list[0]))
@@ -1554,9 +1636,34 @@ class SotNClient(BizHawkClient):
         elif self.goal[0] == 4:
             goal_str = f"{self.goal[3]} / {self.goal[4]} Talisman farm"
         elif self.goal[0] == 5:
-            goal_str = f"{self.goal[3]} / {self.goal[4]} Talisman farm and Kill Dracula"
+            goal_str = f"{self.goal[3]} / {self.goal[4]} Talisman farm and kill Dracula"
         logger.info(f"Goal: {goal_str}")
         logger.info("Have fun!")
+
+    @staticmethod
+    async def play_sfx(ctx: "BizHawkClientContext", snd_id: int):
+        tries = 0
+
+        while tries < 5:
+            buffer_write = await bizhawk.read(ctx.bizhawk_ctx, [(0x80139000, 1, "System Bus")])
+            buffer_write_int = int.from_bytes(buffer_write[0], "little")
+            ring_buffer_pos = buffer_write_int * 6 + 0x801390dc
+
+            await bizhawk.write(ctx.bizhawk_ctx, [(ring_buffer_pos, snd_id.to_bytes(1, "little"), "System Bus")])
+            await bizhawk.write(ctx.bizhawk_ctx, [(ring_buffer_pos + 2, b'\xff\xff', "System Bus")])
+            if buffer_write_int + 1 > 0xff:
+                buffer_write_int = - 1
+            results = await bizhawk.guarded_write(ctx.bizhawk_ctx,
+                                                  [(0x80139000,
+                                                    (buffer_write_int + 1).to_bytes(1, "little"), "System Bus")],
+                                                  [(0x80139000, buffer_write[0], "System Bus")])
+
+            if results:
+                # We played sfx exit loop
+                tries = 5
+            else:
+                # Some sfx played before try again
+                tries += 1
 
 
 def cmd_missing(self, filter_text="") -> bool:
