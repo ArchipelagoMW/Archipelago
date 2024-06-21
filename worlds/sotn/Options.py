@@ -55,7 +55,7 @@ class PercentageOfTalismans(Range):
     display_name = "Required Percentage of Talismans"
     range_start = 1
     range_end = 100
-    default = 100
+    default = 80
 
 
 class Difficult(Choice):
@@ -89,6 +89,14 @@ class AttModifier(Range):
 class HpModifier(Range):
     """Override Monster HP modifier in percentage"""
     display_name = "HP modifier"
+    range_start = 0
+    range_end = 300
+    default = 0
+
+
+class DropModifier(Range):
+    """Multiply Monster drop chance"""
+    display_name = "Drop modifier"
     range_start = 0
     range_end = 300
     default = 0
@@ -200,14 +208,6 @@ class Dropsanity(Toggle):
     display_name = "Enemies drops are locations checks"
 
 
-class BonusLuck(Range):
-    """A hack way to have bonus luck and help with dropsanity"""
-    display_name = "Hacky luck"
-    range_start = 0
-    range_end = 999
-    default = 0
-
-
 class Boostqty(Range):
     """Boosts quantity in the pool."""
     display_name = "Boost quantity"
@@ -233,7 +233,7 @@ class Trapqty(Range):
 class TrapWeight(FreeText):
     """Weights for randomize traps"""
     display_name = "Traps weights"
-    default = "1;2;1;2;1;2;7;3;7;3;8;5;7;6;2;6;2;6;2"
+    default = "1;2;1;2;1;2;7;3;7;3;8;5;7;6;2;6;2;6;2;4;2"
 
 
 class RandRules(Choice):
@@ -271,6 +271,7 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "xp_mod": XpModifier,
     "att_mod": AttModifier,
     "hp_mod": HpModifier,
+    "drop_mod": DropModifier,
     "bosses_need": BossesNeed,
     "rng_songs": RngSongs,
     "rng_shop": RngShop,
@@ -284,7 +285,6 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "prog_drops": ProgDrop,
     "enemysanity": Enemysanity,
     "dropsanity": Dropsanity,
-    "bonus_luck": BonusLuck,
     "boostqty": Boostqty,
     "boostweight": BoostWeight,
     "trapqty": Trapqty,
