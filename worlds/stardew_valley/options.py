@@ -682,7 +682,7 @@ class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
     internal_name = "mods"
     display_name = "Mods"
-    display_valid_keys = True
+    display_valid_keys_in_templates = True
     valid_keys = {
         ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
         ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
