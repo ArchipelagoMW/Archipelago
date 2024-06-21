@@ -315,8 +315,8 @@ def set_location_rules(world: "TunicWorld") -> None:
     # Quarry
     set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),
              lambda state: state.has(laurels, player))
-
-    # nmg - kill boss scav with orb + firecracker, or similar
+    set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
+             lambda state: has_sword(state, player) or state.has_all({fire_wand, laurels}, player))
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
              lambda state: has_sword(state, player))
 
