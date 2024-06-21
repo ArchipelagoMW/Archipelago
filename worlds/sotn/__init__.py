@@ -3,7 +3,6 @@ from typing import ClassVar, Dict, Tuple, Any
 import settings, typing, os
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
-from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch_subprocess, Type
 from Options import AssembleOptions
 
 
@@ -15,9 +14,10 @@ from .Rules import set_rules, set_rules_limited
 from .Options import sotn_option_definitions
 from .Rom import SOTNDeltaPatch, patch_rom, get_base_rom_path
 from .client import SotNClient
+# from .test_client import SotNTestClient
 
 BOOST_QTY = 12
-TRAPS_QTY = 19
+TRAPS_QTY = 21
 
 
 class SotnSettings(settings.Group):
@@ -114,7 +114,6 @@ class SotnWorld(World):
         boosts_weight = self.options.boostweight
         traps_weight = self.options.trapweight
         goal = self.options.goal
-        tt = self.options.num_talisman
         per_tt = self.options.per_talisman
         rules = self.options.rand_rules
 
