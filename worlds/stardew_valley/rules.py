@@ -153,6 +153,9 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
                 extra_raccoons = 1 if world_options.quest_locations >= 0 else 0
                 extra_raccoons = extra_raccoons + num
                 bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
+                if num > 1:
+                    previous_bundle_name = f"Raccoon Request {num-1}"
+                    bundle_rules = bundle_rules & logic.region.can_reach_location(previous_bundle_name)
             room_rules.append(bundle_rules)
             MultiWorldRules.set_rule(location, bundle_rules)
         if bundle_room.name == CCRoom.abandoned_joja_mart or bundle_room.name == CCRoom.raccoon_requests:
