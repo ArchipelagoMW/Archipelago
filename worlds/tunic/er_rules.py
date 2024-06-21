@@ -1465,7 +1465,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
 
     # Ziggurat
     set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
-             lambda state: has_sword(state, player) or state.has(fire_wand, player))
+             lambda state: has_sword(state, player) or state.has_all({fire_wand, laurels}, player))
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - After Guarded Fuse", player),
              lambda state: has_sword(state, player) and has_ability(state, player, prayer, options, ability_unlocks))
 
