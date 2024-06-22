@@ -52,7 +52,27 @@ class TestBundles(unittest.TestCase):
                 self.assertEqual(bundle_item.quality, FishQuality.gold)
 
 
-class TestRemixedAnywhereBundlesLogic(SVTestBase):
+class TestRemixedPlandoBundles(SVTestBase):
+    plando_bundles = {BundleName.money_2500, BundleName.money_5000, BundleName.money_10000, BundleName.gambler, BundleName.ocean_fish,
+                      BundleName.lake_fish, BundleName.deep_fishing, BundleName.spring_fish, BundleName.legendary_fish, BundleName.bait}
+    options = {
+        BundleRandomization: BundleRandomization.option_remixed,
+        BundlePlando: frozenset(plando_bundles)
+    }
+
+    def test_all_plando_bundles_are_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        for bundle_name in self.plando_bundles:
+            with self.subTest(f"{bundle_name}"):
+                self.assertIn(bundle_name, location_names)
+        self.assertNotIn(BundleName.money_25000, location_names)
+        self.assertNotIn(BundleName.carnival, location_names)
+        self.assertNotIn(BundleName.night_fish, location_names)
+        self.assertNotIn(BundleName.specialty_fish, location_names)
+        self.assertNotIn(BundleName.specific_bait, location_names)
+
+
+class TestRemixedAnywhereBundles(SVTestBase):
     fish_bundle_names = {BundleName.spring_fish, BundleName.summer_fish, BundleName.fall_fish, BundleName.winter_fish, BundleName.ocean_fish,
                          BundleName.lake_fish, BundleName.river_fish, BundleName.night_fish, BundleName.legendary_fish, BundleName.specialty_fish,
                          BundleName.bait, BundleName.specific_bait, BundleName.crab_pot, BundleName.tackle, BundleName.quality_fish,

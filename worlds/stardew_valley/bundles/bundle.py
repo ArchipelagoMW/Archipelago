@@ -88,8 +88,8 @@ class CurrencyBundleTemplate(BundleTemplate):
 
 class MoneyBundleTemplate(CurrencyBundleTemplate):
 
-    def __init__(self, room: str, item: BundleItem):
-        super().__init__(room, "", item)
+    def __init__(self, room: str, default_name: str, item: BundleItem):
+        super().__init__(room, default_name, item)
 
     def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
         currency_amount = self.get_currency_amount(options.bundle_price)

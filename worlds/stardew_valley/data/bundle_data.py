@@ -711,7 +711,7 @@ fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thema
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
 fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, trash_bundle,
                              rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle,
-                             specific_bait_bundle, fish_smoker_bundle]
+                             specific_bait_bundle, deep_fishing_bundle, fish_smoker_bundle]
 
 # In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
 fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
@@ -868,10 +868,10 @@ vault_5000_gold = BundleItem.money_bundle(5000)
 vault_10000_gold = BundleItem.money_bundle(10000)
 vault_25000_gold = BundleItem.money_bundle(25000)
 
-vault_2500_bundle = MoneyBundleTemplate(CCRoom.vault, vault_2500_gold)
-vault_5000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_5000_gold)
-vault_10000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_10000_gold)
-vault_25000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_25000_gold)
+vault_2500_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_2500, vault_2500_gold)
+vault_5000_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_5000, vault_5000_gold)
+vault_10000_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_10000, vault_10000_gold)
+vault_25000_bundle = MoneyBundleTemplate(CCRoom.vault, BundleName.money_25000, vault_25000_gold)
 
 vault_gambler_items = BundleItem(Currency.qi_coin, 10000)
 vault_gambler_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.gambler, vault_gambler_items)
