@@ -300,7 +300,7 @@ class FairyChessPawns(Choice):
     option_vanilla = 0
     option_mixed = 1
     option_berolina = 2
-    default = 1
+    default = 0
 
 
 class MinorPieceLimitByType(NamedRange):
@@ -386,7 +386,7 @@ class LockedItems(ItemDict):
     display_name = "Locked Items"
 
 
-class DeathLink(DeathLink):
+class Deathlink(DeathLink):
     """
     Whenever you are checkmated or resign (close the game window), everyone who is also on Death Link dies. Whenever
     you receive a Death Link event, your game window closes. (You cannot undo or review.)
@@ -417,7 +417,7 @@ class CMOptions(PerGameCommonOptions):
     queen_piece_limit: QueenPieceLimit
     pocket_limit_by_pocket: PocketLimitByPocket
     locked_items: LockedItems
-    death_link: DeathLink
+    death_link: Deathlink
 
 
 piece_type_limit_options: dict[str, Callable[[CMOptions], Option]] = {

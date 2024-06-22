@@ -1,10 +1,16 @@
 from . import CMTestBase
+from .. import determine_difficulty, CMOptions
 
 
 class MaterialStateTestBase(CMTestBase):
     def setUp(self):
         self.options["early_material"] = 0
         super().setUp()
+
+        # this class ultimately isn't trying to test this relatively simple function
+        self.difficulty = determine_difficulty(self.options)
+
+        # this is mostly to demonstrate that collect fundamentally acquires the items and to show that setUp sets up
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Material"])
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
@@ -21,8 +27,8 @@ class TestSimpleMaterial(MaterialStateTestBase):
     """
     def test_no_options(self):
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
-        self.assertLessEqual(4050, past_material)
-        self.assertGreaterEqual(4650, past_material)
+        self.assertLessEqual(4050 * self.difficulty, past_material)
+        self.assertGreaterEqual(4650 * self.difficulty, past_material)
 
 
 class TestCyclicMaterial(MaterialStateTestBase):
@@ -30,8 +36,8 @@ class TestCyclicMaterial(MaterialStateTestBase):
     def test_no_options(self):
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-        self.assertLessEqual(4050, past_material)
-        self.assertGreaterEqual(4650, past_material)
+        self.assertLessEqual(4050 * self.difficulty, past_material)
+        self.assertGreaterEqual(4650 * self.difficulty, past_material)
 
         for item in list(self.multiworld.state.prog_items[self.player].keys()):
             self.remove_by_name(item)
@@ -46,8 +52,8 @@ class TestCyclicMaterial(MaterialStateTestBase):
     def test_backward(self):
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-        self.assertLessEqual(4050, past_material)
-        self.assertGreaterEqual(4650, past_material)
+        self.assertLessEqual(4050 * self.difficulty, past_material)
+        self.assertGreaterEqual(4650 * self.difficulty, past_material)
 
         items = list(self.multiworld.state.prog_items[self.player].keys())
         items.reverse()

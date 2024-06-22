@@ -6,13 +6,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
     # Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material.
     # Leaves unique features and mixed material on, but all pieces will be recognizable.
     "No Dumb Pieces": {
-        "early_material": EarlyMaterial.option_off,
-
-        "fairy_chess_pieces": ['FIDE'],
-        "fairy_chess_pawns": FairyChessPawns.option_vanilla,
-
-        # TODO: Set the rest to defaults. Is this necessary? I feel like they should just be... defaults, unless the
-        #   player changes them.
     },
 
     # A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)

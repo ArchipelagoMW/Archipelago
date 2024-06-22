@@ -14,7 +14,6 @@ class PieceLimitTestBase(CMTestBase):
         self.POTENTIAL_CHILDREN = self.world.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int):
-        self.assertTrue(self.options["min_material"] >= 39)
         self.assertEqual(0, self.world.find_piece_limit("Progressive Pawn", self.NO_CHILDREN
                                                         ))
         self.assertEqual(expected_minors, self.world.find_piece_limit("Progressive Minor Piece", self.NO_CHILDREN

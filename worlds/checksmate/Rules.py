@@ -70,6 +70,12 @@ def determine_difficulty(opts: CMOptions):
     if opts.fairy_chess_pawns.value == opts.fairy_chess_pawns.option_mixed:
         difficulty *= 1.05
     fairy_pieces = opts.fairy_chess_pieces.value
+    if opts.fairy_chess_piece_collection.value == opts.fairy_chess_piece_collection.option_fide:
+        fairy_pieces = [0]
+    elif opts.fairy_chess_piece_collection.value == opts.fairy_chess_piece_collection.option_betza:
+        fairy_pieces = [0, 1, 2, 3]
+    elif opts.fairy_chess_piece_collection.value == opts.fairy_chess_piece_collection.option_full:
+        fairy_pieces = [0, 1, 2, 3, 4, 5]
     difficulty *= 0.99 + (0.01 * len(fairy_pieces))
     # difficulty *= 1 + (0.025 * (5 - self.options.max_engine_penalties))
 
