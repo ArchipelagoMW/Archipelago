@@ -332,9 +332,10 @@ This means 2 things about when you can call ER:
    and create your events before you call ER if you want to guarantee a correct output.
 
 If the conditions above are met, you could theoretically do ER as early as `create_regions`. However, plando is also 
-a consideration. Since item plando happens before `pre_fill` and modifies the item pool, doing ER in `pre_fill` is the
-only way to account for placements made by item plando, otherwise you risk impossible seeds or generation failures. 
-Obviously, you may also want to perform ER after entrance plando as well.
+a consideration. Since item plando happens between `set_rules` and `pre_fill` and modifies the item pool, doing ER 
+in `pre_fill` is the only way to account for placements made by item plando, otherwise you risk impossible seeds or 
+generation failures. Obviously, if your world implements entrance plando, you will likely want to do that before ER as
+well.
 
 #### Informing your client about randomized entrances
 
