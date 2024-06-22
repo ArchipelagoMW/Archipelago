@@ -73,17 +73,20 @@ class Boomerang(Choice):
     gift = 1
     default = gift
 
+
 class BossShuffle(Choice):
     none = 0
     shuffle = 1
     random = 2
     default = none
 
+
 class EntranceShuffle(Choice):
     option_vanilla = 0
     option_simple = 1
     option_mixed = 2
     alias_false = option_vanilla
+
 
 class StartShufflePool(OptionList):
     """
@@ -121,6 +124,7 @@ class StartShufflePool(OptionList):
     # option_connector = 6
     # option_dungeon = 7
 
+
 class SingleEntranceShuffle(EntranceShuffle):
     """
     Shuffle Single Entrances (non connectors with checks inside)
@@ -128,7 +132,8 @@ class SingleEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type=["single", "trade"]
+    entrance_type = ["single", "trade"]
+
 
 class DummyEntranceShuffle(EntranceShuffle):
     """
@@ -137,7 +142,8 @@ class DummyEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type=["dummy"]
+    entrance_type = ["dummy"]
+
 
 class AnnoyingEntranceShuffle(EntranceShuffle):
     """
@@ -146,7 +152,8 @@ class AnnoyingEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type=["insanity"]
+    entrance_type = ["insanity"]
+
 
 class WaterEntranceShuffle(EntranceShuffle):
     """
@@ -155,7 +162,8 @@ class WaterEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type=["water"]
+    entrance_type = ["water"]
+
 
 class ConnectorEntranceShuffle(EntranceShuffle):
     """
@@ -164,7 +172,8 @@ class ConnectorEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among all other entrances
     """
-    entrance_type=["connector"]
+    entrance_type = ["connector"]
+
 
 class DungeonEntranceShuffle(EntranceShuffle):
     """
@@ -173,13 +182,15 @@ class DungeonEntranceShuffle(EntranceShuffle):
     [Simple] The entrances will be shuffled amongst themselves
     [Mixed] The entrances will be shuffled among other entrances
     """
-    entrance_type=["dungeon"]
+    entrance_type = ["dungeon"]
+
 
 class APTitleScreen(DefaultOnToggle):
     """
     Enables AP specific title screen and disables the intro cutscene
     """
     display_name = "AP Title Screen"
+
 
 class OwnItemOnTarin(DefaultOnToggle):
     """
@@ -563,6 +574,7 @@ class AdditionalWarpPoints(DefaultOffToggle):
     [Off] No change
     """
 
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -587,10 +599,6 @@ ladx_option_groups = [
         NagMessages,
         BootsControls
     ]),
-    OptionGroup("Experimental", [
-        DungeonShuffle,
-        EntranceShuffle
-    ]),
     OptionGroup("Visuals & Sound", [
         LinkPalette,
         Palette,
@@ -601,6 +609,7 @@ ladx_option_groups = [
         MusicChangeCondition
     ])
 ]
+
 
 @dataclass
 class LinksAwakeningOptions(PerGameCommonOptions):

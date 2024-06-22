@@ -1,5 +1,8 @@
 import binascii
+import dataclasses
 import os
+import copy
+import itertools
 import pkgutil
 import tempfile
 import typing
@@ -14,6 +17,7 @@ from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name)
 from .LADXR import generator
+from .LADXR.entranceInfo import ENTRANCE_INFO, entrances_by_type
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
@@ -22,8 +26,8 @@ from .LADXR.logic.requirements import RequirementsSettings
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
-from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
-                        create_regions_from_ladxr, get_locations_to_id)
+from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion, create_regions_from_ladxr, get_locations_to_id,
+                        connector_info)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups, EntranceShuffle
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
@@ -56,6 +60,7 @@ class LinksAwakeningSettings(settings.Group):
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
 
+
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -67,6 +72,7 @@ class LinksAwakeningWebWorld(WebWorld):
     )]
     theme = "dirt"
     option_groups = ladx_option_groups
+
 
 class LinksAwakeningWorld(World):
     """
@@ -90,7 +96,7 @@ class LinksAwakeningWorld(World):
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
     item_name_to_id = {
-        item.item_name : BASE_ID + item.item_id for item in links_awakening_items
+        item.item_name: BASE_ID + item.item_id for item in links_awakening_items
     }
 
     item_name_to_data = links_awakening_items_by_name
@@ -99,9 +105,9 @@ class LinksAwakeningWorld(World):
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
-    #item_name_groups = {
+    # item_name_groups = {
     #    "weapons": {"sword", "lance"}
-    #}
+    # }
 
     prefill_dungeon_items = None
 
@@ -119,17 +125,20 @@ class LinksAwakeningWorld(World):
         ItemName.RUPEES_500: 500,
     }
 
+    world_setup = None
+    prefill_original_dungeon = [[], [], [], [], [], [], [], [], []]
+    prefill_own_dungeons = []
+    pre_fill_items = []
+    dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]
+
     def convert_ap_options_to_ladxr_logic(self):
         self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
-
-        self.ladxr_options = LADXRSettings(self.player_options)
-
         self.ladxr_settings.validate()
-        world_setup = LADXRWorldSetup()
-        world_setup.randomize(self.ladxr_settings, self.random)
+        self.world_setup = LADXRWorldSetup()
+        self.world_setup.randomize(self.ladxr_settings, self.random)
         self.randomize_entrances()
-        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
+        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=self.world_setup)
+        self.ladxr_itempool: typing.Dict[str, int] = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
 
     def randomize_entrances(self):
         banned_starts = [
@@ -166,16 +175,16 @@ class LinksAwakeningWorld(World):
         entrance_pool_mapping = {}
 
         random = self.multiworld.per_slot_randoms[self.player]
-        world = World(self.laxdr_options, self.world_setup, RequirementsSettings(self.laxdr_options))
+        world = World(self.ladxr_settings, self.world_setup, RequirementsSettings(self.ladxr_settings))
         # First shuffle the start location, if needed
         start = world.start
         start_entrance = "start_house"
 
-        start_shuffle = self.player_options["start_shuffle"]
+        start_shuffle = self.options.start_shuffle
 
         start_type_mappings = {}
 
-        for option_name, option in self.player_options.items():
+        for option_name, option in self.options.as_dict():
             if isinstance(option, EntranceShuffle):
                 for cat in option.entrance_type:
                     start_type_mappings[option_name] = cat
@@ -228,14 +237,11 @@ class LinksAwakeningWorld(World):
                     # This entrance wasn't shuffled, just map back
                     self.world_setup.entrance_mapping["start_house"] = start_entrance
 
-
         for pool in itertools.chain(entrance_pools.values(), indoor_pools.values()):
             # Sort first so that we get the same result every time
             pool.sort()
 
         has_castle_button = False
-
-
 
         # NOTE: this code uses LADXR terms for things where:
         # Region -> Location
@@ -263,9 +269,6 @@ class LinksAwakeningWorld(World):
                 if check_castle_button(current_location, o):
                     walk_locations(callback, o, filter, walked)
 
-
-
-
         # First shuffle connectors, as they will fail if shuffled randomly
         if "connector" in entrance_pool_mapping:
             # Get the list of unshuffled connectors
@@ -276,8 +279,8 @@ class LinksAwakeningWorld(World):
             unseen_entrances = copy.copy(entrance_pools[entrance_pool_mapping["connector"]])
 
             location_to_entrances = {}
-            for k,v in world.overworld_entrance.items():
-                location_to_entrances.setdefault(v.location,[]).append(k)
+            for k, v in world.overworld_entrance.items():
+                location_to_entrances.setdefault(v.location, []).append(k)
 
             unshuffled_entrances = entrance_pools[entrance_pool_mapping["connector"]]
             seen_locations = set()
@@ -356,7 +359,6 @@ class LinksAwakeningWorld(World):
             seen_keys.add(k)
             seen_values.add(v)
 
-
     def create_regions(self) -> None:
         # Initialize
         self.convert_ap_options_to_ladxr_logic()
@@ -370,7 +372,7 @@ class LinksAwakeningWorld(World):
                 start = region
                 break
 
-        assert(start)
+        assert start
 
         menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)        
         menu_region.exits = [Entrance(self.player, "Start Game", menu_region)]
@@ -393,12 +395,18 @@ class LinksAwakeningWorld(World):
         
         self.multiworld.completion_condition[self.player] = lambda state: state.has("An Alarm Clock", player=self.player)
 
-
-    def create_item(self, item_name: str):
+    def create_item(self, item_name: str) -> LinksAwakeningItem:
         return LinksAwakeningItem(self.item_name_to_data[item_name], self, self.player)
 
     def create_event(self, event: str):
         return Item(event, ItemClassification.progression, None, self.player)
+
+    def get_regions(self, player: int) -> typing.Collection[LinksAwakeningRegion]:
+        regions = self.multiworld.get_regions(player)
+        for region in regions:
+            typing.cast(LinksAwakeningRegion, region)
+        regions = typing.cast(typing.Collection[LinksAwakeningRegion], regions)
+        return regions
 
     def create_items(self) -> None:
         itempool = []
@@ -408,10 +416,6 @@ class LinksAwakeningWorld(World):
         dungeon_item_types = {
 
         }
-
-        self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
-        self.prefill_own_dungeons = []
-        self.pre_fill_items = []
         # For any and different world, set item rule instead
         
         for dungeon_item_type in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
@@ -464,7 +468,7 @@ class LinksAwakeningWorld(World):
                             # Find instrument, lock
                             # TODO: we should be able to pinpoint the region we want, save a lookup table please
                             found = False
-                            for r in self.multiworld.get_regions(self.player):
+                            for r in self.get_regions(self.player):
                                 if r.dungeon_index != item.item_data.dungeon_index:
                                     continue
                                 for loc in r.locations:
@@ -496,9 +500,8 @@ class LinksAwakeningWorld(World):
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-       
-        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
-        for r in self.multiworld.get_regions(self.player):
+
+        for r in self.get_regions(self.player):
             # Set aside dungeon locations
             if r.dungeon_index:
                 self.dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
@@ -510,7 +513,7 @@ class LinksAwakeningWorld(World):
                         self.dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
-        if self.multiworld.tarin_gifts_your_item[self.player]:
+        if self.options.tarin_gifts_your_item:
             self.force_start_item(itempool)
 
         self.multiworld.itempool += itempool
@@ -578,9 +581,9 @@ class LinksAwakeningWorld(World):
                 # 2. Either
                 #    2a. it's not a restricted dungeon item
                 #    2b. it's a restricted dungeon item and this location is specified as allowed
-                location.item_rule = lambda item, location=location, orig_rule=orig_rule: \
-                    (item not in allowed_locations_by_item or location in allowed_locations_by_item[item]) and orig_rule(item)
-
+                # the weird names were to get pycharm to shut up
+                location.item_rule = lambda itm, loc=location, orig=orig_rule: \
+                    ((itm not in allowed_locations_by_item or loc in allowed_locations_by_item[itm]) and orig(itm))
         # Now set up the allow-list for any-dungeon items
         for item in self.prefill_own_dungeons:
             # They of course get to go in any spot
@@ -616,9 +619,11 @@ class LinksAwakeningWorld(World):
             all_state.remove(item)
         
         # Finally, fill!
-        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
+        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True,
+                         single_player_placement=True, allow_partial=False)
 
     name_cache = {}
+
     # Tries to associate an icon from another game with an icon we have
     def guess_icon_for_other_world(self, other):
         if not self.name_cache:
@@ -671,8 +676,7 @@ class LinksAwakeningWorld(World):
                 assert name in self.name_cache, name
                 assert name in CHEST_ITEMS, name
             self.name_cache.update(others)
-            
-        
+
         uppered = other.upper()
         if "BIG KEY" in uppered:
             return 'NIGHTMARE_KEY'
@@ -697,7 +701,7 @@ class LinksAwakeningWorld(World):
         for r in self.multiworld.get_regions(self.player):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
-                    assert(loc.item)
+                    assert loc.item
                         
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):

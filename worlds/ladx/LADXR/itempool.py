@@ -1,4 +1,5 @@
 from .locations.items import *
+from typing import Dict
 
 
 DEFAULT_ITEM_POOL = {
@@ -165,12 +166,12 @@ class ItemPool:
             for n in range(9):
                 self.remove("MAP%d" % (n + 1))
                 self.remove("COMPASS%d" % (n + 1))
-                self.add("KEY%d" % (n +1))
-                self.add("NIGHTMARE_KEY%d" % (n +1))
+                self.add("KEY%d" % (n + 1))
+                self.add("NIGHTMARE_KEY%d" % (n + 1))
             if settings.owlstatues in ("none", "overworld"):
                 for n in range(9):
                     self.remove("STONE_BEAK%d" % (n + 1))
-                    self.add("KEY%d" % (n +1))
+                    self.add("KEY%d" % (n + 1))
 
         # if settings.dungeon_items == 'keysy':
         #     for n in range(9):
@@ -274,5 +275,5 @@ class ItemPool:
             self.add(new_item)
             self.remove(remove_item)
 
-    def toDict(self):
+    def toDict(self) -> Dict[str, int]:
         return self.__pool.copy()

@@ -619,20 +619,20 @@ class DungeonDiveOverworld:
         self.overworld_entrance = {}
         self.indoor_location = {}
 
-        start_house = Location("Start House").add(StartItem())
-        Location().add(ShopItem(0)).connect(start_house, OR(COUNT("RUPEES", 200), SWORD))
-        Location().add(ShopItem(1)).connect(start_house, OR(COUNT("RUPEES", 980), SWORD))
-        Location().add(Song(0x0B1)).connect(start_house, OCARINA)  # Marins song
+        start_house = IndoorLocation("Start House").add(StartItem())
+        VirtualLocation().add(ShopItem(0)).connect(start_house, OR(COUNT("RUPEES", 200), SWORD))
+        VirtualLocation().add(ShopItem(1)).connect(start_house, OR(COUNT("RUPEES", 980), SWORD))
+        VirtualLocation().add(Song(0x0B1)).connect(start_house, OCARINA)  # Marins song
         start_house.add(DroppedKey(0xB2))  # Sword on the beach
-        egg = Location().connect(start_house, AND(r.bush, BOMB))
-        Location().add(MadBatter(0x1E1)).connect(start_house, MAGIC_POWDER)
+        egg = VirtualLocation().connect(start_house, AND(r.bush, BOMB))
+        VirtualLocation().add(MadBatter(0x1E1)).connect(start_house, MAGIC_POWDER)
         if options.boomerang == 'trade':
-            Location().add(BoomerangGuy()).connect(start_house, AND(BOMB, OR(BOOMERANG, HOOKSHOT, MAGIC_ROD, PEGASUS_BOOTS, FEATHER, SHOVEL)))
+            VirtualLocation().add(BoomerangGuy()).connect(start_house, AND(BOMB, OR(BOOMERANG, HOOKSHOT, MAGIC_ROD, PEGASUS_BOOTS, FEATHER, SHOVEL)))
         elif options.boomerang == 'gift':
-            Location().add(BoomerangGuy()).connect(start_house, BOMB)
+            VirtualLocation().add(BoomerangGuy()).connect(start_house, BOMB)
 
-        nightmare = Location("Nightmare")
-        windfish = Location("Windfish").connect(nightmare, AND(MAGIC_POWDER, SWORD, OR(BOOMERANG, BOW)))
+        nightmare = VirtualLocation("Nightmare")
+        windfish = VirtualLocation("Windfish").connect(nightmare, AND(MAGIC_POWDER, SWORD, OR(BOOMERANG, BOW)))
 
         self.start = start_house
         self.overworld_entrance = {

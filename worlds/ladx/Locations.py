@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance, Location, CollectionState
-
+from typing import List
 
 from .LADXR.checkMetadata import checkMetadataTable
 from .Common import *
@@ -171,7 +171,7 @@ def ladxr_region_to_name(n):
     return name
 
 
-def create_regions_from_ladxr(player, multiworld, logic):
+def create_regions_from_ladxr(player, multiworld, logic) -> List[LinksAwakeningRegion]:
     tmp = set()
 
     def print_items(n):
