@@ -184,9 +184,14 @@ class EntityHuntPicker:
         """
 
         replacements = {
-            "0x18488": "0x00609",  # Replace Swamp Sliding Bridge Underwater with Swamp Sliding Bridge Above Water
-            "0x03676": "0x03678",  # Replace Quarry Upper Ramp Control with Lower Ramp Control
-            "0x03675": "0x03679",  # Replace Quarry Upper Lift Control with Lower Lift Control
+            "0x18488": "0x00609",  # Replace Swamp Sliding Bridge Underwater -> Swamp Sliding Bridge Above Water
+            "0x03676": "0x03678",  # Replace Quarry Upper Ramp Control -> Lower Ramp Control
+            "0x03675": "0x03679",  # Replace Quarry Upper Lift Control -> Lower Lift Control
+
+            "0x03702": "0x15ADD",  # Jungle Vault Box -> Jungle Vault Panel
+            "0x03542": "0x002A6",  # Mountainside Vault Box -> Mountainside Vault Panel
+            "0x03481": "0x033D4",  # Jungle Vault Box -> Jungle Vault Panel
+            "0x0339E": "0x0CC7B",  # Desert Vault Box -> Desert Vault Panel
         }
 
         if self.player_options.shuffle_doors < 2:
