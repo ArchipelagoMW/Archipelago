@@ -3,19 +3,18 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
-import re
 import sys
 import time
+from random import Random
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
-    Union
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
+                    TYPE_CHECKING, Type, Union)
 
-from Options import PerGameCommonOptions
+from Options import item_and_loc_options, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    import random
-    from BaseClasses import MultiWorld, Item, Location, Tutorial
+    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
 
@@ -52,17 +51,12 @@ class AutoWorldRegister(type):
         dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
-        dct["item_descriptions"] = {name: _normalize_description(description) for name, description
-                                    in dct.get("item_descriptions", {}).items()}
-        dct["item_descriptions"]["Everything"] = "All items in the entire game."
+
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
                                        in dct.get("location_name_groups", {}).items()}
         dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
-        dct["location_descriptions"] = {name: _normalize_description(description) for name, description
-                                    in dct.get("location_descriptions", {}).items()}
-        dct["location_descriptions"]["Everywhere"] = "All locations in the entire game."
 
         # move away from get_required_client_version function
         if "game" in dct:
@@ -115,6 +109,39 @@ class AutoLogicRegister(type):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
                 setattr(CollectionState, item_name, function)
         return new_class
+
+
+class WebWorldRegister(type):
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> WebWorldRegister:
+        # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
+        # dev, putting it at the end if they don't define options in it
+        option_groups: List[OptionGroup] = dct.get("option_groups", [])
+        prebuilt_options = ["Game Options", "Item & Location Options"]
+        seen_options = []
+        item_group_in_list = False
+        for group in option_groups:
+            assert group.options, "A custom defined Option Group must contain at least one Option."
+            # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
+            title_name = group.name.title()
+            assert title_name not in prebuilt_options or title_name == group.name, \
+                f"Prebuilt group name \"{group.name}\" must be \"{title_name}\""
+
+            if group.name == "Item & Location Options":
+                assert not any(option in item_and_loc_options for option in group.options), \
+                    f"Item and Location Options cannot be specified multiple times"
+                group.options.extend(item_and_loc_options)
+                item_group_in_list = True
+            else:
+                for option in group.options:
+                    assert option not in item_and_loc_options, \
+                           f"{option} cannot be moved out of the \"Item & Location Options\" Group"
+            assert len(group.options) == len(set(group.options)), f"Duplicate options in option group {group.name}"
+            for option in group.options:
+                assert option not in seen_options, f"{option} found in two option groups"
+                seen_options.append(option)
+        if not item_group_in_list:
+            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options, True))
+        return super().__new__(mcs, name, bases, dct)
 
 
 def _timed_call(method: Callable[..., Any], *args: Any,
@@ -171,7 +198,7 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
             _timed_call(stage_callable, multiworld, *args)
 
 
-class WebWorld:
+class WebWorld(metaclass=WebWorldRegister):
     """Webhost integration"""
 
     options_page: Union[bool, str] = True
@@ -193,6 +220,30 @@ class WebWorld:
     options_presets: Dict[str, Dict[str, Any]] = {}
     """A dictionary containing a collection of developer-defined game option presets."""
 
+    option_groups: ClassVar[List[OptionGroup]] = []
+    """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
+
+    rich_text_options_doc = False
+    """Whether the WebHost should render Options' docstrings as rich text.
+
+    If this is True, Options' docstrings are interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, they're rendered to HTML
+    so that lists, emphasis, and other rich text features are displayed
+    properly.
+
+    If this is False, the docstrings are instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved. For backwards
+    compatibility, this is the default.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
+    location_descriptions: Dict[str, str] = {}
+    """An optional map from location names (or location group names) to brief descriptions for users."""
+
+    item_descriptions: Dict[str, str] = {}
+    """An optional map from item names (or item group names) to brief descriptions for users."""
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -205,8 +256,8 @@ class World(metaclass=AutoWorldRegister):
 
     game: ClassVar[str]
     """name the game"""
-    topology_present: ClassVar[bool] = False
-    """indicate if world type has any meaningful layout/pathing"""
+    topology_present: bool = False
+    """indicate if this world has any meaningful layout/pathing"""
 
     all_item_and_group_names: ClassVar[FrozenSet[str]] = frozenset()
     """gets automatically populated with all item and item group names"""
@@ -219,34 +270,8 @@ class World(metaclass=AutoWorldRegister):
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps item group names to sets of items. Example: {"Weapons": {"Sword", "Bow"}}"""
 
-    item_descriptions: ClassVar[Dict[str, str]] = {}
-    """An optional map from item names (or item group names) to brief descriptions for users.
-
-    Individual newlines and indentation will be collapsed into spaces before these descriptions are
-    displayed. This may cover only a subset of items.
-    """
-
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
-
-    location_descriptions: ClassVar[Dict[str, str]] = {}
-    """An optional map from location names (or location group names) to brief descriptions for users.
-
-    Individual newlines and indentation will be collapsed into spaces before these descriptions are
-    displayed. This may cover only a subset of locations.
-    """
-
-    data_version: ClassVar[int] = 0
-    """
-    Increment this every time something in your world's names/id mappings changes.
-
-    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
-    that it should not be cached, and clients should request that world's DataPackage every connection. Not
-    recommended for production-ready worlds.
-
-    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
-    request a new DataPackage, if necessary.
-    """
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
@@ -282,7 +307,7 @@ class World(metaclass=AutoWorldRegister):
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
 
-    random: random.Random
+    random: Random
     """This world's random object. Should be used for any randomization needed in world for this player slot."""
 
     settings_key: ClassVar[str]
@@ -296,8 +321,11 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
+        assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
+        self.random = Random(multiworld.random.getrandbits(64))
+        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -306,13 +334,15 @@ class World(metaclass=AutoWorldRegister):
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
-    # in that case the MultiWorld object is passed as an argument and it gets called once for the entire multiworld.
+    # in that case the MultiWorld object is passed as an argument, and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
 
     @classmethod
     def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
-        """Checks that a game is capable of generating, usually checks for some base file like a ROM.
-        This gets called once per present world type. Not run for unittests since they don't produce output"""
+        """
+        Checks that a game is capable of generating, such as checking for some base file like a ROM.
+        This gets called once per present world type. Not run for unittests since they don't produce output.
+        """
         pass
 
     def generate_early(self) -> None:
@@ -357,26 +387,40 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
-        This happens before progression balancing, so the items may not be in their final locations yet."""
+        """
+        Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing, so the items may not be in their final locations yet.
+        """
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use multiworld.random here.
-        If you need any last-second randomization, use self.random instead."""
+        """
+        This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead.
+        """
         pass
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the `slot_data` field in the `Connected` network package.
+    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
+        """
+        What is returned from this function will be in the `slot_data` field
+        in the `Connected` network package.
+        It should be a `dict` with `str` keys, and should be serializable with json.
+
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
 
         The generation does not wait for `generate_output` to complete before calling this.
-        `threading.Event` can be used if you need to wait for something from `generate_output`."""
+        `threading.Event` can be used if you need to wait for something from `generate_output`.
+        """
+        # The reason for the `Mapping` type annotation, rather than `dict`
+        # is so that type checkers won't worry about the mutability of `dict`,
+        # so you can have more specific typing in your world implementation.
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        """Fill in additional entrance information text into locations, which is displayed when hinted.
-        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
+        """
+        Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id.
+        """
         pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
@@ -385,13 +429,17 @@ class World(metaclass=AutoWorldRegister):
 
     # Spoiler writing is optional, these may not get called.
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
-        """Write to the spoiler header. If individual it's right at the end of that player's options,
-        if as stage it's right under the common header before per-player options."""
+        """
+        Write to the spoiler header. If individual it's right at the end of that player's options,
+        if as stage it's right under the common header before per-player options.
+        """
         pass
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        """Write to the spoiler "middle", this is after the per-player options and before locations,
-        meant for useful or interesting info."""
+        """
+        Write to the spoiler "middle", this is after the per-player options and before locations,
+        meant for useful or interesting info.
+        """
         pass
 
     def write_spoiler_end(self, spoiler_handle: TextIO) -> None:
@@ -401,8 +449,10 @@ class World(metaclass=AutoWorldRegister):
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> "Item":
-        """Create an item for this world type and player.
-        Warning: this may be called with self.world = None, for example by MultiServer"""
+        """
+        Create an item for this world type and player.
+        Warning: this may be called with self.world = None, for example by MultiServer
+        """
         raise NotImplementedError
 
     def get_filler_item_name(self) -> str:
@@ -412,34 +462,42 @@ class World(metaclass=AutoWorldRegister):
 
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
-        """Creates a group, which is an instance of World that is responsible for multiple others.
-        An example case is ItemLinks creating these."""
+        """
+        Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these.
+        """
         # TODO remove loop when worlds use options dataclass
         for option_key, option in cls.options_dataclass.type_hints.items():
-            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+            getattr(multiworld, option_key)[new_player_id] = option.from_any(option.default)
         group = cls(multiworld, new_player_id)
-        group.options = cls.options_dataclass(**{option_key: option(option.default)
+        group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
 
         return group
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
-        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
+        """
+        Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
         :param state: CollectionState to collect into
         :param item: Item to decide on if it should be collected into state
-        :param remove: indicate if this is meant to remove from state instead of adding."""
+        :param remove: indicate if this is meant to remove from state instead of adding.
+        """
         if item.advancement:
             return item.name
         return None
 
-    # called to create all_state, return Items that are created during pre_fill
     def get_pre_fill_items(self) -> List["Item"]:
+        """
+        Used to return items that need to be collected when creating a fresh all_state, but don't exist in the
+        multiworld itempool.
+        """
         return []
 
-    # following methods should not need to be overridden.
+    # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
+        """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         if name:
             state.prog_items[self.player][name] += 1
@@ -447,6 +505,7 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
+        """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
             state.prog_items[self.player][name] -= 1
@@ -455,8 +514,23 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
+    # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
+
+    # convenience methods
+    def get_location(self, location_name: str) -> "Location":
+        return self.multiworld.get_location(location_name, self.player)
+
+    def get_entrance(self, entrance_name: str) -> "Entrance":
+        return self.multiworld.get_entrance(entrance_name, self.player)
+
+    def get_region(self, region_name: str) -> "Region":
+        return self.multiworld.get_region(region_name, self.player)
+
+    @property
+    def player_name(self) -> str:
+        return self.multiworld.get_player_name(self.player)
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
@@ -472,7 +546,6 @@ class World(metaclass=AutoWorldRegister):
             "item_name_to_id": cls.item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
             "location_name_to_id": cls.location_name_to_id,
-            "version": cls.data_version,
         }
         res["checksum"] = data_package_checksum(res)
         return res
@@ -490,17 +563,3 @@ def data_package_checksum(data: "GamesPackage") -> str:
     assert sorted(data) == list(data), "Data not ordered"
     from NetUtils import encode
     return hashlib.sha1(encode(data).encode()).hexdigest()
-
-
-def _normalize_description(description):
-    """Normalizes a description in item_descriptions or location_descriptions.
-
-    This allows authors to write descritions with nice indentation and line lengths in their world
-    definitions without having it affect the rendered format.
-    """
-    # First, collapse the whitespace around newlines and the ends of the description.
-    description = re.sub(r' *\n *', '\n', description.strip())
-    # Next, condense individual newlines into spaces.
-    description = re.sub(r'(?<!\n)\n(?!\n)', ' ', description)
-    return description
-

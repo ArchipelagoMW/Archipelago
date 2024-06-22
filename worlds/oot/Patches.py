@@ -29,14 +29,14 @@ from .TextBox import character_table, NORMAL_LINE_WIDTH, rom_safe_text
 from .texture_util import ci4_rgba16patch_to_ci8, rgba16_patch
 from .Utils import __version__
 
-from worlds.Files import APContainer
+from worlds.Files import APPatch
 from Utils import __version__ as ap_version
 
 AP_PROGRESSION = 0xD4
 AP_JUNK = 0xD5
 
 
-class OoTContainer(APContainer):
+class OoTContainer(APPatch):
     game: str = 'Ocarina of Time'
 
     def __init__(self, patch_data: bytes, base_path: str, output_directory: str,

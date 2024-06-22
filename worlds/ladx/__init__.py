@@ -1,18 +1,13 @@
 import binascii
 import os
-import copy
-import itertools
-from .Locations import connector_info
-from .LADXR.entranceInfo import ENTRANCE_INFO, entrances_by_type
 import pkgutil
 import tempfile
 import typing
 
 import bsdiff4
 
-
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, CollectionState
+from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, CollectionState, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -22,15 +17,15 @@ from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
-from .LADXR.logic import Logic as LAXDRLogic
+from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.logic.requirements import RequirementsSettings
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options, DungeonItemShuffle, EntranceShuffle
-from .Rom import LADXDeltaPatch
+from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups, EntranceShuffle
+from .Rom import LADXDeltaPatch, get_base_rom_path
 
 
 DEVELOPER_MODE = False
@@ -71,7 +66,7 @@ class LinksAwakeningWebWorld(WebWorld):
         ["zig"]
     )]
     theme = "dirt"
-
+    option_groups = ladx_option_groups
 
 class LinksAwakeningWorld(World):
     """
@@ -80,15 +75,11 @@ class LinksAwakeningWorld(World):
     """
     game = LINKS_AWAKENING  # name of the game/world
     web = LinksAwakeningWebWorld()
-    
-    option_definitions = links_awakening_options  # options the player can set
+
+    options_dataclass = LinksAwakeningOptions
+    options: LinksAwakeningOptions
     settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
-
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
 
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.
@@ -112,7 +103,13 @@ class LinksAwakeningWorld(World):
     #    "weapons": {"sword", "lance"}
     #}
 
-    player_options = None
+    prefill_dungeon_items = None
+
+    ladxr_settings: LADXRSettings
+    ladxr_logic: LADXRLogic
+    ladxr_itempool: LADXRItemPool
+
+    multi_key: bytearray
 
     rupees = {
         ItemName.RUPEES_20: 20,
@@ -123,19 +120,17 @@ class LinksAwakeningWorld(World):
     }
 
     def convert_ap_options_to_ladxr_logic(self):
-        self.player_options = {
-            option: getattr(self.multiworld, option)[self.player] for option in self.option_definitions
-        }
+        self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
 
-        self.laxdr_options = LADXRSettings(self.player_options)
-        
-        self.laxdr_options.validate()
-        self.world_setup = LADXRWorldSetup()
-        self.world_setup.randomize(self.laxdr_options, self.multiworld.random)
+        self.ladxr_options = LADXRSettings(self.player_options)
+
+        self.ladxr_settings.validate()
+        world_setup = LADXRWorldSetup()
+        world_setup.randomize(self.ladxr_settings, self.random)
         self.randomize_entrances()
-        self.ladxr_logic = LAXDRLogic(configuration_options=self.laxdr_options, world_setup=self.world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
-    
+        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
+        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
+
     def randomize_entrances(self):
         banned_starts = [
             # All of these lead directly to nothing or another connector
@@ -164,7 +159,7 @@ class LinksAwakeningWorld(World):
             # "right_taltal_connector6",
             # "d7"
         ]
-   
+
         from .LADXR.logic.overworld import World
         entrance_pools = {}
         indoor_pools = {}
@@ -175,7 +170,7 @@ class LinksAwakeningWorld(World):
         # First shuffle the start location, if needed
         start = world.start
         start_entrance = "start_house"
-        
+
         start_shuffle = self.player_options["start_shuffle"]
 
         start_type_mappings = {}
@@ -204,7 +199,7 @@ class LinksAwakeningWorld(World):
         # Shuffle starting location
         if start_shuffle.value:
             start_candidates = []
-            
+
             # Find all possible start locations
             for category in start_shuffle.value:
                 start_candidates += entrances_by_type[category]
@@ -213,10 +208,10 @@ class LinksAwakeningWorld(World):
                     start_candidates += entrances_by_type["trade"]
 
             # Some start locations result in either
-            # (A) requiring certain arrangements of connectors 
+            # (A) requiring certain arrangements of connectors
             # (B) immediately deadending
             # these could be fixed with chaos entrance rando or smarter connector shuffle
-            # but for now we aren't gonna handle it            
+            # but for now we aren't gonna handle it
 
             start_candidates = [c for c in start_candidates if c not in banned_starts]
             if start_candidates:
@@ -240,7 +235,7 @@ class LinksAwakeningWorld(World):
 
         has_castle_button = False
 
-        
+
 
         # NOTE: this code uses LADXR terms for things where:
         # Region -> Location
@@ -277,7 +272,7 @@ class LinksAwakeningWorld(World):
             unshuffled_connectors = copy.copy(connector_info)
             random.shuffle(unshuffled_connectors)
 
-            # Get the list of unshuffled candidates connector entrances 
+            # Get the list of unshuffled candidates connector entrances
             unseen_entrances = copy.copy(entrance_pools[entrance_pool_mapping["connector"]])
 
             location_to_entrances = {}
@@ -307,7 +302,7 @@ class LinksAwakeningWorld(World):
                 l = list(seen_locations.intersection(unshuffled_entrances))
                 l.sort()
                 seen_entrance_to_connect = random.choice(l)
-                
+
                 # Pick a connector
                 connector = unshuffled_connectors.pop()
                 if connector.castle_button:
@@ -324,7 +319,7 @@ class LinksAwakeningWorld(World):
                 C = len(connector.entrances) > 2 and connector.entrances[2] or None
 
                 # Flag the two doors as connected
-                self.world_setup.entrance_mapping[seen_entrance_to_connect] = A            
+                self.world_setup.entrance_mapping[seen_entrance_to_connect] = A
                 self.world_setup.entrance_mapping[unseen_entrance_to_connect] = B
                 # Walk the new locations
                 walk_locations(callback=mark_location, current_location=world.overworld_entrance[unseen_entrance_to_connect].location)
@@ -386,7 +381,7 @@ class LinksAwakeningWorld(World):
         # Place RAFT, other access events
         for region in regions:
             for loc in region.locations:
-                if loc.event:
+                if loc.address is None:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
         
         # Connect Windfish -> Victory
@@ -397,7 +392,7 @@ class LinksAwakeningWorld(World):
         l.place_locked_item(self.create_event("An Alarm Clock"))
         
         self.multiworld.completion_condition[self.player] = lambda state: state.has("An Alarm Clock", player=self.player)
-        
+
 
     def create_item(self, item_name: str):
         return LinksAwakeningItem(self.item_name_to_data[item_name], self, self.player)
@@ -419,19 +414,22 @@ class LinksAwakeningWorld(World):
         self.pre_fill_items = []
         # For any and different world, set item rule instead
         
-        for option in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks"]:
-            option = "shuffle_" + option
-            option = self.player_options[option]
+        for dungeon_item_type in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
+            option_name = "shuffle_" + dungeon_item_type
+            option: DungeonItemShuffle = getattr(self.options, option_name)
 
             dungeon_item_types[option.ladxr_item] = option.value
 
+            # The color dungeon does not contain an instrument
+            num_items = 8 if dungeon_item_type == "instruments" else 9
+
             if option.value == DungeonItemShuffle.option_own_world:
-                self.multiworld.local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
+                self.options.local_items.value |= {
+                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items + 1)
                 }
             elif option.value == DungeonItemShuffle.option_different_world:
-                self.multiworld.non_local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
+                self.options.non_local_items.value |= {
+                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items + 1)
                 }
         # option_original_dungeon = 0
         # option_own_dungeons = 1
@@ -452,14 +450,17 @@ class LinksAwakeningWorld(World):
                 else:
                     item = self.create_item(item_name)
 
-                    if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
+                    if not self.options.tradequest and isinstance(item.item_data, TradeItemData):
                         location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
                         location.place_locked_item(item)
                         location.show_in_spoiler = False
                         continue
 
                     if isinstance(item.item_data, DungeonItemData):
-                        if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT:
+                        item_type = item.item_data.ladxr_id[:-1]
+                        shuffle_type = dungeon_item_types[item_type]
+
+                        if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT and shuffle_type == ShuffleInstruments.option_vanilla:
                             # Find instrument, lock
                             # TODO: we should be able to pinpoint the region we want, save a lookup table please
                             found = False
@@ -475,10 +476,8 @@ class LinksAwakeningWorld(World):
                                     found = True
                                     break
                                 if found:
-                                    break                            
+                                    break
                         else:
-                            item_type = item.item_data.ladxr_id[:-1]
-                            shuffle_type = dungeon_item_types[item_type]
                             if shuffle_type == DungeonItemShuffle.option_original_dungeon:
                                 self.prefill_original_dungeon[item.item_data.dungeon_index - 1].append(item)
                                 self.pre_fill_items.append(item)
@@ -515,6 +514,11 @@ class LinksAwakeningWorld(World):
             self.force_start_item(itempool)
 
         self.multiworld.itempool += itempool
+
+        # For now, special case first item
+        FORCE_START_ITEM = True
+        if FORCE_START_ITEM:
+            self.force_start_item(itempool)
 
     def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
@@ -585,7 +589,7 @@ class LinksAwakeningWorld(World):
         # Get the list of locations and shuffle
         all_dungeon_locs_to_fill = sorted(all_dungeon_locs)
 
-        self.multiworld.random.shuffle(all_dungeon_locs_to_fill)
+        self.random.shuffle(all_dungeon_locs_to_fill)
 
         # Get the list of items and sort by priority
         def priority(item):
@@ -682,6 +686,12 @@ class LinksAwakeningWorld(World):
         
         return "TRADING_ITEM_LETTER"
 
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
+
     def generate_output(self, output_directory: str):
         # copy items back to locations
         for r in self.multiworld.get_regions(self.player):
@@ -708,34 +718,19 @@ class LinksAwakeningWorld(World):
                     loc.ladxr_item.location_owner = self.player
 
         rom_name = Rom.get_base_rom_path()
-        out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.gbc"
+        out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.player_name}.gbc"
         out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
 
         parser = get_parser()
         args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
 
-        name_for_rom = self.multiworld.player_name[self.player]
-
-        all_names = [self.multiworld.player_name[i + 1] for i in range(len(self.multiworld.player_name))]
-
-        rom = generator.generateRom(
-            args,
-            self.laxdr_options,
-            self.player_options,
-            self.multi_key,
-            self.multiworld.seed_name,
-            self.ladxr_logic,
-            rnd=self.multiworld.per_slot_randoms[self.player],
-            player_name=name_for_rom,
-            player_names=all_names,
-            player_id = self.player,
-            multiworld=self.multiworld)
+        rom = generator.generateRom(args, self)
       
         with open(out_path, "wb") as handle:
             rom.save(handle, name="LADXR")
 
         # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
-        if self.player_options["ap_title_screen"]:
+        if self.options.ap_title_screen:
             with tempfile.NamedTemporaryFile(delete=False) as title_patch:
                 title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         
@@ -743,16 +738,16 @@ class LinksAwakeningWorld(World):
             os.unlink(title_patch.name)
 
         patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                               player_name=self.multiworld.player_name[self.player], patched_path=out_path)
+                               player_name=self.player_name, patched_path=out_path)
         patch.write()
         if not DEVELOPER_MODE:
             os.unlink(out_path)
 
     def generate_multi_key(self):
-        return bytearray(self.multiworld.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')
+        return bytearray(self.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')
 
     def modify_multidata(self, multidata: dict):
-        multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.player_name]
 
     def collect(self, state, item: Item) -> bool:
         change = super().collect(state, item)

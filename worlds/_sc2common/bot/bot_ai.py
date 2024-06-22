@@ -12,6 +12,8 @@ from .position import Point2
 from .unit import Unit
 from .units import Units
 
+from worlds._sc2common.bot import logger
+
 if TYPE_CHECKING:
     from .game_info import Ramp
 
@@ -310,6 +312,7 @@ class BotAI(BotAIInternal):
         :param message:
         :param team_only:"""
         assert isinstance(message, str), f"{message} is not a string"
+        logger.debug("Sending message: " + message)
         await self.client.chat_send(message, team_only)
 
     def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
