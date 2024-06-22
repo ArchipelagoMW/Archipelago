@@ -396,13 +396,13 @@ def verify_hm_moves(multiworld, world, player):
     while True:
         intervene_move = None
         test_state = multiworld.get_all_state(False)
-        if not logic.can_learn_hm(test_state, "Surf", player):
+        if not logic.can_learn_hm(test_state, world, "Surf", player):
             intervene_move = "Surf"
-        elif not logic.can_learn_hm(test_state, "Strength", player):
+        elif not logic.can_learn_hm(test_state, world, "Strength", player):
             intervene_move = "Strength"
         # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
         # as you will require cut to access celadon gyn
-        elif ((not logic.can_learn_hm(test_state, "Cut", player)) and
+        elif ((not logic.can_learn_hm(test_state, world, "Cut", player)) and
                 (multiworld.accessibility[player] != "minimal" or ((not
                 multiworld.badgesanity[player]) and max(
                 multiworld.elite_four_badges_condition[player],
@@ -410,7 +410,7 @@ def verify_hm_moves(multiworld, world, player):
                 multiworld.victory_road_condition[player])
                 > 7) or (multiworld.door_shuffle[player] not in ("off", "simple")))):
             intervene_move = "Cut"
-        elif ((not logic.can_learn_hm(test_state, "Flash", player))
+        elif ((not logic.can_learn_hm(test_state, world, "Flash", player))
                and multiworld.dark_rock_tunnel_logic[player]
                and (multiworld.accessibility[player] != "minimal"
                     or multiworld.door_shuffle[player])):
@@ -419,7 +419,7 @@ def verify_hm_moves(multiworld, world, player):
         # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
         # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
         # considered in door shuffle.
-        elif ((not logic.can_learn_hm(test_state, "Fly", player))
+        elif ((not logic.can_learn_hm(test_state, world, "Fly", player))
                 and multiworld.door_shuffle[player] not in
                 ("off", "simple") and [world.fly_map, world.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
             intervene_move = "Fly"

@@ -285,7 +285,7 @@ class PokemonRedBlueWorld(World):
             if loc.item:
                 continue
             itempool = progitempool + usefulitempool + filleritempool
-            self.random.shuffle(itempool)
+            multiworld.random.shuffle(itempool)
             unplaced_items = []
             for i, item in enumerate(itempool):
                 if item.player == loc.player and loc.can_fill(multiworld.state, item, False):
