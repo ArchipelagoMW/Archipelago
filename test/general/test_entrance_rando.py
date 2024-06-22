@@ -64,7 +64,7 @@ class TestEntranceLookup(unittest.TestCase):
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
 
-        lookup = EntranceLookup(multiworld.per_slot_randoms[1])
+        lookup = EntranceLookup(multiworld.per_slot_randoms[1], coupled=True)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
@@ -83,7 +83,7 @@ class TestEntranceLookup(unittest.TestCase):
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
 
-        lookup = EntranceLookup(multiworld.per_slot_randoms[1])
+        lookup = EntranceLookup(multiworld.per_slot_randoms[1], coupled=True)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:

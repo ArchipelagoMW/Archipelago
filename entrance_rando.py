@@ -52,12 +52,14 @@ class EntranceLookup:
     others: GroupLookup
     _random: random.Random
     _leads_to_exits_cache: Dict[Entrance, bool]
+    _coupled: bool
 
-    def __init__(self, rng: random.Random):
+    def __init__(self, rng: random.Random, coupled: bool):
         self.dead_ends = EntranceLookup.GroupLookup()
         self.others = EntranceLookup.GroupLookup()
         self._random = rng
         self._leads_to_exits_cache = {}
+        self._coupled = coupled
 
     def _can_lead_to_randomizable_exits(self, entrance: Entrance) -> bool:
         """
@@ -79,8 +81,10 @@ class EntranceLookup:
             visited.add(region)
 
             for exit_ in region.exits:
-                # randomizable and not the reverse of the start entrance
-                if not exit_.connected_region and exit_.name != entrance.name:
+                # randomizable exits which are not reverse of the incoming entrance.
+                # uncoupled mode is an exception because in this case going back in the door you just came in could
+                # actually lead somewhere new
+                if not exit_.connected_region and (not self._coupled or exit_.name != entrance.name):
                     self._leads_to_exits_cache[entrance] = True
                     return True
                 elif exit_.connected_region and exit_.connected_region not in visited:
@@ -119,18 +123,24 @@ class EntranceLookup:
 
 
 class ERPlacementState:
+    """The state of an ongoing or completed entrance randomization"""
     placements: List[Entrance]
+    """The list of randomized Entrance objects which have been connected successfully"""
     pairings: List[Tuple[str, str]]
+    """A list of pairings of connected entrance names, of the form (source_exit, target_entrance)"""
     world: World
+    """The world which is having its entrances randomized"""
     collection_state: CollectionState
+    """The CollectionState backing the entrance randomization logic"""
     coupled: bool
+    """Whether entrance randomization is operating in coupled mode"""
 
     def __init__(self, world: World, coupled: bool):
         self.placements = []
         self.pairings = []
         self.world = world
-        self.collection_state = world.multiworld.get_all_state(False, True)
         self.coupled = coupled
+        self.collection_state = world.multiworld.get_all_state(False, True)
 
     @property
     def placed_regions(self) -> Set[Region]:
@@ -250,7 +260,7 @@ def randomize_entrances(
     """
     start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
-    entrance_lookup = EntranceLookup(world.random)
+    entrance_lookup = EntranceLookup(world.random, coupled)
     # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
     perform_validity_check = True
 
