@@ -3,6 +3,7 @@ from worlds.generic.Rules import set_rule, forbid_item
 from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
 from .er_data import Portal
 from .options import TunicOptions
+from .items import item_name_groups
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -26,7 +27,7 @@ red_hexagon = "Red Questagon"
 green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
-
+hero_relics = item_name_groups["Hero Relics"]
 
 def has_ladder(ladder: str, state: CollectionState, player: int, options: TunicOptions):
     return not options.shuffle_ladders or state.has(ladder, player)
@@ -991,7 +992,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
-                            state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)))
+                            (state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)
+                            and state.has_all(hero_relics, player))))
 
     # connecting the regions portals are in to other portals you can access via ladder storage
     # using has_stick instead of can_ladder_storage since it's already checking the logic rules

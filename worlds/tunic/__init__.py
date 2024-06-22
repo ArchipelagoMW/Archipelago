@@ -159,6 +159,7 @@ class TunicWorld(World):
         keys_behind_bosses = self.options.keys_behind_bosses
         hexagon_quest = self.options.hexagon_quest
         sword_progression = self.options.sword_progression
+        ability_shuffle = self.options.ability_shuffling
 
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
@@ -237,6 +238,18 @@ class TunicWorld(World):
                 items_to_create[replaced_item] = 0
 
             remove_filler(items_to_create[gold_hexagon])
+
+            for hero_relic in item_name_groups["Hero Relics"]:
+                relic_item = TunicItem(hero_relic, ItemClassification.useful, self.item_name_to_id[hero_relic], self.player)
+                tunic_items.append(relic_item)
+                items_to_create[hero_relic] = 0
+
+        if not ability_shuffle:
+            for page in item_name_groups['Abilities']:
+                if items_to_create[page] > 0:
+                    page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
+                    tunic_items.append(page_item)
+                    items_to_create[page] = 0
 
         if self.options.maskless:
             mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)

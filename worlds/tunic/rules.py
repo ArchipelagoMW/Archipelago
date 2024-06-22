@@ -4,6 +4,7 @@ from typing import Dict, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from BaseClasses import CollectionState
 from .options import TunicOptions
+from .items import item_name_groups
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -25,7 +26,7 @@ red_hexagon = "Red Questagon"
 green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
-
+hero_relics = item_name_groups["Hero Relics"]
 
 def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
     ability_requirement = [1, 1, 1]
@@ -128,7 +129,7 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
     multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = \
         lambda state: (state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
-                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)) and \
+                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player) and state.has_all(hero_relics, player)) and \
         has_ability(state, player, prayer, options, ability_unlocks) and has_sword(state, player) and \
         state.has_any({lantern, laurels}, player)
 
