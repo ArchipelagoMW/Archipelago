@@ -3,8 +3,8 @@ from . import poke_data, logic
 from .rom_addresses import rom_addresses
 
 
-def set_mon_palettes(self, random, data):
-    if self.options.randomize_pokemon_palettes == "vanilla":
+def set_mon_palettes(world, random, data):
+    if world.options.randomize_pokemon_palettes == "vanilla":
         return
     pallet_map = {
         "Poison": 0x0F,
@@ -25,9 +25,9 @@ def set_mon_palettes(self, random, data):
     }
     palettes = []
     for mon in poke_data.pokemon_data:
-        if self.options.randomize_pokemon_palettes == "primary_type":
-            pallet = pallet_map[self.local_poke_data[mon]["type1"]]
-        elif (self.options.randomize_pokemon_palettes == "follow_evolutions" and mon in
+        if world.options.randomize_pokemon_palettes == "primary_type":
+            pallet = pallet_map[world.local_poke_data[mon]["type1"]]
+        elif (world.options.randomize_pokemon_palettes == "follow_evolutions" and mon in
               poke_data.evolves_from and poke_data.evolves_from[mon] != "Eevee"):
             pallet = palettes[-1]
         else:  # completely_random or follow_evolutions and it is not an evolved form (except eeveelutions)
@@ -93,41 +93,41 @@ def move_power(move_data):
     return power
 
 
-def process_move_data(self):
-    self.local_move_data = deepcopy(poke_data.moves)
+def process_move_data(world):
+    world.local_move_data = deepcopy(poke_data.moves)
 
-    if self.options.randomize_move_types:
-        for move, data in self.local_move_data.items():
+    if world.options.randomize_move_types:
+        for move, data in world.local_move_data.items():
             if move == "No Move":
                 continue
             # The chance of randomized moves choosing a normal type move is high, so we want to retain having a higher
             # rate of normal type moves
-            data["type"] = self.random.choice(list(poke_data.type_ids) + (["Normal"] * 4))
+            data["type"] = world.random.choice(list(poke_data.type_ids) + (["Normal"] * 4))
 
-    if self.options.move_balancing:
-        self.local_move_data["Sing"]["accuracy"] = 30
-        self.local_move_data["Sleep Powder"]["accuracy"] = 40
-        self.local_move_data["Spore"]["accuracy"] = 50
-        self.local_move_data["Sonicboom"]["effect"] = 0
-        self.local_move_data["Sonicboom"]["power"] = 50
-        self.local_move_data["Dragon Rage"]["effect"] = 0
-        self.local_move_data["Dragon Rage"]["power"] = 80
-        self.local_move_data["Horn Drill"]["effect"] = 0
-        self.local_move_data["Horn Drill"]["power"] = 70
-        self.local_move_data["Horn Drill"]["accuracy"] = 90
-        self.local_move_data["Guillotine"]["effect"] = 0
-        self.local_move_data["Guillotine"]["power"] = 70
-        self.local_move_data["Guillotine"]["accuracy"] = 90
-        self.local_move_data["Fissure"]["effect"] = 0
-        self.local_move_data["Fissure"]["power"] = 70
-        self.local_move_data["Fissure"]["accuracy"] = 90
-        self.local_move_data["Blizzard"]["accuracy"] = 70
+    if world.options.move_balancing:
+        world.local_move_data["Sing"]["accuracy"] = 30
+        world.local_move_data["Sleep Powder"]["accuracy"] = 40
+        world.local_move_data["Spore"]["accuracy"] = 50
+        world.local_move_data["Sonicboom"]["effect"] = 0
+        world.local_move_data["Sonicboom"]["power"] = 50
+        world.local_move_data["Dragon Rage"]["effect"] = 0
+        world.local_move_data["Dragon Rage"]["power"] = 80
+        world.local_move_data["Horn Drill"]["effect"] = 0
+        world.local_move_data["Horn Drill"]["power"] = 70
+        world.local_move_data["Horn Drill"]["accuracy"] = 90
+        world.local_move_data["Guillotine"]["effect"] = 0
+        world.local_move_data["Guillotine"]["power"] = 70
+        world.local_move_data["Guillotine"]["accuracy"] = 90
+        world.local_move_data["Fissure"]["effect"] = 0
+        world.local_move_data["Fissure"]["power"] = 70
+        world.local_move_data["Fissure"]["accuracy"] = 90
+        world.local_move_data["Blizzard"]["accuracy"] = 70
 
-    if self.options.randomize_tm_moves:
-        self.local_tms = self.random.sample([move for move in poke_data.moves.keys() if move not in
-                                                        ["No Move"] + poke_data.hm_moves], 50)
+    if world.options.randomize_tm_moves:
+        world.local_tms = world.random.sample([move for move in poke_data.moves.keys() if move not in
+                                               ["No Move"] + poke_data.hm_moves], 50)
     else:
-        self.local_tms = poke_data.tm_moves.copy()
+        world.local_tms = poke_data.tm_moves.copy()
 
 
 def process_pokemon_data(self):

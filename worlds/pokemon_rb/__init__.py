@@ -3,7 +3,6 @@ import settings
 import typing
 import threading
 import base64
-import random
 from copy import deepcopy
 from typing import TextIO
 
@@ -146,7 +145,7 @@ class PokemonRedBlueWorld(World):
                 continue
             tc_random = world.random
             if world.options.type_chart_seed.value.isdigit():
-                tc_random = random.Random()
+                tc_random = multiworld.random.Random()
                 tc_random.seed(int(world.options.type_chart_seed.value))
 
             if world.options.randomize_type_chart == "vanilla":
@@ -286,7 +285,7 @@ class PokemonRedBlueWorld(World):
             if loc.item:
                 continue
             itempool = progitempool + usefulitempool + filleritempool
-            random.shuffle(itempool)
+            self.random.shuffle(itempool)
             unplaced_items = []
             for i, item in enumerate(itempool):
                 if item.player == loc.player and loc.can_fill(multiworld.state, item, False):

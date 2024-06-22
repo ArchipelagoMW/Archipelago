@@ -39,16 +39,16 @@ def randomize_pokemon(self, mon, mons_list, randomize_type, random):
     return mon
 
 
-def process_trainer_data(self):
+def process_trainer_data(world):
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
-                 or self.options.trainer_legendaries.value]
+                 or world.options.trainer_legendaries.value]
     unevolved_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
-                      or self.options.randomize_legendary_pokemon.value == 3]
+                      or world.options.randomize_legendary_pokemon.value == 3]
     evolved_mons = [mon for mon in mons_list if mon not in unevolved_mons]
     rival_map = {
-        "Charmander": self.multiworld.get_location("Oak's Lab - Starter 1", self.player).item.name[9:],  # strip the
-        "Squirtle": self.multiworld.get_location("Oak's Lab - Starter 2", self.player).item.name[9:],    # 'Missable'
-        "Bulbasaur": self.multiworld.get_location("Oak's Lab - Starter 3", self.player).item.name[9:],   # from the name
+        "Charmander": world.multiworld.get_location("Oak's Lab - Starter 1", world.player).item.name[9:],# strip the
+        "Squirtle": world.multiworld.get_location("Oak's Lab - Starter 2", world.player).item.name[9:],  # 'Missable'
+        "Bulbasaur": world.multiworld.get_location("Oak's Lab - Starter 3", world.player).item.name[9:], # from the name
     }
 
     def add_evolutions():
@@ -60,7 +60,7 @@ def process_trainer_data(self):
                     rival_map[poke_data.evolves_to[a]] = b
     add_evolutions()
     add_evolutions()
-    parties_objs = [location for location in self.multiworld.get_locations(self.player)
+    parties_objs = [location for location in world.multiworld.get_locations(world.player)
                     if location.type == "Trainer Parties"]
     # Process Rival parties in order                                     "Route 22 " is not a typo
     parties_objs.sort(key=lambda i: 0 if "Oak's Lab" in i.name else 1 if "Route 22 " in i.name else 2 if "Cerulean City"
@@ -75,25 +75,25 @@ def process_trainer_data(self):
                     for i, mon in enumerate(rival_party):
                         if mon in ("Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard",
                                    "Squirtle", "Wartortle", "Blastoise"):
-                            if self.options.randomize_starter_pokemon:
+                            if world.options.randomize_starter_pokemon:
                                 rival_party[i] = rival_map[mon]
-                        elif self.options.randomize_trainer_parties:
+                        elif world.options.randomize_trainer_parties:
                             if mon in rival_map:
                                 rival_party[i] = rival_map[mon]
                             else:
-                                new_mon = randomize_pokemon(self, mon,
+                                new_mon = randomize_pokemon(world, mon,
                                                             unevolved_mons if mon in unevolved_mons else evolved_mons,
-                                                            self.options.randomize_trainer_parties.value,
-                                                            self.random)
+                                                            world.options.randomize_trainer_parties.value,
+                                                            world.random)
                                 rival_map[mon] = new_mon
                                 rival_party[i] = new_mon
                             add_evolutions()
             else:
-                if self.options.randomize_trainer_parties:
+                if world.options.randomize_trainer_parties:
                     for i, mon in enumerate(party["party"]):
-                        party["party"][i] = randomize_pokemon(self, mon, mons_list,
-                                                              self.options.randomize_trainer_parties.value,
-                                                              self.random)
+                        party["party"][i] = randomize_pokemon(world, mon, mons_list,
+                                                              world.options.randomize_trainer_parties.value,
+                                                              world.random)
 
 
 def process_pokemon_locations(self):

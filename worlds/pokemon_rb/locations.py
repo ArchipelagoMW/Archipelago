@@ -5,48 +5,48 @@ from . import poke_data
 loc_id_start = 172000000
 
 
-def trainersanity(multiworld, player):
-    include = multiworld.worlds[player].trainersanity_table.pop(0)
-    multiworld.worlds[player].trainersanity_table.append(include)
+def trainersanity(world, player):
+    include = world.trainersanity_table.pop(0)
+    world.trainersanity_table.append(include)
     return include
 
 
-def dexsanity(multiworld, player):
-    include = multiworld.worlds[player].dexsanity_table.pop(0)
-    multiworld.worlds[player].dexsanity_table.append(include)
+def dexsanity(world, player):
+    include = world.dexsanity_table.pop(0)
+    world.dexsanity_table.append(include)
     return include
 
 
-def hidden_items(multiworld, player):
-    return multiworld.worlds[player].options.randomize_hidden_items
+def hidden_items(world, player):
+    return world.options.randomize_hidden_items
 
 
-def hidden_moon_stones(multiworld, player):
-    return multiworld.worlds[player].options.randomize_hidden_items or multiworld.worlds[player].options.stonesanity
+def hidden_moon_stones(world, player):
+    return world.options.randomize_hidden_items or world.options.stonesanity
 
 
-def tea(multiworld, player):
-    return multiworld.worlds[player].options.tea
+def tea(world, player):
+    return world.options.tea
 
 
-def extra_key_items(multiworld, player):
-    return multiworld.worlds[player].options.extra_key_items
+def extra_key_items(world, player):
+    return world.options.extra_key_items
 
 
-def always_on(multiworld, player):
+def always_on(world, player):
     return True
 
 
-def prizesanity(multiworld, player):
-    return multiworld.worlds[player].options.prizesanity
+def prizesanity(world, player):
+    return world.options.prizesanity
 
 
-def split_card_key(multiworld, player):
-    return multiworld.worlds[player].options.split_card_key.value > 0
+def split_card_key(world, player):
+    return world.options.split_card_key.value > 0
 
 
-def not_stonesanity(multiworld, player):
-    return not multiworld.worlds[player].options.stonesanity
+def not_stonesanity(world, player):
+    return not world.options.stonesanity
 
 
 class LocationData:
