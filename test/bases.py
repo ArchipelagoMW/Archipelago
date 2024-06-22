@@ -329,7 +329,7 @@ class WorldTestBase(unittest.TestCase):
                 for n in range(len(locations) - 1, -1, -1):
                     if locations[n].can_reach(state):
                         sphere.append(locations.pop(n))
-                self.assertTrue(sphere or self.multiworld.accessibility[1] == "minimal",
+                self.assertTrue(sphere or self.multiworld.worlds[1].options.accessibility == "minimal",
                                 f"Unreachable locations: {locations}")
                 if not sphere:
                     break
