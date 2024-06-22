@@ -414,7 +414,7 @@ class PsyRules:
         return state.has_all([ItemName.Cake, ItemName.Telekinesis, ItemName.Pyrokinesis], self.player)
 
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
-        return amount <= sum([state.count(item_name, self.player) for item_name in BRAIN_JARS])
+        return amount <= sum([state.has(item_name, self.player) for item_name in BRAIN_JARS])
 
     def set_psy_rules(self) -> None:
         multiworld = self.world.multiworld
