@@ -2510,6 +2510,88 @@ if "Final Fantasy Mystic Quest" in network_data_package["games"]:
         "Progressive Sky Coin"  : 2
     }
 
+    REGION_OVERWORLD        = "Overworld"
+    REGION_CITIES           = "Cities"
+    REGION_ALIVE_FOREST     = "Alive Forest"
+    REGION_AQUARIA          = "Aquaria"
+    REGION_BONE_DUNGEON     = "Bone Dungeon"
+    REGION_DOOM_CASTLE      = "Doom Castle"
+    REGION_FALLS_BASIN      = "Falls Basin"
+    REGION_FIREBURG         = "Fireburg"
+    REGION_FOCUS_TOWER      = "Focus Tower"
+    REGION_FORESTA          = "Foresta"
+    REGION_GIANT_TREE       = "Giant Tree"
+    REGION_ICE_PYRAMID      = "Ice Pyramid"
+    REGION_LAVA_DOME        = "Lava Dome"
+    REGION_LEVEL_FOREST     = "Level Forest"
+    REGION_MACS_SHIP        = "Mac's Ship"
+    REGION_MINE             = "Mine"
+    REGION_MOUNT_GALE       = "Mount Gale"
+    REGION_PAZUZUS_TOWER    = "Pazuzu's Tower"
+    REGION_ROPE_BRIDGE      = "Rope Bridge"
+    REGION_SPENCERS_CAVE    = "Spencer's Cave"
+    REGION_VOLCANO          = "Volcano"
+    REGION_WINDIA           = "Windia"
+    REGION_WINTRY_CAVE      = "Wintry Cave"
+
+    known_regions = [
+        REGION_OVERWORLD,
+        REGION_CITIES,
+
+        REGION_BONE_DUNGEON,
+
+        REGION_FOCUS_TOWER,
+        
+        REGION_WINTRY_CAVE,
+        REGION_ICE_PYRAMID,
+        
+        REGION_MINE,
+        REGION_LAVA_DOME,
+
+        REGION_GIANT_TREE,
+        REGION_MOUNT_GALE,
+        REGION_PAZUZUS_TOWER,
+
+        REGION_DOOM_CASTLE
+    ]
+
+    # mapping table
+    # add region name as 1:1 for location patterns if the location has the same prefix as the region
+    # exceptions are added after
+    # (the 1:1 is used to keep a same behaviour for mapping)
+    location_regions_table = {
+            region : region
+            for region in known_regions
+                if region not in (REGION_OVERWORLD, REGION_CITIES)
+        }
+
+    location_regions_table.update({
+        "Foresta West Battlefield"              : REGION_OVERWORLD,
+        "Mine Battlefield"                      : REGION_OVERWORLD,
+        "North of Libra Temple Battlefield"     : REGION_OVERWORLD,
+        "Path to Fireburg Central Battlefield"  : REGION_OVERWORLD,
+        "South of Aquaria Battlefield"          : REGION_OVERWORLD,
+        "Kaidge Temple"                         : REGION_OVERWORLD,
+        "Libra Temple"                          : REGION_OVERWORLD,
+        "Life Temple"                           : REGION_OVERWORLD,
+        "Light Temple"                          : REGION_OVERWORLD,
+        "Sealed Temple"                         : REGION_OVERWORLD,
+        "Windhole Temple"                       : REGION_OVERWORLD,
+        "Wintry Temple"                         : REGION_OVERWORLD,
+        REGION_LEVEL_FOREST                     : REGION_OVERWORLD,
+        REGION_FALLS_BASIN                      : REGION_OVERWORLD,
+        REGION_VOLCANO                          : REGION_OVERWORLD,
+        REGION_ROPE_BRIDGE                      : REGION_OVERWORLD,
+        REGION_ALIVE_FOREST                     : REGION_OVERWORLD,
+        REGION_SPENCERS_CAVE                    : REGION_OVERWORLD,
+        REGION_MACS_SHIP                        : REGION_OVERWORLD,
+
+        REGION_FORESTA                          : REGION_CITIES,
+        REGION_AQUARIA                          : REGION_CITIES,
+        REGION_FIREBURG                         : REGION_CITIES,
+        REGION_WINDIA                           : REGION_CITIES
+    })
+
     def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
         for item, (prog_item, level) in non_progressive_items.items():
             if item in inventory:
@@ -2565,13 +2647,43 @@ if "Final Fantasy Mystic Quest" in network_data_package["games"]:
         # Translate non-progression items to progression items for tracker simplicity.
         prepare_inventories(team, player, inventory, tracker_data)
 
+        # Mapping check to region/level
+        # This way we can use the actual checkes for the player and
+        #   don't need to implement the available locations based on settings.
+        locations_to_check = {
+            tracker_data.location_id_to_name["Final Fantasy Mystic Quest"][id] : (id, region)
+            for id in tracker_data.get_player_locations(team, player).keys()
+            for level, region in location_regions_table.items()
+                if tracker_data.location_id_to_name["Final Fantasy Mystic Quest"][id].startswith(level)
+        }
+
+        regions = {
+            region_name: {
+                "checked": sum(
+                    1 for location, (id, region) in locations_to_check.items()
+                    if region == region_name and id in tracker_data.get_player_checked_locations(team, player)
+                ),
+                "locations": [
+                    (
+                        tracker_data.location_id_to_name["Final Fantasy Mystic Quest"][id],
+                        id in tracker_data.get_player_checked_locations(team, player)
+                    )
+                    for location, (id, region) in locations_to_check.items()
+                        if region == region_name
+                ],
+            }
+            for region_name in known_regions
+        }
+
         return render_template(
             template_name_or_list="tracker__FFMQ.html",
             room=tracker_data.room,
             team=team,
             player=player,
             inventory=inventory,
-            player_name=tracker_data.get_player_name(team, player)
+            player_name=tracker_data.get_player_name(team, player),
+            regions=regions,
+            known_regions=known_regions
         )
 
     _multiworld_trackers["Final Fantasy Mystic Quest"] = render_FFMQ_multiworld_tracker

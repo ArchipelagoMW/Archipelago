@@ -147,6 +147,36 @@
                 {% endif %}
             {% endfor %}
         </div>
+
+        {% for region_name in known_regions %}
+            {% set region_data = regions[region_name] %}
+            {% if region_data["locations"] | length > 0 %}
+                <div class="regions-list">
+                    <details class="region-details">
+                        <summary>
+                            <div class="region">
+                                    <span>{{ region_name }}</span>
+                                    <span>{{ region_data["checked"] }} / {{ region_data["locations"] | length }}</span>
+                                    <span>
+                                        {% if region_data["checked"] == (region_data["locations"] | length) %}
+                                            ✔
+                                        {% else %}
+                                            &mdash;
+                                        {% endif %}
+                                    </span>
+                                </div>
+                        </summary>
+
+                        <div class="location-rows">
+                            {% for location, checked in region_data["locations"] %}
+                                <div>{{ location }}</div>
+                                <div>{% if checked %}✔{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
     <script>
