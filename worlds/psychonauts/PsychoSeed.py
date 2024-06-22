@@ -4,8 +4,8 @@ from typing import List, Tuple, Iterable, Union, Dict, TYPE_CHECKING
 
 import Utils
 from worlds.Files import APContainer
-from .Items import item_dictionary_table, AP_ITEM_OFFSET
-from .Locations import all_locations, PSYCHOSEED_LOCATION_IDS
+from .Items import ITEM_DICTIONARY, AP_ITEM_OFFSET
+from .Locations import ALL_LOCATIONS, PSYCHOSEED_LOCATION_IDS
 from .Options import Goal
 from .PsychoRandoItems import PSYCHORANDO_BASE_ITEM_IDS, PSYCHORANDO_ITEM_TABLE, MAX_PSY_ITEM_ID
 
@@ -33,7 +33,7 @@ class PSYContainer(APContainer):
 def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
                 ) -> Tuple[List[Tuple[int, int]], Dict[int, int]]:
     """
-    Generic Psychonauts ID generator. The input location tuples may come from scouted locations or from generated
+    Generic PsychoRando ID generator. The input location tuples may come from scouted locations or from generated
     locations.
     """
     # append the item values, need to be in exact order
@@ -45,7 +45,7 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
     # Initialize a list to store tuples of location ID and item code
     location_tuples = []
 
-    # If we run out of Psychonauts IDs to place an item locally because a yaml plando-ed more than can exist by default,
+    # If we run out of PsychoRando IDs to place an item locally because a yaml plando-ed more than can exist by default,
     # or in the very unlikely case that more filler PsiCards were placed locally than can exist locally, place the item
     # as an AP item placeholder instead and send the item as if it were non-local. This dict stores the mapping from AP
     # items placed like this to the item ID to send to Psychonauts when the placeholder item is collected.
@@ -70,32 +70,32 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
             max_count = PSYCHORANDO_ITEM_TABLE[local_item_name]
             if count_placed < max_count:
                 base_item_code = PSYCHORANDO_BASE_ITEM_IDS[local_item_name]
-                itemcode = base_item_code + count_placed
+                item_code = base_item_code + count_placed
                 placed_item_counts[local_item_name] = count_placed + 1
             else:
-                # There aren't any Psychonauts IDs left to place this item into the Psychonauts game world, so place
+                # There aren't any PsychoRando IDs left to place this item into the Psychonauts game world, so place
                 # it as an AP placeholder item and receive the item as if it were placed non-locally.
-                itemcode = non_local_id
-                ap_item_id = item_dictionary_table[local_item_name] + AP_ITEM_OFFSET
-                local_items_placed_as_ap_items[itemcode] = ap_item_id
+                item_code = non_local_id
+                ap_item_id = ITEM_DICTIONARY[local_item_name] + AP_ITEM_OFFSET
+                local_items_placed_as_ap_items[item_code] = ap_item_id
                 non_local_id += 1
         else:
             # item from another game
-            itemcode = non_local_id
+            item_code = non_local_id
             non_local_id += 1
 
         # Append the location ID and item code tuple to the list
 
-        location_tuples.append((location_id, itemcode))
+        location_tuples.append((location_id, item_code))
 
     return location_tuples, local_items_placed_as_ap_items
 
 
-def gen_psy_ids_from_filled_locations(self) -> List[Tuple[int, int]]:
+def gen_psy_ids_from_filled_locations(self: "PSYWorld") -> List[Tuple[int, int]]:
     location_tuples = []
 
     for location in self.multiworld.get_filled_locations(self.player):
-        location_id = all_locations[location.name]
+        location_id = ALL_LOCATIONS[location.name]
 
         is_local = location.item and location.item.player == self.player
         local_item_name = location.item.name if is_local else None
@@ -104,7 +104,7 @@ def gen_psy_ids_from_filled_locations(self) -> List[Tuple[int, int]]:
 
     psy_ids, local_items_placed_as_ap_items = gen_psy_ids(location_tuples)
     if local_items_placed_as_ap_items:
-        print("Warning: There were not enough Psychonauts IDs to place all local items. Some local items have been"
+        print("Warning: There were not enough PsychoRando IDs to place all local items. Some local items have been"
               " placed as AP placeholder items instead.")
     return psy_ids
 
@@ -116,7 +116,7 @@ def _lua_bool(option):
     return "TRUE" if option else "FALSE"
 
 
-def gen_psy_seed(self: "PSYWorld", output_directory):
+def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # Mod name for Zip Folder
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     # Folder name for Client and Game to Read/Write to
@@ -127,12 +127,12 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     randoseed_parts = []
 
     # First part of lua code structure
-    formattedtext1 = '''function RandoSeed(Ob)
+    formatted_text1 = '''function RandoSeed(Ob)
         if ( not Ob ) then
             Ob = CreateObject('ScriptBase')
             Ob.seed = {}
         '''
-    randoseed_parts.append(formattedtext1)
+    randoseed_parts.append(formatted_text1)
 
     # append seed_folder_name for APfoldername
     randoseed_parts.append(f"       Ob.APfoldername = '{seed_folder_name}'\n")
@@ -150,8 +150,8 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     randoseed_parts.append(f"           Ob.lootboxvaults = {_lua_bool(self.options.LootboxVaults)}\n")
 
     # append enemydamagemultiplier setting
-    enemydamagemultiplier = self.options.EnemyDamageMultiplier.value
-    randoseed_parts.append(f"           Ob.enemydamagemultiplier = {enemydamagemultiplier}\n")
+    enemy_damage_multiplier = self.options.EnemyDamageMultiplier.value
+    randoseed_parts.append(f"           Ob.enemydamagemultiplier = {enemy_damage_multiplier}\n")
 
     # append instantdeath setting
     randoseed_parts.append(f"           Ob.instantdeath = {_lua_bool(self.options.InstantDeathMode)}\n")
@@ -173,16 +173,16 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     randoseed_parts.append(f"           Ob.cobwebShuffle = {_lua_bool(self.options.MentalCobwebShuffle)}\n")
 
     # append Goal settings
-    beatoleander = _lua_bool(self.options.Goal == Goal.option_braintank
-                             or self.options.Goal == Goal.option_braintank_and_brainhunt)
-    requirebrainhunt = _lua_bool(self.options.Goal == Goal.option_brainhunt
-                                 or self.options.Goal == Goal.option_braintank_and_brainhunt)
-    randoseed_parts.append(f"           Ob.beatoleander = {beatoleander}\n")
-    randoseed_parts.append(f"           Ob.brainhunt = {requirebrainhunt}\n")
+    beat_oleander = _lua_bool(self.options.Goal == Goal.option_braintank
+                              or self.options.Goal == Goal.option_braintank_and_brainhunt)
+    require_brain_hunt = _lua_bool(self.options.Goal == Goal.option_brainhunt
+                                   or self.options.Goal == Goal.option_braintank_and_brainhunt)
+    randoseed_parts.append(f"           Ob.beatoleander = {beat_oleander}\n")
+    randoseed_parts.append(f"           Ob.brainhunt = {require_brain_hunt}\n")
 
     # append Brain Jar Requirement
-    brainsrequired = self.options.BrainsRequired.value
-    randoseed_parts.append(f"           Ob.brainsrequired = {brainsrequired}\n")
+    brains_required = self.options.BrainsRequired.value
+    randoseed_parts.append(f"           Ob.brainsrequired = {brains_required}\n")
 
     # Section where default settings booleans are written to RandoSeed.lua
     # adding new settings will remove from this list
@@ -207,7 +207,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     location_tuples = gen_psy_ids_from_filled_locations(self)
 
     # attach more lua code structure first
-    formattedtext2 = '''
+    formatted_text2 = '''
     end
     
     function Ob:fillTable()
@@ -215,18 +215,18 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
     
     
     '''
-    randoseed_parts.append(formattedtext2)
+    randoseed_parts.append(formatted_text2)
 
     # Iterate through the sorted list of tuples and append item codes to randoseed_parts
     for index, (location_id, itemcode) in enumerate(location_tuples):
         randoseed_parts.append(str(itemcode))
         # Format so that each line has 10 values, for readability
-        if index > 0 and (index + 1) % 10 == 0:
+        if index % 10 == 9:
             randoseed_parts.append(",\n")
         else:
             randoseed_parts.append(", ")
 
-    formattedtext3 = ''' }
+    formatted_text3 = ''' }
         self.seed = SEED_GOES_HERE
         end
         return Ob
@@ -234,7 +234,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory):
 
     '''
 
-    randoseed_parts.append(formattedtext3)
+    randoseed_parts.append(formatted_text3)
 
     # Combine all the parts into one long piece of text
     randoseed = ''.join(randoseed_parts)

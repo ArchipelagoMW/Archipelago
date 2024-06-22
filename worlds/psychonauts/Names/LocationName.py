@@ -259,7 +259,7 @@ LabTopRailingLeft2 = "(AS Lab) Lab Top Railing Left 2"
 LabTopElevator = "(AS Lab) Lab Top Elevator"
 LabTopRailingRight = "(AS Lab) Lab Top Railing Right"
 TeaRoom = "(AS Lab) Tea Room"
-OleanderBossEvent = "(AS Lab) Oleander Boss Defeated"
+OleanderBrainTankBossEvent = "(AS Lab) Oleander Boss Defeated"
 
 # Obstacle Course 1 [BBA1] 
 JumpingTutorial1 = "(BB Area 1) Jumping Tutorial 1"
@@ -534,7 +534,7 @@ NextToTheFatLadyDufflebag = "(MC Main) Next to the Final Door"
 CobwebTunnelOfLoveOllieEscortExit = "(MC Main Cobweb) Tunnel of Love Ollie Escort Exit"
 CobwebEntranceHall1 = "(MC Main Cobweb) Entrance Hall 1"
 CobwebEntranceHall2 = "(MC Main Cobweb) Entrance Hall 2"
-FinalBossEvent = "(MC Boss) Final Boss Defeated"
+MeatCircusFinalBossEvent = "(MC Boss) Final Boss Defeated"
 
 # Ford's Shop, only a location if Cobweb Duster vanilla
 ShopCobwebDuster = "(CA Lodge) Ford's Shop Cobweb Duster"

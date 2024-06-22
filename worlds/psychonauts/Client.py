@@ -5,14 +5,15 @@ import logging
 import os
 import shutil
 import sys
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, NoReturn
+from argparse import Namespace
 
 import ModuleUpdate
 
 ModuleUpdate.update()
 import Utils
 
-from .Items import AP_ITEM_OFFSET, reverse_item_dictionary_table
+from .Items import AP_ITEM_OFFSET, REVERSE_ITEM_DICTIONARY
 from .Locations import AP_LOCATION_OFFSET, PSYCHOSEED_LOCATION_IDS
 from .PsychoSeed import gen_psy_ids, PSY_NON_LOCAL_ID_START
 from .PsychoRandoItems import PSYCHORANDO_ITEM_LOOKUP, PSYCHORANDO_BASE_ITEM_IDS
@@ -23,8 +24,14 @@ if __name__ == "__main__":
     Utils.init_logging("PsychonautsClient", exception_logger="Client")
 
 from NetUtils import NetworkItem, ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
-    CommonContext, server_loop
+from CommonClient import (
+    gui_enabled,
+    logger,
+    get_base_parser,
+    ClientCommandProcessor,
+    CommonContext,
+    server_loop
+)
 
 # Included when sending items to Psychonauts specify whether the item is from a local or non-local source.
 LOCAL_ITEM_IDENTIFIER = 0
@@ -33,7 +40,7 @@ NON_LOCAL_ITEM_IDENTIFIER = 1
 
 # using this to find the folder game was launched from
 # then find ModData folder there
-def find_moddata_folder(root_directory):
+def find_moddata_folder(root_directory: str) -> str:
     moddata_folder = os.path.join(root_directory, "ModData")
     if os.path.exists(moddata_folder):
         return moddata_folder
@@ -42,7 +49,7 @@ def find_moddata_folder(root_directory):
                               "Unable to infer required game_communication_path")
 
 
-def print_error_and_close(msg):
+def print_error_and_close(msg: str) -> NoReturn:
     logger.error("Error: " + msg)
     Utils.messagebox("Error", msg, error=True)
     sys.exit(1)
@@ -66,12 +73,12 @@ class PsychonautsClientCommandProcessor(ClientCommandProcessor):
     def _cmd_clearmoddata(self):
         """Empty your Psychonauts ModData Folder"""
         if isinstance(self.ctx, PsychonautsContext):
-            if self.ctx.clear_mod_data_warning == False:
+            if not self.ctx.clear_mod_data_warning:
                 self.output(f"WARNING: This will empty all Archipelago files from your Psychonauts ModData folder.\n"
                             "If you are currently playing a multiworld, have other unfinished multiworlds,\n"
                             "or don't know why you're using this command, DO NOT DO THIS!!!\n"
                             "Run this command again to confirm and clear all contents.")
-            elif self.ctx.clear_mod_data_warning == True:
+            elif self.ctx.clear_mod_data_warning:
                 self.output(f"Emptying ModData folder.")
                 self.ctx.clear_mod_data()
 
@@ -89,7 +96,7 @@ class PsychonautsContext(CommonContext):
     pending_received_items: List[Tuple[int, NetworkItem]]  # server state
 
     def __init__(self, server_address, password):
-        super(PsychonautsContext, self).__init__(server_address, password)
+        super().__init__(server_address, password)
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
@@ -100,14 +107,14 @@ class PsychonautsContext(CommonContext):
 
         # When connecting to a server, the contents of self.locations_scouted are sent in a LocationScouts request,
         # filling self.locations_info once the LocationsInfo response is received.
-        # Scout all local locations used in PsychoSeed generation so that the client can figure out the Psychonauts item
+        # Scout all local locations used in PsychoSeed generation so that the client can figure out the PsychoRando item
         # IDs of all locally placed items.
         # Note: Event locations cannot be scouted.
         self.locations_scouted.update(location_id + AP_LOCATION_OFFSET for location_id in PSYCHOSEED_LOCATION_IDS)
 
         # These are read from self.locations_info after the response from the initial request of scouting all local
         # locations:
-        # Mapping from Psychonauts location ID to Psychonauts item ID for all locally placed items.
+        # Mapping from PsychoRando location ID to PsychoRando item ID for all locally placed items.
         self.local_psy_location_to_local_psy_item_id = {}
         # If Psychonauts runs out of IDs to locally place specific items, e.g. because extra copies of those items were
         # placed with item plando without taking the items from the pool, the extra items can be placed as AP
@@ -137,39 +144,37 @@ class PsychonautsContext(CommonContext):
         self.local_items_placed_as_ap_items = {}
         self.has_local_location_data = False
         self.pending_received_items = []
+        self.game_communication_path = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(PsychonautsContext, self).server_auth(password_requested)
+            await super().server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
 
     async def connection_closed(self):
-        await super(PsychonautsContext, self).connection_closed()
-        if self.game_communication_path != None:
+        await super().connection_closed()
+        if self.game_communication_path is not None:
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
                     if "Items" not in file and "Deathlink" not in file:
                         os.remove(root + "/" + file)
-
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
 
     async def shutdown(self):
-        await super(PsychonautsContext, self).shutdown()
-        if self.game_communication_path != None:
+        await super().shutdown()
+        if self.game_communication_path is not None:
             for root, dirs, files in os.walk(self.game_communication_path):
                 for file in files:
                     if "Items" not in file and "Deathlink" not in file:
                         os.remove(root + "/" + file)
 
-    def calc_psy_ids_from_scouted_local_locations(self):
-        # Attempt to figure out the Psychonauts IDs for all locally placed items at locations used in PsychoSeed
-        # generation.
+    def calc_psy_ids_from_scouted_local_locations(self) -> bool:
+        """
+        Attempt to figure out the PsychoRando IDs for all locally placed items at locations used in PsychoSeed
+        generation.
+
+        :returns: True on success, False otherwise.
+        """
         location_tuples = []
         for psy_location_id in PSYCHOSEED_LOCATION_IDS:
             ap_location_id = psy_location_id + AP_LOCATION_OFFSET
@@ -181,7 +186,7 @@ class PsychonautsContext(CommonContext):
                 return False
             is_local_item = scouted_network_item.player == self.slot
             if is_local_item:
-                local_item_name = reverse_item_dictionary_table[scouted_network_item.item - AP_ITEM_OFFSET]
+                local_item_name = REVERSE_ITEM_DICTIONARY[scouted_network_item.item - AP_ITEM_OFFSET]
             else:
                 local_item_name = None
             location_tuples.append((is_local_item, local_item_name, psy_location_id))
@@ -190,10 +195,10 @@ class PsychonautsContext(CommonContext):
         # acquired.
 
         # Note that event item locations are not provided here and are not real locations that can be scouted. The
-        # event locations have no effect on the generated Psychonauts IDs of local items, so the event item
+        # event locations have no effect on the generated PsychoRando IDs of local items, so the event item
         # locations can be omitted from the calculation.
         #
-        # In the unlikely case that Psychonauts runs out of IDs to place all local items, some local items will be
+        # In the unlikely case that PsychoRando runs out of IDs to place all local items, some local items will be
         # placed as AP placeholders like non-local items.
         psy_id_tuples, local_items_placed_as_ap_items = gen_psy_ids(location_tuples)
 
@@ -205,11 +210,11 @@ class PsychonautsContext(CommonContext):
 
         return True
 
-    def receive_local_item(self, index, ap_location_id, ap_item_id):
+    def receive_local_item(self, index: int, ap_location_id: int, ap_item_id: int):
         """
         Receive an item from the local world.
         """
-        # Locally placed items must write the exact Psychonauts item ID they were placed as.
+        # Locally placed items must write the exact PsychoRando item ID they were placed as.
         # Writing locally placed items is required for resuming an in-progress slot from a new save file without having
         # to manually collect the local items again.
         psy_location_id = ap_location_id - AP_LOCATION_OFFSET
@@ -219,24 +224,24 @@ class PsychonautsContext(CommonContext):
             self.receive_non_local_item(index, ap_item_id)
             return
 
-        # Get the Psychonauts item id for the item at this local location.
+        # Get the PsychoRando item id for the item at this local location.
         local_item_psy_id = self.local_psy_location_to_local_psy_item_id[psy_location_id]
 
-        # If Psychonauts ran out of IDs to place the item locally and had to place the item as an AP placeholder, get
+        # If PsychoRando ran out of IDs to place the item locally and had to place the item as an AP placeholder, get
         # the item that should have been placed and send that as if it was a non-locally received item.
         if local_item_psy_id in self.local_items_placed_as_ap_items:
             self.receive_non_local_item(index, self.local_items_placed_as_ap_items[local_item_psy_id])
             return
 
         # Check that the PsychoRando item at this location matches the item AP thinks is at this location.
-        ap_item_name = reverse_item_dictionary_table.get(ap_item_id - AP_ITEM_OFFSET)
+        ap_item_name = REVERSE_ITEM_DICTIONARY.get(ap_item_id - AP_ITEM_OFFSET)
         expected_item_name = PSYCHORANDO_ITEM_LOOKUP.get(local_item_psy_id)
         if ap_item_name and ap_item_name == expected_item_name:
             # Tell Psychonauts it has received the item.
             with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'a') as f:
                 f.write(f"{index},{local_item_psy_id},{LOCAL_ITEM_IDENTIFIER}\n")
         else:
-            # This should not happen unless the scouted location data is incorrect or the Psychonauts item IDs have been
+            # This should not happen unless the scouted location data is incorrect or the PsychoRando item IDs have been
             # incorrectly calculated from the scouted location data.
             if ap_item_name is None:
                 ap_item_name = f"Unknown AP Item {ap_item_id - AP_ITEM_OFFSET}"
@@ -245,12 +250,12 @@ class PsychonautsContext(CommonContext):
             logger.error("Error: Tried to receive item '%s' from local location '%i', but the item should be '%s'"
                          " according to scouted location info.", ap_item_name, ap_location_id, expected_item_name)
 
-    def receive_non_local_item(self, index, ap_item_id):
+    def receive_non_local_item(self, index: int, ap_item_id: int):
         """
         Receive an item from another world.
         """
         # Subtract the AP item offset and get the item name.
-        item_name = reverse_item_dictionary_table[ap_item_id - AP_ITEM_OFFSET]
+        item_name = REVERSE_ITEM_DICTIONARY[ap_item_id - AP_ITEM_OFFSET]
         # Get the first PsychoRando ID for this item name. If there are duplicate PsychoRando IDs for this item, sending
         # any of them should work, but for consistency, we'll always send the first PsychoRando ID.
         base_psy_item_id = PSYCHORANDO_BASE_ITEM_IDS[item_name]
@@ -258,7 +263,12 @@ class PsychonautsContext(CommonContext):
         with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'a') as f:
             f.write(f"{index},{base_psy_item_id},{NON_LOCAL_ITEM_IDENTIFIER}\n")
 
-    def receive_item(self, index, network_item: NetworkItem):
+    def receive_item(self, index: int, network_item: NetworkItem):
+        """
+        Tell Psychonauts to receive an item.
+
+        Must not be called until the AP client has received and processed local location data.
+        """
         if not self.has_local_location_data:
             raise RuntimeError("receive_item() was called before local location data has been received and processed")
 
@@ -269,13 +279,16 @@ class PsychonautsContext(CommonContext):
             self.receive_non_local_item(index, network_item.item)
 
     def clear_mod_data(self):
+        """
+        Remove all files and directories within the ModData directory.
+        """
         for root, dirs, files in os.walk(self.moddata_folder):
-            for dir in dirs:
-                if "AP-" in dir:
-                    shutil.rmtree(os.path.join(root, dir))
+            for directory in dirs:
+                if "AP-" in directory:
+                    shutil.rmtree(os.path.join(root, directory))
 
     def on_package(self, cmd: str, args: dict):
-        if cmd in {"Connected"}:
+        if cmd == "Connected":
             # self.game_communication_path: files go in this path to pass data between us and the actual game
             seed_folder = f"AP-{self.seed_name}-P{self.slot}"
             self.game_communication_path = os.path.join(self.moddata_folder, seed_folder)
@@ -283,37 +296,29 @@ class PsychonautsContext(CommonContext):
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
 
+            # Create empty game communication files if they don't exist.
             # Path to the ItemsCollected.txt file inside the ModData folder
             items_collected_path = os.path.join(self.game_communication_path, "ItemsCollected.txt")
             if not os.path.exists(items_collected_path):
-                with open(items_collected_path, 'w') as f:
-                    f.write(f"")
-                    f.close()
+                with open(items_collected_path, 'w'):
+                    pass
             # Path to the DeathlinkIn.txt file inside the ModData folder
             deathlink_in_path = os.path.join(self.game_communication_path, "DeathlinkIn.txt")
             if not os.path.exists(deathlink_in_path):
-                with open(deathlink_in_path, 'w') as f:
-                    f.write(f"")
-                    f.close()
+                with open(deathlink_in_path, 'w'):
+                    pass
             # Path to the DeathlinkOut.txt file inside the ModData folder
             deathlink_out_path = os.path.join(self.game_communication_path, "DeathlinkOut.txt")
             if not os.path.exists(deathlink_out_path):
-                with open(deathlink_out_path, 'w') as f:
-                    f.write(f"")
-                    f.close()
-            # empty ItemsReceived.txt to avoid appending duplicate items lists
-            with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'w') as f:
-                f.write(f"")
-                f.close()
-            for ss in self.checked_locations:
-                filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.close()
+                with open(deathlink_out_path, 'w'):
+                    pass
+            # Always create or truncate ItemsReceived.txt to avoid appending duplicate items lists.
+            with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'w'):
+                pass
         # used to get seed name for writing to the proper folder
-        if cmd in {"RoomInfo"}:
+        elif cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
-
-        if cmd in {"ReceivedItems"}:
+        elif cmd == "ReceivedItems":
             start_index = args["index"]
             if start_index != len(self.items_received):
                 items = args['items']
@@ -326,16 +331,7 @@ class PsychonautsContext(CommonContext):
                     # because the server will immediately send all items received so far.
                     for i, item in enumerate(items):
                         self.pending_received_items.append((start_index + i, NetworkItem(*item)))
-
-        if cmd in {"RoomUpdate"}:
-
-            if "checked_locations" in args:
-                for ss in self.checked_locations:
-                    filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        f.close()
-
-        if cmd == "LocationInfo":
+        elif cmd == "LocationInfo":
             if not self.has_local_location_data:
                 # It could be the response to the initial LocationScouts request that was sent out to get all local
                 # location data.
@@ -367,85 +363,80 @@ class PsychonautsContext(CommonContext):
 
 
 async def game_watcher(ctx: PsychonautsContext):
-    from worlds.psychonauts.Locations import all_locations
     while not ctx.exit_event.is_set():
-        # seed_name and slot are retrieved on connection, game_communication_path won't be set until then
-        # don't check game for items to send and receive until this is done
-        if ctx.seed_name == None or ctx.slot == None:
+        # `ctx.game_communication_path`: files go in this path to pass data between the AP Client and the actual game.
+        # `ctx.game_communication_path` is set when connecting to the AP server and cleared when disconnecting, so don't
+        # check game for items to send and receive until this is done.
+        game_communication_path = ctx.game_communication_path
+        if game_communication_path is None:
             await asyncio.sleep(0.1)
-        else:
+            continue
 
-            # ctx.game_communication_path: files go in this path to pass data between us and the actual game
-            seed_folder = f"AP-{ctx.seed_name}-P{ctx.slot}"
-            ctx.game_communication_path = os.path.join(ctx.moddata_folder, seed_folder)
+        # Check for DeathLink toggle
+        await ctx.update_death_link(ctx.deathlink_status)
 
-            # Check for DeathLink toggle
-            await ctx.update_death_link(ctx.deathlink_status)
+        if ctx.syncing:
+            sync_msg = [{'cmd': 'Sync'}]
+            if ctx.locations_checked:
+                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
+            await ctx.send_msgs(sync_msg)
+            ctx.syncing = False
 
-            if ctx.syncing == True:
-                sync_msg = [{'cmd': 'Sync'}]
-                if ctx.locations_checked:
-                    sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-                await ctx.send_msgs(sync_msg)
-                ctx.syncing = False
+        # Check for Deathlink to send to player
+        if ctx.got_deathlink:
+            ctx.got_deathlink = False
+            with open(os.path.join(game_communication_path, "DeathlinkIn.txt"), 'a') as f:
+                f.write("DEATH\n")
 
-            # Check for Deathlink to send to player
-            if ctx.got_deathlink:
-                ctx.got_deathlink = False
-                with open(os.path.join(ctx.game_communication_path, "DeathlinkIn.txt"), 'a') as f:
-                    f.write("DEATH\n")
-                    f.close()
+        # Check for Deathlinks from player
+        with open(os.path.join(game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
+            raz_died = f.read()
+            if raz_died:
+                # Move the file pointer to the beginning
+                f.seek(0)
+                # Empty the file by writing an empty string
+                f.truncate(0)
+                if "DeathLink" in ctx.tags:
+                    await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
 
-            # Check for Deathlinks from player
-            with open(os.path.join(ctx.game_communication_path, "DeathlinkOut.txt"), 'r+') as f:
-                RazDied = f.read()
-                if RazDied:
-                    # Move the file pointer to the beginning
-                    f.seek(0)
-                    # Empty the file by writing an empty string
-                    f.truncate(0)
-                    if "DeathLink" in ctx.tags:
-                        await ctx.send_death(death_text=f"{ctx.player_names[ctx.slot]} became lost in thought!")
-                f.close()
+        # Initialize an empty list and set.
+        # The list maintains the order and the set provides fast comparisons and __contains__() checks.
+        sending = []
+        sending_set = set()
+        victory = False
 
-            # Initialize an empty list and set.
-            # The list maintains the order and the set provides fast comparisons and __contains__() checks.
-            sending = []
-            sending_set = set()
-            victory = False
+        # Open the file in read mode
+        with open(os.path.join(game_communication_path, "ItemsCollected.txt"), 'r') as f:
+            collected_items = f.readlines()
+            # Iterate over each line in the file
+            for line in collected_items:
+                # Convert the line to an int, add the offset to convert to AP, and add it to the list and set
+                value = int(line.strip()) + AP_LOCATION_OFFSET
+                # Keep track of already collected values to ensure there are no duplicates.
+                if value not in sending_set:
+                    sending.append(value)
+                    sending_set.add(value)
 
-            # Open the file in read mode
-            with open(os.path.join(ctx.game_communication_path, "ItemsCollected.txt"), 'r') as f:
-                collected_items = f.readlines()
-                # Iterate over each line in the file
-                for line in collected_items:
-                    # Convert the line to an int, add the offset to convert to AP, and add it to the list and set
-                    value = int(line.strip()) + AP_LOCATION_OFFSET
-                    # Keep track of already collected values to ensure there are no duplicates.
-                    if value not in sending_set:
-                        sending.append(value)
-                        sending_set.add(value)
+        # Psychonauts sends victory to the AP client by writing a specifically named file to the game communication
+        # directory.
+        if os.path.exists(os.path.join(game_communication_path, "victory.txt")):
+            victory = True
 
-            for root, dirs, files in os.walk(ctx.game_communication_path):
-                for file in files:
-                    if file.find("victory.txt") > -1:
-                        victory = True
+        if ctx.locations_checked != sending_set:
+            # The checked locations differ from before, so message the server and update the checked locations for the
+            # next loop.
+            ctx.locations_checked = sending_set
+            message = [{"cmd": 'LocationChecks', "locations": sending}]
+            await ctx.send_msgs(message)
 
-            if ctx.locations_checked != sending_set:
-                # The checked locations differ from before, so message the server and update the checked locations for
-                # the next loop.
-                ctx.locations_checked = sending_set
-                message = [{"cmd": 'LocationChecks', "locations": sending}]
-                await ctx.send_msgs(message)
-
-            if not ctx.finished_game and victory == True:
-                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                ctx.finished_game = True
-            await asyncio.sleep(0.1)
+        if not ctx.finished_game and victory:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+        await asyncio.sleep(0.1)
 
 
 def launch():
-    async def main(args):
+    async def main(args: Namespace):
         ctx = PsychonautsContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
