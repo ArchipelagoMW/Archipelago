@@ -43,7 +43,7 @@ class EntranceLookup:
             self._lookup.setdefault(entrance.randomization_group, []).append(entrance)
 
         def remove(self, entrance: Entrance) -> None:
-            group = self._lookup.get(entrance.randomization_group, [])
+            group = self._lookup[entrance.randomization_group]
             group.remove(entrance)
             if not group:
                 del self._lookup[entrance.randomization_group]
@@ -59,7 +59,7 @@ class EntranceLookup:
         self._random = rng
         self._leads_to_exits_cache = {}
 
-    def _can_lead_to_randomizable_exits(self, entrance: Entrance):
+    def _can_lead_to_randomizable_exits(self, entrance: Entrance) -> bool:
         """
         Checks whether an entrance is able to lead to another randomizable exit
         with some combination of items
@@ -254,7 +254,7 @@ def randomize_entrances(
     # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
     perform_validity_check = True
 
-    def do_placement(source_exit: Entrance, target_entrance: Entrance):
+    def do_placement(source_exit: Entrance, target_entrance: Entrance) -> None:
         placed_exits, removed_entrances = er_state.connect(source_exit, target_entrance)
         # remove the placed targets from consideration
         for entrance in removed_entrances:
