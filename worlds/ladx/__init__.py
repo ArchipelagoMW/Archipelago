@@ -184,7 +184,7 @@ class LinksAwakeningWorld(World):
 
         start_type_mappings = {}
 
-        for option_name, option in self.options.as_dict():
+        for option_name, option in dataclasses.asdict(self.options).items():
             if isinstance(option, EntranceShuffle):
                 for cat in option.entrance_type:
                     start_type_mappings[option_name] = cat
