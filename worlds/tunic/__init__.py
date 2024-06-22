@@ -245,7 +245,7 @@ class TunicWorld(World):
                 items_to_create[hero_relic] = 0
 
         if not ability_shuffle:
-            for page in item_name_groups['Abilities']:
+            for page in item_name_groups["Abilities"]:
                 if items_to_create[page] > 0:
                     page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
                     tunic_items.append(page_item)
