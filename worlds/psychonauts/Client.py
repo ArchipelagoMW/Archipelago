@@ -107,14 +107,14 @@ class PsychonautsContext(CommonContext):
 
         # When connecting to a server, the contents of self.locations_scouted are sent in a LocationScouts request,
         # filling self.locations_info once the LocationsInfo response is received.
-        # Scout all local locations used in PsychoSeed generation so that the client can figure out the Psychonauts item
+        # Scout all local locations used in PsychoSeed generation so that the client can figure out the PsychoRando item
         # IDs of all locally placed items.
         # Note: Event locations cannot be scouted.
         self.locations_scouted.update(location_id + AP_LOCATION_OFFSET for location_id in PSYCHOSEED_LOCATION_IDS)
 
         # These are read from self.locations_info after the response from the initial request of scouting all local
         # locations:
-        # Mapping from Psychonauts location ID to Psychonauts item ID for all locally placed items.
+        # Mapping from PsychoRando location ID to PsychoRando item ID for all locally placed items.
         self.local_psy_location_to_local_psy_item_id = {}
         # If Psychonauts runs out of IDs to locally place specific items, e.g. because extra copies of those items were
         # placed with item plando without taking the items from the pool, the extra items can be placed as AP
@@ -170,7 +170,7 @@ class PsychonautsContext(CommonContext):
 
     def calc_psy_ids_from_scouted_local_locations(self) -> bool:
         """
-        Attempt to figure out the Psychonauts IDs for all locally placed items at locations used in PsychoSeed
+        Attempt to figure out the PsychoRando IDs for all locally placed items at locations used in PsychoSeed
         generation.
 
         :returns: True on success, False otherwise.
@@ -195,10 +195,10 @@ class PsychonautsContext(CommonContext):
         # acquired.
 
         # Note that event item locations are not provided here and are not real locations that can be scouted. The
-        # event locations have no effect on the generated Psychonauts IDs of local items, so the event item
+        # event locations have no effect on the generated PsychoRando IDs of local items, so the event item
         # locations can be omitted from the calculation.
         #
-        # In the unlikely case that Psychonauts runs out of IDs to place all local items, some local items will be
+        # In the unlikely case that PsychoRando runs out of IDs to place all local items, some local items will be
         # placed as AP placeholders like non-local items.
         psy_id_tuples, local_items_placed_as_ap_items = gen_psy_ids(location_tuples)
 
@@ -214,7 +214,7 @@ class PsychonautsContext(CommonContext):
         """
         Receive an item from the local world.
         """
-        # Locally placed items must write the exact Psychonauts item ID they were placed as.
+        # Locally placed items must write the exact PsychoRando item ID they were placed as.
         # Writing locally placed items is required for resuming an in-progress slot from a new save file without having
         # to manually collect the local items again.
         psy_location_id = ap_location_id - AP_LOCATION_OFFSET
@@ -224,10 +224,10 @@ class PsychonautsContext(CommonContext):
             self.receive_non_local_item(index, ap_item_id)
             return
 
-        # Get the Psychonauts item id for the item at this local location.
+        # Get the PsychoRando item id for the item at this local location.
         local_item_psy_id = self.local_psy_location_to_local_psy_item_id[psy_location_id]
 
-        # If Psychonauts ran out of IDs to place the item locally and had to place the item as an AP placeholder, get
+        # If PsychoRando ran out of IDs to place the item locally and had to place the item as an AP placeholder, get
         # the item that should have been placed and send that as if it was a non-locally received item.
         if local_item_psy_id in self.local_items_placed_as_ap_items:
             self.receive_non_local_item(index, self.local_items_placed_as_ap_items[local_item_psy_id])
@@ -241,7 +241,7 @@ class PsychonautsContext(CommonContext):
             with open(os.path.join(self.game_communication_path, "ItemsReceived.txt"), 'a') as f:
                 f.write(f"{index},{local_item_psy_id},{LOCAL_ITEM_IDENTIFIER}\n")
         else:
-            # This should not happen unless the scouted location data is incorrect or the Psychonauts item IDs have been
+            # This should not happen unless the scouted location data is incorrect or the PsychoRando item IDs have been
             # incorrectly calculated from the scouted location data.
             if ap_item_name is None:
                 ap_item_name = f"Unknown AP Item {ap_item_id - AP_ITEM_OFFSET}"

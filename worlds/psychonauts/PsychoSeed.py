@@ -33,7 +33,7 @@ class PSYContainer(APContainer):
 def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
                 ) -> Tuple[List[Tuple[int, int]], Dict[int, int]]:
     """
-    Generic Psychonauts ID generator. The input location tuples may come from scouted locations or from generated
+    Generic PsychoRando ID generator. The input location tuples may come from scouted locations or from generated
     locations.
     """
     # append the item values, need to be in exact order
@@ -45,7 +45,7 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
     # Initialize a list to store tuples of location ID and item code
     location_tuples = []
 
-    # If we run out of Psychonauts IDs to place an item locally because a yaml plando-ed more than can exist by default,
+    # If we run out of PsychoRando IDs to place an item locally because a yaml plando-ed more than can exist by default,
     # or in the very unlikely case that more filler PsiCards were placed locally than can exist locally, place the item
     # as an AP item placeholder instead and send the item as if it were non-local. This dict stores the mapping from AP
     # items placed like this to the item ID to send to Psychonauts when the placeholder item is collected.
@@ -73,7 +73,7 @@ def gen_psy_ids(location_tuples_in: Iterable[Tuple[bool, Union[str, None], int]]
                 item_code = base_item_code + count_placed
                 placed_item_counts[local_item_name] = count_placed + 1
             else:
-                # There aren't any Psychonauts IDs left to place this item into the Psychonauts game world, so place
+                # There aren't any PsychoRando IDs left to place this item into the Psychonauts game world, so place
                 # it as an AP placeholder item and receive the item as if it were placed non-locally.
                 item_code = non_local_id
                 ap_item_id = ITEM_DICTIONARY[local_item_name] + AP_ITEM_OFFSET
@@ -104,7 +104,7 @@ def gen_psy_ids_from_filled_locations(self: "PSYWorld") -> List[Tuple[int, int]]
 
     psy_ids, local_items_placed_as_ap_items = gen_psy_ids(location_tuples)
     if local_items_placed_as_ap_items:
-        print("Warning: There were not enough Psychonauts IDs to place all local items. Some local items have been"
+        print("Warning: There were not enough PsychoRando IDs to place all local items. Some local items have been"
               " placed as AP placeholder items instead.")
     return psy_ids
 
