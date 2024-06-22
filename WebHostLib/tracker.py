@@ -2675,6 +2675,10 @@ if "Final Fantasy Mystic Quest" in network_data_package["games"]:
             for region_name in known_regions
         }
 
+        # Sort locations in regions by name
+        for region in regions:
+            regions[region]["locations"].sort()
+
         return render_template(
             template_name_or_list="tracker__FFMQ.html",
             room=tracker_data.room,
