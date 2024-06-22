@@ -71,6 +71,7 @@ class HereticWorld(World):
         "Tome of Power": 16,
         "Silver Shield": 10,
         "Enchanted Shield": 5,
+        "Torch": 5,
         "Morph Ovum": 3,
         "Mystic Urn": 2,
         "Chaos Device": 1,
@@ -242,6 +243,7 @@ class HereticWorld(World):
         self.create_ratioed_items("Mystic Urn", itempool)
         self.create_ratioed_items("Ring of Invincibility", itempool)
         self.create_ratioed_items("Shadowsphere", itempool)
+        self.create_ratioed_items("Torch", itempool)
         self.create_ratioed_items("Timebomb of the Ancients", itempool)
         self.create_ratioed_items("Tome of Power", itempool)
         self.create_ratioed_items("Silver Shield", itempool)

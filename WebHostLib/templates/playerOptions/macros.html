@@ -57,9 +57,9 @@
         <select id="{{ option_name }}-select" data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
             {% for key, val in option.special_range_names.items() %}
                 {% if option.default == val %}
-                    <option value="{{ val }}" selected>{{ key }} ({{ val }})</option>
+                    <option value="{{ val }}" selected>{{ key|replace("_", " ")|title }} ({{ val }})</option>
                 {% else %}
-                    <option value="{{ val }}">{{ key }} ({{ val }})</option>
+                    <option value="{{ val }}">{{ key|replace("_", " ")|title }} ({{ val }})</option>
                 {% endif %}
             {% endfor %}
             <option value="custom" hidden>Custom</option>
@@ -111,7 +111,7 @@
     </div>
 {% endmacro %}
 
-{% macro ItemDict(option_name, option, world) %}
+{% macro ItemDict(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
         {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
@@ -135,7 +135,7 @@
     </div>
 {% endmacro %}
 
-{% macro LocationSet(option_name, option, world) %}
+{% macro LocationSet(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
         {% for group_name in world.location_name_groups.keys()|sort %}
@@ -158,7 +158,7 @@
     </div>
 {% endmacro %}
 
-{% macro ItemSet(option_name, option, world) %}
+{% macro ItemSet(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
         {% for group_name in world.item_name_groups.keys()|sort %}
@@ -196,7 +196,18 @@
 {% macro OptionTitle(option_name, option) %}
     <label for="{{ option_name }}">
         {{ option.display_name|default(option_name) }}:
-        <span class="interactive" data-tooltip="{% filter dedent %}{{(option.__doc__ | default("Please document me!"))|escape }}{% endfilter %}">(?)</span>
+        <span
+            class="interactive tooltip-container"
+            {% if not (option.rich_text_doc | default(world.web.rich_text_options_doc, true)) %}
+              data-tooltip="{{(option.__doc__ | default("Please document me!"))|replace('\n    ', '\n')|escape|trim}}"
+            {% endif %}>
+          (?)
+          {% if option.rich_text_doc | default(world.web.rich_text_options_doc, true) %}
+            <div class="tooltip">
+              {{ option.__doc__ | default("**Please document me!**") | rst_to_html | safe }}
+            </div>
+          {% endif %}
+        </span>
     </label>
 {% endmacro %}
 

@@ -225,6 +225,9 @@ class CommonContext:
         def lookup_in_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
             """Returns the name for an item/location id in the context of a specific slot or own slot if `slot` is
             omitted.
+
+            Use of `lookup_in_slot` should not be used when not connected to a server. If looking in own game, set
+            `ctx.game` and use `lookup_in_game` method instead.
             """
             if slot is None:
                 slot = self.ctx.slot
@@ -493,6 +496,11 @@ class CommonContext:
         """Gets called before sending a Say to the server from the user.
         Returned text is sent, or sending is aborted if None is returned."""
         return text
+    
+    def on_ui_command(self, text: str) -> None:
+        """Gets called by kivy when the user executes a command starting with `/` or `!`.
+        The command processor is still called; this is just intended for command echoing."""
+        self.ui.print_json([{"text": text, "type": "color", "color": "orange"}])
 
     def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():

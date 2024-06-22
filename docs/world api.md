@@ -56,6 +56,12 @@ webhost:
 
 * `options_page` can be changed to a link instead of an AP-generated options page.
 
+* `rich_text_options_doc` controls whether [Option documentation] uses plain text (`False`) or rich text (`True`). It
+  defaults to `False`, but world authors are encouraged to set it to `True` for nicer-looking documentation that looks
+  good on both the WebHost and the YAML template.
+
+  [Option documentation]: /docs/options%20api.md#option-documentation
+
 * `theme` to be used for your game-specific AP pages. Available themes:
 
   | dirt                                       | grass (default)                             | grassFlowers                                       | ice                                       | jungle                                       | ocean                                       | partyTime                                       | stone                                       |
