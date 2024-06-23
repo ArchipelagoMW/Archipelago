@@ -2,7 +2,7 @@ from typing import Mapping, Any, ClassVar, Dict
 
 import settings
 from BaseClasses import Item
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from . import Regions
@@ -18,7 +18,7 @@ from .Items import (
     ITEM_GROUPS,
     ITEM_COUNT,
     AP_ITEM_OFFSET,
-    SKIP_BALANCING_SET,
+    BASE_ITEM_CLASSIFICATIONS,
 )
 from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import ItemName, LocationName
@@ -78,32 +78,35 @@ class PSYWorld(World):
 
     location_name_to_id = {item: id + AP_LOCATION_OFFSET for item, id in ALL_LOCATIONS.items()}
 
+    item_classifications: Dict[str, ItemClassification]
+
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self.item_classifications = BASE_ITEM_CLASSIFICATIONS.copy()
+
     def generate_early(self) -> None:
         """
-        Using this to make Baggage local only.
+        Using this to make Baggage local only and determine item classifications that depend on options.
         """
         for item in LOCAL_SET:
             self.options.local_items.value.add(item)
+
+        # Set item classifications that depend on options.
+        item_classifications = self.item_classifications
+        goal = self.options.Goal
+
+        # Set brains to Progression, when the Brain Hunt goal is enabled.
+        # Skip balancing because Brains are macguffins and are only required for the goal.
+        if goal == Goal.option_brainhunt or goal == Goal.option_braintank_and_brainhunt:
+            for name in BRAIN_JARS:
+                item_classifications[name] = ItemClassification.progression_skip_balancing
 
     def create_item(self, name: str) -> Item:
         """
         Returns created PSYItem
         """
-        if name in BRAIN_JARS:
-            # make brains filler if BrainHunt not a selected option
-            if self.options.Goal == Goal.option_braintank:
-                item_classification = ItemClassification.filler
-            else:
-                item_classification = ItemClassification.progression
-        elif name in PROGRESSION_SET:
-            item_classification = ItemClassification.progression
-        elif name in USEFUL_SET:
-            item_classification = ItemClassification.useful
-        else:
-            item_classification = ItemClassification.filler
-
-        if item_classification == ItemClassification.progression and name in SKIP_BALANCING_SET:
-            item_classification = ItemClassification.progression_skip_balancing
+        # If an item does not have a classification defined, default to Filler.
+        item_classification = self.item_classifications.get(name, ItemClassification.filler)
 
         created_item = PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
 

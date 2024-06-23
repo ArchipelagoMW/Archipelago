@@ -1,5 +1,7 @@
 from typing import Dict, Set
 
+from BaseClasses import ItemClassification
+
 from .Names import ItemName
 from .PsychoRandoItems import PSYCHORANDO_ITEM_TABLE
 
@@ -212,3 +214,13 @@ ITEM_COUNT: Dict[str, int] = {
     ItemName.AHSmall: 30,
     ItemName.AHLarge: 5,
 }
+
+# Classification for each item. Items not in the Dict are assumed to be Filler.
+BASE_ITEM_CLASSIFICATIONS: Dict[str, ItemClassification] = {}
+for item_name in PROGRESSION_SET:
+    if item_name in SKIP_BALANCING_SET:
+        BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.progression_skip_balancing
+    else:
+        BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.progression
+for item_name in USEFUL_SET:
+    BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.useful
