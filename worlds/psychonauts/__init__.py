@@ -17,7 +17,8 @@ from .Items import (
     USEFUL_SET,
     ITEM_GROUPS,
     ITEM_COUNT,
-    AP_ITEM_OFFSET
+    AP_ITEM_OFFSET,
+    SKIP_BALANCING_SET,
 )
 from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import ItemName, LocationName
@@ -100,6 +101,9 @@ class PSYWorld(World):
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
+
+        if item_classification == ItemClassification.progression and name in SKIP_BALANCING_SET:
+            item_classification = ItemClassification.progression_skip_balancing
 
         created_item = PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
 

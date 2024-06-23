@@ -158,6 +158,17 @@ PROGRESSION_SET: Set[str] = {
     *PSI_POWERS,
 }
 
+# Items in the PROGRESSION_SET that should be skipped during progression balancing.
+SKIP_BALANCING_SET: Set[str] = {
+    ItemName.HedgeTrimmers,  # Required to access 3 locations
+    ItemName.RollingPin,  # Required to access 1 location
+    ItemName.FredsLetter,  # Required to access 4 locations
+    ItemName.PricelessCoin,  # Required to access 3 locations
+    ItemName.Musket,  # Required to access 2 locations
+    ItemName.Confusion,  # Required to access 2 locations
+    ItemName.Cake,  # Only required for the Brain Tank goal
+}
+
 USEFUL_SET: Set[str] = {
     ItemName.Vault,
     ItemName.ChallengeMarker,
