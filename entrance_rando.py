@@ -3,7 +3,8 @@ import logging
 import random
 import time
 from collections import deque
-from typing import Callable, Dict, Iterable, List, Tuple, Union, Set, Optional
+from collections.abc import Hashable
+from typing import Callable, Dict, Iterable, List, Tuple, Union, Set, Optional, Any
 
 from BaseClasses import CollectionState, Entrance, Region, EntranceType
 from Options import Accessibility
@@ -16,7 +17,7 @@ class EntranceRandomizationError(RuntimeError):
 
 class EntranceLookup:
     class GroupLookup:
-        _lookup: Dict[str, List[Entrance]]
+        _lookup: Dict[Hashable, List[Entrance]]
 
         def __init__(self):
             self._lookup = {}
@@ -27,7 +28,7 @@ class EntranceLookup:
         def __bool__(self):
             return bool(self._lookup)
 
-        def __getitem__(self, item: str) -> List[Entrance]:
+        def __getitem__(self, item: Hashable) -> List[Entrance]:
             return self._lookup.get(item, [])
 
         def __iter__(self):
@@ -103,7 +104,7 @@ class EntranceLookup:
 
     def get_targets(
             self,
-            groups: Iterable[str],
+            groups: Iterable[Hashable],
             dead_end: bool,
             preserve_group_order: bool
     ) -> Iterable[Entrance]:
@@ -213,7 +214,20 @@ class ERPlacementState:
         return [source_exit], [target_entrance]
 
 
-def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[str] = None) -> None:
+def bake_target_group_lookup(world: World, get_target_groups: Callable[[Any], List[Hashable]]) \
+        -> Dict[Hashable, List[Hashable]]:
+    """
+    Applies a transformation to all known entrance groups on randomizable exists to build a group lookup table.
+
+    :param world: Your World instance
+    :param get_target_groups: Function to call that returns the groups that a specific group type is allowed to connect to
+    """
+    unique_groups = { entrance.randomization_group for entrance in world.multiworld.get_entrances(world.player)
+                      if entrance.parent_region and not entrance.connected_region }
+    return { group: get_target_groups(group) for group in unique_groups }
+
+
+def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[Hashable] = None) -> None:
     """
     Given an entrance in a "vanilla" region graph, splits that entrance to prepare it for randomization
     in randomize_entrances. This should be done after setting the type and group of the entrance.
@@ -244,7 +258,7 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Opti
 def randomize_entrances(
         world: World,
         coupled: bool,
-        get_target_groups: Callable[[str], List[str]],
+        target_group_lookup: Dict[Hashable, List[Hashable]],
         preserve_group_order: bool = False,
         on_connect: Optional[Callable[[ERPlacementState, List[Entrance]], None]] = None
 ) -> ERPlacementState:
@@ -253,7 +267,9 @@ def randomize_entrances(
 
     :param world: Your World instance
     :param coupled: Whether connected entrances should be coupled to go in both directions
-    :param get_target_groups: Function to call that returns the groups that a specific group type is allowed to connect to
+    :param target_group_lookup: Map from each group to a list of the groups that it can be connect to. Every group
+                                used on an exit must be provided and must map to at least one other group. The default
+                                group is 0.
     :param preserve_group_order: Whether the order of groupings should be preserved for the returned target_groups
     :param on_connect: A callback function which allows specifying side effects after a placement is completed
                        successfully and the underlying collection state has been updated.
@@ -278,11 +294,7 @@ def randomize_entrances(
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check)
         for source_exit in placeable_exits:
-            target_groups = get_target_groups(source_exit.randomization_group)
-            # anything can connect to the default group - if people don't like it the fix is to
-            # assign a non-default group
-            if "Default" not in target_groups:
-                target_groups.append("Default")
+            target_groups = target_group_lookup[source_exit.randomization_group]
             for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
                 # requiring a new region is a proxy for enforcing new entrances are added, thus growing the search
                 # space. this is not quite a full fidelity conversion, but doesn't seem to cause issues enough

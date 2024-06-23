@@ -9,7 +9,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import Collection, MutableSequence, Hashable
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
     Type, ClassVar
@@ -777,14 +777,14 @@ class Entrance:
     name: str
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
-    randomization_group: str
+    randomization_group: Hashable
     randomization_type: EntranceType
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
     def __init__(self, player: int, name: str = "", parent: Region = None,
-                 randomization_group: str = "Default", randomization_type: EntranceType = EntranceType.ONE_WAY):
+                 randomization_group: Hashable = 0, randomization_type: EntranceType = EntranceType.ONE_WAY):
         self.name = name
         self.parent_region = parent
         self.player = player

@@ -219,13 +219,17 @@ randomized with other two-ways. You can set whether an `Entrance` is one-way or 
 attribute.
 
 `Entrance`s can also set the `randomization_group` attribute to allow for grouping during randomization. This can be
-any arbitrary string you define and may be based on player options. Some possible use cases for grouping include:
+any hashable object you define and may be based on player options. Some possible use cases for grouping include:
 * Directional matching - only match leftward-facing transitions to rightward-facing ones
 * Terrain matching - only match water transitions to water transitions and land transitions to land transitions
 * Dungeon shuffle - only shuffle entrances within a dungeon/area with each other
 * Combinations of the above
 
-By default, all `Entrance`s are placed in the `"Default"` group.
+By default, all `Entrance`s are placed in the group 0.
+
+> [!NOTE]
+> Throughout these docs, strings will be used as groups for simplicity and readability. In practice, using an int or 
+> IntEnum will be slightly more performant.
 
 ### Calling generic ER
 
@@ -292,24 +296,26 @@ graph LR
 #### Implementing grouping
 
 When you created your entrances, you defined the group each entrance belongs to. Now you will have to define how groups
-should connect with each other. This is done with the `get_target_groups` and `preserve_group_order` parameters. Some
-recipes for `get_target_groups` are presented here.
+should connect with each other. This is done with the `target_group_lookup` and `preserve_group_order` parameters.
+There is also a convenience function `bake_target_group_lookup` which can help to prepare group lookups when more
+complex group mapping logic is needed. Some recipes for `target_group_lookup` are presented here.
 
 Directional matching:
 ```python
-def match_direction(group: str) -> List[str]:
-    if group == "Left":
-        # with preserve_group_order = False, pair a left transition to either a right transition or door randomly
-        # with preserve_group_order = True, pair a left transition to a right transition, or else a door if no
-        #   viable right transitions remain
-        return ["Right", "Door"]
+direction_matching_group_lookup = {
+    # with preserve_group_order = False, pair a left transition to either a right transition or door randomly
+    # with preserve_group_order = True, pair a left transition to a right transition, or else a door if no
+    #   viable right transitions remain
+    "Left": ["Right", "Door"],
     # ...
+}
 ```
 
 Terrain matching or dungeon shuffle:
 ```python
 def randomize_within_same_group(group: str) -> List[str]:
     return [group]
+identity_group_lookup = bake_target_group_lookup(world, randomize_within_same_group)
 ```
 
 Directional + area shuffle:
@@ -318,7 +324,8 @@ def get_target_groups(group: str) -> List[str]:
     # example group: "Left-City"
     # example result: ["Right-City", "Door-City"]
     direction, area = group.split("-")
-    return [f"{pair_direction}-{area}" for pair_direction in match_direction(direction)]
+    return [f"{pair_direction}-{area}" for pair_direction in direction_matching_group_lookup[direction]]
+target_group_lookup = bake_target_group_lookup(world, get_target_groups)
 ```
 
 #### When to call `randomize_entrances`
@@ -367,7 +374,7 @@ from Menu, similar to fill. ER then proceeds in stages to complete the randomiza
 
 The process for each connection will do the following:
 1. Select a randomizable exit of a reachable region which is a valid source transition.
-2. Get its group and call `get_target_groups` to determine which groups are valid targets.
+2. Get its group and check `target_group_lookup` to determine which groups are valid targets.
 3. Look up ER targets from those groups and find one which is valid according to `can_connect_to`
 4. Connect the source exit to the target's target_region and delete the target.
 5. If it's coupled mode, find the reverse exit and target by name and connect them as well.
