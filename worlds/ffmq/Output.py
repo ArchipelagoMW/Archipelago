@@ -1,13 +1,13 @@
 import yaml
 import os
 import zipfile
+import Utils
 from copy import deepcopy
 from .Regions import object_id_table
-from Utils import __version__
 from worlds.Files import APPatch
 import pkgutil
 
-settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
+settings_template = Utils.parse_yaml(pkgutil.get_data(__name__, "data/settings.yaml"))
 
 
 def generate_output(self, output_directory):
@@ -90,7 +90,7 @@ def generate_output(self, output_directory):
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
 
-    rom_name = f'MQ{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
+    rom_name = f'MQ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
     self.rom_name = bytearray(rom_name,
                               'utf8')
     self.rom_name_available_event.set()
