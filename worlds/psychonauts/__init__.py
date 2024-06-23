@@ -1,4 +1,4 @@
-from typing import Mapping, Any, ClassVar, Dict
+from typing import Mapping, Any, ClassVar, Dict, Set
 
 import settings
 from BaseClasses import Item
@@ -19,6 +19,7 @@ from .Items import (
     ITEM_COUNT,
     AP_ITEM_OFFSET,
     BASE_ITEM_CLASSIFICATIONS,
+    SKIP_BALANCING_FOR_DUPLICATES,
 )
 from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import ItemName, LocationName
@@ -80,9 +81,13 @@ class PSYWorld(World):
 
     item_classifications: Dict[str, ItemClassification]
 
+    skip_balancing_if_duplicate: Set[str]
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.item_classifications = BASE_ITEM_CLASSIFICATIONS.copy()
+        # Tracks created items where additional created items with the same name should skip progression balancing.
+        self.skip_balancing_if_duplicate = set()
 
     def generate_early(self) -> None:
         """
@@ -112,9 +117,15 @@ class PSYWorld(World):
         # If an item does not have a classification defined, default to Filler.
         item_classification = self.item_classifications.get(name, ItemClassification.filler)
 
-        created_item = PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
+        # Some duplicates of Progression items should skip progression balancing because the duplicates are only
+        # required to access very few or no locations.
+        if item_classification == ItemClassification.progression and name in SKIP_BALANCING_FOR_DUPLICATES:
+            if name in self.skip_balancing_if_duplicate:
+                item_classification = ItemClassification.progression_skip_balancing
+            else:
+                self.skip_balancing_if_duplicate.add(name)
 
-        return created_item
+        return PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
         return ItemName.PsiCard

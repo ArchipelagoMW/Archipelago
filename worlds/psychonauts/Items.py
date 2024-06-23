@@ -224,3 +224,13 @@ for item_name in PROGRESSION_SET:
         BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.progression
 for item_name in USEFUL_SET:
     BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.useful
+
+# Items where only the first copy is progression balanced.
+# Only one of each PSI Power is progression balanced because there are no locations that require an
+# upgraded PSI Power to access.
+# Only the first Candle is progression balanced because the second candle is only required to access a single
+# location.
+SKIP_BALANCING_FOR_DUPLICATES: Set[str] = {
+    *PSI_POWERS,
+    ItemName.Candle,
+}
