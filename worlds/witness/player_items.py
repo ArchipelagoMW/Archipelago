@@ -186,16 +186,15 @@ class WitnessPlayerItems:
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(list(output))
 
-    def get_door_ids_in_pool(self) -> List[int]:
+    def get_door_mappings_in_pool(self) -> Dict[int, List[int]]:
         """
-        Returns the total set of all door IDs that are controlled by items in the pool.
+        Returns the mapping of door hexes to door item IDs that are in the item pool.
         """
-        output: List[int] = []
-        for item_name, item_data in {name: data for name, data in self.item_data.items()
-                                     if isinstance(data.definition, DoorItemDefinition)}.items():
-            output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
 
-        return output
+        return {
+            int(entity_hex, 16): [self.item_data[door_name].ap_code for door_name in door_names]
+            for entity_hex, door_names in self._logic.DOOR_ITEMS_BY_ID.items()
+        }
 
     def get_symbol_ids_not_in_pool(self) -> List[int]:
         """
