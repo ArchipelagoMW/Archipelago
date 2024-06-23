@@ -16,6 +16,9 @@
 [Astralathe Mod Loader](https://gitlab.com/scrunguscrungus/astralathe/-/releases) <br>
 [PsychoRando Mod, AP Branch](https://github.com/Akashortstack/PsychoRando/releases) <br>
 
+The [PsychoRando Setup Guide](https://docs.google.com/document/d/1b7QOnOLmTSvdC7A1YK3bsSmhtSOsAMs0XF5j-tyE6Zw/edit?usp=sharing)
+provides detailed steps for installing both Astralathe and the PsychoRando Mod.
+
 <h3 style="text-transform:none";>Updating Your Host.yaml</h3>
 
 Find the folder that contains your Psychonauts and Astralathe installation. With the folder open, right-click on the
@@ -27,10 +30,12 @@ slashes. `If you don't, the client may fail to open.`
 
 <h3 style="text-transform:none";>Installing A Seed</h3>
 
-When you generate a game, the Archipelago Seed.zip will include a Psychonauts.zip folder. Extract the Psychonauts.zip
-and find the RandoSeed.lua file inside. Copy this file, then find your Psychonauts directory where Astralathe and the
-PsychoRando mod are installed. Inside the PsychoRando mod, find the Scripts folder and paste RandoSeed.lua inside this
-folder. Make sure to overwrite the old file.
+When generating from the website, your player slot will have a Psychonauts.zip seed on the room page. Download the seed,
+then extract it to access the RandoSeed.lua file inside. If the game is generated locally, extract the Archipelago
+Seed.zip in the output folder (or have the person who generated the seed do this and send you the Psychonauts.zip), then
+extract your Psychonauts.zip. Copy RandoSeed.lua, then find your Psychonauts directory where Astralathe and the
+PsychoRando mod are installed. Inside ModResource, open the PsychoRando mod folder, find the Scripts folder and paste
+RandoSeed.lua inside. Make sure to overwrite the old file.
 
 <h2 style="text-transform:none";>Using the Psychonauts Client</h2>
 
