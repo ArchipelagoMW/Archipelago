@@ -6,7 +6,7 @@ from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 
 from . import data
 from .bundles.bundle_room import BundleRoom
-from .data.fish_data import legendary_fish, special_fish, get_fish_for_mods
+from .data.fish_data import special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
 from .data.villagers_data import get_villagers_for_mods
 from .mods.mod_data import ModNames
@@ -206,7 +206,8 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], option
     if fishsanity == Fishsanity.option_none:
         return
     elif fishsanity == Fishsanity.option_legendaries:
-        randomized_locations.extend(location_table[f"{prefix}{legendary.name}"] for legendary in legendary_fish)
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish.legendary]
+        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
     elif fishsanity == Fishsanity.option_special:
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
     elif fishsanity == Fishsanity.option_randomized:
@@ -216,7 +217,7 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], option
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish]
         randomized_locations.extend(filter_disabled_locations(options, fish_locations))
     elif fishsanity == Fishsanity.option_exclude_legendaries:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish not in legendary_fish]
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if not fish.legendary]
         randomized_locations.extend(filter_disabled_locations(options, fish_locations))
     elif fishsanity == Fishsanity.option_exclude_hard_fish:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish.difficulty < 80]

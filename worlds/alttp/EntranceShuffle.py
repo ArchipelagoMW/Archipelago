@@ -3,6 +3,8 @@ from collections import defaultdict
 
 from .OverworldGlitchRules import overworld_glitch_connections
 from .UnderworldGlitchRules import underworld_glitch_connections
+from .Regions import mark_light_world_regions
+from .InvertedRegions import mark_dark_world_regions
 
 
 def link_entrances(world, player):
@@ -552,19 +554,20 @@ def link_entrances(world, player):
 
     # check for swamp palace fix
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
-        world.swamp_patch_required[player] = True
+        world.worlds[player].swamp_patch_required = True
 
     # check for potion shop location
     if world.get_entrance('Potion Shop', player).connected_region.name != 'Potion Shop':
-        world.powder_patch_required[player] = True
+        world.worlds[player].powder_patch_required = True
 
     # check for ganon location
     if world.get_entrance('Pyramid Hole', player).connected_region.name != 'Pyramid':
-        world.ganon_at_pyramid[player] = False
+        world.worlds[player].ganon_at_pyramid = False
 
     # check for Ganon's Tower location
     if world.get_entrance('Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
-        world.ganonstower_vanilla[player] = False
+        world.worlds[player].ganonstower_vanilla = False
+
 
 def link_inverted_entrances(world, player):
     # Link's house shuffled freely, Houlihan set in mandatory_connections 
@@ -1259,19 +1262,19 @@ def link_inverted_entrances(world, player):
 
     # patch swamp drain
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
-        world.swamp_patch_required[player] = True
+        world.worlds[player].swamp_patch_required = True
 
     # check for potion shop location
     if world.get_entrance('Potion Shop', player).connected_region.name != 'Potion Shop':
-        world.powder_patch_required[player] = True
+        world.worlds[player].powder_patch_required = True
 
     # check for ganon location
     if world.get_entrance('Inverted Pyramid Hole', player).connected_region.name != 'Pyramid':
-        world.ganon_at_pyramid[player] = False
+        world.worlds[player].ganon_at_pyramid = False
    
     # check for Ganon's Tower location
     if world.get_entrance('Inverted Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
-        world.ganonstower_vanilla[player] = False
+        world.worlds[player].ganonstower_vanilla = False
 
 
 def connect_simple(world, exitname, regionname, player):
@@ -1827,6 +1830,10 @@ def plando_connect(world, player: int):
                 func(world, connection.entrance, connection.exit, player)
             except Exception as e:
                 raise Exception(f"Could not connect using {connection}") from e
+        if world.mode[player] != 'inverted':
+            mark_light_world_regions(world, player)
+        else:
+            mark_dark_world_regions(world, player)
 
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
@@ -2651,6 +2658,10 @@ mandatory_connections = [('Links House S&Q', 'Links House'),
                          ('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Crystaroller Room)'),
                          ('Turtle Rock (Dark Room) (South)', 'Turtle Rock (Eye Bridge)'),
                          ('Turtle Rock Dark Room (South)', 'Turtle Rock (Dark Room)'),
+                         ('Turtle Rock Second Section Bomb Wall', 'Turtle Rock (Second Section Bomb Wall)'),
+                         ('Turtle Rock Second Section from Bomb Wall', 'Turtle Rock (Second Section)'),
+                         ('Turtle Rock Eye Bridge Bomb Wall', 'Turtle Rock (Eye Bridge Bomb Wall)'),
+                         ('Turtle Rock Eye Bridge from Bomb Wall', 'Turtle Rock (Eye Bridge)'),
                          ('Turtle Rock (Trinexx)', 'Turtle Rock (Trinexx)'),
                          ('Palace of Darkness Bridge Room', 'Palace of Darkness (Center)'),
                          ('Palace of Darkness Bonk Wall', 'Palace of Darkness (Bonk Section)'),
@@ -2809,6 +2820,10 @@ inverted_mandatory_connections = [('Links House S&Q', 'Inverted Links House'),
                                   ('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Crystaroller Room)'),
                                   ('Turtle Rock (Dark Room) (South)', 'Turtle Rock (Eye Bridge)'),
                                   ('Turtle Rock Dark Room (South)', 'Turtle Rock (Dark Room)'),
+                                  ('Turtle Rock Second Section Bomb Wall', 'Turtle Rock (Second Section Bomb Wall)'),
+                                  ('Turtle Rock Second Section from Bomb Wall', 'Turtle Rock (Second Section)'),
+                                  ('Turtle Rock Eye Bridge Bomb Wall', 'Turtle Rock (Eye Bridge Bomb Wall)'),
+                                  ('Turtle Rock Eye Bridge from Bomb Wall', 'Turtle Rock (Eye Bridge)'),
                                   ('Turtle Rock (Trinexx)', 'Turtle Rock (Trinexx)'),
                                   ('Palace of Darkness Bridge Room', 'Palace of Darkness (Center)'),
                                   ('Palace of Darkness Bonk Wall', 'Palace of Darkness (Bonk Section)'),

@@ -18,7 +18,7 @@ from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, RedDeltaPatch, BlueDeltaPatch
-from .pokemon import process_pokemon_data, process_move_data
+from .pokemon import process_pokemon_data, process_move_data, verify_hm_moves
 from .encounters import process_pokemon_locations, process_trainer_data
 from .rules import set_rules
 from .level_scaling import level_scaling
@@ -74,7 +74,6 @@ class PokemonRedBlueWorld(World):
     option_definitions = pokemon_rb_options
     settings: typing.ClassVar[PokemonSettings]
 
-    data_version = 9
     required_client_version = (0, 4, 2)
 
     topology_present = True
@@ -265,7 +264,6 @@ class PokemonRedBlueWorld(World):
                         state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
                     if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
                         multiworld.push_item(loc, item, False)
-                        loc.event = item.advancement
                         fill_locations.remove(loc)
                         break
                     else:
@@ -279,12 +277,12 @@ class PokemonRedBlueWorld(World):
     def fill_hook(self, progitempool, usefulitempool, filleritempool, fill_locations):
         if not self.multiworld.badgesanity[self.player]:
             # Door Shuffle options besides Simple place badges during door shuffling
-            if not self.multiworld.door_shuffle[self.player] not in ("off", "simple"):
+            if self.multiworld.door_shuffle[self.player] in ("off", "simple"):
                 badges = [item for item in progitempool if "Badge" in item.name and item.player == self.player]
                 for badge in badges:
                     self.multiworld.itempool.remove(badge)
                     progitempool.remove(badge)
-                for _ in range(5):
+                for attempt in range(6):
                     badgelocs = [
                         self.multiworld.get_location(loc, self.player) for loc in [
                             "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
@@ -293,6 +291,12 @@ class PokemonRedBlueWorld(World):
                             "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
                         ] if self.multiworld.get_location(loc, self.player).item is None]
                     state = self.multiworld.get_all_state(False)
+                    # Give it two tries to place badges with wild Pokemon and learnsets as-is.
+                    # If it can't, then try with all Pokemon collected, and we'll try to fix HM move availability after.
+                    if attempt > 1:
+                        for mon in poke_data.pokemon_data.keys():
+                            state.collect(self.create_item(mon), True)
+                    state.sweep_for_events()
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
                     badgelocs_copy = badgelocs.copy()
@@ -312,6 +316,7 @@ class PokemonRedBlueWorld(World):
                         break
                 else:
                     raise FillError(f"Failed to place badges for player {self.player}")
+            verify_hm_moves(self.multiworld, self, self.player)
 
         if self.multiworld.key_items_only[self.player]:
             return
@@ -355,97 +360,14 @@ class PokemonRedBlueWorld(World):
         for location in self.multiworld.get_locations(self.player):
             if location.name in locs:
                 location.show_in_spoiler = False
-
-        def intervene(move, test_state):
-            move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
-            viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
-            if self.multiworld.randomize_wild_pokemon[self.player] and viable_mons:
-                accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if
-                                    loc.type == "Wild Encounter"]
-
-                def number_of_zones(mon):
-                    zones = set()
-                    for loc in [slot for slot in accessible_slots if slot.item.name == mon]:
-                        zones.add(loc.name.split(" - ")[0])
-                    return len(zones)
-
-                placed_mons = [slot.item.name for slot in accessible_slots]
-
-                if self.multiworld.area_1_to_1_mapping[self.player]:
-                    placed_mons.sort(key=lambda i: number_of_zones(i))
-                else:
-                    # this sort method doesn't work if you reference the same list being sorted in the lambda
-                    placed_mons_copy = placed_mons.copy()
-                    placed_mons.sort(key=lambda i: placed_mons_copy.count(i))
-
-                placed_mon = placed_mons.pop()
-                replace_mon = self.multiworld.random.choice(viable_mons)
-                replace_slot = self.multiworld.random.choice([slot for slot in accessible_slots if slot.item.name
-                                                              == placed_mon])
-                if self.multiworld.area_1_to_1_mapping[self.player]:
-                    zone = " - ".join(replace_slot.name.split(" - ")[:-1])
-                    replace_slots = [slot for slot in accessible_slots if slot.name.startswith(zone) and slot.item.name
-                                     == placed_mon]
-                    for replace_slot in replace_slots:
-                        replace_slot.item = self.create_item(replace_mon)
-                else:
-                    replace_slot.item = self.create_item(replace_mon)
-            else:
-                tms_hms = self.local_tms + poke_data.hm_moves
-                flag = tms_hms.index(move)
-                mon_list = [mon for mon in poke_data.pokemon_data.keys() if test_state.has(mon, self.player)]
-                self.multiworld.random.shuffle(mon_list)
-                mon_list.sort(key=lambda mon: self.local_move_data[move]["type"] not in
-                              [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]])
-                for mon in mon_list:
-                    if test_state.has(mon, self.player):
-                        self.local_poke_data[mon]["tms"][int(flag / 8)] |= 1 << (flag % 8)
-                        break
-
-        last_intervene = None
-        while True:
-            intervene_move = None
-            test_state = self.multiworld.get_all_state(False)
-            if not logic.can_learn_hm(test_state, "Surf", self.player):
-                intervene_move = "Surf"
-            elif not logic.can_learn_hm(test_state, "Strength", self.player):
-                intervene_move = "Strength"
-            # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
-            # as you will require cut to access celadon gyn
-            elif ((not logic.can_learn_hm(test_state, "Cut", self.player)) and
-                    (self.multiworld.accessibility[self.player] != "minimal" or ((not
-                    self.multiworld.badgesanity[self.player]) and max(
-                    self.multiworld.elite_four_badges_condition[self.player],
-                    self.multiworld.route_22_gate_condition[self.player],
-                    self.multiworld.victory_road_condition[self.player])
-                    > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")))):
-                intervene_move = "Cut"
-            elif ((not logic.can_learn_hm(test_state, "Flash", self.player))
-                   and self.multiworld.dark_rock_tunnel_logic[self.player]
-                   and (self.multiworld.accessibility[self.player] != "minimal"
-                        or self.multiworld.door_shuffle[self.player])):
-                intervene_move = "Flash"
-            # If no Pokémon can learn Fly, then during door shuffle it would simply not treat the free fly maps
-            # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
-            # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
-            # considered in door shuffle.
-            elif ((not logic.can_learn_hm(test_state, "Fly", self.player))
-                    and self.multiworld.door_shuffle[self.player] not in
-                    ("off", "simple") and [self.fly_map, self.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
-                intervene_move = "Fly"
-            if intervene_move:
-                if intervene_move == last_intervene:
-                    raise Exception(f"Caught in infinite loop attempting to ensure {intervene_move} is available to player {self.player}")
-                intervene(intervene_move, test_state)
-                last_intervene = intervene_move
-            else:
-                break
+        verify_hm_moves(self.multiworld, self, self.player)
 
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
+        all_state = self.multiworld.get_all_state(False)
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
         for location in evolutions_region.locations.copy():
-            if not test_state.can_reach(location, player=self.player):
+            if not all_state.can_reach(location, player=self.player):
                 evolutions_region.locations.remove(location)
 
         if self.multiworld.old_man[self.player] == "early_parcel":
@@ -739,6 +661,9 @@ class PokemonRedBlueWorld(World):
             "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
             "split_card_key": self.multiworld.split_card_key[self.player].value,
             "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
+            "require_pokedex": self.multiworld.require_pokedex[self.player].value,
+            "area_1_to_1_mapping": self.multiworld.area_1_to_1_mapping[self.player].value,
+            "blind_trainers": self.multiworld.blind_trainers[self.player].value,
 
         }
 

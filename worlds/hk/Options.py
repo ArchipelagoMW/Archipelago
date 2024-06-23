@@ -1,6 +1,8 @@
 import typing
+import re
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
+from schema import And, Schema, Optional
 
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
 from .Charms import vanilla_costs, names as charm_names
@@ -11,12 +13,16 @@ if typing.TYPE_CHECKING:
 else:
     Random = typing.Any
 
-
 locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
-StartLocation = type("StartLocation", (Choice,), {"__module__": __name__, "auto_display_name": False, **locations,
-                                                  "__doc__": "Choose your start location. "
-                                                             "This is currently only locked to King's Pass."})
+StartLocation = type("StartLocation", (Choice,), {
+    "__module__": __name__,
+    "auto_display_name": False,
+    "display_name": "Start Location",
+    "__doc__": "Choose your start location. "
+               "This is currently only locked to King's Pass.",
+    **locations,
+})
 del (locations)
 
 option_docstrings = {
@@ -49,8 +55,7 @@ option_docstrings = {
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
                             "pool and open their locations\n    for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
-    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
-                       "Mimic Grubs are always placed\n    in your own game.",
+    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item\n    that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
@@ -99,8 +104,12 @@ default_on = {
     "RandomizeKeys",
     "RandomizeMaskShards",
     "RandomizeVesselFragments",
+    "RandomizeCharmNotches",
     "RandomizePaleOre",
-    "RandomizeRelics"
+    "RandomizeRancidEggs",
+    "RandomizeRelics",
+    "RandomizeStags",
+    "RandomizeLifebloodCocoons"
 }
 
 shop_to_option = {
@@ -117,6 +126,7 @@ shop_to_option = {
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
+splitter_pattern = re.compile(r'(?<!^)(?=[A-Z])')
 for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
@@ -125,6 +135,7 @@ for option_name, option_data in pool_options.items():
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
         option = type(option_name, (Toggle,), extra_data)
+    option.display_name = splitter_pattern.sub(" ", option_name)
     globals()[option.__name__] = option
     hollow_knight_randomize_options[option.__name__] = option
 
@@ -133,11 +144,14 @@ for option_name in logic_options.values():
     if option_name in hollow_knight_randomize_options:
         continue
     extra_data = {"__module__": __name__}
+    # some options, such as elevator pass, appear in logic_options despite explicitly being
+    # handled below as classes.
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
         option = type(option_name, (Toggle,), extra_data)
-    globals()[option.__name__] = option
-    hollow_knight_logic_options[option.__name__] = option
+        option.display_name = splitter_pattern.sub(" ", option_name)
+        globals()[option.__name__] = option
+        hollow_knight_logic_options[option.__name__] = option
 
 
 class RandomizeElevatorPass(Toggle):
@@ -199,7 +213,7 @@ class MinimumEggPrice(Range):
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
-    range_end = 21
+    range_end = 20
     default = 1
 
 
@@ -269,11 +283,11 @@ class RandomCharmCosts(NamedRange):
             random_source.shuffle(charms)
             return charms
         else:
-            charms = [0]*self.charm_count
+            charms = [0] * self.charm_count
             for x in range(self.value):
-                index = random_source.randint(0, self.charm_count-1)
+                index = random_source.randint(0, self.charm_count - 1)
                 while charms[index] > 5:
-                    index = random_source.randint(0, self.charm_count-1)
+                    index = random_source.randint(0, self.charm_count - 1)
                 charms[index] += 1
             return charms
 
@@ -283,6 +297,9 @@ class PlandoCharmCosts(OptionDict):
     This is set after any random Charm Notch costs, if applicable."""
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
+    schema = Schema({
+        Optional(name): And(int, lambda n: 6 >= n >= 0) for name in charm_names
+        })
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
@@ -384,8 +401,8 @@ class Goal(Choice):
     option_hollowknight = 1
     option_siblings = 2
     option_radiance = 3
-    # Client support exists for this, but logic is a nightmare
-    # option_godhome = 4
+    option_godhome = 4
+    option_godhome_flower = 5
     default = 0
 
 
@@ -404,6 +421,7 @@ class WhitePalace(Choice):
 
 class ExtraPlatforms(DefaultOnToggle):
     """Places additional platforms to make traveling throughout Hallownest more convenient."""
+    display_name = "Extra Platforms"
 
 
 class AddUnshuffledLocations(Toggle):
@@ -413,6 +431,7 @@ class AddUnshuffledLocations(Toggle):
     Note: This will increase the number of location checks required to purchase
     hints to the total maximum.
     """
+    display_name = "Add Unshuffled Locations"
 
 
 class DeathLinkShade(Choice):
@@ -430,6 +449,7 @@ class DeathLinkShade(Choice):
     option_shadeless = 1
     option_shade = 2
     default = 2
+    display_name = "Deathlink Shade Handling"
 
 
 class DeathLinkBreaksFragileCharms(Toggle):
@@ -439,6 +459,7 @@ class DeathLinkBreaksFragileCharms(Toggle):
     ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
         will continue to do so.
     """
+    display_name = "Deathlink Breaks Fragile Charms"
 
 
 class StartingGeo(Range):
@@ -462,18 +483,20 @@ class CostSanity(Choice):
     alias_yes = 1
     option_shopsonly = 2
     option_notshops = 3
-    display_name = "Cost Sanity"
+    display_name = "Costsanity"
 
 
 class CostSanityHybridChance(Range):
     """The chance that a CostSanity cost will include two components instead of one, e.g. Grubs + Essence"""
     range_end = 100
     default = 10
+    display_name = "Costsanity Hybrid Chance"
 
 
 cost_sanity_weights: typing.Dict[str, type(Option)] = {}
 for term, cost in cost_terms.items():
     option_name = f"CostSanity{cost.option}Weight"
+    display_name = f"Costsanity {cost.option} Weight"
     extra_data = {
         "__module__": __name__, "range_end": 1000,
         "__doc__": (
@@ -486,9 +509,9 @@ for term, cost in cost_terms.items():
         extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
 
     option = type(option_name, (Range,), extra_data)
+    option.display_name = display_name
     globals()[option.__name__] = option
     cost_sanity_weights[option.__name__] = option
-
 
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,

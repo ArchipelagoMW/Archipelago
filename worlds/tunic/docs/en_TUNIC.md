@@ -6,7 +6,7 @@ The [player options page for this game](../player-options) contains all the opti
 
 ## I haven't played TUNIC before.
 
-**Play vanilla first.** It is **_heavily discouraged_** to play this randomizer before playing the vanilla game.
+<u>**Play vanilla first.**</u> It is **_heavily discouraged_** to play this randomizer before playing the vanilla game.
 It is recommended that you achieve both endings in the vanilla game before playing the randomizer.
 
 ## What does randomization do to this game?
@@ -32,7 +32,7 @@ being to find the required amount of them and then Share Your Wisdom.
 Every item has a chance to appear in another player's world.
 
 ## How many checks are in TUNIC?
-There are 302 checks located across the world of TUNIC.
+There are 302 checks located across the world of TUNIC. The Fairy Seeking Spell can help you locate them.
 
 ## What do items from other worlds look like in TUNIC?
 Items belonging to other TUNIC players will either appear as that item directly (if in a freestanding location) or in a
@@ -51,7 +51,9 @@ There is an [entrance tracker](https://scipiowright.gitlab.io/tunic-tracker/) fo
 You can also use the Universal Tracker (by Faris and qwint) to find a complete list of what checks are in logic with your current items. You can find it on the Archipelago Discord, in its post in the future-game-design channel. This tracker is an extension of the regular Archipelago Text Client.
 
 ## What should I know regarding logic?
+In general:
 - Nighttime is not considered in logic. Every check in the game is obtainable during the day.
+- Bushes are not considered in logic. It is assumed that the player will find a way past them, whether it is with a sword, a bomb, fire, luring an enemy, etc. There is also an option in the in-game randomizer settings menu to clear some of the early bushes.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
 
@@ -63,11 +65,8 @@ For the Entrance Randomizer:
 - The portal in the trophy room of the Old House is active from the start.
 - The elevator in Cathedral is immediately usable without activating the fuse. Activating the fuse does nothing.
 
-## What item groups are there?
-Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
-
-## What location groups are there?
-Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), and shop. Additionally, for checks that do not fall into the above categories, the name of the region is the name of the location group.
+## Does this game have item and location groups?
+Yes! To find what they are, open up the Archipelago Text Client while connected to a TUNIC session and type in `/item_groups` or `/location_groups`.
 
 ## Is Connection Plando supported?
 Yes. The host needs to enable it in their `host.yaml`, and the player's yaml needs to contain a plando_connections block.
@@ -86,3 +85,5 @@ Notes:
 - There is no limit to the number of Shops hard-coded into place.
 - If you have more than one shop in a scene, you may be wrong warped when exiting a shop.
 - If you have a shop in every scene, and you have an odd number of shops, it will error out.
+
+See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.

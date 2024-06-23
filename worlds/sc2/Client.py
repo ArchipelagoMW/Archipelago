@@ -107,10 +107,10 @@ class ColouredMessage:
     def coloured(self, text: str, colour: str) -> 'ColouredMessage':
         add_json_text(self.parts, text, type="color", color=colour)
         return self
-    def location(self, location_id: int, player_id: int = 0) -> 'ColouredMessage':
+    def location(self, location_id: int, player_id: int) -> 'ColouredMessage':
         add_json_location(self.parts, location_id, player_id)
         return self
-    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> 'ColouredMessage':
+    def item(self, item_id: int, player_id: int, flags: int = 0) -> 'ColouredMessage':
         add_json_item(self.parts, item_id, player_id, flags)
         return self
     def player(self, player_id: int) -> 'ColouredMessage':
@@ -122,7 +122,6 @@ class ColouredMessage:
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
-    echo_commands = True
 
     def formatted_print(self, text: str) -> None:
         """Prints with kivy formatting to the GUI, and also prints to command-line and to all logs"""
@@ -244,10 +243,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     self.formatted_print(f" [u]{faction.name}[/u] ")
             
             for item_id in categorized_items[faction]:
-                item_name = self.ctx.item_names[item_id]
+                item_name = self.ctx.item_names.lookup_in_game(item_id)
                 received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
                 matching_children = [child for child in received_child_items
-                                    if item_matches_filter(self.ctx.item_names[child])]
+                                     if item_matches_filter(self.ctx.item_names.lookup_in_game(child))]
                 received_items_of_this_type = items_received.get(item_id, [])
                 item_is_match = item_matches_filter(item_name)
                 if item_is_match or len(matching_children) > 0:
@@ -257,7 +256,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     for item in received_items_of_this_type:
                         print_faction_title()
                         has_printed_faction_title = True
-                        (ColouredMessage('* ').item(item.item, flags=item.flags)
+                        (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
@@ -278,7 +277,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         received_items_of_this_type = items_received.get(child_item, [])
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
-                            (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                            (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
                                 (" from ").location(item.location, self.ctx.slot)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
@@ -957,17 +956,17 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
 
     return options
 
-def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]]) -> bool:
+def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_zerg:
         return True
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_human:
         return False
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_level_35:
-            return items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] >= 35
+        return kerrigan_level >= 35
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
-        completed = len([(mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
-                         for mission_id in ctx.mission_id_to_location_ids])
+        completed = sum((mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
+                         for mission_id in ctx.mission_id_to_location_ids)
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
@@ -1138,7 +1137,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateZergTech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
-        kerrigan_primal_by_items = kerrigan_primal(self.ctx, current_items)
+        kerrigan_primal_by_items = kerrigan_primal(self.ctx, kerrigan_level)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
         await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
             kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
@@ -1165,7 +1164,7 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
             objectives = set(ctx.locations_for_mission(mission))
             if objectives:
                 remaining_objectives = objectives.difference(ctx.checked_locations)
-                unfinished_locations[mission] = [ctx.location_names[location_id] for location_id in remaining_objectives]
+                unfinished_locations[mission] = [ctx.location_names.lookup_in_game(location_id) for location_id in remaining_objectives]
             else:
                 unfinished_locations[mission] = []
 

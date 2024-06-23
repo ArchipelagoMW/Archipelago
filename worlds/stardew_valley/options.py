@@ -10,23 +10,23 @@ class StardewValleyOption(Protocol):
 
 
 class Goal(Choice):
-    """What's your goal with this play-through?
+    """Goal for this playthrough
     Community Center: Complete the Community Center
-    Grandpa's Evaluation: Succeed Grandpa's evaluation with 4 lit candles
-    Bottom of the Mines: Reach level 120 in the mineshaft
-    Cryptic Note: Complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern
-    Master Angler: Catch every fish. Adapts to chosen Fishsanity option
-    Complete Collection: Complete the museum by donating every possible item. Pairs well with Museumsanity
-    Full House: Get married and have two children. Pairs well with Friendsanity
-    Greatest Walnut Hunter: Find all 130 Golden Walnuts
-    Protector of the Valley: Complete all the monster slayer goals. Adapts to Monstersanity
-    Full Shipment: Ship every item in the collection tab. Adapts to Shipsanity
+    Grandpa's Evaluation: 4 lit candles in Grandpa's evaluation
+    Bottom of the Mines: Reach level 120 in the mines
+    Cryptic Note: Complete the quest "Cryptic Note" (Skull Cavern Floor 100)
+    Master Angler: Catch every fish. Adapts to Fishsanity
+    Complete Collection: Complete the museum collection
+    Full House: Get married and have 2 children
+    Greatest Walnut Hunter: Find 130 Golden Walnuts
+    Protector of the Valley: Complete the monster slayer goals. Adapts to Monstersanity
+    Full Shipment: Ship every item. Adapts to Shipsanity
     Gourmet Chef: Cook every recipe. Adapts to Cooksanity
-    Craft Master: Craft every item.
+    Craft Master: Craft every item
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
     Allsanity: Complete every check in your slot
-    Perfection: Attain Perfection, based on the vanilla definition
+    Perfection: Attain Perfection
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -154,7 +154,7 @@ class EntranceRandomization(Choice):
     Disabled: No entrance randomization is done
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
-    Buildings: All Entrances that Allow you to enter a building are randomized with each other
+    Buildings: All entrances that allow you to enter a building are randomized with each other
     Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
     """
     # Everything: All buildings and areas are randomized with each other
@@ -197,7 +197,7 @@ class Cropsanity(Choice):
     """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
     Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
-    Shuffled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
+    Enabled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
     """
     internal_name = "cropsanity"
     display_name = "Cropsanity"
@@ -268,7 +268,6 @@ class BuildingProgression(Choice):
     Vanilla: You can buy each building normally.
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-    Progressive early shipping bin: Same as Progressive, but the shipping bin will be placed early in the multiworld.
     Cheap: Buildings will cost half as much
     Very Cheap: Buildings will cost 1/5th as much
     """
@@ -356,7 +355,7 @@ class QuestLocations(NamedRange):
 class Fishsanity(Choice):
     """Locations for catching a fish the first time?
     None: There are no locations for catching fish
-    Legendaries: Each of the 5 legendary fish are checks
+    Legendaries: Each of the 5 legendary fish are checks, plus the extended family if qi board is turned on
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
     All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
@@ -458,7 +457,7 @@ class Cooksanity(Choice):
 
 
 class Chefsanity(NamedRange):
-    """Locations for leaning cooking recipes?
+    """Locations for learning cooking recipes?
     Vanilla: All cooking recipes are learned normally
     Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
     Purchases: Every purchasable recipe is a check
@@ -698,8 +697,6 @@ class Mods(OptionSet):
 class StardewValleyOptions(PerGameCommonOptions):
     goal: Goal
     farm_type: FarmType
-    starting_money: StartingMoney
-    profit_margin: ProfitMargin
     bundle_randomization: BundleRandomization
     bundle_price: BundlePrice
     entrance_randomization: EntranceRandomization
@@ -723,16 +720,18 @@ class StardewValleyOptions(PerGameCommonOptions):
     craftsanity: Craftsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
-    movement_buff_number: NumberOfMovementBuffs
-    luck_buff_number: NumberOfLuckBuffs
     exclude_ginger_island: ExcludeGingerIsland
-    trap_items: TrapItems
-    multiple_day_sleep_enabled: MultipleDaySleepEnabled
-    multiple_day_sleep_cost: MultipleDaySleepCost
+    quick_start: QuickStart
+    starting_money: StartingMoney
+    profit_margin: ProfitMargin
     experience_multiplier: ExperienceMultiplier
     friendship_multiplier: FriendshipMultiplier
     debris_multiplier: DebrisMultiplier
-    quick_start: QuickStart
+    movement_buff_number: NumberOfMovementBuffs
+    luck_buff_number: NumberOfLuckBuffs
+    trap_items: TrapItems
+    multiple_day_sleep_enabled: MultipleDaySleepEnabled
+    multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
     mods: Mods
     death_link: DeathLink

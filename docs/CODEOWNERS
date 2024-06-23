@@ -6,33 +6,41 @@
 #
 # All usernames must be GitHub usernames (and are case sensitive).
 
-###################
-## Active Worlds ##
-###################
-
 # Adventure
 /worlds/adventure/ @JusticePS
+
+# A Hat in Time
+/worlds/ahit/ @CookieCat45
 
 # A Link to the Past
 /worlds/alttp/ @Berserker66
 
+# Sudoku (APSudoku)
+/worlds/apsudoku/ @EmilyV99
+
+# Aquaria
+/worlds/aquaria/ @tioui
+
 # ArchipIDLE
 /worlds/archipidle/ @LegendaryLinux
-
-# Sudoku (BK Sudoku)
-/worlds/bk_sudoku/ @Jarno458
 
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
 
+# Bomb Rush Cyberfunk
+/worlds/bomb_rush_cyberfunk/ @TRPG0
+
 # Bumper Stickers
 /worlds/bumpstik/ @FelicitusNeko
+
+# Castlevania 64
+/worlds/cv64/ @LiquidCat64
 
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
 # ChecksFinder
-/worlds/checksfinder/ @jonloveslegos
+/worlds/checksfinder/ @SunCatMC
 
 # Clique
 /worlds/clique/ @ThePhar
@@ -55,9 +63,6 @@
 # Factorio
 /worlds/factorio/ @Berserker66
 
-# Final Fantasy
-/worlds/ff1/ @jtoyoda
-
 # Final Fantasy Mystic Quest
 /worlds/ffmq/ @Alchav @wildham0
 
@@ -65,7 +70,7 @@
 /worlds/heretic/ @Daivuk
 
 # Hollow Knight
-/worlds/hk/ @BadMagic100 @ThePhar
+/worlds/hk/ @BadMagic100 @qwint
 
 # Hylics 2
 /worlds/hylics2/ @TRPG0
@@ -82,12 +87,12 @@
 # Lingo
 /worlds/lingo/ @hatkirby
 
-# Links Awakening DX
-/worlds/ladx/ @zig-for
-
 # Lufia II Ancient Cave
 /worlds/lufia2ac/ @el-u
 /worlds/lufia2ac/docs/ @wordfcuk @el-u
+
+# Mario & Luigi: Superstar Saga
+/worlds/mlss/ @jamesbrq
 
 # Meritous
 /worlds/meritous/ @FelicitusNeko
@@ -131,6 +136,9 @@
 # Shivers
 /worlds/shivers/ @GodlFire
 
+# A Short Hike
+/worlds/shorthike/ @chandler05
+
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
@@ -171,7 +179,7 @@
 /worlds/tloz/ @Rosalie-A @t3hf1gm3nt
 
 # TUNIC
-/worlds/tunic/ @silent-destroyer
+/worlds/tunic/ @silent-destroyer @ScipioWright
 
 # Undertale
 /worlds/undertale/ @jonloveslegos
@@ -185,15 +193,36 @@
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
 
+# Yoshi's Island
+/worlds/yoshisisland/ @PinkSwitch
+
+#Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
+/worlds/yugioh06/ @Rensen3
+
 # Zillion
 /worlds/zillion/ @beauxq
 
 # Zork Grand Inquisitor
 /worlds/zork_grand_inquisitor/ @nbrochu
 
-##################################
-## Disabled Unmaintained Worlds ##
-##################################
+
+## Active Unmaintained Worlds
+
+# The following worlds in this repo are currently unmaintained, but currently still work in core. If any update breaks
+# compatibility, these worlds may be moved to `worlds_disabled`. If you are interested in stepping up as maintainer for
+# any of these worlds, please review `/docs/world maintainer.md` documentation.
+
+# Final Fantasy (1)
+# /worlds/ff1/
+
+# Links Awakening DX
+# /worlds/ladx/
+
+## Disabled Unmaintained Worlds
+
+# The following worlds in this repo are currently unmaintained and disabled as they do not work in core. If you are
+# interested in stepping up as maintainer for any of these worlds, please review `/docs/world maintainer.md`
+# documentation.
 
 # Ori and the Blind Forest
-# /worlds_disabled/oribf/ <Unmaintained>
+# /worlds_disabled/oribf/

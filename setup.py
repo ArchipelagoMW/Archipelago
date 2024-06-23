@@ -21,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.15.10'
+    requirement = 'cx-Freeze==7.0.0'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -190,7 +190,7 @@ if is_windows:
     c = next(component for component in components if component.script_name == "Launcher")
     exes.append(cx_Freeze.Executable(
         script=f"{c.script_name}.py",
-        target_name=f"{c.frozen_name}(DEBUG).exe",
+        target_name=f"{c.frozen_name}Debug.exe",
         icon=resolve_icon(c.icon),
     ))
 
@@ -228,8 +228,8 @@ class BuildCommand(setuptools.command.build.build):
 
 
 # Override cx_Freeze's build_exe command for pre and post build steps
-class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
-    user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
+class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
+    user_options = cx_Freeze.command.build_exe.build_exe.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
         ('extra-data=', None, 'Additional files to add.'),
     ]

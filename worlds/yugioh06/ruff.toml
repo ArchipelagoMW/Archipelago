@@ -1,0 +1,12 @@
+line-length = 120
+
+[lint]
+preview = true
+select = ["E", "F", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
+ignore = ["RUF012", "RUF100"]
+
+[per-file-ignores]
+# The way options definitions work right now, world devs are forced to break line length requirements.
+"options.py" = ["E501"]
+# Yu Gi Oh specific: The structure of the Opponents.py file makes the line length violations acceptable.
+"Opponents.py" = ["E501"]

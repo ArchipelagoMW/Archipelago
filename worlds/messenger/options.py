@@ -3,14 +3,45 @@ from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
-from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, Toggle
+from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, \
+    PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
+from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
 class MessengerAccessibility(Accessibility):
     default = Accessibility.option_locations
     # defaulting to locations accessibility since items makes certain items self-locking
     __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+
+
+class PortalPlando(PlandoConnections):
+    """
+    Plando connections to be used with portal shuffle. Direction is ignored.
+    List of valid connections can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/portals.py#L12.
+    The entering Portal should *not* have "Portal" appended.
+    For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
+    Example:
+    - entrance: Riviere Turquoise
+      exit: Wingsuit
+    - entrance: Sunken Shrine
+      exit: Sunny Day
+    - entrance: Searing Crags
+      exit: Glacial Peak Portal
+    """
+    portals = [f"{portal} Portal" for portal in PORTALS]
+    shop_points = [point for points in SHOP_POINTS.values() for point in points]
+    checkpoints = [point for points in CHECKPOINTS.values() for point in points]
+    portal_entrances = PORTALS
+    portal_exits = portals + shop_points + checkpoints
+    entrances = portal_entrances
+    exits = portal_exits
+
+
+# for back compatibility. To later be replaced with transition plando
+class HiddenPortalPlando(PortalPlando):
+    visibility = Visibility.none
+    entrances = PortalPlando.entrances
+    exits = PortalPlando.exits
 
 
 class Logic(Choice):
@@ -88,7 +119,7 @@ class ShuffleTransitions(Choice):
 
 
 class Goal(Choice):
-    """Requirement to finish the game."""
+    """Requirement to finish the game. To win with the power seal hunt goal, you must enter the Music Box through the shop chest."""
     display_name = "Goal"
     option_open_music_box = 0
     option_power_seal_hunt = 1
@@ -121,6 +152,11 @@ class RequiredSeals(Range):
     range_start = 10
     range_end = 100
     default = range_end
+
+
+class Traps(Toggle):
+    """Whether traps should be included in the itempool."""
+    display_name = "Include Traps"
 
 
 class ShopPrices(Range):
@@ -197,5 +233,8 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     notes_needed: NotesNeeded
     total_seals: AmountSeals
     percent_seals_required: RequiredSeals
+    traps: Traps
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
+    portal_plando: PortalPlando
+    plando_connections: HiddenPortalPlando

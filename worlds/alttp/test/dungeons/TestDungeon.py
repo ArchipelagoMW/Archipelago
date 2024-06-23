@@ -13,9 +13,9 @@ class TestDungeon(LTTPTestBase):
         self.world_setup()
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
-        self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
         self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = True
+        self.multiworld.shuffle_capacity_upgrades[1].value = 2
         create_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)
@@ -23,7 +23,7 @@ class TestDungeon(LTTPTestBase):
             connect_simple(self.multiworld, exitname, regionname, 1)
         connect_simple(self.multiworld, 'Big Bomb Shop', 'Big Bomb Shop', 1)
         self.multiworld.get_region('Menu', 1).exits = []
-        self.multiworld.swamp_patch_required[1] = True
+        self.multiworld.worlds[1].swamp_patch_required = True
         self.world.set_rules()
         self.world.create_items()
         self.multiworld.itempool.extend(get_dungeon_item_pool(self.multiworld))

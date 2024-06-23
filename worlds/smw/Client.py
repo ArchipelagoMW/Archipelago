@@ -65,11 +65,12 @@ SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x01F2B
 
 SMW_BLOCKSANITY_BLOCK_COUNT = 582
 
-SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
-SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
-SMW_BAD_TEXT_BOX_LEVELS  = [0x00, 0x26, 0x02, 0x4B]
-SMW_BOSS_STATES          = [0x80, 0xC0, 0xC1]
-SMW_UNCOLLECTABLE_LEVELS = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A, 0x35, 0x34, 0x31, 0x32]
+SMW_GOAL_LEVELS                = [0x28, 0x31, 0x32]
+SMW_INVALID_MARIO_STATES       = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
+SMW_BAD_TEXT_BOX_LEVELS        = [0x00, 0x26, 0x02, 0x4B]
+SMW_BOSS_STATES                = [0x80, 0xC0, 0xC1]
+SMW_UNCOLLECTABLE_LEVELS       = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A, 0x35, 0x34, 0x31, 0x32]
+SMW_UNCOLLECTABLE_DRAGON_COINS = [0x24]
 
 
 class SMWSNIClient(SNIClient):
@@ -447,7 +448,7 @@ class SMWSNIClient(SNIClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names.lookup_in_game(new_check_id)
             snes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
@@ -498,15 +499,16 @@ class SMWSNIClient(SNIClient):
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
+            sending_game = ctx.slot_info[item.player].game
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
 
             if self.should_show_message(ctx, item):
                 if item.item != 0xBC0012 and item.item not in trap_rom_data:
                     # Don't send messages for Boss Tokens
-                    item_name = ctx.item_names[item.item]
+                    item_name = ctx.item_names.lookup_in_game(item.item)
                     player_name = ctx.player_names[item.player]
 
                     receive_message = generate_received_text(item_name, player_name)
@@ -514,7 +516,7 @@ class SMWSNIClient(SNIClient):
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index&0xFF, (recv_index>>8)&0xFF]))
             if item.item in trap_rom_data:
-                item_name = ctx.item_names[item.item]
+                item_name = ctx.item_names.lookup_in_game(item.item)
                 player_name = ctx.player_names[item.player]
 
                 receive_message = generate_received_text(item_name, player_name)
@@ -595,7 +597,7 @@ class SMWSNIClient(SNIClient):
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
-                loc_name = ctx.location_names[loc_id]
+                loc_name = ctx.location_names.lookup_in_game(loc_id)
 
                 if loc_name not in location_id_to_level_id:
                     continue
@@ -604,6 +606,8 @@ class SMWSNIClient(SNIClient):
 
                 if level_data[1] == 2:
                     # Dragon Coins Check
+                    if level_data[0] in SMW_UNCOLLECTABLE_DRAGON_COINS:
+                        continue
 
                     progress_byte = (level_data[0] // 8)
                     progress_bit  = 7 - (level_data[0] % 8)
