@@ -14,22 +14,20 @@
 - [Xbox](https://www.xbox.com/en-US/games/store/Psychonauts/C5HHPG1TXDNG)
 
 [Astralathe Mod Loader](https://gitlab.com/scrunguscrungus/astralathe/-/releases) <br>
-[PsychoRando AP Branch](https://github.com/Akashortstack/PsychoRando/releases) <br>
-[Psychonauts AP World](https://github.com/Akashortstack/Psychonauts_AP/releases) <br>
+[PsychoRando Mod, AP Branch](https://github.com/Akashortstack/PsychoRando/releases) <br>
 
 <h3 style="text-transform:none";>Updating Your Host.yaml</h3>
 
-Find the folder that contains your Psychonauts and Astralathe installation, and copy the folder directory. For example,
-the most common place for the Steam version is "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Psychonauts"
-
+Find the folder that contains your Psychonauts and Astralathe installation. With the folder open, right-click on the
+file path and copy address as text. This will copy the address of your Psychonauts game directory used in host.yaml.
 Run ArchipelagoLauncher.exe and open host.yaml from the Archipelago Launcher, find the psychonauts_options and paste
-your psychonauts game directory into the root_directory setting between the quotes. If the pasted root directory
+your Psychonauts game directory into the root_directory setting between the quotes. If the pasted root directory
 contains single slashes between lines, change all of these to double
 slashes. `If you don't, the client may fail to open.`
 
 <h3 style="text-transform:none";>Installing A Seed</h3>
 
-When you generate a game, the Archipelago Seed.zip will include a Psychonuats.zip folder. Extract the Psychonauts.zip
+When you generate a game, the Archipelago Seed.zip will include a Psychonauts.zip folder. Extract the Psychonauts.zip
 and find the RandoSeed.lua file inside. Copy this file, then find your Psychonauts directory where Astralathe and the
 PsychoRando mod are installed. Inside the PsychoRando mod, find the Scripts folder and paste RandoSeed.lua inside this
 folder. Make sure to overwrite the old file.
