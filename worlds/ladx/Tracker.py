@@ -254,3 +254,4 @@ class MagpieBridge:
                 await self.send_all_inventory()
         else:
             await self.send_inventory_diffs()
+            
