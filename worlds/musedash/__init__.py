@@ -249,9 +249,7 @@ class MuseDashWorld(World):
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
-        song_select_region = Region("Song Select", self.player, self.multiworld)
-        self.multiworld.regions += [menu_region, song_select_region]
-        menu_region.connect(song_select_region)
+        self.multiworld.regions += [menu_region]
 
         # Make a collection of all songs available for this rando.
         # 1. All starting songs
@@ -265,18 +263,16 @@ class MuseDashWorld(World):
         self.random.shuffle(included_song_copy)
         all_selected_locations.extend(included_song_copy)
 
-        # Make a region per song/album, then adds 1-2 item locations to them
+        # Adds 2 item locations per song/album to the menu region.
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
-            region = Region(name, self.player, self.multiworld)
-            self.multiworld.regions.append(region)
-            song_select_region.connect(region, name, lambda state, place=name: state.has(place, self.player))
+            loc1 = MuseDashLocation(self.player,  name + "-0", self.md_collection.song_locations[name + "-0"], menu_region)
+            loc1.access_rule = lambda state, place=name: state.has(place, self.player)
+            menu_region.locations.append(loc1)
 
-            # Muse Dash requires 2 locations per song to be *interesting*. Balanced out by filler.
-            region.add_locations({
-                    name + "-0": self.md_collection.song_locations[name + "-0"],
-                    name + "-1": self.md_collection.song_locations[name + "-1"]
-            }, MuseDashLocation)
+            loc2 = MuseDashLocation(self.player,  name + "-1", self.md_collection.song_locations[name + "-1"], menu_region)
+            loc2.access_rule = lambda state, place=name: state.has(place, self.player)
+            menu_region.locations.append(loc2)
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: \
