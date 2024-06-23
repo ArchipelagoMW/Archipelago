@@ -8,7 +8,7 @@ class MaterialStateTestBase(CMTestBase):
         super().setUp()
 
         # this class ultimately isn't trying to test this relatively simple function
-        self.difficulty = determine_difficulty(self.options)
+        self.difficulty = determine_difficulty(self.world.options)
 
         # this is mostly to demonstrate that collect fundamentally acquires the items and to show that setUp sets up
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
