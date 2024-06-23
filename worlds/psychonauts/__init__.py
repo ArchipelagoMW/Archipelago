@@ -101,6 +101,10 @@ class PSYWorld(World):
             for name in BRAIN_JARS:
                 item_classifications[name] = ItemClassification.progression_skip_balancing
 
+        # Set Birthday Cake to Filler, when the Brain Tank goal is not enabled.
+        if goal == Goal.option_brainhunt:
+            item_classifications[ItemName.Cake] = ItemClassification.filler
+
     def create_item(self, name: str) -> Item:
         """
         Returns created PSYItem
