@@ -52,6 +52,7 @@ class TextShuffle(DefaultOffToggle):
     [On] Shuffles all the text in the game
     [Off] (default) doesn't shuffle them.
     """
+    display_name = "Text Shuffle"
 
 
 class Rooster(DefaultOnToggle, LADXROption):
@@ -466,6 +467,7 @@ class Music(Choice, LADXROption):
     [Shuffled] Shuffled Music
     [Off] No music
     """
+    display_name = "Music"
     ladxr_name = "music"
     option_vanilla = 0
     option_shuffled = 1
@@ -485,6 +487,7 @@ class WarpImprovements(DefaultOffToggle):
     [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
     [Off] No change
     """
+    display_name = "Warp Improvements"
 
 
 class AdditionalWarpPoints(DefaultOffToggle):
@@ -492,6 +495,7 @@ class AdditionalWarpPoints(DefaultOffToggle):
     [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
     [Off] No change
     """
+    display_name = "Additional Warp Points"
 
 ladx_option_groups = [
     OptionGroup("Goal Options", [
