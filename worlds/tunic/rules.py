@@ -26,6 +26,7 @@ green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
+
 def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
     ability_requirement = [1, 1, 1]
     if options.hexagon_quest.value:

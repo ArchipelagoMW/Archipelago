@@ -27,6 +27,7 @@ green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
+
 def has_ladder(ladder: str, state: CollectionState, player: int, options: TunicOptions):
     return not options.shuffle_ladders or state.has(ladder, player)
 
