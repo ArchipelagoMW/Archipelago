@@ -12,7 +12,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
   (select `Wario Land 4 Client` during installation).
-- A Wario Land 4 ROM. Either US/Europe or Japanese is acceptable.
+- A Wario Land 4 ROM. Either US/Europe or Japanese is acceptable. You do not need one to generate a seed, only to play it.
 
 ## Configuring BizHawk
 
@@ -70,7 +70,7 @@ automatically launch the client, and will also create your ROM in the same place
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, they must be connected. **This should happen automatically** 
+Once both the client and the emulator are started, they must be connected. **This should happen automatically**
 However, if the lua script window doesn't appear, then within the emulator click
 on the "Tools" menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua
 script. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
