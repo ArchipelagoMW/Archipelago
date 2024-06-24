@@ -56,13 +56,13 @@
 03006282 incomingitemsender
 03006293 lastcollecteditemid
 03006294 lastcollecteditemstatus
-03006295 deathlinkenabled
-03006296 texttimer
-03006297 currentjeweliconposition
-03006298 abilitiesinthislevel
-03006299 hasfullhealthitem
-0300629A hasfullhealthitem2
-0300629B lastcollectedbox
+03006295 texttimer
+03006296 currentjeweliconposition
+03006297 abilitiesinthislevel
+03006298 hasfullhealthitem
+03006299 hasfullhealthitem2
+0300629A lastcollectedbox
+0300629B vblkstatus
 0300629C queuedfullhealthitem
 0300629C queuedjunk
 0300629D queuedformtraps
@@ -84,7 +84,6 @@
 030062B8 cdboxextdata
 030062BC healthboxextdata
 030062C0 healthbox2extdata
-030062C4 vblkstatus
 0878F97C playername
 0878F9BC playerid
 0878F9BE seedname
@@ -93,10 +92,9 @@
 0878FE1C startinginventoryitemstatus
 0878FE40 startinginventoryjunkcounts
 0878FE45 startinginventorywarioabilities
-0878FE46 deathlinkflag
-0878FE47 sendmultiworlditemsimmediately
-0878FE48 goaltype
-0878FE49 goldentreasuresneeded
-0878FE4A trapbehavior
-087936B0 multiworldstringdump
+0878FE46 sendmultiworlditemsimmediately
+0878FE47 goaltype
+0878FE48 goldentreasuresneeded
+0878FE49 trapbehavior
+087936C8 multiworldstringdump
 

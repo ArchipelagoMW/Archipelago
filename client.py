@@ -12,7 +12,6 @@ from worlds._bizhawk.client import BizHawkClient
 
 from .data import encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
-from .options import Goal
 from .types import Passage
 
 if TYPE_CHECKING:
@@ -127,13 +126,13 @@ def cmd_deathlink(self):
 
 class DeathLinkCtx:
     enabled: bool = False
-    client_override: bool = False
+    update_pending: bool = False
     pending: bool = False
     sent_this_death: bool = False
 
     def __repr__(self):
         return (f'{type(self)} {{ enabled: {self.enabled}, '
-                f'client_override: {self.client_override}, '
+                f'update_pending: {self.update_pending}, '
                 f'pending: {self.pending}, '
                 f'sent_this_death: {self.sent_this_death} }}')
 
@@ -222,6 +221,10 @@ class WL4Client(BizHawkClient):
             await client_ctx.disconnect()
             return
 
+        if self.death_link.update_pending:
+            await client_ctx.update_death_link(self.death_link.enabled)
+            self.death_link.update_pending = False
+
         get_int = functools.partial(int.from_bytes, byteorder='little')
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
@@ -233,7 +236,6 @@ class WL4Client(BizHawkClient):
         multiworld_state_address = get_symbol('MultiworldState')
         incoming_item_address = get_symbol('IncomingItemID')
         item_sender_address = get_symbol('IncomingItemSender')
-        death_link_address = get_symbol('DeathLinkEnabled')
         wario_health_address = get_symbol('WarioHeart')
         timer_status_address = get_symbol('ucTimeUp')
         multiworld_send_address = get_symbol('SendMultiworldItemsImmediately')
@@ -256,7 +258,6 @@ class WL4Client(BizHawkClient):
                 read(level_status_address, 6 * 6 * 4),
                 read8(multiworld_state_address),
                 read16(received_item_count_address),
-                read8(death_link_address),
                 read8(wario_health_address),
                 read8(timer_status_address),
                 read8(multiworld_send_address),
@@ -280,7 +281,6 @@ class WL4Client(BizHawkClient):
         item_status = tuple(map(get_int, batches(next(read_result), 4)))
         multiworld_state = next_int(read_result)
         received_item_count = next_int(read_result)
-        death_link_flag = next_int(read_result)
         wario_health = next_int(read_result)
         timer_status = next_int(read_result)
         send_level_locations = next_int(read_result)
@@ -303,13 +303,6 @@ class WL4Client(BizHawkClient):
 
         if gameplay_state not in read_safe_states:
             return
-
-        # Turn on death link if it is on, and if the client hasn't overriden it
-        if (death_link_flag
-                and not self.death_link.enabled
-                and not self.death_link.client_override):
-            await client_ctx.update_death_link(True)
-            self.death_link.enabled = True
 
         locations = []
         events = {flag: False for flag in TRACKER_EVENT_FLAGS}
@@ -438,11 +431,15 @@ class WL4Client(BizHawkClient):
             return
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
-        if cmd == 'Bounced':
-            tags = args.get('tags', [])
-            if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
-                self.death_link.pending = True
+        if cmd == "Connected":
+            if args["slot_data"].get("death_link"):
+                self.death_link.enabled = True
+                self.death_link.update_pending = True
         if cmd == 'RoomInfo':
             if ctx.seed_name and ctx.seed_name != args['seed_name']:
                 # CommonClient's on_package displays an error to the user in this case, but connection is not cancelled.
                 self.dc_pending = True
+        if cmd == 'Bounced':
+            tags = args.get('tags', [])
+            if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
+                self.death_link.pending = True

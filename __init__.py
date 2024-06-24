@@ -193,6 +193,7 @@ class WL4World(World):
             'required_jewels',
             'open_doors',
             'portal',
+            'death_link',
         )
 
     def create_item(self, name: str, force_non_progression=False) -> Item:

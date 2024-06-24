@@ -125,13 +125,6 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
         seed_name
     )
 
-    # Set deathlink
-    patch.write_token(
-        APTokenTypes.WRITE,
-        get_rom_address('DeathLinkFlag'),
-        world.options.death_link.value.to_bytes(1, 'little')
-    )
-
     set_goal(patch, world.options.goal)
     patch.write_token(
         APTokenTypes.WRITE,
