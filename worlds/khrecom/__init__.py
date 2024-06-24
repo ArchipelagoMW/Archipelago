@@ -52,6 +52,10 @@ class KHRECOMWorld(World):
         self.starting_worlds = []
     
     def create_items(self):
+        if self.options.starting_worlds:
+            possible_starting_worlds = get_items_by_category("World Unlocks", [])
+            self.starting_worlds = self.random.sample(list(possible_starting_worlds),3)
+        
         item_pool: List[KHRECOMItem] = []
         filled_locations = 2 #Larxen II and Final Marluxia
         if self.options.starting_worlds:
@@ -100,9 +104,6 @@ class KHRECOMWorld(World):
         self.multiworld.get_location("Final Marluxia", self.player).place_locked_item(self.create_item("Victory"))
         starting_locations = get_locations_by_category("Starting")
         starting_locations = self.random.sample(list(starting_locations.keys()),4)
-        possible_starting_worlds = get_items_by_category("World Unlocks", [])
-        if self.options.starting_worlds:
-            self.starting_worlds = self.random.sample(list(starting_worlds.keys()),3)
         for i in range(4):
             if i < 3 and self.options.starting_worlds:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(self.starting_worlds[i]))
