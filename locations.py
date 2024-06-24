@@ -123,8 +123,8 @@ location_table = {
     # 40 Below Fridge
     '40 Below Fridge - Looping Room Box':                 LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.JEWEL_NE),       None,              _ALL),
     '40 Below Fridge - Maze Room Box':                    LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.JEWEL_SE),       None,              _ALL),
-    '40 Below Fridge - Snowman Puzzle Upper Box':         LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.JEWEL_SW),       None,              _ALL),
-    '40 Below Fridge - Snowman Puzzle Lower Box':         LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.JEWEL_NW),       None,              _ALL),
+    '40 Below Fridge - Snowman Puzzle Lower Box':         LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.JEWEL_SW),       None,              _ALL),
+    '40 Below Fridge - Snowman Puzzle Upper Box':         LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.JEWEL_NW),       None,              _ALL),
     '40 Below Fridge - CD Box':                           LocationData(LocationType.BOX,   (Passage.RUBY,     2, ItemFlag.CD),             None,              _ALL),
 
     # Pinball Zone
