@@ -3,6 +3,7 @@ import json
 import os
 from textwrap import dedent
 from typing import Dict, Union
+from docutils.core import publish_parts
 
 import yaml
 from flask import redirect, render_template, request, Response
@@ -66,6 +67,22 @@ def filter_dedent(text: str) -> str:
     return dedent(text).strip("\n ")
 
 
+@app.template_filter("rst_to_html")
+def filter_rst_to_html(text: str) -> str:
+    """Converts reStructuredText (such as a Python docstring) to HTML."""
+    if text.startswith(" ") or text.startswith("\t"):
+        text = dedent(text)
+    elif "\n" in text:
+        lines = text.splitlines()
+        text = lines[0] + "\n" + dedent("\n".join(lines[1:]))
+
+    return publish_parts(text, writer_name='html', settings=None, settings_overrides={
+        'raw_enable': False,
+        'file_insertion_enabled': False,
+        'output_encoding': 'unicode'
+    })['body']
+
+
 @app.template_test("ordered")
 def test_ordered(obj):
     return isinstance(obj, collections.abc.Sequence)
@@ -76,6 +93,34 @@ def test_ordered(obj):
 def option_presets(game: str) -> Response:
     world = AutoWorldRegister.world_types[game]
 
+    presets = {}
+    for preset_name, preset in world.web.options_presets.items():
+        presets[preset_name] = {}
+        for preset_option_name, preset_option in preset.items():
+            if preset_option == "random":
+                presets[preset_name][preset_option_name] = preset_option
+                continue
+
+            option = world.options_dataclass.type_hints[preset_option_name].from_any(preset_option)
+            if isinstance(option, Options.NamedRange) and isinstance(preset_option, str):
+                assert preset_option in option.special_range_names, \
+                    f"Invalid preset value '{preset_option}' for '{preset_option_name}' in '{preset_name}'. " \
+                    f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
+
+                presets[preset_name][preset_option_name] = option.value
+            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.ItemDict)):
+                presets[preset_name][preset_option_name] = option.value
+            elif isinstance(preset_option, str):
+                # Ensure the option value is valid for Choice and Toggle options
+                assert option.name_lookup[option.value] == preset_option, \
+                    f"Invalid option value '{preset_option}' for '{preset_option_name}' in preset '{preset_name}'. " \
+                    f"Values must not be resolved to a different option via option.from_text (or an alias)."
+                # Use the name of the option
+                presets[preset_name][preset_option_name] = option.current_key
+            else:
+                # Use the name of the option
+                presets[preset_name][preset_option_name] = option.current_key
+
     class SetEncoder(json.JSONEncoder):
         def default(self, obj):
             from collections.abc import Set
@@ -83,7 +128,7 @@ def option_presets(game: str) -> Response:
                 return list(obj)
             return json.JSONEncoder.default(self, obj)
 
-    json_data = json.dumps(world.web.options_presets, cls=SetEncoder)
+    json_data = json.dumps(presets, cls=SetEncoder)
     response = Response(json_data)
     response.headers["Content-Type"] = "application/json"
     return response
@@ -169,14 +214,21 @@ def generate_yaml(game: str):
             else:
                 options[key] = val
 
-        # Detect and build ItemDict options from their name pattern
         for key, val in options.copy().items():
             key_parts = key.rsplit("||", 2)
+            # Detect and build ItemDict options from their name pattern
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
                 if val != "0":
                     options[key_parts[0]][key_parts[1]] = int(val)
+                del options[key]
+
+            # Detect keys which end with -custom, indicating a TextChoice with a possible custom value
+            elif key_parts[-1].endswith("-custom"):
+                if val:
+                    options[key_parts[-1][:-7]] = val
+
                 del options[key]
 
         # Detect random-* keys and set their options accordingly

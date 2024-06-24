@@ -16,6 +16,7 @@ from .regions import create_regions
 
 class LingoWebWorld(WebWorld):
     option_groups = lingo_option_groups
+    rich_text_options_doc = True
     theme = "grass"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -37,7 +38,6 @@ class LingoWorld(World):
 
     base_id = 444400
     topology_present = True
-    data_version = 1
 
     options_dataclass = LingoOptions
     options: LingoOptions
