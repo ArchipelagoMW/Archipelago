@@ -399,6 +399,16 @@ class WitnessPlayerLogic:
         mnt_lasers = world.options.mountain_lasers
         chal_lasers = world.options.challenge_lasers
 
+        # Victory Condition
+        if victory == "elevator":
+            self.VICTORY_LOCATION = "0x3D9A9"
+        elif victory == "challenge":
+            self.VICTORY_LOCATION = "0x0356B"
+        elif victory == "mountain_box_short":
+            self.VICTORY_LOCATION = "0x09F7F"
+        elif victory == "mountain_box_long":
+            self.VICTORY_LOCATION = "0xFFF00"
+
         # Exclude panels from the post-game if shuffle_postgame is false.
         if not world.options.shuffle_postgame:
             adjustment_linesets_in_order += self.handle_postgame(world)
@@ -417,17 +427,6 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_vault_exclusion_list())
             if not victory == "challenge":
                 adjustment_linesets_in_order.append(["Disabled Locations:", "0x0A332"])
-
-        # Victory Condition
-
-        if victory == "elevator":
-            self.VICTORY_LOCATION = "0x3D9A9"
-        elif victory == "challenge":
-            self.VICTORY_LOCATION = "0x0356B"
-        elif victory == "mountain_box_short":
-            self.VICTORY_LOCATION = "0x09F7F"
-        elif victory == "mountain_box_long":
-            self.VICTORY_LOCATION = "0xFFF00"
 
         # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
         # (challenge_lasers <= 7), you can now solve it without opening Mountain Entry first.
@@ -874,7 +873,7 @@ class WitnessPlayerLogic:
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
-        self.VICTORY_LOCATION = "0x0356B"
+        self.VICTORY_LOCATION: str
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser (Symmetry Laser)",
