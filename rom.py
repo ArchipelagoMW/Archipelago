@@ -236,7 +236,7 @@ class StartInventory:
         elif item.type == ItemType.TREASURE:
             treasure_type = item.code - (ap_id_offset + 0x70)
             flag = 1 << (treasure_type % 3)
-            self.level_table[treasure_type / 3 + 1][4] |= flag
+            self.level_table[treasure_type // 3 + 1][4] |= flag
 
     def write(self, patch: WL4ProcedurePatch):
         patch.write_token(
