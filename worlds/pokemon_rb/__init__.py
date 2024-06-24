@@ -3,6 +3,7 @@ import settings
 import typing
 import threading
 import base64
+import random
 from copy import deepcopy
 from typing import TextIO
 
@@ -145,7 +146,7 @@ class PokemonRedBlueWorld(World):
                 continue
             tc_random = world.random
             if world.options.type_chart_seed.value.isdigit():
-                tc_random = multiworld.random.Random()
+                tc_random = random.Random()
                 tc_random.seed(int(world.options.type_chart_seed.value))
 
             if world.options.randomize_type_chart == "vanilla":
