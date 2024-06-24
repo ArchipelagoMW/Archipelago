@@ -1,5 +1,7 @@
 from typing import Dict, Set
 
+from BaseClasses import ItemClassification
+
 from .Names import ItemName
 from .PsychoRandoItems import PSYCHORANDO_ITEM_TABLE
 
@@ -158,6 +160,17 @@ PROGRESSION_SET: Set[str] = {
     *PSI_POWERS,
 }
 
+# Items in the PROGRESSION_SET that should be skipped during progression balancing.
+SKIP_BALANCING_SET: Set[str] = {
+    ItemName.HedgeTrimmers,  # Required to access 3 locations
+    ItemName.RollingPin,  # Required to access 1 location
+    ItemName.FredsLetter,  # Required to access 4 locations
+    ItemName.PricelessCoin,  # Required to access 3 locations
+    ItemName.Musket,  # Required to access 2 locations
+    ItemName.Confusion,  # Required to access 2 locations
+    ItemName.Cake,  # Only required for the Brain Tank goal
+}
+
 USEFUL_SET: Set[str] = {
     ItemName.Vault,
     ItemName.ChallengeMarker,
@@ -200,4 +213,24 @@ ITEM_COUNT: Dict[str, int] = {
     # The extra available Arrowhead Bundles are only used when DeepArrowheadShuffle is enabled.
     ItemName.AHSmall: 30,
     ItemName.AHLarge: 5,
+}
+
+# Classification for each item. Items not in the Dict are assumed to be Filler.
+BASE_ITEM_CLASSIFICATIONS: Dict[str, ItemClassification] = {}
+for item_name in PROGRESSION_SET:
+    if item_name in SKIP_BALANCING_SET:
+        BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.progression_skip_balancing
+    else:
+        BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.progression
+for item_name in USEFUL_SET:
+    BASE_ITEM_CLASSIFICATIONS[item_name] = ItemClassification.useful
+
+# Items where only the first copy is progression balanced.
+# Only one of each PSI Power is progression balanced because there are no locations that require an
+# upgraded PSI Power to access.
+# Only the first Candle is progression balanced because the second candle is only required to access a single
+# location.
+SKIP_BALANCING_FOR_DUPLICATES: Set[str] = {
+    *PSI_POWERS,
+    ItemName.Candle,
 }

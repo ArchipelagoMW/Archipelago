@@ -150,8 +150,6 @@ class PsyRules:
 
             RegionName.ASUPTele: self.has_telekinesis,
 
-            RegionName.ASLBBoss: lambda state: self.has_cake(state) and self.has_pyrokinesis(state),
-
             RegionName.BBA1: self.has_coach_mind,
 
             RegionName.BBA2Duster: self.has_cobweb_duster,

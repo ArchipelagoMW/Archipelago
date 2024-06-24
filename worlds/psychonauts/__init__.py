@@ -1,8 +1,8 @@
-from typing import Mapping, Any, ClassVar, Dict
+from typing import Mapping, Any, ClassVar, Dict, Set
 
 import settings
 from BaseClasses import Item
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from . import Regions
@@ -17,7 +17,9 @@ from .Items import (
     USEFUL_SET,
     ITEM_GROUPS,
     ITEM_COUNT,
-    AP_ITEM_OFFSET
+    AP_ITEM_OFFSET,
+    BASE_ITEM_CLASSIFICATIONS,
+    SKIP_BALANCING_FOR_DUPLICATES,
 )
 from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
 from .Names import ItemName, LocationName
@@ -77,33 +79,53 @@ class PSYWorld(World):
 
     location_name_to_id = {item: id + AP_LOCATION_OFFSET for item, id in ALL_LOCATIONS.items()}
 
+    item_classifications: Dict[str, ItemClassification]
+
+    skip_balancing_if_duplicate: Set[str]
+
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self.item_classifications = BASE_ITEM_CLASSIFICATIONS.copy()
+        # Tracks created items where additional created items with the same name should skip progression balancing.
+        self.skip_balancing_if_duplicate = set()
+
     def generate_early(self) -> None:
         """
-        Using this to make Baggage local only.
+        Using this to make Baggage local only and determine item classifications that depend on options.
         """
         for item in LOCAL_SET:
             self.options.local_items.value.add(item)
+
+        # Set item classifications that depend on options.
+        item_classifications = self.item_classifications
+        goal = self.options.Goal
+
+        # Set brains to Progression, when the Brain Hunt goal is enabled.
+        # Skip balancing because Brains are macguffins and are only required for the goal.
+        if goal == Goal.option_brainhunt or goal == Goal.option_braintank_and_brainhunt:
+            for name in BRAIN_JARS:
+                item_classifications[name] = ItemClassification.progression_skip_balancing
+
+        # Set Birthday Cake to Filler, when the Brain Tank goal is not enabled.
+        if goal == Goal.option_brainhunt:
+            item_classifications[ItemName.Cake] = ItemClassification.filler
 
     def create_item(self, name: str) -> Item:
         """
         Returns created PSYItem
         """
-        if name in BRAIN_JARS:
-            # make brains filler if BrainHunt not a selected option
-            if self.options.Goal == Goal.option_braintank:
-                item_classification = ItemClassification.filler
+        # If an item does not have a classification defined, default to Filler.
+        item_classification = self.item_classifications.get(name, ItemClassification.filler)
+
+        # Some duplicates of Progression items should skip progression balancing because the duplicates are only
+        # required to access very few or no locations.
+        if item_classification == ItemClassification.progression and name in SKIP_BALANCING_FOR_DUPLICATES:
+            if name in self.skip_balancing_if_duplicate:
+                item_classification = ItemClassification.progression_skip_balancing
             else:
-                item_classification = ItemClassification.progression
-        elif name in PROGRESSION_SET:
-            item_classification = ItemClassification.progression
-        elif name in USEFUL_SET:
-            item_classification = ItemClassification.useful
-        else:
-            item_classification = ItemClassification.filler
+                self.skip_balancing_if_duplicate.add(name)
 
-        created_item = PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
-
-        return created_item
+        return PSYItem(name, item_classification, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
         return ItemName.PsiCard
