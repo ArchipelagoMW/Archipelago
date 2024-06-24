@@ -1,20 +1,18 @@
 from __future__ import annotations
 
-import hashlib
 import itertools
 import random
 from pathlib import Path
-from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
-
-import bsdiff4
+import struct
+from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 import Utils
-from worlds.Files import APDeltaPatch
+from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
 
-from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
+from .data import ap_id_offset, encode_str, get_symbol
 from .items import WL4Item, filter_items
 from .types import ItemType, Passage
-from .options import Difficulty, Goal, MusicShuffle, OpenDoors, WarioVoiceShuffle
+from .options import Difficulty, Goal, MusicShuffle, OpenDoors, Portal, SmashThroughHardBlocks
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -26,71 +24,144 @@ MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
 MD5_JP = '99c8ad779a16be513a9fdff502b6f5c2'
 
 
-class WL4DeltaPatch(APDeltaPatch):
+def get_rom_address(name, offset=0):
+    address = get_symbol(name, offset)
+    if not address & 0x8000000:
+        raise ValueError(f"{name}+{offset} is not in ROM (address: {address:07x})")
+    return address & 0x8000000 - 1
+
+
+def patch_instructions(patch: WL4ProcedurePatch, address: int, *instructions: int):
+    patch.write_token(
+        APTokenTypes.WRITE,
+        address,
+        b"".join(inst.to_bytes(2, 'little') for inst in instructions)
+    )
+
+
+class WL4PatchExtensions(APPatchExtension):
+    game = 'Wario Land 4'
+
+    @staticmethod
+    def update_header(caller: APProcedurePatch, rom: bytes) -> bytes:
+        rombuffer = bytearray(rom)
+
+        # Change game name
+        game_name = rombuffer[0xA0:0xAC].decode('ascii')
+        if game_name == 'WARIOLANDE\0\0':
+            game_name = 'WARIOLANDAPE'
+        elif game_name == 'WARIOLAND\0\0\0':
+            game_name = 'WARIOLANDAPJ'
+        else:
+            raise ValueError(f'Unrecognized game name: {game_name}')
+        rombuffer[0xA0:0xAC] = game_name.encode('ascii')
+
+        # Recalculate checksum
+        checksum = 0
+        for i in range(0xA0, 0xBD):
+            checksum -= rombuffer[i]
+        checksum -= 0x19
+        rombuffer[0xBD] = checksum & 0xFF
+
+        return bytes(rombuffer)
+
+    @staticmethod
+    def shuffle_music_and_wario_voice(caller: APProcedurePatch, rom: bytes, music: int, voices: int) -> bytes:
+        local_rom = LocalRom(rom)
+        shuffle_music(local_rom, music)
+        shuffle_wario_voice_sets(local_rom, voices)
+        return bytes(local_rom)
+
+
+class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = MD5_US_EU
     game = 'Wario Land 4'
     patch_file_ending = '.apwl4'
     result_file_ending = '.gba'
 
+    procedure = [
+        ("apply_bsdiff4", ["basepatch.bsdiff"]),
+        ("apply_tokens", ["token_data.bin"]),
+        ("update_header", []),
+    ]
+
     @classmethod
     def get_source_data(cls) -> bytes:
-        return get_base_rom_bytes()
+        with open(get_base_rom_path(), "rb") as stream:
+            return stream.read()
 
 
-class LocalRom():
-    def __init__(self, file: Path, name=None, hash=None):
-        self.name = name
-        self.hash = hash
+def get_base_rom_path(file_name: str = '') -> Path:
+    options = Utils.get_options()
+    if not file_name:
+        file_name = options['wl4_options']['rom_file']
 
-        with open(file, 'rb') as rom_file:
-            rom_bytes = rom_file.read()
-        patch_bytes = data_path('basepatch.bsdiff')
-        self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
+    file_path = Path(file_name)
+    if file_path.exists():
+        return file_path
+    else:
+        return Path(Utils.user_path(file_name))
 
-    def read_bit(self, address: int, bit_number: int, space: Domain = Domain.SYSTEM_BUS) -> bool:
-        address = Domain.ROM.convert_from(space, address)
-        bitflag = (1 << bit_number)
-        return ((self.buffer[address] & bitflag) != 0)
 
-    def read_byte(self, address: int, space: Domain = Domain.SYSTEM_BUS) -> int:
-        address = Domain.ROM.convert_from(space, address)
-        return self.buffer[address]
+def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
+    fill_items(world, patch)
 
-    def read_bytes(self, startaddress: int, length: int, space: Domain = Domain.SYSTEM_BUS) -> bytes:
-        startaddress = Domain.ROM.convert_from(space, startaddress)
-        return self.buffer[startaddress:startaddress + length]
+    # Write player name and number
+    player_name = world.multiworld.player_name[world.player].encode('utf-8')
+    seed_name = world.multiworld.seed_name.encode('utf-8')[:64]
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('PlayerName'),
+        player_name
+    )
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('PlayerID'),
+        world.player.to_bytes(2, 'little'),
+    )
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('SeedName'),
+        seed_name
+    )
 
-    def read_halfword(self, address: int, space: Domain = Domain.SYSTEM_BUS) -> int:
-        assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
-        halfword = self.read_bytes(address, 2, space)
-        return int.from_bytes(halfword, 'little')
+    # Set deathlink
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('DeathLinkFlag'),
+        world.options.death_link.value.to_bytes(1, 'little')
+    )
 
-    def read_word(self, address: int, space: Domain = Domain.SYSTEM_BUS) -> int:
-        assert address % 4 == 0, f'Misaligned word address: {address:x}'
-        word = self.read_bytes(address, 4, space)
-        return int.from_bytes(word, 'little')
+    set_goal(patch, world.options.goal)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('GoldenTreasuresNeeded'),
+        world.options.golden_treasure_count.value.to_bytes(1, 'little')
+    )
+    set_difficulty_level(patch, world.options.difficulty)
 
-    def write_byte(self, address: int, value: int, space: Domain = Domain.SYSTEM_BUS):
-        address = Domain.ROM.convert_from(space, address)
-        self.buffer[address] = value
+    # TODO: Maybe make it stay open so it looks cleaner
+    if (world.options.portal == Portal.option_open):
+        patch_instructions(patch, 0x02AC56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
+        patch_instructions(patch, 0x02ACB2, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
+        patch_instructions(patch, 0x02AE56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_mid()
+        patch_instructions(patch, 0x02B052, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
+        patch_instructions(patch, 0x02B0BE, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
 
-    def write_bytes(self, startaddress: int, values, space: Domain = Domain.SYSTEM_BUS):
-        startaddress = Domain.ROM.convert_from(space, startaddress)
-        self.buffer[startaddress:startaddress + len(values)] = values
+    # Break hard blocks without stopping
+    if (world.options.smash_through_hard_blocks == SmashThroughHardBlocks.option_true):
+        patch_instructions(patch, 0x06ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
+        patch_instructions(patch, 0x06EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
+        patch_instructions(patch, 0x06EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
 
-    def write_halfword(self, address: int, value: int, space: Domain = Domain.SYSTEM_BUS):
-        assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
-        halfword = value.to_bytes(2, 'little')
-        self.write_bytes(address, halfword, space)
+    # Multiworld send
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('SendMultiworldItemsImmediately'),
+        world.options.send_locations_to_server.value.to_bytes(1, 'little')
+    )
 
-    def write_word(self, address: int, value: int, space: Domain = Domain.SYSTEM_BUS):
-        assert address % 4 == 0, f'Misaligned word address: {address:x}'
-        word = value.to_bytes(4, 'little')
-        self.write_bytes(address, word, space)
-
-    def write_to_file(self, file: Path):
-        with open(file, 'wb') as stream:
-            stream.write(self.buffer)
+    patch.write_file("token_data.bin", patch.get_token_binary())
 
 
 class MultiworldExtData(NamedTuple):
@@ -98,7 +169,7 @@ class MultiworldExtData(NamedTuple):
     name: str
 
 
-def fill_items(rom: LocalRom, world: WL4World):
+def fill_items(world: WL4World, patch: WL4ProcedurePatch):
     # Place item IDs and collect multiworld entries
     multiworld_items = {}
     for location in world.multiworld.get_locations(world.player):
@@ -120,25 +191,96 @@ def fill_items(rom: LocalRom, world: WL4World):
             playername = world.multiworld.player_name[playerid]
 
         location_offset = location.level_offset() + location.entry_offset()
-        item_location = get_symbol('ItemLocationTable', location_offset)
-        rom.write_byte(item_location, itemid)
+        patch.write_token(
+            APTokenTypes.WRITE,
+            get_rom_address('ItemLocationTable', location_offset),
+            itemid.to_bytes(1, 'little')
+        )
 
-        ext_data_location = get_symbol('ItemExtDataTable', 4 * location_offset)
+        ext_data_location = get_rom_address('ItemExtDataTable', 4 * location_offset)
         if playername is not None:
             multiworld_items[ext_data_location] = MultiworldExtData(playername, itemname)
         else:
             multiworld_items[ext_data_location] = None
 
-    create_starting_inventory(rom, world)
+    create_starting_inventory(world, patch)
 
-    strings = create_strings(rom, multiworld_items)
-    write_multiworld_table(rom, multiworld_items, strings)
+    strings = create_strings(patch, multiworld_items)
+    write_multiworld_table(patch, multiworld_items, strings)
 
 
-def create_starting_inventory(rom: LocalRom, world: WL4World):
+class StartInventory:
+    level_table: List[List[int]]
+    abilities: int
+    junk_counts: List[int]
+
+    def __init__(self):
+        self.level_table = [[0] * 6 for _ in range(5)]
+        self.abilities = 0
+        self.junk_counts = [0] * 5
+
+    def add(self, item: WL4Item):
+        if item.type == ItemType.JEWEL:
+            for level in range(4):
+                if not self.level_table[item.passage][level] & item.flag:
+                    self.level_table[item.passage][level] |= item.flag
+                    break
+        elif item.type == ItemType.CD:
+            self.level_table[item.passage][item.level] |= 1 << 4
+        elif item.type == ItemType.ABILITY:
+            ability = item.code - (ap_id_offset + 0x40)
+            flag = 1 << ability
+            if ability in (1, 3) and self.abilities & flag:
+                if ability == 1:
+                    ability = 6
+                else:
+                    ability = 7
+                flag = 1 << ability
+            self.abilities |= flag
+        elif item.type == ItemType.ITEM:
+            junk_type = item.code - (ap_id_offset + 0x80)
+            self.junk_counts[junk_type] += 1
+        elif item.type == ItemType.TREASURE:
+            treasure_type = item.code - (ap_id_offset + 0x70)
+            flag = 1 << (treasure_type % 3)
+            self.level_table[treasure_type / 3 + 1][4] |= flag
+
+    def write(self, patch: WL4ProcedurePatch):
+        patch.write_token(
+            APTokenTypes.WRITE,
+            get_rom_address('StartingInventoryItemStatus'),
+            struct.pack("<30B", *(level
+                                  for passage in self.level_table
+                                  for level in passage))
+        )
+        patch.write_token(
+            APTokenTypes.WRITE,
+            get_rom_address('StartingInventoryWarioAbilities'),
+            int.to_bytes(self.abilities, 1, 'little')
+        )
+        patch.write_token(
+            APTokenTypes.WRITE,
+            get_rom_address('StartingInventoryJunkCounts'),
+            struct.pack("<5B", *(min(255, item) for item in self.junk_counts))
+        )
+
+    def __repr__(self):
+        return (f'{type(self).__name__} {{ '
+                f'level_table: {repr(self.level_table)}, '
+                f'abilities: {repr(self.abilities)}, '
+                f'junk_counts: {repr(self.junk_counts)}'
+                f' }}')
+
+    def __str__(self):
+        return repr(self)
+
+
+def create_starting_inventory(world: WL4World, patch: WL4ProcedurePatch):
+    start_inventory = StartInventory()
+
     # Precollected items
     for item in world.multiworld.precollected_items[world.player]:
-        give_item(rom, item)
+        start_inventory.add(item)
 
     # Removed gem pieces
     required_jewels = world.options.required_jewels.value
@@ -150,12 +292,11 @@ def create_starting_inventory(rom: LocalRom, world: WL4World):
             copies = 4 - required_jewels
 
         for _ in range(copies):
-            give_item(rom, WL4Item.from_name(name, world.player))
+            start_inventory.add(WL4Item.from_name(name, world.player))
 
     # Free Keyzer
     def set_keyzer(passage, level):
-        address = level_to_start_inventory_address(passage, level)
-        rom.write_byte(address, rom.read_byte(address) | 0x20)
+        start_inventory.level_table[passage][level] |= 0x20
 
     if world.options.open_doors != OpenDoors.option_off:
         set_keyzer(Passage.ENTRY, 0)
@@ -165,60 +306,15 @@ def create_starting_inventory(rom: LocalRom, world: WL4World):
     if world.options.open_doors.value == OpenDoors.option_open:
         set_keyzer(Passage.GOLDEN, 0)
 
-
-def give_item(rom: LocalRom, item: WL4Item):
-    if item.type == ItemType.JEWEL:
-        for level in range(4):
-            address = level_to_start_inventory_address(item.passage, level)
-            status = rom.read_byte(address)
-            if not status & item.flag:
-                status |= item.flag
-                rom.write_byte(address, status)
-                break
-    elif item.type == ItemType.CD:
-        address = level_to_start_inventory_address(item.passage, item.level)
-        status = rom.read_byte(address)
-        status |= 1 << 4
-        rom.write_byte(address, status)
-    elif item.type == ItemType.ABILITY:
-        ability = item.code - (ap_id_offset + 0x40)
-        flag = 1 << ability
-        address = get_symbol('StartingInventoryWarioAbilities')
-        abilities = rom.read_byte(address)
-        if ability in (1, 3) and abilities & flag:
-            if ability == 1:
-                ability = 6
-            else:
-                ability = 7
-            flag = 1 << ability
-        abilities |= flag
-        rom.write_byte(address, abilities)
-    elif item.type == ItemType.ITEM:
-        junk_type = item.code - (ap_id_offset + 0x80)
-        address = get_symbol('StartingInventoryJunkCounts', junk_type)
-        count = rom.read_byte(address)
-        count += 1
-        rom.write_byte(address, count)
-    elif item.type == ItemType.TREASURE:
-        treasure_type = item.code - (ap_id_offset + 0x70)
-        address = level_to_start_inventory_address(treasure_type / 3 + 1, 4)
-        flag = 1 << (treasure_type % 3)
-        status = rom.read_byte(address)
-        status |= flag
-        rom.write_byte(address, status)
+    start_inventory.write(patch)
 
 
-def level_to_start_inventory_address(passage: Passage, level: int):
-    index = 6 * passage + level
-    return get_symbol('StartingInventoryItemStatus', index)
-
-
-def create_strings(rom: LocalRom,
+def create_strings(patch: WL4ProcedurePatch,
                    multiworld_items: Dict[int, Optional[MultiworldExtData]]
                    ) -> Dict[Optional[str], int]:
     receivers = set()
     items = set()
-    address = get_symbol('MultiworldStringDump')
+    address = get_rom_address('MultiworldStringDump')
     for item in filter(lambda i: i is not None, multiworld_items.values()):
         receivers.add(item.receiver)
         items.add(item.name)
@@ -227,28 +323,43 @@ def create_strings(rom: LocalRom,
     strings = {None: 0}  # Map a string to its address in game
     for string in itertools.chain(receivers, items):
         if string not in strings:
-            strings[string] = address
+            strings[string] = address | 0x8000000
             encoded = encode_str(string) + b'\xFE'
-            rom.write_bytes(address, encoded)
+            patch.write_token(
+                APTokenTypes.WRITE,
+                address,
+                encoded
+            )
             address += len(encoded)
     return strings
 
 
-def write_multiworld_table(rom: LocalRom,
+def write_multiworld_table(patch: WL4ProcedurePatch,
                            multiworld_items: Dict[int, Optional[MultiworldExtData]],
                            strings: Dict[Optional[str], int]):
-    entry_address = get_symbol('MultiworldStringDump')
+    entry_address = get_rom_address('MultiworldStringDump')
     for location_address, item in multiworld_items.items():
         if item is None:
-            rom.write_word(location_address, 0)
+            patch.write_token(
+                APTokenTypes.WRITE,
+                location_address,
+                (0).to_bytes(4, 'little')
+            )
         else:
-            rom.write_word(location_address, entry_address)
-            rom.write_word(entry_address, strings[item.receiver])
-            rom.write_word(entry_address + 4, strings[item.name])
+            patch.write_token(
+                APTokenTypes.WRITE,
+                location_address,
+                (entry_address | 0x8000000).to_bytes(4, 'little')
+            )
+            patch.write_token(
+                APTokenTypes.WRITE,
+                entry_address,
+                struct.pack("<II", strings[item.receiver], strings[item.name])
+            )
             entry_address += 8
 
 
-def set_goal(rom: LocalRom, _goal: Goal):
+def set_goal(patch: WL4ProcedurePatch, _goal: Goal):
     if _goal == Goal.option_local_golden_treasure_hunt:
         goal = Goal.option_golden_treasure_hunt
     elif _goal == Goal.option_local_golden_diva_treasure_hunt:
@@ -256,39 +367,102 @@ def set_goal(rom: LocalRom, _goal: Goal):
     else:
         goal = _goal.value
 
-    rom.write_byte(get_symbol('GoalType'), goal)
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('GoalType'),
+        goal.to_bytes(1, 'little')
+    )
 
     if goal == Goal.option_golden_treasure_hunt:
         # SelectBossDoorInit01() - Check for golden passage instead of boss defeated
-        rom.write_halfword(0x80863C2, 0x46C0)  # nop
-        rom.write_halfword(0x80863C4, 0x4660)  # mov r0, r12
-        rom.write_halfword(0x80863C6, 0x7800)  # ldrb r0, [r0]  ; Passage ID
-        rom.write_halfword(0x80863C8, 0x2805)  # cmp r0, #5  ; Golden Passage
-        rom.write_halfword(0x80863CA, 0xD10D)  # bne 0x80863E8
-
-        rom.write_halfword(0x808640A, 0x1C03)  # mov r3, r0
-        rom.write_halfword(0x808640C, 0x0688)  # lsl r0, r1, #26
-        rom.write_halfword(0x808640E, 0x2B05)  # cmp r3, #5
-        rom.write_halfword(0x8086410, 0xD101)  # beq 0x8086416
+        patch_instructions(
+            patch,
+            0x0863C2,
+            0x46C0,  # nop
+            0x4660,  # mov r0, r12
+            0x7800,  # ldrb r0, [r0]  ; Passage ID
+            0x2805,  # cmp r0, #5  ; Golden Passage
+            0xD10D,  # bne 0x80863E8
+        )
+        patch_instructions(
+            patch,
+            0x08640A,
+            0x1C03,  # mov r3, r0
+            0x0688,  # lsl r0, r1, #26
+            0x2B05,  # cmp r3, #5
+            0xD101,  # beq 0x8086416
+        )
 
     if goal == Goal.option_golden_diva_treasure_hunt:
         # SelectBossDoorInit01() - Always allow into boss room
-        rom.write_halfword(0x80863CA, 0xE00D)  # b 0x80863E8
-        rom.write_halfword(0x808640C, 0x2300)  # mov r3, #0
+        patch_instructions(patch, 0x0863CA, 0xE00D)  # b 0x80863E8
+        patch_instructions(patch, 0x08640C, 0x2300)  # mov r3, #0
 
 
-def set_difficulty_level(rom: LocalRom, difficulty: Difficulty):
+def set_difficulty_level(patch: WL4ProcedurePatch, difficulty: Difficulty):
     # SramtoWork_Load()
     hardcode_difficulty = 0x2000 | difficulty.value  # mov r0, #difficulty
-    rom.write_halfword(0x8091558, hardcode_difficulty)
-    rom.write_halfword(0x8091590, hardcode_difficulty)
+    patch_instructions(patch, 0x091558, hardcode_difficulty)
+    patch_instructions(patch, 0x091590, hardcode_difficulty)
 
     # Difficulty graphics tiles
     for i in range(3):
-        english_addr = 0x8742992 + 2 * i
-        japanese_addr = 0x8742992 + 2 * (3 + i)
-        rom.write_halfword(english_addr, 0x2C0 + 5 * difficulty.value)
-        rom.write_halfword(japanese_addr, 0x2CF + 5 * difficulty.value)
+        english_addr = 0x742992 + 2 * i
+        japanese_addr = 0x742992 + 2 * (3 + i)
+        patch.write_token(
+            APTokenTypes.WRITE,
+            english_addr,
+            (0x2C0 + 5 * difficulty.value).to_bytes(2, 'little')
+        )
+        patch.write_token(
+            APTokenTypes.WRITE,
+            japanese_addr,
+            (0x2CF + 5 * difficulty.value).to_bytes(2, 'little')
+        )
+
+
+class LocalRom():
+    def __init__(self, rom: bytes):
+        self.buffer = bytearray(rom)
+
+    def read_bit(self, address: int, bit_number: int) -> bool:
+        bitflag = (1 << bit_number)
+        return ((self.buffer[address] & bitflag) != 0)
+
+    def read_byte(self, address: int) -> int:
+        return self.buffer[address]
+
+    def read_bytes(self, startaddress: int, length: int) -> bytes:
+        return self.buffer[startaddress:startaddress + length]
+
+    def read_halfword(self, address: int) -> int:
+        assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
+        halfword = self.read_bytes(address, 2)
+        return int.from_bytes(halfword, 'little')
+
+    def read_word(self, address: int) -> int:
+        assert address % 4 == 0, f'Misaligned word address: {address:x}'
+        word = self.read_bytes(address, 4)
+        return int.from_bytes(word, 'little')
+
+    def write_byte(self, address: int, value: int):
+        self.buffer[address] = value
+
+    def write_bytes(self, startaddress: int, values):
+        self.buffer[startaddress:startaddress + len(values)] = values
+
+    def write_halfword(self, address: int, value: int):
+        assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
+        halfword = value.to_bytes(2, 'little')
+        self.write_bytes(address, halfword)
+
+    def write_word(self, address: int, value: int):
+        assert address % 4 == 0, f'Misaligned word address: {address:x}'
+        word = value.to_bytes(4, 'little')
+        self.write_bytes(address, word)
+
+    def __bytes__(self):
+        return bytes(self.buffer)
 
 
 # https://github.com/wario-land/Toge-Docs/blob/master/Steaks/music_and_sound_effects.md#sfx-indices
@@ -332,7 +506,7 @@ other_songs = [  # Not made to play in levels
 ]
 
 
-def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
+def shuffle_music(rom: LocalRom, music_shuffle: int):
     if music_shuffle == MusicShuffle.option_none:
         return
     # music_shuffle >= MusicShuffle.option_levels_only
@@ -342,7 +516,7 @@ def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
     if music_shuffle >= MusicShuffle.option_full:
         music_pool += other_songs
 
-    music_table_address = 0x8098028
+    music_table_address = 0x098028
     # Only change the header pointers; leave the music player numbers alone
     music_info_table = [rom.read_word(music_table_address + 8 * i) for i in range(819)]
 
@@ -356,7 +530,7 @@ def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
 
     # Remove horizontal mixing in Palm Tree Paradise and Mystic Lake
 
-    palm_tree_paradise_doors = range(0x83F30F0, 0x83F3240, 12)
+    palm_tree_paradise_doors = range(0x3F30F0, 0x3F3240, 12)
     # Set most doors' music IDs to 0 (no change)
     for addr in palm_tree_paradise_doors[1:23]:
         rom.write_halfword(addr + 10, 0)
@@ -367,7 +541,7 @@ def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
     # crossfades like it should if I change 2A1 to 2A2
     rom.write_halfword(palm_tree_paradise_doors[24] + 10, 0x2A2)
 
-    mystic_lake_doors = range(0x83F3420, 0x83F3570, 12)
+    mystic_lake_doors = range(0x3F3420, 0x3F3570, 12)
     for addr in mystic_lake_doors[1:23]:
         rom.write_halfword(addr + 10, 0)
     rom.write_halfword(mystic_lake_doors[23] + 10, 0x28F)
@@ -375,13 +549,13 @@ def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
     rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
 
 
-def shuffle_wario_voice_sets(rom: LocalRom, shuffle: WarioVoiceShuffle):
-    if not shuffle.value:
+def shuffle_wario_voice_sets(rom: LocalRom, shuffle: int):
+    if not shuffle:
         return
 
-    voice_set_pointer_address = 0x86D3648
+    voice_set_pointer_address = 0x6D3648
     voice_set_pointers = [rom.read_word(voice_set_pointer_address + 4 * i) for i in range(12)]
-    voice_set_length_address = 0x86D3394
+    voice_set_length_address = 0x6D3394
     voice_set_lengths = [rom.read_word(voice_set_length_address + 4 * i) for i in range(12)]
     voice_sets = list(zip(voice_set_pointers, voice_set_lengths))
 
@@ -389,90 +563,3 @@ def shuffle_wario_voice_sets(rom: LocalRom, shuffle: WarioVoiceShuffle):
     for i, (pointer, length) in enumerate(voice_sets):
         rom.write_word(voice_set_pointer_address + 4 * i, pointer)
         rom.write_word(voice_set_length_address + 4 * i, length)
-
-
-def update_header(rom: LocalRom):
-    # Change game name
-    game_name = rom.read_bytes(0x80000A0, 12).decode('ascii')
-    if game_name == 'WARIOLANDE\0\0':
-        game_name = 'WARIOLANDAPE'
-    elif game_name == 'WARIOLAND\0\0\0':
-        game_name = 'WARIOLANDAPJ'
-    rom.write_bytes(0x80000A0, game_name.encode('ascii'))
-
-    # Recalculate checksum
-    checksum = 0
-    for i in range(0x0A0, 0x0BD):
-        checksum -= rom.read_byte(i, Domain.ROM)
-    checksum -= 0x19
-    rom.write_byte(0x80000BD, checksum & 0xFF)
-
-
-def patch_rom(rom: LocalRom, world: WL4World):
-    update_header(rom)
-
-    fill_items(rom, world)
-
-    # Write player name and number
-    player_name = world.multiworld.player_name[world.player].encode('utf-8')
-    seed_name = world.multiworld.seed_name.encode('utf-8')[:64]
-    rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_word(get_symbol('PlayerID'), world.player)
-    rom.write_bytes(get_symbol('SeedName'), seed_name)
-
-    # Set deathlink
-    rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
-
-    set_goal(rom, world.options.goal)
-    rom.write_byte(get_symbol('GoldenTreasuresNeeded'), world.options.golden_treasure_count.value)
-    set_difficulty_level(rom, world.options.difficulty)
-
-    # TODO: Maybe make it stay open so it looks cleaner
-    if (world.options.portal.value):
-        rom.write_halfword(0x802AC56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
-        rom.write_halfword(0x802ACB2, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
-        rom.write_halfword(0x802AE56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_mid()
-        rom.write_halfword(0x802B052, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
-        rom.write_halfword(0x802B0BE, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
-
-    # Break hard blocks without stopping
-    if (world.options.smash_through_hard_blocks.value):
-        rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
-        rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
-        rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
-
-    # Multiworld send
-    rom.write_byte(get_symbol('SendMultiworldItemsImmediately'),
-                   world.options.send_locations_to_server.value)
-
-    shuffle_music(rom, world.options.music_shuffle)
-    shuffle_wario_voice_sets(rom, world.options.wario_voice_shuffle)
-
-
-def get_base_rom_bytes(file_name: str = '') -> bytes:
-    base_rom_bytes = getattr(get_base_rom_bytes, 'base_rom_bytes', None)
-    if not base_rom_bytes:
-        file_path = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(open(file_path, 'rb').read())
-
-        basemd5 = hashlib.md5()
-        basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in (MD5_US_EU, MD5_JP):
-            raise Exception('Supplied base ROM does not match the US/EU or '
-                            'Japanese version of Wario Land 4. Please provide '
-                            'the correct ROM version')
-
-        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
-    return base_rom_bytes
-
-
-def get_base_rom_path(file_name: str = '') -> Path:
-    options = Utils.get_options()
-    if not file_name:
-        file_name = options['wl4_options']['rom_file']
-
-    file_path = Path(file_name)
-    if file_path.exists():
-        return file_path
-    else:
-        return Path(Utils.user_path(file_name))

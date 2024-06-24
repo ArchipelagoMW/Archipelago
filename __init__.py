@@ -6,11 +6,12 @@ from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .client import WL4Client
+from .data import data_path
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
 from .locations import location_name_to_id, location_table
 from .options import Goal, GoldenJewels, PoolJewels, WL4Options
 from .regions import connect_regions, create_regions
-from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
+from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
 from .rules import set_access_rules
 from .types import ItemType, LocationType, Passage
 
@@ -20,7 +21,7 @@ class WL4Settings(settings.Group):
         '''File name of the Wario Land 4 ROM'''
         description = 'Wario Land 4 ROM File'
         copy_to = 'Wario Land 4.gba'
-        md5s = [WL4DeltaPatch.hash]
+        md5s = [MD5_US_EU, MD5_JP]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: bool = True
@@ -172,26 +173,16 @@ class WL4World(World):
     def generate_output(self, output_directory: str):
         output_path = Path(output_directory)
 
-        try:
-            world = self.multiworld
-            player = self.player
-            rom = LocalRom(get_base_rom_path())
-            patch_rom(rom, self)
+        patch = WL4ProcedurePatch()
+        patch.write_file('basepatch.bsdiff', data_path('basepatch.bsdiff'))
+        write_tokens(self, patch)
+        patch.procedure.append((
+            'shuffle_music_and_wario_voice',
+            [self.options.music_shuffle.value, self.options.wario_voice_shuffle.value]
+        ))
 
-            rompath = output_path / f'{world.get_out_file_name_base(player)}.gba'
-            rom.write_to_file(rompath)
-            self.rom_name = rom.name
-
-            patch = WL4DeltaPatch(
-                rompath.with_suffix(WL4DeltaPatch.patch_file_ending),
-                player=player,
-                player_name = world.player_name[player],
-                patched_path = rompath
-            )
-            patch.write()
-        finally:
-            if rompath.exists():
-                rompath.unlink()
+        output_filename = self.multiworld.get_out_file_name_base(self.player)
+        patch.write(output_path / f'{output_filename}{patch.patch_file_ending}')
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
