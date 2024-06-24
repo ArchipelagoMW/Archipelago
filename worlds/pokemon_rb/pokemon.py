@@ -325,7 +325,7 @@ def process_pokemon_data(self):
     if self.options.accessibility != "minimal" or ((not
             self.options.badgesanity) and max(self.options.elite_four_badges_condition,
             self.options.route_22_gate_condition, self.options.victory_road_condition)
-            > 7) or (self.multiworld.door_shuffle not in ("off", "simple")):
+            > 7) or (self.options.door_shuffle not in ("off", "simple")):
         hm_verify += ["Cut"]
     if (self.options.accessibility != "minimal" or (not self.options.dark_rock_tunnel_logic) and
             ((self.options.trainersanity or self.options.extra_key_items) or self.options.door_shuffle)):
@@ -349,7 +349,7 @@ def verify_hm_moves(multiworld, world, player):
     def intervene(move, test_state):
         move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
         viable_mons = [mon for mon in world.local_poke_data if world.local_poke_data[mon]["tms"][6] & move_bit]
-        if multiworld.randomize_wild_pokemon[player] and viable_mons:
+        if world.options.randomize_wild_pokemon and viable_mons:
             accessible_slots = [loc for loc in multiworld.get_reachable_locations(test_state, player) if
                                 loc.type == "Wild Encounter"]
 
@@ -361,7 +361,7 @@ def verify_hm_moves(multiworld, world, player):
 
             placed_mons = [slot.item.name for slot in accessible_slots]
 
-            if multiworld.area_1_to_1_mapping[player]:
+            if world.options.area_1_to_1_mapping:
                 placed_mons.sort(key=lambda i: number_of_zones(i))
             else:
                 # this sort method doesn't work if you reference the same list being sorted in the lambda
@@ -369,10 +369,10 @@ def verify_hm_moves(multiworld, world, player):
                 placed_mons.sort(key=lambda i: placed_mons_copy.count(i))
 
             placed_mon = placed_mons.pop()
-            replace_mon = multiworld.random.choice(viable_mons)
-            replace_slot = multiworld.random.choice([slot for slot in accessible_slots if slot.item.name
+            replace_mon = world.random.choice(viable_mons)
+            replace_slot = world.random.choice([slot for slot in accessible_slots if slot.item.name
                                                           == placed_mon])
-            if multiworld.area_1_to_1_mapping[player]:
+            if world.options.area_1_to_1_mapping:
                 zone = " - ".join(replace_slot.name.split(" - ")[:-1])
                 replace_slots = [slot for slot in accessible_slots if slot.name.startswith(zone) and slot.item.name
                                  == placed_mon]
@@ -384,7 +384,7 @@ def verify_hm_moves(multiworld, world, player):
             tms_hms = world.local_tms + poke_data.hm_moves
             flag = tms_hms.index(move)
             mon_list = [mon for mon in poke_data.pokemon_data.keys() if test_state.has(mon, player)]
-            multiworld.random.shuffle(mon_list)
+            world.random.shuffle(mon_list)
             mon_list.sort(key=lambda mon: world.local_move_data[move]["type"] not in
                           [world.local_poke_data[mon]["type1"], world.local_poke_data[mon]["type2"]])
             for mon in mon_list:
@@ -403,24 +403,24 @@ def verify_hm_moves(multiworld, world, player):
         # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
         # as you will require cut to access celadon gyn
         elif ((not logic.can_learn_hm(test_state, world, "Cut", player)) and
-                (multiworld.accessibility[player] != "minimal" or ((not
-                multiworld.badgesanity[player]) and max(
-                multiworld.elite_four_badges_condition[player],
-                multiworld.route_22_gate_condition[player],
-                multiworld.victory_road_condition[player])
-                > 7) or (multiworld.door_shuffle[player] not in ("off", "simple")))):
+                (world.options.accessibility != "minimal" or ((not
+                world.options.badgesanity) and max(
+                world.options.elite_four_badges_condition,
+                world.options.route_22_gate_condition,
+                world.options.victory_road_condition)
+                > 7) or (world.options.door_shuffle not in ("off", "simple")))):
             intervene_move = "Cut"
         elif ((not logic.can_learn_hm(test_state, world, "Flash", player))
-               and multiworld.dark_rock_tunnel_logic[player]
-               and (multiworld.accessibility[player] != "minimal"
-                    or multiworld.door_shuffle[player])):
+               and world.options.dark_rock_tunnel_logic
+               and (world.options.accessibility != "minimal"
+                    or world.options.door_shuffle)):
             intervene_move = "Flash"
         # If no Pokémon can learn Fly, then during door shuffle it would simply not treat the free fly maps
         # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
         # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
         # considered in door shuffle.
         elif ((not logic.can_learn_hm(test_state, world, "Fly", player))
-                and multiworld.door_shuffle[player] not in
+                and world.options.door_shuffle not in
                 ("off", "simple") and [world.fly_map, world.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
             intervene_move = "Fly"
         if intervene_move:

@@ -2263,11 +2263,11 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             # Celadon Gym in Pewter City and need one or more badges for Viridian City gym.
             # No gym leaders would be reachable.
-            if gyms[3] == placed_gyms[0] and multiworld.viridian_gym_condition[player] > 0:
+            if gyms[3] == placed_gyms[0] and world.options.viridian_gym_condition > 0:
                 return True
 
             # Celadon Gym not on Cinnabar Island or can access Viridian City gym with one badge
-            if not gyms[3] == placed_gyms[6] and multiworld.viridian_gym_condition[player] > 1:
+            if not gyms[3] == placed_gyms[6] and world.options.viridian_gym_condition > 1:
                 return False
 
             # At this point we need to see if we can get beyond Pewter/Cinnabar with just one badge
