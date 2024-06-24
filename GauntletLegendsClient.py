@@ -1,7 +1,7 @@
 import asyncio
 import socket
 import traceback
-from typing import List
+from typing import List, Optional
 
 import Patch
 import Utils
@@ -55,7 +55,7 @@ class RetroSocket:
         await asyncio.sleep(0)
         self.socket.sendto(message.encode(), (self.host, self.port))
 
-    async def read(self, message) -> bytes | None:
+    async def read(self, message) -> Optional[bytes]:
         await asyncio.sleep(0)
         self.socket.sendto(message.encode(), (self.host, self.port))
 
@@ -268,7 +268,7 @@ class GauntletLegendsContext(CommonContext):
                 await self.socket.read(
                     message_format(
                         READ,
-                        f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 10) * 0x3C})",
+                        f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 10) * 0x3C}",
                     ),
                 ),
             )
@@ -283,7 +283,7 @@ class GauntletLegendsContext(CommonContext):
                 await self.socket.read(
                     message_format(
                         READ,
-                        f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C})",
+                        f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C}",
                     ),
                 ),
             )
@@ -511,15 +511,13 @@ class GauntletLegendsContext(CommonContext):
             level = [0x1, 0xF]
         players = await self.active_players()
         player_level = await self.player_level()
-        scale_value = (
-            min(self.clear_counts.get(str(level), 0), 3)
-            if self.glslotdata["scale"] == 1
-            else min(max(((player_level - difficulty_convert[level[1]]) // 5), 0), 3)
-        )
-        if level[1] == 2 and self.clear_counts.get(str(level), 0) != 0:
-            scale_value -= min(player_level // 10, 3)
+        max_value: int = self.glslotdata["max"]
+        scale_value = min(max(((player_level - difficulty_convert[level[1]]) // 5), 0), 3)
+        if self.glslotdata["instant_max"] == 1:
+            scale_value = max_value
+        mountain_value = min(player_level // 10, 3) if level[1] == 2 and self.clear_counts.get(str(level), 0) != 0 else 0
         await self.socket.write(
-            message_format(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, 4), 'x')}"),
+            message_format(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, max_value) - mountain_value, 'x')}"),
         )
         self.scaled = True
 
@@ -539,16 +537,16 @@ class GauntletLegendsContext(CommonContext):
         if self.movement != 0x12:
             level = [0x1, 0xF]
         self.current_level = level
+        players = await self.active_players()
         if self.clear_counts.get(str(level), 0) != 0:
-            difficulty = await self.active_players() + (0 if level[1] != 2 else min(await self.player_level() // 10, 3))
+            self.difficulty = players + (0 if level[1] != 2 else min(await self.player_level() // 10, 3))
         else:
-            difficulty = await self.active_players()
-        self.difficulty = difficulty
+            self.difficulty = players
         _id = level[0]
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
         raw_locations = [
-            location for location in level_locations.get((level[1] << 4) + _id, []) if difficulty >= location.difficulty
+            location for location in level_locations.get((level[1] << 4) + _id, []) if self.difficulty >= location.difficulty
         ]
         await ctx.send_msgs(
             [
@@ -589,8 +587,9 @@ class GauntletLegendsContext(CommonContext):
                or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
                and location not in self.obelisk_locations
         ]
+        max_value: int = self.glslotdata['max']
         logger.info(
-            f"Locations: {len(self.obelisk_locations + self.item_locations + self.chest_locations)} Difficulty: {self.difficulty}",
+            f"Locations: {len([location for location in self.obelisk_locations + self.item_locations + self.chest_locations if location.difficulty <= max_value and location.id not in self.locations_checked])} Difficulty: {max_value}",
         )
 
     # Compare values of loaded objects to see if they have been collected
@@ -721,6 +720,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
     while not ctx.exit_event.is_set():
         if ctx.retro_connected:
             cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
+            pl_str: str = f"gl_pl_T{ctx.team}_P{ctx.slot}"
             try:
                 ctx.set_notify(cc_str)
                 if not ctx.auth:
@@ -728,6 +728,23 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     continue
             except Exception:
                 logger.info(traceback.format_exc())
+            player_level = await ctx.player_level()
+            await ctx.send_msgs(
+                [
+                    {
+                        "cmd": "Set",
+                        "key": pl_str,
+                        "default": {},
+                        "want_reply": True,
+                        "operations": [
+                            {
+                                "operation": "replace",
+                                "value": player_level,
+                            },
+                        ],
+                    },
+                ],
+            )
             if ctx.limbo:
                 try:
                     limbo = await ctx.limbo_check(0x78)
@@ -810,7 +827,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
 
 
 def launch():
-    Utils.init_logging("GLClient", exception_logger="Client")
+    Utils.init_logging("GauntletLegendsClient", exception_logger="Client")
 
     async def main():
         parser = get_base_parser()
