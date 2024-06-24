@@ -89,7 +89,7 @@ after_home_water_locations = [
     "Cathedral Underground, third bulb in the top left part",
     "Cathedral Underground, bulb close to the save crystal",
     "Cathedral Underground, bulb in the bottom right path",
-    "Cathedral boss area, beating Mithalan God",
+    "Mithalas boss area, beating Mithalan God",
     "Kelp Forest top left area, bulb in the bottom left clearing",
     "Kelp Forest top left area, bulb in the path down from the top left clearing",
     "Kelp Forest top left area, bulb in the top left clearing",

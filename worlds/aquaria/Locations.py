@@ -240,7 +240,7 @@ class AquariaLocations:
     }
 
     locations_cathedral_boss = {
-        "Cathedral boss area, beating Mithalan God": 698202,
+        "Mithalas boss area, beating Mithalan God": 698202,
     }
 
     locations_forest_tl = {

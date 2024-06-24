@@ -16,7 +16,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
 
     unfillable_locations = [
         "Energy Temple boss area, Fallen God Tooth",
-        "Cathedral boss area, beating Mithalan God",
+        "Mithalas boss area, beating Mithalan God",
         "Kelp Forest boss area, beating Drunian God",
         "Sun Temple boss area, beating Sun God",
         "Sunken City, bulb on top of the boss area",

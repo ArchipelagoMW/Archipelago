@@ -205,6 +205,7 @@ class AquariaWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarianTranslate": bool(self.options.aquarian_translation.value),
+                "blindGoal": bool(self.options.blind_goal.value),
                 "secret_needed": self.options.objective.value > 0,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,

@@ -111,6 +111,14 @@ class BindSongNeededToGetUnderRockBulb(Toggle):
     display_name = "Bind song needed to get sing bulbs under rocks"
 
 
+class BlindGoal(Toggle):
+    """
+    Hide the goal's requirements from the help page so that you have to go to the last boss door to know
+    what is needed to access the boss.
+    """
+    display_name = "Hide the goal's requirements"
+
+
 class UnconfineHomeWater(Choice):
     """
     Open the way out of the Home Water area so that Naija can go to open water and beyond without the bind song.
@@ -142,4 +150,5 @@ class AquariaOptions(PerGameCommonOptions):
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
     skip_first_vision: SkipFirstVision
+    blind_goal: BlindGoal
     death_link: DeathLink
