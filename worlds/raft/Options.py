@@ -1,4 +1,5 @@
-from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink
+from dataclasses import dataclass
+from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink, PerGameCommonOptions
 
 class MinimumResourcePackAmount(Range):
     """The minimum amount of resources available in a resource pack"""
@@ -70,16 +71,16 @@ class PaddleboardMode(Toggle):
     recommended."""
     display_name = "Paddleboard Mode"
 
-raft_options = {
-    "minimum_resource_pack_amount": MinimumResourcePackAmount,
-    "maximum_resource_pack_amount": MaximumResourcePackAmount,
-    "duplicate_items": DuplicateItems,
-    "filler_item_types": FillerItemTypes,
-    "island_frequency_locations": IslandFrequencyLocations,
-    "island_generation_distance": IslandGenerationDistance,
-    "expensive_research": ExpensiveResearch,
-    "progressive_items": ProgressiveItems,
-    "big_island_early_crafting": BigIslandEarlyCrafting,
-    "paddleboard_mode": PaddleboardMode,
-    "death_link": DeathLink
-}
+@dataclass
+class RaftOptions(PerGameCommonOptions):
+    minimum_resource_pack_amount: MinimumResourcePackAmount
+    maximum_resource_pack_amount: MaximumResourcePackAmount
+    duplicate_items: DuplicateItems
+    filler_item_types: FillerItemTypes
+    island_frequency_locations: IslandFrequencyLocations
+    island_generation_distance: IslandGenerationDistance
+    expensive_research: ExpensiveResearch
+    progressive_items: ProgressiveItems
+    big_island_early_crafting: BigIslandEarlyCrafting
+    paddleboard_mode: PaddleboardMode
+    death_link: DeathLink
