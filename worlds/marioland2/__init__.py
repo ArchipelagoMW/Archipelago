@@ -96,8 +96,10 @@ class MarioLand2World(World):
 
     def generate_early(self):
         self.sprite_data = deepcopy(level_sprites)
-        randomize_enemies(self.sprite_data, self.random)
-        randomize_platforms(self.sprite_data, self.random)
+        if self.options.randomize_enemies:
+            randomize_enemies(self.sprite_data, self.random)
+        if self.options.randomize_platforms:
+            randomize_platforms(self.sprite_data, self.random)
 
         if self.options.marios_castle_midway_bell:
             self.sprite_data["Mario's Castle"][35]["sprite"] = "Midway Bell"
@@ -310,6 +312,7 @@ class MarioLand2World(World):
                 ["Mushroom", "Fire Flower", "Carrot"], self.player) and has_pipe_right(state, self.player))
                 or state.has("Mario Zone 1 Midway Bell", self.player),
             "Mario Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
+            "Turtle Zone 1 - Normal Exit": lambda state: logic.not_blocked_by_sharks(state, self.player),
             "Turtle Zone 2 - Normal Exit": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
                 state, self.player) and has_pipe_right(state, self.player) and has_pipe_left(state, self.player)
                 and state.has("Water Physics", self.player) and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
@@ -509,7 +512,7 @@ class MarioLand2World(World):
         return MarioLand2Item(name, items[name], self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self):
-        return "Super Star Duration Increase"
+        return "1 Coin"
 
     def modify_multidata(self, multidata: dict):
         rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
