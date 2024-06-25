@@ -410,14 +410,10 @@ class GauntletLegendsContext(CommonContext):
                 + item.type
                 + int.to_bytes(item.count, 4, "little")
                 + int.to_bytes(item.p_addr, 3, "little")
+                + int.to_bytes(0xE0) if item.p_addr != 0 else int.to_bytes(0xE0)
+                + int.to_bytes(item.n_addr, 3, "little")
+                + int.to_bytes(0xE0) if item.n_addr != 0 else bytes()
         )
-        if item.p_addr != 0:
-            b += int.to_bytes(0xE0)
-        else:
-            b += int.to_bytes(0x0)
-        b += int.to_bytes(item.n_addr, 3, "little")
-        if item.n_addr != 0:
-            b += int.to_bytes(0xE0)
         await self.socket.write(message_format(WRITE, param_format(item.addr, b)))
 
     async def server_auth(self, password_requested: bool = False):
@@ -467,9 +463,9 @@ class GauntletLegendsContext(CommonContext):
                 await self.inv_update("Key", 9000)
             temp = await self.item_from_name("Speed Boots")
             if temp is None and self.glslotdata["speed"] == 1:
-                await self.inv_update("Speed Boots", 200)
+                await self.inv_update("Speed Boots", 2000)
             i = compass.count
-            if i - 1 != len(self.items_received):
+            if i - 1 < len(self.items_received):
                 for index in range(i - 1, len(self.items_received)):
                     item = self.items_received[index].item
                     await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
@@ -479,18 +475,16 @@ class GauntletLegendsContext(CommonContext):
     async def read_time(self) -> int:
         return int.from_bytes(await self.socket.read(message_format(READ, f"0x{format(TIME, 'x')} 2")), "little")
 
-    # Read player input values in RAM
-    async def read_input(self) -> int:
-        return int.from_bytes(await self.socket.read(message_format(READ, f"0x{format(INPUT, 'x')} 1")))
-
     # Read currently loaded level in RAM
     async def read_level(self) -> bytes:
-        return await self.socket.read(message_format(READ, f"0x{format(ACTIVE_LEVEL, 'x')} 2"))
+        level = await self.socket.read(message_format(READ, f"0x{format(ACTIVE_LEVEL, 'x')} 2"))
+        return level
 
     # Read value that is 1 while a level is currently loading
     async def check_loading(self) -> bool:
         if self.in_portal or self.level_loading:
-            return await self.read_time() == 0
+            time = await self.read_time()
+            return time == 0
         return False
 
     # Read number of loaded players in RAM
@@ -515,7 +509,7 @@ class GauntletLegendsContext(CommonContext):
         scale_value = min(max(((player_level - difficulty_convert[level[1]]) // 5), 0), 3)
         if self.glslotdata["instant_max"] == 1:
             scale_value = max_value
-        mountain_value = min(player_level // 10, 3) if level[1] == 2 and self.clear_counts.get(str(level), 0) != 0 else 0
+        mountain_value = min(player_level // 10, 3)
         await self.socket.write(
             message_format(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, max_value) - mountain_value, 'x')}"),
         )
@@ -605,7 +599,8 @@ class GauntletLegendsContext(CommonContext):
                     self.locations_checked += [self.item_locations[i].id]
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
-            if await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name]):
+            ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name])
+            if ob:
                 self.locations_checked += [self.obelisk_locations[j].id]
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):
@@ -816,8 +811,10 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     checking = await ctx.location_loop()
                     if checking:
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
-                    if not ctx.finished_game and await ctx.inv_bitwise("Hell", 0x100):
+                    bitwise = await ctx.inv_bitwise("Hell", 0x100)
+                    if not ctx.finished_game and bitwise:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                        ctx.finished_game = True
                 except Exception:
                     logger.info(traceback.format_exc())
             await asyncio.sleep(0.1)

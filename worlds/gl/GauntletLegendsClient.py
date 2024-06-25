@@ -238,7 +238,6 @@ class GauntletLegendsContext(CommonContext):
     async def inv_bitwise(self, name: str, bit: int) -> bool:
         item = await self.item_from_name(name)
         if item is None:
-            logger.info("NONE")
             return False
         return (item.count & bit) != 0
 
@@ -599,7 +598,6 @@ class GauntletLegendsContext(CommonContext):
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
             ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name])
-            logger.info(ob)
             if ob:
                 self.locations_checked += [self.obelisk_locations[j].id]
                 acquired += [self.obelisk_locations[j].id]
@@ -715,6 +713,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
     while not ctx.exit_event.is_set():
         if ctx.retro_connected:
             cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
+            pl_str: str = f"gl_pl_T{ctx.team}_P{ctx.slot}"
             try:
                 ctx.set_notify(cc_str)
                 if not ctx.auth:
@@ -722,6 +721,23 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     continue
             except Exception:
                 logger.info(traceback.format_exc())
+            player_level = await ctx.player_level()
+            await ctx.send_msgs(
+                [
+                    {
+                        "cmd": "Set",
+                        "key": pl_str,
+                        "default": {},
+                        "want_reply": True,
+                        "operations": [
+                            {
+                                "operation": "replace",
+                                "value": player_level,
+                            },
+                        ],
+                    },
+                ],
+            )
             if ctx.limbo:
                 try:
                     limbo = await ctx.limbo_check(0x78)
