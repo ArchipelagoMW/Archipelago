@@ -144,7 +144,6 @@ SLOT_DATA_OPTIONS: List[str] = [
     "StartingLevitation",
     "StartingMentalMagnet",
     "LootboxVaults",
-    "FasterLindaBoss",
     "EasyMillaRace",
     "EasyFlightMode",
     "EnemyDamageMultiplier",
