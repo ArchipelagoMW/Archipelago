@@ -31,7 +31,7 @@ Mushroom, you will drop straight down to Small Mario.
 - Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
 increase it.
 
-Additionally, the following items can be shuffled depending on your YAML settings:
+Additionally, the following items can be shuffled depending on your YAML options:
 - The 6 Golden Coins: note that the game will still show you the coin being sent to the castle when defeating a boss
 regardless of whether the coin is actually obtained in that location.
 - Mario Coin Fragments: As an alternative to shuffling the 6 Golden Coins, you can shuffle Mario Coin Fragments,
