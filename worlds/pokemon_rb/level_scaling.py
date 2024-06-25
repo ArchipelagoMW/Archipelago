@@ -41,7 +41,8 @@ def level_scaling(multiworld):
                     # reach them earlier. We treat them both as reachable right away for this purpose
                     return True
                 if (location.name == "Route 25 - Item" and state.can_reach("Route 25", "Region", location.player)
-                        and multiworld.worlds[location.player].options.blind_trainers.value < 100):
+                        and multiworld.worlds[location.player].options.blind_trainers.value < 100
+                        and "Route 25 - Jr. Trainer M" not in multiworld.regions.location_cache[location.player]):
                     # Assume they will take their one chance to get the trainer to walk out of the way to reach
                     # the item behind them
                     return True
