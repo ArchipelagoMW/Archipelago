@@ -25,7 +25,7 @@ class GoldenCoinsRequired(Range):
 
 class MarioCoinFragmentPercentage(Range):
     """Percentage of filler items to be replaced with Mario Coin Fragments. Note that the Coinsanity and Coinsanity
-    Checks settings will greatly impact the number of replaceable filler items. There may be as few as 6 available
+    Checks options will greatly impact the number of replaceable filler items. There may be as few as 6 available
     slots for Mario Coin Fragments if Coinsanity is off."""
     display_name = "Mario Coin Fragment Percentage"
     range_start = 1
