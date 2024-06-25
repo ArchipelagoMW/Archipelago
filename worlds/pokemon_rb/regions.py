@@ -1951,6 +1951,9 @@ def create_regions(world):
                 for entrance in reversed(region.exits):
                     if isinstance(entrance, PokemonRBWarp):
                         region.exits.remove(entrance)
+                for entrance in reversed(region.entrances):
+                    if isinstance(entrance, PokemonRBWarp):
+                        region.entrances.remove(entrance)
             multiworld.regions.entrance_cache[world.player] = cache.copy()
             if badge_locs:
                 for loc in badge_locs:
@@ -2348,6 +2351,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                             return found_exit
                 return None
 
+            e = multiworld.get_entrance("Underground Path Route 5 to Underground Path North South", 1)
             while True:
                 for entrance_a in full_interiors:
                     if search_for_exit(entrance_a, entrance_a.parent_region, set()) is None:
