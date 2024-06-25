@@ -156,6 +156,9 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append instantdeath setting
     randoseed_parts.append(f"           Ob.instantdeath = {_lua_bool(self.options.InstantDeathMode)}\n")
 
+    # append fasterLLLL setting
+    randoseed_parts.append(f"           Ob.fasterLLLL = {_lua_bool(self.options.FasterLindaBoss)}\n")
+
     # append easymillarace setting
     randoseed_parts.append(f"           Ob.easymillarace = {_lua_bool(self.options.EasyMillaRace)}\n")
 
