@@ -145,6 +145,7 @@ class EnergyLink(Toggle):
 
 
 
+
 @dataclass
 class SML2Options(PerGameCommonOptions):
     shuffle_golden_coins: ShuffleGoldenCoins
