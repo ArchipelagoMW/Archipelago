@@ -270,7 +270,7 @@ class PokemonRedBlueWorld(World):
 
         self.trainersanity_table = [
             *(True for _ in range(self.options.trainersanity.value)),
-            *(False for _ in range(317 - self.options.dexsanity.value))
+            *(False for _ in range(317 - self.options.trainersanity.value))
         ]
         self.random.shuffle(self.trainersanity_table)
 
