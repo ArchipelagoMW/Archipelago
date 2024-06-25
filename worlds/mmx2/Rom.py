@@ -1,56 +1,56 @@
 import typing
-import bsdiff4
 import Utils
 import hashlib
 import os
-from typing import Optional
-from pkgutil import get_data
 
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
-from .Weaknesses import boss_weakness_data
+STARTING_ID = 0xBE0C00
 
-HASH_US = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
-HASH_LEGACY = 'ff683b75e75e9b59f0c713c7512a016b'
+action_names = ("SHOT", "JUMP", "DASH", "SELECT_L", "SELECT_R", "MENU")
+action_buttons = ("Y", "B", "A", "L", "R", "X", "START", "SELECT")
+
+HASH_US = '67905b989b00046db06df3434ed79f04'
+HASH_LEGACY = 'a8aa24df75686a5bb1a08a27d1876f5f'
 
 weapon_rom_data = {
-    0xBD000B: [0x1FC8, 0xFF],
-    0xBD000C: [0x1FBC, 0xFF],
-    0xBD000D: [0x1FCA, 0xFF],
-    0xBD000E: [0x1FC0, 0xFF],
-    0xBD000F: [0x1FC2, 0xFF],
-    0xBD0010: [0x1FC4, 0xFF],
-    0xBD0011: [0x1FC6, 0xFF],
-    0xBD0012: [0x1FBE, 0xFF],
-    0xBD001A: [0x1FB2, 0xE0],
+    STARTING_ID + 0x000B: [0x1FC1, 0xFF],
+    STARTING_ID + 0x000C: [0x1FBD, 0xFF],
+    STARTING_ID + 0x000D: [0x1FC9, 0xFF],
+    STARTING_ID + 0x000E: [0x1FBF, 0xFF],
+    STARTING_ID + 0x000F: [0x1FC7, 0xFF],
+    STARTING_ID + 0x0010: [0x1FBB, 0xFF],
+    STARTING_ID + 0x0011: [0x1FC3, 0xFF],
+    STARTING_ID + 0x0012: [0x1FC5, 0xFF],
+    STARTING_ID + 0x001A: [0x1FB1, 0x80],
 }
 
 upgrades_rom_data = {
-    0xBD001C: [0x00],
-    0xBD001D: [0x02],
-    0xBD001E: [0x01],
-    0xBD001F: [0x03],
+    STARTING_ID + 0x001C: [0x00],
+    STARTING_ID + 0x001D: [0x02],
+    STARTING_ID + 0x001E: [0x01],
+    STARTING_ID + 0x001F: [0x03],
 }
 
 boss_access_rom_data = {
-    0xBD0009: [0x00],
-    0xBD0005: [0x01],
-    0xBD0008: [0x03],
-    0xBD0002: [0x04],
-    0xBD0003: [0x05],
-    0xBD0006: [0x06],
-    0xBD000A: [0x07],
-    0xBD0004: [0x08],
-    0xBD0007: [0x09],
+    STARTING_ID + 0x0009: [0x01],
+    STARTING_ID + 0x0005: [0x02],
+    STARTING_ID + 0x0004: [0x03],
+    STARTING_ID + 0x0006: [0x04],
+    STARTING_ID + 0x0008: [0x05],
+    STARTING_ID + 0x0003: [0x06],
+    STARTING_ID + 0x0002: [0x07],
+    STARTING_ID + 0x0007: [0x08],
+    STARTING_ID + 0x000A: [0x09],
 }
 
 refill_rom_data = {
-    0xBD0030: ["hp refill", 2],
-    0xBD0031: ["hp refill", 8],
-    0xBD0034: ["1up", 0],
-    0xBD0032: ["weapon refill", 2],
-    0xBD0033: ["weapon refill", 8],
+    STARTING_ID + 0x0030: ["hp refill", 2],
+    STARTING_ID + 0x0031: ["hp refill", 8],
+    STARTING_ID + 0x0034: ["1up", 0],
+    STARTING_ID + 0x0032: ["weapon refill", 2],
+    STARTING_ID + 0x0033: ["weapon refill", 8],
 }
 
 boss_weakness_offsets = {
@@ -85,7 +85,6 @@ boss_hp_caps_offsets = {
     "Serges": 0x0,
     "Violen": 0x0,
     "Gigantic Mechaniloid CF-0": 0x0,
-    "Sea Canthller": 0x0,
     "Pararoid S-38": 0x0,
     "Chop Register": 0x0,
     "Raider Killer": 0x0,
@@ -121,7 +120,6 @@ class MMX2ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def adjust_boss_damage_table(world: World, patch: MMX2ProcedurePatch):
-    strictness = world.options.boss_weakness_strictness
     for boss, data in world.boss_weakness_data.items():
         offset = boss_weakness_offsets[boss]
         patch.write_bytes(offset, bytearray(data))
@@ -158,15 +156,73 @@ def patch_rom(world: World, patch: MMX2ProcedurePatch):
 
     # Prepare some ROM locations to receive the basepatch
 
-    adjust_boss_damage_table(world, patch)
+    #adjust_boss_damage_table(world, patch)
     
-    if world.options.boss_randomize_hp != "off":
-        adjust_boss_hp(world, patch)
+    #if world.options.boss_randomize_hp != "off":
+    #    adjust_boss_hp(world, patch)
 
     # Edit the ROM header
     patch.name = bytearray(f'MMX2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x7FC0, patch.name)
+
+    # Remap buttons
+    button_values = {
+        "A": 0x20,
+        "B": 0x80,
+        "X": 0x10,
+        "Y": 0x40,
+        "L": 0x08,
+        "R": 0x04,
+        "START": 0x01,
+        "SELECT": 0x02,
+    }
+    action_offsets = {
+        "SHOT": 0x371F9,
+        "JUMP": 0x371FA,
+        "DASH": 0x371FB,
+        "SELECT_L": 0x371FC,
+        "SELECT_R": 0x371FD,
+        "MENU": 0x371FE,
+    }
+    button_config = world.options.button_configuration.value
+    for action, button in button_config.items():
+        patch.write_byte(action_offsets[action], button_values[button])
+
+    # Write options to the ROM
+    value = 0
+    base_open = world.options.base_open.value
+    if "Medals" in base_open:
+        value |= 0x01
+    if "Weapons" in base_open:
+        value |= 0x02
+    if "Armor Upgrades" in base_open:
+        value |= 0x04
+    if "Heart Tanks" in base_open:
+        value |= 0x08
+    if "Sub Tanks" in base_open:
+        value |= 0x10
+    patch.write_byte(0x17FFE0, value)
+    patch.write_byte(0x17FFE1, world.options.base_medal_count.value)
+    patch.write_byte(0x17FFE2, world.options.base_weapon_count.value)
+    patch.write_byte(0x17FFE3, world.options.base_upgrade_count.value)
+    patch.write_byte(0x17FFE4, world.options.base_heart_tank_count.value)
+    patch.write_byte(0x17FFE5, world.options.base_sub_tank_count.value)
+    patch.write_byte(0x17FFE6, world.options.starting_life_count.value)
+    patch.write_byte(0x17FFE7, world.options.pickupsanity.value)
+    patch.write_byte(0x17FFE8, world.options.energy_link.value)
+    patch.write_byte(0x17FFE9, world.options.death_link.value)
+    patch.write_byte(0x17FFEA, world.options.jammed_buster.value)
+    patch.write_byte(0x17FFED, world.options.starting_hp.value)
+    patch.write_byte(0x17FFEE, world.options.heart_tank_effectiveness.value)
+    patch.write_byte(0x17FFEF, world.options.base_all_levels.value)
+    patch.write_byte(0x17FFEC, world.options.boss_weakness_rando.value)
+    patch.write_byte(0x17FFF0, world.options.boss_weakness_strictness.value)
+    value = 0
+    if world.options.long_jumps.value:
+        value |= 0x01
+    patch.write_byte(0x17FFF1, value)
+    patch.write_byte(0x17FFF3, world.options.base_boss_rematch_count.value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

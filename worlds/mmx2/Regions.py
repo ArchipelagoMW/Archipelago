@@ -4,7 +4,7 @@ from BaseClasses import CollectionState, MultiWorld, Region, Entrance, ItemClass
 from .Locations import MMX2Location
 from .Items import MMX2Item
 from .Names import LocationName, ItemName, RegionName, EventName
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World 
 
 
 def create_regions(multiworld: MultiWorld, player: int, world: World, active_locations):
@@ -45,6 +45,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     crystal_snail = create_region(multiworld, player, active_locations, RegionName.crystal_snail)
     crystal_snail_start = create_region(multiworld, player, active_locations, RegionName.crystal_snail_start)
     crystal_snail_after_arena = create_region(multiworld, player, active_locations, RegionName.crystal_snail_after_arena)
+    crystal_snail_arena = create_region(multiworld, player, active_locations, RegionName.crystal_snail_arena)
     crystal_snail_quartz = create_region(multiworld, player, active_locations, RegionName.crystal_snail_quartz)
     crystal_snail_downhill = create_region(multiworld, player, active_locations, RegionName.crystal_snail_downhill)
     crystal_snail_uphill = create_region(multiworld, player, active_locations, RegionName.crystal_snail_uphill)
@@ -117,6 +118,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         crystal_snail,
         crystal_snail_start,
         crystal_snail_after_arena,
+        crystal_snail_arena,
         crystal_snail_quartz,
         crystal_snail_downhill,
         crystal_snail_uphill,
@@ -155,57 +157,57 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, RegionName.intro_stage, LocationName.intro_stage_clear)
 
     # Wheel Gator
-    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator, LocationName.wheel_gator_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator, LocationName.wheel_gator_arms)
-    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator, LocationName.wheel_gator_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator, LocationName.wheel_gator_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_mid, LocationName.wheel_gator_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_start, LocationName.wheel_gator_arms)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_boss, LocationName.wheel_gator_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_boss, LocationName.wheel_gator_clear)
 
     # Bubble Crab
-    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab, LocationName.bubble_crab_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab, LocationName.bubble_crab_sub_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab, LocationName.bubble_crab_mini_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab, LocationName.bubble_crab_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab, LocationName.bubble_crab_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_sub_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_boss, LocationName.bubble_crab_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_boss, LocationName.bubble_crab_clear)
 
     # Flame Stag
-    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag, LocationName.flame_stag_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag, LocationName.flame_stag_sub_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag, LocationName.flame_stag_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag, LocationName.flame_stag_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_sub_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_boss, LocationName.flame_stag_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_boss, LocationName.flame_stag_clear)
 
     # Morph Moth
-    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth, LocationName.morph_moth_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth, LocationName.morph_moth_body)
-    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth, LocationName.morph_moth_mini_boss_1)
-    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth, LocationName.morph_moth_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth, LocationName.morph_moth_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_start, LocationName.morph_moth_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_start, LocationName.morph_moth_body)
+    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_mini_boss_1)
+    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_2, LocationName.morph_moth_mini_boss_2)
+    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_boss, LocationName.morph_moth_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_boss, LocationName.morph_moth_clear)
 
     # Magna Centipede
-    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede, LocationName.magna_centipede_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede, LocationName.magna_centipede_sub_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede, LocationName.magna_centipede_mini_boss_1)
-    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede, LocationName.magna_centipede_mini_boss_2)
-    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede, LocationName.magna_centipede_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede, LocationName.magna_centipede_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_start, LocationName.magna_centipede_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_start, LocationName.magna_centipede_sub_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_blade, LocationName.magna_centipede_mini_boss_1)
+    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_security, LocationName.magna_centipede_mini_boss_2)
+    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_boss, LocationName.magna_centipede_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_boss, LocationName.magna_centipede_clear)
 
     # Crystal Snail
-    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail, LocationName.crystal_snail_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail, LocationName.crystal_snail_helmet)
-    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail, LocationName.crystal_snail_mini_boss_1)
-    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail, LocationName.crystal_snail_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail, LocationName.crystal_snail_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_uphill, LocationName.crystal_snail_helmet)
+    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_quartz, LocationName.crystal_snail_mini_boss_1)
+    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_boss, LocationName.crystal_snail_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_boss, LocationName.crystal_snail_clear)
 
     # Overdrive Ostrich
-    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich, LocationName.overdrive_ostrich_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich, LocationName.overdrive_ostrich_leg)
-    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich, LocationName.overdrive_ostrich_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich, LocationName.overdrive_ostrich_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_inside, LocationName.overdrive_ostrich_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_inside, LocationName.overdrive_ostrich_leg)
+    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_boss, LocationName.overdrive_ostrich_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_boss, LocationName.overdrive_ostrich_clear)
 
     # Wire Sponge
-    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge, LocationName.wire_sponge_heart_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge, LocationName.wire_sponge_sub_tank)
-    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge, LocationName.wire_sponge_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge, LocationName.wire_sponge_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_start, LocationName.wire_sponge_heart_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_start, LocationName.wire_sponge_sub_tank)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_boss, LocationName.wire_sponge_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_boss, LocationName.wire_sponge_clear)
 
     # X-Hunter Arena
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_arena, LocationName.agile_defeated)
@@ -214,15 +216,16 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
 
     # X-Hunter Stage 1
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_1_boss, LocationName.x_hunter_stage_1_boss)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.x_hunter_stage_1_clear, EventName.x_hunter_stage_1_clear)
+    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_1_boss, EventName.x_hunter_stage_1_clear, EventName.x_hunter_stage_1_clear)
 
     # X-Hunter Stage 2
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_2_boss, LocationName.x_hunter_stage_2_boss)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.x_hunter_stage_2_clear, EventName.x_hunter_stage_2_clear)
+    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_2_boss, EventName.x_hunter_stage_2_clear, EventName.x_hunter_stage_2_clear)
 
     # X-Hunter Stage 3
+    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_shoryuken)
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_boss, LocationName.x_hunter_stage_3_boss)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.x_hunter_stage_3_clear, EventName.x_hunter_stage_3_clear)
+    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_3_boss, EventName.x_hunter_stage_3_clear, EventName.x_hunter_stage_3_clear)
 
     # X-Hunter Stage 4
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_wheel_gator)
@@ -241,11 +244,110 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.crystal_snail_rematch, EventName.boss_rematch_clear)
     add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.overdrive_ostrich_rematch, EventName.boss_rematch_clear)
     add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.wire_sponge_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.x_hunter_stage_4_clear, EventName.x_hunter_stage_4_clear)
+    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_voice, EventName.x_hunter_stage_4_clear, EventName.x_hunter_stage_4_clear)
 
     # X-Hunter Stage 5
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_5_zero, LocationName.x_hunter_stage_5_zero)
     add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_5_sigma, LocationName.victory)
+
+    if world.options.pickupsanity.value:
+        # Intro Stage
+        add_location_to_region(multiworld, player, active_locations, RegionName.intro_stage, LocationName.intro_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.intro_stage, LocationName.intro_hp_2)
+
+        # Wheel Gator
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_start, LocationName.wheel_gator_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_start, LocationName.wheel_gator_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_mid, LocationName.wheel_gator_1up)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_mid, LocationName.wheel_gator_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_4)
+
+        # Bubble Crab
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_start, LocationName.bubble_crab_1up)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_start, LocationName.bubble_crab_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_energy_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_open, LocationName.bubble_crab_hp_5)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_inside, LocationName.bubble_crab_hp_6)
+
+        # Flame Stag
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_energy_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_1up_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_hp_5)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_start, LocationName.flame_stag_energy_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_volcano, LocationName.flame_stag_hp_6)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_volcano, LocationName.flame_stag_hp_7)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_volcano, LocationName.flame_stag_energy_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_volcano, LocationName.flame_stag_hp_8)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_volcano, LocationName.flame_stag_1up_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_stag_gas, LocationName.flame_stag_hp_9)
+
+        # Morph Moth
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_start, LocationName.morph_moth_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_start, LocationName.morph_moth_1up_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_5)
+
+        # Magna Centpiede
+        add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_blade, LocationName.magna_centipede_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_blade, LocationName.magna_centipede_hp_2)
+
+        # Crystal Snail
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_downhill, LocationName.crystal_snail_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_uphill, LocationName.crystal_snail_1up_2)
+
+        # Overdrive Ostrich
+        add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_start, LocationName.overdrive_ostrich_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_start, LocationName.overdrive_ostrich_1up)
+        add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_inside, LocationName.overdrive_ostrich_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_inside, LocationName.overdrive_ostrich_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_inside, LocationName.overdrive_ostrich_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.overdrive_ostrich_inside, LocationName.overdrive_ostrich_energy_2)
+
+        # Wire Sponge
+        add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_start, LocationName.wire_sponge_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_elevator, LocationName.wire_sponge_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wire_sponge_outside, LocationName.wire_sponge_hp_2)
+
+        # X-Hunter Base 1
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_1_start, LocationName.x_hunter_stage_1_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_1_start, LocationName.x_hunter_stage_1_hp)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_1_start, LocationName.x_hunter_stage_1_1up_2)
+
+        # X-Hunter Base 2
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_2_start, LocationName.x_hunter_stage_2_hp)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_2_start, LocationName.x_hunter_stage_2_1up)
+
+        # X-Hunter Base 3
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_5)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_6)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_1up_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_7)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_hp_8)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_1up_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_3_start, LocationName.x_hunter_stage_3_1up_4)
 
 
 def connect_regions(world: World):
@@ -345,7 +447,7 @@ def connect_regions(world: World):
     connect(world, RegionName.x_hunter_stage_5_zero, RegionName.x_hunter_stage_5_sigma)
 
     # Connect X-Hunter Stages
-    if world.options.base_all_levels:
+    if world.options.base_all_levels.value:
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_1)
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_2)
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_3)
@@ -355,7 +457,7 @@ def connect_regions(world: World):
         connect(world, RegionName.x_hunter_stage_1_boss, RegionName.x_hunter_stage_2)
         connect(world, RegionName.x_hunter_stage_2_boss, RegionName.x_hunter_stage_3)
         connect(world, RegionName.x_hunter_stage_3_boss, RegionName.x_hunter_stage_4)
-        connect(world, RegionName.x_hunter_stage_4_lobby, RegionName.x_hunter_stage_5)
+    connect(world, RegionName.x_hunter_stage_4_voice, RegionName.x_hunter_stage_5)
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

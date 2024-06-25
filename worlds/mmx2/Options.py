@@ -2,7 +2,11 @@ from dataclasses import dataclass
 import typing
 
 #from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
-from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionDict, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+from schema import Schema, And, Use, Optional
+
+from .Rom import action_buttons, action_names
+from .Weaknesses import boss_weaknesses, weapons_chaotic
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -58,14 +62,14 @@ class BossWeaknessRando(Choice):
     chaotic_single: Bosses will have one random weakness under the chaotic set
 
     The chaotic set makes every weapon charge level a separate weakness instead of keeping
-    them together, meaning that a boss can be weak to Charged Frost Shield but not its
+    them together, meaning that a boss can be weak to Charged Silk Shot but not its
     uncharged version.
     """
     display_name = "Boss Weakness Randomization"
     option_vanilla = 0
     option_shuffled = 1
-    option_chaotic_double = 2
-    option_chaotic_single = 3
+    option_chaotic_double = 3
+    option_chaotic_single = 2
     default = 0
 
 class BossWeaknessStrictness(Choice):
@@ -74,7 +78,7 @@ class BossWeaknessStrictness(Choice):
 
     not_strict: Allow every weapon to deal damage to the bosses
     weakness_and_buster: Only allow the weakness and buster to deal damage to the bosses
-    weakness_and_upgraded_buster: Only allow the weakness and buster charge levels 3 & 4 to deal damage to the bosses
+    weakness_and_upgraded_buster: Only allow the weakness and buster charge levels 3 to deal damage to the bosses
     only_weakness: Only the weakness will deal damage to the bosses
     """
     display_name = "Boss Weakness Strictness"
@@ -114,6 +118,12 @@ class DisableChargeFreeze(DefaultOnToggle):
     Allows X and Zero to move while shooting a level 3 charged shot.
     """
     display_name = "Disable Level 3 Charge freeze after shooting"
+
+class LongJumps(Toggle):
+    """
+    Allows X to perform longer jumps when holding down the Dash button.
+    """
+    display_name = "Long Jumps"
 
 class LogicBossWeakness(DefaultOnToggle):
     """
@@ -230,8 +240,37 @@ class XHuntersMedalCount(Range):
     range_end = 5
     default = 2
 
+class ButtonConfiguration(OptionDict):
+    """
+    Default buttons for every action.
+    """
+    display_name = "Button Configuration"
+    schema = Schema({action_name: And(str, Use(str.upper), lambda s: s in action_buttons) for action_name in action_names})
+    default = {
+        "SHOT": "Y",
+        "JUMP": "B",
+        "DASH": "A",
+        "SELECT_L": "L",
+        "SELECT_R": "R",
+        "MENU": "START"
+    }
 
-mmx3_option_groups = [
+class PlandoWeaknesses(OptionDict):
+    """
+    Forces bosses to have a specific weakness. Uses the names that appear on the chaotic weakness set.
+
+    Format: 
+      Boss Name: Weakness Name
+    """
+    display_name = "Button Configuration"
+    schema = Schema({
+        Optional(boss_name): 
+            And(str, lambda weapon: weapon in weapons_chaotic.keys()) for boss_name in boss_weaknesses.keys()
+    })
+    default = {}
+
+
+mmx2_option_groups = [
     """
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
@@ -278,15 +317,18 @@ class MMX2Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     energy_link: EnergyLink
+    button_configuration: ButtonConfiguration
     starting_life_count: StartingLifeCount
     starting_hp: StartingHP
     heart_tank_effectiveness: HeartTankEffectiveness
     boss_weakness_rando: BossWeaknessRando
     boss_weakness_strictness: BossWeaknessStrictness
+    boss_weakness_plando: PlandoWeaknesses
     boss_randomize_hp: BossRandomizedHP
     pickupsanity: PickupSanity
     jammed_buster: JammedBuster
-    zsaber_in_pool: ShoryukenInPool
+    long_jumps: LongJumps
+    shoryuken_in_pool: ShoryukenInPool
     disable_charge_freeze: DisableChargeFreeze
     logic_boss_weakness: LogicBossWeakness
     base_boss_rematch_count: BaseBossRematchCount
@@ -294,6 +336,7 @@ class MMX2Options(PerGameCommonOptions):
     base_open: BaseOpen
     base_medal_count: BaseMedalCount
     base_weapon_count: BaseWeaponCount
+    base_upgrade_count: BaseArmorUpgradeCount
     base_heart_tank_count: BaseHeartTankCount
     base_sub_tank_count: BaseSubTankCount
     x_hunters_medal_count: XHuntersMedalCount

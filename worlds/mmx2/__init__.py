@@ -1,9 +1,7 @@
 import dataclasses
 import os
 import typing
-import math
 import settings
-import hashlib
 import threading
 import pkgutil
 
@@ -79,7 +77,9 @@ class MMX2World(World):
         connect_regions(self)
         
         total_required_locations = 45
-        
+        if self.options.pickupsanity.value:
+            total_required_locations += 75
+
         # Setup item pool
 
         # Add levels into the pool
@@ -108,7 +108,7 @@ class MMX2World(World):
                 else:
                     itempool += [self.create_item(stage_list[i])]
 
-        if len(self.options.doppler_open.value) == 0:
+        if len(self.options.base_open.value) == 0:
             itempool += [self.create_item(ItemName.stage_x_hunter)]
 
         # Add weapons into the pool
@@ -256,12 +256,10 @@ class MMX2World(World):
         self.boss_weaknesses = {}
         self.boss_weakness_data = {}
         handle_weaknesses(self)
-        early_stage = self.random.choice(list(item_groups["Access Codes"]))
-        self.multiworld.local_early_items[self.player][early_stage] = 1
 
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
-        spoiler_handle.write(f"\nMega Man X3 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
+        spoiler_handle.write(f"\nMega Man X2 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
         
         for boss, data in self.boss_weaknesses.items():
             weaknesses = ""
@@ -272,74 +270,60 @@ class MMX2World(World):
 
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        if not self.options.boss_weakness_rando:
+            return
+        
         boss_to_id = {
-            0x202: "Blast Hornet",
-            0x203: "Shurikein",
-            0x204: "Blizzard Buffalo",
-            0x205: "Gravity Beetle",
-            0x206: "Toxic Seahorse",
-            0x207: "Hotareeca",
-            0x208: "Volt Catfish",
-            0x209: "Crush Crawfish",
-            0x20A: "Tunnel Rhino",
-            0x20B: "Hell Crusher",
-            0x20C: "Neon Tiger",
-            0x20D: "Worm Seeker-R",
-            0x009: "Vile",
-            0x20E: "Godkarmachine",
-            0x210: "Dr. Doppler's Lab 2 Boss",
-            0x21A: "Blast Hornet",
-            0x213: "Blizzard Buffalo",
-            0x219: "Gravity Beetle",
-            0x214: "Toxic Seahorse",
-            0x216: "Volt Catfish",
-            0x217: "Crush Crawfish",
-            0x215: "Tunnel Rhino",
-            0x218: "Neon Tiger",
-            0x212: "Doppler",
-            0x00B: "Bit",
-            0x00A: "Byte",
-            0x00E: "Sigma",
+            0x00: "Wheel Gator",
+            0x01: "Bubble Crab",
+            0x02: "Flame Stag",
+            0x03: "Morph Moth",
+            0x04: "Magna Centipede",
+            0x05: "Crystal Snail",
+            0x06: "Overdrive Ostrich",
+            0x07: "Wire Sponge",
+            0x08: "Agile",
+            0x09: "Serges",
+            0x0A: "Violen",
+            0x0B: "Neo Violen",
+            0x0C: "Serges Tank",
+            0x0D: "Agile Flyer",
+            0x0E: "Wheel Gator",
+            0x0F: "Bubble Crab",
+            0x10: "Flame Stag",
+            0x11: "Morph Moth",
+            0x12: "Magna Centipede",
+            0x13: "Crystal Snail",
+            0x14: "Overdrive Ostrich",
+            0x15: "Wire Sponge",
+            0x16: "Zero",
+            0x17: "Sigma",
+            0x19: "Pararoid S-38",
+            0x1D: "Pararoid S-38",
+            0x1A: "Chop Register",
+            0x1B: "Raider Killer",
+            0x1C: "Magna Quartz",
         }
-        # Remove disabled locations if rematch count is 0
-        if self.options.doppler_lab_3_boss_rematch_count.value == 0:
-            del boss_to_id[0x21A]
-            del boss_to_id[0x213]
-            del boss_to_id[0x219]
-            del boss_to_id[0x214]
-            del boss_to_id[0x216]
-            del boss_to_id[0x217]
-            del boss_to_id[0x215]
-            del boss_to_id[0x218]
-
         boss_weakness_hint_data = {}
         for loc_name, level_data in location_id_to_level_id.items():
-            boss_id = level_data[1]
-            if boss_id not in boss_to_id.keys():
-                continue
-
-            boss = boss_to_id[boss_id]
-            data = self.boss_weaknesses[boss]
-            weaknesses = ""
-            for i in range(len(data)):
-                weaknesses += f"{weapon_id[data[i][1]]}, "
-            weaknesses = weaknesses[:-2]
-
-            if boss == "Sigma":
-                data = self.boss_weaknesses["Kaiser Sigma"]
-                weaknesses += ". Kaiser Sigma: "
+            if level_data[1] == 0x000:
+                boss_id = level_data[2]
+                if boss_id not in boss_to_id.keys():
+                    continue
+                boss = boss_to_id[boss_id]
+                data = self.boss_weaknesses[boss]
+                weaknesses = ""
                 for i in range(len(data)):
                     weaknesses += f"{weapon_id[data[i][1]]}, "
                 weaknesses = weaknesses[:-2]
-            elif boss == "Godkarmachine":
-                data = self.boss_weaknesses["Press Disposer"]
-                weaknesses += ". Press Disposer: "
-                for i in range(len(data)):
-                    weaknesses += f"{weapon_id[data[i][1]]}, "
-                weaknesses = weaknesses[:-2]
-
-            location = self.multiworld.get_location(loc_name, self.player)
-            boss_weakness_hint_data[location.address] = weaknesses
+                if boss == "Sigma":
+                    data = self.boss_weaknesses["Sigma Virus"]
+                    weaknesses += ". Sigma Virus: "
+                    for i in range(len(data)):
+                        weaknesses += f"{weapon_id[data[i][1]]}, "
+                    weaknesses = weaknesses[:-2]
+                location = self.multiworld.get_location(loc_name, self.player)
+                boss_weakness_hint_data[location.address] = weaknesses
 
         hint_data[self.player] = boss_weakness_hint_data
 
@@ -350,8 +334,8 @@ class MMX2World(World):
 
     def generate_output(self, output_directory: str):
         try:
-            patch = MMX3ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
-            patch.write_file("mmx3_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mmx3_basepatch.bsdiff4"))
+            patch = MMX2ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+            patch.write_file("mmx2_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mmx2_basepatch.bsdiff4"))
             patch_rom(self, patch)
 
             self.rom_name = patch.name
