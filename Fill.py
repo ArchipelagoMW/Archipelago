@@ -63,15 +63,17 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             # grab one item per player
             items_to_place = [items.pop()
                               for items in reachable_items.values() if items]
-            for item in items_to_place:
-                for p, pool_item in enumerate(item_pool):
-                    if pool_item is item:
-                        item_pool.pop(p)
-                        break
         else:
+            next_player = multiworld.random.choice([player for player, items in reachable_items.items() if items])
             items_to_place = []
             if item_pool:
-                items_to_place.append(item_pool.pop())
+                items_to_place.append(reachable_items[next_player].pop())
+
+        for item in items_to_place:
+            for p, pool_item in enumerate(item_pool):
+                if pool_item is item:
+                    item_pool.pop(p)
+                    break
 
         maximum_exploration_state = sweep_from_pool(
             base_state, item_pool + unplaced_items, multiworld.get_filled_locations(item.player)
