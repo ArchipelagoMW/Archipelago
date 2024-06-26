@@ -381,8 +381,6 @@ class KH2Context(CommonContext):
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 if self.kh2_game_version is None:
-                    #yourmom = self.kh2_read_string(0x09A9830, 4)
-                    #yourdad = self.kh2_read_string(0x09A92F0, 4)
                     if self.kh2_read_string(0x09A9830, 4) == "KH2J":
                         self.kh2_game_version = "STEAM"
                         self.Now = 0x0717008
