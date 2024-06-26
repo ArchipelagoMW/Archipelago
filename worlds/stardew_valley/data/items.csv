@@ -809,6 +809,15 @@ id,name,classification,groups,mod_name
 5278,Seafoam Pudding,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5279,Trap Bobber,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5280,Treasure Chest,filler,"RESOURCE_PACK",
+5281,Resource Pack: 15 Mixed Seeds,filler,"RESOURCE_PACK",
+5282,Resource Pack: 15 Mixed Flower Seeds,filler,"RESOURCE_PACK",
+5283,Resource Pack: 5 Cherry Bomb,filler,"RESOURCE_PACK",
+5284,Resource Pack: 3 Bomb,filler,"RESOURCE_PACK",
+5285,Resource Pack: 2 Mega Bomb,filler,"RESOURCE_PACK",
+5286,Resource Pack: 2 Life Elixir,filler,"RESOURCE_PACK",
+5287,Resource Pack: 5 Coffee,filler,"RESOURCE_PACK",
+5288,Resource Pack: 2 Triple Shot Espresso,filler,"RESOURCE_PACK",
+5289,Prismatic Shard,filler,"RESOURCE_PACK",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
