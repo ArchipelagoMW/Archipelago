@@ -50,6 +50,20 @@ class Difficulty(Choice):
     default = 0
 
 
+class EnableTactics(Choice):
+    """
+    When you start a new match, chooses the player's piece types (such as whether a minor piece is a Knight or Bishop).
+
+    All: Allows the Fork positions to contain progression or useful items.
+
+    None: Completely removes the Fork positions from all item pools.
+    """
+    display_name = "Enable Tactics"
+    option_all = 0
+    option_none = 1
+    default = 1
+
+
 class PieceLocations(Choice):
     """
     When you start a new match, chooses how to distribute player pieces.
@@ -397,6 +411,7 @@ class Deathlink(DeathLink):
 class CMOptions(PerGameCommonOptions):
     goal: Goal
     difficulty: Difficulty
+    enable_tactics: EnableTactics
     piece_locations: PieceLocations
     piece_types: PieceTypes
     enemy_piece_types: EnemyPieceTypes
