@@ -34,15 +34,15 @@ upgrades_rom_data = {
 }
 
 boss_access_rom_data = {
-    STARTING_ID + 0x0009: [0x01],
-    STARTING_ID + 0x0005: [0x02],
+    STARTING_ID + 0x0009: [0x00],
+    STARTING_ID + 0x0005: [0x01],
     STARTING_ID + 0x0004: [0x03],
     STARTING_ID + 0x0006: [0x04],
     STARTING_ID + 0x0008: [0x05],
     STARTING_ID + 0x0003: [0x06],
-    STARTING_ID + 0x0002: [0x07],
-    STARTING_ID + 0x0007: [0x08],
-    STARTING_ID + 0x000A: [0x09],
+    STARTING_ID + 0x0002: [0x08],
+    STARTING_ID + 0x0007: [0x09],
+    STARTING_ID + 0x000A: [0x07],
 }
 
 refill_rom_data = {
