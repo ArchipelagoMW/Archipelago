@@ -14,6 +14,8 @@ WRAM_START = 0xF50000
 WRAM_SIZE = 0x20000
 SRAM_START = 0xE00000 
 
+MMX2_RAM = WRAM_START + 0x1F800
+
 MMX2_GAME_STATE         = WRAM_START + 0x000D0
 MMX2_MENU_STATE         = WRAM_START + 0x000D1
 MMX2_GAMEPLAY_STATE     = WRAM_START + 0x000D2
@@ -31,42 +33,43 @@ MMX2_SHORYUKEN          = WRAM_START + 0x01FB1
 MMX2_CAN_MOVE           = WRAM_START + 0x01F25
 MMX2_ON_RIDE_ARMOR      = WRAM_START + 0x00A54
 
-MMX2_ENABLE_HEART_TANK      = WRAM_START + 0x1F009
-MMX2_ENABLE_HP_REFILL       = WRAM_START + 0x1F00D
-MMX2_HP_REFILL_AMOUNT       = WRAM_START + 0x1F00E
-MMX2_ENABLE_GIVE_1UP        = WRAM_START + 0x1F010
-MMX2_ENABLE_WEAPON_REFILL   = WRAM_START + 0x1F017
-MMX2_WEAPON_REFILL_AMOUNT   = WRAM_START + 0x1F018
-MMX2_RECEIVING_ITEM         = WRAM_START + 0x1F008
-MMX2_UNLOCKED_CHARGED_SHOT  = WRAM_START + 0x1F013
+MMX2_ENABLE_HEART_TANK      = MMX2_RAM + 0x00009
+MMX2_ENABLE_HP_REFILL       = MMX2_RAM + 0x0000D
+MMX2_HP_REFILL_AMOUNT       = MMX2_RAM + 0x0000E
+MMX2_ENABLE_GIVE_1UP        = MMX2_RAM + 0x00010
+MMX2_ENABLE_WEAPON_REFILL   = MMX2_RAM + 0x00017
+MMX2_WEAPON_REFILL_AMOUNT   = MMX2_RAM + 0x00018
+MMX2_RECEIVING_ITEM         = MMX2_RAM + 0x00008
+MMX2_UNLOCKED_CHARGED_SHOT  = MMX2_RAM + 0x00013
+MMX2_UNLOCKED_CHECKPOINTS   = MMX2_RAM + 0x00016
 
-MMX2_SFX_FLAG   = WRAM_START + 0x1F003
-MMX2_SFX_NUMBER = WRAM_START + 0x1F004
+MMX2_SFX_FLAG   = MMX2_RAM + 0x00003
+MMX2_SFX_NUMBER = MMX2_RAM + 0x00004
 
-MMX2_VALIDATION_CHECK = WRAM_START + 0x1F011
+MMX2_VALIDATION_CHECK = MMX2_RAM + 0x00011
 
-MMX2_LEVEL_CLEARED          = WRAM_START + 0x1F080
-MMX2_UNLOCKED_LEVELS        = WRAM_START + 0x1F060
-MMX2_DEFEATED_BOSSES        = WRAM_START + 0x1F0A0
-MMX2_BASE_ACCESS            = WRAM_START + 0x1F002
-MMX2_COLLECTED_HEART_TANKS  = WRAM_START + 0x1F040
-MMX2_COLLECTED_UPGRADES     = WRAM_START + 0x1F041
-MMX2_COLLECTED_PICKUPS      = WRAM_START + 0x1F0C0
-MMX2_COMPLETED_REMATCHES    = WRAM_START + 0x1F000
-MMX2_ENERGY_LINK_PACKET     = WRAM_START + 0x1F006
-MMX2_COLLECTED_SHORYUKEN    = WRAM_START + 0x1F042
+MMX2_LEVEL_CLEARED          = MMX2_RAM + 0x00080
+MMX2_UNLOCKED_LEVELS        = MMX2_RAM + 0x00060
+MMX2_DEFEATED_BOSSES        = MMX2_RAM + 0x000A0
+MMX2_BASE_ACCESS            = MMX2_RAM + 0x00002
+MMX2_COLLECTED_HEART_TANKS  = MMX2_RAM + 0x00040
+MMX2_COLLECTED_UPGRADES     = MMX2_RAM + 0x00041
+MMX2_COLLECTED_PICKUPS      = MMX2_RAM + 0x000C0
+MMX2_COMPLETED_REMATCHES    = MMX2_RAM + 0x00000
+MMX2_ENERGY_LINK_PACKET     = MMX2_RAM + 0x00006
+MMX2_COLLECTED_SHORYUKEN    = MMX2_RAM + 0x00042
 
 MMX2_PICKUPSANITY_ACTIVE    = ROM_START + 0x17FFE7
-MMX2_REQUIRED_REMATCHES     = ROM_START + 0x17FFF3
-MMX2_ENERGY_LINK_ENABLED    = ROM_START + 0x17FFF8
-MMX2_DEATH_LINK_ACTIVE      = ROM_START + 0x17FFF9
-MMX2_JAMMED_BUSTER_ACTIVE   = ROM_START + 0x17FFFA
+MMX2_REQUIRED_REMATCHES     = ROM_START + 0x17FFE3
+MMX2_ENERGY_LINK_ENABLED    = ROM_START + 0x17FFE8
+MMX2_DEATH_LINK_ACTIVE      = ROM_START + 0x17FFE9
+MMX2_JAMMED_BUSTER_ACTIVE   = ROM_START + 0x17FFEA
 
 EXCHANGE_RATE = 500000000
 
 STARTING_ID = 0xBE0C00
 
-MMX2_RECV_INDEX = WRAM_START + 0x1F000
+MMX2_RECV_INDEX = MMX2_RAM + 0x00000
 
 MMX2_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
@@ -90,7 +93,10 @@ class MMX2SNIClient(SNIClient):
         self.energy_link_enabled = False
         self.heal_request_command = None
         self.weapon_refill_request_command = None
+        self.using_newer_client = False
+        self.energy_link_details = False
         self.trade_request = None
+        self.current_level_value = 42
         self.item_queue = []
 
 
@@ -228,7 +234,8 @@ class MMX2SNIClient(SNIClient):
                     {"operation": "max", "value": 0}],
             }])
             pool = ((ctx.stored_data[f'EnergyLink{ctx.team}'] or 0) / EXCHANGE_RATE) + (energy_packet_raw / 16)
-            logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the energy pool. Energy available: {pool:.2f}")
+            if self.energy_link_details:
+                logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the energy pool. Energy available: {pool:.2f}")
             snes_buffered_write(ctx, MMX2_ENERGY_LINK_PACKET, bytearray([0x00, 0x00]))
             await snes_flush_writes(ctx)
 
@@ -346,12 +353,6 @@ class MMX2SNIClient(SNIClient):
 
         next_item = self.item_queue[0]
         item_id = next_item[1]
-
-        if next_item[0] == "boss access":
-            snes_buffered_write(ctx, MMX2_SFX_FLAG, bytearray([0x01]))
-            snes_buffered_write(ctx, MMX2_SFX_NUMBER, bytearray([0x1D]))
-            self.item_queue.pop(0)
-            return
         
         # Do not give items if you can't move, are in pause state, not in the correct mode or not in gameplay state
         receiving_item = await snes_read(ctx, MMX2_RECEIVING_ITEM, 0x1)
@@ -449,7 +450,7 @@ class MMX2SNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + 0x09EE, bytearray([0x18]))
                     snes_buffered_write(ctx, WRAM_START + 0x1FCD, bytearray([0xFF]))
                     snes_buffered_write(ctx, MMX2_UPGRADES, bytearray([upgrades]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0F4ED, bytearray([0x80]))
+                    snes_buffered_write(ctx, MMX2_UNLOCKED_CHECKPOINTS, bytearray([0x80]))
                 elif bit == 0x02:
                     jam_check = await snes_read(ctx, MMX2_JAMMED_BUSTER_ACTIVE, 0x1)
                     charge_shot_unlocked = await snes_read(ctx, MMX2_UNLOCKED_CHARGED_SHOT, 0x1)
@@ -498,14 +499,14 @@ class MMX2SNIClient(SNIClient):
         if menu_state is None:
             self.game_state = False
             self.energy_link_enabled = False
-            ctx.item_queue = []
-            ctx.current_level_value = 42
+            self.current_level_value = 42
+            self.item_queue = []
             return
     
         if game_state[0] == 0:
             self.game_state = False
-            ctx.item_queue = []
-            ctx.current_level_value = 42
+            self.current_level_value = 42
+            self.item_queue = []
             return
         
         validation = await snes_read(ctx, MMX2_VALIDATION_CHECK, 0x2)
@@ -527,14 +528,20 @@ class MMX2SNIClient(SNIClient):
 
         # This is going to be rewritten whenever SNIClient supports on_package
         energy_link = await snes_read(ctx, MMX2_ENERGY_LINK_ENABLED, 0x1)
-        if energy_link[0] != 0:
-            if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
+        if self.using_newer_client:
+            if energy_link[0] != 0:
                 await self.handle_energy_link(ctx)
+        else:
+            if energy_link[0] != 0:
+                if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
+                    await self.handle_energy_link(ctx)
 
-            if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
-                self.energy_link_enabled = True
-                ctx.set_notify(f"EnergyLink{ctx.team}")
-                logger.info(f"Initialized EnergyLink{ctx.team}")
+                if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
+                    self.energy_link_enabled = True
+                    ctx.set_notify(f"EnergyLink{ctx.team}")
+                    logger.info(f"Initialized EnergyLink{ctx.team}")
+                    self.energy_link_details = True
+                    logger.info(f"EnergyLink detailed deposit activity enabled.")
 
         from .Rom import weapon_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
         from .Levels import location_id_to_level_id
@@ -630,8 +637,8 @@ class MMX2SNIClient(SNIClient):
            (game_state[0] == 0x02 and menu_state[0] != 0x04):
             current_level = -1
 
-        if ctx.current_level_value != (current_level + 1):
-            ctx.current_level_value = current_level + 1
+        if self.current_level_value != (current_level + 1):
+            self.current_level_value = current_level + 1
 
             # Send level id data to tracker
             await ctx.send_msgs(
@@ -644,7 +651,7 @@ class MMX2SNIClient(SNIClient):
                         "operations": [
                             {
                                 "operation": "replace",
-                                "value": ctx.current_level_value,
+                                "value": self.current_level_value,
                             }
                         ],
                     }
@@ -689,6 +696,8 @@ class MMX2SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX2_UNLOCKED_LEVELS, boss_access)
                 if item.item == 0xBD000A:
                     snes_buffered_write(ctx, MMX2_BASE_ACCESS, bytearray([0x00]))
+                snes_buffered_write(ctx, MMX2_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX2_SFX_NUMBER, bytearray([0x1D]))
                 
             elif item.item in refill_rom_data:
                 self.add_item_to_queue(refill_rom_data[item.item][0], item.item, refill_rom_data[item.item][1])
@@ -711,7 +720,7 @@ class MMX2SNIClient(SNIClient):
         new_shoryuken = False
         cleared_levels_data = await snes_read(ctx, MMX2_LEVEL_CLEARED, 0x20)
         cleared_levels = list(cleared_levels_data)
-        collected_pickups_data = await snes_read(ctx, MMX2_COLLECTED_PICKUPS, 0x40)
+        collected_pickups_data = await snes_read(ctx, MMX2_COLLECTED_PICKUPS, 0x4A)
         collected_pickups = list(collected_pickups_data)
         collected_heart_tanks_data = await snes_read(ctx, MMX2_COLLECTED_HEART_TANKS, 0x01)
         collected_heart_tanks_data = collected_heart_tanks_data[0]
@@ -760,8 +769,8 @@ class MMX2SNIClient(SNIClient):
                     new_upgrade = True
                 elif internal_id == 0x005:
                     # Shoryuken
-                    collected_new_shoryuken_data = 0xFF
-                    new_new_shoryuken = True
+                    collected_shoryuken_data = 0xFF
+                    new_shoryuken = True
                 elif internal_id >= 0x100:
                     # Pickups
                     collected_pickups[data_bit] = 0x01
@@ -780,6 +789,29 @@ class MMX2SNIClient(SNIClient):
             if new_heart_tank:
                 snes_buffered_write(ctx, MMX2_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks_data]))
             await snes_flush_writes(ctx)
+
+    def on_package(self, ctx, cmd: str, args: dict):
+        super().on_package(ctx, cmd, args)
+
+        if cmd == "Connected":
+            slot_data = args.get("slot_data", None)
+            self.using_newer_client = True
+            if slot_data["energy_link"]:
+                ctx.set_notify(f"EnergyLink{ctx.team}")
+                if ctx.ui:
+                    ctx.ui.enable_energy_link()
+                    ctx.ui.energy_link_label.text = "Energy: Standby"
+                    logger.info(f"Initialized EnergyLink{ctx.team}")
+
+        elif cmd == "SetReply" and args["key"].startswith("EnergyLink"):
+            if ctx.ui:
+                pool = (args["value"] or 0) / EXCHANGE_RATE
+                ctx.ui.energy_link_label.text = f"Energy: {pool:.2f}"
+
+        elif cmd == "Retrieved":
+            if f"EnergyLink{ctx.team}" in args["keys"] and args["keys"][f"EnergyLink{ctx.team}"] and ctx.ui:
+                pool = (args["keys"][f"EnergyLink{ctx.team}"] or 0) / EXCHANGE_RATE
+                ctx.ui.energy_link_label.text = f"Energy: {pool:.2f}"
 
 
 def cmd_pool(self):
@@ -891,4 +923,20 @@ def cmd_trade(self, amount: str = ""):
             logger.info(f"Set up trade for {amount} Weapon Energy. Pause the game to process the trade.")
         else:
             logger.info(f"You need to specify how much Weapon Energy you will request.")
+
+def cmd_details(self):
+    """
+    Toggles displaying energy deposit activity into the console when EnergyLink is active.
+    """
+    if self.ctx.game != "Mega Man X2":
+        logger.warning("This command can only be used while playing Mega Man X2")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.energy_link_details:
+            self.ctx.client_handler.energy_link_details = False
+            logger.info(f"EnergyLink detailed deposit activity disabled.")
+        else:
+            self.ctx.client_handler.energy_link_details = True
+            logger.info(f"EnergyLink detailed deposit activity enabled.")
         

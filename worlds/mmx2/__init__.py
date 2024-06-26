@@ -221,6 +221,7 @@ class MMX2World(World):
         slot_data["pickupsanity"] = self.options.pickupsanity.value
         slot_data["jammed_buster"] = self.options.jammed_buster.value
         slot_data["shoryuken_in_pool"] = self.options.shoryuken_in_pool.value
+        slot_data["energy_link"] = self.options.energy_link.value
         
         value = 0
         base_open = self.options.base_open.value
