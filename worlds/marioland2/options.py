@@ -3,11 +3,12 @@ from dataclasses import dataclass
 
 
 class ShuffleGoldenCoins(Choice):
-    """Vanilla: Golden Coins are not in the item pool, you receive them when defeating bosses as in vanilla.
-    Shuffle: Shuffle the Golden Coins into the item pool and open location checks on bosses.
-    Mario Coin Fragment Hunt: You start with all Golden Coins except the Mario Coin, which has been fragmented into
-    many pieces.
-    You will see a Golden Coin being received when defeating bosses regardless of whether you are actually getting a coin."""
+    """
+    Vanilla: Golden Coins are received when defeating bosses.
+    Shuffle: Shuffle the Golden Coins into the item pool and make bosses location checks.
+    Mario Coin Fragment Hunt: You start with all Golden Coins except the Mario Coin, which has been fragmented into many pieces.
+    You will see a Golden Coin being received when defeating bosses regardless of whether you are actually getting a coin.
+    """
     display_name = "Shuffle Golden Coins"
     default = 0
     option_vanilla = 0
