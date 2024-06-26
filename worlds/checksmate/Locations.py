@@ -15,6 +15,7 @@ class CMLocationData(NamedTuple):
     # c. fork/pin
     material_expectations: int
     chessmen_expectations: int = 0
+    is_tactic: bool = False
 
 
 location_table = {
@@ -90,12 +91,12 @@ location_table = {
     # special moves and tactics
     # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
     # "French Move": CMLocationData(4_902_050, 0),
-    "Fork, Sacrificial": CMLocationData(4_902_052, 700),
-    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700),
-    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200),  # AI really hates getting royal forked
-    "Fork, True": CMLocationData(4_902_055, 2550),
-    "Fork, True Triple": CMLocationData(4_902_056, 3450),
-    "Fork, True Royal": CMLocationData(4_902_057, 4020),  # I sincerely believe this should be filler
+    "Fork, Sacrificial": CMLocationData(4_902_052, 700, True),
+    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, True),
+    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, True),  # AI really hates getting royal forked
+    "Fork, True": CMLocationData(4_902_055, 2550, True),
+    "Fork, True Triple": CMLocationData(4_902_056, 3450, True),
+    "Fork, True Royal": CMLocationData(4_902_057, 4020, True),  # I sincerely believe this should be filler
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     "O-O Castle": CMLocationData(4_902_058, 0, 2),
     "O-O-O Castle": CMLocationData(4_902_059, 0, 2),
