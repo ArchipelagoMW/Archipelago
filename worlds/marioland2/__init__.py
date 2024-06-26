@@ -242,93 +242,139 @@ class MarioLand2World(World):
                 ].count(True) >= self.options.required_golden_coins)
 
         location_rules = {
-            "Hippo Zone - Normal or Secret Exit": lambda state: (state.has_any(["Hippo Bubble", "Water Physics"], self.player)
-                or (state.has("Carrot", self.player) and not is_auto_scroll(state, self.player, "Hippo Zone"))),
+            "Hippo Zone - Normal or Secret Exit":
+                lambda state: (state.has_any(["Hippo Bubble", "Water Physics"], self.player)
+                or (state.has("Carrot", self.player)
+                    and not is_auto_scroll(state, self.player, "Hippo Zone"))),
             # It is possible, however tricky, to beat the Moon Stage without Carrot or Space Physics.
             # However, it requires somewhat precisely jumping off enemies. Enemy shuffle may make this impossible.
             # I have not done any testing there. Instead, I will just always make one or the other required, since
             # it is difficult without them anyway.
-            "Space Zone 1 - Normal Exit": lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
+            "Space Zone 1 - Normal Exit":
+                lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
             # One or the other is actually necessary for the secret exit.
-            "Space Zone 1 - Secret Exit": lambda state: state.has_any(
-                ["Space Physics", "Carrot"], self.player) and not is_auto_scroll(state, self.player, "Space Zone 1"),
-            "Space Zone 2 - Boss": lambda state: logic.space_zone_2_boss(state, self.player),
-            "Space Zone 2 - Midway Bell": lambda state: state.has_any(
-                ["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
-                self.player),
-            "Tree Zone 2 - Normal Exit": lambda state: has_pipe_right(state, self.player) or state.has(
-                "Tree Zone 2 Midway Bell", self.player),
-            "Tree Zone 2 - Midway Bell": lambda state: has_pipe_right(state, self.player) or state.has(
-                "Tree Zone 2 Midway Bell", self.player),
-            "Tree Zone 2 - Secret Exit": lambda state: has_pipe_right(state, self.player)
-                                                       and state.has("Carrot", self.player),
-            "Tree Zone 3 - Normal Exit": lambda state: not is_auto_scroll(state, self.player, "Tree Zone 3"),
-            "Tree Zone 4 - Normal Exit": lambda state: has_pipe_down(state, self.player)
-                and ((has_pipe_right(state, self.player) and has_pipe_up(state, self.player))
-                or state.has("Tree Zone 4 Midway Bell", self.player)),
-            "Tree Zone 4 - Midway Bell": lambda state: ((has_pipe_right(state, self.player)
-                and has_pipe_up(state, self.player)) or state.has("Tree Zone 4 Midway Bell", self.player)),
-            "Tree Zone 5 - Boss": lambda state: has_pipe_right(state, self.player) and (
-                        has_pipe_up(state, self.player) or state.has("Carrot", self.player)),
-            "Macro Zone 1 - Normal Exit": lambda state: has_pipe_down(state, self.player)
-                                                        or state.has("Macro Zone 1 Midway Bell", self.player),
-            "Macro Zone 1 - Midway Bell": lambda state: has_pipe_down(state, self.player)
-                                                        or state.has("Macro Zone 1 Midway Bell", self.player),
-            "Macro Zone 1 - Secret Exit": lambda state: (has_pipe_down(state, self.player)
-                or state.has("Macro Zone 1 Midway Bell", self.player))
-                and state.has("Fire Flower", self.player) and has_pipe_up(state, self.player),
-            "Macro Zone 2 - Normal Exit": lambda state: (has_pipe_down(state, self.player) or state.has(
-                "Macro Zone 2 Midway Bell", self.player))
-                and state.has("Water Physics", self.player) and has_pipe_up(state,
-                self.player) and not is_auto_scroll(state, self.player, "Macro Zone 2"),
-            "Macro Zone 2 - Midway Bell": lambda state: (has_pipe_down(
-                state, self.player) and state.has("Water Physics", self.player)) or state.has(
-                "Macro Zone 2 Midway Bell", self.player),
-            "Macro Zone 3 - Normal Exit": lambda state: (has_pipe_down(state, self.player)
-                and has_pipe_down(state, self.player)) or state.has("Macro Zone 3 Midway Bell", self.player),
-            "Macro Zone 3 - Midway Bell": lambda state: (has_pipe_down(state, self.player)
-                and has_pipe_down(state, self.player)) or state.has("Macro Zone 3 Midway Bell", self.player),
-            "Macro Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
-            "Pumpkin Zone 1 - Normal Exit": lambda state: (has_pipe_down(state, self.player)
-                 and not is_auto_scroll(state, self.player, "Pumpkin Zone 1")) or state.has(
-                "Pumpkin Zone 1 Midway Bell", self.player),
-            "Pumpkin Zone 1 - Midway Bell": lambda state: (has_pipe_down(state, self.player)
-                 and not is_auto_scroll(state, self.player, "Pumpkin Zone 1")) or state.has(
-                "Pumpkin Zone 1 Midway Bell", self.player),
-            "Pumpkin Zone 2 - Normal Exit": lambda state: has_pipe_down(state, self.player) and has_pipe_up(
-                state, self.player) and has_pipe_right(state, self.player) and state.has("Water Physics",
-                self.player) and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
-            "Pumpkin Zone 2 - Secret Exit": lambda state: has_pipe_down(
-                state, self.player) and has_pipe_up(state, self.player) and has_pipe_right(
-                state, self.player) and state.has("Water Physics", self.player) and state.has_any(
-                ["Mushroom", "Fire Flower"], self.player) and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
-            "Pumpkin Zone 3 - Secret Exit": lambda state: state.has("Carrot", self.player),
-            "Pumpkin Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
-            "Mario Zone 1 - Normal Exit": lambda state: has_pipe_right(state, self.player) and (
-                    state.has_any(["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 Midway Bell"], self.player)
-                    or not is_auto_scroll(state, self.player, "Mario Zone 1")),
+            "Space Zone 1 - Secret Exit":
+                lambda state: state.has_any(["Space Physics", "Carrot"], self.player)
+                              and not is_auto_scroll(state, self.player, "Space Zone 1"),
+            "Space Zone 2 - Boss":
+                lambda state: logic.space_zone_2_boss(state, self.player),
+            "Space Zone 2 - Midway Bell":
+                lambda state: state.has_any(["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower",
+                                             "Carrot"], self.player),
+            "Tree Zone 2 - Normal Exit":
+                lambda state: has_pipe_right(state, self.player) or state.has("Tree Zone 2 Midway Bell", self.player),
+            "Tree Zone 2 - Midway Bell":
+                lambda state: has_pipe_right(state, self.player) or state.has("Tree Zone 2 Midway Bell", self.player),
+            "Tree Zone 2 - Secret Exit":
+                lambda state: has_pipe_right(state, self.player) and state.has("Carrot", self.player),
+            "Tree Zone 3 - Normal Exit":
+                lambda state: not is_auto_scroll(state, self.player, "Tree Zone 3"),
+            "Tree Zone 4 - Normal Exit":
+                lambda state: has_pipe_down(state, self.player)
+                              and ((has_pipe_right(state, self.player)
+                                    and has_pipe_up(state, self.player))
+                                   or state.has("Tree Zone 4 Midway Bell", self.player)),
+            "Tree Zone 4 - Midway Bell":
+                lambda state: (has_pipe_right(state, self.player)
+                               and has_pipe_up(state, self.player))
+                              or state.has("Tree Zone 4 Midway Bell", self.player),
+            "Tree Zone 5 - Boss":
+                lambda state: has_pipe_right(state, self.player)
+                              and (has_pipe_up(state, self.player)
+                                   or state.has("Carrot", self.player)),
+            "Macro Zone 1 - Normal Exit":
+                lambda state: has_pipe_down(state, self.player)
+                              or state.has("Macro Zone 1 Midway Bell", self.player),
+            "Macro Zone 1 - Midway Bell":
+                lambda state: has_pipe_down(state, self.player)
+                              or state.has("Macro Zone 1 Midway Bell", self.player),
+            "Macro Zone 1 - Secret Exit":
+                lambda state: (has_pipe_down(state, self.player)
+                               or state.has("Macro Zone 1 Midway Bell", self.player))
+                              and state.has("Fire Flower", self.player) and has_pipe_up(state, self.player),
+            "Macro Zone 2 - Normal Exit":
+                lambda state: (has_pipe_down(state, self.player)
+                               or state.has("Macro Zone 2 Midway Bell", self.player))
+                              and state.has("Water Physics", self.player) and has_pipe_up(state, self.player)
+                              and not is_auto_scroll(state, self.player, "Macro Zone 2"),
+            "Macro Zone 2 - Midway Bell":
+                lambda state: (has_pipe_down(state, self.player)
+                               and state.has("Water Physics", self.player)) or state.has("Macro Zone 2 Midway Bell",
+                                                                                         self.player),
+            "Macro Zone 3 - Normal Exit":
+                lambda state: (has_pipe_down(state, self.player)
+                               and has_pipe_down(state, self.player))
+                              or state.has("Macro Zone 3 Midway Bell", self.player),
+            "Macro Zone 3 - Midway Bell":
+                lambda state: (has_pipe_down(state, self.player)
+                               and has_pipe_down(state, self.player))
+                              or state.has("Macro Zone 3 Midway Bell", self.player),
+            "Macro Zone 4 - Boss":
+                lambda state:has_pipe_right(state, self.player),
+            "Pumpkin Zone 1 - Normal Exit":
+                lambda state: (has_pipe_down(state, self.player)
+                               and not is_auto_scroll(state, self.player, "Pumpkin Zone 1"))
+                              or state.has("Pumpkin Zone 1 Midway Bell", self.player),
+            "Pumpkin Zone 1 - Midway Bell":
+                lambda state: (has_pipe_down(state, self.player)
+                               and not is_auto_scroll(state, self.player, "Pumpkin Zone 1"))
+                              or state.has("Pumpkin Zone 1 Midway Bell", self.player),
+            "Pumpkin Zone 2 - Normal Exit":
+                lambda state: has_pipe_down(state, self.player)
+                              and has_pipe_up(state, self.player)
+                              and has_pipe_right(state, self.player)
+                              and state.has("Water Physics", self.player)
+                              and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
+            "Pumpkin Zone 2 - Secret Exit":
+                lambda state: has_pipe_down(state, self.player)
+                              and has_pipe_up(state, self.player)
+                              and has_pipe_right(state, self.player)
+                              and state.has("Water Physics", self.player)
+                              and state.has_any(["Mushroom", "Fire Flower"], self.player)
+                              and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
+            "Pumpkin Zone 3 - Secret Exit":
+                lambda state: state.has("Carrot", self.player),
+            "Pumpkin Zone 4 - Boss":
+                lambda state: has_pipe_right(state, self.player),
+            "Mario Zone 1 - Normal Exit":
+                lambda state: has_pipe_right(state, self.player)
+                              and (state.has_any(["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 Midway Bell"],
+                                                 self.player)
+                                   or not is_auto_scroll(state, self.player, "Mario Zone 1")),
             # It is possible to get as small mario, but it is a very precise jump and you will die afterward.
-            "Mario Zone 1 - Midway Bell": lambda state: (state.has_any(
-                ["Mushroom", "Fire Flower", "Carrot"], self.player) and has_pipe_right(state, self.player))
-                or state.has("Mario Zone 1 Midway Bell", self.player),
-            "Mario Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
-            "Turtle Zone 1 - Normal Exit": lambda state: logic.not_blocked_by_sharks(state, self.player),
-            "Turtle Zone 2 - Normal Exit": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
-                state, self.player) and has_pipe_right(state, self.player) and has_pipe_left(state, self.player)
-                and state.has("Water Physics", self.player) and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
-            "Turtle Zone 2 - Midway Bell": lambda state: state.has_any(
-                ["Water Physics", "Turtle Zone 2 Midway Bell"], self.player) and not is_auto_scroll(state,
-                self.player, "Turtle Zone 2"),
-            "Turtle Zone 2 - Secret Exit": lambda state: has_pipe_up(
-                state, self.player) and state.has("Water Physics", self.player) and not is_auto_scroll(state,
-                self.player, "Turtle Zone 2"),
-            "Turtle Zone Secret Course - Normal Exit": lambda state: state.has_any(["Fire Flower", "Carrot"],
-                                                                                   self.player),
-            "Turtle Zone 3 - Boss": lambda state: has_pipe_right(state, self.player),
-            "Mario's Castle - Wario": lambda state: has_pipe_right(
-                state, self.player) and has_pipe_left(state, self.player),
-            "Mario's Castle - Midway Bell": lambda state: (has_pipe_right(state, self.player) and has_pipe_left(
-                state, self.player)) or state.has("Mario's Castle Midway Bell", self.player)
+            "Mario Zone 1 - Midway Bell":
+                lambda state: (state.has_any(["Mushroom", "Fire Flower", "Carrot"], self.player)
+                               and has_pipe_right(state, self.player))
+                              or state.has("Mario Zone 1 Midway Bell", self.player),
+            "Mario Zone 4 - Boss":
+                lambda state: has_pipe_right(state, self.player),
+            "Turtle Zone 1 - Normal Exit":
+                lambda state: logic.not_blocked_by_sharks(state, self.player),
+            "Turtle Zone 2 - Normal Exit":
+                lambda state: has_pipe_up(state, self.player)
+                              and has_pipe_down(state, self.player)
+                              and has_pipe_right(state, self.player)
+                              and has_pipe_left(state, self.player)
+                              and state.has("Water Physics", self.player)
+                              and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
+            "Turtle Zone 2 - Midway Bell":
+                lambda state: state.has_any(["Water Physics", "Turtle Zone 2 Midway Bell"], self.player)
+                              and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
+            "Turtle Zone 2 - Secret Exit":
+                lambda state: has_pipe_up(state, self.player)
+                              and state.has("Water Physics", self.player)
+                              and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
+            "Turtle Zone Secret Course - Normal Exit":
+                lambda state: state.has_any(["Fire Flower", "Carrot"], self.player),
+            "Turtle Zone 3 - Boss":
+                lambda state: has_pipe_right(state, self.player),
+            "Mario's Castle - Wario":
+                lambda state: has_pipe_right(state, self.player)
+                              and has_pipe_left(state, self.player),
+            "Mario's Castle - Midway Bell":
+                lambda state: (has_pipe_right(state, self.player)
+                               and has_pipe_left(state, self.player))
+                              or state.has("Mario's Castle Midway Bell", self.player)
         }
 
         for entrance, rule in entrance_rules.items():
