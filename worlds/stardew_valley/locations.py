@@ -101,6 +101,8 @@ class LocationTags(enum.Enum):
     BOOKSANITY_POWER = enum.auto()
     BOOKSANITY_SKILL = enum.auto()
     BOOKSANITY_LOST = enum.auto()
+
+    DEPRECATED = enum.auto()
     # Mods
     # Skill Mods
     LUCK_LEVEL = enum.auto()

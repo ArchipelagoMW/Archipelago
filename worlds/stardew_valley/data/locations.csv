@@ -2501,10 +2501,10 @@ id,region,name,tags,mod_name
 6008,Museum,Friendsanity: Jasper 8 <3,FRIENDSANITY,Professor Jasper Thomas
 6009,Museum,Friendsanity: Jasper 9 <3,FRIENDSANITY,Professor Jasper Thomas
 6010,Museum,Friendsanity: Jasper 10 <3,FRIENDSANITY,Professor Jasper Thomas
-6011,Museum,Friendsanity: Jasper 11 <3,FRIENDSANITY,Professor Jasper Thomas
-6012,Museum,Friendsanity: Jasper 12 <3,FRIENDSANITY,Professor Jasper Thomas
-6013,Museum,Friendsanity: Jasper 13 <3,FRIENDSANITY,Professor Jasper Thomas
-6014,Museum,Friendsanity: Jasper 14 <3,FRIENDSANITY,Professor Jasper Thomas
+6011,Museum,Friendsanity: Jasper 11 <3,"FRIENDSANITY,DEPRECATED",Professor Jasper Thomas
+6012,Museum,Friendsanity: Jasper 12 <3,"FRIENDSANITY,DEPRECATED",Professor Jasper Thomas
+6013,Museum,Friendsanity: Jasper 13 <3,"FRIENDSANITY,DEPRECATED",Professor Jasper Thomas
+6014,Museum,Friendsanity: Jasper 14 <3,"FRIENDSANITY,DEPRECATED",Professor Jasper Thomas
 6015,Yoba's Clearing,Friendsanity: Yoba 1 <3,FRIENDSANITY,Custom NPC - Yoba
 6016,Yoba's Clearing,Friendsanity: Yoba 2 <3,FRIENDSANITY,Custom NPC - Yoba
 6017,Yoba's Clearing,Friendsanity: Yoba 3 <3,FRIENDSANITY,Custom NPC - Yoba
