@@ -17,7 +17,9 @@ class ShuffleGoldenCoins(Choice):
 
 
 class GoldenCoinsRequired(Range):
-    """Number of Golden Coins required to enter Mario's Castle. Ignored on Mario Coin Fragment Hunt."""
+    """
+    Number of Golden Coins required to enter Mario's Castle. Ignored on Mario Coin Fragment Hunt.
+    """
     display_name = "Golden Coins Required"
     range_start = 0
     range_end = 6
@@ -25,9 +27,11 @@ class GoldenCoinsRequired(Range):
 
 
 class MarioCoinFragmentPercentage(Range):
-    """Percentage of filler items to be replaced with Mario Coin Fragments. Note that the Coinsanity and Coinsanity
+    """
+    Percentage of filler items to be replaced with Mario Coin Fragments. Note that the Coinsanity and Coinsanity
     Checks options will greatly impact the number of replaceable filler items. There may be as few as 6 available
-    slots for Mario Coin Fragments if Coinsanity is off."""
+    slots for Mario Coin Fragments if Coinsanity is off.
+    """
     display_name = "Mario Coin Fragment Percentage"
     range_start = 1
     range_end = 100
@@ -35,7 +39,9 @@ class MarioCoinFragmentPercentage(Range):
 
 
 class MarioCoinFragmentsRequiredPercentage(Range):
-    """Percentage of the Mario Coins in the item pool that are required to put the Mario Coin together."""
+    """
+    Percentage of the Mario Coins in the item pool that are required to put the Mario Coin together.
+    """
     display_name = "Mario Coin Fragments Required Percentage"
     range_start = 1
     range_end = 100
@@ -43,28 +49,36 @@ class MarioCoinFragmentsRequiredPercentage(Range):
 
 
 class ShuffleMidwayBells(Toggle):
-    """Shuffle the Midway Bells into the item pool. Ringing a bell will trigger a location check.
+    """
+    Shuffle the Midway Bells into the item pool. Ringing a bell will trigger a location check.
     Obtaining a Midway Bell will be permanent, and some levels will require backtracking from the midway point to reach
-    secret exits."""
+    secret exits.
+    """
     display_name = "Shuffle Midway Bells"
 
 
 class MariosCastleMidwayBell(Toggle):
-    """Adds a Midway Bell to the final stage, just before the Wario fight."""
+    """
+    Adds a Midway Bell to the final stage, just before the Wario fight.
+    """
     display_name = "Mario's Castle Midway Bell"
 
 
 class Coinsanity(Toggle):
-    """Shuffles the singular coins found freestanding and in question mark blocks into the item pool, and adds location
-    checks made by obtaining a sufficient number of coins in particular levels within a single playthrough."""
+    """
+    Shuffles the singular coins found freestanding and in question mark blocks into the item pool, and adds location
+    checks made by obtaining a sufficient number of coins in particular levels within a single playthrough.
+    """
     default_name = "Coinsanity"
 
 
 class CoinsanityChecks(Range):
-    """Number of Coinsanity checks.
+    """
+    Number of Coinsanity checks.
     A higher number means more checks, and smaller coin amounts per coin item in the item pool.
     If Accessibility is set to Locations, auto-scroll levels may have a lower maximum count, which may lead to this
-    value being limited."""
+    value being limited.
+    """
     default_name = "Coinsanity Checks"
     range_start = 31
     range_end = 2599
@@ -72,8 +86,10 @@ class CoinsanityChecks(Range):
 
 
 class DifficultyMode(Choice):
-    """Play in normal or easy mode. You can also start in Normal Mode with an "upgrade" to Easy Mode in the item pool,
-    or start in Easy Mode with a Normal Mode "trap" in the item pool."""
+    """
+    Play in normal or easy mode. You can also start in Normal Mode with an "upgrade" to Easy Mode in the item pool,
+    or start in Easy Mode with a Normal Mode "trap" in the item pool.
+    """
     display_name = "Difficulty Mode"
     option_normal = 0
     option_easy = 1
@@ -83,9 +99,11 @@ class DifficultyMode(Choice):
 
 
 class ShufflePipeTraversal(Choice):
-    """Single: Shuffle a Pipe Traversal item into the item pool, which is required to enter any pipes.
+    """
+    Single: Shuffle a Pipe Traversal item into the item pool, which is required to enter any pipes.
     Split: Shuffle 4 Pipe Traversal items, one required for entering pipes from each direction.
-    Note that being unable to enter pipes is very limiting and affects nearly half of all levels."""
+    Note that being unable to enter pipes is very limiting and affects nearly half of all levels.
+    """
     display_name = "Shuffle Pipe Traversal"
     option_off = 0
     option_single = 1
@@ -94,17 +112,23 @@ class ShufflePipeTraversal(Choice):
 
 
 class RandomizeEnemies(Toggle):
-    """Randomize enemies throughout levels."""
+    """
+    Randomize enemies throughout levels.
+    """
     display_name = "Randomize Enemies"
 
 
 class RandomizePlatforms(Toggle):
-    """Randomize platforms throughout levels."""
+    """
+    Randomize platforms throughout levels.
+    """
     display_name = "Randomize Platforms"
 
 
 class AutoScrollChances(NamedRange):
-    """Chance per eligible level to be made into an auto scroll level. Can also set to Vanilla to leave them unchanged."""
+    """
+    Chance per eligible level to be made into an auto scroll level. Can also set to Vanilla to leave them unchanged.
+    """
     display_name = "Auto Scroll Chance"
     range_start = 0
     range_end = 100
@@ -113,7 +137,8 @@ class AutoScrollChances(NamedRange):
 
 
 class AutoScrollMode(Choice):
-    """Always: Any auto scroll levels will always auto-scroll.
+    """
+    Always: Any auto scroll levels will always auto-scroll.
     Global Trap Item: Auto scroll levels will only auto-scroll after obtaining the Auto Scroll trap item.
     Level Trap Items: As with Trap Item, but there is a separate trap item for each auto scroll level.
     Global Cancel Item: Auto Scroll levels will stop auto-scrolling after obtaining the Auto Scroll Cancel item.
@@ -122,7 +147,8 @@ class AutoScrollMode(Choice):
     The effects of Trap and Cancel items are permanent! If Accessibility is not set to Locations,
     Traps may cause locations to become permanently unreachable.
     With individual level items, the number of auto scroll levels may be limited by the available space in the item
-    pool."""
+    pool.
+    """
     display_name = "Auto Scroll Mode"
     option_always = 0
     option_global_trap_item = 1
@@ -134,13 +160,17 @@ class AutoScrollMode(Choice):
 
 
 class RandomizeMusic(Toggle):
-    """Randomize the music that plays in levels and overworld areas."""
+    """
+    Randomize the music that plays in levels and overworld areas.
+    """
     display_name = "Randomize Music"
 
 
 class EnergyLink(Toggle):
-    """All extra lives beyond 1 are transferred into the server's shared EnergyLink storage. If you drop to 0,
-    1 will be replenished if there is sufficient energy stored."""
+    """
+    All extra lives beyond 1 are transferred into the server's shared EnergyLink storage. If you drop to 0,
+    1 will be replenished if there is sufficient energy stored.
+    """
     display_name = "Energy Link"
     default = 1
 
