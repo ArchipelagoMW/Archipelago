@@ -31,7 +31,8 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
-                     allow_partial: bool = False, allow_excluded: bool = False, name: str = "Unknown") -> None:
+                     allow_partial: bool = False, allow_excluded: bool = False, one_item_per_player: bool = True,
+                     name: str = "Unknown") -> None:
     """
     :param multiworld: Multiworld to be filled.
     :param base_state: State assumed before fill.
@@ -58,14 +59,18 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     placed = 0
 
     while any(reachable_items.values()) and locations:
-        # grab one item per player
-        items_to_place = [items.pop()
-                          for items in reachable_items.values() if items]
-        for item in items_to_place:
-            for p, pool_item in enumerate(item_pool):
-                if pool_item is item:
-                    item_pool.pop(p)
-                    break
+        if one_item_per_player:
+            # grab one item per player
+            items_to_place = [items.pop()
+                              for items in reachable_items.values() if items]
+            for item in items_to_place:
+                for p, pool_item in enumerate(item_pool):
+                    if pool_item is item:
+                        item_pool.pop(p)
+                        break
+        else:
+            items_to_place = [item_pool.pop()]
+
         maximum_exploration_state = sweep_from_pool(
             base_state, item_pool + unplaced_items, multiworld.get_filled_locations(item.player)
             if single_player_placement else None)
@@ -474,7 +479,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         # "priority fill"
         fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
                          single_player_placement=multiworld.players == 1, swap=False, on_place=mark_for_locking,
-                         name="Priority")
+                         name="Priority", one_item_per_player=False)
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
