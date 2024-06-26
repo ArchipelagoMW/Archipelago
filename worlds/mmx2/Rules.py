@@ -216,7 +216,7 @@ def set_rules(world: MMX2World):
              ))
     
     # Bubble Crab rules
-    add_rule(multiworld.get_location(LocationName.bubble_crab_heart_tank, player),
+    add_rule(multiworld.get_location(LocationName.bubble_crab_sub_tank, player),
              lambda state: (
                 state.has(ItemName.arms, player, jammed_buster + 1) and
                 state.has(ItemName.bubble_splash, player)
@@ -311,6 +311,19 @@ def add_pickupsanity_logic(world: MMX2World):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value
+
+    # Bubble Crab
+    add_rule(multiworld.get_location(LocationName.bubble_crab_energy_1, player),
+             lambda state: (
+                state.has(ItemName.legs, player) or
+                (
+                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.speed_burner, player)
+                ) or (
+                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.bubble_splash, player)
+                )
+             ))
 
     # Overdrive Ostrich
     add_rule(multiworld.get_location(LocationName.overdrive_ostrich_hp_1, player),
