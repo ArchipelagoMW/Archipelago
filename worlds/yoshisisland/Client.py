@@ -87,9 +87,7 @@ class YoshisIslandSNIClient(SNIClient):
 
         if game_mode is None:
             return
-        elif goal_flag[0] != 0x00:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            ctx.finished_game = True
+
         elif game_mode[0] not in VALID_GAME_STATES:
             return
         elif item_received[0] > 0x00:
@@ -100,6 +98,10 @@ class YoshisIslandSNIClient(SNIClient):
         if rom != ctx.rom:
             ctx.rom = None
             return
+
+        if goal_flag[0] != 0x00:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
 
         new_checks = []
         from .Rom import location_table
