@@ -69,7 +69,9 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                         item_pool.pop(p)
                         break
         else:
-            items_to_place = [item_pool.pop()]
+            items_to_place = []
+            if item_pool:
+                items_to_place.append(item_pool.pop())
 
         maximum_exploration_state = sweep_from_pool(
             base_state, item_pool + unplaced_items, multiworld.get_filled_locations(item.player)
