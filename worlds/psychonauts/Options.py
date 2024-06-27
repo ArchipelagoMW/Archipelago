@@ -37,10 +37,6 @@ class LootboxVaults(Toggle):
     display_name = "Lootbox Vaults"
     default = True
 
-class FasterLindaBoss(Toggle):
-    """Make the Linda Boss chase sequences faster by increasing the speed of the air bubble."""
-    display_name = "Faster Linda Boss"
-    default = True
 
 class EasyMillaRace(Toggle):
     """Make the race in Milla's Mind easier by removing Bobby from the race, and increasing player speed to 1.5x"""
@@ -128,7 +124,6 @@ class PsychonautsOptions(PerGameCommonOptions):
     StartingCobwebDuster: StartingCobwebDuster
     RandomStartingMinds: RandomStartingMinds
     LootboxVaults: LootboxVaults
-    FasterLindaBoss: FasterLindaBoss
     EasyMillaRace: EasyMillaRace
     EasyFlightMode: EasyFlightMode
     EnemyDamageMultiplier: EnemyDamageMultiplier
