@@ -71,6 +71,16 @@ or whether to only count meat or veggie meals.
 
 Currently the randomizer is designed to work for worlds with caves.
 
+## What happens if I choose Survival or Wilderness as my server playstyle or otherwise regenerate my world?
+
+If the world regenerates, or starting on a new world, your checks and items will sync from the Archipelago server, giving back your AP 
+items when you first spawn in. Trap items will not be given again, except your last season trap received, if any. If you haven't connected
+to Archipelago when restarting your world, progress since you've last connected will be lost.
+
+Your day count will reset, setting back your progress if your completion goal is to survive a number of days. The same applies if
+you reset your character through commands or dying in Wilderness mode, but not when switching your character using a Celestial Portal
+and Moon Rock Idol.
+
 ## Is this compatible with other Don't Starve Together mods?
 
 This should be compatible with other Don't Starve Together mods. Modded items will not be shuffled and will be craftable as normal.
