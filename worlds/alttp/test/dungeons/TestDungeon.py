@@ -55,6 +55,6 @@ class TestDungeon(LTTPTestBase):
                 for item in items:
                     item.classification = ItemClassification.progression
                     state.collect(item, event=True)  # event=True prevents running sweep_for_events() and picking up
-                state.sweep_for_advancements()             # key drop keys repeatedly
+                state.sweep_for_advancements()  # key drop keys repeatedly
 
                 self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), access, f"failed {self.multiworld.get_location(location, 1)} with: {item_pool}")
