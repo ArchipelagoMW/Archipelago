@@ -32,10 +32,11 @@ item_table = {
     "Progressive Major To Queen": CMItemData(4_901_006, ItemClassification.progression, quantity=5, material=415,
                                              parents=[["Progressive Major Piece", 1]]),
     "Victory": CMItemData(4_901_009, ItemClassification.progression),
+    "Super-Size Me": CMItemData(4_901_010, ItemClassification.progression),  # :)
     # TODO: implement extra moves
     # "Progressive Enemy Pawn": CMItemData(4_907, ItemClassification.trap, quantity=8),
     # "Progressive Enemy Piece": CMItemData(4_908, ItemClassification.trap, quantity=7),
-    # "Progressive Opening Move": CMItemData(4_010, ItemClassification.useful, quantity=3),
+    # "Progressive Opening Move": CMItemData(4_013, ItemClassification.useful, quantity=3),
 
     # Players have 3 pockets, which can be empty, or hold a pawn, minor piece, major piece, or queen.
     # Collected pocket items are distributed randomly to the 3 pockets in the above order.
@@ -75,10 +76,10 @@ item_table = {
     "Enemy Piece G": CMItemData(4_901_043, ItemClassification.progression),
     "Enemy Piece H": CMItemData(4_901_044, ItemClassification.progression),
     # TODO: implement castling rule & guarantee major piece on that side for Locations
-    # "Play 00 Castle": CMItemData(4_010, ItemClassification.progression),
-    # "Play 000 Castle": CMItemData(4_011, ItemClassification.progression),
+    # "Play 00 Castle": CMItemData(4_014, ItemClassification.progression),
+    # "Play 000 Castle": CMItemData(4_015, ItemClassification.progression),
     # TODO: consider breaking passant into individual pawns, or progressive for outer..center pawns
-    # "Play En Passant": CMItemData(4_012, ItemClassification.progression),
+    # "Play En Passant": CMItemData(4_011, ItemClassification.progression),
 
     # == Possible pocket implementation ==
     # "Progressive Pocket Pawn": CMItemData(4_021, ItemClassification.progression, quantity=3, material=90),

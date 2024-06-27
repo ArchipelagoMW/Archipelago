@@ -11,7 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Options import CMOptions, piece_type_limit_options, piece_limit_options
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups, CMItemData)
-from .Locations import CMLocation, location_table, highest_chessmen_requirement
+from .Locations import CMLocation, location_table, highest_chessmen_requirement_small, highest_chessmen_requirement
 from .Presets import checksmate_option_presets
 from .Rules import set_rules, determine_difficulty, determine_relaxation
 
@@ -144,9 +144,7 @@ class CMWorld(World):
         set_rules(self.multiworld, self.player, self.options)
 
     def create_items(self):
-        is_single = self.options.goal.value == 0
-        if not is_single:
-            return
+        super_sized = self.options.goal.value != self.options.goal.option_single
         for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
             self.multiworld.push_precollected(self.create_item(enemy_pawn))
         for enemy_piece in self.item_name_groups["Enemy Piece"]:
@@ -172,12 +170,17 @@ class CMWorld(World):
         user_location_count = len(starter_items)
         user_location_count += 1  # Victory item is counted as part of the pool
         items = []
+        if self.options.goal.value == self.options.goal.option_progressive:
+            items.append(create_item_with_correct_settings(self.player, "Super-Size Me"))
 
         # find the material value the user's army should provide once fully collected
         material = sum([
             progression_items[item].material * self.items_used[self.player][item]
             for item in self.items_used[self.player] if item in progression_items])
         difficulty = determine_difficulty(self.options)
+        if super_sized:
+            difficulty *= (location_table["Checkmate Maxima"].material_expectations_grand /
+                           location_table["Checkmate Maxima"].material_expectations)
         absolute_relaxation = determine_relaxation(self.options)
         min_material_option = self.options.min_material.value * 100 * difficulty + absolute_relaxation
         max_material_option = self.options.max_material.value * 100 * difficulty + absolute_relaxation
@@ -271,6 +274,7 @@ class CMWorld(World):
 
         # exclude inaccessible locations
         # (all locations should be accessible if accessibility != minimal)
+        # (I might change this later I guess, Archipelago is supposed to tolerate inaccessible items being swallowed up)
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             # castle
             if (len([item for item in items if item.name == "Progressive Major Piece"]) < 2 +
@@ -357,13 +361,13 @@ class CMWorld(World):
     # this method assumes we cannot run out of pawns... we don't support excluded_items{pawn}
     # there is no maximum number of chessmen... just minimum chessmen and maximum material.
     def should_remove(self,
-                 chosen_item: str,
-                 material: int,
-                 min_material: float,
-                 max_material: float,
-                 items: list[CMItem],
-                 my_progression_items: list[str | CMItemData],
-                 locked_items: dict[str, int]) -> bool:
+                      chosen_item: str,
+                      material: int,
+                      min_material: float,
+                      max_material: float,
+                      items: list[CMItem],
+                      my_progression_items: list[str | CMItemData],
+                      locked_items: dict[str, int]) -> bool:
         if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
             # TODO: there is a better way, probably next step is a "one strike" mechanism
             return True
@@ -378,8 +382,10 @@ class CMWorld(World):
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return False
 
-        necessary_chessmen = (highest_chessmen_requirement -
-                              chessmen_count(items, self.options.pocket_limit_by_pocket.value))
+        chessmen_requirement = highest_chessmen_requirement_small if \
+            self.options.goal.value == self.options.goal.option_single else \
+            highest_chessmen_requirement
+        necessary_chessmen = (chessmen_requirement - chessmen_count(items, self.options.pocket_limit_by_pocket.value))
         if chosen_item in item_name_groups["Chessmen"]:
             necessary_chessmen -= 1
         return necessary_chessmen > 0 and material + chosen_material + (
@@ -416,12 +422,21 @@ class CMWorld(World):
         region = Region("Menu", self.player, self.multiworld)
         for loc_name in location_table:
             loc_data = location_table[loc_name]
+            if self.options.goal.value == self.options.goal.option_single:
+                if loc_data.material_expectations == -1:
+                    continue
+            if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
+                if loc_data.is_tactic:
+                    continue
             region.locations.append(CMLocation(self.player, loc_name, loc_data.code, region))
         self.multiworld.regions.append(region)
 
     def generate_basic(self):
         victory_item = create_item_with_correct_settings(self.player, "Victory")
         self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
+        if self.options.goal.value == 1:
+            supersize_item = create_item_with_correct_settings(self.player, "Super-Size Me")
+            self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(supersize_item)
 
     def fewest_parents(self, parents: list[list[str, int]]):
         # TODO: this concept doesn't work if a parent can have multiple children and another can't, e.g. forwardness
@@ -512,6 +527,7 @@ class CMWorld(World):
         cmoptions: CMOptions = self.options
         non_local_items = self.options.non_local_items.value
         early_material_option = cmoptions.early_material.value
+        super_sized = self.options.goal.value != self.options.goal.option_single
         if early_material_option > 0:
             early_units = []
             if early_material_option == 1 or early_material_option > 4:
@@ -530,8 +546,14 @@ class CMWorld(World):
             item = create_item_with_correct_settings(player, self.random.choice(local_basic_unit))
             multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
             locked_locations.append("King to E2/E7 Early")
+            user_items = [item]
 
-            return [item]
+            if self.options.goal.value == self.options.goal.option_ordered_progressive:
+                item = create_item_with_correct_settings(player, "Super-Size Me")
+                multiworld.get_location("Checkmate Minima", player).place_locked_item(item)
+                locked_locations.append("Checkmate Minima")
+                user_items.append(item)
+            return user_items
         else:
             return []
 
@@ -620,13 +642,12 @@ def get_parents(chosen_item: str) -> list[list[str, int]]:
 def get_children(chosen_item: str) -> list[str]:
     return [item for item in item_table
             if item_table[item].parents is not None and chosen_item in map(
-                lambda x: x[0], item_table[item].parents)]
+            lambda x: x[0], item_table[item].parents)]
 
 
 def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:
     pocket_amount = (0 if pocket_limit <= 0 else
-            math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
+                     math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
     chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
     logging.debug("Found {} chessmen and {} pocket men".format(chessmen_amount, pocket_amount))
     return chessmen_amount + pocket_amount
-

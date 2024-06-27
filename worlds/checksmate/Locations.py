@@ -23,18 +23,18 @@ class CMLocationData(NamedTuple):
 location_table = {
     # capture individual pieces and pawns
     # AI prefers not to use edge pawns early - thus they stay defended longer
-    "Capture Pawn A": CMLocationData(4_902_000, 190, 290),
-    "Capture Pawn B": CMLocationData(4_902_001, 140, 190),
-    "Capture Pawn C": CMLocationData(4_902_002, 100, 140),
-    "Capture Pawn D": CMLocationData(4_902_003, 100, 100),
-    "Capture Pawn E": CMLocationData(4_902_004, 100, 100),
+    "Capture Pawn A": CMLocationData(4_902_000, 190, 310),
+    "Capture Pawn B": CMLocationData(4_902_001, 140, 210),
+    "Capture Pawn C": CMLocationData(4_902_002, 100, 160),
+    "Capture Pawn D": CMLocationData(4_902_003, 100, 120),
+    "Capture Pawn E": CMLocationData(4_902_004, 100, 120),
     # AI prefers not to open kingside as developing queen has more tempo
-    "Capture Pawn F": CMLocationData(4_902_005, 140, 100),
-    "Capture Pawn G": CMLocationData(4_902_006, 240, 100),
+    "Capture Pawn F": CMLocationData(4_902_005, 140, 120),
+    "Capture Pawn G": CMLocationData(4_902_006, 240, 120),
     # AI prefers not to use edge pawns early - thus they stay defended longer
-    "Capture Pawn H": CMLocationData(4_902_007, 290, 140),
-    "Capture Pawn I": CMLocationData(4_902_101, -1, 290),
-    "Capture Pawn J": CMLocationData(4_902_102, -1, 290),
+    "Capture Pawn H": CMLocationData(4_902_007, 290, 160),
+    "Capture Pawn I": CMLocationData(4_902_101, -1, 310),
+    "Capture Pawn J": CMLocationData(4_902_102, -1, 390),
     "Capture Queen's Rook": CMLocationData(4_902_008, 900, 1650),
     "Capture Queen's Knight": CMLocationData(4_902_010, 700, 1200),
     "Capture Queen's Bishop": CMLocationData(4_902_012, 700, 1200),
@@ -108,14 +108,14 @@ location_table = {
     # special moves and tactics
     # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
     # "French Move": CMLocationData(4_902_050, 0),
-    "Fork, Sacrificial": CMLocationData(4_902_052, 700, 700, is_tactic=True),
-    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, 2700, is_tactic=True),
+    "Fork, Sacrificial": CMLocationData(4_902_052, 700, 700, 6, is_tactic=True),
+    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, 2700, 9, is_tactic=True),
     # AI really hates getting royal forked
-    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, 5200, is_tactic=True),
-    "Fork, True": CMLocationData(4_902_055, 2550, 4550, is_tactic=True),
-    "Fork, True Triple": CMLocationData(4_902_056, 3450, 5450, is_tactic=True),
+    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, 5200, 12, is_tactic=True),
+    "Fork, True": CMLocationData(4_902_055, 2550, 4550, 10, is_tactic=True),
+    "Fork, True Triple": CMLocationData(4_902_056, 3450, 5450, 12, is_tactic=True),
     # I sincerely believe this should be filler
-    "Fork, True Royal": CMLocationData(4_902_057, 4020, 6020, is_tactic=True),
+    "Fork, True Royal": CMLocationData(4_902_057, 4020, 6020, 14, is_tactic=True),
     # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     "O-O Castle": CMLocationData(4_902_058, 0, 0, 2),
     "O-O-O Castle": CMLocationData(4_902_059, 0, 0, 2),
@@ -131,4 +131,8 @@ location_table = {
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
 
 # unused because we can never run out of pawn locations
-highest_chessmen_requirement = max([location_table[location].chessmen_expectations for location in location_table])
+highest_chessmen_requirement_small = max([
+    location_table[location].chessmen_expectations for location in location_table if
+    location_table[location].material_expectations != -1])
+highest_chessmen_requirement = max([
+    location_table[location].chessmen_expectations for location in location_table])

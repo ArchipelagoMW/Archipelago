@@ -1,6 +1,7 @@
 from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
+from . import location_table
 from .. import checksmate
 
 from ..generic.Rules import set_rule, add_rule
@@ -98,6 +99,7 @@ def determine_relaxation(opts: CMOptions):
 
 def meets_material_expectations(state: CollectionState,
                                 material: int, player: int, difficulty: float, absolute_relaxation: int) -> bool:
+    # TODO: handle other goals
     target = (material * difficulty) + (absolute_relaxation if material > 90 else 0)
     return state.prog_items[player]["Material"] >= target
 
@@ -112,6 +114,7 @@ def meets_chessmen_expectations(state: CollectionState,
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
+    is_grand = multiworld.worlds[player].items_used[player].get("Super-Size Me", 0)
 
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
@@ -126,6 +129,10 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
         add_rule(multiworld.get_location(name, player),
                  lambda state, v=item.chessmen_expectations: v <= 0 or meets_chessmen_expectations(
                      state, v, player, opts.pocket_limit_by_pocket.value))
+    for name, item in checksmate.Locations.location_table.items():
+        if item.material_expectations == -1:
+            add_rule(multiworld.get_location(name, player),
+                     lambda state: state.count("Super-Size Me", player) > 0)
 
     for i in range(1, 7):
         add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),

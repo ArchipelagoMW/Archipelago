@@ -11,17 +11,16 @@ class Goal(Choice):
     Single: Your opponent starts with an army of 7 pieces and 8 pawns. You have a king. Finding checkmate is your goal.
     To get there, find checks, mate!
 
-    Progressive: Your goal is to checkmate a full army, but their army is scattered across the multiworld. When you
-    deliver checkmate, send a check, and add a sent enemy chessman. Progressively add each enemy pawn and piece by
-    checkmating the opponent 15 times. See also ChecksFinder rows and columns. NOT IMPLEMENTED.
+    Ordered Progressive: When you deliver checkmate, you instead graduate to a Super-Sized board. Your goal is to
+    checkmate again, on that board!
 
-    Ordered Progressive: As Progressive, but the enemy chessmen are always in the progressive checkmate locations. NOT
-    IMPLEMENTED.
+    Progressive: As Ordered Progressive, but the board grows larger when someone sends you your Super-Sized board.
+    NOT IMPLEMENTED.
     """
     display_name = "Goal"
     option_single = 0
-    # option_progressive = 1
-    # option_ordered_progressive = 2
+    option_progressive = 1
+    option_ordered_progressive = 2
     default = 0
 
 
