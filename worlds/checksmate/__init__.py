@@ -180,7 +180,7 @@ class CMWorld(World):
         difficulty = determine_difficulty(self.options)
         if super_sized:
             difficulty *= (location_table["Checkmate Maxima"].material_expectations_grand /
-                           location_table["Checkmate Maxima"].material_expectations)
+                           location_table["Checkmate Minima"].material_expectations_grand)
         absolute_relaxation = determine_relaxation(self.options)
         min_material_option = self.options.min_material.value * 100 * difficulty + absolute_relaxation
         max_material_option = self.options.max_material.value * 100 * difficulty + absolute_relaxation

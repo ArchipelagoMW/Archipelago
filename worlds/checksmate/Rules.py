@@ -2,6 +2,7 @@ from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
 from . import location_table
+from .Locations import piece_names
 from .. import checksmate
 
 from ..generic.Rules import set_rule, add_rule
@@ -146,21 +147,21 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     add_rule(multiworld.get_location("Capture Everything", player),
              lambda state: count_enemy_pawns(state, player) > 7 and count_enemy_pieces(state, player) > 6)
     # pieces must exist to be captured
-    for letter in ["A", "B", "C", "D", "F", "G", "H"]:  # the E piece is the King
-        add_rule(multiworld.get_location("Capture Piece " + str(letter), player),
-                 lambda state, v=letter: has_enemy(state, "Capture Piece " + str(v), player))
+    for letter in ["A", "B", "C", "D", "E", "F", "G", "H"]:  # the E piece is the King
         add_rule(multiworld.get_location("Capture Pawn " + str(letter), player),
                  lambda state, v=letter: has_enemy(state, "Capture Pawn " + str(v), player))
-    add_rule(multiworld.get_location("Capture Pawn E", player),
-             lambda state: has_enemy(state, "Capture Pawn E", player))
+    for piece_name in piece_names:
+        add_rule(multiworld.get_location("Capture " + piece_name, player),
+                 lambda state, v=piece_name: has_enemy(state, "Capture " + v, player))
     # tactics
     # add_rule(multiworld.get_location("Pin", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Fork, Sacrificial", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Fork, True", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Fork, Sacrificial Triple", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Fork, True Triple", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Fork, Sacrificial Royal", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Fork, True Royal", player), lambda state: has_pin(state, player))
+    if opts.enable_tactics.value:
+        add_rule(multiworld.get_location("Fork, Sacrificial", player), lambda state: has_pin(state, player))
+        add_rule(multiworld.get_location("Fork, True", player), lambda state: has_pin(state, player))
+        add_rule(multiworld.get_location("Fork, Sacrificial Triple", player), lambda state: has_pin(state, player))
+        add_rule(multiworld.get_location("Fork, True Triple", player), lambda state: has_pin(state, player))
+        add_rule(multiworld.get_location("Fork, Sacrificial Royal", player), lambda state: has_pin(state, player))
+        add_rule(multiworld.get_location("Fork, True Royal", player), lambda state: has_pin(state, player))
     add_rule(multiworld.get_location("Threaten Pawn", player), lambda state: count_enemy_pawns(state, player) > 0)
     add_rule(multiworld.get_location("Threaten Minor", player), lambda state: count_enemy_pieces(state, player) > 3)
     add_rule(multiworld.get_location("Threaten Major", player), lambda state: count_enemy_pieces(state, player) > 5)

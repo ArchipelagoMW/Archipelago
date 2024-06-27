@@ -15,13 +15,15 @@ class Goal(Choice):
     checkmate again, on that board!
 
     Progressive: As Ordered Progressive, but the board grows larger when someone sends you your Super-Sized board.
-    NOT IMPLEMENTED.
+
+    Super: You skip the 8x8 board immediately. Nearly equivalent to adding Super-Size Me to your starting_inventory.
     """
     display_name = "Goal"
     option_single = 0
-    option_progressive = 1
-    option_ordered_progressive = 2
-    default = 0
+    option_ordered_progressive = 1
+    option_progressive = 2
+    option_super = 3
+    default = 1
 
 
 class Difficulty(Choice):
@@ -60,7 +62,7 @@ class EnableTactics(Choice):
     display_name = "Enable Tactics"
     option_all = 0
     option_none = 1
-    default = 1
+    default = 0
 
 
 class PieceLocations(Choice):
