@@ -614,7 +614,7 @@ def place_events(self: "PSYWorld"):
         victory = final_boss_location
     else:
         # Brain Hunt
-        if self.options.Goal == Options.Goal.option_brainhunt:
+        if self.options.Goal == Options.Goal.option_brain_hunt:
             victory = redeemed_required_brains
         # Brain Tank or Brain Tank AND Brain Hunt
         # For the Brain Tank AND Brain Hunt goal, both must be completed for victory. While the player can complete both

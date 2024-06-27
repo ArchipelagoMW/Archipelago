@@ -173,10 +173,10 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     randoseed_parts.append(f"           Ob.cobwebShuffle = {_lua_bool(self.options.MentalCobwebShuffle)}\n")
 
     # append Goal settings
-    beat_oleander = _lua_bool(self.options.Goal == Goal.option_braintank
-                              or self.options.Goal == Goal.option_braintank_and_brainhunt)
-    require_brain_hunt = _lua_bool(self.options.Goal == Goal.option_brainhunt
-                                   or self.options.Goal == Goal.option_braintank_and_brainhunt)
+    beat_oleander = _lua_bool(self.options.Goal == Goal.option_asylum_brain_tank
+                              or self.options.Goal == Goal.option_asylum_brain_tank_and_brain_hunt)
+    require_brain_hunt = _lua_bool(self.options.Goal == Goal.option_brain_hunt
+                                   or self.options.Goal == Goal.option_asylum_brain_tank_and_brain_hunt)
     randoseed_parts.append(f"           Ob.beatoleander = {beat_oleander}\n")
     randoseed_parts.append(f"           Ob.brainhunt = {require_brain_hunt}\n")
 

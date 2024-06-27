@@ -74,7 +74,7 @@ class PsychonautsMinimalVictoryTestBase(PsychonautsTestBase):
 
 class TestGoalBrainHuntMinimum(PsychonautsMinimalVictoryTestBase):
     options = {
-        "Goal": Options.Goal.option_brainhunt,
+        "Goal": Options.Goal.option_brain_hunt,
         "BrainsRequired": 1,
         "RequireMeatCircus": False,
     }
@@ -90,7 +90,7 @@ class TestGoalBrainHuntMinimum(PsychonautsMinimalVictoryTestBase):
 
 class TestGoalBrainHuntMaximum(PsychonautsMinimalVictoryTestBase):
     options = {
-        "Goal": Options.Goal.option_brainhunt,
+        "Goal": Options.Goal.option_brain_hunt,
         "BrainsRequired": Options.BrainsRequired.range_end,
         "RequireMeatCircus": False,
     }
@@ -109,7 +109,7 @@ class TestGoalBrainHuntMaximum(PsychonautsMinimalVictoryTestBase):
 
 class TestGoalBrainHuntDefault(PsychonautsMinimalVictoryTestBase):
     options = {
-        "Goal": Options.Goal.option_brainhunt,
+        "Goal": Options.Goal.option_brain_hunt,
         "RequireMeatCircus": False,
     }
     victory_items = _get_random_default_brains()
@@ -117,7 +117,7 @@ class TestGoalBrainHuntDefault(PsychonautsMinimalVictoryTestBase):
 
 class TestGoalBrainTank(PsychonautsMinimalVictoryTestBase):
     options = {
-        "Goal": Options.Goal.option_braintank,
+        "Goal": Options.Goal.option_asylum_brain_tank,
         "RequireMeatCircus": False,
     }
     victory_items = _BRAIN_TANK_GOAL_ITEMS
@@ -125,7 +125,7 @@ class TestGoalBrainTank(PsychonautsMinimalVictoryTestBase):
 
 class TestGoalBrainHuntAndBrainTank(PsychonautsMinimalVictoryTestBase):
     options = {
-        "Goal": Options.Goal.option_braintank_and_brainhunt,
+        "Goal": Options.Goal.option_asylum_brain_tank_and_brain_hunt,
         "RequireMeatCircus": False,
     }
     victory_items = _get_random_default_brains() | _BRAIN_TANK_GOAL_ITEMS
@@ -134,7 +134,7 @@ class TestGoalBrainHuntAndBrainTank(PsychonautsMinimalVictoryTestBase):
 class TestGoalMeatCircusWithBrainHunt(PsychonautsMinimalVictoryTestBase):
     options = {
         "RequireMeatCircus": True,
-        "Goal": Options.Goal.option_brainhunt,
+        "Goal": Options.Goal.option_brain_hunt,
     }
     victory_items = _get_random_default_brains() | _MEAT_CIRCUS_GOAL_ITEMS
 
@@ -142,7 +142,7 @@ class TestGoalMeatCircusWithBrainHunt(PsychonautsMinimalVictoryTestBase):
 class TestGoalMeatCircusWithBrainTank(PsychonautsMinimalVictoryTestBase):
     options = {
         "RequireMeatCircus": True,
-        "Goal": Options.Goal.option_braintank,
+        "Goal": Options.Goal.option_asylum_brain_tank,
     }
     victory_items = _BRAIN_TANK_GOAL_ITEMS | _MEAT_CIRCUS_GOAL_ITEMS
 
@@ -150,7 +150,7 @@ class TestGoalMeatCircusWithBrainTank(PsychonautsMinimalVictoryTestBase):
 class TestGoalMeatCircusWithBrainTankAndBrainHunt(PsychonautsMinimalVictoryTestBase):
     options = {
         "RequireMeatCircus": True,
-        "Goal": Options.Goal.option_braintank_and_brainhunt,
+        "Goal": Options.Goal.option_asylum_brain_tank_and_brain_hunt,
     }
     victory_items = _get_random_default_brains() | _BRAIN_TANK_GOAL_ITEMS | _MEAT_CIRCUS_GOAL_ITEMS
     extra_possible_victory_items = _BRAIN_HUNT_GOAL_ITEMS

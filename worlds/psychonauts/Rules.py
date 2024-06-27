@@ -476,7 +476,7 @@ class PsyRules:
         # Either the Brain Hunt goal or the Brain Tank goal will always be enabled.
 
         # Brain Hunt goal
-        if goal_option == Goal.option_brainhunt or goal_option == Goal.option_braintank_and_brainhunt:
+        if goal_option == Goal.option_brain_hunt or goal_option == Goal.option_asylum_brain_tank_and_brain_hunt:
             redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
             brains_required = self.world.options.BrainsRequired.value
             redeemed_required_brains.access_rule = lambda state: self.redeemed_brain_goal(state, brains_required)
@@ -484,7 +484,7 @@ class PsyRules:
             redeemed_required_brains = None
 
         # Brain Tank goal
-        if goal_option == Goal.option_braintank or goal_option == Goal.option_braintank_and_brainhunt:
+        if goal_option == Goal.option_asylum_brain_tank or goal_option == Goal.option_asylum_brain_tank_and_brain_hunt:
             oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBrainTankBossEvent, self.player)
             oleander_boss_location.access_rule = self.has_oleander_boss_access
             # With Brain Hunt also enabled, accessing the Brain Tank is set to logically require completing the Brain

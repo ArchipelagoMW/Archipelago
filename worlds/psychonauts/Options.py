@@ -78,9 +78,9 @@ class Goal(Choice):
 
     Asylum Brain Tank and Brain Hunt: Find the required amount of Camper Brains, AND defeat the Coach Oleander Brain Tank."""
     display_name = "Goal"
-    option_braintank = 0
-    option_brainhunt = 1
-    option_braintank_and_brainhunt = 2
+    option_asylum_brain_tank = 0
+    option_brain_hunt = 1
+    option_asylum_brain_tank_and_brain_hunt = 2
     default = 0
 
 

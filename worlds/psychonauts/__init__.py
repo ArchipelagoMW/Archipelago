@@ -102,12 +102,12 @@ class PSYWorld(World):
 
         # Set brains to Progression, when the Brain Hunt goal is enabled.
         # Skip balancing because Brains are macguffins and are only required for the goal.
-        if goal == Goal.option_brainhunt or goal == Goal.option_braintank_and_brainhunt:
+        if goal == Goal.option_brain_hunt or goal == Goal.option_asylum_brain_tank_and_brain_hunt:
             for name in BRAIN_JARS:
                 item_classifications[name] = ItemClassification.progression_skip_balancing
 
         # Set Birthday Cake to Filler, when the Brain Tank goal is not enabled.
-        if goal == Goal.option_brainhunt:
+        if goal == Goal.option_brain_hunt:
             item_classifications[ItemName.Cake] = ItemClassification.filler
 
     def create_item(self, name: str) -> Item:
