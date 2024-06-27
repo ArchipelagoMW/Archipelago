@@ -91,6 +91,8 @@ Mind Unlocks, will not directly display in the player's inventory, but will stil
 - Skip All Tutorial Popups
 - Skip Collection Animation for Brains
 - Use Smelling Salts Anywhere
+- Faster Dowsing Rod
 - Faster Movement and Use Levitation in Lungfishopolis
+- Faster Auto-scroller in the Linda Boss Fight
 - Option to make Levitation Flight Glitch Easier
 - Option to make the Race in Milla's Mind Easier

@@ -5,6 +5,7 @@
 - [Game Info Page](../../../../games/Psychonauts/info/en)
 - [Player Options Page](../../../../games/Psychonauts/player-options)
 - [PsychoRando Setup Guide](https://docs.google.com/document/d/1b7QOnOLmTSvdC7A1YK3bsSmhtSOsAMs0XF5j-tyE6Zw/edit?usp=sharing)
+- [PopTracker Pack](https://github.com/Mysteryem/Psychonauts_AP_PopTracker/releases)
 
 <h2 style="text-transform:none";>Required Software:</h2> <br>
 
