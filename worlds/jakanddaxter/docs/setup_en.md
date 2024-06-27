@@ -102,6 +102,6 @@ Input file iso_data/jak1/MUS/TWEAKVAL.MUS does not exist.
 
 ### Known Issues
 
-- The game needs to run in debug mode in order to allow the repl to connect to it. At some point I want to make sure it can run in retail mode, or at least hide the debug text on screen and play the game's introductory cutscenes properly.
+- The game needs to run in debug mode in order to allow the repl to connect to it. We hide the debug text on screen and play the game's introductory cutscenes properly.
+- The powershell windows cannot be run as background processes due to how the repl works, so the best we can do is minimize them.
 - The client is currently not very robust and doesn't handle failures gracefully. This may result in items not being delivered to the game, or location checks not being delivered to the server.
-- The game relates tasks and power cells closely but separately. Some issues may result from custom code to add distinct items to the game (like the Fisherman's Boat, the Pontoons, or the Gondola).

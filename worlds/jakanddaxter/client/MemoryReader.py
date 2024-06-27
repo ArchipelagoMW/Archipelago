@@ -1,34 +1,72 @@
 import random
 import typing
+import json
 import pymem
 from pymem import pattern
 from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinAPIError
-import json
+from dataclasses import dataclass
 
 from CommonClient import logger
-from worlds.jakanddaxter.locs import CellLocations as Cells, ScoutLocations as Flies, SpecialLocations as Specials
+from ..locs import (CellLocations as Cells,
+                    ScoutLocations as Flies,
+                    SpecialLocations as Specials,
+                    OrbCacheLocations as Caches)
 
 # Some helpful constants.
 sizeof_uint64 = 8
 sizeof_uint32 = 4
 sizeof_uint8 = 1
 
-next_cell_index_offset = 0  # Each of these is an uint64, so 8 bytes.
-next_buzzer_index_offset = 8  # Each of these is an uint64, so 8 bytes.
-next_special_index_offset = 16  # Each of these is an uint64, so 8 bytes.
 
-cells_checked_offset = 24
-buzzers_checked_offset = 428  # cells_checked_offset + (sizeof uint32 * 101 cells)
-specials_checked_offset = 876  # buzzers_checked_offset + (sizeof uint32 * 112 buzzers)
+# IMPORTANT: OpenGOAL memory structures are particular about the alignment, in memory, of member elements according to
+# their size in bits. The address for an N-bit field must be divisible by N. Use this class to define the memory offsets
+# of important values in the struct. It will also do the byte alignment properly for you.
+# See https://opengoal.dev/docs/reference/type_system/#arrays
+@dataclass
+class OffsetFactory:
+    current_offset: int = 0
 
-buzzers_received_offset = 1004  # specials_checked_offset + (sizeof uint32 * 32 specials)
-specials_received_offset = 1020  # buzzers_received_offset + (sizeof uint8 * 16 levels (for scout fly groups))
+    def define(self, size: int, length: int = 1) -> int:
 
-died_offset = 1052  # specials_received_offset + (sizeof uint8 * 32 specials)
+        # If necessary, align current_offset to the current size first.
+        bytes_to_alignment = self.current_offset % size
+        if bytes_to_alignment != 0:
+            self.current_offset += (size - bytes_to_alignment)
 
-deathlink_enabled_offset = 1053  # died_offset + sizeof uint8
+        # Increment current_offset so the next definition can be made.
+        offset_to_use = self.current_offset
+        self.current_offset += (size * length)
+        return offset_to_use
 
-end_marker_offset = 1054  # deathlink_enabled_offset + sizeof uint8
+
+# Start defining important memory address offsets here. They must be in the same order, have the same sizes, and have
+# the same lengths, as defined in `ap-info-jak1`.
+offsets = OffsetFactory()
+
+# Cell, Buzzer, and Special information.
+next_cell_index_offset = offsets.define(sizeof_uint64)
+next_buzzer_index_offset = offsets.define(sizeof_uint64)
+next_special_index_offset = offsets.define(sizeof_uint64)
+
+cells_checked_offset = offsets.define(sizeof_uint32, 101)
+buzzers_checked_offset = offsets.define(sizeof_uint32, 112)
+specials_checked_offset = offsets.define(sizeof_uint32, 32)
+
+buzzers_received_offset = offsets.define(sizeof_uint8, 16)
+specials_received_offset = offsets.define(sizeof_uint8, 32)
+
+# Deathlink information.
+died_offset = offsets.define(sizeof_uint8)
+deathlink_enabled_offset = offsets.define(sizeof_uint8)
+
+# Move Rando information.
+next_orb_cache_index_offset = offsets.define(sizeof_uint64)
+orb_caches_checked_offset = offsets.define(sizeof_uint32, 16)
+moves_received_offset = offsets.define(sizeof_uint8, 16)
+moverando_enabled_offset = offsets.define(sizeof_uint8)
+
+# The End.
+end_marker_offset = offsets.define(sizeof_uint8, 4)
 
 
 # "Jak" to be replaced by player name in the Client.
@@ -67,7 +105,6 @@ def autopsy(died: int) -> str:
         return "Jak got Flut Flut hurt."
     if died == 18:
         return "Jak poisoned the whole darn catch."
-
     return "Jak died."
 
 
@@ -170,50 +207,26 @@ class JakAndDaxterMemoryReader:
 
     def read_memory(self) -> typing.List[int]:
         try:
-            next_cell_index = int.from_bytes(
-                self.gk_process.read_bytes(self.goal_address, sizeof_uint64),
-                byteorder="little",
-                signed=False)
-            next_buzzer_index = int.from_bytes(
-                self.gk_process.read_bytes(self.goal_address + next_buzzer_index_offset, sizeof_uint64),
-                byteorder="little",
-                signed=False)
-            next_special_index = int.from_bytes(
-                self.gk_process.read_bytes(self.goal_address + next_special_index_offset, sizeof_uint64),
-                byteorder="little",
-                signed=False)
+            next_cell_index = self.read_goal_address(0, sizeof_uint64)
+            next_buzzer_index = self.read_goal_address(next_buzzer_index_offset, sizeof_uint64)
+            next_special_index = self.read_goal_address(next_special_index_offset, sizeof_uint64)
 
             for k in range(0, next_cell_index):
-                next_cell = int.from_bytes(
-                    self.gk_process.read_bytes(
-                        self.goal_address + cells_checked_offset + (k * sizeof_uint32),
-                        sizeof_uint32),
-                    byteorder="little",
-                    signed=False)
+                next_cell = self.read_goal_address(cells_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 cell_ap_id = Cells.to_ap_id(next_cell)
                 if cell_ap_id not in self.location_outbox:
                     self.location_outbox.append(cell_ap_id)
                     logger.debug("Checked power cell: " + str(next_cell))
 
             for k in range(0, next_buzzer_index):
-                next_buzzer = int.from_bytes(
-                    self.gk_process.read_bytes(
-                        self.goal_address + buzzers_checked_offset + (k * sizeof_uint32),
-                        sizeof_uint32),
-                    byteorder="little",
-                    signed=False)
+                next_buzzer = self.read_goal_address(buzzers_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 buzzer_ap_id = Flies.to_ap_id(next_buzzer)
                 if buzzer_ap_id not in self.location_outbox:
                     self.location_outbox.append(buzzer_ap_id)
                     logger.debug("Checked scout fly: " + str(next_buzzer))
 
             for k in range(0, next_special_index):
-                next_special = int.from_bytes(
-                    self.gk_process.read_bytes(
-                        self.goal_address + specials_checked_offset + (k * sizeof_uint32),
-                        sizeof_uint32),
-                    byteorder="little",
-                    signed=False)
+                next_special = self.read_goal_address(specials_checked_offset + (k * sizeof_uint32), sizeof_uint32)
 
                 # 112 is the game-task ID of `finalboss-movies`, which is written to this array when you grab
                 # the white eco. This is our victory condition, so we need to catch it and act on it.
@@ -228,28 +241,39 @@ class JakAndDaxterMemoryReader:
                         self.location_outbox.append(special_ap_id)
                         logger.debug("Checked special: " + str(next_special))
 
-            died = int.from_bytes(
-                self.gk_process.read_bytes(self.goal_address + died_offset, sizeof_uint8),
-                byteorder="little",
-                signed=False)
-
+            died = self.read_goal_address(died_offset, sizeof_uint8)
             if died > 0:
                 self.send_deathlink = True
                 self.cause_of_death = autopsy(died)
 
-            deathlink_flag = int.from_bytes(
-                self.gk_process.read_bytes(self.goal_address + deathlink_enabled_offset, sizeof_uint8),
-                byteorder="little",
-                signed=False)
+            # Listen for any changes to this setting.
+            deathlink_flag = self.read_goal_address(deathlink_enabled_offset, sizeof_uint8)
+            self.deathlink_enabled = bool(deathlink_flag)
+
+            next_cache_index = self.read_goal_address(next_orb_cache_index_offset, sizeof_uint64)
+
+            for k in range(0, next_cache_index):
+                next_cache = self.read_goal_address(orb_caches_checked_offset + (k * sizeof_uint32), sizeof_uint32)
+                cache_ap_id = Caches.to_ap_id(next_cache)
+                if cache_ap_id not in self.location_outbox:
+                    self.location_outbox.append(cache_ap_id)
+                    logger.debug("Checked orb cache: " + str(next_cache))
 
             # Listen for any changes to this setting.
-            self.deathlink_enabled = bool(deathlink_flag)
+            moverando_flag = self.read_goal_address(moverando_enabled_offset, sizeof_uint8)
+            self.moverando_enabled = bool(moverando_flag)
 
         except (ProcessError, MemoryReadError, WinAPIError):
             logger.error("The gk process has died. Restart the game and run \"/memr connect\" again.")
             self.connected = False
 
         return self.location_outbox
+
+    def read_goal_address(self, offset: int, length: int) -> int:
+        return int.from_bytes(
+            self.gk_process.read_bytes(self.goal_address + offset, length),
+            byteorder="little",
+            signed=False)
 
     def save_data(self):
         with open("jakanddaxter_location_outbox.json", "w+") as f:

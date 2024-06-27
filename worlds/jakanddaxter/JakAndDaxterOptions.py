@@ -3,18 +3,21 @@ from dataclasses import dataclass
 from Options import Toggle, PerGameCommonOptions
 
 
-# class EnableScoutFlies(Toggle):
-#     """Enable to include each Scout Fly as a check. Adds 112 checks to the pool."""
-#     display_name = "Enable Scout Flies"
+class EnableMoveRandomizer(Toggle):
+    """Enable to include movement options as items in the randomizer.
+    Jak is only able to run, swim, and single jump, until you find his other moves.
+    Adds 11 items to the pool."""
+    display_name = "Enable Move Randomizer"
 
 
-# class EnablePrecursorOrbs(Toggle):
-#     """Enable to include each Precursor Orb as a check. Adds 2000 checks to the pool."""
-#     display_name = "Enable Precursor Orbs"
+# class EnableOrbsanity(Toggle):
+#     """Enable to include Precursor Orbs as an ordered list of progressive checks.
+#     Each orb you collect triggers the next release in the list.
+#     Adds 2000 items to the pool."""
+#     display_name = "Enable Orbsanity"
 
 
 @dataclass
 class JakAndDaxterOptions(PerGameCommonOptions):
-    # enable_scout_flies: EnableScoutFlies
-    # enable_precursor_orbs: EnablePrecursorOrbs
-    pass
+    enable_move_randomizer: EnableMoveRandomizer
+    # enable_orbsanity: EnableOrbsanity

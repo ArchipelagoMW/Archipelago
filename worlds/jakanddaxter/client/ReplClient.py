@@ -10,13 +10,14 @@ from pymem.exception import ProcessNotFound, ProcessError
 
 from CommonClient import logger
 from NetUtils import NetworkItem
-from worlds.jakanddaxter.GameID import jak1_id
-from worlds.jakanddaxter.Items import item_table
-from worlds.jakanddaxter.locs import (
+from ..GameID import jak1_id, jak1_max
+from ..Items import item_table
+from ..locs import (
+    OrbLocations as Orbs,
     CellLocations as Cells,
     ScoutLocations as Flies,
-    OrbLocations as Orbs,
-    SpecialLocations as Specials)
+    SpecialLocations as Specials,
+    OrbCacheLocations as Caches)
 
 
 class JakAndDaxterReplClient:
@@ -150,8 +151,10 @@ class JakAndDaxterReplClient:
                               "(new-sound-id) 1024 0 0 (sound-group sfx) #t))", print_ok=False):
                 ok_count += 1
 
-            # Disable cheat-mode and debug (close the visual cue).
-            # self.send_form("(set! *debug-segment* #f)")
+            # Disable cheat-mode and debug (close the visual cues).
+            if self.send_form("(set! *debug-segment* #f)", print_ok=False):
+                ok_count += 1
+
             if self.send_form("(set! *cheat-mode* #f)", print_ok=False):
                 ok_count += 1
 
@@ -159,8 +162,8 @@ class JakAndDaxterReplClient:
             if self.send_form("(start \'play (get-continue-by-name *game-info* \"title-start\"))"):
                 ok_count += 1
 
-            # Now wait until we see the success message... 6 times.
-            if ok_count == 7:
+            # Now wait until we see the success message... 8 times.
+            if ok_count == 8:
                 self.connected = True
             else:
                 self.connected = False
@@ -194,10 +197,14 @@ class JakAndDaxterReplClient:
             self.receive_power_cell(ap_id)
         elif ap_id in range(jak1_id + Flies.fly_offset, jak1_id + Specials.special_offset):
             self.receive_scout_fly(ap_id)
-        elif ap_id in range(jak1_id + Specials.special_offset, jak1_id + Orbs.orb_offset):
+        elif ap_id in range(jak1_id + Specials.special_offset, jak1_id + Caches.orb_cache_offset):
             self.receive_special(ap_id)
-        # elif ap_id in range(jak1_id + Orbs.orb_offset, ???):
-        #     self.receive_precursor_orb(ap_id)  # TODO -- Ponder the Orbs.
+        elif ap_id in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
+            self.receive_move(ap_id)
+        elif ap_id in range(jak1_id + Orbs.orb_offset, jak1_max):
+            self.receive_precursor_orb(ap_id)  # Ponder the Orbs.
+        elif ap_id == jak1_max:
+            self.receive_green_eco()  # Ponder why I chose to do ID's this way.
         else:
             raise KeyError(f"Tried to receive item with unknown AP ID {ap_id}.")
 
@@ -235,6 +242,42 @@ class JakAndDaxterReplClient:
             logger.debug(f"Received special unlock {item_table[ap_id]}!")
         else:
             logger.error(f"Unable to receive special unlock {item_table[ap_id]}!")
+        return ok
+
+    def receive_move(self, ap_id: int) -> bool:
+        move_id = Caches.to_game_id(ap_id)
+        ok = self.send_form("(send-event "
+                            "*target* \'get-archipelago "
+                            "(pickup-type ap-move) "
+                            "(the float " + str(move_id) + "))")
+        if ok:
+            logger.debug(f"Received the ability to {item_table[ap_id]}!")
+        else:
+            logger.error(f"Unable to receive the ability to {item_table[ap_id]}!")
+        return ok
+
+    def receive_precursor_orb(self, ap_id: int) -> bool:
+        orb_id = Orbs.to_game_id(ap_id)
+        ok = self.send_form("(send-event "
+                            "*target* \'get-archipelago "
+                            "(pickup-type money) "
+                            "(the float " + str(orb_id) + "))")
+        if ok:
+            logger.debug(f"Received a Precursor Orb!")
+        else:
+            logger.error(f"Unable to receive a Precursor Orb!")
+        return ok
+
+    # Green eco pills are our filler item. Use the get-pickup event instead to handle being full health.
+    def receive_green_eco(self) -> bool:
+        ok = self.send_form("(send-event "
+                            "*target* \'get-pickup "
+                            "(pickup-type eco-pill) "
+                            "(the float 1))")
+        if ok:
+            logger.debug(f"Received a green eco pill!")
+        else:
+            logger.error(f"Unable to receive a green eco pill!")
         return ok
 
     def receive_deathlink(self) -> bool:

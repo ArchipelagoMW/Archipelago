@@ -11,9 +11,9 @@ import Utils
 from NetUtils import ClientStatus
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
 
-from worlds.jakanddaxter.GameID import jak1_name
-from worlds.jakanddaxter.client.ReplClient import JakAndDaxterReplClient
-from worlds.jakanddaxter.client.MemoryReader import JakAndDaxterMemoryReader
+from .GameID import jak1_name
+from .client.ReplClient import JakAndDaxterReplClient
+from .client.MemoryReader import JakAndDaxterMemoryReader
 
 import ModuleUpdate
 ModuleUpdate.update()

@@ -1,16 +1,18 @@
 import typing
 import settings
 
-from Utils import local_path
+from Utils import local_path, visualize_regions
 from BaseClasses import Item, ItemClassification, Tutorial
-from .GameID import jak1_id, jak1_name
+from .GameID import jak1_id, jak1_name, jak1_max
 from .JakAndDaxterOptions import JakAndDaxterOptions
-from .Items import JakAndDaxterItem
 from .Locations import JakAndDaxterLocation, location_table
 from .Items import JakAndDaxterItem, item_table
-from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations as Orbs, SpecialLocations as Specials
+from .locs import (CellLocations as Cells,
+                   ScoutLocations as Scouts,
+                   SpecialLocations as Specials,
+                   OrbCacheLocations as Caches,
+                   OrbLocations as Orbs)
 from .Regions import create_regions
-from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, launch_subprocess, Type, icon_paths
 
@@ -34,7 +36,7 @@ class JakAndDaxterSettings(settings.Group):
         """Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe)."""
         description = "ArchipelaGOAL Root Directory"
 
-    root_directory:  RootDirectory = RootDirectory("D:/Files/Repositories/ArchipelaGOAL/out/build/Release/bin")
+    root_directory: RootDirectory = RootDirectory("D:/Files/Repositories/ArchipelaGOAL/out/build/Release/bin")
 
 
 class JakAndDaxterWebWorld(WebWorld):
@@ -83,17 +85,18 @@ class JakAndDaxterWorld(World):
         "Scout Flies": {item_table[k]: k for k in item_table
                         if k in range(jak1_id + Scouts.fly_offset, jak1_id + Specials.special_offset)},
         "Specials": {item_table[k]: k for k in item_table
-                     if k in range(jak1_id + Specials.special_offset, jak1_id + Orbs.orb_offset)},
-        # TODO - Make group for Precursor Orbs.
-        # "Precursor Orbs": {item_table[k]: k for k in item_table
-        #                    if k in range(jak1_id + Orbs.orb_offset, ???)},
+                     if k in range(jak1_id + Specials.special_offset, jak1_id + Caches.orb_cache_offset)},
+        "Moves": {item_table[k]: k for k in item_table
+                  if k in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset)},
+        "Precursor Orbs": {item_table[k]: k for k in item_table
+                           if k in range(jak1_id + Orbs.orb_offset, jak1_max)},
     }
 
+    # Regions and Rules
+    # This will also set Locations, Location access rules, Region access rules, etc.
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
-
-    def set_rules(self):
-        set_rules(self.multiworld, self.options, self.player)
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "jak.puml")
 
     # Helper function to reuse some nasty if/else trees.
     @staticmethod
@@ -109,14 +112,25 @@ class JakAndDaxterWorld(World):
             count = 7
 
         # Make only 1 of each Special Item.
-        elif item in range(jak1_id + Specials.special_offset, jak1_id + Orbs.orb_offset):
+        elif item in range(jak1_id + Specials.special_offset, jak1_id + Caches.orb_cache_offset):
             classification = ItemClassification.progression
             count = 1
 
-        # TODO - Make ??? Precursor Orbs.
-        # elif item in range(jak1_id + Orbs.orb_offset, ???):
-        #     classification = ItemClassification.filler
-        #     count = ???
+        # Make only 1 of each Move Item.
+        elif item in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
+            classification = ItemClassification.progression
+            count = 1
+
+        # TODO - Make 2000 Precursor Orbs, ONLY IF Orbsanity is enabled.
+        elif item in range(jak1_id + Orbs.orb_offset, jak1_max):
+            classification = ItemClassification.progression_skip_balancing
+            count = 0
+
+        # Under normal circumstances, we will create 0 filler items.
+        # We will manually create filler items as needed.
+        elif item == jak1_max:
+            classification = ItemClassification.filler
+            count = 0
 
         # If we try to make items with ID's higher than we've defined, something has gone wrong.
         else:
@@ -126,8 +140,17 @@ class JakAndDaxterWorld(World):
 
     def create_items(self):
         for item_id in item_table:
-            count, _ = self.item_type_helper(item_id)
-            self.multiworld.itempool += [self.create_item(item_table[item_id]) for k in range(0, count)]
+
+            # Handle Move Randomizer option.
+            # If it is OFF, put all moves in your starting inventory instead of the item pool,
+            # then fill the item pool with a corresponding amount of filler items.
+            if not self.options.enable_move_randomizer and item_table[item_id] in self.item_name_groups["Moves"]:
+                self.multiworld.push_precollected(self.create_item(item_table[item_id]))
+                self.multiworld.itempool += [self.create_item(self.get_filler_item_name())]
+            else:
+                count, classification = self.item_type_helper(item_id)
+                self.multiworld.itempool += [JakAndDaxterItem(item_table[item_id], classification, item_id, self.player)
+                                             for _ in range(count)]
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]
@@ -135,7 +158,7 @@ class JakAndDaxterWorld(World):
         return JakAndDaxterItem(name, classification, item_id, self.player)
 
     def get_filler_item_name(self) -> str:
-        return "Power Cell"  # TODO - Make Precursor Orb the filler item. Until then, enjoy the free progression.
+        return "Green Eco Pill"
 
 
 def launch_client():

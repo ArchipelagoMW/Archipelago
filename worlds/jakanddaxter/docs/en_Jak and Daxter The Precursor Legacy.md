@@ -12,9 +12,13 @@ At this time, there are several caveats and restrictions:
   - This is to prevent hard locks, where an item required for progression is locked behind a trade you can't afford.
 
 ## What does randomization do to this game?
-All 101 Power Cells and 112 Scout Flies are now Location Checks and may contain Items for different games, 
-as well as different Items from within Jak and Daxter. Additionally, several special checks and corresponding items
-have been added that are required to complete the game.
+The game now contains the following Location checks:
+- All 101 Power Cells 
+- All 112 Scout Flies
+- All the Orb Caches that are not in Gol and Maia's Citadel (a total of 11)
+
+These may contain Items for different games, as well as different Items from within Jak and Daxter. 
+Additionally, several special checks and corresponding items have been added that are required to complete the game.
 
 ## What are the special checks and how do I check them?
 | Check Name             | How To Check                                                                 |
@@ -45,6 +49,11 @@ have been added that are required to complete the game.
 | Snowy Fort Gate                                                          | The fort in Snowy Mountain                                                                    |
 | Freed The Blue Sage <br/> Freed The Red Sage <br/> Freed The Yellow Sage | The final staircase in Gol and Maia's Citadel                                                 |
 | Freed The Green Sage                                                     | The final elevator in Gol and Maia's Citadel                                                  | 
+
+## How do I know which special items I have?
+Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `Item Tracker`.
+This will show you a list of all the special items in the game, ones not normally tracked as power cells or scout flies.
+Gray items indicate you do not possess that item, light blue items indicate you possess that item.
 
 ## What is the goal of the game once randomized?
 To complete the game, you must defeat the Gol and Maia and stop them from opening the Dark Eco silo.
@@ -79,15 +88,50 @@ scout fly. So in short:
   - First, you will receive that scout fly, as normal.
   - Second, you will immediately complete the "Free 7 Scout Flies" check, which will send out another item.
 
+## What does Deathlink do?
+If you enable Deathlink, all the other players in your Multiworld who also have it enabled will be linked on death. 
+That means when Jak dies in your game, the players in your Deathlink group also die. Likewise, if any of the other 
+players die, Jak will also die in a random fashion.
+
+You can turn off Deathlink at any time in the game by opening the game's menu, navigate to `Options`, 
+then `Archipelago Options`, then `Deathlink`.
+
+## What does Move Randomizer do?
+If you enable Move Randomizer, most of Jak's movement set will be added to the randomized item pool, and you will need 
+to receive the move in order to use it (i.e. you must find it, or another player must send it to you). Some moves have
+prerequisite moves that you must also have in order to use them (e.g. Crouch Jump is dependent on Crouch). Jak will only
+be able to run, swim (including underwater), and perform single jumps. Note that Flut Flut will have access to her full
+movement set at all times.
+
+You can turn off Move Rando at any time in the game by opening the game's menu, navigate to `Options`, 
+then `Archipelago Options`, then `Move Randomizer`. This will give you access to the full movement set again.
+
+## What are the movement options in Move Randomizer?
+| Move Name       | Prerequisite Moves |
+|-----------------|--------------------|
+| Crouch          |                    |
+| Crouch Jump     | Crouch             |
+| Crouch Uppercut | Crouch             |
+| Roll            |                    |
+| Roll Jump       | Roll               |
+| Double Jump     |                    |
+| Jump Dive       |                    |
+| Jump Kick       |                    |
+| Punch           |                    |
+| Punch Uppercut  | Punch              |
+| Kick            |                    |
+
+## How do I know which moves I have?
+Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `Move Tracker`.
+This will show you a list of all the moves in the game. 
+- Gray items indicate you do not possess that move.
+- Yellow items indicate you possess that move, but you are missing its prerequisites.
+- Light blue items indicate you possess that move, as well as its prerequisites.
+
 ## I got soft-locked and can't leave, how do I get out of here?
 Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then to `Warp To Home`. 
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
 to the nearest sage's hut to continue your journey.
-
-## How do I know which special items I have?
-Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then to `Item Tracker`.
-This will show you a list of all the special items in the game, ones not normally tracked as power cells or scout flies.
-Grayed-out items indicate you do not possess that item, light blue items indicate you possess that item.
 
 ## I think I found a bug, where should I report it?
 Depending on the nature of the bug, there are a couple of different options.

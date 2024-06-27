@@ -16,9 +16,7 @@ from ..GameID import jak1_id
 # The maximum number of orbs that any actor can spawn is 30 (the orb caches in citadel). Covering
 # these ID-less orbs may need to be a future enhancement. TODO ^^
 
-# Standalone orbs need 15 bits to identify themselves by Actor ID,
-# so we can use 2^15 to offset them from scout flies, just like we offset
-# scout flies from power cells by 2^10.
+# We can use 2^15 to offset them from Orb Caches, because Orb Cache ID's max out at (jak1_id + 17792).
 orb_offset = 32768
 
 
