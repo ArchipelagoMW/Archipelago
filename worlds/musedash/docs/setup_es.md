@@ -22,7 +22,7 @@
   - Si haces clic en la barra superior que te indica la carpeta en la que estas, te dará la dirección de ésta para que puedas copiarla. Al pegar esa dirección en la ventana que **MelonLoader** abre, irá automaticamente a esa carpeta.
 3. Desmarque "Latest" y seleccione v0.6.1. Luego haz clic en "install".
 4. Ejecuta el juego una vez, y espera hasta que aparezca la pantalla de inicio de Muse Dash antes de cerrarlo.
-5Descarga la última version de [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) y extraelo en la nueva carpeta creada llamada `/Mods/`, localizada en la carpeta de instalación de Muse Dash.
+5. Descarga la última version de [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) y extraelo en la nueva carpeta creada llamada `/Mods/`, localizada en la carpeta de instalación de Muse Dash.
   - Todos los archivos deben ir directamente en la carpeta `/Mods/`, y NO en una subcarpeta dentro de la carpeta `/Mods/`
 
 Si todo fue instalado correctamente, un botón aparecerá en la parte inferior derecha del juego una vez abierto, que te permitirá conectarte al servidor de Archipelago.
