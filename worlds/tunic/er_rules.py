@@ -1452,8 +1452,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(laurels, player))
 
     # Ziggurat
+    # if ER is off, you still need to get past the Admin or you'll get stuck in lower zig
     set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
-             lambda state: has_sword(state, player) or state.has(fire_wand, player))
+             lambda state: has_sword(state, player) or (state.has(fire_wand, player) and (state.has(laurels, player)
+                                                                                          or options.entrance_rando)))
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - After Guarded Fuse", player),
              lambda state: has_sword(state, player) and has_ability(prayer, state, world))
 
