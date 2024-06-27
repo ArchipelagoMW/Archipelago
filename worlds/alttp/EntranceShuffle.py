@@ -1437,7 +1437,7 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
     invalid_cave_connections = defaultdict(set)
 
     if world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
-        from worlds.alttp import OverworldGlitchRules
+        from . import OverworldGlitchRules
         for entrance in OverworldGlitchRules.get_non_mandatory_exits(world.mode[player] == 'inverted'):
             invalid_connections[entrance] = set()
             if entrance in must_be_exits:

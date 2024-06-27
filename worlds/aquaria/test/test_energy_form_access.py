@@ -5,7 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
              energy form option)
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 
 
 class EnergyFormAccessTest(AquariaTestBase):
