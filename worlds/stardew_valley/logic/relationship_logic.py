@@ -77,7 +77,7 @@ ReceivedLogicMixin, HasLogicMixin]]):
         if hearts == 0:
             return True_()
 
-        return self.logic.or_(*(self.logic.relationship.has_hearts(name)
+        return self.logic.or_(*(self.logic.relationship.has_hearts(name, hearts)
                                 for name, villager in self.content.villagers.items()
                                 if villager.bachelor))
 
@@ -87,7 +87,7 @@ ReceivedLogicMixin, HasLogicMixin]]):
         if hearts == 0:
             return True_()
 
-        return self.logic.or_(*(self.logic.relationship.has_hearts(name)
+        return self.logic.or_(*(self.logic.relationship.has_hearts(name, hearts)
                                 for name, villager in self.content.villagers.items()))
 
     def has_hearts_with_n(self, amount: int, hearts: int = 1) -> StardewRule:
@@ -96,7 +96,7 @@ ReceivedLogicMixin, HasLogicMixin]]):
         if hearts == 0 or amount == 0:
             return True_()
 
-        return self.logic.count(amount, *(self.logic.relationship.has_hearts(name)
+        return self.logic.count(amount, *(self.logic.relationship.has_hearts(name, hearts)
                                           for name, villager in self.content.villagers.items()))
 
     # Should be cached
