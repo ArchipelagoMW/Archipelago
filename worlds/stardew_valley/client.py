@@ -1,6 +1,5 @@
 import asyncio
 
-import Utils
 from CommonClient import logger, get_base_parser, gui_enabled
 
 try:
@@ -95,9 +94,6 @@ def launch():
 
         await ctx.exit_event.wait()
         await ctx.shutdown()
-
-    Utils.init_logging("StardewClient")
-    # options = Utils.get_options()
 
     import colorama
     colorama.init()
