@@ -72,7 +72,7 @@ GENERAL_ITEMS: Dict[str, int] = {
     ItemName.AHSmall: 43,
     ItemName.AHLarge: 44,
     ItemName.PsiCard: 45,
-    ItemName.SuperPalmBomb: 94,
+    ItemName.PalmMegabomb: 94,
 }
 
 BRAIN_JARS: Dict[str, int] = {
@@ -179,7 +179,7 @@ USEFUL_SET: Set[str] = {
     *BAGGAGE_TAGS,
     *BAGGAGE,
     ItemName.AHLarge,
-    ItemName.SuperPalmBomb,
+    ItemName.PalmMegabomb,
 }
 
 LOCAL_SET: Set[str] = {

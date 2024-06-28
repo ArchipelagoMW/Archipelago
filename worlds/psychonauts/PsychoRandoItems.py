@@ -44,8 +44,8 @@ PSYCHORANDO_ITEM_TABLE: Dict[str, int] = {
     ItemName.Clairvoyance: 2,
     ItemName.Shield: 3,
 
-    # Super Palm Bomb
-    ItemName.SuperPalmBomb: 1,
+    # Palm Megabomb
+    ItemName.PalmMegabomb: 1,
 
     # 6 Max Ammo Up
     ItemName.AmmoUp: 6,

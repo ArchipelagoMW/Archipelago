@@ -146,7 +146,7 @@ Feather = "Crow Feather"
 CobwebDuster = "Cobweb Duster"
 SquirrelDinner = "Squirrel Roast Dinner"
 DowsingRod = "Dowsing Rod"
-SuperPalmBomb = "Super Palm Bomb"
+PalmMegabomb = "Palm Megabomb"
 
 # Needed for Victory!
 Victory = "Victory"
