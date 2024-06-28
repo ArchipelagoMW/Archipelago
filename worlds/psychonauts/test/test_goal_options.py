@@ -1,5 +1,5 @@
 from typing import ClassVar, Iterable
-from random import shuffle
+import random
 
 from . import PsychonautsTestBase
 from .. import Options
@@ -31,9 +31,7 @@ _MEAT_CIRCUS_GOAL_ITEMS = {
 
 def _get_random_default_brains():
     """Get a set of random brains with length equal to the default number of brains required for the Brain Hunt goal"""
-    brains = list(_BRAIN_HUNT_GOAL_ITEMS)
-    shuffle(brains)
-    return set(brains[:Options.BrainsRequired.default])
+    return set(random.sample(list(_BRAIN_HUNT_GOAL_ITEMS), Options.BrainsRequired.default))
 
 
 class PsychonautsMinimalVictoryTestBase(PsychonautsTestBase):
@@ -82,10 +80,11 @@ class TestGoalBrainHuntMinimum(PsychonautsMinimalVictoryTestBase):
     def test_minimal_victory(self):
         # Test that each brain individually allows for victory.
         for brain_jar in _BRAIN_HUNT_GOAL_ITEMS:
-            self.world_setup()
-            self.assertBeatable(False)
-            self.collect_by_name(brain_jar)
-            self.assertBeatable(True)
+            with self.subTest(brain_jar=brain_jar):
+                self.world_setup()
+                self.assertBeatable(False)
+                self.collect_by_name(brain_jar)
+                self.assertBeatable(True)
 
 
 class TestGoalBrainHuntMaximum(PsychonautsMinimalVictoryTestBase):
