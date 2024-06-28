@@ -36,7 +36,6 @@ class TestStartInventoryAllsanity(WorldAssertMixin, SVTestBase):
         "start_inventory": {"Progressive Pickaxe": 2}
     }
 
-    # This test exists to check that the start inventory does not mess with the ProgressionPercent values by counting the items wrong
-    def test_start_inventory_2_pickaxes(self):
+    def test_start_inventory_progression_items_does_not_break_progression_percent(self):
         self.assert_basic_checks_with_subtests(self.multiworld)
         self.assert_can_win(self.multiworld)
