@@ -33,9 +33,10 @@ class TestStartInventoryAllsanity(WorldAssertMixin, SVTestBase):
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
         options.Mods.internal_name: ["Tractor Mod", "Bigger Backpack", "Luck Skill", "Magic", "Socializing Skill", "Archaeology", "Cooking Skill",
                                      "Binning Skill"],
-        "start_inventory": {"Movement Speed Bonus": 2}
+        "start_inventory": {"Progressive Pickaxe": 2}
     }
 
-    def test_start_inventory_movement_speed(self):
+    # This test exists to check that the start inventory does not mess with the ProgressionPercent values by counting the items wrong
+    def test_start_inventory_2_pickaxes(self):
         self.assert_basic_checks_with_subtests(self.multiworld)
         self.assert_can_win(self.multiworld)

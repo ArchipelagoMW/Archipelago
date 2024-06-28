@@ -183,9 +183,13 @@ ReceivedLogicMixin, HasLogicMixin]]):
         rules = [self.logic.relationship.can_meet(npc)]
 
         heart_size = self.content.features.friendsanity.heart_size
-        if self.content.features.friendsanity.get_randomized_hearts(villager):
-            previous_heart = max(hearts - heart_size, 0)
-            rules.append(self.logic.relationship.received_hearts(villager, previous_heart))
+        max_randomized_hearts = self.content.features.friendsanity.get_randomized_hearts(villager)
+        if max_randomized_hearts:
+            if hearts > max_randomized_hearts[-1]:
+                rules.append(self.logic.relationship.has_hearts(npc, hearts - 1))
+            else:
+                previous_heart = max(hearts - heart_size, 0)
+                rules.append(self.logic.relationship.has_hearts(npc, previous_heart))
 
         if hearts > 2 or hearts > heart_size:
             rules.append(self.logic.season.has(villager.birthday))
