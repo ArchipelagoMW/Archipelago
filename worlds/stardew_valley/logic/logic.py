@@ -319,12 +319,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             TreeSeed.mossy: self.ability.can_chop_trees() & self.season.has(Season.summer),
             Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
             Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
-            WaterItem.green_algae: self.fishing.can_fish_in_freshwater(), #
-            WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100),
-            WaterItem.river_jelly: self.fishing.can_fish_at(Region.town),
-            WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach),
-            WaterItem.seaweed: self.skill.can_fish(Region.tide_pools), #
-            WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20), #
+            WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
+            WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100) & self.tool.has_fishing_rod(2),
+            WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(2),
+            WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(2),
+            WaterItem.seaweed: self.skill.can_fish(Region.tide_pools),
+            WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20),
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
         })
         # @formatter:on
