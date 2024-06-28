@@ -226,7 +226,7 @@ class PanelHuntDiscourageSameAreaFactor(Range):
     At 0, Hunt Panels will be selected randomly.
     At 100, Hunt Panels will be almost completely evenly distributed between areas.
     """
-    display = "Panel Hunt Discourage Same Area Factor"
+    display_name = "Panel Hunt Discourage Same Area Factor"
 
     range_start = 0
     range_end = 100
