@@ -35,18 +35,18 @@ location_table = {
     "Capture Pawn H": CMLocationData(4_902_007, 290, 160),
     "Capture Pawn I": CMLocationData(4_902_101, -1, 310),
     "Capture Pawn J": CMLocationData(4_902_102, -1, 390),
-    "Capture Queen's Rook": CMLocationData(4_902_008, 900, 1650),
-    "Capture Queen's Knight": CMLocationData(4_902_010, 700, 1200),
-    "Capture Queen's Bishop": CMLocationData(4_902_012, 700, 1200),
-    "Capture Queen": CMLocationData(4_902_014, 1300, 1900),
+    "Capture Piece Queen's Rook": CMLocationData(4_902_008, 900, 1650),
+    "Capture Piece Queen's Knight": CMLocationData(4_902_010, 700, 1200),
+    "Capture Piece Queen's Bishop": CMLocationData(4_902_012, 700, 1200),
+    "Capture Piece Queen": CMLocationData(4_902_014, 1300, 1900),
     "Checkmate Minima": CMLocationData(4_902_098, 4020, 4020),  # (this is the game's goal / completion condition)
     "Checkmate Maxima": CMLocationData(4_902_099, -1, 6020),  # (this is the game's goal / completion condition)
     # AI prefers not to open kingside as developing queen has more tempo
-    "Capture King's Bishop": CMLocationData(4_902_013, 1040, 1400),
-    "Capture King's Knight": CMLocationData(4_902_011, 1040, 1400),
-    "Capture King's Rook": CMLocationData(4_902_009, 1240, 2050),
-    "Capture Queen's Attendant": CMLocationData(4_902_109, -1, 1950),
-    "Capture King's Attendant": CMLocationData(4_902_110, -1, 2030),
+    "Capture Piece King's Bishop": CMLocationData(4_902_013, 1040, 1400),
+    "Capture Piece King's Knight": CMLocationData(4_902_011, 1040, 1400),
+    "Capture Piece King's Rook": CMLocationData(4_902_009, 1240, 2050),
+    "Capture Piece Queen's Attendant": CMLocationData(4_902_109, -1, 1950),
+    "Capture Piece King's Attendant": CMLocationData(4_902_110, -1, 2030),
     # some first locations
     # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
     "King to E2/E7 Early": CMLocationData(4_902_015, 0, 0),
@@ -81,7 +81,7 @@ location_table = {
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 3850, 13),
     "Capture 8 Of Each": CMLocationData(4_902_130, -1, 3850, 15),
     "Capture 9 Of Each": CMLocationData(4_902_131, -1, 3850, 17),
-    "Capture Everything": CMLocationData(4_902_039, -1, 6050, 14),
+    "Capture Everything": CMLocationData(4_902_039, 4020, 6050, -1),
     "Capture Any 2": CMLocationData(4_902_070, 600, 750, 1),
     "Capture Any 3": CMLocationData(4_902_071, 1050, 1350, 2),
     "Capture Any 4": CMLocationData(4_902_072, 1450, 2050, 3),
@@ -130,6 +130,8 @@ location_table = {
 
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
 
+piece_names_small = ["Queen's Rook", "Queen's Knight", "Queen's Bishop", "Queen",
+                     "King's Rook", "King's Knight", "King's Bishop"]
 piece_names = ["Queen's Rook", "Queen's Knight", "Queen's Bishop", "Queen",
                "King's Rook", "King's Knight", "King's Bishop",
                "Queen's Attendant", "King's Attendant"]

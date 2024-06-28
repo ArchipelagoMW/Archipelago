@@ -2,7 +2,7 @@ from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
 from . import location_table
-from .Locations import piece_names
+from .Locations import piece_names, piece_names_small
 from .. import checksmate
 
 from ..generic.Rules import set_rule, add_rule
@@ -28,13 +28,13 @@ def num_items_in_pool(itempool: list[Item], player_and_item: (int, str)):
 
 
 def count_enemy_pieces(state: CollectionState, player: int) -> int:
-    return 7
+    return 9
     # owned_item_ids = [item_id for item_id, item in item_table.items() if state.has(item_id, player)]
     # return sum(1 if x.startswith("Enemy Piece") else 0 for x in owned_item_ids)
 
 
 def count_enemy_pawns(state: CollectionState, player: int) -> int:
-    return 8
+    return 10
     # owned_item_ids = [item_id for item_id, item in item_table.items() if state.has(item_id, player)]
     # return sum(1 if x.startswith("Enemy Pawn") else 0 for x in owned_item_ids)
 
@@ -115,44 +115,58 @@ def meets_chessmen_expectations(state: CollectionState,
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
-    is_grand = multiworld.worlds[player].items_used[player].get("Super-Size Me", 0)
+    is_grand = opts.goal.value != opts.goal.option_single
 
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
-    # AI avoids making trades except where it wins material or secures victory, so require that much material
     for name, item in checksmate.Locations.location_table.items():
-        set_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.material_expectations: v <= 0 or meets_material_expectations(
-                     state, v, player, difficulty, absolute_relaxation))
-    # player must have (a king plus) that many chessmen to capture any given number of chessmen
-    for name, item in checksmate.Locations.location_table.items():
-        add_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.chessmen_expectations: v <= 0 or meets_chessmen_expectations(
-                     state, v, player, opts.pocket_limit_by_pocket.value))
-    for name, item in checksmate.Locations.location_table.items():
+        if not is_grand and item.material_expectations == -1:
+            continue
+        # AI avoids making trades except where it wins material or secures victory, so require that much material
+        if item.material_expectations > 0:
+            set_rule(multiworld.get_location(name, player),
+                     lambda state, v=item.material_expectations: v <= 0 or meets_material_expectations(
+                         state, v, player, difficulty, absolute_relaxation))
+        # player must have (a king plus) that many chessmen to capture any given number of chessme
+        if item.chessmen_expectations == -1:
+            # this is used for items which change between grand and not... currently only 1 location
+            if item.code == 4_902_039:  # Capture Everything
+                add_rule(multiworld.get_location(name, player),
+                         lambda state: meets_chessmen_expectations(
+                             state, 18 if is_grand else 14, player, opts.pocket_limit_by_pocket.value))
+            else:
+                raise RuntimeError("Unknown location code: " + str(item.code))
+        elif item.chessmen_expectations > 0:
+            add_rule(multiworld.get_location(name, player),
+                     lambda state, v=item.chessmen_expectations: meets_chessmen_expectations(
+                         state, v, player, opts.pocket_limit_by_pocket.value))
         if item.material_expectations == -1:
             add_rule(multiworld.get_location(name, player),
                      lambda state: state.count("Super-Size Me", player) > 0)
 
-    for i in range(1, 7):
+    add_rule(multiworld.get_location("Capture 2 Pawns", player),
+             lambda state: count_enemy_pawns(state, player) > 1)
+    piece_files = 9 if is_grand else 7
+    for i in range(1, piece_files):
+        add_rule(multiworld.get_location("Capture " + str(i + 2) + " Pawns", player),
+                 lambda state, v=i: count_enemy_pawns(state, player) > v + 1)
         add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),
                  lambda state, v=i: count_enemy_pieces(state, player) > v)
-        add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pawns", player),
-                 lambda state, v=i: count_enemy_pawns(state, player) > v)
         add_rule(multiworld.get_location("Capture " + str(i + 1) + " Of Each", player),
                  lambda state, v=i: count_enemy_pawns(state, player) > v and count_enemy_pieces(state, player) > v)
-    add_rule(multiworld.get_location("Capture 8 Pawns", player),
-             lambda state: count_enemy_pawns(state, player) > 7)
     add_rule(multiworld.get_location("Capture Everything", player),
-             lambda state: count_enemy_pawns(state, player) > 7 and count_enemy_pieces(state, player) > 6)
+             lambda state: count_enemy_pawns(state, player) > piece_files and count_enemy_pieces(state, player) >= piece_files)
     # pieces must exist to be captured
     for letter in ["A", "B", "C", "D", "E", "F", "G", "H"]:  # the E piece is the King
         add_rule(multiworld.get_location("Capture Pawn " + str(letter), player),
                  lambda state, v=letter: has_enemy(state, "Capture Pawn " + str(v), player))
-    for piece_name in piece_names:
-        add_rule(multiworld.get_location("Capture " + piece_name, player),
-                 lambda state, v=piece_name: has_enemy(state, "Capture " + v, player))
+    names_to_capture = piece_names
+    if not is_grand:
+        names_to_capture = piece_names_small
+    for piece_name in names_to_capture:
+        add_rule(multiworld.get_location("Capture Piece " + piece_name, player),
+                 lambda state, v=piece_name: has_enemy(state, "Capture Piece " + v, player))
     # tactics
     # add_rule(multiworld.get_location("Pin", player), lambda state: has_pin(state, player))
     if opts.enable_tactics.value:

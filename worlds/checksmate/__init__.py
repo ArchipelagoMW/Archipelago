@@ -432,11 +432,15 @@ class CMWorld(World):
         self.multiworld.regions.append(region)
 
     def generate_basic(self):
-        victory_item = create_item_with_correct_settings(self.player, "Victory")
-        self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
-        if self.options.goal.value == 1:
-            supersize_item = create_item_with_correct_settings(self.player, "Super-Size Me")
-            self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(supersize_item)
+        if self.options.goal.value == self.options.goal.option_single:
+            victory_item = create_item_with_correct_settings(self.player, "Victory")
+            self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(victory_item)
+        else:
+            if self.options.goal.value == 1:
+                supersize_item = create_item_with_correct_settings(self.player, "Super-Size Me")
+                self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(supersize_item)
+            victory_item = create_item_with_correct_settings(self.player, "Victory")
+            self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
     def fewest_parents(self, parents: list[list[str, int]]):
         # TODO: this concept doesn't work if a parent can have multiple children and another can't, e.g. forwardness

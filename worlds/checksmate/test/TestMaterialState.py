@@ -5,6 +5,7 @@ from .. import determine_difficulty, CMOptions
 class MaterialStateTestBase(CMTestBase):
 
     def world_setup(self):
+        self.options["goal"] = "single"
         super().world_setup()
 
         # this class ultimately isn't trying to test this relatively simple function
