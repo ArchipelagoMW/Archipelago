@@ -385,6 +385,7 @@ witness_option_groups = [
     ]),
     OptionGroup("Hints", [
         HintAmount,
+        VagueHints,
         AreaHintPercentage,
         LaserHints
     ]),
