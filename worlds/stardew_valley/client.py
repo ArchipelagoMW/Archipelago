@@ -29,8 +29,6 @@ except ModuleNotFoundError:
 
     tracker_loaded = False
 
-DEBUG = False
-
 
 class StardewCommandProcessor(ClientCommandProcessor):
 
@@ -50,7 +48,7 @@ class StardewClientContext(BaseContext):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Stardew Valley Archipelago Tracking Client"
+            base_title = "Stardew Valley Archipelago Tracker"
             ctx: StardewClientContext
 
             def build(self):
@@ -78,7 +76,7 @@ class StardewClientContext(BaseContext):
 
 def launch():
     async def main():
-        parser = get_base_parser(description="Stardew Valley Archipelago Tracking Client")
+        parser = get_base_parser(description="Stardew Valley Archipelago Tracker")
         args = parser.parse_args()
 
         ctx = StardewClientContext(args.connect, args.password)
