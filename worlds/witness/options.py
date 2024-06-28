@@ -257,7 +257,7 @@ class PanelHuntPlando(LocationSet):
     Specify specific hunt panels you want for your panel hunt game.
     """
 
-    display = "Panel Hunt Plando"
+    display_name = "Panel Hunt Plando"
 
     valid_keys = [static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS]
 
