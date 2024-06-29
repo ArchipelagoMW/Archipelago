@@ -248,7 +248,13 @@ class CMWorld(World):
         # items are now in a distribution of 1 queen:1 major:3 minor:7 pawn:6 pocket (material 9 + 5 + 9 + 7 + 6 = 36)
         # note that queens require that a major precede them, which increases the likelihood of the other types
 
-        while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
+        max_items = len(location_table)
+        if super_sized:
+            max_items -= len([loc for loc in location_table if location_table[loc].material_expectations != -1])
+        if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
+            max_items -= len([loc for loc in location_table if location_table[loc].is_tactic])
+
+        while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
                material < max_material_actual and len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
@@ -295,7 +301,7 @@ class CMWorld(World):
                         self.options.exclude_locations.value.add(location)
 
         my_useful_items = list(useful_items.keys())
-        while ((len(items) + user_location_count + sum(locked_items.values())) < len(location_table) and
+        while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
                len(my_useful_items) > 0):
             chosen_item = self.random.choice(my_useful_items)
             if not self.has_prereqs(chosen_item):
@@ -322,7 +328,7 @@ class CMWorld(World):
         # remove "pocket" fillers from the list of filler items
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
-        while (len(items) + user_location_count + sum(locked_items.values())) < len(location_table):
+        while (len(items) + user_location_count + sum(locked_items.values())) < max_items:
             chosen_item = self.random.choice(my_filler_items)
             if not has_pocket and not self.has_prereqs(chosen_item):
                 continue
@@ -531,7 +537,13 @@ class CMWorld(World):
         cmoptions: CMOptions = self.options
         non_local_items = self.options.non_local_items.value
         early_material_option = cmoptions.early_material.value
-        super_sized = self.options.goal.value != self.options.goal.option_single
+
+        user_items = []
+        if self.options.goal.value == self.options.goal.option_ordered_progressive:
+            item = create_item_with_correct_settings(player, "Super-Size Me")
+            multiworld.get_location("Checkmate Minima", player).place_locked_item(item)
+            locked_locations.append("Checkmate Minima")
+            user_items.append(item)
         if early_material_option > 0:
             early_units = []
             if early_material_option == 1 or early_material_option > 4:
@@ -550,16 +562,9 @@ class CMWorld(World):
             item = create_item_with_correct_settings(player, self.random.choice(local_basic_unit))
             multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
             locked_locations.append("King to E2/E7 Early")
-            user_items = [item]
+            user_items.append(item)
 
-            if self.options.goal.value == self.options.goal.option_ordered_progressive:
-                item = create_item_with_correct_settings(player, "Super-Size Me")
-                multiworld.get_location("Checkmate Minima", player).place_locked_item(item)
-                locked_locations.append("Checkmate Minima")
-                user_items.append(item)
-            return user_items
-        else:
-            return []
+        return user_items
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         material = 0

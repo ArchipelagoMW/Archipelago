@@ -115,13 +115,13 @@ def meets_chessmen_expectations(state: CollectionState,
 def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
-    is_grand = opts.goal.value != opts.goal.option_single
+    super_sized = opts.goal.value != opts.goal.option_single
 
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
     for name, item in checksmate.Locations.location_table.items():
-        if not is_grand and item.material_expectations == -1:
+        if not super_sized and item.material_expectations == -1:
             continue
         # AI avoids making trades except where it wins material or secures victory, so require that much material
         if item.material_expectations > 0:
@@ -134,7 +134,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
             if item.code == 4_902_039:  # Capture Everything
                 add_rule(multiworld.get_location(name, player),
                          lambda state: meets_chessmen_expectations(
-                             state, 18 if is_grand else 14, player, opts.pocket_limit_by_pocket.value))
+                             state, 18 if super_sized else 14, player, opts.pocket_limit_by_pocket.value))
             else:
                 raise RuntimeError("Unknown location code: " + str(item.code))
         elif item.chessmen_expectations > 0:
@@ -147,7 +147,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
 
     add_rule(multiworld.get_location("Capture 2 Pawns", player),
              lambda state: count_enemy_pawns(state, player) > 1)
-    piece_files = 9 if is_grand else 7
+    piece_files = 9 if super_sized else 7
     for i in range(1, piece_files):
         add_rule(multiworld.get_location("Capture " + str(i + 2) + " Pawns", player),
                  lambda state, v=i: count_enemy_pawns(state, player) > v + 1)
@@ -162,7 +162,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
         add_rule(multiworld.get_location("Capture Pawn " + str(letter), player),
                  lambda state, v=letter: has_enemy(state, "Capture Pawn " + str(v), player))
     names_to_capture = piece_names
-    if not is_grand:
+    if not super_sized:
         names_to_capture = piece_names_small
     for piece_name in names_to_capture:
         add_rule(multiworld.get_location("Capture Piece " + piece_name, player),
