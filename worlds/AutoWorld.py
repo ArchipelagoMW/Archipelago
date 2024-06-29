@@ -123,8 +123,8 @@ class WebWorldRegister(type):
             assert group.options, "A custom defined Option Group must contain at least one Option."
             # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
             title_name = group.name.title()
-            if title_name in prebuilt_options:
-                group.name = title_name
+            assert title_name not in prebuilt_options or title_name == group.name, \
+                f"Prebuilt group name \"{group.name}\" must be \"{title_name}\""
 
             if group.name == "Item & Location Options":
                 assert not any(option in item_and_loc_options for option in group.options), \
@@ -223,6 +223,21 @@ class WebWorld(metaclass=WebWorldRegister):
     option_groups: ClassVar[List[OptionGroup]] = []
     """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
+    rich_text_options_doc = False
+    """Whether the WebHost should render Options' docstrings as rich text.
+
+    If this is True, Options' docstrings are interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, they're rendered to HTML
+    so that lists, emphasis, and other rich text features are displayed
+    properly.
+
+    If this is False, the docstrings are instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved. For backwards
+    compatibility, this is the default.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
     location_descriptions: Dict[str, str] = {}
     """An optional map from location names (or location group names) to brief descriptions for users."""
 
@@ -265,7 +280,7 @@ class World(metaclass=AutoWorldRegister):
     future. Protocol level compatibility check moved to MultiServer.min_client_version.
     """
 
-    required_server_version: Tuple[int, int, int] = (0, 2, 4)
+    required_server_version: Tuple[int, int, int] = (0, 5, 0)
     """update this if the resulting multidata breaks forward-compatibility of the server"""
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()

@@ -4,7 +4,7 @@ Date: Thu, 18 Apr 2024 18:45:56 +0000
 Description: Unit test used to test accessibility of locations with and without the beast form
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 
 
 class BeastFormAccessTest(AquariaTestBase):
@@ -20,14 +20,14 @@ class BeastFormAccessTest(AquariaTestBase):
             "Mithalas City, second bulb at the end of the top path",
             "Mithalas City, bulb in the top path",
             "Mithalas City, Mithalas Pot",
-            "Mithalas City, urn in the Cathedral flower tube entrance",
+            "Mithalas City, urn in the Castle flower tube entrance",
             "Mermog cave, Piranha Egg",
             "Mithalas Cathedral, Mithalan Dress",
             "Turtle cave, bulb in Bubble Cliff",
             "Turtle cave, Urchin Costume",
             "Sun Worm path, first cliff bulb",
             "Sun Worm path, second cliff bulb",
-            "The Veil top right area, bulb in the top of the waterfall",
+            "The Veil top right area, bulb at the top of the waterfall",
             "Bubble Cave, bulb in the left cave wall",
             "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
             "Bubble Cave, Verse Egg",
