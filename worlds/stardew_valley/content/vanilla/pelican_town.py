@@ -1,7 +1,7 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
-from ...data.harvest import ForagingSource, SeasonalForagingSource
+from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
@@ -137,8 +137,7 @@ pelican_town = ContentPack(
         # Books
         Book.jack_be_nimble_jack_be_thick: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ForagingSource(regions=(Region.forest, Region.backwoods, Region.bus_stop, Region.farm, Region.mountain),
-                           other_requirements=(ToolRequirement(Tool.hoe),)),),
+            ArtifactSpotSource(amount=22),),  # After 22 spots, there are 50.48% chances player received the book.
         Book.woodys_secret: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             GenericSource(regions=(Region.forest, Region.mountain),

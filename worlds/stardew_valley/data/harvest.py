@@ -59,3 +59,8 @@ class HarvestCropSource(ItemSource):
         return {
             self.seed: (ItemTag.CROPSANITY_SEED,)
         }
+
+
+@dataclass(frozen=True, **kw_only)
+class ArtifactSpotSource(ItemSource):
+    amount: int

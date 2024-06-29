@@ -14,7 +14,7 @@ from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
 from ..data.game_item import GenericSource, ItemSource, GameItem, CustomRuleSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
-    HarvestCropSource, HarvestFruitTreeSource
+    HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 
 
@@ -100,3 +100,7 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
     @has_access_to.register
     def _(self, source: FishingTreasureChestSource):
         return self.logic.grind.can_grind_fishing_treasure_chests(source.amount)
+
+    @has_access_to.register
+    def _(self, source: ArtifactSpotSource):
+        return self.logic.grind.can_grind_artifact_spots(source.amount)
