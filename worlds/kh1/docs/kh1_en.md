@@ -12,13 +12,11 @@ BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
     
     Open `OpenKh.Tools.ModsManager.exe` and run first time set up.
     
-    When prompted for game edition, choose `PC Release via Epic Games Store` and navigate to your `KH_1.5_2.5` folder in the path box and click `Next`
+    When prompted for game edition, choose `PC Release`, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`
     
     When prompted, install Panacea, then click `Next`
     
     When prompted, check KH1 plus any other AP game you play and click `Install and configure LUA backend`, then click `Next`.
-    
-    Ensure that `Launch via Epic Games` is checked and click `Next`
     
     Extract game data for KH1 and any other games you wish to modify.
     
