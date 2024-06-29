@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import NamedRange, Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
+from Options import NamedRange, Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, StartInventoryPool
 
 class StrengthIncrease(Range):
     """
@@ -389,5 +389,5 @@ class KH1Options(PerGameCommonOptions):
     mp_increase: MPIncrease
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
-    
+    start_inventory_pool: StartInventoryPool
     

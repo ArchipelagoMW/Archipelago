@@ -19,7 +19,7 @@ def has_evidence(state: CollectionState, player: int) -> bool:
     return state.has("Footprints", player) #or state.has("Stench", player) or state.has("Claw Marks", player) or state.has("Antenna", player)
 
 def can_glide(state: CollectionState, player: int) -> bool:
-    return state.has("Glide", player) or state.has("Superglide", player)
+    return state.has("Progressive Glide", player) or state.has("Superglide", player)
 
 def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bool) -> bool:
     return (
@@ -177,7 +177,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     and
                                                                                                                                                     (
                                                                                                                                                         has_item(state, player, "High Jump")
-                                                                                                                                                        or (options.advanced_logic and has_item(state, player, "Glide"))
+                                                                                                                                                        or (options.advanced_logic and can_glide(state, player))
                                                                                                                                                     )
                                                                                                                                                     and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
                                                                                                                                                  )

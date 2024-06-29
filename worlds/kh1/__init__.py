@@ -127,7 +127,7 @@ class KH1World(World):
                     item_pool += [self.create_item(name) for _ in range(0, 3)]
                 else:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            elif name == "Glide":
+            elif name == "Progressive Glide":
                 if self.options.extra_shared_abilities:
                     item_pool += [self.create_item(name) for _ in range(0, 4)]
                 else:
