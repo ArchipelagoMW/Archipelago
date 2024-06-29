@@ -65,20 +65,20 @@ class RaftWorld(World):
         extraItemNamePool = []
         extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
         if extras > 0:
-            if (self.options.filler_item_types.value != self.options.filler_item_types.option_duplicates): # Use resource packs
+            if (self.options.filler_item_types != self.options.filler_item_types.option_duplicates): # Use resource packs
                 for packItem in resourcePackItems:
                     for i in range(minimumResourcePackAmount, maximumResourcePackAmount + 1):
                         extraItemNamePool.append(createResourcePackName(i, packItem))
 
-            if self.options.filler_item_types.value != self.options.filler_item_types.option_resource_packs: # Use duplicate items
+            if self.options.filler_item_types != self.options.filler_item_types.option_resource_packs: # Use duplicate items
                 dupeItemPool = item_table.copy()
                 # Remove frequencies if necessary
-                if self.options.island_frequency_locations.value != self.options.island_frequency_locations.option_anywhere: # Not completely random locations
+                if self.options.island_frequency_locations != self.options.island_frequency_locations.option_anywhere: # Not completely random locations
                     # If we let frequencies stay in with progressive-frequencies, the progressive-frequency item
                     # will be included 7 times. This is a massive flood of progressive-frequency items, so we
                     # instead add progressive-frequency as its own item a smaller amount of times to prevent
                     # flooding the duplicate item pool with them.
-                    if self.options.island_frequency_locations.value == self.options.island_frequency_locations.option_progressive:
+                    if self.options.island_frequency_locations == self.options.island_frequency_locations.option_progressive:
                         for _ in range(2):
                             # Progressives are not in item_pool, need to create faux item for duplicate item pool
                             # This can still be filtered out later by duplicate_items setting
@@ -87,9 +87,9 @@ class RaftWorld(World):
                     dupeItemPool = (itm for itm in dupeItemPool if "Frequency" not in itm["name"])
                 
                 # Remove progression or non-progression items if necessary
-                if (self.options.duplicate_items.value == self.options.duplicate_items.option_progression): # Progression only
+                if (self.options.duplicate_items == self.options.duplicate_items.option_progression): # Progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == True)
-                elif (self.options.duplicate_items.value == self.options.duplicate_items.option_non_progression): # Non-progression only
+                elif (self.options.duplicate_items == self.options.duplicate_items.option_non_progression): # Non-progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == False)
                 
                 dupeItemPool = list(dupeItemPool)
@@ -122,7 +122,7 @@ class RaftWorld(World):
     
     def create_item_replaceAsNecessary(self, name: str) -> Item:
         isFrequency = "Frequency" in name
-        shouldUseProgressive = bool((isFrequency and self.options.island_frequency_locations.value == self.options.island_frequency_locations.option_progressive)
+        shouldUseProgressive = bool((isFrequency and self.options.island_frequency_locations == self.options.island_frequency_locations.option_progressive)
             or (not isFrequency and self.options.progressive_items))
         if shouldUseProgressive and name in progressive_table:
             name = progressive_table[name]
@@ -153,7 +153,7 @@ class RaftWorld(World):
         return super(RaftWorld, self).collect_item(state, item, remove)
 
     def pre_fill(self):
-        if self.options.island_frequency_locations.value == self.options.island_frequency_locations.option_vanilla:
+        if self.options.island_frequency_locations == self.options.island_frequency_locations.option_vanilla:
             self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
             self.setLocationItem("Vasagatan Frequency to Balboa", "Balboa Island Frequency")
             self.setLocationItem("Relay Station quest", "Caravan Island Frequency")
@@ -161,7 +161,7 @@ class RaftWorld(World):
             self.setLocationItem("Tangaroa Frequency to Varuna Point", "Varuna Point Frequency")
             self.setLocationItem("Varuna Point Frequency to Temperance", "Temperance Frequency")
             self.setLocationItem("Temperance Frequency to Utopia", "Utopia Frequency")
-        elif self.options.island_frequency_locations.value == self.options.island_frequency_locations.option_random_on_island:
+        elif self.options.island_frequency_locations == self.options.island_frequency_locations.option_random_on_island:
             self.setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
             self.setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
             self.setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
@@ -169,7 +169,7 @@ class RaftWorld(World):
             self.setLocationItemFromRegion("Tangaroa", "Varuna Point Frequency")
             self.setLocationItemFromRegion("Varuna Point", "Temperance Frequency")
             self.setLocationItemFromRegion("Temperance", "Utopia Frequency")
-        elif self.options.island_frequency_locations.value in [
+        elif self.options.island_frequency_locations in [
             self.options.island_frequency_locations.option_random_island_order,
             self.options.island_frequency_locations.option_random_on_island_random_order
         ]:
@@ -200,9 +200,9 @@ class RaftWorld(World):
                 else:
                     currentLocation = availableLocationList[0] # Utopia (only one left in list)
                 availableLocationList.remove(currentLocation)
-                if self.options.island_frequency_locations.value == self.options.island_frequency_locations.option_random_island_order:
+                if self.options.island_frequency_locations == self.options.island_frequency_locations.option_random_island_order:
                     self.setLocationItem(locationToVanillaFrequencyLocationMap[previousLocation], locationToFrequencyItemMap[currentLocation])
-                elif self.options.island_frequency_locations.value == self.options.island_frequency_locations.option_random_on_island_random_order:
+                elif self.options.island_frequency_locations == self.options.island_frequency_locations.option_random_on_island_random_order:
                     self.setLocationItemFromRegion(previousLocation, locationToFrequencyItemMap[currentLocation])
                 previousLocation = currentLocation
     
