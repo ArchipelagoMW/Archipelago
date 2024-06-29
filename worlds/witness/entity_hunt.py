@@ -190,7 +190,7 @@ class EntityHuntPicker:
 
             "0x03702": "0x15ADD",  # Jungle Vault Box -> Jungle Vault Panel
             "0x03542": "0x002A6",  # Mountainside Vault Box -> Mountainside Vault Panel
-            "0x03481": "0x033D4",  # Jungle Vault Box -> Jungle Vault Panel
+            "0x03481": "0x033D4",  # Tutorial Vault Box -> Tutorial Vault Panel
             "0x0339E": "0x0CC7B",  # Desert Vault Box -> Desert Vault Panel
         }
 
