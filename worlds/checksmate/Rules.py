@@ -116,6 +116,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
     super_sized = opts.goal.value != opts.goal.option_single
+    always_super_sized = opts.goal.value == opts.goal.option_super
 
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
@@ -124,9 +125,13 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
         if not super_sized and item.material_expectations == -1:
             continue
         # AI avoids making trades except where it wins material or secures victory, so require that much material
-        if item.material_expectations > 0:
+        material_cost = item.material_expectations if not super_sized else (
+            item.material_expectations_grand if always_super_sized else max(
+                item.material_expectations, item.material_expectations_grand
+            ))
+        if material_cost > 0:
             set_rule(multiworld.get_location(name, player),
-                     lambda state, v=item.material_expectations: v <= 0 or meets_material_expectations(
+                     lambda state, v=material_cost: v <= 0 or meets_material_expectations(
                          state, v, player, difficulty, absolute_relaxation))
         # player must have (a king plus) that many chessmen to capture any given number of chessme
         if item.chessmen_expectations == -1:

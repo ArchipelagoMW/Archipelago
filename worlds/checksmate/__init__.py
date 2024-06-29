@@ -249,8 +249,8 @@ class CMWorld(World):
         # note that queens require that a major precede them, which increases the likelihood of the other types
 
         max_items = len(location_table)
-        if super_sized:
-            max_items -= len([loc for loc in location_table if location_table[loc].material_expectations != -1])
+        if not super_sized:
+            max_items -= len([loc for loc in location_table if location_table[loc].material_expectations == -1])
         if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
             max_items -= len([loc for loc in location_table if location_table[loc].is_tactic])
 
@@ -442,9 +442,6 @@ class CMWorld(World):
             victory_item = create_item_with_correct_settings(self.player, "Victory")
             self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(victory_item)
         else:
-            if self.options.goal.value == 1:
-                supersize_item = create_item_with_correct_settings(self.player, "Super-Size Me")
-                self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(supersize_item)
             victory_item = create_item_with_correct_settings(self.player, "Victory")
             self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
