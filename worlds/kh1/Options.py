@@ -389,5 +389,5 @@ class KH1Options(PerGameCommonOptions):
     mp_increase: MPIncrease
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
-    start_inventory_pool: StartInventoryPool
+    start_inventory_from_pool: StartInventoryPool
     
