@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -862,7 +862,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
-        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
+        ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")
