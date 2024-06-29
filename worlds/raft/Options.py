@@ -42,6 +42,8 @@ class IslandFrequencyLocations(Choice):
     option_progressive = 4
     option_anywhere = 5
     default = 2
+    def is_filling_frequencies_in_world(self):
+        return self.value <= self.option_random_on_island_random_order
 
 class IslandGenerationDistance(Choice):
     """Sets how far away islands spawn from you when you input their coordinates into the Receiver."""
