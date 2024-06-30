@@ -1,5 +1,7 @@
 import typing
-from Options import TextChoice, Option, Range, Toggle
+from dataclasses import dataclass
+
+from Options import TextChoice, Range, Toggle, PerGameCommonOptions
 
 
 class Character(TextChoice):
@@ -55,9 +57,9 @@ class Downfall(Toggle):
     default = 0
 
 
-spire_options: typing.Dict[str, type(Option)] = {
-    "character": Character,
-    "ascension": Ascension,
-    "final_act": FinalAct,
-    "downfall": Downfall,
-}
+@dataclass
+class SpireOptions(PerGameCommonOptions):
+    character: Character
+    ascension: Ascension
+    final_act: FinalAct
+    downfall: Downfall
