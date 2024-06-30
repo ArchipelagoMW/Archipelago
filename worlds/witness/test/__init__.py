@@ -3,7 +3,7 @@ from test.general import gen_steps, setup_multiworld
 from test.multiworld.test_multiworlds import MultiworldTestBase
 from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union
 
-from BaseClasses import CollectionState, Item
+from BaseClasses import CollectionState, Entrance, Item, Location, Region
 
 from .. import WitnessWorld
 
@@ -15,12 +15,50 @@ class WitnessTestBase(WorldTestBase):
     world: WitnessWorld
 
     def can_beat_game_with_items(self, items: Iterable[Item]) -> bool:
+        """
+        Check that the items listed are enough to beat the game.
+        """
+
         state = CollectionState(self.multiworld)
         for item in items:
             state.collect(item)
         return state.multiworld.can_beat_game(state)
 
+    def assert_dependency_on_event_item(self, spot: Union[Location, Region, Entrance], item_name: str):
+        """
+        WorldTestBase.assertAccessDependency, but modified & simplified to work with event items
+        """
+        event_items = [item for item in self.multiworld.get_items() if item.name == item_name]
+        self.assertTrue(event_items, f"Event item {item_name} does not exist.")
+
+        event_locations = [event_item.location for event_item in event_items]
+
+        # Checking for an access dependency on an event item requires a bit of extra work,
+        # as state.remove forces a sweep, which will pick up the event item again right after we tried to remove it.
+        # So, we temporarily set the access rules of the event locations to be impossible.
+        original_rules = {event_location.name: event_location.access_rule for event_location in event_locations}
+        for event_location in event_locations:
+            event_location.access_rule = lambda _: False
+
+        # We can't use self.assertAccessDependency here, it doesn't work for event items. (As of 2024-06-30)
+        test_state = self.multiworld.get_all_state(False)
+
+        self.assertFalse(spot.can_reach(test_state), f"{spot.name} is reachable without {item_name}")
+
+        test_state.collect(event_items[0])
+
+        self.assertTrue(spot.can_reach(test_state), f"{spot.name} is not reachable despite having {item_name}")
+
+        # Restore original access rules.
+        for event_location in event_locations:
+            event_location.access_rule = original_rules[event_location.name]
+
     def assert_location_exists(self, location_name: str, strict_check: bool = True):
+        """
+        Assert that a location exists in this world.
+        If strict_check, also make sure that this (non-event) location COULD exist.
+        """
+
         if strict_check:
             self.assertIn(location_name, self.world.location_name_to_id, f"Location {location_name} can never exist")
 
@@ -30,13 +68,18 @@ class WitnessTestBase(WorldTestBase):
             self.fail(f"Location {location_name} does not exist.")
 
     def assert_location_does_not_exist(self, location_name: str, strict_check: bool = True):
+        """
+        Assert that a location exists in this world.
+        If strict_check, be explicit about whether the location could exist in the first place.
+        """
+
         if strict_check:
             self.assertIn(location_name, self.world.location_name_to_id, f"Location {location_name} can never exist")
 
         self.assertRaises(
             KeyError,
             lambda _: self.world.get_location(location_name),
-            f"Location {location_name} exists, but is not supposed to."
+            f"Location {location_name} exists, but is not supposed to.",
         )
 
     def assert_can_beat_with_minimally(self, required_item_counts: Mapping[str, int]):
