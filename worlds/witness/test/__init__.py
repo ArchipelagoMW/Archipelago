@@ -20,6 +20,25 @@ class WitnessTestBase(WorldTestBase):
             state.collect(item)
         return state.multiworld.can_beat_game(state)
 
+    def assert_location_exists(self, location_name: str, strict_check: bool = True):
+        if strict_check:
+            self.assertIn(location_name, self.world.location_name_to_id, f"Location {location_name} can never exist")
+
+        try:
+            self.world.get_location(location_name)
+        except KeyError:
+            self.fail(f"Location {location_name} does not exist.")
+
+    def assert_location_does_not_exist(self, location_name: str, strict_check: bool = True):
+        if strict_check:
+            self.assertIn(location_name, self.world.location_name_to_id, f"Location {location_name} can never exist")
+
+        self.assertRaises(
+            KeyError,
+            lambda _: self.world.get_location(location_name),
+            f"Location {location_name} exists, but is not supposed to."
+        )
+
     def assert_can_beat_with_minimally(self, required_item_counts: Mapping[str, int]):
         """
         Assert that the specified mapping of items is enough to beat the game,
