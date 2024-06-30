@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import asyncio
 
 from CommonClient import logger, get_base_parser, gui_enabled
+from . import StardewLogic
+from .stardew_rule.rule_explain import explain
 
 try:
     from worlds.tracker.TrackerClient import TrackerGameContext as BaseContext, TrackerCommandProcessor as ClientCommandProcessor  # noqa
@@ -31,15 +35,26 @@ except ImportError:
 
 
 class StardewCommandProcessor(ClientCommandProcessor):
+    ctx: StardewClientContext
 
-    def _cmd_explain(self):
+    def _cmd_explain(self, item):
         """Coming soon.™"""
-        logger.info("Coming soon.™")
+        if self.ctx.logic is None:
+            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+            return
+
+        rule = self.ctx.logic.has(item)
+        expl = explain(rule, self.ctx.multiworld.state)
+        logger.info(expl)
+
+    if not tracker_loaded:
+        del _cmd_explain
 
 
 class StardewClientContext(BaseContext):
     game = "Stardew Valley"
     command_processor = StardewCommandProcessor
+    logic: StardewLogic = None
 
     def run_gui(self):
         from kvui import GameManager
@@ -66,6 +81,10 @@ class StardewClientContext(BaseContext):
 
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    def setup_logic(self):
+        if self.multiworld is not None:
+            self.logic = self.multiworld.worlds[self.player_id].logic
+
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(StardewClientContext, self).server_auth(password_requested)
@@ -83,6 +102,10 @@ def launch():
 
         if tracker_loaded:
             ctx.run_generator()
+            # FIXME that's probably not legit
+            if ctx.player_id is None:
+                ctx.player_id = 1
+            ctx.setup_logic()
         else:
             logger.warning("Could not find Universal Tracker.")
 

@@ -37,7 +37,7 @@ STARDEW_VALLEY = "Stardew Valley"
 UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
 
 client_version = 0
-TRACKER_ENABLED = False
+TRACKER_ENABLED = True
 
 
 class StardewLocation(Location):
