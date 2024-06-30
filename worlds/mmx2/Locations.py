@@ -116,9 +116,10 @@ pickup_sanity = {
     LocationName.magna_centipede_hp_2:                  STARTING_ID + 0x0069,
     LocationName.crystal_snail_hp_1:                    STARTING_ID + 0x006A,
     LocationName.crystal_snail_energy_1:                STARTING_ID + 0x006B,
-    LocationName.crystal_snail_hp_2:                    STARTING_ID + 0x006C,
+    LocationName.crystal_snail_hp_2:                    STARTING_ID + 0x008D,
+    LocationName.crystal_snail_hp_3:                    STARTING_ID + 0x006C,
     LocationName.crystal_snail_1up_1:                   STARTING_ID + 0x006D,
-    LocationName.crystal_snail_hp_3:                    STARTING_ID + 0x006E,
+    LocationName.crystal_snail_hp_4:                    STARTING_ID + 0x006E,
     LocationName.crystal_snail_1up_2:                   STARTING_ID + 0x006F,
     LocationName.overdrive_ostrich_hp_1:                STARTING_ID + 0x0070,
     LocationName.overdrive_ostrich_1up:                 STARTING_ID + 0x0071,
@@ -146,6 +147,9 @@ pickup_sanity = {
     LocationName.x_hunter_stage_3_hp_8:                 STARTING_ID + 0x0087,
     LocationName.x_hunter_stage_3_1up_3:                STARTING_ID + 0x0088,
     LocationName.x_hunter_stage_3_1up_4:                STARTING_ID + 0x0089,
+    LocationName.wheel_gator_hp_5:                      STARTING_ID + 0x008A,
+    LocationName.wheel_gator_hp_6:                      STARTING_ID + 0x008B,
+    LocationName.wheel_gator_hp_7:                      STARTING_ID + 0x008C,
 }
 
 stage_clears = {
@@ -158,6 +162,7 @@ stage_clears = {
     LocationName.overdrive_ostrich_clear:               STARTING_ID + 0x00C6,
     LocationName.wire_sponge_clear:                     STARTING_ID + 0x00C7,
     LocationName.intro_stage_clear:                     STARTING_ID + 0x00C8,
+    LocationName.x_hunter_stage_4_clear:                STARTING_ID + 0x00C9,
 }
 
 all_locations = {

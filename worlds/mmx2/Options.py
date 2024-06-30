@@ -113,12 +113,6 @@ class JammedBuster(Toggle):
     """
     display_name = "Jammed Buster"
 
-class DisableChargeFreeze(DefaultOnToggle):
-    """
-    Allows X and Zero to move while shooting a level 3 charged shot.
-    """
-    display_name = "Disable Level 3 Charge freeze after shooting"
-
 class LongJumps(Toggle):
     """
     Allows X to perform longer jumps when holding down the Dash button.
@@ -210,8 +204,8 @@ class BaseArmorUpgradeCount(Range):
     """
     display_name = "Base Armor Upgrade Count"
     range_start = 0
-    range_end = 8
-    default = 5
+    range_end = 4
+    default = 4
 
 class BaseHeartTankCount(Range):
     """
@@ -329,7 +323,6 @@ class MMX2Options(PerGameCommonOptions):
     jammed_buster: JammedBuster
     long_jumps: LongJumps
     shoryuken_in_pool: ShoryukenInPool
-    disable_charge_freeze: DisableChargeFreeze
     logic_boss_weakness: LogicBossWeakness
     base_boss_rematch_count: BaseBossRematchCount
     base_all_levels: BaseBundleUnlock

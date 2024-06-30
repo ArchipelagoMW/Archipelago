@@ -32,6 +32,7 @@ MMX2_LIFE_COUNT         = WRAM_START + 0x01FB3
 MMX2_SHORYUKEN          = WRAM_START + 0x01FB1
 MMX2_CAN_MOVE           = WRAM_START + 0x01F25
 MMX2_ON_RIDE_ARMOR      = WRAM_START + 0x00A54
+MMX2_ZERO_PARTS         = WRAM_START + 0x01FD6
 
 MMX2_ENABLE_HEART_TANK      = MMX2_RAM + 0x00009
 MMX2_ENABLE_HP_REFILL       = MMX2_RAM + 0x0000D
@@ -58,6 +59,7 @@ MMX2_COLLECTED_PICKUPS      = MMX2_RAM + 0x000C0
 MMX2_COMPLETED_REMATCHES    = MMX2_RAM + 0x00000
 MMX2_ENERGY_LINK_PACKET     = MMX2_RAM + 0x00006
 MMX2_COLLECTED_SHORYUKEN    = MMX2_RAM + 0x00042
+MMX2_COLLECTED_SIGMA_ACCESS = MMX2_RAM + 0x00046
 
 MMX2_PICKUPSANITY_ACTIVE    = ROM_START + 0x17FFE7
 MMX2_REQUIRED_REMATCHES     = ROM_START + 0x17FFE3
@@ -507,6 +509,7 @@ class MMX2SNIClient(SNIClient):
             self.game_state = False
             self.current_level_value = 42
             self.item_queue = []
+            ctx.locations_checked = set()
             return
         
         validation = await snes_read(ctx, MMX2_VALIDATION_CHECK, 0x2)
@@ -548,8 +551,6 @@ class MMX2SNIClient(SNIClient):
         from worlds import AutoWorldRegister
 
         defeated_bosses_data = await snes_read(ctx, MMX2_DEFEATED_BOSSES, 0x20)
-        completed_rematches = await snes_read(ctx, MMX2_COMPLETED_REMATCHES, 0x1)
-        completed_rematches = completed_rematches[0]
         required_rematches = await snes_read(ctx, MMX2_REQUIRED_REMATCHES, 0x1)
         required_rematches = required_rematches[0]
         defeated_bosses = list(defeated_bosses_data)
@@ -557,9 +558,10 @@ class MMX2SNIClient(SNIClient):
         cleared_levels = list(cleared_levels_data)
         collected_heart_tanks_data = await snes_read(ctx, MMX2_COLLECTED_HEART_TANKS, 0x01)
         collected_upgrades_data = await snes_read(ctx, MMX2_COLLECTED_UPGRADES, 0x01)
-        collected_shoryuken_data = await snes_read(ctx, MMX2_COLLECTED_UPGRADES, 0x01)
-        collected_pickups_data = await snes_read(ctx, MMX2_COLLECTED_PICKUPS, 0x4A)
+        collected_shoryuken_data = await snes_read(ctx, MMX2_COLLECTED_SHORYUKEN, 0x01)
+        collected_pickups_data = await snes_read(ctx, MMX2_COLLECTED_PICKUPS, 0x4E)
         collected_pickups = list(collected_pickups_data)
+        collected_sigma_access = await snes_read(ctx, MMX2_COLLECTED_SIGMA_ACCESS, 0x01)
         pickupsanity_enabled = await snes_read(ctx, MMX2_PICKUPSANITY_ACTIVE, 0x1)
         new_checks = []
         for loc_name, data in location_id_to_level_id.items():
@@ -595,6 +597,9 @@ class MMX2SNIClient(SNIClient):
                     # Shoryuken
                     if collected_shoryuken_data[0] != 0x00:
                         new_checks.append(loc_id)
+                elif internal_id == 0x006:
+                    if collected_sigma_access[0] != 0x00:
+                        new_checks.append(loc_id)
                 elif internal_id == 0x007:
                     # Intro
                     if game_state[0] == 0x02 and \
@@ -608,10 +613,6 @@ class MMX2SNIClient(SNIClient):
                     if collected_pickups_data[data_bit] != 0:
                         new_checks.append(loc_id)
         
-        snes_buffered_write(ctx, MMX2_COMPLETED_REMATCHES, bytearray([completed_rematches]))
-        snes_buffered_write(ctx, MMX2_DEFEATED_BOSSES, bytes(defeated_bosses))
-        await snes_flush_writes(ctx)
-                        
         verify_game_state = await snes_read(ctx, MMX2_GAMEPLAY_STATE, 1)
         if verify_game_state is None:
             snes_logger.info(f'Exit Game.')
@@ -694,7 +695,7 @@ class MMX2SNIClient(SNIClient):
                 level = boss_access_rom_data[item.item]
                 boss_access[level[0] * 2] = 0x01
                 snes_buffered_write(ctx, MMX2_UNLOCKED_LEVELS, boss_access)
-                if item.item == 0xBD000A:
+                if item.item == STARTING_ID + 0x000A:
                     snes_buffered_write(ctx, MMX2_BASE_ACCESS, bytearray([0x00]))
                 snes_buffered_write(ctx, MMX2_SFX_FLAG, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX2_SFX_NUMBER, bytearray([0x1D]))
@@ -711,6 +712,7 @@ class MMX2SNIClient(SNIClient):
         # Handle collected locations
         game_state = await snes_read(ctx, MMX2_GAME_STATE, 0x1)
         if game_state[0] != 0x02:
+            ctx.locations_checked = set()
             return
         new_boss_clears = False
         new_cleared_level = False
@@ -718,9 +720,10 @@ class MMX2SNIClient(SNIClient):
         new_upgrade = False
         new_pickup = False
         new_shoryuken = False
+        new_sigma_access = False
         cleared_levels_data = await snes_read(ctx, MMX2_LEVEL_CLEARED, 0x20)
         cleared_levels = list(cleared_levels_data)
-        collected_pickups_data = await snes_read(ctx, MMX2_COLLECTED_PICKUPS, 0x4A)
+        collected_pickups_data = await snes_read(ctx, MMX2_COLLECTED_PICKUPS, 0x4E)
         collected_pickups = list(collected_pickups_data)
         collected_heart_tanks_data = await snes_read(ctx, MMX2_COLLECTED_HEART_TANKS, 0x01)
         collected_heart_tanks_data = collected_heart_tanks_data[0]
@@ -730,6 +733,8 @@ class MMX2SNIClient(SNIClient):
         defeated_bosses = list(defeated_bosses_data)
         collected_shoryuken_data = await snes_read(ctx, MMX2_COLLECTED_SHORYUKEN, 0x01)
         collected_shoryuken_data = collected_shoryuken_data[0]
+        collected_sigma_access =  await snes_read(ctx, MMX2_COLLECTED_SIGMA_ACCESS, 0x01)
+        collected_sigma_access = collected_sigma_access[0]
         i = 0
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
@@ -771,7 +776,11 @@ class MMX2SNIClient(SNIClient):
                     # Shoryuken
                     collected_shoryuken_data = 0xFF
                     new_shoryuken = True
-                elif internal_id >= 0x100:
+                elif internal_id == 0x006:
+                    # Sigma Access
+                    collected_sigma_access = 0x01
+                    new_sigma_access = True
+                elif internal_id == 0x20:
                     # Pickups
                     collected_pickups[data_bit] = 0x01
                     new_pickup = True
@@ -784,6 +793,8 @@ class MMX2SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX2_COLLECTED_PICKUPS, bytes(collected_pickups))
             if new_shoryuken:
                 snes_buffered_write(ctx, MMX2_COLLECTED_SHORYUKEN, bytearray([collected_shoryuken_data]))
+            if new_sigma_access:
+                snes_buffered_write(ctx, MMX2_COLLECTED_SIGMA_ACCESS, bytearray([collected_sigma_access]))
             if new_upgrade:
                 snes_buffered_write(ctx, MMX2_COLLECTED_UPGRADES, bytearray([collected_upgrades_data]))
             if new_heart_tank:

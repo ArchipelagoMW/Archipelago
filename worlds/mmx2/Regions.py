@@ -228,22 +228,24 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_event_to_region(multiworld, player, RegionName.x_hunter_stage_3_boss, EventName.x_hunter_stage_3_clear, EventName.x_hunter_stage_3_clear)
 
     # X-Hunter Stage 4
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_wheel_gator)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_bubble_crab)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_flame_stag)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_morph_moth)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_magna_centipede)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_crystal_snail)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_overdrive_ostrich)
-    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_wire_sponge)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.wheel_gator_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.bubble_crab_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.flame_stag_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.morph_moth_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.magna_centipede_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.crystal_snail_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.overdrive_ostrich_rematch, EventName.boss_rematch_clear)
-    add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.wire_sponge_rematch, EventName.boss_rematch_clear)
+    if world.options.base_boss_rematch_count.value != 0:
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_wheel_gator)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_bubble_crab)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_flame_stag)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_morph_moth)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_magna_centipede)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_crystal_snail)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_overdrive_ostrich)
+        add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_lobby, LocationName.x_hunter_stage_4_wire_sponge)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.wheel_gator_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.bubble_crab_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.flame_stag_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.morph_moth_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.magna_centipede_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.crystal_snail_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.overdrive_ostrich_rematch, EventName.boss_rematch_clear)
+        add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_lobby, EventName.wire_sponge_rematch, EventName.boss_rematch_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.x_hunter_stage_4_voice, LocationName.x_hunter_stage_4_clear)
     add_event_to_region(multiworld, player, RegionName.x_hunter_stage_4_voice, EventName.x_hunter_stage_4_clear, EventName.x_hunter_stage_4_clear)
 
     # X-Hunter Stage 5
@@ -262,6 +264,9 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_mid, LocationName.wheel_gator_energy_1)
         add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_3)
         add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_5)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_6)
+        add_location_to_region(multiworld, player, active_locations, RegionName.wheel_gator_end, LocationName.wheel_gator_hp_7)
 
         # Bubble Crab
         add_location_to_region(multiworld, player, active_locations, RegionName.bubble_crab_start, LocationName.bubble_crab_1up)
@@ -308,9 +313,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         # Crystal Snail
         add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_hp_1)
         add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_energy_1)
-        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_after_arena, LocationName.crystal_snail_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_hp_3)
         add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_1up_1)
-        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_downhill, LocationName.crystal_snail_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_downhill, LocationName.crystal_snail_hp_4)
         add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_uphill, LocationName.crystal_snail_1up_2)
 
         # Overdrive Ostrich
@@ -451,12 +457,11 @@ def connect_regions(world: World):
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_1)
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_2)
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_3)
-        connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_4)
     else:
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_1)
         connect(world, RegionName.x_hunter_stage_1_boss, RegionName.x_hunter_stage_2)
         connect(world, RegionName.x_hunter_stage_2_boss, RegionName.x_hunter_stage_3)
-        connect(world, RegionName.x_hunter_stage_3_boss, RegionName.x_hunter_stage_4)
+    connect(world, RegionName.x_hunter_stage_3_boss, RegionName.x_hunter_stage_4)
     connect(world, RegionName.x_hunter_stage_4_voice, RegionName.x_hunter_stage_5)
 
 

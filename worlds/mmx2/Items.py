@@ -31,6 +31,7 @@ access_codes_table = {
     ItemName.stage_overdrive_ostrich:   ItemData(STARTING_ID + 0x08, True),
     ItemName.stage_wire_sponge:         ItemData(STARTING_ID + 0x09, True),
     ItemName.stage_x_hunter:            ItemData(STARTING_ID + 0x0A, True),
+    ItemName.stage_sigma:               ItemData(STARTING_ID + 0x35, True),
 }
 
 weapons = {

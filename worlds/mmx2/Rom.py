@@ -54,48 +54,47 @@ refill_rom_data = {
 }
 
 boss_weakness_offsets = {
-    "Wheel Gator": 0x0,
-    "Bubble Crab": 0x0,
-    "Flame Stag": 0x0,
-    "Morph Moth": 0x0,
-    "Magna Centipede": 0x0,
-    "Crystal Snail": 0x0,
-    "Overdrive Ostrich": 0x0,
-    "Wire Sponge": 0x0,
-    "Agile": 0x0,
-    "Serges": 0x0,
-    "Violen": 0x0,
-    "Neo Violen": 0x0,
-    "Serges Tank": 0x0,
-    "Agile Flyer": 0x0,
-    "Zero": 0x0,
-    "Sigma": 0x0,
+    "Wheel Gator": 0x37643,
+    "Bubble Crab": 0x3753A,
+    "Flame Stag": 0x3761D,
+    "Morph Moth": 0x376DB,
+    "Magna Centipede": 0x374EE,
+    "Crystal Snail": 0x37514,
+    "Overdrive Ostrich": 0x375F7,
+    "Wire Sponge": 0x37560,
+    "Magna Quartz": 0x37DF8,
+    "Chop Register": 0x37E20,
+    "Raider Killer": 0x37E48,
+    "Pararoid S-38": 0x37E70,
+    "Agile": 0x37D80,
+    "Serges": 0x37DA8,
+    "Violen": 0x37DD0,
+    "Neo Violen": 0x3780B,
+    "Serges Tank": 0x377BF,
+    "Agile Flyer": 0x377E5,
+    "Zero": 0x3774D,
+    "Sigma": 0x37773,
+    "Sigma Virus": 0x37799,
 }
 
 boss_hp_caps_offsets = {
-    "Wheel Gator": 0x0,
-    "Bubble Crab": 0x0,
-    "Flame Stag": 0x0,
-    "Morph Moth": 0x0,
-    "Magna Centipede": 0x0,
-    "Crystal Snail": 0x0,
-    "Overdrive Ostrich": 0x0,
-    "Wire Sponge": 0x0,
-    "Agile": 0x0,
-    "Serges": 0x0,
-    "Violen": 0x0,
-    "Gigantic Mechaniloid CF-0": 0x0,
-    "Pararoid S-38": 0x0,
-    "Chop Register": 0x0,
-    "Raider Killer": 0x0,
-    "Magna Quartz": 0x0,
-    "Neo Violen": 0x0,
-    "Serges Tank": 0x0,
-    "Agile Flyer": 0x0,
-    "Zero": 0x0,
-    "Sigma": 0x0,
+    "Wheel Gator": 0x1B7B0,
+    "Bubble Crab": 0x3C267,
+    "Flame Stag": 0x24056,
+    "Morph Moth": 0x1AB86,
+    "Magna Centipede": 0x22C75,
+    "Crystal Snail": 0x3B521,
+    "Overdrive Ostrich": 0x4690B,
+    "Wire Sponge": 0x21C54,
+    "Agile": 0x23E49,  # they all share the same hp
+    #"Serges": 0x0,
+    #"Violen": 0x0,
+    "Gigantic Mechaniloid CF-0": 0x3949F,
+    "Serges Tank": 0x14D4F,
+    "Agile Flyer": 0xAF148,
+    "Zero": 0x14BCBF,
+    "Sigma": 0x15618F,
 }
-
 
 class MMX2ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [HASH_US, HASH_LEGACY]
@@ -125,7 +124,7 @@ def adjust_boss_damage_table(world: World, patch: MMX2ProcedurePatch):
         patch.write_bytes(offset, bytearray(data))
 
     # Write weaknesses to a table
-    offset = 0x98000
+    offset = 0x140000
     for _, entries in world.boss_weaknesses.items():
         data = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
         i = 0
@@ -147,19 +146,28 @@ def adjust_boss_hp(world: World, patch: MMX2ProcedurePatch):
     elif option == "chaotic":
         ranges = [1,64]
     
-    for _, offset in boss_hp_caps_offsets.items():
-        patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
-
+    for boss, offset in boss_hp_caps_offsets.items():
+        if boss == "Morph Moth":
+            value = world.random.randint(ranges[0] + 1, ranges[1])
+            value_2 = world.random.randint(1, value - 1)
+            patch.write_byte(0x1ABB7, value_2)
+            patch.write_byte(0x1B05E, value_2)
+        elif boss == "Gigantic Mechaniloid CF-0":
+            patch.write_byte(0x39F74, value)
+        else:
+            value = world.random.randint(ranges[0], ranges[1])
+        patch.write_byte(offset, value)
+        
 
 def patch_rom(world: World, patch: MMX2ProcedurePatch):
     from Utils import __version__
 
     # Prepare some ROM locations to receive the basepatch
 
-    #adjust_boss_damage_table(world, patch)
+    adjust_boss_damage_table(world, patch)
     
-    #if world.options.boss_randomize_hp != "off":
-    #    adjust_boss_hp(world, patch)
+    if world.options.boss_randomize_hp != "off":
+        adjust_boss_hp(world, patch)
 
     # Edit the ROM header
     patch.name = bytearray(f'MMX2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
@@ -189,6 +197,9 @@ def patch_rom(world: World, patch: MMX2ProcedurePatch):
     for action, button in button_config.items():
         patch.write_byte(action_offsets[action], button_values[button])
 
+    # Starting HP
+    patch.write_byte(0x01D6A, 0xFF)
+    
     # Write options to the ROM
     value = 0
     base_open = world.options.base_open.value
@@ -218,6 +229,7 @@ def patch_rom(world: World, patch: MMX2ProcedurePatch):
     patch.write_byte(0x17FFEF, world.options.base_all_levels.value)
     patch.write_byte(0x17FFEC, world.options.boss_weakness_rando.value)
     patch.write_byte(0x17FFF0, world.options.boss_weakness_strictness.value)
+    patch.write_byte(0x17FFF2, world.options.x_hunters_medal_count.value)
     value = 0
     if world.options.long_jumps.value:
         value |= 0x01

@@ -76,9 +76,11 @@ class MMX2World(World):
         
         connect_regions(self)
         
-        total_required_locations = 45
+        total_required_locations = 38
+        if self.options.base_boss_rematch_count.value != 0:
+            total_required_locations += 8
         if self.options.pickupsanity.value:
-            total_required_locations += 75
+            total_required_locations += 79
 
         # Setup item pool
 
@@ -138,7 +140,7 @@ class MMX2World(World):
 
         # Add heart tanks into the pool
         if "Heart Tanks" in base_open and self.options.base_heart_tank_count.value > 0:
-            i = self.options.sigma_heart_tank_count.value
+            i = self.options.base_heart_tank_count.value
             itempool += [self.create_item(ItemName.heart_tank) for _ in range(i)]
             if i != 8:
                 i = 8 - i
@@ -148,7 +150,7 @@ class MMX2World(World):
 
         # Add sub tanks into the pool
         if "Sub Tanks" in base_open and self.options.base_sub_tank_count.value > 0:
-            i = self.options.sigma_sub_tank_count.value
+            i = self.options.base_sub_tank_count.value
             itempool += [self.create_item(ItemName.sub_tank) for _ in range(i)]
             if i != 4:
                 itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4 - i)]
@@ -183,6 +185,9 @@ class MMX2World(World):
         ]
         for location_name in maverick_location_names:
             self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(ItemName.maverick_medal))
+
+        # Set sigma access item
+        self.multiworld.get_location(LocationName.x_hunter_stage_4_clear, self.player).place_locked_item(self.create_item(ItemName.stage_sigma))
 
         # Set victory item
         self.multiworld.get_location(LocationName.victory, self.player).place_locked_item(self.create_item(ItemName.victory))

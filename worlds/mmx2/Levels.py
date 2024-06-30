@@ -18,6 +18,9 @@ location_id_to_level_id = {
     LocationName.wheel_gator_energy_1:                  [0x00, 0x020, 0x05],
     LocationName.wheel_gator_hp_3:                      [0x00, 0x020, 0x06],
     LocationName.wheel_gator_hp_4:                      [0x00, 0x020, 0x07],
+    LocationName.wheel_gator_hp_5:                      [0x00, 0x020, 0x4A],
+    LocationName.wheel_gator_hp_6:                      [0x00, 0x020, 0x4B],
+    LocationName.wheel_gator_hp_7:                      [0x00, 0x020, 0x4C],
 
     LocationName.bubble_crab_boss:                      [0x08, 0x000, 0x01],
     LocationName.bubble_crab_clear:                     [0x08, 0x001, 0x02],
@@ -84,9 +87,10 @@ location_id_to_level_id = {
     LocationName.crystal_snail_mini_boss_1:             [0x02, 0x000, 0x1C],
     LocationName.crystal_snail_hp_1:                    [0x00, 0x020, 0x2A],
     LocationName.crystal_snail_energy_1:                [0x00, 0x020, 0x2B],
-    LocationName.crystal_snail_hp_2:                    [0x00, 0x020, 0x2C],
+    LocationName.crystal_snail_hp_2:                    [0x00, 0x020, 0x4D],
+    LocationName.crystal_snail_hp_3:                    [0x00, 0x020, 0x2C],
     LocationName.crystal_snail_1up_1:                   [0x00, 0x020, 0x2D],
-    LocationName.crystal_snail_hp_3:                    [0x00, 0x020, 0x2E],
+    LocationName.crystal_snail_hp_4:                    [0x00, 0x020, 0x2E],
     LocationName.crystal_snail_1up_2:                   [0x00, 0x020, 0x2F],
 
     LocationName.overdrive_ostrich_boss:                [0x05, 0x000, 0x06],
@@ -144,6 +148,7 @@ location_id_to_level_id = {
     LocationName.x_hunter_stage_4_crystal_snail:        [0x0D, 0x000, 0x13],
     LocationName.x_hunter_stage_4_overdrive_ostrich:    [0x0D, 0x000, 0x14],
     LocationName.x_hunter_stage_4_wire_sponge:          [0x0D, 0x000, 0x15],
+    LocationName.x_hunter_stage_4_clear:                [0x0D, 0x006, 0x00],
 
     LocationName.x_hunter_stage_5_zero:                 [0x0E, 0x000, 0x16],
     LocationName.victory:                               [0x0E, 0x000, 0x17],

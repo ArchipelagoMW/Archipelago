@@ -7,7 +7,8 @@ stage_magna_centipede = "Magna Centipede Access Codes"
 stage_crystal_snail = "Crystal Snail Access Codes"
 stage_overdrive_ostrich = "Overdrive Ostrich Access Codes"
 stage_wire_sponge = "Wire Sponge Access Codes"
-stage_x_hunter = "X-Hunter Access Codes"
+stage_x_hunter = "X-Hunter Base Access Codes"
+stage_sigma = "Sigma Access Codes"
 
 # Second Armor
 helmet = "Helmet Upgrade"

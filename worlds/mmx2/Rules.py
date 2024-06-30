@@ -150,8 +150,7 @@ def set_rules(world: MMX2World):
                  lambda state: (
                      state.has(EventName.x_hunter_stage_1_clear, player) and 
                      state.has(EventName.x_hunter_stage_2_clear, player) and 
-                     state.has(EventName.x_hunter_stage_3_clear, player) and 
-                     state.has(EventName.x_hunter_stage_4_clear, player)
+                     state.has(EventName.x_hunter_stage_3_clear, player)
                     ))
     else:
         set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_1_boss} -> {RegionName.x_hunter_stage_2}", player),
@@ -160,8 +159,8 @@ def set_rules(world: MMX2World):
                  lambda state: state.has(EventName.x_hunter_stage_2_clear, player))
         set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_3_boss} -> {RegionName.x_hunter_stage_4}", player),
                  lambda state: state.has(EventName.x_hunter_stage_3_clear, player))
-        set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_4_voice} -> {RegionName.x_hunter_stage_5}", player),
-                 lambda state: state.has(EventName.x_hunter_stage_4_clear, player))
+    set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_4_voice} -> {RegionName.x_hunter_stage_5}", player),
+                lambda state: state.has(EventName.x_hunter_stage_4_clear, player))
         
     # Set Boss rematch rules
     if world.options.base_boss_rematch_count.value > 0:
@@ -342,9 +341,15 @@ def add_pickupsanity_logic(world: MMX2World):
     
     # X-Hunter Base 3
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_3_hp_1, player),
-             lambda state: state.has(ItemName.strike_chain, player))
+             lambda state: (
+                state.has(ItemName.legs, player) and
+                state.has(ItemName.strike_chain, player)
+             ))
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_3_1up_1, player),
-             lambda state: state.has(ItemName.strike_chain, player))
+             lambda state: (
+                state.has(ItemName.legs, player) and
+                state.has(ItemName.strike_chain, player)
+             ))
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_3_1up_2, player),
              lambda state: state.has(ItemName.crystal_hunter, player))
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_3_hp_7, player),
