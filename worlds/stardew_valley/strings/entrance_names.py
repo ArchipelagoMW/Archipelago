@@ -233,6 +233,7 @@ class LogicEntrance:
     buy_year3_books = "Buy Year 3 Books from the Bookseller"
     complete_raccoon_requests = "Complete Raccoon Requests"
     buy_from_raccoon = "Buy From Raccoon"
+    fish_in_waterfall = "Fish In Waterfall"
 
 
 # Skull Cavern Elevator
