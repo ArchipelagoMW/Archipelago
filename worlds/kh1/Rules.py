@@ -1105,6 +1105,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
                                                                                                                                                     and has_emblems(state, player, options.keyblades_unlock_chests) 
                                                                                                                                                     and can_glide(state, player)
+                                                                                                                                                    and has_item(state, player, "Progressive Gravity") 
                                                                                                                                                  )
     multiworld.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"                       , player).access_rule = lambda state: (
                                                                                                                                                     has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
