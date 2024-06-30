@@ -62,14 +62,6 @@ def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> 
     return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) >= amount
 
 
-def _can_solve_panel(panel: str, world: "WitnessWorld") -> CollectionRule:
-    """
-    Determines whether a panel can be solved
-    """
-
-    return make_lambda(panel, world)
-
-
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     """
     For Expert PP2, you need a way to access PP2 from the front, and a separate way from the back.
