@@ -223,8 +223,8 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     return tunnels_from_town
 
 
-def _has_item(item: str, world: "WitnessWorld", player: int,
-              player_logic: WitnessPlayerLogic, player_locations: WitnessPlayerLocations) -> CollectionRule:
+def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic) -> CollectionRule:
+
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
         return region.can_reach
@@ -247,8 +247,6 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
         return lambda state: _can_do_expert_pp2(state, world)
     if item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
-    if item in player_logic.USED_EVENT_NAMES_BY_HEX:
-        return _can_solve_panel(item, world)
 
     prog_item = static_witness_logic.get_parent_progressive_item(item)
     return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
@@ -261,7 +259,7 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     """
 
     lambda_conversion = [
-        [_has_item(item, world, world.player, world.player_logic, world.player_locations) for item in subset]
+        [_has_item(item, world, world.player, world.player_logic) for item in subset]
         for subset in requirements
     ]
 
