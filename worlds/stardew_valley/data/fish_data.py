@@ -4,7 +4,7 @@ from typing import Tuple, Union, Optional
 from . import season_data as season
 from ..mods.mod_data import ModNames
 from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
-from ..strings.region_names import Region, SVERegion
+from ..strings.region_names import Region, SVERegion, LogicRegion
 
 
 @dataclass(frozen=True)
@@ -30,7 +30,7 @@ town_river = (Region.town,)
 mountain_lake = (Region.mountain,)
 forest_pond = (Region.forest,)
 forest_river = (Region.forest,)
-forest_waterfall = (Region.forest_waterfall,)
+forest_waterfall = (LogicRegion.forest_waterfall,)
 secret_woods = (Region.secret_woods,)
 mines_floor_20 = (Region.mines_floor_20,)
 mines_floor_60 = (Region.mines_floor_60,)
