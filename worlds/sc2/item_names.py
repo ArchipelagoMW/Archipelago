@@ -99,6 +99,8 @@ STRUCTURE_ARMOR                       = "Structure Armor"
 HI_SEC_AUTO_TRACKING                  = "Hi-Sec Auto Tracking"
 ADVANCED_OPTICS                       = "Advanced Optics"
 ROGUE_FORCES                          = "Rogue Forces"
+MECHANICAL_KNOW_HOW                   = "Mechanical Know-how"
+MERCENARY_MUNITIONS                   = "Mercenary Munitions"
 
 # Terran Unit Upgrades
 BANSHEE_HYPERFLIGHT_ROTORS                         = "Hyperflight Rotors (Banshee)"

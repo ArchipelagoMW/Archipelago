@@ -479,6 +479,8 @@ item_descriptions = {
     item_names.HI_SEC_AUTO_TRACKING: "Increases attack range of all Terran structures by 1.",
     item_names.ADVANCED_OPTICS: "Increases attack range of all Terran mechanical units by 1.",
     item_names.ROGUE_FORCES: "Mercenary calldowns are no longer limited by charges.",
+    item_names.MECHANICAL_KNOW_HOW: "Increases mechanical unit life by 20%.",
+    item_names.MERCENARY_MUNITIONS: "Increases attack speed of all combat units by 15%.",
     item_names.ZEALOT: "Powerful melee warrior. Can use the charge ability.",
     item_names.STALKER: "Ranged attack strider. Can use the Blink ability.",
     item_names.HIGH_TEMPLAR: "Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon.",
