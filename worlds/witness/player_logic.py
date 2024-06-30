@@ -874,7 +874,14 @@ class WitnessPlayerLogic:
             entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
             entity_name = entity_obj["checkName"]
             entity_type = entity_obj["entityType"]
-            action = " Opened" if entity_type == "Door" else " Solved"
+
+            if entity_type == "Door":
+                action = " Opened"
+            elif entity_type == "Laser":
+                action = " Activated"
+            else:
+                action = " Solved"
+
             for i, event_name in enumerate(event_names):
                 if i == 0:
                     self.EVENT_ITEM_PAIRS[entity_name + action] = (event_name, entity_hex)
