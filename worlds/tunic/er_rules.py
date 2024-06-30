@@ -1,4 +1,4 @@
-from typing import Dict, FrozenSet, Tuple, Optional, TYPE_CHECKING
+from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from .options import IceGrappling, LadderStorage
 from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
@@ -1007,7 +1007,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
                             (state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)
-                            and state.has_group_unique("Hero Relics", player, 6))))
+                             and state.has_group_unique("Hero Relics", player, 6)
+                             and has_sword(state, player))))
 
     if options.ladder_storage:
         def get_portal_info(portal_sd: str) -> Tuple[str, str]:
