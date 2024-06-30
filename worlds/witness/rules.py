@@ -224,6 +224,7 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 
 
 def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic) -> CollectionRule:
+    assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
