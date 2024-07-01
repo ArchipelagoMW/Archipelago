@@ -149,7 +149,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 85
+    range_end = 89
     default = 83
 
 
@@ -263,15 +263,16 @@ class EnableNCOMissions(DefaultOnToggle):
 class EnableRaceSwapVariants(Choice):
     """
     Allow mission variants where you play a faction other than the one the map was initially
-    designed for.
+    designed for. NOTE: Cutscenes are always skipped on race-swapped mission variants.
 
     Disabled: Don't shuffle any non-vanilla map variants into the pool.
-    Pick One: Only allow one version of each map at a time
     Shuffle All: Each version of a map can appear in the same pool (so a map can appear up to 3 times as different races)
+    ("Pick Just One At Random" coming soon)
     """
     display_name = "Enable Race-Swapped Mission Variants"
     option_disabled = 0
-    option_pick_one = 1
+    # TODO: Implement pick-one logic
+    # option_pick_one = 1
     option_shuffle_all = 2
     default = option_disabled
 
@@ -1012,7 +1013,7 @@ def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
     if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
-    return set([campaign for campaign in enabled_campaigns if campaign.race in get_enabled_races(world)])
+    return enabled_campaigns
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1039,7 +1040,6 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     excluded_mission_names = world.options.excluded_missions.value
     disabled_campaigns = get_disabled_campaigns(world)
     disabled_flags = get_disabled_flags(world)
-    just_one_variant = get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_pick_one
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
@@ -1060,7 +1060,6 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
-    # TODO: if just_one_variant:
 
     return excluded_missions
 

@@ -220,7 +220,8 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         for item_name in world_item_names:
             self.assertNotEqual(items.item_table[item_name].race, mission_tables.SC2Race.ZERG,
                                 f"{item_name} is a ZERG item!")
-        for region in world_regions:
+        # have to manually exclude the only non-zerg HotS mission...
+        for region in filter(lambda region: region != "With Friends Like These", world_regions):
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
                              ([mission_tables.SC2Campaign.HOTS]),
                              f"{region} is a ZERG mission!")

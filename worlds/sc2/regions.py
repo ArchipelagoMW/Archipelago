@@ -66,38 +66,38 @@ def create_vanilla_regions(
     player: int = world.player
     if SC2Campaign.WOL in enabled_campaigns:
         connect(world, names, 'Menu', 'Liberation Day')
-        connect(world, names, 'Liberation Day', 'The Outlaws',
+        connect(world, names, 'Liberation Day', 'The Outlaws (Terran)',
                 lambda state: state.has("Beat Liberation Day", player))
-        connect(world, names, 'The Outlaws', 'Zero Hour',
-                lambda state: state.has("Beat The Outlaws", player))
-        connect(world, names, 'Zero Hour', 'Evacuation',
-                lambda state: state.has("Beat Zero Hour", player))
+        connect(world, names, 'The Outlaws (Terran)', 'Zero Hour (Terran)',
+                lambda state: state.has("Beat The Outlaws (Terran)", player))
+        connect(world, names, 'Zero Hour (Terran)', 'Evacuation',
+                lambda state: state.has("Beat Zero Hour (Terran)", player))
         connect(world, names, 'Evacuation', 'Outbreak',
                 lambda state: state.has("Beat Evacuation", player))
         connect(world, names, "Outbreak", "Safe Haven",
                 lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
         connect(world, names, "Outbreak", "Haven's Fall",
                 lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
-        connect(world, names, 'Zero Hour', 'Smash and Grab',
-                lambda state: state.has("Beat Zero Hour", player))
-        connect(world, names, 'Smash and Grab', 'The Dig',
-                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Smash and Grab", player))
+        connect(world, names, 'Zero Hour (Terran)', 'Smash and Grab (Terran)',
+                lambda state: state.has("Beat Zero Hour (Terran)", player))
+        connect(world, names, 'Smash and Grab (Terran)', 'The Dig',
+                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Smash and Grab (Terran)", player))
         connect(world, names, 'The Dig', 'The Moebius Factor',
                 lambda state: wol_cleared_missions(state, 11) and state.has("Beat The Dig", player))
         connect(world, names, 'The Moebius Factor', 'Supernova',
                 lambda state: wol_cleared_missions(state, 14) and state.has("Beat The Moebius Factor", player))
         connect(world, names, 'Supernova', 'Maw of the Void',
                 lambda state: state.has("Beat Supernova", player))
-        connect(world, names, 'Zero Hour', "Devil's Playground",
-                lambda state: wol_cleared_missions(state, 4) and state.has("Beat Zero Hour", player))
+        connect(world, names, 'Zero Hour (Terran)', "Devil's Playground",
+                lambda state: wol_cleared_missions(state, 4) and state.has("Beat Zero Hour (Terran)", player))
         connect(world, names, "Devil's Playground", 'Welcome to the Jungle',
                 lambda state: state.has("Beat Devil's Playground", player))
         connect(world, names, "Welcome to the Jungle", 'Breakout',
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
         connect(world, names, "Welcome to the Jungle", 'Ghost of a Chance',
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(world, names, "Zero Hour", 'The Great Train Robbery',
-                lambda state: wol_cleared_missions(state, 6) and state.has("Beat Zero Hour", player))
+        connect(world, names, "Zero Hour (Terran)", 'The Great Train Robbery',
+                lambda state: wol_cleared_missions(state, 6) and state.has("Beat Zero Hour (Terran)", player))
         connect(world, names, 'The Great Train Robbery', 'Cutthroat',
                 lambda state: state.has("Beat The Great Train Robbery", player))
         connect(world, names, 'Cutthroat', 'Engine of Destruction',

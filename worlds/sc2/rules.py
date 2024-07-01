@@ -939,7 +939,7 @@ class SC2Logic:
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
         self.take_over_ai_allies = get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true
         self.kerrigan_unit_available = get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available \
-            and SC2Campaign.HOTS in get_enabled_campaigns(world)
+            and SC2Campaign.HOTS in get_enabled_campaigns(world) and SC2Race.ZERG in get_enabled_races(world)
         self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
         self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")
         self.kerrigan_total_level_cap = get_option_value(world, "kerrigan_total_level_cap")
