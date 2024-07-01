@@ -150,6 +150,7 @@ class ItemGroupNames:
     SOA_ITEMS = "SOA"
     PROTOSS_GLOBAL_UPGRADES = "Protoss Global Upgrades"
     PROTOSS_BUILDINGS = "Protoss Buildings"
+    WAR_COUNCIL = "Protoss War Council Upgrades"
     AIUR_UNITS = "Aiur"
     NERAZIM_UNITS = "Nerazim"
     TAL_DARIM_UNITS = "Tal'Darim"
@@ -587,3 +588,7 @@ item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
 item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
     vanilla_wol_items + vanilla_hots_items + vanilla_lotv_items
 )
+
+item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
+    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ProtossItemType.War_Council
+]

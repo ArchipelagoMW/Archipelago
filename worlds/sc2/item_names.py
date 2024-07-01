@@ -669,6 +669,12 @@ HAVOC_BLOODSHARD_RESONANCE                              = "Bloodshard Resonance 
 ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS              = "Leg Enhancements (Zealot/Sentinel/Centurion)"
 ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY               = "Shield Capacity (Zealot/Sentinel/Centurion)"
 
+# War Council
+ZEALOT_WHIRLWIND                                        = "Whirlwind (Zealot)"
+CENTURION_RESOURCE_EFFICIENCY                           = "Resource Efficiency (Centurion)"
+SENTINEL_RESOURCE_EFFICIENCY                            = "Resource Efficiency (Sentinel)"
+STALKER_PHASE_REACTOR                                   = "Phase Reactor (Stalker)"
+
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
 SOA_PROGRESSIVE_PROXY_PYLON = "Progressive Proxy Pylon (Spear of Adun Calldown)"

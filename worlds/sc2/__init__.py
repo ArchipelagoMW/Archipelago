@@ -9,7 +9,7 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from . import item_names
 from .items import (
-    StarcraftItem, filler_items, get_full_item_list,
+    StarcraftItem, filler_items, get_full_item_list, ProtossItemType,
     get_basic_units, ItemData, upgrade_included_names, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units,
 )
@@ -129,6 +129,7 @@ class SC2World(World):
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
         flag_user_excluded_item_sets(self, item_list)
+        flag_war_council_excludes(self, item_list)
         flag_and_add_resource_locations(self, item_list)
         pool: List[Item] = prune_item_pool(self, item_list)
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
@@ -589,6 +590,16 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
             if vanilla_nonprogressive_count[item.name]:
                 item.flags |= ItemFilterFlags.Excluded
             vanilla_nonprogressive_count[item.name] += 1
+
+def flag_war_council_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
+    """Excludes items based on item set options (`only_vanilla_items`)"""
+    if world.options.allow_unit_nerfs:
+        return
+
+    for item in item_list:
+        if item.data.type != ProtossItemType.War_Council:
+            continue
+        item.flags |= ItemFilterFlags.Excluded
 
 
 def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]) -> None:
