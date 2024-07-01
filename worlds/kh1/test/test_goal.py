@@ -27,3 +27,7 @@ class TestPuppies(KH1TestBase):
     options = {
         "Goal": 4,
     }
+class TestFinalRest(KH1TestBase):
+    options = {
+        "Goal": 5,
+    }

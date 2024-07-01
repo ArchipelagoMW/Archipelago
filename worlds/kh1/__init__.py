@@ -49,6 +49,18 @@ class KH1World(World):
     location_name_groups = location_name_groups
 
     def create_items(self):
+        #Handle starting worlds
+        starting_worlds = []
+        if self.options.starting_worlds > 0:
+            possible_starting_worlds = ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah", "Monstro", "Halloween Town", "Neverland", "Hollow Bastion"]
+            if self.options.atlantica:
+                possible_starting_worlds.append("Atlantica")
+            if self.options.end_of_the_world_unlock.current_key == "item":
+                possible_starting_worlds.append("End of the World")
+            starting_worlds = self.random.sample(possible_starting_worlds, min(self.options.starting_worlds, len(possible_starting_worlds)))
+            for starting_world in starting_worlds:
+                self.multiworld.push_precollected(self.create_item(starting_world))
+        
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
@@ -102,6 +114,8 @@ class KH1World(World):
         for name, data in item_table.items():
             quantity = data.max_quantity
             if data.category not in non_filler_item_categories:
+                continue
+            if name in starting_worlds:
                 continue
             if data.category == "Puppies":
                 if self.options.puppies == "triplets" and "-" in name:
@@ -173,7 +187,8 @@ class KH1World(World):
             "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
             "postcards":       "Traverse Town Mail Postcard 10 Event",
             "final_ansem":     "Final Ansem",
-            "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2"
+            "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2",
+            "final_rest":      "End of the World Final Rest Chest"
         }
         self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
         if self.options.junk_in_missable_locations:

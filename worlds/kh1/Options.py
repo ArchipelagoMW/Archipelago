@@ -119,6 +119,7 @@ class Goal(Choice):
     Postcards: Turn in all 10 postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
     Puppies: Rescue and return all 99 puppies in Traverse Town.
+    Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Goal"
     option_sephiroth = 0
@@ -126,6 +127,7 @@ class Goal(Choice):
     option_postcards = 2
     option_final_ansem = 3
     option_puppies = 4
+    option_final_rest = 5
     default = 3
 
 class EndoftheWorldUnlock(Choice):
@@ -351,6 +353,15 @@ class JunkInMissableLocations(DefaultOnToggle):
     """
     display_name = "Junk in Missable Locations"
 
+class StartingWorlds(Range):
+    """
+    Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
+    """
+    display_name = "Starting Worlds"
+    default = 0
+    range_start = 0
+    range_end = 10
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -364,6 +375,7 @@ class KH1Options(PerGameCommonOptions):
     hundred_acre_wood: HundredAcreWood
     cups: Cups
     puppies: Puppies
+    starting_worlds: StartingWorlds
     keyblades_unlock_chests: KeybladesUnlockChests
     interact_in_battle: InteractInBattle
     exp_multiplier: EXPMultiplier
