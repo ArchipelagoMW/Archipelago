@@ -44,6 +44,7 @@ PLANETARY_FORTRESS                  = "Planetary Fortress"
 PERDITION_TURRET                    = "Perdition Turret"
 HIVE_MIND_EMULATOR                  = "Hive Mind Emulator"
 PSI_DISRUPTER                       = "Psi Disrupter"
+DEVASTATOR_TURRET                   = "Devastator Turret"
 
 # Terran Weapon / Armor Upgrades
 TERRAN_UPGRADE_PREFIX = "Progressive Terran"
@@ -212,6 +213,7 @@ MISSILE_TURRET_TITANIUM_HOUSING                    = "Titanium Housing (Missile 
 PLANETARY_FORTRESS_PROGRESSIVE_AUGMENTED_THRUSTERS = "Progressive Augmented Thrusters (Planetary Fortress)"
 PLANETARY_FORTRESS_ADVANCED_TARGETING              = "Advanced Targeting (Planetary Fortress)"
 PLANETARY_FORTRESS_ORBITAL_MODULE                  = "Orbital Module (Planetary Fortress)"
+DEVASTATOR_TURRET_CONCUSSIVE_GRENADES              = "Concussive Grenades (Devastator Turret)"
 PREDATOR_RESOURCE_EFFICIENCY                       = "Resource Efficiency (Predator)"
 PREDATOR_CLOAK                                     = "Cloak (Predator)"
 PREDATOR_CHARGE                                    = "Charge (Predator)"

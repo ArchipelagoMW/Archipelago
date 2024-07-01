@@ -33,14 +33,15 @@ class TerranItemType(ItemTypeEnum):
     Armory_4 = "Armory", 3
     Armory_5 = "Armory", 4
     Armory_6 = "Armory", 5
-    Progressive = "Progressive Upgrade", 6
-    Laboratory = "Laboratory", 7
-    Upgrade = "Upgrade", 8
-    Unit = "Unit", 9
-    Building = "Building", 10
-    Mercenary = "Mercenary", 11
-    Nova_Gear = "Nova Gear", 12
-    Progressive_2 = "Progressive Upgrade", 13
+    Armory_7 = "Armory", 6
+    Progressive = "Progressive Upgrade", 7
+    Laboratory = "Laboratory", 8
+    Upgrade = "Upgrade", 9
+    Unit = "Unit", 10
+    Building = "Building", 11
+    Mercenary = "Mercenary", 12
+    Nova_Gear = "Nova Gear", 13
+    Progressive_2 = "Progressive Upgrade", 14
 
 
 class ZergItemType(ItemTypeEnum):
@@ -806,6 +807,9 @@ item_table = {
     item_names.PLANETARY_FORTRESS_ORBITAL_MODULE:
         ItemData(395 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 1, SC2Race.TERRAN,
                  parent_item=item_names.PLANETARY_FORTRESS, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
+        ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 0, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
 
     #Buildings
     item_names.BUNKER:
@@ -816,6 +820,9 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.SENSOR_TOWER:
         ItemData(402 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 2, SC2Race.TERRAN),
+    item_names.DEVASTATOR_TURRET:
+        ItemData(403 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 7, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     item_names.WAR_PIGS:
         ItemData(500 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 0, SC2Race.TERRAN,

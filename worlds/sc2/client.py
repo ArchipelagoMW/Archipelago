@@ -1214,10 +1214,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateTerranTech(self, current_items):
         terran_items = current_items[SC2Race.TERRAN]
-        await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-            terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
-            terran_items[11], terran_items[12], terran_items[13]))
+        await self.chat_send("?GiveTerranTech " + " ".join(map(str, terran_items)))
 
     async def updateZergTech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
