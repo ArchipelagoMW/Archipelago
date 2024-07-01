@@ -15,14 +15,14 @@ def create_locations(world: "NoitaWorld", region: Region) -> None:
         location_type = location_data.ltype
         flag = location_data.flag
 
-        is_orb_allowed = location_type == "orb" and flag <= world.options.orbs_as_checks
-        is_boss_allowed = location_type == "boss" and flag <= world.options.bosses_as_checks
+        is_orb_allowed = location_type == "Orb" and flag <= world.options.orbs_as_checks
+        is_boss_allowed = location_type == "Boss" and flag <= world.options.bosses_as_checks
         amount = 0
         if flag == locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
             amount = 1
-        elif location_type == "chest" and flag <= world.options.path_option:
+        elif location_type == "Chest" and flag <= world.options.path_option:
             amount = world.options.hidden_chests.value
-        elif location_type == "pedestal" and flag <= world.options.path_option:
+        elif location_type == "Pedestal" and flag <= world.options.path_option:
             amount = world.options.pedestal_checks.value
 
         region.add_locations(locations.make_location_range(location_name, location_data.id, amount),
@@ -41,7 +41,7 @@ def create_regions(world: "NoitaWorld") -> Dict[str, Region]:
 
 
 # An "Entrance" is really just a connection between two regions
-def create_entrance(player: int, source: str, destination: str, regions: Dict[str, Region]):
+def create_entrance(player: int, source: str, destination: str, regions: Dict[str, Region]) -> Entrance:
     entrance = Entrance(player, f"From {source} To {destination}", regions[source])
     entrance.connect(regions[destination])
     return entrance
@@ -72,7 +72,7 @@ def create_all_regions_and_connections(world: "NoitaWorld") -> None:
 # - Snow Chasm is disconnected from the Snowy Wasteland
 # - Pyramid is connected to the Hiisi Base instead of the Desert due to similar difficulty
 # - Frozen Vault is connected to the Vault instead of the Snowy Wasteland due to similar difficulty
-# - Lake is connected to The Laboratory, since the boss is hard without specific set-ups (which means late game)
+# - Lake is connected to The Laboratory, since the bosses are hard without specific set-ups (which means late game)
 # - Snowy Depths connects to Lava Lake orb since you need digging for it, so fairly early is acceptable
 # - Ancient Laboratory is connected to the Coal Pits, so that Ylialkemisti isn't sphere 1
 noita_connections: Dict[str, List[str]] = {
@@ -99,7 +99,7 @@ noita_connections: Dict[str, List[str]] = {
 
     ###
     "Underground Jungle Holy Mountain": ["Underground Jungle"],
-    "Underground Jungle": ["Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm"],
+    "Underground Jungle": ["Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm", "West Meat Realm"],
 
     ###
     "Vault Holy Mountain": ["The Vault"],
@@ -109,11 +109,11 @@ noita_connections: Dict[str, List[str]] = {
     "Temple of the Art Holy Mountain": ["Temple of the Art"],
     "Temple of the Art": ["Laboratory Holy Mountain", "The Tower", "Wizards' Den"],
     "Wizards' Den": ["Powerplant"],
-    "Powerplant": ["Deep Underground"],
+    "Powerplant": ["Meat Realm"],
 
     ###
     "Laboratory Holy Mountain": ["The Laboratory"],
-    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake"],
+    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake", "The Sky"],
     ###
 }
 

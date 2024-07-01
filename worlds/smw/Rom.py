@@ -83,7 +83,7 @@ class LocalRom:
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
+    def read_bytes(self, startaddress: int, length: int) -> bytearray:
         return self.buffer[startaddress:startaddress + length]
 
     def write_byte(self, address: int, value: int):
@@ -587,18 +587,17 @@ def handle_yoshi_box(rom):
 
 def handle_bowser_damage(rom):
 
-    rom.write_bytes(0x1A509, bytearray([0x20, 0x50, 0xBC])) # JSR $03BC50
+    rom.write_bytes(0x1A509, bytearray([0x5C, 0x50, 0xBC, 0x03])) # JML $03BC50
 
     BOWSER_BALLS_SUB_ADDR = 0x01BC50
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x01, bytearray([0xAD, 0x48, 0x0F]))       # LDA $F48
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x04, bytearray([0xCF, 0xA1, 0xBF, 0x03])) # CMP $03BFA1
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x08, bytearray([0x90, 0x06]))             # BCC +0x06
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0A, bytearray([0x28]))                   # PLP
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0B, bytearray([0xEE, 0xB8, 0x14]))       # INC $14B8
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0E, bytearray([0x80, 0x01]))             # BRA +0x01
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x10, bytearray([0x28]))                   # PLP
-    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x11, bytearray([0x60]))                   # RTS
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0000, bytearray([0xAF, 0xA0, 0xBF, 0x03]))  # bowser_infinite_balls:  lda.l goal_setting
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0004, bytearray([0xD0, 0x0C]))              #                         bne .nope
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0006, bytearray([0xAD, 0x48, 0x0F]))        #                         lda $0F48
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0009, bytearray([0xCF, 0xA1, 0xBF, 0x03]))  #                         cmp.l required_bosses_setting
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x000D, bytearray([0x90, 0x03]))              #                         bcc .nope
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x000F, bytearray([0xEE, 0xB8, 0x14]))        #                         inc $14B8
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0012, bytearray([0xAD, 0xB8, 0x14]))        # .nope                   lda $14B8
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0015, bytearray([0x5C, 0x0F, 0xA5, 0x03]))  #                         jml $03A50F
 
     return
 
@@ -2729,6 +2728,22 @@ def handle_uncompressed_player_gfx(rom):
     ])
     rom.write_bytes(0x87F80, vram_targets)
 
+
+def handle_chocolate_island_2(rom):
+    FIX_CHOCOISLAND2_ADDR = 0x87200
+    rom.write_bytes(0x2DB3E, bytearray([0x5C, 0x00, 0xF2, 0x10])) # jml fix_choco_island_2
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0000, bytearray([0xAD, 0x33, 0x1F]))        # fix_choco_island_2  lda $1F2F+$04
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0003, bytearray([0x29, 0x08]))              #                     and #$08
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0005, bytearray([0xD0, 0x0D]))              #                     bne .dc_room
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0007, bytearray([0xAD, 0x22, 0x14]))        #                     lda $1422
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x000A, bytearray([0xC9, 0x04]))              #                     cmp #$04
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x000C, bytearray([0xF0, 0x06]))              #                     beq .dc_room
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x000E, bytearray([0xA2, 0x02]))              # .rex_room           ldx #$02
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0010, bytearray([0x5C, 0x49, 0xDB, 0x05]))  #                     jml $05DB49
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0014, bytearray([0xA2, 0x00]))              # .dc_room            ldx #$00
+    rom.write_bytes(FIX_CHOCOISLAND2_ADDR + 0x0016, bytearray([0x5C, 0x49, 0xDB, 0x05]))  #                     jml $05DB49
+
+
 def decompress_gfx(compressed_graphics):
     # This code decompresses graphics in LC_LZ2 format in order to be able to swap player and yoshi's graphics with ease.
     decompressed_gfx = bytearray([])
@@ -3049,6 +3064,8 @@ def patch_rom(world: World, rom, player, active_level_dict):
     # Move Thwimps tilemap to another spot in VRAM in order to make them global
     rom.write_bytes(0x09C13, bytearray([0x7E, 0x7E, 0x7F, 0x7F]))
     rom.write_byte(0x3F425, 0x32)
+
+    handle_chocolate_island_2(rom)
 
     handle_ability_code(rom)
 

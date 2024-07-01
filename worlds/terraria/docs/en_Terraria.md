@@ -1,14 +1,14 @@
 # Terraria
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
 
 Boss/event flags are randomized. So, defeating Empress of Light could give you Post-Skeletron, which allows you to enter
-the Dungeon, for example. In your player settings, you may also add item rewards and achievements to the pool.
+the Dungeon, for example. In your player options, you may also add item rewards and achievements to the pool.
 
 ## What Terraria items can appear in other players' worlds?
 

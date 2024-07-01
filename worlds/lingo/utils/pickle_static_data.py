@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Optional
 
 import os
 import sys
@@ -6,7 +6,8 @@ import sys
 sys.path.append(os.path.join("worlds", "lingo"))
 sys.path.append(".")
 sys.path.append("..")
-from datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
+from datatypes import Door, DoorType, EntranceType, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel,\
+    RoomEntrance
 
 import hashlib
 import pickle
@@ -27,6 +28,9 @@ PAINTING_EXIT_ROOMS: Set[str] = set()
 PAINTING_EXITS: int = 0
 REQUIRED_PAINTING_ROOMS: List[str] = []
 REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
+
+SUNWARP_ENTRANCES: List[str] = ["", "", "", "", "", ""]
+SUNWARP_EXITS: List[str] = ["", "", "", "", "", ""]
 
 SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
@@ -96,47 +100,55 @@ def load_static_data(ll1_path, ids_path):
         PAINTING_EXITS = len(PAINTING_EXIT_ROOMS)
 
 
-def process_entrance(source_room, doors, room_obj):
+def process_single_entrance(source_room: str, room_name: str, door_obj) -> RoomEntrance:
     global PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS
 
+    entrance_type = EntranceType.NORMAL
+    if "painting" in door_obj and door_obj["painting"]:
+        entrance_type = EntranceType.PAINTING
+    elif "sunwarp" in door_obj and door_obj["sunwarp"]:
+        entrance_type = EntranceType.SUNWARP
+    elif "warp" in door_obj and door_obj["warp"]:
+        entrance_type = EntranceType.WARP
+    elif source_room == "Crossroads" and room_name == "Roof":
+        entrance_type = EntranceType.CROSSROADS_ROOF_ACCESS
+
+    if "painting" in door_obj and door_obj["painting"]:
+        PAINTING_EXIT_ROOMS.add(room_name)
+        PAINTING_ENTRANCES += 1
+
+    if "door" in door_obj:
+        return RoomEntrance(source_room, RoomAndDoor(
+            door_obj["room"] if "room" in door_obj else None,
+            door_obj["door"]
+        ), entrance_type)
+    else:
+        return RoomEntrance(source_room, None, entrance_type)
+
+
+def process_entrance(source_room, doors, room_obj):
     # If the value of an entrance is just True, that means that the entrance is always accessible.
     if doors is True:
-        room_obj.entrances.append(RoomEntrance(source_room, None, False))
+        room_obj.entrances.append(RoomEntrance(source_room, None, EntranceType.NORMAL))
     elif isinstance(doors, dict):
         # If the value of an entrance is a dictionary, that means the entrance requires a door to be accessible, is a
         # painting-based entrance, or both.
-        if "painting" in doors and "door" not in doors:
-            PAINTING_EXIT_ROOMS.add(room_obj.name)
-            PAINTING_ENTRANCES += 1
-
-            room_obj.entrances.append(RoomEntrance(source_room, None, True))
-        else:
-            if "painting" in doors and doors["painting"]:
-                PAINTING_EXIT_ROOMS.add(room_obj.name)
-                PAINTING_ENTRANCES += 1
-
-            room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
-                doors["room"] if "room" in doors else None,
-                doors["door"]
-            ), doors["painting"] if "painting" in doors else False))
+        room_obj.entrances.append(process_single_entrance(source_room, room_obj.name, doors))
     else:
         # If the value of an entrance is a list, then there are multiple possible doors that can give access to the
-        # entrance.
+        # entrance. If there are multiple connections with the same door (or lack of door) that differ only by entrance
+        # type, coalesce them into one entrance.
+        entrances: Dict[Optional[RoomAndDoor], EntranceType] = {}
         for door in doors:
-            if "painting" in door and door["painting"]:
-                PAINTING_EXIT_ROOMS.add(room_obj.name)
-                PAINTING_ENTRANCES += 1
+            entrance = process_single_entrance(source_room, room_obj.name, door)
+            entrances[entrance.door] = entrances.get(entrance.door, EntranceType(0)) | entrance.type
 
-            room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
-                door["room"] if "room" in door else None,
-                door["door"]
-            ), door["painting"] if "painting" in door else False))
+        for door, entrance_type in entrances.items():
+            room_obj.entrances.append(RoomEntrance(source_room, door, entrance_type))
 
 
 def process_panel(room_name, panel_name, panel_data):
     global PANELS_BY_ROOM
-
-    full_name = f"{room_name} - {panel_name}"
 
     # required_room can either be a single room or a list of rooms.
     if "required_room" in panel_data:
@@ -215,8 +227,13 @@ def process_panel(room_name, panel_name, panel_data):
     else:
         non_counting = False
 
+    if "location_name" in panel_data:
+        location_name = panel_data["location_name"]
+    else:
+        location_name = None
+
     panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, exclude_reduce,
-                      achievement, non_counting)
+                      achievement, non_counting, location_name)
     PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
 
@@ -250,15 +267,15 @@ def process_door(room_name, door_name, door_data):
     else:
         include_reduce = False
 
-    if "junk_item" in door_data:
-        junk_item = door_data["junk_item"]
+    if "door_group" in door_data:
+        door_group = door_data["door_group"]
     else:
-        junk_item = False
+        door_group = None
 
-    if "group" in door_data:
-        group = door_data["group"]
+    if "item_group" in door_data:
+        item_group = door_data["item_group"]
     else:
-        group = None
+        item_group = None
 
     # panels is a list of panels. Each panel can either be a simple string (the name of a panel in the current room) or
     # a dictionary specifying a panel in a different room.
@@ -271,7 +288,7 @@ def process_door(room_name, door_name, door_data):
                 panels.append(RoomAndPanel(None, panel))
     else:
         skip_location = True
-        panels = None
+        panels = []
 
     # The location name associated with a door can be explicitly specified in the configuration. If it is not, then the
     # name is generated using a combination of all of the panels that would ordinarily open the door. This can get quite
@@ -307,8 +324,14 @@ def process_door(room_name, door_name, door_data):
     else:
         painting_ids = []
 
+    door_type = DoorType.NORMAL
+    if door_name.endswith(" Sunwarp"):
+        door_type = DoorType.SUNWARP
+    elif room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
+        door_type = DoorType.SUN_PAINTING
+
     door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, has_doors,
-                    painting_ids, event, group, include_reduce, junk_item)
+                    painting_ids, event, door_group, include_reduce, door_type, item_group)
 
     DOORS_BY_ROOM[room_name][door_name] = door_obj
 
@@ -372,6 +395,15 @@ def process_painting(room_name, painting_data):
     PAINTINGS[painting_id] = painting_obj
 
 
+def process_sunwarp(room_name, sunwarp_data):
+    global SUNWARP_ENTRANCES, SUNWARP_EXITS
+
+    if sunwarp_data["direction"] == "enter":
+        SUNWARP_ENTRANCES[sunwarp_data["dots"] - 1] = room_name
+    else:
+        SUNWARP_EXITS[sunwarp_data["dots"] - 1] = room_name
+
+
 def process_progression(room_name, progression_name, progression_doors):
     global PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM
 
@@ -416,6 +448,10 @@ def process_room(room_name, room_data):
     if "paintings" in room_data:
         for painting_data in room_data["paintings"]:
             process_painting(room_name, painting_data)
+
+    if "sunwarps" in room_data:
+        for sunwarp_data in room_data["sunwarps"]:
+            process_sunwarp(room_name, sunwarp_data)
 
     if "progression" in room_data:
         for progression_name, progression_doors in room_data["progression"].items():
@@ -463,6 +499,8 @@ if __name__ == '__main__':
         "PAINTING_EXITS": PAINTING_EXITS,
         "REQUIRED_PAINTING_ROOMS": REQUIRED_PAINTING_ROOMS,
         "REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS": REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS,
+        "SUNWARP_ENTRANCES": SUNWARP_ENTRANCES,
+        "SUNWARP_EXITS": SUNWARP_EXITS,
         "SPECIAL_ITEM_IDS": SPECIAL_ITEM_IDS,
         "PANEL_LOCATION_IDS": PANEL_LOCATION_IDS,
         "DOOR_LOCATION_IDS": DOOR_LOCATION_IDS,

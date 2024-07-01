@@ -25,13 +25,20 @@ IGNORABLE_MAPS = {
 }
 """These maps exist but don't show up in the rando or are unused, and so should be discarded"""
 
-POSTGAME_MAPS = {
+OUT_OF_LOGIC_MAPS = {
     "MAP_DESERT_UNDERPASS",
     "MAP_SAFARI_ZONE_NORTHEAST",
     "MAP_SAFARI_ZONE_SOUTHEAST",
     "MAP_METEOR_FALLS_STEVENS_CAVE",
+    "MAP_MIRAGE_TOWER_1F",
+    "MAP_MIRAGE_TOWER_2F",
+    "MAP_MIRAGE_TOWER_3F",
+    "MAP_MIRAGE_TOWER_4F",
 }
-"""These maps have encounters and are locked behind beating the champion. Those encounter slots should be ignored for logical access to a species."""
+"""
+These maps have encounters and are locked behind beating the champion or are missable.
+Those encounter slots should be ignored for logical access to a species.
+"""
 
 NUM_REAL_SPECIES = 386
 
@@ -289,6 +296,7 @@ class TrainerData:
     party: TrainerPartyData
     address: int
     script_address: int
+    battle_type: int
 
 
 class PokemonEmeraldData:
@@ -646,7 +654,7 @@ def _init() -> None:
         ("SPECIES_CHIKORITA", "Chikorita", 152),
         ("SPECIES_BAYLEEF", "Bayleef", 153),
         ("SPECIES_MEGANIUM", "Meganium", 154),
-        ("SPECIES_CYNDAQUIL", "Cindaquil", 155),
+        ("SPECIES_CYNDAQUIL", "Cyndaquil", 155),
         ("SPECIES_QUILAVA", "Quilava", 156),
         ("SPECIES_TYPHLOSION", "Typhlosion", 157),
         ("SPECIES_TOTODILE", "Totodile", 158),
@@ -741,7 +749,7 @@ def _init() -> None:
         ("SPECIES_PUPITAR", "Pupitar", 247),
         ("SPECIES_TYRANITAR", "Tyranitar", 248),
         ("SPECIES_LUGIA", "Lugia", 249),
-        ("SPECIES_HO_OH", "Ho-oh", 250),
+        ("SPECIES_HO_OH", "Ho-Oh", 250),
         ("SPECIES_CELEBI", "Celebi", 251),
         ("SPECIES_TREECKO", "Treecko", 252),
         ("SPECIES_GROVYLE", "Grovyle", 253),
@@ -1422,7 +1430,8 @@ def _init() -> None:
                 trainer_json["party_address"]
             ),
             trainer_json["address"],
-            trainer_json["script_address"]
+            trainer_json["script_address"],
+            trainer_json["battle_type"]
         ))
 
 

@@ -1,10 +1,11 @@
 import datetime
 import collections
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, Counter
 from uuid import UUID
+from email.utils import parsedate_to_datetime
 
-from flask import render_template
+from flask import render_template, make_response, Response, request
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -124,10 +125,13 @@ class TrackerData:
     @_cache_results
     def get_player_inventory_counts(self, team: int, player: int) -> collections.Counter:
         """Retrieves a dictionary of all items received by their id and their received count."""
-        items = self.get_player_received_items(team, player)
+        received_items = self.get_player_received_items(team, player)
+        starting_items = self.get_player_starting_inventory(team, player)
         inventory = collections.Counter()
-        for item in items:
+        for item in received_items:
             inventory[item.item] += 1
+        for item in starting_items:
+            inventory[item] += 1
 
         return inventory
 
@@ -288,47 +292,47 @@ class TrackerData:
 
         return video_feeds
 
+    @_cache_results
+    def get_spheres(self) -> List[List[int]]:
+        """ each sphere is { player: { location_id, ... } } """
+        return self._multidata.get("spheres", [])
+
+
+def _process_if_request_valid(incoming_request, room: Optional[Room]) -> Optional[Response]:
+    if not room:
+        abort(404)
+
+    if_modified = incoming_request.headers.get("If-Modified-Since", None)
+    if if_modified:
+        if_modified = parsedate_to_datetime(if_modified)
+        # if_modified has less precision than last_activity, so we bring them to same precision
+        if if_modified >= room.last_activity.replace(microsecond=0):
+            return make_response("",  304)
+
 
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
-def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> str:
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> Response:
     key = f"{tracker}_{tracked_team}_{tracked_player}_{generic}"
-    tracker_page = cache.get(key)
-    if tracker_page:
-        return tracker_page
+    response: Optional[Response] = cache.get(key)
+    if response:
+        return response
 
-    timeout, tracker_page = get_timeout_and_tracker(tracker, tracked_team, tracked_player, generic)
-    cache.set(key, tracker_page, timeout)
-    return tracker_page
-
-
-@app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
-def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> str:
-    return get_player_tracker(tracker, tracked_team, tracked_player, True)
-
-
-@app.route("/tracker/<suuid:tracker>", defaults={"game": "Generic"})
-@app.route("/tracker/<suuid:tracker>/<game>")
-@cache.memoize(timeout=TRACKER_CACHE_TIMEOUT_IN_SECONDS)
-def get_multiworld_tracker(tracker: UUID, game: str):
     # Room must exist.
     room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
 
-    tracker_data = TrackerData(room)
-    enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
-    if game not in _multiworld_trackers:
-        return render_generic_multiworld_tracker(tracker_data, enabled_trackers)
+    response = _process_if_request_valid(request, room)
+    if response:
+        return response
 
-    return _multiworld_trackers[game](tracker_data, enabled_trackers)
+    timeout, last_modified, tracker_page = get_timeout_and_player_tracker(room, tracked_team, tracked_player, generic)
+    response = make_response(tracker_page)
+    response.last_modified = last_modified
+    cache.set(key, response, timeout)
+    return response
 
 
-def get_timeout_and_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool) -> Tuple[int, str]:
-    # Room must exist.
-    room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
-
+def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player: int, generic: bool)\
+        -> Tuple[int, datetime.datetime, str]:
     tracker_data = TrackerData(room)
 
     # Load and render the game-specific player tracker, or fallback to generic tracker if none exists.
@@ -338,7 +342,48 @@ def get_timeout_and_tracker(tracker: UUID, tracked_team: int, tracked_player: in
     else:
         tracker = render_generic_tracker(tracker_data, tracked_team, tracked_player)
 
-    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, tracker
+    return ((tracker_data.get_room_saving_second() - datetime.datetime.now().second)
+            % TRACKER_CACHE_TIMEOUT_IN_SECONDS or TRACKER_CACHE_TIMEOUT_IN_SECONDS, room.last_activity, tracker)
+
+
+@app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
+def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> Response:
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
+
+
+@app.route("/tracker/<suuid:tracker>", defaults={"game": "Generic"})
+@app.route("/tracker/<suuid:tracker>/<game>")
+def get_multiworld_tracker(tracker: UUID, game: str) -> Response:
+    key = f"{tracker}_{game}"
+    response: Optional[Response] = cache.get(key)
+    if response:
+        return response
+
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+
+    response = _process_if_request_valid(request, room)
+    if response:
+        return response
+
+    timeout, last_modified, tracker_page = get_timeout_and_multiworld_tracker(room, game)
+    response = make_response(tracker_page)
+    response.last_modified = last_modified
+    cache.set(key, response, timeout)
+    return response
+
+
+def get_timeout_and_multiworld_tracker(room: Room, game: str)\
+        -> Tuple[int, datetime.datetime, str]:
+    tracker_data = TrackerData(room)
+    enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
+    if game in _multiworld_trackers:
+        tracker = _multiworld_trackers[game](tracker_data, enabled_trackers)
+    else:
+        tracker = render_generic_multiworld_tracker(tracker_data, enabled_trackers)
+
+    return ((tracker_data.get_room_saving_second() - datetime.datetime.now().second)
+            % TRACKER_CACHE_TIMEOUT_IN_SECONDS or TRACKER_CACHE_TIMEOUT_IN_SECONDS, room.last_activity, tracker)
 
 
 def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
@@ -358,10 +403,13 @@ def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
 def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
     game = tracker_data.get_player_game(team, player)
 
-    # Add received index to all received items, excluding starting inventory.
     received_items_in_order = {}
-    for received_index, network_item in enumerate(tracker_data.get_player_received_items(team, player), start=1):
-        received_items_in_order[network_item.item] = received_index
+    starting_inventory = tracker_data.get_player_starting_inventory(team, player)
+    for index, item in enumerate(starting_inventory):
+        received_items_in_order[item] = index
+    for index, network_item in enumerate(tracker_data.get_player_received_items(team, player),
+                                         start=len(starting_inventory)):
+        received_items_in_order[network_item.item] = index
 
     return render_template(
         template_name_or_list="genericTracker.html",
@@ -405,7 +453,28 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         videos=tracker_data.get_room_videos(),
         item_id_to_name=tracker_data.item_id_to_name,
         location_id_to_name=tracker_data.location_id_to_name,
+        saving_second=tracker_data.get_room_saving_second(),
     )
+
+
+def render_generic_multiworld_sphere_tracker(tracker_data: TrackerData) -> str:
+    return render_template(
+        "multispheretracker.html",
+        room=tracker_data.room,
+        tracker_data=tracker_data,
+    )
+
+
+@app.route("/sphere_tracker/<suuid:tracker>")
+@cache.memoize(timeout=TRACKER_CACHE_TIMEOUT_IN_SECONDS)
+def get_multiworld_sphere_tracker(tracker: UUID):
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+
+    tracker_data = TrackerData(room)
+    return render_generic_multiworld_sphere_tracker(tracker_data)
 
 
 # TODO: This is a temporary solution until a proper Tracker API can be implemented for tracker templates and data to
@@ -416,11 +485,11 @@ from worlds import network_data_package
 
 if "Factorio" in network_data_package["games"]:
     def render_Factorio_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
-        inventories: Dict[TeamPlayer, Dict[int, int]] = {
-            (team, player): {
+        inventories: Dict[TeamPlayer, collections.Counter[str]] = {
+            (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
-            } for team, players in tracker_data.get_all_slots().items() for player in players
+            }) for team, players in tracker_data.get_all_slots().items() for player in players
             if tracker_data.get_player_game(team, player) == "Factorio"
         }
 
@@ -450,210 +519,111 @@ if "Factorio" in network_data_package["games"]:
     _multiworld_trackers["Factorio"] = render_Factorio_multiworld_tracker
 
 if "A Link to the Past" in network_data_package["games"]:
+    # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_items = {
+        "Fighter Sword":  ("Progressive Sword",  1),
+        "Master Sword":   ("Progressive Sword",  2),
+        "Tempered Sword": ("Progressive Sword",  3),
+        "Golden Sword":   ("Progressive Sword",  4),
+        "Power Glove":    ("Progressive Glove",  1),
+        "Titans Mitts":   ("Progressive Glove",  2),
+        "Bow":            ("Progressive Bow",    1),
+        "Silver Bow":     ("Progressive Bow",    2),
+        "Blue Mail":      ("Progressive Mail",   1),
+        "Red Mail":       ("Progressive Mail",   2),
+        "Blue Shield":    ("Progressive Shield", 1),
+        "Red Shield":     ("Progressive Shield", 2),
+        "Mirror Shield":  ("Progressive Shield", 3),
+    }
+
+    progressive_item_max = {
+        "Progressive Sword":  4,
+        "Progressive Glove":  2,
+        "Progressive Bow":    2,
+        "Progressive Mail":   2,
+        "Progressive Shield": 3,
+    }
+
+    bottle_items = [
+        "Bottle",
+        "Bottle (Bee)",
+        "Bottle (Blue Potion)",
+        "Bottle (Fairy)",
+        "Bottle (Good Bee)",
+        "Bottle (Green Potion)",
+        "Bottle (Red Potion)",
+    ]
+
+    known_regions = [
+        "Light World", "Dark World", "Hyrule Castle", "Agahnims Tower", "Eastern Palace", "Desert Palace",
+        "Tower of Hera", "Palace of Darkness", "Swamp Palace", "Thieves Town", "Skull Woods", "Ice Palace",
+        "Misery Mire", "Turtle Rock", "Ganons Tower"
+    ]
+
+    class RegionCounts(NamedTuple):
+        total: int
+        checked: int
+
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        for bottle in bottle_items:
+            inventory["Bottles"] = min(inventory["Bottles"] + inventory[bottle], 4)
+
+        if "Progressive Bow (Alt)" in inventory:
+            inventory["Progressive Bow"] += inventory["Progressive Bow (Alt)"]
+            inventory["Progressive Bow"] = min(inventory["Progressive Bow"], progressive_item_max["Progressive Bow"])
+
+        # Highlight 'bombs' if we received any bomb upgrades in bombless start.
+        # In race mode, we'll just assume bombless start for simplicity.
+        if tracker_data.get_slot_data(team, player).get("bombless_start", True):
+            inventory["Bombs"] = sum(count for item, count in inventory.items() if item.startswith("Bomb Upgrade"))
+        else:
+            inventory["Bombs"] = 1
+
+        # Triforce item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["Triforce"] = 1
+
     def render_ALinkToThePast_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
-        # Helper objects.
-        alttp_id_lookup = tracker_data.item_name_to_id["A Link to the Past"]
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
+            (team, player): collections.Counter({
+                tracker_data.item_id_to_name["A Link to the Past"][code]: count
+                for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+            })
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "A Link to the Past"
+        }
 
-        multi_items = {
-            alttp_id_lookup[name]
-            for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove", "Triforce Piece")
-        }
-        links = {
-            "Bow":                   "Progressive Bow",
-            "Silver Arrows":         "Progressive Bow",
-            "Silver Bow":            "Progressive Bow",
-            "Progressive Bow (Alt)": "Progressive Bow",
-            "Bottle (Red Potion)":   "Bottle",
-            "Bottle (Green Potion)": "Bottle",
-            "Bottle (Blue Potion)":  "Bottle",
-            "Bottle (Fairy)":        "Bottle",
-            "Bottle (Bee)":          "Bottle",
-            "Bottle (Good Bee)":     "Bottle",
-            "Fighter Sword":         "Progressive Sword",
-            "Master Sword":          "Progressive Sword",
-            "Tempered Sword":        "Progressive Sword",
-            "Golden Sword":          "Progressive Sword",
-            "Power Glove":           "Progressive Glove",
-            "Titans Mitts":          "Progressive Glove",
-        }
-        links = {alttp_id_lookup[key]: alttp_id_lookup[value] for key, value in links.items()}
-        levels = {
-            "Fighter Sword":   1,
-            "Master Sword":    2,
-            "Tempered Sword":  3,
-            "Golden Sword":    4,
-            "Power Glove":     1,
-            "Titans Mitts":    2,
-            "Bow":             1,
-            "Silver Bow":      2,
-            "Triforce Piece": 90,
-        }
-        tracking_names = [
-            "Progressive Sword", "Progressive Bow", "Book of Mudora", "Hammer", "Hookshot", "Magic Mirror", "Flute",
-            "Pegasus Boots", "Progressive Glove", "Flippers", "Moon Pearl", "Blue Boomerang", "Red Boomerang",
-            "Bug Catching Net", "Cape", "Shovel", "Lamp", "Mushroom", "Magic Powder", "Cane of Somaria",
-            "Cane of Byrna", "Fire Rod", "Ice Rod", "Bombos", "Ether", "Quake", "Bottle", "Triforce Piece", "Triforce",
-        ]
-        default_locations = {
-            "Light World": {
-                1572864, 1572865, 60034, 1572867, 1572868, 60037, 1572869, 1572866, 60040, 59788, 60046, 60175,
-                1572880, 60049, 60178, 1572883, 60052, 60181, 1572885, 60055, 60184, 191256, 60058, 60187, 1572884,
-                1572886, 1572887, 1572906, 60202, 60205, 59824, 166320, 1010170, 60208, 60211, 60214, 60217, 59836,
-                60220, 60223, 59839, 1573184, 60226, 975299, 1573188, 1573189, 188229, 60229, 60232, 1573193,
-                1573194, 60235, 1573187, 59845, 59854, 211407, 60238, 59857, 1573185, 1573186, 1572882, 212328,
-                59881, 59761, 59890, 59770, 193020, 212605
-            },
-            "Dark World": {
-                59776, 59779, 975237, 1572870, 60043, 1572881, 60190, 60193, 60196, 60199, 60840, 1573190, 209095,
-                1573192, 1573191, 60241, 60244, 60247, 60250, 59884, 59887, 60019, 60022, 60028, 60031
-            },
-            "Desert Palace": {1573216, 59842, 59851, 59791, 1573201, 59830},
-            "Eastern Palace": {1573200, 59827, 59893, 59767, 59833, 59773},
-            "Hyrule Castle": {60256, 60259, 60169, 60172, 59758, 59764, 60025, 60253},
-            "Agahnims Tower": {60082, 60085},
-            "Tower of Hera": {1573218, 59878, 59821, 1573202, 59896, 59899},
-            "Swamp Palace": {60064, 60067, 60070, 59782, 59785, 60073, 60076, 60079, 1573204, 60061},
-            "Thieves Town": {59905, 59908, 59911, 59914, 59917, 59920, 59923, 1573206},
-            "Skull Woods": {59809, 59902, 59848, 59794, 1573205, 59800, 59803, 59806},
-            "Ice Palace": {59872, 59875, 59812, 59818, 59860, 59797, 1573207, 59869},
-            "Misery Mire": {60001, 60004, 60007, 60010, 60013, 1573208, 59866, 59998},
-            "Turtle Rock": {59938, 59941, 59944, 1573209, 59947, 59950, 59953, 59956, 59926, 59929, 59932, 59935},
-            "Palace of Darkness": {
-                59968, 59971, 59974, 59977, 59980, 59983, 59986, 1573203, 59989, 59959, 59992, 59962, 59995,
-                59965
-            },
-            "Ganons Tower": {
-                60160, 60163, 60166, 60088, 60091, 60094, 60097, 60100, 60103, 60106, 60109, 60112, 60115, 60118,
-                60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157
-            },
-            "Total": set()
-        }
-        key_only_locations = {
-            "Light World": set(),
-            "Dark World": set(),
-            "Desert Palace": {0x140031, 0x14002b, 0x140061, 0x140028},
-            "Eastern Palace": {0x14005b, 0x140049},
-            "Hyrule Castle": {0x140037, 0x140034, 0x14000d, 0x14003d},
-            "Agahnims Tower": {0x140061, 0x140052},
-            "Tower of Hera": set(),
-            "Swamp Palace": {0x140019, 0x140016, 0x140013, 0x140010, 0x14000a},
-            "Thieves Town": {0x14005e, 0x14004f},
-            "Skull Woods": {0x14002e, 0x14001c},
-            "Ice Palace": {0x140004, 0x140022, 0x140025, 0x140046},
-            "Misery Mire": {0x140055, 0x14004c, 0x140064},
-            "Turtle Rock": {0x140058, 0x140007},
-            "Palace of Darkness": set(),
-            "Ganons Tower": {0x140040, 0x140043, 0x14003a, 0x14001f},
-            "Total": set()
-        }
-        location_to_area = {}
-        for area, locations in default_locations.items():
-            for location in locations:
-                location_to_area[location] = area
-        for area, locations in key_only_locations.items():
-            for location in locations:
-                location_to_area[location] = area
+        # Translate non-progression items to progression items for tracker simplicity.
+        for (team, player), inventory in inventories.items():
+            prepare_inventories(team, player, inventory, tracker_data)
 
-        checks_in_area = {area: len(checks) for area, checks in default_locations.items()}
-        checks_in_area["Total"] = 216
-        ordered_areas = (
-            "Light World", "Dark World", "Hyrule Castle", "Agahnims Tower", "Eastern Palace", "Desert Palace",
-            "Tower of Hera", "Palace of Darkness", "Swamp Palace", "Skull Woods", "Thieves Town", "Ice Palace",
-            "Misery Mire", "Turtle Rock", "Ganons Tower", "Total"
-        )
-
-        player_checks_in_area = {
+        regions: Dict[Tuple[int, int], Dict[str, RegionCounts]] = {
             (team, player): {
-                area_name: len(tracker_data._multidata["checks_in_area"][player][area_name])
-                if area_name != "Total" else tracker_data._multidata["checks_in_area"][player]["Total"]
-                for area_name in ordered_areas
+                region_name: RegionCounts(
+                    total=len(tracker_data._multidata["checks_in_area"][player][region_name]),
+                    checked=sum(
+                        1 for location in tracker_data._multidata["checks_in_area"][player][region_name]
+                        if location in tracker_data.get_player_checked_locations(team, player)
+                    ),
+                )
+                for region_name in known_regions
             }
-            for team, players in tracker_data.get_all_slots().items()
-            for player in players
-            if tracker_data.get_slot_info(team, player).type != SlotType.group and
-            tracker_data.get_slot_info(team, player).game == "A Link to the Past"
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "A Link to the Past"
         }
 
-        tracking_ids = []
-        for item in tracking_names:
-            tracking_ids.append(alttp_id_lookup[item])
-
-        # Can't wait to get this into the apworld. Oof.
-        from worlds.alttp import Items
-
-        small_key_ids = {}
-        big_key_ids = {}
-        ids_small_key = {}
-        ids_big_key = {}
-        for item_name, data in Items.item_table.items():
-            if "Key" in item_name:
-                area = item_name.split("(")[1][:-1]
-                if "Small" in item_name:
-                    small_key_ids[area] = data[2]
-                    ids_small_key[data[2]] = area
-                else:
-                    big_key_ids[area] = data[2]
-                    ids_big_key[data[2]] = area
-
-        def _get_location_table(checks_table: dict) -> dict:
-            loc_to_area = {}
-            for area, locations in checks_table.items():
-                if area == "Total":
-                    continue
-                for location in locations:
-                    loc_to_area[location] = area
-            return loc_to_area
-
-        player_location_to_area = {
-            (team, player): _get_location_table(tracker_data._multidata["checks_in_area"][player])
-            for team, players in tracker_data.get_all_slots().items()
-            for player in players
-            if tracker_data.get_slot_info(team, player).type != SlotType.group and
-            tracker_data.get_slot_info(team, player).game == "A Link to the Past"
-        }
-
-        checks_done: Dict[TeamPlayer, Dict[str: int]] = {
-            (team, player): {location_name: 0 for location_name in default_locations}
-            for team, players in tracker_data.get_all_slots().items()
-            for player in players
-            if tracker_data.get_slot_info(team, player).type != SlotType.group and
-            tracker_data.get_slot_info(team, player).game == "A Link to the Past"
-        }
-
-        inventories: Dict[TeamPlayer, Dict[int, int]] = {}
-        player_big_key_locations = {(player): set() for player in tracker_data.get_all_slots()[0]}
-        player_small_key_locations = {player: set() for player in tracker_data.get_all_slots()[0]}
-        group_big_key_locations = set()
-        group_key_locations = set()
-
-        for (team, player), locations in checks_done.items():
-            # Check if game complete.
-            if tracker_data.get_player_client_status(team, player) == ClientStatus.CLIENT_GOAL:
-                inventories[team, player][106] = 1  # Triforce
-
-            # Count number of locations checked.
-            for location in tracker_data.get_player_checked_locations(team, player):
-                checks_done[team, player][player_location_to_area[team, player][location]] += 1
-                checks_done[team, player]["Total"] += 1
-
-            # Count keys.
-            for location, (item, receiving, _) in tracker_data.get_player_locations(team, player).items():
-                if item in ids_big_key:
-                    player_big_key_locations[receiving].add(ids_big_key[item])
-                elif item in ids_small_key:
-                    player_small_key_locations[receiving].add(ids_small_key[item])
-
-            # Iterate over received items and build inventory/key counts.
-            inventories[team, player] = collections.Counter()
-            for network_item in tracker_data.get_player_received_items(team, player):
-                target_item = links.get(network_item.item, network_item.item)
-                if network_item.item in levels:  # non-progressive
-                    inventories[team, player][target_item] = (max(inventories[team, player][target_item], levels[network_item.item]))
-                else:
-                    inventories[team, player][target_item] += 1
-
-            group_key_locations |= player_small_key_locations[player]
-            group_big_key_locations |= player_big_key_locations[player]
+        # Get a totals count.
+        for player, player_regions in regions.items():
+            total = 0
+            checked = 0
+            for region, region_counts in player_regions.items():
+                total += region_counts.total
+                checked += region_counts.checked
+            regions[player]["Total"] = RegionCounts(total, checked)
 
         return render_template(
             "multitracker__ALinkToThePast.html",
@@ -676,209 +646,39 @@ if "A Link to the Past" in network_data_package["games"]:
             item_id_to_name=tracker_data.item_id_to_name,
             location_id_to_name=tracker_data.location_id_to_name,
             inventories=inventories,
-            tracking_names=tracking_names,
-            tracking_ids=tracking_ids,
-            multi_items=multi_items,
-            checks_done=checks_done,
-            ordered_areas=ordered_areas,
-            checks_in_area=player_checks_in_area,
-            key_locations=group_key_locations,
-            big_key_locations=group_big_key_locations,
-            small_key_ids=small_key_ids,
-            big_key_ids=big_key_ids,
+            regions=regions,
+            known_regions=known_regions,
         )
 
     def render_ALinkToThePast_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-        # Helper objects.
-        alttp_id_lookup = tracker_data.item_name_to_id["A Link to the Past"]
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["A Link to the Past"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
 
-        links = {
-            "Bow":                   "Progressive Bow",
-            "Silver Arrows":         "Progressive Bow",
-            "Silver Bow":            "Progressive Bow",
-            "Progressive Bow (Alt)": "Progressive Bow",
-            "Bottle (Red Potion)":   "Bottle",
-            "Bottle (Green Potion)": "Bottle",
-            "Bottle (Blue Potion)":  "Bottle",
-            "Bottle (Fairy)":        "Bottle",
-            "Bottle (Bee)":          "Bottle",
-            "Bottle (Good Bee)":     "Bottle",
-            "Fighter Sword":         "Progressive Sword",
-            "Master Sword":          "Progressive Sword",
-            "Tempered Sword":        "Progressive Sword",
-            "Golden Sword":          "Progressive Sword",
-            "Power Glove":           "Progressive Glove",
-            "Titans Mitts":          "Progressive Glove",
-        }
-        links = {alttp_id_lookup[key]: alttp_id_lookup[value] for key, value in links.items()}
-        levels = {
-            "Fighter Sword":   1,
-            "Master Sword":    2,
-            "Tempered Sword":  3,
-            "Golden Sword":    4,
-            "Power Glove":     1,
-            "Titans Mitts":    2,
-            "Bow":             1,
-            "Silver Bow":      2,
-            "Triforce Piece": 90,
-        }
-        tracking_names = [
-            "Progressive Sword", "Progressive Bow", "Book of Mudora", "Hammer", "Hookshot", "Magic Mirror", "Flute",
-            "Pegasus Boots", "Progressive Glove", "Flippers", "Moon Pearl", "Blue Boomerang", "Red Boomerang",
-            "Bug Catching Net", "Cape", "Shovel", "Lamp", "Mushroom", "Magic Powder", "Cane of Somaria",
-            "Cane of Byrna", "Fire Rod", "Ice Rod", "Bombos", "Ether", "Quake", "Bottle", "Triforce Piece", "Triforce",
-        ]
-        default_locations = {
-            "Light World": {
-                1572864, 1572865, 60034, 1572867, 1572868, 60037, 1572869, 1572866, 60040, 59788, 60046, 60175,
-                1572880, 60049, 60178, 1572883, 60052, 60181, 1572885, 60055, 60184, 191256, 60058, 60187, 1572884,
-                1572886, 1572887, 1572906, 60202, 60205, 59824, 166320, 1010170, 60208, 60211, 60214, 60217, 59836,
-                60220, 60223, 59839, 1573184, 60226, 975299, 1573188, 1573189, 188229, 60229, 60232, 1573193,
-                1573194, 60235, 1573187, 59845, 59854, 211407, 60238, 59857, 1573185, 1573186, 1572882, 212328,
-                59881, 59761, 59890, 59770, 193020, 212605
-            },
-            "Dark World": {
-                59776, 59779, 975237, 1572870, 60043, 1572881, 60190, 60193, 60196, 60199, 60840, 1573190, 209095,
-                1573192, 1573191, 60241, 60244, 60247, 60250, 59884, 59887, 60019, 60022, 60028, 60031
-            },
-            "Desert Palace": {1573216, 59842, 59851, 59791, 1573201, 59830},
-            "Eastern Palace": {1573200, 59827, 59893, 59767, 59833, 59773},
-            "Hyrule Castle": {60256, 60259, 60169, 60172, 59758, 59764, 60025, 60253},
-            "Agahnims Tower": {60082, 60085},
-            "Tower of Hera": {1573218, 59878, 59821, 1573202, 59896, 59899},
-            "Swamp Palace": {60064, 60067, 60070, 59782, 59785, 60073, 60076, 60079, 1573204, 60061},
-            "Thieves Town": {59905, 59908, 59911, 59914, 59917, 59920, 59923, 1573206},
-            "Skull Woods": {59809, 59902, 59848, 59794, 1573205, 59800, 59803, 59806},
-            "Ice Palace": {59872, 59875, 59812, 59818, 59860, 59797, 1573207, 59869},
-            "Misery Mire": {60001, 60004, 60007, 60010, 60013, 1573208, 59866, 59998},
-            "Turtle Rock": {59938, 59941, 59944, 1573209, 59947, 59950, 59953, 59956, 59926, 59929, 59932, 59935},
-            "Palace of Darkness": {
-                59968, 59971, 59974, 59977, 59980, 59983, 59986, 1573203, 59989, 59959, 59992, 59962, 59995,
-                59965
-            },
-            "Ganons Tower": {
-                60160, 60163, 60166, 60088, 60091, 60094, 60097, 60100, 60103, 60106, 60109, 60112, 60115, 60118,
-                60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157
-            },
-            "Total": set()
-        }
-        key_only_locations = {
-            "Light World": set(),
-            "Dark World": set(),
-            "Desert Palace": {0x140031, 0x14002b, 0x140061, 0x140028},
-            "Eastern Palace": {0x14005b, 0x140049},
-            "Hyrule Castle": {0x140037, 0x140034, 0x14000d, 0x14003d},
-            "Agahnims Tower": {0x140061, 0x140052},
-            "Tower of Hera": set(),
-            "Swamp Palace": {0x140019, 0x140016, 0x140013, 0x140010, 0x14000a},
-            "Thieves Town": {0x14005e, 0x14004f},
-            "Skull Woods": {0x14002e, 0x14001c},
-            "Ice Palace": {0x140004, 0x140022, 0x140025, 0x140046},
-            "Misery Mire": {0x140055, 0x14004c, 0x140064},
-            "Turtle Rock": {0x140058, 0x140007},
-            "Palace of Darkness": set(),
-            "Ganons Tower": {0x140040, 0x140043, 0x14003a, 0x14001f},
-            "Total": set()
-        }
-        location_to_area = {}
-        for area, locations in default_locations.items():
-            for checked_location in locations:
-                location_to_area[checked_location] = area
-        for area, locations in key_only_locations.items():
-            for checked_location in locations:
-                location_to_area[checked_location] = area
+        # Translate non-progression items to progression items for tracker simplicity.
+        prepare_inventories(team, player, inventory, tracker_data)
 
-        checks_in_area = {area: len(checks) for area, checks in default_locations.items()}
-        checks_in_area["Total"] = 216
-        ordered_areas = (
-            "Light World", "Dark World", "Hyrule Castle", "Agahnims Tower", "Eastern Palace", "Desert Palace",
-            "Tower of Hera", "Palace of Darkness", "Swamp Palace", "Skull Woods", "Thieves Town", "Ice Palace",
-            "Misery Mire", "Turtle Rock", "Ganons Tower", "Total"
-        )
-
-        tracking_ids = []
-        for item in tracking_names:
-            tracking_ids.append(alttp_id_lookup[item])
-
-        # Can't wait to get this into the apworld. Oof.
-        from worlds.alttp import Items
-
-        small_key_ids = {}
-        big_key_ids = {}
-        ids_small_key = {}
-        ids_big_key = {}
-        for item_name, data in Items.item_table.items():
-            if "Key" in item_name:
-                area = item_name.split("(")[1][:-1]
-                if "Small" in item_name:
-                    small_key_ids[area] = data[2]
-                    ids_small_key[data[2]] = area
-                else:
-                    big_key_ids[area] = data[2]
-                    ids_big_key[data[2]] = area
-
-        inventory = collections.Counter()
-        checks_done = {loc_name: 0 for loc_name in default_locations}
-        player_big_key_locations = set()
-        player_small_key_locations = set()
-
-        player_locations = tracker_data.get_player_locations(team, player)
-        for checked_location in tracker_data.get_player_checked_locations(team, player):
-            if checked_location in player_locations:
-                area_name = location_to_area.get(checked_location, None)
-                if area_name:
-                    checks_done[area_name] += 1
-
-                checks_done["Total"] += 1
-
-        for received_item in tracker_data.get_player_received_items(team, player):
-            target_item = links.get(received_item.item, received_item.item)
-            if received_item.item in levels:  # non-progressive
-                inventory[target_item] = max(inventory[target_item], levels[received_item.item])
-            else:
-                inventory[target_item] += 1
-
-        for location, (item_id, _, _) in player_locations.items():
-            if item_id in ids_big_key:
-                player_big_key_locations.add(ids_big_key[item_id])
-            elif item_id in ids_small_key:
-                player_small_key_locations.add(ids_small_key[item_id])
-
-        # Note the presence of the triforce item
-        if tracker_data.get_player_client_status(team, player) == ClientStatus.CLIENT_GOAL:
-            inventory[106] = 1  # Triforce
-
-        # Progressive items need special handling for icons and class
-        progressive_items = {
-            "Progressive Sword":  94,
-            "Progressive Glove":  97,
-            "Progressive Bow":    100,
-            "Progressive Mail":   96,
-            "Progressive Shield": 95,
-        }
-        progressive_names = {
-            "Progressive Sword":  [None, "Fighter Sword", "Master Sword", "Tempered Sword", "Golden Sword"],
-            "Progressive Glove":  [None, "Power Glove", "Titan Mitts"],
-            "Progressive Bow":    [None, "Bow", "Silver Bow"],
-            "Progressive Mail":   ["Green Mail", "Blue Mail", "Red Mail"],
-            "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
+        regions = {
+            region_name: {
+                "checked": sum(
+                    1 for location in tracker_data._multidata["checks_in_area"][player][region_name]
+                    if location in tracker_data.get_player_checked_locations(team, player)
+                ),
+                "locations": [
+                    (
+                        tracker_data.location_id_to_name["A Link to the Past"][location],
+                        location in tracker_data.get_player_checked_locations(team, player)
+                    )
+                    for location in tracker_data._multidata["checks_in_area"][player][region_name]
+                ],
+            }
+            for region_name in known_regions
         }
 
-        # Determine which icon to use
-        display_data = {}
-        for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-            display_name = progressive_names[item_name][level]
-            acquired = True
-            if not display_name:
-                acquired = False
-                display_name = progressive_names[item_name][level + 1]
-            base_name = item_name.split(maxsplit=1)[1].lower()
-            display_data[base_name + "_acquired"] = acquired
-            display_data[base_name + "_icon"] = display_name
-
-        # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-        sp_areas = ordered_areas[2:15]
+        # Sort locations in regions by name
+        for region in regions:
+            regions[region]["locations"].sort()
 
         return render_template(
             template_name_or_list="tracker__ALinkToThePast.html",
@@ -887,15 +687,8 @@ if "A Link to the Past" in network_data_package["games"]:
             player=player,
             inventory=inventory,
             player_name=tracker_data.get_player_name(team, player),
-            checks_done=checks_done,
-            checks_in_area=checks_in_area,
-            acquired_items={tracker_data.item_id_to_name["A Link to the Past"][id] for id in inventory},
-            sp_areas=sp_areas,
-            small_key_ids=small_key_ids,
-            key_locations=player_small_key_locations,
-            big_key_ids=big_key_ids,
-            big_key_locations=player_big_key_locations,
-            **display_data,
+            regions=regions,
+            known_regions=known_regions,
         )
 
     _multiworld_trackers["A Link to the Past"] = render_ALinkToThePast_multiworld_tracker
@@ -1606,6 +1399,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Hellstorm Batteries (Missile Turret)":        github_icon_base_url + "blizzard/btn-ability-stetmann-corruptormissilebarrage.png",
             "Advanced Construction (SCV)":                 github_icon_base_url + "blizzard/btn-ability-mengsk-trooper-advancedconstruction.png",
             "Dual-Fusion Welders (SCV)":                   github_icon_base_url + "blizzard/btn-upgrade-swann-scvdoublerepair.png",
+            "Hostile Environment Adaptation (SCV)":        github_icon_base_url + "blizzard/btn-upgrade-swann-hellarmor.png",
             "Fire-Suppression System Level 1":             organics_icon_base_url + "Fire-SuppressionSystem.png",
             "Fire-Suppression System Level 2":             github_icon_base_url + "blizzard/btn-upgrade-swann-firesuppressionsystem.png",
 
@@ -1673,6 +1467,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Resource Efficiency (Spectre)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
             "Juggernaut Plating (HERC)":                   organics_icon_base_url + "JuggernautPlating.png",
             "Kinetic Foam (HERC)":                         organics_icon_base_url + "KineticFoam.png",
+            "Resource Efficiency (HERC)":                  github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
 
             "Hellion":                                     "https://static.wikia.nocookie.net/starcraft/images/5/56/Hellion_SC2_Icon1.jpg",
             "Vulture":                                     github_icon_base_url + "blizzard/btn-unit-terran-vulture.png",
@@ -2333,12 +2128,12 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Zerg Armor Upgrade":           106 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Ground Upgrade":          107 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Flyer Upgrade":           108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon Upgrade":       105 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Armor Upgrade":        106 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Upgrade":       107 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Upgrade":          108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2HOTS_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon Upgrade":       105 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Armor Upgrade":        106 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Ground Upgrade":       107 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Air Upgrade":          108 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2LOTV_ITEM_ID_OFFSET,
         }
         grouped_item_replacements = {
             "Progressive Terran Weapon Upgrade":   ["Progressive Terran Infantry Weapon",
