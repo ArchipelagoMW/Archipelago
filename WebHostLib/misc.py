@@ -1,6 +1,6 @@
 import datetime
 import os
-from typing import Dict, Iterator, List, Tuple, Union
+from typing import Any, IO, Dict, Iterator, List, Tuple, Union
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -97,13 +97,13 @@ def new_room(seed: UUID):
     return redirect(url_for("host_room", room=room.id))
 
 
-def _read_log(path: str, offset: int = 0) -> Iterator[bytes]:
-    with open(path, "rb") as log:
-        marker = log.read(3)  # skip optional BOM
-        if marker != b'\xEF\xBB\xBF':
-            log.seek(0, os.SEEK_SET)
-        log.seek(offset, os.SEEK_CUR)
-        yield from log
+def _read_log(log: IO[Any], offset: int = 0) -> Iterator[bytes]:
+    marker = log.read(3)  # skip optional BOM
+    if marker != b'\xEF\xBB\xBF':
+        log.seek(0, os.SEEK_SET)
+    log.seek(offset, os.SEEK_CUR)
+    yield from log
+    log.close()  # free file handle as soon as possible
 
 
 @app.route('/log/<suuid:room>')
@@ -114,6 +114,7 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
     if room.owner == session["_id"]:
         file_path = os.path.join("logs", str(room.id) + ".txt")
         try:
+            log = open(file_path, "rb")
             range_header = request.headers.get("Range")
             if range_header:
                 range_type, range_values = range_header.split('=')
@@ -121,8 +122,8 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
                 if range_type != "bytes" or end != "":
                     return "Unsupported range", 500
                 # NOTE: we skip Content-Range in the response here, which isn't great but works for our JS
-                return Response(_read_log(file_path, int(start)), mimetype="text/plain", status=206)
-            return Response(_read_log(file_path), mimetype="text/plain")
+                return Response(_read_log(log, int(start)), mimetype="text/plain", status=206)
+            return Response(_read_log(log), mimetype="text/plain")
         except FileNotFoundError:
             return Response(f"Logfile {file_path} does not exist. "
                             f"Likely a crash during spinup of multiworld instance or it is still spinning up.",
@@ -152,15 +153,16 @@ def host_room(room: UUID):
 
     def get_log(max_size: int = 1024000) -> str:
         try:
-            raw_size = 0
-            fragments: List[str] = []
-            for block in _read_log(os.path.join("logs", str(room.id) + ".txt")):
-                if raw_size + len(block) > max_size:
-                    fragments.append("…")
-                    break
-                raw_size += len(block)
-                fragments.append(block.decode("utf-8"))
-            return "".join(fragments)
+            with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
+                raw_size = 0
+                fragments: List[str] = []
+                for block in _read_log(log):
+                    if raw_size + len(block) > max_size:
+                        fragments.append("…")
+                        break
+                    raw_size += len(block)
+                    fragments.append(block.decode("utf-8"))
+                return "".join(fragments)
         except FileNotFoundError:
             return ""
 
