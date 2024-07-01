@@ -438,7 +438,7 @@ item_descriptions = {
         Allows Planetary Fortresses to use Scanner Sweep, MULE, and Extra Supplies if those abilities are owned.
     """),
     item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES: "Devastator Turrets slow enemies they hit. Does not stack with Marauder Concussive Shells.",
-    item_names.DEVASTATOR_TURRET_ARMOR_PIERCING_MUNITIONS: "Increases Devastator Turret damage to armored targets by 10.",
+    item_names.DEVASTATOR_TURRET_ANTI_ARMOR_MUNITIONS: "Increases Devastator Turret damage to armored targets by 10.",
     item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DEVASTATOR_TURRET),
     item_names.MISSILE_TURRET_RESOURCE_EFFICENCY: _get_resource_efficiency_desc(item_names.MISSILE_TURRET),
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
