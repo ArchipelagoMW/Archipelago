@@ -319,7 +319,11 @@ item_descriptions = {
         Level 2: Banshees do not require energy to cloak and remain cloaked.
     """),
     item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY: "Banshees do area damage in a straight line.",
-    item_names.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS: "Spell. Missile Pods do damage to air targets in a target area.",
+    item_names.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS: inspect.cleandoc(f"""
+        {_ability_desc('Battlecruisers', 'Missile Pods', 'deals damage to air units in a target area')}
+        Level 1: Deals 40 damage (+50 vs light).
+        Level 2: Deals 110 damage and costs -50 less energy.
+    """),
     item_names.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX: inspect.cleandoc("""
         Level 1: Spell. For 20 seconds the Battlecruiser gains a shield that can absorb up to 200 damage.
         Level 2: Passive. Battlecruiser gets 200 shields.
