@@ -395,7 +395,7 @@ class KH2Context(CommonContext):
                         self.kh2_game_version = None
                         logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
                 if self.kh2_game_version is not None:
-                    logger.info("You are now auto-tracking")
+                    logger.info(f"You are now auto-tracking. {self.kh2_game_version}")
                     self.kh2connected = True
 
             except Exception as e:
@@ -947,7 +947,7 @@ async def kh2_watcher(ctx: KH2Context):
                                 ctx.kh2_game_version = None
                                 logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
                         if ctx.kh2_game_version is not None:
-                            logger.info("You are now auto-tracking")
+                            logger.info(f"You are now auto-tracking {ctx.kh2_game_version}")
                             ctx.kh2connected = True
         except Exception as e:
             if ctx.kh2connected:
