@@ -273,6 +273,7 @@ item_descriptions = {
     item_names.HERC_JUGGERNAUT_PLATING: "Increases HERC armor by 2.",
     item_names.HERC_KINETIC_FOAM: "Increases HERC life by 50.",
     item_names.REAPER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.REAPER),
+    item_names.REAPER_KINETIC_FOAM: "Increases Reaper life by 10.",
     item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK: inspect.cleandoc("""
         Level 1: Allows Siege Tanks to be transported in Siege Mode.
         Level 2: Siege Tanks in Siege Mode can attack air units while transported by a Medivac.
@@ -441,6 +442,7 @@ item_descriptions = {
     item_names.DEVASTATOR_TURRET_PUNISHER_GRENADES: "Increases Devastator Turret damage to armored targets by 10.",
     item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DEVASTATOR_TURRET),
     item_names.MISSILE_TURRET_RESOURCE_EFFICENCY: _get_resource_efficiency_desc(item_names.MISSILE_TURRET),
+    item_names.SCIENCE_VESSEL_TACTICAL_JUMP: "Allows Science Vessels to warp to a target location anywhere on the map.",
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
