@@ -816,6 +816,9 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.SENSOR_TOWER:
         ItemData(402 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 2, SC2Race.TERRAN),
+    item_names.DEVASTATOR_TURRET:
+        ItemData(403 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 7, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     item_names.WAR_PIGS:
         ItemData(500 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 0, SC2Race.TERRAN,
@@ -906,9 +909,6 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.PSI_DISRUPTER:
         ItemData(619 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 6, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
-    item_names.DEVASTATOR_TURRET:
-        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 7, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.STRUCTURE_ARMOR:
         ItemData(620 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 9, SC2Race.TERRAN),
