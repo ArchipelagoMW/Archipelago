@@ -810,6 +810,15 @@ item_table = {
     item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
         ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 0, SC2Race.TERRAN,
                  parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_PUNISHER_GRENADES:
+        ItemData(397 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 1, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY:
+        ItemData(398 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 2, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
+    item_names.MISSILE_TURRET_RESOURCE_EFFICENCY:
+        ItemData(399 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 3, SC2Race.TERRAN,
+                 classification=ItemClassification.filler, parent_item=item_names.MISSILE_TURRET, origin={"bw"}),
 
     #Buildings
     item_names.BUNKER:

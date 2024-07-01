@@ -49,6 +49,8 @@ resource_efficiency_cost_reduction = {
     item_names.WIDOW_MINE:    (0, 25, 1),
     item_names.LIBERATOR:     (0, 25, 0),
     item_names.VALKYRIE:      (100, 25, 1),
+    item_names.DEVASTATOR_TURRET: (50, 0, 0),
+    item_names.MISSILE_TURRET: (25, 0, 0),
     item_names.SCOURGE:       (0, 50, 0),
     item_names.HYDRALISK:     (25, 25, 1),
     item_names.SWARM_HOST:    (100, 25, 0),
@@ -271,7 +273,6 @@ item_descriptions = {
     item_names.HERC_JUGGERNAUT_PLATING: "Increases HERC armor by 2.",
     item_names.HERC_KINETIC_FOAM: "Increases HERC life by 50.",
     item_names.REAPER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.REAPER),
-    item_names.REAPER_KINETIC_FOAM: "Increases Reaper life by 10.",
     item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK: inspect.cleandoc("""
         Level 1: Allows Siege Tanks to be transported in Siege Mode.
         Level 2: Siege Tanks in Siege Mode can attack air units while transported by a Medivac.
@@ -437,6 +438,9 @@ item_descriptions = {
         Allows Planetary Fortresses to use Scanner Sweep, MULE, and Extra Supplies if those abilities are owned.
     """),
     item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES: "Devastator Turrets slow enemies they hit. Does not stack with Marauder Concussive Shells.",
+    item_names.DEVASTATOR_TURRET_PUNISHER_GRENADES: "Increases Devastator Turret damage to armored targets by 10.",
+    item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DEVASTATOR_TURRET),
+    item_names.MISSILE_TURRET_RESOURCE_EFFICENCY: _get_resource_efficiency_desc(item_names.MISSILE_TURRET),
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
