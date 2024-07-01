@@ -52,6 +52,10 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_names.REAPER: 1,
                 item_names.DIAMONDBACK: 0,
                 item_names.HELLION: 1,
+                # Additional excludes to increase the likelihood that unexcluded items actually appear
+                item_groups.ItemGroupNames.STARPORT_UNITS: 0,
+                item_names.WARHOUND: 0,
+                item_names.VULTURE: 0,
             },
             'unexcluded_items': {
                 item_names.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
@@ -62,6 +66,10 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_names.HELLION: 1,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
                 item_names.MARAUDER_PROGRESSIVE_STIMPACK: 0,
+                # Additional unexcludes for logic
+                item_names.MEDIVAC: 0,
+                item_names.BATTLECRUISER: 0,
+                item_names.SCIENCE_VESSEL: 0,
             },
         }
         self.generate_world(world_options)
@@ -72,8 +80,8 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.REAPER, itempool)
         self.assertEqual(itempool.count(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE), 1, f"Stealth suit occurred the wrong number of times")
         self.assertIn(item_names.HELLION, itempool)
-        self.assertEqual(itempool.count(item_names.MARINE_PROGRESSIVE_STIMPACK), 2, "Marine stimpacks weren't unexcluded")
-        self.assertEqual(itempool.count(item_names.MARAUDER_PROGRESSIVE_STIMPACK), 2, "Marauder stimpacks weren't unexcluded")
+        self.assertEqual(itempool.count(item_names.MARINE_PROGRESSIVE_STIMPACK), 2, f"Marine stimpacks weren't unexcluded  (seed {self.multiworld.seed})")
+        self.assertEqual(itempool.count(item_names.MARAUDER_PROGRESSIVE_STIMPACK), 2, f"Marauder stimpacks weren't unexcluded (seed {self.multiworld.seed})")
         self.assertNotIn(item_names.DIAMONDBACK, itempool)
         self.assertNotIn(item_names.NOVA_BLAZEFIRE_GUNBLADE, itempool)
         self.assertNotIn(item_names.NOVA_ENERGY_SUIT_MODULE, itempool)
