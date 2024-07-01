@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
+MM3_CURRENT_STAGE = 0x22
 MM3_MEGAMAN_STATE = 0x30
 MM3_ROBOT_MASTERS_DEFEATED = 0x61
 MM3_HEALTH = 0xA2
@@ -42,6 +43,8 @@ MM3_DOC_REMAP = {
 }
 MM3_LIVES = 0xAE
 MM3_E_TANKS = 0xAF
+MM3_ENERGY_BAR = 0xB2
+MM3_CONSUMABLES = 0x150
 MM3_ROBOT_MASTERS_UNLOCKED = 0x680
 MM3_DOC_ROBOT_UNLOCKED = 0x681
 MM3_ENERGYLINK = 0x682
@@ -52,11 +55,76 @@ MM3_DOC_ROBOT_DEFEATED = 0x686
 MM3_COMPLETED_STAGES = 0x687
 MM3_RECEIVED_ITEMS = 0x688
 MM3_RUSH_RECEIVED = 0x689
-MM3_CONSUMABLES = 0x68A
 
 MM3_CONSUMABLE_TABLE: Dict[int, Dict[int, Tuple[int, int]]] = {
     # Stage:
     #   Item: (byte offset, bit mask)
+    0: {
+        0x890200: (0, 5),
+        0x890201: (3, 2),
+    },
+    1: {
+        0x890202: (2, 6),
+        0x890203: (2, 5),
+        0x890204: (2, 4),
+        0x890205: (2, 3),
+        0x890206: (3, 6),
+        0x890207: (3, 5),
+        0x890208: (3, 7),
+        0x890209: (4, 0)
+    },
+    2: {
+        0x89020A: (2, 7),
+        0x89020B: (3, 0),
+        0x89020C: (3, 1),
+        0x89020D: (3, 2),
+        0x89020E: (4, 2),
+        0x89020F: (4, 3),
+        0x890210: (4, 7),
+        0x890211: (5, 1),
+        0x890212: (6, 1),
+        0x890213: (7, 0)
+    },
+    3: {
+        0x890214: (0, 6),
+        0x890215: (1, 5),
+        0x890216: (2, 3),
+        0x890217: (2, 7),
+        0x890218: (2, 6),
+        0x890219: (2, 5),
+        0x89021A: (4, 5),
+    },
+    4: {
+        0x89021B: (1, 3),
+        0x89021C: (1, 5),
+        0x89021D: (1, 7),
+        0x89021E: (2, 0),
+        0x89021F: (1, 6),
+        0x890220: (2, 4),
+        0x890221: (2, 5),
+        0x890222: (4, 5)
+    },
+    5: {
+        0x890223: (3, 0),
+        0x890224: (3, 2),
+        0x890225: (4, 5),
+        0x890226: (4, 6),
+        0x890227: (6, 4),
+    },
+    6: {
+        0x890228: (2, 0),
+        0x890229: (2, 1),
+        0x89022A: (3, 1),
+        0x89022B: (3, 2),
+        0x89022C: (3, 3),
+        0x89022D: (3, 4),
+    },
+    7: {
+        0x89022E: (3, 5),
+        0x89022F: (3, 4),
+        0x890230: (3, 3),
+        0x890231: (3, 2),
+    }
 }
 
 
@@ -176,7 +244,7 @@ def cmd_autoheal(self) -> None:
 
 
 def get_sfx_writes(sfx: int) -> Tuple[int, bytes, str]:
-    return (MM3_SFX_QUEUE, sfx.to_bytes(1, 'little'), "RAM")
+    return MM3_SFX_QUEUE, sfx.to_bytes(1, 'little'), "RAM"
 
 
 class MegaMan3Client(BizHawkClient):
@@ -283,7 +351,7 @@ class MegaMan3Client(BizHawkClient):
         # get our relevant bytes
         (robot_masters_unlocked, robot_masters_defeated, doc_robo_unlocked, doc_robo_defeated,
          rush_acquired, received_items, completed_stages, # consumable_checks,
-            e_tanks, lives, weapon_energy, health, state,
+            e_tanks, lives, weapon_energy, health, state, bar_state, current_stage,
             energy_link_packet, last_wily) = await read(ctx.bizhawk_ctx, [
                 (MM3_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM3_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
@@ -298,13 +366,16 @@ class MegaMan3Client(BizHawkClient):
                 (MM3_WEAPON_ENERGY, 11, "RAM"),
                 (MM3_HEALTH, 1, "RAM"),
                 (MM3_MEGAMAN_STATE, 1, "RAM"),
+                (MM3_ENERGY_BAR, 2, "RAM"),
+                (MM3_CURRENT_STAGE, 1, "RAM"),
                 (MM3_ENERGYLINK, 1, "RAM"),
                 (MM3_LAST_WILY, 1, "RAM"),
             ])
 
-        # if difficulty[0] not in (0, 1):
-        #    return  # Game is not initialized
-        # TODO: find/make a good initialization guard
+        if bar_state[0] not in (0x00, 0x80):
+            return  # Game is not initialized
+            # Bit of a trick here, bar state can only be 0x00 or 0x80 (display health bar, or don't)
+            # This means it can double as init guard and in-stage tracker
 
         if not ctx.finished_game and completed_stages[0] & 0x20:
             await ctx.send_msgs([{

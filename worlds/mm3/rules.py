@@ -318,6 +318,11 @@ def set_rules(world: "MM3World") -> None:
 
     if world.options.consumables in (world.options.consumables.option_1up_etank,
                                      world.options.consumables.option_all):
+        add_rule(world.get_location(names.needle_man_c2), lambda state: has_rush_jet(state, world.player))
+        add_rule(world.get_location(names.gemini_man_c1), lambda state: has_rush_jet(state, world.player))
+        add_rule(world.get_location(names.gemini_man_c3),
+                 lambda state: has_rush_vertical(state, world.player)
+                               or state.has_any([names.gemini_laser, names.shadow_blade]))
         for location in etank_1ups["Hard Man Stage"]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         for location in etank_1ups["Wily Stage 2"]:
@@ -326,9 +331,14 @@ def set_rules(world: "MM3World") -> None:
             add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
     if world.options.consumables in (world.options.consumables.option_weapon_health,
                                      world.options.consumables.option_all):
+        add_rule(world.get_location(names.gemini_man_c2), lambda state: has_rush_vertical(state, world.player))
+        add_rule(world.get_location(names.gemini_man_c4), lambda state: has_rush_vertical(state, world.player))
+        add_rule(world.get_location(names.gemini_man_c5), lambda state: has_rush_vertical(state, world.player))
         for location in energy_pickups["Hard Man Stage"]:
             if location == names.hard_man_c1:
                 continue
+            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
+        for location in [names.top_man_c2, names.top_man_c3, names.top_man_c4, names.top_man_c6, names.top_man_c7]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         for location in energy_pickups["Wily Stage 2"]:
             if location in (names.wily_2_c1, names.wily_2_c2, names.wily_2_c4):
