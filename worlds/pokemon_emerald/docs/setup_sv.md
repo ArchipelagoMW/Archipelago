@@ -36,17 +36,17 @@ Detta kommer generera en fil för dig. Din patchfil kommer ha `.apemerald` som s
 4. Välj "Open Patch" på vänstra sidan, och välj din patchfil.
 5. Om detta är första gången du patchar, så kommer du behöva välja var ditt ursprungliga ROM är.
 6. En patchad `.gba` fil kommer skapas på samma plats som patchfilen.
-7. Första gången du öppnar en patch med BizHawk-klienten, kommer du också behöva bekräfta var `EmuHawk.exe`
-filen är installerad i din BizHawk-mapp.
+7. Första gången du öppnar en patch med BizHawk-klienten, kommer du också behöva bekräfta var `EmuHawk.exe` filen är
+installerad i din BizHawk-mapp.
 
-Om du bara tänkt spela själv och du inte bryr dig om automatisk spårning eller ledtrådar, så kan du stanna här, stänga av
-klienten, och starta ditt patchade ROM med valfri emulator. Dock, för multvärldsfunktionen eller 
-andra Archipelago-funktioner, fortsätt nedanför med BizHawk.
+Om du bara tänkt spela själv och du inte bryr dig om automatisk spårning eller ledtrådar, så kan du stanna här, stänga
+av klienten, och starta ditt patchade ROM med valfri emulator. Dock, för multvärldsfunktionen eller andra
+Archipelago-funktioner, fortsätt nedanför med BizHawk.
 
 ## Anslut till en server
 
-Om du vanligtsvis öppnar en patchad fil så görs steg 1-5 automatiskt åt dig. Även om det är så, kom ihåg dessa steg ifall
-du till exempel behöver stänga ner och starta om något medans du spelar.
+Om du vanligtsvis öppnar en patchad fil så görs steg 1-5 automatiskt åt dig. Även om det är så, kom ihåg dessa steg
+ifall du till exempel behöver stänga ner och starta om något medans du spelar.
 
 1. Pokemon Emerald använder Archipelagos BizHawk-klient. Om klienten inte startat efter att du patchat ditt spel,
 så kan du bara öppna den igen från launchern.
@@ -74,4 +74,5 @@ och
 2. Placera tracker pack zip-filen i packs/ där du har PopTracker installerat.
 3. Öppna PopTracker, och välj Pokemon Emerald.
 4. För att automatiskt spåra, tryck på "AP" symbolen längst upp.
-5. Skriv in Archipelago-serverns uppgifter (Samma som du använde för att ansluta med klienten), "Slot"-namn samt lösenord.
+5. Skriv in Archipelago-serverns uppgifter (Samma som du använde för att ansluta med klienten), "Slot"-namn samt
+lösenord.
