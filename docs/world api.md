@@ -457,7 +457,8 @@ In addition, the following methods can be implemented and are called in this ord
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
 * `create_items(self)`
   called to place player's items into the MultiWorld's itempool. After this step all regions
-  and items have to be in the MultiWorld's regions and itempool, and these lists should not be modified afterward.
+  and items have to be in the MultiWorld's regions and itempool, all locations must be created
+  in regions, and these lists should not be modified afterwards.
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
 * `generate_basic(self)`
