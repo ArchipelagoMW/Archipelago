@@ -101,6 +101,8 @@ ADVANCED_OPTICS                       = "Advanced Optics (Terran)"
 ROGUE_FORCES                          = "Rogue Forces (Terran/Zerg)"
 MECHANICAL_KNOW_HOW                   = "Mechanical Know-how (Terran)"
 MERCENARY_MUNITIONS                   = "Mercenary Munitions (Terran)"
+FAST_DELIVERY                         = "Fast Delivery (Terran/Zerg)"
+RAPID_REINFORCEMENT                   = "Rapid Reinforcement (Terran/Zerg)"
 
 # Terran Unit Upgrades
 BANSHEE_HYPERFLIGHT_ROTORS                         = "Hyperflight Rotors (Banshee)"
