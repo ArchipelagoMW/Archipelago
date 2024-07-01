@@ -810,7 +810,7 @@ item_table = {
     item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
         ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 0, SC2Race.TERRAN,
                  parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
-    item_names.DEVASTATOR_TURRET_PUNISHER_GRENADES:
+    item_names.DEVASTATOR_TURRET_ARMOR_PIERCING_MUNITIONS:
         ItemData(397 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 1, SC2Race.TERRAN,
                  parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
     item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY:
