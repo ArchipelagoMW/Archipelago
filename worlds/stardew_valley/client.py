@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import asyncio
 
+from BaseClasses import MultiWorld
 from CommonClient import logger, get_base_parser, gui_enabled
+from MultiServer import mark_raw
 from . import StardewLogic
 from .stardew_rule.rule_explain import explain
 
@@ -16,6 +18,8 @@ except ImportError:
 
     class TrackerGameContextMixin:
         """Expecting the TrackerGameContext to have these methods."""
+        multiworld: MultiWorld
+        player_id: int
 
         def build_gui(self, manager):
             ...
@@ -37,8 +41,20 @@ except ImportError:
 class StardewCommandProcessor(ClientCommandProcessor):
     ctx: StardewClientContext
 
-    def _cmd_explain(self, item):
-        """Coming soon.™"""
+    @mark_raw
+    def _cmd_explain(self, location: str = ""):
+        """Explain the logic behind a location."""
+        if self.ctx.logic is None:
+            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+            return
+
+        rule = self.ctx.logic.region.can_reach_location(location)
+        expl = explain(rule, self.ctx.multiworld.state)
+        logger.info(expl)
+
+    @mark_raw
+    def _cmd_explain_item(self, item: str = ""):
+        """Explain the logic behind a game item."""
         if self.ctx.logic is None:
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return
@@ -47,13 +63,14 @@ class StardewCommandProcessor(ClientCommandProcessor):
         expl = explain(rule, self.ctx.multiworld.state)
         logger.info(expl)
 
-    def _cmd_explain_missing(self, item):
-        """Coming soon.™"""
+    @mark_raw
+    def _cmd_explain_missing(self, location: str = ""):
+        """Will tell you what's missing to consider a location in logic."""
         if self.ctx.logic is None:
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return
 
-        rule = self.ctx.logic.has(item)
+        rule = self.ctx.logic.region.can_reach_location(location)
         state = self.ctx.multiworld.state
         simplified, _ = rule.evaluate_while_simplifying(state)
         expl = explain(simplified, state)
