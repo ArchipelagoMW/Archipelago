@@ -47,8 +47,21 @@ class StardewCommandProcessor(ClientCommandProcessor):
         expl = explain(rule, self.ctx.multiworld.state)
         logger.info(expl)
 
+    def _cmd_explain_missing(self, item):
+        """Coming soon.™"""
+        if self.ctx.logic is None:
+            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+            return
+
+        rule = self.ctx.logic.has(item)
+        state = self.ctx.multiworld.state
+        simplified, _ = rule.evaluate_while_simplifying(state)
+        expl = explain(simplified, state)
+        logger.info(expl)
+
     if not tracker_loaded:
         del _cmd_explain
+        del _cmd_explain_missing
 
 
 class StardewClientContext(BaseContext):
@@ -102,7 +115,7 @@ def launch():
 
         if tracker_loaded:
             ctx.run_generator()
-            # FIXME that's probably not legit
+            # FIXME that's probably not legit, but it works when there is only one player
             if ctx.player_id is None:
                 ctx.player_id = 1
             ctx.setup_logic()
