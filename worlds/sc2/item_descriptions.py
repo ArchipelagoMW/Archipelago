@@ -436,6 +436,7 @@ item_descriptions = {
     item_names.PLANETARY_FORTRESS_ORBITAL_MODULE: inspect.cleandoc("""
         Allows Planetary Fortresses to use Scanner Sweep, MULE, and Extra Supplies if those abilities are owned.
     """),
+    item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES: "Devastator Turrets slow enemies they hit. Does not stack with Marauder Concussive Shells.",
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
@@ -479,6 +480,7 @@ item_descriptions = {
     """),
     item_names.HIVE_MIND_EMULATOR: "Defensive structure. Can permanently Mind Control Zerg units.",
     item_names.PSI_DISRUPTER: "Defensive structure. Slows the attack and movement speeds of all nearby Zerg units.",
+    item_names.DEVASTATOR_TURRET: "Defensive structure. Deals increased damage to armored targets. Attacks ground units.",
     item_names.STRUCTURE_ARMOR: "Increases armor of all Terran structures by 2.",
     item_names.HI_SEC_AUTO_TRACKING: "Increases attack range of all Terran structures by 1.",
     item_names.ADVANCED_OPTICS: "Increases attack range of all Terran mechanical units by 1.",

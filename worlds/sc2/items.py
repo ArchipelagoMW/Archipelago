@@ -907,6 +907,9 @@ item_table = {
     item_names.PSI_DISRUPTER:
         ItemData(619 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 6, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
+    item_names.DEVASTATOR_TURRET:
+        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 7, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.STRUCTURE_ARMOR:
         ItemData(620 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 9, SC2Race.TERRAN),
     item_names.HI_SEC_AUTO_TRACKING:
@@ -919,6 +922,9 @@ item_table = {
         ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN, origin={"ext"}),
     item_names.MERCENARY_MUNITIONS:
         ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
+        ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 15, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
 
     item_names.ZEALOT:
         ItemData(700 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 0, SC2Race.PROTOSS,
