@@ -128,7 +128,7 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
     multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = \
         lambda state: (state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
-                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)) and \
+                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player) and state.has_group_unique("Hero Relics", player, 6)) and \
         has_ability(state, player, prayer, options, ability_unlocks) and has_sword(state, player) and \
         state.has_any({lantern, laurels}, player)
 
