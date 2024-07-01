@@ -244,6 +244,7 @@ SCIENCE_VESSEL_DEFENSIVE_MATRIX                    = "Defensive Matrix (Science 
 SCIENCE_VESSEL_EMP_SHOCKWAVE                       = "EMP Shockwave (Science Vessel)"
 SCIENCE_VESSEL_IMPROVED_NANO_REPAIR                = "Improved Nano-Repair (Science Vessel)"
 SCIENCE_VESSEL_ADVANCED_AI_SYSTEMS                 = "Advanced AI Systems (Science Vessel)"
+SCIENCE_VESSEL_TACTICAL_JUMP                       = "Tactical Jump (Science Vessel)"
 SCV_ADVANCED_CONSTRUCTION                          = "Advanced Construction (SCV)"
 SCV_DUAL_FUSION_WELDERS                            = "Dual-Fusion Welders (SCV)"
 SCV_HOSTILE_ENVIRONMENT_ADAPTATION                 = "Hostile Environment Adaptation (SCV)"

@@ -940,6 +940,7 @@ item_table = {
     item_names.RAPID_REINFORCEMENT:
         ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN, origin={"ext"}),
 
+    # WoL Protoss
     item_names.ZEALOT:
         ItemData(700 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 0, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"}),
@@ -967,6 +968,10 @@ item_table = {
     item_names.CARRIER:
         ItemData(708 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 8, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"}),
+
+    item_names.SCIENCE_VESSEL_TACTICAL_JUMP:
+        ItemData(750 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 4, SC2Race.TERRAN,
+                 parent_item=item_names.SCIENCE_VESSEL, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:
