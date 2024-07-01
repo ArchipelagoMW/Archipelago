@@ -33,14 +33,15 @@ class TerranItemType(ItemTypeEnum):
     Armory_4 = "Armory", 3
     Armory_5 = "Armory", 4
     Armory_6 = "Armory", 5
-    Progressive = "Progressive Upgrade", 6
-    Laboratory = "Laboratory", 7
-    Upgrade = "Upgrade", 8
-    Unit = "Unit", 9
-    Building = "Building", 10
-    Mercenary = "Mercenary", 11
-    Nova_Gear = "Nova Gear", 12
-    Progressive_2 = "Progressive Upgrade", 13
+    Armory_7 = "Armory", 6
+    Progressive = "Progressive Upgrade", 7
+    Laboratory = "Laboratory", 8
+    Upgrade = "Upgrade", 9
+    Unit = "Unit", 10
+    Building = "Building", 11
+    Mercenary = "Mercenary", 12
+    Nova_Gear = "Nova Gear", 13
+    Progressive_2 = "Progressive Upgrade", 14
 
 
 class ZergItemType(ItemTypeEnum):
@@ -503,7 +504,7 @@ item_table = {
     item_names.THOR_RAPID_RELOAD:
         ItemData(293 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 23, SC2Race.TERRAN,
                  parent_item=item_names.THOR, origin={"lotv"}),
-    item_names.LIBERATOR_360_DEGREE_SENSOR_ARRAY:
+    item_names.LIBERATOR_GUERILLA_MISSILES:
         ItemData(294 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 24, SC2Race.TERRAN,
                  parent_item=item_names.LIBERATOR, origin={"ext"}),
     item_names.WIDOW_MINE_RESOURCE_EFFICIENCY:
@@ -806,6 +807,18 @@ item_table = {
     item_names.PLANETARY_FORTRESS_ORBITAL_MODULE:
         ItemData(395 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 1, SC2Race.TERRAN,
                  parent_item=item_names.PLANETARY_FORTRESS, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
+        ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 0, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_ANTI_ARMOR_MUNITIONS:
+        ItemData(397 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 1, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY:
+        ItemData(398 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 2, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
+    item_names.MISSILE_TURRET_RESOURCE_EFFICENCY:
+        ItemData(399 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 3, SC2Race.TERRAN,
+                 classification=ItemClassification.filler, parent_item=item_names.MISSILE_TURRET, origin={"bw"}),
 
     #Buildings
     item_names.BUNKER:
@@ -816,6 +829,9 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.SENSOR_TOWER:
         ItemData(402 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 2, SC2Race.TERRAN),
+    item_names.DEVASTATOR_TURRET:
+        ItemData(403 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 7, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     item_names.WAR_PIGS:
         ItemData(500 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 0, SC2Race.TERRAN,
@@ -915,7 +931,16 @@ item_table = {
         ItemData(622 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 11, SC2Race.TERRAN),
     item_names.ROGUE_FORCES:
         ItemData(623 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 12, SC2Race.TERRAN, origin={"ext"}),
+    item_names.MECHANICAL_KNOW_HOW:
+        ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN, origin={"ext"}),
+    item_names.MERCENARY_MUNITIONS:
+        ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN, origin={"ext"}),
+    item_names.FAST_DELIVERY:
+        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 15, SC2Race.TERRAN, origin={"ext"}),
+    item_names.RAPID_REINFORCEMENT:
+        ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN, origin={"ext"}),
 
+    # WoL Protoss
     item_names.ZEALOT:
         ItemData(700 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 0, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"}),
@@ -943,6 +968,10 @@ item_table = {
     item_names.CARRIER:
         ItemData(708 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 8, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"}),
+
+    item_names.SCIENCE_VESSEL_TACTICAL_JUMP:
+        ItemData(750 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 4, SC2Race.TERRAN,
+                 parent_item=item_names.SCIENCE_VESSEL, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:
@@ -1311,13 +1340,13 @@ item_table = {
         ItemData(277 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 17, SC2Race.ZERG, parent_item=item_names.DEFILER,
                  origin={"ext"}),
     item_names.DEFILER_TRAPDOOR_ADAPTATION:
-        ItemData(278 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 19, SC2Race.ZERG, parent_item=item_names.DEFILER,
+        ItemData(278 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 18, SC2Race.ZERG, parent_item=item_names.DEFILER,
                  origin={"ext"}),
     item_names.DEFILER_PREDATORY_CONSUMPTION:
-        ItemData(279 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 20, SC2Race.ZERG, parent_item=item_names.DEFILER,
+        ItemData(279 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 19, SC2Race.ZERG, parent_item=item_names.DEFILER,
                  origin={"ext"}),
     item_names.DEFILER_COMORBIDITY:
-        ItemData(280 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 18, SC2Race.ZERG, parent_item=item_names.DEFILER,
+        ItemData(280 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 20, SC2Race.ZERG, parent_item=item_names.DEFILER,
                  origin={"ext"}),
     item_names.ABERRATION_MONSTROUS_RESILIENCE:
         ItemData(281 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 21, SC2Race.ZERG, parent_item=item_names.ABERRATION,
@@ -1394,15 +1423,15 @@ item_table = {
     item_names.KERRIGAN_CRUSHING_GRIP: ItemData(403 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 3, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_CHAIN_REACTION: ItemData(404 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 4, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_PSIONIC_SHIFT: ItemData(405 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 5, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
-    item_names.KERRIGAN_ZERGLING_RECONSTITUTION: ItemData(406 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.filler),
-    item_names.KERRIGAN_IMPROVED_OVERLORDS: ItemData(407 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 1, SC2Race.ZERG, origin={"hots"}),
-    item_names.KERRIGAN_AUTOMATED_EXTRACTORS: ItemData(408 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 2, SC2Race.ZERG, origin={"hots"}),
+    item_names.ZERGLING_RECONSTITUTION: ItemData(406 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.filler),
+    item_names.OVERLORD_IMPROVED_OVERLORDS: ItemData(407 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 1, SC2Race.ZERG, origin={"hots"}),
+    item_names.AUTOMATED_EXTRACTORS: ItemData(408 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 2, SC2Race.ZERG, origin={"hots"}),
     item_names.KERRIGAN_WILD_MUTATION: ItemData(409 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 6, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_SPAWN_BANELINGS: ItemData(410 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 7, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_MEND: ItemData(411 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 8, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
-    item_names.KERRIGAN_TWIN_DRONES: ItemData(412 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 3, SC2Race.ZERG, origin={"hots"}),
-    item_names.KERRIGAN_MALIGNANT_CREEP: ItemData(413 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 4, SC2Race.ZERG, origin={"hots"}),
-    item_names.KERRIGAN_VESPENE_EFFICIENCY: ItemData(414 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 5, SC2Race.ZERG, origin={"hots"}),
+    item_names.TWIN_DRONES: ItemData(412 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 3, SC2Race.ZERG, origin={"hots"}),
+    item_names.MALIGNANT_CREEP: ItemData(413 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 4, SC2Race.ZERG, origin={"hots"}),
+    item_names.VESPENE_EFFICIENCY: ItemData(414 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 5, SC2Race.ZERG, origin={"hots"}),
     item_names.KERRIGAN_INFEST_BROODLINGS: ItemData(415 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 9, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_FURY: ItemData(416 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 10, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_ABILITY_EFFICIENCY: ItemData(417 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 11, SC2Race.ZERG, origin={"hots"}),
@@ -1411,6 +1440,7 @@ item_table = {
     item_names.KERRIGAN_DROP_PODS: ItemData(420 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 14, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     # Handled separately from other abilities
     item_names.KERRIGAN_PRIMAL_FORM: ItemData(421 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Primal_Form, 0, SC2Race.ZERG, origin={"hots"}),
+    item_names.ZERG_CREEP_STOMACH: ItemData(422 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 10, SC2Race.ZERG),
 
     item_names.KERRIGAN_LEVELS_10: ItemData(500 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Level, 10, SC2Race.ZERG, origin={"hots"}, quantity=0, classification=ItemClassification.progression),
     item_names.KERRIGAN_LEVELS_9: ItemData(501 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Level, 9, SC2Race.ZERG, origin={"hots"}, quantity=0, classification=ItemClassification.progression),
@@ -1433,11 +1463,15 @@ item_table = {
 
     # Misc Upgrades
     item_names.OVERLORD_VENTRAL_SACS: ItemData(700 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 6, SC2Race.ZERG, origin={"bw"}),
+    item_names.OVERLORD_GENERATE_CREEP: ItemData(701 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 7, SC2Race.ZERG, origin={"ext"}),
+    item_names.OVERLORD_ANTENNAE: ItemData(702 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 8, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.filler),
+    item_names.OVERLORD_PNEUMATIZED_CARAPACE: ItemData(703 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 9, SC2Race.ZERG, origin={"ext"}),
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, origin={"bw"}),
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: ItemData(801 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 7, SC2Race.ZERG, origin={"bw"}),
     item_names.ROACH_RAVAGER_ASPECT: ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 8, SC2Race.ZERG, origin={"ext"}),
+    item_names.OVERLORD_OVERSEER_ASPECT: ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 4, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
 
 
     # Protoss Units (those that aren't as items in WoL (Prophecy))
@@ -1611,6 +1645,8 @@ item_table = {
     item_names.HAVOC_BLOODSHARD_RESONANCE: ItemData(375 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 15, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.HAVOC),
     item_names.ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS: ItemData(376 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 16, SC2Race.PROTOSS, origin={"bw"}),
     item_names.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY: ItemData(377 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 17, SC2Race.PROTOSS, origin={"bw"}),
+    item_names.ORACLE_BOSONIC_CORE: ItemData(378 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 18, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.ORACLE),
+    item_names.SCOUT_RESOURCE_EFFICIENCY: ItemData(379 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 19, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.SCOUT),
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
@@ -1815,6 +1851,8 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Zerg static defenses
     item_names.SPORE_CRAWLER,
     item_names.SPINE_CRAWLER,
+    # Overseer
+    item_names.OVERLORD_OVERSEER_ASPECT,
     # Spear of Adun Abilities
     item_names.SOA_CHRONO_SURGE,
     item_names.SOA_PROGRESSIVE_PROXY_PYLON,
@@ -1904,9 +1942,9 @@ kerrigan_actives: typing.List[typing.Set[str]] = [
 kerrigan_passives: typing.List[typing.Set[str]] = [
     {item_names.KERRIGAN_HEROIC_FORTITUDE},
     {item_names.KERRIGAN_CHAIN_REACTION},
-    {item_names.KERRIGAN_ZERGLING_RECONSTITUTION, item_names.KERRIGAN_IMPROVED_OVERLORDS, item_names.KERRIGAN_AUTOMATED_EXTRACTORS},
+    {item_names.ZERGLING_RECONSTITUTION, item_names.OVERLORD_IMPROVED_OVERLORDS, item_names.AUTOMATED_EXTRACTORS},
     set(),
-    {item_names.KERRIGAN_TWIN_DRONES, item_names.KERRIGAN_MALIGNANT_CREEP, item_names.KERRIGAN_VESPENE_EFFICIENCY},
+    {item_names.TWIN_DRONES, item_names.MALIGNANT_CREEP, item_names.VESPENE_EFFICIENCY},
     {item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY, item_names.KERRIGAN_ABILITY_EFFICIENCY},
     set(),
 ]

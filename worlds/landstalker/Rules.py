@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 def _landstalker_has_visited_regions(state: CollectionState, player: int, regions):
-    return all([state.can_reach(region, None, player) for region in regions])
+    return all(state.has("event_visited_" + region.code, player) for region in regions)
 
 
 def _landstalker_has_health(state: CollectionState, player: int, health):

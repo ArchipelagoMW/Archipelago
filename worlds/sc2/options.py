@@ -983,7 +983,7 @@ def get_enabled_races(world: 'SC2World') -> Set[SC2Race]:
     selection = get_option_value(world, 'selected_races')
     if selection == SelectRaces.option_all:
         return set(SC2Race)
-    enabled = set()
+    enabled = {SC2Race.ANY}
     if selection & MissionFlag.Terran:
         enabled.add(SC2Race.TERRAN)
     if selection & MissionFlag.Zerg:
@@ -1005,7 +1005,10 @@ def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
         enabled_campaigns.add(SC2Campaign.PROLOGUE)
     if get_option_value(world, "enable_lotv_missions"):
         enabled_campaigns.add(SC2Campaign.LOTV)
-    if get_option_value(world, "enable_epilogue_missions"):
+    # Force-disable epilogue missions if vanilla mission order with at least 1 disabled faction
+    if get_option_value(world, "enable_epilogue_missions") \
+            and (get_option_value(world, "mission_order") != MissionOrder.option_vanilla
+                 or get_option_value(world, "selected_races") == SelectRaces.option_all):
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
     if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
