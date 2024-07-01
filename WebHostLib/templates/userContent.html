@@ -36,12 +36,12 @@
                                 <td>
                                     {% set title = [] %}
 
-                                    {% for slot in room.seed.slots %}
+                                    {% for slot in room.seed.slots|list|sort(attribute="player_id") %}
                                         {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] %}
                                         {% set _ = title.append(player) %}
                                     {% endfor %}
 
-                                    <div title="{{ title|sort|join('\n') }}">
+                                    <div title="{{ title|join('\n') }}">
                                         {{ room.seed.slots|length }}
                                     </div>
                                 </td>
@@ -75,12 +75,12 @@
                                     {% if seed.multidata %}
                                         {% set title = [] %}
 
-                                        {% for slot in seed.slots %}
+                                        {% for slot in seed.slots|list|sort(attribute="player_id") %}
                                             {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] %}
                                             {% set _ = title.append(player) %}
                                         {% endfor %}
 
-                                        <div title="{{ title|sort|join('\n') }}">
+                                        <div title="{{ title|join('\n') }}">
                                             {{ seed.slots|length }}
                                         </div>
                                     {% else %}
