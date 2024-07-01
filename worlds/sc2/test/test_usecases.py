@@ -164,7 +164,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_prologue_missions': True,
             'enable_lotv_missions': True,
             'enable_epilogue_missions': True,
-            'mission_order': options.MissionOrder.option_vanilla_shuffled,
+            'mission_order': options.MissionOrder.option_grid,
         }
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
@@ -174,7 +174,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             self.assertNotEqual(items.item_table[item_name].race, mission_tables.SC2Race.PROTOSS, f"{item_name} is a PROTOSS item!")
         for region in world_regions:
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign, 
-                             (mission_tables.SC2Campaign.LOTV, mission_tables.SC2Campaign.PROPHECY, mission_tables.SC2Campaign.PROLOGUE, mission_tables.SC2Campaign.EPILOGUE), 
+                             (mission_tables.SC2Campaign.LOTV, mission_tables.SC2Campaign.PROPHECY, mission_tables.SC2Campaign.PROLOGUE),
                              f"{region} is a PROTOSS mission!")
 
     def test_excluding_terran_excludes_campaigns_and_items(self) -> None:
@@ -187,7 +187,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_prologue_missions': True,
             'enable_lotv_missions': True,
             'enable_epilogue_missions': True,
-            'mission_order': options.MissionOrder.option_vanilla_shuffled,
+            'mission_order': options.MissionOrder.option_grid,
         }
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
@@ -198,7 +198,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                                 f"{item_name} is a TERRAN item!")
         for region in world_regions:
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
-                             (mission_tables.SC2Campaign.WOL, mission_tables.SC2Campaign.NCO, mission_tables.SC2Campaign.EPILOGUE),
+                             (mission_tables.SC2Campaign.WOL, mission_tables.SC2Campaign.NCO),
                              f"{region} is a TERRAN mission!")
 
     def test_excluding_zerg_excludes_campaigns_and_items(self) -> None:
@@ -211,7 +211,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_prologue_missions': True,
             'enable_lotv_missions': True,
             'enable_epilogue_missions': True,
-            'mission_order': options.MissionOrder.option_vanilla_shuffled,
+            'mission_order': options.MissionOrder.option_grid,
         }
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
@@ -222,5 +222,25 @@ class TestSupportedUseCases(Sc2SetupTestBase):
                                 f"{item_name} is a ZERG item!")
         for region in world_regions:
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
-                             (mission_tables.SC2Campaign.HOTS, mission_tables.SC2Campaign.EPILOGUE),
+                             ([mission_tables.SC2Campaign.HOTS]),
                              f"{region} is a ZERG mission!")
+
+    def test_excluding_faction_on_vanilla_order_excludes_epilogue(self) -> None:
+        world_options = {
+            'selected_races': options.SelectRaces.option_terran_and_protoss,
+            'enable_wol_missions': True,
+            'enable_nco_missions': True,
+            'enable_prophecy_missions': True,
+            'enable_hots_missions': True,
+            'enable_lotv_prologue_missions': True,
+            'enable_lotv_missions': True,
+            'enable_epilogue_missions': True,
+            'mission_order': options.MissionOrder.option_vanilla,
+        }
+        self.generate_world(world_options)
+        world_regions = [region.name for region in self.multiworld.regions]
+        world_regions.remove('Menu')
+        for region in world_regions:
+            self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
+                             ([mission_tables.SC2Campaign.EPILOGUE]),
+                             f"{region} is an epilogue mission!")
