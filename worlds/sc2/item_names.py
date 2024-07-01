@@ -98,7 +98,7 @@ PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM   = "Progressive Fire-Suppression System (Te
 STRUCTURE_ARMOR                       = "Structure Armor (Terran)"
 HI_SEC_AUTO_TRACKING                  = "Hi-Sec Auto Tracking (Terran)"
 ADVANCED_OPTICS                       = "Advanced Optics (Terran)"
-ROGUE_FORCES                          = "Rogue Forces (Terran)"
+ROGUE_FORCES                          = "Rogue Forces (Terran/Zerg)"
 MECHANICAL_KNOW_HOW                   = "Mechanical Know-how (Terran)"
 MERCENARY_MUNITIONS                   = "Mercenary Munitions (Terran)"
 
