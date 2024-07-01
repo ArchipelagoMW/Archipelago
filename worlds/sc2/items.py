@@ -806,6 +806,9 @@ item_table = {
     item_names.PLANETARY_FORTRESS_ORBITAL_MODULE:
         ItemData(395 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 1, SC2Race.TERRAN,
                  parent_item=item_names.PLANETARY_FORTRESS, origin={"ext"}),
+    item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
+        ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 30, SC2Race.TERRAN,
+                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
 
     #Buildings
     item_names.BUNKER:
@@ -922,9 +925,6 @@ item_table = {
         ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN, origin={"ext"}),
     item_names.MERCENARY_MUNITIONS:
         ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN, origin={"ext"}),
-    item_names.DEVASTATOR_TURRET_CONCUSSIVE_GRENADES:
-        ItemData(396 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 15, SC2Race.TERRAN,
-                 parent_item=item_names.DEVASTATOR_TURRET, origin={"ext"}),
 
     item_names.ZEALOT:
         ItemData(700 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 0, SC2Race.PROTOSS,
