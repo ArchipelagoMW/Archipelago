@@ -3,8 +3,9 @@ import collections
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, Counter
 from uuid import UUID
+from email.utils import parsedate_to_datetime
 
-from flask import render_template
+from flask import render_template, make_response, Response, request
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
@@ -291,47 +292,47 @@ class TrackerData:
 
         return video_feeds
 
+    @_cache_results
+    def get_spheres(self) -> List[List[int]]:
+        """ each sphere is { player: { location_id, ... } } """
+        return self._multidata.get("spheres", [])
+
+
+def _process_if_request_valid(incoming_request, room: Optional[Room]) -> Optional[Response]:
+    if not room:
+        abort(404)
+
+    if_modified = incoming_request.headers.get("If-Modified-Since", None)
+    if if_modified:
+        if_modified = parsedate_to_datetime(if_modified)
+        # if_modified has less precision than last_activity, so we bring them to same precision
+        if if_modified >= room.last_activity.replace(microsecond=0):
+            return make_response("",  304)
+
 
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
-def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> str:
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> Response:
     key = f"{tracker}_{tracked_team}_{tracked_player}_{generic}"
-    tracker_page = cache.get(key)
-    if tracker_page:
-        return tracker_page
+    response: Optional[Response] = cache.get(key)
+    if response:
+        return response
 
-    timeout, tracker_page = get_timeout_and_tracker(tracker, tracked_team, tracked_player, generic)
-    cache.set(key, tracker_page, timeout)
-    return tracker_page
-
-
-@app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
-def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> str:
-    return get_player_tracker(tracker, tracked_team, tracked_player, True)
-
-
-@app.route("/tracker/<suuid:tracker>", defaults={"game": "Generic"})
-@app.route("/tracker/<suuid:tracker>/<game>")
-@cache.memoize(timeout=TRACKER_CACHE_TIMEOUT_IN_SECONDS)
-def get_multiworld_tracker(tracker: UUID, game: str):
     # Room must exist.
     room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
 
-    tracker_data = TrackerData(room)
-    enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
-    if game not in _multiworld_trackers:
-        return render_generic_multiworld_tracker(tracker_data, enabled_trackers)
+    response = _process_if_request_valid(request, room)
+    if response:
+        return response
 
-    return _multiworld_trackers[game](tracker_data, enabled_trackers)
+    timeout, last_modified, tracker_page = get_timeout_and_player_tracker(room, tracked_team, tracked_player, generic)
+    response = make_response(tracker_page)
+    response.last_modified = last_modified
+    cache.set(key, response, timeout)
+    return response
 
 
-def get_timeout_and_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool) -> Tuple[int, str]:
-    # Room must exist.
-    room = Room.get(tracker=tracker)
-    if not room:
-        abort(404)
-
+def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player: int, generic: bool)\
+        -> Tuple[int, datetime.datetime, str]:
     tracker_data = TrackerData(room)
 
     # Load and render the game-specific player tracker, or fallback to generic tracker if none exists.
@@ -341,7 +342,48 @@ def get_timeout_and_tracker(tracker: UUID, tracked_team: int, tracked_player: in
     else:
         tracker = render_generic_tracker(tracker_data, tracked_team, tracked_player)
 
-    return (tracker_data.get_room_saving_second() - datetime.datetime.now().second) % 60 or 60, tracker
+    return ((tracker_data.get_room_saving_second() - datetime.datetime.now().second)
+            % TRACKER_CACHE_TIMEOUT_IN_SECONDS or TRACKER_CACHE_TIMEOUT_IN_SECONDS, room.last_activity, tracker)
+
+
+@app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
+def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> Response:
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
+
+
+@app.route("/tracker/<suuid:tracker>", defaults={"game": "Generic"})
+@app.route("/tracker/<suuid:tracker>/<game>")
+def get_multiworld_tracker(tracker: UUID, game: str) -> Response:
+    key = f"{tracker}_{game}"
+    response: Optional[Response] = cache.get(key)
+    if response:
+        return response
+
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+
+    response = _process_if_request_valid(request, room)
+    if response:
+        return response
+
+    timeout, last_modified, tracker_page = get_timeout_and_multiworld_tracker(room, game)
+    response = make_response(tracker_page)
+    response.last_modified = last_modified
+    cache.set(key, response, timeout)
+    return response
+
+
+def get_timeout_and_multiworld_tracker(room: Room, game: str)\
+        -> Tuple[int, datetime.datetime, str]:
+    tracker_data = TrackerData(room)
+    enabled_trackers = list(get_enabled_multiworld_trackers(room).keys())
+    if game in _multiworld_trackers:
+        tracker = _multiworld_trackers[game](tracker_data, enabled_trackers)
+    else:
+        tracker = render_generic_multiworld_tracker(tracker_data, enabled_trackers)
+
+    return ((tracker_data.get_room_saving_second() - datetime.datetime.now().second)
+            % TRACKER_CACHE_TIMEOUT_IN_SECONDS or TRACKER_CACHE_TIMEOUT_IN_SECONDS, room.last_activity, tracker)
 
 
 def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
@@ -411,7 +453,28 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
         videos=tracker_data.get_room_videos(),
         item_id_to_name=tracker_data.item_id_to_name,
         location_id_to_name=tracker_data.location_id_to_name,
+        saving_second=tracker_data.get_room_saving_second(),
     )
+
+
+def render_generic_multiworld_sphere_tracker(tracker_data: TrackerData) -> str:
+    return render_template(
+        "multispheretracker.html",
+        room=tracker_data.room,
+        tracker_data=tracker_data,
+    )
+
+
+@app.route("/sphere_tracker/<suuid:tracker>")
+@cache.memoize(timeout=TRACKER_CACHE_TIMEOUT_IN_SECONDS)
+def get_multiworld_sphere_tracker(tracker: UUID):
+    # Room must exist.
+    room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+
+    tracker_data = TrackerData(room)
+    return render_generic_multiworld_sphere_tracker(tracker_data)
 
 
 # TODO: This is a temporary solution until a proper Tracker API can be implemented for tracker templates and data to
@@ -1303,28 +1366,28 @@ if "Starcraft 2" in network_data_package["games"]:
         organics_icon_base_url = "https://0rganics.org/archipelago/sc2wol/"
 
         icons = {
-            "Starting Minerals":                           "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-mineral-protoss.png",
-            "Starting Vespene":                            "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-gas-terran.png",
+            "Starting Minerals":                           github_icon_base_url + "blizzard/icon-mineral-nobg.png",
+            "Starting Vespene":                            github_icon_base_url + "blizzard/icon-gas-terran-nobg.png",
             "Starting Supply":                             github_icon_base_url + "blizzard/icon-supply-terran_nobg.png",
 
-            "Terran Infantry Weapons Level 1":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel1.png",
-            "Terran Infantry Weapons Level 2":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel2.png",
-            "Terran Infantry Weapons Level 3":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel3.png",
-            "Terran Infantry Armor Level 1":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel1.png",
-            "Terran Infantry Armor Level 2":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel2.png",
-            "Terran Infantry Armor Level 3":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel3.png",
-            "Terran Vehicle Weapons Level 1":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel1.png",
-            "Terran Vehicle Weapons Level 2":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel2.png",
-            "Terran Vehicle Weapons Level 3":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel3.png",
-            "Terran Vehicle Armor Level 1":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel1.png",
-            "Terran Vehicle Armor Level 2":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel2.png",
-            "Terran Vehicle Armor Level 3":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel3.png",
-            "Terran Ship Weapons Level 1":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel1.png",
-            "Terran Ship Weapons Level 2":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel2.png",
-            "Terran Ship Weapons Level 3":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel3.png",
-            "Terran Ship Armor Level 1":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel1.png",
-            "Terran Ship Armor Level 2":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel2.png",
-            "Terran Ship Armor Level 3":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel3.png",
+            "Terran Infantry Weapons Level 1":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel1.png",
+            "Terran Infantry Weapons Level 2":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel2.png",
+            "Terran Infantry Weapons Level 3":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel3.png",
+            "Terran Infantry Armor Level 1":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel1.png",
+            "Terran Infantry Armor Level 2":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel2.png",
+            "Terran Infantry Armor Level 3":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel3.png",
+            "Terran Vehicle Weapons Level 1":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel1.png",
+            "Terran Vehicle Weapons Level 2":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel2.png",
+            "Terran Vehicle Weapons Level 3":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel3.png",
+            "Terran Vehicle Armor Level 1":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel1.png",
+            "Terran Vehicle Armor Level 2":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel2.png",
+            "Terran Vehicle Armor Level 3":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel3.png",
+            "Terran Ship Weapons Level 1":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel1.png",
+            "Terran Ship Weapons Level 2":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel2.png",
+            "Terran Ship Weapons Level 3":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel3.png",
+            "Terran Ship Armor Level 1":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel1.png",
+            "Terran Ship Armor Level 2":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel2.png",
+            "Terran Ship Armor Level 3":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel3.png",
 
             "Bunker":                                      "https://static.wikia.nocookie.net/starcraft/images/c/c5/Bunker_SC2_Icon1.jpg",
             "Missile Turret":                              "https://static.wikia.nocookie.net/starcraft/images/5/5f/MissileTurret_SC2_Icon1.jpg",
