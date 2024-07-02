@@ -131,7 +131,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
             found_already_loaded = True
             break
     if found_already_loaded:
-        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already installed,\n"
+        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded,\n"
                         "so a Launcher restart is required to use the new installation.\n"
                         "If the Launcher is not open, no action needs to be taken.")
     world_source = worlds.WorldSource(str(target), is_zip=True)
