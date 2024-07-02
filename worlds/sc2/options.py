@@ -98,7 +98,7 @@ class GameSpeed(Choice):
     default = option_default
 
 
-class DisableForcedCamera(Toggle):
+class DisableForcedCamera(DefaultOnToggle):
     """
     Prevents the game from moving or locking the camera without the player's consent.
     """
@@ -563,8 +563,8 @@ class SpearOfAdunPresence(Choice):
 
     Not Present: Spear of Adun calldowns are unavailable.
     LotV Protoss: Spear of Adun calldowns are only available in LotV main campaign
-    Protoss: Spear od Adun calldowns are available in any Protoss mission
-    Everywhere: Spear od Adun calldowns are available in any mission of any race
+    Protoss: Spear of Adun calldowns are available in any Protoss mission
+    Everywhere: Spear of Adun calldowns are available in any mission of any race
     """
     display_name = "Spear of Adun Presence"
     option_not_present = 0
@@ -599,8 +599,8 @@ class SpearOfAdunAutonomouslyCastAbilityPresence(Choice):
 
     Not Presents: Autocasts are not available.
     LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
-    Protoss: Spear od Adun autocasts are available in any Protoss mission
-    Everywhere: Spear od Adun autocasts are available in any mission of any race
+    Protoss: Spear of Adun autocasts are available in any Protoss mission
+    Everywhere: Spear of Adun autocasts are available in any mission of any race
     """
     display_name = "Spear of Adun Autonomously Cast Powers Presence"
     option_not_present = 0
