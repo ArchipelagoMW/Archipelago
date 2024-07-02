@@ -99,6 +99,7 @@ class MMX3SNIClient(SNIClient):
         self.using_newer_client = False
         self.energy_link_details = False
         self.trade_request = None
+        self.current_level_value = 42
         self.item_queue = []
 
 
@@ -539,14 +540,14 @@ class MMX3SNIClient(SNIClient):
         if menu_state is None:
             self.game_state = False
             self.energy_link_enabled = False
-            ctx.item_queue = []
-            ctx.current_level_value = 42
+            self.item_queue = []
+            self.current_level_value = 42
             return
     
         if game_state[0] == 0:
             self.game_state = False
-            ctx.item_queue = []
-            ctx.current_level_value = 42
+            self.item_queue = []
+            self.current_level_value = 42
             return
         
         validation = await snes_read(ctx, MMX3_VALIDATION_CHECK, 0x2)
@@ -583,8 +584,8 @@ class MMX3SNIClient(SNIClient):
                     self.energy_link_details = True
                     logger.info(f"EnergyLink detailed deposit activity enabled.")
 
-        from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
-        from worlds.mmx3.Levels import location_id_to_level_id
+        from .Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
+        from .Levels import location_id_to_level_id
         from worlds import AutoWorldRegister
 
         bit_byte_vile_data = await snes_read(ctx, MMX3_BIT_BYTE_VILE, 0x01)
@@ -710,8 +711,8 @@ class MMX3SNIClient(SNIClient):
            (game_state[0] == 0x02 and menu_state[0] != 0x04):
             current_level = -1
 
-        if ctx.current_level_value != (current_level + 1):
-            ctx.current_level_value = current_level + 1
+        if self.current_level_value != (current_level + 1):
+            self.current_level_value = current_level + 1
 
             # Send level id data to tracker
             await ctx.send_msgs(
@@ -724,7 +725,7 @@ class MMX3SNIClient(SNIClient):
                         "operations": [
                             {
                                 "operation": "replace",
-                                "value": ctx.current_level_value,
+                                "value": self.current_level_value,
                             }
                         ],
                     }
@@ -741,10 +742,11 @@ class MMX3SNIClient(SNIClient):
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
+            sending_game = ctx.slot_info[item.player].game
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
             
             snes_buffered_write(ctx, MMX3_RECV_INDEX, bytes([recv_index]))
             await snes_flush_writes(ctx)
@@ -793,6 +795,7 @@ class MMX3SNIClient(SNIClient):
         # Handle collected locations
         game_state = await snes_read(ctx, MMX3_GAME_STATE, 0x1)
         if game_state[0] != 0x02:
+            ctx.locations_checked = set()
             return
         new_boss_clears = False
         new_cleared_level = False
@@ -821,7 +824,7 @@ class MMX3SNIClient(SNIClient):
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
-                loc_name = ctx.location_names[loc_id]
+                loc_name = ctx.location_names.lookup_in_game(loc_id)
 
                 if loc_name not in location_id_to_level_id:
                     continue
