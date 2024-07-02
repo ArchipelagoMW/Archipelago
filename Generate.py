@@ -451,7 +451,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
-    valid_keys = set()
+    valid_keys = {"triggers"}
     if "triggers" in weights:
         weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
@@ -518,7 +518,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     # log a warning for options within a game section that aren't determined as valid
     for option_key in game_weights:
-        if option_key in {"triggers", "plando_items", *valid_keys}:
+        if option_key in valid_keys:
             continue
         logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
 
