@@ -536,9 +536,6 @@ silk_shot_family = {
     "Silk Shot (Leaves)",
     "Silk Shot (Crystals)",
     "Silk Shot (Black Rock)",
-}
-
-charged_silk_shot_family = {
     "Charged Silk Shot (Rocks)",
     "Charged Silk Shot (Junk)",
     "Charged Silk Shot (Leaves)",
@@ -606,10 +603,6 @@ def handle_weaknesses(world):
                     for silk_shot in silk_shot_family:
                         if silk_shot in copied_weapon_list:
                             copied_weapon_list.remove(silk_shot)
-                elif chosen_weapon in charged_silk_shot_family:
-                    for charged_silk_shot in charged_silk_shot_family:
-                        if charged_silk_shot in copied_weapon_list:
-                            copied_weapon_list.remove(charged_silk_shot)
                 else:
                     copied_weapon_list.remove(chosen_weapon)
                 for entry in data:
