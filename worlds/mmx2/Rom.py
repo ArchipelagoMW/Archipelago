@@ -121,6 +121,11 @@ class MMX2ProcedurePatch(APProcedurePatch, APTokenMixin):
 def adjust_boss_damage_table(world: World, patch: MMX2ProcedurePatch):
     for boss, data in world.boss_weakness_data.items():
         offset = boss_weakness_offsets[boss]
+
+        if boss == "Serges Tank":
+            for x in range(len(data)):
+                data[x] = data[x]*3 if data[x] < 0x80 else data[x]
+                
         patch.write_bytes(offset, bytearray(data))
 
     # Write weaknesses to a table

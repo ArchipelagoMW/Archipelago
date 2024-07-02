@@ -42,7 +42,7 @@ class MMX2Web(WebWorld):
 
     tutorials = [setup_en]
 
-    #option_groups = mmx2_option_groups
+    option_groups = mmx2_option_groups
 
 
 class MMX2World(World):
@@ -80,7 +80,7 @@ class MMX2World(World):
         if self.options.base_boss_rematch_count.value != 0:
             total_required_locations += 8
         if self.options.pickupsanity.value:
-            total_required_locations += 79
+            total_required_locations += 78
 
         # Setup item pool
 
@@ -322,13 +322,22 @@ class MMX2World(World):
                 for i in range(len(data)):
                     weaknesses += f"{weapon_id[data[i][1]]}, "
                 weaknesses = weaknesses[:-2]
-                if boss == "Sigma":
+                if boss == "Serges Tank":
+                    data = self.boss_weaknesses["Serges"]
+                    weaknesses += ". Serges: "
+                    for i in range(len(data)):
+                        weaknesses += f"{weapon_id[data[i][1]]}, "
+                    weaknesses = weaknesses[:-2]
+                elif boss == "Sigma":
                     data = self.boss_weaknesses["Sigma Virus"]
                     weaknesses += ". Sigma Virus: "
                     for i in range(len(data)):
                         weaknesses += f"{weapon_id[data[i][1]]}, "
                     weaknesses = weaknesses[:-2]
-                location = self.multiworld.get_location(loc_name, self.player)
+                try:
+                    location = self.multiworld.get_location(loc_name, self.player)
+                except KeyError:
+                    pass
                 boss_weakness_hint_data[location.address] = weaknesses
 
         hint_data[self.player] = boss_weakness_hint_data
