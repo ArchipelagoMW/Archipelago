@@ -285,7 +285,7 @@ class HereticWorld(World):
         episode_count = self.get_episode_count()
         count = min(remaining_loc, max(1, self.items_ratio[item_name] * episode_count))
         if count == 0:
-            logger.warning("Warning, no " + item_name + " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
@@ -302,17 +302,17 @@ class HereticWorld(World):
         slot_data["episode5"] = self.included_episodes[4]
 
         # Send slot data for ammo capacity values; this must be generic because Doom uses it too
-        slot_data["ammo1start"] = self.options.wand_crystal_capacity.value
-        slot_data["ammo2start"] = self.options.ethereal_arrow_capacity.value
-        slot_data["ammo3start"] = self.options.claw_orb_capacity.value
-        slot_data["ammo4start"] = self.options.rune_capacity.value
-        slot_data["ammo5start"] = self.options.flame_orb_capacity.value
-        slot_data["ammo6start"] = self.options.mace_sphere_capacity.value
-        slot_data["ammo1add"] = self.options.wand_crystal_boh_increase.value
-        slot_data["ammo2add"] = self.options.ethereal_arrow_boh_increase.value
-        slot_data["ammo3add"] = self.options.claw_orb_boh_increase.value
-        slot_data["ammo4add"] = self.options.rune_boh_increase.value
-        slot_data["ammo5add"] = self.options.flame_orb_boh_increase.value
-        slot_data["ammo6add"] = self.options.mace_sphere_boh_increase.value
+        slot_data["ammo1start"] = self.options.max_ammo_crystals.value
+        slot_data["ammo2start"] = self.options.max_ammo_arrows.value
+        slot_data["ammo3start"] = self.options.max_ammo_claw_orbs.value
+        slot_data["ammo4start"] = self.options.max_ammo_runes.value
+        slot_data["ammo5start"] = self.options.max_ammo_flame_orbs.value
+        slot_data["ammo6start"] = self.options.max_ammo_spheres.value
+        slot_data["ammo1add"] = self.options.added_ammo_crystals.value
+        slot_data["ammo2add"] = self.options.added_ammo_arrows.value
+        slot_data["ammo3add"] = self.options.added_ammo_claw_orbs.value
+        slot_data["ammo4add"] = self.options.added_ammo_runes.value
+        slot_data["ammo5add"] = self.options.added_ammo_flame_orbs.value
+        slot_data["ammo6add"] = self.options.added_ammo_spheres.value
 
         return slot_data

@@ -1,6 +1,6 @@
 import typing
 
-from Options import PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import Visibility, PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -136,11 +136,9 @@ class SecretLevels(Toggle):
     display_name = "Secret Levels"
 
 
-
-
 class SplitBackpack(Toggle):
     """Split the Backpack into four individual items, each one increasing ammo capacity for one type of weapon only."""
-    display_name = "Split Bag of Holding"
+    display_name = "Split Backpack"
 
 
 class BackpackCount(Range):
@@ -152,65 +150,73 @@ class BackpackCount(Range):
     default = 1
 
 
-class BulletCapacity(Range):
+class MaxAmmoBullets(Range):
     """Set the starting ammo capacity for bullets."""
-    display_name = "Bullet Capacity"
+    display_name = "Max Ammo - Bullets"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 200
     range_end = 999
     default = 200
 
 
-class ShellCapacity(Range):
+class MaxAmmoShells(Range):
     """Set the starting ammo capacity for shotgun shells."""
-    display_name = "Shotgun Shell Capacity"
+    display_name = "Max Ammo - Shells"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 50
     range_end = 999
     default = 50
 
 
-class RocketCapacity(Range):
+class MaxAmmoRockets(Range):
     """Set the starting ammo capacity for rockets."""
-    display_name = "Rocket Capacity"
+    display_name = "Max Ammo - Rockets"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 50
     range_end = 999
     default = 50
 
 
-class EnergyCellCapacity(Range):
+class MaxAmmoEnergyCells(Range):
     """Set the starting ammo capacity for energy cells."""
-    display_name = "Energy Cell Capacity"
+    display_name = "Max Ammo - Energy Cells"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 300
     range_end = 999
     default = 300
 
 
-class BulletIncrease(Range):
-    """Set the amount of bullet capacity gained when collecting a backpack."""
-    display_name = "Bullet Backpack Increase"
+class AddedAmmoBullets(Range):
+    """Set the amount of bullet capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Bullets"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 20
     range_end = 999
     default = 200
 
 
-class ShellIncrease(Range):
-    """Set the amount of shotgun shell capacity gained when collecting a backpack."""
-    display_name = "Shotgun Shell Backpack Increase"
+class AddedAmmoShells(Range):
+    """Set the amount of shotgun shell capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Shells"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 5
     range_end = 999
     default = 50
 
 
-class RocketIncrease(Range):
-    """Set the amount of rocket capacity gained when collecting a backpack."""
-    display_name = "Rocket Backpack Increase"
+class AddedAmmoRockets(Range):
+    """Set the amount of rocket capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Rockets"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 5
     range_end = 999
     default = 50
 
 
-class EnergyCellIncrease(Range):
-    """Set the amount of energy cell capacity gained when collecting a backpack."""
-    display_name = "Energy Cell Backpack Increase"
+class AddedAmmoEnergyCells(Range):
+    """Set the amount of energy cell capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Energy Cells"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 30
     range_end = 999
     default = 300
@@ -236,11 +242,11 @@ class DOOM2Options(PerGameCommonOptions):
 
     split_backpack: SplitBackpack
     backpack_count: BackpackCount
-    bullet_capacity: BulletCapacity
-    bullet_backpack_increase: BulletIncrease
-    shell_capacity: ShellCapacity
-    shell_backpack_increase: ShellIncrease
-    rocket_capacity: RocketCapacity
-    rocket_backpack_increase: RocketIncrease
-    energy_cell_capacity: EnergyCellCapacity
-    energy_cell_backpack_increase: EnergyCellIncrease
+    max_ammo_bullets: MaxAmmoBullets
+    max_ammo_shells: MaxAmmoShells
+    max_ammo_rockets: MaxAmmoRockets
+    max_ammo_energy_cells: MaxAmmoEnergyCells
+    added_ammo_bullets: AddedAmmoBullets
+    added_ammo_shells: AddedAmmoShells
+    added_ammo_rockets: AddedAmmoRockets
+    added_ammo_energy_cells: AddedAmmoEnergyCells

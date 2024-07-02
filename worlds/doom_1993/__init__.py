@@ -274,7 +274,7 @@ class DOOM1993World(World):
         # Was balanced for 3 episodes (We added 4th episode, but keep same ratio)
         count = min(remaining_loc, max(1, int(round(self.items_ratio[item_name] * ep_count / 3))))
         if count == 0:
-            logger.warning("Warning, no ", item_name, " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
@@ -291,13 +291,13 @@ class DOOM1993World(World):
         slot_data["two_ways_keydoors"] = True
 
         # Send slot data for ammo capacity values; this must be generic because Heretic uses it too
-        slot_data["ammo1start"] = self.options.bullet_capacity.value
-        slot_data["ammo2start"] = self.options.shell_capacity.value
-        slot_data["ammo3start"] = self.options.energy_cell_capacity.value
-        slot_data["ammo4start"] = self.options.rocket_capacity.value
-        slot_data["ammo1add"] = self.options.bullet_backpack_increase.value
-        slot_data["ammo2add"] = self.options.shell_backpack_increase.value
-        slot_data["ammo3add"] = self.options.energy_cell_backpack_increase.value
-        slot_data["ammo4add"] = self.options.rocket_backpack_increase.value
+        slot_data["ammo1start"] = self.options.max_ammo_bullets.value
+        slot_data["ammo2start"] = self.options.max_ammo_shells.value
+        slot_data["ammo3start"] = self.options.max_ammo_energy_cells.value
+        slot_data["ammo4start"] = self.options.max_ammo_rockets.value
+        slot_data["ammo1add"] = self.options.added_ammo_bullets.value
+        slot_data["ammo2add"] = self.options.added_ammo_shells.value
+        slot_data["ammo3add"] = self.options.added_ammo_energy_cells.value
+        slot_data["ammo4add"] = self.options.added_ammo_rockets.value
 
         return slot_data

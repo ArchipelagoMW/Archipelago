@@ -1,4 +1,4 @@
-from Options import PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import Visibility, PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -158,97 +158,97 @@ class BagOfHoldingCount(Range):
     default = 1
 
 
-class WandCrystalCapacity(Range):
-    """Set the starting ammo capacity for Wand crystals."""
-    display_name = "Wand Crystal Capacity"
+class MaxAmmoCrystals(Range):
+    """Set the starting ammo capacity for crystals (Elven Wand ammo)."""
+    display_name = "Max Ammo - Crystals"
     range_start = 100
     range_end = 999
     default = 100
 
 
-class EtherealArrowCapacity(Range):
-    """Set the starting ammo capacity for Ethereal arrows."""
-    display_name = "Ethereal Arrow Capacity"
+class MaxAmmoArrows(Range):
+    """Set the starting ammo capacity for arrows (Ethereal Crossbow ammo)."""
+    display_name = "Max Ammo - Arrows"
     range_start = 50
     range_end = 999
     default = 50
 
 
-class ClawOrbCapacity(Range):
-    """Set the starting ammo capacity for Claw orbs."""
-    display_name = "Claw Orb Capacity"
+class MaxAmmoClawOrbs(Range):
+    """Set the starting ammo capacity for claw orbs (Dragon Claw ammo)."""
+    display_name = "Max Ammo - Claw Orbs"
     range_start = 200
     range_end = 999
     default = 200
 
 
-class RuneCapacity(Range):
-    """Set the starting ammo capacity for Runes."""
-    display_name = "Rune Capacity"
+class MaxAmmoRunes(Range):
+    """Set the starting ammo capacity for runes (Hellstaff ammo)."""
+    display_name = "Max Ammo - Runes"
     range_start = 200
     range_end = 999
     default = 200
 
 
-class FlameOrbCapacity(Range):
-    """Set the starting ammo capacity for Flame orbs."""
-    display_name = "Flame Orb Capacity"
+class MaxAmmoFlameOrbs(Range):
+    """Set the starting ammo capacity for flame orbs (Phoenix Rod ammo)."""
+    display_name = "Max Ammo - Flame Orbs"
     range_start = 20
     range_end = 999
     default = 20
 
 
-class MaceSphereCapacity(Range):
-    """Set the starting ammo capacity for Mace spheres."""
-    display_name = "Mace Sphere Capacity"
+class MaxAmmoSpheres(Range):
+    """Set the starting ammo capacity for spheres (Firemace ammo)."""
+    display_name = "Max Ammo - Spheres"
     range_start = 150
     range_end = 999
     default = 150
 
 
-class WandCrystalIncrease(Range):
-    """Set the amount of Wand crystal capacity gained when collecting a bag of holding."""
-    display_name = "Wand Crystal BoH Increase"
+class AddedAmmoCrystals(Range):
+    """Set the amount of crystal capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Crystals"
     range_start = 10
     range_end = 999
     default = 100
 
 
-class EtherealArrowIncrease(Range):
-    """Set the amount of Ethereal arrow capacity gained when collecting a bag of holding."""
-    display_name = "Ethereal Arrow BoH Increase"
+class AddedAmmoArrows(Range):
+    """Set the amount of arrow capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Arrows"
     range_start = 5
     range_end = 999
     default = 50
 
 
-class ClawOrbIncrease(Range):
-    """Set the amount of Claw orb capacity gained when collecting a bag of holding."""
-    display_name = "Claw Orb BoH Increase"
+class AddedAmmoClawOrbs(Range):
+    """Set the amount of claw orb capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Claw Orbs"
     range_start = 20
     range_end = 999
     default = 200
 
 
-class RuneIncrease(Range):
-    """Set the amount of Rune capacity gained when collecting a bag of holding."""
-    display_name = "Rune BoH Increase"
+class AddedAmmoRunes(Range):
+    """Set the amount of rune capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Runes"
     range_start = 20
     range_end = 999
     default = 200
 
 
-class FlameOrbIncrease(Range):
-    """Set the amount of Flame orb capacity gained when collecting a bag of holding."""
-    display_name = "Flame Orb BoH Increase"
+class AddedAmmoFlameOrbs(Range):
+    """Set the amount of flame orb capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Flame Orbs"
     range_start = 2
     range_end = 999
     default = 20
 
 
-class MaceSphereIncrease(Range):
-    """Set the amount of Mace sphere capacity gained when collecting a bag of holding."""
-    display_name = "Mace Sphere BoH Increase"
+class AddedAmmoSpheres(Range):
+    """Set the amount of sphere capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Spheres"
     range_start = 15
     range_end = 999
     default = 150
@@ -276,16 +276,15 @@ class HereticOptions(PerGameCommonOptions):
 
     split_bag_of_holding: SplitBagOfHolding
     bag_of_holding_count: BagOfHoldingCount
-    wand_crystal_capacity: WandCrystalCapacity
-    wand_crystal_boh_increase: WandCrystalIncrease
-    ethereal_arrow_capacity: EtherealArrowCapacity
-    ethereal_arrow_boh_increase: EtherealArrowIncrease
-    claw_orb_capacity: ClawOrbCapacity
-    claw_orb_boh_increase: ClawOrbIncrease
-    rune_capacity: RuneCapacity
-    rune_boh_increase: RuneIncrease
-    flame_orb_capacity: FlameOrbCapacity
-    flame_orb_boh_increase: FlameOrbIncrease
-    mace_sphere_capacity: MaceSphereCapacity
-    mace_sphere_boh_increase: MaceSphereIncrease
-
+    max_ammo_crystals: MaxAmmoCrystals
+    max_ammo_arrows: MaxAmmoArrows
+    max_ammo_claw_orbs: MaxAmmoClawOrbs
+    max_ammo_runes: MaxAmmoRunes
+    max_ammo_flame_orbs: MaxAmmoFlameOrbs
+    max_ammo_spheres: MaxAmmoSpheres
+    added_ammo_crystals: AddedAmmoCrystals
+    added_ammo_arrows: AddedAmmoArrows
+    added_ammo_claw_orbs: AddedAmmoClawOrbs
+    added_ammo_runes: AddedAmmoRunes
+    added_ammo_flame_orbs: AddedAmmoFlameOrbs
+    added_ammo_spheres: AddedAmmoSpheres
