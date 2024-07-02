@@ -291,7 +291,7 @@ class WitnessWorld(World):
         early_items = self.player_items.get_early_items()
 
         if not early_items:
-            return
+            return None
 
         self.random.shuffle(early_items)
 
@@ -310,8 +310,8 @@ class WitnessWorld(World):
 
             if pop:
                 return itempool.pop(early_item_index)
-            else:
-                return early_item
+
+            return early_item
 
         error(f"No item could be placed as the \"early good item\" in {player_name}'s world,"
               f" they were all plandoed elsewhere.")
