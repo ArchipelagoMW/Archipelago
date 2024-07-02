@@ -46,8 +46,8 @@ def _has_laser(laser_hex: str, world: "WitnessWorld", redirect_required: bool) -
 
     if laser_hex == "0x012FB" and redirect_required:
         return lambda state: state.has_all([f"+1 Laser ({laser_name})", "Desert Laser Redirection"], player)
-    else:
-        return lambda state: state.has(f"+1 Laser ({laser_name})", player)
+
+    return lambda state: state.has(f"+1 Laser ({laser_name})", player)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:

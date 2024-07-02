@@ -61,7 +61,7 @@ class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
     VICTORY_LOCATION: str
-    
+
     def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
         self.YAML_DISABLED_LOCATIONS: Set[str] = disabled_locations
         self.YAML_ADDED_ITEMS: Dict[str, int] = start_inv
@@ -836,9 +836,9 @@ class WitnessPlayerLogic:
         self.REQUIREMENTS_BY_HEX = {}
 
         # We also clear any data structures that we might have filled in a previous dependency reduction
-        self.REQUIREMENTS_BY_HEX = dict()
+        self.REQUIREMENTS_BY_HEX = {}
         self.USED_EVENT_NAMES_BY_HEX = defaultdict(list)
-        self.CONNECTIONS_BY_REGION_NAME = dict()
+        self.CONNECTIONS_BY_REGION_NAME = {}
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
 
         # Make independent requirements for entities
