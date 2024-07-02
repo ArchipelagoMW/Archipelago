@@ -79,15 +79,17 @@ class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
     patch_file_ending = '.apwl4'
     result_file_ending = '.gba'
 
-    procedure = [
-        ("apply_bsdiff4", ["basepatch.bsdiff"]),
-        ("apply_tokens", ["token_data.bin"]),
-        ("update_header", []),
-    ]
+    def __init__(self, *args, **kwargs):
+        super(WL4ProcedurePatch, self).__init__(*args, **kwargs)
+        self.procedure = [
+            ('apply_bsdiff4', ['basepatch.bsdiff']),
+            ('apply_tokens', ['token_data.bin']),
+            ('update_header', []),
+        ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
-        with open(get_base_rom_path(), "rb") as stream:
+        with open(get_base_rom_path(), 'rb') as stream:
             return stream.read()
 
 
@@ -158,7 +160,7 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
         world.options.trap_behavior.value.to_bytes(1, 'little')
     )
 
-    patch.write_file("token_data.bin", patch.get_token_binary())
+    patch.write_file('token_data.bin', patch.get_token_binary())
 
 
 class MultiworldExtData(NamedTuple):
@@ -246,7 +248,7 @@ class StartInventory:
         patch.write_token(
             APTokenTypes.WRITE,
             get_rom_address('StartingInventoryItemStatus'),
-            struct.pack("<36B", *(level
+            struct.pack('<36B', *(level
                                   for passage in self.level_table
                                   for level in passage))
         )
@@ -258,7 +260,7 @@ class StartInventory:
         patch.write_token(
             APTokenTypes.WRITE,
             get_rom_address('StartingInventoryJunkCounts'),
-            struct.pack("<5B", *(min(255, item) for item in self.junk_counts))
+            struct.pack('<5B', *(min(255, item) for item in self.junk_counts))
         )
 
     def __repr__(self):
