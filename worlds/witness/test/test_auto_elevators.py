@@ -8,7 +8,7 @@ class TestElevatorsComeToYou(WitnessTestBase):
         "shuffle_symbols": False,
     }
 
-    def test_bunker_laser(self):
+    def test_bunker_laser(self) -> None:
         self.collect_by_name("Bunker Drop-Down Door Controls (Panel)")
 
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", self.player))
@@ -41,7 +41,7 @@ class TestElevatorsComeToYouBleed(WitnessMultiworldTestBase):
         "shuffle_doors": "panels",
     }
 
-    def test_correct_access_per_player(self):
+    def test_correct_access_per_player(self) -> None:
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 1))
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 2))
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 3))

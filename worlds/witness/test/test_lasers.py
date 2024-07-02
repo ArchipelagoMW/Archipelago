@@ -10,7 +10,7 @@ class TestSymbolsRequiredToWinElevatorNormal(WitnessTestBase):
         "early_symbol_item": False,
     }
 
-    def test_symbols_to_win(self):
+    def test_symbols_to_win(self) -> None:
         exact_requirement = {
             "Monastery Laser": 1,
             "Progressive Dots": 2,
@@ -35,7 +35,7 @@ class TestSymbolsRequiredToWinElevatorExpert(WitnessTestBase):
         "puzzle_randomization": "sigma_expert",
     }
 
-    def test_symbols_to_win(self):
+    def test_symbols_to_win(self) -> None:
         exact_requirement = {
             "Monastery Laser": 1,
             "Progressive Dots": 2,
@@ -62,7 +62,7 @@ class TestSymbolsRequiredToWinElevatorVanilla(WitnessTestBase):
         "puzzle_randomization": "none",
     }
 
-    def test_symbols_to_win(self):
+    def test_symbols_to_win(self) -> None:
         exact_requirement = {
             "Monastery Laser": 1,
             "Progressive Dots": 2,
@@ -89,7 +89,7 @@ class TestPanelsRequiredToWinElevator(WitnessTestBase):
         "door_groupings": "off",
     }
 
-    def test_panels_to_win(self):
+    def test_panels_to_win(self) -> None:
         exact_requirement = {
             "Desert Laser": 1,
             "Town Desert Laser Redirect Control (Panel)": 1,
@@ -113,7 +113,7 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
         "door_groupings": "off",
     }
 
-    def test_win_from_upper_mountain(self):
+    def test_win_from_upper_mountain(self) -> None:
         exact_requirement = {
             "Monastery Laser": 1,
             "Mountain Floor 1 Exit (Door)": 1,
@@ -126,7 +126,7 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
 
         self.assert_can_beat_with_minimally(exact_requirement)
 
-    def test_win_through_caves(self):
+    def test_win_through_caves(self) -> None:
         exact_requirement = {
             "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
             "Caves Mountain Shortcut (Door)": 1,
@@ -137,7 +137,7 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
 
         self.assert_can_beat_with_minimally(exact_requirement)
 
-    def test_win_through_tunnels_caves(self):
+    def test_win_through_tunnels_caves(self) -> None:
         exact_requirement = {
             "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
             "Windmill Entry (Door)": 1,

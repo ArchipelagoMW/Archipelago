@@ -7,7 +7,7 @@ class TestIndividualDoors(WitnessTestBase):
         "door_groupings": "off",
     }
 
-    def test_swamp_laser_shortcut(self):
+    def test_swamp_laser_shortcut(self) -> None:
         self.assertTrue(self.get_items_by_name("Swamp Laser Shortcut (Door)"))
 
         self.assertAccessDependency(

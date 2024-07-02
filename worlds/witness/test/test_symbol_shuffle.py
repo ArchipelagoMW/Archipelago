@@ -6,7 +6,7 @@ class TestSymbols(WitnessTestBase):
         "early_symbol_item": False,
     }
 
-    def test_progressive_symbols(self):
+    def test_progressive_symbols(self) -> None:
         progressive_dots = self.get_items_by_name("Progressive Dots")
         self.assertEqual(len(progressive_dots), 2)
 
@@ -48,12 +48,12 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
         "early_symbol_item": False,
     }
 
-    def test_arrows(self):
+    def test_arrows(self) -> None:
         self.assertFalse(self.get_items_by_name("Arrows", 1))
         self.assertTrue(self.get_items_by_name("Arrows", 2))
         self.assertFalse(self.get_items_by_name("Arrows", 3))
 
-    def test_correct_symbol_requirements(self):
+    def test_correct_symbol_requirements(self) -> None:
         desert_discard = "0x17CE7"
         triangles = frozenset({frozenset({"Triangles"})})
         arrows = frozenset({frozenset({"Arrows"})})

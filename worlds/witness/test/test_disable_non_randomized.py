@@ -9,10 +9,10 @@ class TestDisableNonRandomized(WitnessTestBase):
         "early_symbol_item": False,
     }
 
-    def test_unrandomized_locations_do_not_exist(self):
+    def test_unrandomized_locations_do_not_exist(self) -> None:
         self.assert_location_does_not_exist("Orchard Apple Tree 5")
 
-    def test_can_reach_lasers_through_alternate_activation_triggers(self):
+    def test_can_reach_lasers_through_alternate_activation_triggers(self) -> None:
         """
         Test that specific Discarded Panels give extra lasers.
         """
@@ -24,7 +24,7 @@ class TestDisableNonRandomized(WitnessTestBase):
         self.assertTrue(_has_lasers(2, self.world, False)(self.multiworld.state))
         self.assertFalse(_has_lasers(3, self.world, False)(self.multiworld.state))
 
-    def test_town_tower_fourth_door_depends_on_event(self):
+    def test_town_tower_fourth_door_depends_on_event(self) -> None:
         """
         Test that entities with alternate activation triggers depend on their specific event items.
         Specifically, assert that Town Tower Fourth Door requires the Town Tower 4th Door Opens event item.
