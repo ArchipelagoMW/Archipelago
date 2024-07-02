@@ -5,7 +5,7 @@ Description: Manage options in the Aquaria game multiworld randomizer
 """
 
 from dataclasses import dataclass
-from Options import Toggle, Choice, Range, DeathLink, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool
+from Options import Toggle, Choice, Range, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool
 
 
 class IngredientRandomizer(Choice):
@@ -151,4 +151,3 @@ class AquariaOptions(PerGameCommonOptions):
     aquarian_translation: AquarianTranslation
     skip_first_vision: SkipFirstVision
     blind_goal: BlindGoal
-    death_link: DeathLink

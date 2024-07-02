@@ -212,5 +212,4 @@ class AquariaWorld(World):
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
                 "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
                 "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
-                "death_link": self.options.death_link.value,
                 }
