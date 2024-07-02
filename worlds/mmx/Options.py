@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 import typing
 
-#from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, DeathLink, PerGameCommonOptions, StartInventoryPool
-from Options import Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, DeathLink, PerGameCommonOptions, StartInventoryPool
 from schema import Schema, And, Use, Optional
 
 from .Rom import action_buttons, action_names
@@ -266,7 +265,16 @@ class LongJumps(Toggle):
     display_name = "Long Jumps"
 
 mmx_option_groups = [
-    """
+    OptionGroup("Gameplay Options", [
+        StartingLifeCount,
+        StartingHP,
+        HeartTankEffectiveness,
+        JammedBuster,
+        BetterWallJump,
+        LongJumps,
+        HadoukenInPool,
+        LogicChargedShotgunIce,
+    ]),
     OptionGroup("Sigma Fortress Options", [
         SigmaOpen,
         SigmaMedalCount,
@@ -275,25 +283,14 @@ mmx_option_groups = [
         SigmaHeartTankCount,
         SigmaSubTankCount,
         FortressBundleUnlock,
+        LogicLegSigma,
     ]),
     OptionGroup("Boss Weaknesses", [
         BossWeaknessRando,
         BossWeaknessStrictness,
         BossRandomizedHP,
-    ]),
-    OptionGroup("Gameplay Options", [
-        StartingLifeCount,
-        StartingHP,
-        HeartTankEffectiveness,
-        JammedBuster,
-        BetterWallJump,
-    ]),
-    OptionGroup("Logic", [
         LogicBossWeakness,
-        LogicLegSigma,
-        LogicChargedShotgunIce,
     ]),
-    """
 ]
 
 @dataclass
