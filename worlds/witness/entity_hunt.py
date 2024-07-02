@@ -37,7 +37,8 @@ ALL_HUNTABLE_PANELS = [
 
 
 class EntityHuntPicker:
-    def __init__(self, player_logic: "WitnessPlayerLogic", world: "WitnessWorld", pre_picked_entities: Set[str]) -> None:
+    def __init__(self, player_logic: "WitnessPlayerLogic", world: "WitnessWorld",
+                 pre_picked_entities: Set[str]) -> None:
         self.player_logic = player_logic
         self.player_options = world.options
         self.player_name = world.player_name
