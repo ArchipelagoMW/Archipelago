@@ -332,7 +332,8 @@ class WitnessWorld(World):
         self.multiworld.local_early_items[self.player][early_good_item.name] = 1
         return
 
-    def fill_hook(self, progitempool: List[Item], _, _2, fill_locations: List[Location]) -> None:
+    def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item],
+                  fill_locations: List[Location]) -> None:
         if self.options.puzzle_randomization == "sigma_expert":
             return
         # Non-Expert: Pick an early item to put on Tutorial Gate Open.
