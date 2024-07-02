@@ -59,7 +59,9 @@ bosses = {
         LocationName.violen_defeated
     ],
     "Serges": [
-        LocationName.serges_defeated
+        LocationName.serges_defeated,
+        f"{RegionName.x_hunter_stage_2_start} -> {RegionName.x_hunter_stage_2_boss}",
+        EventName.x_hunter_stage_2_clear,
     ],
     "Agile": [
         LocationName.agile_defeated
