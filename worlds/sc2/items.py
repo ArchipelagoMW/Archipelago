@@ -972,6 +972,9 @@ item_table = {
     item_names.SCIENCE_VESSEL_TACTICAL_JUMP:
         ItemData(750 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 4, SC2Race.TERRAN,
                  parent_item=item_names.SCIENCE_VESSEL, origin={"ext"}),
+    item_names.LIBERATOR_COMPRESSED_ROCKET_FUEL:
+        ItemData(751 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 5, SC2Race.TERRAN,
+                 parent_item=item_names.LIBERATOR, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

@@ -182,6 +182,7 @@ LIBERATOR_RAID_ARTILLERY                           = "Raid Artillery (Liberator)
 LIBERATOR_SMART_SERVOS                             = "Smart Servos (Liberator)"
 LIBERATOR_RESOURCE_EFFICIENCY                      = "Resource Efficiency (Liberator)"
 LIBERATOR_GUERILLA_MISSILES                        = "Guerilla Missiles (Liberator)"
+LIBERATOR_COMPRESSED_ROCKET_FUEL                   = "Compressed Rocket Fuel (Liberator)"
 MARAUDER_CONCUSSIVE_SHELLS                         = "Concussive Shells (Marauder)"
 MARAUDER_INTERNAL_TECH_MODULE                      = "Internal Tech Module (Marauder)"
 MARAUDER_KINETIC_FOAM                              = "Kinetic Foam (Marauder)"
