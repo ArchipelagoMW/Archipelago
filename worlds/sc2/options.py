@@ -563,8 +563,8 @@ class SpearOfAdunPresence(Choice):
 
     Not Present: Spear of Adun calldowns are unavailable.
     LotV Protoss: Spear of Adun calldowns are only available in LotV main campaign
-    Protoss: Spear od Adun calldowns are available in any Protoss mission
-    Everywhere: Spear od Adun calldowns are available in any mission of any race
+    Protoss: Spear of Adun calldowns are available in any Protoss mission
+    Everywhere: Spear of Adun calldowns are available in any mission of any race
     """
     display_name = "Spear of Adun Presence"
     option_not_present = 0
