@@ -17,7 +17,6 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from logging import warning
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
@@ -35,6 +34,7 @@ from .data.utils import (
     get_early_caves_list,
     get_early_caves_start_list,
     get_elevators_come_to_you,
+    get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
     get_ep_no_eclipse,
@@ -50,6 +50,7 @@ from .data.utils import (
     logical_or_witness_rules,
     parse_lambda,
 )
+from .entity_hunt import EntityHuntPicker
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -134,7 +135,7 @@ class WitnessPlayerLogic:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
-                                     "PP2 Weirdness", "Theater to Tunnels"}:
+                                     "PP2 Weirdness", "Theater to Tunnels", "Entity Hunt"}:
                     new_items = frozenset({frozenset([option_entity])})
                 elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
                     new_items = frozenset()
@@ -151,10 +152,10 @@ class WitnessPlayerLogic:
                     elif option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                         new_items = frozenset({frozenset([option_entity])})
                     elif (entity_hex, option_entity) in self.CONDITIONAL_EVENTS:
-                        new_items = frozenset({frozenset([option_entity])})
-                        self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[
-                            (entity_hex, option_entity)
-                        ]
+                        new_items = frozenset({frozenset([self.CONDITIONAL_EVENTS[(entity_hex, option_entity)]])})
+                        self.USED_EVENT_NAMES_BY_HEX[option_entity].append(
+                            self.CONDITIONAL_EVENTS[(entity_hex, option_entity)]
+                        )
                     else:
                         new_items = theoretical_new_items
                         if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
@@ -312,7 +313,7 @@ class WitnessPlayerLogic:
                 line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    def handle_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+    def handle_regular_postgame(self, world: "WitnessWorld") -> List[List[str]]:
         """
         In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
         This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
@@ -343,6 +344,7 @@ class WitnessPlayerLogic:
         # If we have a long box goal, Challenge is behind the amount of lasers required to just win.
         # This is technically slightly incorrect as the Challenge Vault Box could contain a *symbol* that is required
         # to open Mountain Entry (Stars 2). However, since there is a very easy sphere 1 snipe, this is not considered.
+
         if victory == "mountain_box_long":
             postgame_adjustments.append(["Disabled Locations:", "0x0A332 (Challenge Timer Start)"])
 
@@ -387,6 +389,42 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
+    def handle_panelhunt_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+        postgame_adjustments = []
+
+        # Make some quick references to some options
+        panel_hunt_postgame = world.options.panel_hunt_postgame
+        chal_lasers = world.options.challenge_lasers
+
+        disable_mountain_lasers = (
+            panel_hunt_postgame == "disable_mountain_lasers_locations"
+            or panel_hunt_postgame == "disable_anything_locked_by_lasers"
+        )
+
+        disable_challenge_lasers = (
+            panel_hunt_postgame == "disable_challenge_lasers_locations"
+            or panel_hunt_postgame == "disable_anything_locked_by_lasers"
+        )
+
+        if disable_mountain_lasers:
+            self.DISABLE_EVERYTHING_BEHIND.add("0x09F7F")  # Short box
+            self.PRE_PICKED_HUNT_ENTITIES.add("0x09F7F")
+            self.COMPLETELY_DISABLED_ENTITIES.add("0x3D9A9")  # Elevator Start
+
+            # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
+            if chal_lasers > 7:
+                postgame_adjustments.append([
+                    "Requirement Changes:",
+                    "0xFFF00 - 11 Lasers - True",
+                ])
+
+        if disable_challenge_lasers:
+            self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")  # Long box
+            self.PRE_PICKED_HUNT_ENTITIES.add("0xFFF00")
+            self.COMPLETELY_DISABLED_ENTITIES.add("0x0A332")  # Challenge Timer
+
+        return postgame_adjustments
+
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -408,10 +446,17 @@ class WitnessPlayerLogic:
             self.VICTORY_LOCATION = "0x09F7F"
         elif victory == "mountain_box_long":
             self.VICTORY_LOCATION = "0xFFF00"
+        elif victory == "panel_hunt":
+            self.VICTORY_LOCATION = "0x03629"
+            self.COMPLETELY_DISABLED_ENTITIES.add("0x3352F")
 
         # Exclude panels from the post-game if shuffle_postgame is false.
-        if not world.options.shuffle_postgame:
-            adjustment_linesets_in_order += self.handle_postgame(world)
+        if not world.options.shuffle_postgame and victory != "panel_hunt":
+            adjustment_linesets_in_order += self.handle_regular_postgame(world)
+
+        # Exclude panels from the post-game if shuffle_postgame is false.
+        if victory == "panel_hunt" and world.options.panel_hunt_postgame:
+            adjustment_linesets_in_order += self.handle_panelhunt_postgame(world)
 
         # Exclude Discards / Vaults
         if not world.options.shuffle_discarded_panels:
@@ -478,6 +523,9 @@ class WitnessPlayerLogic:
         if world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append(get_elevators_come_to_you())
 
+        if world.options.victory_condition == "panel_hunt":
+            adjustment_linesets_in_order.append(get_entity_hunt())
+
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
 
@@ -511,7 +559,7 @@ class WitnessPlayerLogic:
             if loc_obj["entityType"] == "EP":
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
-            elif loc_obj["entityType"] in {"General", "Vault", "Discard"}:
+            elif loc_obj["entityType"] == "Panel":
                 self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
 
         for adjustment_lineset in adjustment_linesets_in_order:
@@ -591,6 +639,7 @@ class WitnessPlayerLogic:
             # Check if any regions have become unreachable.
             reachable_regions = self.discover_reachable_regions()
             new_unreachable_regions = all_regions - reachable_regions - self.UNREACHABLE_REGIONS
+
             if new_unreachable_regions:
                 self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
 
@@ -683,7 +732,7 @@ class WitnessPlayerLogic:
 
         # We also clear any data structures that we might have filled in a previous dependency reduction
         self.REQUIREMENTS_BY_HEX = dict()
-        self.USED_EVENT_NAMES_BY_HEX = dict()
+        self.USED_EVENT_NAMES_BY_HEX = defaultdict(list)
         self.CONNECTIONS_BY_REGION_NAME = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
 
@@ -777,7 +826,6 @@ class WitnessPlayerLogic:
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
             "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
-            "0x17CAA": remote_doors,  # Jungle Monastery Garden Shortcut Panel
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
             "0x03313": False,  # Orchard Second Gate
@@ -793,23 +841,16 @@ class WitnessPlayerLogic:
             # Jungle Popup Wall Panel
         }
 
+        # In panel hunt, all panels are game, so all panels need to be reachable (unless disabled)
+        if goal == "panel_hunt":
+            for entity_hex in is_item_required_dict:
+                if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Panel":
+                    is_item_required_dict[entity_hex] = True
+
         # Now, return the keys of the dict entries where the result is False to get unrequired major items
         self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY |= {
             item_name for item_name, is_required in is_item_required_dict.items() if not is_required
         }
-
-    def make_event_item_pair(self, entity_hex: str) -> Tuple[str, str]:
-        """
-        Makes a pair of an event panel and its event item
-        """
-        action = " Opened" if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Door" else " Solved"
-
-        name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]["checkName"] + action
-        if entity_hex not in self.USED_EVENT_NAMES_BY_HEX:
-            warning(f'Entity "{name}" does not have an associated event name.')
-            self.USED_EVENT_NAMES_BY_HEX[entity_hex] = name + " Event"
-        pair = (name, self.USED_EVENT_NAMES_BY_HEX[entity_hex])
-        return pair
 
     def make_event_panel_lists(self) -> None:
         """
@@ -818,16 +859,32 @@ class WitnessPlayerLogic:
 
         self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
-        self.USED_EVENT_NAMES_BY_HEX.update(self.ALWAYS_EVENT_NAMES_BY_HEX)
+        for event_hex, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
+            self.USED_EVENT_NAMES_BY_HEX[event_hex].append(event_name)
 
         self.USED_EVENT_NAMES_BY_HEX = {
-            event_hex: event_name for event_hex, event_name in self.USED_EVENT_NAMES_BY_HEX.items()
+            event_hex: event_list for event_hex, event_list in self.USED_EVENT_NAMES_BY_HEX.items()
             if self.solvability_guaranteed(event_hex)
         }
 
-        for panel in self.USED_EVENT_NAMES_BY_HEX:
-            pair = self.make_event_item_pair(panel)
-            self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
+        for entity_hex, event_names in self.USED_EVENT_NAMES_BY_HEX.items():
+            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+            entity_name = entity_obj["checkName"]
+            entity_type = entity_obj["entityType"]
+            action = " Opened" if entity_type == "Door" else " Solved"
+            for i, event_name in enumerate(event_names):
+                if i == 0:
+                    self.EVENT_ITEM_PAIRS[entity_name + action] = (event_name, entity_hex)
+                else:
+                    self.EVENT_ITEM_PAIRS[entity_name + action + f" (Effect {i + 1})"] = (event_name, entity_hex)
+
+        # Make Panel Hunt Events
+        for entity_hex in self.HUNT_ENTITIES:
+            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+            entity_name = entity_obj["checkName"]
+            self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
+
+        return
 
     def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
         self.YAML_DISABLED_LOCATIONS = disabled_locations
@@ -875,6 +932,9 @@ class WitnessPlayerLogic:
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION: str
 
+        self.PRE_PICKED_HUNT_ENTITIES = set()
+        self.HUNT_ENTITIES = set()
+
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser (Symmetry Laser)",
             "0x012FB": "+1 Laser (Desert Laser)",
@@ -889,11 +949,12 @@ class WitnessPlayerLogic:
             "0x00BF6": "+1 Laser (Swamp Laser)",
             "0x028A4": "+1 Laser (Treehouse Laser)",
             "0x17C34": "Mountain Entry",
-            "0xFFF00": "Bottom Floor Discard Turns On",
         }
 
         self.USED_EVENT_NAMES_BY_HEX = {}
-        self.CONDITIONAL_EVENTS = {}
+        self.CONDITIONAL_EVENTS = {
+            ("0x17FA2", "0xFFF00"): "Bottom Floor Discard Turns On",
+        }
 
         # The basic requirements to solve each entity come from StaticWitnessLogic.
         # However, for any given world, the options (e.g. which item shuffles are enabled) affect the requirements.
@@ -904,6 +965,10 @@ class WitnessPlayerLogic:
         # After we have adjusted the raw requirements, we perform a dependency reduction for the entity requirements.
         # This will make the access conditions way faster, instead of recursively checking dependent entities each time.
         self.make_dependency_reduced_checklist()
+
+        if world.options.victory_condition == "panel_hunt":
+            picker = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES)
+            self.HUNT_ENTITIES = picker.pick_panel_hunt_panels(world.options.panel_hunt_total.value)
 
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()

@@ -11,7 +11,7 @@ from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
 from .data.utils import WitnessRule, optimize_witness_rule
-from .locations import WitnessPlayerLocations, static_witness_locations
+from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -97,16 +97,24 @@ class WitnessPlayerRegions:
             if k not in player_logic.UNREACHABLE_REGIONS
         }
 
+        event_locations_per_region = defaultdict(list)
+
+        for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
+            region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
+            if region is None:
+                region_name = "Entry"
+            else:
+                region_name = region["name"]
+            event_locations_per_region[region_name].append(event_location)
+
         for region_name, region in regions_to_create.items():
             locations_for_this_region = [
                 self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["entities"]
                 if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"]
                 in self.player_locations.CHECK_LOCATION_TABLE
             ]
-            locations_for_this_region += [
-                static_witness_locations.get_event_name(panel) for panel in region["entities"]
-                if static_witness_locations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
-            ]
+
+            locations_for_this_region += event_locations_per_region[region_name]
 
             all_locations = all_locations | set(locations_for_this_region)
 
