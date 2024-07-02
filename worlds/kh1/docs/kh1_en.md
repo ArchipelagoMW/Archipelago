@@ -18,7 +18,7 @@ BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
     
     When prompted, check KH1 plus any other AP game you play and click `Install and configure LUA backend`, then click `Next`.
     
-    Extract game data for KH1 and any other games you wish to modify.
+    Extracting game data for KH1 is unnecessary, but you may want to extract data for KH2 if you plan on playing KH2 AP.
     
     Click `Finish`
     
