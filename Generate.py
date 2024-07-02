@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import logging
 import os
 import random
 import string
+import sys
 import urllib.parse
 import urllib.request
 from collections import Counter
@@ -15,23 +17,16 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
-import copy
 import Utils
 import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
-from Main import main as ERmain
-from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp.EntranceRandomizer import parse_arguments
-from worlds.alttp.Text import TextTable
-from worlds.AutoWorld import AutoWorldRegister
-from worlds.generic import PlandoConnection
-from worlds import failed_world_loads
 
 
 def mystery_argparse():
-    options = get_settings()
-    defaults = options.generator
+    from settings import get_settings
+    settings = get_settings()
+    defaults = settings.generator
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
@@ -43,7 +38,7 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults.players, type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
-    parser.add_argument('--outputpath', default=options.general_options.output_path,
+    parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
@@ -63,20 +58,23 @@ def mystery_argparse():
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
-    return args, options
+    return args
 
 
 def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None, callback=ERmain):
+def main(args=None) -> Tuple[argparse.Namespace, int]:
+    # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
+    if __name__ == "__main__" and "worlds" in sys.modules:
+        raise Exception("Worlds system should not be loaded before logging init.")
+
     if not args:
-        args, options = mystery_argparse()
-    else:
-        options = get_settings()
+        args = mystery_argparse()
 
     seed = get_seed(args.seed)
+
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
     random.seed(seed)
     seed_name = get_seed_name(random)
@@ -145,6 +143,9 @@ def main(args=None, callback=ERmain):
         raise Exception(f"No weights found. "
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
+
+    from worlds.AutoWorld import AutoWorldRegister
+    from worlds.alttp.EntranceRandomizer import parse_arguments
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
@@ -236,7 +237,7 @@ def main(args=None, callback=ERmain):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    return callback(erargs, seed)
+    return erargs, seed
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -361,6 +362,8 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
 
 
 def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+    from worlds import AutoWorldRegister
+
     if not game:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
@@ -438,10 +441,13 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
     except Exception as e:
         raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
     else:
+        from worlds import AutoWorldRegister
         player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
+    from worlds import AutoWorldRegister
+
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
@@ -468,6 +474,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.game = get_choice("game", weights)
     if ret.game not in AutoWorldRegister.world_types:
+        from worlds import failed_world_loads
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
         if picks[0] in failed_world_loads:
             raise Exception(f"No functional world found to handle game {ret.game}. "
@@ -506,35 +513,12 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":
-        roll_alttp_settings(ret, game_weights, plando_options)
-    if PlandoOptions.connections in plando_options:
-        ret.plando_connections = []
-        options = game_weights.get("plando_connections", [])
-        for placement in options:
-            if roll_percentage(get_choice("percentage", placement, 100)):
-                ret.plando_connections.append(PlandoConnection(
-                    get_choice("entrance", placement),
-                    get_choice("exit", placement),
-                    get_choice("direction", placement, "both")
-                ))
+        roll_alttp_settings(ret, game_weights)
 
     return ret
 
 
-def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
-
-    ret.plando_texts = {}
-    if PlandoOptions.texts in plando_options:
-        tt = TextTable()
-        tt.removeUnwantedText()
-        options = weights.get("plando_texts", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                at = str(get_choice_legacy("at", placement))
-                if at not in tt:
-                    raise Exception(f"No text target \"{at}\" found.")
-                ret.plando_texts[at] = str(get_choice_legacy("text", placement))
-
+def roll_alttp_settings(ret: argparse.Namespace, weights):
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")
     if 'random_sprite_on_event' in weights:
@@ -562,7 +546,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    multiworld = main()
+    erargs, seed = main()
+    from Main import main as ERmain
+    multiworld = ERmain(erargs, seed)
     if __debug__:
         import gc
         import sys
