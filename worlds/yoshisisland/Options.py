@@ -169,12 +169,12 @@ class BossShuffle(Toggle):
 
 class LevelShuffle(Choice):
     """Disabled: All levels will appear in their normal location.
-    Bosses Guranteed: All worlds will have a boss on -4 and -8.
+    Bosses Guaranteed: All worlds will have a boss on -4 and -8.
     Full: Worlds may have more than 2 or no bosses in them.
     Regardless of the setting, 6-8 and Extra stages are not shuffled."""
     display_name = "Level Shuffle"
     option_disabled = 0
-    option_bosses_guranteed = 1
+    option_bosses_guaranteed = 1
     option_full = 2
     default = 0
 

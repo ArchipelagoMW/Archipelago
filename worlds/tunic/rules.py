@@ -128,8 +128,9 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
     multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = \
         lambda state: (state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
-                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)) and \
-        has_ability(state, player, prayer, options, ability_unlocks) and has_sword(state, player)
+                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player) and state.has_group_unique("Hero Relics", player, 6)) and \
+        has_ability(state, player, prayer, options, ability_unlocks) and has_sword(state, player) and \
+        state.has_any({lantern, laurels}, player)
 
 
 def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> None:
@@ -268,9 +269,9 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
     set_rule(multiworld.get_location("Ruined Atoll - [West] Near Kevin Block", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Lower Chest", player),
-             lambda state: state.has_any({laurels, key}, player))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2))
     set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Upper Chest", player),
-             lambda state: state.has_any({laurels, key}, player))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2))
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
              lambda state: has_sword(state, player) or options.logic_rules)
 
@@ -303,15 +304,17 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
     # Quarry
     set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Quarry - [West] Upper Area Bombable Wall", player),
-             lambda state: has_mask(state, player, options))
+    set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
+             lambda state: has_sword(state, player) or state.has_all({fire_wand, laurels}, player))
     # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
              lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
-             lambda state: state.has(laurels, player) and state.has(fire_wand, player) and has_sword(state, player))
+             lambda state: (state.has(fire_wand, player) and has_sword(state, player))
+             and (state.has(laurels, player)
+                  or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
     set_rule(multiworld.get_location("Swamp - [Entrance] Above Entryway", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest", player),

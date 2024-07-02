@@ -18,11 +18,12 @@ on Steam, you can obtain a copy of this ROM from the game's files, see instructi
 
 Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
-- Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". This is required for the Lua script to function correctly.
-  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
-  **"NLua+KopiLua" until this step is done.**
+- **If you are using a version of BizHawk older than 2.9**, you will need to modify the Lua Core.
+  Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
+  "Lua+LuaInterface". This is required for the Lua script to function correctly.  
+  **NOTE:** Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs 
+  of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load 
+  "NLua+KopiLua" until this step is done.
 - Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the 5s button.
   This reduces the possibility of losing save data in emulator crashes.
 - Under Config > Customize, check the "Run in background" and "Accept background input" boxes. This will allow you to
@@ -37,7 +38,7 @@ and select EmuHawk.exe.
 
 ## Extracting a ROM from the Legacy Collection
 
-The Steam version of the Legacy Collection contains unmodified GBA ROMs in its files. You can extract these for use with Archipelago.
+The Steam version of the Battle Network Legacy Collection contains unmodified GBA ROMs in its files. You can extract these for use with Archipelago.
 
 1. Open the Legacy Collection Vol. 1's Game Files (Right click on the game in your Library, then open Properties -> Installed Files -> Browse)
 2. Open the file `exe/data/exe3b.dat` in a zip-extracting program such as 7-Zip or WinRAR.
@@ -73,7 +74,9 @@ to the emulator as recommended).
 Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
 menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
 
-Navigate to your Archipelago install folder and open `data/lua/connector_mmbn3.lua`.
+Navigate to your Archipelago install folder and open `data/lua/connector_mmbn3.lua`.  
+**NOTE:** The MMBN3 Lua file depends on other shared Lua files inside of the `data` directory in the Archipelago
+installation. Do not move this Lua file from its default location or you may run into issues connecting.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)

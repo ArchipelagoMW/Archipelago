@@ -176,7 +176,6 @@ class SoEWorld(World):
     options: SoEOptions
     settings: typing.ClassVar[SoESettings]
     topology_present = False
-    data_version = 5
     web = SoEWebWorld()
     required_client_version = (0, 4, 4)
 
@@ -486,4 +485,3 @@ class SoELocation(Location):
         super().__init__(player, name, address, parent)
         # unconditional assignments favor a split dict, saving memory
         self.progress_type = LocationProgressType.EXCLUDED if exclude else LocationProgressType.DEFAULT
-        self.event = not address

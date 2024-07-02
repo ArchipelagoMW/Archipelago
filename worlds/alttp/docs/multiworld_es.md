@@ -64,7 +64,8 @@ configuración personal y descargar un fichero "YAML".
 
 ### Configuración YAML avanzada
 
-Una version mas avanzada del fichero Yaml puede ser creada usando la pagina ["Weighted settings"](/weighted-settings),
+Una version mas avanzada del fichero Yaml puede ser creada usando la pagina
+["Weighted settings"](/games/A Link to the Past/weighted-options),
 la cual te permite tener almacenadas hasta 3 preajustes. La pagina "Weighted Settings" tiene muchas opciones
 representadas con controles deslizantes. Esto permite elegir cuan probable los valores de una categoría pueden ser
 elegidos sobre otros de la misma.
