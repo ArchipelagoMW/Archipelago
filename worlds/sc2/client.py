@@ -922,7 +922,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
         num_missions = int((ctx.generic_upgrade_missions / 100) * total_missions)
         completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
-        upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
+        upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL) if num_missions > 0 else WEAPON_ARMOR_UPGRADE_MAX_LEVEL
 
         # Equivalent to "Progressive Weapon/Armor Upgrade" item
         global_upgrades: typing.Set[str] = upgrade_included_names[GenericUpgradeItems.option_bundle_all]
