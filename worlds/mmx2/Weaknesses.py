@@ -80,8 +80,8 @@ boss_weaknesses = {
         [[ItemName.bubble_splash], 0x11, WEAKNESS_CHARGED_DMG],
     ],
     "Serges Tank": [
-        [[ItemName.speed_burner], 0x0E, WEAKNESS_UNCHARGED_DMG],
-        [[ItemName.speed_burner], 0x17, WEAKNESS_CHARGED_DMG],
+        [[ItemName.silk_shot], 0x1B, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.silk_shot], 0x20, WEAKNESS_CHARGED_DMG],
     ],
     "Agile Flyer": [
         [[ItemName.magnet_mine], 0x0D, WEAKNESS_UNCHARGED_DMG],
@@ -123,10 +123,12 @@ weapon_id = {
     0x15: "Charged Strike Chain",
     0x16: "Charged Magnet Mine",
     0x17: "Charged Speed Burner",
+    0x18: "Uncharged Silk Shot (Black Rock)",
     0x1B: "Uncharged Silk Shot (Junk)",
     0x1C: "Uncharged Silk Shot (Leaves)",
     0x1D: "Charged Shot (Level 3)",
     0x1E: "Uncharged Silk Shot (Crystals)",
+    0x1F: "Charged Silk Shot (Black Rock)",
     0x20: "Charged Silk Shot (Junk)",
     0x21: "Charged Silk Shot (Leaves)",
     0x22: "Charged Silk Shot (Crystals)",
@@ -309,48 +311,72 @@ boss_weakness_data = {
 
 boss_excluded_weapons = {
     "Wheel Gator": [
+        "Speed Burner (Underwater)",
     ],
     "Bubble Crab": [
         "Speed Burner",
         "Charged Speed Burner",
     ],
     "Flame Stag": [
+        "Speed Burner (Underwater)",
     ],
     "Morph Moth": [
+        "Speed Burner (Underwater)",
     ],
     "Magna Centipede": [
+        "Speed Burner (Underwater)",
     ],
     "Crystal Snail": [
+        "Speed Burner (Underwater)",
     ],
     "Overdrive Ostrich": [
+        "Speed Burner (Underwater)",
     ],
     "Wire Sponge": [
+        "Speed Burner (Underwater)",
     ],
     "Magna Quartz": [
+        "Speed Burner (Underwater)",
     ],
     "Chop Register": [
+        "Speed Burner (Underwater)",
     ],
     "Raider Killer": [
+        "Speed Burner (Underwater)",
     ],
     "Pararoid S-38": [
+        "Speed Burner (Underwater)",
     ],
     "Agile": [
+        "Speed Burner (Underwater)",
     ],
     "Serges": [
+        "Silk Shot (Leaves)",
+        "Charged Silk Shot (Leaves)",
+        "Charged Speed Burner",
+        "Charged Bubble Splash",
     ],
     "Violen": [
+        "Speed Burner (Underwater)",
     ],
     "Neo Violen": [
+        "Speed Burner (Underwater)",
     ],
     "Serges Tank": [
+        "Charged Speed Burner",
+        "Speed Burner (Underwater)",
     ],
     "Agile Flyer": [
+        "Speed Burner (Underwater)",
     ],
     "Zero": [
+        "Speed Burner (Underwater)",
     ],
     "Sigma": [
+        "Speed Burner (Underwater)",
     ],
     "Sigma Virus": [
+        "Speed Burner (Underwater)",
     ],
 }
 
@@ -396,6 +422,10 @@ weapons = {
     "Silk Shot (Crystals)": [
         [[ItemName.silk_shot], 0x1E, WEAKNESS_UNCHARGED_DMG],
         [[ItemName.silk_shot], 0x22, WEAKNESS_CHARGED_DMG],
+    ],
+    "Silk Shot (Black Rock)": [
+        [[ItemName.silk_shot], 0x18, WEAKNESS_UNCHARGED_DMG],
+        [[ItemName.silk_shot], 0x1F, WEAKNESS_CHARGED_DMG],
     ],
     "Magnet Mine": [
         [[ItemName.magnet_mine], 0x0D, WEAKNESS_UNCHARGED_DMG],
@@ -477,6 +507,12 @@ weapons_chaotic = {
     "Charged Silk Shot (Crystals)": [
         [[ItemName.silk_shot], 0x22, WEAKNESS_CHARGED_DMG],
     ],
+    "Silk Shot (Black Rock)": [
+        [[ItemName.silk_shot], 0x18, WEAKNESS_UNCHARGED_DMG],
+    ],
+    "Charged Silk Shot (Black Rock)": [
+        [[ItemName.silk_shot], 0x1F, WEAKNESS_CHARGED_DMG],
+    ],
     "Magnet Mine": [
         [[ItemName.magnet_mine], 0x0D, WEAKNESS_UNCHARGED_DMG],
     ],
@@ -494,6 +530,21 @@ weapons_chaotic = {
     ],
 }
 
+silk_shot_family = {
+    "Silk Shot (Rocks)",
+    "Silk Shot (Junk)",
+    "Silk Shot (Leaves)",
+    "Silk Shot (Crystals)",
+    "Silk Shot (Black Rock)",
+}
+
+charged_silk_shot_family = {
+    "Charged Silk Shot (Rocks)",
+    "Charged Silk Shot (Junk)",
+    "Charged Silk Shot (Leaves)",
+    "Charged Silk Shot (Crystals)",
+    "Charged Silk Shot (Black Rock)",
+}
 
 def handle_weaknesses(world):
     shuffle_type = world.options.boss_weakness_rando.value
@@ -551,7 +602,16 @@ def handle_weaknesses(world):
             for _ in range(shuffle_type - 1):
                 chosen_weapon = world.random.choice(copied_weapon_list)
                 data = weapons_chaotic[chosen_weapon].copy()
-                copied_weapon_list.remove(chosen_weapon)
+                if chosen_weapon in silk_shot_family:
+                    for silk_shot in silk_shot_family:
+                        if silk_shot in copied_weapon_list:
+                            copied_weapon_list.remove(silk_shot)
+                elif chosen_weapon in charged_silk_shot_family:
+                    for charged_silk_shot in charged_silk_shot_family:
+                        if charged_silk_shot in copied_weapon_list:
+                            copied_weapon_list.remove(charged_silk_shot)
+                else:
+                    copied_weapon_list.remove(chosen_weapon)
                 for entry in data:
                     world.boss_weaknesses[boss].append(entry)
                     damage = entry[2]
