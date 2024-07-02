@@ -105,7 +105,7 @@ class WitnessPlayerLogic:
         )
         self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = {}
 
-        self.EVENT_ITEM_PAIRS: Dict[str, Tuple[str, int]] = {}
+        self.EVENT_ITEM_PAIRS: Dict[str, Tuple[str, str]] = {}
         self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
         self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
         self.PRECOMPLETED_LOCATIONS: Set[str] = set()
