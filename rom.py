@@ -147,11 +147,15 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
         patch_instructions(patch, 0x06EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
         patch_instructions(patch, 0x06EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
 
-    # Multiworld send
     patch.write_token(
         APTokenTypes.WRITE,
         get_rom_address('SendMultiworldItemsImmediately'),
         world.options.send_locations_to_server.value.to_bytes(1, 'little')
+    )
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('TrapBehavior'),
+        world.options.trap_behavior.value.to_bytes(1, 'little')
     )
 
     patch.write_file("token_data.bin", patch.get_token_binary())

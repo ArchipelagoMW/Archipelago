@@ -197,6 +197,7 @@ class WL4Options(PerGameCommonOptions):
     portal: Portal
     smash_through_hard_blocks: SmashThroughHardBlocks
     send_locations_to_server: MultiworldSend
+    trap_behavior: TrapBehavior
     death_link: DeathLink
     music_shuffle: MusicShuffle
     wario_voice_shuffle: WarioVoiceShuffle
