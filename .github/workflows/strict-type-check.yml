@@ -26,7 +26,7 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          python -m pip install --upgrade pip pyright==1.1.358 mypy==1.9.0
+          python -m pip install --upgrade pip pyright==1.1.369 mypy==1.10.1
           python ModuleUpdate.py --append "WebHostLib/requirements.txt" --force --yes
 
       - name: "type check: strict check on specific files"
