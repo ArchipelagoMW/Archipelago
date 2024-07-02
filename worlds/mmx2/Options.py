@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 import typing
 
-#from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
-from Options import Choice, Range, Toggle, DefaultOnToggle, OptionDict, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, OptionDict, OptionSet, OptionGroup, DeathLink, PerGameCommonOptions, StartInventoryPool
 from schema import Schema, And, Use, Optional
 
 from .Rom import action_buttons, action_names
@@ -265,13 +264,14 @@ class PlandoWeaknesses(OptionDict):
 
 
 mmx2_option_groups = [
-    """
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
         StartingHP,
         HeartTankEffectiveness,
         JammedBuster,
-        DisableChargeFreeze,
+        LongJumps,
+        ShoryukenInPool,
+        XHuntersMedalCount,
     ]),
     OptionGroup("Boss Weakness Options", [
         BossWeaknessRando,
@@ -279,31 +279,16 @@ mmx2_option_groups = [
         BossRandomizedHP,
         LogicBossWeakness,
     ]),
-    OptionGroup("Dr. Doppler's Lab Options", [
-        DopplerOpen,
-        DopplerMedalCount,
-        DopplerWeaponCount,
-        DopplerArmorUpgradeCount,
-        DopplerHeartTankCount,
-        DopplerSubTankCount,
-        Lab2Boss,
-        Lab3BossRematchCount,
-        LabsBundleUnlock,
-        LogicRequireVileDefeatForDoppler,
+    OptionGroup("X-Hunter's Base Options", [
+        BaseOpen,
+        BaseMedalCount,
+        BaseWeaponCount,
+        BaseArmorUpgradeCount,
+        BaseHeartTankCount,
+        BaseSubTankCount,
+        BaseBossRematchCount,
+        BaseBundleUnlock,
     ]),
-    OptionGroup("Vile's Stage Options", [
-        VileOpen,
-        VileMedalCount,
-        VileWeaponCount,
-        VileArmorUpgradeCount,
-        VileHeartTankCount,
-        VileSubTankCount,
-    ]),
-    OptionGroup("Bit & Byte Options", [
-        BitMedalCount,
-        ByteMedalCount,
-    ]),
-    """
 ]
 
 @dataclass
