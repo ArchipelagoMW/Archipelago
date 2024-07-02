@@ -44,7 +44,7 @@ class MMXWeb(WebWorld):
 
     tutorials = [setup_en]
 
-    #option_groups = mmx_option_groups
+    option_groups = mmx_option_groups
 
 
 class MMXWorld(World):
