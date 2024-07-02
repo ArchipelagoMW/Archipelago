@@ -193,7 +193,7 @@ class WitnessPlayerItems:
         """
 
         return [
-            item_data.ap_code for item_data in self.item_data.values()
+            cast(int, item_data.ap_code) for item_data in self.item_data.values()
             if isinstance(item_data.definition, DoorItemDefinition)
         ]
 
