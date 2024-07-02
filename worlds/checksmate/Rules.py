@@ -1,8 +1,6 @@
 from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
-from . import location_table
-from .Locations import piece_names, piece_names_small
 from .. import checksmate
 
 from ..generic.Rules import set_rule, add_rule
@@ -150,28 +148,31 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
             add_rule(multiworld.get_location(name, player),
                      lambda state: state.count("Super-Size Me", player) > 0)
 
-    add_rule(multiworld.get_location("Capture 2 Pawns", player),
-             lambda state: count_enemy_pawns(state, player) > 1)
-    piece_files = 9 if super_sized else 7
-    for i in range(1, piece_files):
-        add_rule(multiworld.get_location("Capture " + str(i + 2) + " Pawns", player),
-                 lambda state, v=i: count_enemy_pawns(state, player) > v + 1)
-        add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),
-                 lambda state, v=i: count_enemy_pieces(state, player) > v)
-        add_rule(multiworld.get_location("Capture " + str(i + 1) + " Of Each", player),
-                 lambda state, v=i: count_enemy_pawns(state, player) > v and count_enemy_pieces(state, player) > v)
-    add_rule(multiworld.get_location("Capture Everything", player),
-             lambda state: count_enemy_pawns(state, player) > piece_files and count_enemy_pieces(state, player) >= piece_files)
+    # add_rule(multiworld.get_location("Capture 2 Pawns", player),
+    #          lambda state: count_enemy_pawns(state, player) > 1)
+    # piece_files = 9 if super_sized else 7
+    # for i in range(1, piece_files):
+    #     add_rule(multiworld.get_location("Capture " + str(i + 2) + " Pawns", player),
+    #              lambda state, v=i: count_enemy_pawns(state, player) > v + 1)
+    #     add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),
+    #              lambda state, v=i: count_enemy_pieces(state, player) > v)
+    #     add_rule(multiworld.get_location("Capture " + str(i + 1) + " Of Each", player),
+    #              lambda state, v=i: count_enemy_pawns(state, player) > v and count_enemy_pieces(state, player) > v)
+    # add_rule(multiworld.get_location("Capture Everything", player),
+    #          lambda state: count_enemy_pawns(state, player) > \
+    #          piece_files and count_enemy_pieces(state, player) >= piece_files)
+
     # pieces must exist to be captured
-    for letter in ["A", "B", "C", "D", "E", "F", "G", "H"]:  # the E piece is the King
-        add_rule(multiworld.get_location("Capture Pawn " + str(letter), player),
-                 lambda state, v=letter: has_enemy(state, "Capture Pawn " + str(v), player))
-    names_to_capture = piece_names
-    if not super_sized:
-        names_to_capture = piece_names_small
-    for piece_name in names_to_capture:
-        add_rule(multiworld.get_location("Capture Piece " + piece_name, player),
-                 lambda state, v=piece_name: has_enemy(state, "Capture Piece " + v, player))
+    # for letter in ["A", "B", "C", "D", "E", "F", "G", "H"]:  # the E piece is the King
+    #     add_rule(multiworld.get_location("Capture Pawn " + str(letter), player),
+    #              lambda state, v=letter: has_enemy(state, "Capture Pawn " + str(v), player))
+    # names_to_capture = piece_names
+    # if not super_sized:
+    #     names_to_capture = piece_names_small
+    # for piece_name in names_to_capture:
+    #     add_rule(multiworld.get_location("Capture Piece " + piece_name, player),
+    #              lambda state, v=piece_name: has_enemy(state, "Capture Piece " + v, player))
+
     # tactics
     # add_rule(multiworld.get_location("Pin", player), lambda state: has_pin(state, player))
     if opts.enable_tactics.value:

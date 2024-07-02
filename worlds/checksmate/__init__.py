@@ -145,10 +145,10 @@ class CMWorld(World):
 
     def create_items(self):
         super_sized = self.options.goal.value != self.options.goal.option_single
-        for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
-            self.multiworld.push_precollected(self.create_item(enemy_pawn))
-        for enemy_piece in self.item_name_groups["Enemy Piece"]:
-            self.multiworld.push_precollected(self.create_item(enemy_piece))
+        # for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
+        #     self.multiworld.push_precollected(self.create_item(enemy_pawn))
+        # for enemy_piece in self.item_name_groups["Enemy Piece"]:
+        #     self.multiworld.push_precollected(self.create_item(enemy_piece))
 
         # TODO: limit total material
         # items = [[self.create_item(item) for _ in range(item_data.quantity)]
@@ -172,6 +172,7 @@ class CMWorld(World):
         items = []
         if self.options.goal.value == self.options.goal.option_progressive:
             items.append(create_item_with_correct_settings(self.player, "Super-Size Me"))
+        items.append(create_item_with_correct_settings(self.player, "Play as White"))
 
         # find the material value the user's army should provide once fully collected
         material = sum([
@@ -205,6 +206,9 @@ class CMWorld(World):
         self.items_used[self.player]["Progressive Pocket"] = (
                 self.items_used[self.player].get("Progressive Pocket", 0) +
                 (12 - min(self.options.max_pocket.value, 3 * self.options.pocket_limit_by_pocket.value)))
+        # if self.options.goal.value != self.options.goal.option_progressive:
+        self.items_used[self.player]["Super-Size Me"] = 1
+        self.items_used[self.player]["Play as White"] = 1
 
         # add items player really wants
         yaml_locked_items: dict[str, int] = self.options.locked_items.value
@@ -376,6 +380,9 @@ class CMWorld(World):
                       locked_items: dict[str, int]) -> bool:
         if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
             # TODO: there is a better way, probably next step is a "one strike" mechanism
+            return True
+
+        if self.items_used[self.player].get(chosen_item, 0) >= item_table[chosen_item].quantity:
             return True
 
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
