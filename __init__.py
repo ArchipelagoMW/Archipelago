@@ -9,7 +9,7 @@ from .client import WL4Client
 from .data import data_path
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
 from .locations import location_name_to_id, location_table
-from .options import Goal, GoldenJewels, PoolJewels, WL4Options
+from .options import Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
 from .rules import set_access_rules
@@ -28,8 +28,6 @@ class WL4Settings(settings.Group):
 
 
 class WL4Web(WebWorld):
-    theme = 'jungle'
-
     setup_en = Tutorial(
         'Multiworld Setup Guide',
         'A guide to setting up the Wario Land 4 randomizer connected to an Archipelago Multiworld.',
@@ -39,7 +37,9 @@ class WL4Web(WebWorld):
         ['lil David']
     )
 
+    theme = 'jungle'
     tutorials = [setup_en]
+    option_groups = wl4_option_groups
 
 
 class WL4World(World):
@@ -60,6 +60,8 @@ class WL4World(World):
     item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()
                        if data[1] is not None}
     location_name_to_id = location_name_to_id
+
+    required_client_version = (0, 5, 0)
 
     item_name_groups = {
         'Golden Treasure': {

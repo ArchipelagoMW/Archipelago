@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range
+from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range, OptionGroup
 
 
 class Goal(Choice):
@@ -184,20 +184,45 @@ class WarioVoiceShuffle(Toggle):
     display_name = "Shuffle Wario's voices"
 
 
+wl4_option_groups = [
+    OptionGroup("Goal Options", [
+        Goal,
+        GoldenTreasureCount,
+    ]),
+    OptionGroup("World", [
+        Difficulty,
+        PoolJewels,
+        GoldenJewels,
+        RequiredJewels,
+        OpenDoors,
+        Portal,
+    ]),
+    OptionGroup("Quality of Life", [
+        MultiworldSend,
+        TrapBehavior,
+        SmashThroughHardBlocks,
+    ]),
+    OptionGroup("Cosmetic", [
+        MusicShuffle,
+        WarioVoiceShuffle,
+    ]),
+]
+
+
 @dataclass
 class WL4Options(PerGameCommonOptions):
+    logic: Logic
+    death_link: DeathLink
     goal: Goal
     golden_treasure_count: GoldenTreasureCount
     difficulty: Difficulty
-    logic: Logic
     pool_jewels: PoolJewels
     golden_jewels: GoldenJewels
     required_jewels: RequiredJewels
     open_doors: OpenDoors
     portal: Portal
-    smash_through_hard_blocks: SmashThroughHardBlocks
     send_locations_to_server: MultiworldSend
     trap_behavior: TrapBehavior
-    death_link: DeathLink
+    smash_through_hard_blocks: SmashThroughHardBlocks
     music_shuffle: MusicShuffle
     wario_voice_shuffle: WarioVoiceShuffle
