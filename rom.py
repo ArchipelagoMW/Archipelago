@@ -208,7 +208,7 @@ class StartInventory:
     junk_counts: List[int]
 
     def __init__(self):
-        self.level_table = [[0] * 6 for _ in range(5)]
+        self.level_table = [[0] * 6 for _ in Passage]
         self.abilities = 0
         self.junk_counts = [0] * 5
 
@@ -242,7 +242,7 @@ class StartInventory:
         patch.write_token(
             APTokenTypes.WRITE,
             get_rom_address('StartingInventoryItemStatus'),
-            struct.pack("<30B", *(level
+            struct.pack("<36B", *(level
                                   for passage in self.level_table
                                   for level in passage))
         )
