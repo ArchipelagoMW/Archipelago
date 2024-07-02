@@ -60,6 +60,7 @@ class WitnessPlayerLocations:
         self.CHECK_PANELHEX_TO_ID = dict(
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
         )
+
         self.EVENT_LOCATION_TABLE = {
             event_location: None
             for event_location in player_logic.EVENT_ITEM_PAIRS
@@ -75,5 +76,5 @@ class WitnessPlayerLocations:
 
     def add_location_late(self, entity_name: str) -> None:
         entity_hex = static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
-        self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
+        self.CHECK_LOCATION_TABLE[entity_hex] = static_witness_locations.get_id(entity_hex)
         self.CHECK_PANELHEX_TO_ID[entity_hex] = static_witness_locations.get_id(entity_hex)
