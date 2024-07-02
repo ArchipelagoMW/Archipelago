@@ -17,6 +17,12 @@ JaredWeakStrike for helping clean up my mess of code.
 
 KSX for their interact in battle code.
 
+RavSpect for their title screen image edit.
+
+SunCatMC for their work on ChecksFinder, which I used as a basis for game-to-client communication.
+
+ThePhar for their work on Rogue Legacy AP, which I used as a basis for the apworld creation.
+
 ## Where is the options page?
 
 The [player options page for this game](../player-options) contains most of the options you need to 
