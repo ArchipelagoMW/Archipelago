@@ -7,16 +7,17 @@ from typing import Any, Dict, List, Optional, Union, cast
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
 
-from Options import PerGameCommonOptions, Toggle
+from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import static_items as static_witness_items
+from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
 from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
-from .locations import WitnessPlayerLocations, static_witness_locations
-from .options import TheWitnessOptions
+from .locations import WitnessPlayerLocations
+from .options import TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
@@ -36,6 +37,7 @@ class WitnessWebWorld(WebWorld):
     )]
 
     options_presets = witness_option_presets
+    option_groups = witness_option_groups
 
 
 class WitnessWorld(World):
@@ -52,7 +54,8 @@ class WitnessWorld(World):
     options: TheWitnessOptions
 
     item_name_to_id = {
-        name: data.ap_code for name, data in static_witness_items.ITEM_DATA.items()
+        # ITEM_DATA doesn't have any event items in it
+        name: cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
     }
     location_name_to_id = static_witness_locations.ALL_LOCATIONS_TO_ID
     item_name_groups = static_witness_items.ITEM_GROUPS
@@ -124,9 +127,9 @@ class WitnessWorld(World):
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
-            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
-                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle, or Obelisk Keys.")
+            raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                              f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                              f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
         disabled_locations = self.options.exclude_locations.value
@@ -141,7 +144,7 @@ class WitnessWorld(World):
         )
         self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
-        self.log_ids_to_hints = dict()
+        self.log_ids_to_hints = {}
 
         self.determine_sufficient_progression()
 
@@ -262,7 +265,7 @@ class WitnessWorld(World):
         remaining_item_slots = pool_size - sum(item_pool.values())
 
         # Add puzzle skips.
-        num_puzzle_skips = self.options.puzzle_skip_amount
+        num_puzzle_skips = self.options.puzzle_skip_amount.value
 
         if num_puzzle_skips > remaining_item_slots:
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world has insufficient locations"
@@ -352,21 +355,21 @@ class WitnessWorld(World):
         tutorial_gate_open.place_locked_item(early_good_item)
         fill_locations.remove(tutorial_gate_open)
 
-    def fill_slot_data(self) -> dict:
-        self.log_ids_to_hints: Dict[int, CompactItemData] = dict()
-        self.laser_ids_to_hints: Dict[int, CompactItemData] = dict()
+    def fill_slot_data(self) -> Dict[str, Any]:
+        self.log_ids_to_hints: Dict[int, CompactItemData] = {}
+        self.laser_ids_to_hints: Dict[int, CompactItemData] = {}
 
         already_hinted_locations = set()
 
         # Laser hints
 
         if self.options.laser_hints:
-            laser_hints = make_laser_hints(self, static_witness_items.ITEM_GROUPS["Lasers"])
+            laser_hints = make_laser_hints(self, sorted(static_witness_items.ITEM_GROUPS["Lasers"]))
 
             for item_name, hint in laser_hints.items():
                 item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
                 self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
-                already_hinted_locations.add(hint.location)
+                already_hinted_locations.add(cast(Location, hint.location))
 
         # Audio Log Hints
 
@@ -429,13 +432,13 @@ class WitnessLocation(Location):
     game: str = "The Witness"
     entity_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: Optional[int], parent, ch_hex: int = -1) -> None:
+    def __init__(self, player: int, name: str, address: Optional[int], parent: Region, ch_hex: int = -1) -> None:
         super().__init__(player, name, address, parent)
         self.entity_hex = ch_hex
 
 
 def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlayerLocations,
-                  region_locations=None, exits=None) -> Region:
+                  region_locations: Optional[List[str]] = None, exits: Optional[List[str]] = None) -> Region:
     """
     Create an Archipelago Region for The Witness
     """
@@ -450,11 +453,11 @@ def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlaye
                 entity_hex = int(
                     static_witness_logic.ENTITIES_BY_NAME[location]["entity_hex"], 0
                 )
-            location = WitnessLocation(
+            location_obj = WitnessLocation(
                 world.player, location, loc_id, ret, entity_hex
             )
 
-            ret.locations.append(location)
+            ret.locations.append(location_obj)
     if exits:
         for single_exit in exits:
             ret.exits.append(Entrance(world.player, single_exit, ret))
