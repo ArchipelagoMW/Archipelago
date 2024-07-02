@@ -540,8 +540,8 @@ class MMXSNIClient(SNIClient):
                     self.energy_link_details = True
                     logger.info(f"EnergyLink detailed deposit activity enabled.")
 
-        from worlds.mmx.Rom import weapon_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
-        from worlds.mmx.Levels import location_id_to_level_id
+        from .Rom import weapon_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
+        from .Levels import location_id_to_level_id
         from worlds import AutoWorldRegister
 
         defeated_bosses_data = await snes_read(ctx, MMX_DEFEATED_BOSSES, 0x20)
@@ -616,7 +616,7 @@ class MMXSNIClient(SNIClient):
         
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names.lookup_in_game(new_check_id)
             snes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
@@ -659,10 +659,11 @@ class MMXSNIClient(SNIClient):
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
+            sending_game = ctx.slot_info[item.player].game
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
             
             snes_buffered_write(ctx, MMX_RECV_INDEX, bytes([recv_index]))
             await snes_flush_writes(ctx)
@@ -702,6 +703,7 @@ class MMXSNIClient(SNIClient):
         # Handle collected locations
         game_state = await snes_read(ctx, MMX_GAME_STATE, 0x1)
         if game_state[0] != 0x02:
+            ctx.locations_checked = set()
             return
         new_boss_clears = False
         new_cleared_level = False
@@ -725,7 +727,7 @@ class MMXSNIClient(SNIClient):
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
-                loc_name = ctx.location_names[loc_id]
+                loc_name = ctx.location_names.lookup_in_game(loc_id)
 
                 if loc_name not in location_id_to_level_id:
                     continue
@@ -762,7 +764,7 @@ class MMXSNIClient(SNIClient):
                     # Hadouken
                     collected_hadouken_data = 0xFF
                     new_hadouken = True
-                elif internal_id >= 0x100:
+                elif internal_id == 0x20:
                     # Pickups
                     collected_pickups[data_bit] = 0x01
                     new_pickup = True
@@ -774,7 +776,7 @@ class MMXSNIClient(SNIClient):
             if new_pickup:
                 snes_buffered_write(ctx, MMX_COLLECTED_PICKUPS, bytes(collected_pickups))
             if new_hadouken:
-                snes_buffered_write(ctx, MMX_COLLECTED_PICKUPS, bytearray([collected_hadouken_data]))
+                snes_buffered_write(ctx, MMX_COLLECTED_HADOUKEN, bytearray([collected_hadouken_data]))
             if new_upgrade:
                 snes_buffered_write(ctx, MMX_COLLECTED_UPGRADES, bytearray([collected_upgrades_data]))
             if new_heart_tank:
