@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, Dict, List, Set, Tuple
 from .data import static_logic as static_witness_logic
 
 if TYPE_CHECKING:
-    from . import WitnessPlayerLogic, WitnessWorld
-
+    from . import WitnessWorld
+    from .player_logic import WitnessPlayerLogic
 
 DISALLOWED_ENTITIES_FOR_PANEL_HUNT = {
     "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
@@ -37,14 +37,14 @@ ALL_HUNTABLE_PANELS = [
 
 
 class EntityHuntPicker:
-    def __init__(self, player_logic: "WitnessPlayerLogic", world: "WitnessWorld", pre_picked_entities: Set[str]):
+    def __init__(self, player_logic: "WitnessPlayerLogic", world: "WitnessWorld", pre_picked_entities: Set[str]) -> None:
         self.player_logic = player_logic
         self.player_options = world.options
         self.player_name = world.player_name
         self.random = world.random
 
         self.PRE_PICKED_HUNT_ENTITIES = pre_picked_entities.copy()
-        self.HUNT_ENTITIES = set()
+        self.HUNT_ENTITIES: Set[str] = set()
 
         self.ALL_ELIGIBLE_ENTITIES, self.ELIGIBLE_ENTITIES_PER_AREA = self._get_eligible_panels()
 
@@ -102,7 +102,7 @@ class EntityHuntPicker:
 
         return all_eligible_panels, eligible_panels_by_area
 
-    def _get_percentage_of_hunt_entities_by_area(self):
+    def _get_percentage_of_hunt_entities_by_area(self) -> Dict[str, float]:
         hunt_entities_picked_so_far_prevent_div_0 = max(len(self.HUNT_ENTITIES), 1)
 
         contributing_percentage_per_area = {}
@@ -124,7 +124,7 @@ class EntityHuntPicker:
 
         max_percentage = max(percentage_of_hunt_entities_by_area.values())
         if max_percentage == 0:
-            allowance_per_area = {area: 1 for area in percentage_of_hunt_entities_by_area}
+            allowance_per_area = {area: 1.0 for area in percentage_of_hunt_entities_by_area}
         else:
             allowance_per_area = {
                 area: (max_percentage - current_percentage) / max_percentage
@@ -152,7 +152,7 @@ class EntityHuntPicker:
 
         return self.random.choices(remaining_entities, weights=remaining_entity_weights, k=amount)
 
-    def _pick_all_hunt_entities(self, total_amount: int):
+    def _pick_all_hunt_entities(self, total_amount: int) -> None:
         """
         The core function of the EntityHuntPicker in which all Hunt Entities are picked,
         respecting the player's choices for total amount and same area discouragement.
@@ -177,7 +177,7 @@ class EntityHuntPicker:
 
             self.HUNT_ENTITIES.update(self._get_next_random_batch(actual_amount_to_pick, same_area_discouragement))
 
-    def _replace_unfair_hunt_entities_with_good_hunt_entities(self):
+    def _replace_unfair_hunt_entities_with_good_hunt_entities(self) -> None:
         """
         For connected entities that "solve together", make sure that the one you're guaranteed
         to be able to see and interact with first is the one that is chosen, so you don't get "surprise entities".
@@ -216,11 +216,11 @@ class EntityHuntPicker:
             self.HUNT_ENTITIES.remove(bad_entitiy)
             self.HUNT_ENTITIES.add(good_entity)
 
-    def _log_results(self):
+    def _log_results(self) -> None:
         final_percentage_by_area = self._get_percentage_of_hunt_entities_by_area()
 
         sorted_area_percentages_dict = dict(sorted(final_percentage_by_area.items(), key=lambda x: x[1]))
-        sorted_area_percentages_dict = {
+        sorted_area_percentages_dict_pretty_print = {
             area: str(percentage) + (" (maxed)" if self.ELIGIBLE_ENTITIES_PER_AREA[area] <= self.HUNT_ENTITIES else "")
             for area, percentage in sorted_area_percentages_dict.items()
         }
@@ -228,5 +228,5 @@ class EntityHuntPicker:
         discouragemenet_factor = self.player_options.panel_hunt_discourage_same_area_factor
         debug(
             f'Final area percentages for player "{player_name}" ({discouragemenet_factor} discouragement):\n'
-            f"{pformat(sorted_area_percentages_dict)}"
+            f"{pformat(sorted_area_percentages_dict_pretty_print)}"
         )
