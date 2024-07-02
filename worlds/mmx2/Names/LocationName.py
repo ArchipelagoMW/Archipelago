@@ -108,9 +108,9 @@ wire_sponge_1up_1 = "Wire Sponge - 1-Up Pickup"
 wire_sponge_hp_1 = "Wire Sponge - HP Pickup 1"
 wire_sponge_hp_2 = "Wire Sponge - HP Pickup 2"
 
-agile_defeated = "Agile Defeated"
-serges_defeated = "Serges Defeated"
-violen_defeated = "Violen Defeated"
+agile_defeated = "Defeated Agile"
+serges_defeated = "Defeated Serges"
+violen_defeated = "Defeated Violen"
 
 x_hunter_stage_1_boss = "Defeated Neo Violen"
 x_hunter_stage_1_1up_1 = "X-Hunter Base 1 - 1-Up Pickup 1"
