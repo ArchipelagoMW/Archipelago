@@ -1,7 +1,7 @@
 from typing import ClassVar
 
 from test.bases import WorldTestBase
-from .. import CMWorld, CMOptions
+from .. import CMWorld
 
 
 class CMTestBase(WorldTestBase):
