@@ -222,10 +222,10 @@ location_groups = {
     "Crystal Snail Stage": {location for location in all_locations.keys() if "Crystal Snail - " in location},
     "Overdrive Ostrich Stage": {location for location in all_locations.keys() if "Overdrive Ostrich - " in location},
     "Wire Sponge Stage": {location for location in all_locations.keys() if "Wire Sponge - " in location},
-    "X Hunter Base 1": {location for location in all_locations.keys() if "X Hunter Base 1 - " in location},
-    "X Hunter Base 2": {location for location in all_locations.keys() if "X Hunter Base 2 - " in location},
-    "X Hunter Base 3": {location for location in all_locations.keys() if "X Hunter Base 3 - " in location},
-    "X Hunter Base 4": {location for location in all_locations.keys() if "X Hunter Base 4 - " in location},
+    "X-Hunter Base 1": {location for location in all_locations.keys() if "X-Hunter Base 1 - " in location},
+    "X-Hunter Base 2": {location for location in all_locations.keys() if "X-Hunter Base 2 - " in location},
+    "X-Hunter Base 3": {location for location in all_locations.keys() if "X-Hunter Base 3 - " in location},
+    "X-Hunter Base 4": {location for location in all_locations.keys() if "X-Hunter Base 4 - " in location},
 }
     
 def setup_locations(world: World):
