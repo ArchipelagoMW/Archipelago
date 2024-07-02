@@ -197,7 +197,7 @@ class WitnessPlayerLogic:
             # Those requirements need to be preserved even in door shuffle.
             entity_dependencies_need_to_be_preserved = (
                 # EPs keep all their entity dependencies
-                static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP"
+                static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "EP"
                 # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
                 # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
                 # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
