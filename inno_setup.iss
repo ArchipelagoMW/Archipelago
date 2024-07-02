@@ -219,7 +219,7 @@ Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{
 Root: HKCR; Subkey: ".apworld";                                 ValueData: "{#MyAppName}worlddata";  Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}worlddata";                    ValueData: "Archipelago World Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}worlddata\DefaultIcon";        ValueData: "{app}\ArchipelagoLauncher.exe,0";                 ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}worlddata\shell\open\command"; ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";
+Root: HKCR; Subkey: "{#MyAppName}worlddata\shell\open\command"; ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";        ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: "archipelago"; ValueType: "string"; ValueData: "Archipegalo Protocol"; Flags: uninsdeletekey;
 Root: HKCR; Subkey: "archipelago"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: "";

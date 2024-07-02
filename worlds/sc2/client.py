@@ -23,10 +23,10 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from worlds.sc2 import item_names
-from worlds.sc2.item_groups import item_name_groups, unlisted_item_name_groups
-from worlds.sc2 import options
-from worlds.sc2.options import (
+from . import item_names
+from .item_groups import item_name_groups, unlisted_item_name_groups
+from . import options
+from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
@@ -47,18 +47,18 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.items import (
+from .items import (
     lookup_id_to_name, get_full_item_list, ItemData,
     race_to_item_type, upgrade_item_types, ZergItemType, upgrade_bundles, upgrade_included_names,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from worlds.sc2.locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2.mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
+from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
+from .mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
-from worlds.sc2.regions import MissionInfo
+from .regions import MissionInfo
 
 import colorama
-from worlds.sc2.options import Option
+from .options import Option
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
