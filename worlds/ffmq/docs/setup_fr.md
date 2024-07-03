@@ -148,7 +148,7 @@ le maintenant. Les utilisateurs de SD2SNES et de FXPak Pro peuvent télécharger
 Puisque vous avez lancé SNI manuellement, vous devrez probablement lui indiquer l'adresse à laquelle il doit se connecter.
 Si le serveur est hébergé sur le site d'Archipelago, vous verrez l'adresse à laquelle vous connecter dans le haut de la page, dernière ligne avant la liste des mondes.
 Tapez `/connect adresse` (ou le "adresse" est remplacé par l'adresse archipelago, par exemple `/connect archipelago.gg:12345`) dans la boîte de commande au bas de votre client SNI, ou encore écrivez l'adresse dans la boîte "server" dans le haut du client, puis cliquez `Connect`.
-Si le serveur n'est pas hébergé sur le site d'Archipelago, demandez à l'hôte l'adresse du serveur, puis tapez `/connect adresse` (ou "adresse" est remplacé par l'adresse fourni par l'hôte) ou copiez/collez cette adresse dans le champ "Server" puis appuyez sur Entrée.
+Si le serveur n'est pas hébergé sur le site d'Archipelago, demandez à l'hôte l'adresse du serveur, puis tapez `/connect adresse` (ou "adresse" est remplacé par l'adresse fourni par l'hôte) ou copiez/collez cette adresse dans le champ "Server" puis appuyez sur "Connect".
 
 Le client essaiera de vous reconnecter à la nouvelle adresse du serveur, et devrait mentionner "Server Status:
 Connected". Si le client ne se connecte pas après quelques instants, il faudra peut-être rafraîchir la page de
