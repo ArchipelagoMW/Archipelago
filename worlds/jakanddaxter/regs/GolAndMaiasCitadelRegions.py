@@ -14,17 +14,8 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
                 or state.has("Jump Kick", p)
                 or (state.has("Punch", p) and state.has("Punch Uppercut", p)))
 
-    def can_uppercut_spin(state: CollectionState, p: int) -> bool:
-        return (state.has("Punch", p)
-                and state.has("Punch Uppercut", p)
-                and state.has("Jump Kick", p))
-
     def can_triple_jump(state: CollectionState, p: int) -> bool:
         return state.has("Double Jump", p) and state.has("Jump Kick", p)
-
-    # Don't @ me on the name.
-    def can_move_fancy(state: CollectionState, p: int) -> bool:
-        return can_uppercut_spin(state, p) or can_triple_jump(state, p)
 
     def can_jump_stairs(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
@@ -75,12 +66,14 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
     robot_scaffolding.connect(main_area, rule=lambda state: state.has("Jump Dive", player))
     robot_scaffolding.connect(blast_furnace, rule=lambda state:
                               state.has("Jump Dive", player)
+                              and can_jump_farther(state, player)
                               and ((state.has("Roll", player) and state.has("Roll Jump", player))
-                                   or can_uppercut_spin(state, player)))
+                                   or can_triple_jump(state, player)))
     robot_scaffolding.connect(bunny_room, rule=lambda state:
-                              can_fight(state, player)
-                              and (can_move_fancy(state, player)
-                                   or (state.has("Roll", player) and state.has("Roll Jump", player))))
+                              state.has("Jump Dive", player)
+                              and can_jump_farther(state, player)
+                              and ((state.has("Roll", player) and state.has("Roll Jump", player))
+                                   or can_triple_jump(state, player)))
 
     jump_pad_room.connect(main_area)
     jump_pad_room.connect(robot_scaffolding, rule=lambda state:
@@ -93,7 +86,7 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
     bunny_room.connect(robot_scaffolding, rule=lambda state:
                        state.has("Jump Dive", player)
                        and ((state.has("Roll", player) and state.has("Roll Jump", player))
-                            or can_triple_jump(state, player)))
+                            or can_jump_farther(state, player)))
 
     # Final climb.
     robot_scaffolding.connect(rotating_tower, rule=lambda state:
@@ -104,10 +97,10 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
 
     rotating_tower.connect(main_area)  # Take stairs back down.
 
-    # You're going to need free-shooting yellow eco to defeat the robot.
+    # Final elevator. Need to break boxes at summit to get blue eco for platform.
     rotating_tower.connect(final_boss, rule=lambda state:
                            state.has("Freed The Green Sage", player)
-                           and state.has("Punch", player))
+                           and can_fight(state, player))
 
     final_boss.connect(rotating_tower)  # Take elevator back down.
 

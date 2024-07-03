@@ -8,17 +8,16 @@ from ..Rules import can_free_scout_flies, can_fight
 def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[JakAndDaxterRegion]:
 
     # We need a few helper functions.
-    def can_uppercut_spin(state: CollectionState, p: int) -> bool:
-        return (state.has("Punch", p)
-                and state.has("Punch Uppercut", p)
-                and state.has("Jump Kick", p))
+    def can_cross_main_gap(state: CollectionState, p: int) -> bool:
+        return ((state.has("Roll", player)
+                 and state.has("Roll Jump", player))
+                or (state.has("Double Jump", player)
+                    and state.has("Jump Kick", player)))
 
-    def can_triple_jump(state: CollectionState, p: int) -> bool:
-        return state.has("Double Jump", p) and state.has("Jump Kick", p)
-
-    # Don't @ me on the name.
-    def can_move_fancy(state: CollectionState, p: int) -> bool:
-        return can_uppercut_spin(state, p) or can_triple_jump(state, p)
+    def can_cross_frozen_cave(state: CollectionState, p: int) -> bool:
+        return (state.has("Jump Kick", p)
+                and (state.has("Double Jump", p)
+                     or (state.has("Roll", p) and state.has("Roll Jump", p))))
 
     def can_jump_blockers(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
@@ -31,14 +30,29 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
     main_area.add_fly_locations([65], access_rule=lambda state: can_free_scout_flies(state, player))
 
     # We need a few virtual regions like we had for Dark Crystals in Spider Cave.
-    # First, a virtual region for the glacier lurkers, who all require combat.
+    # First, a virtual region for the glacier lurkers.
     glacier_lurkers = JakAndDaxterRegion("Glacier Lurkers", player, multiworld, level_name, 0)
-    glacier_lurkers.add_cell_locations([61], access_rule=lambda state: can_fight(state, player))
+
+    # Need to fight all the troops.
+    # Troop in snowball_canyon: cross main_area.
+    # Troop in ice_skating_rink: cross main_area and fort_exterior.
+    # Troop in fort_exterior: cross main_area and fort_exterior.
+    glacier_lurkers.add_cell_locations([61], access_rule=lambda state:
+                                       can_fight(state, player)
+                                       and can_cross_main_gap(state, player))
 
     # Second, a virtual region for the precursor blockers. Unlike the others, this contains orbs:
     # the total number of orbs that sit on top of the blockers. Yes, there are only 8.
     blockers = JakAndDaxterRegion("Precursor Blockers", player, multiworld, level_name, 8)
-    blockers.add_cell_locations([66], access_rule=lambda state: can_fight(state, player))
+
+    # 1 in main_area
+    # 2 in snowball_canyon
+    # 4 in ice_skating_rink
+    # 3 in fort_exterior
+    # 3 in bunny_cave_start
+    blockers.add_cell_locations([66], access_rule=lambda state:
+                                can_fight(state, player)
+                                and can_cross_main_gap(state, player))
 
     snowball_canyon = JakAndDaxterRegion("Snowball Canyon", player, multiworld, level_name, 28)
 
@@ -96,35 +110,32 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
     main_area.connect(glacier_lurkers, rule=lambda state: can_fight(state, player))
 
     # Yes, the only way into the rest of the level requires advanced movement.
-    main_area.connect(snowball_canyon, rule=lambda state:
-                      (state.has("Roll", player) and state.has("Roll Jump", player))
-                      or can_move_fancy(state, player))
+    main_area.connect(snowball_canyon, rule=lambda state: can_cross_main_gap(state, player))
 
     snowball_canyon.connect(main_area)                              # But you can just jump down and run up the ramp.
     snowball_canyon.connect(bunny_cave_start)                       # Jump down from the glacier troop cliff.
     snowball_canyon.connect(fort_exterior)                          # Jump down, to the left of frozen box cave.
     snowball_canyon.connect(frozen_box_cave, rule=lambda state:     # More advanced movement.
-                            can_move_fancy(state, player))
+                            can_cross_frozen_cave(state, player))
 
     frozen_box_cave.connect(snowball_canyon, rule=lambda state:                 # Same movement to go back.
-                            can_move_fancy(state, player))
+                            can_cross_frozen_cave(state, player))
     frozen_box_cave.connect(frozen_box_cave_crates, rule=lambda state:          # Same movement to get these crates.
-                            state.has("Yellow Eco Switch", player)
-                            and can_move_fancy(state, player))
+                            state.has("Yellow Eco Switch", player)              # Plus YES.
+                            and can_cross_frozen_cave(state, player))
     frozen_box_cave.connect(ice_skating_rink, rule=lambda state:                # Same movement to go forward.
-                            can_move_fancy(state, player))
+                            can_cross_frozen_cave(state, player))
 
     frozen_box_cave_crates.connect(frozen_box_cave)                             # Semi-virtual region, no moves req'd.
 
     ice_skating_rink.connect(frozen_box_cave, rule=lambda state:                # Same movement to go back.
-                             can_move_fancy(state, player))
+                             can_cross_frozen_cave(state, player))
     ice_skating_rink.connect(flut_flut_course, rule=lambda state:               # Duh.
                              state.has("Flut Flut", player))
     ice_skating_rink.connect(fort_exterior)                                     # Just slide down the elevator ramp.
 
-    fort_exterior.connect(ice_skating_rink, rule=lambda state:                  # Twin elevators are tough to reach.
-                          state.has("Double Jump", player)
-                          or state.has("Jump Kick", player))
+    fort_exterior.connect(ice_skating_rink, rule=lambda state:                  # Twin elevators OR scout fly ledge.
+                          can_cross_main_gap(state, player))                    # Both doable with main_gap logic.
     fort_exterior.connect(snowball_canyon)                                      # Run across bridge.
     fort_exterior.connect(fort_interior, rule=lambda state:                     # Duh.
                           state.has("Snowy Fort Gate", player))

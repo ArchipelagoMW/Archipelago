@@ -105,6 +105,8 @@ def autopsy(died: int) -> str:
         return "Jak got Flut Flut hurt."
     if died == 18:
         return "Jak poisoned the whole darn catch."
+    if died == 19:
+        return "Jak collided with too many obstacles."
     return "Jak died."
 
 

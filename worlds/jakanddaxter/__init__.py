@@ -23,7 +23,6 @@ def launch_client():
 
 
 components.append(Component("Jak and Daxter Client",
-                            "JakAndDaxterClient",
                             func=launch_client,
                             component_type=Type.CLIENT,
                             icon="egg"))
@@ -159,8 +158,3 @@ class JakAndDaxterWorld(World):
 
     def get_filler_item_name(self) -> str:
         return "Green Eco Pill"
-
-
-def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="JakAndDaxterClient")
