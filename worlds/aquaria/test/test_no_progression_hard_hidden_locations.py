@@ -4,7 +4,7 @@ Date: Fri, 03 May 2024 14:07:35 +0000
 Description: Unit test used to test that no progression items can be put in hard or hidden locations when option enabled
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 from BaseClasses import ItemClassification
 
 
@@ -30,7 +30,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
         "Final Boss area, bulb in the boss third form room",
         "Sun Worm path, first cliff bulb",
         "Sun Worm path, second cliff bulb",
-        "The Veil top right area, bulb in the top of the waterfall",
+        "The Veil top right area, bulb at the top of the waterfall",
         "Bubble Cave, bulb in the left cave wall",
         "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
         "Bubble Cave, Verse Egg",
