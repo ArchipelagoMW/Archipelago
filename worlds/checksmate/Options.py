@@ -122,9 +122,9 @@ class EnemyPieceTypes(Choice):
 class EarlyMaterial(Choice):
     """
     Guarantees that a King move directly onto the second rank within the first few moves will provide a piece or pawn
-    (chessman). When this option is set, this location (Bongcloud Once) gets overridden over any exclusion.
+    (chessman). When this option is set, this location (Move King E2/E7 Early) gets overridden over any exclusion.
 
-    The other Bongcloud moves also involve the King, but are not altered by this setting. (A File: Move to the leftmost
+    4 other Bongcloud moves also involve the King, but are not altered by this setting. (A File: Move to the leftmost
     File; Capture: Any capturing move; Center: Move to any of the center 4 squares; Promotion: Move to enemy back rank)
 
     Pawn, Minor, Major: You will get an early chessman of the specified type (i.e. a pawn, minor piece, or major piece).
@@ -241,7 +241,7 @@ class FairyChessPieceCollection(Choice):
     Configure: Allows you to specify your own pieces using the FairyChessPieces option. See also FairyChessPieces (an
     OptionSet, which is not typically visible on the Archipelago Settings UI) for advanced, specific configuration.
     """
-    display_name = "Fairy Chess Piece Types"
+    display_name = "Fairy Chess Piece Collection"
     option_fide = 0
     option_betza = 1
     option_full = 2
@@ -251,6 +251,8 @@ class FairyChessPieceCollection(Choice):
 
 class FairyChessPieces(OptionSet):
     """
+    THIS OPTION IS INCOMPATIBLE WITH FairyChessPieceCollection. Set that option to "Configure" to use this option.
+
     Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies. If omitted,
     the default allows for all following fairy chess pieces, as well as the standard pieces defined by FIDE.
 
@@ -325,7 +327,7 @@ class MinorPieceLimitByType(NamedRange):
     """
     display_name = "Minor Piece Limit by Type"
     range_start = 1
-    range_end = 9
+    range_end = 15
     default = 0
     special_range_names = {
         "disabled": 0,
@@ -339,7 +341,7 @@ class MajorPieceLimitByType(NamedRange):
     """
     display_name = "Major Piece Limit by Type"
     range_start = 1
-    range_end = 9
+    range_end = 11
     default = 0
     special_range_names = {
         "disabled": 0,
@@ -353,7 +355,7 @@ class QueenPieceLimitByType(NamedRange):
     """
     display_name = "Queen Piece Limit by Type"
     range_start = 1
-    range_end = 5
+    range_end = 9
     default = 0
     special_range_names = {
         "disabled": 0,
@@ -384,7 +386,7 @@ class QueenPieceLimit(NamedRange):
     """
     display_name = "Queen Piece Limit"
     range_start = 1
-    range_end = 7
+    range_end = 9
     default = 0
     special_range_names = {
         "disabled": 0,

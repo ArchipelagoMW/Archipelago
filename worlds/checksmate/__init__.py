@@ -38,7 +38,7 @@ class CMWorld(World):
     game: ClassVar[str] = "ChecksMate"
     data_version = 0
     web = CMWeb()
-    required_client_version = (0, 0, 2)
+    required_client_version = (0, 2, 1)
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
     options: CMOptions
 
@@ -333,6 +333,8 @@ class CMWorld(World):
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         while (len(items) + user_location_count + sum(locked_items.values())) < max_items:
+            if len(my_filler_items) == 0:
+                my_filler_items = list(filler_items.keys())
             chosen_item = self.random.choice(my_filler_items)
             if not has_pocket and not self.has_prereqs(chosen_item):
                 continue

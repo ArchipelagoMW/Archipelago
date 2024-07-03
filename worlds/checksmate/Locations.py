@@ -108,7 +108,7 @@ location_table = {
     # special moves and tactics
     # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
     # "French Move": CMLocationData(4_902_050, 0),
-    "Fork, Sacrificial": CMLocationData(4_902_052, 700, 700, 6, is_tactic=True),
+    "Fork, Sacrificial": CMLocationData(4_902_052, 700, 1100, 6, is_tactic=True),
     "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, 2700, 9, is_tactic=True),
     # AI really hates getting royal forked
     "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, 5200, 12, is_tactic=True),
@@ -116,7 +116,6 @@ location_table = {
     "Fork, True Triple": CMLocationData(4_902_056, 3450, 5450, 12, is_tactic=True),
     # I sincerely believe this should be filler
     "Fork, True Royal": CMLocationData(4_902_057, 4020, 6020, 14, is_tactic=True),
-    # TODO: prevent castle from holding enemy pieces (progression item) in case of "Oops all queens."
     "O-O Castle": CMLocationData(4_902_058, 0, 0, 2),
     "O-O-O Castle": CMLocationData(4_902_059, 0, 0, 2),
     # "Discovered Attack": CMLocationData(4_902_060, 0),

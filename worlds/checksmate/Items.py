@@ -25,11 +25,11 @@ item_table = {
     "Progressive Pawn Forwardness": CMItemData(4_901_003, ItemClassification.filler, quantity=13, parents=[
         ["Progressive Pawn", 3]]),
     # Bishops and Knights are worth 3.25 to 3.5, but some minor pieces are worse, so we assume 3.0 conservatively
-    "Progressive Minor Piece": CMItemData(4_901_004, ItemClassification.progression, quantity=11, material=300),
+    "Progressive Minor Piece": CMItemData(4_901_004, ItemClassification.progression, quantity=15, material=300),
     # Rooks are worth 5.25 to 5.5, but many major pieces are worse, so we assume 4.85, which stays under 5.0
-    "Progressive Major Piece": CMItemData(4_901_005, ItemClassification.progression, quantity=9, material=485),
+    "Progressive Major Piece": CMItemData(4_901_005, ItemClassification.progression, quantity=11, material=485),
     # Queen pieces are pretty good, and even the weak ones are pretty close, so queens can stay 9.0 (but not 10.0)
-    "Progressive Major To Queen": CMItemData(4_901_006, ItemClassification.progression, quantity=5, material=415,
+    "Progressive Major To Queen": CMItemData(4_901_006, ItemClassification.progression, quantity=9, material=415,
                                              parents=[["Progressive Major Piece", 1]]),
     "Victory": CMItemData(4_901_009, ItemClassification.progression),
     "Super-Size Me": CMItemData(4_901_010, ItemClassification.progression, quantity=0),  # :)

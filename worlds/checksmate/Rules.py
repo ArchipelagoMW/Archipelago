@@ -122,6 +122,8 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     for name, item in checksmate.Locations.location_table.items():
         if not super_sized and item.material_expectations == -1:
             continue
+        if not opts.enable_tactics.value == opts.enable_tactics.option_all and item.is_tactic:
+            continue
         # AI avoids making trades except where it wins material or secures victory, so require that much material
         material_cost = item.material_expectations if not super_sized else (
             item.material_expectations_grand if always_super_sized else max(
@@ -175,7 +177,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
 
     # tactics
     # add_rule(multiworld.get_location("Pin", player), lambda state: has_pin(state, player))
-    if opts.enable_tactics.value:
+    if opts.enable_tactics.value == opts.enable_tactics.option_all:
         add_rule(multiworld.get_location("Fork, Sacrificial", player), lambda state: has_pin(state, player))
         add_rule(multiworld.get_location("Fork, True", player), lambda state: has_pin(state, player))
         add_rule(multiworld.get_location("Fork, Sacrificial Triple", player), lambda state: has_pin(state, player))
