@@ -19,7 +19,7 @@ inclure les objets des coffres bruns (qui contiennent normalement des consommabl
 
 Tous les objets qui ont été déterminés mélangés dans les options peuvent être placés dans d'autres mondes.
 
-## À quoi ressemblent les les objets des autres joueurs dans Final Fantasy Mystic Quest?
+## À quoi ressemblent les objets des autres joueurs dans Final Fantasy Mystic Quest?
 
 Les emplacements qui étaient à l'origine des coffres (rouges ou bruns si ceux-ci sont inclus) apparaîtront comme des coffres.
 Les coffres rouges sont des objets qui sont utiles ou de progression, alors que les coffres bruns seront des objets "filler".
