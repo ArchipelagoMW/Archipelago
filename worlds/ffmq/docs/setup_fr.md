@@ -29,7 +29,7 @@ La communauté d'Archipelago ne peut vous fournir avec ce fichier.
    programme par défaut pour ouvrir vos ROMs.
     1. Extrayez votre dossier d'émulateur sur votre Bureau, ou à un endroit dont vous vous souviendrez.
     2. Faites un clic droit sur un fichier ROM et sélectionnez **Ouvrir avec...**
-    3. Cochez la case à côté de **Toujours utiliser cette application pour ouvrir les fichiers .sfc**
+    3. Cochez la case à côté de **Toujours utiliser cette application pour ouvrir les fichiers `.sfc`**
     4. Descendez jusqu'en bas de la liste et sélectionnez **Rechercher une autre application sur ce PC**
     5. Naviguez dans les dossiers jusqu'au fichier `.exe` de votre émulateur et choisissez **Ouvrir**. Ce fichier
        devrait se trouver dans le dossier que vous avez extrait à la première étape.
