@@ -641,6 +641,7 @@ VANGUARD_AGONY_LAUNCHERS                                = "Agony Launchers (Vang
 VANGUARD_MATTER_DISPERSION                              = "Matter Dispersion (Vanguard)"
 IMMORTAL_ANNIHILATOR_STALWART_SINGULARITY_CHARGE        = "Singularity Charge (Immortal/Annihilator/Stalwart)"
 IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS = "Advanced Targeting Mechanics (Immortal/Annihilator/Stalwart)"
+IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION      = "Disruptor Dispersion (Immortal/Annihilator/Stalwart)"
 COLOSSUS_PACIFICATION_PROTOCOL                          = "Pacification Protocol (Colossus)"
 WRATHWALKER_RAPID_POWER_CYCLING                         = "Rapid Power Cycling (Wrathwalker)"
 WRATHWALKER_EYE_OF_WRATH                                = "Eye of Wrath (Wrathwalker)"

@@ -808,6 +808,7 @@ item_descriptions = {
     item_names.VANGUARD_MATTER_DISPERSION: "Increases Vanguard attack area.",
     item_names.IMMORTAL_ANNIHILATOR_STALWART_SINGULARITY_CHARGE: "Increases Immortal, Annihilator, and Stalwart attack range by +2.",
     item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS: "Immortals, Annihilators, and Stalwarts can attack air units.",
+    item_names.IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION: "Immortals, Annihilators, and Stalwarts deal minor splash damage.",
     item_names.COLOSSUS_PACIFICATION_PROTOCOL: "Increases Colossus attack speed.",
     item_names.WRATHWALKER_RAPID_POWER_CYCLING: "Reduces the charging time and increases attack speed of the Wrathwalker's Charged Blast.",
     item_names.WRATHWALKER_EYE_OF_WRATH: "Increases Wrathwalker weapon range by +1.",
