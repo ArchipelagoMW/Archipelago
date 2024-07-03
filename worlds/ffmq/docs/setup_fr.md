@@ -78,6 +78,7 @@ s'occupe de la génération. Une fois cela fait, l'hôte vous fournira soit un l
 fichier `.zip` contenant les patchs de tous les joueurs. Votre patch devrait avoir l'extension `.apmq`.
 
 Allez au [site FFMQR](https://ffmqrando.net/Archipelago) et sélectionnez votre ROM Final Fantasy Mystic Quest original dans le boîte "ROM", puis votre ficher patch `.apmq` dans la boîte "Load Archipelago Config File".
+Cliquez sur "Generate". Un téléchargement avec votre ROM aléatoire devrait s'amorcer.
 
 Ouvrez le client SNI (sur Windows ArchipelagoSNIClient.exe, sur Linux ouvrez le .appImage puis cliquez sur SNI Client), puis ouvrez le ROM téléchargé avec votre émulateur choisi.
 
