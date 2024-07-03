@@ -2,7 +2,7 @@
 
 ## Où se situe la page d'options?
 
-La [page de configuration](../player-options) contient toutes les options nécessaires pour configurer et créer un fichier de configuration.
+La [page de configuration](../player-options) contient toutes les options nécessaires pour créer un fichier de configuration.
 
 
 ## Qu'est-ce qui est rendu aléatoire dans ce jeu?
