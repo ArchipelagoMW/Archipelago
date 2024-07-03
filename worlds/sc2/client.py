@@ -898,7 +898,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     
     # War council option
     if not ctx.allow_unit_nerfs:
-        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council] = (1 << 30) - 1
+        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council.flag_word] = (1 << 30) - 1
 
     # Deprecated Orbital Command handling (Backwards compatibility):
     if orbital_command_count > 0:
