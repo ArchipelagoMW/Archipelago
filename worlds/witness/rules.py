@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Optional, Tuple, List
+from typing import TYPE_CHECKING, Optional, Tuple, List, Union
 
 from BaseClasses import CollectionState
 
@@ -199,7 +199,7 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     )
 
 
-def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> CollectionRule | SimpleItemRepresentation:
+def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> Union[CollectionRule, SimpleItemRepresentation]:
     """
     Convert a single element of a WitnessRule into a CollectionRule, unless it is referring to an item,
     in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
@@ -237,8 +237,8 @@ def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic
     return simple_rule
 
 
-def optimize_requirement_option(requirement_option: List[CollectionRule | SimpleItemRepresentation])\
-        -> List[CollectionRule | SimpleItemRepresentation]:
+def optimize_requirement_option(requirement_option: List[Union[CollectionRule, SimpleItemRepresentation]])\
+        -> List[Union[CollectionRule, SimpleItemRepresentation]]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
@@ -258,7 +258,7 @@ def optimize_requirement_option(requirement_option: List[CollectionRule | Simple
     return optimized_requirement_option
 
 
-def convert_requirement_option(requirement: List[CollectionRule | SimpleItemRepresentation],
+def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],
                                player: int) -> List[CollectionRule]:
     """
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
