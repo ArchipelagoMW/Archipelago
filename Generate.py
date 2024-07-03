@@ -402,16 +402,19 @@ def compare_results(
         yaml_value: Union[str, int, bool, dict, list],
         trigger_value: Union[str, int, bool, dict, list],
         comparator: str):
+    if (isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int)):
+        yaml_value = str(yaml_value)
+        trigger_value = str(trigger_value)
     if comparator == "=":
         return yaml_value == trigger_value
     if comparator == "!=":
         return yaml_value != trigger_value
-    if isinstance(yaml_value, int) and isinstance(trigger_value, int):
+    try:
         if comparator == "<":
-            return yaml_value < trigger_value
+            return int(yaml_value) < int(trigger_value)
         if comparator == ">":
-            return yaml_value > trigger_value
-    else:
+            return int(yaml_value) > int(trigger_value)
+    except ValueError:
         raise Exception("Comparing non-integer values is not possible with < or >")
 
 
