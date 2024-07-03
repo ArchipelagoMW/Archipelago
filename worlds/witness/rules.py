@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Optional, Tuple, List, Union, cast, Dict
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union, cast
 
 from BaseClasses import CollectionState
 
@@ -28,8 +28,8 @@ def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
     if redirect_required:
         return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Redirected)"], world.player, amount)
-    else:
-        return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Unredirected)"], world.player, amount)
+
+    return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Unredirected)"], world.player, amount)
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
@@ -167,12 +167,13 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     )
 
 
-def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> Union[CollectionRule, SimpleItemRepresentation]:
+def _has_item(item: str, world: "WitnessWorld",
+              player_logic: WitnessPlayerLogic) -> Union[CollectionRule, SimpleItemRepresentation]:
     """
     Convert a single element of a WitnessRule into a CollectionRule, unless it is referring to an item,
     in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
     """
-    
+
     assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
@@ -219,11 +220,10 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     for item_rule in direct_items:
         max_per_item[item_rule[0]] = max(max_per_item[item_rule[0]], item_rule[1])
 
-    optimized_requirement_option = [
+    return [
         rule for rule in requirement_option
         if not (isinstance(rule, tuple) and rule[1] < max_per_item[rule[0]])
     ]
-    return optimized_requirement_option
 
 
 def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],

@@ -3,7 +3,7 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Region
 
