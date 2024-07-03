@@ -13,7 +13,7 @@ Il y a aussi plusieurs autres options afin d'ajuster la difficulté du jeu et la
 ## Quels objets et emplacements sont mélangés?
 
 Les objets normalement reçus des coffres rouges, des PNJ et des champs de bataille sont mélangés. Vous pouvez aussi
-ajouter les coffres bruns (qui contiennent normalement les consommables) dans les objets mélangés.
+inclure les objets des coffres bruns (qui contiennent normalement des consommables) dans les objets mélangés.
 
 ## Quels objets peuvent être dans les mondes des autres joueurs?
 
