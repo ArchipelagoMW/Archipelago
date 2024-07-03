@@ -6,7 +6,7 @@ try:
     from worlds.tracker.TrackerClient import TrackerGameContext as BaseContext, TrackerCommandProcessor as ClientCommandProcessor  # noqa
 
     tracker_loaded = True
-except ModuleNotFoundError:
+except ImportError:
     from CommonClient import CommonContext, ClientCommandProcessor
 
 
