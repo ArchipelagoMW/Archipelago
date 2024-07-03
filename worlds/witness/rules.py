@@ -16,20 +16,6 @@ from .player_logic import WitnessPlayerLogic
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-laser_hexes = [
-    "0x028A4",
-    "0x00274",
-    "0x032F9",
-    "0x01539",
-    "0x181B3",
-    "0x0C2B2",
-    "0x00509",
-    "0x00BF6",
-    "0x014BB",
-    "0x012FB",
-    "0x17C65",
-]
-
 SimpleItemRepresentation = Tuple[str, int]
 
 
@@ -39,29 +25,11 @@ def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
     return lambda state: state.has("+1 Panel Hunt", player, required)
 
 
-def _has_laser(laser_hex: str, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
-    player = world.player
-    laser_name = static_witness_logic.ENTITIES_BY_HEX[laser_hex]["checkName"]
-
-    # Workaround for intentional naming inconsistency
-    if laser_name == "Symmetry Island Laser":
-        laser_name = "Symmetry Laser"
-
-    if laser_hex == "0x012FB" and redirect_required:
-        return lambda state: state.has_all([f"+1 Laser ({laser_name})", "Desert Laser Redirection"], player)
-
-    return lambda state: state.has(f"+1 Laser ({laser_name})", player)
-
-
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
-    laser_lambdas = []
-
-    for laser_hex in laser_hexes:
-        has_laser_lambda = _has_laser(laser_hex, world, redirect_required)
-
-        laser_lambdas.append(has_laser_lambda)
-
-    return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) >= amount
+    if redirect_required:
+        return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Redirected)"], world.player, amount)
+    else:
+        return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Unredirected)"], world.player, amount)
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
