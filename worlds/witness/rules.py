@@ -200,6 +200,11 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 
 
 def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> CollectionRule | SimpleItemRepresentation:
+    """
+    Convert a single element of a WitnessRule into a CollectionRule, unless it is referring to an item,
+    in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
+    """
+    
     assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
@@ -232,8 +237,11 @@ def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic
     return simple_rule
 
 
-def optimize_requirement_option(requirement_option: List[CollectionRule | SimpleItemRepresentation]) -> List[CollectionRule | SimpleItemRepresentation]:
-    # Optimize out "Progressive Dots: 1, Progressive Dots: 2"
+def optimize_requirement_option(requirement_option: List[CollectionRule | SimpleItemRepresentation])\
+        -> List[CollectionRule | SimpleItemRepresentation]:
+    """
+    This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
+    """
 
     direct_items = [rule for rule in requirement_option if isinstance(rule, tuple)]
     if not direct_items:
@@ -252,6 +260,10 @@ def optimize_requirement_option(requirement_option: List[CollectionRule | Simple
 
 def convert_requirement_option(requirement: List[CollectionRule | SimpleItemRepresentation],
                                player: int) -> List[CollectionRule]:
+    """
+    Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
+    If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
+    """
     if all(isinstance(rule, tuple) for rule in requirement):
         item_counts = dict(requirement)
         return [lambda state: state.has_all_counts(item_counts, player)]
@@ -269,8 +281,7 @@ def convert_requirement_option(requirement: List[CollectionRule | SimpleItemRepr
 
 def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
     """
-    Checks whether item and panel requirements are met for
-    a panel
+    Converts a WitnessRule into a CollectionRule.
     """
     player = world.player
 
