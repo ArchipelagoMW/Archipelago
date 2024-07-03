@@ -22,7 +22,7 @@ Tous les objets qui ont été déterminés mélangés dans les options peuvent �
 ## À quoi ressemblent les objets des autres joueurs dans Final Fantasy Mystic Quest?
 
 Les emplacements qui étaient à l'origine des coffres (rouges ou bruns si ceux-ci sont inclus) apparaîtront comme des coffres.
-Les coffres rouges sont des objets qui sont utiles ou de progression, alors que les coffres bruns seront des objets "filler".
+Les coffres rouges seront des objets utiles ou de progression, alors que les coffres bruns seront des objets de remplissage.
 Les pièges peuvent aussi bien apparaître comme des coffre rouges ou bruns.
 Lorsque vous ouvrirez un coffre contenant un objet d'un auter joueur, vous verrez un icône d'Archipelago comme objet reçu et
 la fenêtre vous indiquera avoir reçu un "Archipelago Item".
