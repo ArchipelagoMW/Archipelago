@@ -487,8 +487,8 @@ class SC2Logic:
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
             or state.has_any({item_names.SCOUT, item_names.WRATHWALKER}, self.player) \
-            or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
-                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
+            or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
+                and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_anti_light_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
@@ -501,8 +501,8 @@ class SC2Logic:
             or (state.has_any({item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER}, self.player)
                 and state.has_any({item_names.SCOUT, item_names.WRATHWALKER}, self.player)) \
             or (self.advanced_tactics
-                and state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
-                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
+                and state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
+                and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_has_blink(self, state: CollectionState) -> bool:
         return state.has_any({item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER}, self.player) \
@@ -527,7 +527,7 @@ class SC2Logic:
     def templars_return_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
             or (
-                state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
+                state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
                 and state.has_any({item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR}, self.player)
                 and state.has_any({item_names.SENTRY, item_names.HIGH_TEMPLAR}, self.player)
             )
@@ -551,7 +551,7 @@ class SC2Logic:
                         self.protoss_hybrid_counter(state)
                         or state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.SIEGE_TANK}, self.player)
                         or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
-                        or (state.has(item_names.IMMORTAL, self.player)
+                        or (state.has_any({item_names.IMMORTAL, item_names.STALWART}, self.player)
                             and state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player)
                             and self.terran_bio_heal(state))
                 )
@@ -564,7 +564,7 @@ class SC2Logic:
         return state.has_any(
             {item_names.ANNIHILATOR, item_names.ASCENDANT, item_names.TEMPEST, item_names.CARRIER, item_names.VOID_RAY,
              item_names.WRATHWALKER, item_names.VANGUARD}, self.player) \
-            or (state.has(item_names.IMMORTAL, self.player) or self.advanced_tactics) and state.has_any(
+            or (state.has_any({item_names.IMMORTAL, item_names.STALWART}, self.player) or self.advanced_tactics) and state.has_any(
                 {item_names.STALKER, item_names.DRAGOON, item_names.ADEPT, item_names.INSTIGATOR, item_names.SLAYER}, self.player)
 
     def the_infinite_cycle_requirement(self, state: CollectionState) -> bool:

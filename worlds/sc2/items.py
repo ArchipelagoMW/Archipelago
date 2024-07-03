@@ -1479,66 +1479,99 @@ item_table = {
 
 
     # Protoss Units (those that aren't as items in WoL (Prophecy))
-    item_names.OBSERVER: ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 9, SC2Race.PROTOSS, 
+    item_names.OBSERVER:
+        ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 9, SC2Race.PROTOSS,
                  classification=ItemClassification.filler, origin={"wol"}),
-    item_names.CENTURION: ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 10, SC2Race.PROTOSS, 
+    item_names.CENTURION:
+        ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 10, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.SENTINEL: ItemData(2 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 11, SC2Race.PROTOSS, 
+    item_names.SENTINEL:
+        ItemData(2 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 11, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 12, SC2Race.PROTOSS, 
+    item_names.SUPPLICANT:
+        ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 12, SC2Race.PROTOSS,
                  classification=ItemClassification.filler, important_for_filtering=True, origin={"ext"}),
-    item_names.INSTIGATOR: ItemData(4 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 13, SC2Race.PROTOSS, 
+    item_names.INSTIGATOR:
+        ItemData(4 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 13, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 14, SC2Race.PROTOSS, 
+    item_names.SLAYER:
+        ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 14, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 15, SC2Race.PROTOSS, 
+    item_names.SENTRY:
+        ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 15, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.ENERGIZER: ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 16, SC2Race.PROTOSS, 
+    item_names.ENERGIZER:
+        ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 16, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.HAVOC: ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 17, SC2Race.PROTOSS,
+    item_names.HAVOC:
+        ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 17, SC2Race.PROTOSS,
                  origin={"lotv"}, important_for_filtering=True),
-    item_names.SIGNIFIER: ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 18, SC2Race.PROTOSS, 
+    item_names.SIGNIFIER:
+        ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 18, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.ASCENDANT: ItemData(10 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 19, SC2Race.PROTOSS, 
+    item_names.ASCENDANT:
+        ItemData(10 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 19, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.AVENGER: ItemData(11 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 20, SC2Race.PROTOSS, 
+    item_names.AVENGER:
+        ItemData(11 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 20, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.BLOOD_HUNTER: ItemData(12 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 21, SC2Race.PROTOSS, 
+    item_names.BLOOD_HUNTER:
+        ItemData(12 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 21, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.DRAGOON: ItemData(13 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 22, SC2Race.PROTOSS, 
+    item_names.DRAGOON:
+        ItemData(13 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 22, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.DARK_ARCHON: ItemData(14 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 23, SC2Race.PROTOSS, 
+    item_names.DARK_ARCHON:
+        ItemData(14 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 23, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.ADEPT: ItemData(15 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 24, SC2Race.PROTOSS, 
+    item_names.ADEPT:
+        ItemData(15 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 24, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.WARP_PRISM: ItemData(16 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 25, SC2Race.PROTOSS, 
+    item_names.WARP_PRISM:
+        ItemData(16 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 25, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.ANNIHILATOR: ItemData(17 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 26, SC2Race.PROTOSS, 
+    item_names.ANNIHILATOR:
+        ItemData(17 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 26, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.VANGUARD: ItemData(18 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 27, SC2Race.PROTOSS, 
+    item_names.VANGUARD:
+        ItemData(18 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 27, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.WRATHWALKER: ItemData(19 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 28, SC2Race.PROTOSS, 
+    item_names.WRATHWALKER:
+        ItemData(19 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 28, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.REAVER: ItemData(20 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 29, SC2Race.PROTOSS, 
+    item_names.REAVER:
+        ItemData(20 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 29, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.DISRUPTOR: ItemData(21 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 0, SC2Race.PROTOSS, 
+    item_names.DISRUPTOR:
+        ItemData(21 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 0, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.MIRAGE: ItemData(22 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 1, SC2Race.PROTOSS, 
+    item_names.MIRAGE:
+        ItemData(22 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 1, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.CORSAIR: ItemData(23 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 2, SC2Race.PROTOSS, 
+    item_names.CORSAIR:
+        ItemData(23 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 2, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.DESTROYER: ItemData(24 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 3, SC2Race.PROTOSS, 
+    item_names.DESTROYER:
+        ItemData(24 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 3, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.SCOUT: ItemData(25 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 4, SC2Race.PROTOSS, 
+    item_names.SCOUT:
+        ItemData(25 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 4, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.TEMPEST: ItemData(26 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 5, SC2Race.PROTOSS, 
+    item_names.TEMPEST:
+        ItemData(26 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 5, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.MOTHERSHIP: ItemData(27 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 6, SC2Race.PROTOSS, 
+    item_names.MOTHERSHIP:
+        ItemData(27 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 6, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.ARBITER: ItemData(28 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 7, SC2Race.PROTOSS, 
+    item_names.ARBITER:
+        ItemData(28 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 7, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"}),
-    item_names.ORACLE: ItemData(29 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 8, SC2Race.PROTOSS, 
+    item_names.ORACLE:
+        ItemData(29 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 8, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
+    item_names.STALWART:
+        ItemData(30 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 9, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"wol"}),
 
     # Protoss Upgrades
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"wol", "lotv"}),
@@ -1619,8 +1652,8 @@ item_table = {
     item_names.REAVER_RESOURCE_EFFICIENCY: ItemData(345 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 15, SC2Race.PROTOSS, origin={"bw"}, parent_item=item_names.REAVER),
     item_names.VANGUARD_AGONY_LAUNCHERS: ItemData(346 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 16, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.VANGUARD),
     item_names.VANGUARD_MATTER_DISPERSION: ItemData(347 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 17, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.VANGUARD),
-    item_names.IMMORTAL_ANNIHILATOR_SINGULARITY_CHARGE: ItemData(348 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 18, SC2Race.PROTOSS, origin={"ext"}),
-    item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS: ItemData(349 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 19, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
+    item_names.IMMORTAL_ANNIHILATOR_STALWART_SINGULARITY_CHARGE: ItemData(348 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 18, SC2Race.PROTOSS, origin={"ext"}),
+    item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS: ItemData(349 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 19, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     item_names.COLOSSUS_PACIFICATION_PROTOCOL: ItemData(350 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 20, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.COLOSSUS),
     item_names.WRATHWALKER_RAPID_POWER_CYCLING: ItemData(351 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 21, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.WRATHWALKER),
     item_names.WRATHWALKER_EYE_OF_WRATH: ItemData(352 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 22, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=item_names.WRATHWALKER),
@@ -1756,6 +1789,7 @@ advanced_basic_units = {
         item_names.IMMORTAL,
         item_names.ANNIHILATOR,
         item_names.VANGUARD,
+        item_names.STALWART,
     })
 }
 
