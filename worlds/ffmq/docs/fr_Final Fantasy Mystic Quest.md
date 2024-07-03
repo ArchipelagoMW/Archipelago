@@ -8,7 +8,7 @@ La [page de configuration](../player-options) contient toutes les options néces
 ## Qu'est-ce qui est rendu aléatoire dans ce jeu?
 
 Outre les objets mélangés, il y a plusieurs options pour aussi mélanger les villes et donjons, les pièces dans les donjons, les téléporteurs et les champs de bataille.
-Il y a aussi plusieurs autres options afin de modifier la difficulté du jeu et la vitesse d'une partie.
+Il y a aussi plusieurs autres options afin d'ajuster la difficulté du jeu et la vitesse d'une partie.
 
 ## Quels objets et emplacements sont mélangés?
 
