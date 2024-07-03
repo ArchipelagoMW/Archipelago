@@ -86,7 +86,7 @@ Ouvrez le client SNI (sur Windows ArchipelagoSNIClient.exe, sur Linux ouvrez le 
 
 #### Avec un émulateur
 
-Quand le client se lance automatiquement, QUsb2Snes devrait se lancer automatiquement également en arrière-plan. Si
+Quand le client se lance automatiquement, QUsb2Snes devrait également se lancer automatiquement en arrière-plan. Si
 c'est la première fois qu'il démarre, il vous sera peut-être demandé de l'autoriser à communiquer à travers le pare-feu
 Windows.
 
