@@ -1352,7 +1352,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.remaining_mode == "enabled":
             remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
             if remaining_item_ids:
-                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
+                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[self.client.slot]][item_id]
                                                             for item_id in remaining_item_ids))
             else:
                 self.output("No remaining items found.")
@@ -1365,7 +1365,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
                 remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if remaining_item_ids:
-                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
+                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[self.client.slot]][item_id]
                                                                 for item_id in remaining_item_ids))
                 else:
                     self.output("No remaining items found.")
