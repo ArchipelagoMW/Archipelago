@@ -19,10 +19,9 @@ if TYPE_CHECKING:
 SimpleItemRepresentation = Tuple[str, int]
 
 
-def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
+def _can_do_panel_hunt(world: "WitnessWorld") -> SimpleItemRepresentation:
     required = world.panel_hunt_required_count
-    player = world.player
-    return lambda state: state.has("+1 Panel Hunt", player, required)
+    return "+1 Panel Hunt", required
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
