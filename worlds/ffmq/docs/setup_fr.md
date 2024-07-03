@@ -18,7 +18,7 @@ La communauté d'Archipelago ne peut vous fournir avec ce fichier.
 ### Installation sur Linux
 
 1. Téléchargez et installez [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). 
-** Le fichier d'installation est situé dans la section "assets" dans le bas de la fenêtre d'information de la version. Vous voulez probablement le .appImage**
+** Le fichier d'installation est situé dans la section "assets" dans le bas de la fenêtre d'information de la version. Vous voulez probablement le `.appImage`**
 2. L'utilisation de RetroArch ou BizHawk est recommandé pour les utilisateurs linux.
 
 ### Installation sur Windows
