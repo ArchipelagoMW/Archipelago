@@ -63,7 +63,7 @@ Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous
    et cliquez sur le bouton "Generate Game".
 2. Il vous sera alors présenté une page d'informations sur la seed
 3. Cliquez sur le lien "Create New Room".
-4. Vous verrez s'afficher la page du server, duquel vous pourrez télécharger votre fichier patch `.apmq` .
+4. Vous verrez s'afficher la page du server, de laquelle vous pourrez télécharger votre fichier patch `.apmq`.
 5. Rendez-vous sur le [site FFMQR](https://ffmqrando.net/Archipelago).
 Sur cette page, sélectionnez votre ROM Final Fantasy Mystic Quest original dans le boîte "ROM", puis votre ficher patch `.apmq` dans la boîte "Load Archipelago Config File".
 Cliquez sur "Generate". Un téléchargement avec votre ROM aléatoire devrait s'amorcer.
