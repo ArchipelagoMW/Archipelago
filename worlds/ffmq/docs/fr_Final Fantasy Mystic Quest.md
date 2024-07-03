@@ -31,4 +31,4 @@ la boîte de dialogue vous indiquera avoir reçu un "Archipelago Item".
 ## Lorsqu'un joueur reçoit un objet, qu'arrive-t-il?
 
 Une boîte de dialogue apparaîtra pour vous montrer l'objet que vous avez reçu. Vous ne pourrez pas recevoir d'objet si vous êtes
-en combat, dans la mappe monde ou dans les menus (à exception près lorsque vous fermez le menu).
+en combat, dans la mappemonde ou dans les menus (à l'exception de lorsque vous fermez le menu).
