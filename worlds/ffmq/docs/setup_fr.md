@@ -35,26 +35,26 @@ La communauté d'Archipelago ne peut vous fournir avec ce fichier.
        devrait se trouver dans le dossier que vous avez extrait à la première étape.
 
 
-## Configurer son fichier YAML
+## Créer son fichier de configuration (.yaml)
 
-### Qu'est-ce qu'un fichier YAML et pourquoi en ai-je besoin ?
+### Qu'est-ce qu'un fichier de configuration et pourquoi en ai-je besoin ?
 
-Votre fichier YAML contient un ensemble d'options de configuration qui fournissent au générateur des informations sur
-comment il devrait générer votre seed. Chaque joueur d'un multiwolrd devra fournir son propre fichier YAML. Cela permet
-à chaque joueur d'apprécier une expérience customisée selon ses goûts, et les différents joueurs d'un même multiworld
-peuvent avoir différentes options.
+Votre fichier de configuration contient un ensemble d'options de configuration pour indiquer au générateur 
+comment il devrait générer votre seed. Chaque joueur d'un multiworld devra fournir son propre fichier de configuration. Cela permet
+à chaque joueur d'apprécier une expérience personalisée. Les différents joueurs d'un même multiworld
+pouront avoir des options de génération différentes.
 Vous pouvez lire le [guide pour créer un YAML de base](/tutorial/Archipelago/setup/en) en anglais.
 
-### Où est-ce que j'obtiens un fichier YAML ?
+### Où est-ce que j'obtiens un fichier de configuration ?
 
 La [page d'options sur le site](/games/Final%20Fantasy%20Mystic%20Quest/player-options) vous permet de choisir vos
-options de génération et de les exporter vers un fichier YAML.
-Il vous est aussi possible de trouver le fichier yaml modèle de Mystic Quest dans votre répertoire d'installation d'Archipelago, 
+options de génération et de les exporter vers un fichier de configuration.
+Il vous est aussi possible de trouver le fichier de configuration modèle de Mystic Quest dans votre répertoire d'installation d'Archipelago, 
 dans le dossier Players/Templates.
 
-### Vérifier son fichier YAML
+### Vérifier son fichier de configuration
 
-Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
+Si vous voulez valider votre fichier de configuration pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
 [Validateur de YAML](/mysterycheck).
 
 ## Générer une partie pour un joueur
@@ -73,7 +73,7 @@ Cliquez sur "Generate". Un téléchargement avec votre ROM aléatoire devrait s'
 
 ### Obtenir son patch et créer sa ROM
 
-Quand vous rejoignez un multiworld, il vous sera demandé de fournir votre fichier YAML à celui qui héberge la partie ou
+Quand vous rejoignez un multiworld, il vous sera demandé de fournir votre fichier de configuration à celui qui héberge la partie ou
 s'occupe de la génération. Une fois cela fait, l'hôte vous fournira soit un lien pour télécharger votre patch, soit un
 fichier `.zip` contenant les patchs de tous les joueurs. Votre patch devrait avoir l'extension `.apmq`.
 
@@ -164,11 +164,11 @@ pour avoir rejoint un multiworld !
 La méthode recommandée pour héberger une partie est d'utiliser le service d'hébergement fourni par
 Archipelago. Le processus est relativement simple :
 
-1. Récupérez les fichiers YAML des joueurs.
-2. Créez une archive zip contenant ces fichiers YAML.
+1. Récupérez les fichiers de configuration (.yaml) des joueurs.
+2. Créez une archive zip contenant ces fichiers de configuration.
 3. Téléversez l'archive zip sur le lien ci-dessous.
      - Generate page: [WebHost Seed Generation Page](/generate)
-4. Attendez un moment que les seed soient générées.
+4. Attendez un moment que la seed soit générée.
 5. Lorsque la seed est générée, vous serez redirigé vers une page d'informations "Seed Info".
 6. Cliquez sur "Create New Room". Cela vous amènera à la page du serveur. Fournissez le lien de cette page aux autres
    joueurs afin qu'ils puissent récupérer leurs patchs.  
