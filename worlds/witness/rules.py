@@ -2,7 +2,8 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
-from typing import TYPE_CHECKING
+from collections import Counter
+from typing import TYPE_CHECKING, Optional, Tuple, List
 
 from BaseClasses import CollectionState
 
@@ -28,6 +29,8 @@ laser_hexes = [
     "0x012FB",
     "0x17C65",
 ]
+
+SimpleItemRepresentation = Tuple[str, int]
 
 
 def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
@@ -196,7 +199,7 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     )
 
 
-def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic) -> CollectionRule:
+def _has_item(item: str, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> CollectionRule | SimpleItemRepresentation:
     assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
@@ -223,27 +226,77 @@ def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: Witne
         return lambda state: _can_do_theater_to_tunnels(state, world)
 
     prog_item = static_witness_logic.get_parent_progressive_item(item)
-    return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
+    needed_amount = player_logic.MULTI_AMOUNTS[item]
+
+    simple_rule: SimpleItemRepresentation = (prog_item, needed_amount)
+    return simple_rule
 
 
-def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> CollectionRule:
+def optimize_requirement_option(requirement_option: List[CollectionRule | SimpleItemRepresentation]) -> List[CollectionRule | SimpleItemRepresentation]:
+    # Optimize out "Progressive Dots: 1, Progressive Dots: 2"
+
+    direct_items = [rule for rule in requirement_option if isinstance(rule, tuple)]
+    if not direct_items:
+        return requirement_option
+
+    max_per_item = Counter()
+    for item_rule in direct_items:
+        max_per_item[item_rule[0]] = max(max_per_item[item_rule[0]], item_rule[1])
+
+    optimized_requirement_option = [
+        rule for rule in requirement_option
+        if not (isinstance(rule, tuple) and rule[1] < max_per_item[rule[0]])
+    ]
+    return optimized_requirement_option
+
+
+def convert_requirement_option(requirement: List[CollectionRule | SimpleItemRepresentation],
+                               player: int) -> List[CollectionRule]:
+    if all(isinstance(rule, tuple) for rule in requirement):
+        item_counts = dict(requirement)
+        return [lambda state: state.has_all_counts(item_counts, player)]
+
+    converted_sublist = []
+    for rule in requirement:
+        if not isinstance(rule, tuple):
+            converted_sublist.append(rule)
+            continue
+
+        converted_sublist.append(lambda state, item=rule[0], count=rule[1]: state.has(item, player, count))
+
+    return converted_sublist
+
+
+def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
     """
     Checks whether item and panel requirements are met for
     a panel
     """
+    player = world.player
 
-    lambda_conversion = [
-        [_has_item(item, world, world.player, world.player_logic) for item in subset]
+    if requirements == frozenset({frozenset()}):
+        return None
+
+    rule_conversion = [
+        [_has_item(item, world, world.player_logic) for item in subset]
         for subset in requirements
     ]
 
+    optimized_rule_conversion = [optimize_requirement_option(sublist) for sublist in rule_conversion]
+
+    fully_converted_rules = [convert_requirement_option(sublist, player) for sublist in optimized_rule_conversion]
+
+    if len(fully_converted_rules) == 1:
+        if len(fully_converted_rules[0]) == 1:
+            return fully_converted_rules[0][0]
+        return lambda state: all(condition(state) for condition in fully_converted_rules[0])
     return lambda state: any(
         all(condition(state) for condition in sub_requirement)
-        for sub_requirement in lambda_conversion
+        for sub_requirement in fully_converted_rules
     )
 
 
-def make_lambda(entity_hex: str, world: "WitnessWorld") -> CollectionRule:
+def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRule]:
     """
     Lambdas are created in a for loop so values need to be captured
     """
@@ -268,6 +321,8 @@ def set_rules(world: "WitnessWorld") -> None:
         entity_hex = associated_entity["entity_hex"]
 
         rule = make_lambda(entity_hex, world)
+        if rule is None:
+            continue
 
         location = world.get_location(location)
 
