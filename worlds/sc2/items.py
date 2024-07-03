@@ -1572,6 +1572,9 @@ item_table = {
     item_names.STALWART:
         ItemData(30 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 9, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol"}),
+    item_names.WARP_RAY:
+        ItemData(31 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 10, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"wol"}),
 
     # Protoss Upgrades
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"wol", "lotv"}),
@@ -1631,7 +1634,7 @@ item_table = {
     item_names.CARRIER_HULL_OF_PAST_GLORIES:
         ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 4, SC2Race.PROTOSS, origin={"bw"},
                  parent_item=item_names.CARRIER),
-    item_names.VOID_RAY_DESTROYER_FLUX_VANES:
+    item_names.VOID_RAY_DESTROYER_WARP_RAY_FLUX_VANES:
         ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 5, SC2Race.PROTOSS, classification=ItemClassification.filler,
                  origin={"ext"}),
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE:
