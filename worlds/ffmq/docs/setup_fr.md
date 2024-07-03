@@ -47,8 +47,8 @@ Vous pouvez lire le [guide pour créer un YAML de base](/tutorial/Archipelago/se
 
 ### Où est-ce que j'obtiens un fichier YAML ?
 
-La [page d'options sur le site](/games/Final%20Fantasy%20Mystic%20Quest/player-options) vous permet de configurer vos
-paramètres personnels et de les exporter vers un fichier YAML.
+La [page d'options sur le site](/games/Final%20Fantasy%20Mystic%20Quest/player-options) vous permet de choisir vos
+options de génération et de les exporter vers un fichier YAML.
 Il vous est aussi possible de trouver le fichier yaml modèle de Mystic Quest dans votre répertoire d'installation d'Archipelago, 
 dans le dossier Players/Templates.
 
