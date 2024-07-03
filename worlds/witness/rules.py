@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Optional, Tuple, List, Union
+from typing import TYPE_CHECKING, Optional, Tuple, List, Union, cast
 
 from BaseClasses import CollectionState
 
@@ -232,19 +232,25 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
     """
-    if all(isinstance(rule, tuple) for rule in requirement):
-        item_counts = dict(requirement)
-        return [lambda state: state.has_all_counts(item_counts, player)]
-
     converted_sublist = []
+
     for rule in requirement:
         if not isinstance(rule, tuple):
             converted_sublist.append(rule)
             continue
 
-        converted_sublist.append(lambda state, item=rule[0], count=rule[1]: state.has(item, player, count))
+    collection_rules = [rule for rule in requirement if not isinstance(rule, tuple)]
+    item_rules = [cast(SimpleItemRepresentation, rule) for rule in requirement if isinstance(rule, tuple)]
 
-    return converted_sublist
+    if len(item_rules) == 1:
+        item = item_rules[0][0]
+        count = item_rules[0][1]
+        item_rules_converted = [lambda state: state.has(item, player, count)]
+    else:
+        item_counts = dict(item_rules)
+        item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
+
+    return collection_rules + item_rules_converted
 
 
 def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
