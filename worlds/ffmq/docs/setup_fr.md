@@ -169,7 +169,7 @@ Archipelago. Le processus est relativement simple :
 3. Téléversez l'archive zip sur le lien ci-dessous.
      - Generate page: [WebHost Seed Generation Page](/generate)
 4. Attendez un moment que les seed soient générées.
-5. Lorsque les seeds sont générées, vous serez redirigé vers une page d'informations "Seed Info".
+5. Lorsque la seed est générée, vous serez redirigé vers une page d'informations "Seed Info".
 6. Cliquez sur "Create New Room". Cela vous amènera à la page du serveur. Fournissez le lien de cette page aux autres
    joueurs afin qu'ils puissent récupérer leurs patchs.  
 7. Remarquez qu'un lien vers le traqueur du MultiWorld est en haut de la page de la salle. Vous devriez également
