@@ -556,6 +556,14 @@ class EnableMorphling(Toggle):
     display_name = "Enable Morphling"
 
 
+class AllowUnitNerfs(Toggle):
+    """
+    Controls whether some units can initially be found in a nerfed state, with upgrades restoring their stronger power level.
+    For example, nerfed Zealots will lack the whirlwind upgrade until it is found as an item.
+    """
+    display_name = "Allow Unit Nerfs"
+
+
 class SpearOfAdunPresence(Choice):
     """
     Determines in which missions Spear of Adun calldowns will be available.
@@ -929,6 +937,7 @@ class Starcraft2Options(PerGameCommonOptions):
     start_primary_abilities: StartPrimaryAbilities
     kerrigan_primal_status: KerriganPrimalStatus
     enable_morphling: EnableMorphling
+    allow_unit_nerfs: AllowUnitNerfs
     spear_of_adun_presence: SpearOfAdunPresence
     spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
     spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence

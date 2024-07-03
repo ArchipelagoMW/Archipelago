@@ -32,7 +32,7 @@ from .options import (
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, AllowUnitNerfs, LEGACY_GRID_ORDERS,
 )
 
 
@@ -49,12 +49,14 @@ from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from .items import (
     lookup_id_to_name, get_full_item_list, ItemData,
-    race_to_item_type, upgrade_item_types, ZergItemType, upgrade_bundles, upgrade_included_names,
+    race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles, upgrade_included_names,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
-from .mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
+from .mission_tables import (
+    lookup_id_to_mission, SC2Campaign, lookup_name_to_mission,
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
+)
 from .regions import MissionInfo
 
 import colorama
@@ -327,6 +329,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
+            ConfigurableOptionInfo('unit_nerfs', 'allow_unit_nerfs', options.AllowUnitNerfs, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -540,6 +543,7 @@ class SC2Context(CommonContext):
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
+        self.allow_unit_nerfs: int = AllowUnitNerfs.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
         self.final_mission: int = 29
         self.announcements: queue.Queue = queue.Queue()
@@ -647,6 +651,7 @@ class SC2Context(CommonContext):
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
+            self.allow_unit_nerfs = args["slot_data"].get("allow_unit_nerfs", AllowUnitNerfs.default)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -890,6 +895,10 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
+    
+    # War council option
+    if not ctx.allow_unit_nerfs:
+        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council.flag_word] = (1 << 30) - 1
 
     # Deprecated Orbital Command handling (Backwards compatibility):
     if orbital_command_count > 0:
@@ -1103,23 +1112,24 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                difficulty,
-                self.ctx.generic_upgrade_research,
-                self.ctx.all_in_choice,
-                game_speed,
-                self.ctx.disable_forced_camera,
-                self.ctx.skip_cutscenes,
-                kerrigan_options,
-                self.ctx.grant_story_tech,
-                self.ctx.take_over_ai_allies,
-                soa_options,
-                self.ctx.mission_order,
-                1 if self.ctx.nova_covert_ops_only else 0,
-                self.ctx.grant_story_levels,
-                self.ctx.enable_morphling,
-                mission_variant
-            ))
+            await self.chat_send(
+                "?SetOptions"
+                f" {difficulty}"
+                f" {self.ctx.generic_upgrade_research}"
+                f" {self.ctx.all_in_choice}"
+                f" {game_speed}"
+                f" {self.ctx.disable_forced_camera}"
+                f" {self.ctx.skip_cutscenes}"
+                f" {kerrigan_options}"
+                f" {self.ctx.grant_story_tech}"
+                f" {self.ctx.take_over_ai_allies}"
+                f" {soa_options}"
+                f" {self.ctx.mission_order}"
+                f" {int(self.ctx.nova_covert_ops_only)}"
+                f" {self.ctx.grant_story_levels}"
+                f" {self.ctx.enable_morphling}"
+                f" {mission_variant}"
+            )
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
                 start_items[SC2Race.ANY][1],
@@ -1220,17 +1230,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         zerg_items = current_items[SC2Race.ZERG]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, kerrigan_level)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
-        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
-            zerg_items[3], zerg_items[4], zerg_items[5], zerg_items[6], zerg_items[9], zerg_items[10], zerg_items[11]
-        ))
+        await self.chat_send(f"?GiveZergTech {kerrigan_level} {kerrigan_primal_bot_value} " + ' '.join(map(str, zerg_items)))
 
     async def updateProtossTech(self, current_items):
         protoss_items = current_items[SC2Race.PROTOSS]
-        await self.chat_send("?GiveProtossTech {} {} {} {} {} {} {} {} {} {}".format(
-            protoss_items[0], protoss_items[1], protoss_items[2], protoss_items[3], protoss_items[4],
-            protoss_items[5], protoss_items[6], protoss_items[7], protoss_items[8], protoss_items[9]
-        ))
+        await self.chat_send("?GiveProtossTech " + " ".join(map(str, protoss_items)))
 
 
 def request_unfinished_missions(ctx: SC2Context) -> None:
