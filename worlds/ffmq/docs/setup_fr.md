@@ -11,7 +11,7 @@
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle
       compatible
 - Le fichier ROM de la v1.0 ou v1.1 NA de Final Fantasy Mystic Quest obtenu légalement, sûrement nommé `Final Fantasy - Mystic Quest (U) (V1.0).sfc` ou `Final Fantasy - Mystic Quest (U) (V1.1).sfc`
-La communauté d'Archipelago ne peut vous obtenir avec ce fichier.
+La communauté d'Archipelago ne peut vous fournir avec ce fichier.
 
 ## Procédure d'installation
 
