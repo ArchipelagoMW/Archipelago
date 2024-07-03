@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Optional, Tuple, List, Union, cast
+from typing import TYPE_CHECKING, Optional, Tuple, List, Union, cast, Dict
 
 from BaseClasses import CollectionState
 
@@ -215,7 +215,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     if not direct_items:
         return requirement_option
 
-    max_per_item = Counter()
+    max_per_item: Dict[str, int] = Counter()
     for item_rule in direct_items:
         max_per_item[item_rule[0]] = max(max_per_item[item_rule[0]], item_rule[1])
 
