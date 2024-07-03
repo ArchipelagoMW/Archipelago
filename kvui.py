@@ -599,6 +599,7 @@ class GameManager(App):
             self.ctx.username = None
             async_start(self.ctx.disconnect())
         else:
+            self.ctx.username = None
             async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
