@@ -4,9 +4,9 @@ from Options import NamedRange, Choice, Range, Option, Toggle, DeathLink, Defaul
 
 class StrengthIncrease(Range):
     """
-    Number of Strength Increases to Add to the Level Up Rewards
+    Number of Strength Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "STR Increases"
@@ -16,9 +16,9 @@ class StrengthIncrease(Range):
 
 class DefenseIncrease(Range):
     """
-    Number of Defense Increases to Add to the Level Up Rewards
+    Number of Defense Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "DEF Increases"
@@ -28,9 +28,9 @@ class DefenseIncrease(Range):
 
 class HPIncrease(Range):
     """
-    Number of HP Increases to Add to the Level Up Rewards
+    Number of HP Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "HP Increases"
@@ -40,9 +40,9 @@ class HPIncrease(Range):
 
 class APIncrease(Range):
     """
-    Number of AP Increases to Add to the Level Up Rewards
+    Number of AP Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "AP Increases"
@@ -52,9 +52,9 @@ class APIncrease(Range):
 
 class MPIncrease(Range):
     """
-    Number of MP Increases to Add to the Level Up Rewards
+    Number of MP Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "MP Increases"
@@ -64,9 +64,9 @@ class MPIncrease(Range):
 
 class AccessorySlotIncrease(Range):
     """
-    Number of Accessory Slot Increases to Add to the Level Up Rewards
+    Number of Accessory Slot Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "Accessory Slot Increases"
@@ -76,9 +76,9 @@ class AccessorySlotIncrease(Range):
 
 class ItemSlotIncrease(Range):
     """
-    Number of Item Slot Increases to Add to the Level Up Rewards
+    Number of Item Slot Increases to add to the multiworld
     
-    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "Item Slot Increases"
@@ -88,7 +88,7 @@ class ItemSlotIncrease(Range):
 
 class Atlantica(Toggle):
     """
-    Toggle whether Atlantica locations/items should be included.
+    Toggle whether to include Atlantica locations/items.
     """
     display_name = "Atlantica"
 
@@ -106,7 +106,7 @@ class SuperBosses(Toggle):
 
 class Cups(Toggle):
     """
-    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.  Please note that the items will still appear in the multiworld, as they are required to challenge Sephiroth.
+    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.  Please note that the cup items will still appear in the multiworld even if toggled off, as they are required to challenge Sephiroth.
     """
     display_name = "Cups"
 
@@ -114,11 +114,11 @@ class Goal(Choice):
     """
     Determines when victory is achieved in your playthrough.
     
-    Sephiroth: Defeat Sephiroth.
-    Unknown: Defeat Unknown.
+    Sephiroth: Defeat Sephiroth
+    Unknown: Defeat Unknown
     Postcards: Turn in all 10 postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
-    Puppies: Rescue and return all 99 puppies in Traverse Town.
+    Puppies: Rescue and return all 99 puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Goal"
@@ -217,7 +217,7 @@ class RandomizeKeybladeStats(DefaultOnToggle):
 
 class KeybladeMinStrength(Range):
     """
-    Determines the lowest STR bonus a keyblade can have
+    Determines the minimum STR bonus a keyblade can have
     """
     display_name = "Keyblade Minimum STR Bonus"
     default = 3
@@ -344,7 +344,7 @@ class VanillaEmblemPieces(DefaultOnToggle):
 
 class JunkInMissableLocations(DefaultOnToggle):
     """
-    If on, will place Elixirs in missable locations.  If turned off, there is a chance you will need to play the game multiple times to get the missed items.
+    If on, will place Elixirs in missable locations.  If turned off, there is a chance you will need to play the game multiple times to check missed locations.
     Locations include:
         Leon Gift
         Aerith Gift
