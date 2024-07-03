@@ -1,8 +1,10 @@
-# This file is required to get pyximport to work with C++.
-# Switching from std::set to a pure C implementation is still on the table to simplify everything.
+# This file is used when doing pyximport
+import os
 
 def make_ext(modname, pyxfilename):
     from distutils.extension import Extension
     return Extension(name=modname,
                      sources=[pyxfilename],
-                     language='c++')
+                     depends=["intset.h"],
+                     include_dirs=[os.getcwd()],
+                     language="c")
