@@ -48,7 +48,6 @@ class Overcooked2World(World):
     web = Overcooked2Web()
     required_client_version = (0, 3, 8)
     topology_present: bool = False
-    data_version = 3
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
@@ -217,8 +216,6 @@ class Overcooked2World(World):
     # Autoworld Hooks
 
     def generate_early(self):
-        self.player_name = self.multiworld.player_name[self.player]
-
         # 0.0 to 1.0 where 1.0 is World Record
         self.star_threshold_scale = self.options.star_threshold_scale / 100.0
 

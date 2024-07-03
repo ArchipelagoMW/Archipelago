@@ -13,7 +13,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple
+from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -272,7 +272,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if multiworld.algorithm == 'flood':
         flood_items(multiworld)  # different algo, biased towards early game progress items
     elif multiworld.algorithm == 'balanced':
-        distribute_items_restrictive(multiworld)
+        distribute_items_restrictive(multiworld, get_settings().generator.panic_method)
 
     AutoWorld.call_all(multiworld, 'post_fill')
 
@@ -372,6 +372,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
+                # get spheres -> filter address==None -> skip empty
+                spheres: List[Dict[int, Set[int]]] = []
+                for sphere in multiworld.get_spheres():
+                    current_sphere: Dict[int, Set[int]] = collections.defaultdict(set)
+                    for sphere_location in sphere:
+                        if type(sphere_location.address) is int:
+                            current_sphere[sphere_location.player].add(sphere_location.address)
+
+                    if current_sphere:
+                        spheres.append(dict(current_sphere))
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
@@ -386,6 +397,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": multiworld.seed_name,
+                    "spheres": spheres,
                     "datapackage": data_package,
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
