@@ -6,7 +6,7 @@
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
     - Un émulateur capable d'éxécuter des scripts Lua
       - snes9x-rr de: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-      - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
+      - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html),
       - RetroArch 1.10.1 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Ou,
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle
       compatible
