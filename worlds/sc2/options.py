@@ -149,7 +149,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 83
+    range_end = 89
     default = 83
 
 
@@ -258,6 +258,23 @@ class EnableNCOMissions(DefaultOnToggle):
     Note: For best gameplay experience it's recommended to also enable Wings of Liberty campaign.
     """
     display_name = "Enable Nova Covert Ops missions"
+
+
+class EnableRaceSwapVariants(Choice):
+    """
+    Allow mission variants where you play a faction other than the one the map was initially
+    designed for. NOTE: Cutscenes are always skipped on race-swapped mission variants.
+
+    Disabled: Don't shuffle any non-vanilla map variants into the pool.
+    Shuffle All: Each version of a map can appear in the same pool (so a map can appear up to 3 times as different races)
+    ("Pick Just One At Random" coming soon)
+    """
+    display_name = "Enable Race-Swapped Mission Variants"
+    option_disabled = 0
+    # TODO: Implement pick-one logic
+    # option_pick_one = 1
+    option_shuffle_all = 2
+    default = option_disabled
 
 
 class ShuffleCampaigns(DefaultOnToggle):
@@ -911,6 +928,7 @@ class Starcraft2Options(PerGameCommonOptions):
     player_color_protoss: PlayerColorProtoss
     player_color_zerg: PlayerColorZerg
     player_color_zerg_primal: PlayerColorZergPrimal
+    selected_races: SelectRaces
     enable_wol_missions: EnableWolMissions
     enable_prophecy_missions: EnableProphecyMissions
     enable_hots_missions: EnableHotsMissions
@@ -918,6 +936,7 @@ class Starcraft2Options(PerGameCommonOptions):
     enable_lotv_missions: EnableLotVMissions
     enable_epilogue_missions: EnableEpilogueMissions
     enable_nco_missions: EnableNCOMissions
+    enable_race_swap: EnableRaceSwapVariants
     shuffle_campaigns: ShuffleCampaigns
     shuffle_no_build: ShuffleNoBuild
     starter_unit: StarterUnit
@@ -1003,7 +1022,7 @@ def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
     if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
-    return set([campaign for campaign in enabled_campaigns if campaign.race in get_enabled_races(world)])
+    return enabled_campaigns
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1019,6 +1038,8 @@ def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     # filter out no-build missions
     if not get_option_value(world, "shuffle_no_build"):
         excluded |= MissionFlag.NoBuild
+    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_disabled:
+        excluded |= MissionFlag.RaceSwap
     # TODO: add more flags to potentially exclude once we have a way to get that from the player
     return MissionFlag(excluded)
 
@@ -1042,7 +1063,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
             [mission for mission in SC2Mission if
              mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE]
         )
-    # Omitting No-Build missions if not shuffling no-build
+    # Omitting missions with flags we don't want
     if disabled_flags:
         excluded_missions = excluded_missions.union(get_missions_with_any_flags_in_list(disabled_flags))
     # Omitting missions not in enabled campaigns

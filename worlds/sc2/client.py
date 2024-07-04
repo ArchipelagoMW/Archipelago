@@ -34,6 +34,7 @@ from .options import (
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
 )
+from .mission_tables import MissionFlag
 
 
 if __name__ == "__main__":
@@ -1053,6 +1054,20 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return get_full_item_list()[item_names.KERRIGAN_PRIMAL_FORM].code in codes
     return False
 
+
+def get_mission_variant(mission_id: int) -> int:
+    mission_flags = lookup_id_to_mission[mission_id].flags
+    if MissionFlag.RaceSwap not in mission_flags:
+        return 0
+    if MissionFlag.Terran in mission_flags:
+        return 1
+    elif MissionFlag.Zerg in mission_flags:
+        return 2
+    elif MissionFlag.Protoss in mission_flags:
+        return 3
+    return 0
+
+
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
@@ -1101,9 +1116,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
+            mission_variant = get_mission_variant(self.mission_id)  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
-            # TODO: Add logic to determine which variant, based on selected map ID
-            mission_variant = 0  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:

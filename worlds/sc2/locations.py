@@ -17,6 +17,7 @@ SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
+SC2_RACESWAP_LOC_ID_OFFSET = SC2NCO_LOC_ID_OFFSET + 900
 
 
 class SC2Location(Location):
@@ -104,39 +105,39 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         LocationData("Liberation Day", "Liberation Day: Sixth Statue", SC2WOL_LOC_ID_OFFSET + 106, LocationType.VANILLA),
         LocationData("Liberation Day", "Liberation Day: Special Delivery", SC2WOL_LOC_ID_OFFSET + 107, LocationType.EXTRA),
         LocationData("Liberation Day", "Liberation Day: Transport", SC2WOL_LOC_ID_OFFSET + 108, LocationType.EXTRA),
-        LocationData("The Outlaws", "The Outlaws: Victory", SC2WOL_LOC_ID_OFFSET + 200, LocationType.VICTORY,
+        LocationData("The Outlaws (Terran)", "The Outlaws (Terran): Victory", SC2WOL_LOC_ID_OFFSET + 200, LocationType.VICTORY,
                      lambda state: logic.terran_early_tech(state)),
-        LocationData("The Outlaws", "The Outlaws: Rebel Base", SC2WOL_LOC_ID_OFFSET + 201, LocationType.VANILLA,
+        LocationData("The Outlaws (Terran)", "The Outlaws (Terran): Rebel Base", SC2WOL_LOC_ID_OFFSET + 201, LocationType.VANILLA,
                      lambda state: logic.terran_early_tech(state)),
-        LocationData("The Outlaws", "The Outlaws: North Resource Pickups", SC2WOL_LOC_ID_OFFSET + 202, LocationType.EXTRA,
+        LocationData("The Outlaws (Terran)", "The Outlaws (Terran): North Resource Pickups", SC2WOL_LOC_ID_OFFSET + 202, LocationType.EXTRA,
                      lambda state: logic.terran_early_tech(state)),
-        LocationData("The Outlaws", "The Outlaws: Bunker", SC2WOL_LOC_ID_OFFSET + 203, LocationType.VANILLA,
+        LocationData("The Outlaws (Terran)", "The Outlaws (Terran): Bunker", SC2WOL_LOC_ID_OFFSET + 203, LocationType.VANILLA,
                      lambda state: logic.terran_early_tech(state)),
-        LocationData("The Outlaws", "The Outlaws: Close Resource Pickups", SC2WOL_LOC_ID_OFFSET + 204, LocationType.EXTRA),
-        LocationData("Zero Hour", "Zero Hour: Victory", SC2WOL_LOC_ID_OFFSET + 300, LocationType.VICTORY,
+        LocationData("The Outlaws (Terran)", "The Outlaws (Terran): Close Resource Pickups", SC2WOL_LOC_ID_OFFSET + 204, LocationType.EXTRA),
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Victory", SC2WOL_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2 and
                                    (adv_tactics or logic.terran_basic_anti_air(state))),
-        LocationData("Zero Hour", "Zero Hour: First Group Rescued", SC2WOL_LOC_ID_OFFSET + 301, LocationType.VANILLA),
-        LocationData("Zero Hour", "Zero Hour: Second Group Rescued", SC2WOL_LOC_ID_OFFSET + 302, LocationType.VANILLA,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): First Group Rescued", SC2WOL_LOC_ID_OFFSET + 301, LocationType.VANILLA),
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Second Group Rescued", SC2WOL_LOC_ID_OFFSET + 302, LocationType.VANILLA,
                      lambda state: logic.terran_common_unit(state)),
-        LocationData("Zero Hour", "Zero Hour: Third Group Rescued", SC2WOL_LOC_ID_OFFSET + 303, LocationType.VANILLA,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Third Group Rescued", SC2WOL_LOC_ID_OFFSET + 303, LocationType.VANILLA,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2),
-        LocationData("Zero Hour", "Zero Hour: First Hatchery", SC2WOL_LOC_ID_OFFSET + 304, LocationType.CHALLENGE,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): First Hatchery", SC2WOL_LOC_ID_OFFSET + 304, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state)),
-        LocationData("Zero Hour", "Zero Hour: Second Hatchery", SC2WOL_LOC_ID_OFFSET + 305, LocationType.CHALLENGE,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Second Hatchery", SC2WOL_LOC_ID_OFFSET + 305, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state)),
-        LocationData("Zero Hour", "Zero Hour: Third Hatchery", SC2WOL_LOC_ID_OFFSET + 306, LocationType.CHALLENGE,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Third Hatchery", SC2WOL_LOC_ID_OFFSET + 306, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state)),
-        LocationData("Zero Hour", "Zero Hour: Fourth Hatchery", SC2WOL_LOC_ID_OFFSET + 307, LocationType.CHALLENGE,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Fourth Hatchery", SC2WOL_LOC_ID_OFFSET + 307, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state)),
-        LocationData("Zero Hour", "Zero Hour: Ride's on its Way", SC2WOL_LOC_ID_OFFSET + 308, LocationType.EXTRA,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Ride's on its Way", SC2WOL_LOC_ID_OFFSET + 308, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state)),
-        LocationData("Zero Hour", "Zero Hour: Hold Just a Little Longer", SC2WOL_LOC_ID_OFFSET + 309, LocationType.EXTRA,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Hold Just a Little Longer", SC2WOL_LOC_ID_OFFSET + 309, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2),
-        LocationData("Zero Hour", "Zero Hour: Cavalry's on the Way", SC2WOL_LOC_ID_OFFSET + 310, LocationType.EXTRA,
+        LocationData("Zero Hour (Terran)", "Zero Hour (Terran): Cavalry's on the Way", SC2WOL_LOC_ID_OFFSET + 310, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400, LocationType.VICTORY,
@@ -238,25 +239,25 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_competent_anti_air(state) and
                                    logic.terran_defense_rating(state, True) >= 3),
-        LocationData("Smash and Grab", "Smash and Grab: Victory", SC2WOL_LOC_ID_OFFSET + 800, LocationType.VICTORY,
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): Victory", SC2WOL_LOC_ID_OFFSET + 800, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
                                     or logic.terran_competent_anti_air(state))),
-        LocationData("Smash and Grab", "Smash and Grab: First Relic", SC2WOL_LOC_ID_OFFSET + 801, LocationType.VANILLA),
-        LocationData("Smash and Grab", "Smash and Grab: Second Relic", SC2WOL_LOC_ID_OFFSET + 802, LocationType.VANILLA),
-        LocationData("Smash and Grab", "Smash and Grab: Third Relic", SC2WOL_LOC_ID_OFFSET + 803, LocationType.VANILLA,
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): First Relic", SC2WOL_LOC_ID_OFFSET + 801, LocationType.VANILLA),
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): Second Relic", SC2WOL_LOC_ID_OFFSET + 802, LocationType.VANILLA),
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): Third Relic", SC2WOL_LOC_ID_OFFSET + 803, LocationType.VANILLA,
                      lambda state: logic.terran_common_unit(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
                                     or logic.terran_competent_anti_air(state))),
-        LocationData("Smash and Grab", "Smash and Grab: Fourth Relic", SC2WOL_LOC_ID_OFFSET + 804, LocationType.VANILLA,
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): Fourth Relic", SC2WOL_LOC_ID_OFFSET + 804, LocationType.VANILLA,
                      lambda state: logic.terran_common_unit(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
                                     or logic.terran_competent_anti_air(state))),
-        LocationData("Smash and Grab", "Smash and Grab: First Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 805, LocationType.EXTRA,
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): First Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 805, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
                                     or logic.terran_competent_anti_air(state))),
-        LocationData("Smash and Grab", "Smash and Grab: Second Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 806, LocationType.EXTRA,
+        LocationData("Smash and Grab (Terran)", "Smash and Grab (Terran): Second Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 806, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
                                     or logic.terran_competent_anti_air(state))),
@@ -1619,6 +1620,121 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.end_game_requirement(state) and logic.nova_any_weapon(state)),
         LocationData("End Game", "End Game: Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
                      lambda state: logic.end_game_requirement(state)),
+
+        # Mission Variants
+        # 10X/20X - Liberation Day
+        LocationData("The Outlaws (Zerg)", "The Outlaws (Zerg): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 300, LocationType.VICTORY,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("The Outlaws (Zerg)", "The Outlaws (Zerg): Rebel Base", SC2_RACESWAP_LOC_ID_OFFSET + 301, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("The Outlaws (Zerg)", "The Outlaws (Zerg): North Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 302, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("The Outlaws (Zerg)", "The Outlaws (Zerg): Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 303, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("The Outlaws (Zerg)", "The Outlaws (Zerg): Close Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 304, LocationType.EXTRA),
+        LocationData("The Outlaws (Protoss)", "The Outlaws (Protoss): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 400, LocationType.VICTORY,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("The Outlaws (Protoss)", "The Outlaws (Protoss): Rebel Base", SC2_RACESWAP_LOC_ID_OFFSET + 401, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("The Outlaws (Protoss)", "The Outlaws (Protoss): North Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 402, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("The Outlaws (Protoss)", "The Outlaws (Protoss): Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 403, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("The Outlaws (Protoss)", "The Outlaws (Protoss): Close Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 404, LocationType.EXTRA),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 500, LocationType.VICTORY,
+                     lambda state: logic.zerg_competent_defense(state) and 
+                                   logic.zerg_basic_kerriganless_anti_air(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): First Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 501, LocationType.VANILLA),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Second Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 502, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Third Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 503, LocationType.VANILLA,
+                     lambda state: logic.zerg_competent_defense(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): First Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 504, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Second Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 505, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Third Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 506, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Fourth Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 507, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Ride's on its Way", SC2_RACESWAP_LOC_ID_OFFSET + 508, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Hold Just a Little Longer", SC2_RACESWAP_LOC_ID_OFFSET + 509,
+                     LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_defense(state)),
+        LocationData("Zero Hour (Zerg)", "Zero Hour (Zerg): Cavalry's on the Way", SC2_RACESWAP_LOC_ID_OFFSET + 510, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_defense(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 600, LocationType.VICTORY,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics or logic.protoss_basic_anti_air(state))),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): First Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 601, LocationType.VANILLA),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Second Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 602, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Third Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 603, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): First Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 604, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_competent_comp(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Second Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 605, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_competent_comp(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Third Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 606, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_competent_comp(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Fourth Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 607, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_competent_comp(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Ride's on its Way", SC2_RACESWAP_LOC_ID_OFFSET + 608, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Hold Just a Little Longer", SC2_RACESWAP_LOC_ID_OFFSET + 609,
+                     LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state)),
+        LocationData("Zero Hour (Protoss)", "Zero Hour (Protoss): Cavalry's on the Way", SC2_RACESWAP_LOC_ID_OFFSET + 610, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state)),
+        # 70X/80X - Evacuation
+        # 90X/100X - Outbreak
+        # 110X/120X - Safe Haven
+        # 130X/140X - Haven's Fall
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): First Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1501, LocationType.VANILLA),
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): Second Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1502, LocationType.VANILLA),
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): Third Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1503, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): Fourth Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1504, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): First Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 1505, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Zerg)", "Smash and Grab (Zerg): Second Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 1506, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
+                                    or logic.zerg_competent_anti_air(state))),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1600, LocationType.VICTORY,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): First Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1601, LocationType.VANILLA),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): Second Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1602, LocationType.VANILLA),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): Third Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1603, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): Fourth Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1604, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): First Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 1605, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
+        LocationData("Smash and Grab (Protoss)", "Smash and Grab (Protoss): Second Forcefield Area Busted", SC2_RACESWAP_LOC_ID_OFFSET + 1606, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   (adv_tactics and logic.protoss_basic_anti_air(state)
+                                    or logic.protoss_competent_anti_air(state))),
     ]
 
     beat_events = []
