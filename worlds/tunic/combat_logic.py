@@ -60,7 +60,8 @@ enemy_encounters: Dict[str, EncounterData] = {
 }
 
 
-def has_combat_logic(encounter_data: List[EncounterData], state: CollectionState, player: int) -> bool:
+def has_combat_logic(encounters: List[str], state: CollectionState, player: int) -> bool:
+    encounter_data: List[EncounterData] = [enemy_encounters[name] for name in encounters]
     # if you do not meet the item requirements for any of the encounters, you cannot proceed
     for data in encounter_data:
         if not has_required_items(data.items_required, data.stick_required, state, player):
