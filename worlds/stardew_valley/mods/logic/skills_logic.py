@@ -5,6 +5,7 @@ from ...logic.action_logic import ActionLogicMixin
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.building_logic import BuildingLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
+from ...logic.crafting_logic import CraftingLogicMixin
 from ...logic.fishing_logic import FishingLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
@@ -31,7 +32,7 @@ class ModSkillLogicMixin(BaseLogicMixin):
 
 
 class ModSkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, ActionLogicMixin, RelationshipLogicMixin, BuildingLogicMixin,
-ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
+ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicLogicMixin]]):
     def has_mod_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
@@ -103,7 +104,13 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
             return self.logic.cooking.can_cook()
 
     def can_earn_binning_skill_level(self, level: int) -> StardewRule:
-        if level >= 6:
-            return self.logic.has(Machine.recycling_machine)
-        else:
-            return True_()  # You can always earn levels 1-5 with trash cans
+        binning_rule = True_()   # Lets design this around the new craftables to spread out the logic more.
+        if level >= 2:
+            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.trash_can) & self.logic.crafting.can_craft(Machine.recycling_machine)
+        if level >= 4:
+            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.composter)
+        if level >= 7:
+            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.recycling_bin)
+        if level >= 9:
+            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.advanced_recycling_machine)
+        return binning_rule
