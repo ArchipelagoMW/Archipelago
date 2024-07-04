@@ -602,7 +602,6 @@ DRAGOON_HIGH_IMPACT_PHASE_DISRUPTORS                    = "High Impact Phase Dis
 DRAGOON_TRILLIC_COMPRESSION_SYSTEM                      = "Trillic Compression System (Dragoon)"
 DRAGOON_SINGULARITY_CHARGE                              = "Singularity Charge (Dragoon)"
 DRAGOON_ENHANCED_STRIDER_SERVOS                         = "Enhanced Strider Servos (Dragoon)"
-DRAGOON_PHALANX_SUIT                                    = "Phalanx Suit (Dragoon)"
 SCOUT_COMBAT_SENSOR_ARRAY                               = "Combat Sensor Array (Scout)"
 SCOUT_APIAL_SENSORS                                     = "Apial Sensors (Scout)"
 SCOUT_GRAVITIC_THRUSTERS                                = "Gravitic Thrusters (Scout)"
@@ -678,6 +677,7 @@ ZEALOT_WHIRLWIND                                        = "Whirlwind (Zealot)"
 CENTURION_RESOURCE_EFFICIENCY                           = "Resource Efficiency (Centurion)"
 SENTINEL_RESOURCE_EFFICIENCY                            = "Resource Efficiency (Sentinel)"
 STALKER_PHASE_REACTOR                                   = "Phase Reactor (Stalker)"
+DRAGOON_PHALANX_SUIT                                    = "Phalanx Suit (Dragoon)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
