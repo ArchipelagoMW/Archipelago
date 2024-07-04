@@ -486,8 +486,12 @@ class ValidInventory:
         if item_names.ROACH not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if item.name != item_names.ROACH_RAVAGER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
+            inventory = [item for item in inventory if item.name != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_RAVAGER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
         if item_names.HYDRALISK not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
             inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
