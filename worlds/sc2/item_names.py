@@ -602,6 +602,7 @@ DRAGOON_HIGH_IMPACT_PHASE_DISRUPTORS                    = "High Impact Phase Dis
 DRAGOON_TRILLIC_COMPRESSION_SYSTEM                      = "Trillic Compression System (Dragoon)"
 DRAGOON_SINGULARITY_CHARGE                              = "Singularity Charge (Dragoon)"
 DRAGOON_ENHANCED_STRIDER_SERVOS                         = "Enhanced Strider Servos (Dragoon)"
+DRAGOON_PHALANX_SUIT                                    = "Phalanx Suit (Dragoon)"
 SCOUT_COMBAT_SENSOR_ARRAY                               = "Combat Sensor Array (Scout)"
 SCOUT_APIAL_SENSORS                                     = "Apial Sensors (Scout)"
 SCOUT_GRAVITIC_THRUSTERS                                = "Gravitic Thrusters (Scout)"

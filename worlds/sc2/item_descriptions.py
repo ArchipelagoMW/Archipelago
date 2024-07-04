@@ -839,9 +839,10 @@ item_descriptions = {
     item_names.ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS: "Zealots, Sentinels, and Centurions gain increased movement speed.",
     item_names.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY: "Zealots, Sentinels, and Centurions gain +30 maximum shields.",
     item_names.ZEALOT_WHIRLWIND: "Zealot War Council upgrade. Gives Zealots the whirlwind ability, dealing damage in an area over 3 seconds.",
-    item_names.CENTURION_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.CENTURION),
-    item_names.SENTINEL_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SENTINEL),
-    item_names.STALKER_PHASE_REACTOR: "Stalkers restore 80 shields over 5 seconds after they Blink.",
+    item_names.CENTURION_RESOURCE_EFFICIENCY: "Centurion War Council upgrade. " + _get_resource_efficiency_desc(item_names.CENTURION),
+    item_names.SENTINEL_RESOURCE_EFFICIENCY: "Sentinel War Council upgrade. " + _get_resource_efficiency_desc(item_names.SENTINEL),
+    item_names.STALKER_PHASE_REACTOR: "Stalker War Council upgrade. Stalkers restore 80 shields over 5 seconds after they Blink.",
+    item_names.DRAGOON_PHALANX_SUIT: "Dragoon War Council upgrade. Dragoons gain +2 range, move slightly faster, and can form tighter formations.",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.
