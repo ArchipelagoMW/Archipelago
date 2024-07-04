@@ -365,7 +365,6 @@ trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, LogicRegion.mines_dw
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
 
 bouquet = skill_recipe(Gift.bouquet, ModSkill.socializing, 3, {Flower.tulip: 3}, ModNames.socializing_skill)
-recycling_machine_dos = skill_recipe(Machine.recycling_machine, ModSkill.binning, 1, {Material.wood: 25, Material.stone: 25, MetalBar.iron: 1}, ModSkill.binning)
 trash_can = skill_recipe(ModMachine.trash_can, ModSkill.binning, 2, {Material.stone: 30, MetalBar.iron: 2}, ModSkill.binning)
 composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wood: 70, Material.sap: 20, Material.fiber: 30}, ModSkill.binning)
 recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModSkill.binning)

@@ -38,6 +38,11 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         ingredients_rule = self.logic.has_all(*recipe.ingredients)
         return learn_rule & ingredients_rule
 
+    # Too annoying to use the above sometimes.
+    def can_craft_by_name(self, recipe_name: str) -> StardewRule:
+        recipe = all_crafting_recipes_by_name[recipe_name]
+        return self.logic.crafting.can_craft(recipe)
+
     @cache_self1
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, ArchipelagoSource):

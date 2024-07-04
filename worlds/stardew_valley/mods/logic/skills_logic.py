@@ -105,12 +105,12 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
 
     def can_earn_binning_skill_level(self, level: int) -> StardewRule:
         binning_rule = True_()   # Lets design this around the new craftables to spread out the logic more.
-        if level >= 2:
-            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.trash_can) & self.logic.crafting.can_craft(Machine.recycling_machine)
-        if level >= 4:
-            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.composter)
-        if level >= 7:
-            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.recycling_bin)
-        if level >= 9:
-            binning_rule = binning_rule & self.logic.crafting.can_craft(ModMachine.advanced_recycling_machine)
+        if level > 2:
+            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.trash_can) & self.logic.crafting.can_craft_by_name(Machine.recycling_machine)
+        if level > 4:
+            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.composter)
+        if level > 7:
+            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.recycling_bin)
+        if level > 9:
+            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.advanced_recycling_machine)
         return binning_rule
