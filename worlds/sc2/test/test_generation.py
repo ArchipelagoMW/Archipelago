@@ -482,7 +482,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enable_epilogue_missions': False,
             'enable_nco_missions': False,
             'mission_order': options.MissionOrder.option_grid,
-            'allow_unit_nerfs': options.AllowUnitNerfs.option_false,
+            'nerf_unit_baselines': options.NerfUnitBaselines.option_false,
         }
 
         self.generate_world(world_options)
@@ -491,4 +491,4 @@ class TestItemFiltering(Sc2SetupTestBase):
         present_war_council_items = war_council_item_names.intersection(itempool)
 
         self.assertTrue(itempool)
-        self.assertFalse(present_war_council_items, f'Found war council upgrades when allow_unit_nerfs is false: {present_war_council_items}')
+        self.assertFalse(present_war_council_items, f'Found war council upgrades when nerf_unit_baselines is false: {present_war_council_items}')

@@ -32,7 +32,7 @@ from .options import (
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, AllowUnitNerfs, LEGACY_GRID_ORDERS,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
 )
 
 
@@ -329,7 +329,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
-            ConfigurableOptionInfo('unit_nerfs', 'allow_unit_nerfs', options.AllowUnitNerfs, can_break_logic=True),
+            ConfigurableOptionInfo('unit_nerfs', 'nerf_unit_baselines', options.NerfUnitBaselines, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -543,7 +543,7 @@ class SC2Context(CommonContext):
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
-        self.allow_unit_nerfs: int = AllowUnitNerfs.default
+        self.nerf_unit_baselines: int = NerfUnitBaselines.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
         self.final_mission: int = 29
         self.announcements: queue.Queue = queue.Queue()
@@ -651,7 +651,7 @@ class SC2Context(CommonContext):
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
-            self.allow_unit_nerfs = args["slot_data"].get("allow_unit_nerfs", AllowUnitNerfs.default)
+            self.nerf_unit_baselines = args["slot_data"].get("nerf_unit_baselines", NerfUnitBaselines.default)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -897,7 +897,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
     
     # War council option
-    if not ctx.allow_unit_nerfs:
+    if not ctx.nerf_unit_baselines:
         accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council.flag_word] = (1 << 30) - 1
 
     # Deprecated Orbital Command handling (Backwards compatibility):
