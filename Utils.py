@@ -458,8 +458,14 @@ class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
 
-    def __init__(self, default_factory: typing.Callable[[Any], Any] = None, **kwargs):
-        super().__init__(default_factory, **kwargs)
+    def __init__(self,
+                 default_factory: typing.Callable[[Any], Any] = None,
+                 seq: typing.Union[typing.Mapping, typing.Iterable, None] = None,
+                 **kwargs):
+        if seq is not None:
+            super().__init__(default_factory, seq, **kwargs)
+        else:
+            super().__init__(default_factory, **kwargs)
 
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
@@ -547,6 +553,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         f"Archipelago ({__version__}) logging initialized"
         f" on {platform.platform()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        f"{' (frozen)' if is_frozen() else ''}"
     )
 
 

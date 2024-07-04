@@ -2,6 +2,7 @@ import typing
 import re
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
+from schema import And, Schema, Optional
 
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
 from .Charms import vanilla_costs, names as charm_names
@@ -212,7 +213,7 @@ class MinimumEggPrice(Range):
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
-    range_end = 21
+    range_end = 20
     default = 1
 
 
@@ -296,6 +297,9 @@ class PlandoCharmCosts(OptionDict):
     This is set after any random Charm Notch costs, if applicable."""
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
+    schema = Schema({
+        Optional(name): And(int, lambda n: 6 >= n >= 0) for name in charm_names
+        })
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
