@@ -197,6 +197,10 @@ class ModMachine:
     grinder = "Grinder"
     ancient_battery = "Ancient Battery Production Station"
     restoration_table = "Restoration Table"
+    trash_can = "Trash Can"
+    composter = "Composter"
+    recycling_bin = "Recycling Bin"
+    advanced_recycling_machine = "Advanced Recycling Machine"
 
 
 class ModFloor:

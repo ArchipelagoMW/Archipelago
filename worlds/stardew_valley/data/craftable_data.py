@@ -15,6 +15,7 @@ from ..strings.fish_names import Fish, WaterItem, ModTrash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
+from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
@@ -362,5 +363,13 @@ trex_skeleton_m = shop_recipe(ModCraftable.trex_skeleton_m, LogicRegion.mines_dw
 trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, LogicRegion.mines_dwarf_shop, 5000,
                               {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_femur: 1, ModFossil.dinosaur_pelvis: 1,
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+
+bouquet = skill_recipe(Gift.bouquet, ModSkill.socializing, 3, {Flower.tulip: 3}, ModNames.socializing_skill)
+recycling_machine_dos = skill_recipe(Machine.recycling_machine, ModSkill.binning, 1, {Material.wood: 25, Material.stone: 25, MetalBar.iron: 1}, ModSkill.binning)
+trash_can = skill_recipe(ModMachine.trash_can, ModSkill.binning, 2, {Material.stone: 30, MetalBar.iron: 2}, ModSkill.binning)
+composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wood: 70, Material.sap: 20, Material.fiber: 30}, ModSkill.binning)
+recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModSkill.binning)
+advanced_recycling_machine = skill_recipe(ModMachine.advanced_recycling_machine, ModSkill.binning, 9,
+                                          {MetalBar.iridium: 5, ArtisanGood.battery_pack: 2, MetalBar.quartz: 10}, ModSkill.binning)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
