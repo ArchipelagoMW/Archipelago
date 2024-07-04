@@ -12,6 +12,7 @@ class TestHostFakeRoom(TestBase):
 
     def setUp(self) -> None:
         from pony.orm import db_session
+        from Utils import user_path
         from WebHostLib.models import Room, Seed
 
         super().setUp()
@@ -23,7 +24,7 @@ class TestHostFakeRoom(TestBase):
                 seed = Seed(multidata=b"", owner=session["_id"])
                 room = Room(seed=seed, owner=session["_id"], tracker=uuid4())
                 self.room_id = room.id
-                self.log_filename = f"logs/{self.room_id}.txt"
+                self.log_filename = user_path("logs", f"{self.room_id}.txt")
 
     def tearDown(self) -> None:
         from pony.orm import db_session, select
