@@ -1,8 +1,6 @@
-from typing import Dict, List, NamedTuple, TYPE_CHECKING
+from typing import Dict, List, NamedTuple
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
-if TYPE_CHECKING:
-    from . import TunicWorld
 
 stick = "Stick"
 sword = "Sword"
@@ -67,7 +65,7 @@ def has_combat_logic(encounter_data: List[EncounterData], state: CollectionState
     for data in encounter_data:
         if not has_required_items(data.items_required, data.stick_required, state, player):
             return False
-    # if you met the item requirements and you have enough power, then you may proceed
+    # if you met the item requirements, and you have enough power, then you may proceed
     level_req: int = max(data.power_required for data in encounter_data)
     if sum_power(state, player) >= level_req:
         return True
