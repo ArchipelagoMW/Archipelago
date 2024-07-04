@@ -1,7 +1,7 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from .options import IceGrappling, LadderStorage
-from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
+from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip)
 from .er_data import Portal
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
@@ -452,10 +452,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Beneath the Well Front"].connect(
         connecting_region=regions["Beneath the Well Main"],
-        rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
+        rule=lambda state: has_melee(state, player) or state.has(fire_wand, player))
     regions["Beneath the Well Main"].connect(
         connecting_region=regions["Beneath the Well Front"],
-        rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
+        rule=lambda state: has_melee(state, player) or state.has(fire_wand, player))
 
     regions["Beneath the Well Main"].connect(
         connecting_region=regions["Beneath the Well Back"],
@@ -463,7 +463,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Beneath the Well Back"].connect(
         connecting_region=regions["Beneath the Well Main"],
         rule=lambda state: has_ladder("Ladders in Well", state, world)
-        and (has_stick(state, player) or state.has(fire_wand, player)))
+        and (has_melee(state, player) or state.has(fire_wand, player)))
 
     regions["Well Boss"].connect(
         connecting_region=regions["Dark Tomb Checkpoint"])
@@ -1325,9 +1325,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Events
     set_rule(multiworld.get_location("Eastern Bell", player),
-             lambda state: (has_stick(state, player) or state.has(fire_wand, player)))
+             lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
     set_rule(multiworld.get_location("Western Bell", player),
-             lambda state: (has_stick(state, player) or state.has(fire_wand, player)))
+             lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
     set_rule(multiworld.get_location("Furnace Fuse", player),
              lambda state: has_ability(prayer, state, world))
     set_rule(multiworld.get_location("South and West Fortress Exterior Fuses", player),

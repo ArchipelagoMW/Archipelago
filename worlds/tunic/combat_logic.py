@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple, TYPE_CHECKING
 from BaseClasses import CollectionState
-from .rules import has_sword, has_stick
+from .rules import has_sword, has_melee
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -57,27 +57,28 @@ enemy_encounters: Dict[str, EncounterData] = {
 
 def has_combat_logic(level: int, required_items: List[str], state: CollectionState, player: int) -> bool:
     # no stick, no power
-    if not has_stick(state, player):
+    if not has_melee(state, player):
         return False
     # if level required is 0, just return true, you already have stick
     if level == 0:
         return True
     # use the helper for sword
-    if "Sword" in required_items and not has_sword(state, player):
-        return False
-    else:
-        required_items.remove("Sword")
+    if "Sword" in required_items:
+        if not has_sword(state, player):
+            return False
+        else:
+            required_items.remove("Sword")
 
     if required_items and not state.has_all(required_items, player):
         return False
     power = (get_att_power(state, player) + get_def_power(state, player) + get_potion_power(state, player)
              + get_hp_power(state, player) + get_mp_power(state, player) + get_other_power(state, player))
-    return True if power >= level else False
+    return power >= level
 
 
 def get_att_power(state: CollectionState, player: int) -> int:
     # not relevant if you don't have a weapon that benefits from attack
-    if not has_stick(state, player):
+    if not has_melee(state, player):
         return 0
     power = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player)
     sword_upgrades = state.count("Sword Upgrade", player)
