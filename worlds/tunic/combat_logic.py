@@ -31,55 +31,79 @@ enemy_encounters: Dict[str, EncounterData] = {
     # can deal with single big crabs and any amount of small crabs with just stick
     "Crabs": EncounterData(0),
     "Slorms": EncounterData(8, [[sword], [fire_wand], [gun], [stick, shield]], False),
+    # the birds that swoop down at you
+    "Hushers": EncounterData(12),
     # includes shield fleemers
     "Fleemers": EncounterData(8),
     "Big Fleemer": EncounterData(12),
     "Lost Echo": EncounterData(0, [[sword]]),
+    # can't damage with stick
     "Autobolts": EncounterData(8, [[sword], [fire_wand], [gun]], False),
     "Chompignoms": EncounterData(8),
     "Fairies": EncounterData(0, [[fire_wand], [gun], [grapple]]),
-    # and custodians
+    # just fortress in general
     "Wizards": EncounterData(12),
-    # just frog's domain in general, basically
+    # just frog's domain in general
     "Frogues": EncounterData(12),
     "Birds with Guns": EncounterData(12),
-    # you're meant to fight them with sword, wand, shield, no stats
-    "Foxes": EncounterData(8),
+    # you're meant to fight them with sword, wand, shield, and some flasks
+    "Foxes": EncounterData(10),
+    "Scavengers": EncounterData(16),
+    "Scav Snipers": EncounterData(16, [[fire_wand], [grapple]]),
 
+    # can't damage with stick
     "Garden Knight": EncounterData(12, [[sword]], False),
     "Siege Engine": EncounterData(16),
     "Librarian": EncounterData(16, [[fire_wand], [gun]]),
     "Boss Scavenger": EncounterData(20),
+    "Gauntlet": EncounterData(10, [[sword, fire_wand], [sword, gun]]),
     # the other heir requirements are included in the entrance rule for the heir fight
     "The Heir": EncounterData(24),
 }
 
 
-def has_combat_logic(level: int, required_items: List[str], state: CollectionState, player: int) -> bool:
-    # no stick, no power
-    if not has_melee(state, player):
-        return False
-    # if level required is 0, just return true, you already have stick
-    if level == 0:
-        return True
-    # use the helper for sword
-    if "Sword" in required_items:
-        if not has_sword(state, player):
+def has_combat_logic(encounter_data: List[EncounterData], state: CollectionState, player: int) -> bool:
+    # if you do not meet the item requirements for any of the encounters, you cannot proceed
+    for data in encounter_data:
+        if not has_required_items(data.items_required, data.stick_required, state, player):
             return False
-        else:
-            required_items.remove("Sword")
+    # if you met the item requirements and you have enough power, then you may proceed
+    level_req: int = max(data.power_required for data in encounter_data)
+    if sum_power(state, player) >= level_req:
+        return True
 
-    if required_items and not state.has_all(required_items, player):
+
+def has_required_items(required_items: List[List[str]], stick_req: bool, state: CollectionState, player: int) -> bool:
+    # stick required for power unless excepted
+    if stick_req and not has_melee(state, player):
         return False
-    power = (get_att_power(state, player) + get_def_power(state, player) + get_potion_power(state, player)
-             + get_hp_power(state, player) + get_mp_power(state, player) + get_other_power(state, player))
-    return power >= level
+    if not required_items:
+        return True
+
+    for reqs in required_items:
+        # stick and sword have special handling because of the progressive sword option
+        if sword in reqs:
+            # state.has_all returns true for an empty list
+            if has_sword(state, player) and state.has_all([item for item in reqs if item != sword], player):
+                return True
+        elif stick in reqs:
+            if has_melee(state, player) and state.has_all([item for item in reqs if item != stick], player):
+                return True
+        else:
+            if state.has_all(reqs, player):
+                return True
+    return False
+
+
+def sum_power(state: CollectionState, player: int) -> int:
+    return (get_att_power(state, player) + get_def_power(state, player) + get_potion_power(state, player)
+            + get_hp_power(state, player) + get_mp_power(state, player) + get_other_power(state, player))
 
 
 def get_att_power(state: CollectionState, player: int) -> int:
-    # not relevant if you don't have a weapon that benefits from attack
+    # no stick, no power
     if not has_melee(state, player):
-        return 0
+        return False
     power = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player)
     sword_upgrades = state.count("Sword Upgrade", player)
     # +4 power from sword, +2 power for the next two sword (includes the attack buff from getting it)
