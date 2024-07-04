@@ -84,7 +84,7 @@ def get_att_power(state: CollectionState, player: int) -> int:
     sword_upgrades = state.count("Sword Upgrade", player)
     # +4 power from sword, +2 power for the next two sword (includes the attack buff from getting it)
     if sword_upgrades >= 2:
-        power += sword_upgrades * 2
+        power += max(8, sword_upgrades * 2)
     return power
 
 
