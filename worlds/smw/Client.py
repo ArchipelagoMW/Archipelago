@@ -223,7 +223,7 @@ class SMWSNIClient(SNIClient):
 
         next_trap, message = self.trap_queue.pop(0)
 
-        from worlds.smw.Rom import trap_rom_data
+        from .Rom import trap_rom_data
         if next_trap.item in trap_rom_data:
             trap_active = await snes_read(ctx, WRAM_START + trap_rom_data[next_trap.item][0], 0x3)
 
@@ -349,8 +349,8 @@ class SMWSNIClient(SNIClient):
         blocksanity_flags = bytearray(await snes_read(ctx, SMW_BLOCKSANITY_FLAGS, 0xC))
         blocksanity_active = await snes_read(ctx, SMW_BLOCKSANITY_ACTIVE_ADDR, 0x1)
         level_clear_flags = bytearray(await snes_read(ctx, SMW_LEVEL_CLEAR_FLAGS, 0x60))
-        from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
-        from worlds.smw.Levels import location_id_to_level_id, level_info_dict, level_blocks_data
+        from .Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
+        from .Levels import location_id_to_level_id, level_info_dict, level_blocks_data
         from worlds import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
