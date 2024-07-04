@@ -10,6 +10,7 @@ shield = "Shield"
 laurels = "Hero's Laurels"
 fire_wand = "Magic Wand"
 gun = "Gun"
+grapple = "Magic Orb"
 
 
 class EncounterData(NamedTuple):
@@ -18,17 +19,34 @@ class EncounterData(NamedTuple):
     stick_required: bool = True  # by default, you need a stick. but for some, you may not need one if you have alts
 
 
+# general requirements for enemy encounters in the game, for use in determining whether you can access a chest
 enemy_encounters: Dict[str, EncounterData] = {
+    # pink slimes are basically free
+    "Blue Slimes": EncounterData(0),
     "Rudelings": EncounterData(4),
     "Shield Rudelings": EncounterData(6),
+    # just gets stunlocked with a stick
+    "Spyrites": EncounterData(4),
+    "Sappharachs": EncounterData(12),
     # can deal with single big crabs and any amount of small crabs with just stick
     "Crabs": EncounterData(0),
     "Slorms": EncounterData(8, [[sword], [fire_wand], [gun], [stick, shield]], False),
     # includes shield fleemers
     "Fleemers": EncounterData(8),
     "Big Fleemer": EncounterData(12),
+    "Lost Echo": EncounterData(0, [[sword]]),
+    "Autobolts": EncounterData(8, [[sword], [fire_wand], [gun]], False),
+    "Chompignoms": EncounterData(8),
+    "Fairies": EncounterData(0, [[fire_wand], [gun], [grapple]]),
+    # and custodians
+    "Wizards": EncounterData(12),
+    # just frog's domain in general, basically
+    "Frogues": EncounterData(12),
+    "Birds with Guns": EncounterData(12),
+    # you're meant to fight them with sword, wand, shield, no stats
+    "Foxes": EncounterData(8),
 
-    "Garden Knight": EncounterData(12, [[sword]]),
+    "Garden Knight": EncounterData(12, [[sword]], False),
     "Siege Engine": EncounterData(16),
     "Librarian": EncounterData(16, [[fire_wand], [gun]]),
     "Boss Scavenger": EncounterData(20),
