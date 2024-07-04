@@ -595,11 +595,10 @@ class GameManager(App):
                                              "!help for server commands.")
 
     def connect_button_action(self, button):
+        self.ctx.username = None
         if self.ctx.server:
-            self.ctx.username = None
             async_start(self.ctx.disconnect())
         else:
-            self.ctx.username = None
             async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
