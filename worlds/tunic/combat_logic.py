@@ -1,14 +1,50 @@
-from typing import List, TYPE_CHECKING
+from typing import Dict, List, NamedTuple, TYPE_CHECKING
 from BaseClasses import CollectionState
 from .rules import has_sword, has_stick
 if TYPE_CHECKING:
     from . import TunicWorld
+
+stick = "Stick"
+sword = "Sword"
+shield = "Shield"
+laurels = "Hero's Laurels"
+fire_wand = "Magic Wand"
+gun = "Gun"
+
+
+class EncounterData(NamedTuple):
+    power_required: int  # how strong you need to be to do the encounter
+    items_required: List[List[str]] = []  # any(all(requirements))
+    stick_required: bool = True  # by default, you need a stick. but for some, you may not need one if you have alts
+
+
+enemy_encounters: Dict[str, EncounterData] = {
+    "Rudelings": EncounterData(4),
+    "Shield Rudelings": EncounterData(6),
+    # can deal with single big crabs and any amount of small crabs with just stick
+    "Crabs": EncounterData(0),
+    "Slorms": EncounterData(8, [[sword], [fire_wand], [gun], [stick, shield]], False),
+    # includes shield fleemers
+    "Fleemers": EncounterData(8),
+    "Big Fleemer": EncounterData(12),
+
+    "Garden Knight": EncounterData(12, [[sword]]),
+    "Siege Engine": EncounterData(16),
+    "Librarian": EncounterData(16, [[fire_wand], [gun]]),
+    "Boss Scavenger": EncounterData(20),
+    # the other heir requirements are included in the entrance rule for the heir fight
+    "The Heir": EncounterData(24),
+}
 
 
 def has_combat_logic(level: int, required_items: List[str], state: CollectionState, player: int) -> bool:
     # no stick, no power
     if not has_stick(state, player):
         return False
+    # if level required is 0, just return true, you already have stick
+    if level == 0:
+        return True
+    # use the helper for sword
     if "Sword" in required_items and not has_sword(state, player):
         return False
     else:
