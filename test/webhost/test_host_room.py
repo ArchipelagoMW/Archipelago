@@ -26,10 +26,12 @@ class TestHostFakeRoom(TestBase):
                 self.log_filename = f"logs/{self.room_id}.txt"
 
     def tearDown(self) -> None:
-        from pony.orm import db_session
-        from WebHostLib.models import Room
+        from pony.orm import db_session, select
+        from WebHostLib.models import Command, Room
 
         with db_session:
+            for command in select(command for command in Command if command.room.id == self.room_id):  # type: ignore
+                command.delete()
             room: Room = Room.get(id=self.room_id)
             room.seed.delete()
             room.delete()
@@ -113,3 +115,77 @@ class TestHostFakeRoom(TestBase):
             })
             self.assertEqual(response.status_code, 206)
             self.assertEqual(response.get_data(True), text)
+
+    def test_host_room_missing(self) -> None:
+        """Verify that missing room gives a 404 response."""
+        missing_room_id = uuid5(uuid4(), "")  # rooms are always uuid4, so this can't exist
+        with self.app.app_context(), self.app.test_request_context():
+            response = self.client.get(url_for("host_room", room=missing_room_id))
+            self.assertEqual(response.status_code, 404)
+
+    def test_host_room_own(self) -> None:
+        """Verify that own room gives the full output."""
+        with open(self.log_filename, "w", encoding="utf-8-sig") as f:
+            text = "super secret"
+            f.write(text)
+
+        with self.app.app_context(), self.app.test_request_context():
+            response = self.client.get(url_for("host_room", room=self.room_id))
+            response_text = response.get_data(True)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn("href=\"/seed/", response_text)
+            self.assertIn(text, response_text)
+
+    def test_host_room_other(self) -> None:
+        """Verify that non-own room gives the reduced output."""
+        from pony.orm import db_session
+        from WebHostLib.models import Room
+
+        with db_session:
+            room: Room = Room.get(id=self.room_id)
+            room.last_port = 12345
+
+        with open(self.log_filename, "w", encoding="utf-8-sig") as f:
+            text = "super secret"
+            f.write(text)
+
+        other_client = self.app.test_client()
+        with self.app.app_context(), self.app.test_request_context():
+            response = other_client.get(url_for("host_room", room=self.room_id))
+            response_text = response.get_data(True)
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn("href=\"/seed/", response_text)
+            self.assertNotIn(text, response_text)
+            self.assertIn("/connect ", response_text)
+            self.assertIn(":12345", response_text)
+
+    def test_host_room_own_post(self) -> None:
+        """Verify command from owner gets queued for the server and response is redirect."""
+        from pony.orm import db_session, select
+        from WebHostLib.models import Command
+
+        with self.app.app_context(), self.app.test_request_context():
+            response = self.client.post(url_for("host_room", room=self.room_id), data={
+                "cmd": "/help"
+            })
+            self.assertEqual(response.status_code, 302, response.text)\
+
+        with db_session:
+            commands = select(command for command in Command if command.room.id == self.room_id)  # type: ignore
+            self.assertIn("/help", (command.commandtext for command in commands))
+
+    def test_host_room_other_post(self) -> None:
+        """Verify command from non-owner does not get queued for the server."""
+        from pony.orm import db_session, select
+        from WebHostLib.models import Command
+
+        other_client = self.app.test_client()
+        with self.app.app_context(), self.app.test_request_context():
+            response = other_client.post(url_for("host_room", room=self.room_id), data={
+                "cmd": "/help"
+            })
+            self.assertLess(response.status_code, 500)
+
+        with db_session:
+            commands = select(command for command in Command if command.room.id == self.room_id)  # type: ignore
+            self.assertNotIn("/help", (command.commandtext for command in commands))
