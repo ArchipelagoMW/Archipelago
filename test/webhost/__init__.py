@@ -22,6 +22,7 @@ class TestBase(unittest.TestCase):
         }
         raw_app.config.update({
             "TESTING": True,
+            "DEBUG": True,
         })
         try:
             cls.app = get_app()
