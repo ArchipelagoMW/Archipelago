@@ -166,6 +166,20 @@ class TunicPlandoConnections(PlandoConnections):
     duplicate_exits = True
 
 
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logicaly require a combination of stat upgrades and items to reach combat breakpoints in order to get through certain areas.
+    Note that this option marks many more items as progression and may force weapons much earlier than normal.
+    If disabled, the standard logic is used.
+    """
+    internal_name = "combat_logic"
+    display_name = "Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
+
+
 class LaurelsZips(Toggle):
     """
     Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
@@ -239,6 +253,7 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
@@ -252,6 +267,7 @@ class TunicOptions(PerGameCommonOptions):
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
+        CombatLogic,
         Lanternless,
         Maskless,
         LaurelsZips,

@@ -169,7 +169,11 @@ class TunicWorld(World):
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
-        return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
+        if self.options.combat_logic:
+            classification = item_data.combat_ic or item_data.classification
+        else:
+            classification = item_data.classification
+        return TunicItem(name, classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
 
