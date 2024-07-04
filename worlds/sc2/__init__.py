@@ -593,7 +593,7 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
 
 def flag_war_council_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes items based on item set options (`only_vanilla_items`)"""
-    if world.options.allow_unit_nerfs:
+    if world.options.nerf_unit_baselines:
         return
 
     for item in item_list:
