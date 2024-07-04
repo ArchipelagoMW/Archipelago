@@ -486,7 +486,7 @@ class SC2Logic:
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY}, self.player) \
+            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY, item_names.SCORCHER}, self.player) \
             or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
 
@@ -512,9 +512,10 @@ class SC2Logic:
             )
 
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
-        return state.has_any(
-            {item_names.SCOUT, item_names.TEMPEST,
-             item_names.CARRIER, item_names.VOID_RAY, item_names.DESTROYER, item_names.MOTHERSHIP}, self.player) \
+        return state.has_any({
+            item_names.SCOUT, item_names.TEMPEST, item_names.CARRIER, item_names.VOID_RAY, item_names.DESTROYER,
+            item_names.WARP_RAY, item_names.SCORCHER, item_names.MOTHERSHIP
+        }, self.player) \
             or self.protoss_has_blink(state) \
             or (state.has(item_names.WARP_PRISM, self.player)
                 and (self.protoss_common_unit(state) or state.has(item_names.WARP_PRISM_PHASE_BLASTER, self.player))) \
@@ -522,7 +523,10 @@ class SC2Logic:
                 and state.has_any({item_names.ORACLE, item_names.ARBITER}, self.player))
 
     def protoss_fleet(self, state: CollectionState) -> bool:
-        return state.has_any({item_names.CARRIER, item_names.TEMPEST, item_names.VOID_RAY, item_names.DESTROYER}, self.player)
+        return state.has_any({
+            item_names.CARRIER, item_names.TEMPEST, item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY,
+            item_names.SCORCHER
+        }, self.player)
 
     def templars_return_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \

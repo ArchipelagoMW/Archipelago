@@ -1575,6 +1575,9 @@ item_table = {
     item_names.WARP_RAY:
         ItemData(31 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 10, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol"}),
+    item_names.SCORCHER:
+        ItemData(32 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 11, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"ext"}),
 
     # Protoss Upgrades
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"wol", "lotv"}),
