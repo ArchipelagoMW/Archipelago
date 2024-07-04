@@ -34,7 +34,7 @@ sve_pelican_town_hard_fishes = {
     SVEFish.void_eel,
 }
 sve_pelican_town_medium_fishes = {
-    SVEFish.bonefish, SVEFish.butterfish, SVEFish.frog, SVEFish.goldenfish, SVEFish.snatcher_worm, SVEFish.water_grub, SVEFish.dulse_seaweed,
+    SVEFish.bonefish, SVEFish.butterfish, SVEFish.frog, SVEFish.goldenfish, SVEFish.snatcher_worm, SVEFish.water_grub,
 }
 sve_pelican_town_easy_fishes = {SVEFish.bull_trout, SVEFish.minnow, }
 sve_ginger_island_hard_fishes = {SVEFish.gemfish, SVEFish.shiny_lunaloo, }

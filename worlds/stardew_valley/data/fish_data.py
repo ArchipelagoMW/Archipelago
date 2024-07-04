@@ -154,7 +154,6 @@ undeadfish = create_fish(SVEFish.undeadfish, crimson_badlands, season.all_season
 void_eel = create_fish(SVEFish.void_eel, witch_swamp, season.all_seasons, 100, mod_name=ModNames.sve)
 water_grub = create_fish(SVEFish.water_grub, mutant_bug_lair, season.all_seasons, 60, mod_name=ModNames.sve)
 sea_sponge = create_fish(SVEFish.sea_sponge, ginger_island_ocean, season.all_seasons, 40, mod_name=ModNames.sve)
-dulse_seaweed = create_fish(SVEFish.dulse_seaweed, vineyard, season.all_seasons, 50, mod_name=ModNames.sve)
 
 void_minnow = create_fish(DistantLandsFish.void_minnow, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
 purple_algae = create_fish(DistantLandsFish.purple_algae, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)

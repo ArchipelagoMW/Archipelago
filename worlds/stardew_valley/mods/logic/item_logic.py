@@ -25,7 +25,7 @@ from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
 from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop
-from ...strings.fish_names import ModTrash
+from ...strings.fish_names import ModTrash, SVEFish
 from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.forageable_names import SVEForage, DistantLandsForageable
 from ...strings.gift_names import SVEGift
@@ -141,6 +141,7 @@ FarmingLogicMixin]]):
                                          self.logic.combat.can_fight_at_level(Performance.great)),
             Ore.iridium: items[Ore.iridium] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.crimson_badlands) &
                                                self.logic.combat.can_fight_at_level(Performance.maximum)),
+            SVEFish.dulse_seaweed: self.logic.fishing.can_fish_at(Region.beach) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter])
         }
 
     def get_modified_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
