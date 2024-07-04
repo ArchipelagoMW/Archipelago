@@ -18,14 +18,14 @@ class FillError(RuntimeError):
 
 
 class FillLogger():
-    min_size: int   = 1000
-    min_time: float = 0.25
+    min_size: int = 1000   # minimum number of items we care about reporting (non-tty)
+    min_time: float = 0.25 # minimum time (in seconds) between reports (tty)
 
     def __init__(self, total_items: int):
-        self.start_time       = time.time()
-        self.prev_time        = time.time()
-        self.cur_time         = time.time()
-        self.step: int        = max(round(total_items * 0.1), 1000)
+        self.start_time = time.time()
+        self.prev_time = time.time()
+        self.cur_time = time.time()
+        self.step: int = max(round(total_items * 0.1), 1000)
         self.total_items: int = total_items
 
     def log_fill_progress(self, name: str, placed: int, final: bool = False) -> None:
@@ -33,19 +33,16 @@ class FillLogger():
         if self.total_items < self.min_size:
             return
 
-        if sys.stdin.isatty() and sys.stdout.isatty():
-            self.log_tty(name, placed, final)
-        else:
-            self.log_nontty(name, placed, final)
+        self.log_nontty(name, placed, final)
+        self.log_tty(name, placed, final)
 
-    # any non-CLI logging; just log 10x times (or fewer), no need for anything fancy
     def log_nontty(self, name: str, placed: int, final: bool) -> None:
         if final or placed % self.step == 0:
             status: str = "Finished" if final else "Current"
             pct: float = round(100 * (placed / self.total_items), 2)
-            logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed.")
+            logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed.",
+                         extra={"NoStream": True})
 
-    # on CLI, be a little friendlier
     def log_tty(self, name: str, placed: int, final: bool) -> None:
         self.cur_time = time.time()
 
@@ -56,15 +53,21 @@ class FillLogger():
         # Update our sliding window
         self.prev_time = self.cur_time
 
+        # time's hour field only goes to 24 (mod 24); calculate hours by hand
+        status: str = "Finished" if final else "Current"
+        pct: float = round(100 * (placed / self.total_items), 2)
+        diff: int = round(self.cur_time - self.start_time)
+        hrs: int = int(diff / 3600)
+        elapsed: str = time.strftime(f"{hrs:02}h:%Mm:%Ss", time.gmtime(diff))
+
         # Store the terminator in case someone else is doing something interesting
         old_term: str = logging.StreamHandler.terminator
         if not final:
             logging.StreamHandler.terminator = '\r'
 
-        status: str = "Finished" if final else "Current"
-        pct: float = round(100 * (placed / self.total_items), 2)
-        elapsed: str = time.strftime("%Hh:%Mm:%Ss", time.gmtime(round(self.cur_time - self.start_time)))
-        logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed [{elapsed} elapsed].")
+        logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} "
+                     f"({pct}%) items placed [{elapsed} elapsed].",
+                     extra={"NoFile": True})
 
         # restore the terminator
         logging.StreamHandler.terminator = old_term
