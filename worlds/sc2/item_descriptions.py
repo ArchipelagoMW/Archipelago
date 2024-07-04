@@ -794,7 +794,7 @@ item_descriptions = {
     item_names.ARBITER_ENHANCED_CLOAK_FIELD: "Increases Arbiter Cloaking Field range.",
     item_names.CARRIER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
     item_names.CARRIER_HULL_OF_PAST_GLORIES: "Carriers gain +2 armour.",
-    item_names.VOID_RAY_DESTROYER_WARP_RAY_FLUX_VANES: "Increases Void Ray and Destroyer movement speed.",
+    item_names.VOID_RAY_DESTROYER_WARP_RAY_SCORCHER_FLUX_VANES: "Increases Void Ray and Destroyer movement speed.",
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
     item_names.WARP_PRISM_GRAVITIC_DRIVE: "Increases the movement speed of Warp Prisms.",
     item_names.WARP_PRISM_PHASE_BLASTER: "Equips Warp Prisms with an auto-attack that can hit ground and air targets.",

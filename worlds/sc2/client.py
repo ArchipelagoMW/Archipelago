@@ -839,7 +839,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
 
     network_item: NetworkItem
     accumulators: typing.Dict[SC2Race, typing.List[int]] = {
-        race: [0 for _ in item_type_enum_class]
+        race: [0 for element in item_type_enum_class if element.flag_word >= 0]
         for race, item_type_enum_class in race_to_item_type.items()
     }
 
@@ -851,6 +851,9 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     for network_item in items:
         name: str = lookup_id_to_name[network_item.item]
         item_data: ItemData = item_list[name]
+
+        if item_data.type.flag_word < 0:
+            continue
 
         # exists exactly once
         if item_data.quantity == 1:
@@ -1242,6 +1245,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateZergTech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
+        zerg_items = [value for index, value in enumerate(zerg_items) if index not in [ZergItemType.Level.flag_word, ZergItemType.Primal_Form.flag_word]]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, kerrigan_level)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
         await self.chat_send(f"?GiveZergTech {kerrigan_level} {kerrigan_primal_bot_value} " + ' '.join(map(str, zerg_items)))
