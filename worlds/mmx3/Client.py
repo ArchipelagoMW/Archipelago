@@ -666,14 +666,6 @@ class MMX3SNIClient(SNIClient):
                     boss_id = internal_id & 0x1F
                     if defeated_bosses_data[boss_id] != 0:
                         new_checks.append(loc_id)
-                    else:
-                        if required_rematches != 0:
-                            if boss_id >= 0x13 and boss_id <= 0x1A: 
-                                # Auto complete every rematch boss if the required amount was reached
-                                if completed_rematches.bit_count() >= required_rematches:
-                                    defeated_bosses[boss_id] = 0xFF
-                                    completed_rematches = 0xFF
-                                    new_checks.append(loc_id)
                 elif internal_id >= 0x100:
                     # Pickups
                     if not pickupsanity_enabled or pickupsanity_enabled[0] == 0:
