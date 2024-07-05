@@ -31,6 +31,6 @@ class TestDisableNonRandomized(WitnessTestBase):
 
             self.collect_by_name("Triangles")
 
-            # Alternate activation triggers yield Bunker Laser (Mountainside Discard) and Monastery Laser (Desert Discard)
+            # Alternate triggers yield Bunker Laser (Mountainside Discard) and Monastery Laser (Desert Discard)
             self.assertTrue(_has_lasers(2, self.world, False)(self.multiworld.state))
             self.assertFalse(_has_lasers(3, self.world, False)(self.multiworld.state))
