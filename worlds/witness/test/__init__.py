@@ -126,6 +126,10 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
     common_options: Dict[str, Any] = {}
 
     def setUp(self) -> None:
+        """
+        Set up a multiworld with multiple players, each using different options.
+        """
+
         self.multiworld = setup_multiworld([WitnessWorld] * len(self.options_per_world), ())
 
         for world, options in zip(self.multiworld.worlds.values(), self.options_per_world):
@@ -138,12 +142,20 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
         self.assertSteps(gen_steps)
 
     def collect_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> List[Item]:
+        """
+        Collect all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
+        """
+
         items = self.get_items_by_name(item_names, player)
         for item in items:
             self.multiworld.state.collect(item)
         return items
 
     def get_items_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> List[Item]:
+        """
+        Return all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
+        """
+
         if isinstance(item_names, str):
             item_names = (item_names,)
         return [item for item in self.multiworld.itempool if item.name in item_names and item.player == player]

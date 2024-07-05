@@ -9,12 +9,13 @@ class TestDisableNonRandomized(WitnessTestBase):
         "early_symbol_item": False,
     }
 
-    def test_unrandomized_locations_do_not_exist(self) -> None:
-        self.assert_location_does_not_exist("Orchard Apple Tree 5")
-
     def test_locations_got_disabled_and_alternate_activation_triggers_work(self) -> None:
         """
-        Test that specific Discarded Panels give extra lasers.
+        Test the different behaviors of the disable_non_randomized mode:
+
+        1. Unrandomized locations like Orchard Apple Tree 5 are disabled.
+        2. Certain doors or lasers that would usually be activated by unrandomized panels depend on event items instead.
+        3. These alternate activations are tied to solving Discarded Panels.
         """
 
         with self.subTest("Test that unrandomized locations are disabled."):

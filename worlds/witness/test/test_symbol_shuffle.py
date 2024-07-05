@@ -7,6 +7,11 @@ class TestSymbols(WitnessTestBase):
     }
 
     def test_progressive_symbols(self) -> None:
+        """
+        Test that Dots & Full Dots are correctly replaced by 2x Progressive Dots,
+        and test that Dots puzzles and Full Dots puzzles require 1 and 2 copies of this item respectively.
+        """
+
         progressive_dots = self.get_items_by_name("Progressive Dots")
         self.assertEqual(len(progressive_dots), 2)
 
@@ -49,6 +54,11 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
     }
 
     def test_arrows_exist_and_are_required_in_expert_seeds_only(self) -> None:
+        """
+        In sigma_expert, Discarded Panels require Arrows.
+        In sigma_normal, Discarded Panels require Triangles, and Arrows shouldn't exist at all as an item.
+        """
+
         with self.subTest("Test that Arrows exist only in the expert seed."):
             self.assertFalse(self.get_items_by_name("Arrows", 1))
             self.assertTrue(self.get_items_by_name("Arrows", 2))

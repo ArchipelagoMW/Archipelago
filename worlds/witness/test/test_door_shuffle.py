@@ -8,6 +8,10 @@ class TestIndividualDoors(WitnessTestBase):
     }
 
     def test_swamp_laser_shortcut(self) -> None:
+        """
+        Test that Door Shuffle grants early access to Swamp Laser from the back shortcut.
+        """
+
         self.assertTrue(self.get_items_by_name("Swamp Laser Shortcut (Door)"))
 
         self.assertAccessDependency(

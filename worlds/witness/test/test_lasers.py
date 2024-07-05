@@ -11,6 +11,12 @@ class TestSymbolsRequiredToWinElevatorNormal(WitnessTestBase):
     }
 
     def test_symbols_to_win(self) -> None:
+        """
+        In symbol shuffle, the only way to reach the Elevator is through Mountain Entry by descending the Mountain.
+        This requires a very specific set of symbol items per puzzle randomization mode.
+        In this case, we check Sigma Normal Puzzles.
+        """
+
         exact_requirement = {
             "Monastery Laser": 1,
             "Progressive Dots": 2,
@@ -36,6 +42,12 @@ class TestSymbolsRequiredToWinElevatorExpert(WitnessTestBase):
     }
 
     def test_symbols_to_win(self) -> None:
+        """
+        In symbol shuffle, the only way to reach the Elevator is through Mountain Entry by descending the Mountain.
+        This requires a very specific set of symbol items per puzzle randomization mode.
+        In this case, we check Sigma Expert Puzzles.
+        """
+
         exact_requirement = {
             "Monastery Laser": 1,
             "Progressive Dots": 2,
@@ -63,6 +75,12 @@ class TestSymbolsRequiredToWinElevatorVanilla(WitnessTestBase):
     }
 
     def test_symbols_to_win(self) -> None:
+        """
+        In symbol shuffle, the only way to reach the Elevator is through Mountain Entry by descending the Mountain.
+        This requires a very specific set of symbol items per puzzle randomization mode.
+        In this case, we check Vanilla Puzzles.
+        """
+
         exact_requirement = {
             "Monastery Laser": 1,
             "Progressive Dots": 2,
@@ -90,6 +108,11 @@ class TestPanelsRequiredToWinElevator(WitnessTestBase):
     }
 
     def test_panels_to_win(self) -> None:
+        """
+        In door panel shuffle , the only way to reach the Elevator is through Mountain Entry by descending the Mountain.
+        This requires some control panels for each of the Mountain Floors.
+        """
+
         exact_requirement = {
             "Desert Laser": 1,
             "Town Desert Laser Redirect Control (Panel)": 1,
@@ -114,6 +137,14 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
     }
 
     def test_doors_to_elevator_paths(self) -> None:
+        """
+        In remote door shuffle, there are three ways to win.
+
+        - Through the normal route (Mountain Entry -> Descend through Mountain -> Reach Bottom Floor)
+        - Through the Caves using the Caves Shortcuts (Caves -> Reach Bottom Floor)
+        - Through the Caves via Challenge (Tunnels -> Challenge -> Caves -> Reach Bottom Floor)
+        """
+
         with self.subTest("Test Elevator victory in shuffle_doors through Mountain Entry."):
             exact_requirement = {
                 "Monastery Laser": 1,
