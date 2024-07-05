@@ -14,7 +14,7 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression
-from ...stardew_rule import StardewRule, False_, True_
+from ...stardew_rule import StardewRule, False_, True_, And
 from ...strings.building_names import Building
 from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.geode_names import Geode
@@ -83,15 +83,15 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
         return self.logic.count(level * 2, *villager_count)
 
     def can_earn_archaeology_skill_level(self, level: int) -> StardewRule:
-        sifter_rule = True_()
+        shifter_rule = True_()
         preservation_rule = True_()
         if self.options.skill_progression == self.options.skill_progression.option_progressive:
-            sifter_rule = self.logic.has(ModCraftable.water_sifter)
+            shifter_rule = self.logic.has(ModCraftable.water_shifter)
             preservation_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
         if level >= 8:
-            return (self.logic.tool.has_tool(Tool.pan, ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)) & sifter_rule & preservation_rule
+            return (self.logic.tool.has_tool(Tool.pan, ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)) & shifter_rule & preservation_rule
         if level >= 5:
-            return (self.logic.tool.has_tool(Tool.pan, ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)) & sifter_rule
+            return (self.logic.tool.has_tool(Tool.pan, ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)) & shifter_rule
         if level >= 3:
             return self.logic.tool.has_tool(Tool.pan, ToolMaterial.iron) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
         return self.logic.tool.has_tool(Tool.pan, ToolMaterial.copper) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)
@@ -104,13 +104,13 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
             return self.logic.cooking.can_cook()
 
     def can_earn_binning_skill_level(self, level: int) -> StardewRule:
-        binning_rule = True_()   # Lets design this around the new craftables to spread out the logic more.
-        if level > 2:
-            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.trash_bin) & self.logic.crafting.can_craft_by_name(Machine.recycling_machine)
+        if level <= 2:
+            return True_()
+        binning_rule = [self.logic.has(ModMachine.trash_bin) & self.logic.has(Machine.recycling_machine)]
         if level > 4:
-            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.composter)
+            binning_rule.append(self.logic.has(ModMachine.composter))
         if level > 7:
-            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.recycling_bin)
+            binning_rule.append(self.logic.has(ModMachine.recycling_bin))
         if level > 9:
-            binning_rule = binning_rule & self.logic.crafting.can_craft_by_name(ModMachine.advanced_recycling_machine)
-        return binning_rule
+            binning_rule.append(self.logic.has(ModMachine.advanced_recycling_machine))
+        return And(*binning_rule)
