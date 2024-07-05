@@ -5,7 +5,7 @@ from .Regions import inscryption_regions_all, inscryption_regions_act_1
 from typing import Dict, Any
 from . import Rules
 from BaseClasses import Region, Item, Tutorial, ItemClassification, LocationProgressType
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 
 class InscrypWeb(WebWorld):
