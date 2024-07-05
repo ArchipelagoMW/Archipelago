@@ -1,10 +1,11 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
-from worlds.generic.Rules import set_rule, forbid_item
-from .options import IceGrappling, LadderStorage
+from worlds.generic.Rules import set_rule, add_rule, forbid_item
+from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip)
 from .er_data import Portal
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
+from .combat_logic import has_combat_logic
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -1361,3 +1362,19 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_sword(state, player))
     set_rule(multiworld.get_location("Shop - Coin 2", player),
              lambda state: has_sword(state, player))
+
+    if world.options.combat_logic >= CombatLogic.option_bosses_only:
+        set_rule(multiworld.get_entrance("West Garden -> West Garden after Boss", player),
+                 lambda state: state.has(laurels, player)
+                 or has_combat_logic(["Garden Knight"], state, player))
+        set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
+                 lambda state: has_combat_logic(["Siege Engine"], state, player))
+        set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
+                 lambda state: has_combat_logic(["Librarian"], state, player))
+        set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
+                 lambda state: has_combat_logic(["Boss Scavenger"], state, player))
+        set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
+                 lambda state: has_combat_logic(["Gauntlet"], state, player))
+        if not world.options.hexagon_quest:
+            add_rule(multiworld.get_entrance("Heir Arena -> Heir Arena Victory", player),
+                     lambda state: has_combat_logic(["The Heir"], state, player))

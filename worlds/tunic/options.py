@@ -170,6 +170,7 @@ class CombatLogic(Choice):
     """
     If enabled, the player will logicaly require a combination of stat upgrades and items to reach combat breakpoints in order to get through certain areas.
     Note that this option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
     If disabled, the standard logic is used.
     """
     internal_name = "combat_logic"
