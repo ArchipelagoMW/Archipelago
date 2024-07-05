@@ -30,7 +30,7 @@ class AquariaLocations:
 
     locations_verse_cave_r = {
         "Verse Cave, bulb in the skeleton room": 698107,
-        "Verse Cave, bulb in the path left of the skeleton room": 698108,
+        "Verse Cave, bulb in the path right of the skeleton room": 698108,
         "Verse Cave right area, Big Seed": 698175,
     }
 
