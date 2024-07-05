@@ -1376,5 +1376,5 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
                  lambda state: has_combat_logic(["Gauntlet"], state, player))
         if not world.options.hexagon_quest:
-            add_rule(multiworld.get_entrance("Heir Arena -> Heir Arena Victory", player),
+            add_rule(multiworld.get_entrance("Spirit Arena -> Spirit Arena Victory", player),
                      lambda state: has_combat_logic(["The Heir"], state, player))

@@ -175,7 +175,6 @@ class TunicWorld(World):
         return TunicItem(name, classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
 
@@ -327,7 +326,7 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando or self.options.shuffle_ladders:
+        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
             set_er_location_rules(self)
         else:
             set_region_rules(self)
