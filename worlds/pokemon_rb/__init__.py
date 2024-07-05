@@ -74,7 +74,6 @@ class PokemonRedBlueWorld(World):
     option_definitions = pokemon_rb_options
     settings: typing.ClassVar[PokemonSettings]
 
-    data_version = 9
     required_client_version = (0, 4, 2)
 
     topology_present = True
@@ -662,6 +661,9 @@ class PokemonRedBlueWorld(World):
             "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
             "split_card_key": self.multiworld.split_card_key[self.player].value,
             "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
+            "require_pokedex": self.multiworld.require_pokedex[self.player].value,
+            "area_1_to_1_mapping": self.multiworld.area_1_to_1_mapping[self.player].value,
+            "blind_trainers": self.multiworld.blind_trainers[self.player].value,
 
         }
 

@@ -8,9 +8,9 @@ from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
-from .options import TunicOptions, EntranceRando
+from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic import PlandoConnection
+from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -27,6 +27,8 @@ class TunicWeb(WebWorld):
     ]
     theme = "grassFlowers"
     game = "TUNIC"
+    option_groups = tunic_option_groups
+    options_presets = tunic_option_presets
 
 
 class TunicItem(Item):
@@ -41,7 +43,7 @@ class SeedGroup(TypedDict):
     logic_rules: int  # logic rules value
     laurels_at_10_fairies: bool  # laurels location value
     fixed_shop: bool  # fixed shop value
-    plando: List[PlandoConnection]  # consolidated list of plando connections for the seed group
+    plando: TunicPlandoConnections  # consolidated of plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -68,17 +70,17 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
 
     def generate_early(self) -> None:
-        if self.multiworld.plando_connections[self.player]:
-            for index, cxn in enumerate(self.multiworld.plando_connections[self.player]):
+        if self.options.plando_connections:
+            for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
                 if cxn.entrance.startswith("Shop"):
                     replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].remove(cxn)
-                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
                 elif cxn.exit.startswith("Shop"):
                     replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].remove(cxn)
-                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
 
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -94,13 +96,15 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+                self.options.fixed_shop.value = self.options.fixed_shop.option_false
+                self.options.laurels_location.value = self.options.laurels_location.option_anywhere
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
         tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
         for tunic in tunic_worlds:
             # if it's one of the options, then it isn't a custom seed group
-            if tunic.options.entrance_rando.value in EntranceRando.options:
+            if tunic.options.entrance_rando.value in EntranceRando.options.values():
                 continue
             group = tunic.options.entrance_rando.value
             # if this is the first world in the group, set the rules equal to its rules
@@ -145,16 +149,13 @@ class TunicWorld(World):
                                             f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
                                             f"connection {cxn.entrance} <-> {cxn.exit}")
                     if new_cxn:
-                        cls.seed_groups[group]["plando"].append(cxn)
+                        cls.seed_groups[group]["plando"].value.append(cxn)
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-        keys_behind_bosses = self.options.keys_behind_bosses
-        hexagon_quest = self.options.hexagon_quest
-        sword_progression = self.options.sword_progression
 
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
@@ -168,7 +169,7 @@ class TunicWorld(World):
         if self.options.start_with_sword:
             self.multiworld.push_precollected(self.create_item("Sword"))
 
-        if sword_progression:
+        if self.options.sword_progression:
             items_to_create["Stick"] = 0
             items_to_create["Sword"] = 0
         else:
@@ -185,9 +186,9 @@ class TunicWorld(World):
             self.slot_data_items.append(laurels)
             items_to_create["Hero's Laurels"] = 0
 
-        if keys_behind_bosses:
+        if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
-                hex_item = self.create_item(gold_hexagon if hexagon_quest else rgb_hexagon)
+                hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
                 self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
                 self.slot_data_items.append(hex_item)
                 items_to_create[rgb_hexagon] = 0
@@ -218,7 +219,7 @@ class TunicWorld(World):
                     ladder_count += 1
             remove_filler(ladder_count)
 
-        if hexagon_quest:
+        if self.options.hexagon_quest:
             # Calculate number of hexagons in item pool
             hexagon_goal = self.options.hexagon_goal
             extra_hexagons = self.options.extra_hexagon_percentage
@@ -233,6 +234,18 @@ class TunicWorld(World):
                 items_to_create[replaced_item] = 0
 
             remove_filler(items_to_create[gold_hexagon])
+
+            for hero_relic in item_name_groups["Hero Relics"]:
+                relic_item = TunicItem(hero_relic, ItemClassification.useful, self.item_name_to_id[hero_relic], self.player)
+                tunic_items.append(relic_item)
+                items_to_create[hero_relic] = 0
+
+        if not self.options.ability_shuffling:
+            for page in item_name_groups["Abilities"]:
+                if items_to_create[page] > 0:
+                    page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
+                    tunic_items.append(page_item)
+                    items_to_create[page] = 0
 
         if self.options.maskless:
             mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
