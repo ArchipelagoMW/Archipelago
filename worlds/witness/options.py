@@ -38,7 +38,6 @@ class EarlyCaves(Choice):
 class EarlySymbolItem(DefaultOnToggle):
     """
     Put a random helpful symbol item on an early check, specifically Tutorial Gate Open if it is available early.
-
     """
 
     visibility = Visibility.none
