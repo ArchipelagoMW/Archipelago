@@ -3,6 +3,7 @@ import logging
 import sys
 import typing
 import re
+from collections import deque
 
 from kivy.uix.image import AsyncImage
 from kivy.uix.relativelayout import RelativeLayout
@@ -400,6 +401,57 @@ class ConnectBarTextInput(MDTextField):
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
 
 
+def is_command_input(string: str) -> bool:
+    return len(string) > 0 and string[0] in "/!"
+
+
+class CommandPromptTextInput(MDTextField):
+    MAXIMUM_HISTORY_MESSAGES = 50
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self._command_history_index = -1
+        self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
+    
+    def update_history(self, new_entry: str) -> None:
+        self._command_history_index = -1
+        if is_command_input(new_entry):
+            self._command_history.appendleft(new_entry)
+
+    def keyboard_on_key_down(
+        self,
+        window,
+        keycode: typing.Tuple[int, str],
+        text: typing.Optional[str],
+        modifiers: typing.List[str]
+    ) -> bool:
+        """
+        :param window: The kivy window object
+        :param keycode: A tuple of (keycode, keyname). Keynames are always lowercase
+        :param text: The text printed by this key, not accounting for modifiers, or `None` if no text.
+                     Seems to pretty naively interpret the keycode as unicode, so numlock can return odd characters.
+        :param modifiers: A list of string modifiers, like `ctrl` or `numlock`
+        """
+        if keycode[1] == 'up':
+            self._change_to_history_text_if_available(self._command_history_index + 1)
+            return True
+        if keycode[1] == 'down':
+            self._change_to_history_text_if_available(self._command_history_index - 1)
+            return True
+        return super().keyboard_on_key_down(window, keycode, text, modifiers)
+    
+    def _change_to_history_text_if_available(self, new_index: int) -> None:
+        if new_index < -1:
+            return
+        if new_index >= len(self._command_history):
+            return
+        self._command_history_index = new_index
+        if new_index == -1:
+            self.text = ""
+            return
+        self.text = self._command_history[self._command_history_index]
+
+
 class MessageBox(Popup):
     class MessageBoxLabel(MDLabel):
         def __init__(self, **kwargs):
@@ -448,7 +500,7 @@ class GameManager(MDApp):
         self.commandprocessor = ctx.command_processor(ctx)
         self.icon = r"data/icon.png"
         self.json_to_kivy_parser = KivyJSONtoTextParser(ctx)
-        self.log_panels = {}
+        self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
         self.last_autofillable_command = "hint"
@@ -548,7 +600,7 @@ class GameManager(MDApp):
                                size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.5})
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = MDTextField(size_hint_y=None, multiline=False, write_tab=False, role="medium")
+        self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         info_button.height = self.textinput.height
         self.textinput.text_validate_unfocus = False
@@ -608,14 +660,18 @@ class GameManager(MDApp):
 
         self.ctx.exit_event.set()
 
-    def on_message(self, textinput: MDTextField):
+    def on_message(self, textinput: CommandPromptTextInput):
         try:
             input_text = textinput.text.strip()
             textinput.text = ""
+            textinput.update_history(input_text)
 
             if self.ctx.input_requests > 0:
                 self.ctx.input_requests -= 1
                 self.ctx.input_queue.put_nowait(input_text)
+            elif is_command_input(input_text):
+                self.ctx.on_ui_command(input_text)
+                self.commandprocessor(input_text)
             elif input_text:
                 self.commandprocessor(input_text)
 

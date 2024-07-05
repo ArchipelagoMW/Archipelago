@@ -19,7 +19,7 @@ import sys
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Sequence, Union, Optional
+from typing import Callable, Sequence, Union, Optional
 
 import Utils
 import settings
@@ -161,20 +161,21 @@ def launch(exe, in_terminal=False):
     subprocess.Popen(exe)
 
 
+refresh_components: Optional[Callable[[], None]] = None
+
+
 def run_gui():
-    from kvui import MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox
+    from kvui import MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox, ContainerLayout
+    from kivy.core.window import Window
     from kivy.uix.image import AsyncImage
     from kivymd.uix.relativelayout import MDRelativeLayout
 
     class Launcher(MDApp):
         base_title: str = "Archipelago Launcher"
-        container: MDFloatLayout
+        container: ContainerLayout
         grid: MDGridLayout
-
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
-        _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
+        _tool_layout: Optional[ScrollBox] = None
+        _client_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
             self.title = self.base_title
@@ -182,24 +183,7 @@ def run_gui():
             self.icon = r"data/icon.png"
             super().__init__()
 
-        def build(self):
-            self.theme_cls.theme_style = "Dark"
-            self.theme_cls.primary_palette = "Green"
-            self.container = MDFloatLayout()
-            self.grid = MDGridLayout(cols=2)
-            self.container.add_widget(self.grid)
-            self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40))
-            self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40))
-            tool_layout = ScrollBox()
-            tool_layout.layout.orientation = "vertical"
-            tool_layout.layout.spacing = 10
-            self.grid.add_widget(tool_layout)
-            client_layout = ScrollBox()
-            client_layout.layout.orientation = "vertical"
-            client_layout.layout.spacing = 10
-            self.grid.add_widget(client_layout)
-            self.grid.padding = 10
-            self.grid.spacing = 5
+        def _refresh_components(self) -> None:
 
             def build_button(component: Component, col=1):
                 """
@@ -226,14 +210,55 @@ def run_gui():
 
                 return button
 
+            # clear before repopulating
+            assert self._tool_layout and self._client_layout, "must call `build` first"
+            tool_children = reversed(self._tool_layout.layout.children)
+            for child in tool_children:
+                self._tool_layout.layout.remove_widget(child)
+            client_children = reversed(self._client_layout.layout.children)
+            for child in client_children:
+                self._client_layout.layout.remove_widget(child)
+
+            _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
+            _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
+            _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+            _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
+
             for (tool, client) in itertools.zip_longest(itertools.chain(
-                    self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
+                _tools.items(), _miscs.items(), _adjusters.items()
+            ), _clients.items()):
                 # column 1
                 if tool:
-                    tool_layout.layout.add_widget(build_button(tool[1]))
+                    self._tool_layout.layout.add_widget(build_button(tool[1]))
                 # column 2
                 if client:
-                    client_layout.layout.add_widget(build_button(client[1]))
+                    self._client_layout.layout.add_widget(build_button(client[1]))
+
+        def build(self):
+            self.theme_cls.theme_style = "Dark"
+            self.theme_cls.primary_palette = "Green"
+            self.container = MDFloatLayout()
+            self.grid = MDGridLayout(cols=2)
+            self.container.add_widget(self.grid)
+            self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40))
+            self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40))
+            tool_layout = ScrollBox()
+            tool_layout.layout.orientation = "vertical"
+            tool_layout.layout.spacing = 10
+            self.grid.add_widget(tool_layout)
+            client_layout = ScrollBox()
+            client_layout.layout.orientation = "vertical"
+            client_layout.layout.spacing = 10
+            self.grid.add_widget(client_layout)
+            self.grid.padding = 10
+            self.grid.spacing = 5
+
+            self._refresh_components()
+
+            global refresh_components
+            refresh_components = self._refresh_components
+
+            Window.bind(on_drop_file=self._on_drop_file)
 
             return self.container
 
@@ -244,6 +269,14 @@ def run_gui():
             else:
                 launch(get_exe(button.component), button.component.cli)
 
+        def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
+            """ When a patch file is dropped into the window, run the associated component. """
+            file, component = identify(filename.decode())
+            if file and component:
+                run_component(component, file)
+            else:
+                logging.warning(f"unable to identify component for {filename}")
+
         def _stop(self, *largs):
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
             # Closing the window explicitly cleans it up.
@@ -252,10 +285,17 @@ def run_gui():
 
     Launcher().run()
 
+    # avoiding Launcher reference leak
+    # and don't try to do something with widgets after window closed
+    global refresh_components
+    refresh_components = None
+
 
 def run_component(component: Component, *args):
     if component.func:
         component.func(*args)
+        if refresh_components:
+            refresh_components()
     elif component.script_name:
         subprocess.run([*get_exe(component.script_name), *args])
     else:
