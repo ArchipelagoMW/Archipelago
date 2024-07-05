@@ -48,16 +48,17 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
         "early_symbol_item": False,
     }
 
-    def test_arrows(self) -> None:
-        self.assertFalse(self.get_items_by_name("Arrows", 1))
-        self.assertTrue(self.get_items_by_name("Arrows", 2))
-        self.assertFalse(self.get_items_by_name("Arrows", 3))
+    def test_arrows_exist_and_are_required_in_expert_seeds_only(self) -> None:
+        with self.subTest("Test that Arrows exist only in the expert seed."):
+            self.assertFalse(self.get_items_by_name("Arrows", 1))
+            self.assertTrue(self.get_items_by_name("Arrows", 2))
+            self.assertFalse(self.get_items_by_name("Arrows", 3))
 
-    def test_correct_symbol_requirements(self) -> None:
-        desert_discard = "0x17CE7"
-        triangles = frozenset({frozenset({"Triangles"})})
-        arrows = frozenset({frozenset({"Arrows"})})
+        with self.subTest("Test that Discards ask for Triangles in normal, but Arrows in expert."):
+            desert_discard = "0x17CE7"
+            triangles = frozenset({frozenset({"Triangles"})})
+            arrows = frozenset({frozenset({"Arrows"})})
 
-        self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
-        self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_HEX[desert_discard], arrows)
-        self.assertEqual(self.multiworld.worlds[3].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
+            self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
+            self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_HEX[desert_discard], arrows)
+            self.assertEqual(self.multiworld.worlds[3].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)

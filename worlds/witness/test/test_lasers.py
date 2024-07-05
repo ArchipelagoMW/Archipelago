@@ -113,41 +113,42 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
         "door_groupings": "off",
     }
 
-    def test_win_from_upper_mountain(self) -> None:
-        exact_requirement = {
-            "Monastery Laser": 1,
-            "Mountain Floor 1 Exit (Door)": 1,
-            "Mountain Floor 2 Staircase Near (Door)": 1,
-            "Mountain Floor 2 Staircase Far (Door)": 1,
-            "Mountain Floor 2 Exit (Door)": 1,
-            "Mountain Bottom Floor Giant Puzzle Exit (Door)": 1,
-            "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
-        }
+    def test_doors_to_elevator_paths(self) -> None:
+        with self.subTest("Test Elevator victory in shuffle_doors through Mountain Entry."):
+            exact_requirement = {
+                "Monastery Laser": 1,
+                "Mountain Floor 1 Exit (Door)": 1,
+                "Mountain Floor 2 Staircase Near (Door)": 1,
+                "Mountain Floor 2 Staircase Far (Door)": 1,
+                "Mountain Floor 2 Exit (Door)": 1,
+                "Mountain Bottom Floor Giant Puzzle Exit (Door)": 1,
+                "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
+            }
 
-        self.assert_can_beat_with_minimally(exact_requirement)
+            self.assert_can_beat_with_minimally(exact_requirement)
 
-    def test_win_through_caves(self) -> None:
-        exact_requirement = {
-            "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
-            "Caves Mountain Shortcut (Door)": 1,
-            "Caves Entry (Door)": 1,
-            "Mountain Bottom Floor Rock (Door)": 1,
-            "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
-        }
+        with self.subTest("Test Elevator victory in shuffle_doors through Caves Shortcuts."):
+            exact_requirement = {
+                "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
+                "Caves Mountain Shortcut (Door)": 1,
+                "Caves Entry (Door)": 1,
+                "Mountain Bottom Floor Rock (Door)": 1,
+                "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
+            }
 
-        self.assert_can_beat_with_minimally(exact_requirement)
+            self.assert_can_beat_with_minimally(exact_requirement)
 
-    def test_win_through_tunnels_caves(self) -> None:
-        exact_requirement = {
-            "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
-            "Windmill Entry (Door)": 1,
-            "Tunnels Theater Shortcut (Door)": 1,
-            "Tunnels Entry (Door)": 1,
-            "Challenge Entry (Door)": 1,
-            "Caves Pillar Door": 1,
-            "Caves Entry (Door)": 1,
-            "Mountain Bottom Floor Rock (Door)": 1,
-            "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
-        }
+        with self.subTest("Test Elevator victory in shuffle_doors through Tunnels->Challenge->Caves."):
+            exact_requirement = {
+                "Monastery Laser": 1,  # Elevator Panel itself has a laser lock
+                "Windmill Entry (Door)": 1,
+                "Tunnels Theater Shortcut (Door)": 1,
+                "Tunnels Entry (Door)": 1,
+                "Challenge Entry (Door)": 1,
+                "Caves Pillar Door": 1,
+                "Caves Entry (Door)": 1,
+                "Mountain Bottom Floor Rock (Door)": 1,
+                "Mountain Bottom Floor Pillars Room Entry (Door)": 1,
+            }
 
-        self.assert_can_beat_with_minimally(exact_requirement)
+            self.assert_can_beat_with_minimally(exact_requirement)
