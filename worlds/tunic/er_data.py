@@ -522,7 +522,6 @@ class RegionInfo(NamedTuple):
     dead_end: int = 0  # if a region has only one exit
 
 
-# todo: make this work with the new options
 class DeadEnd(IntEnum):
     free = 0  # not a dead end
     all_cats = 1  # dead end in every logic category
@@ -555,6 +554,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld to West Garden Upper": RegionInfo("Overworld Redux"),  # usually leads to garden knight
     "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux"),  # isolated stairway with one chest
     "Overworld Well Ladder": RegionInfo("Overworld Redux"),  # just the ladder entrance itself as a region
+    "Overworld Well Entry Area": RegionInfo("Overworld Redux"),  # the page, the bridge, etc.
+    "Overworld Tunnel to Beach": RegionInfo("Overworld Redux"),  # the tunnel with the chest
     "Overworld Beach": RegionInfo("Overworld Redux"),  # from the two turrets to invisble maze, and lower atoll entry
     "Overworld Tunnel Turret": RegionInfo("Overworld Redux"),  # the tunnel turret by the southwest beach ladder
     "Overworld to Atoll Upper": RegionInfo("Overworld Redux"),  # the little ledge before the ladder
@@ -745,6 +746,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Overworld": {
         "Overworld Beach":
             [],
+        "Overworld Tunnel to Beach":
+            [],
         "Overworld to Atoll Upper":
             [["Hyperdash"]],
         "Overworld Belltower":
@@ -755,7 +758,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Overworld Special Shop Entry":
             [["Hyperdash"], ["LS1"]],
-        "Overworld Well Ladder":
+        "Overworld Well Entry Area":
             [],
         "Overworld Ruined Passage Door":
             [],
@@ -828,6 +831,12 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     #     "Overworld":
     #         [],
     # },
+    "Overworld Tunnel to Beach": {
+        # "Overworld":
+        #     [],
+        "Overworld Beach":
+            [],
+    },
     "Overworld Beach": {
         # "Overworld":
         #     [],
@@ -854,9 +863,15 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Beach":
             [],
     },
-    "Overworld Well Ladder": {
+    "Overworld Well Entry Area": {
         # "Overworld":
         #     [],
+        "Overworld Well Ladder":
+            [],
+    },
+    "Overworld Well Ladder": {
+        "Overworld Well Entry Area":
+            [],
     },
     "Overworld at Patrol Cave": {
         "East Overworld":

@@ -52,10 +52,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Beach"],
         rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
         or state.has_any({laurels, grapple}, player))
+    # regions["Overworld Beach"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
+    #     or state.has_any({laurels, grapple}, player))
+
+    # region for combat logic, no need to connect it to beach since it would be the same as the ow -> beach cxn
+    ow_tunnel_beach = regions["Overworld"].connect(
+        connecting_region=regions["Overworld Tunnel to Beach"])
+
     regions["Overworld Beach"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
-        or state.has_any({laurels, grapple}, player))
+        connecting_region=regions["Overworld Tunnel to Beach"],
+        rule=lambda state: state.has(laurels, player) or has_ladder("Ladders in Overworld Town", state, world))
 
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld West Garden Laurels Entry"],
@@ -268,11 +276,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["East Overworld"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["Overworld"].connect(
+    # region made for combat logic
+    ow_to_well_entry = regions["Overworld"].connect(
+        connecting_region=regions["Overworld Well Entry Area"])
+    regions["Overworld Well Entry Area"].connect(
+        connecting_region=regions["Overworld"])
+
+    regions["Overworld Well Entry Area"].connect(
         connecting_region=regions["Overworld Well Ladder"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
     regions["Overworld Well Ladder"].connect(
-        connecting_region=regions["Overworld"],
+        connecting_region=regions["Overworld Well Entry Area"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
 
     # nmg: can ice grapple through the door
@@ -503,7 +517,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden"],
         rule=lambda state: state.has(laurels, player))
-    regions["West Garden"].connect(
+    wg_to_after_gk = regions["West Garden"].connect(
         connecting_region=regions["West Garden after Boss"],
         rule=lambda state: state.has(laurels, player) or has_sword(state, player))
 
@@ -1003,7 +1017,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Far Shore"])
 
     # Misc
-    regions["Spirit Arena"].connect(
+    heir_fight = regions["Spirit Arena"].connect(
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
@@ -1141,6 +1155,23 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
         for region in ladder_regions.values():
             world.multiworld.regions.append(region)
+
+    # for combat logic, easiest to replace or add to existing rules
+    if world.options.combat_logic >= CombatLogic.option_bosses_only:
+        set_rule(wg_to_after_gk,
+                 lambda state: state.has(laurels, player)
+                 or has_combat_logic(["Garden Knight"], state, player))
+        if not world.options.hexagon_quest:
+            add_rule(heir_fight,
+                     lambda state: has_combat_logic(["The Heir"], state, player))
+
+    if world.options.combat_logic == CombatLogic.option_on:
+        # need to fight through the rudelings and turret, or just laurels from near the windmill
+        set_rule(ow_to_well_entry,
+                 lambda state: state.has(laurels, player)
+                 or has_combat_logic(["Shield Rudelings", "Autobolts"], state, player))
+        set_rule(ow_tunnel_beach,
+                 lambda state: has_combat_logic(["Shield Rudelings"], state, player))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
@@ -1364,9 +1395,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_sword(state, player))
 
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
-        set_rule(multiworld.get_entrance("West Garden -> West Garden after Boss", player),
-                 lambda state: state.has(laurels, player)
-                 or has_combat_logic(["Garden Knight"], state, player))
+        # garden knight is in the regions part above
         set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
                  lambda state: has_combat_logic(["Siege Engine"], state, player))
         set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
@@ -1375,6 +1404,19 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  lambda state: has_combat_logic(["Boss Scavenger"], state, player))
         set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
                  lambda state: has_combat_logic(["Gauntlet"], state, player))
-        if not world.options.hexagon_quest:
-            add_rule(multiworld.get_entrance("Spirit Arena -> Spirit Arena Victory", player),
-                     lambda state: has_combat_logic(["The Heir"], state, player))
+
+    if world.options.combat_logic == CombatLogic.option_on:
+        set_rule(multiworld.get_location("Overworld - [East] Between Ladders Near Ruined Passage", player),
+                 lambda state: has_combat_logic(["Slimes"], state, player))
+        set_rule(multiworld.get_location("Overworld - [East] Chest Near Pots", player),
+                 lambda state: has_combat_logic(["Slimes"], state, player))
+        add_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
+                 lambda state: has_combat_logic(["Slimes"], state, player))
+        set_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Quarry Gate", player),
+                 lambda state: has_combat_logic(["Rudelings"], state, player))
+        set_rule(multiworld.get_location("Overworld - [Northeast] Chest Above Patrol Cave", player),
+                 lambda state: has_combat_logic(["Shield Rudelings"], state, player))
+        set_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret", player),
+                 lambda state: has_combat_logic(["Autobolts"], state, player))
+        add_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret 2", player),
+                 lambda state: has_combat_logic(["Autobolts"], state, player))

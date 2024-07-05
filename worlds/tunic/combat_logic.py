@@ -19,8 +19,8 @@ class EncounterData(NamedTuple):
 
 # general requirements for enemy encounters in the game, for use in determining whether you can access a chest
 enemy_encounters: Dict[str, EncounterData] = {
-    # pink slimes are basically free
-    "Blue Slimes": EncounterData(0),
+    # pink and blue slimes really only need a stick
+    "Slimes": EncounterData(0),
     "Rudelings": EncounterData(4),
     "Shield Rudelings": EncounterData(6),
     # just gets stunlocked with a stick
@@ -68,7 +68,8 @@ def has_combat_logic(encounters: List[str], state: CollectionState, player: int)
             return False
     # if you met the item requirements, and you have enough power, then you may proceed
     level_req: int = max(data.power_required for data in encounter_data)
-    if sum_power(state, player) >= level_req:
+    # the not level_req is to short circuit early for spots with combat level 0
+    if not level_req or sum_power(state, player) >= level_req:
         return True
 
 
