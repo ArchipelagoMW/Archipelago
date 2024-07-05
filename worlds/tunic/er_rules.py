@@ -901,19 +901,24 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         or state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
-    # nmg: ice grapple through cathedral door, can do it both ways
-    # todo: add can_reach for beach and the ladder to atoll
-    regions["Swamp Mid"].connect(
+    swamp_mid_to_cath = regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: (has_ability(prayer, state, world) 
-                            and (state.has(laurels, player) 
+        rule=lambda state: (has_ability(prayer, state, world)
+                            and (state.has(laurels, player)
+                                 # blam yourself in the face with a wand shot off the fuse
                                  or (can_ladder_storage(state, world) and state.has(fire_wand, player)
-                                     and options.ladder_storage >= LadderStorage.option_hard 
-                                     and (not options.shuffle_ladders 
-                                          or state.has_any({"Ladders in Overworld Town", 
+                                     and options.ladder_storage >= LadderStorage.option_hard
+                                     and (not options.shuffle_ladders
+                                          or state.has_any({"Ladders in Overworld Town",
                                                             "Ladder to Swamp",
-                                                            "Ladders near Weathervane"}, player)))))
+                                                            "Ladders near Weathervane"}, player)
+                                          or (state.has("Ladder to Ruined Atoll", player)
+                                              and state.can_reach_region("Overworld Beach", player))))))
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+
+    if options.ladder_storage >= LadderStorage.option_hard and options.shuffle_ladders:
+        world.multiworld.register_indirect_condition(regions["Overworld Beach"], swamp_mid_to_cath)
+
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
