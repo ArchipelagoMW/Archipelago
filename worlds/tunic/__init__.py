@@ -200,7 +200,7 @@ class TunicWorld(World):
 
         # Remove filler to make room for other items
         def remove_filler(amount: int) -> None:
-            for _ in range(0, amount):
+            for _ in range(amount):
                 if not available_filler:
                     fill = "Fool Trap"
                 else:
@@ -258,7 +258,7 @@ class TunicWorld(World):
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
-            for i in range(0, quantity):
+            for _ in range(quantity):
                 tunic_item: TunicItem = self.create_item(item)
                 if item in slot_data_item_names:
                     self.slot_data_items.append(tunic_item)
@@ -309,10 +309,10 @@ class TunicWorld(World):
 
     def set_rules(self) -> None:
         if self.options.entrance_rando or self.options.shuffle_ladders:
-            set_er_location_rules(self, self.ability_unlocks)
+            set_er_location_rules(self)
         else:
-            set_region_rules(self, self.ability_unlocks)
-            set_location_rules(self, self.ability_unlocks)
+            set_region_rules(self)
+            set_location_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
@@ -387,7 +387,7 @@ class TunicWorld(World):
             if start_item in slot_data_item_names:
                 if start_item not in slot_data:
                     slot_data[start_item] = []
-                for i in range(0, self.options.start_inventory_from_pool[start_item]):
+                for _ in range(self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
 
         for plando_item in self.multiworld.plando_items[self.player]:
