@@ -23,7 +23,6 @@ from typing import Callable, Sequence, Union, Optional
 
 import Utils
 import settings
-from kvui import ImageIcon
 from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
 
 if __name__ == "__main__":
@@ -165,7 +164,8 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui():
-    from kvui import MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox, ContainerLayout
+    from kvui import (MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
+                      ContainerLayout, ImageIcon)
     from kivy.core.window import Window
     from kivy.uix.image import AsyncImage
     from kivymd.uix.relativelayout import MDRelativeLayout
