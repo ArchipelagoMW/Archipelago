@@ -93,6 +93,51 @@ boss_hp_caps_offsets = {
     "Wolf Sigma": 0x44B78,
 }
 
+enemy_tweaks_offsets = {
+    "Chill Penguin": 0x158000,
+    "Armored Armadillo": 0x158002,
+    "Spark Mandrill": 0x158004,
+}
+
+enemy_tweaks_indexes = {
+    "Chill Penguin": {
+        "Random horizontal slide speed": 0x0001,
+        "Jumps when starting slide": 0x0002,
+        "Random ice block horizontal speed": 0x0004,
+        "Random ice block vertical speed": 0x0008,
+        "Shoot random amount of ice blocks": 0x0010,
+        "Ice block shooting rate enhancer #1": 0x0020,
+        "Ice block shooting rate enhancer #2": 0x0040,
+        "Ice block shooting rate enhancer #3": 0x0080,
+        "Random blizzard strength": 0x0100,
+        "Fast falls after jumping": 0x0200,
+        "Random mist range": 0x0400,
+        "Can't be stunned/set on fire with incoming damage": 0x4000,
+        "Can't be set on fire with weakness": 0x8000,
+    },
+    "Armored Armadillo": {
+        "Random bouncing speed": 0x0001,
+        "Random bouncing angle": 0x0002,
+        "Random energy horizontal speed": 0x0004,
+        "Random energy vertical speed": 0x0008,
+        "Energy shooting rate enhancer #1": 0x0010,
+        "Energy shooting rate enhancer #2": 0x0020,
+        "Don't absorb any projectile": 0x1000,
+        "Absorbs any projectile except weakness": 0x2000,
+        "Don't flinch from incoming damage without armor": 0x4000,
+        "Can't block incoming projectiles": 0x8000,
+    },
+    "Spark Mandrill": {
+        "Random Electric Spark speed": 0x0001,
+        "Additional Electric Spark #1": 0x0002,
+        "Additional Electric Spark #2": 0x0004,
+        "Landing creates Electric Spark": 0x0008,
+        "Hitting a wall creates Electric Spark": 0x0010,
+        "Can't be stunned during Dash Punch with weakness": 0x4000,
+        "Can't be frozen with weakness": 0x8000,
+    }
+}
+
 class MMXProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [HASH_US, HASH_LEGACY]
     game = "Mega Man X"
@@ -132,6 +177,7 @@ def adjust_boss_damage_table(world: World, patch: MMXProcedurePatch):
             data[i] = entry[1]
             i += 1
         patch.write_bytes(offset, bytearray(data))
+        print (f"Boss: {_} | Offset: 0x{offset - 0x17E9A2:04X}")
         offset += 8
 
 
@@ -221,6 +267,20 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     button_config = world.options.button_configuration.value
     for action, button in button_config.items():
         patch.write_byte(action_offsets[action], button_values[button])
+
+    # Write tweaks
+    enemy_tweaks_available = {
+        "Chill Penguin": world.options.chill_penguin_tweaks.value,
+        "Armored Armadillo": world.options.armored_armadillo_tweaks.value,
+        "Spark Mandrill": world.options.spark_mandrill_tweaks.value,
+    }
+    for boss, offset in enemy_tweaks_offsets.items():
+        selected_tweaks = enemy_tweaks_available[boss]
+        final_value = 0
+        for tweak in selected_tweaks:
+            final_value |= enemy_tweaks_indexes[boss][tweak]
+        print (f"Boss: {boss} | Offset: 0x{offset:06X} | Config: 0x{final_value:04X}")
+        patch.write_bytes(offset, bytearray([final_value & 0xFF, (final_value >> 8) & 0xFF]))
 
     # Edit the ROM header
     from Utils import __version__

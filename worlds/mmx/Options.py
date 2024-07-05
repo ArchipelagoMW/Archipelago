@@ -264,6 +264,65 @@ class LongJumps(Toggle):
     """
     display_name = "Long Jumps"
 
+class ChillPenguinTweaks(OptionSet):
+    """
+    Additional behavior to Chill Penguin
+    """
+    display_name = "Chill Penguin Tweaks"
+    valid_keys = {
+        "Random horizontal slide speed",
+        "Jumps when starting slide",
+        "Random ice block horizontal speed",
+        "Random ice block vertical speed",
+        "Shoot random amount of ice blocks",
+        "Ice block shooting rate enhancer #1",
+        "Ice block shooting rate enhancer #2",
+        "Ice block shooting rate enhancer #3",
+        "Random blizzard strength",
+        "Fast falls after jumping",
+        "Random mist range",
+        "Can't be stunned/set on fire with incoming damage",
+        "Can't be set on fire with weakness",
+    }
+    default = {}
+
+
+class ArmoredArmadilloTweaks(OptionSet):
+    """
+    Additional behavior to Armored Armadillo
+    """
+    display_name = "Armored Armadillo Tweaks"
+    valid_keys = {
+        "Random bouncing speed",
+        "Random bouncing angle",
+        "Random energy horizontal speed",
+        "Random energy vertical speed",
+        "Energy shooting rate enhancer #1",
+        "Energy shooting rate enhancer #2",
+        "Don't absorb any projectile",
+        "Absorbs any projectile except weakness",
+        "Don't flinch from incoming damage without armor",
+        "Can't block incoming projectiles",
+    }
+    default = {}
+
+
+class SparkMandrillTweaks(OptionSet):
+    """
+    Additional behavior to Spark Mandrill
+    """
+    display_name = "Spark Mandrill Tweaks"
+    valid_keys = {
+        "Random Electric Spark speed",
+        "Additional Electric Spark #1",
+        "Additional Electric Spark #2",
+        "Landing creates Electric Spark",
+        "Hitting a wall creates Electric Spark",
+        "Can't be stunned during Dash Punch with weakness",
+        "Can't be frozen with weakness",
+    }
+    default = {}
+
 mmx_option_groups = [
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
@@ -272,6 +331,7 @@ mmx_option_groups = [
         JammedBuster,
         BetterWallJump,
         LongJumps,
+        AirDash,
         HadoukenInPool,
         LogicChargedShotgunIce,
     ]),
@@ -290,6 +350,11 @@ mmx_option_groups = [
         BossWeaknessStrictness,
         BossRandomizedHP,
         LogicBossWeakness,
+    ]),
+    OptionGroup("Enemy Tweaks", [
+        ChillPenguinTweaks,
+        ArmoredArmadilloTweaks,
+        SparkMandrillTweaks,
     ]),
 ]
 
@@ -323,3 +388,6 @@ class MMXOptions(PerGameCommonOptions):
     sigma_upgrade_count: SigmaArmorUpgradeCount
     sigma_heart_tank_count: SigmaHeartTankCount
     sigma_sub_tank_count: SigmaSubTankCount
+    chill_penguin_tweaks: ChillPenguinTweaks
+    armored_armadillo_tweaks: ArmoredArmadilloTweaks
+    spark_mandrill_tweaks: SparkMandrillTweaks
