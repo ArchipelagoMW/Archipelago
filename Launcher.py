@@ -242,14 +242,14 @@ def run_gui():
             self.container.add_widget(self.grid)
             self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40))
             self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40))
-            tool_layout = ScrollBox()
-            tool_layout.layout.orientation = "vertical"
-            tool_layout.layout.spacing = 10
-            self.grid.add_widget(tool_layout)
-            client_layout = ScrollBox()
-            client_layout.layout.orientation = "vertical"
-            client_layout.layout.spacing = 10
-            self.grid.add_widget(client_layout)
+            self._tool_layout = ScrollBox()
+            self._tool_layout.layout.orientation = "vertical"
+            self._tool_layout.layout.spacing = 10
+            self.grid.add_widget(self._tool_layout)
+            self._client_layout = ScrollBox()
+            self._client_layout.layout.orientation = "vertical"
+            self._client_layout.layout.spacing = 10
+            self.grid.add_widget(self._client_layout)
             self.grid.padding = 10
             self.grid.spacing = 5
 
