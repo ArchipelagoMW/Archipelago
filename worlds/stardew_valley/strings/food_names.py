@@ -104,6 +104,11 @@ class SVEMeal:
     grampleton_orange_chicken = "Grampleton Orange Chicken"
 
 
+class TrashyMeal:
+    grilled_cheese = "Grilled Cheese"
+    fish_casserole = "Fish Casserole"
+
+
 class ArchaeologyMeal:
     diggers_delight = "Digger's Delight"
     rocky_root = "Rocky Root Coffee"

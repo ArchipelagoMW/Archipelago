@@ -9,7 +9,7 @@ from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
 from ..strings.flower_names import Flower
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
 from ..strings.ingredient_names import Ingredient
-from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal, ArchaeologyMeal
+from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal, ArchaeologyMeal, TrashyMeal
 from ..strings.material_names import Material
 from ..strings.metal_names import Fossil, Artifact
 from ..strings.monster_drop_names import Loot
@@ -191,7 +191,7 @@ frog_legs = shop_recipe(SVEMeal.frog_legs, Region.adventurer_guild, 2000, {SVEFi
 glazed_butterfish = friendship_and_shop_recipe(SVEMeal.glazed_butterfish, NPC.gus, 10, Region.saloon, 4000,
                                                {SVEFish.butterfish: 1, Ingredient.wheat_flour: 1, Ingredient.oil: 1}, ModNames.sve)
 mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fruit.strawberry: 6, SVEFruit.salal_berry: 6, Forageable.blackberry: 6,
-                                                                             SVEForage.bearberrys: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
+                                                                             SVEForage.bearberry: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
                               ModNames.sve)
 mushroom_berry_rice = friendship_and_shop_recipe(SVEMeal.mushroom_berry_rice, ModNPC.marlon, 6, Region.adventurer_guild, 1500, {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10,
                                                                                                Ingredient.rice: 1, Ingredient.sugar: 2}, ModNames.sve)
@@ -214,5 +214,8 @@ special_pumpkin_soup = friendship_recipe(BoardingHouseMeal.special_pumpkin_soup,
 diggers_delight = skill_recipe(ArchaeologyMeal.diggers_delight, ModSkill.archaeology, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.milk: 1}, ModNames.archaeology)
 rocky_root = skill_recipe(ArchaeologyMeal.rocky_root, ModSkill.archaeology, 7, {Forageable.cave_carrot: 3, Seed.coffee: 1, Material.stone: 1}, ModNames.archaeology)
 ancient_jello = skill_recipe(ArchaeologyMeal.ancient_jello, ModSkill.archaeology, 9, {WaterItem.cave_jelly: 6, Ingredient.sugar: 5, AnimalProduct.egg: 1, AnimalProduct.milk: 1, Artifact.chipped_amphora: 1}, ModNames.archaeology)
+
+grilled_cheese = skill_recipe(TrashyMeal.grilled_cheese, ModSkill.binning, 1, {Meal.bread: 1, ArtisanGood.cheese: 1}, ModNames.binning_skill)
+fish_casserole = skill_recipe(TrashyMeal.fish_casserole, ModSkill.binning, 8, {Fish.any: 1, AnimalProduct.milk: 1, Vegetable.carrot: 1}, ModNames.binning_skill)
 
 all_cooking_recipes_by_name = {recipe.meal: recipe for recipe in all_cooking_recipes}

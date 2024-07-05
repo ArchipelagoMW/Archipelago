@@ -2931,6 +2931,11 @@ id,region,name,tags,mod_name
 7428,Farm,Craft Rusty Brazier,CRAFTSANITY,Archaeology
 7429,Farm,Craft Lucky Ring,CRAFTSANITY,Archaeology
 7430,Farm,Craft Bone Fence,CRAFTSANITY,Archaeology
+7431,Farm,Craft Bouquet,CRAFTSANITY,Socializing Skill
+7432,Farm,Craft Trash Bin,CRAFTSANITY,Binning Skill
+7433,Farm,Craft Composter,CRAFTSANITY,Binning Skill
+7434,Farm,Craft Recycling Bin,CRAFTSANITY,Binning Skill
+7435,Farm,Craft Advanced Recycling Machine,CRAFTSANITY,Binning Skill
 7451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
@@ -2979,6 +2984,8 @@ id,region,name,tags,mod_name
 7566,Kitchen,Cook Digger's Delight,COOKSANITY,Archaeology
 7567,Kitchen,Cook Rocky Root Coffee,COOKSANITY,Archaeology
 7568,Kitchen,Cook Ancient Jello,COOKSANITY,Archaeology
+7569,Kitchen,Cook Grilled Cheese,COOKSANITY,Binning Skill
+7570,Kitchen,Cook Fish Casserole,COOKSANITY,Binning Skill
 7601,Bear Shop,Baked Berry Oatmeal Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7602,Bear Shop,Flower Cookie Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7603,Saloon,Big Bark Burger Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
@@ -3002,6 +3009,8 @@ id,region,name,tags,mod_name
 7623,Farm,Digger's Delight Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 7624,Farm,Rocky Root Coffee Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 7625,Farm,Ancient Jello Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7627,Farm,Grilled Cheese Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Binning Skill
+7628,Farm,Fish Casserole Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Binning Skill
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
 7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
 7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
@@ -3031,7 +3040,6 @@ id,region,name,tags,mod_name
 7724,Mutant Bug Lair,Fishsanity: Water Grub,FISHSANITY,Stardew Valley Expanded
 7725,Crimson Badlands,Fishsanity: Undeadfish,FISHSANITY,Stardew Valley Expanded
 7726,Shearwater Bridge,Fishsanity: Kittyfish,FISHSANITY,Stardew Valley Expanded
-7727,Blue Moon Vineyard,Fishsanity: Dulse Seaweed,FISHSANITY,Stardew Valley Expanded
 7728,Witch's Swamp,Fishsanity: Void Minnow,FISHSANITY,Distant Lands - Witch Swamp Overhaul
 7729,Witch's Swamp,Fishsanity: Swamp Leech,FISHSANITY,Distant Lands - Witch Swamp Overhaul
 7730,Witch's Swamp,Fishsanity: Giant Horsehoe Crab,FISHSANITY,Distant Lands - Witch Swamp Overhaul
@@ -3048,15 +3056,15 @@ id,region,name,tags,mod_name
 8002,Shipping,Shipsanity: Travel Core,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Magic
 8003,Shipping,Shipsanity: Aegis Elixir,SHIPSANITY,Stardew Valley Expanded
 8004,Shipping,Shipsanity: Aged Blue Moon Wine,SHIPSANITY,Stardew Valley Expanded
-8005,Shipping,Shipsanity: Ancient Ferns Seed,SHIPSANITY,Stardew Valley Expanded
+8005,Shipping,Shipsanity: Ancient Fern Seed,SHIPSANITY,Stardew Valley Expanded
 8006,Shipping,Shipsanity: Ancient Fiber,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8007,Shipping,Shipsanity: Armor Elixir,SHIPSANITY,Stardew Valley Expanded
 8008,Shipping,Shipsanity: Baby Lunaloo,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8009,Shipping,Shipsanity: Baked Berry Oatmeal,SHIPSANITY,Stardew Valley Expanded
 8010,Shipping,Shipsanity: Barbarian Elixir,SHIPSANITY,Stardew Valley Expanded
-8011,Shipping,Shipsanity: Bearberrys,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8011,Shipping,Shipsanity: Bearberry,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8012,Shipping,Shipsanity: Big Bark Burger,SHIPSANITY,Stardew Valley Expanded
-8013,Shipping,Shipsanity: Big Conch,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8013,Shipping,Shipsanity: Conch,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8014,Shipping,Shipsanity: Blue Moon Wine,SHIPSANITY,Stardew Valley Expanded
 8015,Shipping,Shipsanity: Bonefish,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8016,Shipping,Shipsanity: Bull Trout,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -3064,8 +3072,7 @@ id,region,name,tags,mod_name
 8018,Shipping,Shipsanity: Clownfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8019,Shipping,Shipsanity: Daggerfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8020,Shipping,Shipsanity: Dewdrop Berry,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
-8021,Shipping,Shipsanity: Dried Sand Dollar,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
-8022,Shipping,Shipsanity: Dulse Seaweed,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
+8021,Shipping,Shipsanity: Sand Dollar,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8023,Shipping,Shipsanity: Ferngill Primrose,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8024,Shipping,Shipsanity: Flower Cookie,SHIPSANITY,Stardew Valley Expanded
 8025,Shipping,Shipsanity: Frog,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -3085,7 +3092,7 @@ id,region,name,tags,mod_name
 8040,Shipping,Shipsanity: King Salmon,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8050,Shipping,Shipsanity: Kittyfish,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8051,Shipping,Shipsanity: Lightning Elixir,SHIPSANITY,Stardew Valley Expanded
-8052,Shipping,Shipsanity: Lucky Four Leaf Clover,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8052,Shipping,Shipsanity: Four Leaf Clover,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8053,Shipping,Shipsanity: Lunaloo,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8054,Shipping,Shipsanity: Meteor Carp,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8055,Shipping,Shipsanity: Minnow,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -3108,7 +3115,7 @@ id,region,name,tags,mod_name
 8072,Shipping,Shipsanity: Shrub Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8073,Shipping,Shipsanity: Slime Berry,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT,GINGER_ISLAND",Stardew Valley Expanded
 8074,Shipping,Shipsanity: Slime Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8075,Shipping,Shipsanity: Smelly Rafflesia,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8075,Shipping,Shipsanity: Rafflesia,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8076,Shipping,Shipsanity: Sports Drink,SHIPSANITY,Stardew Valley Expanded
 8077,Shipping,Shipsanity: Stalk Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8078,Shipping,Shipsanity: Stamina Capsule,SHIPSANITY,Stardew Valley Expanded
@@ -3278,3 +3285,5 @@ id,region,name,tags,mod_name
 8242,Shipping,Shipsanity: Rocky Root Coffee,SHIPSANITY,Archaeology
 8243,Shipping,Shipsanity: Ancient Jello,SHIPSANITY,Archaeology
 8244,Shipping,Shipsanity: Bone Fence,SHIPSANITY,Archaeology
+8245,Shipping,Shipsanity: Grilled Cheese,SHIPSANITY,Binning Skill
+8246,Shipping,Shipsanity: Fish Casserole,SHIPSANITY,Binning Skill

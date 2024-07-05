@@ -61,12 +61,12 @@ class TreeSeed:
 
 
 class SVESeed:
-    stalk_seed = "Stalk Seed"
-    fungus_seed = "Fungus Seed"
-    slime_seed = "Slime Seed"
-    void_seed = "Void Seed"
-    shrub_seed = "Shrub Seed"
-    ancient_ferns_seed = "Ancient Ferns Seed"
+    stalk = "Stalk Seed"
+    fungus = "Fungus Seed"
+    slime = "Slime Seed"
+    void = "Void Seed"
+    shrub = "Shrub Seed"
+    ancient_fern = "Ancient Fern Seed"
 
 
 class DistantLandsSeed:

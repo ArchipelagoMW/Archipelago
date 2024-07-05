@@ -103,7 +103,6 @@ register_mod_content_pack(SVEContentPack(
         fish_data.void_eel,
         fish_data.water_grub,
         fish_data.sea_sponge,  # Removed when no ginger island
-        fish_data.dulse_seaweed,
 
     ),
     villagers=(

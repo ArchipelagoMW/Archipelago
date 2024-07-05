@@ -15,11 +15,12 @@ from ..strings.fish_names import Fish, WaterItem, ModTrash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
+from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral, ModFossil
-from ..strings.monster_drop_names import Loot
+from ..strings.monster_drop_names import Loot, ModLoot
 from ..strings.quest_names import Quest
 from ..strings.region_names import Region, SVERegion, LogicRegion
 from ..strings.seed_names import Seed, TreeSeed
@@ -330,11 +331,11 @@ hardwood_display = skill_recipe(ModCraftable.hardwood_display, ModSkill.archaeol
 lucky_ring = skill_recipe(Ring.lucky_ring, ModSkill.archaeology, 8, {Artifact.elvish_jewelry: 1, AnimalProduct.rabbit_foot: 5, Mineral.tigerseye: 1}, ModNames.archaeology)
 volcano_totem = skill_recipe(ModConsumable.volcano_totem, ModSkill.archaeology, 9, {Material.cinder_shard: 5, Artifact.rare_disc: 1, Artifact.dwarf_gadget: 1},
                              ModNames.archaeology)
-haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, SVEForage.void_soul: 5, Ingredient.sugar: 1,
+haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, ModLoot.void_soul: 5, Ingredient.sugar: 1,
                                                                                   Meal.spicy_eel: 1}, ModNames.sve)
-hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {SVEForage.void_pebble: 3, SVEForage.void_soul: 5, Ingredient.oil: 1,
+hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {ModLoot.void_pebble: 3, ModLoot.void_soul: 5, Ingredient.oil: 1,
                                                                                Loot.slime: 10}, ModNames.sve)
-armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, SVEForage.void_soul: 5, Ingredient.vinegar: 5,
+armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, ModLoot.void_soul: 5, Ingredient.vinegar: 5,
                                                                                   Fossil.bone_fragment: 5}, ModNames.sve)
 ginger_tincture = friendship_recipe(ModConsumable.ginger_tincture, ModNPC.goblin, 4, {DistantLandsForageable.brown_amanita: 1, Forageable.ginger: 5,
                                                                                       Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1},
@@ -362,5 +363,12 @@ trex_skeleton_m = shop_recipe(ModCraftable.trex_skeleton_m, LogicRegion.mines_dw
 trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, LogicRegion.mines_dwarf_shop, 5000,
                               {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_femur: 1, ModFossil.dinosaur_pelvis: 1,
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+
+bouquet = skill_recipe(Gift.bouquet, ModSkill.socializing, 3, {Flower.tulip: 3}, ModNames.socializing_skill)
+trash_bin = skill_recipe(ModMachine.trash_bin, ModSkill.binning, 2, {Material.stone: 30, MetalBar.iron: 2}, ModNames.binning_skill)
+composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wood: 70, Material.sap: 20, Material.fiber: 30}, ModNames.binning_skill)
+recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModNames.binning_skill)
+advanced_recycling_machine = skill_recipe(ModMachine.advanced_recycling_machine, ModSkill.binning, 9,
+                                          {MetalBar.iridium: 5, ArtisanGood.battery_pack: 2, MetalBar.quartz: 10}, ModNames.binning_skill)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
