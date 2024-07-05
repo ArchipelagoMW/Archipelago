@@ -6,6 +6,15 @@ from ....mods.mod_data import ModNames
 from ....strings.fish_names import SVEFish
 from ....strings.villager_names import ModNPC, NPC
 
+vanilla_villagers = 33
+vanilla_villagers_with_leo = 34
+sve_villagers = 13
+sve_villagers_with_lance = 14
+vanilla_pelican_town_fish = 63
+vanilla_ginger_island_fish = 3
+sve_pelican_town_fish = 16
+sve_ginger_island_fish = 10
+
 
 class TestVanilla(SVContentPackTestBase):
 
@@ -38,8 +47,7 @@ class TestSVE(SVContentPackTestBase):
         self.assertIn(ModNPC.scarlett, self.content.villagers)
         self.assertIn(ModNPC.susan, self.content.villagers)
 
-        # 33 vanilla + 13 SVE
-        self.assertEqual(33 + 13, len(self.content.villagers))
+        self.assertEqual(vanilla_villagers + sve_villagers, len(self.content.villagers))
 
     def test_sve_has_sve_fish(self):
         fish_names = self.content.fishes.keys()
@@ -61,8 +69,7 @@ class TestSVE(SVContentPackTestBase):
         self.assertIn(SVEFish.void_eel, fish_names)
         self.assertIn(SVEFish.water_grub, fish_names)
 
-        # 63 pelican town  + 17 sve pelican town
-        self.assertEqual(63 + 16, len(self.content.fishes))
+        self.assertEqual(vanilla_pelican_town_fish + sve_pelican_town_fish, len(self.content.fishes))
 
 
 class TestSVEWithGingerIsland(SVContentPackTestBase):
@@ -87,8 +94,7 @@ class TestSVEWithGingerIsland(SVContentPackTestBase):
         self.assertIn(ModNPC.scarlett, self.content.villagers)
         self.assertIn(ModNPC.susan, self.content.villagers)
 
-        # 34 vanilla + 14 SVE
-        self.assertEqual(34 + 14, len(self.content.villagers))
+        self.assertEqual(vanilla_villagers_with_leo + sve_villagers_with_lance, len(self.content.villagers))
 
     def test_sve_has_sve_fish(self):
         fish_names = self.content.fishes.keys()
@@ -120,8 +126,7 @@ class TestSVEWithGingerIsland(SVContentPackTestBase):
         self.assertIn(SVEFish.water_grub, fish_names)
         self.assertIn(SVEFish.sea_sponge, fish_names)
 
-        # 63 pelican town + 3 ginger island + 17 sve pelican town + 10 sve ginger island
-        self.assertEqual(63 + 3 + 16 + 10, len(self.content.fishes))
+        self.assertEqual(vanilla_pelican_town_fish + vanilla_ginger_island_fish + sve_pelican_town_fish + sve_ginger_island_fish, len(self.content.fishes))
 
 
 class TestSVEWithoutGingerIslandE2E(SVTestBase):
