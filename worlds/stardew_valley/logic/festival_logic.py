@@ -112,8 +112,7 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
             FestivalCheck.squidfest_day_1_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
             FestivalCheck.squidfest_day_1_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.bait),
             FestivalCheck.squidfest_day_1_gold: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_1_iridium: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) &
-                                                   self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid]),
+            FestivalCheck.squidfest_day_1_iridium: self.logic.festival.can_squidfest_day_1_iridium_reward(),
             FestivalCheck.squidfest_day_2_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
             FestivalCheck.squidfest_day_2_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.bait),
             FestivalCheck.squidfest_day_2_gold: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.deluxe_bait),
@@ -121,14 +120,17 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
                                                    self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid]),
         })
         for i in range(1, 11):
-            self.registry.festival_rules[f"{FestivalCheck.trout_derby_reward_pattern}{i}"] = self.logic.fishing.can_catch_fish(
-                self.content.fishes[Fish.rainbow_trout])
+            check_name = f"{FestivalCheck.trout_derby_reward_pattern}{i}"
+            self.registry.festival_rules[check_name] = self.logic.fishing.can_catch_fish(self.content.fishes[Fish.rainbow_trout])
+
+    def can_squidfest_day_1_iridium_reward(self) -> StardewRule:
+        return self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid])
 
     def has_squidfest_day_1_iridium_reward(self) -> StardewRule:
         if self.options.festival_locations == FestivalLocations.option_disabled:
-            return self.registry.festival_rules[FestivalCheck.squidfest_day_1_iridium]
+            return self.logic.festival.can_squidfest_day_1_iridium_reward()
         else:
-            return self.logic.has(Book.the_art_o_crabbing)
+            return self.logic.received(f"Book: {Book.the_art_o_crabbing}")
 
     def can_win_egg_hunt(self) -> StardewRule:
         return self.logic.true_
