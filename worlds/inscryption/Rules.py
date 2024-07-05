@@ -103,7 +103,7 @@ class InscryptionRules:
         return state.has("Magnificus Eye", self.player)
 
     def has_useful_act1_items(self, state: CollectionState) -> bool:
-        return state.has("Oil Painting's Clover Plant", self.player) and state.has("Squirrel Totem Head")
+        return state.has("Oil Painting's Clover Plant", self.player) and state.has("Squirrel Totem Head", self.player)
 
     def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
         if self.world.options.epitaph_pieces_randomization.value == 0:
