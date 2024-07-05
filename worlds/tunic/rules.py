@@ -337,3 +337,13 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
              lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
     set_rule(multiworld.get_location("Hero's Grave - Feathers Relic", player),
              lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
+
+    # Shop
+    set_rule(multiworld.get_location("Shop - Potion 1", player),
+             lambda state: has_sword(state, player))
+    set_rule(multiworld.get_location("Shop - Potion 2", player),
+             lambda state: has_sword(state, player))
+    set_rule(multiworld.get_location("Shop - Coin 1", player),
+             lambda state: has_sword(state, player))
+    set_rule(multiworld.get_location("Shop - Coin 2", player),
+             lambda state: has_sword(state, player))
