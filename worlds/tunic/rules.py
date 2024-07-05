@@ -64,7 +64,6 @@ def laurels_zip(state: CollectionState, world: "TunicWorld") -> bool:
     return state.has(laurels, world.player)
 
 
-# todo: find and put proper typing on ice_grapple
 def has_ice_grapple_logic(long_range: bool, difficulty: IceGrappling, state: CollectionState, world: "TunicWorld") -> bool:
     if world.options.ice_grappling < difficulty:
         return False
