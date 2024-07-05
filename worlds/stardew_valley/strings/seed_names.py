@@ -66,7 +66,7 @@ class SVESeed:
     slime_seed = "Slime Seed"
     void_seed = "Void Seed"
     shrub_seed = "Shrub Seed"
-    ancient_ferns_seed = "Ancient Ferns Seed"
+    ancient_fern_seed = "Ancient Fern Seed"
 
 
 class DistantLandsSeed:

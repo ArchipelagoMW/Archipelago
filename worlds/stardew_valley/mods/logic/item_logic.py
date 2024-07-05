@@ -83,18 +83,18 @@ FarmingLogicMixin]]):
                                         self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.logic.season.has_any_not_winter(),
                 SVEFruit.monster_fruit: self.logic.season.has(Season.summer) & self.logic.has(SVESeed.stalk_seed),
                 SVEVegetable.monster_mushroom: self.logic.season.has(Season.fall) & self.logic.has(SVESeed.fungus_seed),
-                SVEForage.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_galaxy_weapon &
+                ModLoot.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_galaxy_weapon &
                                                  self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
                 SVEFruit.slime_berry: self.logic.season.has(Season.spring) & self.logic.has(SVESeed.slime_seed),
                 SVESeed.slime_seed: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_good_weapon,
                 SVESeed.stalk_seed: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_good_weapon,
-                SVEForage.swirl_stone: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
+                ModLoot.swirl_stone: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
                 SVEVegetable.void_root: self.logic.season.has(Season.winter) & self.logic.has(SVESeed.void_seed),
                 SVESeed.void_seed: self.logic.region.can_reach(SVERegion.highlands_cavern) & self.logic.combat.has_good_weapon,
-                SVEForage.void_soul: self.logic.region.can_reach(
+                ModLoot.void_soul: self.logic.region.can_reach(
                     SVERegion.crimson_badlands) & self.logic.combat.has_good_weapon & self.logic.cooking.can_cook(),
                 SVEForage.winter_star_rose: self.logic.region.can_reach(SVERegion.summit) & self.logic.season.has(Season.winter),
-                SVEForage.bearberrys: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has(Season.winter),
+                SVEForage.bearberry: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has(Season.winter),
                 SVEForage.poison_mushroom: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has_any([Season.summer, Season.fall]),
                 SVEForage.red_baneberry: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has(Season.summer),
                 SVEForage.ferngill_primrose: self.logic.region.can_reach(SVERegion.summit) & self.logic.season.has(Season.spring),
@@ -106,25 +106,25 @@ FarmingLogicMixin]]):
                 ModEdible.lightning_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 12000),
                 ModEdible.barbarian_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 22000),
                 ModEdible.gravity_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 4000),
-                SVESeed.ancient_ferns_seed: self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic),
-                SVEVegetable.ancient_fiber: self.logic.farming.can_plant_and_grow_item(Season.summer) & self.logic.has(SVESeed.ancient_ferns_seed),
-                SVEForage.big_conch: self.logic.region.can_reach_any((Region.beach, SVERegion.fable_reef)),
+                SVESeed.ancient_fern_seed: self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic),
+                SVEVegetable.ancient_fiber: self.logic.farming.can_plant_and_grow_item(Season.summer) & self.logic.has(SVESeed.ancient_fern_seed),
+                SVEForage.conch: self.logic.region.can_reach_any((Region.beach, SVERegion.fable_reef)),
                 SVEForage.dewdrop_berry: self.logic.region.can_reach(SVERegion.enchanted_grove),
-                SVEForage.dried_sand_dollar: self.logic.region.can_reach(SVERegion.fable_reef) | (self.logic.region.can_reach(Region.beach) &
-                                                                                                  self.logic.season.has_any([Season.summer, Season.fall])),
+                SVEForage.sand_dollar: self.logic.region.can_reach(SVERegion.fable_reef) | (self.logic.region.can_reach(Region.beach) &
+                                                                                            self.logic.season.has_any([Season.summer, Season.fall])),
                 SVEForage.golden_ocean_flower: self.logic.region.can_reach(SVERegion.fable_reef),
                 SVEMeal.grampleton_orange_chicken: self.logic.money.can_spend_at(Region.saloon, 650) & self.logic.relationship.has_hearts(ModNPC.sophia, 6),
                 ModEdible.hero_elixir: self.logic.money.can_spend_at(SVERegion.isaac_shop, 8000),
-                SVEForage.lucky_four_leaf_clover: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.forest_west)) &
-                                                  self.logic.season.has_any([Season.spring, Season.summer]),
+                SVEForage.four_leaf_clover: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.forest_west)) &
+                                            self.logic.season.has_any([Season.spring, Season.summer]),
                 SVEForage.mushroom_colony: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.junimo_woods, SVERegion.forest_west)) &
                                            self.logic.season.has(Season.fall),
                 SVEForage.rusty_blade: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
-                SVEForage.smelly_rafflesia: self.logic.region.can_reach(Region.secret_woods),
+                SVEForage.rafflesia: self.logic.region.can_reach(Region.secret_woods),
                 SVEBeverage.sports_drink: self.logic.money.can_spend_at(Region.hospital, 750),
                 "Stamina Capsule": self.logic.money.can_spend_at(Region.hospital, 4000),
                 SVEForage.thistle: self.logic.region.can_reach(SVERegion.summit),
-                SVEForage.void_pebble: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
+                ModLoot.void_pebble: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
                 ModLoot.void_shard: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_galaxy_weapon &
                                     self.logic.skill.has_level(Skill.combat, 10) & self.logic.region.can_reach(Region.saloon) & self.logic.time.has_year_three
                 }

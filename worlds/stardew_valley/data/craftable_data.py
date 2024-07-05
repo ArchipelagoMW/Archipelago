@@ -20,7 +20,7 @@ from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral, ModFossil
-from ..strings.monster_drop_names import Loot
+from ..strings.monster_drop_names import Loot, ModLoot
 from ..strings.quest_names import Quest
 from ..strings.region_names import Region, SVERegion, LogicRegion
 from ..strings.seed_names import Seed, TreeSeed
@@ -325,17 +325,17 @@ bone_path = skill_recipe(ModFloor.bone_path, ModSkill.archaeology, 4, {Fossil.bo
 rust_path = skill_recipe(ModFloor.rusty_path, ModSkill.archaeology, 2, {ModTrash.rusty_scrap: 2}, ModNames.archaeology)
 rusty_brazier = skill_recipe(ModCraftable.rusty_brazier, ModSkill.archaeology, 3, {ModTrash.rusty_scrap: 10, Material.coal: 1, Material.fiber: 1}, ModNames.archaeology)
 bone_fence = skill_recipe(ModCraftable.bone_fence, ModSkill.archaeology, 8, {Fossil.bone_fragment: 2}, ModNames.archaeology)
-water_shifter = skill_recipe(ModCraftable.water_shifter, ModSkill.archaeology, 4, {Material.wood: 40, MetalBar.copper: 4}, ModNames.archaeology)
+water_sifter = skill_recipe(ModCraftable.water_sifter, ModSkill.archaeology, 4, {Material.wood: 40, MetalBar.copper: 4}, ModNames.archaeology)
 wooden_display = skill_recipe(ModCraftable.wooden_display, ModSkill.archaeology, 1, {Material.wood: 25}, ModNames.archaeology)
 hardwood_display = skill_recipe(ModCraftable.hardwood_display, ModSkill.archaeology, 7, {Material.hardwood: 10}, ModNames.archaeology)
 lucky_ring = skill_recipe(Ring.lucky_ring, ModSkill.archaeology, 8, {Artifact.elvish_jewelry: 1, AnimalProduct.rabbit_foot: 5, Mineral.tigerseye: 1}, ModNames.archaeology)
 volcano_totem = skill_recipe(ModConsumable.volcano_totem, ModSkill.archaeology, 9, {Material.cinder_shard: 5, Artifact.rare_disc: 1, Artifact.dwarf_gadget: 1},
                              ModNames.archaeology)
-haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, SVEForage.void_soul: 5, Ingredient.sugar: 1,
+haste_elixir = shop_recipe(ModEdible.haste_elixir, SVERegion.alesia_shop, 35000, {Loot.void_essence: 35, ModLoot.void_soul: 5, Ingredient.sugar: 1,
                                                                                   Meal.spicy_eel: 1}, ModNames.sve)
-hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {SVEForage.void_pebble: 3, SVEForage.void_soul: 5, Ingredient.oil: 1,
+hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {ModLoot.void_pebble: 3, ModLoot.void_soul: 5, Ingredient.oil: 1,
                                                                                Loot.slime: 10}, ModNames.sve)
-armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, SVEForage.void_soul: 5, Ingredient.vinegar: 5,
+armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, ModLoot.void_soul: 5, Ingredient.vinegar: 5,
                                                                                   Fossil.bone_fragment: 5}, ModNames.sve)
 ginger_tincture = friendship_recipe(ModConsumable.ginger_tincture, ModNPC.goblin, 4, {DistantLandsForageable.brown_amanita: 1, Forageable.ginger: 5,
                                                                                       Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1},
@@ -365,7 +365,7 @@ trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, LogicRegion.mines_dw
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
 
 bouquet = skill_recipe(Gift.bouquet, ModSkill.socializing, 3, {Flower.tulip: 3}, ModNames.socializing_skill)
-trash_can = skill_recipe(ModMachine.trash_can, ModSkill.binning, 2, {Material.stone: 30, MetalBar.iron: 2}, ModSkill.binning)
+trash_bin = skill_recipe(ModMachine.trash_bin, ModSkill.binning, 2, {Material.stone: 30, MetalBar.iron: 2}, ModSkill.binning)
 composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wood: 70, Material.sap: 20, Material.fiber: 30}, ModSkill.binning)
 recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModSkill.binning)
 advanced_recycling_machine = skill_recipe(ModMachine.advanced_recycling_machine, ModSkill.binning, 9,

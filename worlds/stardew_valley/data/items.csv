@@ -943,15 +943,20 @@ id,name,classification,groups,mod_name
 10702,Resource Pack: 3 Travel Core,filler,RESOURCE_PACK,Magic
 10703,Preservation Chamber,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
 10704,Hardwood Preservation Chamber,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
-10705,Resource Pack: 3 Water Shifter,filler,RESOURCE_PACK,Archaeology
+10705,Resource Pack: 3 Water Sifter,filler,RESOURCE_PACK,Archaeology
 10706,Resource Pack: 5 Hardwood Display,filler,RESOURCE_PACK,Archaeology
 10707,Resource Pack: 5 Wooden Display,filler,RESOURCE_PACK,Archaeology
 10708,Grinder,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
 10709,Ancient Battery Production Station,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
-10710,Hero Elixir,filler,RESOURCE_PACK,Starde Valley Expanded
+10710,Hero Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10711,Aegis Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10712,Haste Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10713,Lightning Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10714,Armor Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10715,Gravity Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10716,Barbarian Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10717,Restoration Table,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
+10718,Trash Bin,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill
+10719,Composter,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill
+10720,Recycling Bin,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill
+10721,Advanced Recycling Machine,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill

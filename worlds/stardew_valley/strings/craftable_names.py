@@ -176,7 +176,7 @@ class ModEdible:
 class ModCraftable:
     travel_core = "Travel Core"
     glass_brazier = "Glass Brazier"
-    water_shifter = "Water Shifter"
+    water_sifter = "Water Sifter"
     rusty_brazier = "Rusty Brazier"
     glass_fence = "Glass Fence"
     bone_fence = "Bone Fence"
@@ -197,7 +197,7 @@ class ModMachine:
     grinder = "Grinder"
     ancient_battery = "Ancient Battery Production Station"
     restoration_table = "Restoration Table"
-    trash_can = "Trash Can"
+    trash_bin = "Trash Bin"
     composter = "Composter"
     recycling_bin = "Recycling Bin"
     advanced_recycling_machine = "Advanced Recycling Machine"
