@@ -16,7 +16,7 @@ class SpiritFormAccessTest(AquariaTestBase):
             "The Veil bottom area, bulb in the spirit path",
             "Mithalas City Castle, Trident Head",
             "Open Water skeleton path, King Skull",
-            "Kelp Forest bottom left area, Walker baby",
+            "Kelp Forest bottom left area, Walker Baby",
             "Abyss right area, bulb behind the rock in the whale room",
             "The Whale, Verse Egg",
             "Ice Cave, bulb in the room to the right",

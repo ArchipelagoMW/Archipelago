@@ -24,7 +24,7 @@ class LiAccessTest(AquariaTestBase):
             "Sunken City left area, Girl Costume",
             "Sunken City, bulb on top of the boss area",
             "The Body center area, breaking Li's cage",
-            "The Body main area, bulb on the main path blocking tube",
+            "The Body center area, bulb on the main path blocking tube",
             "The Body left area, first bulb in the top face room",
             "The Body left area, second bulb in the top face room",
             "The Body left area, bulb below the water stream",
