@@ -3,6 +3,8 @@ import logging
 import sys
 import typing
 import re
+import io
+import pkgutil
 from collections import deque
 
 if sys.platform == "win32":
@@ -35,6 +37,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
+from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -61,6 +64,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
+from kivy.uix.image import AsyncImage
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -768,6 +772,42 @@ class HintLog(RecycleView):
         for element in self.children[0].children:
             max_height = max(child.texture_size[1] for child in element.children)
             element.height = max_height
+
+
+class ApAsyncImage(AsyncImage):
+    def is_uri(self, filename):
+        if filename[:3] == "ap:":
+            return True
+        else:
+            return super().is_uri(filename)
+
+
+class ImageLoaderPkgutil(ImageLoaderBase):
+    def load(self, filename):
+        # take off the "ap:" prefix
+        module, path = filename[3:].split("/", 1)
+        data = pkgutil.get_data(module, path)
+        return self._bytes_to_data(data)
+
+    def _bytes_to_data(self, data):
+        from PIL import Image as PImage
+        p_im = PImage.open(io.BytesIO(data)).convert("RGBA")
+        im_d = ImageData(p_im.size[0], p_im.size[1], p_im.mode.lower(), p_im.tobytes())
+        return [im_d]
+
+
+# grab the default loader method so we can override it but use it as a fallback
+DefaultLoad = ImageLoader.load
+
+
+def load_override(filename, default_load=DefaultLoad, **kwargs):
+    if filename[:3] == "ap:":
+        return ImageLoaderPkgutil(filename)
+    else:
+        return default_load(filename, **kwargs)
+
+
+ImageLoader.load = load_override
 
 
 class E(ExceptionHandler):
