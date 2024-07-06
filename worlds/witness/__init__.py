@@ -185,21 +185,22 @@ class WitnessWorld(World):
 
         self.items_placed_early.append("Puzzle Skip")
 
-        # Pick an early item to place on the tutorial gate.
-        early_items = [
-            item for item in self.player_items.get_early_items() if item in self.player_items.get_mandatory_items()
-        ]
-        if early_items:
-            random_early_item = self.random.choice(early_items)
-            if self.options.puzzle_randomization == "sigma_expert":
-                # In Expert, only tag the item as early, rather than forcing it onto the gate.
-                self.multiworld.local_early_items[self.player][random_early_item] = 1
-            else:
-                # Force the item onto the tutorial gate check and remove it from our random pool.
-                gate_item = self.create_item(random_early_item)
-                self.get_location("Tutorial Gate Open").place_locked_item(gate_item)
-                self.own_itempool.append(gate_item)
-                self.items_placed_early.append(random_early_item)
+        if self.options.early_symbol_item:
+            # Pick an early item to place on the tutorial gate.
+            early_items = [
+                item for item in self.player_items.get_early_items() if item in self.player_items.get_mandatory_items()
+            ]
+            if early_items:
+                random_early_item = self.random.choice(early_items)
+                if self.options.puzzle_randomization == "sigma_expert":
+                    # In Expert, only tag the item as early, rather than forcing it onto the gate.
+                    self.multiworld.local_early_items[self.player][random_early_item] = 1
+                else:
+                    # Force the item onto the tutorial gate check and remove it from our random pool.
+                    gate_item = self.create_item(random_early_item)
+                    self.get_location("Tutorial Gate Open").place_locked_item(gate_item)
+                    self.own_itempool.append(gate_item)
+                    self.items_placed_early.append(random_early_item)
 
         # There are some really restrictive settings in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
