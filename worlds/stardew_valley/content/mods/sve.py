@@ -3,15 +3,17 @@ from ..mod_registry import register_mod_content_pack
 from ..override import override
 from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_content_pack
 from ...data import villagers_data, fish_data
-from ...data.harvest import ForagingSource
+from ...data.game_item import ItemTag, Tag
+from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.requirement import YearRequirement
 from ...mods.mod_data import ModNames
-from ...strings.crop_names import Fruit
+from ...strings.crop_names import Fruit, SVEVegetable, SVEFruit
 from ...strings.fish_names import WaterItem
 from ...strings.flower_names import Flower
 from ...strings.forageable_names import Mushroom, Forageable
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
+from ...strings.seed_names import SVESeed
 
 
 class SVEContentPack(ContentPack):
@@ -37,6 +39,24 @@ class SVEContentPack(ContentPack):
         if ginger_island_content_pack.name not in content.registered_packs:
             # Remove Lance if Ginger Island is not in content since he is first encountered in Volcano Forge
             content.villagers.pop(villagers_data.lance.name)
+
+    def harvest_source_hook(self, content: StardewContent):
+        content.untag_item(SVESeed.shrub, tag=ItemTag.CROPSANITY_SEED)
+        content.untag_item(SVESeed.fungus, tag=ItemTag.CROPSANITY_SEED)
+        content.untag_item(SVESeed.slime, tag=ItemTag.CROPSANITY_SEED)
+        content.untag_item(SVESeed.stalk, tag=ItemTag.CROPSANITY_SEED)
+        content.untag_item(SVESeed.void, tag=ItemTag.CROPSANITY_SEED)
+        content.untag_item(SVESeed.ancient_fern, tag=ItemTag.CROPSANITY_SEED)
+        if ginger_island_content_pack.name not in content.registered_packs:
+            # Remove Highlands seeds as these are behind Lance existing.
+            content.source_item(SVESeed.void)
+            content.source_item(SVEVegetable.void_root)
+            content.source_item(SVESeed.stalk)
+            content.source_item(SVEFruit.monster_fruit)
+            content.source_item(SVESeed.fungus)
+            content.source_item(SVEVegetable.monster_mushroom)
+            content.source_item(SVESeed.slime)
+            content.source_item(SVEFruit.slime_berry)
 
 
 register_mod_content_pack(SVEContentPack(
@@ -75,6 +95,22 @@ register_mod_content_pack(SVEContentPack(
         WaterItem.coral: (ForagingSource(regions=(SVERegion.fable_reef,)),),
         Forageable.rainbow_shell: (ForagingSource(regions=(SVERegion.fable_reef,)),),
         WaterItem.sea_urchin: (ForagingSource(regions=(SVERegion.fable_reef,)),),
+
+        # Crops
+        SVESeed.shrub: (ForagingSource(regions=(Region.secret_woods,)),),
+        SVEFruit.salal_berry: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=SVESeed.shrub, seasons=(Season.spring,)),),
+        SVESeed.slime: (ForagingSource(regions=(SVERegion.highlands_outside,)),),
+        SVEFruit.slime_berry: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=SVESeed.slime, seasons=(Season.spring,)),),
+        SVESeed.ancient_fern: (ForagingSource(regions=(Region.secret_woods,)),),
+        SVEVegetable.ancient_fiber: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=SVESeed.ancient_fern, seasons=(Season.summer,)),),
+        SVESeed.stalk: (ForagingSource(regions=(SVERegion.highlands_outside,)),),
+        SVEFruit.monster_fruit: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=SVESeed.stalk, seasons=(Season.summer,)),),
+        SVESeed.fungus: (ForagingSource(regions=(SVERegion.highlands_pond,)),),
+        SVEVegetable.monster_mushroom: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=SVESeed.fungus, seasons=(Season.fall,)),),
+        SVESeed.void: (ForagingSource(regions=(SVERegion.highlands_cavern,)),),
+        SVEVegetable.void_root: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=SVESeed.void, seasons=(Season.winter,)),),
+
+
     },
     fishes=(
         fish_data.baby_lunaloo,  # Removed when no ginger island
