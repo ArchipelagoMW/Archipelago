@@ -19,6 +19,7 @@ from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
+from ..strings.tool_names import ToolMaterial, Tool
 
 
 class FishingLogicMixin(BaseLogicMixin):
@@ -54,6 +55,8 @@ class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLog
             difficulty_rule = self.logic.skill.can_fish(difficulty=(120 if fish.legendary else fish.difficulty))
         if fish.name == SVEFish.kittyfish:
             item_rule = self.logic.received(SVEQuestItem.kittyfish_spell)
+        elif fish.name == SVEFish.daggerfish:
+            item_rule = self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron)
         else:
             item_rule = True_()
         return quest_rule & region_rule & season_rule & difficulty_rule & item_rule
