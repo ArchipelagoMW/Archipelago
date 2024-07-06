@@ -133,6 +133,12 @@ class ShoryukenInPool(DefaultOnToggle):
     """
     display_name = "Shoryuken In Pool"
 
+class ShoryukenUseHadoukenInput(Toggle):
+    """
+    Makes Shoryuken use the Hadouken input.
+    """
+    display_name = "Shoryuken Uses Hadouken Input"
+
 class PickupSanity(Toggle):
     """
     Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
@@ -271,6 +277,7 @@ mmx2_option_groups = [
         JammedBuster,
         LongJumps,
         ShoryukenInPool,
+        ShoryukenUseHadoukenInput,
         XHuntersMedalCount,
     ]),
     OptionGroup("Boss Weakness Options", [
@@ -308,6 +315,7 @@ class MMX2Options(PerGameCommonOptions):
     jammed_buster: JammedBuster
     long_jumps: LongJumps
     shoryuken_in_pool: ShoryukenInPool
+    shoryuken_use_hadouken_input: ShoryukenUseHadoukenInput
     logic_boss_weakness: LogicBossWeakness
     base_boss_rematch_count: BaseBossRematchCount
     base_all_levels: BaseBundleUnlock
