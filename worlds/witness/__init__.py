@@ -319,6 +319,8 @@ class WitnessWorld(World):
         return None
 
     def pre_fill(self) -> None:
+        if not self.options.early_symbol_item:
+            return
         if self.options.puzzle_randomization != "sigma_expert":
             return
         # Expert: Pick an early item to add to local early items.
@@ -334,6 +336,8 @@ class WitnessWorld(World):
 
     def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item],
                   fill_locations: List[Location]) -> None:
+        if not self.options.early_symbol_item:
+            return
         if self.options.puzzle_randomization == "sigma_expert":
             return
         # Non-Expert: Pick an early item to put on Tutorial Gate Open.
