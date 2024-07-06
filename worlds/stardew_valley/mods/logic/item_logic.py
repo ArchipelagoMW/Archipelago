@@ -62,6 +62,8 @@ FarmingLogicMixin]]):
             items.update(self.get_sve_item_rules())
         if ModNames.archaeology in self.options.mods:
             items.update(self.get_archaeology_item_rules())
+        if ModNames.distant_lands in self.options.mods:
+            items.update(self.get_distant_lands_item_rules())
         if ModNames.boarding_house in self.options.mods:
             items.update(self.get_boarding_house_item_rules())
         return items
@@ -163,6 +165,19 @@ FarmingLogicMixin]]):
                     archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
         archaeology_item_rules[ModTrash.rusty_scrap] = self.logic.has(ModMachine.grinder) & self.logic.has_any(*all_artifacts)
         return archaeology_item_rules
+
+    # Keeping these until I can figure out why it errors when I remove most of these when the rules are already in the content pack.  Weird tbh.
+    def get_distant_lands_item_rules(self):
+        return {
+            DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
+            DistantLandsForageable.brown_amanita: self.logic.region.can_reach(Region.witch_swamp),
+            DistantLandsSeed.vile_ancient_fruit: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(
+                ModQuest.CorruptedCropsTask),
+            DistantLandsSeed.void_mint: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(
+                ModQuest.CorruptedCropsTask),
+            DistantLandsCrop.void_mint: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.void_mint),
+            DistantLandsCrop.vile_ancient_fruit: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.vile_ancient_fruit),
+        }
 
     def get_boarding_house_item_rules(self):
         return {

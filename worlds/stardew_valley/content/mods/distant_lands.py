@@ -1,4 +1,4 @@
-from ..game_content import ContentPack
+from ..game_content import ContentPack, StardewContent
 from ..mod_registry import register_mod_content_pack
 from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag, Tag
@@ -10,7 +10,15 @@ from ...strings.region_names import Region
 from ...strings.season_names import Season
 from ...strings.seed_names import DistantLandsSeed
 
-register_mod_content_pack(ContentPack(
+
+class DistantLandsContentPack(ContentPack):
+
+    def harvest_source_hook(self, content: StardewContent):
+        content.untag_item(DistantLandsSeed.void_mint, tag=ItemTag.CROPSANITY_SEED)
+        content.untag_item(DistantLandsSeed.vile_ancient_fruit, tag=ItemTag.CROPSANITY_SEED)
+
+
+register_mod_content_pack(DistantLandsContentPack(
     ModNames.distant_lands,
     fishes=(
         fish_data.void_minnow,
