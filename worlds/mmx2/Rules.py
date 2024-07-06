@@ -193,6 +193,8 @@ def set_rules(world: MMX2World):
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
     set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.x_hunter_arena}", player), 
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+    set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.crystal_snail_after_arena}", player), 
+             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
     set_rule(multiworld.get_entrance(f"{RegionName.overdrive_ostrich_arena} -> {RegionName.x_hunter_arena}", player), 
              lambda state: (
                     state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value) and
@@ -314,6 +316,8 @@ def add_pickupsanity_logic(world: MMX2World):
     jammed_buster = world.options.jammed_buster.value
 
     # Bubble Crab
+    add_rule(multiworld.get_location(LocationName.bubble_crab_1up, player),
+             lambda state: state.has(ItemName.spin_wheel, player))
     add_rule(multiworld.get_location(LocationName.bubble_crab_energy_1, player),
              lambda state: (
                 state.has(ItemName.legs, player) or
