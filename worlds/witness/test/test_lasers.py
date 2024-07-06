@@ -109,7 +109,7 @@ class TestSymbolsRequiredToWinElevatorVariety(WitnessTestBase):
         """
         In symbol shuffle, the only way to reach the Elevator is through Mountain Entry by descending the Mountain.
         This requires a very specific set of symbol items per puzzle randomization mode.
-        In this case, we check Vanilla Puzzles.
+        In this case, we check Variety Puzzles.
         """
 
         exact_requirement = {
