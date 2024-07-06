@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from Utils import cache_argsless
 
@@ -24,13 +24,37 @@ from .utils import (
 
 
 class StaticWitnessLogicObj:
-    def read_logic_file(self, lines) -> None:
+    def __init__(self, lines: Optional[List[str]] = None) -> None:
+        if lines is None:
+            lines = get_sigma_normal_logic()
+
+        # All regions with a list of panels in them and the connections to other regions, before logic adjustments
+        self.ALL_REGIONS_BY_NAME: Dict[str, Dict[str, Any]] = {}
+        self.ALL_AREAS_BY_NAME: Dict[str, Dict[str, Any]] = {}
+        self.CONNECTIONS_WITH_DUPLICATES: Dict[str, Dict[str, Set[WitnessRule]]] = defaultdict(lambda: defaultdict(set))
+        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = {}
+
+        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = {}
+        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = {}
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = {}
+
+        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = {}
+
+        self.EP_TO_OBELISK_SIDE: Dict[str, str] = {}
+
+        self.ENTITY_ID_TO_NAME: Dict[str, str] = {}
+
+        self.read_logic_file(lines)
+        self.reverse_connections()
+        self.combine_connections()
+
+    def read_logic_file(self, lines: List[str]) -> None:
         """
         Reads the logic file and does the initial population of data structures
         """
 
-        current_region = dict()
-        current_area = {
+        current_region = {}
+        current_area: Dict[str, Any] = {
             "name": "Misc",
             "regions": [],
         }
@@ -155,7 +179,7 @@ class StaticWitnessLogicObj:
             current_region["entities"].append(entity_hex)
             current_region["physical_entities"].append(entity_hex)
 
-    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[WitnessRule]]):
+    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[WitnessRule]]) -> None:
         target = connection[0]
         traversal_options = connection[1]
 
@@ -169,13 +193,13 @@ class StaticWitnessLogicObj:
             if remaining_options:
                 self.CONNECTIONS_WITH_DUPLICATES[target][source_region].add(frozenset(remaining_options))
 
-    def reverse_connections(self):
+    def reverse_connections(self) -> None:
         # Iterate all connections
         for region_name, connections in list(self.CONNECTIONS_WITH_DUPLICATES.items()):
             for connection in connections.items():
                 self.reverse_connection(region_name, connection)
 
-    def combine_connections(self):
+    def combine_connections(self) -> None:
         # All regions need to be present, and this dict is copied later - Thus, defaultdict is not the correct choice.
         self.STATIC_CONNECTIONS_BY_REGION_NAME = {region_name: set() for region_name in self.ALL_REGIONS_BY_NAME}
 
@@ -183,30 +207,6 @@ class StaticWitnessLogicObj:
             for target, requirement in connections.items():
                 combined_req = logical_or_witness_rules(requirement)
                 self.STATIC_CONNECTIONS_BY_REGION_NAME[source].add((target, combined_req))
-
-    def __init__(self, lines=None) -> None:
-        if lines is None:
-            lines = get_sigma_normal_logic()
-
-        # All regions with a list of panels in them and the connections to other regions, before logic adjustments
-        self.ALL_REGIONS_BY_NAME = dict()
-        self.ALL_AREAS_BY_NAME = dict()
-        self.CONNECTIONS_WITH_DUPLICATES = defaultdict(lambda: defaultdict(lambda: set()))
-        self.STATIC_CONNECTIONS_BY_REGION_NAME = dict()
-
-        self.ENTITIES_BY_HEX = dict()
-        self.ENTITIES_BY_NAME = dict()
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
-
-        self.OBELISK_SIDE_ID_TO_EP_HEXES = dict()
-
-        self.EP_TO_OBELISK_SIDE = dict()
-
-        self.ENTITY_ID_TO_NAME = dict()
-
-        self.read_logic_file(lines)
-        self.reverse_connections()
-        self.combine_connections()
 
 
 # Item data parsed from WitnessItems.txt
@@ -276,12 +276,12 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_sigma_expert_logic())
 
 
-def __getattr__(name):
+def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
         return get_vanilla()
-    elif name == "sigma_normal":
+    if name == "sigma_normal":
         return get_sigma_normal()
-    elif name == "sigma_expert":
+    if name == "sigma_expert":
         return get_sigma_expert()
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
