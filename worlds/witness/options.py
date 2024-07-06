@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -33,6 +33,14 @@ class EarlyCaves(Choice):
     option_starting_inventory = 2
     alias_true = 2
     alias_on = 2
+
+
+class EarlySymbolItem(DefaultOnToggle):
+    """
+    Put a random helpful symbol item on an early check, specifically Tutorial Gate Open if it is available early.
+    """
+
+    visibility = Visibility.none
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -386,6 +394,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     panel_hunt_postgame: PanelHuntPostgame
     panel_hunt_discourage_same_area_factor: PanelHuntDiscourageSameAreaFactor
     early_caves: EarlyCaves
+    early_symbol_item: EarlySymbolItem
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
     trap_weights: TrapWeights
