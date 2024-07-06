@@ -162,6 +162,7 @@ class BagOfHoldingCount(Range):
 class MaxAmmoCrystals(Range):
     """Set the starting ammo capacity for crystals (Elven Wand ammo)."""
     display_name = "Max Ammo - Crystals"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 100
     range_end = 999
     default = 100
@@ -170,6 +171,7 @@ class MaxAmmoCrystals(Range):
 class MaxAmmoArrows(Range):
     """Set the starting ammo capacity for arrows (Ethereal Crossbow ammo)."""
     display_name = "Max Ammo - Arrows"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 50
     range_end = 999
     default = 50
@@ -178,6 +180,7 @@ class MaxAmmoArrows(Range):
 class MaxAmmoClawOrbs(Range):
     """Set the starting ammo capacity for claw orbs (Dragon Claw ammo)."""
     display_name = "Max Ammo - Claw Orbs"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 200
     range_end = 999
     default = 200
@@ -186,6 +189,7 @@ class MaxAmmoClawOrbs(Range):
 class MaxAmmoRunes(Range):
     """Set the starting ammo capacity for runes (Hellstaff ammo)."""
     display_name = "Max Ammo - Runes"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 200
     range_end = 999
     default = 200
@@ -194,6 +198,7 @@ class MaxAmmoRunes(Range):
 class MaxAmmoFlameOrbs(Range):
     """Set the starting ammo capacity for flame orbs (Phoenix Rod ammo)."""
     display_name = "Max Ammo - Flame Orbs"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 20
     range_end = 999
     default = 20
@@ -202,6 +207,7 @@ class MaxAmmoFlameOrbs(Range):
 class MaxAmmoSpheres(Range):
     """Set the starting ammo capacity for spheres (Firemace ammo)."""
     display_name = "Max Ammo - Spheres"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 150
     range_end = 999
     default = 150
@@ -210,6 +216,7 @@ class MaxAmmoSpheres(Range):
 class AddedAmmoCrystals(Range):
     """Set the amount of crystal capacity gained when collecting a bag of holding or a capacity upgrade."""
     display_name = "Added Ammo - Crystals"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 10
     range_end = 999
     default = 100
@@ -218,6 +225,7 @@ class AddedAmmoCrystals(Range):
 class AddedAmmoArrows(Range):
     """Set the amount of arrow capacity gained when collecting a bag of holding or a capacity upgrade."""
     display_name = "Added Ammo - Arrows"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 5
     range_end = 999
     default = 50
@@ -226,6 +234,7 @@ class AddedAmmoArrows(Range):
 class AddedAmmoClawOrbs(Range):
     """Set the amount of claw orb capacity gained when collecting a bag of holding or a capacity upgrade."""
     display_name = "Added Ammo - Claw Orbs"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 20
     range_end = 999
     default = 200
@@ -234,6 +243,7 @@ class AddedAmmoClawOrbs(Range):
 class AddedAmmoRunes(Range):
     """Set the amount of rune capacity gained when collecting a bag of holding or a capacity upgrade."""
     display_name = "Added Ammo - Runes"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 20
     range_end = 999
     default = 200
@@ -242,6 +252,7 @@ class AddedAmmoRunes(Range):
 class AddedAmmoFlameOrbs(Range):
     """Set the amount of flame orb capacity gained when collecting a bag of holding or a capacity upgrade."""
     display_name = "Added Ammo - Flame Orbs"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 2
     range_end = 999
     default = 20
@@ -250,6 +261,7 @@ class AddedAmmoFlameOrbs(Range):
 class AddedAmmoSpheres(Range):
     """Set the amount of sphere capacity gained when collecting a bag of holding or a capacity upgrade."""
     display_name = "Added Ammo - Spheres"
+    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 15
     range_end = 999
     default = 150
