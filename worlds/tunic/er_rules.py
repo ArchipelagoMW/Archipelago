@@ -1443,6 +1443,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Above Big Skeleton", player),
                  lambda state: has_combat_logic(["Fleemers"], state, player))
         # the tentacles deal with everything else reasonably, so you just have to fight them
+        # todo: revisit, should it be fine since this is a knowledge check (get on island to stop tentacles)
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Guarded By Tentacles", player),
                  lambda state: has_combat_logic(["Tentacles"], state, player))
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Obscured Beneath Telescope", player),
