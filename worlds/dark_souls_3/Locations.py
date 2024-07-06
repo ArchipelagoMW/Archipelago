@@ -2062,9 +2062,9 @@ location_tables = {
         DS3LocationData("LC: Irithyll Rapier - basement, miniboss drop", "Irithyll Rapier",
                         miniboss=True),  # Boreal Outrider drop
         DS3LocationData("LC: Twinkling Titanite - dark room mid, out door opposite wyvern, lizard",
-                        "Twinkling Titanite x2", lizard=True),
+                        "Twinkling Titanite x2", lizard=True, missable=True),
         DS3LocationData("LC: Twinkling Titanite - moat, right path, lizard",
-                        "Twinkling Titanite x2", lizard=True),
+                        "Twinkling Titanite x2", lizard=True, missable=True),
         DS3LocationData("LC: Gotthard Twinswords - by Grand Archives door, after PC and AL bosses",
                         "Gotthard Twinswords", conditional=True),
         DS3LocationData("LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
