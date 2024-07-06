@@ -1415,6 +1415,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
                  lambda state: has_combat_logic(["Gauntlet"], state, player))
 
+    # todo: come back add add dagger to checks that can be reasonably done with dagger
     if world.options.combat_logic == CombatLogic.option_on:
         set_rule(multiworld.get_location("Overworld - [East] Between Ladders Near Ruined Passage", player),
                  lambda state: has_combat_logic(["Slimes"], state, player))

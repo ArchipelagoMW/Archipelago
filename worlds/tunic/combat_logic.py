@@ -54,10 +54,10 @@ enemy_encounters: Dict[str, EncounterData] = {
     "Garden Knight": EncounterData(12, [[sword]], False),
     "Siege Engine": EncounterData(16),
     "Librarian": EncounterData(16, [[fire_wand], [gun]]),
-    "Boss Scavenger": EncounterData(20),
+    "Boss Scavenger": EncounterData(24),
     "Gauntlet": EncounterData(10, [[sword, fire_wand], [sword, gun]]),
     # the other heir requirements are included in the entrance rule for the heir fight
-    "The Heir": EncounterData(24),
+    "The Heir": EncounterData(28),
 }
 
 
