@@ -78,11 +78,19 @@ FarmingLogicMixin]]):
     def get_sve_item_rules(self):
         return {SVEGift.aged_blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 28000),
                 SVEGift.blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 3000),
+                SVESeed.fungus: self.logic.region.can_reach(SVERegion.highlands_cavern) & self.logic.combat.has_good_weapon,
                 ModLoot.green_mushroom: self.logic.region.can_reach(SVERegion.highlands_outside) &
                                         self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.logic.season.has_any_not_winter(),
+                SVEFruit.monster_fruit: self.logic.season.has(Season.summer) & self.logic.has(SVESeed.stalk),
+                SVEVegetable.monster_mushroom: self.logic.season.has(Season.fall) & self.logic.has(SVESeed.fungus),
                 ModLoot.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_galaxy_weapon &
                                                  self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
+                SVEFruit.slime_berry: self.logic.season.has(Season.spring) & self.logic.has(SVESeed.slime),
+                SVESeed.slime: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_good_weapon,
+                SVESeed.stalk: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_good_weapon,
                 ModLoot.swirl_stone: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
+                SVEVegetable.void_root: self.logic.season.has(Season.winter) & self.logic.has(SVESeed.void),
+                SVESeed.void: self.logic.region.can_reach(SVERegion.highlands_cavern) & self.logic.combat.has_good_weapon,
                 ModLoot.void_soul: self.logic.region.can_reach(
                     SVERegion.crimson_badlands) & self.logic.combat.has_good_weapon & self.logic.cooking.can_cook(),
                 SVEForage.winter_star_rose: self.logic.region.can_reach(SVERegion.summit) & self.logic.season.has(Season.winter),
@@ -92,10 +100,14 @@ FarmingLogicMixin]]):
                 SVEForage.ferngill_primrose: self.logic.region.can_reach(SVERegion.summit) & self.logic.season.has(Season.spring),
                 SVEForage.goldenrod: self.logic.region.can_reach(SVERegion.summit) & (
                         self.logic.season.has(Season.summer) | self.logic.season.has(Season.fall)),
+                SVESeed.shrub: self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic),
+                SVEFruit.salal_berry: self.logic.farming.can_plant_and_grow_item((Season.spring, Season.summer)) & self.logic.has(SVESeed.shrub),
                 ModEdible.aegis_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 28000),
                 ModEdible.lightning_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 12000),
                 ModEdible.barbarian_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 22000),
                 ModEdible.gravity_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 4000),
+                SVESeed.ancient_fern: self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic),
+                SVEVegetable.ancient_fiber: self.logic.farming.can_plant_and_grow_item(Season.summer) & self.logic.has(SVESeed.ancient_fern),
                 SVEForage.conch: self.logic.region.can_reach_any((Region.beach, SVERegion.fable_reef)),
                 SVEForage.dewdrop_berry: self.logic.region.can_reach(SVERegion.enchanted_grove),
                 SVEForage.sand_dollar: self.logic.region.can_reach(SVERegion.fable_reef) | (self.logic.region.can_reach(Region.beach) &
@@ -166,7 +178,6 @@ FarmingLogicMixin]]):
         archaeology_item_rules[ModTrash.rusty_scrap] = self.logic.has(ModMachine.grinder) & self.logic.has_any(*all_artifacts)
         return archaeology_item_rules
 
-    # Keeping these until I can figure out why it errors when I remove most of these when the rules are already in the content pack.  Weird tbh.
     def get_distant_lands_item_rules(self):
         return {
             DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
