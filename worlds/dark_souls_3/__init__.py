@@ -40,6 +40,7 @@ class DarkSouls3Web(WebWorld):
     tutorials = [setup_en, setup_fr]
     option_groups = option_groups
     item_descriptions = item_descriptions
+    rich_text_options_doc = True
 
 
 class DarkSouls3World(World):

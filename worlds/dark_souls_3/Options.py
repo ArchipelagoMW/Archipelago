@@ -20,9 +20,12 @@ class EarlySmallLothricBanner(Choice):
 class LateBasinOfVowsOption(Choice):
     """Guarantee that you don't need to enter Lothric Castle until later in the run.
 
-    - Off: You may have to enter Lothric Castle and the areas beyond it immediately after High Wall of Lothric.
-    - After Small Lothric Banner: You may have to enter Lothric Castle after Catacombs of Carthus.
-    - After Small Doll: You won't have to enter Lothric Castle until after Irithyll of the Boreal Valley.
+    - **Off:** You may have to enter Lothric Castle and the areas beyond it immediately after High
+      Wall of Lothric.
+    - **After Small Lothric Banner:** You may have to enter Lothric Castle after Catacombs of
+      Carthus.
+    - **After Small Doll:** You won't have to enter Lothric Castle until after Irithyll of the
+      Boreal Valley.
     """
     display_name = "Late Basin of Vows"
     option_off = 0
@@ -35,9 +38,9 @@ class LateBasinOfVowsOption(Choice):
 class LateDLCOption(Choice):
     """Guarantee that you don't need to enter the DLC until later in the run.
 
-    - Off: You may have to enter the DLC after Catacombs of Carthus.
-    - After Small Doll: You may have to enter the DLC after Irithyll of the Boreal Valley.
-    - After Basin: You won't have to enter the DLC until after Lothric Castle.
+    - **Off:** You may have to enter the DLC after Catacombs of Carthus.
+    - **After Small Doll:** You may have to enter the DLC after Irithyll of the Boreal Valley.
+    - **After Basin:** You won't have to enter the DLC until after Lothric Castle.
     """
     display_name = "Late DLC"
     option_off = 0
@@ -78,7 +81,10 @@ class AutoEquipOption(Toggle):
 
 
 class LockEquipOption(Toggle):
-    """Lock the equipment slots so you cannot change your armor or your left/right weapons. Works great with the Auto-equip option."""
+    """Lock the equipment slots so you cannot change your armor or your left/right weapons.
+
+    Works great with the Auto-equip option.
+    """
     display_name = "Lock Equipment Slots"
 
 
@@ -88,7 +94,9 @@ class NoEquipLoadOption(Toggle):
 
 
 class NoWeaponRequirementsOption(Toggle):
-    """Disable the weapon requirements by removing any movement or damage penalties, permitting you to use any weapon early."""
+    """Disable the weapon requirements by removing any movement or damage penalties, permitting you
+    to use any weapon early.
+    """
     display_name = "No Weapon Requirements"
 
 
@@ -105,7 +113,8 @@ class RandomizeInfusionOption(Toggle):
 
 
 class RandomizeInfusionPercentageOption(NamedRange):
-    """The percentage of weapons/shields in the pool to be infused if Randomize Infusion is toggled."""
+    """The percentage of weapons/shields in the pool to be infused if Randomize Infusion is toggled.
+    """
     display_name = "Percentage of Infused Weapons"
     range_start = 0
     range_end = 100
@@ -115,11 +124,12 @@ class RandomizeInfusionPercentageOption(NamedRange):
 
 
 class RandomizeWeaponLevelOption(Choice):
-    """Enable this option to upgrade a percentage of the pool of weapons to a random value between the minimum and maximum levels defined.
+    """Enable this option to upgrade a percentage of the pool of weapons to a random value between
+    the minimum and maximum levels defined.
 
-    - All: All weapons are eligible, both basic and epic
-    - Basic: Only weapons that can be upgraded to +10
-    - Epic: Only weapons that can be upgraded to +5
+    - **All:** All weapons are eligible, both basic and epic
+    - **Basic:** Only weapons that can be upgraded to +10
+    - **Epic:** Only weapons that can be upgraded to +5
     """
     display_name = "Randomize Weapon Level"
     option_none = 0
@@ -173,7 +183,9 @@ class MaxLevelsIn10WeaponPoolOption(Range):
 class SmoothSoulItemsOption(DefaultOnToggle):
     """Distribute soul items in a similar order as the base game.
 
-    By default, soul items will be distributed totally randomly. If this is set, less valuable soul items will generally appear in earlier spheres and more valuable ones will generally appear later.
+    By default, soul items will be distributed totally randomly. If this is set, less valuable soul
+    items will generally appear in earlier spheres and more valuable ones will generally appear
+    later.
     """
     display_name = "Smooth Soul Items"
 
@@ -181,7 +193,9 @@ class SmoothSoulItemsOption(DefaultOnToggle):
 class SmoothUpgradeItemsOption(DefaultOnToggle):
     """Distribute upgrade items in a similar order as the base game.
 
-    By default, upgrade items will be distributed totally randomly. If this is set, lower-level upgrade items will generally appear in earlier spheres and higher-level ones will generally appear later.
+    By default, upgrade items will be distributed totally randomly. If this is set, lower-level
+    upgrade items will generally appear in earlier spheres and higher-level ones will generally
+    appear later.
     """
     display_name = "Smooth Upgrade Items"
 
@@ -189,7 +203,9 @@ class SmoothUpgradeItemsOption(DefaultOnToggle):
 class SmoothUpgradedWeaponsOption(DefaultOnToggle):
     """Distribute upgraded weapons in a similar order as the base game.
 
-    By default, upgraded weapons will be distributed totally randomly. If this is set, lower-level weapons will generally appear in earlier spheres and higher-level ones will generally appear later.
+    By default, upgraded weapons will be distributed totally randomly. If this is set, lower-level
+    weapons will generally appear in earlier spheres and higher-level ones will generally appear
+    later.
     """
     display_name = "Smooth Upgraded Weapons"
 
@@ -204,7 +220,8 @@ class RandomizeEnemiesOption(DefaultOnToggle):
 class SimpleEarlyBossesOption(DefaultOnToggle):
     """Avoid replacing Iudex Gundyr and Vordt with late bosses.
 
-    This excludes all bosses after Dancer of the Boreal Valley from these two boss fights. Disable it for a chance at a much harder early game.
+    This excludes all bosses after Dancer of the Boreal Valley from these two boss fights. Disable
+    it for a chance at a much harder early game.
 
     This is ignored unless enemies are randomized.
     """
@@ -214,7 +231,8 @@ class SimpleEarlyBossesOption(DefaultOnToggle):
 class ScaleEnemiesOption(DefaultOnToggle):
     """Scale randomized enemy stats to match the areas in which they appear.
 
-    Disabling this will tend to make the early game much more difficult and the late game much easier.
+    Disabling this will tend to make the early game much more difficult and the late game much
+    easier.
 
     This is ignored unless enemies are randomized.
     """
@@ -224,7 +242,9 @@ class ScaleEnemiesOption(DefaultOnToggle):
 class RandomizeMimicsWithEnemiesOption(Toggle):
     """Mix Mimics into the main enemy pool.
 
-    If this is enabled, Mimics will be replaced by normal enemies who drop the Mimic rewards on death, and Mimics will be placed randomly in place of normal enemies. It's recommended to enable Impatient Mimics as well if you enable this.
+    If this is enabled, Mimics will be replaced by normal enemies who drop the Mimic rewards on
+    death, and Mimics will be placed randomly in place of normal enemies. It's recommended to enable
+    Impatient Mimics as well if you enable this.
 
     This is ignored unless enemies are randomized.
     """
@@ -234,7 +254,8 @@ class RandomizeMimicsWithEnemiesOption(Toggle):
 class RandomizeSmallCrystalLizardsWithEnemiesOption(Toggle):
     """Mix small Crystal Lizards into the main enemy pool.
 
-    If this is enabled, Crystal Lizards will be replaced by normal enemies who drop the Crystal Lizard rewards on death, and Crystal Lizards will be placed randomly in place of normal enemies.
+    If this is enabled, Crystal Lizards will be replaced by normal enemies who drop the Crystal
+    Lizard rewards on death, and Crystal Lizards will be placed randomly in place of normal enemies.
 
     This is ignored unless enemies are randomized.
     """
@@ -244,7 +265,8 @@ class RandomizeSmallCrystalLizardsWithEnemiesOption(Toggle):
 class ReduceHarmlessEnemiesOption(Toggle):
     """Reduce the frequency that "harmless" enemies appear.
 
-    Enable this to add a bit of extra challenge. This severely limits the number of enemies that are slow to aggro, slow to attack, and do very little damage that appear in the enemy pool.
+    Enable this to add a bit of extra challenge. This severely limits the number of enemies that are
+    slow to aggro, slow to attack, and do very little damage that appear in the enemy pool.
 
     This is ignored unless enemies are randomized.
     """
@@ -254,7 +276,8 @@ class ReduceHarmlessEnemiesOption(Toggle):
 class AllChestsAreMimicsOption(Toggle):
     """Replace all chests with mimics that drop the same items.
 
-    If "Randomize Mimics With Enemies" is set, these chests will instead be replaced with random enemies that drop the same items.
+    If "Randomize Mimics With Enemies" is set, these chests will instead be replaced with random
+    enemies that drop the same items.
 
     This is ignored unless enemies are randomized.
     """
@@ -272,7 +295,7 @@ class ImpatientMimicsOption(Toggle):
 class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     """The YAML preset for the static enemy randomizer.
 
-    See the static randomizer documentation in randomizer\\presets\\README.txt for details.
+    See the static randomizer documentation in `randomizer\\presets\\README.txt` for details.
     """
     display_name = "Random Enemy Preset"
     supports_weighting = False
@@ -307,11 +330,16 @@ class DS3ExcludeLocations(ExcludeLocations):
 class ExcludedLocationBehaviorOption(Choice):
     """Which items can be placed in excluded locations in DS3.
 
-    - Unnecessary: Excluded locations can't have progression items, but they can have useful items.
-    - Unimportant: Neither progression items nor useful items can be placed in excluded locations.
-    - Unrandomized: Excluded locations always contain the same item as in vanilla Dark Souls III.
+    - **Unnecessary:** Excluded locations can't have progression items, but they can have useful
+      items.
+    - **Unimportant:** Neither progression items nor useful items can be placed in excluded
+      locations.
+    - **Unrandomized:** Excluded locations always contain the same item as in vanilla Dark Souls
+      III.
 
-    A "progression item" is anything that's required to unlock another location in some game. A "useful item" is something each game defines individually, usually items that are quite desirable but not strictly necessary.
+    A "progression item" is anything that's required to unlock another location in some game. A
+    "useful item" is something each game defines individually, usually items that are quite
+    desirable but not strictly necessary.
     """
     display_name = "Excluded Locations Behavior"
     option_unnecessary = 1
@@ -323,11 +351,16 @@ class ExcludedLocationBehaviorOption(Choice):
 class MissableLocationBehaviorOption(Choice):
     """Which items can be placed in locations that can be permanently missed.
 
-    - Unnecessary: Missable locations can't have progression items, but they can have useful items.
-    - Unimportant: Neither progression items nor useful items can be placed in missable locations.
-    - Unrandomized: Missable locations always contain the same item as in vanilla Dark Souls III.
+    - **Unnecessary:** Missable locations can't have progression items, but they can have useful
+      items.
+    - **Unimportant:** Neither progression items nor useful items can be placed in missable
+      locations.
+    - **Unrandomized:** Missable locations always contain the same item as in vanilla Dark Souls
+      III.
 
-    A "progression item" is anything that's required to unlock another location in some game. A "useful item" is something each game defines individually, usually items that are quite desirable but not strictly necessary.
+    A "progression item" is anything that's required to unlock another location in some game. A
+    "useful item" is something each game defines individually, usually items that are quite
+    desirable but not strictly necessary.
     """
     display_name = "Missable Locations Behavior"
     option_unnecessary = 1
