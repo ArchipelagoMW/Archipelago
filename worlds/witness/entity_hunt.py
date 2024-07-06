@@ -13,6 +13,7 @@ DISALLOWED_ENTITIES_FOR_PANEL_HUNT = {
     "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
     "0x03505",  # Tutorial Gate Close (same thing)
     "0x3352F",  # Gate EP (same thing)
+    "0x09F7F",  # Mountaintop Box Short. This is reserved for panel_hunt_postgame.
     "0x00CDB",  # Challenge Reallocating
     "0x0051F",  # Challenge Reallocating
     "0x00524",  # Challenge Reallocating
