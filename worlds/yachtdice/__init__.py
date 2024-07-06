@@ -56,7 +56,7 @@ class YachtDiceWorld(World):
 
     item_name_groups = item_groups
 
-    ap_world_version = "2.0.6"
+    ap_world_version = "2.1.0"
 
     def _get_yachtdice_data(self):
         return {
@@ -142,10 +142,10 @@ class YachtDiceWorld(World):
         ]
 
         # categories used in this game.
-        possible_categories = []
+        self.possible_categories = []
 
         for index, cats in enumerate(all_categories):
-            possible_categories.append(cats[categorylist[index]])
+            self.possible_categories.append(cats[categorylist[index]])
 
             # Add Choice and Inverse choice (or their alts) to the precollected list.
             if index == 0 or index == 1:
@@ -264,7 +264,7 @@ class YachtDiceWorld(World):
                 # which often don't give any points, until you get overpowered, and then they give all points.
                 cat_weights = [2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
                 weights["Double category"] /= 1.1
-                return self.random.choices(possible_categories, weights=cat_weights)[0]
+                return self.random.choices(self.possible_categories, weights=cat_weights)[0]
             elif which_item_to_add == "Points":
                 score_dist = self.options.points_size
                 probs = {"1 Point": 1, "10 Points": 0, "100 Points": 0}
@@ -301,7 +301,7 @@ class YachtDiceWorld(World):
             self.itempool.append(get_item_to_add(weights, extra_points_added, multipliers_added, items_added))
 
         score_in_logic = dice_simulation_fill_pool(
-            self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.difficulty, self.player
+            self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.possible_categories, self.difficulty, self.player
         )
 
         # if we overshoot, remove items until you get below 1000, then return the last removed item
@@ -313,6 +313,7 @@ class YachtDiceWorld(World):
                     self.itempool + self.precollected,
                     self.frags_per_dice,
                     self.frags_per_roll,
+                    self.possible_categories,
                     self.difficulty,
                     self.player,
                 )
@@ -333,6 +334,7 @@ class YachtDiceWorld(World):
                         self.itempool + self.precollected,
                         self.frags_per_dice,
                         self.frags_per_roll,
+                        self.possible_categories,
                         self.difficulty,
                         self.player,
                     )
@@ -443,7 +445,7 @@ class YachtDiceWorld(World):
         """
         set rules per location, and add the rule for beating the game
         """
-        set_yacht_rules(self.multiworld, self.player, self.frags_per_dice, self.frags_per_roll, self.difficulty)
+        set_yacht_rules(self.multiworld, self.player, self.frags_per_dice, self.frags_per_roll, self.possible_categories, self.difficulty)
         set_yacht_completion_rules(self.multiworld, self.player)
 
     def fill_slot_data(self):
@@ -463,6 +465,7 @@ class YachtDiceWorld(World):
         slot_data = {**yacht_dice_data, **yacht_dice_options}  # combine the two
         slot_data["goal_score"] = self.goal_score
         slot_data["last_check_score"] = self.max_score
+        slot_data["allowed_categories"] = self.possible_categories
         slot_data["ap_world_version"] = self.ap_world_version
         return slot_data
 
