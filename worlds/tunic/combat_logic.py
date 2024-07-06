@@ -31,10 +31,6 @@ enemy_encounters: Dict[str, EncounterData] = {
     "Slorms": EncounterData(8, [[sword], [fire_wand], [gun], [stick, shield]], False),
     # the birds that swoop down at you
     "Hushers": EncounterData(12),
-    # includes shield fleemers
-    "Fleemers": EncounterData(8),
-    "Big Fleemer": EncounterData(12),
-    "Lost Echo": EncounterData(0, [[sword]]),
     # can't damage with stick
     "Autobolts": EncounterData(8, [[sword], [fire_wand], [gun]], False),
     "Chompignoms": EncounterData(8),
@@ -43,7 +39,12 @@ enemy_encounters: Dict[str, EncounterData] = {
     "Wizards": EncounterData(12),
     # just frog's domain in general
     "Frogues": EncounterData(12),
+    # includes shield fleemers
+    "Fleemers": EncounterData(8),
+    "Big Fleemer": EncounterData(12),
+    "Lost Echoes": EncounterData(8),
     "Birds with Guns": EncounterData(12),
+    "Tentacles": EncounterData(12),
     # you're meant to fight them with sword, wand, shield, and some flasks
     "Foxes": EncounterData(10),
     "Scavengers": EncounterData(16),
