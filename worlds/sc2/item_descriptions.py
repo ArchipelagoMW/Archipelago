@@ -66,7 +66,8 @@ resource_efficiency_cost_reduction = {
 
     # War Council
     item_names.CENTURION:     (0, 50, 0),
-    item_names.SENTINEL:     (60, 0, 1),
+    item_names.SENTINEL:      (60, 0, 1),
+    item_names.INSTIGATOR:    (40, 15, 0),
 }
 
 
@@ -845,6 +846,7 @@ item_descriptions = {
     item_names.SENTINEL_RESOURCE_EFFICIENCY: "Sentinel War Council upgrade. " + _get_resource_efficiency_desc(item_names.SENTINEL),
     item_names.STALKER_PHASE_REACTOR: "Stalker War Council upgrade. Stalkers restore 80 shields over 5 seconds after they Blink.",
     item_names.DRAGOON_PHALANX_SUIT: "Dragoon War Council upgrade. Dragoons gain +2 range, move slightly faster, and can form tighter formations.",
+    item_names.INSTIGATOR_RESOURCE_EFFICIENCY: f"Instigator War Council upgrade. {_get_resource_efficiency_desc(item_names.INSTIGATOR)}",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

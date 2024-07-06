@@ -680,6 +680,7 @@ CENTURION_RESOURCE_EFFICIENCY                           = "Resource Efficiency (
 SENTINEL_RESOURCE_EFFICIENCY                            = "Resource Efficiency (Sentinel)"
 STALKER_PHASE_REACTOR                                   = "Phase Reactor (Stalker)"
 DRAGOON_PHALANX_SUIT                                    = "Phalanx Suit (Dragoon)"
+INSTIGATOR_RESOURCE_EFFICIENCY                          = "Resource Efficiency (Instigator)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
