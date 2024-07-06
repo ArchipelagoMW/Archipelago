@@ -1221,15 +1221,16 @@ class DarkSouls3World(World):
         all_locations = self.multiworld.get_locations(self.player)
 
         unnecessary_locations = (
-            {
-                location.name
-                for location in all_locations
-                if location.name in self.all_excluded_locations
-                and not (
-                    location.data.missable
-                    and self.options.excluded_location_behavior < self.options.missable_location_behavior
-                )
-            }
+            (
+                {
+                    location.name
+                    for location in all_locations
+                    if location.name in self.all_excluded_locations
+                    and not location.data.missable
+                }
+                if self.options.excluded_location_behavior < self.options.missable_location_behavior
+                else self.all_excluded_locations
+            )
             if self.options.excluded_location_behavior == "unnecessary"
             else set()
         ).union(
@@ -1239,7 +1240,8 @@ class DarkSouls3World(World):
                 if location.data.missable
                 and not (
                     location.name in self.all_excluded_locations
-                    and self.options.missable_location_behavior < self.options.excluded_location_behavior
+                    and self.options.missable_location_behavior <
+                        self.options.excluded_location_behavior
                 )
             }
             if self.options.missable_location_behavior == "unnecessary"
