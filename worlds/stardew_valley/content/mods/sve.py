@@ -5,12 +5,13 @@ from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_
 from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.requirement import YearRequirement
+from ...data.requirement import YearRequirement, CombatRequirement
 from ...mods.mod_data import ModNames
 from ...strings.crop_names import Fruit, SVEVegetable, SVEFruit
 from ...strings.fish_names import WaterItem
 from ...strings.flower_names import Flower
 from ...strings.forageable_names import Mushroom, Forageable
+from ...strings.performance_names import Performance
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
@@ -97,17 +98,17 @@ register_mod_content_pack(SVEContentPack(
         WaterItem.sea_urchin: (ForagingSource(regions=(SVERegion.fable_reef,)),),
 
         # Crops
-        SVESeed.shrub: (ForagingSource(regions=(Region.secret_woods,)),),
+        SVESeed.shrub: (ForagingSource(regions=(Region.secret_woods,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEFruit.salal_berry: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=SVESeed.shrub, seasons=(Season.spring,)),),
-        SVESeed.slime: (ForagingSource(regions=(SVERegion.highlands_outside,)),),
+        SVESeed.slime: (ForagingSource(regions=(SVERegion.highlands_outside,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEFruit.slime_berry: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=SVESeed.slime, seasons=(Season.spring,)),),
         SVESeed.ancient_fern: (ForagingSource(regions=(Region.secret_woods,)),),
         SVEVegetable.ancient_fiber: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=SVESeed.ancient_fern, seasons=(Season.summer,)),),
-        SVESeed.stalk: (ForagingSource(regions=(SVERegion.highlands_outside,)),),
+        SVESeed.stalk: (ForagingSource(regions=(SVERegion.highlands_outside,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEFruit.monster_fruit: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=SVESeed.stalk, seasons=(Season.summer,)),),
-        SVESeed.fungus: (ForagingSource(regions=(SVERegion.highlands_pond,)),),
+        SVESeed.fungus: (ForagingSource(regions=(SVERegion.highlands_pond,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEVegetable.monster_mushroom: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=SVESeed.fungus, seasons=(Season.fall,)),),
-        SVESeed.void: (ForagingSource(regions=(SVERegion.highlands_cavern,)),),
+        SVESeed.void: (ForagingSource(regions=(SVERegion.highlands_cavern,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEVegetable.void_root: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=SVESeed.void, seasons=(Season.winter,)),),
 
 

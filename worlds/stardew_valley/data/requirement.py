@@ -29,3 +29,8 @@ class SeasonRequirement(Requirement):
 @dataclass(frozen=True)
 class YearRequirement(Requirement):
     year: int
+
+
+@dataclass(frozen=True)
+class CombatRequirement(Requirement):
+    level: str

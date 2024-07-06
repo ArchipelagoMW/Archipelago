@@ -30,11 +30,11 @@ register_mod_content_pack(DistantLandsContentPack(
         villagers_data.zic,
     ),
     harvest_sources={
-        DistantLandsForageable.swamp_herb: (ForagingSource(regions=Region.witch_swamp),),
-        DistantLandsForageable.brown_amanita: (ForagingSource(regions=Region.witch_swamp),),
-        DistantLandsSeed.void_mint: (ForagingSource(regions=Region.witch_swamp),),
+        DistantLandsForageable.swamp_herb: (ForagingSource(regions=(Region.witch_swamp,)),),
+        DistantLandsForageable.brown_amanita: (ForagingSource(regions=(Region.witch_swamp,)),),
+        DistantLandsSeed.void_mint: (ForagingSource(regions=(Region.witch_swamp,)),),
         DistantLandsCrop.void_mint: (Tag(ItemTag.VEGETABLE), HarvestCropSource(seed=DistantLandsSeed.void_mint, seasons=(Season.spring, Season.summer, Season.fall)),),
-        DistantLandsSeed.vile_ancient_fruit: (ForagingSource(regions=Region.witch_swamp),),
+        DistantLandsSeed.vile_ancient_fruit: (ForagingSource(regions=(Region.witch_swamp,)),),
         DistantLandsCrop.vile_ancient_fruit: (Tag(ItemTag.FRUIT), HarvestCropSource(seed=DistantLandsSeed.vile_ancient_fruit, seasons=(Season.spring, Season.summer, Season.fall)),)
     }
 ))
