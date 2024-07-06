@@ -740,6 +740,7 @@ item_descriptions = {
     item_names.CORSAIR: "Air superiority starfighter. Can use the Disruption Web ability.",
     item_names.DESTROYER: "Area assault craft. Can use the Destruction Beam ability to attack multiple units at once.",
     item_names.WARP_RAY: "Surgical-strike craft. Damage output increases the longer the Warp Ray remains on target.",
+    item_names.SCORCHER: "Flying Assault Ship. Can use prismatic alignment to temporarily deal increased damage at the cost of movement speed.",
     item_names.SCOUT: "Versatile high-speed fighter.",
     item_names.TEMPEST: "Siege artillery craft. Attacks from long range. Can use the Disintegration ability.",
     item_names.MOTHERSHIP: "Ultimate Protoss vessel, Can use the Vortex and Mass Recall abilities. Cloaks nearby units and structures.",

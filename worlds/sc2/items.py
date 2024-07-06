@@ -1953,6 +1953,7 @@ defense_ratings = {
     item_names.PLANETARY_FORTRESS: 3,
     # Bunker w/ Marine/Marauder: 3,
     item_names.PERDITION_TURRET: 2,
+    item_names.DEVASTATOR_TURRET: 2,
     item_names.VULTURE: 1,
     item_names.BANSHEE: 1,
     item_names.BATTLECRUISER: 1,
