@@ -301,7 +301,12 @@ class YachtDiceWorld(World):
             self.itempool.append(get_item_to_add(weights, extra_points_added, multipliers_added, items_added))
 
         score_in_logic = dice_simulation_fill_pool(
-            self.itempool + self.precollected, self.frags_per_dice, self.frags_per_roll, self.possible_categories, self.difficulty, self.player
+            self.itempool + self.precollected,
+            self.frags_per_dice,
+            self.frags_per_roll,
+            self.possible_categories,
+            self.difficulty,
+            self.player,
         )
 
         # if we overshoot, remove items until you get below 1000, then return the last removed item
@@ -445,7 +450,14 @@ class YachtDiceWorld(World):
         """
         set rules per location, and add the rule for beating the game
         """
-        set_yacht_rules(self.multiworld, self.player, self.frags_per_dice, self.frags_per_roll, self.possible_categories, self.difficulty)
+        set_yacht_rules(
+            self.multiworld,
+            self.player,
+            self.frags_per_dice,
+            self.frags_per_roll,
+            self.possible_categories,
+            self.difficulty,
+        )
         set_yacht_completion_rules(self.multiworld, self.player)
 
     def fill_slot_data(self):

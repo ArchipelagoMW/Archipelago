@@ -16,6 +16,7 @@ from .YachtWeights import yacht_weights
 # We then pick a correct percentile to reflect the correct score that should be in logic.
 # The score is logic is *much* lower than the actual maximum reachable score.
 
+
 class Category:
     def __init__(self, name, quantity=1):
         self.name = name
