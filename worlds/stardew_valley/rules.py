@@ -489,6 +489,8 @@ def set_walnut_puzzle_rules(logic, multiworld, player, world_options):
     MultiWorldRules.add_rule(multiworld.get_location("Complete Snake Collection", player), logic.can_complete_snake_collection())
     MultiWorldRules.add_rule(multiworld.get_location("Complete Mummified Frog Collection", player), logic.can_complete_frog_collection())
     MultiWorldRules.add_rule(multiworld.get_location("Complete Mummified Bat Collection", player), logic.can_complete_bat_collection())
+    MultiWorldRules.add_rule(multiworld.get_location("Purple Flowers Island Survey", player), logic.can_start_field_office)
+    MultiWorldRules.add_rule(multiworld.get_location("Purple Starfish Island Survey", player), logic.can_start_field_office)
     MultiWorldRules.add_rule(multiworld.get_location("Protruding Tree Walnut", player), logic.combat.has_slingshot)
     MultiWorldRules.add_rule(multiworld.get_location("Starfish Tide Pool", player), logic.tool.has_fishing_rod(1))
     MultiWorldRules.add_rule(multiworld.get_location("Mermaid Song", player), logic.has(Furniture.flute_block))

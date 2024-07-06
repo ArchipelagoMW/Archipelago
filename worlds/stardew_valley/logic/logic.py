@@ -175,7 +175,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.large_goat_milk: self.animal.has_happy_animal(Animal.goat),
             AnimalProduct.large_milk: self.animal.has_happy_animal(Animal.cow),
             AnimalProduct.milk: self.animal.has_animal(Animal.cow),
-            AnimalProduct.ostrich_egg: self.tool.can_forage(Generic.any, Region.island_north, True),
+            AnimalProduct.ostrich_egg: self.tool.can_forage(Generic.any, Region.island_north, True) & self.quest.has_magnifying_glass() & self.region.can_reach(Region.volcano_floor_5),
             AnimalProduct.rabbit_foot: self.animal.has_happy_animal(Animal.rabbit),
             AnimalProduct.roe: self.skill.can_fish() & self.building.has_building(Building.fish_pond),
             AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
