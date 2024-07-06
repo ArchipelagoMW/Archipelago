@@ -65,204 +65,204 @@ def create_vanilla_regions(
     
     player: int = world.player
     if SC2Campaign.WOL in enabled_campaigns:
-        connect(world, names, 'Menu', 'Liberation Day')
-        connect(world, names, 'Liberation Day', 'The Outlaws (Terran)',
-                lambda state: state.has("Beat Liberation Day", player))
-        connect(world, names, 'The Outlaws (Terran)', 'Zero Hour (Terran)',
-                lambda state: state.has("Beat The Outlaws (Terran)", player))
-        connect(world, names, 'Zero Hour (Terran)', 'Evacuation',
-                lambda state: state.has("Beat Zero Hour (Terran)", player))
-        connect(world, names, 'Evacuation', 'Outbreak',
-                lambda state: state.has("Beat Evacuation", player))
-        connect(world, names, "Outbreak", "Safe Haven",
-                lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
-        connect(world, names, "Outbreak", "Haven's Fall",
-                lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
-        connect(world, names, 'Zero Hour (Terran)', 'Smash and Grab (Terran)',
-                lambda state: state.has("Beat Zero Hour (Terran)", player))
-        connect(world, names, 'Smash and Grab (Terran)', 'The Dig',
-                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Smash and Grab (Terran)", player))
-        connect(world, names, 'The Dig', 'The Moebius Factor',
-                lambda state: wol_cleared_missions(state, 11) and state.has("Beat The Dig", player))
-        connect(world, names, 'The Moebius Factor', 'Supernova',
-                lambda state: wol_cleared_missions(state, 14) and state.has("Beat The Moebius Factor", player))
-        connect(world, names, 'Supernova', 'Maw of the Void',
-                lambda state: state.has("Beat Supernova", player))
-        connect(world, names, 'Zero Hour (Terran)', "Devil's Playground",
-                lambda state: wol_cleared_missions(state, 4) and state.has("Beat Zero Hour (Terran)", player))
-        connect(world, names, "Devil's Playground", 'Welcome to the Jungle',
-                lambda state: state.has("Beat Devil's Playground", player))
-        connect(world, names, "Welcome to the Jungle", 'Breakout',
-                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(world, names, "Welcome to the Jungle", 'Ghost of a Chance',
-                lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(world, names, "Zero Hour (Terran)", 'The Great Train Robbery',
-                lambda state: wol_cleared_missions(state, 6) and state.has("Beat Zero Hour (Terran)", player))
-        connect(world, names, 'The Great Train Robbery', 'Cutthroat',
-                lambda state: state.has("Beat The Great Train Robbery", player))
-        connect(world, names, 'Cutthroat', 'Engine of Destruction',
-                lambda state: state.has("Beat Cutthroat", player))
-        connect(world, names, 'Engine of Destruction', 'Media Blitz',
-                lambda state: state.has("Beat Engine of Destruction", player))
-        connect(world, names, 'Media Blitz', 'Piercing the Shroud',
-                lambda state: state.has("Beat Media Blitz", player))
-        connect(world, names, 'Maw of the Void', 'Gates of Hell',
-                lambda state: state.has("Beat Maw of the Void", player))
-        connect(world, names, 'Gates of Hell', 'Belly of the Beast',
-                lambda state: state.has("Beat Gates of Hell", player))
-        connect(world, names, 'Gates of Hell', 'Shatter the Sky',
-                lambda state: state.has("Beat Gates of Hell", player))
-        connect(world, names, 'Gates of Hell', 'All-In',
+        connect(world, names, 'Menu', SC2Mission.LIBERATION_DAY.mission_name)
+        connect(world, names, SC2Mission.LIBERATION_DAY.mission_name, SC2Mission.THE_OUTLAWS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.LIBERATION_DAY.mission_name}", player))
+        connect(world, names, SC2Mission.THE_OUTLAWS.mission_name, SC2Mission.ZERO_HOUR.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_OUTLAWS.mission_name}", player))
+        connect(world, names, SC2Mission.ZERO_HOUR.mission_name, SC2Mission.EVACUATION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.ZERO_HOUR.mission_name}", player))
+        connect(world, names, SC2Mission.EVACUATION.mission_name, SC2Mission.OUTBREAK.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.EVACUATION.mission_name}", player))
+        connect(world, names, SC2Mission.OUTBREAK.mission_name, SC2Mission.SAFE_HAVEN.mission_name,
+                lambda state: wol_cleared_missions(state, 7) and state.has(f"Beat {SC2Mission.OUTBREAK.mission_name}", player))
+        connect(world, names, SC2Mission.OUTBREAK.mission_name, SC2Mission.HAVENS_FALL.mission_name,
+                lambda state: wol_cleared_missions(state, 7) and state.has(f"Beat {SC2Mission.OUTBREAK.mission_name}", player))
+        connect(world, names, SC2Mission.ZERO_HOUR.mission_name, SC2Mission.SMASH_AND_GRAB.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.ZERO_HOUR.mission_name}", player))
+        connect(world, names, SC2Mission.SMASH_AND_GRAB.mission_name, SC2Mission.THE_DIG.mission_name,
+                lambda state: wol_cleared_missions(state, 8) and state.has(f"Beat {SC2Mission.SMASH_AND_GRAB.mission_name}", player))
+        connect(world, names, SC2Mission.THE_DIG.mission_name, SC2Mission.THE_MOEBIUS_FACTOR.mission_name,
+                lambda state: wol_cleared_missions(state, 11) and state.has(f"Beat {SC2Mission.THE_DIG.mission_name}", player))
+        connect(world, names, SC2Mission.THE_MOEBIUS_FACTOR.mission_name, SC2Mission.SUPERNOVA.mission_name,
+                lambda state: wol_cleared_missions(state, 14) and state.has(f"Beat {SC2Mission.THE_MOEBIUS_FACTOR.mission_name}", player))
+        connect(world, names, SC2Mission.SUPERNOVA.mission_name, SC2Mission.MAW_OF_THE_VOID.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SUPERNOVA.mission_name}", player))
+        connect(world, names, SC2Mission.ZERO_HOUR.mission_name, SC2Mission.DEVILS_PLAYGROUND.mission_name,
+                lambda state: wol_cleared_missions(state, 4) and state.has(f"Beat {SC2Mission.ZERO_HOUR.mission_name}", player))
+        connect(world, names, SC2Mission.DEVILS_PLAYGROUND.mission_name, SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.DEVILS_PLAYGROUND.mission_name}", player))
+        connect(world, names, SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, SC2Mission.BREAKOUT.mission_name,
+                lambda state: wol_cleared_missions(state, 8) and state.has(f"Beat {SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name}", player))
+        connect(world, names, SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, SC2Mission.GHOST_OF_A_CHANCE.mission_name,
+                lambda state: wol_cleared_missions(state, 8) and state.has(f"Beat {SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name}", player))
+        connect(world, names, SC2Mission.ZERO_HOUR.mission_name, SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name,
+                lambda state: wol_cleared_missions(state, 6) and state.has(f"Beat {SC2Mission.ZERO_HOUR.mission_name}", player))
+        connect(world, names, SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, SC2Mission.CUTTHROAT.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name}", player))
+        connect(world, names, SC2Mission.CUTTHROAT.mission_name, SC2Mission.ENGINE_OF_DESTRUCTION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.CUTTHROAT.mission_name}", player))
+        connect(world, names, SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, SC2Mission.MEDIA_BLITZ.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.ENGINE_OF_DESTRUCTION.mission_name}", player))
+        connect(world, names, SC2Mission.MEDIA_BLITZ.mission_name, SC2Mission.PIERCING_OF_THE_SHROUD.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.MEDIA_BLITZ.mission_name}", player))
+        connect(world, names, SC2Mission.MAW_OF_THE_VOID.mission_name, SC2Mission.GATES_OF_HELL.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.MAW_OF_THE_VOID.mission_name}", player))
+        connect(world, names, SC2Mission.GATES_OF_HELL.mission_name, SC2Mission.BELLY_OF_THE_BEAST.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.GATES_OF_HELL.mission_name}", player))
+        connect(world, names, SC2Mission.GATES_OF_HELL.mission_name, SC2Mission.SHATTER_THE_SKY.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.GATES_OF_HELL.mission_name}", player))
+        connect(world, names, SC2Mission.GATES_OF_HELL.mission_name, SC2Mission.ALL_IN.mission_name,
                 lambda state: state.has('Beat Gates of Hell', player) and (
                         state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
     if SC2Campaign.PROPHECY in enabled_campaigns:
         if SC2Campaign.WOL in enabled_campaigns:
-            connect(world, names, 'The Dig', 'Whispers of Doom',
-                    lambda state: state.has("Beat The Dig", player)),
+            connect(world, names, SC2Mission.THE_DIG.mission_name, SC2Mission.WHISPERS_OF_DOOM.mission_name,
+                    lambda state: state.has(f"Beat {SC2Mission.THE_DIG.mission_name}", player)),
         else:
             vanilla_mission_reqs[SC2Campaign.PROPHECY] = vanilla_mission_reqs[SC2Campaign.PROPHECY].copy()
             vanilla_mission_reqs[SC2Campaign.PROPHECY][SC2Mission.WHISPERS_OF_DOOM.mission_name] = MissionInfo(
                 SC2Mission.WHISPERS_OF_DOOM, [], SC2Mission.WHISPERS_OF_DOOM.area)
-            connect(world, names, 'Menu', 'Whispers of Doom'),
-        connect(world, names, 'Whispers of Doom', 'A Sinister Turn',
-                lambda state: state.has("Beat Whispers of Doom", player))
-        connect(world, names, 'A Sinister Turn', 'Echoes of the Future',
-                lambda state: state.has("Beat A Sinister Turn", player))
-        connect(world, names, 'Echoes of the Future', 'In Utter Darkness',
-                lambda state: state.has("Beat Echoes of the Future", player))
+            connect(world, names, 'Menu', SC2Mission.WHISPERS_OF_DOOM.mission_name),
+        connect(world, names, SC2Mission.WHISPERS_OF_DOOM.mission_name, SC2Mission.A_SINISTER_TURN.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.WHISPERS_OF_DOOM.mission_name}", player))
+        connect(world, names, SC2Mission.A_SINISTER_TURN.mission_name, SC2Mission.ECHOES_OF_THE_FUTURE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.A_SINISTER_TURN.mission_name}", player))
+        connect(world, names, SC2Mission.ECHOES_OF_THE_FUTURE.mission_name, SC2Mission.IN_UTTER_DARKNESS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.ECHOES_OF_THE_FUTURE.mission_name}", player))
 
     if SC2Campaign.HOTS in enabled_campaigns:
-        connect(world, names, 'Menu', 'Lab Rat'),
-        connect(world, names, 'Lab Rat', 'Back in the Saddle',
-                lambda state: state.has("Beat Lab Rat", player)),
-        connect(world, names, 'Back in the Saddle', 'Rendezvous',
-                lambda state: state.has("Beat Back in the Saddle", player)),
-        connect(world, names, 'Rendezvous', 'Harvest of Screams',
-                lambda state: state.has("Beat Rendezvous", player)),
-        connect(world, names, 'Harvest of Screams', 'Shoot the Messenger',
-                lambda state: state.has("Beat Harvest of Screams", player)),
-        connect(world, names, 'Shoot the Messenger', 'Enemy Within',
-                lambda state: state.has("Beat Shoot the Messenger", player)),
-        connect(world, names, 'Rendezvous', 'Domination',
-                lambda state: state.has("Beat Rendezvous", player)),
-        connect(world, names, 'Domination', 'Fire in the Sky',
-                lambda state: state.has("Beat Domination", player)),
-        connect(world, names, 'Fire in the Sky', 'Old Soldiers',
-                lambda state: state.has("Beat Fire in the Sky", player)),
-        connect(world, names, 'Old Soldiers', 'Waking the Ancient',
-                lambda state: state.has("Beat Old Soldiers", player)),
-        connect(world, names, 'Enemy Within', 'Waking the Ancient',
-                lambda state: state.has("Beat Enemy Within", player)),
-        connect(world, names, 'Waking the Ancient', 'The Crucible',
-                lambda state: state.has("Beat Waking the Ancient", player)),
-        connect(world, names, 'The Crucible', 'Supreme',
-                lambda state: state.has("Beat The Crucible", player)),
-        connect(world, names, 'Supreme', 'Infested',
-                lambda state: state.has("Beat Supreme", player) and
-                            state.has("Beat Old Soldiers", player) and
-                            state.has("Beat Enemy Within", player)),
-        connect(world, names, 'Infested', 'Hand of Darkness',
-                lambda state: state.has("Beat Infested", player)),
-        connect(world, names, 'Hand of Darkness', 'Phantoms of the Void',
-                lambda state: state.has("Beat Hand of Darkness", player)),
-        connect(world, names, 'Supreme', 'With Friends Like These',
-                lambda state: state.has("Beat Supreme", player) and
-                            state.has("Beat Old Soldiers", player) and
-                            state.has("Beat Enemy Within", player)),
-        connect(world, names, 'With Friends Like These', 'Conviction',
-                lambda state: state.has("Beat With Friends Like These", player)),
-        connect(world, names, 'Conviction', 'Planetfall',
-                lambda state: state.has("Beat Conviction", player) and
-                            state.has("Beat Phantoms of the Void", player)),
-        connect(world, names, 'Planetfall', 'Death From Above',
-                lambda state: state.has("Beat Planetfall", player)),
-        connect(world, names, 'Death From Above', 'The Reckoning',
-                lambda state: state.has("Beat Death From Above", player)),
+        connect(world, names, 'Menu', SC2Mission.LAB_RAT.mission_name),
+        connect(world, names, SC2Mission.LAB_RAT.mission_name, SC2Mission.BACK_IN_THE_SADDLE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.LAB_RAT.mission_name}", player)),
+        connect(world, names, SC2Mission.BACK_IN_THE_SADDLE.mission_name, SC2Mission.RENDEZVOUS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.BACK_IN_THE_SADDLE.mission_name}", player)),
+        connect(world, names, SC2Mission.RENDEZVOUS.mission_name, SC2Mission.HARVEST_OF_SCREAMS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.RENDEZVOUS.mission_name}", player)),
+        connect(world, names, SC2Mission.HARVEST_OF_SCREAMS.mission_name, SC2Mission.SHOOT_THE_MESSENGER.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.HARVEST_OF_SCREAMS.mission_name}", player)),
+        connect(world, names, SC2Mission.SHOOT_THE_MESSENGER.mission_name, SC2Mission.ENEMY_WITHIN.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SHOOT_THE_MESSENGER.mission_name}", player)),
+        connect(world, names, SC2Mission.RENDEZVOUS.mission_name, SC2Mission.DOMINATION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.RENDEZVOUS.mission_name}", player)),
+        connect(world, names, SC2Mission.DOMINATION.mission_name, SC2Mission.FIRE_IN_THE_SKY.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.DOMINATION.mission_name}", player)),
+        connect(world, names, SC2Mission.FIRE_IN_THE_SKY.mission_name, SC2Mission.OLD_SOLDIERS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.FIRE_IN_THE_SKY.mission_name}", player)),
+        connect(world, names, SC2Mission.OLD_SOLDIERS.mission_name, SC2Mission.WAKING_THE_ANCIENT.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.OLD_SOLDIERS.mission_name}", player)),
+        connect(world, names, SC2Mission.ENEMY_WITHIN.mission_name, SC2Mission.WAKING_THE_ANCIENT.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.ENEMY_WITHIN.mission_name}", player)),
+        connect(world, names, SC2Mission.WAKING_THE_ANCIENT.mission_name, SC2Mission.THE_CRUCIBLE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.WAKING_THE_ANCIENT.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_CRUCIBLE.mission_name, SC2Mission.SUPREME.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_CRUCIBLE.mission_name}", player)),
+        connect(world, names, SC2Mission.SUPREME.mission_name, SC2Mission.INFESTED.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SUPREME.mission_name}", player) and
+                            state.has(f"Beat {SC2Mission.OLD_SOLDIERS.mission_name}", player) and
+                            state.has(f"Beat {SC2Mission.ENEMY_WITHIN.mission_name}", player)),
+        connect(world, names, SC2Mission.INFESTED.mission_name, SC2Mission.HAND_OF_DARKNESS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.INFESTED.mission_name}", player)),
+        connect(world, names, SC2Mission.HAND_OF_DARKNESS.mission_name, SC2Mission.PHANTOMS_OF_THE_VOID.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.HAND_OF_DARKNESS.mission_name}", player)),
+        connect(world, names, SC2Mission.SUPREME.mission_name, SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SUPREME.mission_name}", player) and
+                            state.has(f"Beat {SC2Mission.OLD_SOLDIERS.mission_name}", player) and
+                            state.has(f"Beat {SC2Mission.ENEMY_WITHIN.mission_name}", player)),
+        connect(world, names, SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name, SC2Mission.CONVICTION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name}", player)),
+        connect(world, names, SC2Mission.CONVICTION.mission_name, SC2Mission.PLANETFALL.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.CONVICTION.mission_name}", player) and
+                            state.has(f"Beat {SC2Mission.PHANTOMS_OF_THE_VOID.mission_name}", player)),
+        connect(world, names, SC2Mission.PLANETFALL.mission_name, SC2Mission.DEATH_FROM_ABOVE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.PLANETFALL.mission_name}", player)),
+        connect(world, names, SC2Mission.DEATH_FROM_ABOVE.mission_name, SC2Mission.THE_RECKONING.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.DEATH_FROM_ABOVE.mission_name}", player)),
 
     if SC2Campaign.PROLOGUE in enabled_campaigns:
-        connect(world, names, "Menu", "Dark Whispers")
-        connect(world, names, "Dark Whispers", "Ghosts in the Fog",
-                lambda state: state.has("Beat Dark Whispers", player))
-        connect(world, names, "Ghosts in the Fog", "Evil Awoken",
-                lambda state: state.has("Beat Ghosts in the Fog", player))
+        connect(world, names, "Menu", SC2Mission.DARK_WHISPERS.mission_name)
+        connect(world, names, SC2Mission.DARK_WHISPERS.mission_name, SC2Mission.GHOSTS_IN_THE_FOG.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.DARK_WHISPERS.mission_name}", player))
+        connect(world, names, SC2Mission.GHOSTS_IN_THE_FOG.mission_name, SC2Mission.EVIL_AWOKEN.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.GHOSTS_IN_THE_FOG.mission_name}", player))
 
     if SC2Campaign.LOTV in enabled_campaigns:
-        connect(world, names, "Menu", "For Aiur!")
-        connect(world, names, "For Aiur!", "The Growing Shadow",
-                lambda state: state.has("Beat For Aiur!", player)),
-        connect(world, names, "The Growing Shadow", "The Spear of Adun",
-                lambda state: state.has("Beat The Growing Shadow", player)),
-        connect(world, names, "The Spear of Adun", "Sky Shield",
-                lambda state: state.has("Beat The Spear of Adun", player)),
-        connect(world, names, "Sky Shield", "Brothers in Arms",
-                lambda state: state.has("Beat Sky Shield", player)),
-        connect(world, names, "Brothers in Arms", "Forbidden Weapon",
-                lambda state: state.has("Beat Brothers in Arms", player)),
-        connect(world, names, "The Spear of Adun", "Amon's Reach",
-                lambda state: state.has("Beat The Spear of Adun", player)),
-        connect(world, names, "Amon's Reach", "Last Stand",
-                lambda state: state.has("Beat Amon's Reach", player)),
-        connect(world, names, "Last Stand", "Forbidden Weapon",
-                lambda state: state.has("Beat Last Stand", player)),
-        connect(world, names, "Forbidden Weapon", "Temple of Unification",
-                lambda state: state.has("Beat Brothers in Arms", player)
-                              and state.has("Beat Last Stand", player)
-                              and state.has("Beat Forbidden Weapon", player)),
-        connect(world, names, "Temple of Unification", "The Infinite Cycle",
-                lambda state: state.has("Beat Temple of Unification", player)),
-        connect(world, names, "The Infinite Cycle", "Harbinger of Oblivion",
-                lambda state: state.has("Beat The Infinite Cycle", player)),
-        connect(world, names, "Harbinger of Oblivion", "Unsealing the Past",
-                lambda state: state.has("Beat Harbinger of Oblivion", player)),
-        connect(world, names, "Unsealing the Past", "Purification",
-                lambda state: state.has("Beat Unsealing the Past", player)),
-        connect(world, names, "Purification", "Templar's Charge",
-                lambda state: state.has("Beat Purification", player)),
-        connect(world, names, "Harbinger of Oblivion", "Steps of the Rite",
-                lambda state: state.has("Beat Harbinger of Oblivion", player)),
-        connect(world, names, "Steps of the Rite", "Rak'Shir",
-                lambda state: state.has("Beat Steps of the Rite", player)),
-        connect(world, names, "Rak'Shir", "Templar's Charge",
-                lambda state: state.has("Beat Rak'Shir", player)),
-        connect(world, names, "Templar's Charge", "Templar's Return",
-                lambda state: state.has("Beat Purification", player)
-                              and state.has("Beat Rak'Shir", player)
-                              and state.has("Beat Templar's Charge", player)),
-        connect(world, names, "Templar's Return", "The Host",
-                lambda state: state.has("Beat Templar's Return", player)),
-        connect(world, names, "The Host", "Salvation",
-                lambda state: state.has("Beat The Host", player)),
+        connect(world, names, "Menu", SC2Mission.FOR_AIUR.mission_name)
+        connect(world, names, SC2Mission.FOR_AIUR.mission_name, SC2Mission.THE_GROWING_SHADOW.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.FOR_AIUR.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_GROWING_SHADOW.mission_name, SC2Mission.THE_SPEAR_OF_ADUN.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_GROWING_SHADOW.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_SPEAR_OF_ADUN.mission_name, SC2Mission.SKY_SHIELD.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_SPEAR_OF_ADUN.mission_name}", player)),
+        connect(world, names, SC2Mission.SKY_SHIELD.mission_name, SC2Mission.BROTHERS_IN_ARMS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SKY_SHIELD.mission_name}", player)),
+        connect(world, names, SC2Mission.BROTHERS_IN_ARMS.mission_name, SC2Mission.FORBIDDEN_WEAPON.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.BROTHERS_IN_ARMS.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_SPEAR_OF_ADUN.mission_name, SC2Mission.AMON_S_REACH.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_SPEAR_OF_ADUN.mission_name}", player)),
+        connect(world, names, SC2Mission.AMON_S_REACH.mission_name, SC2Mission.LAST_STAND.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.AMON_S_REACH.mission_name}", player)),
+        connect(world, names, SC2Mission.LAST_STAND.mission_name, SC2Mission.FORBIDDEN_WEAPON.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.LAST_STAND.mission_name}", player)),
+        connect(world, names, SC2Mission.FORBIDDEN_WEAPON.mission_name, SC2Mission.TEMPLE_OF_UNIFICATION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.BROTHERS_IN_ARMS.mission_name}", player)
+                              and state.has(f"Beat {SC2Mission.LAST_STAND.mission_name}", player)
+                              and state.has(f"Beat {SC2Mission.FORBIDDEN_WEAPON.mission_name}", player)),
+        connect(world, names, SC2Mission.TEMPLE_OF_UNIFICATION.mission_name, SC2Mission.THE_INFINITE_CYCLE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.TEMPLE_OF_UNIFICATION.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_INFINITE_CYCLE.mission_name, SC2Mission.HARBINGER_OF_OBLIVION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_INFINITE_CYCLE.mission_name}", player)),
+        connect(world, names, SC2Mission.HARBINGER_OF_OBLIVION.mission_name, SC2Mission.UNSEALING_THE_PAST.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.HARBINGER_OF_OBLIVION.mission_name}", player)),
+        connect(world, names, SC2Mission.UNSEALING_THE_PAST.mission_name, SC2Mission.PURIFICATION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.UNSEALING_THE_PAST.mission_name}", player)),
+        connect(world, names, SC2Mission.PURIFICATION.mission_name, SC2Mission.TEMPLAR_S_CHARGE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.PURIFICATION.mission_name}", player)),
+        connect(world, names, SC2Mission.HARBINGER_OF_OBLIVION.mission_name, SC2Mission.STEPS_OF_THE_RITE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.HARBINGER_OF_OBLIVION.mission_name}", player)),
+        connect(world, names, SC2Mission.STEPS_OF_THE_RITE.mission_name, SC2Mission.RAK_SHIR.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.STEPS_OF_THE_RITE.mission_name}", player)),
+        connect(world, names, SC2Mission.RAK_SHIR.mission_name, SC2Mission.TEMPLAR_S_CHARGE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.RAK_SHIR.mission_name}", player)),
+        connect(world, names, SC2Mission.TEMPLAR_S_CHARGE.mission_name, SC2Mission.TEMPLAR_S_RETURN.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.PURIFICATION.mission_name}", player)
+                              and state.has(f"Beat {SC2Mission.RAK_SHIR.mission_name}", player)
+                              and state.has(f"Beat {SC2Mission.TEMPLAR_S_CHARGE.mission_name}", player)),
+        connect(world, names, SC2Mission.TEMPLAR_S_RETURN.mission_name, SC2Mission.THE_HOST.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.TEMPLAR_S_RETURN.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_HOST.mission_name, SC2Mission.SALVATION.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_HOST.mission_name}", player)),
 
     if SC2Campaign.EPILOGUE in enabled_campaigns:
         # TODO: Make this aware about excluded campaigns
-        connect(world, names, "Salvation", "Into the Void",
-                lambda state: state.has("Beat Salvation", player)
-                              and state.has("Beat The Reckoning", player)
-                              and state.has("Beat All-In", player)),
-        connect(world, names, "Into the Void", "The Essence of Eternity",
-                lambda state: state.has("Beat Into the Void", player)),
-        connect(world, names, "The Essence of Eternity", "Amon's Fall",
-                lambda state: state.has("Beat The Essence of Eternity", player)),
+        connect(world, names, SC2Mission.SALVATION.mission_name, SC2Mission.INTO_THE_VOID.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SALVATION.mission_name}", player)
+                              and state.has(f"Beat {SC2Mission.THE_RECKONING.mission_name}", player)
+                              and state.has(f"Beat {SC2Mission.ALL_IN.mission_name}", player)),
+        connect(world, names, SC2Mission.INTO_THE_VOID.mission_name, SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.INTO_THE_VOID.mission_name}", player)),
+        connect(world, names, SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name, SC2Mission.AMON_S_FALL.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name}", player)),
 
     if SC2Campaign.NCO in enabled_campaigns:
-        connect(world, names, "Menu", "The Escape")
-        connect(world, names, "The Escape", "Sudden Strike",
-                lambda state: state.has("Beat The Escape", player))
-        connect(world, names, "Sudden Strike", "Enemy Intelligence",
-                lambda state: state.has("Beat Sudden Strike", player))
-        connect(world, names, "Enemy Intelligence", "Trouble In Paradise",
-                lambda state: state.has("Beat Enemy Intelligence", player))
-        connect(world, names, "Trouble In Paradise", "Night Terrors",
-                lambda state: state.has("Beat Trouble In Paradise", player))
-        connect(world, names, "Night Terrors", "Flashpoint",
-                lambda state: state.has("Beat Night Terrors", player))
-        connect(world, names, "Flashpoint", "In the Enemy's Shadow",
-                lambda state: state.has("Beat Flashpoint", player))
-        connect(world, names, "In the Enemy's Shadow", "Dark Skies",
-                lambda state: state.has("Beat In the Enemy's Shadow", player))
-        connect(world, names, "Dark Skies", "End Game",
-                lambda state: state.has("Beat Dark Skies", player))
+        connect(world, names, "Menu", SC2Mission.THE_ESCAPE.mission_name)
+        connect(world, names, SC2Mission.THE_ESCAPE.mission_name, SC2Mission.SUDDEN_STRIKE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.THE_ESCAPE.mission_name}", player))
+        connect(world, names, SC2Mission.SUDDEN_STRIKE.mission_name, SC2Mission.ENEMY_INTELLIGENCE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.SUDDEN_STRIKE.mission_name}", player))
+        connect(world, names, SC2Mission.ENEMY_INTELLIGENCE.mission_name, SC2Mission.TROUBLE_IN_PARADISE.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.ENEMY_INTELLIGENCE.mission_name}", player))
+        connect(world, names, SC2Mission.TROUBLE_IN_PARADISE.mission_name, SC2Mission.NIGHT_TERRORS.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.TROUBLE_IN_PARADISE.mission_name}", player))
+        connect(world, names, SC2Mission.NIGHT_TERRORS.mission_name, SC2Mission.FLASHPOINT.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.NIGHT_TERRORS.mission_name}", player))
+        connect(world, names, SC2Mission.FLASHPOINT.mission_name, SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.FLASHPOINT.mission_name}", player))
+        connect(world, names, SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, SC2Mission.DARK_SKIES.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name}", player))
+        connect(world, names, SC2Mission.DARK_SKIES.mission_name, SC2Mission.END_GAME.mission_name,
+                lambda state: state.has(f"Beat {SC2Mission.DARK_SKIES.mission_name}", player))
 
     goal_location = get_goal_location(final_mission)
     assert goal_location, f"Unable to find a goal location for mission {final_mission}"

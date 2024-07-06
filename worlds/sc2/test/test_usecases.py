@@ -7,6 +7,21 @@ from .. import get_all_missions, item_groups, item_names, items, mission_tables,
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
+    def test_vanilla_all_campaigns_generates(self) -> None:
+        world_options = {
+            'mission_order': options.MissionOrder.option_vanilla,
+            'enable_wol_missions': True,
+            'enable_nco_missions': True,
+            'enable_prophecy_missions': True,
+            'enable_hots_missions': True,
+            'enable_lotv_prologue_missions': True,
+            'enable_lotv_missions': True,
+            'enable_epilogue_missions': True,
+        }
+        self.generate_world(world_options)
+        world_regions = [region.name for region in self.multiworld.regions if region.name != "Menu"]
+        self.assertEqual(len(world_regions), 83, "Unexpected number of missions for vanilla mission order")
+
     def test_terran_with_nco_units_only_generates(self):
         world_options = {
             'enable_prophecy_missions': False,

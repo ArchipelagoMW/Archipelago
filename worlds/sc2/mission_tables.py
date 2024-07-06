@@ -354,11 +354,10 @@ lookup_name_to_mission: Dict[str, SC2Mission] = {
     mission.mission_name: mission for mission in SC2Mission
 }
 for mission in SC2Mission:
-    if mission.id <= SC2Mission.END_GAME.id:
-        if '(' in mission.mission_name:
-            # Short names for non-race-swapped missions for client compatibility
-            short_name = mission.mission_name[:mission.mission_name.find(' (')]
-            lookup_name_to_mission[short_name] = mission
+    if MissionFlag.HasRaceSwap in mission.flags and ' (' in mission.mission_name:
+        # Short names for non-race-swapped missions for client compatibility
+        short_name = mission.mission_name[:mission.mission_name.find(' (')]
+        lookup_name_to_mission[short_name] = mission
 
 lookup_id_to_campaign: Dict[int, SC2Campaign] = {
     campaign.id: campaign for campaign in SC2Campaign
