@@ -111,8 +111,8 @@ class DarkSouls3World(World):
                 [boss for boss in all_bosses if self._allow_boss_for_yhorm(boss)])
 
             # If Yhorm is early, make sure the Storm Ruler is easily available to avoid BK
+            # Iudex Gundyr is handled separately in _fill_local_items
             if (
-                self.yhorm_location.name == "Iudex Gundyr" or
                 self.yhorm_location.name == "Vordt of the Boreal Valley" or (
                     self.yhorm_location.name == "Dancer of the Boreal Valley" and
                     not self.options.late_basin_of_vows
@@ -498,7 +498,7 @@ class DarkSouls3World(World):
         if not candidate_locations:
             warning(f"Couldn't place \"{name}\" in a valid location for {self.player_name}. Adding it to starting inventory instead.")
             location = next(
-                (location for location in self.multiworld.get_locations() if location.item == item),
+                (location for location in self.multiworld.get_locations(self.player) if location.data.default_item_name == item.name),
                 None
             )
             if location: self._replace_with_filler(location)
@@ -1291,7 +1291,7 @@ class DarkSouls3World(World):
 
         The rule can just be a single item/event name as well as an explicit rule lambda.
         """
-        locations = location if type(location) is list else [location]
+        locations = location if isinstance(location, list) else [location]
         for location in locations:
             data = location_dictionary[location]
             if data.dlc and not self.options.enable_dlc: return
@@ -1306,7 +1306,7 @@ class DarkSouls3World(World):
     def _add_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the entrance to the given region."""
         assert region in location_tables
-        if not any(region == reg.name for reg in self.multiworld.regions): return
+        if not any(region == reg for reg in self.multiworld.regions.region_cache[self.player]): return
         if isinstance(rule, str):
             if " -> " not in rule:
                 assert item_dictionary[rule].classification == ItemClassification.progression
