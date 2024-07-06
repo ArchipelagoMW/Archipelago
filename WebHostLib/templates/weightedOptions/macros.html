@@ -18,7 +18,11 @@
         <tbody>
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
-                    {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name|lower else None) }}
+                    {% if option.default != 'random' %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
+                    {% else %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
+                    {% endif %}
                 {% endif %}
             {% endfor %}
             {{ RandomRow(option_name, option) }}
@@ -34,16 +38,16 @@
         Normal range: {{ option.range_start }} - {{ option.range_end }}
         {% if option.special_range_names %}
             <br /><br />
-            The following values has special meaning, and may fall outside the normal range.
+            The following values have special meanings, and may fall outside the normal range.
             <ul>
                 {% for name, value in option.special_range_names.items() %}
-                    <li>{{ value }}: {{ name }}</li>
+                    <li>{{ value }}: {{ name|replace("_", " ")|title }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
         <div class="add-option-div">
             <input type="number" class="range-option-value" data-option="{{ option_name }}" />
-            <button class="add-range-option-button" data-option="{{ option_name }}">Add</button>
+            <button type="button" class="add-range-option-button" data-option="{{ option_name }}">Add</button>
         </div>
     </div>
     <table class="range-rows" data-option="{{ option_name }}">
@@ -68,7 +72,7 @@
         This option allows custom values only. Please enter your desired values below.
         <div class="custom-value-wrapper">
             <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
-            <button data-option="{{ option_name }}">Add</button>
+            <button type="button" data-option="{{ option_name }}">Add</button>
         </div>
         <table>
             <tbody>
@@ -85,14 +89,18 @@
         Custom values are also allowed for this option. To create one, enter it into the input box below.
         <div class="custom-value-wrapper">
             <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
-            <button data-option="{{ option_name }}">Add</button>
+            <button type="button" data-option="{{ option_name }}">Add</button>
         </div>
     </div>
     <table>
         <tbody>
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
-                    {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                    {% if option.default != 'random' %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
+                    {% else %}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
+                    {% endif %}
                 {% endif %}
             {% endfor %}
             {{ RandomRow(option_name, option) }}
