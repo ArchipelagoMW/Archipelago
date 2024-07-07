@@ -35,7 +35,7 @@ def has_item(state: CollectionState, player: int, item: str) -> bool:
     return state.has(item, player)
 
 def has_at_least(state: CollectionState, player: int, item: str, x: int) -> bool:
-    return state.count(item, player) >= x
+    return state.has(item, player, x)
 
 def has_postcards(state: CollectionState, player: int, postcards_required: int) -> bool:
     postcards_available = 0
