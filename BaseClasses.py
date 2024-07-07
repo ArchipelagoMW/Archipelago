@@ -718,10 +718,6 @@ class CollectionState():
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
 
-    def item_count(self, item: str, player: int) -> int:
-        Utils.deprecate("Use count instead.")
-        return self.count(item, player)
-
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
         found: int = 0
@@ -732,7 +728,7 @@ class CollectionState():
                 return True
         return False
     
-    def has_from_list_exclusive(self, items: Iterable[str], player: int, count: int) -> bool:
+    def has_from_list_unique(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list.
         Ignores duplicates of the same item."""
         found: int = 0
@@ -747,7 +743,7 @@ class CollectionState():
         """Returns the cumulative count of items from a list present in state."""
         return sum(self.prog_items[player][item_name] for item_name in items)
     
-    def count_from_list_exclusive(self, items: Iterable[str], player: int) -> int:
+    def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state. Ignores duplicates of the same item."""
         return sum(self.prog_items[player][item_name] > 0 for item_name in items)
 
@@ -762,7 +758,7 @@ class CollectionState():
                 return True
         return False
 
-    def has_group_exclusive(self, item_name_group: str, player: int, count: int = 1) -> bool:
+    def has_group_unique(self, item_name_group: str, player: int, count: int = 1) -> bool:
         """Returns True if the state contains at least `count` items present in a specified item group.
         Ignores duplicates of the same item.
         """
@@ -782,7 +778,7 @@ class CollectionState():
             for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]
         )
 
-    def count_group_exclusive(self, item_name_group: str, player: int) -> int:
+    def count_group_unique(self, item_name_group: str, player: int) -> int:
         """Returns the cumulative count of items from an item group present in state.
         Ignores duplicates of the same item."""
         player_prog_items = self.prog_items[player]

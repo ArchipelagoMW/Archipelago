@@ -1,4 +1,4 @@
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 from collections.abc import Callable
 from BaseClasses import CollectionState
 from worlds.generic.Rules import forbid_item
@@ -78,7 +78,7 @@ def all_skull_dials_available(state: CollectionState, player: int) -> bool:
 
 
 def get_rules_lookup(player: int):
-    rules_lookup: Dict[str, List[Callable[[CollectionState], bool]]] = {
+    rules_lookup: Dict[str, Dict[str, Callable[[CollectionState], bool]]] = {
         "entrances": {
             "To Office Elevator From Underground Blue Tunnels": lambda state: state.has("Key for Office Elevator", player),
             "To Office Elevator From Office": lambda state: state.has("Key for Office Elevator", player),
@@ -195,6 +195,15 @@ def set_rules(world: "ShiversWorld") -> None:
         for location_name, rule in rules_lookup["lightning"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
+    # Register indirect conditions
+    multiworld.register_indirect_condition(world.get_region("Burial"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Egypt"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Gods Room"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Tar River"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Werewolf"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Tar River From Lobby"))
+
     # forbid cloth in janitor closet and oil in tar river
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Top DUPE", player)
@@ -226,7 +235,3 @@ def set_rules(world: "ShiversWorld") -> None:
 
     # Set completion condition
     multiworld.completion_condition[player] = lambda state: (first_nine_ixupi_capturable(state, player) and lightning_capturable(state, player))
-
-
-
-

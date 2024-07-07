@@ -46,7 +46,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.6"
+__version__ = "0.5.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -101,8 +101,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
 
     @functools.wraps(function)
     def wrap(self: S, arg: T) -> RetType:
-        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
-                                                        getattr(self, cache_name, None))
+        cache: Optional[Dict[T, RetType]] = getattr(self, cache_name, None)
         if cache is None:
             res = function(self, arg)
             setattr(self, cache_name, {arg: res})
@@ -209,10 +208,11 @@ def output_path(*path: str) -> str:
 
 def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
     if is_windows:
-        os.startfile(filename)
+        os.startfile(filename)  # type: ignore
     else:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
+        assert open_command, "Didn't find program for open_file! Please report this together with system details."
         subprocess.call([open_command, filename])
 
 
@@ -300,21 +300,21 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: typing.Any, value: typing.Any):
+def persistent_store(category: str, key: str, value: typing.Any):
     path = user_path("_persistent_storage.yaml")
-    storage: dict = persistent_load()
-    category = storage.setdefault(category, {})
-    category[key] = value
+    storage = persistent_load()
+    category_dict = storage.setdefault(category, {})
+    category_dict[key] = value
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
 
-def persistent_load() -> typing.Dict[str, dict]:
-    storage = getattr(persistent_load, "storage", None)
+def persistent_load() -> Dict[str, Dict[str, Any]]:
+    storage: Union[Dict[str, Dict[str, Any]], None] = getattr(persistent_load, "storage", None)
     if storage:
         return storage
     path = user_path("_persistent_storage.yaml")
-    storage: dict = {}
+    storage = {}
     if os.path.exists(path):
         try:
             with open(path, "r") as f:
@@ -323,7 +323,7 @@ def persistent_load() -> typing.Dict[str, dict]:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
         storage = {}
-    persistent_load.storage = storage
+    setattr(persistent_load, "storage", storage)
     return storage
 
 
@@ -365,6 +365,7 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
 
+
 def get_default_adjuster_settings(game_name: str) -> Namespace:
     import LttPAdjuster
     adjuster_settings = Namespace()
@@ -383,7 +384,9 @@ def get_adjuster_settings(game_name: str) -> Namespace:
     default_settings = get_default_adjuster_settings(game_name)
 
     # Fill in any arguments from the argparser that we haven't seen before
-    return Namespace(**vars(adjuster_settings), **{k:v for k,v in vars(default_settings).items() if k not in vars(adjuster_settings)})
+    return Namespace(**vars(adjuster_settings), **{
+        k: v for k, v in vars(default_settings).items() if k not in vars(adjuster_settings)
+    })
 
 
 @cache_argsless
@@ -407,13 +410,13 @@ safe_builtins = frozenset((
 class RestrictedUnpickler(pickle.Unpickler):
     generic_properties_module: Optional[object]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
         self.generic_properties_module = None
 
-    def find_class(self, module, name):
+    def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by MultiServer -> savegame/multidata
@@ -437,7 +440,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
 
-def restricted_loads(s):
+def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
@@ -454,6 +457,15 @@ class ByValue:
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
+
+    def __init__(self,
+                 default_factory: typing.Callable[[Any], Any] = None,
+                 seq: typing.Union[typing.Mapping, typing.Iterable, None] = None,
+                 **kwargs):
+        if seq is not None:
+            super().__init__(default_factory, seq, **kwargs)
+        else:
+            super().__init__(default_factory, **kwargs)
 
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
@@ -493,7 +505,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     file_handler.setFormatter(logging.Formatter(log_format))
 
     class Filter(logging.Filter):
-        def __init__(self, filter_name, condition):
+        def __init__(self, filter_name: str, condition: typing.Callable[[logging.LogRecord], bool]) -> None:
             super().__init__(filter_name)
             self.condition = condition
 
@@ -541,10 +553,11 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         f"Archipelago ({__version__}) logging initialized"
         f" on {platform.platform()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        f"{' (frozen)' if is_frozen() else ''}"
     )
 
 
-def stream_input(stream, queue):
+def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
     def queuer():
         while 1:
             try:
@@ -572,7 +585,7 @@ class VersionException(Exception):
     pass
 
 
-def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+def chaining_prefix(index: int, labels: typing.Sequence[str]) -> str:
     text = ""
     max_label = len(labels) - 1
     while index > max_label:
@@ -595,7 +608,7 @@ def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P
     return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
-def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit: typing.Optional[int] = None) \
         -> typing.List[typing.Tuple[str, int]]:
     import jellyfish
 
@@ -603,21 +616,55 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
         return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
                 / max(len(word1), len(word2)))
 
-    limit: int = limit if limit else len(wordlist)
+    limit = limit if limit else len(word_list)
     return list(
         map(
             lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
             sorted(
-                map(lambda candidate:
-                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
-                    wordlist),
+                map(lambda candidate: (candidate, get_fuzzy_ratio(input_word, candidate)), word_list),
                 key=lambda element: element[1],
-                reverse=True)[0:limit]
+                reverse=True
+            )[0:limit]
         )
     )
 
 
-def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
+def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
+    picks = get_fuzzy_results(input_text, possible_answers, limit=2)
+    if len(picks) > 1:
+        dif = picks[0][1] - picks[1][1]
+        if picks[0][1] == 100:
+            return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] < 75:
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+        elif dif > 5:
+            return picks[0][0], True, "Close Match"
+        else:
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+    else:
+        if picks[0][1] > 90:
+            return picks[0][0], True, "Only Option Match"
+        else:
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+
+
+def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    if "did you mean " in text:
+        for question in ("Didn't find something that closely matches",
+                         "Too many close matches"):
+            if text.startswith(question):
+                name = get_text_between(text, "did you mean '",
+                                        "'? (")
+                return f"!{command} {name}"
+    elif text.startswith("Missing: "):
+        return text.replace("Missing: ", "!hint_location ")
+    return None
+
+
+def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
 
@@ -734,7 +781,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
-def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
+def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: Union[str, Dict[str, Any]]) -> str:
         if (not isinstance(element, str)):
@@ -788,7 +835,7 @@ class DeprecateDict(dict):
     log_message: str
     should_error: bool
 
-    def __init__(self, message, error: bool = False) -> None:
+    def __init__(self, message: str, error: bool = False) -> None:
         self.log_message = message
         self.should_error = error
         super().__init__()
