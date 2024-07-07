@@ -60,8 +60,6 @@ FarmingLogicMixin]]):
         items = dict()
         if ModNames.archaeology in self.options.mods:
             items.update(self.get_archaeology_item_rules())
-        if ModNames.distant_lands in self.options.mods:
-            items.update(self.get_distant_lands_item_rules())
         if ModNames.boarding_house in self.options.mods:
             items.update(self.get_boarding_house_item_rules())
         return items
@@ -104,14 +102,6 @@ FarmingLogicMixin]]):
                     archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
         archaeology_item_rules[ModTrash.rusty_scrap] = self.logic.has(ModMachine.grinder) & self.logic.has_any(*all_artifacts)
         return archaeology_item_rules
-
-    def get_distant_lands_item_rules(self):
-        return {
-            DistantLandsSeed.vile_ancient_fruit: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(
-                ModQuest.CorruptedCropsTask),
-            DistantLandsSeed.void_mint: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(
-                ModQuest.CorruptedCropsTask),
-        }
 
     def get_boarding_house_item_rules(self):
         return {
