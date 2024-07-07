@@ -58,8 +58,6 @@ FarmingLogicMixin]]):
 
     def get_modded_item_rules(self) -> Dict[str, StardewRule]:
         items = dict()
-        if ModNames.sve in self.options.mods:
-            items.update(self.get_sve_item_rules())
         if ModNames.archaeology in self.options.mods:
             items.update(self.get_archaeology_item_rules())
         if ModNames.distant_lands in self.options.mods:
@@ -69,68 +67,9 @@ FarmingLogicMixin]]):
         return items
 
     def modify_vanilla_item_rules_with_mod_additions(self, item_rule: Dict[str, StardewRule]):
-        if ModNames.sve in self.options.mods:
-            item_rule.update(self.get_modified_item_rules_for_sve(item_rule))
         if ModNames.deepwoods in self.options.mods:
             item_rule.update(self.get_modified_item_rules_for_deep_woods(item_rule))
         return item_rule
-
-    def get_sve_item_rules(self):
-        return {SVEGift.aged_blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 28000),
-                SVEGift.blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 3000),
-                ModLoot.green_mushroom: self.logic.region.can_reach(SVERegion.highlands_outside) &
-                                        self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.logic.season.has_any_not_winter(),
-                ModLoot.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_galaxy_weapon &
-                                                 self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
-                ModLoot.swirl_stone: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
-                ModLoot.void_soul: self.logic.region.can_reach(
-                    SVERegion.crimson_badlands) & self.logic.combat.has_good_weapon & self.logic.cooking.can_cook(),
-                SVEForage.winter_star_rose: self.logic.region.can_reach(SVERegion.summit) & self.logic.season.has(Season.winter),
-                SVEForage.bearberry: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has(Season.winter),
-                SVEForage.poison_mushroom: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has_any([Season.summer, Season.fall]),
-                SVEForage.red_baneberry: self.logic.region.can_reach(Region.secret_woods) & self.logic.season.has(Season.summer),
-                SVEForage.ferngill_primrose: self.logic.region.can_reach(SVERegion.summit) & self.logic.season.has(Season.spring),
-                SVEForage.goldenrod: self.logic.region.can_reach(SVERegion.summit) & (
-                        self.logic.season.has(Season.summer) | self.logic.season.has(Season.fall)),
-                                ModEdible.aegis_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 28000),
-                ModEdible.lightning_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 12000),
-                ModEdible.barbarian_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 22000),
-                ModEdible.gravity_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 4000),
-                SVEForage.conch: self.logic.region.can_reach_any((Region.beach, SVERegion.fable_reef)),
-                SVEForage.dewdrop_berry: self.logic.region.can_reach(SVERegion.enchanted_grove),
-                SVEForage.sand_dollar: self.logic.region.can_reach(SVERegion.fable_reef) | (self.logic.region.can_reach(Region.beach) &
-                                                                                            self.logic.season.has_any([Season.summer, Season.fall])),
-                SVEForage.golden_ocean_flower: self.logic.region.can_reach(SVERegion.fable_reef),
-                SVEMeal.grampleton_orange_chicken: self.logic.money.can_spend_at(Region.saloon, 650) & self.logic.relationship.has_hearts(ModNPC.sophia, 6),
-                ModEdible.hero_elixir: self.logic.money.can_spend_at(SVERegion.isaac_shop, 8000),
-                SVEForage.four_leaf_clover: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.forest_west)) &
-                                            self.logic.season.has_any([Season.spring, Season.summer]),
-                SVEForage.mushroom_colony: self.logic.region.can_reach_any((Region.secret_woods, SVERegion.junimo_woods, SVERegion.forest_west)) &
-                                           self.logic.season.has(Season.fall),
-                SVEForage.rusty_blade: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
-                SVEForage.rafflesia: self.logic.region.can_reach(Region.secret_woods),
-                SVEBeverage.sports_drink: self.logic.money.can_spend_at(Region.hospital, 750),
-                "Stamina Capsule": self.logic.money.can_spend_at(Region.hospital, 4000),
-                SVEForage.thistle: self.logic.region.can_reach(SVERegion.summit),
-                ModLoot.void_pebble: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_great_weapon,
-                ModLoot.void_shard: self.logic.region.can_reach(SVERegion.crimson_badlands) & self.logic.combat.has_galaxy_weapon &
-                                    self.logic.skill.has_level(Skill.combat, 10) & self.logic.region.can_reach(Region.saloon) & self.logic.time.has_year_three
-                }
-        # @formatter:on
-
-    def get_modified_item_rules_for_sve(self, items: Dict[str, StardewRule]):
-        return {
-            Loot.void_essence: items[Loot.void_essence] | self.logic.region.can_reach(SVERegion.highlands_cavern) | self.logic.region.can_reach(
-                SVERegion.crimson_badlands),
-            Loot.solar_essence: items[Loot.solar_essence] | self.logic.region.can_reach(SVERegion.crimson_badlands),
-            Ore.copper: items[Ore.copper] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &
-                                             self.logic.combat.can_fight_at_level(Performance.great)),
-            Ore.iron: items[Ore.iron] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &
-                                         self.logic.combat.can_fight_at_level(Performance.great)),
-            Ore.iridium: items[Ore.iridium] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.crimson_badlands) &
-                                               self.logic.combat.can_fight_at_level(Performance.maximum)),
-            SVEFish.dulse_seaweed: self.logic.fishing.can_fish_at(Region.beach) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter])
-        }
 
     def get_modified_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
         options_to_update = {
