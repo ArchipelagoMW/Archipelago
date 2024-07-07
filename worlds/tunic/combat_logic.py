@@ -54,7 +54,7 @@ enemy_encounters: Dict[str, EncounterData] = {
     "Garden Knight": EncounterData(12, [[sword]], False),
     "Siege Engine": EncounterData(16),
     "Librarian": EncounterData(16, [[fire_wand], [gun]]),
-    "Boss Scavenger": EncounterData(24),
+    "Boss Scavenger": EncounterData(24, [[sword]], False),
     "Gauntlet": EncounterData(10, [[sword, fire_wand], [sword, gun]]),
     # the other heir requirements are included in the entrance rule for the heir fight
     "The Heir": EncounterData(28),
@@ -98,24 +98,29 @@ def has_required_items(required_items: List[List[str]], stick_req: bool, state: 
 
 def sum_power(state: CollectionState, player: int) -> int:
     return (get_att_power(state, player) + get_def_power(state, player) + get_potion_power(state, player)
-            + get_hp_power(state, player) + get_mp_power(state, player) + get_other_power(state, player))
+            + get_hp_power(state, player) + get_mp_power(state, player) + get_sp_power(state, player)
+            + get_other_power(state, player))
 
 
 def get_att_power(state: CollectionState, player: int) -> int:
     # no stick, no power
     if not has_melee(state, player):
-        return False
-    power = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player)
+        return 0
+    power = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player) * 4 // 3
     sword_upgrades = state.count("Sword Upgrade", player)
-    # +4 power from sword, +2 power for the next two sword (includes the attack buff from getting it)
+    # longer swords are effectively an extra attack upgrade in terms of how much better you do with range
     if sword_upgrades >= 2:
-        power += max(8, sword_upgrades * 2)
+        power += min(10, sword_upgrades * 8 // 3)
+    # stick doesn't scale super well in terms of damage, cap it at 4 power
+    if not has_sword(state, player):
+        power = min(4, power)
     return power
 
 
 # defense helps a lot when you're trying not to die, as it turns out
 def get_def_power(state: CollectionState, player: int) -> int:
-    return min(4, state.count_from_list({"DEF Offering", "Hero Relic - DEF", "Secret Legend", "Phonomath"}, player))
+    def_upgrades = state.count_from_list({"DEF Offering", "Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)
+    return min(4, def_upgrades * 2 // 3)
 
 
 # healing is kinda power, right?
@@ -123,11 +128,11 @@ def get_potion_power(state: CollectionState, player: int) -> int:
     potion_count = state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
     if potion_count == 0:
         return 0
-    power = min(3, potion_count // 2)
-    # get potion upgrades
-    power += min(3, state.count_from_list({"Potion Offering", "Hero Relic - POTION",
-                                           "Just Some Pals", "Spring Falls", "Back To Work"}, player))
-    return power
+    potion_upgrade_count = state.count_from_list({"Potion Offering", "Hero Relic - POTION",
+                                                  "Just Some Pals", "Spring Falls", "Back To Work"}, player)
+    total_healing = potion_count * (30 + 10 * potion_upgrade_count)
+    # effectively .5 power per unupgraded flask
+    return min(6, total_healing // 60)
 
 
 def get_hp_power(state: CollectionState, player: int) -> int:
@@ -139,10 +144,15 @@ def get_mp_power(state: CollectionState, player: int) -> int:
         return 0
     # default 2 power for having a wand or gun. Having both doesn't increase it since they do basically the same thing
     power = 2
-    # max of 3 power from mp gains
+    # max of 3 power from mp gains, get +.5 power per mp offering (since each is half a tick)
     power += min(3, state.count_from_list({"MP Offering", "Hero Relic - MP",
-                                           "Sacred Geometry", "Vintage", "Dusty"}, player))
+                                           "Sacred Geometry", "Vintage", "Dusty"}, player) // 2)
     return power
+
+
+def get_sp_power(state: CollectionState, player: int) -> int:
+    return min(2, state.count_from_list({"SP Offering", "Hero Relic - SP",
+                                         "Mr Mayor", "Power Up", "Regal Weasel", "Forever Friend"}, player) // 4)
 
 
 def get_other_power(state: CollectionState, player: int) -> int:
