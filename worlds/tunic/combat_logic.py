@@ -100,22 +100,39 @@ def sum_power(state: CollectionState, player: int) -> int:
     print("att power is", get_att_power(state, player))
     print("effective hp is", get_effective_hp(state, player))
     print("mp power is", get_mp_power(state, player))
-    print("sum power is", int(get_att_power(state, player) * get_effective_hp(state, player) / 80 + get_mp_power(state, player)))
+    power = int(get_att_power(state, player) * get_effective_hp(state, player) / 80 + get_mp_power(state, player))
+    print("sum power is", power)
     print()
-    return int(get_att_power(state, player) * get_effective_hp(state, player) / 80 + get_mp_power(state, player))
+    return power
 
 
 def get_att_power(state: CollectionState, player: int) -> int:
     # no stick, no power
     if not has_melee(state, player):
         return 0
-    power = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player) * 4 // 3
+    power = 0
+
+    sword_state = False
+    if has_sword(state, player):
+        sword_state = True
+        # sword has a base power of 4, which is an arbitrary number
+        power = 4
+
+    att_upgrades = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player)
     sword_upgrades = state.count("Sword Upgrade", player)
-    # longer swords are effectively an extra attack upgrade in terms of how much better you do with range
-    if sword_upgrades >= 2:
-        power += min(10, sword_upgrades * 8 // 3)
+    if sword_upgrades >= 3:
+        power += min(2, (sword_upgrades - 2))
+        att_upgrades += sword_upgrades - 2
+
+    # sword slash base damage is 10, max damage is 20, min damage is 5, and is modified by player attack - enemy defense
+    # you do min damage at (player attack - enemy defense) <= -3
+    # you do max damage at (player attack - enemy defense) >= 4
+    # scav boss has 5 defense, rudelings have 2 defense, hedgehogs have 1 defense
+    # maybe later we'll have a system to compare attack with enemy defense, but for now let's keep it simple
+    power += sword_upgrades // 2
+
     # stick doesn't scale super well in terms of damage, cap it at 4 power
-    if not has_sword(state, player):
+    if not sword_state:
         power = min(4, power)
     return power
 
