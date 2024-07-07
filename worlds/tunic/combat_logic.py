@@ -97,9 +97,7 @@ def has_required_items(required_items: List[List[str]], stick_req: bool, state: 
 
 
 def sum_power(state: CollectionState, player: int) -> int:
-    return (get_att_power(state, player) + get_def_power(state, player) + get_potion_power(state, player)
-            + get_hp_power(state, player) + get_mp_power(state, player) + get_sp_power(state, player)
-            + get_other_power(state, player))
+    return (get_att_power(state, player) + get_mp_power(state, player)) * get_defensive_power(state, player)
 
 
 def get_att_power(state: CollectionState, player: int) -> int:
@@ -117,26 +115,18 @@ def get_att_power(state: CollectionState, player: int) -> int:
     return power
 
 
-# defense helps a lot when you're trying not to die, as it turns out
-def get_def_power(state: CollectionState, player: int) -> int:
-    def_upgrades = state.count_from_list({"DEF Offering", "Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)
-    return min(4, def_upgrades * 2 // 3)
-
-
-# healing is kinda power, right?
-def get_potion_power(state: CollectionState, player: int) -> int:
+def get_defensive_power(state: CollectionState, player: int) -> int:
+    hp_upgrades = state.count_from_list({"HP Offering", "Hero Relic - HP"}, player)
+    player_hp = 80 + hp_upgrades * 20
+    def_level = 1 + state.count_from_list({"DEF Offering", "Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)
     potion_count = state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
-    if potion_count == 0:
-        return 0
-    potion_upgrade_count = state.count_from_list({"Potion Offering", "Hero Relic - POTION",
-                                                  "Just Some Pals", "Spring Falls", "Back To Work"}, player)
-    total_healing = potion_count * (30 + 10 * potion_upgrade_count)
-    # effectively .5 power per unupgraded flask
-    return min(6, total_healing // 60)
-
-
-def get_hp_power(state: CollectionState, player: int) -> int:
-    return min(3, state.count_from_list({"HP Offering", "Hero Relic - HP"}, player) // 2)
+    potion_upgrade_level = 1 + state.count_from_list({"Potion Offering", "Hero Relic - POTION",
+                                                      "Just Some Pals", "Spring Falls", "Back To Work"}, player)
+    # total health you get from potions
+    total_healing = potion_count * (20 + 10 * potion_upgrade_level)
+    has_shield = state.has(shield, player)
+    has_laurels = state.has(laurels, player)
+    return 20
 
 
 def get_mp_power(state: CollectionState, player: int) -> int:
@@ -150,15 +140,6 @@ def get_mp_power(state: CollectionState, player: int) -> int:
     return power
 
 
-def get_sp_power(state: CollectionState, player: int) -> int:
-    return min(2, state.count_from_list({"SP Offering", "Hero Relic - SP",
-                                         "Mr Mayor", "Power Up", "Regal Weasel", "Forever Friend"}, player) // 4)
-
-
-def get_other_power(state: CollectionState, player: int) -> int:
-    power = 0
-    if state.has("Shield", player):
-        power += 2
-    if state.has("Hero's Laurels", player):
-        power += 4
-    return power
+def get_sp_count(state: CollectionState, player: int) -> int:
+    return state.count_from_list({"SP Offering", "Hero Relic - SP",
+                                  "Mr Mayor", "Power Up", "Regal Weasel", "Forever Friend"}, player)
