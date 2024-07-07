@@ -5,7 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
              under rock needing bind song option)
 """
 
-from worlds.aquaria.test import AquariaTestBase, after_home_water_locations
+from . import AquariaTestBase, after_home_water_locations
 
 
 class BindSongAccessTest(AquariaTestBase):
