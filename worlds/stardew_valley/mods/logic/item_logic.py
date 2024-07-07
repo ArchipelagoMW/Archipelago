@@ -23,24 +23,14 @@ from ...logic.tool_logic import ToolLogicMixin
 from ...options import Cropsanity
 from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
-from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
-from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop
-from ...strings.fish_names import ModTrash, SVEFish
-from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.forageable_names import SVEForage, DistantLandsForageable
-from ...strings.gift_names import SVEGift
+from ...strings.craftable_names import ModCraftable, ModMachine
+from ...strings.fish_names import ModTrash
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil
-from ...strings.monster_drop_names import ModLoot, Loot
 from ...strings.performance_names import Performance
-from ...strings.quest_names import ModQuest
-from ...strings.region_names import Region, SVERegion, DeepWoodsRegion, BoardingHouseRegion
-from ...strings.season_names import Season
-from ...strings.seed_names import SVESeed, DistantLandsSeed
-from ...strings.skill_names import Skill
+from ...strings.region_names import DeepWoodsRegion, BoardingHouseRegion
 from ...strings.tool_names import Tool, ToolMaterial
-from ...strings.villager_names import ModNPC
 
 display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
 display_items = all_artifacts + all_fossils
