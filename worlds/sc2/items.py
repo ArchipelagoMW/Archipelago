@@ -60,6 +60,7 @@ class ZergItemType(ItemTypeEnum):
     """Zerg global economy upgrades, like automated extractors"""
     Mutation_2 = "Mutation", 10
     Mutation_3 = "Mutation", 11
+    Mutation_4 = "Mutation", 12
 
 
 class ProtossItemType(ItemTypeEnum):
@@ -1380,6 +1381,13 @@ item_table = {
         ItemData(289 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 29, SC2Race.ZERG, parent_item=item_names.CORRUPTOR,
                  origin={"ext"}),
 
+    item_names.PRIMAL_IGNITER_CONCENTRATED_FIRE:
+        ItemData(290 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 0, SC2Race.ZERG, parent_item=item_names.ROACH_PRIMAL_IGNITER_ASPECT,
+                 origin={"ext"}),
+    item_names.PRIMAL_IGNITER_PRIMAL_TENACITY:
+        ItemData(291 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 1, SC2Race.ZERG, parent_item=item_names.ROACH_PRIMAL_IGNITER_ASPECT,
+                 origin={"ext"}),
+
     item_names.ZERGLING_RAPTOR_STRAIN:
         ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING,
                  origin={"hots"}),
@@ -1476,6 +1484,7 @@ item_table = {
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: ItemData(801 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 7, SC2Race.ZERG, origin={"bw"}),
     item_names.ROACH_RAVAGER_ASPECT: ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 8, SC2Race.ZERG, origin={"ext"}),
     item_names.OVERLORD_OVERSEER_ASPECT: ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 4, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
+    item_names.ROACH_PRIMAL_IGNITER_ASPECT: ItemData(804 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 9, SC2Race.ZERG, origin={"ext"}),
 
 
     # Protoss Units (those that aren't as items in WoL (Prophecy))
