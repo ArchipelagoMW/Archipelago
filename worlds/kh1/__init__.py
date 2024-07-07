@@ -226,12 +226,12 @@ class KH1World(World):
         slot_data = {"xpmult": int(self.options.exp_multiplier)/16,
                     "required_reports_eotw": self.determine_reports_required_to_open_end_of_the_world(),
                     "required_reports_door": self.determine_reports_required_to_open_final_rest_door(),
-                    ,"door": self.options.final_rest_door.current_key
-                    ,"seed": self.multiworld.seed_name
-                    ,"advanced_logic": bool(self.options.advanced_logic)
-                    ,"hundred_acre_wood": bool(self.options.hundred_acre_wood)
-                    ,"atlantica": bool(self.options.atlantica)
-                    ,"goal": str(self.options.goal.current_key)}
+                    "door": self.options.final_rest_door.current_key,
+                    "seed": self.multiworld.seed_name,
+                    "advanced_logic": bool(self.options.advanced_logic),
+                    "hundred_acre_wood": bool(self.options.hundred_acre_wood),
+                    "atlantica": bool(self.options.atlantica),
+                    "goal": str(self.options.goal.current_key)}
         if self.options.randomize_keyblade_stats:
             min_str_bonus = min(self.options.keyblade_min_str, self.options.keyblade_max_str)
             max_str_bonus = max(self.options.keyblade_min_str, self.options.keyblade_max_str)
@@ -278,7 +278,7 @@ class KH1World(World):
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
     
-    def get_numbers_of_reports_to_consider(self):
+    def get_numbers_of_reports_to_consider(self) -> List:
         numbers_to_consider = []
         if self.options.end_of_the_world_unlock.current_key == "reports":
             numbers_to_consider.append(self.options.required_reports_eotw)
@@ -289,21 +289,21 @@ class KH1World(World):
         numbers_to_consider.sort()
         return numbers_to_consider
     
-    def determine_reports_in_pool(self):
+    def determine_reports_in_pool(self) -> int:
         numbers_to_consider = self.get_numbers_of_reports_to_consider()
         if len(numbers_to_consider) > 0:
             return max(numbers_to_consider)
         else:
             return 0
     
-    def determine_reports_required_to_open_end_of_the_world(self):
+    def determine_reports_required_to_open_end_of_the_world(self) -> int:
         if self.options.end_of_the_world_unlock.current_key == "reports":
             numbers_to_consider = self.get_numbers_of_reports_to_consider()
             if len(numbers_to_consider) > 0:
                 return numbers_to_consider[0]
         return 14
     
-    def determine_reports_required_to_open_final_rest_door(self):
+    def determine_reports_required_to_open_final_rest_door(self) -> int:
         if self.options.final_rest_door.current_key == "reports":
             numbers_to_consider = self.get_numbers_of_reports_to_consider()
             if len(numbers_to_consider) == 3:
