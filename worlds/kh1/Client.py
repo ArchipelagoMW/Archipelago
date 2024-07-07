@@ -188,7 +188,7 @@ class KH1Context(CommonContext):
 
 
 async def game_watcher(ctx: KH1Context):
-    from worlds.kh1.Locations import lookup_id_to_name
+    from .Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
         global death_link
         if death_link and "DeathLink" not in ctx.tags:
