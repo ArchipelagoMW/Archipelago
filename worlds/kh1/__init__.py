@@ -94,7 +94,7 @@ class KH1World(World):
             i = self.options.force_stats_on_levels - 1
             while len(level_up_item_pool) > 0 and i < self.options.level_checks:
                 self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
-                i = i + 1
+                i += 1
         
         #Calculate prefilled locations and items
         if True: #Allow notepad++ to collpase this section
