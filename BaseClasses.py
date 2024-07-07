@@ -524,10 +524,10 @@ class MultiWorld():
         and then a set of all of the unreachable locations.
         """
         state = CollectionState(self)
-        locations = set()
-        events = set()
+        locations: Set[Location] = set()
+        events: Set[Location] = set()
         for location in self.get_filled_locations():
-            if type(location.item.code) == int:
+            if type(location.item.code) is int:
                 locations.add(location)
             else:
                 events.add(location)
@@ -536,7 +536,7 @@ class MultiWorld():
             sphere: Set[Location] = set()
 
             # cull events out
-            done_events = {None}
+            done_events: Set[Union[Location, None]] = {None}
             while done_events:
                 done_events = set()
                 for event in events:
