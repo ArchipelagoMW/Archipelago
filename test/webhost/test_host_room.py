@@ -127,7 +127,7 @@ class TestHostFakeRoom(TestBase):
     def test_host_room_own(self) -> None:
         """Verify that own room gives the full output."""
         with open(self.log_filename, "w", encoding="utf-8-sig") as f:
-            text = "super secret"
+            text = "* should be visible *"
             f.write(text)
 
         with self.app.app_context(), self.app.test_request_context():
@@ -147,7 +147,7 @@ class TestHostFakeRoom(TestBase):
             room.last_port = 12345
 
         with open(self.log_filename, "w", encoding="utf-8-sig") as f:
-            text = "super secret"
+            text = "* should not be visible *"
             f.write(text)
 
         other_client = self.app.test_client()
