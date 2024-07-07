@@ -223,11 +223,9 @@ class KH1World(World):
         return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def fill_slot_data(self) -> dict:
-        required_reports_eotw = self.determine_reports_required_to_open_end_of_the_world()
-        required_reports_door = self.determine_reports_required_to_open_final_rest_door()
-        slot_data = {"xpmult": int(self.options.exp_multiplier)/16
-                    ,"required_reports_eotw": int(required_reports_eotw)
-                    ,"required_reports_door": int(required_reports_door)
+        slot_data = {"xpmult": int(self.options.exp_multiplier)/16,
+                    "required_reports_eotw": self.determine_reports_required_to_open_end_of_the_world(),
+                    "required_reports_door": self.determine_reports_required_to_open_final_rest_door(),
                     ,"door": self.options.final_rest_door.current_key
                     ,"seed": self.multiworld.seed_name
                     ,"advanced_logic": bool(self.options.advanced_logic)
