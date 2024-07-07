@@ -58,7 +58,7 @@ When the player receives an item, your client will display a message displaying 
 
 Please reach out to Gicu#7034 on Discord.
 
-## How do I progress a certain world?
+## How do I progress a in certain world?
 
 ###The evidence boxes aren't spawning in Wonderland.
 
@@ -72,10 +72,10 @@ Firstly, find `Entry Pass` in the multiworld.  Additionally, `Phil Cup`, `Pegasu
 
 Find `Slides` in the multiworld.
 
-###I can't progress Atlantica.
+###I can't progress in Atlantica.
 Find `Crystal Trident` in the multiworld.
 
-###I can't progress Halloween Town.
+###I can't progress in Halloween Town.
 
 Find `Forget-Me-Not` and `Jack-in-the-Box` in the multiworld.
 
