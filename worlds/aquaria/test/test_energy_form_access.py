@@ -5,7 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
              energy form option)
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 
 
 class EnergyFormAccessTest(AquariaTestBase):
@@ -39,8 +39,8 @@ class EnergyFormAccessTest(AquariaTestBase):
             "Mithalas Cathedral, third urn in the path behind the flesh vein",
             "Mithalas Cathedral, fourth urn in the top right room",
             "Mithalas Cathedral, Mithalan Dress",
-            "Mithalas Cathedral right area, urn below the left entrance",
-            "Cathedral boss area, beating Mithalan God",
+            "Mithalas Cathedral, urn below the left entrance",
+            "Mithalas boss area, beating Mithalan God",
             "Kelp Forest top left area, bulb close to the Verse Egg",
             "Kelp Forest top left area, Verse Egg",
             "Kelp Forest boss area, beating Drunian God",
