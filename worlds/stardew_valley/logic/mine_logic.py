@@ -3,13 +3,15 @@ from typing import Union
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
+from .cooking_logic import CookingLogicMixin
+from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
 from .. import options
 from ..options import ToolProgression
-from ..stardew_rule import StardewRule, And, True_
+from ..stardew_rule import StardewRule, True_
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
@@ -22,7 +24,8 @@ class MineLogicMixin(BaseLogicMixin):
         self.mine = MineLogic(*args, **kwargs)
 
 
-class MineLogic(BaseLogic[Union[MineLogicMixin, RegionLogicMixin, ReceivedLogicMixin, CombatLogicMixin, ToolLogicMixin, SkillLogicMixin]]):
+class MineLogic(BaseLogic[Union[HasLogicMixin, MineLogicMixin, RegionLogicMixin, ReceivedLogicMixin, CombatLogicMixin, ToolLogicMixin,
+SkillLogicMixin, CookingLogicMixin]]):
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
         return self.logic.region.can_reach(Region.mines_floor_5)
@@ -57,11 +60,13 @@ class MineLogic(BaseLogic[Union[MineLogicMixin, RegionLogicMixin, ReceivedLogicM
         rules.append(weapon_rule)
         if self.options.tool_progression & ToolProgression.option_progressive:
             rules.append(self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             skill_tier = min(10, max(0, tier * 2))
             rules.append(self.logic.skill.has_level(Skill.combat, skill_tier))
             rules.append(self.logic.skill.has_level(Skill.mining, skill_tier))
-        return And(*rules)
+        if tier >= 4:
+            rules.append(self.logic.cooking.can_cook())
+        return self.logic.and_(*rules)
 
     @cache_self1
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
@@ -79,8 +84,8 @@ class MineLogic(BaseLogic[Union[MineLogicMixin, RegionLogicMixin, ReceivedLogicM
         rules.append(weapon_rule)
         if self.options.tool_progression & ToolProgression.option_progressive:
             rules.append(self.logic.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             skill_tier = min(10, max(0, tier * 2 + 6))
             rules.extend({self.logic.skill.has_level(Skill.combat, skill_tier),
                           self.logic.skill.has_level(Skill.mining, skill_tier)})
-        return And(*rules)
+        return self.logic.and_(*rules)
