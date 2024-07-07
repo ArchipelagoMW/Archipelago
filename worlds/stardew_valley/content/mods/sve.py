@@ -85,7 +85,7 @@ register_mod_content_pack(SVEContentPack(
         ModEdible.hero_elixir: (ShopSource(money_price=8000, shop_region=SVERegion.isaac_shop),),
         ModEdible.aegis_elixir: (ShopSource(money_price=28000, shop_region=SVERegion.galmoran_outpost),),
         SVEBeverage.sports_drink: (ShopSource(money_price=750, shop_region=Region.hospital),),
-        "Stamina Capsule": (ShopSource(money_price=4000, shop_region=Region.hospital),),
+        SVEMeal.stamina_capsule: (ShopSource(money_price=4000, shop_region=Region.hospital),),
     },
     harvest_sources={
         Mushroom.red: (
@@ -112,15 +112,6 @@ register_mod_content_pack(SVEContentPack(
         Fruit.sweet_gem_berry: (
             ForagingSource(regions=(SVERegion.sprite_spring,), seasons=Season.not_winter, other_requirements=(YearRequirement(3),)),
         ),
-
-        Loot.void_essence: (ForagingSource(regions=(SVERegion.highlands_cavern, SVERegion.crimson_badlands), ),),
-        Loot.solar_essence: (ForagingSource(regions=(SVERegion.crimson_badlands,), ),),
-        Ore.copper: (ForagingSource(regions=(SVERegion.highlands_cavern,),
-                                    other_requirements=(CombatRequirement(Performance.great), ToolRequirement(Tool.pickaxe, ToolMaterial.basic))),),
-        Ore.iron: (ForagingSource(regions=(SVERegion.highlands_cavern,),
-                                  other_requirements=(CombatRequirement(Performance.great), ToolRequirement(Tool.pickaxe, ToolMaterial.copper))),),
-        Ore.iridium: (ForagingSource(regions=(SVERegion.highlands_cavern,),
-                                     other_requirements=(CombatRequirement(Performance.great), ToolRequirement(Tool.pickaxe, ToolMaterial.gold))),),
 
         # New items
 

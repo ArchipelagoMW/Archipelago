@@ -28,8 +28,9 @@ from ...strings.fish_names import ModTrash
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil
+from ...strings.monster_drop_names import Loot
 from ...strings.performance_names import Performance
-from ...strings.region_names import DeepWoodsRegion, BoardingHouseRegion
+from ...strings.region_names import SVERegion, DeepWoodsRegion, BoardingHouseRegion
 from ...strings.tool_names import Tool, ToolMaterial
 
 display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
@@ -55,9 +56,25 @@ FarmingLogicMixin]]):
         return items
 
     def modify_vanilla_item_rules_with_mod_additions(self, item_rule: Dict[str, StardewRule]):
+        if ModNames.sve in self.options.mods:
+            item_rule.update(self.get_modified_item_rules_for_sve(item_rule))
         if ModNames.deepwoods in self.options.mods:
             item_rule.update(self.get_modified_item_rules_for_deep_woods(item_rule))
         return item_rule
+
+    def get_modified_item_rules_for_sve(self, items: Dict[str, StardewRule]):
+        return {
+            Loot.void_essence: items[Loot.void_essence] | self.logic.region.can_reach(SVERegion.highlands_cavern) | self.logic.region.can_reach(
+                SVERegion.crimson_badlands),
+            Loot.solar_essence: items[Loot.solar_essence] | self.logic.region.can_reach(SVERegion.crimson_badlands),
+            Ore.copper: items[Ore.copper] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &
+                                             self.logic.combat.can_fight_at_level(Performance.great)),
+            Ore.iron: items[Ore.iron] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &
+                                         self.logic.combat.can_fight_at_level(Performance.great)),
+            Ore.iridium: items[Ore.iridium] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.crimson_badlands) &
+                                               self.logic.combat.can_fight_at_level(Performance.maximum)),
+
+        }
 
     def get_modified_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
         options_to_update = {

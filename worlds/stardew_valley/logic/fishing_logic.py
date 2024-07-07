@@ -19,7 +19,6 @@ from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
-from ..strings.tool_names import ToolMaterial, Tool
 
 
 class FishingLogicMixin(BaseLogicMixin):
