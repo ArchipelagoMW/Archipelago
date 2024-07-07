@@ -219,17 +219,13 @@ randomized with other two-ways. You can set whether an `Entrance` is one-way or 
 attribute.
 
 `Entrance`s can also set the `randomization_group` attribute to allow for grouping during randomization. This can be
-any hashable object you define and may be based on player options. Some possible use cases for grouping include:
+any integer you define and may be based on player options. Some possible use cases for grouping include:
 * Directional matching - only match leftward-facing transitions to rightward-facing ones
 * Terrain matching - only match water transitions to water transitions and land transitions to land transitions
 * Dungeon shuffle - only shuffle entrances within a dungeon/area with each other
 * Combinations of the above
 
 By default, all `Entrance`s are placed in the group 0.
-
-> [!NOTE]
-> Throughout these docs, strings will be used as groups for simplicity and readability. In practice, using an int or 
-> IntEnum will be slightly more performant.
 
 ### Calling generic ER
 
@@ -300,31 +296,51 @@ should connect with each other. This is done with the `target_group_lookup` and 
 There is also a convenience function `bake_target_group_lookup` which can help to prepare group lookups when more
 complex group mapping logic is needed. Some recipes for `target_group_lookup` are presented here.
 
+For the recipes below, assume the following groups (if the syntax used here is unfamiliar to you, "bit masking" and 
+"bitwise operators" would be the terms to search for):
+```python
+class Groups(IntEnum):
+    # Directions
+    LEFT = 1
+    RIGHT = 2
+    TOP = 3
+    BOTTOM = 4
+    DOOR = 5
+    # Areas
+    FIELD = 1 << 3
+    CAVE = 2 << 3
+    MOUNTAIN = 3 << 3
+    # Bitmasks
+    DIRECTION_MASK = FIELD - 1
+    AREA_MASK = ~0 << 3
+```
+
 Directional matching:
 ```python
 direction_matching_group_lookup = {
     # with preserve_group_order = False, pair a left transition to either a right transition or door randomly
     # with preserve_group_order = True, pair a left transition to a right transition, or else a door if no
     #   viable right transitions remain
-    "Left": ["Right", "Door"],
+    Groups.LEFT: [Groups.RIGHT, Groups.DOOR],
     # ...
 }
 ```
 
 Terrain matching or dungeon shuffle:
 ```python
-def randomize_within_same_group(group: str) -> List[str]:
+def randomize_within_same_group(group: int) -> List[int]:
     return [group]
 identity_group_lookup = bake_target_group_lookup(world, randomize_within_same_group)
 ```
 
 Directional + area shuffle:
 ```python
-def get_target_groups(group: str) -> List[str]:
-    # example group: "Left-City"
-    # example result: ["Right-City", "Door-City"]
-    direction, area = group.split("-")
-    return [f"{pair_direction}-{area}" for pair_direction in direction_matching_group_lookup[direction]]
+def get_target_groups(group: int) -> List[int]:
+    # example group: LEFT | CAVE
+    # example result: [RIGHT | CAVE, DOOR | CAVE]
+    direction = group & Groups.DIRECTION_MASK
+    area = group & Groups.AREA_MASK
+    return [pair_direction | area for pair_direction in direction_matching_group_lookup[direction]]
 target_group_lookup = bake_target_group_lookup(world, get_target_groups)
 ```
 

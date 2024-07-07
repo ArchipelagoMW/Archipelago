@@ -3,8 +3,7 @@ import logging
 import random
 import time
 from collections import deque
-from collections.abc import Hashable
-from typing import Callable, Dict, Iterable, List, Tuple, Union, Set, Optional, Any
+from typing import Callable, Dict, Iterable, List, Tuple, Set, Optional
 
 from BaseClasses import CollectionState, Entrance, Region, EntranceType
 from Options import Accessibility
@@ -17,7 +16,7 @@ class EntranceRandomizationError(RuntimeError):
 
 class EntranceLookup:
     class GroupLookup:
-        _lookup: Dict[Hashable, List[Entrance]]
+        _lookup: Dict[int, List[Entrance]]
 
         def __init__(self):
             self._lookup = {}
@@ -28,7 +27,7 @@ class EntranceLookup:
         def __bool__(self):
             return bool(self._lookup)
 
-        def __getitem__(self, item: Hashable) -> List[Entrance]:
+        def __getitem__(self, item: int) -> List[Entrance]:
             return self._lookup.get(item, [])
 
         def __iter__(self):
@@ -104,7 +103,7 @@ class EntranceLookup:
 
     def get_targets(
             self,
-            groups: Iterable[Hashable],
+            groups: Iterable[int],
             dead_end: bool,
             preserve_group_order: bool
     ) -> Iterable[Entrance]:
@@ -214,20 +213,21 @@ class ERPlacementState:
         return [source_exit], [target_entrance]
 
 
-def bake_target_group_lookup(world: World, get_target_groups: Callable[[Any], List[Hashable]]) \
-        -> Dict[Hashable, List[Hashable]]:
+def bake_target_group_lookup(world: World, get_target_groups: Callable[[int], List[int]]) \
+        -> Dict[int, List[int]]:
     """
     Applies a transformation to all known entrance groups on randomizable exists to build a group lookup table.
 
     :param world: Your World instance
-    :param get_target_groups: Function to call that returns the groups that a specific group type is allowed to connect to
+    :param get_target_groups: Function to call that returns the groups that a specific group type is allowed to
+                              connect to
     """
     unique_groups = { entrance.randomization_group for entrance in world.multiworld.get_entrances(world.player)
                       if entrance.parent_region and not entrance.connected_region }
     return { group: get_target_groups(group) for group in unique_groups }
 
 
-def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[Hashable] = None) -> None:
+def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[int] = None) -> None:
     """
     Given an entrance in a "vanilla" region graph, splits that entrance to prepare it for randomization
     in randomize_entrances. This should be done after setting the type and group of the entrance.
@@ -258,7 +258,7 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Opti
 def randomize_entrances(
         world: World,
         coupled: bool,
-        target_group_lookup: Dict[Hashable, List[Hashable]],
+        target_group_lookup: Dict[int, List[int]],
         preserve_group_order: bool = False,
         on_connect: Optional[Callable[[ERPlacementState, List[Entrance]], None]] = None
 ) -> ERPlacementState:

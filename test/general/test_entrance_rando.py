@@ -1,4 +1,5 @@
 import unittest
+from enum import IntEnum
 from typing import List, Type
 
 from BaseClasses import Region, EntranceType, MultiWorld, Entrance
@@ -9,7 +10,22 @@ from test.general import generate_test_multiworld, generate_locations, generate_
 from worlds.generic.Rules import set_rule
 
 
-def generate_entrance_pair(region: Region, name_suffix: str, group: str):
+class ERTestGroups(IntEnum):
+    LEFT = 1
+    RIGHT = 2
+    TOP = 3
+    BOTTOM = 4
+
+
+directionally_matched_group_lookup = {
+    ERTestGroups.LEFT: [ERTestGroups.RIGHT],
+    ERTestGroups.RIGHT: [ERTestGroups.LEFT],
+    ERTestGroups.TOP: [ERTestGroups.BOTTOM],
+    ERTestGroups.BOTTOM: [ERTestGroups.TOP]
+}
+
+
+def generate_entrance_pair(region: Region, name_suffix: str, group: int):
     lx = region.create_exit(region.name + name_suffix)
     lx.randomization_group = group
     lx.randomization_type = EntranceType.TWO_WAY
@@ -36,21 +52,13 @@ def generate_disconnected_region_grid(multiworld: MultiWorld, grid_side_length: 
             if row == 0 and col == 0:
                 multiworld.get_region("Menu", 1).connect(region)
             if col != 0:
-                generate_entrance_pair(region, "_left", "Left")
+                generate_entrance_pair(region, "_left", ERTestGroups.LEFT)
             if col != grid_side_length - 1:
-                generate_entrance_pair(region, "_right", "Right")
+                generate_entrance_pair(region, "_right", ERTestGroups.RIGHT)
             if row != 0:
-                generate_entrance_pair(region, "_top", "Top")
+                generate_entrance_pair(region, "_top", ERTestGroups.TOP)
             if row != grid_side_length - 1:
-                generate_entrance_pair(region, "_bottom", "Bottom")
-
-
-directionally_matched_group_lookup = {
-    "Left": ["Right"],
-    "Right": ["Left"],
-    "Top": ["Bottom"],
-    "Bottom": ["Top"]
-}
+                generate_entrance_pair(region, "_bottom", ERTestGroups.BOTTOM)
 
 
 class TestEntranceLookup(unittest.TestCase):
@@ -65,7 +73,8 @@ class TestEntranceLookup(unittest.TestCase):
         for entrance in er_targets:
             lookup.add(entrance)
 
-        retrieved_targets = lookup.get_targets(["Top", "Bottom"], False, False)
+        retrieved_targets = lookup.get_targets([ERTestGroups.TOP, ERTestGroups.BOTTOM],
+                                               False, False)
         prev = None
         group_order = [prev := group.randomization_group for group in retrieved_targets if prev != group.randomization_group]
         # technically possible that group order may not be shuffled, by some small chance, on some seeds. but generally
@@ -84,10 +93,11 @@ class TestEntranceLookup(unittest.TestCase):
         for entrance in er_targets:
             lookup.add(entrance)
 
-        retrieved_targets = lookup.get_targets(["Top", "Bottom"], False, True)
+        retrieved_targets = lookup.get_targets([ERTestGroups.TOP, ERTestGroups.BOTTOM],
+                                               False, True)
         prev = None
         group_order = [prev := group.randomization_group for group in retrieved_targets if prev != group.randomization_group]
-        self.assertEqual(["Top", "Bottom"], group_order)
+        self.assertEqual([ERTestGroups.TOP, ERTestGroups.BOTTOM], group_order)
 
 
 class TestBakeTargetGroupLookup(unittest.TestCase):
@@ -96,12 +106,12 @@ class TestBakeTargetGroupLookup(unittest.TestCase):
         generate_disconnected_region_grid(multiworld, 5)
         world = multiworld.worlds[1]
         expected = {
-            "Left": ["tfeL"],
-            "Right": ["thgiR"],
-            "Top": ["poT"],
-            "Bottom": ["mottoB"]
+            ERTestGroups.LEFT: [-ERTestGroups.LEFT],
+            ERTestGroups.RIGHT: [-ERTestGroups.RIGHT],
+            ERTestGroups.TOP: [-ERTestGroups.TOP],
+            ERTestGroups.BOTTOM: [-ERTestGroups.BOTTOM]
         }
-        actual = bake_target_group_lookup(world, lambda s: [s[::-1]])
+        actual = bake_target_group_lookup(world, lambda g: [-g])
         self.assertEqual(expected, actual)
 
 
@@ -112,7 +122,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.TWO_WAY
-        e.randomization_group = "Group1"
+        e.randomization_group = 1
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e)
@@ -127,7 +137,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertIsNone(r1.entrances[0].parent_region)
         self.assertEqual("e", r1.entrances[0].name)
         self.assertEqual(EntranceType.TWO_WAY, r1.entrances[0].randomization_type)
-        self.assertEqual("Group1", r1.entrances[0].randomization_group)
+        self.assertEqual(1, r1.entrances[0].randomization_group)
 
     def test_disconnect_default_1way(self):
         multiworld = generate_test_multiworld()
@@ -135,7 +145,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.ONE_WAY
-        e.randomization_group = "Group1"
+        e.randomization_group = 1
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e)
@@ -150,7 +160,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertIsNone(r2.entrances[0].parent_region)
         self.assertEqual("r2", r2.entrances[0].name)
         self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
-        self.assertEqual("Group1", r2.entrances[0].randomization_group)
+        self.assertEqual(1, r2.entrances[0].randomization_group)
 
     def test_disconnect_uses_alternate_group(self):
         multiworld = generate_test_multiworld()
@@ -158,10 +168,10 @@ class TestDisconnectForRandomization(unittest.TestCase):
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
         e.randomization_type = EntranceType.ONE_WAY
-        e.randomization_group = "Group1"
+        e.randomization_group = 1
         e.connect(r2)
 
-        disconnect_entrance_for_randomization(e, "Group2")
+        disconnect_entrance_for_randomization(e, 2)
 
         self.assertIsNone(e.connected_region)
         self.assertEqual([], r1.entrances)
@@ -173,7 +183,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertIsNone(r2.entrances[0].parent_region)
         self.assertEqual("r2", r2.entrances[0].name)
         self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
-        self.assertEqual("Group2", r2.entrances[0].randomization_group)
+        self.assertEqual(2, r2.entrances[0].randomization_group)
 
 
 class TestRandomizeEntrances(unittest.TestCase):
@@ -257,10 +267,10 @@ class TestRandomizeEntrances(unittest.TestCase):
         for index, region in enumerate(["region4", "region20", "region24"]):
             x = multiworld.get_region(region, 1).create_exit(f"{region}_bottom_1way")
             x.randomization_type = EntranceType.ONE_WAY
-            x.randomization_group = "Bottom"
+            x.randomization_group = ERTestGroups.BOTTOM
             e = region26.create_er_target(f"region26_top_1way{index}")
             e.randomization_type = EntranceType.ONE_WAY
-            e.randomization_group = "Top"
+            e.randomization_group = ERTestGroups.TOP
 
         result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_lookup)
         for exit_name, entrance_name in result.pairings:
@@ -333,7 +343,7 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_fails_when_some_unconnectable_exit(self):
         """tests that entrance randomization fails if an exit can't be made into a valid placement (non-minimal)"""
         class CustomEntrance(Entrance):
-            def can_connect_to(self, other: Entrance, state: "ERPlacementState") -> bool:
+            def can_connect_to(self, other: Entrance, er_state: "ERPlacementState") -> bool:
                 if other.name == "region1_right":
                     return False
 

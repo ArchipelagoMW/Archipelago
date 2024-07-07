@@ -826,21 +826,20 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
     player: int
     name: str
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
-    randomization_group: Hashable
+    randomization_group: int
     randomization_type: EntranceType
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
     def __init__(self, player: int, name: str = "", parent: Region = None,
-                 randomization_group: Hashable = 0, randomization_type: EntranceType = EntranceType.ONE_WAY):
+                 randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY):
         self.name = name
         self.parent_region = parent
         self.player = player
@@ -861,18 +860,18 @@ class Entrance:
         self.addresses = addresses
         region.entrances.append(self)
 
-    def is_valid_source_transition(self, state: "ERPlacementState") -> bool:
+    def is_valid_source_transition(self, er_state: "ERPlacementState") -> bool:
         """
         Determines whether this is a valid source transition, that is, whether the entrance
         randomizer is allowed to pair it to place any other regions. By default, this is the
         same as a reachability check, but can be modified by Entrance implementations to add
         other restrictions based on the placement state.
 
-        :param state: The current (partial) state of the ongoing entrance randomization
+        :param er_state: The current (partial) state of the ongoing entrance randomization
         """
-        return self.can_reach(state.collection_state)
+        return self.can_reach(er_state.collection_state)
 
-    def can_connect_to(self, other: Entrance, state: "ERPlacementState") -> bool:
+    def can_connect_to(self, other: Entrance, er_state: "ERPlacementState") -> bool:
         """
         Determines whether a given Entrance is a valid target transition, that is, whether
         the entrance randomizer is allowed to pair this Entrance to that Entrance. By default,
@@ -880,11 +879,11 @@ class Entrance:
         two ways always go to two ways) and prevents connecting an exit to itself in coupled mode.
 
         :param other: The proposed Entrance to connect to
-        :param state: The current (partial) state of the ongoing entrance randomization
+        :param er_state: The current (partial) state of the ongoing entrance randomization
         """
         # the implementation of coupled causes issues for self-loops since the reverse entrance will be the
         # same as the forward entrance. In uncoupled they are ok.
-        return self.randomization_type == other.randomization_type and (not state.coupled or self.name != other.name)
+        return self.randomization_type == other.randomization_type and (not er_state.coupled or self.name != other.name)
 
     def __repr__(self):
         return self.__str__()
