@@ -501,7 +501,7 @@ class SC2Logic:
     def protoss_competent_anti_air(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
-            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST
+            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.PURGER
         }, self.player) \
             or (
                     state.has_any({
@@ -525,8 +525,8 @@ class SC2Logic:
 
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any({
-            item_names.SCOUT, item_names.TEMPEST, item_names.CARRIER, item_names.SKYLORD, item_names.VOID_RAY,
-            item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER, item_names.MOTHERSHIP
+            item_names.SCOUT, item_names.TEMPEST, item_names.CARRIER, item_names.SKYLORD, item_names.PURGER,
+            item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER, item_names.MOTHERSHIP
         }, self.player) \
             or self.protoss_has_blink(state) \
             or (state.has(item_names.WARP_PRISM, self.player)
@@ -536,8 +536,8 @@ class SC2Logic:
 
     def protoss_fleet(self, state: CollectionState) -> bool:
         return state.has_any({
-            item_names.CARRIER, item_names.SKYLORD, item_names.TEMPEST, item_names.VOID_RAY, item_names.DESTROYER,
-            item_names.WARP_RAY, item_names.SCORCHER
+            item_names.CARRIER, item_names.SKYLORD, item_names.PURGER, item_names.TEMPEST, item_names.VOID_RAY,
+            item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER
         }, self.player)
 
     def templars_return_requirement(self, state: CollectionState) -> bool:
@@ -577,11 +577,17 @@ class SC2Logic:
         """
         Ground Hybrids
         """
-        return state.has_any(
-            {item_names.ANNIHILATOR, item_names.ASCENDANT, item_names.TEMPEST, item_names.CARRIER, item_names.SKYLORD,
-             item_names.VOID_RAY, item_names.WARP_RAY, item_names.WRATHWALKER, item_names.VANGUARD}, self.player) \
-            or (state.has_any({item_names.IMMORTAL, item_names.STALWART}, self.player) or self.advanced_tactics) and state.has_any(
-                {item_names.STALKER, item_names.DRAGOON, item_names.ADEPT, item_names.INSTIGATOR, item_names.SLAYER}, self.player)
+        return (
+                state.has_any({
+                    item_names.ANNIHILATOR, item_names.ASCENDANT, item_names.TEMPEST, item_names.CARRIER,
+                    item_names.SKYLORD, item_names.PURGER, item_names.VOID_RAY, item_names.WARP_RAY,
+                    item_names.WRATHWALKER, item_names.VANGUARD
+                }, self.player)
+                or (state.has_any({item_names.IMMORTAL, item_names.STALWART}, self.player) or self.advanced_tactics)
+                and state.has_any({
+                    item_names.STALKER, item_names.DRAGOON, item_names.ADEPT, item_names.INSTIGATOR, item_names.SLAYER
+                }, self.player)
+        )
 
     def the_infinite_cycle_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
@@ -703,7 +709,7 @@ class SC2Logic:
         if self.take_over_ai_allies:
             return (
                     (
-                        state.has_any({item_names.BATTLECRUISER, item_names.CARRIER, item_names.SKYLORD}, self.player)
+                        state.has_any({item_names.BATTLECRUISER, item_names.CARRIER, item_names.SKYLORD, item_names.PURGER}, self.player)
                     )
                     or (state.has(item_names.ULTRALISK, self.player)
                         and self.protoss_competent_anti_air(state)
