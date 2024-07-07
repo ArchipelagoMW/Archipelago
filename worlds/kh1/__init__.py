@@ -68,7 +68,7 @@ class KH1World(World):
         #Calculate Level Up Items
         if True: #Allow notepad++ to collapse this section
             # Fill pool with mandatory items
-            for i in range(self.options.item_slot_increase):
+            for _ in range(self.options.item_slot_increase):
                 level_up_item_pool.append("Item Slot Increase")
             for i in range(self.options.accessory_slot_increase):
                 level_up_item_pool.append("Accessory Slot Increase")
