@@ -55,7 +55,7 @@ class KH1World(World):
             possible_starting_worlds = ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah", "Monstro", "Halloween Town", "Neverland", "Hollow Bastion"]
             if self.options.atlantica:
                 possible_starting_worlds.append("Atlantica")
-            if self.options.end_of_the_world_unlock.current_key == "item":
+            if self.options.end_of_the_world_unlock == "item":
                 possible_starting_worlds.append("End of the World")
             starting_worlds = self.random.sample(possible_starting_worlds, min(self.options.starting_worlds, len(possible_starting_worlds)))
             for starting_world in starting_worlds:
