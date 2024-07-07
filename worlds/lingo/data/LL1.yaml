@@ -2052,6 +2052,7 @@
         door: Rhyme Room Entrance
       Art Gallery:
         warp: True
+      Roof: True # by parkouring through the Bearer shortcut
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
@@ -2333,6 +2334,7 @@
         # This is the MASTERY on the other side of THE FEARLESS. It can only be
         # accessed by jumping from the top of the tower.
         id: Master Room/Panel_mastery_mastery8
+        location_name: The Fearless - MASTERY
         tag: midwhite
         hunt: True
         required_door:
@@ -4098,6 +4100,7 @@
       Number Hunt:
         room: Number Hunt
         door: Door to Directional Gallery
+      Roof: True # through ceiling of sunwarp
     panels:
       PEPPER:
         id: Backside Room/Panel_pepper_salt
@@ -5390,6 +5393,7 @@
           - The Artistic (Apple)
           - The Artistic (Lattice)
         check: True
+        location_name: The Artistic - Achievement
         achievement: The Artistic
       FINE:
         id: Ceiling Room/Panel_yellow_top_5
@@ -6046,7 +6050,7 @@
     paintings:
       - id: symmetry_painting_a_5
         orientation: east
-      - id: symmetry_painting_a_5
+      - id: symmetry_painting_b_5
         disable: True
   The Wondrous (Window):
     entrances:
@@ -6814,9 +6818,6 @@
         tag: syn rhyme
         subtag: bot
         link: rhyme FALL
-      LEAP:
-        id: Double Room/Panel_leap_leap
-        tag: midwhite
     doors:
       Exit:
         id: Double Room Area Doors/Door_room_exit
@@ -7065,6 +7066,9 @@
         tag: syn rhyme
         subtag: bot
         link: rhyme CREATIVE
+      LEAP:
+        id: Double Room/Panel_leap_leap
+        tag: midwhite
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
@@ -7272,6 +7276,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
