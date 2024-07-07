@@ -15,6 +15,7 @@ from ...strings.skill_names import ModSkill
 
 class ArchaeologyContentPack(ContentPack):
     def artisan_good_hook(self, content: StardewContent):
+        # Done as honestly there are too many display items to put into the initial registration traditionally.
         display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
         display_items = all_artifacts + all_fossils
         rusty_scrap_machine_rules = []
@@ -31,6 +32,8 @@ class ArchaeologyContentPack(ContentPack):
                     content.source_item(product_name, MachineSource(item=str(item), machine=ModMachine.preservation_chamber))
                 else:
                     content.source_item(product_name, MachineSource(item=str(item), machine=ModMachine.hardwood_preservation_chamber))
+        # Done as there are too many artifacts that suffice for this rule, and realistically a machine will always be bijective in use save
+        # this, so it's hard to argue a change.
         content.source_item(ModTrash.rusty_scrap, *tuple(rusty_scrap_machine_rules))
 
 
