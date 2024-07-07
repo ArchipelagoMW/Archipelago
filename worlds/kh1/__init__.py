@@ -311,3 +311,4 @@ class KH1World(World):
             elif len(numbers_to_consider) == 2:
                 return numbers_to_consider[0]
         return 14
+        
