@@ -49,8 +49,6 @@ FarmingLogicMixin]]):
 
     def get_modded_item_rules(self) -> Dict[str, StardewRule]:
         items = dict()
-        if ModNames.archaeology in self.options.mods:
-            items.update(self.get_archaeology_item_rules())
         if ModNames.boarding_house in self.options.mods:
             items.update(self.get_boarding_house_item_rules())
         return items
@@ -91,24 +89,6 @@ FarmingLogicMixin]]):
             })
 
         return options_to_update
-
-    def get_archaeology_item_rules(self):
-        archaeology_item_rules = {}
-        preservation_chamber_rule = self.logic.has(ModMachine.preservation_chamber)
-        hardwood_preservation_chamber_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
-        for item in display_items:
-            for display_type in display_types:
-                if item == "Trilobite":
-                    location_name = f"{display_type}: Trilobite Fossil"
-                else:
-                    location_name = f"{display_type}: {item}"
-                display_item_rule = self.logic.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.logic.has(item)
-                if "Wooden" in display_type:
-                    archaeology_item_rules[location_name] = display_item_rule & preservation_chamber_rule
-                else:
-                    archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
-        archaeology_item_rules[ModTrash.rusty_scrap] = self.logic.has(ModMachine.grinder) & self.logic.has_any(*all_artifacts)
-        return archaeology_item_rules
 
     def get_boarding_house_item_rules(self):
         return {
@@ -171,8 +151,3 @@ FarmingLogicMixin]]):
                                                                                BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
                 Performance.great),
         }
-
-    def has_seed_unlocked(self, seed_name: str):
-        if self.options.cropsanity == Cropsanity.option_disabled:
-            return True_()
-        return self.logic.received(seed_name)
