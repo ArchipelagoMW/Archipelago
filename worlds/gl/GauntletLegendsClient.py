@@ -290,11 +290,9 @@ class GauntletLegendsContext(CommonContext):
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[0] != 0xFF]
         if mode == 1:
-            _obj = _obj[: len(self.chest_locations)]
-            self.chest_objects = _obj
+            self.chest_objects = _obj[: len(self.chest_locations)]
         else:
-            _obj = _obj[: len(self.item_locations)]
-            self.item_objects = _obj
+            self.item_objects = _obj[: len(self.item_locations)]
 
     # Update item count of an item.
     # If the item is new, add it to your inventory
@@ -351,7 +349,7 @@ class GauntletLegendsContext(CommonContext):
                 continue
             item.addr = INV_ADDR + (0x10 * i)
             item.p_addr = item.addr - 0x10
-            if i == len(self.inventory) - 1:
+            if i == (len(self.inventory) - 1):
                 item.n_addr = 0
                 self.inventory[i] = item
                 break
@@ -387,18 +385,13 @@ class GauntletLegendsContext(CommonContext):
     # Call refactor at the end to write it into ram correctly
     async def inv_add(self, name: str, count: int):
         new = InventoryEntry()
+        new.name = name
         if name == "Key":
             new.on = 1
         new.count = count
         if name in timers:
             new.count *= 0x96
         new.type = name_to_type(name)
-        last = self.inventory[-1]
-        last.n_addr = last.addr + 0x10
-        new.addr = last.n_addr
-        self.inventory[-1] = last
-        new.p_addr = last.addr
-        new.n_addr = 0
         await self.inv_refactor(new)
 
     # Write a single item entry into RAM
@@ -408,9 +401,9 @@ class GauntletLegendsContext(CommonContext):
                 + item.type
                 + int.to_bytes(item.count, 4, "little")
                 + int.to_bytes(item.p_addr, 3, "little")
-                + int.to_bytes(0xE0) if item.p_addr != 0 else int.to_bytes(0xE0)
+                + (int.to_bytes(0xE0) if item.p_addr != 0 else int.to_bytes(0x0))
                 + int.to_bytes(item.n_addr, 3, "little")
-                + int.to_bytes(0xE0) if item.n_addr != 0 else bytes()
+                + (int.to_bytes(0xE0) if item.n_addr != 0 else bytes())
         )
         await self.socket.write(message_format(WRITE, param_format(item.addr, b)))
 
@@ -442,8 +435,6 @@ class GauntletLegendsContext(CommonContext):
                 self.clear_counts = cc
             else:
                 self.clear_counts = {}
-        elif cmd == "SetReply":
-            logger.info(f"Updated: {args['key']} Value: {args['value']}")
         elif cmd == "LocationInfo":
             self.location_scouts = args["locations"]
 
