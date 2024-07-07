@@ -129,7 +129,8 @@ def get_att_power(state: CollectionState, player: int) -> int:
     # you do max damage at (player attack - enemy defense) >= 4
     # scav boss has 5 defense, rudelings have 2 defense, hedgehogs have 1 defense
     # maybe later we'll have a system to compare attack with enemy defense, but for now let's keep it simple
-    power += sword_upgrades // 2
+    # at attack level 4, most regular enemies feel trivial (mostly since your poise damage gets so high)
+    power += min(3, att_upgrades)
 
     # stick doesn't scale super well in terms of damage, cap it at 4 power
     if not sword_state:
