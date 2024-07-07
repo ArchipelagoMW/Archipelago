@@ -165,8 +165,8 @@ def get_mp_power(state: CollectionState, player: int) -> int:
     # default 2 power for having a wand or gun. Having both doesn't increase it since they do basically the same thing
     power = 2
     # max of 3 power from mp gains, get +.5 power per mp offering (since each is half a tick)
-    power += min(3, state.count_from_list({"MP Offering", "Hero Relic - MP",
-                                           "Sacred Geometry", "Vintage", "Dusty"}, player) // 2)
+    power += 3, state.count_from_list({"MP Offering", "Hero Relic - MP",
+                                       "Sacred Geometry", "Vintage", "Dusty"}, player) // 2
     return power
 
 
