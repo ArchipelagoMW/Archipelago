@@ -116,7 +116,14 @@ def has_oogie_manor(state: CollectionState, player: int, advanced_logic: bool) -
                 or (advanced_logic and has_item(state, player, "High Jump") and can_glide(state, player))
            )
 
-def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_reports: int, final_rest_door_required_reports: int, final_rest_door_requirement: str):
+def set_rules(kh1world):
+    multiworld                       = kh1world.multiworld
+    player                           = kh1world.player
+    options                          = kh1world.options
+    eotw_required_reports            = kh1world.determine_reports_required_to_open_end_of_the_world()
+    final_rest_door_required_reports = kh1world.determine_reports_required_to_open_final_rest_door()
+    final_rest_door_requirement      = kh1world.options.final_rest_door.current_key
+    
     #Location rules.
     #Keys
    #multiworld.get_location("Destiny Islands Chest"                                                        , player).access_rule = lambda state: has_item(state, player, "")

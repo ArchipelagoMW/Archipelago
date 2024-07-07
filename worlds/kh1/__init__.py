@@ -92,7 +92,7 @@ class KH1World(World):
             level_up_locations = list(get_locations_by_category("Levels").keys())
             self.random.shuffle(level_up_item_pool)
             starting_level_for_stats_only = self.options.force_stats_on_levels - 1
-            while len(level_up_item_pool) > 0 and i < self.options.level_checks:
+            while len(level_up_item_pool) > 0 and starting_level_for_stats_only < self.options.level_checks:
                 self.multiworld.get_location(level_up_locations[starting_level_for_stats_only], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
                 starting_level_for_stats_only += 1
         
@@ -273,7 +273,7 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options, self.determine_reports_required_to_open_end_of_the_world(), self.determine_reports_required_to_open_final_rest_door(), self.options.final_rest_door.current_key)
+        set_rules(self)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
