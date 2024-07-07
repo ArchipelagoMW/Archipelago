@@ -13,6 +13,8 @@ class AlectoContentPack(ContentPack):
 
     def harvest_source_hook(self, content: StardewContent):
         if ModNames.distant_lands in content.registered_packs:
+            content.game_items.pop(DistantLandsSeed.void_mint)
+            content.game_items.pop(DistantLandsSeed.vile_ancient_fruit)
             content.source_item(DistantLandsSeed.void_mint,
                                 ForagingSource(regions=(Region.witch_swamp,), other_requirements=(QuestRequirement(ModQuest.WitchOrder),)),),
             content.source_item(DistantLandsSeed.vile_ancient_fruit,
