@@ -70,19 +70,19 @@ class KH1World(World):
             # Fill pool with mandatory items
             for _ in range(self.options.item_slot_increase):
                 level_up_item_pool.append("Item Slot Increase")
-            for i in range(self.options.accessory_slot_increase):
+            for _ in range(self.options.accessory_slot_increase):
                 level_up_item_pool.append("Accessory Slot Increase")
 
             # Create other pool
-            for i in range(self.options.strength_increase):
+            for _ in range(self.options.strength_increase):
                 possible_level_up_item_pool.append("Strength Increase")
-            for i in range(self.options.defense_increase):
+            for _ in range(self.options.defense_increase):
                 possible_level_up_item_pool.append("Defense Increase")
-            for i in range(self.options.hp_increase):
+            for _ in range(self.options.hp_increase):
                 possible_level_up_item_pool.append("Max HP Increase")
-            for i in range(self.options.mp_increase):
+            for _ in range(self.options.mp_increase):
                 possible_level_up_item_pool.append("Max MP Increase")
-            for i in range(self.options.ap_increase):
+            for _ in range(self.options.ap_increase):
                 possible_level_up_item_pool.append("Max AP Increase")
 
             # Fill remaining pool with items from other pool
