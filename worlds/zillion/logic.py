@@ -1,9 +1,11 @@
-from typing import Dict, FrozenSet, Tuple, cast, List, Counter as _Counter
+from typing import Dict, FrozenSet, Tuple, List, Counter as _Counter
+
 from BaseClasses import CollectionState
+
+from zilliandomizer.logic_components.items import Item, items
 from zilliandomizer.logic_components.locations import Location
 from zilliandomizer.randomizer import Randomizer
-from zilliandomizer.logic_components.items import Item, items
-from .region import ZillionLocation
+
 from .item import ZillionItem
 from .id_maps import item_name_to_id
 
@@ -18,11 +20,12 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
 
     returns a hash of the player and of the set locations with their items
     """
+    from . import ZillionWorld
     z_world = cs.multiworld.worlds[p]
-    my_locations = cast(List[ZillionLocation], getattr(z_world, "my_locations"))
+    assert isinstance(z_world, ZillionWorld)
 
     _hash = p
-    for z_loc in my_locations:
+    for z_loc in z_world.my_locations:
         zz_name = z_loc.zz_loc.name
         zz_item = z_loc.item.zz_item \
             if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
@@ -38,10 +41,10 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
 
     ((item_name, count), (item_name, count), ...)
     """
-    return tuple((item_name, cs.item_count(item_name, p)) for item_name in item_name_to_id)
+    return tuple((item_name, cs.count(item_name, p)) for item_name in item_name_to_id)
 
 
-LogicCacheType = Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]]
+LogicCacheType = Dict[int, Tuple[Dict[int, _Counter[str]], FrozenSet[Location]]]
 """ { hash: (cs.prog_items, accessible_locations) } """
 
 

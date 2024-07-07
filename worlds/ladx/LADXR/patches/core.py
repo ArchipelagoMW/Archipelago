@@ -1,9 +1,11 @@
+from .. import assembler
 from ..assembler import ASM
 from ..entranceInfo import ENTRANCE_INFO
 from ..roomEditor import RoomEditor, ObjectWarp, ObjectHorizontal
 from ..backgroundEditor import BackgroundEditor
 from .. import utils
 
+from ...Options import BootsControls
 
 def bugfixWrittingWrongRoomStatus(rom):
     # The normal rom contains a pretty nasty bug where door closing triggers in D7/D8 can effect doors in
@@ -255,8 +257,9 @@ noWrapDown:
     """ % (type, map, room, x, y)), fill_nop=True)
 
    # Patch the RAM clear not to delete our custom dialog when we screen transition
+   # This is kind of horrible as it relies on bank 1 being loaded, lol
     rom.patch(0x01, 0x042C, "C629", "6B7E")
-    rom.patch(0x01, 0x3E6B, 0x3FFF, ASM("""
+    rom.patch(0x01, 0x3E6B, 0x3E7B, ASM("""
         ld bc, $A0
         call $29DC
         ld bc, $1200
@@ -390,7 +393,7 @@ OAMData:
         db  $20, $20, $20, $00 ;I
         db  $20, $28, $28, $00 ;M
         db  $20, $30, $18, $00 ;E
-        
+
         db  $20, $70, $16, $00 ;D
         db  $20, $78, $18, $00 ;E
         db  $20, $80, $10, $00 ;A
@@ -407,7 +410,7 @@ OAMData:
         db  $68, $38, $%02x, $00 ;0
         db  $68, $40, $%02x, $00 ;0
         db  $68, $48, $%02x, $00 ;0
-        
+
     """ % ((((check_count // 100) % 10) * 2) | 0x40, (((check_count // 10) % 10) * 2) | 0x40, ((check_count % 10) * 2) | 0x40), 0x469D), fill_nop=True)
     # Lower line of credits roll into XX XX XX
     rom.patch(0x17, 0x0784, 0x082D, ASM("""
@@ -424,7 +427,7 @@ OAMData:
         call updateOAM
         ld   a, [$B001] ; seconds
         call updateOAM
-        
+
         ld   a, [$DB58] ; death count high
         call updateOAM
         ld   a, [$DB57] ; death count low
@@ -472,7 +475,7 @@ OAMData:
         db  $68, $18, $40, $00 ;0
         db  $68, $20, $40, $00 ;0
         db  $68, $28, $40, $00 ;0
-        
+
     """, 0x4784), fill_nop=True)
 
     # Grab the "mostly" complete A-Z font
@@ -537,3 +540,295 @@ OAMData:
         gfx_low = "\n".join([line.split(" ")[n] for line in tile_graphics.split("\n")[8:]])
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
+
+def addBootsControls(rom, boots_controls: BootsControls):
+    if boots_controls == BootsControls.option_vanilla:
+        return
+    consts = {
+          "INVENTORY_PEGASUS_BOOTS": 0x8,
+          "INVENTORY_POWER_BRACELET": 0x3,
+          "UsePegasusBoots": 0x1705,
+          "J_A": (1 << 4),
+          "J_B": (1 << 5),
+          "wAButtonSlot": 0xDB01,
+          "wBButtonSlot": 0xDB00,
+          "wPegasusBootsChargeMeter": 0xC14B,
+          "hPressedButtonsMask": 0xCB
+    }
+    for c,v in consts.items():
+        assembler.const(c, v)
+
+    BOOTS_START_ADDR = 0x11E8
+    condition = {
+        BootsControls.option_bracelet: """
+        ld   a, [hl]
+        ; Check if we are using the bracelet
+        cp   INVENTORY_POWER_BRACELET
+        jr   z, .yesBoots
+        """,
+        BootsControls.option_press_a: """
+        ; Check if we are using the A slot
+        cp  J_A
+        jr  z, .yesBoots
+        ld   a, [hl]
+        """,
+        BootsControls.option_press_b: """
+        ; Check if we are using the B slot
+        cp  J_B
+        jr  z, .yesBoots
+        ld   a, [hl]
+        """
+    }[boots_controls.value]
+    
+    # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
+    boots_code = assembler.ASM("""
+CheckBoots:
+    ; check if we own boots
+    ld  a, [wCollectedTunics]
+    and  $04
+    ; if not, move on to the next inventory item (shield)
+    jr z, .out
+
+    ; Check the B button
+    ld  hl, wBButtonSlot
+    ld   d, J_B
+    call  .maybeBoots
+                               
+    ; Check the A button
+    inc l ; l = wAButtonSlot - done this way to save a byte or two
+    ld   d, J_A
+    call  .maybeBoots
+                               
+    ; If neither, reset charge meter and bail
+    xor  a
+    ld   [wPegasusBootsChargeMeter], a
+    jr .out
+
+.maybeBoots:
+    ; Check if we are holding this button even
+    ldh  a, [hPressedButtonsMask]
+    and  d
+    ret  z
+    """
+    # Check the special condition (also loads the current item for button into a)
+    + condition +
+    """
+    ; Check if we are just using boots regularly
+    cp INVENTORY_PEGASUS_BOOTS
+    ret  nz
+.yesBoots:
+    ; We're using boots! Do so.
+    call UsePegasusBoots
+    ; If we return now we will go back into CheckBoots, we don't want that
+    ; We instead want to move onto the next item
+    ; but if we don't cleanup, the next "ret" will take us back there again
+    ; So we pop the return address off of the stack
+    pop af
+.out:
+    """, BOOTS_START_ADDR)
+
+
+
+    original_code = 'fa00dbfe08200ff0cbe6202805cd05171804afea4bc1fa01dbfe08200ff0cbe6102805cd05171804afea4bc1'
+    rom.patch(0, BOOTS_START_ADDR, original_code, boots_code, fill_nop=True)
+
+def addWarpImprovements(rom, extra_warps):
+    # Patch in a warp icon
+    tile = utils.createTileData( \
+"""11111111
+10000000
+10200320 
+10323200
+10033300
+10023230
+10230020
+10000000""", key="0231")
+    MINIMAP_BASE = 0x3800
+    
+    # This is replacing a junk tile never used on the minimap
+    rom.banks[0x2C][MINIMAP_BASE + len(tile) * 0x65 : MINIMAP_BASE + len(tile) * 0x66] = tile
+    
+    # Allow using ENTITY_WARP for finding which map sections are warps
+    # Interesting - 3CA0 should be free, but something has pushed all the code forward a byte
+    rom.patch(0x02, 0x3CA1, None, ASM("""
+        ld   e, $0F
+        ld   d, $00
+    warp_search_loop:
+        ; Warp search loop
+        ld   hl, $C3A0
+        add  hl, de                     ; $5FE1: $19
+        ld   a, [hl]                    ; $5FE2: $7E
+        cp   $61 ; ENTITY_WARP
+        jr   nz, search_continue        ; if it's not a warp, check the next one
+        ld   hl, $C280
+        add  hl, de
+        ld   a, [hl]
+        and  a
+        jr   z, search_continue         ; if this is despawned, check the next one
+    found:
+        jp   $511B                      ; found
+    search_continue:
+        dec  e
+        ld   a, e
+        cp   $FF
+        jr   nz, warp_search_loop
+    
+    not_found:
+        jp   $512B
+
+    """))
+
+    # Insert redirect to above code
+    rom.patch(0x02, 0x1109, ASM("""
+    ldh a, [$F6]
+    cp 1
+    
+    """), ASM("""
+    jp $7CA1
+    nop
+    """))
+    # Leaves some extra bytes behind, if we need more space in 0x02
+
+    # On warp hole, open map instead
+    rom.patch(0x19, 0x1DB9, None, ASM("""
+        ld a, 7       ; Set GAMEPLAY_MAP
+        ld [$DB95], a
+        ld a, 0       ; reset subtype
+        ld [$DB96], a
+        ld a, 1         ; Set flag for using teleport
+        ld [$FFDD], a
+
+        ret
+    """), fill_nop=True)
+
+    # Patch over some instructions that decided if we are in debug mode holding some 
+    # buttons with instead checking for FFDD (why FFDD? It appears to be never used anywhere, so we repurpose it for "is in teleport mode")
+    rom.banks[0x01][0x17B8] = 0xDD
+    rom.banks[0x01][0x17B9] = 0xFF
+    rom.banks[0x01][0x17FD] = 0xDD
+    rom.banks[0x01][0x17FE] = 0xFF
+
+    # If in warp mode, don't allow manual exit
+    rom.patch(0x01, 0x1800, "20021E60", ASM("jp nz, $5818"), fill_nop=True)
+
+    # Allow warp with just B
+    rom.banks[0x01][0x17C0] = 0x20
+
+    # Allow cursor to move over black squares
+    # This allows warping to undiscovered areas - a fine cheat, but needs a check for wOverworldRoomStatus in the warp code
+    CHEAT_WARP_ANYWHERE = False
+    if CHEAT_WARP_ANYWHERE:
+        rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
+
+    # This disables the arrows around the selection bubble
+    #rom.patch(0x01, 0x1B6F, None, ASM("ret"), fill_nop=True)
+    
+    # Fix lag when moving the cursor
+    # One option - just disable the delay code
+    #rom.patch(0x01, 0x1A76, 0x1A76+3, ASM("xor a"), fill_nop=True)
+    #rom.banks[0x01][0x1A7C] = 0
+    # Another option - just remove the animation
+    rom.banks[0x01][0x1B20] = 0
+    rom.banks[0x01][0x1B3B] = 0
+
+    # Patch the icon for all teleports
+    all_warps = [0x01, 0x95, 0x2C, 0xEC]
+
+
+    if extra_warps:
+        # mamu
+        all_warps.append(0x45)
+        # Tweak the flute location
+        rom.banks[0x14][0x0E95] += 0x10
+        rom.banks[0x14][0x0EA3] += 0x01
+
+        mamu_pond = RoomEditor(rom, 0x45)
+        # Remove some tall grass so we can add a warp instead
+        mamu_pond.changeObject(1, 6, 0xE8)
+        mamu_pond.moveObject(1, 6, 3, 5)
+        mamu_pond.addEntity(3, 5, 0x61)
+
+        mamu_pond.store(rom)
+
+        # eagle
+        all_warps.append(0x0F)
+        room = RoomEditor(rom, 0x0F)
+        # Move one cliff edge and change it into a pit
+        room.changeObject(7, 6, 0xE8)
+        room.moveObject(7, 6, 6, 4)
+
+        # Add the warp
+        room.addEntity(6, 4, 0x61)
+        # move the two corners
+        room.moveObject(6, 7, 7, 7)
+        room.moveObject(6, 6, 7, 6)
+        for object in room.objects:
+            # Extend the lower wall
+            if ((object.x == 0 and object.y == 7)
+            # Extend the lower floor
+            or (object.x == 0 and object.y == 6)):
+                room.overlay[object.x + object.count + object.y * 10] = object.type_id
+                object.count += 1
+        room.store(rom)
+    
+    for warp in all_warps:
+        # Set icon
+        rom.banks[0x20][0x168B + warp] = 0x55
+        # Set text
+        if not rom.banks[0x01][0x1959 + warp]:
+            rom.banks[0x01][0x1959 + warp] = 0x42
+        # Set palette
+        # rom.banks[0x20][0x178B + 0x95] = 0x1      
+
+    # Setup [?!] icon on map and associated text
+    rom.banks[0x01][0x1909 + 0x42] = 0x2B
+    rom.texts[0x02B] = utils.formatText('Warp')
+
+    # call warp function (why not just jmp?!)
+    rom.patch(0x01, 0x17C3, None, ASM("""
+    call $7E7B
+    ret
+    """))
+    
+    # Build a switch statement by hand
+    warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr z, success\n" for warp in all_warps)
+
+    rom.patch(0x01, 0x3E7B, None, ASM(f"""
+TeleportHandler:
+
+    ld  a, [$DBB4] ; Load the current selected tile
+    ; TODO: check if actually revealed so we can have free movement
+    ; Check cursor against different tiles to see if we are selecting a warp
+    {warp_jump}
+    jr exit
+
+success:
+    ld   a, $0B
+    ld   [$DB95], a ; Gameplay type
+    xor a
+    ld   [$D401], a                  ; wWarp0MapCategory
+    ldh [$DD], a                     ; unset teleport flag(!!!)
+    ld   [$D402], a                  ; wWarp0Map
+    ld   a, [$DBB4]                  ; wDBB4
+    ld   [$D403], a                  ; wWarp0Room
+
+    ld   a, $68
+    ld   [$D404], a                  ; wWarp0DestinationX
+    ldh  [$98], a                    ; LinkPositionY
+    ld  [$D475], a
+    ld   a, $70
+    ld   [$D405], a                  ; wWarp0DestinationY
+    ldh  [$99], a                    ; LinkPositionX
+    ld   a, $66                        
+    ld   [$D416], a                  ; wWarp0PositionTileIndex
+    ld   a, $07
+    ld   [$DB96], a                  ; wGameplaySubtype
+    ldh a, [$A2]
+    ld  [$DBC8], a
+    call $0C83                       ; ApplyMapFadeOutTransition
+    xor  a                                        ; $5DF3: $AF
+    ld   [$C167], a                               ; $5DF4: $EA $67 $C1
+
+exit:
+    ret
+        """))

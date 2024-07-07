@@ -8,7 +8,7 @@ use that version. These steps are for developers or platforms without compiled r
 
 What you'll need:
  * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
-   * **Python 3.11 does not work currently**
+   * **Python 3.12 is currently unsupported**
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
    * possibly optional, read operating system specific sections
@@ -17,20 +17,21 @@ Then run any of the starting point scripts, like Generate.py, and the included M
 required modules and after pressing enter proceed to install everything automatically.
 After this, you should be able to run the programs.
 
+ * `Launcher.py` gives access to many components, including clients registered in `worlds/LauncherComponents.py`.
+    * The Launcher button "Generate Template Options" will generate default yamls for all worlds.
  * With yaml(s) in the `Players` folder, `Generate.py` will generate the multiworld archive.
  * `MultiServer.py`, with the filename of the generated archive as a command line parameter, will host the multiworld locally.
     * `--log_network` is a command line parameter useful for debugging.
  * `WebHost.py` will host the website on your computer.
     * You can copy `docs/webhost configuration sample.yaml` to `config.yaml`
     to change WebHost options (like the web hosting port number).
-    * As a side effect, `WebHost.py` creates the template yamls for all the games in `WebHostLib/static/generated`.
 
 
 ## Windows
 
 Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
-   * **Python 3.11 does not work currently**
+   * **Python 3.12 is currently unsupported**
 
  * **Optional**: Download and install Visual Studio Build Tools from
    [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).

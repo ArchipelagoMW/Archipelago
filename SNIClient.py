@@ -68,12 +68,11 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         options = snes_options.split()
         num_options = len(options)
 
-        if num_options > 0:
-            snes_device_number = int(options[0])
-
         if num_options > 1:
             snes_address = options[0]
             snes_device_number = int(options[1])
+        elif num_options > 0:
+            snes_device_number = int(options[0])
 
         self.ctx.snes_reconnect_address = None
         if self.ctx.snes_connect_task:
@@ -86,6 +85,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
+        self.ctx.snes_state = SNESState.SNES_DISCONNECTED
         if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
@@ -208,12 +208,12 @@ class SNIContext(CommonContext):
             self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
         super(SNIContext, self).on_deathlink(data)
 
-    async def handle_deathlink_state(self, currently_dead: bool) -> None:
+    async def handle_deathlink_state(self, currently_dead: bool, death_text: str = "") -> None:
         # in this state we only care about triggering a death send
         if self.death_state == DeathState.alive:
             if currently_dead:
                 self.death_state = DeathState.dead
-                await self.send_death()
+                await self.send_death(death_text)
         # in this state we care about confirming a kill, to move state to dead
         elif self.death_state == DeathState.killing_player:
             # this is being handled in deathlink_kill_player(ctx) already
@@ -282,7 +282,7 @@ class SNESState(enum.IntEnum):
 
 
 def launch_sni() -> None:
-    sni_path = Utils.get_options()["sni_options"]["sni_path"]
+    sni_path = Utils.get_settings()["sni_options"]["sni_path"]
 
     if not os.path.isdir(sni_path):
         sni_path = Utils.local_path(sni_path)
@@ -566,8 +566,6 @@ async def snes_write(ctx: SNIContext, write_list: typing.List[typing.Tuple[int, 
         try:
             for address, data in write_list:
                 PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
-                # REVIEW: above: `if snes_socket is None: return False`
-                # Does it need to be checked again?
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(dumps(PutAddress_Request))
                     await ctx.snes_socket.send(data)
@@ -656,7 +654,7 @@ async def game_watcher(ctx: SNIContext) -> None:
 
 async def run_game(romfile: str) -> None:
     auto_start = typing.cast(typing.Union[bool, str],
-                             Utils.get_options()["sni_options"].get("snes_rom_start", True))
+                             Utils.get_settings()["sni_options"].get("snes_rom_start", True))
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)

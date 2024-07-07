@@ -1,22 +1,7 @@
-from typing import Union, Dict, runtime_checkable, Protocol
-from Options import Option, DeathLink, Choice, Toggle, SpecialRange
 from dataclasses import dataclass
+import datetime
 
-
-@runtime_checkable
-class DLCQuestOption(Protocol):
-    internal_name: str
-
-
-@dataclass
-class DLCQuestOptions:
-    options: Dict[str, Union[bool, int]]
-
-    def __getitem__(self, item: Union[str, DLCQuestOption]) -> Union[bool, int]:
-        if isinstance(item, DLCQuestOption):
-            item = item.internal_name
-
-        return self.options.get(item, None)
+from Options import Choice, DeathLink, NamedRange, PerGameCommonOptions
 
 
 class DoubleJumpGlitch(Choice):
@@ -49,7 +34,7 @@ class CoinSanity(Choice):
     default = 0
 
 
-class CoinSanityRange(SpecialRange):
+class CoinSanityRange(NamedRange):
     """This is the amount of coins in a coin bundle
     You need to collect that number of coins to get a location check, and when receiving coin items, you will get bundles of this size
     It is highly recommended to not set this value below 10, as it generates a very large number of boring locations and items.
@@ -64,6 +49,20 @@ class CoinSanityRange(SpecialRange):
         "normal": 20,
         "high": 50,
     }
+    if datetime.datetime.today().month == 4:
+        if datetime.datetime.today().day == 1:
+            special_range_names["surprise"] = -1
+        else:
+            special_range_names["coin piece"] = -1
+
+
+class PermanentCoins(Choice):
+    """If purchasing a pack decreases your current coins amounts."""
+    internal_name = "permanent_coins"
+    display_name = "Permanent Coins"
+    option_false = 0
+    option_true = 1
+    default = 0
 
 
 class EndingChoice(Choice):
@@ -94,31 +93,14 @@ class ItemShuffle(Choice):
     default = 0
 
 
-DLCQuest_options: Dict[str, type(Option)] = {
-    option.internal_name: option
-    for option in [
-        DoubleJumpGlitch,
-        CoinSanity,
-        CoinSanityRange,
-        TimeIsMoney,
-        EndingChoice,
-        Campaign,
-        ItemShuffle,
-    ]
-}
-default_options = {option.internal_name: option.default for option in DLCQuest_options.values()}
-DLCQuest_options["death_link"] = DeathLink
-
-
-def fetch_options(world, player: int) -> DLCQuestOptions:
-    return DLCQuestOptions({option: get_option_value(world, player, option) for option in DLCQuest_options})
-
-
-def get_option_value(world, player: int, name: str) -> Union[bool, int]:
-    assert name in DLCQuest_options, f"{name} is not a valid option for DLC Quest."
-
-    value = getattr(world, name)
-
-    if issubclass(DLCQuest_options[name], Toggle):
-        return bool(value[player].value)
-    return value[player].value
+@dataclass
+class DLCQuestOptions(PerGameCommonOptions):
+    double_jump_glitch: DoubleJumpGlitch
+    coinsanity: CoinSanity
+    coinbundlequantity: CoinSanityRange
+    permanent_coins: PermanentCoins
+    time_is_money: TimeIsMoney
+    ending_choice: EndingChoice
+    campaign: Campaign
+    item_shuffle: ItemShuffle
+    death_link: DeathLink
