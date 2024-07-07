@@ -2139,4 +2139,5 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
     multiworld.get_entrance("100 Acre Wood"                                                                , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
 
     # Win condition.
-    multiworld.completion_condition[player] = lambda state: state.has_all({"Victory"}, player)
+    multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+    
