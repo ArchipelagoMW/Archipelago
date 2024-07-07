@@ -281,11 +281,11 @@ class KH1World(World):
     def get_numbers_of_reports_to_consider(self) -> List:
         numbers_to_consider = []
         if self.options.end_of_the_world_unlock.current_key == "reports":
-            numbers_to_consider.append(self.options.required_reports_eotw)
+            numbers_to_consider.append(self.options.required_reports_eotw.value)
         if self.options.final_rest_door.current_key == "reports":
-            numbers_to_consider.append(self.options.required_reports_door)
+            numbers_to_consider.append(self.options.required_reports_door.value)
         if self.options.final_rest_door.current_key == "reports" or self.options.end_of_the_world_unlock.current_key == "reports":
-            numbers_to_consider.append(self.options.reports_in_pool)
+            numbers_to_consider.append(self.options.reports_in_pool.value)
         numbers_to_consider.sort()
         return numbers_to_consider
     
