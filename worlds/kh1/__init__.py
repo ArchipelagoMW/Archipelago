@@ -278,7 +278,7 @@ class KH1World(World):
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
     
-    def get_numbers_of_reports_to_consider(self) -> int:
+    def get_numbers_of_reports_to_consider(self):
         numbers_to_consider = []
         if self.options.end_of_the_world_unlock.current_key == "reports":
             numbers_to_consider.append(self.options.required_reports_eotw)
