@@ -97,7 +97,12 @@ def has_required_items(required_items: List[List[str]], stick_req: bool, state: 
 
 
 def sum_power(state: CollectionState, player: int) -> int:
-    return (get_att_power(state, player) + get_mp_power(state, player)) * get_defensive_power(state, player)
+    print("att power is", get_att_power(state, player))
+    print("effective hp is", get_effective_hp(state, player))
+    print("mp power is", get_mp_power(state, player))
+    print("sum power is", int(get_att_power(state, player) * get_effective_hp(state, player) / 80 + get_mp_power(state, player)))
+    print()
+    return int(get_att_power(state, player) * get_effective_hp(state, player) / 80 + get_mp_power(state, player))
 
 
 def get_att_power(state: CollectionState, player: int) -> int:
@@ -115,18 +120,25 @@ def get_att_power(state: CollectionState, player: int) -> int:
     return power
 
 
-def get_defensive_power(state: CollectionState, player: int) -> int:
+def get_effective_hp(state: CollectionState, player: int) -> int:
     hp_upgrades = state.count_from_list({"HP Offering", "Hero Relic - HP"}, player)
     player_hp = 80 + hp_upgrades * 20
-    def_level = 1 + state.count_from_list({"DEF Offering", "Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)
+    def_level = max(8, 1 + state.count_from_list({"DEF Offering", "Hero Relic - DEF",
+                                                  "Secret Legend", "Phonomath"}, player))
     potion_count = state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
     potion_upgrade_level = 1 + state.count_from_list({"Potion Offering", "Hero Relic - POTION",
                                                       "Just Some Pals", "Spring Falls", "Back To Work"}, player)
     # total health you get from potions
-    total_healing = potion_count * (20 + 10 * potion_upgrade_level)
+    total_healing = potion_count * (min(20 + 10 * potion_upgrade_level, player_hp))
+    total_hp = player_hp + total_healing * .75  # since you don't tend to use potions efficiently all the time
+    effective_hp = total_hp * (1 + def_level / 10)  # not accurate, pending better calcs
     has_shield = state.has(shield, player)
+    if has_shield:
+        effective_hp *= 1.2
     has_laurels = state.has(laurels, player)
-    return 20
+    if has_laurels:
+        effective_hp *= 1.2
+    return int(effective_hp)
 
 
 def get_mp_power(state: CollectionState, player: int) -> int:
