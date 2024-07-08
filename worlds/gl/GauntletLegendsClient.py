@@ -572,7 +572,7 @@ class GauntletLegendsContext(CommonContext):
         ]
         max_value: int = self.glslotdata['max']
         logger.info(
-            f"Locations: {len([location for location in self.obelisk_locations + self.item_locations + self.chest_locations if location.difficulty <= max_value and location.id not in self.locations_checked])} Difficulty: {max_value}",
+            f"Locations: {len([location for location in self.obelisk_locations + self.item_locations + self.chest_locations if location.difficulty <= max_value and location.id not in self.locations_checked])} Difficulty: { max_value if self.glslotdata['instant_max'] else self.difficulty}",
         )
 
     # Compare values of loaded objects to see if they have been collected
