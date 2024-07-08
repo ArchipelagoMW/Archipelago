@@ -49,6 +49,7 @@ enemy_encounters: Dict[str, EncounterData] = {
     "Foxes": EncounterData(10),
     "Scavengers": EncounterData(16),
     "Scav Snipers": EncounterData(16, [[fire_wand], [grapple]]),
+    "Voidlings": EncounterData(12),
 
     # can't damage with stick
     "Garden Knight": EncounterData(12, [[sword]], False),
@@ -115,8 +116,8 @@ def get_att_power(state: CollectionState, player: int) -> int:
     sword_state = False
     if has_sword(state, player):
         sword_state = True
-        # sword has a base power of 4, which is an arbitrary number
-        power = 4
+        # sword has a base power of 5, which is an arbitrary number
+        power = 5
 
     att_upgrades = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player)
     sword_upgrades = state.count("Sword Upgrade", player)
@@ -140,8 +141,9 @@ def get_att_power(state: CollectionState, player: int) -> int:
 
 def get_effective_hp(state: CollectionState, player: int) -> int:
     hp_upgrades = state.count_from_list({"HP Offering", "Hero Relic - HP"}, player)
+    # starting hp is 80, you get 20 per upgrade
     player_hp = 80 + hp_upgrades * 20
-    def_level = max(8, 1 + state.count_from_list({"DEF Offering", "Hero Relic - DEF",
+    def_level = min(8, 1 + state.count_from_list({"DEF Offering", "Hero Relic - DEF",
                                                   "Secret Legend", "Phonomath"}, player))
     potion_count = state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
     potion_upgrade_level = 1 + state.count_from_list({"Potion Offering", "Hero Relic - POTION",
@@ -150,12 +152,17 @@ def get_effective_hp(state: CollectionState, player: int) -> int:
     total_healing = potion_count * (min(20 + 10 * potion_upgrade_level, player_hp))
     total_hp = player_hp + total_healing * .75  # since you don't tend to use potions efficiently all the time
     effective_hp = total_hp * (1 + def_level / 10)  # not accurate, pending better calcs
-    has_shield = state.has(shield, player)
-    if has_shield:
-        effective_hp *= 1.2
-    has_laurels = state.has(laurels, player)
-    if has_laurels:
-        effective_hp *= 1.2
+
+    # you get some extra mitigation in the form of being able to block and the greater dodge from laurels
+    total_sp = 80 + get_sp_count(state, player) * 20
+    extra_mitigation = 0
+    if state.has(shield, player):
+        extra_mitigation += .1
+    if state.has(laurels, player):
+        extra_mitigation += .1
+    # scale your extra mitigation based on your max stamina over your starting stamina
+    extra_mitigation *= total_sp / 80
+    effective_hp *= (1 + extra_mitigation)
     return int(effective_hp)
 
 
@@ -165,8 +172,8 @@ def get_mp_power(state: CollectionState, player: int) -> int:
     # default 2 power for having a wand or gun. Having both doesn't increase it since they do basically the same thing
     power = 2
     # max of 3 power from mp gains, get +.5 power per mp offering (since each is half a tick)
-    power += 3, state.count_from_list({"MP Offering", "Hero Relic - MP",
-                                       "Sacred Geometry", "Vintage", "Dusty"}, player) // 2
+    power += state.count_from_list({"MP Offering", "Hero Relic - MP",
+                                    "Sacred Geometry", "Vintage", "Dusty"}, player) // 2
     return power
 
 
