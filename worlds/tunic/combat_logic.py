@@ -17,6 +17,39 @@ class EncounterData(NamedTuple):
     stick_required: bool = True  # by default, you need a stick. but for some, you may not need one if you have alts
 
 
+# the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
+class AreaStats(NamedTuple):
+    att_level: int
+    def_level: int
+    potion_level: int  # all 3 are before your first bonfire after getting the upgrade page, third costs 1k
+    hp_level: int
+    sp_level: int
+    mp_level: int
+
+
+area_data: Dict[str, AreaStats] = {
+    # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
+    "Overworld": AreaStats(1, 1, 1, 1, 1, 1),
+    "East Forest": AreaStats(1, 1, 1, 1, 1, 1),
+    # learn how to upgrade
+    "Beneath the Well": AreaStats(2, 1, 3, 3, 1, 1),
+    "Dark Tomb": AreaStats(2, 2, 3, 3, 1, 1),
+    "West Garden": AreaStats(2, 3, 3, 3, 1, 1),
+    "Garden Knight": AreaStats(3, 3, 3, 3, 2, 1),
+    # get the wand here
+    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1),
+    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2),
+    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3),
+    # the second half of Atoll is the part you need the stats for, so putting it after frogs
+    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3),
+    "Library": AreaStats(4, 4, 3, 5, 3, 3),
+    "Quarry": AreaStats(5, 4, 3, 5, 3, 3),
+    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3),
+    "Swamp": AreaStats(1, 1, 1, 1, 1, 1),
+    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1),
+}
+
+
 # general requirements for enemy encounters in the game, for use in determining whether you can access a chest
 enemy_encounters: Dict[str, EncounterData] = {
     # pink and blue slimes really only need a stick
