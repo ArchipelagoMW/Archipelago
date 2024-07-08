@@ -153,11 +153,7 @@ class TunicWorld(World):
 
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
-        tunic_item = TunicItem(name, classification if classification else item_data.classification,
-                               self.item_name_to_id[name], self.player)
-        if name in slot_data_item_names:
-            self.slot_data_items.append(tunic_item)
-        return tunic_item
+        return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
 
@@ -258,6 +254,10 @@ class TunicWorld(World):
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
                 tunic_items.append(self.create_item(item))
+
+        for tunic_item in tunic_items:
+            if tunic_item.name in slot_data_item_names:
+                self.slot_data_items.append(tunic_item)
 
         self.multiworld.itempool += tunic_items
 
