@@ -129,8 +129,8 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
     }
 
     possible_stages = [default_levels[level][stage] for level in default_levels for stage in range(6)]
-    if world.multiworld.plando_connections[world.player]:
-        for connection in world.multiworld.plando_connections[world.player]:
+    if world.options.plando_connections:
+        for connection in world.options.plando_connections:
             try:
                 entrance_world, entrance_stage = connection.entrance.rsplit(" ", 1)
                 stage_world, stage_stage = connection.exit.rsplit(" ", 1)

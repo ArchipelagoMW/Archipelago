@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set, Union, Tuple
+from typing import Callable, Dict, List, Set, Union, Tuple, Optional
 from BaseClasses import  Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
@@ -69,21 +69,39 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         return mission_pools
 
     # Finding the goal map
-    goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
-    goal_level = max(goal_priorities.values())
-    candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-    candidate_campaigns.sort(key=lambda it: it.id)
-    goal_campaign = world.random.choice(candidate_campaigns)
-    primary_goal = campaign_final_mission_locations[goal_campaign]
-    if primary_goal is None or primary_goal.mission in excluded_missions:
-        # No primary goal or its mission is excluded
-        candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
-        candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
-        if len(candidate_missions) == 0:
-            raise Exception("There are no valid goal missions. Please exclude fewer missions.")
-        goal_mission = world.random.choice(candidate_missions)
+    goal_mission: Optional[SC2Mission] = None
+    if mission_order_type in campaign_depending_orders:
+        # Prefer long campaigns over shorter ones and harder missions over easier ones
+        goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
+        goal_level = max(goal_priorities.values())
+        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns.sort(key=lambda it: it.id)
+
+        goal_campaign = world.random.choice(candidate_campaigns)
+        primary_goal = campaign_final_mission_locations[goal_campaign]
+        if primary_goal is None or primary_goal.mission in excluded_missions:
+            # No primary goal or its mission is excluded
+            candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+            candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
+            if len(candidate_missions) == 0:
+                raise Exception("There are no valid goal missions. Please exclude fewer missions.")
+            goal_mission = world.random.choice(candidate_missions)
+        else:
+            goal_mission = primary_goal.mission
     else:
-        goal_mission = primary_goal.mission
+        # Find one of the missions with the hardest difficulty
+        available_missions: List[SC2Mission] = \
+            [mission for mission in SC2Mission
+             if (mission not in excluded_missions and mission.campaign in enabled_campaigns)]
+        available_missions.sort(key=lambda it: it.id)
+        # Loop over pools, from hardest to easiest
+        for mission_pool in range(MissionPools.VERY_HARD, MissionPools.STARTER - 1, -1):
+            pool_missions: List[SC2Mission] = [mission for mission in available_missions if mission.pool == mission_pool]
+            if pool_missions:
+                goal_mission = world.random.choice(pool_missions)
+                break
+    if goal_mission is None:
+        raise Exception("There are no valid goal missions. Please exclude fewer missions.")
 
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
