@@ -328,13 +328,13 @@ class DS3ExcludeLocations(ExcludeLocations):
 
 
 class ExcludedLocationBehaviorOption(Choice):
-    """Which items can be placed in excluded locations in DS3.
+    """How to choose items for excluded locations in DS3.
 
-    - **Unnecessary:** Excluded locations can't have progression items, but they can have useful
+    - **Allow Useful:** Excluded locations can't have progression items, but they can have useful
       items.
-    - **Unimportant:** Neither progression items nor useful items can be placed in excluded
+    - **Forbid Useful:** Neither progression items nor useful items can be placed in excluded
       locations.
-    - **Unrandomized:** Excluded locations always contain the same item as in vanilla Dark Souls
+    - **Do Not Randomize:** Excluded locations always contain the same item as in vanilla Dark Souls
       III.
 
     A "progression item" is anything that's required to unlock another location in some game. A
@@ -342,20 +342,20 @@ class ExcludedLocationBehaviorOption(Choice):
     desirable but not strictly necessary.
     """
     display_name = "Excluded Locations Behavior"
-    option_unnecessary = 1
-    option_unimportant = 2
-    option_unrandomized = 3
+    option_allow_useful = 1
+    option_forbid_useful = 2
+    option_do_not_randomize = 3
     default = 2
 
 
 class MissableLocationBehaviorOption(Choice):
     """Which items can be placed in locations that can be permanently missed.
 
-    - **Unnecessary:** Missable locations can't have progression items, but they can have useful
+    - **Allow Useful:** Missable locations can't have progression items, but they can have useful
       items.
-    - **Unimportant:** Neither progression items nor useful items can be placed in missable
+    - **Forbid Useful:** Neither progression items nor useful items can be placed in missable
       locations.
-    - **Unrandomized:** Missable locations always contain the same item as in vanilla Dark Souls
+    - **Do Not Randomize:** Missable locations always contain the same item as in vanilla Dark Souls
       III.
 
     A "progression item" is anything that's required to unlock another location in some game. A
@@ -363,9 +363,9 @@ class MissableLocationBehaviorOption(Choice):
     desirable but not strictly necessary.
     """
     display_name = "Missable Locations Behavior"
-    option_unnecessary = 1
-    option_unimportant = 2
-    option_unrandomized = 3
+    option_allow_useful = 1
+    option_forbid_useful = 2
+    option_do_not_randomize = 3
     default = 2
 
 
