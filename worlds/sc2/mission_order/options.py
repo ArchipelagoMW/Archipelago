@@ -1,8 +1,10 @@
 from __future__ import annotations
-import typing, random
+import random
 
 from Options import OptionDict
 from schema import Schema, Optional, And, Or
+import typing
+from typing import Any, Union, Dict, Set, List
 import copy
 
 from ..mission_tables import lookup_name_to_mission, SC2Mission, MissionFlag, SC2Campaign
@@ -26,29 +28,51 @@ IntZero = And(int, lambda val: val >= 0)
 IntOne = And(int, lambda val: val >= 1)
 IntPercent = And(int, lambda val: 0 <= val <= 100)
 
+SubRuleEntryRule = {
+    "rules": [{str: Any}], # recursive schema checking is too hard
+    "amount": IntNegOne,
+}
+MissionCountEntryRule = {
+    "scope": [str],
+    "amount": IntNegOne,
+}
+BeatMissionsEntryRule = {
+    "scope": [str],
+}
+EntryRule = Or(SubRuleEntryRule, MissionCountEntryRule, BeatMissionsEntryRule)
+
 class CustomMissionOrder(OptionDict):
     """
     Used to generate a custom mission order. Please look at documentation to understand usage.
     """
-    display_name = "Mission Order"
-    value: typing.Dict[str, typing.Any]
+    display_name = "Custom Mission Order"
+    value: Dict[str, Dict[str, Any]]
     default = {
         "Default Campaign": {
-            "order": 0,
-            "unlock_count": -1,
-            "unlock_specific": [],
-            "required": True,
+            # "order": 0,
+            # "unlock_count": -1,
+            # "unlock_specific": [],
+            # "required": True,
+            "display_name": "null",
+            "entry_rules": [],
+            "goal": True,
             "min_difficulty": "relative",
             "max_difficulty": "relative",
+            # "single_layout_campaign" intentionally has no default
             GLOBAL_ENTRY: {
-                "order": 0,
+                # "order": 0,
                 "limit": 0,
-                "required": False,
-                "unlock_count": -1,
-                "unlock_specific": [],
+                # "required": False,
+                # "unlock_count": -1,
+                # "unlock_specific": [],
+                "display_name": "null",
+                "entry_rules": [],
+                "goal": False,
+                "exit": False,
                 "mission_pool": ["all missions"],
                 "min_difficulty": "relative",
                 "max_difficulty": "relative",
+                "missions": [],
             },
             "Default Layout": {
                 "type": "grid",
@@ -60,138 +84,251 @@ class CustomMissionOrder(OptionDict):
     schema = Schema({
         # Campaigns
         str: {
-            "order": int,
-            "unlock_count": IntNegOne,
-            "unlock_specific": [str],
-            "required": bool,
+            # "order": int,
+            # "unlock_count": IntNegOne,
+            # "unlock_specific": [str],
+            # "required": bool,
+            "display_name": [str],
+            "entry_rules": [EntryRule],
+            "goal": bool,
             "min_difficulty": Difficulty,
             "max_difficulty": Difficulty,
+            "single_layout_campaign": bool,
             # Layouts
             str: {
                 # Type options
                 "type": lambda val: issubclass(val, LayoutType),
-                "order": int,
+                # "order": int,
                 "size": IntOne,
                 "limit": IntZero,
                 # Link options
-                "required": bool,
-                "unlock_count": IntNegOne,
-                "unlock_specific": [str],
+                # "required": bool,
+                # "unlock_count": IntNegOne,
+                # "unlock_specific": [str],
+                "exit": bool,
+                "goal": bool,
+                "display_name": [str],
+                "entry_rules": [EntryRule],
                 # Mission pool options
                 "mission_pool": {int},
                 "min_difficulty": Difficulty,
                 "max_difficulty": Difficulty,
                 # Mission slots
-                Optional(int): {
-                    Optional("mission"): str,
-                    Optional("required"): bool,
+                "missions": [{
+                    "index": [int],
+                    # Optional("mission"): str,
+                    # Optional("required"): bool,
                     Optional("entrance"): bool,
                     Optional("exit"): bool,
+                    Optional("goal"): bool,
                     Optional("empty"): bool,
                     Optional("next"): [int],
-                    Optional("unlock_count"): IntZero,
-                    Optional("unlock_specific"): [str],
+                    # Optional("unlock_count"): IntZero,
+                    # Optional("unlock_specific"): [str],
+                    Optional("entry_rules"): [EntryRule],
                     Optional("mission_pool"): {int},
                     Optional("difficulty"): Difficulty,
-                },
+                }],
             },
         }
     })
     
-    def __init__(self, value: typing.Dict[str, typing.Dict[str, typing.Any]]):
+    def __init__(self, value: Dict[str, Dict[str, Any]]):
         # Make sure all the globals are filled
-        self.value = dict()
+        self.value: Dict[str, Dict[str, Any]] = dict()
         if value == self.default: # If this option is default, it shouldn't mess with its own values
             value = copy.deepcopy(self.default)
+
         for campaign in value:
             self.value[campaign] = dict()
+
+            # Check if this campaign has a layout type, making it a campaign-level layout
+            single_layout_campaign = "type" in value[campaign]
+            if single_layout_campaign:
+                # Single-layout campaigns are not allowed to declare more layouts
+                single_layout = {key: val for (key, val) in value[campaign].items() if type(val) != dict}
+                value[campaign] = {campaign: single_layout}
+                # Hide campaign name for single-layout campaigns
+                value[campaign]["display_name"] = ""
+            value[campaign]["single_layout_campaign"] = single_layout_campaign
+
             # Check if this campaign has a global layout
             global_dict = dict()
             for name in value[campaign]:
                 if name.lower() == GLOBAL_ENTRY:
                     global_dict = value[campaign].pop(name, dict())
                     break
+
+            # Campaign values = default options (except for default layouts) + campaign options
             self.value[campaign] = {key: value for (key, value) in self.default["Default Campaign"].items() if type(value) != dict}
             self.value[campaign].update(value[campaign])
             _resolve_special_options(self.value[campaign])
+
             for layout in value[campaign]:
                 if type(value[campaign][layout]) != dict:
                     continue
-                # Layout values = default options + global options + layout options
+                # Layout values = default options + campaign's global options + layout options
                 self.value[campaign][layout] = copy.deepcopy(self.default["Default Campaign"][GLOBAL_ENTRY])
                 self.value[campaign][layout].update(global_dict)
                 self.value[campaign][layout].update(value[campaign][layout])
                 _resolve_special_options(self.value[campaign][layout])
-                for mission_slot in value[campaign][layout]:
-                    if type(mission_slot) == int:
-                        # Defaults for mission slots are handled by the mission slot struct
-                        _resolve_special_options(self.value[campaign][layout][mission_slot])
+
+                for mission_slot_index in range(len(self.value[campaign][layout]["missions"])):
+                    # Defaults for mission slots are handled by the mission slot struct
+                    _resolve_special_options(self.value[campaign][layout]["missions"][mission_slot_index])
         # print(self.value)
 
     # Overloaded to remove pre-init schema validation
     # Schema is still validated after __init__
     @classmethod
-    def from_any(cls, data: typing.Dict[str, typing.Any]) -> CustomMissionOrder:
+    def from_any(cls, data: Dict[str, Any]) -> CustomMissionOrder:
         if type(data) == dict:
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-def _resolve_special_options(data: typing.Dict):
+def _resolve_special_options(data: Dict[str, Any]):
     # Handle range values & string-to-value conversions
-    range_missions = []
     for option in data:
-        # Mission slot indices can be ranges
-        if type(option) == str and option.startswith("random-range-"):
-            range_missions.append(option)
         option_value = data[option]
-        # Option values can be ranges
-        if type(option_value) == str and option_value.startswith("random-range-"):
-            resolved = _custom_range(option_value)
-            data[option] = resolved
-        # Option values can be strings representations of values
-        if option in STR_OPTION_VALUES:
-            if type(option_value) == list:
-                data[option] = [STR_OPTION_VALUES[option][val.lower()] for val in option_value]
-            else:
-                data[option] = STR_OPTION_VALUES[option][option_value.lower()]
+        new_value = _resolve_special_option(option, option_value)
+        data[option] = new_value
+        # # Option values can be ranges
+        # if type(option_value) == str and option_value.startswith("random-range-"):
+        #     resolved = _custom_range(option_value)
+        #     data[option] = resolved
+        # # Option values can be strings representations of values
+        # if option in STR_OPTION_VALUES:
+        #     if type(option_value) == list:
+        #         data[option] = [STR_OPTION_VALUES[option][val.lower()] for val in option_value]
+        #     else:
+        #         data[option] = STR_OPTION_VALUES[option][option_value.lower()]
         # 'unlock_specific' can contain indices, which need to be converted to strings
-        if option == "unlock_specific":
-            data[option] = [str(val) for val in option_value]
+        # if option == "unlock_specific":
+        #     data[option] = [str(val) for val in option_value]
         # 'mission_pool' contains a list of instructions for making a set of mission indices
-        if option == "mission_pool":
-            if type(option_value) == str: # TODO consider if this is better or worse than a dedicated 'mission' option
-                pool = {lookup_name_to_mission[option_value].id}
-            else:
-                pool: typing.Set[int] = set()
-                for line in option_value:
-                    if line.startswith("~"):
-                        if len(pool) == 0:
-                            raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
-                        term = line[1:].strip()
-                        missions = _get_target_missions(term)
-                        pool.difference_update(missions)
-                    elif line.startswith("and "): # TODO figure out a real symbol
-                        if len(pool) == 0:
-                            raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
-                        term = line[4:].strip()
-                        missions = _get_target_missions(term)
-                        pool.intersection_update(missions)
-                    else:
-                        if line.startswith("+"):
-                            term = line[1:].strip()
-                        else:
-                            term = line.strip()
-                        missions = _get_target_missions(term)
-                        pool.update(missions)
-            if len(pool) == 0 and not len(data.get("mission", "")) > 0:
-                raise ValueError(f"Mission pool evaluated to zero missions: {option_value}")
-            data[option] = pool
-    for range in range_missions:
-        resolved = _custom_range(range)
-        data.setdefault(resolved, dict()).update(data.pop(range))
+        # if option == "mission_pool":
+        #     if type(option_value) == str: # TODO consider if this is better or worse than a dedicated 'mission' option
+        #         pool = {lookup_name_to_mission[option_value].id}
+        #     else:
+        #         pool: Set[int] = set()
+        #         for line in option_value:
+        #             if line.startswith("~"):
+        #                 if len(pool) == 0:
+        #                     raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
+        #                 term = line[1:].strip()
+        #                 missions = _get_target_missions(term)
+        #                 pool.difference_update(missions)
+        #             elif line.startswith("and "): # TODO figure out a real symbol
+        #                 if len(pool) == 0:
+        #                     raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
+        #                 term = line[4:].strip()
+        #                 missions = _get_target_missions(term)
+        #                 pool.intersection_update(missions)
+        #             else:
+        #                 if line.startswith("+"):
+        #                     term = line[1:].strip()
+        #                 else:
+        #                     term = line.strip()
+        #                 missions = _get_target_missions(term)
+        #                 pool.update(missions)
+        #     if len(pool) == 0 and not len(data.get("mission", "")) > 0:
+        #         raise ValueError(f"Mission pool evaluated to zero missions: {option_value}")
+        #     data[option] = pool
 
-def _get_target_missions(term: str) -> typing.Set[int]:
+def _resolve_special_option(option: str, option_value: Any) -> Any:
+    # Option values can be string representations of values
+    if option in STR_OPTION_VALUES:
+        if type(option_value) == list:
+            return [STR_OPTION_VALUES[option][val.lower()] for val in option_value]
+        else:
+            return STR_OPTION_VALUES[option][option_value.lower()]
+    
+    if option == "mission_pool":
+        return _resolve_mission_pool(option_value)
+    
+    if option == "entry_rules":
+        rules = [_resolve_entry_rule(subrule) for subrule in option_value]
+        return rules
+    
+    if option == "display_name":
+        # Make sure all the values are strings
+        if type(option_value) == list:
+            names = [str(value) for value in option_value]
+            return names
+        elif option_value == "null":
+            # "null" means no custom display name
+            return []
+        else:
+            return [str(option_value)]
+        
+    if option == "index":
+        # All index values could be ranges
+        if type(option_value) == list:
+            indices = [_resolve_potential_range(index) for index in option_value]
+            return indices
+        else:
+            return [_resolve_potential_range(option_value)]
+
+    # Option values can be ranges
+    return _resolve_potential_range(option_value)
+
+def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
+    resolved: Dict[str, Any] = {}
+    if "amount" in option_value:
+        resolved["amount"] = _resolve_potential_range(option_value["amount"])
+    if "scope" in option_value:
+        # A scope may be a list or a single address
+        # Since addresses can be a single index, they may be ranges
+        if type(option_value["scope"]) == list:
+            resolved["scope"] = [_resolve_potential_range(subscope) for subscope in option_value["scope"]]
+        else:
+            resolved["scope"] = [_resolve_potential_range(option_value["scope"])]
+    if "rules" in option_value:
+        resolved["rules"] = [_resolve_entry_rule(subrule) for subrule in option_value["rules"]]
+    return resolved
+
+def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
+    # An option value may be a range
+    if type(option_value) == str and option_value.startswith("random-range-"):
+        resolved = _custom_range(option_value)
+        return resolved
+    else:
+        # As this is a catch-all function,
+        # assume non-range option values are handled elsewhere
+        # or intended to fall through
+        return option_value
+
+def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[str]:
+    if type(option_value) == str: # TODO consider if this is better or worse than a dedicated 'mission' option
+        pool = _get_target_missions(option_value)
+    else:
+        pool: Set[int] = set()
+        for line in option_value:
+            if line.startswith("~"):
+                if len(pool) == 0:
+                    raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
+                term = line[1:].strip()
+                missions = _get_target_missions(term)
+                pool.difference_update(missions)
+            elif line.startswith("and "): # TODO figure out a real symbol
+                if len(pool) == 0:
+                    raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
+                term = line[4:].strip()
+                missions = _get_target_missions(term)
+                pool.intersection_update(missions)
+            else:
+                if line.startswith("+"):
+                    term = line[1:].strip()
+                else:
+                    term = line.strip()
+                missions = _get_target_missions(term)
+                pool.update(missions)
+    if len(pool) == 0:
+        raise ValueError(f"Mission pool evaluated to zero missions: {option_value}")
+    return pool
+
+def _get_target_missions(term: str) -> Set[int]:
     if term in lookup_name_to_mission:
         return {lookup_name_to_mission[term].id}
     else:
