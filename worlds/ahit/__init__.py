@@ -6,7 +6,7 @@ from .Locations import location_table, contract_locations, is_location_valid, ge
     get_total_locations
 from .Rules import set_rules
 from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal, create_option_groups
-from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item
+from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
 from worlds.AutoWorld import World, WebWorld, CollectionState
@@ -96,8 +96,10 @@ class HatInTimeWorld(World):
                     self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
                     if self.options.UmbrellaLogic:
                         self.multiworld.push_precollected(self.create_item("Umbrella"))
-
-                if start_chapter == ChapterIndex.SUBCON and self.options.ShuffleSubconPaintings:
+                elif start_chapter == ChapterIndex.BIRDS and self.options.UmbrellaLogic \
+                 and self.options.LogicDifficulty < Difficulty.EXPERT:
+                    self.multiworld.push_precollected(self.create_item("Umbrella"))
+                elif start_chapter == ChapterIndex.SUBCON and self.options.ShuffleSubconPaintings:
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))
 
     def create_regions(self):
