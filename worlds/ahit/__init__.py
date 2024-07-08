@@ -90,7 +90,7 @@ class HatInTimeWorld(World):
         # If starting chapter is 3 and painting shuffle is enabled, and act rando isn't, give one free painting unlock
         start_chapter: ChapterIndex = ChapterIndex(self.options.StartingChapter)
 
-        if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
+        if start_chapter != ChapterIndex.MAFIA:
             if not self.options.ActRandomizer:
                 if start_chapter == ChapterIndex.ALPINE:
                     self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
