@@ -25,29 +25,33 @@ class AreaStats(NamedTuple):
     hp_level: int
     sp_level: int
     mp_level: int
+    potion_count: int  # todo: fill out potion counts
 
 
 area_data: Dict[str, AreaStats] = {
     # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
-    "Overworld": AreaStats(1, 1, 1, 1, 1, 1),
-    "East Forest": AreaStats(1, 1, 1, 1, 1, 1),
+    "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0),
+    "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0),
     # learn how to upgrade
-    "Beneath the Well": AreaStats(2, 1, 3, 3, 1, 1),
-    "Dark Tomb": AreaStats(2, 2, 3, 3, 1, 1),
-    "West Garden": AreaStats(2, 3, 3, 3, 1, 1),
-    "Garden Knight": AreaStats(3, 3, 3, 3, 2, 1),
+    "Beneath the Well": AreaStats(2, 1, 3, 3, 1, 1, 3),
+    "Dark Tomb": AreaStats(2, 2, 3, 3, 1, 1, 3),
+    "West Garden": AreaStats(2, 3, 3, 3, 1, 1, 4),
+    "Garden Knight": AreaStats(3, 3, 3, 3, 2, 1, 4),
     # get the wand here
-    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1),
-    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2),
-    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3),
+    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1, 4),
+    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2, 4),
+    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3, 4),
     # the second half of Atoll is the part you need the stats for, so putting it after frogs
-    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3),
-    "Library": AreaStats(4, 4, 3, 5, 3, 3),
-    "Quarry": AreaStats(5, 4, 3, 5, 3, 3),
-    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3),
-    "Swamp": AreaStats(1, 1, 1, 1, 1, 1),
-    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1),
+    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3, 4),
+    "Library": AreaStats(4, 4, 3, 5, 3, 3, 4),
+    "Quarry": AreaStats(5, 4, 3, 5, 3, 3, 4),
+    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 4),
+    "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 4),
+    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 4),
 }
+
+# flask locations: 1 by dance fox, 1 after guard captain, 1 in the shop at the start, 1 in the shop at west garden
+# flask shard locations: 1 by overworld well, 1 before guard captain, 1 in orb grapple chest in ow, (continue)
 
 
 # general requirements for enemy encounters in the game, for use in determining whether you can access a chest
