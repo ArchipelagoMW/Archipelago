@@ -156,9 +156,6 @@ class TunicWorld(World):
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-        keys_behind_bosses = self.options.keys_behind_bosses
-        hexagon_quest = self.options.hexagon_quest
-        sword_progression = self.options.sword_progression
 
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
@@ -172,7 +169,7 @@ class TunicWorld(World):
         if self.options.start_with_sword:
             self.multiworld.push_precollected(self.create_item("Sword"))
 
-        if sword_progression:
+        if self.options.sword_progression:
             items_to_create["Stick"] = 0
             items_to_create["Sword"] = 0
         else:
@@ -189,9 +186,9 @@ class TunicWorld(World):
             self.slot_data_items.append(laurels)
             items_to_create["Hero's Laurels"] = 0
 
-        if keys_behind_bosses:
+        if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
-                hex_item = self.create_item(gold_hexagon if hexagon_quest else rgb_hexagon)
+                hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
                 self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
                 self.slot_data_items.append(hex_item)
                 items_to_create[rgb_hexagon] = 0
@@ -203,7 +200,7 @@ class TunicWorld(World):
 
         # Remove filler to make room for other items
         def remove_filler(amount: int) -> None:
-            for _ in range(0, amount):
+            for _ in range(amount):
                 if not available_filler:
                     fill = "Fool Trap"
                 else:
@@ -222,7 +219,7 @@ class TunicWorld(World):
                     ladder_count += 1
             remove_filler(ladder_count)
 
-        if hexagon_quest:
+        if self.options.hexagon_quest:
             # Calculate number of hexagons in item pool
             hexagon_goal = self.options.hexagon_goal
             extra_hexagons = self.options.extra_hexagon_percentage
@@ -238,6 +235,18 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
+            for hero_relic in item_name_groups["Hero Relics"]:
+                relic_item = TunicItem(hero_relic, ItemClassification.useful, self.item_name_to_id[hero_relic], self.player)
+                tunic_items.append(relic_item)
+                items_to_create[hero_relic] = 0
+
+        if not self.options.ability_shuffling:
+            for page in item_name_groups["Abilities"]:
+                if items_to_create[page] > 0:
+                    page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
+                    tunic_items.append(page_item)
+                    items_to_create[page] = 0
+
         if self.options.maskless:
             mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
             tunic_items.append(mask_item)
@@ -249,7 +258,7 @@ class TunicWorld(World):
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
-            for i in range(0, quantity):
+            for _ in range(quantity):
                 tunic_item: TunicItem = self.create_item(item)
                 if item in slot_data_item_names:
                     self.slot_data_items.append(tunic_item)
@@ -300,10 +309,10 @@ class TunicWorld(World):
 
     def set_rules(self) -> None:
         if self.options.entrance_rando or self.options.shuffle_ladders:
-            set_er_location_rules(self, self.ability_unlocks)
+            set_er_location_rules(self)
         else:
-            set_region_rules(self, self.ability_unlocks)
-            set_location_rules(self, self.ability_unlocks)
+            set_region_rules(self)
+            set_location_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
@@ -378,7 +387,7 @@ class TunicWorld(World):
             if start_item in slot_data_item_names:
                 if start_item not in slot_data:
                     slot_data[start_item] = []
-                for i in range(0, self.options.start_inventory_from_pool[start_item]):
+                for _ in range(self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
 
         for plando_item in self.multiworld.plando_items[self.player]:
