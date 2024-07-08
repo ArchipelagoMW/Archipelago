@@ -59,14 +59,14 @@ class SVEContentPack(ContentPack):
         content.untag_item(SVESeed.ancient_fern, tag=ItemTag.CROPSANITY_SEED)
         if ginger_island_content_pack.name not in content.registered_packs:
             # Remove Highlands seeds as these are behind Lance existing.
-            content.source_item(SVESeed.void)
-            content.source_item(SVEVegetable.void_root)
-            content.source_item(SVESeed.stalk)
-            content.source_item(SVEFruit.monster_fruit)
-            content.source_item(SVESeed.fungus)
-            content.source_item(SVEVegetable.monster_mushroom)
-            content.source_item(SVESeed.slime)
-            content.source_item(SVEFruit.slime_berry)
+            content.game_items.pop(SVESeed.void)
+            content.game_items.pop(SVEVegetable.void_root)
+            content.game_items.pop(SVESeed.stalk)
+            content.game_items.pop(SVEFruit.monster_fruit)
+            content.game_items.pop(SVESeed.fungus)
+            content.game_items.pop(SVEVegetable.monster_mushroom)
+            content.game_items.pop(SVESeed.slime)
+            content.game_items.pop(SVEFruit.slime_berry)
 
 
 register_mod_content_pack(SVEContentPack(

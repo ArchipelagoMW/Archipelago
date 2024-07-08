@@ -16,25 +16,19 @@ from ...strings.skill_names import ModSkill
 class ArchaeologyContentPack(ContentPack):
     def artisan_good_hook(self, content: StardewContent):
         # Done as honestly there are too many display items to put into the initial registration traditionally.
-        display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
         display_items = all_artifacts + all_fossils
-        rusty_scrap_machine_rules = []
         for item in display_items:
-            if item in all_artifacts:
-                rusty_scrap_machine_rules.append(MachineSource(item=str(item), machine=ModMachine.grinder))
-            for display_type in display_types:
-                if item == "Trilobite":
-                    product_name = f"{display_type}: Trilobite Fossil"
-                else:
-                    product_name = f"{display_type}: {item}"
+            self.source_display_items(item, content)
+        content.source_item(ModTrash.rusty_scrap, *(MachineSource(item=artifact, machine=ModMachine.grinder) for artifact in all_artifacts))
 
-                if "Wooden" in display_type:
-                    content.source_item(product_name, MachineSource(item=str(item), machine=ModMachine.preservation_chamber))
-                else:
-                    content.source_item(product_name, MachineSource(item=str(item), machine=ModMachine.hardwood_preservation_chamber))
-        # Done as there are too many artifacts that suffice for this rule, and realistically a machine will always be bijective in use save
-        # this, so it's hard to argue a change.
-        content.source_item(ModTrash.rusty_scrap, *tuple(rusty_scrap_machine_rules))
+    def source_display_items(self, item: str, content: StardewContent):
+        wood_display = f"Wooden Display: {item}"
+        hardwood_display = f"Hardwood Display: {item}"
+        if item == "Trilobite":
+            wood_display = f"Wooden Display: Trilobite Fossil"
+            hardwood_display = f"Hardwood Display: Trilobite Fossil"
+        content.source_item(wood_display, MachineSource(item=str(item), machine=ModMachine.preservation_chamber))
+        content.source_item(hardwood_display, MachineSource(item=str(item), machine=ModMachine.hardwood_preservation_chamber))
 
 
 register_mod_content_pack(ArchaeologyContentPack(
