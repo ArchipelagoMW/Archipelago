@@ -419,6 +419,33 @@ class ValidInventory:
         if not STARPORT_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
             unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
+        if not {item_names.MEDIVAC, item_names.HERCULES} & logical_inventory_set:
+            inventory = [item for item in inventory if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            locked_items = [item for item in locked_items if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+        if item_names.MEDIVAC not in logical_inventory_set:
+            # Don't allow L2 Siege Tank Transport Hook without Medivac
+            inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            locked_transport_hooks = [item for item in locked_items if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            if len(inventory_transport_hooks) + len(locked_transport_hooks) > 1:
+                if len(inventory_transport_hooks) > 1:
+                    inventory.remove(inventory_transport_hooks[0])
+                else:
+                    locked_items.remove(locked_transport_hooks[0])
+            if len(inventory_transport_hooks) + len(locked_transport_hooks) > 0:
+                # Transport Hook is in inventory, remove from unused_items
+                unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            else:
+                unused_transport_hooks = [item_name for item_name in unused_items if item_name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+                if len(unused_transport_hooks) > 1:
+                    # Not in inventory, allow only one in unused_items
+                    unused_items.remove(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK)
+        if not {item_names.COMMAND_CENTER_SCANNER_SWEEP, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_EXTRA_SUPPLIES} & logical_inventory_set:
+            # No orbital Command Spells
+            inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            locked_items = [item for item in locked_items if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+
         # HotS
         # Baneling without sources => remove Baneling and upgrades
         if (item_names.ZERGLING_BANELING_ASPECT in self.logical_inventory
@@ -432,9 +459,9 @@ class ValidInventory:
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ZERGLING_BANELING_ASPECT]
         # Spawn Banelings without Zergling/Morphling => remove Baneling unit, keep upgrades except macro ones
         if (item_names.ZERGLING_BANELING_ASPECT in self.logical_inventory
-            and item_names.ZERGLING not in self.logical_inventory
-            and item_names.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
-            and not enable_morphling
+                and item_names.ZERGLING not in self.logical_inventory
+                and item_names.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
+                and not enable_morphling
         ):
             inventory = [item for item in inventory if item.name != item_names.ZERGLING_BANELING_ASPECT]
             inventory = [item for item in inventory if item.name != item_names.BANELING_RAPID_METAMORPH]
@@ -459,8 +486,12 @@ class ValidInventory:
         if item_names.ROACH not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if item.name != item_names.ROACH_RAVAGER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
+            inventory = [item for item in inventory if item.name != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_RAVAGER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
         if item_names.HYDRALISK not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
             inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
@@ -476,12 +507,15 @@ class ValidInventory:
         if not {item_names.PHOENIX, item_names.MIRAGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Phoenix/Mirage)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Phoenix/Mirage)")]
-        if not {item_names.VOID_RAY, item_names.DESTROYER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer)")]
-        if not {item_names.IMMORTAL, item_names.ANNIHILATOR} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator)")]
+        if not {item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer/Warp Ray/Scorcher)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer/Warp Ray/Scorcher)")]
+        if not {item_names.CARRIER, item_names.SKYLORD, item_names.PURGER} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Carrier/Skylord/Purger)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Skylord/Purger)")]
+        if not {item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator/Stalwart)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator/Stalwart)")]
         if not {item_names.DARK_TEMPLAR, item_names.AVENGER, item_names.BLOOD_HUNTER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Templar/Avenger/Blood Hunter)")]

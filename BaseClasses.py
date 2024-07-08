@@ -11,8 +11,8 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
-    Type, ClassVar
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
+                   TypedDict, Union, Type, ClassVar
 
 import NetUtils
 import Options
@@ -707,15 +707,49 @@ class CollectionState():
         """Returns True if at least one item name of items is in state at least once."""
         return any(self.prog_items[player][item] for item in items)
 
+    def has_all_counts(self, item_counts: Mapping[str, int], player: int) -> bool:
+        """Returns True if each item name is in the state at least as many times as specified."""
+        return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
+
+    def has_any_count(self, item_counts: Mapping[str, int], player: int) -> bool:
+        """Returns True if at least one item name is in the state at least as many times as specified."""
+        return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
+
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
 
-    def item_count(self, item: str, player: int) -> int:
-        Utils.deprecate("Use count instead.")
-        return self.count(item, player)
+    def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
+        """Returns True if the state contains at least `count` items matching any of the item names from a list."""
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in items:
+            found += player_prog_items[item_name]
+            if found >= count:
+                return True
+        return False
+    
+    def has_from_list_unique(self, items: Iterable[str], player: int, count: int) -> bool:
+        """Returns True if the state contains at least `count` items matching any of the item names from a list.
+        Ignores duplicates of the same item."""
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in items:
+            found += player_prog_items[item_name] > 0
+            if found >= count:
+                return True
+        return False
+
+    def count_from_list(self, items: Iterable[str], player: int) -> int:
+        """Returns the cumulative count of items from a list present in state."""
+        return sum(self.prog_items[player][item_name] for item_name in items)
+    
+    def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
+        """Returns the cumulative count of items from a list present in state. Ignores duplicates of the same item."""
+        return sum(self.prog_items[player][item_name] > 0 for item_name in items)
 
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
+        """Returns True if the state contains at least `count` items present in a specified item group."""
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
@@ -724,12 +758,34 @@ class CollectionState():
                 return True
         return False
 
-    def count_group(self, item_name_group: str, player: int) -> int:
+    def has_group_unique(self, item_name_group: str, player: int, count: int = 1) -> bool:
+        """Returns True if the state contains at least `count` items present in a specified item group.
+        Ignores duplicates of the same item.
+        """
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += player_prog_items[item_name]
-        return found
+            found += player_prog_items[item_name] > 0
+            if found >= count:
+                return True
+        return False
+
+    def count_group(self, item_name_group: str, player: int) -> int:
+        """Returns the cumulative count of items from an item group present in state."""
+        player_prog_items = self.prog_items[player]
+        return sum(
+            player_prog_items[item_name]
+            for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]
+        )
+
+    def count_group_unique(self, item_name_group: str, player: int) -> int:
+        """Returns the cumulative count of items from an item group present in state.
+        Ignores duplicates of the same item."""
+        player_prog_items = self.prog_items[player]
+        return sum(
+            player_prog_items[item_name] > 0
+            for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]
+        )
 
     # Item related
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
@@ -990,7 +1046,7 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
+        return ((self.always_allow(state, item) and item.name not in state.multiworld.worlds[item.player].options.non_local_items)
                 or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))))
@@ -1186,7 +1242,7 @@ class Spoiler:
                 logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
                     location.item.name, location.item.player, location.name, location.player) for location in
                                                                                sphere_candidates])
-                if any([multiworld.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
+                if any([multiworld.worlds[location.item.player].options.accessibility != 'minimal' for location in sphere_candidates]):
                     raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
                                        f'Something went terribly wrong here.')
                 else:

@@ -99,7 +99,7 @@ class GameSpeed(Choice):
     default = option_default
 
 
-class DisableForcedCamera(Toggle):
+class DisableForcedCamera(DefaultOnToggle):
     """
     Prevents the game from moving or locking the camera without the player's consent.
     """
@@ -150,7 +150,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 83
+    range_end = 89
     default = 83
 
 
@@ -261,6 +261,23 @@ class EnableNCOMissions(DefaultOnToggle):
     display_name = "Enable Nova Covert Ops missions"
 
 
+class EnableRaceSwapVariants(Choice):
+    """
+    Allow mission variants where you play a faction other than the one the map was initially
+    designed for. NOTE: Cutscenes are always skipped on race-swapped mission variants.
+
+    Disabled: Don't shuffle any non-vanilla map variants into the pool.
+    Shuffle All: Each version of a map can appear in the same pool (so a map can appear up to 3 times as different races)
+    ("Pick Just One At Random" coming soon)
+    """
+    display_name = "Enable Race-Swapped Mission Variants"
+    option_disabled = 0
+    # TODO: Implement pick-one logic
+    # option_pick_one = 1
+    option_shuffle_all = 2
+    default = option_disabled
+
+
 class ShuffleCampaigns(DefaultOnToggle):
     """
     Shuffles the missions between campaigns if enabled.
@@ -365,7 +382,7 @@ class VanillaItemsOnly(Toggle):
 
 
 # Current maximum number of upgrades for a unit
-MAX_UPGRADES_OPTION = 12
+MAX_UPGRADES_OPTION = 14
 
 
 class EnsureGenericItems(Range):
@@ -557,6 +574,14 @@ class EnableMorphling(Toggle):
     display_name = "Enable Morphling"
 
 
+class NerfUnitBaselines(Toggle):
+    """
+    Controls whether some units can initially be found in a nerfed state, with upgrades restoring their stronger power level.
+    For example, nerfed Zealots will lack the whirlwind upgrade until it is found as an item.
+    """
+    display_name = "Allow Unit Nerfs"
+
+
 class SpearOfAdunPresence(Choice):
     """
     Determines in which missions Spear of Adun calldowns will be available.
@@ -564,8 +589,8 @@ class SpearOfAdunPresence(Choice):
 
     Not Present: Spear of Adun calldowns are unavailable.
     LotV Protoss: Spear of Adun calldowns are only available in LotV main campaign
-    Protoss: Spear od Adun calldowns are available in any Protoss mission
-    Everywhere: Spear od Adun calldowns are available in any mission of any race
+    Protoss: Spear of Adun calldowns are available in any Protoss mission
+    Everywhere: Spear of Adun calldowns are available in any mission of any race
     """
     display_name = "Spear of Adun Presence"
     option_not_present = 0
@@ -600,8 +625,8 @@ class SpearOfAdunAutonomouslyCastAbilityPresence(Choice):
 
     Not Presents: Autocasts are not available.
     LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
-    Protoss: Spear od Adun autocasts are available in any Protoss mission
-    Everywhere: Spear od Adun autocasts are available in any mission of any race
+    Protoss: Spear of Adun autocasts are available in any Protoss mission
+    Everywhere: Spear of Adun autocasts are available in any mission of any race
     """
     display_name = "Spear of Adun Autonomously Cast Powers Presence"
     option_not_present = 0
@@ -904,6 +929,7 @@ class Starcraft2Options(PerGameCommonOptions):
     player_color_protoss: PlayerColorProtoss
     player_color_zerg: PlayerColorZerg
     player_color_zerg_primal: PlayerColorZergPrimal
+    selected_races: SelectRaces
     enable_wol_missions: EnableWolMissions
     enable_prophecy_missions: EnableProphecyMissions
     enable_hots_missions: EnableHotsMissions
@@ -911,6 +937,7 @@ class Starcraft2Options(PerGameCommonOptions):
     enable_lotv_missions: EnableLotVMissions
     enable_epilogue_missions: EnableEpilogueMissions
     enable_nco_missions: EnableNCOMissions
+    enable_race_swap: EnableRaceSwapVariants
     shuffle_campaigns: ShuffleCampaigns
     shuffle_no_build: ShuffleNoBuild
     starter_unit: StarterUnit
@@ -930,6 +957,7 @@ class Starcraft2Options(PerGameCommonOptions):
     start_primary_abilities: StartPrimaryAbilities
     kerrigan_primal_status: KerriganPrimalStatus
     enable_morphling: EnableMorphling
+    nerf_unit_baselines: NerfUnitBaselines
     spear_of_adun_presence: SpearOfAdunPresence
     spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
     spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence
@@ -967,7 +995,7 @@ def get_enabled_races(world: 'SC2World') -> Set[SC2Race]:
     selection = get_option_value(world, 'selected_races')
     if selection == SelectRaces.option_all:
         return set(SC2Race)
-    enabled = set()
+    enabled = {SC2Race.ANY}
     if selection & MissionFlag.Terran:
         enabled.add(SC2Race.TERRAN)
     if selection & MissionFlag.Zerg:
@@ -989,11 +1017,14 @@ def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
         enabled_campaigns.add(SC2Campaign.PROLOGUE)
     if get_option_value(world, "enable_lotv_missions"):
         enabled_campaigns.add(SC2Campaign.LOTV)
-    if get_option_value(world, "enable_epilogue_missions"):
+    # Force-disable epilogue missions if vanilla mission order with at least 1 disabled faction
+    if get_option_value(world, "enable_epilogue_missions") \
+            and (get_option_value(world, "mission_order") != MissionOrder.option_vanilla
+                 or get_option_value(world, "selected_races") == SelectRaces.option_all):
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
     if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
-    return set([campaign for campaign in enabled_campaigns if campaign.race in get_enabled_races(world)])
+    return enabled_campaigns
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1009,6 +1040,8 @@ def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     # filter out no-build missions
     if not get_option_value(world, "shuffle_no_build"):
         excluded |= MissionFlag.NoBuild
+    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_disabled:
+        excluded |= MissionFlag.RaceSwap
     # TODO: add more flags to potentially exclude once we have a way to get that from the player
     return MissionFlag(excluded)
 
@@ -1032,7 +1065,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
             [mission for mission in SC2Mission if
              mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE]
         )
-    # Omitting No-Build missions if not shuffling no-build
+    # Omitting missions with flags we don't want
     if disabled_flags:
         excluded_missions = excluded_missions.union(get_missions_with_any_flags_in_list(disabled_flags))
     # Omitting missions not in enabled campaigns

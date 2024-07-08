@@ -3,6 +3,7 @@ import unittest
 from .. import items
 from .. import item_descriptions
 
+
 class TestItemDescriptions(unittest.TestCase):
     def test_all_items_have_description(self):
         for item_name in items.item_table:

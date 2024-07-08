@@ -23,18 +23,19 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from worlds.sc2 import item_names
-from worlds.sc2.item_groups import item_name_groups, unlisted_item_name_groups
-from worlds.sc2 import options
-from worlds.sc2.options import (
+from . import item_names
+from .item_groups import item_name_groups, unlisted_item_name_groups
+from . import options
+from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
 )
 from worlds.sc2.mission_order.structs import MissionRequirements, SC2MissionOrder
+from .mission_tables import MissionFlag
 
 
 if __name__ == "__main__":
@@ -48,17 +49,20 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.items import (
-    lookup_id_to_name, get_full_item_list, ItemData, upgrade_numbers, upgrade_numbers_all,
-    race_to_item_type, upgrade_item_types, ZergItemType,
+from .items import (
+    lookup_id_to_name, get_full_item_list, ItemData,
+    race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles, upgrade_included_names,
+    WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from worlds.sc2.locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2.mission_tables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
+from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
+from .mission_tables import (
+    lookup_id_to_mission, SC2Campaign, lookup_name_to_mission,
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
-from worlds.sc2.regions import MissionInfo
+)
+from .regions import MissionInfo
 
 import colorama
-from worlds.sc2.options import Option
+from .options import Option
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
@@ -112,10 +116,10 @@ class ColouredMessage:
     def coloured(self, text: str, colour: str) -> 'ColouredMessage':
         add_json_text(self.parts, text, type="color", color=colour)
         return self
-    def location(self, location_id: int, player_id: int = 0) -> 'ColouredMessage':
+    def location(self, location_id: int, player_id: int) -> 'ColouredMessage':
         add_json_location(self.parts, location_id, player_id)
         return self
-    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> 'ColouredMessage':
+    def item(self, item_id: int, player_id: int, flags: int = 0) -> 'ColouredMessage':
         add_json_item(self.parts, item_id, player_id, flags)
         return self
     def player(self, player_id: int) -> 'ColouredMessage':
@@ -127,7 +131,6 @@ class ColouredMessage:
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
-    echo_commands = True
 
     def formatted_print(self, text: str) -> None:
         """Prints with kivy formatting to the GUI, and also prints to command-line and to all logs"""
@@ -255,10 +258,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     self.formatted_print(f" [u]{faction.name}[/u] ")
             
             for item_id in categorized_items[faction]:
-                item_name = self.ctx.item_names[item_id]
+                item_name = self.ctx.item_names.lookup_in_game(item_id)
                 received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
                 matching_children = [child for child in received_child_items
-                                    if item_matches_filter(self.ctx.item_names[child])]
+                                     if item_matches_filter(self.ctx.item_names.lookup_in_game(child))]
                 received_items_of_this_type = items_received.get(item_id, [])
                 item_is_match = item_matches_filter(item_name)
                 if item_is_match or len(matching_children) > 0:
@@ -268,7 +271,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     for item in received_items_of_this_type:
                         print_faction_title()
                         has_printed_faction_title = True
-                        (ColouredMessage('* ').item(item.item, flags=item.flags)
+                        (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
@@ -289,7 +292,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         received_items_of_this_type = items_received.get(child_item, [])
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
-                            (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                            (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
                                 (" from ").location(item.location, self.ctx.slot)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
@@ -328,6 +331,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
+            ConfigurableOptionInfo('unit_nerfs', 'nerf_unit_baselines', options.NerfUnitBaselines, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -541,6 +545,7 @@ class SC2Context(CommonContext):
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
+        self.nerf_unit_baselines: int = NerfUnitBaselines.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
         self.custom_mission_order: typing.Dict[str, typing.Dict[str, typing.List[typing.List[typing.Tuple[int, MissionRequirements]]]]]
         self.final_mission: int = 29
@@ -670,6 +675,7 @@ class SC2Context(CommonContext):
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
+            self.nerf_unit_baselines = args["slot_data"].get("nerf_unit_baselines", NerfUnitBaselines.default)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -862,10 +868,12 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.slot_data_version < 3:
         for compat_item in API2_TO_API3_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
+    # API < 4 Orbital Command Count (Deprecated item)
+    orbital_command_count: int = 0
 
     network_item: NetworkItem
     accumulators: typing.Dict[SC2Race, typing.List[int]] = {
-        race: [0 for _ in item_type_enum_class]
+        race: [0 for element in item_type_enum_class if element.flag_word >= 0]
         for race, item_type_enum_class in race_to_item_type.items()
     }
 
@@ -878,6 +886,9 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         name: str = lookup_id_to_name[network_item.item]
         item_data: ItemData = item_list[name]
 
+        if item_data.type.flag_word < 0:
+            continue
+
         # exists exactly once
         if item_data.quantity == 1:
             accumulators[item_data.race][item_data.type.flag_word] |= 1 << item_data.number
@@ -887,14 +898,14 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             flaggroup = item_data.type.flag_word
 
             # Generic upgrades apply only to Weapon / Armor upgrades
-            if item_data.type not in upgrade_item_types or ctx.generic_upgrade_items == 0:
+            if item_data.number >= 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
                 if name == item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
                     shields_from_ground_upgrade += 1
                 if name == item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE:
                     shields_from_air_upgrade += 1
-                for bundled_number in upgrade_numbers[item_data.number]:
+                for bundled_number in get_bundle_upgrade_member_numbers(name):
                     accumulators[item_data.race][flaggroup] += 1 << bundled_number
 
             # Regen bio-steel nerf with API3 - undo for older games
@@ -905,7 +916,9 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
         else:
-            if name == item_names.STARTING_MINERALS:
+            if name == item_names.PROGRESSIVE_ORBITAL_COMMAND:
+                orbital_command_count += 1
+            elif name == item_names.STARTING_MINERALS:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.minerals_per_item
             elif name == item_names.STARTING_VESPENE:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
@@ -919,32 +932,63 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
-            accumulators[shield_upgrade_item.race][item_data.type.flag_word] += 1 << shield_upgrade_item.number
+            accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
+    
+    # War council option
+    if not ctx.nerf_unit_baselines:
+        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council.flag_word] = (1 << 30) - 1
+
+    # Deprecated Orbital Command handling (Backwards compatibility):
+    if orbital_command_count > 0:
+        orbital_command_replacement_items: typing.List[str] = [
+            item_names.COMMAND_CENTER_SCANNER_SWEEP,
+            item_names.COMMAND_CENTER_MULE,
+            item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
+            item_names.PLANETARY_FORTRESS_ORBITAL_MODULE
+        ]
+        replacement_item_ids = [get_full_item_list()[item_name].code for item_name in orbital_command_replacement_items]
+        if sum(item_id in replacement_item_ids for item_id in items) > 0:
+            logger.warning(inspect.cleandoc("""
+                Both old Orbital Command and its replacements are present in the world. Skipping compatibility handling.
+            """))
+        else:
+            # None of replacement items are present
+            # L1: MULE and Scanner Sweep
+            scanner_sweep_data = get_full_item_list()[item_names.COMMAND_CENTER_SCANNER_SWEEP]
+            mule_data = get_full_item_list()[item_names.COMMAND_CENTER_MULE]
+            accumulators[scanner_sweep_data.race][scanner_sweep_data.type.flag_word] += 1 << scanner_sweep_data.number
+            accumulators[mule_data.race][mule_data.type.flag_word] += 1 << mule_data.number
+            if orbital_command_count >= 2:
+                # L2 MULE and Scanner Sweep usable even in Planetary Fortress Mode
+                planetary_orbital_module_data = get_full_item_list()[item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+                accumulators[planetary_orbital_module_data.race][planetary_orbital_module_data.type.flag_word] += \
+                    1 << planetary_orbital_module_data.number
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
         # total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
         total_missions = sum(len(column) for layout in ctx.custom_mission_order.values() for columns in layout.values() for column in columns)
-        for race in SC2Race:
-            if race == SC2Race.ANY:
-                continue
+        num_missions = int((ctx.generic_upgrade_missions / 100) * total_missions)
+        completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
+        upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL) if num_missions > 0 else WEAPON_ARMOR_UPGRADE_MAX_LEVEL
+
+        # Equivalent to "Progressive Weapon/Armor Upgrade" item
+        global_upgrades: typing.Set[str] = upgrade_included_names[GenericUpgradeItems.option_bundle_all]
+        for global_upgrade in global_upgrades:
+            race = get_full_item_list()[global_upgrade].race
             upgrade_flaggroup = race_to_item_type[race]["Upgrade"].flag_word
-            num_missions = ctx.generic_upgrade_missions * total_missions
-            amounts = [
-                num_missions // 100,
-                2 * num_missions // 100,
-                3 * num_missions // 100
-            ]
-            upgrade_count = 0
-            completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
-            for amount in amounts:
-                if completed >= amount:
-                    upgrade_count += 1
-            # Equivalent to "Progressive Weapon/Armor Upgrade" item
-            for bundled_number in upgrade_numbers[upgrade_numbers_all[race]]:
+            for bundled_number in get_bundle_upgrade_member_numbers(global_upgrade):
                 accumulators[race][upgrade_flaggroup] += upgrade_count << bundled_number
 
     return accumulators
+
+
+def get_bundle_upgrade_member_numbers(bundled_item: str) -> typing.List[int]:
+    upgrade_elements: typing.List[str] = upgrade_bundles[bundled_item]
+    if bundled_item in (item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE, item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE):
+        # Shields are handled as a maximum of those two
+        upgrade_elements = [item_name for item_name in upgrade_elements if item_name != item_names.PROGRESSIVE_PROTOSS_SHIELDS]
+    return [get_full_item_list()[item_name].number for item_name in upgrade_elements]
 
 
 def calc_difficulty(difficulty: int):
@@ -1040,13 +1084,27 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return kerrigan_level >= 35
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
-        completed = len([(mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
-                         for mission_id in ctx.mission_id_to_location_ids])
+        completed = sum((mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
+                         for mission_id in ctx.mission_id_to_location_ids)
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
         codes = [item.item for item in ctx.items_received]
         return get_full_item_list()[item_names.KERRIGAN_PRIMAL_FORM].code in codes
     return False
+
+
+def get_mission_variant(mission_id: int) -> int:
+    mission_flags = lookup_id_to_mission[mission_id].flags
+    if MissionFlag.RaceSwap not in mission_flags:
+        return 0
+    if MissionFlag.Terran in mission_flags:
+        return 1
+    elif MissionFlag.Zerg in mission_flags:
+        return 2
+    elif MissionFlag.Protoss in mission_flags:
+        return 3
+    return 0
+
 
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
@@ -1096,6 +1154,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
+            mission_variant = get_mission_variant(self.mission_id)  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
@@ -1105,22 +1164,24 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                difficulty,
-                self.ctx.generic_upgrade_research,
-                self.ctx.all_in_choice,
-                game_speed,
-                self.ctx.disable_forced_camera,
-                self.ctx.skip_cutscenes,
-                kerrigan_options,
-                self.ctx.grant_story_tech,
-                self.ctx.take_over_ai_allies,
-                soa_options,
-                self.ctx.mission_order,
-                1 if self.ctx.nova_covert_ops_only else 0,
-                self.ctx.grant_story_levels,
-                self.ctx.enable_morphling
-            ))
+            await self.chat_send(
+                "?SetOptions"
+                f" {difficulty}"
+                f" {self.ctx.generic_upgrade_research}"
+                f" {self.ctx.all_in_choice}"
+                f" {game_speed}"
+                f" {self.ctx.disable_forced_camera}"
+                f" {self.ctx.skip_cutscenes}"
+                f" {kerrigan_options}"
+                f" {self.ctx.grant_story_tech}"
+                f" {self.ctx.take_over_ai_allies}"
+                f" {soa_options}"
+                f" {self.ctx.mission_order}"
+                f" {int(self.ctx.nova_covert_ops_only)}"
+                f" {self.ctx.grant_story_levels}"
+                f" {self.ctx.enable_morphling}"
+                f" {mission_variant}"
+            )
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
                 start_items[SC2Race.ANY][1],
@@ -1223,26 +1284,18 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateTerranTech(self, current_items):
         terran_items = current_items[SC2Race.TERRAN]
-        await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-            terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
-            terran_items[11], terran_items[12], terran_items[13]))
+        await self.chat_send("?GiveTerranTech " + " ".join(map(str, terran_items)))
 
     async def updateZergTech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
+        zerg_items = [value for index, value in enumerate(zerg_items) if index not in [ZergItemType.Level.flag_word, ZergItemType.Primal_Form.flag_word]]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, kerrigan_level)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
-        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
-            zerg_items[3], zerg_items[4], zerg_items[5], zerg_items[6], zerg_items[9], zerg_items[10], zerg_items[11]
-        ))
+        await self.chat_send(f"?GiveZergTech {kerrigan_level} {kerrigan_primal_bot_value} " + ' '.join(map(str, zerg_items)))
 
     async def updateProtossTech(self, current_items):
         protoss_items = current_items[SC2Race.PROTOSS]
-        await self.chat_send("?GiveProtossTech {} {} {} {} {} {} {} {} {} {}".format(
-            protoss_items[0], protoss_items[1], protoss_items[2], protoss_items[3], protoss_items[4],
-            protoss_items[5], protoss_items[6], protoss_items[7], protoss_items[8], protoss_items[9]
-        ))
+        await self.chat_send("?GiveProtossTech " + " ".join(map(str, protoss_items)))
 
 
 def request_unfinished_missions(ctx: SC2Context) -> None: # TODO still uses req table
@@ -1257,7 +1310,7 @@ def request_unfinished_missions(ctx: SC2Context) -> None: # TODO still uses req 
             objectives = set(ctx.locations_for_mission(lookup_name_to_mission[mission]))
             if objectives:
                 remaining_objectives = objectives.difference(ctx.checked_locations)
-                unfinished_locations[mission] = [ctx.location_names[location_id] for location_id in remaining_objectives]
+                unfinished_locations[mission] = [ctx.location_names.lookup_in_game(location_id) for location_id in remaining_objectives]
             else:
                 unfinished_locations[mission] = []
 

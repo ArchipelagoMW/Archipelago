@@ -52,6 +52,10 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_names.REAPER: 1,
                 item_names.DIAMONDBACK: 0,
                 item_names.HELLION: 1,
+                # Additional excludes to increase the likelihood that unexcluded items actually appear
+                item_groups.ItemGroupNames.STARPORT_UNITS: 0,
+                item_names.WARHOUND: 0,
+                item_names.VULTURE: 0,
             },
             'unexcluded_items': {
                 item_names.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
@@ -62,6 +66,10 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_names.HELLION: 1,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
                 item_names.MARAUDER_PROGRESSIVE_STIMPACK: 0,
+                # Additional unexcludes for logic
+                item_names.MEDIVAC: 0,
+                item_names.BATTLECRUISER: 0,
+                item_names.SCIENCE_VESSEL: 0,
             },
         }
         self.generate_world(world_options)
@@ -72,8 +80,8 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.REAPER, itempool)
         self.assertEqual(itempool.count(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE), 1, f"Stealth suit occurred the wrong number of times")
         self.assertIn(item_names.HELLION, itempool)
-        self.assertEqual(itempool.count(item_names.MARINE_PROGRESSIVE_STIMPACK), 2, "Marine stimpacks weren't unexcluded")
-        self.assertEqual(itempool.count(item_names.MARAUDER_PROGRESSIVE_STIMPACK), 2, "Marauder stimpacks weren't unexcluded")
+        self.assertEqual(itempool.count(item_names.MARINE_PROGRESSIVE_STIMPACK), 2, f"Marine stimpacks weren't unexcluded  (seed {self.multiworld.seed})")
+        self.assertEqual(itempool.count(item_names.MARAUDER_PROGRESSIVE_STIMPACK), 2, f"Marauder stimpacks weren't unexcluded (seed {self.multiworld.seed})")
         self.assertNotIn(item_names.DIAMONDBACK, itempool)
         self.assertNotIn(item_names.NOVA_BLAZEFIRE_GUNBLADE, itempool)
         self.assertNotIn(item_names.NOVA_ENERGY_SUIT_MODULE, itempool)
@@ -423,8 +431,64 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertTrue(itempool)
         aspects_in_pool = list(set(itempool).intersection(set(item_groups.zerg_morphs)))
+        if item_names.OVERLORD_OVERSEER_ASPECT in aspects_in_pool:
+            # Overseer morphs from Overlord, that's available always
+            aspects_in_pool.remove(item_names.OVERLORD_OVERSEER_ASPECT)
         self.assertFalse(aspects_in_pool)
         units_in_pool = list(set(itempool).intersection(set(item_groups.zerg_units))
                              .difference(set(item_groups.zerg_morphs)))
         self.assertFalse(units_in_pool)
 
+    def test_deprecated_orbital_command_not_present(self) -> None:
+        """
+        Orbital command got replaced. The item is still there for backwards compatibility.
+        It shouldn't be generated.
+        :return:
+        """
+        world_options = {}
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertTrue(itempool)
+        self.assertNotIn(item_names.PROGRESSIVE_ORBITAL_COMMAND, itempool)
+
+    def test_planetary_orbital_module_not_present_without_cc_spells(self) -> None:
+        world_options = {
+            "excluded_items": [
+                item_names.COMMAND_CENTER_MULE,
+                item_names.COMMAND_CENTER_SCANNER_SWEEP,
+                item_names.COMMAND_CENTER_EXTRA_SUPPLIES
+            ],
+            "locked_items": [
+                item_names.PLANETARY_FORTRESS
+            ]
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        self.assertTrue(itempool)
+        self.assertIn(item_names.PLANETARY_FORTRESS, itempool)
+        self.assertNotIn(item_names.PLANETARY_FORTRESS_ORBITAL_MODULE, itempool)
+
+    def test_disabling_unit_nerfs_removes_war_council_upgrades(self) -> None:
+        world_options = {
+            'enable_wol_missions': False,
+            'enable_prophecy_missions': True,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': True,
+            'enable_lotv_missions': True,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'mission_order': options.MissionOrder.option_grid,
+            'nerf_unit_baselines': options.NerfUnitBaselines.option_false,
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        war_council_item_names = set(item_groups.item_name_groups[item_groups.ItemGroupNames.WAR_COUNCIL])
+        present_war_council_items = war_council_item_names.intersection(itempool)
+
+        self.assertTrue(itempool)
+        self.assertFalse(present_war_council_items, f'Found war council upgrades when nerf_unit_baselines is false: {present_war_council_items}')
