@@ -702,9 +702,10 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
         elif act.name == "Heating Up Mafia Town":  # Straight up impossible
             return False
 
-    if (diff < Difficulty.EXPERT or world.options.ShuffleSubconPaintings and world.options.NoPaintingSkips) \
-       and act.name == "Your Contract has Expired":
-        return False
+    # Need to be able to hover
+    if act.name == "Your Contract has Expired":
+        if diff < Difficulty.EXPERT or world.options.ShuffleSubconPaintings and world.options.NoPaintingSkips:
+            return False
 
     if act.name == "Dead Bird Studio":
         # No umbrella logic = moderate, umbrella logic = expert.
@@ -720,7 +721,7 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
         return False
 
     if world.options.ShuffleSubconPaintings and act_chapters.get(act.name, "") == "Subcon Forest":
-        # Only allow Subcon levels if paintings can be skipped
+        # Only allow Subcon levels if painting skips are allowed
         if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
             return False
 
