@@ -16,7 +16,7 @@ from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
-from worlds.generic.Rules import add_item_rule
+from worlds.generic.Rules import add_item_rule, add_rule
 
 
 class MMBN3Settings(settings.Group):
@@ -174,19 +174,36 @@ class MMBN3World(World):
 
         # Set WWW ID requirements
         def has_www_id(state): return state.has(ItemName.WWW_ID, self.player)
-        self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player).access_rule = has_www_id
-        self.multiworld.get_location(LocationName.SciLab_1_WWW_BMD, self.player).access_rule = has_www_id
-        self.multiworld.get_location(LocationName.Yoka_1_WWW_BMD, self.player).access_rule = has_www_id
-        self.multiworld.get_location(LocationName.Undernet_1_WWW_BMD, self.player).access_rule = has_www_id
+        add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.SciLab_1_WWW_BMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.Yoka_1_WWW_BMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.Undernet_1_WWW_BMD, self.player), has_www_id)
 
         # Set Press Program requirements
         def has_press(state): return state.has(ItemName.Press, self.player)
-        self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Yoka_2_Upper_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Beach_2_East_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Hades_South_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Secret_3_BugFrag_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player).access_rule = has_press
+        add_rule(self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Yoka_2_Upper_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Beach_2_East_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Hades_South_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Secret_3_BugFrag_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
+
+        # Set Purple Mystery Data Unlocker access
+        def can_unlock(state): return state.can_reach(RegionName.SciLab_Overworld, "Region", self.player) or \
+            state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player) or \
+            state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player) or \
+            state.has(ItemName.Unlocker, self.player, 8) # There are 8 PMDs that aren't in one of the above areas
+        add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Beach_1_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Undernet_7_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Mayls_HP_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.SciLab_Dads_Computer_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Zoo_Panda_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Beach_DNN_Security_Panel_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Beach_DNN_Main_Console_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Tamakos_HP_PMD, self.player), can_unlock)
 
         # Set Job additional area access
         self.multiworld.get_location(LocationName.Please_deliver_this, self.player).access_rule = \
