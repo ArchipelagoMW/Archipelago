@@ -26,33 +26,49 @@ class AreaStats(NamedTuple):
     sp_level: int
     mp_level: int
     potion_count: int
+    equipment: List[str] = []
 
 
 area_data: Dict[str, AreaStats] = {
     # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
     "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0),
-    "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0),
+    "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
     # learn how to upgrade
-    "Beneath the Well": AreaStats(2, 1, 3, 3, 1, 1, 3),
-    "Dark Tomb": AreaStats(2, 2, 3, 3, 1, 1, 3),
-    "West Garden": AreaStats(2, 3, 3, 3, 1, 1, 4),
-    "Garden Knight": AreaStats(3, 3, 3, 3, 2, 1, 4),
+    "Beneath the Well": AreaStats(2, 1, 3, 3, 1, 1, 3, ["Sword", "Shield"]),
+    "Dark Tomb": AreaStats(2, 2, 3, 3, 1, 1, 3, ["Sword", "Shield"]),
+    "West Garden": AreaStats(2, 3, 3, 3, 1, 1, 4, ["Sword", "Shield"]),
+    "Garden Knight": AreaStats(3, 3, 3, 3, 2, 1, 4, ["Sword", "Shield"]),
     # get the wand here
-    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1, 4),
-    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2, 4),
-    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3, 4),
+    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1, 4, ["Sword", "Shield", "Magic Wand"]),
+    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic Wand"]),
+    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3, 4, ["Sword", "Shield", "Magic Wand"]),
     # the second half of Atoll is the part you need the stats for, so putting it after frogs
-    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3, 5),
-    "Library": AreaStats(4, 4, 3, 5, 3, 3, 5),
-    "Quarry": AreaStats(5, 4, 3, 5, 3, 3, 5),
-    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6),
-    "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6),
-    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6),
+    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
+    "The Librarian": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
+    "Quarry": AreaStats(5, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
+    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
+    "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
+    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
+    "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
 }
 
 
-def has_required_stats(area_name: str, state: CollectionState, player: int) -> bool:
+def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
     data = area_data[area_name]
+    for item in data.equipment:
+        if item == "Stick" and not has_melee(state, player):
+            return False
+        elif item == "Sword" and not has_sword(state, player):
+            return False
+        else:
+            if not state.has(item, player):
+                return False
+    if not has_required_stats(data, state, player):
+        return False
+    return True
+
+
+def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> bool:
     # for now, just check if you have the vanilla stat requirements, can get more advanced later
     if data.att_level > 1 and get_att_level(state, player) < data.att_level:
         return False
@@ -69,28 +85,6 @@ def has_required_stats(area_name: str, state: CollectionState, player: int) -> b
     if data.potion_count > 0 and get_potion_count(state, player) < data.potion_count:
         return False
     return True
-
-
-def has_required_items(required_items: List[List[str]], stick_req: bool, state: CollectionState, player: int) -> bool:
-    # stick required for power unless excepted
-    if stick_req and not has_melee(state, player):
-        return False
-    if not required_items:
-        return True
-
-    for reqs in required_items:
-        # stick and sword have special handling because of the progressive sword option
-        if sword in reqs:
-            # state.has_all returns true for an empty list
-            if has_sword(state, player) and state.has_all([item for item in reqs if item != sword], player):
-                return True
-        elif stick in reqs:
-            if has_melee(state, player) and state.has_all([item for item in reqs if item != stick], player):
-                return True
-        else:
-            if state.has_all(reqs, player):
-                return True
-    return False
 
 
 def get_effective_hp(state: CollectionState, player: int) -> int:

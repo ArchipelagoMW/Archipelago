@@ -5,7 +5,7 @@ from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, ha
                     laurels_zip)
 from .er_data import Portal
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
-from .combat_logic import has_combat_logic
+from .combat_logic import has_required_stats
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -930,7 +930,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                                           or (state.has("Ladder to Ruined Atoll", player)
                                               and state.can_reach_region("Overworld Beach", player)))))
                             and (not options.combat_logic
-                                 or has_combat_logic(["Birds with Guns", "Lost Echoes"], state, player)))
+                                 or has_required_stats("Swamp", state, player)))
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     if options.ladder_storage >= LadderStorage.option_hard and options.shuffle_ladders:
@@ -1167,16 +1167,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         set_rule(wg_to_after_gk,
                  lambda state: state.has(laurels, player)
-                 or has_combat_logic(["Garden Knight"], state, player))
+                 or has_required_stats("Garden Knight", state, player))
         if not world.options.hexagon_quest:
             add_rule(heir_fight,
-                     lambda state: has_combat_logic(["The Heir"], state, player))
+                     lambda state: has_required_stats("The Heir", state, player))
 
     if world.options.combat_logic == CombatLogic.option_on:
         # need to fight through the rudelings and turret, or just laurels from near the windmill
         set_rule(ow_to_well_entry,
                  lambda state: state.has(laurels, player)
-                 or has_combat_logic(["Shield Rudelings", "Autobolts"], state, player))
+                 or has_combat_requirements(["Shield Rudelings", "Autobolts"], state, player))
         set_rule(ow_tunnel_beach,
                  lambda state: has_combat_logic(["Shield Rudelings"], state, player))
         # need some strength to deal with the frogs at the northwest fuse
