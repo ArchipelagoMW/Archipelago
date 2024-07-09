@@ -22,6 +22,7 @@ STR_OPTION_VALUES = {
 STR_OPTION_VALUES["min_difficulty"] = STR_OPTION_VALUES["difficulty"]
 STR_OPTION_VALUES["max_difficulty"] = STR_OPTION_VALUES["difficulty"]
 GLOBAL_ENTRY = "global"
+
 StrOption = lambda cat: And(str, lambda val: val.lower() in STR_OPTION_VALUES[cat])
 IntNegOne = And(int, lambda val: val >= -1)
 IntZero = And(int, lambda val: val >= 0)
@@ -49,10 +50,6 @@ class CustomMissionOrder(OptionDict):
     value: Dict[str, Dict[str, Any]]
     default = {
         "Default Campaign": {
-            # "order": 0,
-            # "unlock_count": -1,
-            # "unlock_specific": [],
-            # "required": True,
             "display_name": "null",
             "entry_rules": [],
             "goal": True,
@@ -60,11 +57,7 @@ class CustomMissionOrder(OptionDict):
             "max_difficulty": "relative",
             # "single_layout_campaign" intentionally has no default
             GLOBAL_ENTRY: {
-                # "order": 0,
                 "limit": 0,
-                # "required": False,
-                # "unlock_count": -1,
-                # "unlock_specific": [],
                 "display_name": "null",
                 "entry_rules": [],
                 "goal": False,
@@ -84,10 +77,6 @@ class CustomMissionOrder(OptionDict):
     schema = Schema({
         # Campaigns
         str: {
-            # "order": int,
-            # "unlock_count": IntNegOne,
-            # "unlock_specific": [str],
-            # "required": bool,
             "display_name": [str],
             "entry_rules": [EntryRule],
             "goal": bool,
@@ -98,13 +87,9 @@ class CustomMissionOrder(OptionDict):
             str: {
                 # Type options
                 "type": lambda val: issubclass(val, LayoutType),
-                # "order": int,
                 "size": IntOne,
                 "limit": IntZero,
                 # Link options
-                # "required": bool,
-                # "unlock_count": IntNegOne,
-                # "unlock_specific": [str],
                 "exit": bool,
                 "goal": bool,
                 "display_name": [str],
@@ -115,16 +100,12 @@ class CustomMissionOrder(OptionDict):
                 "max_difficulty": Difficulty,
                 # Mission slots
                 "missions": [{
-                    "index": [int],
-                    # Optional("mission"): str,
-                    # Optional("required"): bool,
+                    "index": [Or(int, str)],
                     Optional("entrance"): bool,
                     Optional("exit"): bool,
                     Optional("goal"): bool,
                     Optional("empty"): bool,
                     Optional("next"): [int],
-                    # Optional("unlock_count"): IntZero,
-                    # Optional("unlock_specific"): [str],
                     Optional("entry_rules"): [EntryRule],
                     Optional("mission_pool"): {int},
                     Optional("difficulty"): Difficulty,
@@ -266,9 +247,11 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
         # All index values could be ranges
         if type(option_value) == list:
             indices = [_resolve_potential_range(index) for index in option_value]
+            indices = [idx if type(idx) == int else str(idx) for idx in indices]
             return indices
         else:
-            return [_resolve_potential_range(option_value)]
+            idx = _resolve_potential_range(option_value)
+            return [idx if type(idx) == int else str(idx)]
 
     # Option values can be ranges
     return _resolve_potential_range(option_value)
@@ -281,11 +264,14 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
         # A scope may be a list or a single address
         # Since addresses can be a single index, they may be ranges
         if type(option_value["scope"]) == list:
-            resolved["scope"] = [_resolve_potential_range(subscope) for subscope in option_value["scope"]]
+            resolved["scope"] = [_resolve_potential_range(str(subscope)) for subscope in option_value["scope"]]
         else:
-            resolved["scope"] = [_resolve_potential_range(option_value["scope"])]
+            resolved["scope"] = [_resolve_potential_range(str(option_value["scope"]))]
     if "rules" in option_value:
         resolved["rules"] = [_resolve_entry_rule(subrule) for subrule in option_value["rules"]]
+        # Make sure sub-rule rules have a specified amount
+        if not "amount" in option_value:
+            resolved["amount"] = -1
     return resolved
 
 def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
