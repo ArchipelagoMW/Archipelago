@@ -1096,7 +1096,8 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.white_jungle_itembox_6,
         LocationName.white_jungle_itembox_7,
         LocationName.white_jungle_itembox_8,
-        LocationName.white_jungle_big,
+        LocationName.white_jungle_big_1,
+        LocationName.white_jungle_big_2,
         LocationName.white_jungle_upgrade,
     ]
     white_jungle_region = create_region(multiworld, player, active_locations, LocationName.white_jungle_region,

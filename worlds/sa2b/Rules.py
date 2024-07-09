@@ -2036,7 +2036,9 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.lost_colony_big, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
-        add_rule(multiworld.get_location(LocationName.white_jungle_big, player),
+        add_rule(multiworld.get_location(LocationName.white_jungle_big_1, player),
+                 lambda state: state.has(ItemName.shadow_air_shoes, player))
+        add_rule(multiworld.get_location(LocationName.white_jungle_big_2, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player))
         add_rule(multiworld.get_location(LocationName.mad_space_big, player),
                  lambda state: state.has(ItemName.rouge_iron_boots, player))

@@ -1847,16 +1847,22 @@ big_location_table = {
     LocationName.lost_colony_big: 0xFF1B15,
     LocationName.weapons_bed_big: 0xFF1B16,
     LocationName.security_hall_big: 0xFF1B17,
-    LocationName.white_jungle_big: 0xFF1B18,
+    LocationName.white_jungle_big_1: 0xFF1B18,
     LocationName.sky_rail_big: 0xFF1B1A,
     LocationName.mad_space_big: 0xFF1B1B,
     LocationName.cosmic_wall_big: 0xFF1B1C,
     LocationName.final_chase_big: 0xFF1B1D,
 
     LocationName.cannon_core_big_1: 0xFF1B1E,
+
+    LocationName.white_jungle_big_2: 0xFF1B38,
+
     LocationName.cannon_core_big_2: 0xFF1B3E,
+
     LocationName.cannon_core_big_3: 0xFF1B5E,
+
     LocationName.cannon_core_big_4: 0xFF1B7E,
+
     LocationName.cannon_core_big_5: 0xFF1B9E,
 }
 
