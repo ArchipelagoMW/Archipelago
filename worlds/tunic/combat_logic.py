@@ -41,14 +41,17 @@ area_data: Dict[str, AreaStats] = {
     # get the wand here
     "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1, 4, ["Sword", "Shield", "Magic Wand"]),
     "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic Wand"]),
+    "Siege Engine": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic Wand"]),
     "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3, 4, ["Sword", "Shield", "Magic Wand"]),
     # the second half of Atoll is the part you need the stats for, so putting it after frogs
     "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
     "The Librarian": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
     "Quarry": AreaStats(5, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
     "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
+    "Boss Scavenger": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
     "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
     "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
+    "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
     "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
 }
 
@@ -56,10 +59,12 @@ area_data: Dict[str, AreaStats] = {
 def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
     data = area_data[area_name]
     for item in data.equipment:
-        if item == "Stick" and not has_melee(state, player):
-            return False
-        elif item == "Sword" and not has_sword(state, player):
-            return False
+        if item == "Stick":
+            if not has_melee(state, player):
+                return False
+        elif item == "Sword":
+            if not has_sword(state, player):
+                return False
         else:
             if not state.has(item, player):
                 return False
