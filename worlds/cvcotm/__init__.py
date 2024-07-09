@@ -16,7 +16,8 @@ from .data import iname, lname
 from .presets import cvcotm_options_presets
 from worlds.AutoWorld import WebWorld, World
 
-from .aesthetics import shuffle_sub_weapons, get_location_data, get_countdown_flags, populate_enemy_drops
+from .aesthetics import shuffle_sub_weapons, get_location_data, get_countdown_flags, populate_enemy_drops,\
+    get_start_inventory_data
 from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch, CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, \
     CVCotM_VC_US_HASH
 from .client import CastlevaniaCotMClient
@@ -177,6 +178,8 @@ class CVCotMWorld(World):
     # Countdown
         if self.options.countdown:
             offset_data.update(get_countdown_flags(self, active_locations))
+    # Start Inventory
+        offset_data.update(get_start_inventory_data(self.player, self.multiworld.precollected_items[self.player]))
 
         patch = CVCotMProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch_rom(self, patch, offset_data)

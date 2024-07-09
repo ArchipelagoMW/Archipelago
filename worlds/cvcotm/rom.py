@@ -99,11 +99,6 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data = RomData(rom)
         options = json.loads(caller.get_file(options_file).decode("utf-8"))
 
-        # This patch grants Dash Boots on game initialization, effectively giving you Dash Boots from the beginning of
-        # the game without needing to pick them up.
-        # Created by DevAnj.
-        rom_data.apply_ips("AutoDashBoots.ips")
-
         # This patch allows placing DSS cards on pedestals, prevents them from timing out, and removes them from enemy
         # drop tables. Created by DevAnj but drop and pedestal item replacements have been stripped out.
         rom_data.apply_ips("CardUp_v3_Custom.ips")
@@ -157,9 +152,9 @@ class CVCotMPatchExtensions(APPatchExtension):
         # Created by Fusecavator.
         rom_data.apply_ips("AllowAlwaysDrop.ips")
 
-        # Displays the seed on the pause menu. Created by Fusecavator and modified by Liquid Cat to display a 20-digit
-        # seed for AP purposes.
-        rom_data.apply_ips("SeedDisplayAPEdition.ips")
+        # Displays the seed on the pause menu. Originally created by Fusecavator and modified by Liquid Cat to display a
+        # 20-digit seed (which AP seeds most commonly are).
+        rom_data.apply_ips("SeedDisplay20Digits.ips")
 
         # Write the seed. Upwards of 20 digits can be displayed for the seed number.
         curr_seed_addr = 0x672152
@@ -236,6 +231,14 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.apply_ips("NoMPDrain.ips")
 
         # Everything from this line and below was created and added by Liquid Cat for this Archipelago version.
+
+        # Give the player their Start Inventory upon entering their name on a new file.
+        rom_data.write_bytes(0x7F70, [0x00, 0x48, 0x87, 0x46, 0x00, 0x00, 0x68, 0x08])
+        rom_data.write_bytes(0x680000, patches.start_inventory_giver)
+
+        # Prevent Max Ups from exceeding 255.
+        rom_data.write_bytes(0x5E170, [0x00, 0x4A, 0x97, 0x46, 0x00, 0x00, 0x6A, 0x08])
+        rom_data.write_bytes(0x6A0000, patches.max_max_up_checker)
 
         # Write the textbox messaging system code.
         rom_data.write_bytes(0x7D60, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])

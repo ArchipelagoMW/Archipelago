@@ -1,12 +1,30 @@
-from BaseClasses import ItemClassification, Location
+from BaseClasses import ItemClassification, Location, Item
 from .options import ItemDropRandomization, Countdown
 from .locations import cvcotm_location_info
 from .items import cvcotm_item_info
+from .data import iname
 
 from typing import TYPE_CHECKING, Dict, List, Iterable
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
+
+# amount per = Amount this stat increases per Max Up the player starts with.
+# max allowed = The most amount of this stat the player is allowed to start with. Problems arise if the stat exceeds
+#               9999, so we must ensure it can't if the player raises any class to level 99 as well as collects 255 of
+#               that max up. The game caps hearts at 999 automatically, so it doesn't matter so much for that one.
+# variable = The key variable in extra_stats that the stat max up affects.
+extra_starting_stat_info = {
+    iname.hp_max: {"amount per": 10,
+                   "max allowed": 5289,
+                   "variable": "extra health"},
+    iname.mp_max: {"amount per": 10,
+                   "max allowed": 3129,
+                   "variable": "extra magic"},
+    iname.heart_max: {"amount per": 6,
+                      "max allowed": 999,
+                      "variable": "extra hearts"},
+}
 
 # 0 = Holy water  22
 # 1 = Axe         24
@@ -115,7 +133,7 @@ rom_sub_weapon_offsets = {
 }
 
 easy_items = [
-    1,   # Leather Armor
+    1,  # Leather Armor
     12,  # Cotton Robe
     17,  # Cotton Clothes
     34,  # Wristband
@@ -123,14 +141,14 @@ easy_items = [
     46,  # Antidote
     47,  # Cure Curse
     48,  # Mind Restore
-    51   # Heart
+    51  # Heart
 ]
 
 common_items = easy_items + [
-    2,   # Bronze Armor
-    3,   # Gold Armor
-    4,   # Chainmail
-    5,   # Steel Armor
+    2,  # Bronze Armor
+    3,  # Gold Armor
+    4,  # Chainmail
+    5,  # Steel Armor
 
     13,  # Silk Robe
     14,  # Rainbow Robe
@@ -160,10 +178,10 @@ common_items = easy_items + [
 ]
 
 rare_items = [
-    6,   # Platinum Armor
-    7,   # Diamond Armor
-    8,   # Mirror Armor
-    9,   # Needle Armor
+    6,  # Platinum Armor
+    7,  # Diamond Armor
+    8,  # Mirror Armor
+    9,  # Needle Armor
     10,  # Dark Armor
 
     15,  # Magic Robe
@@ -191,11 +209,11 @@ rare_items = [
 all_items = rare_items + common_items
 
 easily_farmable_enemies = [
-    0,   # Medusa Head
-    1,   # Zombie
-    2,   # Ghoul
-    3,   # Wight
-    7,   # Skeleton Bomber
+    0,  # Medusa Head
+    1,  # Zombie
+    2,  # Ghoul
+    3,  # Wight
+    7,  # Skeleton Bomber
     14,  # Fleaman
     16,  # Bat
     17,  # Spirit
@@ -213,42 +231,42 @@ easily_farmable_enemies = [
 ]
 
 below_150_hp_enemies = easily_farmable_enemies + [
-    4,    # Clinking Man
-    5,    # Zombie Thief
-    8,    # Electric Skeleton
-    9,    # Skeleton Spear
-    10,   # Skeleton Boomerang
-    11,   # Skeleton Soldier
-    12,   # Skeleton Knight
-    13,   # Bone Tower
-    15,   # Poltergeist
-    20,   # Axe Armor
-    26,   # Earth Armor
-    29,   # Stone Armor
-    35,   # Bloody Sword
-    41,   # Skeleton Athlete
-    42,   # Harpy
-    44,   # Imp
-    45,   # Mudman
-    47,   # Slime
-    48,   # Frozen Shade
-    49,   # Heat Shade
-    52,   # Will-O-Wisp
-    53,   # Spearfish
-    57,   # Marionette
-    60,   # Evil Pillar
-    63,   # Bone Head
-    64,   # Fox Archer
-    65,   # Fox Hunter
-    77,   # Hyena
-    78,   # Fishhead
-    79,   # Dryad
-    81,   # Brain Float
-    83,   # Abiondarg
-    86,   # Witch
-    93,   # King Moth
-    94,   # Killer Bee
-    96,   # Lizard-man
+    4,  # Clinking Man
+    5,  # Zombie Thief
+    8,  # Electric Skeleton
+    9,  # Skeleton Spear
+    10,  # Skeleton Boomerang
+    11,  # Skeleton Soldier
+    12,  # Skeleton Knight
+    13,  # Bone Tower
+    15,  # Poltergeist
+    20,  # Axe Armor
+    26,  # Earth Armor
+    29,  # Stone Armor
+    35,  # Bloody Sword
+    41,  # Skeleton Athlete
+    42,  # Harpy
+    44,  # Imp
+    45,  # Mudman
+    47,  # Slime
+    48,  # Frozen Shade
+    49,  # Heat Shade
+    52,  # Will-O-Wisp
+    53,  # Spearfish
+    57,  # Marionette
+    60,  # Evil Pillar
+    63,  # Bone Head
+    64,  # Fox Archer
+    65,  # Fox Hunter
+    77,  # Hyena
+    78,  # Fishhead
+    79,  # Dryad
+    81,  # Brain Float
+    83,  # Abiondarg
+    86,  # Witch
+    93,  # King Moth
+    94,  # Killer Bee
+    96,  # Lizard-man
     113,  # Devil Tower (Battle Arena)
     119,  # Bone Tower (Battle Arena)
     122,  # Bloody Sword (Battle Arena)
@@ -256,11 +274,11 @@ below_150_hp_enemies = easily_farmable_enemies + [
 ]
 
 bosses = [
-    68,   # Cerberus
-    76,   # Necromancer
-    84,   # Iron Golem
-    89,   # Adramelech
-    95,   # Zombie Dragon
+    68,  # Cerberus
+    76,  # Necromancer
+    84,  # Iron Golem
+    89,  # Adramelech
+    95,  # Zombie Dragon
     100,  # Death
     101,  # Camilla
     102,  # Hugh
@@ -270,7 +288,7 @@ bosses = [
 candles = [
     136,  # Scary Candle
     137,  # Trick Candle
-    80,   # Mimic Candle
+    80,  # Mimic Candle
 ]
 
 NUMBER_ENEMIES = 141
@@ -301,7 +319,7 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
     # array of flags the Countdown will track.
     for loc in active_locations:
         if ((loc.item.advancement or loc.item.classification == ItemClassification.useful)
-           or world.options.countdown == Countdown.option_all_locations) and loc.address is not None:
+                or world.options.countdown == Countdown.option_all_locations) and loc.address is not None:
             countdown_index = cvcotm_location_info[loc.name].countdown
             # If we're looking at a locally-placed DSS Card, take the card's parameter value for the flag.
             if (loc.item.player == world.player or (loc.item.player in world.multiworld.groups and world.player in
@@ -482,3 +500,79 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
 
     # Return the item ID
     return drop_list[eligible_items[random_result]]
+
+
+def get_start_inventory_data(player: int, precollected_items: List[Item]) -> Dict[int, bytes]:
+    """Calculate and return the starting inventory arrays. Different items go into different arrays, so they all have
+    to be handled accordingly."""
+    start_inventory_data = {}
+
+    magic_items_array = [0 for _ in range(8)]
+    cards_array = [0 for _ in range(20)]
+    extra_stats = {"extra health": 0,
+                   "extra magic": 0,
+                   "extra hearts": 0}
+
+    # Always start with the Dash Boots.
+    magic_items_array[0] = 1
+
+    for item in precollected_items:
+        if item.player != player:
+            continue
+
+        array_offset = item.code & 0xFF
+
+        # If it's a Max Up we're starting with, check if increasing the extra amount of that stat will put us over the
+        # max amount of the stat allowed. If it will, set the current extra amount to the max. Otherwise, increase it by
+        # the amount that it should.
+        if "Max Up" in item.name:
+            info = extra_starting_stat_info[item.name]
+            if extra_stats[info["variable"]] + info["amount per"] > info["max allowed"]:
+                extra_stats[info["variable"]] = info["max allowed"]
+            else:
+                extra_stats[info["variable"]] += info["amount per"]
+        # If it's a DSS card we're starting with, set that card's value in the cards array.
+        elif "Card" in item.name:
+            cards_array[array_offset] = 1
+        # If it's none of the above, it has to be a Magic Item.
+        # Increase that Magic Item's value in the Magic Items array if it's not greater than 240. Last Keys are the only
+        # Magic Item wherein having more than one is relevant.
+        else:
+            # Decrease the Magic Item array offset by 1 if it's higher than the unused Map's item value.
+            if array_offset > 5:
+                array_offset -= 1
+            if magic_items_array[array_offset] < 240:
+                magic_items_array[array_offset] += 1
+
+    # Add the start inventory arrays to the offset data in bytes form.
+    start_inventory_data[0x680080] = bytes(magic_items_array)
+    start_inventory_data[0x6800A0] = bytes(cards_array)
+
+    # Add the extra max HP/MP/Hearts to all classes' base stats. Doing it this way makes us less likely to hit the max
+    # possible Max Ups.
+    # Vampire Killer
+    start_inventory_data[0xE08C6] = int.to_bytes(100 + extra_stats["extra health"], 2, "little")
+    start_inventory_data[0xE08CE] = int.to_bytes(100 + extra_stats["extra magic"], 2, "little")
+    start_inventory_data[0xE08D4] = int.to_bytes(50 + extra_stats["extra hearts"], 2, "little")
+
+    # Magician
+    start_inventory_data[0xE090E] = int.to_bytes(50 + extra_stats["extra health"], 2, "little")
+    start_inventory_data[0xE0916] = int.to_bytes(400 + extra_stats["extra magic"], 2, "little")
+    start_inventory_data[0xE091C] = int.to_bytes(50 + extra_stats["extra hearts"], 2, "little")
+
+    # Fighter
+    start_inventory_data[0xE0932] = int.to_bytes(200 + extra_stats["extra health"], 2, "little")
+    start_inventory_data[0xE093A] = int.to_bytes(50 + extra_stats["extra magic"], 2, "little")
+    start_inventory_data[0xE0940] = int.to_bytes(50 + extra_stats["extra hearts"], 2, "little")
+
+    # Shooter
+    start_inventory_data[0xE0832] = int.to_bytes(50 + extra_stats["extra health"], 2, "little")
+    start_inventory_data[0xE08F2] = int.to_bytes(100 + extra_stats["extra magic"], 2, "little")
+    start_inventory_data[0xE08F8] = int.to_bytes(250 + extra_stats["extra hearts"], 2, "little")
+
+    # Thief
+    start_inventory_data[0xE0956] = int.to_bytes(50 + extra_stats["extra health"], 2, "little")
+    start_inventory_data[0xE095E] = int.to_bytes(50 + extra_stats["extra magic"], 2, "little")
+    start_inventory_data[0xE0964] = int.to_bytes(50 + extra_stats["extra hearts"], 2, "little")
+
+    return start_inventory_data

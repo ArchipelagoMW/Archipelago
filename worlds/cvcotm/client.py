@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Set
 from .locations import base_id, get_location_names_to_ids
 from .text import cvcotm_string_to_bytearray
 from .options import CompletionGoal, DeathLink
+from .data import iname
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -28,6 +29,11 @@ EVENT_FLAG_MAP = {
     0xBB: "FLAG_DEFEATED_DRACULA_I",
     0xBC: "FLAG_DEFEATED_DRACULA_II"
 }
+
+DEATHLINK_AREA_NAMES = ["Sealed Room", "Catacomb", "Abyss Staircase", "Audience Room", "Triumph Hallway",
+                        "Machine Tower", "Eternal Corridor", "Chapel Tower", "Underground Warehouse",
+                        "Underground Gallery", "Underground Waterway", "Outer Wall", "Observation Tower",
+                        "Ceremonial Room", "Battle Arena"]
 
 
 class CastlevaniaCotMClient(BizHawkClient):
@@ -73,7 +79,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             return False  # Should verify on the next pass
 
         ctx.game = self.game
-        ctx.items_handling = 0b101
+        ctx.items_handling = 0b001
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
         return True
@@ -90,10 +96,12 @@ class CastlevaniaCotMClient(BizHawkClient):
         if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
             if "cause" in args["data"]:
                 cause = args["data"]["cause"]
+                if cause == "":
+                    cause = f"{args['data']['source']} killed you without a word!"
                 if len(cause) > 300:
-                    cause = cause[0x00:0x89]
+                    cause = cause[:300]
             else:
-                cause = f"{args['data']['source']} killed you!"
+                cause = f"{args['data']['source']} killed you without a word!"
 
             # Highlight the player that killed us in the game's orange text.
             if args['data']['source'] in cause:
@@ -117,8 +125,8 @@ class CastlevaniaCotMClient(BizHawkClient):
                                                               (0x25308, 2, "EWRAM"),
                                                               (0x26000, 1, "EWRAM"),
                                                               (0x50, 1, "EWRAM"),
-                                                              (0x2562C, 4, "EWRAM"),
-                                                              (0x253FC, 1, "EWRAM")])
+                                                              (0x2562E, 18, "EWRAM"),
+                                                              (0x253FC, 2, "EWRAM")])
 
             game_state = int.from_bytes(read_state[0], "little")
             flag_bytes = read_state[1]
@@ -130,8 +138,17 @@ class CastlevaniaCotMClient(BizHawkClient):
             delay_timer = int.from_bytes(bytearray(read_state[7]), "little")
             cutscene = int.from_bytes(bytearray(read_state[8]), "little")
             nathan_state = int.from_bytes(bytearray(read_state[9]), "little")
-            health = int.from_bytes(bytearray(read_state[10]), "little")
-            area = int.from_bytes(bytearray(read_state[11]), "little")
+            health_stats_array = bytearray(read_state[10])
+            area = int.from_bytes(bytearray(read_state[11][0:1]), "little")
+            room = int.from_bytes(bytearray(read_state[11][1:]), "little")
+
+            # Get out each of the individual health/magic/heart values.
+            hp = int.from_bytes(health_stats_array[0:2], "little")
+            max_hp = int.from_bytes(health_stats_array[4:6], "little")
+            # mp = int.from_bytes(health_stats_array[8:10], "little") Not used. Not currently, at least.
+            max_mp = int.from_bytes(health_stats_array[12:14], "little")
+            hearts = int.from_bytes(health_stats_array[14:16], "little")
+            max_hearts = int.from_bytes(health_stats_array[16:], "little")
 
             # If there's no textbox already queued, the delay timer is 0, we are not in a cutscene, and Nathan's current
             # state value is not 0x34 (using a save room), we can safely inject a textbox message.
@@ -153,9 +170,18 @@ class CastlevaniaCotMClient(BizHawkClient):
                 await ctx.update_death_link(True)
 
             # Send a DeathLink if we died on our own independently of receiving another one.
-            if "DeathLink" in ctx.tags and health == 0 and not self.currently_dead:
+            if "DeathLink" in ctx.tags and hp == 0 and not self.currently_dead:
                 self.currently_dead = True
-                await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished. Dracula has won!")
+
+                # Check if we are in Dracula II's arena. The game considers this part of the Sealed Room area,
+                # which I don't think makes sense to be player-facing like this.
+                if area == 0 and room == 2:
+                    area_of_death = "Dracula's realm"
+                # If we aren't in Dracula II's arena, then take the name of whatever area the player is currently in.
+                else:
+                    area_of_death = DEATHLINK_AREA_NAMES[area]
+
+                await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished in {area_of_death}. Dracula has won!")
 
             # Scout all Locations and get our Set events.
             if ctx.locations_info == {}:
@@ -283,7 +309,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                     mssg_sfx_id = 0x1B3
                     inv_array = max_ups_array
 
-                item_name = ctx.item_names[next_item.item]
+                item_name = ctx.item_names.lookup_in_slot(next_item.item)
                 player_name = ctx.player_names[next_item.player]
                 # Truncate the player name at 50 characters.
                 if len(player_name) > 50:
@@ -292,12 +318,33 @@ class CastlevaniaCotMClient(BizHawkClient):
                 received_text = cvcotm_string_to_bytearray(f"「{item_name}」 received from "
                                                            f"「{player_name}」◊", "big middle", 0)
 
+                # Check if the player has 255 of the item being received. If they do, don't increment that counter
+                # further.
+                refill_write = []
+                new_total = inv_array[item_index] + 1
+                if new_total > 0xFF:
+                    new_total -= 1
+                    # If it's a stat max up being received, manually give a refill of that item's stat.
+                    # Normally, the game does this automatically by incrementing the number of that max up.
+                    if item_name == iname.hp_max:
+                        refill_write = [(0x2562E, int.to_bytes(max_hp, 2, "little"), "EWRAM")]
+                    elif item_name == iname.mp_max:
+                        refill_write = [(0x25636, int.to_bytes(max_mp, 2, "little"), "EWRAM")]
+                    elif item_name == iname.heart_max:
+                        # If adding +6 Hearts doesn't put us over the player's current max Hearts, do so.
+                        # Otherwise, set the player's current Hearts to the current max.
+                        if hearts + 6 > max_hearts:
+                            new_hearts = max_hearts
+                        else:
+                            new_hearts = hearts + 6
+                        refill_write = [(0x2563C, int.to_bytes(new_hearts, 2, "little"), "EWRAM")]
+
                 await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                             [(0x25300, [0x1D, 0x82], "EWRAM"),
                                              (0x25304, [1], "EWRAM"),
                                              (0x25306, bytearray(int.to_bytes(mssg_sfx_id, 2, "little")), "EWRAM"),
-                                             (inv_offset + item_index, [inv_array[item_index] + 1], "EWRAM"),
-                                             (0x7CEB00, received_text, "ROM")],
+                                             (inv_offset + item_index, [new_total], "EWRAM"),
+                                             (0x7CEB00, received_text, "ROM")] + refill_write,
                                             # Make sure the number of received items is still what we expected it to be.
                                             [(0x253D0, read_state[3], "EWRAM")]),
 
