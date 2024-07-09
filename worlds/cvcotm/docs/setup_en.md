@@ -22,8 +22,9 @@ clear it.
 
 ## Optional Software
 
-- [Castlevania: Circle of the Moon AP Tracker](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest), for use with
-[PopTracker](https://github.com/black-sliver/PopTracker/releases)
+- [Castlevania: Circle of the Moon AP Tracker](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/), for use with
+[PopTracker](https://github.com/black-sliver/PopTracker/releases). **NOTE:** The Releases are out-of-date. Click the green "Code" button and
+then "Download ZIP" for the most up-to-date version.
 
 ## Generating and Patching a Game
 

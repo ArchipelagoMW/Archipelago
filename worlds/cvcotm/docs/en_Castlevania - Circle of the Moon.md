@@ -3,7 +3,8 @@
 ## Quick Links
 - [Setup](/tutorial/Castlevania%20-%20Circle%20of%20the%20Moon/setup/en)
 - [Options Page](/games/Castlevania%20-%20Circle%20of%20the%20Moon/player-options)
-- [PopTracker Pack](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest)
+- [PopTracker Pack](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/) (The Releases are out-of-date. Click the green "Code" button and
+then "Download ZIP" for the most up-to-date version.)
 - [Repo of the original non-Archipelago version of this randomizer](https://github.com/calm-palm/cotm-randomizer)
 - [Web version of the above randomizer](https://rando.circleofthemoon.com/)
 
