@@ -342,13 +342,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-
+    
+    # don't need the ice grapple rule since you can go from ow -> beach -> tunnel
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: state.has(laurels, player))
-    regions["Overworld Tunnel Turret"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({grapple, laurels}, player))
+    
+    # regions["Overworld Tunnel Turret"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: state.has_any({grapple, laurels}, player))
 
     # Overworld side areas
     regions["Old House Front"].connect(
