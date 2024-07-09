@@ -181,6 +181,22 @@ class CombatLogic(Choice):
     default = 0
 
 
+class TempCombatOption(Choice):
+    """
+    Temporary option for testing combat logic.
+    Choose a boss, and it will be the goal for the purpose of generation.
+    The client will not goal when you kill that boss (unless it's the heir).
+    This is purely for testing spoiler outputs.
+    """
+    display_name = "Test Combat Goal"
+    option_off = 0
+    option_siege_engine = 2
+    option_librarian = 3
+    option_scav_boss = 4
+    option_gauntlet = 5
+    default = 0
+
+
 class LaurelsZips(Toggle):
     """
     Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
@@ -255,6 +271,7 @@ class TunicOptions(PerGameCommonOptions):
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
     combat_logic: CombatLogic
+    test_combat_option: TempCombatOption
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips

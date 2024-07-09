@@ -51,7 +51,21 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     victory_region = regions["Spirit Arena Victory"]
     victory_location = TunicERLocation(world.player, "The Heir", None, victory_region)
     victory_location.place_locked_item(TunicERItem("Victory", ItemClassification.progression, None, world.player))
-    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+    # todo: remove this later, just for testing
+    if not world.options.test_combat_option:
+        world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+    elif world.options.test_combat_option == 2:
+        world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_location(
+            "Fortress Arena - Siege Engine/Vault Key Pickup", world.player)
+    elif world.options.test_combat_option == 3:
+        world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_location(
+            "Librarian - Hexagon Green", world.player)
+    elif world.options.test_combat_option == 4:
+        world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_location(
+            "Rooted Ziggurat Lower - Hexagon Blue", world.player)
+    elif world.options.test_combat_option == 5:
+        world.multiworld.completion_condition[world.player] = lambda state: state.can_reach_location(
+            "Cathedral Gauntlet - Gauntlet Reward", world.player)
     victory_region.locations.append(victory_location)
 
     return portal_pairs
