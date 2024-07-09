@@ -5,7 +5,7 @@ from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, ha
                     laurels_zip)
 from .er_data import Portal
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
-from .combat_logic import has_required_stats
+from .combat_logic import has_combat_reqs
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -930,7 +930,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                                           or (state.has("Ladder to Ruined Atoll", player)
                                               and state.can_reach_region("Overworld Beach", player)))))
                             and (not options.combat_logic
-                                 or has_required_stats("Swamp", state, player)))
+                                 or has_combat_reqs("Swamp", state, player)))
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     if options.ladder_storage >= LadderStorage.option_hard and options.shuffle_ladders:
@@ -1167,21 +1167,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         set_rule(wg_to_after_gk,
                  lambda state: state.has(laurels, player)
-                 or has_required_stats("Garden Knight", state, player))
+                 or has_combat_reqs("Garden Knight", state, player))
         if not world.options.hexagon_quest:
             add_rule(heir_fight,
-                     lambda state: has_required_stats("The Heir", state, player))
+                     lambda state: has_combat_reqs("The Heir", state, player))
 
     if world.options.combat_logic == CombatLogic.option_on:
         # need to fight through the rudelings and turret, or just laurels from near the windmill
         set_rule(ow_to_well_entry,
                  lambda state: state.has(laurels, player)
-                 or has_combat_requirements(["Shield Rudelings", "Autobolts"], state, player))
+                 or has_combat_reqs("East Forest", state, player))
         set_rule(ow_tunnel_beach,
-                 lambda state: has_combat_logic(["Shield Rudelings"], state, player))
-        # need some strength to deal with the frogs at the northwest fuse
+                 lambda state: has_combat_reqs("East Forest", state, player))
         add_rule(atoll_statue,
-                 lambda state: has_combat_logic(["Frogues"], state, player))
+                 lambda state: has_combat_reqs("Ruined Atoll", state, player))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
@@ -1407,61 +1406,61 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         # garden knight is in the regions part above
         set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
-                 lambda state: has_combat_logic(["Siege Engine"], state, player))
+                 lambda state: has_combat_reqs("Siege Engine", state, player))
         set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-                 lambda state: has_combat_logic(["Librarian"], state, player))
+                 lambda state: has_combat_reqs("The Librarian", state, player))
         set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-                 lambda state: has_combat_logic(["Boss Scavenger"], state, player))
+                 lambda state: has_combat_reqs("Boss Scavenger", state, player))
         set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
-                 lambda state: has_combat_logic(["Gauntlet"], state, player))
+                 lambda state: has_combat_reqs("Gauntlet", state, player))
 
     # todo: come back add add dagger to checks that can be reasonably done with dagger
     if world.options.combat_logic == CombatLogic.option_on:
         set_rule(multiworld.get_location("Overworld - [East] Between Ladders Near Ruined Passage", player),
-                 lambda state: has_combat_logic(["Slimes"], state, player))
+                 lambda state: has_combat_reqs("Overworld", state, player))
         set_rule(multiworld.get_location("Overworld - [East] Chest Near Pots", player),
-                 lambda state: has_combat_logic(["Slimes"], state, player))
+                 lambda state: has_combat_reqs("Overworld", state, player))
         add_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
-                 lambda state: has_combat_logic(["Slimes"], state, player))
+                 lambda state: has_combat_reqs("Garden Knight", state, player))
         set_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Quarry Gate", player),
-                 lambda state: has_combat_logic(["Rudelings"], state, player))
+                 lambda state: has_combat_reqs("East Forest", state, player))
         set_rule(multiworld.get_location("Overworld - [Northeast] Chest Above Patrol Cave", player),
-                 lambda state: has_combat_logic(["Shield Rudelings"], state, player))
+                 lambda state: has_combat_reqs("Garden Knight", state, player))
         set_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret", player),
-                 lambda state: has_combat_logic(["Autobolts"], state, player))
+                 lambda state: has_combat_reqs("Overworld", state, player))
         add_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret 2", player),
-                 lambda state: has_combat_logic(["Autobolts"], state, player))
+                 lambda state: has_combat_reqs("Overworld", state, player))
 
         # could add it to the other fuse events but that's just wasteful imo
         add_rule(multiworld.get_location("Eastern Vault West Fuses", player),
-                 lambda state: has_combat_logic(["Wizards"], state, player))
+                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
         add_rule(multiworld.get_location("Eastern Vault East Fuse", player),
-                 lambda state: has_combat_logic(["Wizards"], state, player))
+                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
 
         # replace the sword rule with this one
         set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
-                 lambda state: has_combat_logic(["Big Fleemer"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Above Big Skeleton", player),
-                 lambda state: has_combat_logic(["Fleemers"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         # the tentacles deal with everything else reasonably, so you just have to fight them
         # todo: revisit, should it be fine since this is a knowledge check (get on island to stop tentacles)
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Guarded By Tentacles", player),
-                 lambda state: has_combat_logic(["Tentacles"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Obscured Beneath Telescope", player),
                  lambda state: state.has(laurels, player)  # can dash from swamp mid to here and grab it
-                 or has_combat_logic(["Lost Echoes", "Fleemers"], state, player))
+                 or has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [Central] South Secret Passage", player),
                  lambda state: state.has(laurels, player)  # can dash from swamp front to here and grab it
-                 or has_combat_logic(["Lost Echoes"], state, player))
+                 or has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway On Pedestal", player),
-                 lambda state: has_combat_logic(["Fleemers"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [Central] Beneath Memorial", player),
-                 lambda state: has_combat_logic(["Lost Echoes"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [Central] Near Ramps Up", player),
-                 lambda state: has_combat_logic(["Lost Echoes"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [Upper Graveyard] Near Telescope", player),
-                 lambda state: has_combat_logic(["Lost Echoes"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [Upper Graveyard] Near Shield Fleemers", player),
-                 lambda state: has_combat_logic(["Fleemers"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(multiworld.get_location("Swamp - [Upper Graveyard] Obscured Behind Hill", player),
-                 lambda state: has_combat_logic(["Fleemers"], state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
