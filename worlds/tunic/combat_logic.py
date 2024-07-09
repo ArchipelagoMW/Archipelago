@@ -51,6 +51,26 @@ area_data: Dict[str, AreaStats] = {
 }
 
 
+def has_required_stats(area_name: str, state: CollectionState, player: int) -> bool:
+    data = area_data[area_name]
+    # for now, just check if you have the vanilla stat requirements, can get more advanced later
+    if data.att_level > 1 and get_att_level(state, player) < data.att_level:
+        return False
+    if data.def_level > 1 and get_def_level(state, player) < data.def_level:
+        return False
+    if data.potion_level > 1 and get_potion_level(state, player) < data.potion_level:
+        return False
+    if data.hp_level > 1 and get_hp_level(state, player) < data.hp_level:
+        return False
+    if data.sp_level > 1 and get_sp_level(state, player) < data.sp_level:
+        return False
+    if data.mp_level > 1 and get_mp_level(state, player) < data.mp_level:
+        return False
+    if data.potion_count > 0 and get_potion_count(state, player) < data.potion_count:
+        return False
+    return True
+
+
 def has_required_items(required_items: List[List[str]], stick_req: bool, state: CollectionState, player: int) -> bool:
     # stick required for power unless excepted
     if stick_req and not has_melee(state, player):
@@ -120,3 +140,7 @@ def get_sp_level(state: CollectionState, player: int) -> int:
 def get_mp_level(state: CollectionState, player: int) -> int:
     return 1 + state.count_from_list({"MP Offering", "Hero Relic - MP",
                                       "Sacred Geometry", "Vintage", "Dusty"}, player)
+
+
+def get_potion_count(state: CollectionState, player: int) -> int:
+    return state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
