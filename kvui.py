@@ -775,21 +775,21 @@ class HintLog(RecycleView):
 
 
 class ApAsyncImage(AsyncImage):
-    def is_uri(self, filename):
-        if filename[:3] == "ap:":
+    def is_uri(self, filename: str) -> bool:
+        if filename.startswith("ap:"):
             return True
         else:
             return super().is_uri(filename)
 
 
 class ImageLoaderPkgutil(ImageLoaderBase):
-    def load(self, filename):
+    def load(self, filename: str) -> typing.List[ImageData]:
         # take off the "ap:" prefix
         module, path = filename[3:].split("/", 1)
         data = pkgutil.get_data(module, path)
         return self._bytes_to_data(data)
 
-    def _bytes_to_data(self, data):
+    def _bytes_to_data(self, data: typing.Union[bytes, bytearray]) -> typing.List[ImageData]:
         from PIL import Image as PImage
         p_im = PImage.open(io.BytesIO(data)).convert("RGBA")
         im_d = ImageData(p_im.size[0], p_im.size[1], p_im.mode.lower(), p_im.tobytes())
