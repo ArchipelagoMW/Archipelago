@@ -503,7 +503,7 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
         if unfilled:
             for player in multiworld.player_ids:
                 locs_diff = locations_counter[player] - items_counter[player]
-                if locs_diff:
+                if locs_diff > 0:
                     logging.warning(
                         f"Player {multiworld.get_player_name(player)} had {locs_diff} more locations than items.")
             raise FillError(
