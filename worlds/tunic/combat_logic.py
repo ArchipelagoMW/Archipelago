@@ -3,12 +3,6 @@ from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
 
 
-class EncounterData(NamedTuple):
-    power_required: int  # how strong you need to be to do the encounter
-    items_required: List[List[str]] = []  # any(all(requirements))
-    stick_required: bool = True  # by default, you need a stick. but for some, you may not need one if you have alts
-
-
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
 class AreaStats(NamedTuple):
     att_level: int
@@ -25,7 +19,8 @@ class AreaStats(NamedTuple):
 area_data: Dict[str, AreaStats] = {
     # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
     "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
-    "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
+    "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Sword"]),
+    "Before Well": AreaStats(1, 1, 1, 1, 1, 1, 3, ["Sword", "Shield"]),
     # learn how to upgrade
     "Beneath the Well": AreaStats(2, 1, 3, 3, 1, 1, 3, ["Sword", "Shield"]),
     "Dark Tomb": AreaStats(2, 2, 3, 3, 1, 1, 3, ["Sword", "Shield"]),
