@@ -2,14 +2,6 @@ from typing import Dict, List, NamedTuple
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
 
-stick = "Stick"
-sword = "Sword"
-shield = "Shield"
-laurels = "Hero's Laurels"
-fire_wand = "Magic Wand"
-gun = "Gun"
-grapple = "Magic Orb"
-
 
 class EncounterData(NamedTuple):
     power_required: int  # how strong you need to be to do the encounter
@@ -39,56 +31,83 @@ area_data: Dict[str, AreaStats] = {
     "West Garden": AreaStats(2, 3, 3, 3, 1, 1, 4, ["Sword", "Shield"]),
     "Garden Knight": AreaStats(3, 3, 3, 3, 2, 1, 4, ["Sword", "Shield"]),
     # get the wand here
-    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1, 4, ["Sword", "Shield", "Magic Wand"]),
-    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic Wand"]),
-    "Siege Engine": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic Wand"]),
-    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3, 4, ["Sword", "Shield", "Magic Wand"]),
+    "Beneath the Vault": AreaStats(3, 3, 3, 3, 2, 1, 4, ["Sword", "Shield", "Magic"]),
+    "Eastern Vault Fortress": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic"]),
+    "Siege Engine": AreaStats(3, 3, 3, 4, 3, 2, 4, ["Sword", "Shield", "Magic"]),
+    "Frog's Domain": AreaStats(3, 4, 3, 5, 3, 3, 4, ["Sword", "Shield", "Magic"]),
     # the second half of Atoll is the part you need the stats for, so putting it after frogs
-    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
-    "The Librarian": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
-    "Quarry": AreaStats(5, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic Wand"]),
-    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
-    "Boss Scavenger": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
-    "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
-    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
-    "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic Wand"]),
-    "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic Wand"]),
+    "Ruined Atoll": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic"]),
+    "The Librarian": AreaStats(4, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic"]),
+    "Quarry": AreaStats(5, 4, 3, 5, 3, 3, 5, ["Sword", "Shield", "Magic"]),
+    "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"]),
+    "Boss Scavenger": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"]),
+    "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
+    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
+    "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
+    "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic", "Laurels"]),
 }
 
 
 def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
     data = area_data[area_name]
+    extra_att_needed = 0
+    extra_def_needed = 0
+    extra_mp_needed = 0
+    extra_magic_needed = False
     for item in data.equipment:
         if item == "Stick":
             if not has_melee(state, player):
-                return False
+                extra_mp_needed += 4
+                extra_att_needed -= 16
         elif item == "Sword":
             if not has_sword(state, player):
-                return False
-        else:
-            if not state.has(item, player):
-                return False
-    if not has_required_stats(data, state, player):
+                # +4 mp pretty much makes up for the lack of sword, at least in Quarry
+                extra_mp_needed += 4
+                extra_magic_needed = True
+                extra_att_needed -= 2
+        elif item == "Shield":
+            if not state.has("Shield", player):
+                extra_def_needed += 2
+        elif item == "Laurels":
+            if not state.has("Hero's Laurels", player):
+                # these are entirely based on vibes
+                extra_att_needed += 2
+                extra_def_needed += 3
+        elif item == "Magic" or extra_magic_needed:
+            if not state.has_any({"Magic Wand", "Gun"}, player):
+                # if you needed magic from a lack of sword, and you don't even have a magic weapon, then false
+                if extra_magic_needed:
+                    return False
+                extra_att_needed += 2
+                extra_def_needed += 2
+                extra_mp_needed -= 16
+    modified_stats = AreaStats(data.att_level + extra_att_needed, data.def_level + extra_def_needed, data.potion_level,
+                               data.hp_level, data.sp_level, data.mp_level + extra_mp_needed, data.potion_count)
+    if not has_required_stats(modified_stats, state, player):
         return False
     return True
 
 
 def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> bool:
     # for now, just check if you have the vanilla stat requirements, can get more advanced later
-    if data.att_level > 1 and get_att_level(state, player) < data.att_level:
+    player_att = get_att_level(state, player)
+    if data.att_level > 1 and player_att < data.att_level:
         return False
-    if data.def_level > 1 and get_def_level(state, player) < data.def_level:
+    # adding defense and sp together since they accomplish similar things: making you take less damage
+    if (data.def_level + data.sp_level > 2
+            and get_def_level(state, player) + get_sp_level(state, player) < data.def_level + data.sp_level):
         return False
-    if data.potion_level > 1 and get_potion_level(state, player) < data.potion_level:
+    # if you have 2 more attack than needed, we can forego needing mp
+    if not player_att > data.att_level + 2:
+        if data.mp_level > 1 and get_mp_level(state, player) < data.mp_level:
+            return False
+
+    req_hp = 60 + data.hp_level * 20
+    # required hp if you include your potions at 75% healing effectiveness
+    req_effective_hp = req_hp + .75 * min(20 + data.potion_level * 10, req_hp) * data.potion_count
+    if get_effective_hp(state, player) < req_effective_hp:
         return False
-    if data.hp_level > 1 and get_hp_level(state, player) < data.hp_level:
-        return False
-    if data.sp_level > 1 and get_sp_level(state, player) < data.sp_level:
-        return False
-    if data.mp_level > 1 and get_mp_level(state, player) < data.mp_level:
-        return False
-    if data.potion_count > 0 and get_potion_count(state, player) < data.potion_count:
-        return False
+
     return True
 
 
