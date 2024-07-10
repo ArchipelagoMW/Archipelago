@@ -28,6 +28,8 @@ from .strings.goal_names import Goal as GoalName
 from .strings.metal_names import Ore
 from .strings.region_names import Region as RegionName, LogicRegion
 
+logger = logging.getLogger(__name__)
+
 STARDEW_VALLEY = "Stardew Valley"
 UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
 
@@ -103,8 +105,12 @@ class StardewValleyWorld(World):
         self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
         self.random = Random(self.seed)
 
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> int:
-        return slot_data[UNIVERSAL_TRACKER_SEED_PROPERTY]
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Optional[int]:
+        # If the seed is not specified in the slot data, this mean the world was generated before Universal Tracker support.
+        seed = slot_data.get(UNIVERSAL_TRACKER_SEED_PROPERTY)
+        if seed is None:
+            logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
+        return seed
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
@@ -119,12 +125,12 @@ class StardewValleyWorld(World):
             self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
             goal_name = self.options.goal.current_key
             player_name = self.multiworld.player_name[self.player]
-            logging.warning(
+            logger.warning(
                 f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
         if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
             self.options.walnutsanity.value = Walnutsanity.preset_none
             player_name = self.multiworld.player_name[self.player]
-            logging.warning(
+            logger.warning(
                 f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({player_name})'s world, so walnutsanity was force disabled")
 
     def create_regions(self):
