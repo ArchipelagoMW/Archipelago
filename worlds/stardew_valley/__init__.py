@@ -1,4 +1,5 @@
 import logging
+from random import Random
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
@@ -27,15 +28,18 @@ from .strings.goal_names import Goal as GoalName
 from .strings.metal_names import Ore
 from .strings.region_names import Region as RegionName, LogicRegion
 
+STARDEW_VALLEY = "Stardew Valley"
+UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
+
 client_version = 0
 
 
 class StardewLocation(Location):
-    game: str = "Stardew Valley"
+    game: str = STARDEW_VALLEY
 
 
 class StardewItem(Item):
-    game: str = "Stardew Valley"
+    game: str = STARDEW_VALLEY
 
 
 class StardewWebWorld(WebWorld):
@@ -60,7 +64,7 @@ class StardewValleyWorld(World):
     Stardew Valley is an open-ended country-life RPG. You can farm, fish, mine, fight, complete quests,
     befriend villagers, and uncover dark secrets.
     """
-    game = "Stardew Valley"
+    game = STARDEW_VALLEY
     topology_present = False
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -94,6 +98,13 @@ class StardewValleyWorld(World):
         self.filler_item_pool_names = []
         self.total_progression_items = 0
         # self.all_progression_items = dict()
+
+        # Taking the seed specified in slot data for UT, otherwise just generating the seed.
+        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
+        self.random = Random(self.seed)
+
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> int:
+        return slot_data[UNIVERSAL_TRACKER_SEED_PROPERTY]
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
@@ -413,6 +424,7 @@ class StardewValleyWorld(World):
         included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
+            UNIVERSAL_TRACKER_SEED_PROPERTY: self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": bundles,
