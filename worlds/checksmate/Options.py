@@ -48,14 +48,14 @@ class Difficulty(Choice):
     option_daily = 1
     option_bullet = 2
     option_relaxed = 3
-    default = 0
+    default = 1
 
 
 class EnableTactics(Choice):
     """
     When you start a new match, chooses the player's piece types (such as whether a minor piece is a Knight or Bishop).
 
-    All: Allows the Fork positions to contain progression or useful items.
+    All: Allows the Fork positions to contain progression, useful, trash or other items.
 
     None: Completely removes the Fork positions from all item pools.
     """
@@ -141,31 +141,6 @@ class EarlyMaterial(Choice):
     option_piece = 4
     option_any = 5
     default = 0
-
-
-class MaterialMinLimit(Range):
-    """
-    The minimum material value of your army, once all items are collected. A FIDE army has value 40 (8+6.5+6.5+10+9).
-
-    If you want consistent access to material, consider using Starting Inventory or Starting Hints in your YAML.
-    """
-    display_name = "Minimum Material"
-    range_start = 40
-    range_end = 90
-    default = 41
-
-
-class MaterialMaxLimit(Range):
-    """
-    The maximum material value of your army, once all items are collected. A FIDE army has value 40 (8+6.5+6.5+10+9).
-
-    Due to an ongoing issue, you may go over this maximum (by one piece) if your minimum and maximum are very close
-    (within 4).
-    """
-    display_name = "Maximum Material"
-    range_start = 40
-    range_end = 100
-    default = 46
 
 
 class MaximumEnginePenalties(Range):
@@ -419,8 +394,6 @@ class CMOptions(PerGameCommonOptions):
     piece_types: PieceTypes
     enemy_piece_types: EnemyPieceTypes
     early_material: EarlyMaterial
-    min_material: MaterialMinLimit
-    max_material: MaterialMaxLimit
     max_engine_penalties: MaximumEnginePenalties
     max_pocket: MaximumPocket
     max_kings: MaximumKings

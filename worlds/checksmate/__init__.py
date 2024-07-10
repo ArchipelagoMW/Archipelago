@@ -183,14 +183,10 @@ class CMWorld(World):
             difficulty *= (location_table["Checkmate Maxima"].material_expectations_grand /
                            location_table["Checkmate Minima"].material_expectations_grand)
         absolute_relaxation = determine_relaxation(self.options)
-        min_material_option = self.options.min_material.value * 100 * difficulty + absolute_relaxation
-        max_material_option = self.options.max_material.value * 100 * difficulty + absolute_relaxation
-        if max_material_option < min_material_option:
-            max_material_option = min_material_option
-        max_material_interval = self.random.random() * (max_material_option - min_material_option)
-        max_material_actual = max_material_interval + min_material_option
-        min_material_option += progression_items["Play as White"].material * difficulty
-        max_material_actual += progression_items["Play as White"].material * difficulty
+        min_material = 41 * 100 * difficulty + absolute_relaxation
+        max_material = 46 * 100 * difficulty + absolute_relaxation
+        min_material += progression_items["Play as White"].material * difficulty
+        max_material += progression_items["Play as White"].material * difficulty
 
         # remove items player does not want
         # TODO: tie these "magic numbers" to the corresponding Item.quantity
@@ -227,7 +223,7 @@ class CMWorld(World):
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
         #  locations, e.g. because the locked_items might contain some filler items like Progressive Pocket Range.
         logging.debug(str(self.player) + " pre-fill granted total material of " + str(material) +
-                      " toward " + str(max_material_actual) + " via items " + str(self.items_used[self.player]) +
+                      " toward " + str(max_material) + " via items " + str(self.items_used[self.player]) +
                       " having set " + str(starter_items) + " and generated " + str(Counter(items)))
 
         my_progression_items = list(progression_items.keys())
@@ -259,10 +255,10 @@ class CMWorld(World):
             max_items -= len([loc for loc in location_table if location_table[loc].is_tactic])
 
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
-               material < max_material_actual and len(my_progression_items) > 0):
+               material < max_material and len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
-            if (self.should_remove(chosen_item, material, min_material_option, max_material_actual,
+            if (self.should_remove(chosen_item, material, min_material, max_material,
                                    items, my_progression_items, locked_items)):
                 my_progression_items.remove(chosen_item)
                 continue
@@ -276,10 +272,10 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
-            elif material >= min_material_option:
+            elif material >= min_material:
                 my_progression_items.remove(chosen_item)
         logging.debug(str(self.player) + " granted total material of " + str(material) +
-                      " toward " + str(max_material_actual) + " via items " + str(self.items_used[self.player]) +
+                      " toward " + str(max_material) + " via items " + str(self.items_used[self.player]) +
                       " having generated " + str(Counter(items)))
 
         # exclude inaccessible locations
@@ -334,7 +330,7 @@ class CMWorld(World):
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         while (len(items) + user_location_count + sum(locked_items.values())) < max_items:
             if len(my_filler_items) == 0:
-                my_filler_items = list(filler_items.keys())
+                my_filler_items = ["Progressive Pocket Gems"]
             chosen_item = self.random.choice(my_filler_items)
             if not has_pocket and not self.has_prereqs(chosen_item):
                 continue
