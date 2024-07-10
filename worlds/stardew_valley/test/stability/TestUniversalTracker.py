@@ -18,6 +18,7 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
             raise unittest.SkipTest("Long tests disabled")
 
         try:
+            # This test only run if UT is present, so no risk of running in the CI.
             from worlds.tracker.TrackerClient import TrackerGameContext  # noqa
         except ImportError:
             raise unittest.SkipTest("UT not loaded, skipping test")
