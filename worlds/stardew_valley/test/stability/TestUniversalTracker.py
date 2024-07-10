@@ -1,16 +1,17 @@
 import unittest
 from unittest.mock import Mock
 
-from .. import SVTestBase, create_args
-from ... import STARDEW_VALLEY, options
+from .. import SVTestBase, create_args, allsanity_mods_6_x_x
+from ... import STARDEW_VALLEY, FarmType, BundleRandomization, EntranceRandomization
 
 
 class TestUniversalTrackerGenerationIsStable(SVTestBase):
-    options = {
-        options.EntranceRandomization.internal_name: options.EntranceRandomization.option_buildings,
-        options.BundleRandomization.internal_name: options.BundleRandomization.option_shuffled,
-        options.FarmType.internal_name: options.FarmType.option_standard,  # Need to choose one  otherwise it's random
-    }
+    options = allsanity_mods_6_x_x()
+    options.update({
+        EntranceRandomization.internal_name: EntranceRandomization.option_buildings,
+        BundleRandomization.internal_name: BundleRandomization.option_shuffled,
+        FarmType.internal_name: FarmType.option_standard,  # Need to choose one  otherwise it's random
+    })
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
         # This might open a kivy window temporarily, but it's the only way to test this...
@@ -47,4 +48,5 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
         generated_slot_data = generated_multi_world.worlds[1].fill_slot_data()
 
         # Just checking slot data should prove that UT generates the same result as AP generation.
+        self.maxDiff = None
         self.assertEqual(slot_data, generated_slot_data)
