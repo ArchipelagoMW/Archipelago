@@ -17,6 +17,7 @@ class Goal(Choice):
     Progressive: As Ordered Progressive, but the board grows larger when someone sends you your Super-Sized board.
 
     Super: You skip the 8x8 board immediately. Nearly equivalent to adding Super-Size Me to your starting_inventory.
+    (Don't do that.)
     """
     display_name = "Goal"
     option_single = 0
