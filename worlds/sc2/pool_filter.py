@@ -507,9 +507,9 @@ class ValidInventory:
         if not {item_names.PHOENIX, item_names.MIRAGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Phoenix/Mirage)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Phoenix/Mirage)")]
-        if not {item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer/Warp Ray/Scorcher)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer/Warp Ray/Scorcher)")]
+        if not {item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer/Warp Ray/Dawnbringer)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer/Warp Ray/Dawnbringer)")]
         if not {item_names.CARRIER, item_names.SKYLORD, item_names.PURGER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Carrier/Skylord/Purger)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Skylord/Purger)")]

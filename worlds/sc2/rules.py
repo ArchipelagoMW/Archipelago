@@ -488,7 +488,7 @@ class SC2Logic:
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY, item_names.SCORCHER}, self.player) \
+            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY}, self.player) \
             or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
 
@@ -509,7 +509,7 @@ class SC2Logic:
                         item_names.SKYLORD
                     }, self.player)
                     and state.has_any({
-                        item_names.SCOUT, item_names.WRATHWALKER, item_names.SCORCHER, item_names.WARP_RAY
+                        item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY
                     }, self.player)
             ) \
             or (self.advanced_tactics
@@ -526,7 +526,7 @@ class SC2Logic:
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.SCOUT, item_names.TEMPEST, item_names.CARRIER, item_names.SKYLORD, item_names.PURGER,
-            item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER, item_names.MOTHERSHIP
+            item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER, item_names.MOTHERSHIP
         }, self.player) \
             or self.protoss_has_blink(state) \
             or (state.has(item_names.WARP_PRISM, self.player)
@@ -537,7 +537,7 @@ class SC2Logic:
     def protoss_fleet(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.CARRIER, item_names.SKYLORD, item_names.PURGER, item_names.TEMPEST, item_names.VOID_RAY,
-            item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER
+            item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER
         }, self.player)
 
     def templars_return_requirement(self, state: CollectionState) -> bool:
@@ -601,7 +601,7 @@ class SC2Logic:
     def protoss_basic_splash(self, state: CollectionState) -> bool:
         return state.has_any(
             {item_names.ZEALOT, item_names.COLOSSUS, item_names.VANGUARD, item_names.HIGH_TEMPLAR, item_names.SIGNIFIER,
-             item_names.DARK_TEMPLAR, item_names.REAVER, item_names.ASCENDANT}, self.player)
+             item_names.DARK_TEMPLAR, item_names.REAVER, item_names.ASCENDANT, item_names.DAWNBRINGER}, self.player)
 
     def protoss_static_defense(self, state: CollectionState) -> bool:
         return state.has_any({item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH}, self.player)
