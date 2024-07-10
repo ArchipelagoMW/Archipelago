@@ -1,12 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, Option, PerGameCommonOptions
-import typing
-
-
-class DeathLink(Toggle):
-    """Activate DeathLink"""
-    display_name = "DeathLink"
+from Options import Toggle, Choice, DeathLinkMixin, PerGameCommonOptions
 
 
 class Act1DeathLinkBehaviour(Choice):
@@ -14,7 +8,7 @@ class Act1DeathLinkBehaviour(Choice):
     Sacrificed: Send a death when sacrificed by Leshy. Receiving a death will extinguish all candles.
     Candle Extinguished: Send a death when a candle is extinguished. Receiving a death will extinguish a candle."""
     auto_display_name = True
-    display_name = "Act 1 DeathLink Behaviour"
+    display_name = "Act 1 Death Link Behaviour"
     option_sacrificed = 0
     option_candle_extinguished = 1
 
@@ -32,7 +26,7 @@ class Goal(Choice):
 
 
 class RandomizeCodes(Toggle):
-    """Randomize codes and passwords in the game(clocks, safes, etc.)"""
+    """Randomize codes and passwords in the game (clocks, safes, etc.)"""
     display_name = "Randomize Codes"
 
 
@@ -109,9 +103,8 @@ class PaintingChecksBalancing(Choice):
     option_force_filler = 2
 
 @dataclass
-class InscryptionOptions(PerGameCommonOptions):
-    deathlink: DeathLink
-    act1_deathlink_behaviour: Act1DeathLinkBehaviour
+class InscryptionOptions(DeathLinkMixin, PerGameCommonOptions):
+    act1_death_link_behaviour: Act1DeathLinkBehaviour
     goal: Goal
     randomize_codes: RandomizeCodes
     randomize_deck: RandomizeDeck

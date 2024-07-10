@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from typing import TypedDict, Set, List
+from typing import TypedDict, List
 
 from BaseClasses import Item
 

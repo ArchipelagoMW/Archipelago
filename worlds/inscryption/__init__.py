@@ -1,4 +1,4 @@
-from .Options import InscryptionOptions
+from .Options import InscryptionOptions, Goal, EpitaphPiecesRandomization, PaintingChecksBalancing
 from .Items import act1_items, act2_items, act3_items, filler_items, base_id, InscryptionItem, ItemDict
 from .Locations import act1_locations, act2_locations, act3_locations, regions_to_locations
 from .Regions import inscryption_regions_all, inscryption_regions_act_1
@@ -54,12 +54,13 @@ class InscryptionWorld(World):
 
     def create_items(self) -> None:
         nb_items_added = 0
-        useful_items = (act1_items + act2_items + act3_items) if self.options.goal <= 1 else act1_items
+        useful_items = (act1_items + act2_items + act3_items) if self.options.goal != Goal.option_first_act \
+            else act1_items
 
-        if self.options.goal <= 1:
-            if self.options.epitaph_pieces_randomization.value == 0:
+        if self.options.goal != Goal.option_first_act:
+            if self.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_all_pieces:
                 useful_items.remove(act2_items[3])
-            elif self.options.epitaph_pieces_randomization.value == 1:
+            elif self.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_in_groups:
                 useful_items.remove(act2_items[2])
                 useful_items[len(act1_items) + 2]['count'] = 3
             else:
@@ -72,7 +73,7 @@ class InscryptionWorld(World):
                 self.multiworld.itempool.append(new_item)
                 nb_items_added += 1
 
-        filler_count = len(self.all_locations if self.options.goal <= 1 else act1_locations)
+        filler_count = len(self.all_locations if self.options.goal != Goal.option_first_act else act1_locations)
         filler_count -= nb_items_added
 
         for i in range(filler_count):
@@ -82,7 +83,8 @@ class InscryptionWorld(World):
             self.multiworld.itempool.append(new_item)
 
     def create_regions(self) -> None:
-        used_regions = inscryption_regions_all if self.options.goal <= 1 else inscryption_regions_act_1
+        used_regions = inscryption_regions_all if self.options.goal != Goal.option_first_act \
+            else inscryption_regions_act_1
         for region_name in used_regions.keys():
             self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
 
@@ -95,9 +97,9 @@ class InscryptionWorld(World):
 
     def set_rules(self) -> None:
         Rules.InscryptionRules(self).set_all_rules()
-        if self.options.painting_checks_balancing.value == 1:
+        if self.options.painting_checks_balancing.value == PaintingChecksBalancing.option_balanced:
             Rules.InscryptionRules(self).set_painting_rules()
-        elif self.options.painting_checks_balancing.value == 2 and \
+        elif self.options.painting_checks_balancing.value == PaintingChecksBalancing.option_force_filler and \
                 sum(item.classification == ItemClassification.filler for item in self.multiworld.itempool) >= 2:
             region = self.multiworld.get_region("Act 1", self.player)
             loc = next((x for x in region.locations if x.name == "Act 1 - Painting 2"), None)
@@ -109,8 +111,8 @@ class InscryptionWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
-            "deathlink": self.options.deathlink.value,
-            "act1_deathlink_behaviour": self.options.act1_deathlink_behaviour.value,
+            "death_link": self.options.death_link.value,
+            "act1_death_link_behaviour": self.options.act1_death_link_behaviour.value,
             "goal": self.options.goal.value,
             "randomize_codes": self.options.randomize_codes.value,
             "randomize_deck": self.options.randomize_deck.value,

@@ -1,5 +1,6 @@
-from typing import Dict, List, Callable, TYPE_CHECKING
+from typing import Dict, Callable, TYPE_CHECKING
 from BaseClasses import CollectionState
+from .Options import EpitaphPiecesRandomization, Goal
 
 if TYPE_CHECKING:
     from . import InscryptionWorld
@@ -106,9 +107,9 @@ class InscryptionRules:
         return state.has("Oil Painting's Clover Plant", self.player) and state.has("Squirrel Totem Head", self.player)
 
     def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
-        if self.world.options.epitaph_pieces_randomization.value == 0:
+        if self.world.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_all_pieces:
             return state.has("Epitaph Piece", self.player, 9)
-        elif self.world.options.epitaph_pieces_randomization.value == 1:
+        elif self.world.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_in_groups:
             return state.has("Epitaph Pieces", self.player, 3)
         else:
             return state.has("Epitaph Pieces", self.player, 1)
@@ -129,7 +130,7 @@ class InscryptionRules:
         return self.has_camera_and_meat(state) or self.has_all_epitaph_pieces(state)
 
     def has_tower_requirements(self, state: CollectionState) -> bool:
-        return self.has_act2_bridge_requirements(state) and self.has_monocle(state)
+        return self.has_monocle(state) and self.has_act2_bridge_requirements(state)
 
     def has_inspectometer_battery(self, state: CollectionState) -> bool:
         return state.has("Inspectometer Battery", self.player)
@@ -179,12 +180,12 @@ class InscryptionRules:
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld
-        if self.world.options.goal.value <= 1:
+        if self.world.options.goal.value != Goal.option_first_act:
             multiworld.completion_condition[self.player] = self.has_epilogue_requirements
         else:
             multiworld.completion_condition[self.player] = self.has_act2_requirements
         for region in multiworld.get_regions(self.player):
-            if self.world.options.goal.value == 0:
+            if self.world.options.goal.value == Goal.option_full_story_in_order:
                 if region.name in self.region_rules:
                     for entrance in region.entrances:
                         entrance.access_rule = self.region_rules[region.name]
