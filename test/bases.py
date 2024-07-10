@@ -4,7 +4,6 @@ import typing
 import unittest
 from argparse import Namespace
 
-import Options
 from Generate import get_seed_name
 from test.general import gen_steps
 from worlds import AutoWorld
