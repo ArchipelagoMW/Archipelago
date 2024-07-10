@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import collections
 import copy
 import logging
 import asyncio
@@ -8,6 +9,7 @@ import sys
 import typing
 import time
 import functools
+import warnings
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -21,7 +23,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -173,10 +175,77 @@ class CommonContext:
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
-    # data package
-    # Contents in flux until connection to server is made, to download correct data for this multiworld.
-    item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
-    location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
+    class NameLookupDict:
+        """A specialized dict, with helper methods, for id -> name item/location data package lookups by game."""
+        def __init__(self, ctx: CommonContext, lookup_type: typing.Literal["item", "location"]):
+            self.ctx: CommonContext = ctx
+            self.lookup_type: typing.Literal["item", "location"] = lookup_type
+            self._unknown_item: typing.Callable[[int], str] = lambda key: f"Unknown {lookup_type} (ID: {key})"
+            self._archipelago_lookup: typing.Dict[int, str] = {}
+            self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
+            self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
+                lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
+            self.warned: bool = False
+
+        # noinspection PyTypeChecker
+        def __getitem__(self, key: str) -> typing.Mapping[int, str]:
+            # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
+            if isinstance(key, int):
+                if not self.warned:
+                    # Use warnings instead of logger to avoid deprecation message from appearing on user side.
+                    self.warned = True
+                    warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain "
+                                  f"backwards compatibility for now. If multiple games share the same id for a "
+                                  f"{self.lookup_type}, name could be incorrect. Please use "
+                                  f"`{self.lookup_type}_names.lookup_in_game()` or "
+                                  f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
+                return self._flat_store[key]  # type: ignore
+
+            return self._game_store[key]
+
+        def __len__(self) -> int:
+            return len(self._game_store)
+
+        def __iter__(self) -> typing.Iterator[str]:
+            return iter(self._game_store)
+
+        def __repr__(self) -> str:
+            return self._game_store.__repr__()
+
+        def lookup_in_game(self, code: int, game_name: typing.Optional[str] = None) -> str:
+            """Returns the name for an item/location id in the context of a specific game or own game if `game` is
+            omitted.
+            """
+            if game_name is None:
+                game_name = self.ctx.game
+                assert game_name is not None, f"Attempted to lookup {self.lookup_type} with no game name available."
+
+            return self._game_store[game_name][code]
+
+        def lookup_in_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
+            """Returns the name for an item/location id in the context of a specific slot or own slot if `slot` is
+            omitted.
+
+            Use of `lookup_in_slot` should not be used when not connected to a server. If looking in own game, set
+            `ctx.game` and use `lookup_in_game` method instead.
+            """
+            if slot is None:
+                slot = self.ctx.slot
+                assert slot is not None, f"Attempted to lookup {self.lookup_type} with no slot info available."
+
+            return self.lookup_in_game(code, self.ctx.slot_info[slot].game)
+
+        def update_game(self, game: str, name_to_id_lookup_table: typing.Dict[str, int]) -> None:
+            """Overrides existing lookup tables for a particular game."""
+            id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
+            id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
+            self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
+            self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
+            if game == "Archipelago":
+                # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
+                # it updates in all chain maps automatically.
+                self._archipelago_lookup.clear()
+                self._archipelago_lookup.update(id_to_name_lookup_table)
 
     # defaults
     starting_reconnect_delay: int = 5
@@ -207,6 +276,8 @@ class CommonContext:
 
     finished_game: bool
     ready: bool
+    team: typing.Optional[int]
+    slot: typing.Optional[int]
     auth: typing.Optional[str]
     seed_name: typing.Optional[str]
 
@@ -229,7 +300,7 @@ class CommonContext:
     # message box reporting a loss of connection
     _messagebox_connection_loss: typing.Optional["kvui.MessageBox"] = None
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
+    def __init__(self, server_address: typing.Optional[str] = None, password: typing.Optional[str] = None) -> None:
         # server state
         self.server_address = server_address
         self.username = None
@@ -268,6 +339,9 @@ class CommonContext:
         self.player_names = {0: "Archipelago"}
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
+
+        self.item_names = self.NameLookupDict(self, "item")
+        self.location_names = self.NameLookupDict(self, "location")
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
@@ -422,6 +496,11 @@ class CommonContext:
         """Gets called before sending a Say to the server from the user.
         Returned text is sent, or sending is aborted if None is returned."""
         return text
+    
+    def on_ui_command(self, text: str) -> None:
+        """Gets called by kivy when the user executes a command starting with `/` or `!`.
+        The command processor is still called; this is just intended for command echoing."""
+        self.ui.print_json([{"text": text, "type": "color", "color": "orange"}])
 
     def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():
@@ -484,19 +563,17 @@ class CommonContext:
                         or remote_checksum != cache_checksum:
                     needed_updates.add(game)
                 else:
-                    self.update_game(cached_game)
+                    self.update_game(cached_game, game)
         if needed_updates:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
-    def update_game(self, game_package: dict):
-        for item_name, item_id in game_package["item_name_to_id"].items():
-            self.item_names[item_id] = item_name
-        for location_name, location_id in game_package["location_name_to_id"].items():
-            self.location_names[location_id] = location_name
+    def update_game(self, game_package: dict, game: str):
+        self.item_names.update_game(game, game_package["item_name_to_id"])
+        self.location_names.update_game(game, game_package["location_name_to_id"])
 
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():
-            self.update_game(game_data)
+            self.update_game(game_data, game)
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
@@ -785,7 +862,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
-        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
+        ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")

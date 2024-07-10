@@ -12,6 +12,9 @@ ModuleUpdate.update()
 import Utils
 import settings
 
+if typing.TYPE_CHECKING:
+    from flask import Flask
+
 Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
@@ -19,7 +22,7 @@ if not os.path.exists(configpath):  # fall back to config.yaml in home
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
 
 
-def get_app():
+def get_app() -> "Flask":
     from WebHostLib import register, cache, app as raw_app
     from WebHostLib.models import db
 
@@ -55,6 +58,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             worlds[game] = world
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
+    shutil.rmtree(base_target_path, ignore_errors=True)
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
         target_path = os.path.join(base_target_path, game)
@@ -117,7 +121,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
     from WebHostLib.lttpsprites import update_sprites_lttp
-    from WebHostLib.autolauncher import autohost, autogen
+    from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
 
     try:
@@ -138,3 +142,11 @@ if __name__ == "__main__":
         else:
             from waitress import serve
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
+    else:
+        from time import sleep
+        try:
+            while True:
+                sleep(1)  # wait for process to be killed
+        except (SystemExit, KeyboardInterrupt):
+            pass
+    stop()  # stop worker threads
