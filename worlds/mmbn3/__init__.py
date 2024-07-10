@@ -383,6 +383,11 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Numberman_Code_31, self.player).access_rule =\
             lambda state: self.explore_score(state) > 10
 
+        #miscellaneous locations with extra requirements
+        add_rule(self.multiworld.get_location(LocationName.Comedian, self.player),
+                 lambda state: state.has(ItemName.Humor, self.player))
+        add_rule(self.multiworld.get_location(LocationName.Villain, self.player),
+                 lambda state: state.has(ItemName.BlckMnd, self.player))
         def not_undernet(item): return item.code != item_table[ItemName.Progressive_Undernet_Rank].code or item.player != self.player
         self.multiworld.get_location(LocationName.WWW_1_Central_BMD, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_1_East_BMD, self.player).item_rule = not_undernet

@@ -135,6 +135,7 @@ regions = [
                     LocationName.Somebody_please_help,
                     LocationName.Looking_for_condor,
                     LocationName.Help_with_rehab,
+                    LocationName.Help_with_rehab_bonus,
                     LocationName.Old_Master,
                     LocationName.Catching_gang_members,
                     LocationName.Please_adopt_a_virus,

@@ -290,7 +290,9 @@ programList: typing.List[ItemData] = [
     ItemData(0xB31099, ItemName.WpnLV_plus_Yellow, ItemClassification.filler, ItemType.Program, 35, ProgramColor.Yellow),
     ItemData(0xB3109A, ItemName.Press,             ItemClassification.progression, ItemType.Program, 20, ProgramColor.White),
 
-    ItemData(0xB310B7, ItemName.UnderSht,          ItemClassification.useful, ItemType.Program, 30, ProgramColor.White)
+    ItemData(0xB310B7, ItemName.UnderSht,          ItemClassification.useful, ItemType.Program, 30, ProgramColor.White),
+    ItemData(0xB310E0, ItemName.Humor,             ItemClassification.progression, ItemType.Program, 45, ProgramColor.Pink),
+    ItemData(0xB310E1, ItemName.BlckMnd,           ItemClassification.progression, ItemType.Program, 46, ProgramColor.White)
 ]
 
 zennyList: typing.List[ItemData] = [

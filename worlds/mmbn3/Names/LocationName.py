@@ -261,6 +261,7 @@ class LocationName():
     Somebody_please_help = "Job: Somebody, please help!"
     Looking_for_condor = "Job: Looking for condor"
     Help_with_rehab = "Job: Help with rehab"
+    Help_with_rehab_bonus = "Job: Help with rehab bonus"
     Old_Master = "Job: Old Master"
     Catching_gang_members = "Job: Catching gang members"
     Please_adopt_a_virus = "Job: Please adopt a virus!"
