@@ -800,8 +800,8 @@ class ImageLoaderPkgutil(ImageLoaderBase):
 DefaultLoad = ImageLoader.load
 
 
-def load_override(filename, default_load=DefaultLoad, **kwargs):
-    if filename[:3] == "ap:":
+def load_override(filename: str, default_load=DefaultLoad, **kwargs):
+    if filename.startswith("ap:"):
         return ImageLoaderPkgutil(filename)
     else:
         return default_load(filename, **kwargs)
