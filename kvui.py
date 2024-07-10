@@ -797,10 +797,10 @@ class ImageLoaderPkgutil(ImageLoaderBase):
 
 
 # grab the default loader method so we can override it but use it as a fallback
-DefaultLoad = ImageLoader.load
+_original_image_loader_load = ImageLoader.load
 
 
-def load_override(filename: str, default_load=DefaultLoad, **kwargs):
+def load_override(filename: str, default_load=_original_image_loader_load, **kwargs):
     if filename.startswith("ap:"):
         return ImageLoaderPkgutil(filename)
     else:
