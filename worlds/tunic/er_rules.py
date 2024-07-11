@@ -39,6 +39,24 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     player = world.player
     options = world.options
 
+    # input scene destination tag, returns portal's name and paired portal's region
+    def get_portal_info(portal_sd: str) -> Tuple[str, str]:
+        for portal1, portal2 in portal_pairs.items():
+            if portal1.scene_destination() == portal_sd:
+                return portal1.name, portal2.region
+            if portal2.scene_destination() == portal_sd:
+                return portal2.name, portal1.region
+        raise Exception("no matches found in get_portal_info")
+
+    # input scene destination tag, returns paired portal's name and region
+    def get_paired_portal(portal_sd: str) -> Tuple[str, str]:
+        for portal1, portal2 in portal_pairs.items():
+            if portal1.scene_destination() == portal_sd:
+                return portal2.name, portal2.region
+            if portal2.scene_destination() == portal_sd:
+                return portal1.name, portal1.region
+        raise Exception("no matches found in get_paired_portal")
+
     regions["Menu"].connect(
         connecting_region=regions["Overworld"])
 
@@ -521,7 +539,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     wg_checkpoint_to_dagger = regions["West Garden South Checkpoint"].connect(
         connecting_region=regions["West Garden at Dagger House"])
-    wg_dagger_to_checkpoint = regions["West Garden at Dagger House"].connect(
+    regions["West Garden at Dagger House"].connect(
         connecting_region=regions["West Garden South Checkpoint"])
 
     wg_checkpoint_to_before_boss = regions["West Garden South Checkpoint"].connect(
@@ -1053,16 +1071,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                             (state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)
                              and state.has_group_unique("Hero Relics", player, 6)
                              and has_sword(state, player))))
-
+    
     if options.ladder_storage:
-        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.scene_destination() == portal_sd:
-                    return portal1.name, portal2.region
-                if portal2.scene_destination() == portal_sd:
-                    return portal2.name, portal1.region
-            raise Exception("no matches found in get_paired_region")
-
         # connect ls elevation regions to their destinations
         def ls_connect(origin_name: str, portal_sdt: str) -> None:
             p_name, paired_region_name = get_portal_info(portal_sdt)
@@ -1213,7 +1223,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         add_rule(dt_exit_to_main,
                  lambda state: has_combat_reqs("Dark Tomb", state, player))
 
-        # todo: add rule for running past the enemies and into dagger house, with a can_reach for the entrance
         set_rule(wg_before_to_after_terry,
                  lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
         set_rule(wg_after_to_before_terry,
@@ -1221,12 +1230,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         # laurels through, probably to the checkpoint, or just fight
         set_rule(wg_checkpoint_to_after_terry,
                  lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
-        set_rule(wg_checkpoint_to_dagger,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
-        set_rule(wg_dagger_to_checkpoint,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
         set_rule(wg_checkpoint_to_before_boss,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+                 lambda state: has_combat_reqs("West Garden", state, player))
+
+        # for spots where you can go into and come out of an entrance to reset enemy aggro
+        if world.options.entrance_rando:
+            dagger_entry_paired_name, dagger_entry_paired_region = get_paired_portal("Archipelagos Redux, Archipelagos_house_")
+            set_rule(wg_checkpoint_to_dagger,
+                     lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player)
+                     or state.can_reach_entrance(dagger_entry_paired_name, player))
+            world.multiworld.register_indirect_condition(regions["West Garden at Dagger House"], dagger_entry_paired_region)
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
