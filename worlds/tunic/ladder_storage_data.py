@@ -78,9 +78,9 @@ easy_ls: List[LadderInfo] = [
 
     # West Garden
     # exit after Garden Knight
-    LadderInfo("West Garden", "Archipelagos Redux, Overworld Redux_upper"),
+    LadderInfo("West Garden before Boss", "Archipelagos Redux, Overworld Redux_upper"),
     # West Garden laurels exit
-    LadderInfo("West Garden", "Archipelagos Redux, Overworld Redux_lowest"),
+    LadderInfo("West Garden after Terry", "Archipelagos Redux, Overworld Redux_lowest"),
 
     # Atoll, use the little ladder you fix at the beginning
     LadderInfo("Ruined Atoll", "Atoll Redux, Overworld Redux_lower"),

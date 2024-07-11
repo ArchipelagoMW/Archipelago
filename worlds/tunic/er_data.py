@@ -192,13 +192,13 @@ portal_mapping: List[Portal] = [
     Portal(name="Dark Tomb to Checkpoint", region="Dark Tomb Entry Point",
            destination="Sewer_Boss", tag="_"),
     
-    Portal(name="West Garden Exit near Hero's Grave", region="West Garden",
+    Portal(name="West Garden Exit near Hero's Grave", region="West Garden before Terry",
            destination="Overworld Redux", tag="_lower"),
-    Portal(name="West Garden to Magic Dagger House", region="West Garden",
+    Portal(name="West Garden to Magic Dagger House", region="West Garden at Dagger House",
            destination="archipelagos_house", tag="_"),
     Portal(name="West Garden Exit after Boss", region="West Garden after Boss",
            destination="Overworld Redux", tag="_upper"),
-    Portal(name="West Garden Shop", region="West Garden",
+    Portal(name="West Garden Shop", region="West Garden before Terry",
            destination="Shop", tag="_"),
     Portal(name="West Garden Laurels Exit", region="West Garden Laurels Exit Region",
            destination="Overworld Redux", tag="_lowest"),
@@ -616,11 +616,15 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Beneath the Well Front": RegionInfo("Sewer"),  # the front, to separate it from the weapon requirement in the mid
     "Beneath the Well Main": RegionInfo("Sewer"),  # the main section of it, requires a weapon
     "Beneath the Well Back": RegionInfo("Sewer"),  # the back two portals, and all 4 upper chests
-    "West Garden": RegionInfo("Archipelagos Redux"),
+    "West Garden before Terry": RegionInfo("Archipelagos Redux"),  # the lower entry point, near hero grave
+    "West Garden after Terry": RegionInfo("Archipelagos Redux"),  # after Terry, up until next chompignons
+    "West Garden at Dagger House": RegionInfo("Archipelagos Redux"),  # just outside magic dagger house
+    "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
     "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
+    "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # main west garden
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
     "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
@@ -1092,37 +1096,63 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Dark Tomb Main":
             [],
     },
-    "West Garden": {
-        "West Garden Laurels Exit Region":
-            [["Hyperdash"], ["LS1"]],
-        "West Garden after Boss":
-            [], 
+    "West Garden before Terry": {
+        "West Garden after Terry":
+            [],
         "West Garden Hero's Grave Region":
+            [],
+    },
+    "West Garden Hero's Grave Region": {
+        "West Garden before Terry":
+            [],
+    },
+    "West Garden after Terry": {
+        "West Garden before Terry":
+            [],
+        "West Garden South Checkpoint":
+            [],
+        "West Garden Laurels Exit Region":
+            [["LS1"]],
+    },
+    "West Garden South Checkpoint": {
+        "West Garden before Boss":
+            [],
+        "West Garden at Dagger House":
+            [],
+        "West Garden after Terry":
+            [],
+    },
+    "West Garden before Boss": {
+        "West Garden after Boss":
+            [],
+        "West Garden South Checkpoint":
+            [],
+    },
+    "West Garden after Boss": {
+        "West Garden before Boss":
+            [["Hyperdash"]],
+    },
+    "West Garden at Dagger House": {
+        "West Garden Laurels Exit Region":
+            [["Hyperdash"]],
+        "West Garden South Checkpoint":
             [],
         "West Garden Portal Item":
             [["IG2"]],
     },
     "West Garden Laurels Exit Region": {
-        "West Garden":
-            [["Hyperdash"]],
-    },
-    "West Garden after Boss": {
-        "West Garden":
+        "West Garden at Dagger House":
             [["Hyperdash"]],
     },
     "West Garden Portal Item": {
-        "West Garden":
+        "West Garden at Dagger House":
             [["IG1"]],
         "West Garden Portal":
-            [["Hyperdash", "West Garden"]],
+            [["Hyperdash", "West Garden South Checkpoint"]],
     },
     "West Garden Portal": {
         "West Garden Portal Item":
             [["Hyperdash"]],
-    },
-    "West Garden Hero's Grave Region": {
-        "West Garden":
-            [],
     },
     "Ruined Atoll": {
         "Ruined Atoll Lower Entry Area":
@@ -1533,7 +1563,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Far Shore to Library Region":
             [["Library Lab"]],
         "Far Shore to West Garden Region":
-            [["West Garden"]],
+            [["West Garden South Checkpoint"]],
         "Far Shore to Fortress Region":
             [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
     },

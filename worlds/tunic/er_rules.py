@@ -508,25 +508,46 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_lantern(state, world))
 
     # West Garden
+    # combat logic regions
+    wg_before_to_after_terry = regions["West Garden before Terry"].connect(
+        connecting_region=regions["West Garden after Terry"])
+    wg_after_to_before_terry = regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden before Terry"])
+
+    regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+    wg_checkpoint_to_after_terry = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden after Terry"])
+
+    wg_checkpoint_to_dagger = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden at Dagger House"])
+    wg_dagger_to_checkpoint = regions["West Garden at Dagger House"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+
+    wg_checkpoint_to_before_boss = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden before Boss"])
+    regions["West Garden before Boss"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+
     regions["West Garden Laurels Exit Region"].connect(
-        connecting_region=regions["West Garden"],
+        connecting_region=regions["West Garden at Dagger House"],
         rule=lambda state: state.has(laurels, player))
-    regions["West Garden"].connect(
+    regions["West Garden at Dagger House"].connect(
         connecting_region=regions["West Garden Laurels Exit Region"],
         rule=lambda state: state.has(laurels, player))
 
     regions["West Garden after Boss"].connect(
-        connecting_region=regions["West Garden"],
+        connecting_region=regions["West Garden before Boss"],
         rule=lambda state: state.has(laurels, player))
-    wg_to_after_gk = regions["West Garden"].connect(
+    wg_to_after_gk = regions["West Garden before Boss"].connect(
         connecting_region=regions["West Garden after Boss"],
         rule=lambda state: state.has(laurels, player) or has_sword(state, player))
 
-    regions["West Garden"].connect(
+    regions["West Garden before Terry"].connect(
         connecting_region=regions["West Garden Hero's Grave Region"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["West Garden Hero's Grave Region"].connect(
-        connecting_region=regions["West Garden"])
+        connecting_region=regions["West Garden before Terry"])
 
     regions["West Garden Portal"].connect(
         connecting_region=regions["West Garden Portal Item"],
@@ -535,11 +556,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["West Garden Portal"],
         rule=lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
 
-    # nmg: can ice grapple to and from the item behind the magic dagger house
+    # can ice grapple to and from the item behind the magic dagger house
     regions["West Garden Portal Item"].connect(
-        connecting_region=regions["West Garden"],
+        connecting_region=regions["West Garden at Dagger House"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-    regions["West Garden"].connect(
+    regions["West Garden at Dagger House"].connect(
         connecting_region=regions["West Garden Portal Item"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
 
@@ -1192,6 +1213,21 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         add_rule(dt_exit_to_main,
                  lambda state: has_combat_reqs("Dark Tomb", state, player))
 
+        # todo: add rule for running past the enemies and into dagger house, with a can_reach for the entrance
+        set_rule(wg_before_to_after_terry,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+        set_rule(wg_after_to_before_terry,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+        # laurels through, probably to the checkpoint, or just fight
+        set_rule(wg_checkpoint_to_after_terry,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+        set_rule(wg_checkpoint_to_dagger,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+        set_rule(wg_dagger_to_checkpoint,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+        set_rule(wg_checkpoint_to_before_boss,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
@@ -1490,6 +1526,16 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  lambda state: has_combat_reqs("Beneath the Well", state, player))
         add_rule(multiworld.get_location("Beneath the Well - [Side Room] Chest By Phrends", player),
                  lambda state: has_combat_reqs("Overworld", state, player))
+
+        # laurels past the enemies, then use the wand or gun to take care of the fairies that chased you
+        add_rule(multiworld.get_location("West Garden - [West Lowlands] Tree Holy Cross Chest", player),
+                 lambda state: state.has_any({fire_wand, "Gun"}, player))
+        add_rule(multiworld.get_location("West Garden - [Central Lowlands] Chest Beneath Faeries", player),
+                 lambda state: has_combat_reqs("West Garden", state, player))
+        add_rule(multiworld.get_location("West Garden - [Central Lowlands] Chest Beneath Save Point", player),
+                 lambda state: has_combat_reqs("West Garden", state, player))
+        add_rule(multiworld.get_location("West Garden - [West Highlands] Upper Left Walkway", player),
+                 lambda state: has_combat_reqs("West Garden", state, player))
 
         # could add it to the other fuse events but that's just wasteful imo
         add_rule(multiworld.get_location("Eastern Vault West Fuses", player),
