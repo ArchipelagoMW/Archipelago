@@ -467,17 +467,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Beneath the Well Ladder Exit"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
 
-    regions["Beneath the Well Front"].connect(
+    btw_front_main = regions["Beneath the Well Front"].connect(
         connecting_region=regions["Beneath the Well Main"],
         rule=lambda state: has_melee(state, player) or state.has(fire_wand, player))
     regions["Beneath the Well Main"].connect(
-        connecting_region=regions["Beneath the Well Front"],
-        rule=lambda state: has_melee(state, player) or state.has(fire_wand, player))
+        connecting_region=regions["Beneath the Well Front"])
 
     regions["Beneath the Well Main"].connect(
         connecting_region=regions["Beneath the Well Back"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
-    regions["Beneath the Well Back"].connect(
+    btw_back_main = regions["Beneath the Well Back"].connect(
         connecting_region=regions["Beneath the Well Main"],
         rule=lambda state: has_ladder("Ladders in Well", state, world)
         and (has_melee(state, player) or state.has(fire_wand, player)))
@@ -1183,6 +1182,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("East Forest", state, player))
         add_rule(atoll_statue,
                  lambda state: has_combat_reqs("Ruined Atoll", state, player))
+        set_rule(btw_front_main,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player))
+        set_rule(btw_back_main,
+                 lambda state: has_ladder("Ladders in Well", state, world)
+                 and (state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player)))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
@@ -1467,6 +1471,16 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  lambda state: has_combat_reqs("East Forest", state, player))
         add_rule(multiworld.get_location("Forest Grave Path - Obscured Chest", player),
                  lambda state: has_combat_reqs("East Forest", state, player))
+
+        # most of beneath the well is covered by the region access rule
+        add_rule(multiworld.get_location("Beneath the Well - [Entryway] Chest", player),
+                 lambda state: has_combat_reqs("Beneath the Well", state, player))
+        add_rule(multiworld.get_location("Beneath the Well - [Entryway] Obscured Behind Waterfall", player),
+                 lambda state: has_combat_reqs("Beneath the Well", state, player))
+        add_rule(multiworld.get_location("Beneath the Well - [Back Corridor] Left Secret", player),
+                 lambda state: has_combat_reqs("Beneath the Well", state, player))
+        add_rule(multiworld.get_location("Beneath the Well - [Side Room] Chest By Phrends", player),
+                 lambda state: has_combat_reqs("Overworld", state, player))
 
         # could add it to the other fuse events but that's just wasteful imo
         add_rule(multiworld.get_location("Eastern Vault West Fuses", player),
