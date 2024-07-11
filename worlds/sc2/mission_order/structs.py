@@ -49,7 +49,7 @@ class EntryRule:
         """Passed to Archipelago for use during item placement."""
         return lambda _: False
     
-    def to_slot_data(self) -> Dict[str, Any]:
+    def to_slot_data(self) -> RuleData:
         """Used in the client to determine accessibility while playing and to populate tooltips."""
         return {}
 
@@ -67,15 +67,34 @@ class BeatMissionsEntryRule(EntryRule):
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         return lambda state: state.has_all([mission.beat_item() for mission in self.missions_to_beat], player)
     
-    def to_slot_data(self) -> Dict[str, Any]:
+    def to_slot_data(self) -> RuleData:
         resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
         mission_ids = {mission.mission.id for mission in self.missions_to_beat}
-        slot_data = {
-            "mission_ids": mission_ids,
-            "visual_reqs": resolved_reqs
-        }
-        return slot_data
+        return BeatMissionsRuleData(
+            mission_ids,
+            resolved_reqs
+        )
 
+class BeatMissionsRuleData(NamedTuple):
+    mission_ids: Set[int]
+    visual_reqs: List[Union[str, int]]
+
+    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
+        return beaten_missions.issuperset(self.mission_ids)
+    
+    def as_dict(self) -> Dict[str, Any]:
+        return self._asdict()
+    
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+        indent = " ".join("" for _ in range(indents))
+        if len(self.visual_reqs) == 1:
+            req = self.visual_reqs[0]
+            return f"Beat {missions[req].mission_name if type(req) == int else req}"
+        tooltip = f"Beat all of these:\n{indent}- "
+        reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
+        tooltip += f"\n{indent}- ".join(req for req in reqs)
+        return tooltip
+    
 class CountMissionsEntryRule(EntryRule):
     missions_to_count: Set[SC2MOGenMission]
     target_amount: int
@@ -95,15 +114,45 @@ class CountMissionsEntryRule(EntryRule):
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         return lambda state: self.target_amount <= sum(state.has(mission.beat_item(), player) for mission in self.missions_to_count)
     
-    def to_slot_data(self) -> Dict[str, Any]:
+    def to_slot_data(self) -> RuleData:
         resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
         mission_ids = {mission.mission.id for mission in self.missions_to_count}
-        slot_data = {
-            "mission_ids": mission_ids,
-            "amount": self.target_amount,
-            "visual_reqs": resolved_reqs
-        }
-        return slot_data
+        return CountMissionsRuleData(
+            mission_ids,
+            self.target_amount,
+            resolved_reqs
+        )
+
+class CountMissionsRuleData(NamedTuple):
+    mission_ids: Set[int]
+    amount: int
+    visual_reqs: List[Union[str, int]]
+
+    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
+        return self.amount <= len(beaten_missions.intersection(self.mission_ids))
+    
+    def as_dict(self) -> Dict[str, Any]:
+        return self._asdict()
+    
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+        indent = " ".join("" for _ in range(indents))
+        if self.amount == len(self.mission_ids):
+            amount = "all"
+        else:
+            amount = str(self.amount)
+        if len(self.visual_reqs) == 1:
+            req = self.visual_reqs[0]
+            req_str = missions[req].mission_name if type(req) == int else req
+            if self.amount == 1:
+                return f"Beat {req_str}"
+            return f"Beat {amount} missions from {req_str}"
+        if amount == 1:
+            tooltip = f"Beat {amount} mission from:\n{indent}- "
+        else:
+            tooltip = f"Beat {amount} missions from:\n{indent}- "
+        reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
+        tooltip += f"\n{indent}- ".join(req for req in reqs)
+        return tooltip
     
 class SubRuleEntryRule(EntryRule):
     rules_to_check: List[EntryRule]
@@ -123,13 +172,64 @@ class SubRuleEntryRule(EntryRule):
         sub_lambdas = [rule.to_lambda(player) for rule in self.rules_to_check]
         return lambda state, sub_lambdas=sub_lambdas: self.target_amount <= sum(sub_lambda(state) for sub_lambda in sub_lambdas)
     
-    def to_slot_data(self) -> Dict[str, Any]:
+    def to_slot_data(self) -> RuleData:
         sub_rules = [rule.to_slot_data() for rule in self.rules_to_check]
-        slot_data = {
-            "sub_rules": sub_rules,
-            "amount": self.target_amount
+        return SubRuleRuleData(
+            sub_rules,
+            self.target_amount
+        )
+    
+class SubRuleRuleData(NamedTuple):
+    sub_rules: List[RuleData]
+    amount: int
+
+    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
+        return self.amount <= sum(rule.is_fulfilled(beaten_missions) for rule in self.sub_rules)
+    
+    @staticmethod
+    def parse_from_dict(data: Dict[str, Any]) -> SubRuleRuleData:
+        amount = data["amount"]
+        sub_rules: List[RuleData] = []
+        for rule_data in data["sub_rules"]:
+            if "sub_rules" in rule_data:
+                rule = SubRuleRuleData.parse_from_dict(rule_data)
+            elif "amount" in rule_data:
+                rule = CountMissionsRuleData(
+                    **{field: value for field, value in rule_data.items()}
+                )
+            else:
+                rule = BeatMissionsRuleData(
+                    **{field: value for field, value in rule_data.items()}
+                )
+            sub_rules.append(rule)
+        return SubRuleRuleData(
+            sub_rules,
+            amount
+        )
+    
+    @staticmethod
+    def empty() -> SubRuleRuleData:
+        return SubRuleRuleData([], 0)
+    
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "sub_rules": [rule.as_dict() for rule in self.sub_rules],
+            "amount": self.amount,
         }
-        return slot_data
+    
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+        indent = " ".join("" for _ in range(indents))
+        if self.amount == len(self.sub_rules):
+            if self.amount == 1:
+                return self.sub_rules[0].tooltip(indents, missions)
+            amount = "all"
+        else:
+            amount = str(self.amount)
+        tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
+        tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 2, missions) for rule in self.sub_rules)
+        return tooltip
+    
+RuleData = Union[SubRuleRuleData, BeatMissionsRuleData, CountMissionsRuleData]
 
 class Difficulty(IntEnum):
     RELATIVE = 0
@@ -377,9 +477,9 @@ class SC2MissionOrder:
         """Returns the slots of all missions that are required to beat the mission order."""
         return list(self.goal_missions)
 
-    def get_slot_data(self) -> Dict[str, Dict[str, List[List[Tuple[int, Dict[str, Any]]]]]]:
+    def get_slot_data(self) -> List[Dict[str, Any]]:
         """Parses the mission order into a format usable for slot data."""
-        # [(campaign data, [layout data, [[mission data]]])]
+        # [(campaign data, [(layout data, [[(mission data)]] )] )]
         return [campaign.get_slot_data()._asdict() for campaign in self.campaigns]
         # TODO
         # {"campaign": {"layout": [[(mission id, requirement), ...], ...]}}
@@ -583,6 +683,9 @@ class SC2MissionOrder:
                         "amount": -1
                     }
                     mission.entry_rule = self.dict_to_entry_rule(entry_rule, [campaign, layout, mission])
+                    # Manually make a rule for prev missions
+                    mission.entry_rule.target_amount += 1
+                    mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
 
         return
 
@@ -1017,7 +1120,7 @@ class SC2MOGenCampaign:
     def get_slot_data(self) -> CampaignSlotData:
         return CampaignSlotData(
             self.get_visual_name(),
-            self.entry_rule.to_slot_data(),
+            self.entry_rule.to_slot_data().as_dict(),
             [layout.get_slot_data()._asdict() for layout in self.layouts]
         )
 
@@ -1264,7 +1367,7 @@ class SC2MOGenLayout:
 
         return LayoutSlotData(
             self.get_visual_name(),
-            self.entry_rule.to_slot_data(),
+            self.entry_rule.to_slot_data().as_dict(),
             mission_slots
         )
         # TODO
@@ -1409,9 +1512,13 @@ class SC2MOGenMission:
         else:
             unlock_rule = self_rule
         # Individually connect to previous missions
+        # TODO
+        # for mission in self.prev:
+        #     connect(world, used_names, mission.mission.mission_name, self.mission.mission_name,
+        #             lambda state, unlock_rule=unlock_rule, beat_rule=mission.beat_rule(world.player): beat_rule(state) and unlock_rule(state))
         for mission in self.prev:
             connect(world, used_names, mission.mission.mission_name, self.mission.mission_name,
-                    lambda state, unlock_rule=unlock_rule, beat_rule=mission.beat_rule(world.player): beat_rule(state) and unlock_rule(state))
+                    lambda state, unlock_rule=unlock_rule: unlock_rule(state))
         # If there are no previous missions, connect to Menu instead
         if len(self.prev) == 0:
             connect(world, used_names, "Menu", self.mission.mission_name,
@@ -1449,7 +1556,8 @@ class SC2MOGenMission:
     def get_slot_data(self) -> MissionSlotData:
         return MissionSlotData(
             self.mission.id,
-            self.entry_rule.to_slot_data()
+            {mission.mission.id for mission in self.prev},
+            self.entry_rule.to_slot_data().as_dict()
         )
 
 class MissionRequirements(NamedTuple):
@@ -1467,22 +1575,23 @@ class MissionRequirements(NamedTuple):
         return MissionRequirements(set(), set(), "", 0, [], 0, [], 0)
 
 class CampaignSlotData(NamedTuple):
-    display_name: str
-    entry_rule: Dict[str, Any]
+    name: str
+    entry_rule: SubRuleRuleData
     layouts: List[LayoutSlotData]
 
 class LayoutSlotData(NamedTuple):
-    display_name: str
-    entry_rule: Dict[str, Any]
+    name: str
+    entry_rule: SubRuleRuleData
     missions: List[List[MissionSlotData]]
 
 class MissionSlotData(NamedTuple):
     mission_id: int
-    entry_rule: Dict[str, Any]
+    prev_mission_ids: Set[int]
+    entry_rule: SubRuleRuleData
 
     @staticmethod
     def empty() -> MissionSlotData:
-        return MissionSlotData(-1, {})
+        return MissionSlotData(-1, SubRuleRuleData.empty())
 
 # TODO band-aid for ..regions circular import
 def create_location(player: int, location_data: 'LocationData', region: Region,

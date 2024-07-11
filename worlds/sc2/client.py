@@ -34,7 +34,7 @@ from .options import (
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
 )
-from worlds.sc2.mission_order.structs import MissionRequirements, SC2MissionOrder
+from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, SC2MissionOrder, SubRuleRuleData
 from .mission_tables import MissionFlag
 
 
@@ -547,7 +547,9 @@ class SC2Context(CommonContext):
         self.enable_morphling = EnableMorphling.default
         self.nerf_unit_baselines: int = NerfUnitBaselines.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
-        self.custom_mission_order: typing.Dict[str, typing.Dict[str, typing.List[typing.List[typing.Tuple[int, MissionRequirements]]]]]
+        self.custom_mission_order: typing.List[CampaignSlotData]
+        self.mission_rule_mapping: typing.Dict[int, typing.Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]]
+        self.mission_data_mapping: typing.Dict[int, MissionSlotData]
         self.final_mission: int = 29
         self.final_mission_ids: typing.List[int] = [29]
         self.final_locations: typing.List[int] = []
@@ -631,17 +633,47 @@ class SC2Context(CommonContext):
                         }
                     }
             if self.slot_data_version >= 4:
-                self.custom_mission_order = {
-                    campaign: {
-                        layout: [
-                            [
-                                (mission_id, MissionRequirements(
-                                    **{field: value for field, value in mission_reqs.items() if field in MissionRequirements._fields}
-                                )) for (mission_id, mission_reqs) in column
-                            ] for column in columns
-                        ] for (layout, columns) in layouts.items()
-                    } for (campaign, layouts) in args["slot_data"]["custom_mission_order"].items()
+                self.custom_mission_order = [
+                    CampaignSlotData(
+                        **{field:value for field, value in campaign_data.items() if field not in ["layouts", "entry_rule"]},
+                        entry_rule = SubRuleRuleData.parse_from_dict(campaign_data["entry_rule"]),
+                        layouts = [
+                            LayoutSlotData(
+                                **{field:value for field, value in layout_data.items() if field not in ["missions", "entry_rule"]},
+                                entry_rule = SubRuleRuleData.parse_from_dict(layout_data["entry_rule"]),
+                                missions = [
+                                    [
+                                        MissionSlotData(
+                                            **{field:value for field, value in mission_data.items() if field != "entry_rule"},
+                                            entry_rule = SubRuleRuleData.parse_from_dict(mission_data["entry_rule"])
+                                        ) for mission_data in column
+                                    ] for column in layout_data["missions"]
+                                ]
+                            ) for layout_data in campaign_data["layouts"]
+                        ]
+                    ) for campaign_data in args["slot_data"]["custom_mission_order"]
+                ]
+                self.mission_rule_mapping = {
+                    mission.mission_id: (mission.entry_rule, layout.entry_rule, campaign.entry_rule)
+                    for campaign in self.custom_mission_order for layout in campaign.layouts
+                    for column in layout.missions for mission in column
                 }
+                self.mission_data_mapping = {
+                    mission.mission_id: mission
+                    for campaign in self.custom_mission_order for layout in campaign.layouts
+                    for column in layout.missions for mission in column
+                }
+                # self.custom_mission_order = {
+                #     campaign: {
+                #         layout: [
+                #             [
+                #                 (mission_id, MissionRequirements(
+                #                     **{field: value for field, value in mission_reqs.items() if field in MissionRequirements._fields}
+                #                 )) for (mission_id, mission_reqs) in column
+                #             ] for column in columns
+                #         ] for (layout, columns) in layouts.items()
+                #     } for (campaign, layouts) in args["slot_data"]["custom_mission_order"].items()
+                # }
 
             self.mission_order = args["slot_data"].get("mission_order", MissionOrder.option_vanilla)
             if self.slot_data_version < 4:
@@ -787,11 +819,16 @@ class SC2Context(CommonContext):
             mission_info.mission.id: set() for campaign_mission in self.mission_req_table.values() for mission_info in campaign_mission.values()
         }
         # TODO remove req table
-        for layouts in self.custom_mission_order.values():
-            for columns in layouts.values():
-                for column in columns:
-                    for (mission_id, _) in column:
-                        mission_id_to_location_ids[mission_id] = set()
+        for campaign in self.custom_mission_order:
+            for layout in campaign.layouts:
+                for column in layout.missions:
+                    for mission in column:
+                        mission_id_to_location_ids[mission.mission_id] = set()
+        # for layouts in self.custom_mission_order.values():
+        #     for columns in layouts.values():
+        #         for column in columns:
+        #             for (mission_id, _) in column:
+        #                 mission_id_to_location_ids[mission_id] = set()
 
         for loc in self.server_locations:
             offset = SC2WOL_LOC_ID_OFFSET if loc < SC2HOTS_LOC_ID_OFFSET \
@@ -1337,6 +1374,25 @@ def request_unfinished_missions(ctx: SC2Context) -> None: # TODO still uses req 
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
 
+def calc_unfinished_nodes(
+        ctx: SC2Context
+) -> typing.Tuple[typing.Set[int], typing.Set[int], typing.Set[int], typing.Set[int]]:
+    unfinished_missions: typing.Set[int] = set()
+
+    available_missions, available_layouts, available_campaigns = calc_available_nodes(ctx)
+    # print(f"missions: {available_missions}")
+    # print(f"layouts: {available_layouts}")
+    # print(f"campaigns: {available_campaigns}")
+
+    for mission_id in available_missions:
+        objectives = set(ctx.locations_for_mission_id(mission_id))
+        if objectives:
+            objectives_completed = ctx.checked_locations & objectives
+            if len(objectives_completed) < len(objectives):
+                unfinished_missions.add(mission_id)
+    
+    return available_missions, available_layouts, available_campaigns, unfinished_missions
+
 def calc_unfinished_missions_custom_order(ctx: SC2Context, unlocks: typing.Optional[typing.Dict] = None):
     unfinished_missions: typing.List[int] = []
     locations_completed: typing.List[typing.Union[typing.Set[int], typing.Literal[-1]]] = []
@@ -1390,7 +1446,8 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool: # T
 
         return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
     else:
-        available_missions = calc_available_missions_custom_order(ctx)
+        # available_missions = calc_available_missions_custom_order(ctx)
+        available_missions, _, _ = calc_available_nodes(ctx)
 
         return mission_id_to_check in available_missions
 
@@ -1462,6 +1519,32 @@ def request_available_missions(ctx: SC2Context): # TODO
     else:
         sc2_logger.warning("No mission table found, you are likely not connected to a server.")
 
+def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typing.Dict[int, typing.List[int]], typing.List[int]]:
+    available_missions: typing.List[int] = []
+    available_layouts: typing.Dict[int, typing.List[int]] = {}
+    available_campaigns: typing.List[int] = []
+
+    def mission_beaten(mission_id: int) -> bool:
+        return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
+    beaten_missions = {mission_id for mission_id in ctx.mission_rule_mapping if mission_beaten(mission_id)}
+    # print(f"beaten: {beaten_missions}")
+
+    for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
+        available_layouts[campaign_idx] = []
+        if campaign.entry_rule.is_fulfilled(beaten_missions):
+            available_campaigns.append(campaign_idx)
+            for layout_idx, layout in enumerate(campaign.layouts):
+                if layout.entry_rule.is_fulfilled(beaten_missions):
+                    available_layouts[campaign_idx].append(layout_idx)
+                    for column in layout.missions:
+                        for mission in column:
+                            if mission.mission_id == -1:
+                                continue
+
+                            if mission_reqs_completed_recursive(ctx, mission.mission_id, beaten_missions, set()):
+                                available_missions.append(mission.mission_id)
+
+    return available_missions, available_layouts, available_campaigns
 
 def calc_available_missions_custom_order(ctx: SC2Context, unlocks: typing.Optional[dict] = None) -> typing.List[int]:
     available_missions: typing.List[int] = []
@@ -1525,7 +1608,27 @@ def parse_unlock(unlock: typing.Union[typing.Dict[typing.Literal["connect_to", "
         return MissionConnection(unlock["connect_to"], lookup_id_to_campaign[unlock["campaign"]])
 
 
-def mission_reqs_completed_custom_order(ctx: SC2Context, mission_reqs: MissionRequirements, mission_complete: int) -> bool:
+def mission_reqs_completed_recursive(
+    ctx: SC2Context, mission_id: int,
+    beaten_missions: typing.Set[int], seen_missions: typing.Set[int]
+) -> bool:
+    mission_data = ctx.mission_data_mapping[mission_id]
+    if mission_data.entry_rule.is_fulfilled(beaten_missions):
+        prev_missions = set(mission_data.prev_mission_ids)
+        if len(prev_missions) == 0:
+            return True
+        seen_missions.add(mission_id)
+        unseen_prev = prev_missions.difference(seen_missions).intersection(beaten_missions)
+        while len(unseen_prev) > 0:
+            unseen_id = unseen_prev.pop()
+            if mission_reqs_completed_recursive(ctx, unseen_id, beaten_missions, seen_missions):
+                return True
+            seen_missions.add(unseen_id)
+        return False
+    return False
+
+# TODO def mission_reqs_completed_custom_order(ctx: SC2Context, mission_reqs: MissionRequirements, mission_complete: int) -> bool:
+def mission_reqs_completed_custom_order(ctx: SC2Context, mission_reqs: typing.Any, mission_complete: int) -> bool:
     def mission_beaten(mission_id: int) -> bool:
         return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
 

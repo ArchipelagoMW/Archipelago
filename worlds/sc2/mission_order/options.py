@@ -30,7 +30,7 @@ IntOne = And(int, lambda val: val >= 1)
 IntPercent = And(int, lambda val: 0 <= val <= 100)
 
 SubRuleEntryRule = {
-    "rules": [{str: Any}], # recursive schema checking is too hard
+    "rules": [{str: object}], # recursive schema checking is too hard
     "amount": IntNegOne,
 }
 MissionCountEntryRule = {
@@ -129,6 +129,9 @@ class CustomMissionOrder(OptionDict):
                 # Single-layout campaigns are not allowed to declare more layouts
                 single_layout = {key: val for (key, val) in value[campaign].items() if type(val) != dict}
                 value[campaign] = {campaign: single_layout}
+                # Campaign should inherit layout goal status
+                if not "goal" in single_layout or not single_layout["goal"]:
+                    value[campaign]["goal"] = False
                 # Hide campaign name for single-layout campaigns
                 value[campaign]["display_name"] = ""
             value[campaign]["single_layout_campaign"] = single_layout_campaign

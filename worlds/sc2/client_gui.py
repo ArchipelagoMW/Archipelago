@@ -13,7 +13,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_missions, calc_unfinished_missions_custom_order, parse_unlock
+from worlds.sc2.client import SC2Context, calc_unfinished_missions, calc_unfinished_nodes, parse_unlock
 from worlds.sc2.mission_tables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race, SC2Campaign
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type
@@ -167,12 +167,13 @@ class SC2Manager(GameManager):
 
             self.mission_id_to_button = {}
 
-            available_missions, unfinished_missions = calc_unfinished_missions_custom_order(self.ctx)
+            available_missions, available_layouts, available_campaigns, unfinished_missions = calc_unfinished_nodes(self.ctx)
 
             multi_campaign_layout_height = 0
 
-            for campaign_name, layouts in self.ctx.custom_mission_order.items():
-                longest_column = max(len(col) for columns in layouts.values() for col in columns)
+            for campaign_idx, campaign in enumerate(self.ctx.custom_mission_order):
+            # for campaign_name, layouts in self.ctx.custom_mission_order.items():
+                longest_column = max(len(col) for layout in campaign.layouts for col in layout.missions)
                 if longest_column == 1:
                     campaign_layout_height = 115
                 else:
@@ -180,20 +181,24 @@ class SC2Manager(GameManager):
                 multi_campaign_layout_height += campaign_layout_height
                 campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
                 campaign_layout.add_widget(
-                    Label(text=campaign_name, size_hint_y=None, height=25, outline_width=1)
+                    Label(text=campaign.name, size_hint_y=None, height=25, outline_width=1)
                 )
                 mission_layout = MissionLayout(padding=[10,0,10,0])
-                for layout_name, columns in layouts.items():
+                for layout_idx, layout in enumerate(campaign.layouts):
+                # for layout_name, columns in layouts.items():
                     layout_panel = RegionLayout()
                     layout_panel.add_widget(
-                        Label(text=layout_name, size_hint_y=None, height=25, outline_width=1))
+                        Label(text=layout.name, size_hint_y=None, height=25, outline_width=1))
                     column_panel = ColumnLayout()
 
-                    for column in columns:
+                    for column in layout.missions:
+                    # for column in columns:
                         category_panel = MissionCategory(padding=[3,6,3,6])
                         
-                        for (mission_id, mission_reqs) in column:
+                        for mission in column:
+                        # for (mission_id, mission_reqs) in column:
                             MISSION_BUTTON_HEIGHT = 50
+                            mission_id = mission.mission_id
 
                             # Empty mission slots
                             if mission_id == -1:
@@ -202,70 +207,12 @@ class SC2Manager(GameManager):
                                 continue
 
                             mission_obj = lookup_id_to_mission[mission_id]
-                            text: str = mission_obj.mission_name
-                            tooltip: str = ""
-                            remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations_custom_order(mission_id)
-                            # Map has uncollected locations
-                            if mission_id in unfinished_missions:
-                                if self.any_valuable_locations(remaining_locations):
-                                    text = f"[color=6495ED]{text}[/color]"
-                                else:
-                                    text = f"[color=A0BEF4]{text}[/color]"
-                            elif mission_id in available_missions:
-                                text = f"[color=FFFFFF]{text}[/color]"
-                            # Map requirements not met
-                            else:
-                                text = f"[color=a9a9a9]{text}[/color]"
-                                tooltip = f"Requires: "
-                                if mission_reqs.prev_missions:
-                                    tooltip += "\n- Any one of: "
-                                    tooltip += ", ".join([lookup_id_to_mission[prev_id].mission_name for prev_id in mission_reqs.prev_missions])
-                                if mission_reqs.unlocking_missions:
-                                    tooltip += "\n- All of: "
-                                    tooltip += ", ".join([lookup_id_to_mission[prev_id].mission_name for prev_id in mission_reqs.unlocking_missions])
-                                if mission_reqs.unlocking_count:
-                                    tooltip += f"\n- {mission_reqs.unlocking_count} total missions from campaign {mission_reqs.parent_campaign}"
-                                if len(mission_reqs.campaign_required) > 0 and mission_reqs.campaign_count != 0:
-                                    if mission_reqs.campaign_count > 0:
-                                        tooltip += f"\n- Any {mission_reqs.campaign_count} complete sets from the following:"
-                                    else:
-                                        tooltip += f"\n- All of the following:"
-                                    for prev_campaign_missions in mission_reqs.campaign_required:
-                                        tooltip += "\n  - "
-                                        tooltip += ", ".join([lookup_id_to_mission[mission_id].mission_name for mission_id in prev_campaign_missions])
-                                if len(mission_reqs.layout_required) > 0 and mission_reqs.layout_count != 0:
-                                    if mission_reqs.layout_count > 0:
-                                        tooltip += f"\n- Any {mission_reqs.layout_count} complete sets from the following:"
-                                    else:
-                                        tooltip += f"\n- All of the following:"
-                                    for prev_layout_missions in mission_reqs.layout_required:
-                                        tooltip += "\n  - "
-                                        tooltip += ", ".join([lookup_id_to_mission[mission_id].mission_name for mission_id in prev_layout_missions])
 
-                            if mission_id in self.ctx.final_mission_ids:
-                                if mission_id in available_missions:
-                                    text = f"[color=FFBC95]{mission_obj.mission_name}[/color]"
-                                else:
-                                    text = f"[color=D0C0BE]{mission_obj.mission_name}[/color]"
-                                if tooltip:
-                                    tooltip += "\n\n"
-                                tooltip += "Required to beat the world"
+                            text, tooltip = self.mission_text(
+                                self.ctx, mission_id, mission_obj, layout_idx, campaign_idx,
+                                available_missions, available_layouts, available_campaigns, unfinished_missions
+                            )
 
-                            if remaining_count > 0:
-                                if tooltip:
-                                    tooltip += "\n\n"
-                                tooltip += f"-- Uncollected locations --"
-                                for loctype in LocationType:
-                                    if len(remaining_locations[loctype]) > 0:
-                                        if loctype == LocationType.VICTORY:
-                                            tooltip += f"\n- {remaining_locations[loctype][0]}"
-                                        else:
-                                            tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
-                                            tooltip += "\n- ".join(remaining_locations[loctype])
-                                if len(plando_locations) > 0:
-                                    tooltip += f"\nPlando:\n- "
-                                    tooltip += "\n- ".join(plando_locations)
-                            
                             mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
                             mission_race = mission_obj.race
                             if mission_race == SC2Race.ANY:
@@ -420,6 +367,108 @@ class SC2Manager(GameManager):
             campaign_layout.add_widget(mission_layout)
             self.campaign_panel.add_widget(campaign_layout)
         self.campaign_panel.height = multi_campaign_layout_height
+
+    def mission_text(
+        self, ctx: SC2Context, mission_id: int, mission_obj: SC2Mission, layout_id: int, campaign_id: int,
+        available_missions: List[int], available_layouts: Dict[int, List[int]], available_campaigns: List[int],
+        unfinished_missions: List[int]
+    ) -> Tuple[str, str]:
+        COLOR_MISSION_IMPORTANT = "6495ED" # blue
+        COLOR_MISSION_UNIMPORTANT = "A0BEF4" # lighter blue
+        COLOR_MISSION_CLEARED = "FFFFFF" # white
+        COLOR_MISSION_LOCKED = "A9A9A9" # gray
+        COLOR_PARENT_LOCKED = "848484" # darker gray
+        COLOR_MISSION_FINAL = "FFBC95" # orange
+        COLOR_MISSION_FINAL_LOCKED = "D0C0BE" # gray + orange
+        COLOR_FINAL_PARENT_LOCKED = "D0C0BE" # gray + orange
+
+        text = mission_obj.mission_name
+        tooltip: str = ""
+        remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations_custom_order(mission_id)
+        parent_locked = campaign_id not in available_campaigns or layout_id not in available_layouts[campaign_id]
+
+        # Map has uncollected locations
+        if mission_id in unfinished_missions:
+            if self.any_valuable_locations(remaining_locations):
+                text = f"[color={COLOR_MISSION_IMPORTANT}]{text}[/color]"
+            else:
+                text = f"[color={COLOR_MISSION_UNIMPORTANT}]{text}[/color]"
+        elif mission_id in available_missions:
+            text = f"[color={COLOR_MISSION_CLEARED}]{text}[/color]"
+        # Map requirements not met
+        else:
+            mission_rule, layout_rule, campaign_rule = ctx.mission_rule_mapping[mission_id]
+            if parent_locked:
+                text = f"[color={COLOR_PARENT_LOCKED}]{text}[/color]"
+                if campaign_id not in available_campaigns:
+                    tooltip = "To unlock this campaign, "
+                    rule_tooltip = campaign_rule.tooltip(0, lookup_id_to_mission)
+                    tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
+                else:
+                    tooltip = "To unlock this region, "
+                    rule_tooltip = layout_rule.tooltip(0, lookup_id_to_mission)
+                    tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
+            else:
+                text = f"[color={COLOR_MISSION_LOCKED}]{text}[/color]"
+                tooltip = "To unlock this mission, "
+                rule_tooltip = mission_rule.tooltip(0, lookup_id_to_mission)
+                tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
+
+            # tooltip = f"Requires: "
+            # if mission_reqs.prev_missions:
+            #     tooltip += "\n- Any one of: "
+            #     tooltip += ", ".join([lookup_id_to_mission[prev_id].mission_name for prev_id in mission_reqs.prev_missions])
+            # if mission_reqs.unlocking_missions:
+            #     tooltip += "\n- All of: "
+            #     tooltip += ", ".join([lookup_id_to_mission[prev_id].mission_name for prev_id in mission_reqs.unlocking_missions])
+            # if mission_reqs.unlocking_count:
+            #     tooltip += f"\n- {mission_reqs.unlocking_count} total missions from campaign {mission_reqs.parent_campaign}"
+            # if len(mission_reqs.campaign_required) > 0 and mission_reqs.campaign_count != 0:
+            #     if mission_reqs.campaign_count > 0:
+            #         tooltip += f"\n- Any {mission_reqs.campaign_count} complete sets from the following:"
+            #     else:
+            #         tooltip += f"\n- All of the following:"
+            #     for prev_campaign_missions in mission_reqs.campaign_required:
+            #         tooltip += "\n  - "
+            #         tooltip += ", ".join([lookup_id_to_mission[mission_id].mission_name for mission_id in prev_campaign_missions])
+            # if len(mission_reqs.layout_required) > 0 and mission_reqs.layout_count != 0:
+            #     if mission_reqs.layout_count > 0:
+            #         tooltip += f"\n- Any {mission_reqs.layout_count} complete sets from the following:"
+            #     else:
+            #         tooltip += f"\n- All of the following:"
+            #     for prev_layout_missions in mission_reqs.layout_required:
+            #         tooltip += "\n  - "
+            #         tooltip += ", ".join([lookup_id_to_mission[mission_id].mission_name for mission_id in prev_layout_missions])
+
+        # Mark goal missions
+        if mission_id in self.ctx.final_mission_ids:
+            if mission_id in available_missions:
+                text = f"[color={COLOR_MISSION_FINAL}]{mission_obj.mission_name}[/color]"
+            elif parent_locked:
+                text = f"[color={COLOR_FINAL_PARENT_LOCKED}]{mission_obj.mission_name}[/color]"
+            else:
+                text = f"[color={COLOR_MISSION_FINAL_LOCKED}]{mission_obj.mission_name}[/color]"
+            if tooltip:
+                tooltip += "\n\n"
+            tooltip += "Required to beat the world"
+
+        # Populate remaining location list
+        if remaining_count > 0:
+            if tooltip:
+                tooltip += "\n\n"
+            tooltip += f"-- Uncollected locations --"
+            for loctype in LocationType:
+                if len(remaining_locations[loctype]) > 0:
+                    if loctype == LocationType.VICTORY:
+                        tooltip += f"\n- {remaining_locations[loctype][0]}"
+                    else:
+                        tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
+                        tooltip += "\n- ".join(remaining_locations[loctype])
+            if len(plando_locations) > 0:
+                tooltip += f"\nPlando:\n- "
+                tooltip += "\n- ".join(plando_locations)
+        return text, tooltip
+        
 
     def mission_callback(self, button: MissionButton) -> None:
         if not self.launching:
