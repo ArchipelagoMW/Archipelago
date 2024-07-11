@@ -362,7 +362,7 @@ portal_mapping: List[Portal] = [
     Portal(name="East Fortress to Interior Upper", region="Fortress East Shortcut Upper",
            destination="Fortress Main", tag="_upper"),
     
-    Portal(name="Fortress Grave Path Lower Exit", region="Fortress Grave Path",
+    Portal(name="Fortress Grave Path Lower Exit", region="Fortress Grave Path Entry",
            destination="Fortress Courtyard", tag="_Lower"),
     Portal(name="Fortress Hero's Grave", region="Fortress Hero's Grave Region",
            destination="RelicVoid", tag="_teleporter_relic plinth"),
@@ -668,7 +668,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Eastern Vault Fortress Gold Door": RegionInfo("Fortress Main"),
     "Fortress East Shortcut Upper": RegionInfo("Fortress East"),
     "Fortress East Shortcut Lower": RegionInfo("Fortress East"),
-    "Fortress Grave Path": RegionInfo("Fortress Reliquary"),
+    "Fortress Grave Path Entry": RegionInfo("Fortress Reliquary"),
+    "Fortress Grave Path Combat": RegionInfo("Fortress Reliquary"),  # the combat is basically just a barrier here
+    "Fortress Grave Path by Grave": RegionInfo("Fortress Reliquary"),
     "Fortress Grave Path Upper": RegionInfo("Fortress Reliquary", dead_end=DeadEnd.restricted),
     "Fortress Grave Path Dusty Entrance Region": RegionInfo("Fortress Reliquary"),
     "Fortress Hero's Grave Region": RegionInfo("Fortress Reliquary"),
@@ -1355,22 +1357,40 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Eastern Vault Fortress":
             [["IG1"]],
     },
-    "Fortress Grave Path": {
+    "Fortress Grave Path Entry": {
+        "Fortress Grave Path Combat":
+            [],
+        # redundant here, keeping a comment to show it's intentional
+        # "Fortress Grave Path Dusty Entrance Region":
+        #     [["Hyperdash"]],
+    },
+    "Fortress Grave Path Combat": {
+        "Fortress Grave Path Entry":
+            [],
+        "Fortress Grave Path by Grave":
+            [],
+    },
+    "Fortress Grave Path by Grave": {
+        "Fortress Grave Path Entry":
+            [],
+        # unnecessary, you can just skip it
+        # "Fortress Grave Path Combat":
+        #     [],
         "Fortress Hero's Grave Region":
-            [], 
+            [],
         "Fortress Grave Path Dusty Entrance Region":
             [["Hyperdash"]],
     },
     "Fortress Grave Path Upper": {
-        "Fortress Grave Path":
+        "Fortress Grave Path Entry":
             [["IG1"]],
     },
     "Fortress Grave Path Dusty Entrance Region": {
-        "Fortress Grave Path":
+        "Fortress Grave Path by Grave":
             [["Hyperdash"]],
     },
     "Fortress Hero's Grave Region": {
-        "Fortress Grave Path":
+        "Fortress Grave Path by Grave":
             [],
     },
     "Fortress Arena": {

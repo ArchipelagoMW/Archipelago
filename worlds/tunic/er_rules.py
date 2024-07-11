@@ -802,22 +802,32 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Eastern Vault Fortress"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
-    regions["Fortress Grave Path"].connect(
-        connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
-        rule=lambda state: state.has(laurels, player))
-    regions["Fortress Grave Path Dusty Entrance Region"].connect(
-        connecting_region=regions["Fortress Grave Path"],
-        rule=lambda state: state.has(laurels, player))
+    fort_grave_entry_to_combat = regions["Fortress Grave Path Entry"].connect(
+        connecting_region=regions["Fortress Grave Path Combat"])
+    regions["Fortress Grave Path Combat"].connect(
+        connecting_region=regions["Fortress Grave Path Entry"])
 
-    regions["Fortress Grave Path"].connect(
+    regions["Fortress Grave Path Combat"].connect(
+        connecting_region=regions["Fortress Grave Path by Grave"])
+
+    # run past the enemies
+    regions["Fortress Grave Path by Grave"].connect(
+        connecting_region=regions["Fortress Grave Path Entry"])
+
+    regions["Fortress Grave Path by Grave"].connect(
         connecting_region=regions["Fortress Hero's Grave Region"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["Fortress Hero's Grave Region"].connect(
-        connecting_region=regions["Fortress Grave Path"])
+        connecting_region=regions["Fortress Grave Path by Grave"])
+
+    regions["Fortress Grave Path by Grave"].connect(
+        connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
+        rule=lambda state: state.has(laurels, player))
+    # reverse connection is conditionally made later, depending on whether combat logic is on, and the details of ER
 
     # nmg: ice grapple from upper grave path to lower
     regions["Fortress Grave Path Upper"].connect(
-        connecting_region=regions["Fortress Grave Path"],
+        connecting_region=regions["Fortress Grave Path Entry"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["Fortress Arena"].connect(
@@ -1205,6 +1215,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                      lambda state: has_combat_reqs("The Heir", state, player))
 
     if world.options.combat_logic == CombatLogic.option_on:
+        # this is redundant with combat logic off
+        regions["Fortress Grave Path Entry"].connect(
+            connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
+            rule=lambda state: state.has(laurels, player))
+
         # need to fight through the rudelings and turret, or just laurels from near the windmill
         set_rule(ow_to_well_entry,
                  lambda state: state.has(laurels, player)
@@ -1242,12 +1257,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(monastery_front_to_back,
                  lambda state: has_combat_reqs("Quarry", state, player))
 
+        set_rule(fort_grave_entry_to_combat,
+                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
+
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
-            dagger_entry_paired_name, dagger_entry_paired_region = get_paired_portal("Archipelagos Redux, Archipelagos_house_")
+            # for the chest outside of magic dagger house
+            dagger_entry_paired_name, dagger_entry_paired_region = (
+                get_paired_portal("Archipelagos Redux, archipelagos_house_"))
             try:
-                dagger_entry_paired_entrance = world.multiworld.get_entrance(dagger_entry_paired_name)
-            except:
+                dagger_entry_paired_entrance = world.multiworld.get_entrance(dagger_entry_paired_name, player)
+            except KeyError:
                 # there is no paired entrance, so we don't include the can_reach
                 set_rule(wg_checkpoint_to_dagger,
                          lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
@@ -1255,7 +1275,34 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 set_rule(wg_checkpoint_to_dagger,
                          lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player)
                          or dagger_entry_paired_entrance.can_reach(state))
-                world.multiworld.register_indirect_condition(regions["West Garden at Dagger House"], dagger_entry_paired_region)
+                world.multiworld.register_indirect_condition(region=regions["West Garden at Dagger House"],
+                                                             entrance=dagger_entry_paired_entrance)
+
+            # zip past enemies in fortress grave path to enter the dusty entrance, then come back out
+            fort_dusty_paired_name, fort_dusty_paired_region = get_paired_portal("Fortress Reliquary, Dusty_")
+            try:
+                fort_dusty_paired_entrance = world.multiworld.get_entrance(fort_dusty_paired_name, player)
+            except KeyError:
+                # there is no paired entrance, so you can't run past to deaggro
+                # the path to dusty can be done via combat, so no need to do anything here
+                pass
+            else:
+                # there is a paired entrance, so you can use that to deaggro enemies
+                regions["Fortress Grave Path Dusty Entrance Region"].connect(
+                    connecting_region=regions["Fortress Grave Path by Grave"],
+                    rule=lambda state: state.has(laurels, player) and fort_dusty_paired_entrance.can_reach(state))
+                world.multiworld.register_indirect_condition(region=regions["Fortress Grave Path by Grave"],
+                                                             entrance=fort_dusty_paired_entrance)
+        else:
+            # if combat logic is on and ER is off, we can make this entrance freely
+            regions["Fortress Grave Path Dusty Entrance Region"].connect(
+                connecting_region=regions["Fortress Grave Path by Grave"],
+                rule=lambda state: state.has(laurels, player))
+    else:
+        # if combat logic is off, we can make this entrance freely
+        regions["Fortress Grave Path Dusty Entrance Region"].connect(
+            connecting_region=regions["Fortress Grave Path by Grave"],
+            rule=lambda state: state.has(laurels, player))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
