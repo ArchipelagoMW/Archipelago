@@ -402,6 +402,8 @@ def compare_results(
         yaml_value: Union[str, int, bool, dict, list],
         trigger_value: Union[str, int, bool, dict, list],
         comparator: str):
+    if yaml_value is None:
+        return False
     if (isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int)):
         yaml_value = str(yaml_value)
         trigger_value = str(trigger_value)
@@ -470,7 +472,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                                                       option_set["option_result"]]]
                 else:
                     option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
-            currently_targeted_weights = weights
+            currently_targeted_weights = copy.deepcopy(weights)
             category = option_set.get("option_category", None)
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
