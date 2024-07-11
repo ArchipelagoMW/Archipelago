@@ -22,16 +22,23 @@ class TunicERLocation(Location):
 
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
-    for region_name, region_data in tunic_er_regions.items():
-        regions[region_name] = Region(region_name, world.player, world.multiworld)
 
     if world.options.entrance_rando:
+        for region_name, region_data in tunic_er_regions.items():
+            regions[region_name] = Region(region_name, world.player, world.multiworld)
+
         portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
         for portal1, portal2 in portal_pairs.items():
             world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
     else:
+        # todo: test this change
+        for region_name, region_data in tunic_er_regions.items():
+            # filter out regions that are inaccessible in non-er
+            if region_name not in ["Zig Skip Exit", "Purgatory"]:
+                regions[region_name] = Region(region_name, world.player, world.multiworld)
+
         portal_pairs = vanilla_portals(world, regions)
 
     set_er_region_rules(world, regions, portal_pairs)
@@ -81,7 +88,7 @@ tunic_events: Dict[str, str] = {
     "Eastern Vault West Fuses": "Eastern Vault Fortress",
     "Eastern Vault East Fuse": "Eastern Vault Fortress",
     "Quarry Connector Fuse": "Quarry Connector",
-    "Quarry Fuse": "Quarry",
+    "Quarry Fuse": "Quarry Entry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
     "West Garden Fuse": "West Garden South Checkpoint",
     "Library Fuse": "Library Lab",
@@ -120,7 +127,7 @@ def create_shop_region(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
-    portal_map = [portal for portal in portal_mapping if portal.name != "Ziggurat Lower Falling Entrance"]
+    portal_map = [portal for portal in portal_mapping if portal.name not in ["Ziggurat Lower Falling Entrance", "Purgatory Bottom Exit", "Purgatory Top Exit"]]
 
     while portal_map:
         portal1 = portal_map[0]
@@ -132,9 +139,6 @@ def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Por
             portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                              destination="Previous Region", tag="_")
             create_shop_region(world, regions)
-
-        elif portal2_sdt == "Purgatory, Purgatory_bottom":
-            portal2_sdt = "Purgatory, Purgatory_top"
 
         for portal in portal_map:
             if portal.scene_destination() == portal2_sdt:
