@@ -67,7 +67,7 @@ tunic_events: Dict[str, str] = {
     "Eastern Vault West Fuses": "Eastern Vault Fortress",
     "Eastern Vault East Fuse": "Eastern Vault Fortress",
     "Quarry Connector Fuse": "Quarry Connector",
-    "Quarry Fuse": "Quarry",
+    "Quarry Fuse": "Quarry Entry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
     "West Garden Fuse": "West Garden",
     "Library Fuse": "Library Lab",
