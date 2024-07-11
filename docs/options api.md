@@ -85,6 +85,81 @@ class ExampleWorld(World):
     options: ExampleGameOptions
 ```
 
+### Option Documentation
+
+Options' [docstrings] are used as their user-facing documentation. They're displayed on the WebHost setup page when a
+user hovers over the yellow "(?)" icon, and included in the YAML templates generated for each game.
+
+[docstrings]: /docs/world%20api.md#docstrings
+
+The WebHost can display Option documentation either as plain text with all whitespace preserved (other than the base
+indentation), or as HTML generated from the standard Python [reStructuredText] format. Although plain text is the
+default for backwards compatibility, world authors are encouraged to write their Option documentation as
+reStructuredText and enable rich text rendering by setting `World.rich_text_options_doc = True`.
+
+[reStructuredText]: https://docutils.sourceforge.io/rst.html
+
+```python
+from worlds.AutoWorld import WebWorld
+
+
+class ExampleWebWorld(WebWorld):
+    # Render all this world's options as rich text.
+    rich_text_options_doc = True
+```
+
+You can set a single option to use rich or plain text by setting
+`Option.rich_text_doc`.
+
+```python
+from Options import Toggle, Range, Choice, PerGameCommonOptions
+
+
+class Difficulty(Choice):
+    """Sets overall game difficulty.
+
+    - **Easy:** All enemies die in one hit.
+    - **Normal:** Enemies and the player both have normal health bars.
+    - **Hard:** The player dies in one hit."""
+    display_name = "Difficulty"
+    rich_text_doc = True
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    default = 1
+```
+
+### Option Groups
+Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order specified
+by your world on the player-options and weighted-options pages. In the generated template files, there will be a comment
+with the group name at the beginning of each group of options. The `start_collapsed` Boolean only affects how the groups
+appear on the WebHost, with the grouping being collapsed when this is `True`.
+
+Options without a group name are categorized into a generic "Game Options" group, which is always the first group. If
+every option for your world is in a group, this group will be removed. There is also an "Items & Location Options"
+group, which is automatically created using certain specified `item_and_loc_options`. These specified options cannot be
+removed from this group.
+
+Both the "Game Options" and "Item & Location Options" groups can be overridden by creating your own groups with
+those names, letting you add options to them and change whether they start collapsed. The "Item &
+Location Options" group can also be moved to a different position in the group ordering, but "Game Options" will always
+be first, regardless of where it is in your list.
+
+```python
+from worlds.AutoWorld import WebWorld
+from Options import OptionGroup
+from . import Options
+
+class MyWorldWeb(WebWorld):
+    option_groups = [
+        OptionGroup("Color Options", [
+            Options.ColorblindMode,
+            Options.FlashReduction,
+            Options.UIColors,
+        ]),
+    ]
+```
+
 ### Option Checking
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
@@ -101,7 +176,8 @@ or if I need a boolean object, such as in my slot_data I can access it as:
 start_with_sword = bool(self.options.starting_sword.value)
 ```
 All numeric options (i.e. Toggle, Choice, Range) can be compared to integers, strings that match their attributes,
-strings that match the option attributes after "option_" is stripped, and the attributes themselves.
+strings that match the option attributes after "option_" is stripped, and the attributes themselves. The option can
+also be checked to see if it exists within a collection, but this will fail for a set of strings due to hashing.
 ```python
 # options.py
 class Logic(Choice):
@@ -112,6 +188,12 @@ class Logic(Choice):
     option_insane = 4
     alias_extra_hard = 2
     crazy = 4  # won't be listed as an option and only exists as an attribute on the class
+
+class Weapon(Choice):
+    option_none = 0
+    option_sword = 1
+    option_bow = 2
+    option_hammer = 3
 
 # __init__.py
 from .options import Logic
@@ -126,6 +208,16 @@ elif self.options.logic == Logic.option_extreme:
     do_extreme_things()
 elif self.options.logic == "crazy":
     do_insane_things()
+
+# check if the current option is in a collection of integers using the class attributes
+if self.options.weapon in {Weapon.option_bow, Weapon.option_sword}:
+    do_stuff()
+# in order to make a set of strings work, we have to compare against current_key
+elif self.options.weapon.current_key in {"none", "hammer"}:
+    do_something_else()
+# though it's usually better to just use a tuple instead
+elif self.options.weapon in ("none", "hammer"):
+    do_something_else()
 ```
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
@@ -155,10 +247,12 @@ Gives the player starting hints for where the items defined here are.
 Gives the player starting hints for the items on locations defined here.
 
 ### ExcludeLocations
-Marks locations given here as `LocationProgressType.Excluded` so that progression items can't be placed on them.
+Marks locations given here as `LocationProgressType.Excluded` so that neither progression nor useful items can be
+placed on them.
 
 ### PriorityLocations
-Marks locations given here as `LocationProgressType.Priority` forcing progression items on them.
+Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
+the pool.
 
 ### ItemLinks
 Allows users to share their item pool with other players. Currently item links are per game. A link of one game between
