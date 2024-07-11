@@ -1,11 +1,12 @@
 from typing import List
 from BaseClasses import CollectionState, MultiWorld
 from .RegionBase import JakAndDaxterRegion
-from ..Rules import can_free_scout_flies, can_fight
+from .. import JakAndDaxterOptions
+from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs
 
 
 # God help me... here we go.
-def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxterOptions, player: int) -> List[JakAndDaxterRegion]:
 
     # We need a few helper functions.
     def can_cross_main_gap(state: CollectionState, p: int) -> bool:
@@ -188,5 +189,22 @@ def build_regions(level_name: str, player: int, multiworld: MultiWorld) -> List[
     multiworld.regions.append(fort_interior_caches)
     multiworld.regions.append(fort_interior_base)
     multiworld.regions.append(fort_interior_course_end)
+
+    # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
+    # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
+    if options.enable_orbsanity.value == 1:
+        orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
+
+        bundle_size = options.level_orbsanity_bundle_size.value
+        bundle_count = int(200 / bundle_size)
+        for bundle_index in range(bundle_count):
+            orbs.add_orb_locations(12,
+                                   bundle_index,
+                                   bundle_size,
+                                   access_rule=lambda state, bundle=bundle_index:
+                                   can_reach_orbs(state, player, multiworld, options, level_name)
+                                   >= (bundle_size * (bundle + 1)))
+        multiworld.regions.append(orbs)
+        main_area.connect(orbs)
 
     return [main_area]

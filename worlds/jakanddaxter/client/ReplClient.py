@@ -257,15 +257,15 @@ class JakAndDaxterReplClient:
         return ok
 
     def receive_precursor_orb(self, ap_id: int) -> bool:
-        orb_id = Orbs.to_game_id(ap_id)
+        orb_amount = Orbs.to_game_id(ap_id)
         ok = self.send_form("(send-event "
                             "*target* \'get-archipelago "
                             "(pickup-type money) "
-                            "(the float " + str(orb_id) + "))")
+                            "(the float " + str(orb_amount) + "))")
         if ok:
-            logger.debug(f"Received a Precursor Orb!")
+            logger.debug(f"Received {orb_amount} Precursor Orbs!")
         else:
-            logger.error(f"Unable to receive a Precursor Orb!")
+            logger.error(f"Unable to receive {orb_amount} Precursor Orbs!")
         return ok
 
     # Green eco pills are our filler item. Use the get-pickup event instead to handle being full health.
@@ -306,6 +306,28 @@ class JakAndDaxterReplClient:
             logger.debug(f"Reset deathlink flag!")
         else:
             logger.error(f"Unable to reset deathlink flag!")
+        return ok
+
+    def setup_orbsanity(self, option: int, bundle: int) -> bool:
+        ok = self.send_form(f"(ap-setup-orbs! (the uint {option}) (the uint {bundle}))")
+        if ok:
+            logger.debug(f"Set up orbsanity: Option {option}, Bundle {bundle}!")
+        else:
+            logger.error(f"Unable to set up orbsanity: Option {option}, Bundle {bundle}!")
+        return ok
+
+    def reset_orbsanity(self) -> bool:
+        ok = self.send_form(f"(set! (-> *ap-info-jak1* collected-bundle-level) 0)")
+        if ok:
+            logger.debug(f"Reset level ID for collected orbsanity bundle!")
+        else:
+            logger.error(f"Unable to reset level ID for collected orbsanity bundle!")
+
+        ok = self.send_form(f"(set! (-> *ap-info-jak1* collected-bundle-count) 0)")
+        if ok:
+            logger.debug(f"Reset orb count for collected orbsanity bundle!")
+        else:
+            logger.error(f"Unable to reset orb count for collected orbsanity bundle!")
         return ok
 
     def save_data(self):

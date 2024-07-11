@@ -1,5 +1,5 @@
 import random
-import typing
+from typing import ByteString, List, Callable
 import json
 import pymem
 from pymem import pattern
@@ -7,7 +7,8 @@ from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinA
 from dataclasses import dataclass
 
 from CommonClient import logger
-from ..locs import (CellLocations as Cells,
+from ..locs import (OrbLocations as Orbs,
+                    CellLocations as Cells,
                     ScoutLocations as Flies,
                     SpecialLocations as Specials,
                     OrbCacheLocations as Caches)
@@ -65,6 +66,12 @@ orb_caches_checked_offset = offsets.define(sizeof_uint32, 16)
 moves_received_offset = offsets.define(sizeof_uint8, 16)
 moverando_enabled_offset = offsets.define(sizeof_uint8)
 
+# Orbsanity information.
+orbsanity_option_offset = offsets.define(sizeof_uint8)
+orbsanity_bundle_offset = offsets.define(sizeof_uint32)
+collected_bundle_level_offset = offsets.define(sizeof_uint8)
+collected_bundle_count_offset = offsets.define(sizeof_uint32)
+
 # The End.
 end_marker_offset = offsets.define(sizeof_uint8, 4)
 
@@ -111,7 +118,7 @@ def autopsy(died: int) -> str:
 
 
 class JakAndDaxterMemoryReader:
-    marker: typing.ByteString
+    marker: ByteString
     goal_address = None
     connected: bool = False
     initiated_connect: bool = False
@@ -128,15 +135,20 @@ class JakAndDaxterMemoryReader:
     send_deathlink: bool = False
     cause_of_death: str = ""
 
-    def __init__(self, marker: typing.ByteString = b'UnLiStEdStRaTs_JaK1\x00'):
+    # Orbsanity handling
+    orbsanity_enabled: bool = False
+    reset_orbsanity: bool = False
+
+    def __init__(self, marker: ByteString = b'UnLiStEdStRaTs_JaK1\x00'):
         self.marker = marker
         self.connect()
 
     async def main_tick(self,
-                        location_callback: typing.Callable,
-                        finish_callback: typing.Callable,
-                        deathlink_callback: typing.Callable,
-                        deathlink_toggle: typing.Callable):
+                        location_callback: Callable,
+                        finish_callback: Callable,
+                        deathlink_callback: Callable,
+                        deathlink_toggle: Callable,
+                        orbsanity_callback: Callable):
         if self.initiated_connect:
             await self.connect()
             self.initiated_connect = False
@@ -170,6 +182,9 @@ class JakAndDaxterMemoryReader:
 
         if self.send_deathlink:
             deathlink_callback()
+
+        if self.reset_orbsanity:
+            orbsanity_callback()
 
     async def connect(self):
         try:
@@ -207,7 +222,7 @@ class JakAndDaxterMemoryReader:
         logger.info("   Last location checked: " + (str(self.location_outbox[self.outbox_index])
                                                     if self.outbox_index else "None"))
 
-    def read_memory(self) -> typing.List[int]:
+    def read_memory(self) -> List[int]:
         try:
             next_cell_index = self.read_goal_address(0, sizeof_uint64)
             next_buzzer_index = self.read_goal_address(next_buzzer_index_offset, sizeof_uint64)
@@ -262,8 +277,30 @@ class JakAndDaxterMemoryReader:
                     logger.debug("Checked orb cache: " + str(next_cache))
 
             # Listen for any changes to this setting.
-            moverando_flag = self.read_goal_address(moverando_enabled_offset, sizeof_uint8)
-            self.moverando_enabled = bool(moverando_flag)
+            # moverando_flag = self.read_goal_address(moverando_enabled_offset, sizeof_uint8)
+            # self.moverando_enabled = bool(moverando_flag)
+
+            orbsanity_option = self.read_goal_address(orbsanity_option_offset, sizeof_uint8)
+            orbsanity_bundle = self.read_goal_address(orbsanity_bundle_offset, sizeof_uint32)
+            self.orbsanity_enabled = orbsanity_option > 0
+
+            # Treat these values like the Deathlink flag. They need to be reset once they are checked.
+            collected_bundle_level = self.read_goal_address(collected_bundle_level_offset, sizeof_uint8)
+            collected_bundle_count = self.read_goal_address(collected_bundle_count_offset, sizeof_uint32)
+
+            if orbsanity_option > 0 and collected_bundle_count > 0:
+                # Count up from the first bundle, by bundle size, until you reach the latest collected bundle.
+                # e.g. {25, 50, 75, 100, 125...}
+                for k in range(orbsanity_bundle,
+                               orbsanity_bundle + collected_bundle_count,  # Range max is non-inclusive.
+                               orbsanity_bundle):
+
+                    bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(collected_bundle_level, k, orbsanity_bundle))
+                    if bundle_ap_id not in self.location_outbox:
+                        self.location_outbox.append(bundle_ap_id)
+                        logger.debug("Checked orb bundle: " + str(bundle_ap_id))
+
+                # self.reset_orbsanity = True
 
         except (ProcessError, MemoryReadError, WinAPIError):
             logger.error("The gk process has died. Restart the game and run \"/memr connect\" again.")
