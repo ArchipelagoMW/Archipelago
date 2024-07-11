@@ -41,7 +41,12 @@ class PsychonautsMinimalVictoryTestBase(PsychonautsTestBase):
     @classmethod
     def setUpClass(cls):
         # For minimal tests, no starting items are allowed.
-        cls.options.update({
+        options = cls.options
+        # Ensure `.options` is overridden, so that the base class' `.options` does not get modified.
+        if options is PsychonautsMinimalVictoryTestBase.options:
+            options = {}
+            cls.options = options
+        options.update({
             "RandomStartingMinds": 0,
             "StartingLevitation": False,
             "StartingMentalMagnet": False,
