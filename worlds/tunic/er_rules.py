@@ -840,19 +840,19 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Quarry Portal"].connect(
         connecting_region=regions["Quarry Entry"])
 
-    regions["Quarry Entry"].connect(
+    quarry_entry_to_main = regions["Quarry Entry"].connect(
         connecting_region=regions["Quarry"],
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Entry"])
 
-    regions["Quarry Back"].connect(
+    quarry_back_to_main = regions["Quarry Back"].connect(
         connecting_region=regions["Quarry"],
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Back"])
 
-    regions["Quarry Monastery Entry"].connect(
+    monastery_to_quarry_main = regions["Quarry Monastery Entry"].connect(
         connecting_region=regions["Quarry"],
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
@@ -889,7 +889,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
-    regions["Monastery Front"].connect(
+    monastery_front_to_back = regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
     # laurels through the gate, no setup needed
     regions["Monastery Back"].connect(
@@ -1232,6 +1232,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
         set_rule(wg_checkpoint_to_before_boss,
                  lambda state: has_combat_reqs("West Garden", state, player))
+
+        set_rule(quarry_entry_to_main,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(quarry_back_to_main,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(monastery_to_quarry_main,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(monastery_front_to_back,
+                 lambda state: has_combat_reqs("Quarry", state, player))
 
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
