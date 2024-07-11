@@ -22,9 +22,7 @@ class ShiversWorld(World):
     Shivers is a horror themed point and click adventure. Explore the mysteries of Windlenot's Museum of the Strange and Unusual.
     """
 
-    pot_completed_list: list[...]
-
-    game: str = "Shivers"
+    game = "Shivers"
     topology_present = False
     web = ShiversWeb()
     options_dataclass = ShiversOptions
@@ -33,6 +31,8 @@ class ShiversWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
     shivers_item_id_offset = 27000
+    pot_completed_list: list[...]
+
 
     def generate_early(self):
         self.pot_completed_list = []
