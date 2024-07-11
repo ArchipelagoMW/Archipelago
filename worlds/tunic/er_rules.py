@@ -1418,10 +1418,6 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # todo: come back add add dagger to checks that can be reasonably done with dagger
     if world.options.combat_logic == CombatLogic.option_on:
-        set_rule(multiworld.get_location("Overworld - [East] Between Ladders Near Ruined Passage", player),
-                 lambda state: has_combat_reqs("Overworld", state, player))
-        add_rule(multiworld.get_location("Overworld - [East] Chest Near Pots", player),
-                 lambda state: has_combat_reqs("Overworld", state, player))
         add_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
                  lambda state: has_combat_reqs("Garden Knight", state, player))
         add_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Quarry Gate", player),
