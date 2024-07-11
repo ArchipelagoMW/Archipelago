@@ -1236,10 +1236,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
             dagger_entry_paired_name, dagger_entry_paired_region = get_paired_portal("Archipelagos Redux, Archipelagos_house_")
-            set_rule(wg_checkpoint_to_dagger,
-                     lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player)
-                     or state.can_reach_entrance(dagger_entry_paired_name, player))
-            world.multiworld.register_indirect_condition(regions["West Garden at Dagger House"], dagger_entry_paired_region)
+            try:
+                dagger_entry_paired_entrance = world.multiworld.get_entrance(dagger_entry_paired_name)
+            except:
+                # there is no paired entrance, so we don't include the can_reach
+                set_rule(wg_checkpoint_to_dagger,
+                         lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+            else:
+                set_rule(wg_checkpoint_to_dagger,
+                         lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player)
+                         or dagger_entry_paired_entrance.can_reach(state))
+                world.multiworld.register_indirect_condition(regions["West Garden at Dagger House"], dagger_entry_paired_region)
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
