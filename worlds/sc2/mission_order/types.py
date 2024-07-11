@@ -15,9 +15,6 @@ class Column(LayoutType):
             missions[i].next.add(missions[i + 1])
         return missions
     
-    # def get_slot_data(self, slots: List[SC2MOGenMission]) -> List[List[SC2MOGenMission]]:
-    #     return [slots]
-    
     def get_visual_layout(self) -> List[List[int]]:
         return [list(range(self.size))]
 
@@ -130,13 +127,6 @@ class Grid(LayoutType):
             y += 1
 
         return missions
-    
-    # def get_slot_data(self, slots: List[SC2MOGenMission]) -> List[List[SC2MOGenMission]]:
-    #     columns = [
-    #         [slots[self.get_grid_index(x, y)] for y in range(self.height)]
-    #         for x in range(self.width)
-    #     ]
-    #     return columns
     
     def get_visual_layout(self) -> List[List[int]]:
         columns = [

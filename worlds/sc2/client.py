@@ -663,18 +663,7 @@ class SC2Context(CommonContext):
                     for campaign in self.custom_mission_order for layout in campaign.layouts
                     for column in layout.missions for mission in column
                 }
-                # self.custom_mission_order = {
-                #     campaign: {
-                #         layout: [
-                #             [
-                #                 (mission_id, MissionRequirements(
-                #                     **{field: value for field, value in mission_reqs.items() if field in MissionRequirements._fields}
-                #                 )) for (mission_id, mission_reqs) in column
-                #             ] for column in columns
-                #         ] for (layout, columns) in layouts.items()
-                #     } for (campaign, layouts) in args["slot_data"]["custom_mission_order"].items()
-                # }
-
+                
             self.mission_order = args["slot_data"].get("mission_order", MissionOrder.option_vanilla)
             if self.slot_data_version < 4:
                 self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
@@ -824,11 +813,6 @@ class SC2Context(CommonContext):
                 for column in layout.missions:
                     for mission in column:
                         mission_id_to_location_ids[mission.mission_id] = set()
-        # for layouts in self.custom_mission_order.values():
-        #     for columns in layouts.values():
-        #         for column in columns:
-        #             for (mission_id, _) in column:
-        #                 mission_id_to_location_ids[mission_id] = set()
 
         for loc in self.server_locations:
             offset = SC2WOL_LOC_ID_OFFSET if loc < SC2HOTS_LOC_ID_OFFSET \
@@ -1380,9 +1364,6 @@ def calc_unfinished_nodes(
     unfinished_missions: typing.Set[int] = set()
 
     available_missions, available_layouts, available_campaigns = calc_available_nodes(ctx)
-    # print(f"missions: {available_missions}")
-    # print(f"layouts: {available_layouts}")
-    # print(f"campaigns: {available_campaigns}")
 
     for mission_id in available_missions:
         objectives = set(ctx.locations_for_mission_id(mission_id))
@@ -1392,29 +1373,6 @@ def calc_unfinished_nodes(
                 unfinished_missions.add(mission_id)
     
     return available_missions, available_layouts, available_campaigns, unfinished_missions
-
-def calc_unfinished_missions_custom_order(ctx: SC2Context, unlocks: typing.Optional[typing.Dict] = None):
-    unfinished_missions: typing.List[int] = []
-    locations_completed: typing.List[typing.Union[typing.Set[int], typing.Literal[-1]]] = []
-
-    # TODO I can't tell if this is actually used by anything
-    # if not unlocks:
-    #     unlocks = initialize_blank_mission_dict_custom_order(ctx.custom_mission_order)
-
-    available_missions = calc_available_missions_custom_order(ctx)
-
-    for mission_id in available_missions:
-        objectives = set(ctx.locations_for_mission_id(mission_id))
-        if objectives:
-            objectives_completed = ctx.checked_locations & objectives
-            if len(objectives_completed) < len(objectives):
-                unfinished_missions.append(mission_id)
-                locations_completed.append(objectives_completed)
-        else:
-            unfinished_missions.append(mission_id)
-            locations_completed.append(-1)
-
-    return available_missions, dict(zip(unfinished_missions, locations_completed))
 
 def calc_unfinished_missions(ctx: SC2Context, unlocks: typing.Optional[typing.Dict] = None):
     unfinished_missions: typing.List[str] = []
@@ -1446,7 +1404,6 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool: # T
 
         return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
     else:
-        # available_missions = calc_available_missions_custom_order(ctx)
         available_missions, _, _ = calc_available_nodes(ctx)
 
         return mission_id_to_check in available_missions
@@ -1527,7 +1484,6 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     def mission_beaten(mission_id: int) -> bool:
         return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
     beaten_missions = {mission_id for mission_id in ctx.mission_rule_mapping if mission_beaten(mission_id)}
-    # print(f"beaten: {beaten_missions}")
 
     for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
         available_layouts[campaign_idx] = []
@@ -1545,27 +1501,6 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
                                 available_missions.append(mission.mission_id)
 
     return available_missions, available_layouts, available_campaigns
-
-def calc_available_missions_custom_order(ctx: SC2Context, unlocks: typing.Optional[dict] = None) -> typing.List[int]:
-    available_missions: typing.List[int] = []
-    missions_complete = 0
-
-    # Get number of missions completed
-    for loc in ctx.checked_locations:
-        if loc % VICTORY_MODULO == 0:
-            missions_complete += 1
-    
-    for campaign in ctx.custom_mission_order.values():
-        for layout in campaign.values():
-            for column in layout:
-                for (mission_id, mission_reqs) in column:
-                    if mission_id == -1:
-                        continue
-
-                    if mission_reqs_completed_custom_order(ctx, mission_reqs, missions_complete):
-                        available_missions.append(mission_id)
-    
-    return available_missions
 
 def calc_available_missions(ctx: SC2Context, unlocks: typing.Optional[dict] = None) -> typing.List[str]:
     available_missions: typing.List[str] = []
@@ -1626,61 +1561,6 @@ def mission_reqs_completed_recursive(
             seen_missions.add(unseen_id)
         return False
     return False
-
-# TODO def mission_reqs_completed_custom_order(ctx: SC2Context, mission_reqs: MissionRequirements, mission_complete: int) -> bool:
-def mission_reqs_completed_custom_order(ctx: SC2Context, mission_reqs: typing.Any, mission_complete: int) -> bool:
-    def mission_beaten(mission_id: int) -> bool:
-        return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
-
-    # Beat any of these
-    prev_requirement = False
-    if len(mission_reqs.prev_missions) == 0:
-        prev_requirement = True
-    for prev_id in mission_reqs.prev_missions:
-        if mission_beaten(prev_id):
-            prev_requirement = True
-            break
-    
-    # Beat all of these
-    specific_requirement = True
-    for unlock_id in mission_reqs.unlocking_missions:
-        if not mission_beaten(unlock_id):
-            specific_requirement = False
-            break
-    
-    # Beat this many in the campaign
-    count = sum(
-        mission_beaten(mission_id)
-        for columns in ctx.custom_mission_order[mission_reqs.parent_campaign].values()
-        for column in columns for (mission_id, _) in column
-    )
-    campaign_count_requirement = count >= mission_reqs.unlocking_count
-    
-    # Beat this many sets of required missions from previous-order campaigns
-    count = sum(
-        all(
-            mission_beaten(mission_id)
-            for mission_id in prev_campaign_missions
-        ) for prev_campaign_missions in mission_reqs.campaign_required
-    )
-    if mission_reqs.campaign_count == -1: # -1 -> beat them all
-        campaign_order_requirement = count == len(mission_reqs.campaign_required)
-    else:
-        campaign_order_requirement = count >= mission_reqs.campaign_count
-    
-    # Beat this many sets of required missions from previous-order layouts
-    count = sum(
-        all(
-            mission_beaten(mission_id)
-            for mission_id in prev_layout_missions
-        ) for prev_layout_missions in mission_reqs.layout_required
-    )
-    if mission_reqs.layout_count == -1: # -1 -> beat them all
-        layout_order_requirement = count == len(mission_reqs.layout_required)
-    else:
-        layout_order_requirement = count >= mission_reqs.layout_count
-    
-    return prev_requirement and specific_requirement and campaign_count_requirement and campaign_order_requirement and layout_order_requirement
 
 def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int) -> bool:
     """Returns a bool signifying if the mission has all requirements complete and can be done

@@ -177,48 +177,6 @@ def _resolve_special_options(data: Dict[str, Any]):
         option_value = data[option]
         new_value = _resolve_special_option(option, option_value)
         data[option] = new_value
-        # # Option values can be ranges
-        # if type(option_value) == str and option_value.startswith("random-range-"):
-        #     resolved = _custom_range(option_value)
-        #     data[option] = resolved
-        # # Option values can be strings representations of values
-        # if option in STR_OPTION_VALUES:
-        #     if type(option_value) == list:
-        #         data[option] = [STR_OPTION_VALUES[option][val.lower()] for val in option_value]
-        #     else:
-        #         data[option] = STR_OPTION_VALUES[option][option_value.lower()]
-        # 'unlock_specific' can contain indices, which need to be converted to strings
-        # if option == "unlock_specific":
-        #     data[option] = [str(val) for val in option_value]
-        # 'mission_pool' contains a list of instructions for making a set of mission indices
-        # if option == "mission_pool":
-        #     if type(option_value) == str: # TODO consider if this is better or worse than a dedicated 'mission' option
-        #         pool = {lookup_name_to_mission[option_value].id}
-        #     else:
-        #         pool: Set[int] = set()
-        #         for line in option_value:
-        #             if line.startswith("~"):
-        #                 if len(pool) == 0:
-        #                     raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
-        #                 term = line[1:].strip()
-        #                 missions = _get_target_missions(term)
-        #                 pool.difference_update(missions)
-        #             elif line.startswith("and "): # TODO figure out a real symbol
-        #                 if len(pool) == 0:
-        #                     raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
-        #                 term = line[4:].strip()
-        #                 missions = _get_target_missions(term)
-        #                 pool.intersection_update(missions)
-        #             else:
-        #                 if line.startswith("+"):
-        #                     term = line[1:].strip()
-        #                 else:
-        #                     term = line.strip()
-        #                 missions = _get_target_missions(term)
-        #                 pool.update(missions)
-        #     if len(pool) == 0 and not len(data.get("mission", "")) > 0:
-        #         raise ValueError(f"Mission pool evaluated to zero missions: {option_value}")
-        #     data[option] = pool
 
 def _resolve_special_option(option: str, option_value: Any) -> Any:
     # Option values can be string representations of values
@@ -289,7 +247,7 @@ def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
         return option_value
 
 def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[str]:
-    if type(option_value) == str: # TODO consider if this is better or worse than a dedicated 'mission' option
+    if type(option_value) == str:
         pool = _get_target_missions(option_value)
     else:
         pool: Set[int] = set()

@@ -146,7 +146,7 @@ class CountMissionsRuleData(NamedTuple):
             if self.amount == 1:
                 return f"Beat {req_str}"
             return f"Beat {amount} missions from {req_str}"
-        if amount == 1:
+        if self.amount == 1:
             tooltip = f"Beat {amount} mission from:\n{indent}- "
         else:
             tooltip = f"Beat {amount} missions from:\n{indent}- "
@@ -457,12 +457,6 @@ class SC2MissionOrder:
             for layout in campaign.layouts if layout.is_always_unlocked()
             for mission in layout.missions if mission.is_always_unlocked()
         }
-        # Entrance missions of entrance layouts of entrance campaigns that have no requirements
-        # return {
-        #     mission.mission
-        #     for campaign in self.entrances for layout in campaign.entrances for mission in layout.entrances
-        #     if campaign.is_always_unlocked() and layout.is_always_unlocked() and mission.is_always_unlocked()
-        # }
 
     def get_completion_condition(self, player: int) -> Callable[[CollectionState], bool]:
         """Returns a lambda to determine whether a state has beaten the mission order's required campaigns."""
@@ -481,15 +475,6 @@ class SC2MissionOrder:
         """Parses the mission order into a format usable for slot data."""
         # [(campaign data, [(layout data, [[(mission data)]] )] )]
         return [campaign.get_slot_data()._asdict() for campaign in self.campaigns]
-        # TODO
-        # {"campaign": {"layout": [[(mission id, requirement), ...], ...]}}
-        return {
-            campaign.option_name: {
-                layout.option_name: layout.get_slot_data()
-                for layout in campaign.layouts
-            }
-            for campaign in self.campaigns
-        }
 
     def make_connections(self, world: World):
         names: Dict[str, int] = {}
@@ -497,65 +482,23 @@ class SC2MissionOrder:
             for layout in campaign.layouts:
                 for mission in layout.missions:
                     mission.make_connections(world, names)
-        # TODO
-        # cur_campaigns = {campaign for campaign in self.entrances}
-        # names: Dict[str, int] = {}
-        # while len(cur_campaigns) > 0:
-        #     campaign = cur_campaigns.pop()
-        #     cur_campaigns.update(campaign.next)
-        #     cur_layouts = {layout for layout in campaign.entrances}
-        #     while len(cur_layouts) > 0:
-        #         layout = cur_layouts.pop()
-        #         cur_layouts.update(layout.next)
-        #         seen_missions: Set[SC2MOGenMission] = set()
-        #         cur_missions = {mission for mission in layout.entrances}
-        #         while len(cur_missions) > 0:
-        #             mission = cur_missions.pop()
-        #             seen_missions.add(mission)
-        #             cur_missions.update(mission.next.difference(seen_missions))
-        #             mission.make_connections(world, names)
-        
+
     def fill_min_steps(self) -> None:
         steps = 0
 
         accessible_campaigns: Set[SC2MOGenCampaign] = {campaign for campaign in self.campaigns if campaign.is_always_unlocked()}
-        # beaten_campaigns: Set[SC2MOGenCampaign] = set()
         next_campaigns: Set[SC2MOGenCampaign] = set(self.campaigns).difference(accessible_campaigns)
 
-        # cur_layouts: Dict[str, Set[SC2MOGenLayout]] = {
         accessible_layouts: Set[SC2MOGenLayout] = {
             layout
             for campaign in accessible_campaigns for layout in campaign.layouts
             if layout.is_always_unlocked()
         }
-        # beaten_layouts: Dict[str, Set[SC2MOGenLayout]] = {campaign.option_name: set() for campaign in self.campaigns}
-        # next_layouts: Dict[str, Set[SC2MOGenLayout]] = {}
         next_layouts: Set[SC2MOGenLayout] = {layout for campaign in accessible_campaigns for layout in campaign.layouts}.difference(accessible_layouts)
 
-        # beaten_campaign_missions: Dict[str, Set[SC2MOGenMission]] = {campaign.option_name: set() for campaign in self.campaigns}
         next_missions: Set[SC2MOGenMission] = {mission for layout in accessible_layouts for mission in layout.entrances}
         beaten_missions: Set[SC2MOGenMission] = set()
 
-        # Immediately accessible are the always-unlocked missions of the always-unlocked layouts of the always-unlocked campaigns
-        # new_campaigns: Set[SC2MOGenCampaign] = set()
-        # for campaign in next_campaigns:
-        #     if campaign.is_unlocked(beaten_campaigns, beaten_missions):
-        #         cur_campaigns.add(campaign)
-        #         new_campaigns.update(campaign.next)
-        #         next_layouts[campaign.option_name] = {layout for layout in campaign.entrances}
-        #         cur_layouts[campaign.option_name] = set()
-        # next_campaigns.difference_update(cur_campaigns)
-        # next_campaigns.update(new_campaigns)
-        # for campaign_name, layouts in next_layouts.items():
-        #     new_layouts: Set[SC2MOGenLayout] = set()
-        #     for layout in layouts:
-        #         if layout.is_unlocked(beaten_layouts[campaign_name], beaten_missions):
-        #             cur_layouts[campaign_name].add(layout)
-        #             new_layouts.update(layout.next)
-        #             next_missions.update(layout.entrances)
-        #     layouts.difference_update(cur_layouts[campaign_name])
-        #     layouts.update(new_layouts)
-        
         # Sanity check: Can any missions be accessed?
         if len(next_missions) == 0:
             raise Exception("Mission order has no possibly accessible missions")
@@ -564,7 +507,6 @@ class SC2MissionOrder:
             # Check for accessible missions
             cur_missions: Set[SC2MOGenMission] = {
                 mission for mission in next_missions
-                # if mission.is_unlocked(beaten_missions, beaten_campaign_missions[mission.parent_campaign.option_name])
                 if mission.is_unlocked(beaten_missions)
             }
             if len(cur_missions) == 0:
@@ -574,7 +516,6 @@ class SC2MissionOrder:
             while len(cur_missions) > 0:
                 mission = cur_missions.pop()
                 beaten_missions.add(mission)
-                # beaten_campaign_missions[mission.parent_campaign.option_name].add(mission)
                 mission.min_steps = steps
                 next_missions.update(mission.next.difference(cur_missions, beaten_missions))
             
@@ -598,57 +539,7 @@ class SC2MissionOrder:
                 accessible_layouts.add(layout)
                 next_missions.update(layout.entrances)
                 next_layouts.remove(layout)
-                    
-
-            # # Check for newly beaten campaigns & layout
-            # for campaign in accessible_campaigns:
-            #     # Campaigns are beaten when all required missions have been seen
-            #     if campaign.is_beaten(beaten_missions):
-            #         beaten_campaigns.add(campaign)
-            #     # Layouts are beaten when all exit missions have been seen
-            #     for layout in accessible_layouts[campaign.option_name]:
-            #         if layout.is_beaten(beaten_missions):
-            #             beaten_layouts[campaign.option_name].add(layout)
-
-            # # Check whether upcoming campaigns & layouts are now accessible
-            # new_campaigns: Set[SC2MOGenCampaign] = set()
-            # for campaign in next_campaigns:
-            #     if campaign.is_unlocked(beaten_campaigns, beaten_missions):
-            #         accessible_campaigns.add(campaign)
-            #         new_campaigns.update(campaign.next)
-            #         next_layouts[campaign.option_name] = {layout for layout in campaign.entrances}
-            #         accessible_layouts[campaign.option_name] = set()
-            # next_campaigns.difference_update(accessible_campaigns)
-            # next_campaigns.update(new_campaigns)
-            # for campaign_name, layouts in next_layouts.items():
-            #     new_layouts: Set[SC2MOGenLayout] = set()
-            #     for layout in layouts:
-            #         if layout.is_unlocked(beaten_layouts[campaign_name], beaten_missions):
-            #             accessible_layouts[campaign_name].add(layout)
-            #             new_layouts.update(layout.next)
-            #             next_missions.update(layout.entrances)
-            #     layouts.difference_update(accessible_layouts[campaign_name])
-            #     layouts.update(new_layouts)
-        
-            # # Remove fully beaten campaigns & layouts
-            # done_campaigns: Set[SC2MOGenCampaign] = set()
-            # for campaign in accessible_campaigns:
-            #     # Layouts are fully beaten when all their missions are beaten
-            #     done_layouts: Set[SC2MOGenLayout] = set()
-            #     for layout in accessible_layouts[campaign.option_name]:
-            #         if beaten_missions.issuperset([mission for mission in layout.missions if not mission.option_empty]):
-            #             step_counts = [mission.min_steps for mission in layout.missions if not mission.option_empty]
-            #             layout.min_steps = min(step_counts)
-            #             layout.max_steps = max(step_counts)
-            #             done_layouts.add(layout)
-            #     accessible_layouts[campaign.option_name].difference_update(done_layouts)
-            #     # Campaigns are fully beaten when all their layouts are fully beaten
-            #     if len(accessible_layouts[campaign.option_name]) == 0:
-            #         campaign.min_steps = min(layout.min_steps for layout in campaign.layouts)
-            #         campaign.max_steps = max(layout.max_steps for layout in campaign.layouts)
-            #         done_campaigns.add(campaign)
-            # accessible_campaigns.difference_update(done_campaigns)
-        
+    
         # Make sure we didn't miss anything
         assert len(accessible_campaigns) == len(self.campaigns)
         assert len(accessible_layouts) == sum(len(campaign.layouts) for campaign in self.campaigns)
@@ -686,159 +577,6 @@ class SC2MissionOrder:
                     # Manually make a rule for prev missions
                     mission.entry_rule.target_amount += 1
                     mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
-
-        return
-
-        # orders = sorted(self.ordered_campaigns.keys())
-        # TODO
-        # campaign/layout.next should hold campaigns/layouts that may be unlocked via the order/count mechanism by beating this layout
-        #   mission.next is handled by layout type
-        #   a campaign/layout is either:
-        #     a lowest-order object: then it is an entrance
-        #     a non-lowest-order object: then there exists an object whose .next contains this object
-        #   so when starting at entrances, this setup iteratively covers every object
-        #   always-unlocked objects are additionally made entrances and removed from .nexts
-        # campaign/layout.prev should hold campaigns/layouts that may be required via the order/count mechanism
-        #   mission.prev is handled by layout init
-        # campaign/layout/mission.unlock_specific_* should hold campaigns/layouts/missions required by the campaign/layout
-        #   this needs to be rolled down to only missions somewhere
-        #   unlock_specific_missions holds missions that are required
-        #   unlock_specific_layouts holds layouts whose exit missions (layout.exits) are required
-        #   unlock_specific_campaigns holds campaigns whose required missions (campaign.required) are required
-        #   => campaign/layout/mission.unlock_missions is a set of hard required remote missions
-        for idx in range(len(orders) - 1):
-            low_order = orders[idx]
-            high_order = orders[idx + 1]
-            for campaign in self.ordered_campaigns[low_order]:
-                campaign.next.update(self.ordered_campaigns[high_order])
-            for campaign in self.ordered_campaigns[high_order]:
-                campaign.prev.update(self.ordered_campaigns[low_order])
-        for campaign in self.campaigns:
-            orders = sorted(campaign.ordered_layouts.keys())
-            for idx in range(len(orders) - 1):
-                low_order = orders[idx]
-                high_order = orders[idx + 1]
-                for layout in campaign.ordered_layouts[low_order]:
-                    layout.next.update(campaign.ordered_layouts[high_order])
-                for layout in campaign.ordered_layouts[high_order]:
-                    layout.prev.update(campaign.ordered_layouts[low_order])
-            
-            # Address parsing
-            # campaign-level addresses: "campaign", "campaign/layout", "campaign/layout/index"
-            # layout-level addresses: ^ + "layout", "layout/index"
-            # mission-level addresses: ^ + "index"
-            # parent campaign/layout can be implicit
-            for address in campaign.option_unlock_specific:
-                parts = address.split('/')
-                other_campaign = _find_by_name(parts[0], self.campaigns, campaign, "campaign", address)
-                if len(parts) == 1: # "campaign"
-                    campaign.unlock_specific_campaigns.add(other_campaign)
-                    campaign.unlock_missions.update(other_campaign.exits)
-                elif len(parts) == 2: # "campaign/layout"
-                    layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                    campaign.unlock_specific_layouts.add(layout)
-                    campaign.unlock_missions.update(layout.exits)
-                elif len(parts) == 3: # "campaign/layout/index"
-                    layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                    mission = _find_mission_by_index(parts[2], layout.missions, None, address)
-                    campaign.unlock_specific_missions.add(mission)
-                    campaign.unlock_missions.add(mission)
-                else:
-                    raise ValueError(f"Address {address} contains too many '/'s.")
-            for layout in campaign.layouts:
-                for address in layout.option_unlock_specific:
-                    parts = address.split('/')
-                    other_campaign = _find_by_name(parts[0], self.campaigns, None, "campaign", address, True)
-                    other_layout = None
-                    if not other_campaign: # If the first part is not a campaign, assume it wants the local campaign
-                        other_campaign = campaign
-                        other_layout = _find_by_name(parts[0], campaign.layouts, layout, "layout", address)
-                    if len(parts) == 1:
-                        if other_layout: # [parent campaign]/"layout"
-                            layout.unlock_specific_layouts.add(other_layout)
-                            layout.unlock_missions.update(other_layout.exits)
-                        else: # "campaign"
-                            layout.unlock_specific_campaigns.add(other_campaign)
-                            layout.unlock_missions.update(other_campaign.exits)
-                    elif len(parts) == 2:
-                        if other_layout: # [parent campaign]/"layout/index"
-                            mission = _find_mission_by_index(parts[1], other_layout.missions, None, address)
-                            layout.unlock_specific_missions.add(mission)
-                            layout.unlock_missions.add(mission)
-                        else: # "campaign/layout"
-                            other_layout = _find_by_name(parts[1], other_campaign.layouts, layout, "layout", address)
-                            layout.unlock_specific_layouts.add(other_layout)
-                            layout.unlock_missions.update(other_layout.exits)
-                    elif len(parts) == 3: # "campaign/layout/index"
-                        if other_layout:
-                            raise ValueError(f"Address {address} could not find campaign with name \"{parts[0]}\". Please check the spelling of campaign names.")
-                        other_layout = _find_by_name(parts[1], other_campaign.layouts, layout, "layout", address)
-                        mission = _find_mission_by_index(parts[2], other_layout.missions, None, address)
-                        layout.unlock_specific_missions.add(mission)
-                        layout.unlock_missions.update(mission)
-                    else:
-                        raise ValueError(f"Address {address} contains too many '/'s.")
-                for mission in layout.missions:
-                    for address in mission.option_unlock_specific:
-                        parts = address.split('/')
-                        other_campaign = _find_by_name(parts[0], self.campaigns, None, "campaign", address, True)
-                        other_layout = None
-                        other_mission = None
-                        if not other_campaign: # If the first part is not a campaign, assume it wants the local campaign
-                            other_campaign = campaign
-                            other_layout = _find_by_name(parts[0], campaign.layouts, None, "layout", address, True)
-                            if not other_layout: # If the first part is not a layout either, assume it wants the local layout
-                                other_layout = layout
-                                other_mission = _find_mission_by_index(parts[0], layout.missions, mission, address)
-                        if len(parts) == 1:
-                            if other_mission: # [parent campaign]/[parent layout]/"index"
-                                mission.unlock_specific_missions.add(other_mission)
-                                mission.unlock_missions.add(other_mission)
-                            elif other_layout: # [parent campaign]/"layout"
-                                mission.unlock_specific_layouts.add(other_layout)
-                                mission.unlock_missions.update(other_layout.exits)
-                            elif other_campaign: # "campaign"
-                                mission.unlock_specific_campaigns.add(other_campaign)
-                                mission.unlock_missions.update(other_campaign.exits)
-                            else:
-                                raise ValueError(f"Address {address} could not find campaign or layout with name \"{parts[0]}\". Please check the spelling of campaign and layout names.")
-                        elif len(parts) == 2:
-                            if other_mission: # Error: "index/???"
-                                raise ValueError(f"Address {address} could not find campaign or layout with name \"{parts[0]}\". Please check the spelling of campaign and layout names.")
-                            elif other_layout: # [parent campaign]/"layout/index"
-                                other_mission = _find_mission_by_index(parts[1], other_layout.missions, mission, address)
-                                mission.unlock_specific_missions.add(other_mission)
-                                mission.unlock_missions.add(other_mission)
-                            else: # "campaign/layout"
-                                other_layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                                mission.unlock_specific_layouts.add(other_layout)
-                                mission.unlock_missions.update(other_layout.exits)
-                        elif len(parts) == 3:
-                            if other_mission: # Error: "index/???/???"
-                                raise ValueError(f"Address {address} could not find campaign with name \"{parts[0]}\". Please check the spelling of campaign names.")
-                            elif other_layout: # Error: "layout/???/???"
-                                raise ValueError(f"Address {address} could not find campaign with name \"{parts[0]}\". Please check the spelling of campaign names.")
-                            else: # "campaign/layout/index"
-                                other_layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                                other_mission = _find_mission_by_index(parts[2], other_layout.missions, mission, address)
-                                mission.unlock_specific_missions.add(other_mission)
-                                mission.unlock_missions.add(other_mission)
-                        else:
-                            raise ValueError(f"Address {address} contains too many '/'s.")
-    
-        # Set up entrance campaigns/layouts
-        for campaign in self.campaigns:
-            if campaign.is_always_unlocked():
-                self.entrances.add(campaign)
-                for prev_campaign in campaign.prev:
-                    prev_campaign.next.remove(campaign)
-                campaign.prev.clear()
-            for layout in campaign.layouts:
-                if layout.is_always_unlocked():
-                    campaign.entrances.add(layout)
-                    for prev_layout in layout.prev:
-                        prev_layout.next.remove(layout)
-                    layout.prev.clear()
 
     def dict_to_entry_rule(self, data: Dict[str, Any], searchers: Any) -> EntryRule:
         if "rules" in data:
@@ -1020,17 +758,10 @@ class SC2MOGenCampaign:
 
     # layouts of this campaign in correct order
     layouts: List[SC2MOGenLayout]
-    # exit_layouts: Set[SC2MOGenLayout] # layouts required to beat this campaign
     exits: Set[SC2MOGenMission] # missions required to beat this campaign (missions marked "exit" in layouts marked "exit")
     entry_rule: SubRuleEntryRule
     display_name: str
 
-    # TODO these three are currently unused
-    unlock_specific_campaigns: Set[SC2MOGenCampaign]
-    unlock_specific_layouts: Set[SC2MOGenLayout]
-    unlock_specific_missions: Set[SC2MOGenMission]
-
-    unlock_missions: Set[SC2MOGenMission] # remote missions required to access this campaign
     # TODO these two are currently unused
     min_steps: int
     max_steps: int
@@ -1044,11 +775,6 @@ class SC2MOGenCampaign:
         self.option_max_difficulty = data["max_difficulty"]
         self.option_single_layout_campaign = data["single_layout_campaign"]
         self.layouts = []
-        # self.exit_layouts = set()
-        self.unlock_specific_campaigns = set()
-        self.unlock_specific_layouts = set()
-        self.unlock_specific_missions = set()
-        self.unlock_missions = set()
         self.exits = set()
         self.min_steps = 0
         self.max_steps = 0
@@ -1060,13 +786,11 @@ class SC2MOGenCampaign:
 
                 # Collect required missions (marked layouts' exits)
                 if layout.option_exit:
-                    # self.exit_layouts.add(layout)
                     self.exits.update(layout.exits)
                 
         # If no exits are set, use the last defined layout
         if len(self.exits) == 0:
             self.layouts[-1].option_exit = True
-            # self.exit_layouts.add(self.layouts[-1])
             self.exits.update(self.layouts[-1].exits)
         
         # Pick a random display name
@@ -1083,20 +807,6 @@ class SC2MOGenCampaign:
 
     def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.entry_rule.is_fulfilled(beaten_missions)
-
-        # TODO
-        # Count/Order requirement: Amount of beaten previous-order campaigns must be >= count option
-        count_required = self.option_unlock_count
-        # If count is -1, all previous-order campaigns are required
-        if count_required == -1:
-            count_required = len(self.prev)
-        beaten_prev_campaigns = beaten_campaigns.intersection(self.prev)
-        count_requirement: bool = len(beaten_prev_campaigns) >= self.option_unlock_count
-            
-        # Specific requirement: All required remote missions are required
-        specific_requirement: bool = beaten_missions.issuperset(self.unlock_missions)
-        
-        return count_requirement and specific_requirement
 
     def resolve_difficulties(self, total_steps: int) -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
         sorted_missions: Dict[Difficulty, Set[SC2MOGenMission]] = {diff: set() for diff in Difficulty if diff != Difficulty.RELATIVE}
@@ -1124,9 +834,6 @@ class SC2MOGenCampaign:
             [layout.get_slot_data()._asdict() for layout in self.layouts]
         )
 
-    def get_prev_id_sets(self) -> List[Set[int]]:
-        return [{mission.mission.id for mission in campaign.required} for campaign in self.prev]
-
 class SC2MOGenLayout:
     option_name: str # name of this layout
     option_display_name: str # visual name of this layout
@@ -1138,8 +845,6 @@ class SC2MOGenLayout:
     option_mission_pool: List[int] # IDs of valid missions for this layout
     option_missions: List[Dict[str, Any]]
 
-    # option_unlock_count: int # how many previous-order layouts are required to enter this layout
-    # option_unlock_specific: List[str] # which specific layouts are required to enter this layout
     option_entry_rules: List[Dict[str, Any]]
 
     # minimum difficulty of this layout
@@ -1155,12 +860,6 @@ class SC2MOGenLayout:
     exits: Set[SC2MOGenMission]
     entry_rule: SubRuleEntryRule
 
-    # TODO these three are currently unused
-    unlock_specific_campaigns: Set[SC2MOGenCampaign]
-    unlock_specific_layouts: Set[SC2MOGenLayout]
-    unlock_specific_missions: Set[SC2MOGenMission]
-
-    unlock_missions: Set[SC2MOGenMission] # missions required to access this layout
     min_steps: int
     max_steps: int
 
@@ -1180,12 +879,6 @@ class SC2MOGenLayout:
         self.missions = []
         self.entrances = set()
         self.exits = set()
-        self.next = set()
-        self.prev = set()
-        self.unlock_specific_campaigns = set()
-        self.unlock_specific_layouts = set()
-        self.unlock_specific_missions = set()
-        self.unlock_missions = set()
         self.min_steps = 0
         self.max_steps = 0
 
@@ -1293,20 +986,6 @@ class SC2MOGenLayout:
     def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.entry_rule.is_fulfilled(beaten_missions)
 
-        # TODO
-        # Count/Order requirement: Amount of beaten previous-order layouts must be >= count option
-        count_required = self.option_unlock_count
-        # If count is -1, all previous-order layouts are required
-        if count_required == -1:
-            count_required = len(self.prev)
-        beaten_prev_layouts = beaten_layouts.intersection(self.prev)
-        count_requirement: bool = len(beaten_prev_layouts) >= count_required
-        
-        # Specific requirement: All required remote missions are required
-        specific_requirement: bool = beaten_missions.issuperset(self.unlock_missions)
-        
-        return count_requirement and specific_requirement
-
     def resolve_difficulties(self, total_steps: int, parent_min: Difficulty, parent_max: Difficulty) \
         -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
         if self.option_min_difficulty == Difficulty.RELATIVE:
@@ -1370,13 +1049,7 @@ class SC2MOGenLayout:
             self.entry_rule.to_slot_data().as_dict(),
             mission_slots
         )
-        # TODO
-        mission_slots = self.layout_type.get_slot_data(self.missions)
-        return [[(-1 if row.option_empty else row.mission.id, row.get_slot_requirements()._asdict()) for row in column] for column in mission_slots]
     
-    def get_prev_id_sets(self) -> List[Set[int]]:
-        return [{mission.mission.id for mission in layout.exits} for layout in self.prev]
-
 class SC2MOGenMission:
     option_goal: bool # whether this mission is required to beat the game
     option_entrance: bool # whether this mission is unlocked when the layout is unlocked
@@ -1397,10 +1070,6 @@ class SC2MOGenMission:
 
     next: Set[SC2MOGenMission]
     prev: Set[SC2MOGenMission]
-    unlock_specific_campaigns: Set[SC2MOGenCampaign]
-    unlock_specific_layouts: Set[SC2MOGenLayout]
-    unlock_specific_missions: Set[SC2MOGenMission]
-    unlock_missions: Set[SC2MOGenMission]
 
     def __init__(self, parent_campaign: SC2MOGenCampaign, parent_layout: SC2MOGenLayout, parent_mission_pool: Set[int]):
         self.option_mission_pool = parent_mission_pool
@@ -1414,10 +1083,6 @@ class SC2MOGenMission:
         self.parent_campaign = parent_campaign
         self.parent_layout = parent_layout
         self.next = set()
-        self.unlock_specific_campaigns = set()
-        self.unlock_specific_layouts = set()
-        self.unlock_specific_missions = set()
-        self.unlock_missions = set()
         self.prev = set()
 
     def update_with_data(self, data: Dict):
@@ -1443,14 +1108,6 @@ class SC2MOGenMission:
     
     def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.entry_rule.is_fulfilled(beaten_missions)
-        # TODO
-        # Count/Order requirement: Amount of beaten missions from this slot's campaign must be >= count option
-        count_requirement: bool = len(beaten_campaign_missions) >= self.option_unlock_count
-        
-        # Specific requirement: All required remote missions are required
-        specific_requirement: bool = beaten_missions.issuperset(self.unlock_missions)
-        
-        return count_requirement and specific_requirement
     
     def beat_item(self) -> str:
         return f"Beat {self.mission.mission_name}"
@@ -1464,43 +1121,6 @@ class SC2MOGenMission:
     def get_exits(self) -> Set[SC2MOGenMission]:
         return {self}
     
-    # def get_visual_name(self) -> Union[str, None]:
-    #     return None
-
-    def is_campaign_entrance(self) -> bool:
-        return self.parent_layout in self.parent_campaign.entrances and self.option_entrance
-
-    def connect_rule(self, player: int) -> Callable[[CollectionState], bool]:
-        # has_all is true for empty lists
-        # This intentionally leaves out prev_missions because those are handled by the region connection
-
-        required_missions = {mission for mission in self.unlock_missions}
-        if self.is_campaign_entrance():
-            required_missions.update(mission for mission in self.parent_campaign.unlock_missions)
-        if self.option_entrance:
-            required_missions.update(mission for mission in self.parent_layout.unlock_missions)
-
-        if self.parent_campaign.option_unlock_count == -1:
-            campaign_unlock_count = len(self.parent_campaign.prev)
-        else:
-            campaign_unlock_count = self.parent_campaign.option_unlock_count
-
-        if self.parent_layout.option_unlock_count == -1:
-            layout_unlock_count = len(self.parent_layout.prev)
-        else:
-            layout_unlock_count = self.parent_layout.option_unlock_count
-
-        return lambda state: (
-            # Specific requirement (beat all remote missions, including possible campaign/layout requirements)
-            state.has_all([mission.beat_item() for mission in required_missions], player) and
-            # Count requirement (beat X missions of the parent campaign)
-            self.option_unlock_count <= sum(state.has(mission.beat_item(), player) for layout in self.parent_campaign.layouts for mission in layout.missions if not mission.option_empty) and
-            # Campaign count requirement (beat X sets of required missions of previous-order campaigns)
-            campaign_unlock_count <= sum(state.has_all([mission.beat_item() for mission in campaign.required], player) for campaign in self.parent_campaign.prev) and
-            # Layout count requirement (beat X sets of exit missions of previous-order layouts)
-            layout_unlock_count <= sum(state.has_all([mission.beat_item() for mission in layout.exits], player) for layout in self.parent_layout.prev)
-        )
-
     def make_connections(self, world: World, used_names: Dict[str, int]):
         player = world.player
         self_rule = self.entry_rule.to_lambda(player)
@@ -1512,10 +1132,6 @@ class SC2MOGenMission:
         else:
             unlock_rule = self_rule
         # Individually connect to previous missions
-        # TODO
-        # for mission in self.prev:
-        #     connect(world, used_names, mission.mission.mission_name, self.mission.mission_name,
-        #             lambda state, unlock_rule=unlock_rule, beat_rule=mission.beat_rule(world.player): beat_rule(state) and unlock_rule(state))
         for mission in self.prev:
             connect(world, used_names, mission.mission.mission_name, self.mission.mission_name,
                     lambda state, unlock_rule=unlock_rule: unlock_rule(state))
@@ -1524,55 +1140,12 @@ class SC2MOGenMission:
             connect(world, used_names, "Menu", self.mission.mission_name,
                     lambda state, unlock_rule=unlock_rule: unlock_rule(state))
     
-    def get_slot_requirements(self) -> MissionRequirements:
-        if self.option_empty:
-            return MissionRequirements.empty()
-        remote_missions = {mission.mission.id for mission in self.unlock_missions}
-        campaign_sets = []
-        campaign_count = 0
-        if self.is_campaign_entrance():
-            # This mission is its parent campaign's entrance and should copy the campaign's entrance requirements
-            campaign_sets = self.parent_campaign.get_prev_id_sets()
-            campaign_count = self.parent_campaign.option_unlock_count
-            remote_missions.update(mission.mission.id for mission in self.parent_campaign.unlock_missions)
-        layout_sets = []
-        layout_count = 0
-        if self.option_entrance:
-            # This mission is its parent layout's entrance and should copy the layout's entrance requirements
-            layout_sets = self.parent_layout.get_prev_id_sets()
-            layout_count = self.parent_layout.option_unlock_count
-            remote_missions.update(mission.mission.id for mission in self.parent_layout.unlock_missions)
-        return MissionRequirements(
-            {mission.mission.id for mission in self.prev}, # Beat any of these
-            remote_missions, # Beat all of these
-            self.parent_campaign.option_name, # Parent campaign for lookup for the following
-            self.option_unlock_count, # Beat this many in the campaign
-            campaign_sets, # Parent campaign's previous campaigns' required missions
-            campaign_count, # Beat this many sets from the above list
-            layout_sets, # Parent layout's previous layouts' exit missions
-            layout_count # Beat this many sets from the above list
-        )
-    
     def get_slot_data(self) -> MissionSlotData:
         return MissionSlotData(
             self.mission.id,
             {mission.mission.id for mission in self.prev},
             self.entry_rule.to_slot_data().as_dict()
         )
-
-class MissionRequirements(NamedTuple):
-    prev_missions: Set[int] # Beat any of these
-    unlocking_missions: Set[int] # Beat all of these
-    parent_campaign: str # Parent campaign for lookup for the following
-    unlocking_count: int # Beat this many in the campaign
-    campaign_required: List[Set[int]] # Parent campaign's previous campaigns' required missions
-    campaign_count: int # Beat this many sets from the above list
-    layout_required: List[Set[int]] # Parent layout's previous layouts' exit missions
-    layout_count: int # Beat this many sets from the above list
-
-    @staticmethod
-    def empty() -> MissionRequirements:
-        return MissionRequirements(set(), set(), "", 0, [], 0, [], 0)
 
 class CampaignSlotData(NamedTuple):
     name: str
