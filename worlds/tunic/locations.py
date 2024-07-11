@@ -35,7 +35,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Cathedral - [2F] Bird Room Secret": TunicLocationData("Cathedral", "Cathedral"),
     "Cathedral - [1F] Library Secret": TunicLocationData("Cathedral", "Cathedral"),
     "Dark Tomb - Spike Maze Near Exit": TunicLocationData("Dark Tomb", "Dark Tomb Main"),
-    "Dark Tomb - 2nd Laser Room": TunicLocationData("Dark Tomb", "Dark Tomb Main"),
+    "Dark Tomb - 2nd Laser Room": TunicLocationData("Dark Tomb", "Dark Tomb Dark Exit"),
     "Dark Tomb - 1st Laser Room": TunicLocationData("Dark Tomb", "Dark Tomb Main"),
     "Dark Tomb - Spike Maze Upper Walkway": TunicLocationData("Dark Tomb", "Dark Tomb Main"),
     "Dark Tomb - Skulls Chest": TunicLocationData("Dark Tomb", "Dark Tomb Upper"),

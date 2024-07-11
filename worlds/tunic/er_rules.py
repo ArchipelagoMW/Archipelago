@@ -488,7 +488,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Well Boss"],
         rule=lambda state: laurels_zip(state, world))
 
-    regions["Dark Tomb Entry Point"].connect(
+    dt_entry_to_upper = regions["Dark Tomb Entry Point"].connect(
         connecting_region=regions["Dark Tomb Upper"],
         rule=lambda state: has_lantern(state, world))
     regions["Dark Tomb Upper"].connect(
@@ -503,7 +503,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Dark Tomb Main"].connect(
         connecting_region=regions["Dark Tomb Dark Exit"])
-    regions["Dark Tomb Dark Exit"].connect(
+    dt_exit_to_main = regions["Dark Tomb Dark Exit"].connect(
         connecting_region=regions["Dark Tomb Main"],
         rule=lambda state: has_lantern(state, world))
 
@@ -1187,6 +1187,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(btw_back_main,
                  lambda state: has_ladder("Ladders in Well", state, world)
                  and (state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player)))
+        add_rule(dt_entry_to_upper,
+                 lambda state: has_combat_reqs("Dark Tomb", state, player))
+        add_rule(dt_exit_to_main,
+                 lambda state: has_combat_reqs("Dark Tomb", state, player))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
@@ -1284,6 +1288,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has_all({grapple, laurels}, player))
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
             state.has_all({grapple, ice_dagger, fire_wand}, player) and has_ability(icebolt, state, world)))
+
+    # Dark Tomb
+    # added to make combat logic smoother
+    set_rule(multiworld.get_location("Dark Tomb - 2nd Laser Room", player),
+             lambda state: has_lantern(state, world))
 
     # West Garden
     set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),
