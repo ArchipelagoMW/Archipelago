@@ -1453,6 +1453,25 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  lambda state: has_sword(state, player) and (state.has("Shield", player)
                                                              or state.has("Sword Upgrade", player, 3)))
 
+        # the first spider chest they literally do not attack you until you open the chest
+        # the second one, you can still just walk past them, but I guess /something/ would be wanted
+        add_rule(multiworld.get_location("East Forest - Beneath Spider Chest", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("East Forest - Golden Obelisk Holy Cross", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("East Forest - Dancing Fox Spirit Holy Cross", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("East Forest - From Guardhouse 1 Chest", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("East Forest - Above Save Point", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("East Forest - Above Save Point Obscured", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("Forest Grave Path - Above Gate", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+        add_rule(multiworld.get_location("Forest Grave Path - Obscured Chest", player),
+                 lambda state: has_combat_reqs("East Forest", state, player))
+
         # could add it to the other fuse events but that's just wasteful imo
         add_rule(multiworld.get_location("Eastern Vault West Fuses", player),
                  lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
