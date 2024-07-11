@@ -68,11 +68,11 @@ class InscryptionRules:
             "Act 3 - Forest Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Crypt Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Tower Holo Pelt": self.has_gems_and_battery,
-            "Act 3 - Trader 1": self.has_one_pelt,
-            "Act 3 - Trader 2": self.has_two_pelt,
-            "Act 3 - Trader 3": self.has_three_pelt,
-            "Act 3 - Trader 4": self.has_four_pelt,
-            "Act 3 - Trader 5": self.has_five_pelt,
+            "Act 3 - Trader 1": self.has_pelts(1),
+            "Act 3 - Trader 2": self.has_pelts(2),
+            "Act 3 - Trader 3": self.has_pelts(3),
+            "Act 3 - Trader 4": self.has_pelts(4),
+            "Act 3 - Trader 5": self.has_pelts(5),
             "Act 3 - Goobert's Painting": self.has_gems_and_battery,
             "Act 3 - The Great Transcendence": self.has_transcendence_requirements,
             "Act 3 - Boss Mycologists": self.has_mycologists_boss_requirements,
@@ -138,23 +138,8 @@ class InscryptionRules:
     def has_gems_and_battery(self, state: CollectionState) -> bool:
         return state.has("Gems Module", self.player) and self.has_inspectometer_battery(state)
 
-    def has_pelts(self, state: CollectionState, count: int) -> bool:
-        return state.has("Holo Pelt", self.player, count)
-
-    def has_one_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 1) and self.has_gems_and_battery(state)
-
-    def has_two_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 2) and self.has_gems_and_battery(state)
-
-    def has_three_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 3) and self.has_gems_and_battery(state)
-
-    def has_four_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 4) and self.has_gems_and_battery(state)
-
-    def has_five_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 5) and self.has_gems_and_battery(state)
+    def has_pelts(self, count: int) -> Callable[[CollectionState], bool]:
+        return lambda state: state.has("Holo Pelt", self.player, count) and self.has_gems_and_battery(state)
 
     def has_mycologists_boss_requirements(self, state: CollectionState) -> bool:
         return state.has("Mycologists Holo Key", self.player) and self.has_transcendence_requirements(state)

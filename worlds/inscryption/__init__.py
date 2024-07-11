@@ -31,6 +31,8 @@ class InscrypWeb(WebWorld):
 
     tutorials = [guide_en, guide_fr]
 
+    bug_report_page = "https://github.com/DrBibop/Archipelago_Inscryption/issues"
+
 
 class InscryptionWorld(World):
     """
