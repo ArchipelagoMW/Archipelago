@@ -22,6 +22,7 @@ class TestBase(unittest.TestCase):
             "D04Z01S06[E]", # purified_hand must be true
             "D04Z02S02[NE]", # difficulty must be hard and purified_hand must be true
             "D05Z01S11[SW]", # difficulty must be hard
+            "D06Z01S08[N]", # difficulty must be hard and purified_hand must be true
             "D20Z02S11[NW]", # difficulty must be hard
             "D20Z02S11[E]", # difficulty must be hard
         },
