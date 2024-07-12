@@ -1553,41 +1553,35 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(multiworld.get_location("Shop - Coin 2", player),
              lambda state: has_sword(state, player))
 
+    def combat_logic_to_loc(loc_name: str, combat_req_area: str, set_instead_of_add: bool = False) -> None:
+        if set_instead_of_add:
+            set_rule(multiworld.get_location(loc_name, player),
+                     # someome tell me if you need to do the p=player and c=combat_req_area, lambdas scary
+                     lambda state, p=player, c=combat_req_area: has_combat_reqs(c, state, p))
+        else:
+            add_rule(multiworld.get_location(loc_name, player),
+                     lambda state, p=player, c=combat_req_area: has_combat_reqs(c, state, p))
+
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         # garden knight is in the regions part above
-        set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
-                 lambda state: has_combat_reqs("Siege Engine", state, player))
-        set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-                 lambda state: has_combat_reqs("The Librarian", state, player))
-        set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-                 lambda state: has_combat_reqs("Boss Scavenger", state, player))
-        set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
-                 lambda state: has_combat_reqs("Gauntlet", state, player))
+        combat_logic_to_loc("Fortress Arena - Siege Engine/Vault Key Pickup", "Siege Engine", True)
+        combat_logic_to_loc("Librarian - Hexagon Green", "The Librarian", True)
+        combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", True)
+        combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", True)
 
     # todo: come back add add dagger to checks that can be reasonably done with dagger
     if world.options.combat_logic == CombatLogic.option_on:
-        add_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
-                 lambda state: has_combat_reqs("Garden Knight", state, player))
-        add_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Quarry Gate", player),
-                 lambda state: has_combat_reqs("Before Well", state, player))
-        add_rule(multiworld.get_location("Overworld - [Northeast] Chest Above Patrol Cave", player),
-                 lambda state: has_combat_reqs("Garden Knight", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret", player),
-                 lambda state: has_combat_reqs("Overworld", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret 2", player),
-                 lambda state: has_combat_reqs("Overworld", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] Bombable Wall Near Fountain", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] Bombable Wall Near Fountain", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] Fountain Holy Cross", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] South Chest Near Guard", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Overworld - [Southwest] Tunnel Guarded By Turret", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Turret", player),
-                 lambda state: has_combat_reqs("Before Well", state, player))
+        combat_logic_to_loc("Overworld - [Northeast] Flowers Holy Cross", "Garden Knight")
+        combat_logic_to_loc("Overworld - [Northwest] Chest Near Quarry Gate", "Before Well")
+        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "Garden Knight")
+        combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret", "Overworld")
+        combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret 2", "Overworld")
+        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest")
+        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest")
+        combat_logic_to_loc("Overworld - [Southwest] Fountain Holy Cross", "East Forest")
+        combat_logic_to_loc("Overworld - [Southwest] South Chest Near Guard", "East Forest")
+        combat_logic_to_loc("Overworld - [Southwest] Tunnel Guarded By Turret", "East Forest")
+        combat_logic_to_loc("Overworld - [Northwest] Chest Near Turret", "Before Well")
 
         add_rule(multiworld.get_location("Hourglass Cave - Hourglass Chest", player),
                  lambda state: has_sword(state, player) and (state.has("Shield", player)
@@ -1599,73 +1593,48 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # the first spider chest they literally do not attack you until you open the chest
         # the second one, you can still just walk past them, but I guess /something/ would be wanted
-        add_rule(multiworld.get_location("East Forest - Beneath Spider Chest", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("East Forest - Golden Obelisk Holy Cross", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("East Forest - Dancing Fox Spirit Holy Cross", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("East Forest - From Guardhouse 1 Chest", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("East Forest - Above Save Point", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("East Forest - Above Save Point Obscured", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Forest Grave Path - Above Gate", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
-        add_rule(multiworld.get_location("Forest Grave Path - Obscured Chest", player),
-                 lambda state: has_combat_reqs("East Forest", state, player))
+        combat_logic_to_loc("East Forest - Beneath Spider Chest", "East Forest")
+        combat_logic_to_loc("East Forest - Golden Obelisk Holy Cross", "East Forest")
+        combat_logic_to_loc("East Forest - Dancing Fox Spirit Holy Cross", "East Forest")
+        combat_logic_to_loc("East Forest - From Guardhouse 1 Chest", "East Forest")
+        combat_logic_to_loc("East Forest - Above Save Point", "East Forest")
+        combat_logic_to_loc("East Forest - Above Save Point Obscured", "East Forest")
+        combat_logic_to_loc("Forest Grave Path - Above Gate", "East Forest")
+        combat_logic_to_loc("Forest Grave Path - Obscured Chest", "East Forest")
 
         # most of beneath the well is covered by the region access rule
-        add_rule(multiworld.get_location("Beneath the Well - [Entryway] Chest", player),
-                 lambda state: has_combat_reqs("Beneath the Well", state, player))
-        add_rule(multiworld.get_location("Beneath the Well - [Entryway] Obscured Behind Waterfall", player),
-                 lambda state: has_combat_reqs("Beneath the Well", state, player))
-        add_rule(multiworld.get_location("Beneath the Well - [Back Corridor] Left Secret", player),
-                 lambda state: has_combat_reqs("Beneath the Well", state, player))
-        add_rule(multiworld.get_location("Beneath the Well - [Side Room] Chest By Phrends", player),
-                 lambda state: has_combat_reqs("Overworld", state, player))
+        combat_logic_to_loc("Beneath the Well - [Entryway] Chest", "Beneath the Well")
+        combat_logic_to_loc("Beneath the Well - [Entryway] Obscured Behind Waterfall", "Beneath the Well")
+        combat_logic_to_loc("Beneath the Well - [Back Corridor] Left Secret", "Beneath the Well")
+        combat_logic_to_loc("Beneath the Well - [Side Room] Chest By Phrends", "Overworld")
 
         # laurels past the enemies, then use the wand or gun to take care of the fairies that chased you
         add_rule(multiworld.get_location("West Garden - [West Lowlands] Tree Holy Cross Chest", player),
                  lambda state: state.has_any({fire_wand, "Gun"}, player))
-        add_rule(multiworld.get_location("West Garden - [Central Lowlands] Chest Beneath Faeries", player),
-                 lambda state: has_combat_reqs("West Garden", state, player))
-        add_rule(multiworld.get_location("West Garden - [Central Lowlands] Chest Beneath Save Point", player),
-                 lambda state: has_combat_reqs("West Garden", state, player))
-        add_rule(multiworld.get_location("West Garden - [West Highlands] Upper Left Walkway", player),
-                 lambda state: has_combat_reqs("West Garden", state, player))
+        combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Faeries", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
+        combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
 
+        combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress")
         # could add it to the other fuse events but that's just wasteful imo
-        add_rule(multiworld.get_location("Eastern Vault West Fuses", player),
-                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
-        add_rule(multiworld.get_location("Eastern Vault East Fuse", player),
-                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
+        combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
+        combat_logic_to_loc("Eastern Vault East Fuse", "Eastern Vault Fortress")
 
         # replace the sword rule with this one
-        set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [South Graveyard] Above Big Skeleton", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
+        combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", True)
+        combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp")
         # the tentacles deal with everything else reasonably, so you just have to fight them
         # todo: revisit, should it be fine since this is a knowledge check (get on island to stop tentacles)
-        set_rule(multiworld.get_location("Swamp - [South Graveyard] Guarded By Tentacles", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
+        combat_logic_to_loc("Swamp - [South Graveyard] Guarded By Tentacles", "Swamp", True)
         add_rule(multiworld.get_location("Swamp - [South Graveyard] Obscured Beneath Telescope", player),
                  lambda state: state.has(laurels, player)  # can dash from swamp mid to here and grab it
                  or has_combat_reqs("Swamp", state, player))
         add_rule(multiworld.get_location("Swamp - [Central] South Secret Passage", player),
                  lambda state: state.has(laurels, player)  # can dash from swamp front to here and grab it
                  or has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway On Pedestal", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [Central] Beneath Memorial", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [Central] Near Ramps Up", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [Upper Graveyard] Near Telescope", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [Upper Graveyard] Near Shield Fleemers", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        add_rule(multiworld.get_location("Swamp - [Upper Graveyard] Obscured Behind Hill", player),
-                 lambda state: has_combat_reqs("Swamp", state, player))
+        combat_logic_to_loc("Swamp - [South Graveyard] Upper Walkway On Pedestal", "Swamp")
+        combat_logic_to_loc("Swamp - [Central] Beneath Memorial", "Swamp")
+        combat_logic_to_loc("Swamp - [Central] Near Ramps Up", "Swamp")
+        combat_logic_to_loc("Swamp - [Upper Graveyard] Near Telescope", "Swamp")
+        combat_logic_to_loc("Swamp - [Upper Graveyard] Near Shield Fleemers", "Swamp")
+        combat_logic_to_loc("Swamp - [Upper Graveyard] Obscured Behind Hill", "Swamp")
