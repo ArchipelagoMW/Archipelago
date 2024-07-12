@@ -25,6 +25,9 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     if world.options.entrance_rando:
         for region_name, region_data in tunic_er_regions.items():
+            # if fewer shops is off, zig skip is not made
+            if region_name == "Zig Skip Exit" and not world.options.fixed_shop:
+                continue
             regions[region_name] = Region(region_name, world.player, world.multiworld)
 
         portal_pairs = pair_portals(world, regions)
