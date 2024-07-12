@@ -459,7 +459,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Swamp Hero's Grave", region="Swamp Hero's Grave Region",
            destination="RelicVoid", tag="_teleporter_relic plinth"),
     
-    Portal(name="Cathedral Main Exit", region="Cathedral",
+    Portal(name="Cathedral Main Exit", region="Cathedral Entry",
            destination="Swamp Redux 2", tag="_main"),
     Portal(name="Cathedral Elevator", region="Cathedral to Gauntlet",
            destination="Cathedral Arena", tag="_"),
@@ -713,7 +713,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Back of Swamp": RegionInfo("Swamp Redux 2"),  # the area with hero grave and gauntlet entrance
     "Swamp Hero's Grave Region": RegionInfo("Swamp Redux 2"),
     "Back of Swamp Laurels Area": RegionInfo("Swamp Redux 2"),  # the spots you need laurels to traverse
-    "Cathedral": RegionInfo("Cathedral Redux"),
+    "Cathedral Entry": RegionInfo("Cathedral Redux"),  # the checkpoint and easily-accessible chests
+    "Cathedral Main": RegionInfo("Cathedral Redux"),  # the majority of Cathedral
     "Cathedral to Gauntlet": RegionInfo("Cathedral Redux"),  # the elevator
     "Cathedral Secret Legend Room": RegionInfo("Cathedral Redux", dead_end=DeadEnd.all_cats),
     "Cathedral Gauntlet Checkpoint": RegionInfo("Cathedral Arena"),
@@ -1562,12 +1563,22 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Back of Swamp":
             [],
     },
-    "Cathedral": {
+    "Cathedral Entry": {
+        "Cathedral to Gauntlet":
+            [],
+        "Cathedral Main":
+            [],
+    },
+    "Cathedral Main": {
+        "Cathedral Entry":
+            [],
         "Cathedral to Gauntlet":
             [],
     },
     "Cathedral to Gauntlet": {
-        "Cathedral":
+        "Cathedral Entry":
+            [],
+        "Cathedral Main":
             [],
     },
     "Cathedral Gauntlet Checkpoint": {
