@@ -20,16 +20,12 @@ To illustrate, the following is what the default custom mission order currently 
   custom_mission_order:
     # This is a campaign, defined by its name
     Default Campaign:
-      # This defines where the campaign shows up
-      order: 0
-      # How many previous campaigns must be beaten
-      # before this one can be accessed
-      unlock_count: -1
-      # Which specific parts of the mission order must be beaten
-      # before this one can be accessed
-      unlock_specific: []
+      # The campaign's name as displayed in the client
+      display_name: "null"
+      # Conditions that must be fulfilled to access this campaign
+      entry_rules: []
       # Whether beating this campaign is part of the world's goal
-      required: true
+      goal: true
       # The lowest difficulty of missions in this campaign
       min_difficulty: relative
       # The highest difficulty of missions in this campaign
@@ -37,18 +33,16 @@ To illustrate, the following is what the default custom mission order currently 
       # This is a special layout that defines defaults
       # for other layouts in the campaign
       global:
-        # This defines where in the campaign the layout shows up
-        order: 0
+        # The layout's name as displayed in the client
+        display_name: "null"
         # See Default Layout
         limit: 0
+        # Whether beating this layout is part of the world's goal
+        goal: false
         # Whether this layout must be beaten to beat the campaign
-        required: false
-        # How many previous layouts must be beaten
-        # before this one can be accessed
-        unlock_count: -1
-        # Which specific parts of the mission order must be beaten
-        # before this one can be accessed
-        unlock_specific: []
+        exit: false
+        # Conditions that must be fulfilled to access this layout
+        entry_rules: []
         # Which missions are allowed to appear in this layout
         mission_pool:
           - all missions
@@ -56,6 +50,9 @@ To illustrate, the following is what the default custom mission order currently 
         min_difficulty: relative
         # The highest difficulty of missions in this layout
         max_difficulty: relative
+        # Used for overwriting default options of mission slots,
+        # which are set by the layout type (see Default Layout)
+        missions: []
       # This is a regular layout, defined by its name
       Default Layout:
         # This defines how missions in the layout are organized,
@@ -100,160 +97,247 @@ If you want multiple campaigns or layouts, it would look like this:
         size: 10
     # etc.
 ```
+If you don't want to have a campaign container for your layouts, you can also forego the campaign layer like this:
+```yaml
+  custom_mission_order:
+    Example campaign-level layout:
+      # Make sure to always declare these two, like with regular layouts
+      type: column
+      size: 3
+    
+    # Regular campaigns and campaign-less layouts
+    # can be mixed however you want
+    Some Campaign:
+      Some Layout:
+        type: column
+        size: 3
+```
 It is also possible to access mission slots by their index, which is defined by the type of the layout they are in. The below shows an example of how to access a mission slot, as well as the defaults for their options.
 
-However, keep in mind that layout types will set their own options for specific slots. As before, the options are explained in more depth later.
+However, keep in mind that layout types will set their own options for specific slots, overwriting the below defaults, and using this option in turn overwrites the values set by layout types. As before, the options are explained in more depth later.
 ```yaml
   custom_mission_order:
     My Campaign:
       My Layout:
         type: column
         size: 5
-        # 0 is often the layout's starting mission
-        # Any index between 0 and (size - 1) is accessible
-        0:
-          # Which specific mission should go in this slot
-          # Defaults to none, picking randomly from the mission pool
-          mission: ""
-          # Whether this mission is required to beat the campaign
-          required: false
-          # Whether this mission is accessible as soon as the
-          # layout is accessible
-          entrance: false
-          # Whether this mission is required to beat the layout
-          exit: false
-          # Whether this slot contains a mission at all
-          empty: false
-          # Which missions in the layout are unlocked by this mission
-          # This is normally set by the layout's type
-          next: []
-          # How many missions in the campaign must be beaten
-          # to access this mission
-          unlock_count: 0
-          # Which specific parts of the mission order must be beaten
-          # before this one can be accessed
-          unlock_specific: []
-          # Which missions are allowed to appear in this slot
-          # If not defined, the slot inherits the layout's pool
-          mission_pool:
-            - all missions
-          # Which specific difficulty this mission should have
-          difficulty: relative
+        missions:
+          # 0 is often the layout's starting mission
+          # Any index between 0 and (size - 1) is accessible
+          - index: 0
+            # Whether this mission is part of the world's goal
+            goal: false
+            # Whether this mission is accessible as soon as the
+            # layout is accessible
+            entrance: false
+            # Whether this mission is required to beat the layout
+            exit: false
+            # Whether this slot contains a mission at all
+            empty: false
+            # Conditions that must be fulfilled to access this mission
+            entry_rules: []
+            # Which missions in the layout are unlocked by this mission
+            # This is normally set by the layout's type
+            next: []
+            # Which missions are allowed to appear in this slot
+            # If not defined, the slot inherits the layout's pool
+            mission_pool:
+              - all missions
+            # Which specific difficulty this mission should have
+            difficulty: relative
 ```
-## Access Rules
+## Instructions for building a mission order
 
-If you've read the short option descriptions, you will have seen the word "access" a lot. Normally when you play a Starcraft 2 world, you have a table of missions in the Archipelago SC2 Client, and hovering over a mission tells you what missions are required to access it.
+Normally when you play a Starcraft 2 world, you have a table of missions in the Archipelago SC2 Client, and hovering over a mission tells you what missions are required to access it. This is still true for custom mission orders, but you now have control over the way missions are visually organized, as well as their access requirements.
 
-This is still true for custom mission orders, but they also allow defining access rules for campaigns and layouts, which then apply to their entrance missions, and show up on those in the client. Entrance missions of layouts are those that either the layout type or your YAML mark with `entrance: true`. Entrance missions of campaigns are the entrance missions of layouts that have no access rules.
+This section is meant to offer some guidance when making your own mission order for the first time.
 
-Similarly, a mission in a custom mission order may require a campaign or layout to be beaten, which means beating all of their exit missions. Exit missions of layouts are those that either the layout type or your YAML mark with `exit: true`. Exit missions of campaigns are the exit missions of layouts that are marked as `required: true` and the missions your YAML marks with `required: true`. If you do not mark any required layouts or missions, all layouts of the highest order in the campaign will be required by default.
+To begin making your own mission order, think about how you visually want your missions laid out. This should inform the layout `type`s you want to use, and give you some idea about the overall structure of your mission order.
 
-There are four different ways to restrict access to a mission:
-- A layout's type will define the natural flow of missions, eg. to access a mission in a column layout you must beat the mission above it. Specific layout types are covered at the end of this document. You can override this flow using the `next` option on missions.
-- `order` and `unlock_count` allow defining a similar flow for layouts and campaigns. This process is explained below.
-- For missions, `unlock_count` defines how many other missions in the same campaign must be beaten before the mission can be accessed.
-- `unlock_specific` allows picking specific campaigns, layouts, or missions to turn into a requirement. This process is also explained below.
+For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of `type: column`. If you want a Hopscotch layout with certain missions or races, a single layout with `type: hopscotch` will suffice. If you want to play through a funny shape, a single large `type: grid` will be your best starting point. If you just want to make a minor change to a vanilla campaign, you will want to start with a `preset` campaign. (Note: presets and hopscotch aren't implemented yet) <!-- TODO -->
+
+The natural flow of a mission order is defined by the types of its layouts. It makes sense for a mission to unlock its neighbors, it makes sense for a Hopscotch layout to wrap around the sides, and it makes sense for a Column's final mission to be at the bottom. Layout types create their flow by setting `next`, `entrance`, `exit`, and `entry_rules` on missions. More on these in a little bit.
+
+Layout types dictate their own visual structure, and will only rarely make mission slots with `empty: true`. If you want a certain shape that's not exactly like an existing type, make sure you pick a type that has missions in **more** spots than you want, not less, and then get rid of the spots you don't want by setting `empty: true` on them.
+
+With the basic setup in place, you should decide on what the goal of your mission order is. By default every campaign has `goal: true`, meaning all campaigns must be beaten to complete the world. You can additionally set `goal: true` on layouts and mission slots to require them to be beaten as well. If you set `goal: false` on everything, the mission order will default to setting the last campaign (lowest in your YAML) as the goal.
+
+After deciding on a goal, you can complicate your way towards it. At the start of a world, the only accessible missions in the mission order are all the missions marked `entrance: true`. When you beat one of these missions, it unlocks all the missions in the beaten mission's `next` list. This process repeats until all the missions are accessible.
+
+If this behavior isn't enough for your planned mission order, you can interrupt the natural flow of layout types using `entry_rules` in combination with `exit`.
+
+When this document refers to "beating" something, it means the following:
+- Beating a mission simply means getting its victory check
+- Beating a layout means beating all the missions in the layout with `exit: true`
+- Beating a campaign means beating all the layouts in the campaign with `exit: true`
+
+Layouts will have their default exit missions set by the layout type. If you don't want to use this default, you will have to manually set `exit: false` on the default exits. Campaigns default to using the last layout in them (the lowest in your YAML) as their exit, but only if you don't manually set `exit: true` on a layout.
+
+Using `entry_rules`, you can make a mission require beating things other than those missions whose `next` points to it, and you can make layouts and campaigns not available from the start.
+
+Note that `entry_rules` are an addition to the `next` behavior. If you want a mission to completely ignore the natural flow and only use your `entry_rules`, simply set `entrance: true` on it.
+
+Please see the `entry_rules` section below for available rules and examples.
+
+With your playthrough sufficiently complicated, it only remains to add flavor to your mission order by changing `mission_pool` and `difficulty` options as you like them. These options are also explained below.
+
+To summarize:
+- Start by setting up campaigns and layouts with appropriate layout `type`s and `size`s
+- Decide the mission order's `goal`s
+- Customize access requirements as desired:
+  - Use `entrance`, `next`, and `empty` on mission slots to change the unlocking order of missions within a layout
+  - Use `entry_rules` in combination with `exit` to add additional restrictions to missions, layouts, and campaigns
+- Use the `mission_pool` and `difficulty` options to add flavor
+- Finally, generate and have fun!
 
 ## Shared options
 
-All the options below are listed with their defaults.
+These are the options that campaigns, layouts and missions have in common, though not all of them apply to all three. All the options below are listed with their defaults.
 
 ---
+### Display Name
+```yaml
+# For campaigns and layouts
+display_name: "null"
+```
+As shown in the examples, every campaign and layout is defined with a name in your YAML. This name is used to find campaigns and layouts within the mission order (see `entry_rules` section), and by default, meaning with `display_name: "null"`, it is also shown in the client.
+
+This option changes the name shown in the client without affecting the definition name.
+
+There are two special use cases for this option:
+```yaml
+# This means the campaign or layout
+# will not have a title in the client
+display_name: ""
+
+# This will randomly pick a name from the given list of options
+display_name:
+  - My First Choice
+  - My Second Choice
+  - My Third Choice
+```
+
+---
+### Goal
 ```yaml
 # For campaigns
-required: true
+goal: true
 # For layouts and missions
-required: false
+goal: false
 ```
-For campaigns, this determines whether the campaign is required to beat the world. If you turn this off for every campaign, the campaigns with the highest order are automatically marked as required.
-
-For layouts and missions, this determines whether the layout or mission is required to beat the campaign they are in. If no missions or layouts are marked as required, the layouts of the highest order are automatically marked as required.
+This determines whether the campaign, layout or mission is required to beat the world. If you turn this off for everything, the last defined campaign (meaning the lowest one in your YAML) is chosen by default.
 
 ---
+### Exit
 ```yaml
-order: 0
+# For layouts and missions
+exit: false
 ```
-Applies to campaigns and layouts. Can be any integer value.
-
-The order determines where the campaign or layout is placed relative to other campaigns or layouts. Lower orders appear earlier and ties are considered to be parallel. For layouts, the order is only relative to other layouts within the same campaign.
-
-The order also determines where the campaign or layout is placed in the client. Lower-order campaigns are higher up, and lower-order layouts are further left. Ties are broken randomly.
+This determines whether beating the mission is required to beat its parent layout, and whether beating the layout is required to beat its parent campaign.
 
 ---
-
+### Entry rules
 ```yaml
-unlock_count: -1 
+# For campaigns, layouts, and missions
+entry_rules: []
 ```
-Applies to campaigns and layouts. Must be bigger than or equal to -1.
+This defines access restrictions for parts of the mission order.
 
-Missions also have a `unlock_count` option, but it works differently for them, and is covered later.
+There are three available rules:
+```yaml
+entry_rules:
+  # Beat these things ("Beat rule")
+  - scope: []
+  # Beat X amount of missions from these things ("Count rule")
+  - scope: []
+    amount: -1
+  # Fulfill X amount of other conditions ("Subrule rule")
+  - rules: []
+    amount: -1
+```
+The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order. Addresses can look differently depending on the object that uses them.
 
-This determines how many campaigns or layouts of the next-lowest order need to be beaten to access this campaign or layout. Negative values, including the default, mean that every previous-order campaign or layout is required.
+The basic structure of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout. The indices of mission slots are determined by the layout's type.
 
-Next-lowest and previous order here only count orders that are defined in the YAML. If you want a campaign or layout to have a specific order but not use this access rule, set `unlock_count: 0` on it.
+If you don't want to point all the way down to a mission slot, you can omit the later parts. `<Campaign>` and `<Campaign>/<Layout>` are valid addresses, and will point to the entire specified campaign or layout.
 
-The following is an example of these two options:
+In layouts and missions it is also allowed to omit the earlier parts, so a layout can use `<Layout>/<Mission>`, and a mission can additionally use `<Mission>`. In these cases the omitted parts are assumed to be the containing campaign and layout. In combination with the previous paragraph, layouts and missions can also use `<Layout>` to require beating a layout from the same campaign.
+
+Note that if you have a campaign-less layout, you will not require a `<Campaign>` part to find it.
+
+Below are examples of the available entry rules:
 ```yaml
   custom_mission_order:
-    Campaign A:
-      order: 0 # This is the default and could be omitted
-      global:
+    Some Missions:
+      type: grid
+      size: 9
+    
+    Wings of Liberty:
+      Mar Sara:
         type: column
         size: 3
-      Layout A-1:
-        order: -5 # Negative orders are allowed
-      Layout A-2:
-        order: 1
-      Layout A-3:
-        order: 1
-      Layout A-4:
-        order: 2
-        unlock_count: 1
-    Campaign B:
-      order: 1
-      Layout B-1:
-        order: -3
+      Artifact:
         type: column
         size: 3
+        entry_rules:
+          # Beat rule:
+          # To access the Artifact layout,
+          # you have to first beat Mar Sara
+          - scope: Mar Sara
+      Prophecy:
+        type: column
+        size: 3
+        entry_rules:
+          # Beat rule:
+          # Beat the mission at index 1 in the Artifact layout
+          - scope: Artifact/1
+          # This is identical to the above
+          # because this layout is already in Wings of Liberty
+          - scope: Wings of Liberty/Artifact/1
+      Covert:
+        type: column
+        size: 3
+        entry_rules:
+          # Count rule:
+          # Beat any 7 missions from Wings of Liberty
+          - scope: Wings of Liberty
+            amount: 7
+    
+    Complicated Access:
+      type: column
+      size: 3
+      entry_rules:
+        # Subrule rule:
+        # To access this layout,
+        # fulfill any 1 of the nested rules
+        # (See amount value at the bottom)
+        - rules:
+            # Nested Subrule rule:
+            # Fulfill all of the nested rules
+            # Amount can be at the top if you prefer
+            - amount: -1 # -1 means "all of them"
+              rules:
+              # Count rule:
+              # Beat any 5 missions from Wings of Liberty
+              - scope: Wings of Liberty
+                amount: 5
+              # Count rule:
+              # Beat any 5 missions from Some Missions
+              - scope: Some Missions
+                amount: 5
+            # Count rule:
+            # Beat any 10 combined missions from
+            # Wings of Liberty or Some Missions
+            - scope:
+                - Wings of Liberty
+                - Some Missions
+              amount: 10
+          amount: 1
 ```
-This would result in the following visual layout in the client:
-```
-                           Campaign A
-  Layout A-1   |  Layout A-2   |  Layout A-3   |  Layout A-4
----------------------------------------------------------------
- Mission A-1-0 | Mission A-2-0 | Mission A-3-0 | Mission A-4-0
- Mission A-1-1 | Mission A-2-1 | Mission A-3-1 | Mission A-4-1
- Mission A-1-2 | Mission A-2-2 | Mission A-3-2 | Mission A-4-2
-
-  Campaign B
-  Layout B-1
----------------
- Mission B-1-0
- Mission B-1-1
- Mission B-1-2
-```
-It is possible for `Layout A-2` and `Layout A-3` to randomly swap places here, because they are in the same campaign and their orders are equal.
-
-The following rules apply here:
-- `Layout A-1` is immediately accessible, because it is the lowest-order layout of the lowest-order campaign and has no further access rules.
-- `Layout A-2` and `Layout A-3` both require `Layout A-1` to be beaten, because it has the biggest order lower than their own (-5 < 1).
-  - `Layout B-1`'s order (-3) is technically closer to 1 than -5, however, it is not part of the same campaign, so `Campaign A`'s layouts ignore it.
-- `Layout A-4` would by default require both `Layout A-2` and `Layout A-3` to be beaten (because 1 is the biggest order lower than its 2), but because of its `unlock_count: 1` option, it only requires either one of the two to be beaten.
-- `Campaign B` requires `Campaign A` to be beaten because of their relative orders, by the same concept as the layout orders explained above.
-  - Because no layout in `Campaign A` is marked with `required: true`, it defaults to setting its highest-order layouts (only `Layout A-4` in this case) as required, so unlocking `Campaign B` really requires beating `Layout A-4`.
-- Because no campaign is marked with `required: false`, all of them are required to beat this world.
-
-As a reminder, a column's default entrance is its top-most mission and its default exit is its bottom-most mission, so by default, to beat a column-type layout you must beat every mission in it.
-
-Together, this forms the following playthrough:
-- The first available mission is `A-1-0`.
-- Beat `Layout A-1` by beating `A-1-1`, then `A-1-2`.
-- Beat either one out of `Layout A-2` and `Layout A-3` by beating all their respective missions.
-- Beat `Layout A-4` by beating all its missions. This also beats `Campaign A`.
-- Beat `Layout B-1` by beating all its missions. This also beats `Campaign B`, which beats the world.
+As this last example shows, the Subrule rule is a powerful tool for making arbitrarily complex requirements. Put plainly, the example accomplishes the following: To unlock the `Complicated Access` layout, either beat 5 missions in both the `Wings of Liberty` campaign and the `Some Missions` layout, or beat 10 missions across both of them.
 
 ---
-
+### Difficulty
 ```yaml
 # These two apply to campaigns and layouts
 min_difficulty: relative
@@ -289,65 +373,19 @@ In every case, if a mission's mission pool does not contain missions of an appro
       Layout 2:
         type: column
         size: 3
-        0:
-          difficulty: starter
+        missions:
+          - index: 0
+            difficulty: starter
 ```
 In this example, `Campaign` is restricted to missions between Easy and Medium. `Layout 1` overrides Medium to be Hard instead, so its 3 missions will go from Easy to Hard. `Layout 2` keeps the campaign's limits, but its first mission is set to Starter. In this case, the first mission will be a Starter mission, but the other two missions will scale towards Medium as if the first had been an Easy one.
 
 ---
-
+### Mission Pool
 ```yaml
-unlock_specific: []
-```
-Applies to campaigns, layouts, and missions.
-
-This is a list of addresses to other parts of the mission order. The campaign, layout, or mission that defines this list will require all of the defined parts to be beaten.
-
-The basic structure of an address is `<Campaign>/<Layout>/<Mission Index>`, where `<Campaign>` and `<Layout>` are the names of a campaign and a layout within that campaign, and `<Mission Index>` is the index of a mission slot in that layout. As explained earlier, the indices of mission slots are determined by the layout's type.
-
-It is possible to omit the later parts, so `<Campaign>` and `<Campaign>/<Layout>` are valid addresses, and will require beating the entire specified campaign or layout.
-
-In layouts and missions it is also allowed to omit the earlier parts, so a layout can use `<Layout>/<Mission>`, and a mission can additionally use `<Mission>` as addresses. In these cases the omitted parts are assumed to be the containing campaign and layout. In combination with the above, layouts and missions can also use `<Layout>` to require beating a certain layout from the same campaign.
-
-```yaml
-  custom_mission_order:
-    Campaign A:
-      Layout A-1:
-        type: column
-        size: 3
-      Layout A-2:
-        type: column
-        size: 3
-        unlock_specific:
-          - Layout A-1
-        1:
-          unlock_specific:
-            - Layout A-1/1
-            - 0
-    Campaign B:
-      unlock_specific:
-        - Campaign A
-        - Campaign A/Layout A-2
-        - Campaign A/Layout A-2/2
-      Layout B-1:
-        type: column
-        size: 3
-```
-The following rules apply in this example:
-- Every campaign and layout uses the default order, so none of them have restricted access via the order mechanism.
-- `Layout A-2` requires `Layout A-1`, so this would be the same as setting `Layout A-1` to a lower order than `Layout A-2`.
-- The second mission of `Layout A-2` requires the second mission of `Layout A-1`, and the first mission of its containing layout (`Layout A-2`). The second rule here is superfluous, because in a column the second mission already requires the first, but this illustrates how to refer to a mission in the same layout.
-- `Campaign B` requires `Campaign A`, `Layout A-2` from `Campaign A`, and the third mission of `Campaign A`'s `Layout A-2`. Because of how `Campaign A` and `Layout A-2` are structured, all three of these are equivalent.
-- Because no campaign is marked `required: false`, this world is beaten by beating every campaign. However, the access rules turn this setup into a linear mission order, so `Campaign B` will be the last campaign to be beaten.
-
----
-
-```yaml
+# For layouts and missions
 mission_pool:
   - all missions
 ```
-Applies to layouts and missions.
-
 Valid values are names of specific missions and names of mission groups. Group names can be looked up here: [APSC2 Mission Groups](https://matthewmarinets.github.io/ap_sc2_icons/missiongroups)
 
 If a mission defines this, it ignores the pool of its containing layout. To define a pool for a full campaign, define it in the `global` layout.
@@ -399,86 +437,104 @@ Campaigns have no further options at this time.
 
 ## Layout Options
 
+### Type
 ```yaml
 type: # There is no default
 ```
 Determines how missions are placed relative to one another within a layout, as well as how they connect to each other.
 
-Valid values are:
+Currently, valid values are:
 - Column
 - Grid
 
 Details about specific layout types are covered at the end of this document.
 
 ---
-
+### Size
 ```yaml
 size: # There is no default
 ```
 Determines how many missions a layout contains. Valid values are positive numbers.
 
 ---
-
+### Limit
 ```yaml
 limit: 0
 ```
 This is interpreted by each layout type as a secondary parameter for determining the placement of missions. Valid values are non-negative numbers. See each layout type for details on how this value is used.
 
+### Missions
+```yaml
+missions: []
+```
+This is used to access mission slots and overwrite the options that the layout type set for them. Valid options for mission slots are covered below, but the `index` option used to find mission slots is explained here.
+
+Note that this list is evaluated from top to bottom, meaning if you perform conflicting changes on the same mission slot, the last defined operation (lowest in your YAML) will be the one that takes effect.
+
+The following example shows ways to access and modify missions:
+```yaml
+  custom_mission_order:
+    My Example:
+      type: grid
+      size: 4
+      missions:
+        # Indices can be a numerical value
+        # This sets the mission at index 1 to be an exit
+        - index: 1
+          exit: true
+        # Indices can be special terms
+        # Valid terms are 'exits', 'entrances', and 'all'
+        # This takes all exits, including the one set above,
+        # and turns them into non-exits
+        - index: exits
+          exit: false
+        # Indices can be index functions
+        # Available functions depend on the layout's type
+        # In this case the function will return the indices 1 and 3
+        # and then mark those two slots as empty
+        - index: rect(1, 0, 1, 1) # TODO
+          empty: true
+        # Indices can be a list of valid values
+        # This takes all entrances as well as the mission at index 2
+        # and marks all of them as both entrances and exits
+        - index:
+            - entrances
+            - 2
+          entrance: true
+          exit: true
+```
+The result of this example will be a grid where the two missions on the right are empty, and the two missions on the left are both entrances and exits.
+
 ## Mission Slot Options
 
-For all options in mission slots, the type of their containing layout choses the defaults, and any values you define override the type's defaults.
+For all options in mission slots, the layout type containing the mission slot choses the defaults, and any values you define override the type's defaults.
 
 ---
-
-```yaml
-mission: ""
-```
-Valid values are names of specific missions. If this is set, the mission slot will be set to the chosen mission, ignoring any restrictions by the slot's mission pool or difficulty.
-
----
-
-```yaml
-unlock_count: 0
-```
-Valid values are non-negative numbers.
-
-Unlike with campaigns and layouts, this is a requirement on the number of missions beaten across the whole campaign that this mission is in.
-
----
-
+### Entrance
 ```yaml
 entrance: false
 ```
-Determines whether this mission is an entrance for its containing layout. An entrance mission becomes available when the access requirements for its layout become fulfilled, but may further be restricted by its own access requirements.
+Determines whether this mission is an entrance for its containing layout. An entrance mission becomes available its parent layout's and campaign's `entry_rules` are fulfilled, but may further be restricted by its own `entry_rules`.
 
-If for any reason a layout has missions which cannot be unlocked by beating other missions, for example if you set the first mission of a column to not be an entrance, then those missions will be automatically marked as entrances. However, this cannot detect circular dependencies, for example if you cut off a section of a grid, so make sure to manually set entrances as appropriate in those cases.
-
----
-
-```yaml
-exit: false
-```
-Determines whether this mission is an exit for its containing layout. A layout is considered beaten when all its exit missions are beaten.
-
-Layout types will always have at least one default exit, but you can manually turn them off to make a layout without exits. In this case, make sure that beating the layout is not required to access any missions, or generation will fail.
+If for any reason a mission cannot be unlocked by beating other missions, meaning that there is no mission whose `next` points at this mission, then this missions will be automatically marked as entrances. However, this cannot detect circular dependencies, for example if you cut off a section of a grid, so make sure to manually set entrances as appropriate in those cases.
 
 ---
-
+### Empty
 ```yaml
 empty: false
 ```
-Determines whether this mission slot contains a mission at all. If enabled, the slot is empty and will show up as a blank space in the client.
+Determines whether this mission slot contains a mission at all. If set to `true`, the slot is empty and will show up as a blank space in the client.
 
-Layout types may have empty slots depending on other settings, and it is up to the layout type whether their empty slots are accessible by index.
+Layout types have their own means of creating blank spaces in the client, and so rarely use this option. If you want complete control over a layout's slots, use a layout of `type: grid`.
 
 ---
-
+### Next
 ```yaml
 next: []
 ```
-Valid values are indices of other missions within the same layout. Note that unlike `unlock_specific`, this does not accept addresses.
+Valid values are indices of other missions within the same layout. Note that this does not accept addresses.
 
-This is the mechanism layout types use to establish mission flow. Overriding this will break the intended order of missions within a type. If you wish to add on to the type's flow rather than replace it, you must manually include the type's intended indices.
+This is the mechanism layout types use to establish mission flow. Overriding this will break the intended order of missions within a type. If you wish to add on to the type's flow rather than replace it, you must manually include the indices intended by the type.
 
 Mechanically, a mission is unlocked when any other mission that contains the former in its `next` list is beaten. If a mission is not present in any other mission's `next` list, it is automatically marked as an entrance.
 ```yaml
@@ -487,20 +543,32 @@ Mechanically, a mission is unlocked when any other mission that contains the for
       Char:
         type: column
         size: 4
-        0:
-          next:
-            - 1
-            - 2
-        1:
-          next:
-            - 3
+        missions:
+          - index: 0
+            next:
+              - 1
+              - 2
+          - index: 1
+            next:
+              - 3
+          # The below two are default for a column
+          # and could be removed from this list
+          - index: 2
+            next:
+              - 3
+          - index: 3
+            next: []
+
 ```
 This example creates the branching path within `Char` in the Vanilla mission order.
 
 
 ## Layout Types
 
-### Column (`column`)
+### Column
+```yaml
+type: column
+```
 
 This is a linear order going from top to bottom.
 
@@ -517,8 +585,10 @@ A `size: 5` column has the following indices:
 
 ---
 
-### Grid (`grid`)
-
+### Grid
+```yaml
+type: grid
+```
 This is a rectangular order. Beating a mission unlocks adjacent missions in cardinal directions.
 
 `limit` sets the width of the grid, and height is determined via `size` and `limit`. If `limit` is set to 0, the width and height are determined automatically.
