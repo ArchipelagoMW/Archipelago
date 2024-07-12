@@ -1037,7 +1037,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Swamp Hero's Grave Region"].connect(
         connecting_region=regions["Back of Swamp"])
 
-    cath_to_elev = regions["Cathedral Entry"].connect(
+    cath_entry_to_elev = regions["Cathedral Entry"].connect(
         connecting_region=regions["Cathedral to Gauntlet"],
         rule=lambda state: (has_ability(prayer, state, world)
                             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
@@ -1317,10 +1317,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: (state.has(laurels, player)
                                 or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
                  and has_ability(prayer, state, world)
-                 and has_combat_reqs("Rooted Ziggurat", state, player))
+                 and has_combat_reqs("Rooted Ziggurat", state, player)))
 
         # only activating the fuse requires combat logic
-        set_rule(cath_to_elev,
+        set_rule(cath_entry_to_elev,
                  lambda state: options.entrance_rando
                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
                  or (has_ability(prayer, state, world) and has_combat_reqs("Cathedral", state, player)))
