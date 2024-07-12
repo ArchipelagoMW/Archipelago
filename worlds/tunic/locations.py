@@ -97,7 +97,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Frog's Domain - Main Room Top Floor": TunicLocationData("Frog's Domain", "Frog's Domain Main"),
     "Frog's Domain - Main Room Bottom Floor": TunicLocationData("Frog's Domain", "Frog's Domain Main"),
     "Frog's Domain - Side Room Secret Passage": TunicLocationData("Frog's Domain", "Frog's Domain Main"),
-    "Frog's Domain - Side Room Chest": TunicLocationData("Frog's Domain", "Frog's Domain Main),
+    "Frog's Domain - Side Room Chest": TunicLocationData("Frog's Domain", "Frog's Domain Main"),
     "Frog's Domain - Side Room Grapple Secret": TunicLocationData("Frog's Domain", "Frog's Domain Front"),
     "Frog's Domain - Magic Orb Pickup": TunicLocationData("Frog's Domain", "Frog's Domain Main"),
     "Librarian - Hexagon Green": TunicLocationData("Library", "Library Arena", location_group="Bosses"),
