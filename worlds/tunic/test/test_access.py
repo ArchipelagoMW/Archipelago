@@ -62,7 +62,8 @@ class TestNormalGoal(TunicTestBase):
 class TestER(TunicTestBase):
     options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
                options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
-               options.HexagonQuest.internal_name: options.HexagonQuest.option_false}
+               options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
+               options.CombatLogic.internal_name: options.CombatLogic.option_off}
 
     def test_overworld_hc_chest(self) -> None:
         # test to see that static connections are working properly -- this chest requires holy cross and is in Overworld
