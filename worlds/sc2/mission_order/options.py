@@ -116,12 +116,12 @@ class CustomMissionOrder(OptionDict):
     
     def __init__(self, value: Dict[str, Dict[str, Any]]):
         # Make sure all the globals are filled
-        self.value: Dict[str, Dict[str, Any]] = dict()
+        self.value: Dict[str, Dict[str, Any]] = {}
         if value == self.default: # If this option is default, it shouldn't mess with its own values
             value = copy.deepcopy(self.default)
 
         for campaign in value:
-            self.value[campaign] = dict()
+            self.value[campaign] = {}
 
             # Check if this campaign has a layout type, making it a campaign-level layout
             single_layout_campaign = "type" in value[campaign]
@@ -137,10 +137,10 @@ class CustomMissionOrder(OptionDict):
             value[campaign]["single_layout_campaign"] = single_layout_campaign
 
             # Check if this campaign has a global layout
-            global_dict = dict()
+            global_dict = {}
             for name in value[campaign]:
                 if name.lower() == GLOBAL_ENTRY:
-                    global_dict = value[campaign].pop(name, dict())
+                    global_dict = value[campaign].pop(name, {})
                     break
 
             # Campaign values = default options (except for default layouts) + campaign options
