@@ -771,7 +771,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
 
-    regions["Beneath the Vault Ladder Exit"].connect(
+    btv_front_to_main = regions["Beneath the Vault Ladder Exit"].connect(
         connecting_region=regions["Beneath the Vault Main"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
         and has_lantern(state, world))
@@ -781,7 +781,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"])
-    regions["Beneath the Vault Back"].connect(
+    btv_back_to_main = regions["Beneath the Vault Back"].connect(
         connecting_region=regions["Beneath the Vault Main"],
         rule=lambda state: has_lantern(state, world))
 
@@ -1248,6 +1248,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(wg_checkpoint_to_before_boss,
                  lambda state: has_combat_reqs("West Garden", state, player))
 
+        add_rule(btv_front_to_main,
+                 lambda state: has_combat_reqs("Beneath the Vault", state, player))
+        add_rule(btv_back_to_main,
+                 lambda state: has_combat_reqs("Beneath the Vault", state, player))
+
+        set_rule(fort_grave_entry_to_combat,
+                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
+
         set_rule(quarry_entry_to_main,
                  lambda state: has_combat_reqs("Quarry", state, player))
         set_rule(quarry_back_to_main,
@@ -1256,9 +1264,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("Quarry", state, player))
         set_rule(monastery_front_to_back,
                  lambda state: has_combat_reqs("Quarry", state, player))
-
-        set_rule(fort_grave_entry_to_combat,
-                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
 
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
@@ -1614,6 +1619,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Faeries", "West Garden")
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
+
+        # the other ones are just too easy to get imo, this one at least requires you to walk past spiders
+        combat_logic_to_loc("Beneath the Fortress - Bridge", "Beneath the Vault", True)
 
         combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress")
 
