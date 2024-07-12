@@ -178,8 +178,8 @@ class CombatLogic(Choice):
     option_off = 0
     option_bosses_only = 1
     option_on = 2
-    # todo: default 0
-    default = 2
+    # todo: fix unit test failures when default is not 0
+    default = 0
 
 
 class TempCombatOption(Choice):
