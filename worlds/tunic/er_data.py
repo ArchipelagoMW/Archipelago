@@ -461,7 +461,7 @@ portal_mapping: List[Portal] = [
     
     Portal(name="Cathedral Main Exit", region="Cathedral",
            destination="Swamp Redux 2", tag="_main"),
-    Portal(name="Cathedral Elevator", region="Cathedral",
+    Portal(name="Cathedral Elevator", region="Cathedral to Gauntlet",
            destination="Cathedral Arena", tag="_"),
     Portal(name="Cathedral Secret Legend Room Exit", region="Cathedral Secret Legend Room",
            destination="Swamp Redux 2", tag="_secret"),
@@ -714,6 +714,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Swamp Hero's Grave Region": RegionInfo("Swamp Redux 2"),
     "Back of Swamp Laurels Area": RegionInfo("Swamp Redux 2"),  # the spots you need laurels to traverse
     "Cathedral": RegionInfo("Cathedral Redux"),
+    "Cathedral to Gauntlet": RegionInfo("Cathedral Redux"),  # the elevator
     "Cathedral Secret Legend Room": RegionInfo("Cathedral Redux", dead_end=DeadEnd.all_cats),
     "Cathedral Gauntlet Checkpoint": RegionInfo("Cathedral Arena"),
     "Cathedral Gauntlet": RegionInfo("Cathedral Arena"),
@@ -1559,6 +1560,14 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Swamp Hero's Grave Region": {
         "Back of Swamp":
+            [],
+    },
+    "Cathedral": {
+        "Cathedral to Gauntlet":
+            [],
+    },
+    "Cathedral to Gauntlet": {
+        "Cathedral":
             [],
     },
     "Cathedral Gauntlet Checkpoint": {
