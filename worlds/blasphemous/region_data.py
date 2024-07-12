@@ -18213,7 +18213,11 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "D06Z01S13[S]"
+                            "EnemySkipsAndDoubleJump",
+                            "wallClimb",
+                            "doubleJump",
+                            "canEnemyBounce",
+                            "preciseSkipsAllowed"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -18226,6 +18230,14 @@ regions = [
                     {
                         "item_requirements": [
                             "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -19218,6 +19230,26 @@ regions = [
                             "canSurvivePoison2",
                             "blood",
                             "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash",
+                            "preciseSkipsAllowed",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce",
+                            "preciseSkipsAllowed"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21391,7 +21423,11 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "D06Z01S13[S]"
+                            "EnemySkipsAndDoubleJump",
+                            "wallClimb",
+                            "doubleJump",
+                            "canEnemyBounce",
+                            "preciseSkipsAllowed"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21742,6 +21778,25 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "canSurvivePoison2",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
                     }
                 ]
             },
@@ -21887,6 +21942,25 @@ regions = [
                             "canSurvivePoison2",
                             "doubleJump",
                             "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "canSurvivePoison2",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canEnemyBounce"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -22922,20 +22996,20 @@ regions = [
         "name": "D06Z01S13[S]",
         "exits": [
             {
-                "target": "D06Z01S01[SW]",
-                "logic": []
-            },
-            {
                 "target": "D06Z01S08[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "D06Z01S13[S]"
+                            "EnemySkipsAndDoubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": []
             },
             {
                 "target": "D06Z01S02[S]",
@@ -23178,6 +23252,25 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "canSurvivePoison2",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
                     }
                 ]
             }
@@ -23402,6 +23495,24 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]",
+                            "doubleJump",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
                     }
                 ]
             },
@@ -23440,6 +23551,24 @@ regions = [
                         "item_requirements": [
                             "D06Z01S06[EE]",
                             "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]",
+                            "doubleJump",
+                            "blood"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -39316,6 +39445,14 @@ locations = [
                 ],
                 "location_requirements": [],
                 "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
             }
         ]
     },
@@ -39414,6 +39551,61 @@ locations = [
             {
                 "item_requirements": [
                     "canCrossGap11",
+                    "aubade",
+                    "canAirStall"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7",
+                    "doubleJump"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7",
+                    "pillar"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7",
+                    "cante"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7",
+                    "verdiales"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7",
+                    "tirana"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyBounce",
+                    "canCrossGap7",
                     "aubade",
                     "canAirStall"
                 ],
@@ -40048,6 +40240,14 @@ locations = [
                     "canClimbOnRoot",
                     "doubleJump",
                     "canAirStall"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "doubleJump",
+                    "canEnemyBounce"
                 ],
                 "location_requirements": [],
                 "state_modifiers": []
@@ -43456,7 +43656,25 @@ transitions = [
     },
     {
         "name": "D06Z01S08[N]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D06Z01S13[S]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "wallClimb",
+                    "doubleJump",
+                    "canEnemyBounce",
+                    "preciseSkipsAllowed"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D06Z01S09[W]",

@@ -338,7 +338,7 @@ class BlasphemousWorld(World):
         }
     
         slot_data = {
-            "locations": [[loc, (base_id + index)] for index, loc in enumerate(location_names)],
+            "locationinfo": [[loc, (base_id + index)] for index, loc in enumerate(location_names)],
             "doors": doors,
             "cfg": config,
             "ending": self.options.ending.value,
