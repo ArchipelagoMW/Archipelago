@@ -3,6 +3,7 @@ from .. import options
 
 
 class TestAccess(TunicTestBase):
+    options = {options.CombatLogic.internal_name: options.CombatLogic.option_off}
     # test whether you can get into the temple without laurels
     def test_temple_access(self) -> None:
         self.collect_all_but(["Hero's Laurels", "Lantern"])
