@@ -1,3 +1,4 @@
+from typing import List
 from .Items import item_table, ShiversItem
 from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Location
@@ -31,7 +32,7 @@ class ShiversWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
     shivers_item_id_offset = 27000
-    pot_completed_list: list[...]
+    pot_completed_list: List[int]
 
 
     def generate_early(self):
