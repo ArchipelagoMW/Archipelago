@@ -957,8 +957,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
-    regions["Zig Skip Exit"].connect(
-        connecting_region=regions["Rooted Ziggurat Lower Front"])
+    # zig skip region only gets made if entrance rando and fewer shops are on
+    if options.entrance_rando and options.fixed_shop:
+        regions["Zig Skip Exit"].connect(
+            connecting_region=regions["Rooted Ziggurat Lower Front"])
 
     regions["Rooted Ziggurat Portal"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
