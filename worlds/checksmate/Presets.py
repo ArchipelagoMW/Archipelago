@@ -39,8 +39,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_material": EarlyMaterial.option_pawn,
 
-        "min_material": 45,
-        "max_material": 51,
+        "difficulty": 2,
         "max_engine_penalties": 5,
         "max_pocket": 12,
         "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
@@ -63,7 +62,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_material": EarlyMaterial.option_piece,
 
-        "difficulty": 0,
+        "difficulty": 2,
         "max_engine_penalties": 5,
         "max_pocket": 12,
         "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
@@ -88,7 +87,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_material": EarlyMaterial.option_major,
 
-        "difficulty": 0,
+        "difficulty": 2,
         "max_engine_penalties": 5,
         "max_pocket": 12,
         "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,

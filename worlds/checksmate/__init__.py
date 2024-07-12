@@ -385,7 +385,7 @@ class CMWorld(World):
 
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
-        if chosen_material <= 200 and material + remaining_material < min_material:
+        if chosen_material <= 500 and material + remaining_material < min_material:
             return False
         if material + remaining_material + chosen_material > max_material:
             return True

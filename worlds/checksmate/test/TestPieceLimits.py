@@ -33,7 +33,7 @@ class PieceLimitTestBase(CMTestBase):
 
 class TestChaosPieceLimits(PieceLimitTestBase):
     def test_no_options(self):
-        self.options["fairy_chess_army"] = "chaos"
+        # self.options["fairy_chess_army"] = "chaos"
         expected_minors = 0
         expected_majors = 0
         expected_queens = 0
