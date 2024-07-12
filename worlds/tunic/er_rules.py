@@ -1703,7 +1703,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         # with wand, you can get this chest. Non-ER, you need laurels to continue down. ER, you can just torch
         set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
                  lambda state: (state.has(fire_wand, player) 
-                                and (state.has(laurels, player) or options.entrance_rando))
+                                and (state.has(laurels, player) or world.options.entrance_rando))
                  or has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(multiworld.get_location("Rooted Ziggurat Lower - After Guarded Fuse", player),
                  lambda state: has_ability(prayer, state, world) 
