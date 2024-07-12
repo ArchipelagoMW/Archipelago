@@ -1024,6 +1024,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Swamp Hero's Grave Region"].connect(
         connecting_region=regions["Back of Swamp"])
 
+    cath_to_elev = regions["Cathedral"].connect(
+        connecting_region=regions["Cathedral to Gauntlet"],
+        rule=lambda state: (has_ability(prayer, state, world)
+                            or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+        or options.entrance_rando)  # elevator is always there in ER
+    regions["Cathedral to Gauntlet"].connect(
+        connecting_region=regions["Cathedral"])
+  
     regions["Cathedral Gauntlet Checkpoint"].connect(
         connecting_region=regions["Cathedral Gauntlet"])
 
@@ -1264,6 +1272,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("Quarry", state, player))
         set_rule(monastery_front_to_back,
                  lambda state: has_combat_reqs("Quarry", state, player))
+
+        # only activating the fuse requires combat logic
+        set_rule(cath_to_elev,
+                 lambda state: options.entrance_rando
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                 or (has_ability(prayer, state, world) and has_combat_reqs("Cathedral", state, player)))
 
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
