@@ -1616,7 +1616,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
 
         combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress")
-        # could add it to the other fuse events but that's just wasteful imo
+
+        # could just do the last two, but this outputs better in the spoiler log
+        combat_logic_to_loc("Upper and Central Fortress Exterior Fuses", "Eastern Vault Fortress")
+        combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
         combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
         combat_logic_to_loc("Eastern Vault East Fuse", "Eastern Vault Fortress")
 
