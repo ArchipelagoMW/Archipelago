@@ -929,13 +929,23 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Middle Top"].connect(
         connecting_region=regions["Rooted Ziggurat Middle Bottom"])
 
+    zig_low_entry_to_front = regions["Rooted Ziggurat Lower Entry"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
     regions["Rooted Ziggurat Lower Front"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Entry"])
+
+    regions["Rooted Ziggurat Lower Front"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"])
+    zig_low_mid_to_front = regions["Rooted Ziggurat Lower Mid Checkpoint"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
+
+    zig_low_mid_to_back = regions["Rooted Ziggurat Lower Mid Checkpoint"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"],
         rule=lambda state: state.has(laurels, player)
         or (has_sword(state, player) and has_ability(prayer, state, world)))
-    # nmg: can ice grapple on the voidlings to the double admin fight, still need to pray at the fuse
-    regions["Rooted Ziggurat Lower Back"].connect(
-        connecting_region=regions["Rooted Ziggurat Lower Front"],
+    # can ice grapple to the voidlings to get to the double admin fight, still need to pray at the fuse
+    zig_low_back_to_mid = regions["Rooted Ziggurat Lower Back"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"],
         rule=lambda state: (state.has(laurels, player)
                             or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
         and has_ability(prayer, state, world) 
@@ -1236,9 +1246,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                      lambda state: has_combat_reqs("The Heir", state, player))
 
     if world.options.combat_logic == CombatLogic.option_on:
-        # this is redundant with combat logic off
+        # these are redundant with combat logic off
         regions["Fortress Grave Path Entry"].connect(
             connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
+            rule=lambda state: state.has(laurels, player))
+
+        regions["Rooted Ziggurat Lower Entry"].connect(
+            connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"],
+            rule=lambda state: state.has(laurels, player))
+        regions["Rooted Ziggurat Lower Mid Checkpoint"].connect(
+            connecting_region=regions["Rooted Ziggurat Lower Entry"],
             rule=lambda state: state.has(laurels, player))
 
         # need to fight through the rudelings and turret, or just laurels from near the windmill
@@ -1288,6 +1305,19 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("Quarry", state, player))
         set_rule(monastery_front_to_back,
                  lambda state: has_combat_reqs("Quarry", state, player))
+
+        set_rule(zig_low_entry_to_front,
+                 lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
+        set_rule(zig_low_mid_to_front,
+                 lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
+        set_rule(zig_low_mid_to_back,
+                 lambda state: state.has(laurels, player)
+                 or (has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player)))
+        set_rule(zig_low_back_to_mid,
+                 lambda state: (state.has(laurels, player)
+                                or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+                 and has_ability(prayer, state, world)
+                 and has_combat_reqs("Rooted Ziggurat", state, player))
 
         # only activating the fuse requires combat logic
         set_rule(cath_to_elev,
