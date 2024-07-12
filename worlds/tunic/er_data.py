@@ -638,8 +638,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Frog Stairs Upper": RegionInfo("Frog Stairs"),
     "Frog Stairs Lower": RegionInfo("Frog Stairs"),
     "Frog Stairs to Frog's Domain": RegionInfo("Frog Stairs"),
-    "Frog's Domain Entry": RegionInfo("frog cave main"),
-    "Frog's Domain": RegionInfo("frog cave main"),
+    "Frog's Domain Entry": RegionInfo("frog cave main"),  # just the ladder
+    "Frog's Domain Front": RegionInfo("frog cave main"),  # before combat
+    "Frog's Domain Main": RegionInfo("frog cave main"),
     "Frog's Domain Back": RegionInfo("frog cave main"),
     "Library Exterior Tree Region": RegionInfo("Library Exterior"),
     "Library Exterior Ladder Region": RegionInfo("Library Exterior"),
@@ -1217,15 +1218,22 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
     "Frog's Domain Entry": {
-        "Frog's Domain":
+        "Frog's Domain Front":
             [],
     },
-    "Frog's Domain": {
+    "Frog's Domain Front": {
         "Frog's Domain Entry":
+            [],
+        "Frog's Domain Main":
+            [],
+    },
+    "Frog's Domain Main": {
+        "Frog's Domain Front":
             [],
         "Frog's Domain Back":
             [],
     },
+    # cannot get from frogs back to front
     "Library Exterior Ladder Region": {
         "Library Exterior Tree Region":
             [],
