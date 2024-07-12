@@ -1678,3 +1678,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("Swamp - [Upper Graveyard] Near Telescope", "Swamp")
         combat_logic_to_loc("Swamp - [Upper Graveyard] Near Shield Fleemers", "Swamp")
         combat_logic_to_loc("Swamp - [Upper Graveyard] Obscured Behind Hill", "Swamp")
+
+        # zip through the rubble to sneakily grab this chest, or just fight to it
+        add_rule(multiworld.get_location("Cathedral - [1F] Near Spikes", player),
+                 lambda state: laurels_zip(state, world) or has_combat_reqs("Cathedral", state, player))
