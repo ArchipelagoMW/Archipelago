@@ -891,15 +891,21 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ladder("Ladders in Lower Quarry", state, world)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    # nmg: bring a scav over, then ice grapple through the door, only with ER on to avoid soft lock
     regions["Even Lower Quarry"].connect(
+        connecting_region=regions["Even Lower Quarry Isolated Chest"])
+    # you grappled down, might as well loot the rest too
+    lower_quarry_empty_to_combat = regions["Even Lower Quarry Isolated Chest"].connect(
+        connecting_region=regions["Even Lower Quarry"],
+        rule=lambda state: has_mask(state, world))
+
+    regions["Even Lower Quarry Isolated Chest"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: state.has("Activate Quarry Fuse", player)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
-    # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask only with ER on
+    # don't need the mask for this either, please don't complain about not needing a mask here, you know what you did
     regions["Quarry"].connect(
-        connecting_region=regions["Lower Quarry Zig Door"],
+        connecting_region=regions["Even Lower Quarry Isolated Chest"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
     monastery_front_to_back = regions["Monastery Front"].connect(
@@ -1308,6 +1314,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("Quarry", state, player))
         set_rule(monastery_front_to_back,
                  lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(lower_quarry_empty_to_combat,
+                 lambda state: has_combat_reqs("Quarry", state, player))
 
         set_rule(zig_low_entry_to_front,
                  lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
@@ -1318,9 +1326,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  or (has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player)))
         set_rule(zig_low_back_to_mid,
                  lambda state: (state.has(laurels, player)
-                                or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+                                or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
                  and has_ability(prayer, state, world)
-                 and has_combat_reqs("Rooted Ziggurat", state, player)))
+                 and has_combat_reqs("Rooted Ziggurat", state, player))
 
         # only activating the fuse requires combat logic
         set_rule(cath_entry_to_elev,

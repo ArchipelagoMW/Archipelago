@@ -44,14 +44,14 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         portal_pairs = vanilla_portals(world, regions)
 
+    create_randomized_entrances(portal_pairs, regions)
+
     set_er_region_rules(world, regions, portal_pairs)
 
     for location_name, location_id in world.location_name_to_id.items():
         region = regions[location_table[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
-    
-    create_randomized_entrances(portal_pairs, regions)
 
     for region in regions.values():
         world.multiworld.regions.append(region)

@@ -233,7 +233,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Quarry - [Lowlands] Upper Walkway": TunicLocationData("Lower Quarry", "Even Lower Quarry"),
     "Quarry - [West] Lower Area Below Bridge": TunicLocationData("Lower Quarry", "Lower Quarry"),
     "Quarry - [West] Lower Area Isolated Chest": TunicLocationData("Lower Quarry", "Lower Quarry"),
-    "Quarry - [Lowlands] Near Elevator": TunicLocationData("Lower Quarry", "Even Lower Quarry"),
+    "Quarry - [Lowlands] Near Elevator": TunicLocationData("Lower Quarry", "Even Lower Quarry Isolated Chest"),
     "Quarry - [West] Lower Area After Bridge": TunicLocationData("Lower Quarry", "Lower Quarry"),
     "Rooted Ziggurat Upper - Near Bridge Switch": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Upper Front"),
     "Rooted Ziggurat Upper - Beneath Bridge To Administrator": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Upper Back"),

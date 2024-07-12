@@ -693,6 +693,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Monastery Rope": RegionInfo("Quarry Redux"),
     "Lower Quarry": RegionInfo("Quarry Redux"),
     "Even Lower Quarry": RegionInfo("Quarry Redux"),
+    "Even Lower Quarry Isolated Chest": RegionInfo("Quarry Redux"),  # a region for that one chest
     "Lower Quarry Zig Door": RegionInfo("Quarry Redux"),
     "Rooted Ziggurat Entry": RegionInfo("ziggurat2020_0"),
     "Rooted Ziggurat Upper Entry": RegionInfo("ziggurat2020_1"),
@@ -1470,15 +1471,17 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Quarry Monastery Entry":
             [],
-        "Lower Quarry Zig Door":
-            [["IG3"]],
     },
     "Lower Quarry": {
         "Even Lower Quarry":
             [],
     },
     "Even Lower Quarry": {
-        "Lower Quarry":
+        "Even Lower Quarry Isolated Chest":
+            [],
+    },
+    "Even Lower Quarry Isolated Chest": {
+        "Even Lower Quarry":
             [],
         "Lower Quarry Zig Door":
             [["Quarry", "Quarry Connector"], ["IG3"]],
