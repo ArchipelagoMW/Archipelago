@@ -648,10 +648,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
 
     regions["Frog's Domain Entry"].connect(
-        connecting_region=regions["Frog's Domain"],
+        connecting_region=regions["Frog's Domain Front"],
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
 
-    regions["Frog's Domain"].connect(
+    frogs_front_to_main = regions["Frog's Domain Front"].connect(
+        connecting_region=regions["Frog's Domain Main"])
+
+    regions["Frog's Domain Main"].connect(
         connecting_region=regions["Frog's Domain Back"],
         rule=lambda state: state.has(grapple, player))
 
@@ -1274,6 +1277,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(fort_grave_entry_to_combat,
                  lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
 
+        set_rule(frogs_front_to_main,
+                 lambda state: has_combat_reqs("Frog's Domain", state, player))
+
         set_rule(quarry_entry_to_main,
                  lambda state: has_combat_reqs("Quarry", state, player))
         set_rule(quarry_back_to_main,
@@ -1659,6 +1665,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
         combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
         combat_logic_to_loc("Eastern Vault East Fuse", "Eastern Vault Fortress")
+
+        # can get this one without fighting if you have laurels
+        add_rule(multiworld.get_location("Frog's Domain - Above Vault", player),
+                 lambda state: state.has(laurels, player) or has_combat_logic("Frog's Domain", state, player))
 
         # replace the sword rule with this one
         combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", True)
