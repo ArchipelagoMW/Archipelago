@@ -4,9 +4,9 @@ from .. import determine_difficulty, CMOptions
 
 class MaterialStateTestBase(CMTestBase):
 
-    def world_setup(self):
+    def world_setup(self, *args, **kwargs):
         self.options["goal"] = "single"
-        super().world_setup()
+        super().world_setup(*args, **kwargs)
         del(self.options["goal"])
 
         # this class ultimately isn't trying to test this relatively simple function

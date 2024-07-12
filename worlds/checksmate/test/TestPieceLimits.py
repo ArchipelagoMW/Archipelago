@@ -7,8 +7,8 @@ from . import CMTestBase
 
 class PieceLimitTestBase(CMTestBase):
 
-    def world_setup(self):
-        super().world_setup()
+    def world_setup(self, *args, **kwargs):
+        super().world_setup(*args, **kwargs)
         self.NO_CHILDREN = self.world.PieceLimitCascade.NO_CHILDREN
         self.ACTUAL_CHILDREN = self.world.PieceLimitCascade.ACTUAL_CHILDREN
         self.POTENTIAL_CHILDREN = self.world.PieceLimitCascade.POTENTIAL_CHILDREN
