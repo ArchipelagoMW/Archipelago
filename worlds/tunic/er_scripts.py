@@ -130,7 +130,8 @@ def create_shop_region(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
-    portal_map = [portal for portal in portal_mapping if portal.name not in ["Ziggurat Lower Falling Entrance", "Purgatory Bottom Exit", "Purgatory Top Exit"]]
+    portal_map = [portal for portal in portal_mapping if portal.name not in
+                  ["Ziggurat Lower Falling Entrance", "Purgatory Bottom Exit", "Purgatory Top Exit"]]
 
     while portal_map:
         portal1 = portal_map[0]

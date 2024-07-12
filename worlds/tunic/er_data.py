@@ -702,9 +702,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Middle Bottom": RegionInfo("ziggurat2020_2"),
     "Rooted Ziggurat Lower Entry": RegionInfo("ziggurat2020_3"),  # the vanilla entry point side
     "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the front for combat logic
-    "Rooted Ziggurat Lower Mid Checkpoint": RegionInfo("ziggurat2020_3"),  # the mid checkpoint before double admin
+    "Rooted Ziggurat Lower Mid Checkpoint": RegionInfo("ziggurat2020_3"),  # the mid-checkpoint before double admin
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
-    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special),  # the exit from zig skip, for use with fixed shop on
+    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special),  # for use with fixed shop on
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
     "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom"),
     "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom"),
