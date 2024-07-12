@@ -785,7 +785,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Beneath the Vault Main"],
         rule=lambda state: has_lantern(state, world))
 
-    regions["Fortress East Shortcut Upper"].connect(
+    fort_east_upper_lower = regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
     # nmg: can ice grapple upwards
     regions["Fortress East Shortcut Lower"].connect(
@@ -1268,15 +1268,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             try:
                 dagger_entry_paired_entrance = world.multiworld.get_entrance(dagger_entry_paired_name, player)
             except KeyError:
-                # there is no paired entrance, so we don't include the can_reach
-                set_rule(wg_checkpoint_to_dagger,
-                         lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+                # there is no paired entrance, so you must fight or dash past, which is done in the finally
+                pass
             else:
                 set_rule(wg_checkpoint_to_dagger,
-                         lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player)
-                         or dagger_entry_paired_entrance.can_reach(state))
+                         lambda state: dagger_entry_paired_entrance.can_reach(state))
                 world.multiworld.register_indirect_condition(region=regions["West Garden at Dagger House"],
                                                              entrance=dagger_entry_paired_entrance)
+            finally:
+                add_rule(wg_checkpoint_to_dagger,
+                         lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player),
+                         combine="or")
 
             # zip past enemies in fortress grave path to enter the dusty entrance, then come back out
             fort_dusty_paired_name, fort_dusty_paired_region = get_paired_portal("Fortress Reliquary, Dusty_")
@@ -1293,6 +1295,27 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     rule=lambda state: state.has(laurels, player) and fort_dusty_paired_entrance.can_reach(state))
                 world.multiworld.register_indirect_condition(region=regions["Fortress Grave Path by Grave"],
                                                              entrance=fort_dusty_paired_entrance)
+
+            # for activating the ladder switch to get from fortress east upper to lower
+            fort_east_upper_right_paired_name, fort_east_upper_right_paired_region = (
+                get_paired_portal("Fortress East, Fortress Courtyard_"))
+            try:
+                fort_east_upper_right_paired_entrance = (
+                    world.multiworld.get_entrance(fort_east_upper_right_paired_name, player))
+            except KeyError:
+                # no paired entrance, so you must fight, which is done in the finally
+                pass
+            else:
+                set_rule(fort_east_upper_lower,
+                         lambda state: fort_east_upper_right_paired_entrance.can_reach(state))
+                world.multiworld.register_indirect_condition(region=regions["Fortress East Shortcut Lower"],
+                                                             entrance=fort_east_upper_right_paired_entrance)
+            finally:
+                add_rule(fort_east_upper_lower,
+                         lambda state: has_combat_reqs("Eastern Vault Fortress", state, player)
+                         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world),
+                         combine="or")
+
         else:
             # if combat logic is on and ER is off, we can make this entrance freely
             regions["Fortress Grave Path Dusty Entrance Region"].connect(
