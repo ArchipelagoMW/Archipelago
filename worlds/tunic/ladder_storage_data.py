@@ -173,7 +173,7 @@ hard_ls: List[LadderInfo] = [
     LadderInfo("Beneath the Well Front", "Sewer, Overworld Redux_west_aqueduct", "Ladders in Well"),
     LadderInfo("Beneath the Well Front", "Beneath the Well Back", "Ladders in Well", dest_is_region=True),
     # go through the hexagon engraving above the vault door
-    LadderInfo("Frog's Domain", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
+    LadderInfo("Frog's Domain Front", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
     # maybe a little egregious -- ice grapple a spider off, then use it to push into the portal room
     LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
     # go behind the cathedral to reach the door, pretty easily doable
