@@ -14,8 +14,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_material": EarlyMaterial.option_pawn,  # not counted against locked_items (this may be changed)
 
-        "min_material": 41,
-        "max_material": 46,  # excludes so many items that it can never get more than 45 material
+        "difficulty": 0,  # excludes so many items that it can never get more than 45 material
         "max_engine_penalties": 4,
         "max_pocket": 0,
         "fairy_chess_pieces": ['FIDE'],
@@ -44,7 +43,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "max_material": 51,
         "max_engine_penalties": 5,
         "max_pocket": 12,
-        "fairy_chess_pieces": ["FIDE", "Rookies", "Clobberers", "Nutty", "Cannon"],
+        "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_chaos,
 
@@ -64,11 +63,10 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_material": EarlyMaterial.option_piece,
 
-        "min_material": 45,
-        "max_material": 51,
+        "difficulty": 0,
         "max_engine_penalties": 5,
         "max_pocket": 12,
-        "fairy_chess_pieces": ["Rookies", "Clobberers", "Nutty", "Camel"],
+        "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_stable,
 
@@ -90,11 +88,10 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_material": EarlyMaterial.option_major,
 
-        "min_material": 45,
-        "max_material": 51,
+        "difficulty": 0,
         "max_engine_penalties": 5,
         "max_pocket": 12,
-        "fairy_chess_pieces": ["FIDE", "Rookies", "Clobberers", "Nutty", "Camel"],
+        "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_berolina,
         "fairy_chess_army": FairyChessArmy.option_chaos,
 

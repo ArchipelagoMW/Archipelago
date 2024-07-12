@@ -7,6 +7,7 @@ class MaterialStateTestBase(CMTestBase):
     def world_setup(self):
         self.options["goal"] = "single"
         super().world_setup()
+        del(self.options["goal"])
 
         # this class ultimately isn't trying to test this relatively simple function
         self.difficulty = determine_difficulty(self.world.options)
@@ -30,7 +31,7 @@ class TestSimpleMaterial(MaterialStateTestBase):
     def test_no_options(self):
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
-        self.assertLessEqual(4050 * self.difficulty, past_material)
+        self.assertLessEqual(4150 * self.difficulty, past_material)
         self.assertGreaterEqual(4650 * self.difficulty, past_material)
 
 
@@ -40,7 +41,7 @@ class TestCyclicMaterial(MaterialStateTestBase):
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-        self.assertLessEqual(4050 * self.difficulty, past_material)
+        self.assertLessEqual(4150 * self.difficulty, past_material)
         self.assertGreaterEqual(4650 * self.difficulty, past_material)
 
         for item in list(self.multiworld.state.prog_items[self.player].keys()):
@@ -57,7 +58,7 @@ class TestCyclicMaterial(MaterialStateTestBase):
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
-        self.assertLessEqual(4050 * self.difficulty, past_material)
+        self.assertLessEqual(4150 * self.difficulty, past_material)
         self.assertGreaterEqual(4650 * self.difficulty, past_material)
 
         items = list(self.multiworld.state.prog_items[self.player].keys())
