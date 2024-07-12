@@ -1698,16 +1698,16 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # can get this one without fighting if you have laurels
         add_rule(multiworld.get_location("Frog's Domain - Above Vault", player),
-                 lambda state: state.has(laurels, player) or has_combat_logic("Frog's Domain", state, player))
+                 lambda state: state.has(laurels, player) or has_combat_reqs("Frog's Domain", state, player))
 
         # with wand, you can get this chest. Non-ER, you need laurels to continue down. ER, you can just torch
         set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
                  lambda state: (state.has(fire_wand, player) 
                                 and (state.has(laurels, player) or options.entrance_rando))
-                 or has_combat_logic("Rooted Ziggurat", state, player))
+                 or has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(multiworld.get_location("Rooted Ziggurat Lower - After Guarded Fuse", player),
                  lambda state: has_ability(prayer, state, world) 
-                 and has_combat_logic("Rooted Ziggurat", state, player))
+                 and has_combat_reqs("Rooted Ziggurat", state, player))
 
         # replace the sword rule with this one
         combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", True)
