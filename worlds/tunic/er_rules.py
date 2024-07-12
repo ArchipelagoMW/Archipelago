@@ -959,8 +959,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Cathedral"].connect(
         connecting_region=regions["Cathedral to Gauntlet"],
-        rule=lambda state: has_ability(prayer, state, world)
-        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+        rule=lambda state: (has_ability(prayer, state, world)
+                            or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+        or options.entrance_rando)  # elevator is always there in ER
     regions["Cathedral to Gauntlet"].connect(
         connecting_region=regions["Cathedral"])
 
