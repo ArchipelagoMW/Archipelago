@@ -431,7 +431,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Ziggurat Tower to Ziggurat Lower", region="Rooted Ziggurat Middle Bottom",
            destination="ziggurat2020_3", tag="_"),
     
-    Portal(name="Ziggurat Lower to Ziggurat Tower", region="Rooted Ziggurat Lower Front",
+    Portal(name="Ziggurat Lower to Ziggurat Tower", region="Rooted Ziggurat Lower Entry",
            destination="ziggurat2020_2", tag="_"),
     Portal(name="Ziggurat Portal Room Entrance", region="Rooted Ziggurat Portal Room Entrance",
            destination="ziggurat2020_FTRoom", tag="_"),
@@ -700,7 +700,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Upper Back": RegionInfo("ziggurat2020_1"),  # after the administrator
     "Rooted Ziggurat Middle Top": RegionInfo("ziggurat2020_2"),
     "Rooted Ziggurat Middle Bottom": RegionInfo("ziggurat2020_2"),
-    "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the vanilla entry point side
+    "Rooted Ziggurat Lower Entry": RegionInfo("ziggurat2020_3"),  # the vanilla entry point side
+    "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the front for combat logic
+    "Rooted Ziggurat Lower Mid Checkpoint": RegionInfo("ziggurat2020_3"),  # the mid checkpoint before double admin
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
     "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special),  # the exit from zig skip, for use with fixed shop on
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
@@ -1501,13 +1503,33 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Rooted Ziggurat Middle Bottom":
             [],
     },
+    "Rooted Ziggurat Lower Entry": {
+        "Rooted Ziggurat Lower Front":
+            [],
+        # can zip through to the checkpoint
+        "Rooted Ziggurat Lower Mid Checkpoint":
+            [["Hyperdash"]],
+    },
     "Rooted Ziggurat Lower Front": {
+        "Rooted Ziggurat Lower Entry":
+            [],
+        "Rooted Ziggurat Lower Mid Checkpoint":
+            [],
+    },
+    "Rooted Ziggurat Lower Mid Checkpoint": {
+        "Rooted Ziggurat Lower Entry":
+            [["Hyperdash"]],
+        "Rooted Ziggurat Lower Front":
+            [],
         "Rooted Ziggurat Lower Back":
             [],
     },
     "Rooted Ziggurat Lower Back": {
-        "Rooted Ziggurat Lower Front":
-            [["Hyperdash"], ["LS1"], ["IG1"]],
+        # don't need to include the LS2 destinations, the LS1 covers it all
+        "Rooted Ziggurat Lower Entry":
+            [["LS1"]],
+        "Rooted Ziggurat Lower Mid Checkpoint":
+            [["Hyperdash"], ["IG1"]],
         "Rooted Ziggurat Portal Room Entrance":
             [],
     },
