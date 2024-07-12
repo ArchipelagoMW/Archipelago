@@ -168,7 +168,7 @@ class TunicPlandoConnections(PlandoConnections):
 
 class CombatLogic(Choice):
     """
-    If enabled, the player will logicaly require a combination of stat upgrades and items to reach combat breakpoints in order to get through certain areas.
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get most checks, with a goal of matching the vanilla combat difficulty.
     Note that this option marks many more items as progression and may force weapons much earlier than normal.
     Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
     If disabled, the standard logic is used.
@@ -179,7 +179,7 @@ class CombatLogic(Choice):
     option_bosses_only = 1
     option_on = 2
     # todo: default 0
-    default = 0
+    default = 2
 
 
 class TempCombatOption(Choice):
