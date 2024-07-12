@@ -1286,9 +1286,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("Dark Tomb", state, player))
 
         set_rule(wg_before_to_after_terry,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+                 lambda state: state.has_any({laurels, ice_dagger}, player)
+                 or has_combat_reqs("West Garden", state, player))
         set_rule(wg_after_to_before_terry,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+                 lambda state: state.has_any({laurels, ice_dagger}, player)
+                 or has_combat_reqs("West Garden", state, player))
         # laurels through, probably to the checkpoint, or just fight
         set_rule(wg_checkpoint_to_after_terry,
                  lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
