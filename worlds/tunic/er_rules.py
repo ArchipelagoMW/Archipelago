@@ -764,7 +764,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    regions["Fortress Courtyard Upper"].connect(
+    fort_upper_lower = regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Courtyard"])
     # nmg: can ice grapple to the upper ledge
     regions["Fortress Courtyard"].connect(
@@ -1300,6 +1300,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         add_rule(btv_back_to_main,
                  lambda state: has_combat_reqs("Beneath the Vault", state, player))
 
+        add_rule(fort_upper_lower,
+                 lambda state: state.has(ice_dagger, player)
+                 or has_combat_reqs("Eastern Vault Fortress", state, player))
+
         set_rule(fort_grave_entry_to_combat,
                  lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
 
@@ -1634,34 +1638,36 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(multiworld.get_location("Shop - Coin 2", player),
              lambda state: has_sword(state, player))
 
-    def combat_logic_to_loc(loc_name: str, combat_req_area: str, set_instead_of_add: bool = False) -> None:
-        if set_instead_of_add:
+    def combat_logic_to_loc(loc_name: str, combat_req_area: str, set_instead: bool = False,
+                            dagger: bool = False) -> None:
+        # dagger_instead means you can just use magic dagger instead of combat for that check
+        if set_instead:
             set_rule(multiworld.get_location(loc_name, player),
                      # someome tell me if you need to do the p=player and c=combat_req_area, lambdas scary
-                     lambda state, p=player, c=combat_req_area: has_combat_reqs(c, state, p))
+                     lambda state, p=player, c=combat_req_area, d=dagger: has_combat_reqs(c, state, p)
+                     or (state.has(ice_dagger, player) if d else True))
         else:
             add_rule(multiworld.get_location(loc_name, player),
-                     lambda state, p=player, c=combat_req_area: has_combat_reqs(c, state, p))
+                     lambda state, p=player, c=combat_req_area, d=dagger: has_combat_reqs(c, state, p)
+                     or (state.has(ice_dagger, player) if d else True))
 
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         # garden knight is in the regions part above
-        combat_logic_to_loc("Fortress Arena - Siege Engine/Vault Key Pickup", "Siege Engine", True)
-        combat_logic_to_loc("Librarian - Hexagon Green", "The Librarian", True)
-        combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", True)
-        combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", True)
+        combat_logic_to_loc("Fortress Arena - Siege Engine/Vault Key Pickup", "Siege Engine", set_instead=True)
+        combat_logic_to_loc("Librarian - Hexagon Green", "The Librarian", set_instead=True)
+        combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", set_instead=True)
+        combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", set_instead=True)
 
-    # todo: come back add add dagger to checks that can be reasonably done with dagger
     if world.options.combat_logic == CombatLogic.option_on:
         combat_logic_to_loc("Overworld - [Northeast] Flowers Holy Cross", "Garden Knight")
-        combat_logic_to_loc("Overworld - [Northwest] Chest Near Quarry Gate", "Before Well")
-        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "Garden Knight")
-        combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret", "Overworld")
+        combat_logic_to_loc("Overworld - [Northwest] Chest Near Quarry Gate", "Before Well", dagger=True)
+        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "Garden Knight", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret", "Overworld", dagger=True)
         combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret 2", "Overworld")
-        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest")
-        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest")
-        combat_logic_to_loc("Overworld - [Southwest] Fountain Holy Cross", "East Forest")
-        combat_logic_to_loc("Overworld - [Southwest] South Chest Near Guard", "East Forest")
-        combat_logic_to_loc("Overworld - [Southwest] Tunnel Guarded By Turret", "East Forest")
+        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Fountain Holy Cross", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] South Chest Near Guard", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Tunnel Guarded By Turret", "East Forest", dagger=True)
         combat_logic_to_loc("Overworld - [Northwest] Chest Near Turret", "Before Well")
 
         add_rule(multiworld.get_location("Hourglass Cave - Hourglass Chest", player),
@@ -1674,14 +1680,14 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # the first spider chest they literally do not attack you until you open the chest
         # the second one, you can still just walk past them, but I guess /something/ would be wanted
-        combat_logic_to_loc("East Forest - Beneath Spider Chest", "East Forest")
-        combat_logic_to_loc("East Forest - Golden Obelisk Holy Cross", "East Forest")
-        combat_logic_to_loc("East Forest - Dancing Fox Spirit Holy Cross", "East Forest")
-        combat_logic_to_loc("East Forest - From Guardhouse 1 Chest", "East Forest")
-        combat_logic_to_loc("East Forest - Above Save Point", "East Forest")
-        combat_logic_to_loc("East Forest - Above Save Point Obscured", "East Forest")
-        combat_logic_to_loc("Forest Grave Path - Above Gate", "East Forest")
-        combat_logic_to_loc("Forest Grave Path - Obscured Chest", "East Forest")
+        combat_logic_to_loc("East Forest - Beneath Spider Chest", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Golden Obelisk Holy Cross", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Dancing Fox Spirit Holy Cross", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - From Guardhouse 1 Chest", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Above Save Point", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Above Save Point Obscured", "East Forest", dagger=True)
+        combat_logic_to_loc("Forest Grave Path - Above Gate", "East Forest", dagger=True)
+        combat_logic_to_loc("Forest Grave Path - Obscured Chest", "East Forest", dagger=True)
 
         # most of beneath the well is covered by the region access rule
         combat_logic_to_loc("Beneath the Well - [Entryway] Chest", "Beneath the Well")
@@ -1696,16 +1702,18 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
 
-        # the other ones are just too easy to get imo, this one at least requires you to walk past spiders
-        combat_logic_to_loc("Beneath the Fortress - Bridge", "Beneath the Vault", True)
+        # all the beneath the vault ones are really trivial, but since gun is in logic now, might as well
+        add_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
+                 lambda state: state.has("Gun", player),
+                 combine="or")
 
-        combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress")
+        combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress", dagger=True)
 
         # could just do the last two, but this outputs better in the spoiler log
+        # dagger is maybe viable here, but it's sketchy -- activate ladder switch, save to reset enemies, climb up
         combat_logic_to_loc("Upper and Central Fortress Exterior Fuses", "Eastern Vault Fortress")
         combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
         combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
-        combat_logic_to_loc("Eastern Vault East Fuse", "Eastern Vault Fortress")
 
         # can get this one without fighting if you have laurels
         add_rule(multiworld.get_location("Frog's Domain - Above Vault", player),
@@ -1721,11 +1729,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  and has_combat_reqs("Rooted Ziggurat", state, player))
 
         # replace the sword rule with this one
-        combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", True)
-        combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp")
-        # the tentacles deal with everything else reasonably, so you just have to fight them
-        # todo: revisit, should it be fine since this is a knowledge check (get on island to stop tentacles)
-        combat_logic_to_loc("Swamp - [South Graveyard] Guarded By Tentacles", "Swamp", True)
+        combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", set_instead=True)
+        # don't really agree with this one but eh
+        combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp", dagger=True)
+        # the tentacles deal with everything else reasonably, and you can hide on the island, so no rule for it
         add_rule(multiworld.get_location("Swamp - [South Graveyard] Obscured Beneath Telescope", player),
                  lambda state: state.has(laurels, player)  # can dash from swamp mid to here and grab it
                  or has_combat_reqs("Swamp", state, player))
