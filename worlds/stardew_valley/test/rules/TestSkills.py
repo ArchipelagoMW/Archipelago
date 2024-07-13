@@ -44,8 +44,18 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
     #  Using minsanity so collecting everything is faster
     options = get_minsanity_options() | {
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
-        Mods.internal_name: frozenset(Mods.valid_keys),
+        Mods.internal_name: frozenset(),
     }
+
+    def test_given_all_levels_when_can_earn_mastery_then_can(self):
+        self.collect_everything()
+
+        for skill in all_vanilla_skills:
+            with self.subTest(skill):
+                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
+                self.assert_reach_location_true(location, self.multiworld.state)
+
+        self.reset_collection()
 
     def test_given_one_level_missing_when_can_earn_mastery_then_cannot(self):
         for skill in all_vanilla_skills:
@@ -58,12 +68,12 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
 
                 self.reset_collection()
 
-    def test_given_all_levels_when_can_earn_mastery_then_can(self):
+    def test_given_one_tool_missing_when_can_earn_mastery_then_cannot(self):
         self.collect_everything()
 
-        for skill in all_vanilla_skills:
-            with self.subTest(skill):
-                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
-                self.assert_reach_location_true(location, self.multiworld.state)
+        # Testing with combat because weapon are always randomized regardless of tools progression options.
+        self.remove_one_by_name(f"Progressive Weapon")
+        location = self.multiworld.get_location("Combat Mastery", self.player)
+        self.assert_reach_location_false(location, self.multiworld.state)
 
         self.reset_collection()
