@@ -1719,6 +1719,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
         combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
 
+        # if you come in from the left, you only need to fight small crabs
+        add_rule(multiworld.get_location("Ruined Atoll - [South] Near Birds", player),
+                 lambda state: has_melee(state, player) or state.has("Gun", player))
+
         # can get this one without fighting if you have laurels
         add_rule(multiworld.get_location("Frog's Domain - Above Vault", player),
                  lambda state: state.has(laurels, player) or has_combat_reqs("Frog's Domain", state, player))
