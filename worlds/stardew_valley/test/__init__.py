@@ -306,6 +306,12 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             self.multiworld.worlds[self.player].total_progression_items -= 1
         return created_item
 
+    def remove_one_by_name(self, item: str) -> None:
+        self.remove(self.create_item(item))
+
+    def reset_collection(self):
+        self.multiworld.state = self.original_state.copy()
+
 
 pre_generated_worlds = {}
 

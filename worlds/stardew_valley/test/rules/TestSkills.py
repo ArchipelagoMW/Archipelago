@@ -1,7 +1,7 @@
 from ... import HasProgressionPercent
 from ...options import ToolProgression, SkillProgression, Mods
-from ...strings.skill_names import all_skills
-from ...test import SVTestBase
+from ...strings.skill_names import all_skills, all_vanilla_skills
+from ...test import SVTestBase, get_minsanity_options
 
 
 class TestVanillaSkillLogicSimplification(SVTestBase):
@@ -25,16 +25,45 @@ class TestAllSkillsRequirePrevious(SVTestBase):
         for skill in all_skills:
             self.collect_everything()
             self.remove_by_name(f"{skill} Level")
+
             for level in range(1, 11):
                 location_name = f"Level {level} {skill}"
+                location = self.multiworld.get_location(location_name, self.player)
+
                 with self.subTest(location_name):
-                    can_reach = self.can_reach_location(location_name)
                     if level > 1:
-                        self.assertFalse(can_reach)
+                        self.assert_reach_location_false(location, self.multiworld.state)
                         self.collect(f"{skill} Level")
-                        can_reach = self.can_reach_location(location_name)
-                    self.assertTrue(can_reach)
-            self.multiworld.state = self.original_state.copy()
+
+                    self.assert_reach_location_true(location, self.multiworld.state)
+
+            self.reset_collection()
 
 
+class TestMasteryRequireSkillBeingMaxed(SVTestBase):
+    #  Using minsanity so collecting everything is faster
+    options = get_minsanity_options() | {
+        SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        Mods.internal_name: frozenset(Mods.valid_keys),
+    }
 
+    def test_given_one_level_missing_when_can_earn_mastery_then_cannot(self):
+        for skill in all_vanilla_skills:
+            with self.subTest(skill):
+                self.collect_everything()
+                self.remove_one_by_name(f"{skill} Level")
+
+                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
+                self.assert_reach_location_false(location, self.multiworld.state)
+
+                self.reset_collection()
+
+    def test_given_all_levels_when_can_earn_mastery_then_can(self):
+        self.collect_everything()
+
+        for skill in all_vanilla_skills:
+            with self.subTest(skill):
+                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
+                self.assert_reach_location_true(location, self.multiworld.state)
+
+        self.reset_collection()
