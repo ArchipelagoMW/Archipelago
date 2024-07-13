@@ -74,7 +74,7 @@ VICTORY_MODULO: int = 100
 # GitHub repo where the Map/mod data is hosted for /download_data command
 DATA_REPO_OWNER = "Ziktofel"
 DATA_REPO_NAME = "Archipelago-SC2-data"
-DATA_API_VERSION = "API3"
+DATA_API_VERSION = "API4"
 
 # Bot controller
 CONTROLLER_HEALTH: int = 38281
