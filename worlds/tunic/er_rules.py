@@ -1711,7 +1711,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  lambda state: state.has("Gun", player),
                  combine="or")
 
-        combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress", dagger=True)
+        combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress",
+                            dagger=True)
 
         # could just do the last two, but this outputs better in the spoiler log
         # dagger is maybe viable here, but it's sketchy -- activate ladder switch, save to reset enemies, climb up
@@ -1721,7 +1722,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # if you come in from the left, you only need to fight small crabs
         add_rule(multiworld.get_location("Ruined Atoll - [South] Near Birds", player),
-                 lambda state: has_melee(state, player) or state.has("Gun", player))
+                 lambda state: has_melee(state, player) or state.has_any({laurels, "Gun"}, player))
 
         # can get this one without fighting if you have laurels
         add_rule(multiworld.get_location("Frog's Domain - Above Vault", player),
