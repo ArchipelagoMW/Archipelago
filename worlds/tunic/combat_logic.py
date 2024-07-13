@@ -149,7 +149,7 @@ def get_def_level(state: CollectionState, player: int) -> int:
 
 def get_potion_level(state: CollectionState, player: int) -> int:
     potion_offering_count = state.count("Potion Offering", player)
-    # getting from 3 to 4 potion costs 1,000 money, can assume most players will not do that
+    # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
     return (1 + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player)
             + min(2, potion_offering_count))
 

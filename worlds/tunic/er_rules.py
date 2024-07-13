@@ -1711,10 +1711,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
 
-        # all the beneath the vault ones are really trivial, but since gun is in logic now, might as well
-        add_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
-                 lambda state: state.has("Gun", player),
-                 combine="or")
+        # with combat logic on, I presume the player will want to be able to see to avoid the spiders
+        set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
+                 lambda state: has_lantern(state, world)
+                 and (state.has_any({laurels, fire_wand, "Gun"}, player) or has_melee(state, player)))
 
         combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress",
                             dagger=True)
