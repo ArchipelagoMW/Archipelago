@@ -49,21 +49,33 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     extra_att_needed = 0
     extra_def_needed = 0
     extra_mp_needed = 0
-    extra_magic_needed = False
+    has_magic = state.has_any({"Magic Wand", "Gun"}, player)
     for item in data.equipment:
         if item == "Stick":
             if not has_melee(state, player):
-                extra_mp_needed += 4
-                extra_att_needed -= 16
+                if has_magic:
+                    # magic can make up for the lack of stick
+                    extra_mp_needed += 2
+                    extra_att_needed -= 16
+                else:
+                    return False
+
         elif item == "Sword":
             if not has_sword(state, player):
                 # need sword for bosses
                 if data.is_boss:
                     return False
-                # +4 mp pretty much makes up for the lack of sword, at least in Quarry
-                extra_mp_needed += 4
-                extra_magic_needed = True
-                extra_att_needed -= 2
+                if has_magic:
+                    # +4 mp pretty much makes up for the lack of sword, at least in Quarry
+                    extra_mp_needed += 4
+                    # stick is a backup plan, and doesn't scale well, so let's require a little less
+                    extra_att_needed -= 2
+                elif has_melee(state, player):
+                    # may revise this later based on feedback
+                    extra_att_needed += 3
+                    extra_def_needed += 2
+                else:
+                    return False
         elif item == "Shield":
             if not state.has("Shield", player):
                 extra_def_needed += 2
@@ -72,11 +84,8 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
                 # these are entirely based on vibes
                 extra_att_needed += 2
                 extra_def_needed += 3
-        elif item == "Magic" or extra_magic_needed:
-            if not state.has_any({"Magic Wand", "Gun"}, player):
-                # if you needed magic from a lack of sword, and you don't even have a magic weapon, then false
-                if extra_magic_needed:
-                    return False
+        elif item == "Magic":
+            if not has_magic:
                 extra_att_needed += 2
                 extra_def_needed += 2
                 extra_mp_needed -= 16
@@ -90,7 +99,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
 def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> bool:
     # for now, just check if you have the vanilla stat requirements, can get more advanced later
     player_att = get_att_level(state, player)
-    if data.att_level > 1 and player_att < data.att_level:
+    if player_att < data.att_level:
         return False
     # adding defense and sp together since they accomplish similar things: making you take less damage
     if (data.def_level + data.sp_level > 2
