@@ -1,6 +1,7 @@
 from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
+from . import progression_items
 from .. import checksmate
 
 from ..generic.Rules import set_rule, add_rule
@@ -86,6 +87,21 @@ def determine_difficulty(opts: CMOptions):
     if opts.difficulty.value == opts.difficulty.option_relaxed:
         difficulty *= 1.35  # results in, for example, the 4000 checkmate requirement becoming 5400
     return difficulty
+
+
+def determine_material(opts: CMOptions, base_material: int):
+    difficulty = determine_difficulty(opts)
+    material = base_material * 100 * difficulty
+    material += progression_items["Play as White"].material * difficulty
+    return material + determine_relaxation(opts)
+
+
+def determine_min_material(opts: CMOptions):
+    return determine_material(opts, 41)
+
+
+def determine_max_material(opts: CMOptions):
+    return determine_material(opts, 46)
 
 
 def determine_relaxation(opts: CMOptions):

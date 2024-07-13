@@ -1,6 +1,5 @@
 import logging
 import math
-import random
 from collections import Counter
 from enum import Enum
 from typing import List, Dict, ClassVar, Callable, Type
@@ -13,7 +12,7 @@ from .Items import (CMItem, item_table, create_item_with_correct_settings, fille
                     useful_items, item_name_groups, CMItemData)
 from .Locations import CMLocation, location_table, highest_chessmen_requirement_small, highest_chessmen_requirement
 from .Presets import checksmate_option_presets
-from .Rules import set_rules, determine_difficulty, determine_relaxation
+from .Rules import set_rules, determine_difficulty, determine_relaxation, determine_min_material, determine_max_material
 
 
 class CMWeb(WebWorld):
@@ -173,20 +172,19 @@ class CMWorld(World):
         if self.options.goal.value == self.options.goal.option_progressive:
             items.append(create_item_with_correct_settings(self.player, "Super-Size Me"))
         items.append(create_item_with_correct_settings(self.player, "Play as White"))
+        self.items_used[self.player]["Play as White"] = 1
 
         # find the material value the user's army should provide once fully collected
         material = sum([
             progression_items[item].material * self.items_used[self.player][item]
             for item in self.items_used[self.player] if item in progression_items])
-        difficulty = determine_difficulty(self.options)
+        min_material = determine_min_material(self.options)
+        max_material = determine_max_material(self.options)
         if super_sized:
-            difficulty *= (location_table["Checkmate Maxima"].material_expectations_grand /
-                           location_table["Checkmate Minima"].material_expectations_grand)
-        absolute_relaxation = determine_relaxation(self.options)
-        min_material = 41 * 100 * difficulty + absolute_relaxation
-        max_material = 46 * 100 * difficulty + absolute_relaxation
-        min_material += progression_items["Play as White"].material * difficulty
-        max_material += progression_items["Play as White"].material * difficulty
+            endgame_multiplier = (location_table["Checkmate Maxima"].material_expectations_grand /
+                                  location_table["Checkmate Minima"].material_expectations_grand)
+            min_material *= endgame_multiplier
+            max_material *= endgame_multiplier
 
         # remove items player does not want
         # TODO: tie these "magic numbers" to the corresponding Item.quantity
@@ -204,7 +202,6 @@ class CMWorld(World):
                 (12 - min(self.options.max_pocket.value, 3 * self.options.pocket_limit_by_pocket.value)))
         # if self.options.goal.value != self.options.goal.option_progressive:
         self.items_used[self.player]["Super-Size Me"] = 1
-        self.items_used[self.player]["Play as White"] = 1
 
         # add items player really wants
         yaml_locked_items: dict[str, int] = self.options.locked_items.value
@@ -222,7 +219,8 @@ class CMWorld(World):
         # TODO(chesslogic): I can instead remove items from locked_items during the corresponding loop, until we would
         #  reach min_material by adding the remaining contents of locked_items. We would also need to check remaining
         #  locations, e.g. because the locked_items might contain some filler items like Progressive Pocket Range.
-        logging.debug(str(self.player) + " pre-fill granted total material of " + str(material) +
+        remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
+        logging.debug(str(self.player) + " pre-fill granted total material of " + str(material + remaining_material) +
                       " toward " + str(max_material) + " via items " + str(self.items_used[self.player]) +
                       " having set " + str(starter_items) + " and generated " + str(Counter(items)))
 
@@ -274,7 +272,8 @@ class CMWorld(World):
                     self.lock_new_items(chosen_item, items, locked_items)
             elif material >= min_material:
                 my_progression_items.remove(chosen_item)
-        logging.debug(str(self.player) + " granted total material of " + str(material) +
+        all_material = sum([locked_items[item] * progression_items[item].material for item in locked_items]) + material
+        logging.debug(str(self.player) + " granted total material of " + str(all_material) +
                       " toward " + str(max_material) + " via items " + str(self.items_used[self.player]) +
                       " having generated " + str(Counter(items)))
 
@@ -385,7 +384,8 @@ class CMWorld(World):
 
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
-        if chosen_material <= 500 and material + remaining_material < min_material:
+        if material + remaining_material + chosen_material <= max_material and \
+                material + remaining_material < min_material:
             return False
         if material + remaining_material + chosen_material > max_material:
             return True

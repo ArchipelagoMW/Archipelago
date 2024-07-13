@@ -6,11 +6,14 @@ class MaterialStateTestBase(CMTestBase):
 
     def world_setup(self, *args, **kwargs):
         self.options["goal"] = "single"
+        self.options["difficulty"] = "grandmaster"
         super().world_setup(*args, **kwargs)
-        del(self.options["goal"])
 
         # this class ultimately isn't trying to test this relatively simple function
         self.difficulty = determine_difficulty(self.world.options)
+
+        del self.options["goal"]
+        del self.options["difficulty"]
 
     def test_basic_fill(self):
         # this is mostly to demonstrate that collect fundamentally acquires the items and to show that setUp sets up
