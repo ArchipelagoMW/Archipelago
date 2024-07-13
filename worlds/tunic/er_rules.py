@@ -330,7 +330,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld Fountain Cross Door"].connect(
         connecting_region=regions["Overworld"])
 
-    regions["Overworld"].connect(
+    ow_to_town_portal = regions["Overworld"].connect(
         connecting_region=regions["Overworld Town Portal"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["Overworld Town Portal"].connect(
@@ -1267,6 +1267,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             connecting_region=regions["Rooted Ziggurat Lower Entry"],
             rule=lambda state: state.has(laurels, player))
 
+        add_rule(ow_to_town_portal,
+                 lambda state: has_combat_reqs("Before Well", state, player))
         # need to fight through the rudelings and turret, or just laurels from near the windmill
         set_rule(ow_to_well_entry,
                  lambda state: state.has(laurels, player)
