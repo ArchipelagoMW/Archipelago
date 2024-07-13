@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Tuple
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
 
@@ -96,77 +96,213 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     return True
 
 
+# check if you have the required stats, and the money to afford them
+# it may be innaccurate due to poor spending, and it may even require you to "spend poorly"
+# but that's fine -- it's already pretty generous to begin with
 def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> bool:
-    # for now, just check if you have the vanilla stat requirements, can get more advanced later
-    player_att = get_att_level(state, player)
-    if player_att < data.att_level:
-        return False
-    # adding defense and sp together since they accomplish similar things: making you take less damage
-    if (data.def_level + data.sp_level > 2
-            and get_def_level(state, player) + get_sp_level(state, player) < data.def_level + data.sp_level):
-        return False
-    # if you have 2 more attack than needed, we can forego needing mp
-    if not player_att > data.att_level + 2:
-        if data.mp_level > 1 and get_mp_level(state, player) < data.mp_level:
-            return False
+    money_required = 0
+    player_att = 0
 
-    req_hp = 60 + data.hp_level * 20
-    # required hp if you include your potions at 75% healing effectiveness
-    req_effective_hp = req_hp + .75 * min(20 + data.potion_level * 10, req_hp) * data.potion_count
-    if get_effective_hp(state, player) < req_effective_hp:
+    # check if we actually need the stat before checking state
+    if data.att_level > 1:
+        player_att, att_offerings = get_att_level(state, player)
+        if player_att < data.att_level:
+            return False
+        else:
+            extra_att = player_att - data.att_level
+            paid_att = max(0, att_offerings - extra_att)
+            # attack upgrades cost 100 for the first, +50 for each additional
+            money_per_att = 100
+            for _ in range(paid_att):
+                money_required += money_per_att
+                money_per_att += 50
+
+    # adding defense and sp together since they accomplish similar things: making you take less damage
+    if data.def_level + data.sp_level > 2:
+        player_def, def_offerings = get_def_level(state, player)
+        player_sp, sp_offerings = get_sp_level(state, player)
+        if player_def + player_sp < data.def_level + data.sp_level:
+            return False
+        else:
+            free_def = player_def - def_offerings
+            free_sp = player_sp - sp_offerings
+            paid_stats = data.def_level + data.sp_level - free_def - free_sp
+            def_to_buy = 0
+            sp_to_buy = 0
+
+            if paid_stats <= 0:
+                # if you don't have to pay for any stats, you don't need money for these upgrades
+                pass
+            elif paid_stats <= def_offerings:
+                # get the amount needed to buy these def offerings
+                def_to_buy = paid_stats
+            else:
+                def_to_buy = def_offerings
+                sp_to_buy = max(0, paid_stats - def_offerings)
+
+            # if you have to buy more than 3 def, it's cheaper to buy 1 extra sp
+            if def_to_buy > 3 and sp_offerings > 0:
+                def_to_buy -= 1
+                sp_to_buy += 1
+            # def costs 100 for the first, +50 for each additional
+            money_per_def = 100
+            for _ in range(def_to_buy):
+                money_required += money_per_def
+                money_per_def += 50
+            # sp costs 200 for the first, +200 for each additional
+            money_per_sp = 200
+            for _ in range(sp_to_buy):
+                money_required += money_per_sp
+                money_per_sp += 200
+
+    # if you have 2 more attack than needed, we can forego needing mp
+    if data.mp_level > 1 and player_att < data.att_level + 2:
+        player_mp, mp_offerings = get_mp_level(state, player)
+        if player_mp < data.mp_level:
+            return False
+        else:
+            extra_mp = player_mp - data.mp_level
+            paid_mp = max(0, mp_offerings - extra_mp)
+            # mp costs 300 for the first, +50 for each additional
+            money_per_mp = 300
+            for _ in range(paid_mp):
+                money_required += money_per_mp
+                money_per_mp += 50
+
+    req_effective_hp = calc_effective_hp(data.hp_level, data.potion_level, data.potion_count)
+    player_potion, potion_offerings = get_potion_level(state, player)
+    player_hp, hp_offerings = get_hp_level(state, player)
+    player_potion_count = get_potion_count(state, player)
+    player_effective_hp = calc_effective_hp(player_hp, player_potion, player_potion_count)
+    if player_effective_hp < req_effective_hp:
+        return False
+    else:
+        # need a way to determine which of potion offerings or hp offerings you can reduce
+        # your level if you didn't pay for offerings
+        free_potion = player_potion - potion_offerings
+        free_hp = player_hp - hp_offerings
+        paid_hp_count = 0
+        paid_potion_count = 0
+        if calc_effective_hp(free_hp, free_potion, player_potion_count) >= req_effective_hp:
+            # you don't need to buy upgrades
+            pass
+        # if you have no potions, or no potion upgrades, you only need to check your hp upgrades
+        elif player_potion_count == 0 or potion_offerings == 0:
+            # check if you have enough hp at each paid hp offering
+            for i in range(hp_offerings):
+                paid_hp_count = i + 1
+                if calc_effective_hp(paid_hp_count, 0, player_potion_count) > req_effective_hp:
+                    break
+        else:
+            for i in range(potion_offerings):
+                paid_potion_count = i + 1
+                if calc_effective_hp(free_hp, free_potion + paid_potion_count, player_potion_count) > req_effective_hp:
+                    break
+                for j in range(hp_offerings):
+                    paid_hp_count = j + 1
+                    if (calc_effective_hp(free_hp + paid_hp_count, free_potion + paid_potion_count, player_potion_count)
+                            > req_effective_hp):
+                        break
+        # hp costs 200 for the first, +50 for each additional
+        money_per_hp = 200
+        for _ in range(paid_hp_count):
+            money_required += money_per_hp
+            money_per_hp += 50
+
+        # potion costs 100 for the first, 300 for the second, 1,000 for the third, and +200 for each additional
+        # currently we assume you will not buy past the second potion upgrade, but we might change our minds later
+        money_per_potion = 100
+        for _ in range(paid_potion_count):
+            money_required += money_per_potion
+            if money_per_potion == 100:
+                money_per_potion = 300
+            elif money_per_potion == 300:
+                money_per_potion = 1000
+            else:
+                money_per_potion += 200
+
+    if money_required > get_money_count(state, player):
         return False
 
     return True
 
 
-def get_effective_hp(state: CollectionState, player: int) -> int:
-    # starting hp is 80, you get 20 per upgrade
-    player_hp = 60 + get_hp_level(state, player) * 20
-    potion_count = state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
-    potion_upgrade_level = 1 + state.count_from_list({"Potion Offering", "Hero Relic - POTION",
-                                                      "Just Some Pals", "Spring Falls", "Back To Work"}, player)
-    # total health you get from potions
-    total_healing = potion_count * (min(20 + 10 * potion_upgrade_level, player_hp))
-    effective_hp = player_hp + total_healing * .75  # since you don't tend to use potions efficiently all the time
-
-    # scale your extra mitigation based on your max stamina over your starting stamina
-    return int(effective_hp)
-
-
-def get_att_level(state: CollectionState, player: int) -> int:
-    att_upgrades = state.count_from_list({"ATT Offering", "Hero Relic - ATT"}, player)
+# returns a tuple of your max attack level, the number of attack offerings
+def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
+    att_offering_count = state.count("ATT Offering", player)
+    att_upgrades = state.count("Hero Relic - ATT", player)
     sword_level = state.count("Sword Upgrade", player)
     if sword_level >= 3:
         att_upgrades += min(2, sword_level - 2)
     # attack falls off, can just cap it at 8 for simplicity
-    return min(8, 1 + att_upgrades)
+    return min(8, 1 + att_offering_count + att_upgrades), att_offering_count
 
 
-def get_def_level(state: CollectionState, player: int) -> int:
+# returns a tuple of your max defense level, the number of defense offerings
+def get_def_level(state: CollectionState, player: int) -> Tuple[int, int]:
+    def_offering_count = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
-    return min(8, 1 + state.count_from_list({"DEF Offering", "Hero Relic - DEF", "Secret Legend", "Phonomath"}, player))
+    return (min(8, 1 + def_offering_count
+                + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)),
+            def_offering_count)
 
 
-def get_potion_level(state: CollectionState, player: int) -> int:
-    potion_offering_count = state.count("Potion Offering", player)
+# returns a tuple of your max potion level, the number of potion offerings
+def get_potion_level(state: CollectionState, player: int) -> Tuple[int, int]:
+    potion_offering_count = min(2, state.count("Potion Offering", player))
     # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
-    return (1 + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player)
-            + min(2, potion_offering_count))
+    return (1 + potion_offering_count
+            + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player),
+            potion_offering_count)
 
 
-def get_hp_level(state: CollectionState, player: int) -> int:
-    return 1 + state.count_from_list({"HP Offering", "Hero Relic - HP"}, player)
+# returns a tuple of your max hp level, the number of hp offerings
+def get_hp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+    hp_offerings = state.count("HP Offering", player)
+    return 1 + hp_offerings + state.count("Hero Relic - HP", player), hp_offerings
 
 
-def get_sp_level(state: CollectionState, player: int) -> int:
-    return 1 + state.count_from_list({"SP Offering", "Hero Relic - SP",
-                                      "Mr Mayor", "Power Up", "Regal Weasel", "Forever Friend"}, player)
+# returns a tuple of your max sp level, the number of sp offerings
+def get_sp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+    sp_offerings = state.count("SP Offering", player)
+    return (1 + sp_offerings
+            + state.count_from_list({"Hero Relic - SP", "Mr Mayor", "Power Up",
+                                     "Regal Weasel", "Forever Friend"}, player),
+            sp_offerings)
 
 
-def get_mp_level(state: CollectionState, player: int) -> int:
-    return 1 + state.count_from_list({"MP Offering", "Hero Relic - MP",
-                                      "Sacred Geometry", "Vintage", "Dusty"}, player)
+def get_mp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+    mp_offerings = state.count("MP Offering", player)
+    return (1 + mp_offerings
+            + state.count_from_list({"Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"}, player),
+            mp_offerings)
 
 
 def get_potion_count(state: CollectionState, player: int) -> int:
     return state.count("Potion Flask", player) + state.count("Flask Shard", player) // 3
+
+
+def calc_effective_hp(hp_level: int, potion_level: int, potion_count: int) -> int:
+    player_hp = 60 + hp_level * 20
+    # since you don't tend to use potions efficiently all the time, scale healing by .75
+    total_healing = int(.75 * potion_count * min(player_hp, 20 + 10 * potion_level))
+    return player_hp + total_healing
+
+
+# returns the total amount of progression money the player has
+def get_money_count(state: CollectionState, player: int) -> int:
+    money: int = 0
+    # this could be done with something to parse the money count at the end of the string, but I don't wanna
+    money += state.count("Money x255", player) * 255  # 1 in pool
+    money += state.count("Money x200", player) * 200  # 1 in pool
+    money += state.count("Money x128", player) * 128  # 3 in pool
+    money += state.count("Money x100", player) * 100  # 5 in pool
+    # total from regular money: 1,339
+    # first effigy is 8, doubles until it reaches 512 at number 7, after effigy 28 they stop dropping money
+    # with the vanilla count of 12, you get a total of 3,576 money
+    effigy_count = min(28, state.count("Effigy", player))  # 12 in pool
+    money_per_break = 8
+    for _ in range(effigy_count):
+        money += money_per_break
+        money_per_break = min(512, money_per_break * 2)
+    return money
