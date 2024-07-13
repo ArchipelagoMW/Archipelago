@@ -34,7 +34,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     for region_name, region_data in tunic_er_regions.items():
         regions[region_name] = Region(region_name, world.player, world.multiworld)
 
-    set_er_region_rules(world, world.ability_unlocks, regions, portal_pairs)
+    set_er_region_rules(world, regions, portal_pairs)
 
     for location_name, location_id in world.location_name_to_id.items():
         region = regions[location_table[location_name].er_region]
@@ -67,7 +67,7 @@ tunic_events: Dict[str, str] = {
     "Eastern Vault West Fuses": "Eastern Vault Fortress",
     "Eastern Vault East Fuse": "Eastern Vault Fortress",
     "Quarry Connector Fuse": "Quarry Connector",
-    "Quarry Fuse": "Quarry",
+    "Quarry Fuse": "Quarry Entry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
     "West Garden Fuse": "West Garden",
     "Library Fuse": "Library Lab",

@@ -4,7 +4,7 @@ from typing import Set
 
 from BaseClasses import get_seed
 from . import SVTestCase, complete_options_with_default
-from ..options import EntranceRandomization, ExcludeGingerIsland
+from ..options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_connections_and_regions
 from ..strings.entrance_names import Entrance as EntranceName
 from ..strings.region_names import Region as RegionName
@@ -56,10 +56,12 @@ class TestEntranceRando(SVTestCase):
     def test_entrance_randomization(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
             sv_options = complete_options_with_default({
                 EntranceRandomization.internal_name: option,
-                ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false
+                ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+                SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
             })
             seed = get_seed()
             rand = random.Random(seed)
@@ -80,11 +82,13 @@ class TestEntranceRando(SVTestCase):
     def test_entrance_randomization_without_island(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
 
             sv_options = complete_options_with_default({
                 EntranceRandomization.internal_name: option,
-                ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true
+                ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+                SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
             })
             seed = get_seed()
             rand = random.Random(seed)
@@ -111,7 +115,8 @@ class TestEntranceRando(SVTestCase):
     def test_cannot_put_island_access_on_island(self):
         sv_options = complete_options_with_default({
             EntranceRandomization.internal_name: EntranceRandomization.option_buildings,
-            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false
+            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+            SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         })
 
         for i in range(0, 100 if self.skip_long_tests else 10000):
