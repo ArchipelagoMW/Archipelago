@@ -1643,17 +1643,22 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_sword(state, player))
 
     def combat_logic_to_loc(loc_name: str, combat_req_area: str, set_instead: bool = False,
-                            dagger: bool = False) -> None:
-        # dagger_instead means you can just use magic dagger instead of combat for that check
+                            dagger: bool = False, laurel: bool = False) -> None:
+        # dagger means you can use magic dagger instead of combat for that check
+        # laurel means you can dodge the enemies freely with the laurels
         if set_instead:
             set_rule(multiworld.get_location(loc_name, player),
-                     # someome tell me if you need to do the p=player and c=combat_req_area, lambdas scary
-                     lambda state, p=player, c=combat_req_area, d=dagger: has_combat_reqs(c, state, p)
-                     or (state.has(ice_dagger, player) if d else True))
+                     # someome tell me if you actually need to do the p=player and c=combat_req_area, lambdas scary
+                     lambda state, p=player, c=combat_req_area, d=dagger, la=laurel:
+                     has_combat_reqs(c, state, p)
+                     or (state.has(ice_dagger, player) if d else False)
+                     or (state.has(laurels, player) if la else False))
         else:
             add_rule(multiworld.get_location(loc_name, player),
-                     lambda state, p=player, c=combat_req_area, d=dagger: has_combat_reqs(c, state, p)
-                     or (state.has(ice_dagger, player) if d else True))
+                     lambda state, p=player, c=combat_req_area, d=dagger, la=laurel:
+                     has_combat_reqs(c, state, p)
+                     or (state.has(ice_dagger, player) if d else True)
+                     or (state.has(laurels, player) if la else False))
 
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         # garden knight is in the regions part above
@@ -1684,14 +1689,14 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # the first spider chest they literally do not attack you until you open the chest
         # the second one, you can still just walk past them, but I guess /something/ would be wanted
-        combat_logic_to_loc("East Forest - Beneath Spider Chest", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Beneath Spider Chest", "East Forest", dagger=True, laurel=True)
         combat_logic_to_loc("East Forest - Golden Obelisk Holy Cross", "East Forest", dagger=True)
-        combat_logic_to_loc("East Forest - Dancing Fox Spirit Holy Cross", "East Forest", dagger=True)
-        combat_logic_to_loc("East Forest - From Guardhouse 1 Chest", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Dancing Fox Spirit Holy Cross", "East Forest", dagger=True, laurel=True)
+        combat_logic_to_loc("East Forest - From Guardhouse 1 Chest", "East Forest", dagger=True, laurel=True)
         combat_logic_to_loc("East Forest - Above Save Point", "East Forest", dagger=True)
         combat_logic_to_loc("East Forest - Above Save Point Obscured", "East Forest", dagger=True)
-        combat_logic_to_loc("Forest Grave Path - Above Gate", "East Forest", dagger=True)
-        combat_logic_to_loc("Forest Grave Path - Obscured Chest", "East Forest", dagger=True)
+        combat_logic_to_loc("Forest Grave Path - Above Gate", "East Forest", dagger=True, laurel=True)
+        combat_logic_to_loc("Forest Grave Path - Obscured Chest", "East Forest", dagger=True, laurel=True)
 
         # most of beneath the well is covered by the region access rule
         combat_logic_to_loc("Beneath the Well - [Entryway] Chest", "Beneath the Well")
@@ -1740,7 +1745,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         # replace the sword rule with this one
         combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", set_instead=True)
         # don't really agree with this one but eh
-        combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp", dagger=True)
+        combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp", dagger=True, laurel=True)
         # the tentacles deal with everything else reasonably, and you can hide on the island, so no rule for it
         add_rule(multiworld.get_location("Swamp - [South Graveyard] Obscured Beneath Telescope", player),
                  lambda state: state.has(laurels, player)  # can dash from swamp mid to here and grab it
