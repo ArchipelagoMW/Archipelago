@@ -42,10 +42,11 @@ class TestAllSkillsRequirePrevious(SVTestBase):
 
 class TestMasteryRequireSkillBeingMaxed(SVTestBase):
     #  Using minsanity so collecting everything is faster
-    options = get_minsanity_options() | {
+    options = get_minsanity_options()
+    options.update({
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         Mods.internal_name: frozenset(),
-    }
+    })
 
     def test_given_all_levels_when_can_earn_mastery_then_can(self):
         self.collect_everything()
