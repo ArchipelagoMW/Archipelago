@@ -4,6 +4,7 @@ from typing import Dict, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from BaseClasses import CollectionState
 from .options import TunicOptions
+from .grass import set_grass_location_rules
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -133,6 +134,9 @@ def set_location_rules(world: "TunicWorld") -> None:
     multiworld = world.multiworld
     player = world.player
     options = world.options
+
+    if options.grass_randomizer:
+        set_grass_location_rules(world)
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 

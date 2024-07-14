@@ -3,6 +3,7 @@ from worlds.generic.Rules import set_rule, forbid_item
 from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
 from .er_data import Portal
 from BaseClasses import Region, CollectionState
+from .grass import set_grass_location_rules
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -1320,6 +1321,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
     multiworld = world.multiworld
     options = world.options
+
+    if options.grass_randomizer:
+        set_grass_location_rules(world)
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 

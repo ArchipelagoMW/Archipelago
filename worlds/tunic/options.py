@@ -171,7 +171,15 @@ class ShuffleLadders(Toggle):
     """
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
-    
+
+
+class GrassRandomizer(Toggle):
+    """
+    Turns every individual piece of grass and bush in the game into item checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
     
 class TunicPlandoConnections(PlandoConnections):
     """
@@ -205,6 +213,7 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
+    grass_randomizer: GrassRandomizer
     plando_connections: TunicPlandoConnections
       
 
