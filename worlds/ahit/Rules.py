@@ -863,6 +863,8 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
     if world.is_dlc1():
         for entrance in regions["Time Rift - Balcony"].entrances:
             add_rule(entrance, lambda state: can_clear_required_act(state, world, "The Arctic Cruise - Finale"))
+            reg_act_connection(world, world.multiworld.get_entrance("The Arctic Cruise - Finale",
+                                                                    world.player).connected_region, entrance)
 
         for entrance in regions["Time Rift - Deep Sea"].entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Cake"))
@@ -939,6 +941,7 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
     if world.is_dlc1():
         for entrance in world.multiworld.get_region("Time Rift - Balcony", world.player).entrances:
             add_rule(entrance, lambda state: can_clear_required_act(state, world, "The Arctic Cruise - Finale"))
+            reg_act_connection(world, "Rock the Boat", entrance.name)
 
         for entrance in world.multiworld.get_region("Time Rift - Deep Sea", world.player).entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Cake"))
