@@ -13,12 +13,12 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_missions, calc_unfinished_nodes, parse_unlock
-from worlds.sc2.mission_tables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, SC2Race, SC2Campaign
+from worlds.sc2.client import SC2Context, calc_unfinished_nodes
+from worlds.sc2.mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
+    SC2Mission, SC2Race
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.options import LocationInclusion
-from worlds.sc2 import SC2World, get_first_mission
+from worlds.sc2 import SC2World
 
 
 class HoverableButton(HoverBehavior, Button):
@@ -157,209 +157,79 @@ class SC2Manager(GameManager):
         else:
             self.campaign_scroll_panel.border_on = False
         self.last_data_out_of_date = self.ctx.data_out_of_date
-        if not ((self.ctx.slot_data_version >= 4 and self.ctx.mission_order) or self.ctx.mission_req_table):
+        if not self.ctx.mission_order:
             self.campaign_panel.add_widget(Label(text="Connect to a world to see a mission layout here."))
             return
 
-        if self.ctx.slot_data_version >= 4 and self.ctx.mission_order:
-            self.last_checked_locations = self.ctx.checked_locations.copy()
-            self.first_check = False
-
-            self.mission_id_to_button = {}
-
-            available_missions, available_layouts, available_campaigns, unfinished_missions = calc_unfinished_nodes(self.ctx)
-
-            multi_campaign_layout_height = 0
-
-            for campaign_idx, campaign in enumerate(self.ctx.custom_mission_order):
-                longest_column = max(len(col) for layout in campaign.layouts for col in layout.missions)
-                if longest_column == 1:
-                    campaign_layout_height = 115
-                else:
-                    campaign_layout_height = (longest_column + 2) * 50
-                multi_campaign_layout_height += campaign_layout_height
-                campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
-                campaign_layout.add_widget(
-                    Label(text=campaign.name, size_hint_y=None, height=25, outline_width=1)
-                )
-                mission_layout = MissionLayout(padding=[10,0,10,0])
-                for layout_idx, layout in enumerate(campaign.layouts):
-                    layout_panel = RegionLayout()
-                    layout_panel.add_widget(
-                        Label(text=layout.name, size_hint_y=None, height=25, outline_width=1))
-                    column_panel = ColumnLayout()
-
-                    for column in layout.missions:
-                        category_panel = MissionCategory(padding=[3,6,3,6])
-                        
-                        for mission in column:
-                            MISSION_BUTTON_HEIGHT = 50
-                            mission_id = mission.mission_id
-
-                            # Empty mission slots
-                            if mission_id == -1:
-                                column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
-                                category_panel.add_widget(column_spacer)
-                                continue
-
-                            mission_obj = lookup_id_to_mission[mission_id]
-
-                            text, tooltip = self.mission_text(
-                                self.ctx, mission_id, mission_obj, layout_idx, campaign_idx,
-                                available_missions, available_layouts, available_campaigns, unfinished_missions
-                            )
-
-                            mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
-                            mission_race = mission_obj.race
-                            if mission_race == SC2Race.ANY:
-                                mission_race = mission_obj.campaign.race
-                            race = campaign_race_exceptions.get(mission_obj, mission_race)
-                            racial_colors = {
-                                SC2Race.TERRAN: (0.24, 0.84, 0.68),
-                                SC2Race.ZERG: (1, 0.65, 0.37),
-                                SC2Race.PROTOSS: (0.55, 0.7, 1)
-                            }
-                            if race in racial_colors:
-                                mission_button.background_color = racial_colors[race]
-                            mission_button.tooltip_text = tooltip
-                            mission_button.bind(on_press=self.mission_callback)
-                            self.mission_id_to_button[mission_id] = mission_button
-                            category_panel.add_widget(mission_button)
-
-                        # layout_panel.add_widget(Label(text=""))
-                        column_panel.add_widget(category_panel)
-                    layout_panel.add_widget(column_panel)
-                    mission_layout.add_widget(layout_panel)
-                campaign_layout.add_widget(mission_layout)
-                self.campaign_panel.add_widget(campaign_layout)
-            self.campaign_panel.height = multi_campaign_layout_height
-            return
-
-        # Below is the mission req table rendering
-
+        # if self.ctx.slot_data_version >= 4 and self.ctx.mission_order:
         self.last_checked_locations = self.ctx.checked_locations.copy()
         self.first_check = False
-        self.first_mission = get_first_mission(self.ctx.mission_req_table).mission_name
 
         self.mission_id_to_button = {}
 
-        available_missions, unfinished_missions = calc_unfinished_missions(self.ctx)
+        available_missions, available_layouts, available_campaigns, unfinished_missions = calc_unfinished_nodes(self.ctx)
 
         multi_campaign_layout_height = 0
 
-        for campaign, missions in sorted(self.ctx.mission_req_table.items(), key=lambda item: item[0].id):
-            categories: Dict[str, List[str]] = {}
-
-            # separate missions into categories
-            for mission_index in missions:
-                mission_info = self.ctx.mission_req_table[campaign][mission_index]
-                if mission_info.category not in categories:
-                    categories[mission_info.category] = []
-
-                categories[mission_info.category].append(mission_index)
-
-            max_mission_count = max(len(categories[category]) for category in categories)
-            if max_mission_count == 1:
+        for campaign_idx, campaign in enumerate(self.ctx.custom_mission_order):
+            longest_column = max(len(col) for layout in campaign.layouts for col in layout.missions)
+            if longest_column == 1:
                 campaign_layout_height = 115
             else:
-                campaign_layout_height = (max_mission_count + 2) * 50
+                campaign_layout_height = (longest_column + 2) * 50
             multi_campaign_layout_height += campaign_layout_height
             campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
-            if campaign != SC2Campaign.GLOBAL:
-                campaign_layout.add_widget(
-                    Label(text=campaign.campaign_name, size_hint_y=None, height=25, outline_width=1)
-                )
-            mission_layout = MissionLayout()
+            campaign_layout.add_widget(
+                Label(text=campaign.name, size_hint_y=None, height=25, outline_width=1)
+            )
+            mission_layout = MissionLayout(padding=[10,0,10,0])
+            for layout_idx, layout in enumerate(campaign.layouts):
+                layout_panel = RegionLayout()
+                layout_panel.add_widget(
+                    Label(text=layout.name, size_hint_y=None, height=25, outline_width=1))
+                column_panel = ColumnLayout()
 
-            for category in categories:
-                category_name_height = 0
-                category_spacing = 3
-                if category.startswith('_'):
-                    category_display_name = ''
-                else:
-                    category_display_name = category
-                    category_name_height += 25
-                    category_spacing = 10
-                category_panel = MissionCategory(padding=[category_spacing,6,category_spacing,6])
-                category_panel.add_widget(
-                    Label(text=category_display_name, size_hint_y=None, height=category_name_height, outline_width=1))
-
-                for mission in categories[category]:
-                    text: str = mission
-                    tooltip: str = ""
-                    mission_obj: SC2Mission = lookup_name_to_mission[mission]
-                    mission_id: int = mission_obj.id
-                    mission_data = self.ctx.mission_req_table[campaign][mission]
-                    remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_obj)
-                    # Map has uncollected locations
-                    if mission in unfinished_missions:
-                        if self.any_valuable_locations(remaining_locations):
-                            text = f"[color=6495ED]{text}[/color]"
-                        else:
-                            text = f"[color=A0BEF4]{text}[/color]"
-                    elif mission in available_missions:
-                        text = f"[color=FFFFFF]{text}[/color]"
-                    # Map requirements not met
-                    else:
-                        text = f"[color=a9a9a9]{text}[/color]"
-                        tooltip = f"Requires: "
-                        if mission_data.required_world:
-                            tooltip += ", ".join(list(self.ctx.mission_req_table[parse_unlock(req_mission).campaign])[parse_unlock(req_mission).connect_to - 1] for
-                                                    req_mission in
-                                                    mission_data.required_world)
-
-                            if mission_data.number:
-                                tooltip += " and "
-                        if mission_data.number:
-                            tooltip += f"{self.ctx.mission_req_table[campaign][mission].number} missions completed"
-
-                    if mission_id == self.ctx.final_mission:
-                        if mission in available_missions:
-                            text = f"[color=FFBC95]{mission}[/color]"
-                        else:
-                            text = f"[color=D0C0BE]{mission}[/color]"
-                        if tooltip:
-                            tooltip += "\n"
-                        tooltip += "Final Mission"
-
-                    if remaining_count > 0:
-                        if tooltip:
-                            tooltip += "\n\n"
-                        tooltip += f"-- Uncollected locations --"
-                        for loctype in LocationType:
-                            if len(remaining_locations[loctype]) > 0:
-                                if loctype == LocationType.VICTORY:
-                                    tooltip += f"\n- {remaining_locations[loctype][0]}"
-                                else:
-                                    tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
-                                    tooltip += "\n- ".join(remaining_locations[loctype])
-                        if len(plando_locations) > 0:
-                            tooltip += f"\nPlando:\n- "
-                            tooltip += "\n- ".join(plando_locations)
+                for column in layout.missions:
+                    category_panel = MissionCategory(padding=[3,6,3,6])
                     
-                    MISSION_BUTTON_HEIGHT = 50
-                    for pad in range(mission_data.ui_vertical_padding):
-                        column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
-                        category_panel.add_widget(column_spacer)
-                    mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
-                    mission_race = mission_obj.race
-                    if mission_race == SC2Race.ANY:
-                        mission_race = mission_obj.campaign.race
-                    race = campaign_race_exceptions.get(mission_obj, mission_race)
-                    racial_colors = {
-                        SC2Race.TERRAN: (0.24, 0.84, 0.68),
-                        SC2Race.ZERG: (1, 0.65, 0.37),
-                        SC2Race.PROTOSS: (0.55, 0.7, 1)
-                    }
-                    if race in racial_colors:
-                        mission_button.background_color = racial_colors[race]
-                    mission_button.tooltip_text = tooltip
-                    mission_button.bind(on_press=self.mission_callback)
-                    self.mission_id_to_button[mission_id] = mission_button
-                    category_panel.add_widget(mission_button)
+                    for mission in column:
+                        MISSION_BUTTON_HEIGHT = 50
+                        mission_id = mission.mission_id
 
-                category_panel.add_widget(Label(text=""))
-                mission_layout.add_widget(category_panel)
+                        # Empty mission slots
+                        if mission_id == -1:
+                            column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
+                            category_panel.add_widget(column_spacer)
+                            continue
+
+                        mission_obj = lookup_id_to_mission[mission_id]
+
+                        text, tooltip = self.mission_text(
+                            self.ctx, mission_id, mission_obj, layout_idx, campaign_idx,
+                            available_missions, available_layouts, available_campaigns, unfinished_missions
+                        )
+
+                        mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
+                        mission_race = mission_obj.race
+                        if mission_race == SC2Race.ANY:
+                            mission_race = mission_obj.campaign.race
+                        race = campaign_race_exceptions.get(mission_obj, mission_race)
+                        racial_colors = {
+                            SC2Race.TERRAN: (0.24, 0.84, 0.68),
+                            SC2Race.ZERG: (1, 0.65, 0.37),
+                            SC2Race.PROTOSS: (0.55, 0.7, 1)
+                        }
+                        if race in racial_colors:
+                            mission_button.background_color = racial_colors[race]
+                        mission_button.tooltip_text = tooltip
+                        mission_button.bind(on_press=self.mission_callback)
+                        self.mission_id_to_button[mission_id] = mission_button
+                        category_panel.add_widget(mission_button)
+
+                    # layout_panel.add_widget(Label(text=""))
+                    column_panel.add_widget(category_panel)
+                layout_panel.add_widget(column_panel)
+                mission_layout.add_widget(layout_panel)
             campaign_layout.add_widget(mission_layout)
             self.campaign_panel.add_widget(campaign_layout)
         self.campaign_panel.height = multi_campaign_layout_height
