@@ -175,7 +175,7 @@ class ShuffleLadders(Toggle):
 
 class GrassRandomizer(Toggle):
     """
-    Turns every individual piece of grass and bush in the game into item checks.
+    Turns every individual piece of grass and bush in the game into checks.
     """
     internal_name = "grass_randomizer"
     display_name = "Grass Randomizer"

@@ -291,7 +291,7 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
 
         # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
-        if self.options.entrance_rando or self.options.shuffle_ladders:
+        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.grass_randomizer:
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -319,7 +319,7 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando or self.options.shuffle_ladders:
+        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.grass_randomizer:
             set_er_location_rules(self)
         else:
             set_region_rules(self)
