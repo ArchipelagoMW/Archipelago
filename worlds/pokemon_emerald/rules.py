@@ -558,6 +558,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         get_location("NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON"),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", world.player)
     )
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_COIN_CASE"),
+        lambda state: state.has("EVENT_BUY_HARBOR_MAIL", world.player)
+    )
 
     # Route 117
     set_rule(
@@ -1637,10 +1641,6 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         set_rule(
             get_location("NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"),
             lambda state: state.has("EVENT_DEFEAT_NORMAN", world.player) and state.has("EVENT_TURN_OFF_GENERATOR", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_COIN_CASE"),
-            lambda state: state.has("EVENT_BUY_HARBOR_MAIL", world.player)
         )
 
         # Fallarbor Town
