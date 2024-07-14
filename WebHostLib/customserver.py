@@ -330,6 +330,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 self._tasks.append(task)
                 task.add_done_callback(self._done)
                 logging.info(f"Starting room {next_room} on {name}.")
+                del task  # delete reference to task object
 
     starter = Starter()
     starter.daemon = True
