@@ -134,17 +134,24 @@ class GauntletLegendsWorld(World):
         cshard = self.get_location("Chimera's Keep - Chimera Mirror Shard").item
         fshard = self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard").item
         shard_values = [
-            item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
+            item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4],
             item_dict[yshard.code] if yshard.player == self.player else [0x27, 0x4],
             item_dict[cshard.code] if cshard.player == self.player else [0x27, 0x4],
-            item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4],
+            item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
+        ]
+        characters = [
+            self.options.unlock_character_one.value,
+            self.options.unlock_character_two.value,
+            self.options.unlock_character_three.value,
+            self.options.unlock_character_four.value,
         ]
         return {
             "player": self.player,
+            "players": self.options.local_players.value,
             "shards": shard_values,
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
-            "character": self.options.unlock_character.value,
+            "characters": characters,
             "max": self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4,
             "instant_max": self.options.instant_max.value
         }
@@ -180,7 +187,7 @@ class GauntletLegendsWorld(World):
                     freq = 1
                 filler_items += [item.item_name for _ in range(freq)]
 
-        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 2
+        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - (2 if not self.options.infinite_keys else 0)
         if self.options.obelisks == 0:
             remaining -= 7
         if self.options.mirror_shards == 0:

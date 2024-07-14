@@ -3,6 +3,18 @@ from dataclasses import dataclass
 from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range
 
 
+class PlayerCount(Range):
+    """
+    Select how many players will be playing this world locally.
+    If 3 players will be active then change this to 3, etc.
+    """
+
+    display_name = "Local Players"
+    range_start = 1
+    range_end = 4
+    default = 1
+
+
 class ChestBarrels(Choice):
     """
     Choose how you want Chests and Barrels to be randomized.
@@ -91,9 +103,57 @@ class InfiniteKeys(Toggle):
     display_name = "Infinite Keys"
 
 
-class UnlockCharacter(Choice):
+class UnlockCharacterOne(Choice):
     """
-    Unlock a secret character from the start.
+    Unlock a secret character for Player 1 from the start.
+    None: No secret characters will be unlocked.
+    Chosen Character: The selected character will be available from a new save.
+    """
+
+    option_none = 0
+    option_minotaur = 1
+    option_falconess = 2
+    option_tigress = 3
+    option_jackal = 4
+    option_sumner = 5
+    default = 0
+
+
+class UnlockCharacterTwo(Choice):
+    """
+    Unlock a secret character for Player 2 from the start.
+    None: No secret characters will be unlocked.
+    Chosen Character: The selected character will be available from a new save.
+    """
+
+    option_none = 0
+    option_minotaur = 1
+    option_falconess = 2
+    option_tigress = 3
+    option_jackal = 4
+    option_sumner = 5
+    default = 0
+
+
+class UnlockCharacterThree(Choice):
+    """
+    Unlock a secret character for Player 3 from the start.
+    None: No secret characters will be unlocked.
+    Chosen Character: The selected character will be available from a new save.
+    """
+
+    option_none = 0
+    option_minotaur = 1
+    option_falconess = 2
+    option_tigress = 3
+    option_jackal = 4
+    option_sumner = 5
+    default = 0
+
+
+class UnlockCharacterFour(Choice):
+    """
+    Unlock a secret character for Player 4 from the start.
     None: No secret characters will be unlocked.
     Chosen Character: The selected character will be available from a new save.
     """
@@ -110,12 +170,16 @@ class UnlockCharacter(Choice):
 @dataclass
 class GLOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+    local_players: PlayerCount
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards
     max_difficulty_toggle: MaxDifficultyToggle
     max_difficulty_value: MaxDifficultyRange
     instant_max: InstantMaxDifficulty
-    unlock_character: UnlockCharacter
+    unlock_character_one: UnlockCharacterOne
+    unlock_character_two: UnlockCharacterTwo
+    unlock_character_three: UnlockCharacterThree
+    unlock_character_four: UnlockCharacterFour
     infinite_keys: InfiniteKeys
     permanent_speed: PermaSpeed

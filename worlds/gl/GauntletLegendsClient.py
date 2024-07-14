@@ -166,6 +166,7 @@ class GauntletLegendsContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.difficulty: int = 0
+        self.players: int = 1
         self.gl_sync_task = None
         self.received_index: int = 0
         self.glslotdata = None
@@ -173,8 +174,8 @@ class GauntletLegendsContext(CommonContext):
         self.socket = RetroSocket()
         self.awaiting_rom = False
         self.locations_checked: List[int] = []
-        self.inventory: List[InventoryEntry] = []
-        self.inventory_raw: RamChunk
+        self.inventory: List[List[InventoryEntry]] = []
+        self.inventory_raw: List[RamChunk] = []
         self.item_objects: List[ObjectEntry] = []
         self.obelisk_objects: List[ObjectEntry] = []
         self.chest_objects: List[ObjectEntry] = []
@@ -199,44 +200,47 @@ class GauntletLegendsContext(CommonContext):
         self.character_loaded: bool = False
 
     # Return number of items in inventory
-    def inv_count(self):
-        return len(self.inventory)
+    def inv_count(self, player: int) -> int:
+        return len(self.inventory[player])
 
     # Update self.inventory to current in-game values
     async def inv_read(self):
-        _inv: List[InventoryEntry] = []
-        b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR, 'x')} 3072")))
-        if b is None:
-            return
-        b.iterate(0x10)
-        self.inventory_raw = b
-        for i, arr in enumerate(b.split):
-            _inv += [InventoryEntry(arr, i)]
-        for i in range(len(_inv)):
-            if _inv[i].p_addr == 0:
-                _inv = _inv[i:]
-                break
-        new_inv: List[InventoryEntry] = []
-        new_inv += [_inv[0]]
-        addr = new_inv[0].n_addr
-        while True:
-            if addr == 0:
-                break
-            new_inv += [inv for inv in _inv if inv.addr == addr]
-            addr = new_inv[-1].n_addr
-        self.inventory = new_inv
+        self.inventory = []
+        self.inventory_raw = []
+        for i in range(self.players):
+            _inv: List[InventoryEntry] = []
+            b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR + (0x400 * i), 'x')} 1008")))
+            if b is None:
+                return
+            b.iterate(0x10)
+            self.inventory_raw += [b]
+            for i, arr in enumerate(b.split):
+                _inv += [InventoryEntry(arr, i)]
+            for i in range(len(_inv)):
+                if _inv[i].p_addr == 0:
+                    _inv = _inv[i:]
+                    break
+            new_inv: List[InventoryEntry] = []
+            new_inv += [_inv[0]]
+            addr = new_inv[0].n_addr
+            while True:
+                if addr == 0:
+                    break
+                new_inv += [inv for inv in _inv if inv.addr == addr]
+                addr = new_inv[-1].n_addr
+            self.inventory += [new_inv]
 
     # Return InventoryEntry if item of name is in inv, else return None
-    async def item_from_name(self, name: str) -> InventoryEntry | None:
+    async def item_from_name(self, name: str, player: int) -> InventoryEntry | None:
         await self.inv_read()
-        for i in range(0, self.inv_count()):
-            if self.inventory[i].name == name:
-                return self.inventory[i]
+        for i in range(0, self.inv_count(player)):
+            if self.inventory[player][i].name == name:
+                return self.inventory[player][i]
         return None
 
     # Return True if bitwise and evaluates to non-zero value
-    async def inv_bitwise(self, name: str, bit: int) -> bool:
-        item = await self.item_from_name(name)
+    async def inv_bitwise(self, name: str, bit: int, player: int) -> bool:
+        item = await self.item_from_name(name, player)
         if item is None:
             return False
         return (item.count & bit) != 0
@@ -281,6 +285,21 @@ class GauntletLegendsContext(CommonContext):
                 await self.socket.read(
                     message_format(
                         READ,
+                        f"0x{format(obj_address + (self.offset + len(self.item_locations) + self.extra_items) * 0x3C, 'x')} {len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner]) * 0x3C}",
+                    ),
+                ),
+            )
+            b.iterate(0x3C)
+            count = 0
+            for obj in b.split:
+                if obj[0] == 0xFF:
+                    count += 1
+            self.extra_items += count
+
+            b = RamChunk(
+                await self.socket.read(
+                    message_format(
+                        READ,
                         f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C}",
                     ),
                 ),
@@ -306,80 +325,79 @@ class GauntletLegendsContext(CommonContext):
             name = "Obelisk"
         if "Mirror" in name:
             name = "Mirror Shard"
-        for item in self.inventory:
-            if item.name == name:
-                zero = item.count == 0
-                if name in timers:
-                    count *= 96
-                if "Compass" in name:
-                    item.count = count
-                elif "Health" in name:
-                    max = await self.item_from_name("Max")
-                    item.count = min(item.count + count, max.count)
-                elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
-                    item.count |= count
+        for player in range(self.players):
+            for item in self.inventory[player]:
+                if item.name == name:
+                    zero = item.count == 0
+                    if name in timers:
+                        count *= 96
+                    if "Compass" in name:
+                        item.count = count
+                    elif "Health" in name:
+                        max = await self.item_from_name("Max", player)
+                        item.count = min(item.count + count, max.count)
+                    elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
+                        item.count |= count
+                    else:
+                        item.count += count
+                    await self.write_item(item)
+                    if zero:
+                        await self.inv_refactor()
                 else:
-                    item.count += count
-                await self.write_inv(item)
-                if zero:
-                    await self.inv_refactor()
-                return
-        logger.info(f"Adding new item to inv: {name}")
-        await self.inv_add(name, count)
+                    await self.inv_add(name, count)
 
     # Rewrite entire inventory in RAM.
     # This is necessary since item entries are not cleared after full use until a level is completed.
-    async def inv_refactor(self, new=None):
+    async def inv_refactor(self):
         await self.inv_read()
-        if new is not None:
-            self.inventory += [new]
-        for i, item in enumerate(self.inventory):
-            if item.name is not None:
-                if "Potion" in item.name and item.count != 0:
-                    await self.socket.write(
-                        message_format(
-                            WRITE, param_format(ACTIVE_POTION, int.to_bytes(item.type[2] // 0x10, 1, "little")),
+        for player in range(self.players):
+            for i, item in enumerate(self.inventory[player]):
+                if item.name is not None:
+                    if "Potion" in item.name and item.count != 0:
+                        await self.socket.write(
+                            message_format(
+                                WRITE, param_format(ACTIVE_POTION, int.to_bytes(item.type[2] // 0x10, 1, "little")),
+                            ),
+                        )
+                if i == 0:
+                    item.p_addr = 0
+                    item.addr = INV_ADDR
+                    item.n_addr = item.addr + 0x10
+                    self.inventory[player][i] = item
+                    continue
+                item.addr = INV_ADDR + (0x10 * i)
+                item.p_addr = item.addr - 0x10
+                if i == (len(self.inventory[player]) - 1):
+                    item.n_addr = 0
+                    self.inventory[player][i] = item
+                    break
+                item.n_addr = item.addr + 0x10
+                self.inventory[player][i] = item
+
+            for item in self.inventory[player]:
+                await self.write_item(item)
+
+            for i, raw in enumerate(self.inventory_raw[player].split[len(self.inventory[player]):], len(self.inventory[player])):
+                item = InventoryEntry(raw, i)
+                if item.type != bytes([0, 0, 0]):
+                    await self.write_item(
+                        InventoryEntry(
+                            bytes([0, 0, 0, 0, 0, 0, 0, 0])
+                            + int.to_bytes(item.addr + 0x10, 3, "little")
+                            + bytes([0xE0, 0, 0, 0, 0]),
+                            i,
                         ),
                     )
-            if i == 0:
-                item.p_addr = 0
-                item.addr = INV_ADDR
-                item.n_addr = item.addr + 0x10
-                self.inventory[i] = item
-                continue
-            item.addr = INV_ADDR + (0x10 * i)
-            item.p_addr = item.addr - 0x10
-            if i == (len(self.inventory) - 1):
-                item.n_addr = 0
-                self.inventory[i] = item
-                break
-            item.n_addr = item.addr + 0x10
-            self.inventory[i] = item
 
-        for item in self.inventory:
-            await self.write_inv(item)
+            await self.socket.write(
+                message_format(WRITE, param_format(INV_UPDATE_ADDR + (4 * player), int.to_bytes(self.inventory[player][-1].addr, 3, "little"))),
+            )
+            await self.socket.write(
+                message_format(WRITE,
+                               param_format(INV_LAST_ADDR + (4 * player), int.to_bytes(self.inventory[player][-1].addr + 0x10, 3, "little"))),
+            )
 
-        for i, raw in enumerate(self.inventory_raw.split[len(self.inventory):], len(self.inventory)):
-            item = InventoryEntry(raw, i)
-            if item.type != bytes([0, 0, 0]):
-                await self.write_inv(
-                    InventoryEntry(
-                        bytes([0, 0, 0, 0, 0, 0, 0, 0])
-                        + int.to_bytes(item.addr + 0x10, 3, "little")
-                        + bytes([0xE0, 0, 0, 0, 0]),
-                        i,
-                    ),
-                )
-
-        await self.socket.write(
-            message_format(WRITE, param_format(INV_UPDATE_ADDR, int.to_bytes(self.inventory[-1].addr, 3, "little"))),
-        )
-        await self.socket.write(
-            message_format(WRITE,
-                           param_format(INV_LAST_ADDR, int.to_bytes(self.inventory[-1].addr + 0x10, 3, "little"))),
-        )
-
-        await self.socket.write(f"{WRITE} 0xC6BF0 0x{format(self.inv_count(), 'x')}")
+            await self.socket.write(f"{WRITE} 0x{format(0xC6BF0 + (4 * player), 'x')} 0x{format(self.inv_count(player), 'x')}")
 
     # Add new item to inventory
     # Call refactor at the end to write it into ram correctly
@@ -392,10 +410,12 @@ class GauntletLegendsContext(CommonContext):
         if name in timers:
             new.count *= 0x96
         new.type = name_to_type(name)
-        await self.inv_refactor(new)
+        for player in range(self.players):
+            self.inventory[player] += [new]
+        await self.inv_refactor()
 
     # Write a single item entry into RAM
-    async def write_inv(self, item: InventoryEntry):
+    async def write_item(self, item: InventoryEntry):
         b = (
                 int.to_bytes(item.on, 1)
                 + item.type
@@ -403,7 +423,7 @@ class GauntletLegendsContext(CommonContext):
                 + int.to_bytes(item.p_addr, 3, "little")
                 + (int.to_bytes(0xE0) if item.p_addr != 0 else int.to_bytes(0x0))
                 + int.to_bytes(item.n_addr, 3, "little")
-                + (int.to_bytes(0xE0) if item.n_addr != 0 else bytes())
+                + (int.to_bytes(0xE0) if item.n_addr != 0 else int.to_bytes(0x0))
         )
         await self.socket.write(message_format(WRITE, param_format(item.addr, b)))
 
@@ -419,6 +439,7 @@ class GauntletLegendsContext(CommonContext):
             self.glslotdata = args["slot_data"]
             if self.socket.status():
                 self.retro_connected = True
+                self.players = self.glslotdata["players"]
             else:
                 raise Exception("Retroarch not detected. Please open you patched ROM in Retroarch.")
         elif cmd == "Retrieved":
@@ -441,24 +462,29 @@ class GauntletLegendsContext(CommonContext):
     # Update inventory based on items received from server
     # Also adds starting items based on a few yaml options
     async def handle_items(self):
-        compass = await self.item_from_name("Compass")
+        compass = None
+        for player in range(self.players):
+            compass = await self.item_from_name("Compass", player)
+            if compass == None:
+                return
         if compass is not None:
-            if self.glslotdata["character"] != 0:
-                temp = await self.item_from_name(characters[self.glslotdata["character"] - 1])
-                if temp is None:
-                    await self.inv_update(characters[self.glslotdata["character"] - 1], 50)
-            temp = await self.item_from_name("Key")
-            if temp is None and self.glslotdata["keys"] == 1:
-                await self.inv_update("Key", 9000)
-            temp = await self.item_from_name("Speed Boots")
-            if temp is None and self.glslotdata["speed"] == 1:
-                await self.inv_update("Speed Boots", 2000)
-            i = compass.count
-            if i - 1 < len(self.items_received):
-                for index in range(i - 1, len(self.items_received)):
-                    item = self.items_received[index].item
-                    await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
-                await self.inv_update("Compass", len(self.items_received) + 1)
+            for player in range(self.players):
+                if self.glslotdata["characters"][player] != 0:
+                    temp = await self.item_from_name(characters[self.glslotdata["character"] - 1], player)
+                    if temp is None:
+                        await self.inv_update(characters[self.glslotdata["character"] - 1], 50)
+                temp = await self.item_from_name("Key", player)
+                if temp is None and self.glslotdata["keys"] == 1:
+                    await self.inv_update("Key", 9000)
+                temp = await self.item_from_name("Speed Boots", player)
+                if temp is None and self.glslotdata["speed"] == 1:
+                    await self.inv_update("Speed Boots", 2000)
+        i = compass.count
+        if i - 1 < len(self.items_received):
+            for index in range(i - 1, len(self.items_received)):
+                item = self.items_received[index].item
+                await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
+        await self.inv_update("Compass", len(self.items_received) + 1)
 
     # Read current timer in RAM
     async def read_time(self) -> int:
@@ -588,7 +614,7 @@ class GauntletLegendsContext(CommonContext):
                     self.locations_checked += [self.item_locations[i].id]
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
-            ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name])
+            ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name], 0)
             if ob:
                 self.locations_checked += [self.obelisk_locations[j].id]
                 acquired += [self.obelisk_locations[j].id]
@@ -800,7 +826,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     checking = await ctx.location_loop()
                     if checking:
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
-                    bitwise = await ctx.inv_bitwise("Hell", 0x100)
+                    bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
                     if not ctx.finished_game and bitwise:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
