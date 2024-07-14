@@ -286,7 +286,7 @@ def turtle_zone_2_coins(state, player, coins):
         if state.has("Water Physics", player):
             reachable_coins += 6
     else:
-        reachable_coins += 3
+        reachable_coins += 2
         if state.has("Water Physics", player):
             reachable_coins += 20
         elif state.has("Turtle Zone 2 Midway Bell", player):
