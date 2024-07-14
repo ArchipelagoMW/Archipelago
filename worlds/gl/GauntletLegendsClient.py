@@ -110,10 +110,10 @@ def name_to_type(name) -> bytes:
 
 
 class InventoryEntry:
-    def __init__(self, arr=None, index=None):
+    def __init__(self, arr=None, index=None, player=None):
         if arr is not None:
             self.raw = arr
-            self.addr = 0xC5BF0 + (index * 0x10)
+            self.addr = 0xC5BF0 + (0x400 * player) + (index * 0x10)
             self.on: int = arr[0]
             self.type: bytes = arr[1:4]
             self.name = type_to_name(self.type)
@@ -207,15 +207,15 @@ class GauntletLegendsContext(CommonContext):
     async def inv_read(self):
         self.inventory = []
         self.inventory_raw = []
-        for i in range(self.players):
+        for player in range(self.players):
             _inv: List[InventoryEntry] = []
-            b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR + (0x400 * i), 'x')} 1008")))
+            b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR + (0x400 * player), 'x')} 1008")))
             if b is None:
                 return
             b.iterate(0x10)
             self.inventory_raw += [b]
             for i, arr in enumerate(b.split):
-                _inv += [InventoryEntry(arr, i)]
+                _inv += [InventoryEntry(arr, i, player)]
             for i in range(len(_inv)):
                 if _inv[i].p_addr == 0:
                     _inv = _inv[i:]
@@ -315,7 +315,7 @@ class GauntletLegendsContext(CommonContext):
 
     # Update item count of an item.
     # If the item is new, add it to your inventory
-    async def inv_update(self, name: str, count: int):
+    async def inv_update(self, name: str, count: int, one=None):
         await self.inv_read()
         if "Runestone" in name:
             name = "Runestone"
@@ -325,8 +325,32 @@ class GauntletLegendsContext(CommonContext):
             name = "Obelisk"
         if "Mirror" in name:
             name = "Mirror Shard"
-        for player in range(self.players):
-            for item in self.inventory[player]:
+        zero = False
+        if one is None:
+            for player in range(self.players):
+                added = False
+                for item in self.inventory[player]:
+                    if item.name == name:
+                        zero = item.count == 0
+                        if name in timers:
+                            count *= 96
+                        if "Compass" in name:
+                            item.count = count
+                        elif "Health" in name:
+                            max = await self.item_from_name("Max", player)
+                            item.count = min(item.count + count, max.count)
+                        elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
+                            item.count |= count
+                        else:
+                            item.count += count
+                        await self.write_item(item)
+                        added = True
+                if not added:
+                    await self.inv_add(name, count, player)
+            if zero:
+                await self.inv_refactor()
+        else:
+            for item in self.inventory[one]:
                 if item.name == name:
                     zero = item.count == 0
                     if name in timers:
@@ -334,7 +358,7 @@ class GauntletLegendsContext(CommonContext):
                     if "Compass" in name:
                         item.count = count
                     elif "Health" in name:
-                        max = await self.item_from_name("Max", player)
+                        max = await self.item_from_name("Max", one)
                         item.count = min(item.count + count, max.count)
                     elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
                         item.count |= count
@@ -343,29 +367,35 @@ class GauntletLegendsContext(CommonContext):
                     await self.write_item(item)
                     if zero:
                         await self.inv_refactor()
-                else:
-                    await self.inv_add(name, count)
+                    return
+            await self.inv_add(name, count, one)
 
     # Rewrite entire inventory in RAM.
     # This is necessary since item entries are not cleared after full use until a level is completed.
-    async def inv_refactor(self):
+    async def inv_refactor(self, new=None, one=None):
         await self.inv_read()
+        if new is not None:
+            if one is None:
+                for player in range(self.players):
+                    self.inventory[player] += [new]
+            else:
+                self.inventory[one] += [new]
         for player in range(self.players):
             for i, item in enumerate(self.inventory[player]):
                 if item.name is not None:
                     if "Potion" in item.name and item.count != 0:
                         await self.socket.write(
                             message_format(
-                                WRITE, param_format(ACTIVE_POTION, int.to_bytes(item.type[2] // 0x10, 1, "little")),
+                                WRITE, param_format(ACTIVE_POTION + (0x1F0 * player), int.to_bytes(item.type[2] // 0x10, 1, "little")),
                             ),
                         )
                 if i == 0:
                     item.p_addr = 0
-                    item.addr = INV_ADDR
+                    item.addr = INV_ADDR + (0x400 * player)
                     item.n_addr = item.addr + 0x10
                     self.inventory[player][i] = item
                     continue
-                item.addr = INV_ADDR + (0x10 * i)
+                item.addr = INV_ADDR + (0x400 * player) + (0x10 * i)
                 item.p_addr = item.addr - 0x10
                 if i == (len(self.inventory[player]) - 1):
                     item.n_addr = 0
@@ -378,7 +408,7 @@ class GauntletLegendsContext(CommonContext):
                 await self.write_item(item)
 
             for i, raw in enumerate(self.inventory_raw[player].split[len(self.inventory[player]):], len(self.inventory[player])):
-                item = InventoryEntry(raw, i)
+                item = InventoryEntry(raw, i, player)
                 if item.type != bytes([0, 0, 0]):
                     await self.write_item(
                         InventoryEntry(
@@ -386,7 +416,7 @@ class GauntletLegendsContext(CommonContext):
                             + int.to_bytes(item.addr + 0x10, 3, "little")
                             + bytes([0xE0, 0, 0, 0, 0]),
                             i,
-                        ),
+                        player),
                     )
 
             await self.socket.write(
@@ -401,7 +431,7 @@ class GauntletLegendsContext(CommonContext):
 
     # Add new item to inventory
     # Call refactor at the end to write it into ram correctly
-    async def inv_add(self, name: str, count: int):
+    async def inv_add(self, name: str, count: int, one=None):
         new = InventoryEntry()
         new.name = name
         if name == "Key":
@@ -410,9 +440,7 @@ class GauntletLegendsContext(CommonContext):
         if name in timers:
             new.count *= 0x96
         new.type = name_to_type(name)
-        for player in range(self.players):
-            self.inventory[player] += [new]
-        await self.inv_refactor()
+        await self.inv_refactor(new, one)
 
     # Write a single item entry into RAM
     async def write_item(self, item: InventoryEntry):
@@ -465,26 +493,26 @@ class GauntletLegendsContext(CommonContext):
         compass = None
         for player in range(self.players):
             compass = await self.item_from_name("Compass", player)
-            if compass == None:
-                return
+            if compass is None:
+                break
         if compass is not None:
             for player in range(self.players):
                 if self.glslotdata["characters"][player] != 0:
-                    temp = await self.item_from_name(characters[self.glslotdata["character"] - 1], player)
+                    temp = await self.item_from_name(characters[self.glslotdata["characters"][player] - 1], player)
                     if temp is None:
-                        await self.inv_update(characters[self.glslotdata["character"] - 1], 50)
+                        await self.inv_update(characters[self.glslotdata["characters"][player] - 1], 50, player)
                 temp = await self.item_from_name("Key", player)
                 if temp is None and self.glslotdata["keys"] == 1:
-                    await self.inv_update("Key", 9000)
+                    await self.inv_update("Key", 9000, player)
                 temp = await self.item_from_name("Speed Boots", player)
                 if temp is None and self.glslotdata["speed"] == 1:
-                    await self.inv_update("Speed Boots", 2000)
-        i = compass.count
-        if i - 1 < len(self.items_received):
-            for index in range(i - 1, len(self.items_received)):
-                item = self.items_received[index].item
-                await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
-        await self.inv_update("Compass", len(self.items_received) + 1)
+                    await self.inv_update("Speed Boots", 2000, player)
+            i = compass.count
+            if i - 1 < len(self.items_received):
+                for index in range(i - 1, len(self.items_received)):
+                    item = self.items_received[index].item
+                    await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
+            await self.inv_update("Compass", len(self.items_received) + 1)
 
     # Read current timer in RAM
     async def read_time(self) -> int:
