@@ -1744,6 +1744,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # replace the sword rule with this one
         combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", set_instead=True)
+        combat_logic_to_loc("Swamp - [South Graveyard] Guarded By Big Skeleton", "Swamp", dagger=True)
         # don't really agree with this one but eh
         combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp", dagger=True, laurel=True)
         # the tentacles deal with everything else reasonably, and you can hide on the island, so no rule for it
