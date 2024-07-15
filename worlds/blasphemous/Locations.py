@@ -71,7 +71,7 @@ location_names: Dict[str, str] = {
     "RESCUED_CHERUB_13": "DC: Upper east Child of Moonlight",
     "Oil[D01Z05S07]": "DC: Oil of the Pilgrims",
     "QI12": "DC: Behind gate in miasma room",
-    "RESCUED_CHERUB_14": "DC: Child of moonlight, miasma room",
+    "RESCUED_CHERUB_14": "DC: Child of Moonlight, miasma room",
     "QI45": "DC: Lower east tunnel chest",
     "RESCUED_CHERUB_12": "DC: Child of Moonlight, behind pillar",
     "RESCUED_CHERUB_11": "DC: Child of Moonlight, above water",
