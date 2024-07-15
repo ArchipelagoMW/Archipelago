@@ -296,10 +296,9 @@ def get_money_count(state: CollectionState, player: int) -> int:
     money += state.count("Money x255", player) * 255  # 1 in pool
     money += state.count("Money x200", player) * 200  # 1 in pool
     money += state.count("Money x128", player) * 128  # 3 in pool
-    money += state.count("Money x100", player) * 100  # 5 in pool
-    # total from regular money: 1,339
+    # total from regular money: 839
     # first effigy is 8, doubles until it reaches 512 at number 7, after effigy 28 they stop dropping money
-    # with the vanilla count of 12, you get a total of 3,576 money
+    # with the vanilla count of 12, you get 3,576 money from effigies
     effigy_count = min(28, state.count("Effigy", player))  # 12 in pool
     money_per_break = 8
     for _ in range(effigy_count):
