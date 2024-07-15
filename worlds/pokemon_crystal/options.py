@@ -86,7 +86,7 @@ class TrainersanityAlerts(Choice):
     """
     Shows a message box or plays a sound for Trainersanity checks
     """
-    display_name = "Trainersanity"
+    display_name = "Trainersanity Alerts"
     default = 1
     option_no_alerts = 0
     option_message_box = 1
