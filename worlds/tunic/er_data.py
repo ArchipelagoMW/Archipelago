@@ -1528,9 +1528,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
     "Rooted Ziggurat Lower Back": {
-        # don't need to include the LS2 destinations, the LS1 covers it all
         "Rooted Ziggurat Lower Entry":
-            [["LS1"]],
+            [["LS2"]],
         "Rooted Ziggurat Lower Mid Checkpoint":
             [["Hyperdash"], ["IG1"]],
         "Rooted Ziggurat Portal Room Entrance":
