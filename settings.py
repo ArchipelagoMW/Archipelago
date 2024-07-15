@@ -807,10 +807,12 @@ class Settings(Group):
         # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
         with open(temp_location, "w", encoding="utf-8") as f:
             self.dump(f)
-        # replace old with new
-        if os.path.exists(location):
+        # replace old with new, try atomic operation first
+        try:
+            os.rename(temp_location, location)
+        except (OSError, FileExistsError):
             os.unlink(location)
-        os.rename(temp_location, location)
+            os.rename(temp_location, location)
         self._filename = location
 
     def dump(self, f: TextIO, level: int = 0) -> None:
