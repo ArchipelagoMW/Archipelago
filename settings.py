@@ -798,6 +798,7 @@ class Settings(Group):
             atexit.register(autosave)
 
     def save(self, location: Optional[str] = None) -> None:  # as above
+        from Utils import parse_yaml
         location = location or self._filename
         assert location, "No file specified"
         temp_location = location + ".tmp"  # not using tempfile to test expected file access
@@ -807,6 +808,12 @@ class Settings(Group):
         # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
         with open(temp_location, "w", encoding="utf-8") as f:
             self.dump(f)
+            f.flush()
+            if hasattr(os, "fsync"):
+                os.fsync(f.fileno())
+        # validate new file is valid yaml
+        with open(temp_location, encoding="utf-8") as f:
+            parse_yaml(f.read())
         # replace old with new, try atomic operation first
         try:
             os.rename(temp_location, location)
