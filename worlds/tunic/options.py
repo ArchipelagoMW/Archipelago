@@ -168,32 +168,17 @@ class TunicPlandoConnections(PlandoConnections):
 
 class CombatLogic(Choice):
     """
-    If enabled, the player will logically require a combination of stat upgrade items and equipment to get most checks, with a goal of matching the vanilla combat difficulty.
-    Note that this option marks many more items as progression and may force weapons much earlier than normal.
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
     Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
-    If disabled, the standard logic is used.
+    If disabled, the standard, looser logic is used.
     """
     internal_name = "combat_logic"
-    display_name = "Combat Logic"
+    display_name = "More Combat Logic"
     option_off = 0
     option_bosses_only = 1
     option_on = 2
-    default = 2
-
-
-class TempCombatOption(Choice):
-    """
-    Temporary option for testing combat logic.
-    Choose a boss, and it will be the goal for the purpose of generation.
-    The client will not goal when you kill that boss (unless it's the heir).
-    This is purely for testing spoiler outputs.
-    """
-    display_name = "Test Combat Goal"
-    option_off = 0
-    option_siege_engine = 2
-    option_librarian = 3
-    option_scav_boss = 4
-    option_gauntlet = 5
     default = 0
 
 
@@ -271,7 +256,6 @@ class TunicOptions(PerGameCommonOptions):
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
     combat_logic: CombatLogic
-    test_combat_option: TempCombatOption
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
