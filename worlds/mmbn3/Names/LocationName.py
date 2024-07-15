@@ -210,6 +210,7 @@ class LocationName():
     WWW_Control_Room_1_Screen = "WWW Control Room 1 Screen"
     WWW_Wilys_Desk = "WWW Wily's Desk"
     Undernet_4_Pillar_Prog = "Undernet 4 Pillar Prog"
+    Serenade = "Serenade"
 
     ## Numberman Codes
     Numberman_Code_01 = "Numberman Code 01"
