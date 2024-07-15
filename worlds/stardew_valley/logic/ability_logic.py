@@ -1,6 +1,7 @@
 from typing import Union
 
 from .base_logic import BaseLogicMixin, BaseLogic
+from .cooking_logic import CookingLogicMixin
 from .mine_logic import MineLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
