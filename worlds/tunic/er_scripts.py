@@ -258,6 +258,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         for connection in plando_connections:
             p_entrance = connection.entrance
             p_exit = connection.exit
+            # if you plando secret gathering place, need to know that during portal pairing
+            if "Secret Gathering Place Exit" in [p_entrance, p_exit]:
+                waterfall_plando = True
             portal1_dead_end = True
             portal2_dead_end = True
 
@@ -347,7 +350,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     else:
                         raise Exception(f"{player_name} paired a dead end to a dead end in their "
                                         "plando connections.")
-                waterfall_plando = True
             portal_pairs[portal1] = portal2
 
         # if we have plando connections, our connected regions may change somewhat
