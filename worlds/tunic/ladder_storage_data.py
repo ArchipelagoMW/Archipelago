@@ -160,7 +160,8 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Quarry Back", "Quarry Redux, Monastery_back"),
 
     LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_2_"),
-    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Front", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Entry", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Mid Checkpoint", dest_is_region=True),
 
     # Swamp to Overworld upper
     LadderInfo("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall", "Ladders in Swamp"),
