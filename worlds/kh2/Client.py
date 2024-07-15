@@ -615,7 +615,6 @@ class KH2Context(CommonContext):
         # if journal=-1 and shop = 5 then in shop
         # if journal !=-1 and shop = 10 then journal
 
-        #todo:get these addresses updated
         journal = self.kh2_read_short(self.Journal)
         shop = self.kh2_read_short(self.Shop)
         if (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
