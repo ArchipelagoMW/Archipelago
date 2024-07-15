@@ -351,10 +351,6 @@ def set_rules(world: "MLSSWorld", excluded):
         lambda state: StateLogic.ultra(state, world.player),
     )
     add_rule(
-        world.get_location(LocationName.TeeheeValleySoloLuigiMazeRoom1Block),
-        lambda state: StateLogic.ultra(state, world.player),
-    )
-    add_rule(
         world.get_location(LocationName.OhoOasisFirebrand),
         lambda state: StateLogic.canMini(state, world.player),
     )
