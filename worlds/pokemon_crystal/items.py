@@ -6,7 +6,7 @@ from .data import data
 
 class PokemonCrystalItem(Item):
     game: str = "Pokemon Crystal"
-    ags: FrozenSet[str]
+    tags: FrozenSet[str]
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int) -> None:
         super().__init__(name, classification, code, player)

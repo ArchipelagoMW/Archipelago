@@ -159,6 +159,7 @@ class StaticPokemon(NamedTuple):
 
 class PokemonCrystalData:
     rom_version: int
+    rom_version_11: int
     rom_addresses: Dict[str, int]
     ram_addresses: Dict[str, int]
     event_flags: Dict[str, int]
@@ -217,6 +218,7 @@ def _init() -> None:
     tmhm_data = data_json["tmhm"]
 
     data.rom_version = data_json["rom_version"]
+    data.rom_version_11 = data_json["rom_version_11"]
 
     claimed_locations: Set[str] = set()
 
@@ -281,8 +283,11 @@ def _init() -> None:
             item_classification,
             frozenset(attributes["tags"])
         )
-        if attributes["name"].startswith("TM") and item_constant_name != "TM_ROCK_SMASH":
+
+        if "TM" in attributes["tags"] and item_constant_name != "TM_ROCK_SMASH":
+            # Make a copy of the TM item without the move name for randomized TMs
             tm_num = attributes["name"][2:4]
+            # Offset by 256 from normal TM item code
             data.items[item_codes[item_constant_name] + 256] = ItemData(
                 "TM" + tm_num,
                 item_codes[item_constant_name],

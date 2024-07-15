@@ -30,8 +30,8 @@ from .wild import randomize_wild_pokemon, randomize_static_pokemon
 
 class PokemonCrystalSettings(settings.Group):
     class RomFile(settings.UserFilePath):
-        description = "Pokemon Crystal (UE) (V1.0) ROM File"
-        copy_to = "Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc"
+        description = "Pokemon Crystal (UE) (V1.0 or V1.1) ROM File"
+        copy_to = "Pokemon - Crystal Version (UE) [C][!].gbc"
         md5s = ["9f2922b235a5eeb78d65594e82ef5dde"]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
@@ -158,6 +158,7 @@ class PokemonCrystalWorld(World):
         for location in item_locations:
             item_code = location.default_item_code
             if item_code > 0 and get_item_classification(item_code) != ItemClassification.filler:
+                # If TMs are randomized, TM items without move names are added to the pool
                 if item_code in crystal_data.tm_replace_map and self.options.randomize_tm_moves:
                     default_itempool += [self.create_item_by_code(item_code + 256)]
                 else:
@@ -243,6 +244,7 @@ class PokemonCrystalWorld(World):
 
         patch = PokemonCrystalProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
+        patch.write_file("basepatch11.bsdiff4", pkgutil.get_data(__name__, "data/basepatch11.bsdiff4"))
         generate_output(self, output_directory, patch)
 
     def fill_slot_data(self) -> Dict[str, Any]:

@@ -2,14 +2,31 @@ import copy
 import os
 from typing import TYPE_CHECKING
 
+import bsdiff4
+
 from settings import get_settings
-from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .data import data
 from .items import item_const_name_to_id
 from .utils import convert_to_ingame_text
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
+
+
+class PokemonCrystalAPPatchExtension(APPatchExtension):
+    game = "Pokemon Crystal"
+
+    @staticmethod
+    def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str):
+        revision_address = data.rom_addresses["AP_ROM_Revision"]
+        rom_bytes = bytearray(rom)
+        if rom_bytes[revision_address] == 1:
+            if "basepatch11.bsdiff4" not in caller.files:
+                raise Exception("This patch was generated without support for Pokemon Crystal V1.1 ROM. "
+                                "Please regenerate with a newer APWorld version or use a V1.0 ROM")
+            return bsdiff4.patch(rom, caller.get_file("basepatch11.bsdiff4"))
+        return bsdiff4.patch(rom, caller.get_file(patch))
 
 
 class PokemonCrystalProcedurePatch(APProcedurePatch, APTokenMixin):
