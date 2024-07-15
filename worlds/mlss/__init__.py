@@ -55,7 +55,7 @@ class MLSSWorld(World):
     settings: typing.ClassVar[MLSSSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 5, 0)
 
     disabled_locations: List[str]
 
@@ -135,21 +135,7 @@ class MLSSWorld(World):
             filler_items += [item.itemName for _ in range(freq)]
 
         # And finally take as many fillers as we need to have the same amount of items and locations.
-        remaining = len(all_locations) - len(required_items) - 5
-        if self.options.castle_skip:
-            remaining -= len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0)
-        if self.options.skip_minecart and self.options.chuckle_beans == 2:
-            remaining -= 1
-        if self.options.disable_surf:
-            remaining -= 1
-        if self.options.harhalls_pants:
-            remaining -= 1
-        if self.options.chuckle_beans == 0:
-            remaining -= 192
-        if self.options.chuckle_beans == 1:
-            remaining -= 59
-        if not self.options.coins:
-            remaining -= len(coins)
+        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 5
 
         self.multiworld.itempool += [
             self.create_item(filler_item_name) for filler_item_name in self.random.sample(filler_items, remaining)

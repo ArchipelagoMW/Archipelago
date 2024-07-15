@@ -88,7 +88,7 @@ class MLSSPatchExtension(APPatchExtension):
             return rom
         stream = io.BytesIO(rom)
 
-        for location in all_locations:
+        for location in [location for location in all_locations if location.itemType == 0]:
             stream.seek(location.id - 6)
             b = stream.read(1)
             if b[0] == 0x10 and options["block_visibility"] == 1:
@@ -333,7 +333,7 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
             continue
         if not world.options.coins and "Coin" in location_name:
             continue
-        location = world.multiworld.get_location(location_name, world.player)
+        location = world.get_location(location_name)
         item = location.item
         address = [address for address in all_locations if address.name == location.name]
         item_inject(world, patch, location.address, address[0].itemType, item)
