@@ -1432,7 +1432,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Rooted Ziggurat Lower Back": {
         "Rooted Ziggurat Lower Front":
-            [["Hyperdash"], ["LS1"], ["IG1"]],
+            [["Hyperdash"], ["LS2"], ["IG1"]],
         "Rooted Ziggurat Portal Room Entrance":
             [],
     },
