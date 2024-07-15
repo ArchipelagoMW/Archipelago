@@ -105,6 +105,7 @@ class TunicWorld(World):
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+                self.options.combat_logic.value = passthrough["combat_logic"]
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -390,6 +391,7 @@ class TunicWorld(World):
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "shuffle_ladders": self.options.shuffle_ladders.value,
+            "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
