@@ -172,7 +172,7 @@ class CombatLogic(Choice):
     The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
     This option marks many more items as progression and may force weapons much earlier than normal.
     Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
-    If disabled, the standard, looser logic is used.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
     """
     internal_name = "combat_logic"
     display_name = "More Combat Logic"
