@@ -222,7 +222,7 @@ overworlds = [
     LocationData(LocationName.WWW_Control_Room_1_Screen,          0xb310ac, 0x200024d, 0x40, 0x7596C4, 222, [3, 4]),
     LocationData(LocationName.WWW_Wilys_Desk,                     0xb310ad, 0x200024d, 0x2, 0x759384, 229, [3]),
     LocationData(LocationName.Undernet_4_Pillar_Prog,             0xb310ae, 0x2000161, 0x1, 0x7746C8, 191, [0, 1]),
-    LocationData(LocationName.Serenade,                           0xb3110f, 0x2000178, 0x40, 0x7B3C74, 1, 0)
+    LocationData(LocationName.Serenade,                           0xb3110f, 0x2000178, 0x40, 0x7B3C74, 1, [0])
 ]
 
 jobs = [
@@ -252,7 +252,7 @@ jobs = [
     LocationData(LocationName.Hide_and_seek_Second_Child, 0xb310c5, 0x2000188, 0x2, 0x75ADA8, 191, [0]),
     LocationData(LocationName.Hide_and_seek_Third_Child,  0xb310c6, 0x2000188, 0x1, 0x75B5EC, 191, [0]),
     LocationData(LocationName.Hide_and_seek_Fourth_Child, 0xb310c7, 0x2000189, 0x80, 0x75BEB0, 191, [0]),
-    LocationData(LocationName.Hide_and_seek_Completion,   0xb310c8, 0x2000302, 0x8, 0x7406A0, 193, [0]),
+    LocationData(LocationName.Hide_and_seek_Completion,   0xb310c8, 0x2000302, 0x8, 0x742D40, 193, [0]),
     LocationData(LocationName.Finding_the_blue_Navi,      0xb310c9, 0x2000302, 0x4, 0x773700, 192, [0]),
     LocationData(LocationName.Give_your_support,          0xb310ca, 0x2000302, 0x2, 0x752D80, 192, [0]),
     LocationData(LocationName.Stamp_collecting,           0xb310cb, 0x2000302, 0x1, 0x756074, 193, [0]),
