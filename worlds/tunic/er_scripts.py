@@ -426,6 +426,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                             cr.add(portal.region)
                             if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_tricks):
                                 continue
+                        # if not waterfall_plando, then we just want to pair secret gathering place now
                         elif portal.region != "Secret Gathering Place":
                             continue
                     portal2 = portal
