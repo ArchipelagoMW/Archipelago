@@ -3,6 +3,7 @@ Application settings / host.yaml interface using type hints.
 This is different from player options.
 """
 
+import os
 import os.path
 import shutil
 import sys
@@ -11,7 +12,6 @@ import warnings
 from enum import IntEnum
 from threading import Lock
 from typing import cast, Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, Union, TypeVar
-import os
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -832,7 +832,6 @@ def get_settings() -> Settings:
     with _lock:  # make sure we only have one instance
         res = getattr(get_settings, "_cache", None)
         if not res:
-            import os
             from Utils import user_path, local_path
             filenames = ("options.yaml", "host.yaml")
             locations: List[str] = []
