@@ -103,8 +103,8 @@ class SC2Mission(Enum):
     LIBERATION_DAY = 1, "Liberation Day", SC2Campaign.WOL, "Mar Sara", SC2Race.ANY, MissionPools.STARTER, "ap_liberation_day", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
     THE_OUTLAWS = 2, "The Outlaws (Terran)", SC2Campaign.WOL, "Mar Sara", SC2Race.TERRAN, MissionPools.EASY, "ap_the_outlaws", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     ZERO_HOUR = 3, "Zero Hour (Terran)", SC2Campaign.WOL, "Mar Sara", SC2Race.TERRAN, MissionPools.EASY, "ap_zero_hour", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
-    EVACUATION = 4, "Evacuation", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.EASY, "ap_evacuation", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsZerg
-    OUTBREAK = 5, "Outbreak", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.EASY, "ap_outbreak", MissionFlag.Terran|MissionFlag.Defense|MissionFlag.VsZerg
+    EVACUATION = 4, "Evacuation (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.EASY, "ap_evacuation", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
+    OUTBREAK = 5, "Outbreak (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.EASY, "ap_outbreak", MissionFlag.Terran|MissionFlag.Defense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     SAFE_HAVEN = 6, "Safe Haven", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_safe_haven", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss
     HAVENS_FALL = 7, "Haven's Fall", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Terran|MissionFlag.VsZerg
     SMASH_AND_GRAB = 8, "Smash and Grab (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.HasRaceSwap
@@ -202,8 +202,10 @@ class SC2Mission(Enum):
     THE_OUTLAWS_P = 87, "The Outlaws (Protoss)", SC2Campaign.WOL, "Mar Sara", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_outlaws", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
     ZERO_HOUR_Z = 88, "Zero Hour (Zerg)", SC2Campaign.WOL, "Mar Sara", SC2Race.ZERG, MissionPools.EASY, "ap_zero_hour", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     ZERO_HOUR_P = 89, "Zero Hour (Protoss)", SC2Campaign.WOL, "Mar Sara", SC2Race.PROTOSS, MissionPools.EASY, "ap_zero_hour", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
-    # 90/91 - Evacuation
-    # 92/93 - Outbreak
+    EVACUATION_Z = 90, "Evacuation (Zerg)", SC2Campaign.WOL, "Colonist", SC2Race.ZERG, MissionPools.EASY, "ap_evacuation", MissionFlag.Zerg|MissionFlag.AutoScroller|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    EVACUATION_P = 91, "Evacuation (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.EASY, "ap_evacuation", MissionFlag.Protoss|MissionFlag.AutoScroller|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    OUTBREAK_Z = 92, "Outbreak (Zerg)", SC2Campaign.WOL, "Colonist", SC2Race.ZERG, MissionPools.EASY, "ap_outbreak", MissionFlag.Zerg|MissionFlag.Defense|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    OUTBREAK_P = 93, "Outbreak (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.EASY, "ap_outbreak", MissionFlag.Protoss|MissionFlag.Defense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 94/95 - Safe Haven
     # 96/97 - Haven's Fall
     SMASH_AND_GRAB_Z = 98, "Smash and Grab (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
