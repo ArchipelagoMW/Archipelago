@@ -1,7 +1,5 @@
-from worlds.adventure import location_table
-from worlds.adventure.Options import BatLogic, DifficultySwitchB, DifficultySwitchA
+from .Options import BatLogic, DifficultySwitchB
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
-from BaseClasses import LocationProgressType
 
 
 def set_rules(self) -> None:
