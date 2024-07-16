@@ -409,7 +409,6 @@ class SC2MissionOrder:
     fixed_missions: Set[SC2MOGenMission]
     mission_pools: SC2MOGenMissionPools
     goal_missions: Set[SC2MOGenMission]
-    single_layout_campaigns: Set[str]
     max_steps: int
 
     def __init__(self, world: World, data: Dict[str, Any]):
@@ -417,7 +416,6 @@ class SC2MissionOrder:
         self.sorted_missions = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
         self.fixed_missions = set()
         self.mission_pools = SC2MOGenMissionPools()
-        self.single_layout_campaigns = set()
         self.goal_missions = set()
 
         for (campaign_name, campaign_data) in data.items():
@@ -1038,7 +1036,7 @@ class SC2MOGenLayout:
     def get_slot_data(self) -> LayoutSlotData:
         mission_slots = [
             [
-                self.missions[idx].get_slot_data()._asdict() if idx >= 0 else MissionSlotData.empty()
+                self.missions[idx].get_slot_data().as_dict() if idx >= 0 else MissionSlotData.empty().as_dict()
                 for idx in column
             ]
             for column in self.layout_type.get_visual_layout()
@@ -1144,7 +1142,7 @@ class SC2MOGenMission:
         return MissionSlotData(
             self.mission.id,
             {mission.mission.id for mission in self.prev},
-            self.entry_rule.to_slot_data().as_dict()
+            self.entry_rule.to_slot_data()
         )
 
 class CampaignSlotData(NamedTuple):
@@ -1164,7 +1162,12 @@ class MissionSlotData(NamedTuple):
 
     @staticmethod
     def empty() -> MissionSlotData:
-        return MissionSlotData(-1, SubRuleRuleData.empty())
+        return MissionSlotData(-1, set(), SubRuleRuleData.empty())
+    
+    def as_dict(self) -> Dict[str, Any]:
+        result = self._asdict()
+        result["entry_rule"] = self.entry_rule.as_dict()
+        return result
 
 # TODO band-aid for ..regions circular import
 def create_location(player: int, location_data: 'LocationData', region: Region,

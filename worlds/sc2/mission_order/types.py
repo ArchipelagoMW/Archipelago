@@ -134,3 +134,155 @@ class Grid(LayoutType):
             for x in range(self.width)
         ]
         return columns
+    
+class Hopscotch(LayoutType):
+    """Alternating between one and two available missions.
+    Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
+
+    # 0 2
+    # 1 3 5
+    #   4 6
+    #     7
+
+    def __init__(self, size: int, limit: int):
+        super().__init__(size, limit)
+    
+    def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
+        slots = [mission_factory() for _ in range(self.size)]
+        slots[0].option_entrance = True
+        slots[-1].option_exit = True
+
+        cycle = 0
+        for idx in range(self.size):
+            match cycle:
+                case 0:
+                    indices = [idx + 1, idx + 2]
+                    cycle = 2
+                case 1:
+                    indices = [idx + 1]
+                    cycle -= 1
+                case 2:
+                    indices = [idx + 2]
+                    cycle -= 1
+            for next_idx in indices:
+                if next_idx < self.size:
+                    slots[idx].next.add(slots[next_idx])
+        
+        return slots
+    
+    @staticmethod
+    def space_at_column(idx: int) -> List[int]:
+        # -1 0 1 2 3 4 5
+        amount = idx - 1
+        if amount > 0:
+            return [-1 for _ in range(amount)]
+        else:
+            return []
+
+    def get_visual_layout(self) -> List[List[int]]:
+        # max width is fixed at 7 right now
+        max_width = 7
+        spacer = max_width - 3
+        # size offset by 1 to account for first column of two slots
+        cols: List[List[int]] = []
+        col: List[int] = []
+        col_size = 1
+        for idx in range(self.size):
+            if col_size == 3:
+                col_size = 1
+                cols.append(col)
+                col = [idx]
+            else:
+                col_size += 1
+                col.append(idx)
+        if len(col) > 0:
+            cols.append(col)
+
+        final_cols: List[List[int]] = [Hopscotch.space_at_column(idx) for idx in range(min(len(cols), max_width))]
+        for (col_idx, col) in enumerate(cols):
+            if col_idx > 6:
+                final_cols[col_idx % 7].extend([-1 for _ in range(spacer)])
+            final_cols[col_idx % 7].extend(col)
+        
+        fill_to_longest(final_cols)
+
+        return final_cols
+
+class Gauntlet(LayoutType):
+    """Long, linear layout. Goes horizontally and wraps around.
+    Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
+
+    def __init__(self, size: int, limit: int):
+        super().__init__(size, limit)
+    
+    def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
+        missions = [mission_factory() for _ in range(self.size)]
+        missions[0].option_entrance = True
+        missions[-1].option_exit = True
+        for i in range(self.size - 1):
+            missions[i].next.add(missions[i + 1])
+        return missions
+    
+    def get_visual_layout(self) -> List[List[int]]:
+        max_width = 7
+        width = min(max_width, self.size)
+        columns = [[] for _ in range(width)]
+        for idx in range(self.size):
+            if idx > 6:
+                columns[idx % 7].append(-1)
+            columns[idx % 7].append(idx)
+
+        fill_to_longest(columns)
+
+        return columns
+
+class Blitz(LayoutType):
+    """Rows of missions, one mission per row required.
+    Default entrances are every mission in the top row, default exit is a central mission in the bottom row."""
+    width: int
+
+    def __init__(self, size: int, limit: int):
+        super().__init__(size, limit)
+        min_width, max_width = 2, 5
+        mission_divisor = 5
+        self.width = min(max(size // mission_divisor, min_width), max_width)
+    
+    def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
+        slots = [mission_factory() for _ in range(self.size)]
+        for idx in range(self.width):
+            slots[idx].option_entrance = True
+        
+        middle_column = self.width // 2
+        if self.size % self.width > middle_column:
+            final_row = self.width * (self.size // self.width)
+            final_mission = final_row + middle_column
+        else:
+            final_mission = self.size - 1
+        slots[final_mission].option_exit = True
+
+        rows = self.size // self.width
+        for row in range(rows):
+            for top in range(self.width):
+                idx = row * self.width + top
+                for bot in range(self.width):
+                    other = (row + 1) * self.width + bot
+                    if other < self.size:
+                        slots[idx].next.add(slots[other])
+        
+        return slots
+    
+    def get_visual_layout(self) -> List[List[int]]:
+        columns = [[] for _ in range(self.width)]
+        for idx in range(self.size):
+            columns[idx % self.width].append(idx)
+        
+        fill_to_longest(columns)
+
+        return columns
+
+def fill_to_longest(columns: List[List[int]]):
+    longest = max(len(col) for col in columns)
+    for idx in range(len(columns)):
+        length = len(columns[idx])
+        if length < longest:
+            columns[idx].extend([-1 for _ in range(longest - length)])

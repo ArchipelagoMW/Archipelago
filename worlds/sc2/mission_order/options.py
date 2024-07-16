@@ -10,10 +10,12 @@ import copy
 from ..mission_tables import lookup_name_to_mission, SC2Mission, MissionFlag, SC2Campaign
 from ..mission_groups import mission_groups
 from .structs import Difficulty, LayoutType
-from .types import Column, Grid
+from .types import Column, Grid, Hopscotch, Gauntlet, Blitz
 
 STR_OPTION_VALUES = {
-    "type": { "column": Column, "grid": Grid },
+    "type": {
+        "column": Column, "grid": Grid, "hopscotch": Hopscotch, "gauntlet": Gauntlet, "blitz": Blitz,
+    },
     "difficulty": {
         "relative": Difficulty.RELATIVE, "starter": Difficulty.STARTER, "easy": Difficulty.EASY,
         "medium": Difficulty.MEDIUM, "hard": Difficulty.HARD, "very hard": Difficulty.VERY_HARD
