@@ -1,7 +1,9 @@
 from __future__ import annotations
-from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, NamedTuple, Union, TypeVar, TYPE_CHECKING
+from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union, TypeVar, TYPE_CHECKING
 from collections.abc import Iterable
 from enum import IntEnum
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, asdict
 
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission
@@ -10,7 +12,7 @@ from worlds.AutoWorld import World
 if TYPE_CHECKING:
     from ..locations import LocationData
 
-class LayoutType:
+class LayoutType(ABC):
     size: int
     limit: int
 
@@ -18,18 +20,21 @@ class LayoutType:
         self.size = size
         self.limit = limit
 
+    @abstractmethod
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         """Use the provided `Callable` to create a one-dimensional list of mission slots and set up initial settings and connections.
 
         This should include at least one entrance and exit."""
         return []
     
+    @abstractmethod
     def parse_index(self, term: str) -> Union[Set[int], None]:
         """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
 
         If the term cannot be parsed, either raise an exception or return `None`."""
         return None
 
+    @abstractmethod
     def get_visual_layout(self) -> List[List[int]]:
         """Organize the mission slots into a list of columns from left to right and top to bottom.
         The list should contain indices into the list created by `make_slots`. Intentionally empty spots should contain -1.
@@ -37,21 +42,34 @@ class LayoutType:
         The resulting 2D list should be rectangular."""
         pass
 
-class EntryRule:
+class EntryRule(ABC):
     def is_always_fulfilled(self) -> bool:
         return self.is_fulfilled(set())
 
+    @abstractmethod
     def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         """Used during region creation to ensure a beatable mission order."""
         return False
     
+    @abstractmethod
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         """Passed to Archipelago for use during item placement."""
         return lambda _: False
     
+    @abstractmethod
     def to_slot_data(self) -> RuleData:
         """Used in the client to determine accessibility while playing and to populate tooltips."""
         return {}
+
+@dataclass
+class RuleData(ABC):
+    @abstractmethod
+    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
+        return False
+    
+    @abstractmethod
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+        return ""
 
 class BeatMissionsEntryRule(EntryRule):
     missions_to_beat: Set[SC2MOGenMission]
@@ -75,15 +93,13 @@ class BeatMissionsEntryRule(EntryRule):
             resolved_reqs
         )
 
-class BeatMissionsRuleData(NamedTuple):
+@dataclass
+class BeatMissionsRuleData(RuleData):
     mission_ids: Set[int]
     visual_reqs: List[Union[str, int]]
 
     def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
         return beaten_missions.issuperset(self.mission_ids)
-    
-    def as_dict(self) -> Dict[str, Any]:
-        return self._asdict()
     
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         indent = " ".join("" for _ in range(indents))
@@ -123,16 +139,14 @@ class CountMissionsEntryRule(EntryRule):
             resolved_reqs
         )
 
-class CountMissionsRuleData(NamedTuple):
+@dataclass
+class CountMissionsRuleData(RuleData):
     mission_ids: Set[int]
     amount: int
     visual_reqs: List[Union[str, int]]
 
     def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
         return self.amount <= len(beaten_missions.intersection(self.mission_ids))
-    
-    def as_dict(self) -> Dict[str, Any]:
-        return self._asdict()
     
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         indent = " ".join("" for _ in range(indents))
@@ -178,8 +192,9 @@ class SubRuleEntryRule(EntryRule):
             sub_rules,
             self.target_amount
         )
-    
-class SubRuleRuleData(NamedTuple):
+
+@dataclass
+class SubRuleRuleData(RuleData):
     sub_rules: List[RuleData]
     amount: int
 
@@ -211,12 +226,6 @@ class SubRuleRuleData(NamedTuple):
     def empty() -> SubRuleRuleData:
         return SubRuleRuleData([], 0)
     
-    def as_dict(self) -> Dict[str, Any]:
-        return {
-            "sub_rules": [rule.as_dict() for rule in self.sub_rules],
-            "amount": self.amount,
-        }
-    
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         indent = " ".join("" for _ in range(indents))
         if self.amount == len(self.sub_rules):
@@ -228,8 +237,6 @@ class SubRuleRuleData(NamedTuple):
         tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
         tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 2, missions) for rule in self.sub_rules)
         return tooltip
-    
-RuleData = Union[SubRuleRuleData, BeatMissionsRuleData, CountMissionsRuleData]
 
 class Difficulty(IntEnum):
     RELATIVE = 0
@@ -472,7 +479,7 @@ class SC2MissionOrder:
     def get_slot_data(self) -> List[Dict[str, Any]]:
         """Parses the mission order into a format usable for slot data."""
         # [(campaign data, [(layout data, [[(mission data)]] )] )]
-        return [campaign.get_slot_data()._asdict() for campaign in self.campaigns]
+        return [asdict(campaign.get_slot_data()) for campaign in self.campaigns]
 
     def make_connections(self, world: World):
         names: Dict[str, int] = {}
@@ -828,8 +835,8 @@ class SC2MOGenCampaign:
     def get_slot_data(self) -> CampaignSlotData:
         return CampaignSlotData(
             self.get_visual_name(),
-            self.entry_rule.to_slot_data().as_dict(),
-            [layout.get_slot_data()._asdict() for layout in self.layouts]
+            asdict(self.entry_rule.to_slot_data()),
+            [asdict(layout.get_slot_data()) for layout in self.layouts]
         )
 
 class SC2MOGenLayout:
@@ -1036,7 +1043,7 @@ class SC2MOGenLayout:
     def get_slot_data(self) -> LayoutSlotData:
         mission_slots = [
             [
-                self.missions[idx].get_slot_data().as_dict() if idx >= 0 else MissionSlotData.empty().as_dict()
+                asdict(self.missions[idx].get_slot_data()) if idx >= 0 else asdict(MissionSlotData.empty())
                 for idx in column
             ]
             for column in self.layout_type.get_visual_layout()
@@ -1044,7 +1051,7 @@ class SC2MOGenLayout:
 
         return LayoutSlotData(
             self.get_visual_name(),
-            self.entry_rule.to_slot_data().as_dict(),
+            asdict(self.entry_rule.to_slot_data()),
             mission_slots
         )
     
@@ -1145,17 +1152,20 @@ class SC2MOGenMission:
             self.entry_rule.to_slot_data()
         )
 
-class CampaignSlotData(NamedTuple):
+@dataclass
+class CampaignSlotData:
     name: str
     entry_rule: SubRuleRuleData
     layouts: List[LayoutSlotData]
 
-class LayoutSlotData(NamedTuple):
+@dataclass
+class LayoutSlotData:
     name: str
     entry_rule: SubRuleRuleData
     missions: List[List[MissionSlotData]]
 
-class MissionSlotData(NamedTuple):
+@dataclass
+class MissionSlotData:
     mission_id: int
     prev_mission_ids: Set[int]
     entry_rule: SubRuleRuleData
@@ -1164,11 +1174,6 @@ class MissionSlotData(NamedTuple):
     def empty() -> MissionSlotData:
         return MissionSlotData(-1, set(), SubRuleRuleData.empty())
     
-    def as_dict(self) -> Dict[str, Any]:
-        result = self._asdict()
-        result["entry_rule"] = self.entry_rule.as_dict()
-        return result
-
 # TODO band-aid for ..regions circular import
 def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
