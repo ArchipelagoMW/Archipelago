@@ -331,10 +331,7 @@ chocolate_shop = [
     LocationData(LocationName.Chocolate_Shop_32, 0xb3110d, 0x20001c3, 0x01, 0x73F8FC, 181, [0]),
 ]
 
-always_excluded_locations = [
-    LocationName.Undernet_7_PMD,
-    LocationName.Undernet_7_Northeast_BMD,
-    LocationName.Undernet_7_Northwest_BMD,
+secret_locations = [
     LocationName.Secret_1_Northwest_BMD,
     LocationName.Secret_1_Northeast_BMD,
     LocationName.Secret_1_South_BMD,
@@ -347,16 +344,19 @@ always_excluded_locations = [
     LocationName.Serenade
 ]
 
+location_groups: typing.Dict[str, typing.Set[str]] = {
+    "BMDs": [loc.name for loc in bmds],
+    "PMDs": [loc.name for loc in pmds],
+    "Jobs": [loc.name for loc in jobs],
+    "Number Trader": [loc.name for loc in number_traders],
+    "Bugfrag Trader": [loc.name for loc in chocolate_shop],
+    "Secret Area": {LocationName.Secret_1_Northwest_BMD, LocationName.Secret_1_Northeast_BMD,
+                    LocationName.Secret_1_South_BMD, LocationName.Secret_2_Upper_BMD, LocationName.Secret_2_Lower_BMD,
+                    LocationName.Secret_2_Island_BMD, LocationName.Secret_3_Island_BMD,
+                    LocationName.Secret_3_BugFrag_BMD, LocationName.Secret_3_South_BMD, LocationName.Serenade},
+}
 
 all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + chocolate_shop
 scoutable_locations: typing.List[LocationData] = [loc for loc in all_locations if loc.hint_flag is not None]
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
-
-
-"""
-def setup_locations(world, player: int):
-    # If we later include options to change what gets added to the random pool,
-    # this is where they would be changed
-    return {locData.name: locData.id for locData in all_locations}
-"""

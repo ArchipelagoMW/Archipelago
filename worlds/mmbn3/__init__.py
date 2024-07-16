@@ -9,9 +9,9 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
 from worlds.AutoWorld import WebWorld, World
 
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, item_groups
 from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
-    always_excluded_locations, jobs
+    secret_locations, jobs, location_groups
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
@@ -65,6 +65,9 @@ class MMBN3World(World):
     excluded_locations: typing.List[str]
     item_frequencies: typing.Dict[str, int]
 
+    location_name_groups = location_groups
+    item_name_groups = item_groups
+
     web = MMBN3Web()
 
     def generate_early(self) -> None:
@@ -76,10 +79,11 @@ class MMBN3World(World):
         if self.options.extra_ranks > 0:
             self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.options.extra_ranks
 
+        self.excluded_locations = []
+        if not self.options.include_secret:
+            self.excluded_locations = secret_locations
         if not self.options.include_jobs:
-            self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
-        else:
-            self.excluded_locations = always_excluded_locations
+            self.excluded_locations = self.excluded_locations + [job.name for job in jobs]
 
     def create_regions(self) -> None:
         """
@@ -174,7 +178,6 @@ class MMBN3World(World):
 
         # Set WWW ID requirements
         def has_www_id(state): return state.has(ItemName.WWW_ID, self.player)
-        add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), has_www_id)
         add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), has_www_id)
         add_rule(self.multiworld.get_location(LocationName.SciLab_1_WWW_BMD, self.player), has_www_id)
         add_rule(self.multiworld.get_location(LocationName.Yoka_1_WWW_BMD, self.player), has_www_id)
