@@ -145,10 +145,10 @@ class ZillionWorld(World):
         self._item_counts = item_counts
 
         with redirect_stdout(self.lsi):  # type: ignore
-            self.zz_system.make_randomizer(zz_op)
-
-            self.zz_system.seed(self.multiworld.seed)
+            self.zz_system.set_options(zz_op)
+            self.zz_system.seed(self.random.randrange(1999999999))
             self.zz_system.make_map()
+            self.zz_system.make_randomizer()
 
         # just in case the options changed anything (I don't think they do)
         assert self.zz_system.randomizer, "init failed"
