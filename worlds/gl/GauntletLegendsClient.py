@@ -281,20 +281,23 @@ class GauntletLegendsContext(CommonContext):
                     count += 1
             self.extra_items = count
         else:
-            b = RamChunk(
-                await self.socket.read(
-                    message_format(
-                        READ,
-                        f"0x{format(obj_address + (self.offset + len(self.item_locations) + self.extra_items) * 0x3C, 'x')} {len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner]) * 0x3C}",
+            spawner_count = len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner])
+            for i in range((spawner_count // 101) + 1):
+                b = RamChunk(
+                    await self.socket.read(
+                        message_format(
+                            READ,
+                            f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min(spawner_count, 100) * 0x3C}",
+                        ),
                     ),
-                ),
-            )
-            b.iterate(0x3C)
-            count = 0
-            for obj in b.split:
-                if obj[0] == 0xFF and obj[1] == 0xFF:
-                    count += 1
-            self.extra_items += count
+                )
+                b.iterate(0x3C)
+                count = 0
+                for obj in b.split:
+                    if obj[0] == 0xFF and obj[1] == 0xFF:
+                        count += 1
+                self.extra_items += count
+                spawner_count -= 100
 
             b = RamChunk(
                 await self.socket.read(
@@ -556,7 +559,7 @@ class GauntletLegendsContext(CommonContext):
             scale_value = max_value
         mountain_value = min(player_level // 10, 3)
         await self.socket.write(
-            message_format(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, max_value) - mountain_value, 'x')}"),
+            message_format(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, max_value), 'x')}"),
         )
         self.scaled = True
 
