@@ -76,14 +76,16 @@ item_list: typing.List[ItemData] = [
     ItemData(77780059, "Town Obelisk 2", ItemClassification.progression),
     ItemData(77780060, "Castle Obelisk 1", ItemClassification.progression),
     ItemData(77780061, "Castle Obelisk 2", ItemClassification.progression),
+    ItemData(77780062, "Death", ItemClassification.trap),
+    ItemData(77780063, "Poison Fruit", ItemClassification.trap),
 ]
 
 item_frequencies: typing.Dict[str, int] = {
     "Key": 1000,
-    "Lightning Potion": 45,
-    "Light Potion": 40,
-    "Acid Potion": 40,
-    "Fire Potion": 42,
+    "Lightning Potion": 50,
+    "Light Potion": 50,
+    "Acid Potion": 50,
+    "Fire Potion": 50,
     "Acid Breath": 33,
     "Lightning Breath": 33,
     "Fire Breath": 33,
@@ -111,6 +113,8 @@ item_frequencies: typing.Dict[str, int] = {
     "Fruit": 100,
     "Meat": 100,
     "Gold": 150,
+    "Death": 75,
+    "Poison Fruit": 75,
 }
 
 item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list}

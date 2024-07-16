@@ -277,7 +277,7 @@ class GauntletLegendsContext(CommonContext):
             b.iterate(0x3C)
             count = 0
             for obj in b.split:
-                if obj[0] == 0xFF:
+                if obj[0] == 0xFF and obj[1] == 0xFF:
                     count += 1
             self.extra_items = count
         else:
@@ -292,7 +292,7 @@ class GauntletLegendsContext(CommonContext):
             b.iterate(0x3C)
             count = 0
             for obj in b.split:
-                if obj[0] == 0xFF:
+                if obj[0] == 0xFF and obj[1] == 0xFF:
                     count += 1
             self.extra_items += count
 
@@ -307,7 +307,7 @@ class GauntletLegendsContext(CommonContext):
             b.iterate(0x3C)
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
-        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF]
+        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF and obj.raw[1] != 0xFF]
         if mode == 1:
             self.chest_objects = _obj[: len(self.chest_locations)]
         else:
@@ -511,6 +511,8 @@ class GauntletLegendsContext(CommonContext):
             if i - 1 < len(self.items_received):
                 for index in range(i - 1, len(self.items_received)):
                     item = self.items_received[index].item
+                    if items_by_id[item].item_name == "Death":
+                        continue
                     await self.inv_update(items_by_id[item].item_name, base_count[items_by_id[item].item_name])
             await self.inv_update("Compass", len(self.items_received) + 1)
 

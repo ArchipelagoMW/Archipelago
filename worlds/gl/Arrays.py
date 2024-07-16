@@ -153,6 +153,8 @@ item_dict: Dict[int, bytes] = {
     77780052: [0x29, 0x4],
     77780053: [0x29, 0x5],
     77780054: [0x3, 0x2],
+    77780062: [0x21, 0x1],
+    77780063: [0x4, 0x2],
 }
 
 # Items that use a timer
@@ -249,6 +251,7 @@ base_count: Dict[str, int] = {
     "Tigress": 1,
     "Jackal": 1,
     "Sumner": 1,
+    "Poison Fruit": -50,
 }
 
 # Level area ID to area name conversion

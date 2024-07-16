@@ -2,7 +2,8 @@ import os
 import typing
 
 import settings
-from BaseClasses import ItemClassification, Tutorial
+from BaseClasses import ItemClassification, Tutorial, Item
+from Fill import fast_fill
 
 from worlds.AutoWorld import WebWorld, World
 
@@ -72,6 +73,7 @@ class GauntletLegendsWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 4, 6)
+    death: typing.List[Item] = []
     crc32: str = None
 
     disabled_locations: typing.List[LocationData]
@@ -182,7 +184,7 @@ class GauntletLegendsWorld(World):
                     continue
                 if "Boots" in item.item_name and self.options.permanent_speed:
                     continue
-                freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0)
+                freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
                 if freq is None:
                     freq = 1
                 filler_items += [item.item_name for _ in range(freq)]
@@ -194,6 +196,9 @@ class GauntletLegendsWorld(World):
             remaining -= 4
         for i in range(remaining):
             filler_item_name = self.multiworld.random.choice(filler_items)
+            if filler_item_name == "Death":
+                self.death += self.create_item(filler_item_name)
+                continue
             item = self.create_item(filler_item_name)
             self.multiworld.itempool.append(item)
             filler_items.remove(filler_item_name)
@@ -203,6 +208,9 @@ class GauntletLegendsWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
             "Gates of the Underworld", "Region", self.player,
         )
+
+    def pre_fill(self) -> None:
+        fast_fill(self.multiworld, self.death, self.multiworld.get_unfilled_locations(player=self.player))
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]
