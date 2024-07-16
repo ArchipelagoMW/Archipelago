@@ -32,7 +32,7 @@ class PokemonCrystalSettings(settings.Group):
     class RomFile(settings.UserFilePath):
         description = "Pokemon Crystal (UE) (V1.0 or V1.1) ROM File"
         copy_to = "Pokemon - Crystal Version (UE) [C][!].gbc"
-        md5s = ["9f2922b235a5eeb78d65594e82ef5dde"]
+        md5s = ["9f2922b235a5eeb78d65594e82ef5dde", "301899b8087289a6436b0a241fbbb474"]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
