@@ -4,6 +4,7 @@ from .. import options
 
 class TestAccess(TunicTestBase):
     options = {options.CombatLogic.internal_name: options.CombatLogic.option_off}
+
     # test whether you can get into the temple without laurels
     def test_temple_access(self) -> None:
         self.collect_all_but(["Hero's Laurels", "Lantern"])
@@ -63,10 +64,31 @@ class TestER(TunicTestBase):
     options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
                options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
                options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
-               options.CombatLogic.internal_name: options.CombatLogic.option_off}
+               options.CombatLogic.internal_name: options.CombatLogic.option_off,
+               options.FixedShop.internal_name: options.FixedShop.option_true}
 
     def test_overworld_hc_chest(self) -> None:
         # test to see that static connections are working properly -- this chest requires holy cross and is in Overworld
         self.assertFalse(self.can_reach_location("Overworld - [Southwest] Flowers Holy Cross"))
         self.collect_by_name(["Pages 42-43 (Holy Cross)"])
         self.assertTrue(self.can_reach_location("Overworld - [Southwest] Flowers Holy Cross"))
+
+
+class TestERSpecial(TunicTestBase):
+    options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
+               options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
+               options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
+               options.CombatLogic.internal_name: options.CombatLogic.option_off,
+               options.FixedShop.internal_name: options.FixedShop.option_true,
+               options.IceGrappling.internal_name: options.IceGrappling.option_easy,
+               "plando_connections": [
+                   {
+                       "entrance": "Stick House Entrance",
+                       "exit": "Ziggurat Portal Room Entrance"
+                   },
+                   {
+                       "entrance": "Ziggurat Lower to Ziggurat Tower",
+                       "exit": "Secret Gathering Place Exit"
+                   }
+               ]}
+    # with these plando connections, you need to ice grapple from the back of lower zig to the front to get laurels
