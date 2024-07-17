@@ -13,6 +13,21 @@ from BaseClasses import Location, MultiWorld, CollectionState, ItemClassificatio
 from worlds.alttp.Items import item_factory
 
 
+class DefaultOptionsDict(typing.Dict[str, typing.Any]):
+    def __setitem__(self, key: str, value: typing.Any) -> None:
+        raise Exception("Can not modify global default options. Please copy in setUp.")
+
+    def __copy__(self) -> typing.Dict[str, typing.Any]:
+        return {**self}
+
+    def __deepcopy__(self, memodict):
+        from copy import deepcopy
+        res = {}
+        memodict[id(self)] = res
+        res.update({k: deepcopy(v, memodict) for k, v in self.items()})
+        return res
+
+
 class TestBase(unittest.TestCase):
     multiworld: MultiWorld
     _state_cache = {}
@@ -104,7 +119,7 @@ class TestBase(unittest.TestCase):
 
 
 class WorldTestBase(unittest.TestCase):
-    options: typing.Dict[str, typing.Any] = {}
+    options: typing.Dict[str, typing.Any] = DefaultOptionsDict()
     """Define options that should be used when setting up this TestBase."""
     multiworld: MultiWorld
     """The constructed MultiWorld instance after setup."""
