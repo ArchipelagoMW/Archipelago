@@ -45,8 +45,6 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
 
         tool_level = min(4, (level - 1) // 2)
         tool_material = ToolMaterial.tiers[tool_level]
-        months = max(1, level - 1)
-        months_rule = self.logic.time.has_lived_months(months)
 
         if self.options.skill_progression == options.SkillProgression.option_vanilla:
             previous_level_rule = true_
@@ -70,11 +68,11 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
         elif skill in all_mod_skills:
             # Ideal solution would be to add a logic registry, but I'm too lazy.
-            return previous_level_rule & months_rule & self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
+            return previous_level_rule & self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
         else:
             raise Exception(f"Unknown skill: {skill}")
 
-        return previous_level_rule & months_rule & xp_rule
+        return previous_level_rule & xp_rule
 
     # Should be cached
     def has_level(self, skill: str, level: int) -> StardewRule:
@@ -82,7 +80,8 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             return True_()
 
         if self.options.skill_progression == options.SkillProgression.option_vanilla:
-            return self.logic.skill.can_earn_level(skill, level)
+            months = max(1, level - 1)
+            return self.logic.skill.can_earn_level(skill, level) & self.logic.time.has_lived_months(months)
 
         return self.logic.received(f"{skill} Level", level)
 
@@ -190,9 +189,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
 
     def can_earn_mastery(self, skill: str) -> StardewRule:
         # Checking for level 11, so it includes having level 10 and being able to earn xp.
-        return (self.logic.skill.can_earn_level(skill, 11) &
-                self.logic.time.has_lived_max_months &
-                self.logic.region.can_reach(Region.mastery_cave))
+        return self.logic.skill.can_earn_level(skill, 11) & self.logic.region.can_reach(Region.mastery_cave)
 
     def has_mastery(self, skill: str) -> StardewRule:
         if self.options.skill_progression == options.SkillProgression.option_progressive_with_masteries:
