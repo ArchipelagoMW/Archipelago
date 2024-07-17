@@ -10,7 +10,7 @@ from ...data.shop import ShopSource
 from ...mods.mod_data import ModNames
 from ...strings.craftable_names import ModEdible
 from ...strings.crop_names import Fruit, SVEVegetable, SVEFruit
-from ...strings.fish_names import WaterItem, SVEFish
+from ...strings.fish_names import WaterItem, SVEFish, ModWaterItem
 from ...strings.flower_names import Flower
 from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.forageable_names import Mushroom, Forageable, SVEForage
@@ -138,7 +138,7 @@ register_mod_content_pack(SVEContentPack(
         ModLoot.void_pebble: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.great),)),),
         ModLoot.void_shard: (ForagingSource(regions=(SVERegion.crimson_badlands,),
                                             other_requirements=(CombatRequirement(Performance.galaxy), SkillRequirement(Skill.combat, 10), YearRequirement(3),)),),
-        SVEFish.dulse_seaweed: (ForagingSource(regions=(Region.beach,), other_requirements=(FishingRequirement(Region.beach),)),),
+        ModWaterItem.dulse_seaweed: (ForagingSource(regions=(Region.beach,), other_requirements=(FishingRequirement(Region.beach),)),),
 
         # Fable Reef
         WaterItem.coral: (ForagingSource(regions=(SVERegion.fable_reef,)),),
