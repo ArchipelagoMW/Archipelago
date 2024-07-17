@@ -34,7 +34,8 @@ from .options import (
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
 )
-from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, SC2MissionOrder, SubRuleRuleData, CountMissionsRuleData
+from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData
+from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
 from .mission_tables import MissionFlag
 
 

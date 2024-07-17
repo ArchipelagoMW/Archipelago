@@ -1,8 +1,40 @@
 from __future__ import annotations
-from typing import List, Callable, Tuple
+from typing import List, Callable, Set, Tuple, Union, TYPE_CHECKING
 import math
+from abc import ABC, abstractmethod
 
-from .structs import LayoutType, SC2MOGenMission
+if TYPE_CHECKING:
+    from .structs import SC2MOGenMission
+
+class LayoutType(ABC):
+    size: int
+    limit: int
+
+    def __init__(self, size: int, limit: int):
+        self.size = size
+        self.limit = limit
+
+    @abstractmethod
+    def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
+        """Use the provided `Callable` to create a one-dimensional list of mission slots and set up initial settings and connections.
+
+        This should include at least one entrance and exit."""
+        return []
+    
+    @abstractmethod
+    def parse_index(self, term: str) -> Union[Set[int], None]:
+        """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
+
+        If the term cannot be parsed, either raise a descriptive exception or return `None`."""
+        return None
+
+    @abstractmethod
+    def get_visual_layout(self) -> List[List[int]]:
+        """Organize the mission slots into a list of columns from left to right and top to bottom.
+        The list should contain indices into the list created by `make_slots`. Intentionally empty spots should contain -1.
+        
+        The resulting 2D list should be rectangular."""
+        pass
 
 class Column(LayoutType):
     """Linear layout. Default entrance is index 0 at the top, default exit is index `size - 1` at the bottom."""
@@ -18,6 +50,9 @@ class Column(LayoutType):
     def get_visual_layout(self) -> List[List[int]]:
         return [list(range(self.size))]
 
+    def parse_index(self, term: str) -> Union[Set[int], None]:
+        raise NotImplementedError
+    
 class Grid(LayoutType):
     """Rectangular grid. Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
     width: int
@@ -135,6 +170,9 @@ class Grid(LayoutType):
         ]
         return columns
     
+    def parse_index(self, term: str) -> Union[Set[int], None]:
+        raise NotImplementedError
+    
 class Hopscotch(LayoutType):
     """Alternating between one and two available missions.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
@@ -208,6 +246,9 @@ class Hopscotch(LayoutType):
 
         return final_cols
 
+    def parse_index(self, term: str) -> Union[Set[int], None]:
+        raise NotImplementedError
+    
 class Gauntlet(LayoutType):
     """Long, linear layout. Goes horizontally and wraps around.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
@@ -236,6 +277,9 @@ class Gauntlet(LayoutType):
 
         return columns
 
+    def parse_index(self, term: str) -> Union[Set[int], None]:
+        raise NotImplementedError
+    
 class Blitz(LayoutType):
     """Rows of missions, one mission per row required.
     Default entrances are every mission in the top row, default exit is a central mission in the bottom row."""
@@ -279,6 +323,9 @@ class Blitz(LayoutType):
         fill_to_longest(columns)
 
         return columns
+    
+    def parse_index(self, term: str) -> Union[Set[int], None]:
+        raise NotImplementedError
 
 def fill_to_longest(columns: List[List[int]]):
     longest = max(len(col) for col in columns)

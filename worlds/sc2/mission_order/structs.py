@@ -1,274 +1,18 @@
 from __future__ import annotations
 from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union, TypeVar, TYPE_CHECKING
 from collections.abc import Iterable
-from enum import IntEnum
-from abc import ABC, abstractmethod
+from weakref import ref, ReferenceType
 from dataclasses import dataclass, asdict
 
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission
+from .types import LayoutType
+from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData
+from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from ..locations import LocationData
-
-class LayoutType(ABC):
-    size: int
-    limit: int
-
-    def __init__(self, size: int, limit: int):
-        self.size = size
-        self.limit = limit
-
-    @abstractmethod
-    def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
-        """Use the provided `Callable` to create a one-dimensional list of mission slots and set up initial settings and connections.
-
-        This should include at least one entrance and exit."""
-        return []
-    
-    @abstractmethod
-    def parse_index(self, term: str) -> Union[Set[int], None]:
-        """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
-
-        If the term cannot be parsed, either raise an exception or return `None`."""
-        return None
-
-    @abstractmethod
-    def get_visual_layout(self) -> List[List[int]]:
-        """Organize the mission slots into a list of columns from left to right and top to bottom.
-        The list should contain indices into the list created by `make_slots`. Intentionally empty spots should contain -1.
-        
-        The resulting 2D list should be rectangular."""
-        pass
-
-class EntryRule(ABC):
-    def is_always_fulfilled(self) -> bool:
-        return self.is_fulfilled(set())
-
-    @abstractmethod
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        """Used during region creation to ensure a beatable mission order."""
-        return False
-    
-    @abstractmethod
-    def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
-        """Passed to Archipelago for use during item placement."""
-        return lambda _: False
-    
-    @abstractmethod
-    def to_slot_data(self) -> RuleData:
-        """Used in the client to determine accessibility while playing and to populate tooltips."""
-        return {}
-
-@dataclass
-class RuleData(ABC):
-    @abstractmethod
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return False
-    
-    @abstractmethod
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
-        return ""
-
-class BeatMissionsEntryRule(EntryRule):
-    missions_to_beat: Set[SC2MOGenMission]
-    visual_reqs: List[Union[str, SC2MOGenMission]]
-
-    def __init__(self, missions_to_beat: Set[SC2MOGenMission], visual_reqs: List[Union[str, SC2MOGenMission]]):
-        self.missions_to_beat = missions_to_beat
-        self.visual_reqs = visual_reqs
-    
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return beaten_missions.issuperset(self.missions_to_beat)
-    
-    def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
-        return lambda state: state.has_all([mission.beat_item() for mission in self.missions_to_beat], player)
-    
-    def to_slot_data(self) -> RuleData:
-        resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
-        mission_ids = {mission.mission.id for mission in self.missions_to_beat}
-        return BeatMissionsRuleData(
-            mission_ids,
-            resolved_reqs
-        )
-
-@dataclass
-class BeatMissionsRuleData(RuleData):
-    mission_ids: Set[int]
-    visual_reqs: List[Union[str, int]]
-
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return beaten_missions.issuperset(self.mission_ids)
-    
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
-        indent = " ".join("" for _ in range(indents))
-        if len(self.visual_reqs) == 1:
-            req = self.visual_reqs[0]
-            return f"Beat {missions[req].mission_name if type(req) == int else req}"
-        tooltip = f"Beat all of these:\n{indent}- "
-        reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
-        tooltip += f"\n{indent}- ".join(req for req in reqs)
-        return tooltip
-    
-class CountMissionsEntryRule(EntryRule):
-    missions_to_count: Set[SC2MOGenMission]
-    target_amount: int
-    visual_reqs: List[Union[str, SC2MOGenMission]]
-
-    def __init__(self, missions_to_count: Set[SC2MOGenMission], target_amount: int, visual_reqs: List[Union[str, SC2MOGenMission]]):
-        self.missions_to_count = missions_to_count
-        if target_amount == -1 or target_amount > len(missions_to_count):
-            self.target_amount = len(missions_to_count)
-        else:
-            self.target_amount = target_amount
-        self.visual_reqs = visual_reqs
-
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return self.target_amount <= len(beaten_missions.intersection(self.missions_to_count))
-    
-    def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
-        return lambda state: self.target_amount <= sum(state.has(mission.beat_item(), player) for mission in self.missions_to_count)
-    
-    def to_slot_data(self) -> RuleData:
-        resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
-        mission_ids = {mission.mission.id for mission in self.missions_to_count}
-        return CountMissionsRuleData(
-            mission_ids,
-            self.target_amount,
-            resolved_reqs
-        )
-
-@dataclass
-class CountMissionsRuleData(RuleData):
-    mission_ids: Set[int]
-    amount: int
-    visual_reqs: List[Union[str, int]]
-
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return self.amount <= len(beaten_missions.intersection(self.mission_ids))
-    
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
-        indent = " ".join("" for _ in range(indents))
-        if self.amount == len(self.mission_ids):
-            amount = "all"
-        else:
-            amount = str(self.amount)
-        if len(self.visual_reqs) == 1:
-            req = self.visual_reqs[0]
-            req_str = missions[req].mission_name if type(req) == int else req
-            if self.amount == 1:
-                return f"Beat {req_str}"
-            return f"Beat {amount} missions from {req_str}"
-        if self.amount == 1:
-            tooltip = f"Beat {amount} mission from:\n{indent}- "
-        else:
-            tooltip = f"Beat {amount} missions from:\n{indent}- "
-        reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
-        tooltip += f"\n{indent}- ".join(req for req in reqs)
-        return tooltip
-    
-class SubRuleEntryRule(EntryRule):
-    rules_to_check: List[EntryRule]
-    target_amount: int
-
-    def __init__(self, rules_to_check: List[EntryRule], target_amount: int):
-        self.rules_to_check = rules_to_check
-        if target_amount == -1 or target_amount > len(rules_to_check):
-            self.target_amount = len(rules_to_check)
-        else:
-            self.target_amount = target_amount
-
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return self.target_amount <= sum(rule.is_fulfilled(beaten_missions) for rule in self.rules_to_check)
-    
-    def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
-        sub_lambdas = [rule.to_lambda(player) for rule in self.rules_to_check]
-        return lambda state, sub_lambdas=sub_lambdas: self.target_amount <= sum(sub_lambda(state) for sub_lambda in sub_lambdas)
-    
-    def to_slot_data(self) -> RuleData:
-        sub_rules = [rule.to_slot_data() for rule in self.rules_to_check]
-        return SubRuleRuleData(
-            sub_rules,
-            self.target_amount
-        )
-
-@dataclass
-class SubRuleRuleData(RuleData):
-    sub_rules: List[RuleData]
-    amount: int
-
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return self.amount <= sum(rule.is_fulfilled(beaten_missions) for rule in self.sub_rules)
-    
-    @staticmethod
-    def parse_from_dict(data: Dict[str, Any]) -> SubRuleRuleData:
-        amount = data["amount"]
-        sub_rules: List[RuleData] = []
-        for rule_data in data["sub_rules"]:
-            if "sub_rules" in rule_data:
-                rule = SubRuleRuleData.parse_from_dict(rule_data)
-            elif "amount" in rule_data:
-                rule = CountMissionsRuleData(
-                    **{field: value for field, value in rule_data.items()}
-                )
-            else:
-                rule = BeatMissionsRuleData(
-                    **{field: value for field, value in rule_data.items()}
-                )
-            sub_rules.append(rule)
-        return SubRuleRuleData(
-            sub_rules,
-            amount
-        )
-    
-    @staticmethod
-    def empty() -> SubRuleRuleData:
-        return SubRuleRuleData([], 0)
-    
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
-        indent = " ".join("" for _ in range(indents))
-        if self.amount == len(self.sub_rules):
-            if self.amount == 1:
-                return self.sub_rules[0].tooltip(indents, missions)
-            amount = "all"
-        else:
-            amount = str(self.amount)
-        tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
-        tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 2, missions) for rule in self.sub_rules)
-        return tooltip
-
-class Difficulty(IntEnum):
-    RELATIVE = 0
-    STARTER = 1
-    EASY = 2
-    MEDIUM = 3
-    HARD = 4
-    VERY_HARD = 5
-
-# TODO figure out an organic way to get these
-DEFAULT_DIFFICULTY_THRESHOLDS = {
-    Difficulty.STARTER: 0,
-    Difficulty.EASY: 5,
-    Difficulty.MEDIUM: 35,
-    Difficulty.HARD: 65,
-    Difficulty.VERY_HARD: 95,
-    Difficulty.VERY_HARD + 1: 100
-}
-
-def _modified_difficulty_thresholds(min: Difficulty, max: Difficulty) -> Dict[int, Difficulty]:
-    if min == Difficulty.RELATIVE:
-        min = Difficulty.STARTER
-    if max == Difficulty.RELATIVE:
-        max = Difficulty.VERY_HARD
-    thresholds: Dict[int, Difficulty] = {}
-    min_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[min]
-    total_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[max + 1] - min_thresh
-    for difficulty in range(min, max + 1):
-        threshold = DEFAULT_DIFFICULTY_THRESHOLDS[difficulty] - min_thresh
-        threshold *= 100 / total_thresh
-        thresholds[int(threshold)] = Difficulty(difficulty)
-    return thresholds
 
 _T = TypeVar('_T')
 def _find_by_name(
@@ -301,112 +45,7 @@ def _find_mission_by_index(term: str, missions: List[SC2MOGenMission], searcher:
         raise ValueError(f"Mission at address \"{full_term}\" is an empty slot. This is an impossible requirement.")
     return mission
 
-class SC2MOGenMissionPools:
-    """
-    Manages available and used missions for a mission order.
-    """
-    master_list: Set[int]
-    difficulty_pools: Dict[Difficulty, Set[int]]
-    _used_flags: Dict[MissionFlag, int]
-    _used_missions: Set[SC2Mission]
-
-    def __init__(self) -> None:
-        self.master_list = {mission.id for mission in SC2Mission}
-        self.difficulty_pools = {
-            diff: {mission.id for mission in SC2Mission if mission.pool + 1 == diff}
-            for diff in Difficulty if diff != Difficulty.RELATIVE
-        }
-        self._used_flags = {}
-        self._used_missions = set()
-
-    def set_exclusions(self, excluded: List[str], unexcluded: List[str]) -> None:
-        """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
-        from appearing in the mission order."""
-        total_exclusions = [lookup_name_to_mission[name] for name in excluded if name not in unexcluded]
-        self.master_list.difference_update(total_exclusions)
-
-    def move_mission(self, mission: SC2Mission, old_diff: Difficulty, new_diff: Difficulty) -> None:
-        """Changes the difficulty of the given `mission`. Does nothing if the mission is not allowed to appear
-        or if it isn't set to the `old_diff` difficulty."""
-        if mission.id in self.master_list and mission.id in self.difficulty_pools[old_diff]:
-            self.difficulty_pools[old_diff].remove(mission.id)
-            self.difficulty_pools[new_diff].add(mission.id)
-
-    def get_pool_size(self, diff: Difficulty) -> int:
-        """Returns the amount of missions of the given difficulty that are allowed to appear."""
-        return len(self.difficulty_pools[diff])
-    
-    def get_used_flags(self) -> Dict[MissionFlag, int]:
-        """Returns a dictionary of all used flags and their appearance count within the mission order.
-        Flags that don't appear in the mission order also don't appear in this dictionary."""
-        return self._used_flags
-
-    def get_used_missions(self) -> Set[SC2Mission]:
-        """Returns a set of all missions used in the mission order."""
-        return self._used_missions
-
-    def pull_specific_mission(self, mission: SC2Mission) -> None:
-        """Marks the given mission as present in the mission order."""
-        # Remove the mission from the master list and whichever difficulty pool it is in
-        if mission.id in self.master_list:
-            self.master_list.remove(mission.id)
-            for diff in self.difficulty_pools:
-                if mission.id in self.difficulty_pools[diff]:
-                    self.difficulty_pools[diff].remove(mission.id)
-                    break
-        self._add_mission_stats(mission)
-    
-    def _add_mission_stats(self, mission: SC2Mission) -> None:
-        # Update used flag counts & missions
-        for flag in mission.flags:
-            self._used_flags.setdefault(flag, 0)
-            self._used_flags[flag] += 1
-        self._used_missions.add(mission)
-
-    def pull_random_mission(self, world: World, slot: SC2MOGenMission, locked_ids: List[int]) -> SC2Mission:
-        """Picks a random mission from the mission pool of the given slot, preferring a mission from `locked_ids` if allowed in the slot,
-        and marks it as present in the mission order."""
-        # Use a locked mission if possible in this slot
-        base_pool = slot.option_mission_pool.intersection(self.master_list)
-        allowed_locked = base_pool.intersection(locked_ids)
-        if len(allowed_locked) > 0:
-            pool = allowed_locked
-        else:
-            pool = base_pool
-        
-        difficulty_pools: Dict[int, List[int]] = {
-            diff: list(pool.intersection(self.difficulty_pools[diff]))
-            for diff in Difficulty if diff != Difficulty.RELATIVE
-        }
-
-        # Iteratively look down and up around the slot's desired difficulty
-        # Either a difficulty with valid missions is found, or an error is raised
-        final_pool: List[int] = []
-        final_difficulty = Difficulty.RELATIVE
-        desired_diff = slot.option_difficulty
-        diff_offset = 0
-        while len(final_pool) == 0:
-            lower_diff = max(desired_diff - diff_offset, 1)
-            higher_diff = min(desired_diff + diff_offset, 5)
-            final_pool = difficulty_pools[lower_diff]
-            if len(final_pool) > 0:
-                final_difficulty = Difficulty(lower_diff)
-                break
-            final_pool = difficulty_pools[higher_diff]
-            if len(final_pool) > 0:
-                final_difficulty = Difficulty(higher_diff)
-                break
-            if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
-                raise Exception(f"Slot in campaign \"{slot.parent_campaign.option_name}\" and layout \"{slot.parent_layout.option_name}\" ran out of possible missions to place.")
-            diff_offset += 1
-        
-        # Remove the mission from the master list
-        mission = lookup_id_to_mission[world.random.choice(final_pool)]
-        self.master_list.remove(mission.id)
-        self.difficulty_pools[final_difficulty].remove(mission.id)
-        self._add_mission_stats(mission)
-        return mission
-
+@dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
 class SC2MissionOrder:
     """
     The top-level data structure for mission orders. Contains helper functions for getting data about generated missions.
@@ -748,6 +387,7 @@ class SC2MissionOrder:
 
         world.multiworld.regions += regions
 
+@dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
 class SC2MOGenCampaign:
     option_name: str # name of this campaign
     option_display_name: List[str]
@@ -839,9 +479,10 @@ class SC2MOGenCampaign:
             [asdict(layout.get_slot_data()) for layout in self.layouts]
         )
 
+@dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
 class SC2MOGenLayout:
     option_name: str # name of this layout
-    option_display_name: str # visual name of this layout
+    option_display_name: List[str] # visual name of this layout
     option_type: Type[LayoutType] # type of this layout
     option_size: int # amount of missions in this layout
     option_limit: int # secondary size limit of this layout
@@ -864,6 +505,7 @@ class SC2MOGenLayout:
     entrances: Set[SC2MOGenMission]
     exits: Set[SC2MOGenMission]
     entry_rule: SubRuleEntryRule
+    display_name: str
 
     min_steps: int
     max_steps: int
@@ -1011,7 +653,7 @@ class SC2MOGenLayout:
             # Use minimum difficulty in this case
             step_range = 1
         # If min/max aren't relative, assume the limits are meant to show up
-        layout_thresholds = _modified_difficulty_thresholds(min_diff, max_diff)
+        layout_thresholds = modified_difficulty_thresholds(min_diff, max_diff)
         thresholds = sorted(layout_thresholds.keys())
         sorted_missions: Dict[Difficulty, Set[SC2MOGenMission]] = {diff: set() for diff in Difficulty if diff != Difficulty.RELATIVE}
         fixed_missions: Set[SC2MOGenMission] = set()
@@ -1043,7 +685,7 @@ class SC2MOGenLayout:
     def get_slot_data(self) -> LayoutSlotData:
         mission_slots = [
             [
-                asdict(self.missions[idx].get_slot_data()) if idx >= 0 else asdict(MissionSlotData.empty())
+                asdict(self.missions[idx].get_slot_data() if idx >= 0 else MissionSlotData.empty())
                 for idx in column
             ]
             for column in self.layout_type.get_visual_layout()
@@ -1054,7 +696,8 @@ class SC2MOGenLayout:
             asdict(self.entry_rule.to_slot_data()),
             mission_slots
         )
-    
+
+@dataclass(repr=False, eq=False, match_args=False, slots=True)
 class SC2MOGenMission:
     option_goal: bool # whether this mission is required to beat the game
     option_entrance: bool # whether this mission is unlocked when the layout is unlocked
@@ -1179,10 +822,6 @@ def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
-
-    if id is None:
-        location.event = True
-        location.locked = True
 
     location_cache.append(location)
 

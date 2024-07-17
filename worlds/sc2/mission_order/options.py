@@ -7,7 +7,7 @@ import typing
 from typing import Any, Union, Dict, Set, List
 import copy
 
-from ..mission_tables import lookup_name_to_mission, SC2Mission, MissionFlag, SC2Campaign
+from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
 from .structs import Difficulty, LayoutType
 from .types import Column, Grid, Hopscotch, Gauntlet, Blitz
