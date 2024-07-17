@@ -1304,7 +1304,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
              lambda state: has_sword(state, player))
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: (has_sword(state, player))
+             lambda state: has_sword(state, player)
              and has_ladder("Ladders in Library", state, world))
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
              lambda state: has_sword(state, player))
