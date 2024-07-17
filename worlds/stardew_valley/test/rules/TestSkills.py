@@ -1,23 +1,30 @@
-from ... import HasProgressionPercent
+from ... import HasProgressionPercent, StardewLogic
 from ...options import ToolProgression, SkillProgression, Mods
-from ...strings.skill_names import all_skills, all_vanilla_skills
+from ...strings.skill_names import all_skills, all_vanilla_skills, Skill
 from ...test import SVTestBase
 
 
-class TestVanillaSkillLogicSimplification(SVTestBase):
+class TestSkillProgressionVanilla(SVTestBase):
     options = {
         SkillProgression.internal_name: SkillProgression.option_vanilla,
         ToolProgression.internal_name: ToolProgression.option_progressive,
     }
 
     def test_skill_logic_has_level_only_uses_one_has_progression_percent(self):
-        rule = self.multiworld.worlds[1].logic.skill.has_level("Farming", 8)
-        self.assertEqual(1, sum(1 for i in rule.current_rules if type(i) == HasProgressionPercent))
+        rule = self.multiworld.worlds[1].logic.skill.has_level(Skill.farming, 8)
+        self.assertEqual(1, sum(1 for i in rule.current_rules if type(i) is HasProgressionPercent))
+
+    def test_has_mastery_requires_month_equivalent_to_10_levels(self):
+        logic: StardewLogic = self.multiworld.worlds[1].logic
+        rule = logic.skill.has_mastery(Skill.farming)
+        time_rule = logic.time.has_lived_months(10)
+
+        self.assertIn(time_rule, rule.current_rules)
 
 
-class TestAllSkillsRequirePrevious(SVTestBase):
+class TestSkillProgressionProgressive(SVTestBase):
     options = {
-        SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        SkillProgression.internal_name: SkillProgression.option_progressive,
         Mods.internal_name: frozenset(Mods.valid_keys),
     }
 
@@ -39,13 +46,27 @@ class TestAllSkillsRequirePrevious(SVTestBase):
 
             self.reset_collection_state()
 
+    def test_has_mastery_requires_10_levels(self):
+        logic: StardewLogic = self.multiworld.worlds[1].logic
+        rule = logic.skill.has_mastery(Skill.farming)
+        level_rule = logic.received("Farming Level", 10)
 
-class TestMasteryRequireSkillBeingMaxed(SVTestBase):
+        self.assertIn(level_rule, rule.current_rules)
+
+
+class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
     options = {
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         ToolProgression.internal_name: ToolProgression.option_progressive,
         Mods.internal_name: frozenset(),
     }
+
+    def test_has_mastery_requires_the_item(self):
+        logic: StardewLogic = self.multiworld.worlds[1].logic
+        rule = logic.skill.has_mastery(Skill.farming)
+        received_mastery = logic.received("Farming Mastery")
+
+        self.assertEqual(received_mastery, rule)
 
     def test_given_all_levels_when_can_earn_mastery_then_can_earn_mastery(self):
         self.collect_everything()

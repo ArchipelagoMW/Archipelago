@@ -15,7 +15,7 @@ from .. import options
 from ..data.harvest import HarvestCropSource
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
-from ..stardew_rule import StardewRule, True_, False_, true_
+from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
@@ -46,10 +46,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         tool_level = min(4, (level - 1) // 2)
         tool_material = ToolMaterial.tiers[tool_level]
 
-        if self.options.skill_progression == options.SkillProgression.option_vanilla:
-            previous_level_rule = true_
-        else:
-            previous_level_rule = self.logic.skill.has_level(skill, level - 1)
+        previous_level_rule = self.logic.skill.has_previous_level(skill, level)
 
         if skill == Skill.fishing:
             xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3))
@@ -76,14 +73,27 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
 
     # Should be cached
     def has_level(self, skill: str, level: int) -> StardewRule:
-        if level <= 0:
-            return True_()
+        assert level >= 0, f"There is no level before level 0."
+        if level == 0:
+            return true_
+
+        previous_level_rule = self.logic.skill.has_previous_level(skill, level)
+
+        if self.options.skill_progression == options.SkillProgression.option_vanilla:
+            return self.logic.skill.can_earn_level(skill, level) & previous_level_rule
+
+        return previous_level_rule
+
+    def has_previous_level(self, skill: str, level: int) -> StardewRule:
+        assert level > 0, f"There is no level before level 0."
+        if level == 1:
+            return true_
 
         if self.options.skill_progression == options.SkillProgression.option_vanilla:
             months = max(1, level - 1)
-            return self.logic.skill.can_earn_level(skill, level) & self.logic.time.has_lived_months(months)
+            return self.logic.time.has_lived_months(months)
 
-        return self.logic.received(f"{skill} Level", level)
+        return self.logic.received(f"{skill} Level", level - 1)
 
     @cache_self1
     def has_farming_level(self, level: int) -> StardewRule:
