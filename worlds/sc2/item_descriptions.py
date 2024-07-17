@@ -853,6 +853,7 @@ item_descriptions = {
     item_names.INSTIGATOR_RESOURCE_EFFICIENCY: f"Instigator War Council upgrade. {_get_resource_efficiency_desc(item_names.INSTIGATOR)}",
     item_names.ADEPT_DISRUPTIVE_TRANSFER: "Adept War Council upgrade. Adept shades apply a debuff to enemies they touch, increasing damage taken by +5.",
     item_names.SLAYER_PHASE_BLINK: "Slayer War Council upgrade. Slayers can now blink. After blinking, the Slayer's next attack within 8 seconds deals double damage.",
+    item_names.AVENGER_KRYHAS_CLOAK: "Avenger War Council upgrade. Avengers are now permanently cloaked.",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.
