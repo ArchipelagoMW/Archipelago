@@ -1726,7 +1726,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Reach Hanson", SC2_RACESWAP_LOC_ID_OFFSET + 804, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Secret Resource Stash", SC2_RACESWAP_LOC_ID_OFFSET + 805, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 806, LocationType.CHALLENGE,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state) and
                                    (adv_tactics and logic.protoss_basic_anti_air(state)
                                     or logic.protoss_competent_anti_air(state))),
@@ -1755,28 +1755,28 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.zerg_defense_rating(state, True, False) >= 2 and
                                    logic.zerg_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 4 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 4 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "Left Infestor", SC2_RACESWAP_LOC_ID_OFFSET + 1001, LocationType.VANILLA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "Right Infestor", SC2_RACESWAP_LOC_ID_OFFSET + 1002, LocationType.VANILLA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "North Infested Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1003, LocationType.EXTRA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "South Infested Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1004, LocationType.EXTRA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "Northwest Bar", SC2_RACESWAP_LOC_ID_OFFSET + 1005, LocationType.EXTRA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "North Bar", SC2_RACESWAP_LOC_ID_OFFSET + 1006, LocationType.EXTRA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "South Bar", SC2_RACESWAP_LOC_ID_OFFSET + 1007, LocationType.EXTRA,
-                     lambda state: logic.protoss_defense_rating(state, True, False) >= 2 and
+                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         # 110X/120X - Safe Haven
         # 130X/140X - Haven's Fall

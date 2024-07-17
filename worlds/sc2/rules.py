@@ -6,7 +6,7 @@ from .options import get_option_value, RequiredTactics, kerrigan_unit_available,
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
 from .items import get_basic_units, tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings, \
     kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings, \
-    pvz_defense_ratings, pvx_air_defense_ratings
+    pvz_defense_ratings
 from .mission_tables import SC2Race, SC2Campaign
 from . import item_names
 
@@ -380,13 +380,14 @@ class SC2Logic:
             if zerg_enemy:
                 defense_score += 1
         # Igniter
-        if state.has(item_names.ROACH_PRIMAL_IGNITER_ASPECT, self.player) and (state.has(item_names.ROACH, self.player) or self.morphling_enabled) and zerg_enemy:
+        if self.morph_igniter(state) and zerg_enemy:
             defense_score += 2
             if state.has(item_names.PRIMAL_IGNITER_CONCENTRATED_FIRE, self.player):
                 defense_score += 1
         # Creep Tumors
         if state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player):
-            defense_score += 1
+            if not zerg_enemy:
+                defense_score += 1
             if state.has(item_names.MALIGNANT_CREEP, self.player):
                 defense_score += 1
         # Infested Siege Tanks
@@ -435,6 +436,10 @@ class SC2Logic:
 
     def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
         return self.morph_impaler(state) or self.morph_lurker(state)
+
+    def morph_igniter(self, state: CollectionState) -> bool:
+        return (state.has(item_names.ROACH, self.player) or self.morphling_enabled) \
+            and state.has(item_names.ROACH_PRIMAL_IGNITER_ASPECT, self.player)
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
@@ -542,7 +547,7 @@ class SC2Logic:
 
     # LotV
 
-    def protoss_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
+    def protoss_defense_rating(self, state: CollectionState, zerg_enemy: bool) -> int:
         """
         Ability to handle defensive missions
         :param state:
@@ -561,15 +566,11 @@ class SC2Logic:
         # High Templar variants vs zerg
         if state.has_any({item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT}, self.player) and zerg_enemy:
             defense_score += 2
-        # Phoenix/Mirage vs air
-        if state.has_any({item_names.PHOENIX, item_names.MIRAGE}, self.player) and air_enemy:
-            defense_score += 1
 
         # General enemy-based rules
+        # No anti-air defense dict here, use an existing logic rule instead
         if zerg_enemy:
             defense_score += sum((pvz_defense_ratings[item] for item in pvz_defense_ratings if state.has(item, self.player)))
-        if air_enemy:
-            defense_score += sum((pvx_air_defense_ratings[item] for item in pvx_air_defense_ratings if state.has(item, self.player)))
         # Advanced Tactics bumps defense rating requirements down by 2
         if self.advanced_tactics:
             defense_score += 2

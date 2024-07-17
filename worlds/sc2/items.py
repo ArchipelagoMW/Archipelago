@@ -2031,10 +2031,6 @@ pvz_defense_ratings = {
     item_names.REAVER: 1,
     # any high templar variant: 2
 }
-pvx_air_defense_ratings = {
-    item_names.CORSAIR: 1,
-    # phoenix or mirage: 1
-}
 
 kerrigan_levels = [
     item_name for item_name, item_data in item_table.items()
