@@ -8,16 +8,17 @@ import numbers
 import random
 import typing
 import enum
+from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 from typing_extensions import Self
 
-from Utils import get_fuzzy_results, is_iterable_except_str
+from Utils import get_fuzzy_results, is_iterable_except_str, output_path
 
 if typing.TYPE_CHECKING:
-    from BaseClasses import PlandoOptions
+    from BaseClasses import MultiWorld, PlandoOptions
     from worlds.AutoWorld import World
     import pathlib
 
@@ -1486,6 +1487,36 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
+
+
+def dump_player_options(multiworld: MultiWorld) -> None:
+    from csv import DictWriter
+
+    game_players = defaultdict(list)
+    for player, game in multiworld.game.items():
+        game_players[game].append(player)
+    game_players = dict(sorted(game_players.items()))
+
+    output = []
+    all_options = set()
+    for game, players in game_players.items():
+        for player in players:
+            world = multiworld.worlds[player]
+            player_output = {
+                "name": multiworld.get_player_name(player),
+                "game": multiworld.game[player],
+            }
+            output.append(player_output)
+            for option_key, option in world.options_dataclass.type_hints.items():
+                display_name = getattr(option, "display_name", option_key)
+                player_output[display_name] = getattr(world.options, option_key).current_option_name
+                all_options.add(display_name)
+
+    with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w") as file:
+        fields = ["name", "game", *sorted(all_options)]
+        writer = DictWriter(file, fields)
+        writer.writeheader()
+        writer.writerows(output)
 
 
 if __name__ == "__main__":
