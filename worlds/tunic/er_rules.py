@@ -1570,7 +1570,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
              lambda state: has_sword(state, player))
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: (has_sword(state, player))
+             lambda state: has_sword(state, player) and has_ladder("Ladders in Library", state, world)
              and has_ladder("Ladders in Library", state, world))
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
              lambda state: has_sword(state, player))
@@ -1663,6 +1663,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         # garden knight is in the regions part above
         combat_logic_to_loc("Fortress Arena - Siege Engine/Vault Key Pickup", "Siege Engine", set_instead=True)
         combat_logic_to_loc("Librarian - Hexagon Green", "The Librarian", set_instead=True)
+        set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
+                 rule=lambda state: has_combat_reqs("The Librarian", state, player)
+                 and has_ladder("Ladders in Library", state, world))
         combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", set_instead=True)
         combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", set_instead=True)
 
