@@ -1962,9 +1962,9 @@ filler_items: typing.Tuple[str, ...] = (
 
 # Defense rating table
 # Commented defense ratings are handled in LogicMixin
-defense_ratings = {
+tvx_defense_ratings = {
     item_names.SIEGE_TANK: 5,
-    # "Maelstrom Rounds": 2,
+    # "Graduating Range": 1,
     item_names.PLANETARY_FORTRESS: 3,
     # Bunker w/ Marine/Marauder: 3,
     item_names.PERDITION_TURRET: 2,
@@ -1976,15 +1976,63 @@ defense_ratings = {
     item_names.WIDOW_MINE: 1,
     # "Concealment (Widow Mine)": 1
 }
-zerg_defense_ratings = {
+tvz_defense_ratings = {
     item_names.PERDITION_TURRET: 2,
     # Bunker w/ Firebat: 2,
     item_names.LIBERATOR: -2,
     item_names.HIVE_MIND_EMULATOR: 3,
     item_names.PSI_DISRUPTER: 3,
 }
-air_defense_ratings = {
+tvx_air_defense_ratings = {
     item_names.MISSILE_TURRET: 2,
+}
+zvx_defense_ratings = {
+    # Note that this doesn't include Kerrigan because this is just for race swaps, which doesn't involve her (for now)
+    item_names.SPINE_CRAWLER: 2,
+    # w/ Twin Drones: 1
+    item_names.SWARM_QUEEN: 1,
+    item_names.SWARM_HOST: 1,
+    # impaler: 3
+    #  "Hardened Tentacle Spines (Impaler)": 2
+    # lurker: 1
+    #  "Seismic Spines (Lurker)": 2
+    #  "Adapted Spines (Lurker)": 1
+    # brood lord : 2
+    # corpser roach: 1
+    # creep tumors (swarm queen or overseer): 1
+    # w/ malignant creep: 1
+    item_names.INFESTED_SIEGE_TANKS: 5,
+    # "Graduating Range": 1,
+}
+# zvz_defense_ratings = {
+    # corpser roach: 1
+    # primal igniter: 2
+    # w/ concentrated fire: 1
+    # lurker: 1
+    # w/ adapted spines: -1
+    # impaler: -1
+# }
+zvx_air_defense_ratings = {
+    item_names.SPORE_CRAWLER: 2,
+    # w/ Twin Drones: 1
+}
+pvx_defense_ratings = {
+    item_names.PHOTON_CANNON: 2,
+    item_names.KHAYDARIN_MONOLITH: 3,
+    # khalai ingenuity, enhanced targeting, optimized ordnance: 1 each if either of the above exist
+    item_names.SHIELD_BATTERY: 1,
+    item_names.NEXUS_OVERCHARGE: 2,
+    item_names.CORSAIR: 1,
+    # any of cloak, argus jewel, sustaining disruption: 1
+    item_names.MATRIX_OVERLOAD: 1,
+    item_names.COLOSSUS: 1,
+}
+pvz_defense_ratings = {
+    item_names.KHAYDARIN_MONOLITH: -2,
+    item_names.COLOSSUS: 2,
+    item_names.VANGUARD: 1,
+    item_names.REAVER: 1,
+    # any high templar variant: 2
 }
 
 kerrigan_levels = [
