@@ -1,7 +1,7 @@
 from ... import HasProgressionPercent
 from ...options import ToolProgression, SkillProgression, Mods
 from ...strings.skill_names import all_skills, all_vanilla_skills
-from ...test import SVTestBase, get_minsanity_options
+from ...test import SVTestBase
 
 
 class TestVanillaSkillLogicSimplification(SVTestBase):
@@ -41,14 +41,12 @@ class TestAllSkillsRequirePrevious(SVTestBase):
 
 
 class TestMasteryRequireSkillBeingMaxed(SVTestBase):
-    #  Using minsanity so collecting everything is faster
-    options = get_minsanity_options()
-    options.update({
+    options = {
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         Mods.internal_name: frozenset(),
-    })
+    }
 
-    def test_given_all_levels_when_can_earn_mastery_then_can(self):
+    def test_given_all_levels_when_can_earn_mastery_then_can_earn_mastery(self):
         self.collect_everything()
 
         for skill in all_vanilla_skills:
@@ -58,7 +56,7 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
 
         self.reset_collection()
 
-    def test_given_one_level_missing_when_can_earn_mastery_then_cannot(self):
+    def test_given_one_level_missing_when_can_earn_mastery_then_cannot_earn_mastery(self):
         for skill in all_vanilla_skills:
             with self.subTest(skill):
                 self.collect_everything()
@@ -69,10 +67,10 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
 
                 self.reset_collection()
 
-    def test_given_one_tool_missing_when_can_earn_mastery_then_cannot(self):
+    def test_given_one_tool_missing_when_can_earn_mastery_then_cannot_earn_mastery(self):
         self.collect_everything()
 
-        # Testing with combat because weapon are always randomized regardless of tools progression options.
+        # Testing with combat because weapon are always randomized regardless of tools progression options (ignoring monstersanity).
         self.remove_one_by_name(f"Progressive Weapon")
         location = self.multiworld.get_location("Combat Mastery", self.player)
         self.assert_reach_location_false(location, self.multiworld.state)
