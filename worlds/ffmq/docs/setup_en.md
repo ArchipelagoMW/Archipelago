@@ -20,7 +20,7 @@ The Archipelago community cannot supply you with this.
 ### Linux Setup
 
 1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
-   file is located in the assets section at the bottom of the version information. You'll likely be looking for the `.appImage`.**
+   file is located in the assets section at the bottom of the version information. You'll likely be looking for the `.AppImage`.**
 2. It is recommended to use either RetroArch or BizHawk if you run on linux, as snes9x-rr isn't compatible.
 
 ### Windows Setup
