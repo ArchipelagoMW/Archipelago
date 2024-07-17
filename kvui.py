@@ -836,6 +836,9 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         return self._handle_text(node)
 
     def _handle_text(self, node: JSONMessagePart):
+        node_type = node.get("type", None)
+        if node_type == "text" or node_type == None: # All other text goes through _handle_color, and we don't want to escape markup twice
+            node["text"] = escape_markup(node["text"])
         for ref in node.get("refs", []):
             node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
             self.ref_count += 1
