@@ -158,8 +158,6 @@ def get_rules_lookup(player: int):
             "Local Brewery": lambda state: can_brew_potions(state, player),
             "The Next Generation": lambda state: can_respawn_ender_dragon(state, player) and can_kill_ender_dragon(state, player),
             "Fishy Business": lambda state: state.has("Fishing Rod", player),
-            "Hot Tourist Destinations": lambda state: ((fortress_loot(state, player) or complete_raid(state, player)) and
-                state.has("Saddle", player) and state.has("Fishing Rod", player)),
             "This Boat Has Legs": lambda state: ((fortress_loot(state, player) or complete_raid(state, player)) and 
                 state.has("Saddle", player) and state.has("Fishing Rod", player)),
             "Sniper Duel": lambda state: state.has("Archery", player),

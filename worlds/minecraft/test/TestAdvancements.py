@@ -198,15 +198,9 @@ class TestAdvancements(MCTestBase):
             ["Hot Tourist Destinations", False, [], ['Progressive Resource Crafting']],
             ["Hot Tourist Destinations", False, [], ['Flint and Steel']],
             ["Hot Tourist Destinations", False, [], ['Progressive Tools']],
-            ["Hot Tourist Destinations", False, [], ['Progressive Weapons']],
-            ["Hot Tourist Destinations", False, [], ['Progressive Armor', 'Shield']],
-            ["Hot Tourist Destinations", False, [], ['Fishing Rod']],
-            ["Hot Tourist Destinations", False, [], ['Saddle']],
             ["Hot Tourist Destinations", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']],
-            ["Hot Tourist Destinations", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']],
-            ["Hot Tourist Destinations", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
-            ["Hot Tourist Destinations", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Bucket', 'Fishing Rod']],
-            ["Hot Tourist Destinations", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["Hot Tourist Destinations", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']],
+            ["Hot Tourist Destinations", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42015(self):
