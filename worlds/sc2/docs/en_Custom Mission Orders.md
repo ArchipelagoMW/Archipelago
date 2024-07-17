@@ -35,8 +35,6 @@ To illustrate, the following is what the default custom mission order currently 
       global:
         # The layout's name as displayed in the client
         display_name: "null"
-        # See Default Layout
-        limit: 0
         # Whether beating this layout is part of the world's goal
         goal: false
         # Whether this layout must be beaten to beat the campaign
@@ -60,10 +58,6 @@ To illustrate, the following is what the default custom mission order currently 
         type: grid
         # How many total missions should appear in this layout
         size: 9
-        # Optional secondary size value that is subject to
-        # interpretation by the layout type
-        # In the case of grid this sets the grid's width
-        limit: 3
 ```
 This default option also defines default values (though you won't get the Default Campaign and Default Layout), so you can omit the options you don't want to change in your own YAML.
 
@@ -437,6 +431,10 @@ Campaigns have no further options at this time.
 
 ## Layout Options
 
+Layouts may have special options depending on their `type`. These are covered in the section on Layout Types.
+Below are the options that apply to every layout.
+
+---
 ### Type
 ```yaml
 type: # There is no default
@@ -455,13 +453,6 @@ Details about specific layout types are covered at the end of this document.
 size: # There is no default
 ```
 Determines how many missions a layout contains. Valid values are positive numbers.
-
----
-### Limit
-```yaml
-limit: 0
-```
-This is interpreted by each layout type as a secondary parameter for determining the placement of missions. Valid values are non-negative numbers. See each layout type for details on how this value is used.
 
 ### Missions
 ```yaml
@@ -565,14 +556,15 @@ This example creates the branching path within `Char` in the Vanilla mission ord
 
 ## Layout Types
 
+The below types are listed with their custom options and their defaults.
+
+---
 ### Column
 ```yaml
 type: column
 ```
 
 This is a linear order going from top to bottom.
-
-`limit` is ignored for this type.
 
 A `size: 5` column has the following indices:
 ```yaml
@@ -584,18 +576,18 @@ A `size: 5` column has the following indices:
 ```
 
 ---
-
 ### Grid
 ```yaml
 type: grid
+width: 0 # Accepts positive numbers
 ```
 This is a rectangular order. Beating a mission unlocks adjacent missions in cardinal directions.
 
-`limit` sets the width of the grid, and height is determined via `size` and `limit`. If `limit` is set to 0, the width and height are determined automatically.
+`width` sets the width of the grid, and height is determined via `size` and `width`. If `width` is set to 0, the width and height are determined automatically.
 
 If `size` is too small for the determined width and height, then slots in the bottom left and top right corners will be removed to fit the given `size`. These empty slots are still accessible by index.
 
-A `size: 25`, `limit: 5` grid has the following indices:
+A `size: 25`, `width: 5` grid has the following indices:
 ```yaml
  0  1  2  3  4
  5  6  7  8  9
@@ -604,3 +596,68 @@ A `size: 25`, `limit: 5` grid has the following indices:
 20 21 22 23 24
 ```
 The top left corner (index `0`) is the default entrance. The bottom right corner (index `size - 1`) is the default exit.
+
+---
+### Hopscotch
+```yaml
+type: hopscotch
+width: 7 # Accepts numbers >= 4
+```
+
+This order alternates between one and two missions becoming available at a time.
+
+`width` determines how many mini columns are allowed to be next to one another before they wrap around the sides.
+
+A `size: 22`, `width: 4` Hopscotch layout has the following indices:
+```yaml
+ 0  2
+ 1  3  5
+    4  6  8
+       7  9
+11       10
+12 14 
+13 15 17
+   16 18 20
+      19 21
+         22
+```
+The top left corner (index `0`) is the default entrance. The bottom-most mission of the lowest column (index `size - 1`) is the default exit.
+
+---
+### Gauntlet
+```yaml
+type: gauntlet
+width: 7 # Accepts positive numbers
+```
+This type works the same way as column, but it goes horizontally instead of vertically.
+
+`width` is the maximum allowed missions on a row before it wraps around into a new row.
+
+A `size: 21`, `width: 7` gauntlet has the following indices:
+```yaml
+ 0  1  2  3  4  5  6
+
+ 7  8  9 10 11 12 13
+
+14 15 16 17 18 19 20
+```
+The left-most mission on the top row (index `0`) is the default entrance. The right-most mission on the bottom row (index `size - 1`) is the default exit.
+
+---
+### Blitz
+```yaml
+type: blitz
+width: 0 # Accepts positive numbers
+```
+This type features rows of missions, where beating a mission in a row unlocks the entire next row.
+
+`width` determines how many missions there are in a row. If set to 0, the width is determined automatically based on the total number of missions (the layout's `size`), but limited to be between 2 and 5.
+
+A `size: 20`, `width: 5` Blitz layout has the following indices:
+```yaml
+ 0  1  2  3  4
+ 5  6  7  8  9
+10 11 12 13 14
+15 16 17 18 19
+```
+The top left corner (index `0`) is the default entrance. The right-most mission on the bottom row (index `size - 1`) is the default exit.

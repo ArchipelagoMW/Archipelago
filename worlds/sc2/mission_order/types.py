@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Callable, Set, Tuple, Union, TYPE_CHECKING
+from typing import List, Callable, Set, Tuple, Union, TYPE_CHECKING, Dict, Any
 import math
 from abc import ABC, abstractmethod
 
@@ -8,11 +8,17 @@ if TYPE_CHECKING:
 
 class LayoutType(ABC):
     size: int
-    limit: int
 
-    def __init__(self, size: int, limit: int):
+    # 0
+    # 1
+    # 2
+
+    def __init__(self, size: int):
         self.size = size
-        self.limit = limit
+
+    def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        """Get type-specific options from the provided dict. Should return unused values."""
+        return options
 
     @abstractmethod
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
@@ -59,14 +65,19 @@ class Grid(LayoutType):
     height: int
     num_corners_to_remove: int
 
-    def __init__(self, size: int, limit: int):
-        super().__init__(size, limit)
-        if limit == 0:
-            self.width, self.height, self.num_corners_to_remove = Grid.get_grid_dimensions(size)
+    # 0 1 2
+    # 3 4 5
+    # 6 7 8
+
+    def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        width: int = options.pop("width", 0)
+        if width < 1:
+            self.width, self.height, self.num_corners_to_remove = Grid.get_grid_dimensions(self.size)
         else:
-            self.width = limit
-            self.height = math.ceil(size / self.width)
-            self.num_corners_to_remove = self.height * limit - size
+            self.width = width
+            self.height = math.ceil(self.size / self.width)
+            self.num_corners_to_remove = self.height * width - self.size
+        return options
 
     @staticmethod
     def get_factors(number: int) -> Tuple[int, int]:
@@ -176,15 +187,18 @@ class Grid(LayoutType):
 class Hopscotch(LayoutType):
     """Alternating between one and two available missions.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
+    width: int
 
     # 0 2
     # 1 3 5
     #   4 6
     #     7
 
-    def __init__(self, size: int, limit: int):
-        super().__init__(size, limit)
-    
+    def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        width: int = options.pop("width", 7)
+        self.width = max(width, 4)
+        return options
+
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         slots = [mission_factory() for _ in range(self.size)]
         slots[0].option_entrance = True
@@ -218,9 +232,7 @@ class Hopscotch(LayoutType):
             return []
 
     def get_visual_layout(self) -> List[List[int]]:
-        # max width is fixed at 7 right now
-        max_width = 7
-        spacer = max_width - 3
+        spacer = self.width - 3
         # size offset by 1 to account for first column of two slots
         cols: List[List[int]] = []
         col: List[int] = []
@@ -236,11 +248,11 @@ class Hopscotch(LayoutType):
         if len(col) > 0:
             cols.append(col)
 
-        final_cols: List[List[int]] = [Hopscotch.space_at_column(idx) for idx in range(min(len(cols), max_width))]
+        final_cols: List[List[int]] = [Hopscotch.space_at_column(idx) for idx in range(min(len(cols), self.width))]
         for (col_idx, col) in enumerate(cols):
-            if col_idx > 6:
-                final_cols[col_idx % 7].extend([-1 for _ in range(spacer)])
-            final_cols[col_idx % 7].extend(col)
+            if col_idx >= self.width:
+                final_cols[col_idx % self.width].extend([-1 for _ in range(spacer)])
+            final_cols[col_idx % self.width].extend(col)
         
         fill_to_longest(final_cols)
 
@@ -252,10 +264,17 @@ class Hopscotch(LayoutType):
 class Gauntlet(LayoutType):
     """Long, linear layout. Goes horizontally and wraps around.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
+    width: int
 
-    def __init__(self, size: int, limit: int):
-        super().__init__(size, limit)
+    # 0 1 2 3
+    #
+    # 4 5 6 7
     
+    def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        width: int = options.pop("width", 7)
+        self.width = min(max(width, 4), self.size)
+        return options
+
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         missions = [mission_factory() for _ in range(self.size)]
         missions[0].option_entrance = True
@@ -265,13 +284,11 @@ class Gauntlet(LayoutType):
         return missions
     
     def get_visual_layout(self) -> List[List[int]]:
-        max_width = 7
-        width = min(max_width, self.size)
-        columns = [[] for _ in range(width)]
+        columns = [[] for _ in range(self.width)]
         for idx in range(self.size):
-            if idx > 6:
-                columns[idx % 7].append(-1)
-            columns[idx % 7].append(idx)
+            if idx >= self.width:
+                columns[idx % self.width].append(-1)
+            columns[idx % self.width].append(idx)
 
         fill_to_longest(columns)
 
@@ -285,24 +302,33 @@ class Blitz(LayoutType):
     Default entrances are every mission in the top row, default exit is a central mission in the bottom row."""
     width: int
 
-    def __init__(self, size: int, limit: int):
-        super().__init__(size, limit)
-        min_width, max_width = 2, 5
-        mission_divisor = 5
-        self.width = min(max(size // mission_divisor, min_width), max_width)
+    # 0 1 2 3
+    # 4 5 6 7
+
+    def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        width = options.pop("width", 0)
+        if width < 1:
+            min_width, max_width = 2, 5
+            mission_divisor = 5
+            self.width = min(max(self.size // mission_divisor, min_width), max_width)
+        else:
+            self.width = min(self.size, width)
+        return options
     
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         slots = [mission_factory() for _ in range(self.size)]
         for idx in range(self.width):
             slots[idx].option_entrance = True
         
-        middle_column = self.width // 2
-        if self.size % self.width > middle_column:
-            final_row = self.width * (self.size // self.width)
-            final_mission = final_row + middle_column
-        else:
-            final_mission = self.size - 1
-        slots[final_mission].option_exit = True
+        # TODO: this works, but I'm not 100% sure on the intent
+        # middle_column = self.width // 2
+        # if self.size % self.width > middle_column:
+        #     final_row = self.width * (self.size // self.width)
+        #     final_mission = final_row + middle_column
+        # else:
+        #     final_mission = self.size - 1
+        # slots[final_mission].option_exit = True
+        slots[-1].option_exit = True
 
         rows = self.size // self.width
         for row in range(rows):

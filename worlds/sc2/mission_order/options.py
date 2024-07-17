@@ -57,9 +57,8 @@ class CustomMissionOrder(OptionDict):
             "goal": True,
             "min_difficulty": "relative",
             "max_difficulty": "relative",
-            # "single_layout_campaign" intentionally has no default
+            "single_layout_campaign": False,
             GLOBAL_ENTRY: {
-                "limit": 0,
                 "display_name": "null",
                 "entry_rules": [],
                 "goal": False,
@@ -72,7 +71,6 @@ class CustomMissionOrder(OptionDict):
             "Default Layout": {
                 "type": "grid",
                 "size": 9,
-                "limit": 3,
             },
         },
     }
@@ -90,7 +88,6 @@ class CustomMissionOrder(OptionDict):
                 # Type options
                 "type": lambda val: issubclass(val, LayoutType),
                 "size": IntOne,
-                "limit": IntZero,
                 # Link options
                 "exit": bool,
                 "goal": bool,
@@ -100,6 +97,8 @@ class CustomMissionOrder(OptionDict):
                 "mission_pool": {int},
                 "min_difficulty": Difficulty,
                 "max_difficulty": Difficulty,
+                # Allow arbitrary options for layout types
+                Optional(str): Or(int, str, bool, [Or(int, str, bool)]),
                 # Mission slots
                 "missions": [{
                     "index": [Or(int, str)],
@@ -162,7 +161,6 @@ class CustomMissionOrder(OptionDict):
                 for mission_slot_index in range(len(self.value[campaign][layout]["missions"])):
                     # Defaults for mission slots are handled by the mission slot struct
                     _resolve_special_options(self.value[campaign][layout]["missions"][mission_slot_index])
-        # print(self.value)
 
     # Overloaded to remove pre-init schema validation
     # Schema is still validated after __init__

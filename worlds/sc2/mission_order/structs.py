@@ -3,6 +3,7 @@ from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union,
 from collections.abc import Iterable
 from weakref import ref, ReferenceType
 from dataclasses import dataclass, asdict
+import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission
@@ -188,6 +189,14 @@ class SC2MissionOrder:
         assert len(accessible_campaigns) == len(self.campaigns)
         assert len(accessible_layouts) == sum(len(campaign.layouts) for campaign in self.campaigns)
         assert len(beaten_missions) == sum(len(layout.missions) for campaign in self.campaigns for layout in campaign.layouts)
+
+        # Fill campaign/layout step values as min/max of their children
+        for campaign in self.campaigns:
+            for layout in campaign.layouts:
+                layout.min_steps = min(mission.min_steps for mission in layout.missions)
+                layout.max_steps = max(mission.min_steps for mission in layout.missions)
+            campaign.min_steps = min(layout.min_steps for layout in campaign.layouts)
+            campaign.max_steps = max(layout.max_steps for layout in campaign.layouts)
 
         self.max_steps = steps - 1
 
@@ -421,8 +430,6 @@ class SC2MOGenCampaign:
         self.option_single_layout_campaign = data["single_layout_campaign"]
         self.layouts = []
         self.exits = set()
-        self.min_steps = 0
-        self.max_steps = 0
 
         for (layout_name, layout_data) in data.items():
             if type(layout_data) == dict:
@@ -485,7 +492,6 @@ class SC2MOGenLayout:
     option_display_name: List[str] # visual name of this layout
     option_type: Type[LayoutType] # type of this layout
     option_size: int # amount of missions in this layout
-    option_limit: int # secondary size limit of this layout
     option_goal: bool # whether this layout is required to beat the game
     option_exit: bool # whether this layout is required to beat its parent campaign
     option_mission_pool: List[int] # IDs of valid missions for this layout
@@ -512,29 +518,29 @@ class SC2MOGenLayout:
 
     def __init__(self, world: World, parent_campaign: SC2MOGenCampaign, name: str, data: Dict):
         self.option_name = name
-        self.option_display_name = data["display_name"]
-        self.option_type = data["type"]
-        self.option_size = data["size"]
-        self.option_limit = data["limit"]
-        self.option_goal = data["goal"]
-        self.option_exit = data["exit"]
-        self.option_mission_pool = data["mission_pool"]
-        self.option_missions = data["missions"]
-        self.option_entry_rules = data["entry_rules"]
-        self.option_min_difficulty = data["min_difficulty"]
-        self.option_max_difficulty = data["max_difficulty"]
+        self.option_display_name = data.pop("display_name")
+        self.option_type = data.pop("type")
+        self.option_size = data.pop("size")
+        self.option_goal = data.pop("goal")
+        self.option_exit = data.pop("exit")
+        self.option_mission_pool = data.pop("mission_pool")
+        self.option_missions = data.pop("missions")
+        self.option_entry_rules = data.pop("entry_rules")
+        self.option_min_difficulty = data.pop("min_difficulty")
+        self.option_max_difficulty = data.pop("max_difficulty")
         self.missions = []
         self.entrances = set()
         self.exits = set()
-        self.min_steps = 0
-        self.max_steps = 0
 
         # Check for positive size now instead of during YAML validation to actively error with default size
         if self.option_size == 0:
             raise ValueError(f"Layout \"{self.option_name}\" has a size of 0.")
 
         # Build base layout
-        self.layout_type: LayoutType = self.option_type(self.option_size, self.option_limit)
+        self.layout_type: LayoutType = self.option_type(self.option_size)
+        unused = self.layout_type.set_options(data)
+        if len(unused) > 0:
+            logging.warning(f"SC2 ({world.player_name}): Layout \"{self.option_name}\" has unknown options: {list(unused.keys())}")
         mission_factory = lambda: SC2MOGenMission(parent_campaign, self, set(self.option_mission_pool))
         self.missions = self.layout_type.make_slots(mission_factory)
 
