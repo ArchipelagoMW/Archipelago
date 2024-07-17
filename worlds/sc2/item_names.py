@@ -688,6 +688,8 @@ STALKER_PHASE_REACTOR                                   = "Phase Reactor (Stalke
 DRAGOON_PHALANX_SUIT                                    = "Phalanx Suit (Dragoon)"
 INSTIGATOR_RESOURCE_EFFICIENCY                          = "Resource Efficiency (Instigator)"
 ADEPT_DISRUPTIVE_TRANSFER                               = "Disruptive Transfer (Adept)"
+SLAYER_PHASE_BLINK                                      = "Phase Blink (Slayer)"
+AVENGER_KRYHAS_CLOAK                                    = "Kryhas Cloak (Avenger)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"

@@ -749,7 +749,7 @@ item_descriptions = {
     item_names.MOTHERSHIP: "Ultimate Protoss vessel, Can use the Vortex and Mass Recall abilities. Cloaks nearby units and structures.",
     item_names.ARBITER: "Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units.",
     item_names.ORACLE: "Flying caster. Can use the Revelation and Stasis Ward abilities.",
-    item_names.SKYLORD: "Capital ship. Builds and launches Interceptors that attack enemy targets. Can use Tactical Jump ability.",
+    item_names.SKYLORD: "Capital ship. Fires a powerful laser that deals damage in a line. Can use Tactical Jump ability.",
     item_names.PURGER: "Capital ship. Builds and launches Interceptors that attack enemy targets. Has Solar Beam weapon.",
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", PROTOSS, "ground units"),
     item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", PROTOSS, "ground units"),
@@ -852,6 +852,8 @@ item_descriptions = {
     item_names.DRAGOON_PHALANX_SUIT: "Dragoon War Council upgrade. Dragoons gain +2 range, move slightly faster, and can form tighter formations.",
     item_names.INSTIGATOR_RESOURCE_EFFICIENCY: f"Instigator War Council upgrade. {_get_resource_efficiency_desc(item_names.INSTIGATOR)}",
     item_names.ADEPT_DISRUPTIVE_TRANSFER: "Adept War Council upgrade. Adept shades apply a debuff to enemies they touch, increasing damage taken by +5.",
+    item_names.SLAYER_PHASE_BLINK: "Slayer War Council upgrade. Slayers can now blink. After blinking, the Slayer's next attack within 8 seconds deals double damage.",
+    item_names.AVENGER_KRYHAS_CLOAK: "Avenger War Council upgrade. Avengers are now permanently cloaked.",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.
