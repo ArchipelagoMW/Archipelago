@@ -37,7 +37,7 @@ class TestAllSkillsRequirePrevious(SVTestBase):
 
                     self.assert_reach_location_true(location, self.multiworld.state)
 
-            self.reset_collection()
+            self.reset_collection_state()
 
 
 class TestMasteryRequireSkillBeingMaxed(SVTestBase):
@@ -55,7 +55,7 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
                 location = self.multiworld.get_location(f"{skill} Mastery", self.player)
                 self.assert_reach_location_true(location, self.multiworld.state)
 
-        self.reset_collection()
+        self.reset_collection_state()
 
     def test_given_one_level_missing_when_can_earn_mastery_then_cannot_earn_mastery(self):
         for skill in all_vanilla_skills:
@@ -66,7 +66,7 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
                 location = self.multiworld.get_location(f"{skill} Mastery", self.player)
                 self.assert_reach_location_false(location, self.multiworld.state)
 
-                self.reset_collection()
+                self.reset_collection_state()
 
     def test_given_one_tool_missing_when_can_earn_mastery_then_cannot_earn_mastery(self):
         self.collect_everything()
@@ -75,4 +75,4 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
         location = self.multiworld.get_location("Mining Mastery", self.player)
         self.assert_reach_location_false(location, self.multiworld.state)
 
-        self.reset_collection()
+        self.reset_collection_state()

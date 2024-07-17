@@ -309,7 +309,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def remove_one_by_name(self, item: str) -> None:
         self.remove(self.create_item(item))
 
-    def reset_collection(self):
+    def reset_collection_state(self):
         self.multiworld.state = self.original_state.copy()
 
 
