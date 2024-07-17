@@ -749,7 +749,7 @@ item_descriptions = {
     item_names.MOTHERSHIP: "Ultimate Protoss vessel, Can use the Vortex and Mass Recall abilities. Cloaks nearby units and structures.",
     item_names.ARBITER: "Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units.",
     item_names.ORACLE: "Flying caster. Can use the Revelation and Stasis Ward abilities.",
-    item_names.SKYLORD: "Capital ship. Builds and launches Interceptors that attack enemy targets. Can use Tactical Jump ability.",
+    item_names.SKYLORD: "Capital ship. Fires a powerful laser that deals damage in a line. Can use Tactical Jump ability.",
     item_names.PURGER: "Capital ship. Builds and launches Interceptors that attack enemy targets. Has Solar Beam weapon.",
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", PROTOSS, "ground units"),
     item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", PROTOSS, "ground units"),
