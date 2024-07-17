@@ -43,6 +43,7 @@ class TestAllSkillsRequirePrevious(SVTestBase):
 class TestMasteryRequireSkillBeingMaxed(SVTestBase):
     options = {
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
         Mods.internal_name: frozenset(),
     }
 
@@ -70,9 +71,8 @@ class TestMasteryRequireSkillBeingMaxed(SVTestBase):
     def test_given_one_tool_missing_when_can_earn_mastery_then_cannot_earn_mastery(self):
         self.collect_everything()
 
-        # Testing with combat because weapon are always randomized regardless of tools progression options (ignoring monstersanity).
-        self.remove_one_by_name(f"Progressive Weapon")
-        location = self.multiworld.get_location("Combat Mastery", self.player)
+        self.remove_one_by_name(f"Progressive Pickaxe")
+        location = self.multiworld.get_location("Mining Mastery", self.player)
         self.assert_reach_location_false(location, self.multiworld.state)
 
         self.reset_collection()
