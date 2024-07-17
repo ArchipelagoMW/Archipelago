@@ -107,7 +107,7 @@ class TestPilgrimageRequireStartingRoom(LingoTestBase):
                  "Orange Tower Fifth Floor - Quadruple Intersection", "The Tenacious - Shortcut to Hub Room",
                  "Outside The Agreeable - Tenacious Entrance", "Crossroads - Tower Entrance",
                  "Orange Tower Fourth Floor - Hot Crusts Door", "Challenge Room - Welcome Door",
-                 "Welcome Back Area - Shortcut to Starting Room", "Number Hunt - Challenge Entrance"]
+                 "Number Hunt - Challenge Entrance", "Welcome Back Area - Shortcut to Starting Room"]
 
         for door in doors:
             print(door)
