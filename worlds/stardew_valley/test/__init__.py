@@ -85,7 +85,7 @@ def allsanity_no_mods_6_x_x():
         options.QuestLocations.internal_name: 56,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
-        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.TrapItems.internal_name: options.TrapItems.option_nightmare,
