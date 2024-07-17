@@ -2,7 +2,7 @@ from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, WalnutRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -290,9 +290,6 @@ pelican_town = ContentPack(
         Book.woodcutters_weekly: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.queen_of_sauce_cookbook: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
     },
     fishes=(
         fish_data.albacore,
