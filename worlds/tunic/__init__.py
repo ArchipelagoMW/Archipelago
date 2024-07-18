@@ -386,7 +386,7 @@ class TunicWorld(World):
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs,
-            "disable_local_spoiler": int(tunic_settings["disable_local_spoiler"]),
+            "disable_local_spoiler": max(int(tunic_settings["disable_local_spoiler"]), int(self.multiworld.is_race)),
         }
 
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
