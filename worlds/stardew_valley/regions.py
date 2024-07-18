@@ -2,8 +2,7 @@ from random import Random
 from typing import Iterable, Dict, Protocol, List, Tuple, Set
 
 from BaseClasses import Region, Entrance
-from . import StardewContent
-from .content import content_packs
+from .content import content_packs, StardewContent
 from .mods.mod_regions import ModDataList, vanilla_connections_to_remove_by_mod
 from .options import EntranceRandomization, ExcludeGingerIsland, StardewValleyOptions
 from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
