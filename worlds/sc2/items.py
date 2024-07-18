@@ -1390,7 +1390,7 @@ item_table = {
 
     item_names.ZERGLING_RAPTOR_STRAIN:
         ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING,
-                 origin={"hots"}),
+                 origin={"hots"}, classification=ItemClassification.progression),
     item_names.ZERGLING_SWARMLING_STRAIN:
         ItemData(301 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 1, SC2Race.ZERG, parent_item=item_names.ZERGLING,
                  origin={"hots"}),

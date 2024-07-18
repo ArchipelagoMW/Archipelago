@@ -2,8 +2,7 @@ from dataclasses import dataclass, fields, Field
 from typing import *
 
 from Utils import is_iterable_except_str
-from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
-    PerGameCommonOptions, Option, VerifyKeys)
+from Options import *
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
@@ -979,9 +978,12 @@ class Starcraft2Options(PerGameCommonOptions):
     starting_supply_per_item: StartingSupplyPerItem
 
 
-def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
+def get_option_value(world: Union['SC2World', None], name: str) -> Union[int, FrozenSet]:
     if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
+        if isinstance(field.type, str):
+            if field.type in globals():
+                return globals()[field.type].default
         return field.type.default
 
     player_option = getattr(world.options, name)
