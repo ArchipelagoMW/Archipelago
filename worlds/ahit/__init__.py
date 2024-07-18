@@ -97,9 +97,10 @@ class HatInTimeWorld(World):
                     self.multiworld.push_precollected(self.create_item("Umbrella"))
 
                 if self.options.ShuffleAlpineZiplines:
-                    ziplines = [(alps_hooks.keys())]
+                    ziplines = list(alps_hooks.keys())
                     ziplines.remove("Zipline Unlock - The Twilight Bell Path")  # not enough checks from this one
-                    self.multiworld.push_precollected(self.create_item(self.random.choice(ziplines)))
+                    self.multiworld.push_precollected(
+                        self.create_item(ziplines[self.random.randint(0, len(ziplines)-1)]))
             elif start_chapter == ChapterIndex.SUBCON:
                 if self.options.ShuffleSubconPaintings:
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))
