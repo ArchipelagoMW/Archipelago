@@ -382,8 +382,6 @@ class SC2Logic:
         # Igniter
         if self.morph_igniter(state) and zerg_enemy:
             defense_score += 2
-            if state.has(item_names.PRIMAL_IGNITER_CONCENTRATED_FIRE, self.player):
-                defense_score += 1
         # Creep Tumors
         if state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player):
             if not zerg_enemy:
@@ -556,18 +554,7 @@ class SC2Logic:
         :return:
         """
         defense_score = sum((pvx_defense_ratings[item] for item in pvx_defense_ratings if state.has(item, self.player)))
-        # Defensive Upgrades
-        defensive_upgrades = {item_names.KHALAI_INGENUITY, item_names.ENHANCED_TARGETING, item_names.OPTIMIZED_ORDNANCE}
-        if state.has_any({item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH}, self.player):
-            defense_score += sum(item for item in defensive_upgrades if state.has(item, self.player))
-        # Corsair upgrades
-        if state.has(item_names.CORSAIR, self.player) and state.has_any({item_names.CORSAIR_ARGUS_JEWEL, item_names.CORSAIR_STEALTH_DRIVE, item_names.CORSAIR_SUSTAINING_DISRUPTION}, self.player):
-            defense_score += 1
-        # High Templar variants vs zerg
-        if state.has_any({item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT}, self.player) and zerg_enemy:
-            defense_score += 2
 
-        # General enemy-based rules
         # No anti-air defense dict here, use an existing logic rule instead
         if zerg_enemy:
             defense_score += sum((pvz_defense_ratings[item] for item in pvz_defense_ratings if state.has(item, self.player)))
