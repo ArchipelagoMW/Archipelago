@@ -218,7 +218,7 @@ def _init() -> None:
     tmhm_data = data_json["tmhm"]
 
     data.rom_version = data_json["rom_version"]
-    data.rom_version_11 = data_json["rom_version_11"]
+    data.rom_version_11 = data_json["rom_version11"]
 
     claimed_locations: Set[str] = set()
 
