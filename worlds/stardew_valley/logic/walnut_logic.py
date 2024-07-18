@@ -24,12 +24,8 @@ class WalnutLogicMixin(BaseLogicMixin):
         self.walnut = WalnutLogic(*args, **kwargs)
 
 
-class CountLogicMixin:
-    pass
-
-
-class WalnutLogic(
-    BaseLogic[Union[WalnutLogicMixin, ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, CountLogicMixin, CombatLogicMixin, AbilityLogicMixin]]):
+class WalnutLogic(BaseLogic[Union[WalnutLogicMixin, ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, CombatLogicMixin,
+                                  AbilityLogicMixin]]):
 
     def has_walnut(self, number: int) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
@@ -109,7 +105,7 @@ class WalnutLogic(
         gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
         return reach_entire_island & self.logic.has(Fruit.banana) & self.logic.has_all(*gems) & \
                self.logic.ability.can_mine_perfectly() & self.logic.ability.can_fish_perfectly() & \
-               self.logic.has(Furniture.flute_block) & self.logic.has(Seed.melon) & self.logic.has(Seed.wheat) &\
+               self.logic.has(Furniture.flute_block) & self.logic.has(Seed.melon) & self.logic.has(Seed.wheat) & \
                self.logic.has(Seed.garlic) & self.can_complete_field_office()
 
     @cached_property
