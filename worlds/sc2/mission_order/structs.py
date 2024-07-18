@@ -3,6 +3,7 @@ from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union,
 from collections.abc import Iterable
 from weakref import ref, ReferenceType
 from dataclasses import dataclass, asdict
+from abc import ABC, abstractmethod
 import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
@@ -15,39 +16,40 @@ from worlds.AutoWorld import World
 if TYPE_CHECKING:
     from ..locations import LocationData
 
-_T = TypeVar('_T')
-def _find_by_name(
-        term: str, objects: Iterable[_T], searcher: Union[_T, None] = None,
-        error_name: str = "object", full_term: str = "", fail_allowed: bool = False
-) -> _T:
-    if searcher and searcher.option_name.casefold() == term.casefold():
-        raise ValueError(f"{error_name.capitalize()} at address \"{full_term}\" tried to find itself (\"{term}\"). This would create a circular requirement.")
-    search = [obj for obj in objects if obj.option_name.casefold() == term.casefold()]
-    if len(search) == 0:
-        if fail_allowed:
-            return None
-        raise ValueError(f"Address \"{full_term}\" could not find {error_name} with name \"{term}\". Please check the spelling of {error_name} names.")
-    if len(search) > 1:
-        raise ValueError(f"Address \"{full_term}\" found multiple {error_name}s with name \"{term}\". Please make sure only one {error_name} with the given name exists.")
-    return search[0]
+class MissionOrderNode(ABC):
+    parent: ReferenceType[MissionOrderNode]
+    __slots__ = ("parent",)
 
-def _find_mission_by_index(term: str, missions: List[SC2MOGenMission], searcher: Union[SC2MOGenMission, None] = None, full_term: str = "") -> SC2MOGenMission:
-    index = -1
-    try:
-        index = int(term)
-    except ValueError:
-        raise ValueError(f"Address \"{full_term}\" contains index \"{term}\", which is not a number.")
-    if index < 0 or index >= len(missions):
-        raise ValueError(f"Address \"{full_term}\" contains index \"{term}\", which is out of bounds.")
-    mission = missions[index]
-    if mission == searcher:
-        raise ValueError(f"Mission at address \"{full_term}\" tried to find itself. This would create a circular requirement.")
-    if mission.option_empty:
-        raise ValueError(f"Mission at address \"{full_term}\" is an empty slot. This is an impossible requirement.")
-    return mission
+    def get_parent(self, address_so_far: str, full_address: str) -> MissionOrderNode:
+        if self.parent is None:
+            raise ValueError(
+                f"Address \"{address_so_far}\" (from \"{full_address}\") could not find a parent object. " +
+                "This should mean the address contains \"..\" too often."
+            )
+        return self.parent()
+
+    @abstractmethod
+    def search(self, term: str) -> Union[List[MissionOrderNode], None]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def child_type_name(self) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_missions(self) -> Set[SC2MOGenMission]:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def get_exits(self) -> Set[SC2MOGenMission]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+        raise NotImplementedError
 
 @dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
-class SC2MissionOrder:
+class SC2MissionOrder(MissionOrderNode):
     """
     The top-level data structure for mission orders. Contains helper functions for getting data about generated missions.
     """
@@ -64,9 +66,10 @@ class SC2MissionOrder:
         self.fixed_missions = set()
         self.mission_pools = SC2MOGenMissionPools()
         self.goal_missions = set()
+        self.parent = None
 
         for (campaign_name, campaign_data) in data.items():
-            campaign = SC2MOGenCampaign(world, campaign_name, campaign_data)
+            campaign = SC2MOGenCampaign(world, ref(self), campaign_name, campaign_data)
             self.campaigns.append(campaign)
 
         # Check that the mission order actually has a goal
@@ -120,6 +123,25 @@ class SC2MissionOrder:
         """Parses the mission order into a format usable for slot data."""
         # [(campaign data, [(layout data, [[(mission data)]] )] )]
         return [asdict(campaign.get_slot_data()) for campaign in self.campaigns]
+
+    def search(self, term: str) -> Union[List[MissionOrderNode], None]:
+        return [
+            campaign.layouts[0] if campaign.option_single_layout_campaign else campaign
+            for campaign in self.campaigns
+            if campaign.option_name.casefold() == term.casefold()
+        ]
+    
+    def child_type_name(self) -> str:
+        return "Campaign"
+    
+    def get_missions(self) -> Set[SC2MOGenMission]:
+        return {mission for campaign in self.campaigns for layout in campaign.layouts for mission in layout.missions}
+    
+    def get_exits(self) -> Set[SC2MOGenMission]:
+        return set()
+    
+    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+        return "All Missions"
 
     def make_connections(self, world: World):
         names: Dict[str, int] = {}
@@ -214,156 +236,76 @@ class SC2MissionOrder:
                 "rules": campaign.option_entry_rules,
                 "amount": -1
             }
-            campaign.entry_rule = self.dict_to_entry_rule(entry_rule, [campaign])
+            campaign.entry_rule = self.dict_to_entry_rule(entry_rule, campaign)
             for layout in campaign.layouts:
                 entry_rule = {
                     "rules": layout.option_entry_rules,
                     "amount": -1
                 }
-                layout.entry_rule = self.dict_to_entry_rule(entry_rule, [campaign, layout])
+                layout.entry_rule = self.dict_to_entry_rule(entry_rule, layout)
                 for mission in layout.missions:
                     entry_rule = {
                         "rules": mission.option_entry_rules,
                         "amount": -1
                     }
-                    mission.entry_rule = self.dict_to_entry_rule(entry_rule, [campaign, layout, mission])
+                    mission.entry_rule = self.dict_to_entry_rule(entry_rule, mission)
                     # Manually make a rule for prev missions
                     mission.entry_rule.target_amount += 1
                     mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
 
-    def dict_to_entry_rule(self, data: Dict[str, Any], searchers: Any) -> EntryRule:
+    def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode) -> EntryRule:
         if "rules" in data:
-            rules = [self.dict_to_entry_rule(subrule, searchers) for subrule in data["rules"]]
+            rules = [self.dict_to_entry_rule(subrule, searcher) for subrule in data["rules"]]
             return SubRuleEntryRule(rules, data["amount"])
         if "scope" in data:
-            objects: List[Union[SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission]] = []
+            objects: List[Tuple[MissionOrderNode, str]] = []
             for address in data["scope"]:
-                resolved = self.resolve_address(address, searchers)
-                objects.append(resolved)
-            visual_reqs = [obj if type(obj) == SC2MOGenMission else obj.get_visual_name() for obj in objects]
+                resolved = self.resolve_address(address, searcher)
+                objects.append((resolved, address))
+            visual_reqs = [obj.get_visual_requirement() for (obj, _) in objects]
             if "amount" in data:
-                missions = {mission for obj in objects for mission in obj.get_missions()}
+                missions = {mission for (obj, _) in objects for mission in obj.get_missions()}
                 return CountMissionsEntryRule(missions, data["amount"], visual_reqs)
-            missions = {mission for obj in objects for mission in obj.get_exits()}
+            missions = set()
+            for (obj, address) in objects:
+                exits = obj.get_exits()
+                if len(exits) == 0:
+                    raise ValueError(
+                        f"Address \"{address}\" found an unbeatable object. " +
+                        "This should mean the address contains \"..\" too often."
+                    )
+                missions.update(exits)
             return BeatMissionsEntryRule(missions, visual_reqs)
 
-    def resolve_address(self, address: str, searchers: List[Any]) -> Union[SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission]:
-        match len(searchers):
-            case 1:
-                return self.resolve_address_from_campaign(address, searchers[0])
-            case 2:
-                return self.resolve_address_from_layout(address, searchers[1], searchers[0])
-            case 3:
-                return self.resolve_address_from_mission(address, searchers[2], searchers[0], searchers[1])
-            case _:
-                return self.resolve_address_from_campaign(address, None)
-
-    def resolve_address_from_campaign(
-        self, address: str, searcher: Union[SC2MOGenCampaign, None]
-    ) -> Union[SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission]:
-        # campaign-level addresses: "campaign", "campaign/layout", "campaign/layout/index", "top layout", "top layout/index"
-        parts = address.split('/')
-        other_campaign = _find_by_name(parts[0], self.campaigns, searcher, "campaign", address)
-        if len(parts) == 1: # "campaign", "top layout" (= same-name campaign)
-            return other_campaign
-        elif len(parts) == 2:
-            if other_campaign.option_single_layout_campaign: # "top layout/index"
-                mission = _find_mission_by_index(parts[1], other_campaign.layouts[0].missions, None, address)
-                return mission
-            else: # "campaign/layout"
-                layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                return layout
-        elif len(parts) == 3: # "campaign/layout/index"
-            layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-            mission = _find_mission_by_index(parts[2], layout.missions, None, address)
-            return mission
+    def resolve_address(self, address: str, searcher: MissionOrderNode) -> MissionOrderNode:
+        if address.startswith("../") or address == "..":
+            # Relative address, starts from searching object
+            cursor = searcher
         else:
-            raise ValueError(f"Address {address} contains too many '/'s.")
-
-    def resolve_address_from_layout(
-        self, address: str, searcher: SC2MOGenLayout, parent: SC2MOGenCampaign
-    ) -> Union[SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission]:
-        # layout-level addresses: campaign-level addresses + "layout", "layout/index"
-        parts = address.split('/')
-        other_campaign = _find_by_name(parts[0], self.campaigns, None, "campaign", address, True)
-        other_layout = None
-        if not other_campaign: # If the first part is not a campaign, assume it wants the local campaign
-            other_campaign = parent
-            other_layout = _find_by_name(parts[0], parent.layouts, searcher, "layout", address)
-        if len(parts) == 1:
-            if other_layout: # [parent campaign]/"layout"
-                return other_layout
-            else: # "campaign", "top layout"
-                return other_campaign
-        elif len(parts) == 2:
-            if other_layout: # [parent campaign]/"layout/index"
-                mission = _find_mission_by_index(parts[1], other_layout.missions, None, address)
-                return mission
+            # Absolute address, starts from the top
+            cursor = self
+        address_so_far = ""
+        for term in address.split("/"):
+            if len(address_so_far) > 0:
+                address_so_far += "/"
+            address_so_far += term
+            if term == "..":
+                cursor = cursor.get_parent(address_so_far, address)
             else:
-                if other_campaign.option_single_layout_campaign: # "top layout/index"
-                    mission = _find_mission_by_index(parts[1], other_campaign.layouts[0].missions, None, address)
-                    return mission
-                else: # "campaign/layout"
-                    other_layout = _find_by_name(parts[1], other_campaign.layouts, searcher, "layout", address)
-                    return other_layout
-        elif len(parts) == 3: # "campaign/layout/index"
-            if other_layout:
-                raise ValueError(f"Address {address} could not find campaign with name \"{parts[0]}\". Please check the spelling of campaign names.")
-            other_layout = _find_by_name(parts[1], other_campaign.layouts, searcher, "layout", address)
-            mission = _find_mission_by_index(parts[2], other_layout.missions, None, address)
-            return mission
-        else:
-            raise ValueError(f"Address {address} contains too many '/'s.")
-
-    def resolve_address_from_mission(
-        self, address: str, searcher: SC2MOGenMission,
-        parent_campaign: SC2MOGenCampaign, parent_layout: SC2MOGenLayout
-    ) -> Union[SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission]:
-        # mission-level addresses: layout-level addresses + "index"
-        parts = address.split('/')
-        other_campaign = _find_by_name(parts[0], self.campaigns, None, "campaign", address, True)
-        other_layout = None
-        other_mission = None
-        if not other_campaign: # If the first part is not a campaign, assume it wants the local campaign
-            other_campaign = parent_campaign
-            other_layout = _find_by_name(parts[0], parent_campaign.layouts, None, "layout", address, True)
-            if not other_layout: # If the first part is not a layout either, assume it wants the local layout
-                other_layout = parent_layout
-                other_mission = _find_mission_by_index(parts[0], parent_layout.missions, searcher, address)
-        if len(parts) == 1:
-            if other_mission: # [parent campaign]/[parent layout]/"index"
-                return other_mission
-            elif other_layout: # [parent campaign]/"layout"
-                return other_layout
-            elif other_campaign: # "campaign"
-                return other_campaign
-            else:
-                raise ValueError(f"Address {address} could not find campaign or layout with name \"{parts[0]}\". Please check the spelling of campaign and layout names.")
-        elif len(parts) == 2:
-            if other_mission: # Error: "index/???"
-                raise ValueError(f"Address {address} could not find campaign or layout with name \"{parts[0]}\". Please check the spelling of campaign and layout names.")
-            elif other_layout: # [parent campaign]/"layout/index"
-                other_mission = _find_mission_by_index(parts[1], other_layout.missions, searcher, address)
-                return other_mission
-            else:
-                if other_campaign.option_single_layout_campaign: # "top layout/index"
-                    other_mission = _find_mission_by_index(parts[1], other_campaign.layouts[0].missions, None, address)
-                    return other_mission
-                else: # "campaign/layout"
-                    other_layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                    return other_layout
-        elif len(parts) == 3:
-            if other_mission: # Error: "index/???/???"
-                raise ValueError(f"Address {address} could not find campaign with name \"{parts[0]}\". Please check the spelling of campaign names.")
-            elif other_layout: # Error: "layout/???/???"
-                raise ValueError(f"Address {address} could not find campaign with name \"{parts[0]}\". Please check the spelling of campaign names.")
-            else: # "campaign/layout/index"
-                other_layout = _find_by_name(parts[1], other_campaign.layouts, None, "layout", address)
-                other_mission = _find_mission_by_index(parts[2], other_layout.missions, searcher, address)
-                return other_mission
-        else:
-            raise ValueError(f"Address {address} contains too many '/'s.")
-
+                result = cursor.search(term)
+                if result is None:
+                    raise ValueError(f"Address \"{address_so_far}\" (from \"{address}\") tried to find a child for a mission.")
+                if len(result) == 0:
+                    raise ValueError(f"Address \"{address_so_far}\" (from \"{address}\") could not find a {cursor.child_type_name()}.")
+                if len(result) > 1:
+                    raise ValueError((f"Address \"{address_so_far}\" (from \"{address}\") found more than one {cursor.child_type_name()}s."))
+                cursor = result[0]
+            if cursor == searcher:
+                raise ValueError(
+                    f"Address \"{address_so_far}\" (from \"{address}\") returned to original object. " + 
+                    "This is not allowed to avoid circular requirements."
+                )
+        return cursor
 
     def fill_missions(
             self, world: World, locked_missions: List[str],
@@ -397,7 +339,7 @@ class SC2MissionOrder:
         world.multiworld.regions += regions
 
 @dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
-class SC2MOGenCampaign:
+class SC2MOGenCampaign(MissionOrderNode):
     option_name: str # name of this campaign
     option_display_name: List[str]
     option_entry_rules: List[Dict[str, Any]]
@@ -420,7 +362,8 @@ class SC2MOGenCampaign:
     min_steps: int
     max_steps: int
 
-    def __init__(self, world: World, name: str, data: Dict[str, Any]):
+    def __init__(self, world: World, parent: ReferenceType[SC2MissionOrder], name: str, data: Dict[str, Any]):
+        self.parent = parent
         self.option_name = name
         self.option_display_name = data["display_name"]
         self.option_goal = data["goal"]
@@ -433,7 +376,7 @@ class SC2MOGenCampaign:
 
         for (layout_name, layout_data) in data.items():
             if type(layout_data) == dict:
-                layout = SC2MOGenLayout(world, self, layout_name, layout_data)
+                layout = SC2MOGenLayout(world, ref(self), layout_name, layout_data)
                 self.layouts.append(layout)
 
                 # Collect required missions (marked layouts' exits)
@@ -470,11 +413,24 @@ class SC2MOGenCampaign:
                 sorted_missions[diff].update(missions)
         return (sorted_missions, fixed_missions)
 
+    def search(self, term: str) -> Union[List[MissionOrderNode], None]:
+        return [
+            layout
+            for layout in self.layouts
+            if layout.option_name.casefold() == term.casefold()
+        ]
+    
+    def child_type_name(self) -> str:
+        return "Layout"
+
     def get_missions(self) -> Set[SC2MOGenMission]:
         return {mission for layout in self.layouts for mission in layout.missions}    
 
     def get_exits(self) -> Set[SC2MOGenMission]:
         return self.exits
+    
+    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+        return self.get_visual_name()
     
     def get_visual_name(self) -> str:
         return self.display_name
@@ -487,7 +443,7 @@ class SC2MOGenCampaign:
         )
 
 @dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
-class SC2MOGenLayout:
+class SC2MOGenLayout(MissionOrderNode):
     option_name: str # name of this layout
     option_display_name: List[str] # visual name of this layout
     option_type: Type[LayoutType] # type of this layout
@@ -516,7 +472,8 @@ class SC2MOGenLayout:
     min_steps: int
     max_steps: int
 
-    def __init__(self, world: World, parent_campaign: SC2MOGenCampaign, name: str, data: Dict):
+    def __init__(self, world: World, parent: ReferenceType[SC2MOGenCampaign], name: str, data: Dict):
+        self.parent: ReferenceType[SC2MOGenCampaign] = parent
         self.option_name = name
         self.option_display_name = data.pop("display_name")
         self.option_type = data.pop("type")
@@ -541,7 +498,7 @@ class SC2MOGenLayout:
         unused = self.layout_type.set_options(data)
         if len(unused) > 0:
             logging.warning(f"SC2 ({world.player_name}): Layout \"{self.option_name}\" has unknown options: {list(unused.keys())}")
-        mission_factory = lambda: SC2MOGenMission(parent_campaign, self, set(self.option_mission_pool))
+        mission_factory = lambda: SC2MOGenMission(ref(self), set(self.option_mission_pool))
         self.missions = self.layout_type.make_slots(mission_factory)
 
         # Update missions with user data
@@ -679,11 +636,33 @@ class SC2MOGenLayout:
             sorted_missions[mission.option_difficulty].add(mission)
         return (sorted_missions, fixed_missions)
 
+    def get_parent(self, _address_so_far: str, _full_address: str) -> MissionOrderNode:
+        if self.parent().option_single_layout_campaign:
+            parent = self.parent().parent
+        else:
+            parent = self.parent
+        return parent()
+
+    def search(self, term: str) -> Union[List[MissionOrderNode], None]:
+        try:
+            index = int(term)
+        except ValueError:
+            return []
+        if index < 0 or index >= len(self.missions):
+            return []
+        return [self.missions[index]]
+    
+    def child_type_name(self) -> str:
+        return "Mission"
+
     def get_missions(self) -> Set[SC2MOGenMission]:
         return {mission for mission in self.missions}    
 
     def get_exits(self) -> Set[SC2MOGenMission]:
         return self.exits
+    
+    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+        return self.get_visual_name()
     
     def get_visual_name(self) -> str:
         return self.display_name
@@ -704,7 +683,7 @@ class SC2MOGenLayout:
         )
 
 @dataclass(repr=False, eq=False, match_args=False, slots=True)
-class SC2MOGenMission:
+class SC2MOGenMission(MissionOrderNode):
     option_goal: bool # whether this mission is required to beat the game
     option_entrance: bool # whether this mission is unlocked when the layout is unlocked
     option_exit: bool # whether this mission is required to beat its parent layout
@@ -714,8 +693,6 @@ class SC2MOGenMission:
     option_difficulty: Difficulty # difficulty pool this mission pulls from
     option_mission_pool: Set[int] # Allowed mission IDs for this slot
 
-    parent_campaign: SC2MOGenCampaign # Parent campaign of this slot
-    parent_layout: SC2MOGenLayout # Parent layout of this slot
     entry_rule: SubRuleEntryRule
     min_steps: int # Smallest amount of missions to beat before this slot is accessible
 
@@ -725,7 +702,8 @@ class SC2MOGenMission:
     next: Set[SC2MOGenMission]
     prev: Set[SC2MOGenMission]
 
-    def __init__(self, parent_campaign: SC2MOGenCampaign, parent_layout: SC2MOGenLayout, parent_mission_pool: Set[int]):
+    def __init__(self, parent: ReferenceType[SC2MOGenLayout], parent_mission_pool: Set[int]):
+        self.parent: ReferenceType[SC2MOGenLayout] = parent
         self.option_mission_pool = parent_mission_pool
         self.option_goal = False
         self.option_entrance = False
@@ -734,8 +712,6 @@ class SC2MOGenMission:
         self.option_next = []
         self.option_entry_rules = []
         self.option_difficulty = Difficulty.RELATIVE
-        self.parent_campaign = parent_campaign
-        self.parent_layout = parent_layout
         self.next = set()
         self.prev = set()
 
@@ -769,19 +745,28 @@ class SC2MOGenMission:
     def beat_rule(self, player) -> Callable[[CollectionState], bool]:
         return lambda state: state.has(self.beat_item(), player)
 
+    def search(self, term: str) -> Union[List[MissionOrderNode], None]:
+        return None
+    
+    def child_type_name(self) -> str:
+        return ""
+
     def get_missions(self) -> Set[SC2MOGenMission]:
         return {self}
 
     def get_exits(self) -> Set[SC2MOGenMission]:
         return {self}
     
+    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+        return self
+    
     def make_connections(self, world: World, used_names: Dict[str, int]):
         player = world.player
         self_rule = self.entry_rule.to_lambda(player)
         # Only layout entrances need to consider campaign & layout prerequisites
         if self.option_entrance:
-            campaign_rule = self.parent_campaign.entry_rule.to_lambda(player)
-            layout_rule = self.parent_layout.entry_rule.to_lambda(player)
+            campaign_rule = self.parent().parent().entry_rule.to_lambda(player)
+            layout_rule = self.parent().entry_rule.to_lambda(player)
             unlock_rule = lambda state: campaign_rule(state) and layout_rule(state) and self_rule(state)
         else:
             unlock_rule = self_rule

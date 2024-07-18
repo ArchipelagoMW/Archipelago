@@ -148,7 +148,7 @@ This section is meant to offer some guidance when making your own mission order 
 
 To begin making your own mission order, think about how you visually want your missions laid out. This should inform the layout `type`s you want to use, and give you some idea about the overall structure of your mission order.
 
-For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of `type: column`. If you want a Hopscotch layout with certain missions or races, a single layout with `type: hopscotch` will suffice. If you want to play through a funny shape, a single large `type: grid` will be your best starting point. If you just want to make a minor change to a vanilla campaign, you will want to start with a `preset` campaign. (Note: presets and hopscotch aren't implemented yet) <!-- TODO -->
+For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of `type: column`. If you want a Hopscotch layout with certain missions or races, a single layout with `type: hopscotch` will suffice. If you want to play through a funny shape, a single large `type: grid` will be your best starting point. If you just want to make a minor change to a vanilla campaign, you will want to start with a `preset` campaign. (Note: presets aren't implemented yet) <!-- TODO -->
 
 The natural flow of a mission order is defined by the types of its layouts. It makes sense for a mission to unlock its neighbors, it makes sense for a Hopscotch layout to wrap around the sides, and it makes sense for a Column's final mission to be at the bottom. Layout types create their flow by setting `next`, `entrance`, `exit`, and `entry_rules` on missions. More on these in a little bit.
 
@@ -249,15 +249,21 @@ entry_rules:
   - rules: []
     amount: -1
 ```
-The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order. Addresses can look differently depending on the object that uses them.
+The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order.
 
-The basic structure of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout. The indices of mission slots are determined by the layout's type.
+The basic form of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout. The indices of mission slots are determined by the layout's type.
 
 If you don't want to point all the way down to a mission slot, you can omit the later parts. `<Campaign>` and `<Campaign>/<Layout>` are valid addresses, and will point to the entire specified campaign or layout.
 
-In layouts and missions it is also allowed to omit the earlier parts, so a layout can use `<Layout>/<Mission>`, and a mission can additionally use `<Mission>`. In these cases the omitted parts are assumed to be the containing campaign and layout. In combination with the previous paragraph, layouts and missions can also use `<Layout>` to require beating a layout from the same campaign.
+Futhermore, you can generically refer to the parent of an object using `..`, so if you are creating entry rules for a given layout and want to point at a different `<Layout>` in the same `<Campaign>`, the following are identical:
+- `../<Layout>`
+- `<Campaign>/<Layout>`
 
-Note that if you have a campaign-less layout, you will not require a `<Campaign>` part to find it.
+You can also chain these, so for a given mission `../..` will point to its parent campaign.
+
+Lastly, you can point to the whole mission order via `<Campaign>/..` (or the equivalent number of `..`s from a given layer), but this is only supported for Count rules and not Beat rules.
+
+Note that if you have a campaign-less layout, you will not require a `<Campaign>` part to find it, and `..` will skip the campaign layer.
 
 Below are examples of the available entry rules:
 ```yaml
@@ -277,14 +283,14 @@ Below are examples of the available entry rules:
           # Beat rule:
           # To access the Artifact layout,
           # you have to first beat Mar Sara
-          - scope: Mar Sara
+          - scope: ../Mar Sara
       Prophecy:
         type: column
         size: 3
         entry_rules:
           # Beat rule:
           # Beat the mission at index 1 in the Artifact layout
-          - scope: Artifact/1
+          - scope: ../Artifact/1
           # This is identical to the above
           # because this layout is already in Wings of Liberty
           - scope: Wings of Liberty/Artifact/1
