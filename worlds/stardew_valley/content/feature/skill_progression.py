@@ -1,32 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar, Sequence, Iterable, Tuple
+from typing import ClassVar, Iterable, Tuple
 
 from ...data.skill import Skill
-
-
-def to_level_item_name(skill: Skill) -> str:
-    return f"{skill.name} Level"
-
-
-def to_level_location_name(skill: Skill, level: int) -> str:
-    assert 0 < level <= 10
-    return f"Level {level} {skill.name}"
 
 
 class SkillProgressionFeature(ABC):
     is_progressive: ClassVar[bool]
     are_masteries_shuffled: ClassVar[bool]
-
-    to_level_item_name = staticmethod(to_level_item_name)
-    to_level_location_name = staticmethod(to_level_location_name)
-
-    @abstractmethod
-    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
-        ...
-
-    @abstractmethod
-    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
-        ...
 
     @abstractmethod
     def get_randomized_level_names_by_level(self, skill: Skill) -> Iterable[Tuple[int, str]]:
@@ -41,12 +21,6 @@ class SkillProgressionVanilla(SkillProgressionFeature):
     is_progressive = False
     are_masteries_shuffled = False
 
-    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
-        return range(0)
-
-    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
-        return ()
-
     def get_randomized_level_names_by_level(self, skill: Skill) -> Iterable[Tuple[int, str]]:
         return ()
 
@@ -57,12 +31,6 @@ class SkillProgressionVanilla(SkillProgressionFeature):
 class SkillProgressionProgressive(SkillProgressionFeature):
     is_progressive = True
     are_masteries_shuffled = False
-
-    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
-        return skill.levels
-
-    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
-        return skill.level_names
 
     def get_randomized_level_names_by_level(self, skill: Skill) -> Iterable[Tuple[int, str]]:
         return skill.level_names_by_level

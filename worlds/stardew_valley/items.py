@@ -344,7 +344,7 @@ def create_skills(item_factory: StardewItemFactory, content: StardewContent, ite
         return
 
     for skill in content.skills.values():
-        items.extend(item_factory(skill.level_name) for _ in skill_progression.get_randomized_levels(skill))
+        items.extend(item_factory(skill.level_name) for _ in skill_progression.get_randomized_level_names_by_level(skill))
 
         if skill_progression.is_mastery_randomized(skill):
             items.append(item_factory(skill.mastery_name))

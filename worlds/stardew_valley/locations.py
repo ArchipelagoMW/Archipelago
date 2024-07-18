@@ -482,7 +482,7 @@ def create_locations(location_collector: StardewLocationCollector,
     skill_progression = content.features.skill_progression
     if skill_progression.is_progressive:
         for skill in content.skills.values():
-            randomized_locations.extend([location_table[location_name] for location_name in skill_progression.get_randomized_level_names(skill)])
+            randomized_locations.extend([location_table[location_name] for _, location_name in skill_progression.get_randomized_level_names_by_level(skill)])
             if skill_progression.is_mastery_randomized(skill):
                 randomized_locations.append(location_table[skill.mastery_name])
 

@@ -39,7 +39,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     fishing = content.skills.get(Skill.fishing)
     if fishing is not None and content.features.skill_progression.is_progressive:
-        early_forced.append(content.features.skill_progression.to_level_item_name(fishing))
+        early_forced.append(fishing.level_name)
 
     if options.quest_locations >= 0:
         early_candidates.append(Wallet.magnifying_glass)
