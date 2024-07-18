@@ -32,7 +32,6 @@ class FestivalItemSource(BundleItemSource):
 
 
 # FIXME remove this once recipes are in content packs
-
 class MasteryItemSource(BundleItemSource):
     def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         return content.features.skill_progression.are_masteries_shuffled
