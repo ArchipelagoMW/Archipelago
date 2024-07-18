@@ -6,7 +6,6 @@ from .book_logic import BookLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogicMixin
-from ..options import Booksanity
 from ..stardew_rule import StardewRule, HasProgressionPercent
 from ..strings.book_names import Book
 from ..strings.craftable_names import Consumable
@@ -36,7 +35,7 @@ class GrindLogic(BaseLogic[Union[GrindLogicMixin, HasLogicMixin, ReceivedLogicMi
     def can_grind_mystery_boxes(self, quantity: int) -> StardewRule:
         mystery_box_rule = self.logic.has(Consumable.mystery_box)
         book_of_mysteries_rule = self.logic.true_ \
-            if self.options.booksanity == Booksanity.option_none \
+            if not self.content.features.booksanity.is_enabled \
             else self.logic.book.has_book_power(Book.book_of_mysteries)
         # Assuming one box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride.
         time_rule = self.logic.time.has_lived_months(quantity // 14)
