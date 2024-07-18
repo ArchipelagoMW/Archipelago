@@ -726,7 +726,8 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     elif act.name == "Contractual Obligations" and world.options.ShuffleSubconPaintings:
         return False
 
-    if world.options.ShuffleSubconPaintings and act_chapters.get(act.name, "") == "Subcon Forest":
+    if world.options.ShuffleSubconPaintings and "Time Rift" not in act.name \
+       and act_chapters.get(act.name, "") == "Subcon Forest":
         # Only allow Subcon levels if painting skips are allowed
         if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
             return False
