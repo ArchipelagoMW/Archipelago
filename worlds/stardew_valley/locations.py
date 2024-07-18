@@ -479,13 +479,12 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_elevator_locations(randomized_locations, options)
 
-    if not options.skill_progression == SkillProgression.option_vanilla:
-        for location in locations_by_tag[LocationTags.SKILL_LEVEL]:
-            if location.mod_name is not None and location.mod_name not in options.mods:
-                continue
-            if LocationTags.MASTERY_LEVEL in location.tags and options.skill_progression != SkillProgression.option_progressive_with_masteries:
-                continue
-            randomized_locations.append(location_table[location.name])
+    skill_progression = content.features.skill_progression
+    if skill_progression.is_progressive:
+        for skill in content.skills.values():
+            randomized_locations.extend([location_table[location_name] for location_name in skill_progression.get_randomized_level_names(skill)])
+            if skill_progression.is_mastery_randomized(skill):
+                randomized_locations.append(location_table[skill.mastery_name])
 
     if options.building_progression & BuildingProgression.option_progressive:
         for location in locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:

@@ -159,7 +159,7 @@ class StardewValleyWorld(World):
 
         self.multiworld.itempool += created_items
 
-        setup_early_items(self.multiworld, self.options, self.player, self.random)
+        setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
         self.setup_player_events()
         self.setup_victory()
 

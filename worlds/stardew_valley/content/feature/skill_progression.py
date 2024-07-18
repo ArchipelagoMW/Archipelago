@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar
+from typing import ClassVar, Sequence, Iterable
 
 from ...data.skill import Skill
 
 
 def to_level_item_name(skill: Skill) -> str:
-    return f"Progressive {skill.name} Level"
+    return f"{skill.name} Level"
 
 
 def to_level_location_name(skill: Skill, level: int) -> str:
@@ -14,45 +14,62 @@ def to_level_location_name(skill: Skill, level: int) -> str:
 
 
 class SkillProgressionFeature(ABC):
-    is_enabled: ClassVar[bool]
+    is_progressive: ClassVar[bool]
+    are_masteries_shuffled: ClassVar[bool]
 
     to_level_item_name = staticmethod(to_level_item_name)
     to_level_location_name = staticmethod(to_level_location_name)
 
     @abstractmethod
-    def is_included(self, skill: Skill) -> bool:
+    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
         ...
 
     @abstractmethod
-    def is_mastery_included(self, skill: Skill) -> bool:
+    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
+        ...
+
+    @abstractmethod
+    def is_mastery_randomized(self, skill: Skill) -> bool:
         ...
 
 
 class SkillProgressionVanilla(SkillProgressionFeature):
-    is_enabled = False
+    is_progressive = False
+    are_masteries_shuffled = False
 
-    def is_included(self, skill: Skill) -> bool:
-        return False
+    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
+        return range(0)
 
-    def is_mastery_included(self, skill: Skill) -> bool:
+    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
+        return ()
+
+    def is_mastery_randomized(self, skill: Skill) -> bool:
         return False
 
 
 class SkillProgressionProgressive(SkillProgressionFeature):
-    is_enabled = True
+    is_progressive = True
+    are_masteries_shuffled = False
 
-    def is_included(self, skill: Skill) -> bool:
-        return True
+    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
+        return skill.levels
 
-    def is_mastery_included(self, skill: Skill) -> bool:
+    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
+        return skill.level_names
+
+    def is_mastery_randomized(self, skill: Skill) -> bool:
         return False
 
 
 class SkillProgressionProgressiveWithMasteries(SkillProgressionFeature):
-    is_enabled = True
+    is_progressive = True
+    are_masteries_shuffled = True
 
-    def is_included(self, skill: Skill) -> bool:
-        return True
+    def get_randomized_levels(self, skill: Skill) -> Sequence[int]:
+        return skill.levels
 
-    def is_mastery_included(self, skill: Skill) -> bool:
-        return True
+    def get_randomized_level_names(self, skill: Skill) -> Iterable[str]:
+        return skill.level_names
+
+    def is_mastery_randomized(self, skill: Skill) -> bool:
+        return skill.has_mastery
