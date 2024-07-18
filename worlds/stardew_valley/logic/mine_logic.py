@@ -58,14 +58,19 @@ SkillLogicMixin, CookingLogicMixin]]):
         rules = []
         weapon_rule = self.logic.mine.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
+
         if self.options.tool_progression & ToolProgression.option_progressive:
             rules.append(self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
-        if self.options.skill_progression >= options.SkillProgression.option_progressive:
-            skill_tier = min(10, max(0, tier * 2))
-            rules.append(self.logic.skill.has_level(Skill.combat, skill_tier))
-            rules.append(self.logic.skill.has_level(Skill.mining, skill_tier))
+
+        # No alternative for vanilla because we assume that you will grind the levels in the mines.
+        if self.content.features.skill_progression.is_progressive:
+            skill_level = min(10, max(0, tier * 2))
+            rules.append(self.logic.skill.has_level(Skill.combat, skill_level))
+            rules.append(self.logic.skill.has_level(Skill.mining, skill_level))
+
         if tier >= 4:
             rules.append(self.logic.cooking.can_cook())
+
         return self.logic.and_(*rules)
 
     @cache_self1
@@ -82,10 +87,14 @@ SkillLogicMixin, CookingLogicMixin]]):
         rules = []
         weapon_rule = self.logic.combat.has_great_weapon
         rules.append(weapon_rule)
+
         if self.options.tool_progression & ToolProgression.option_progressive:
             rules.append(self.logic.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
-        if self.options.skill_progression >= options.SkillProgression.option_progressive:
-            skill_tier = min(10, max(0, tier * 2 + 6))
-            rules.extend({self.logic.skill.has_level(Skill.combat, skill_tier),
-                          self.logic.skill.has_level(Skill.mining, skill_tier)})
+
+        # No alternative for vanilla because we assume that you will grind the levels in the mines.
+        if self.content.features.skill_progression.is_progressive:
+            skill_level = min(10, max(0, tier * 2 + 6))
+            rules.extend((self.logic.skill.has_level(Skill.combat, skill_level),
+                          self.logic.skill.has_level(Skill.mining, skill_level)))
+
         return self.logic.and_(*rules)

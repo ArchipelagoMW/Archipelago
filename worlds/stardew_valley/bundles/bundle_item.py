@@ -33,6 +33,7 @@ class FestivalItemSource(BundleItemSource):
 
 class MasteryItemSource(BundleItemSource):
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        # FIXME remove this once recipes are in content packs
         return options.skill_progression == SkillProgression.option_progressive_with_masteries
 
 
@@ -98,4 +99,3 @@ class BundleItem:
             return self.get_item() in content.game_items
 
         return self.source.can_appear(options)
-
