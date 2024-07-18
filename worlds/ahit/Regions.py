@@ -684,9 +684,12 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     if act.name not in guaranteed_first_acts:
         return False
 
+    if world.options.ActRandomizer == ActRandomizer.option_light and "Time Rift" in act.name:
+        return False
+
     # If there's only a single level in the starting chapter, only allow Mafia Town or Subcon Forest levels
     start_chapter = world.options.StartingChapter
-    if start_chapter is ChapterIndex.ALPINE or start_chapter is ChapterIndex.SUBCON:
+    if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
         if "Time Rift" in act.name:
             return False
 
