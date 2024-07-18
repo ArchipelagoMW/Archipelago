@@ -87,6 +87,9 @@ class GLPatchExtension(APPatchExtension):
         data.write(bytes([0xFF]))
         data.seek(0x212, 0)
         data.write(bytes([0xFF, 0xFF]))
+        for i in range(25):
+            data.seek(0x1A, 1)
+            data.write(bytes([0xFF, 0xFF]))
         data.seek(0x53E, 0)
         data.write(bytes([0xFF, 0xFF]))
         data.seek(0x55A, 0)
@@ -97,8 +100,6 @@ class GLPatchExtension(APPatchExtension):
         data.write(bytes([0xFF, 0xFF]))
         data.seek(0x522, 0)
         data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x96C, 0)
-        data.write(bytes([0x4, 0x3]))
         stream.seek(0x67E7E0, 0)
         stream.write(zenc(data.getvalue()))
         return stream.getvalue()

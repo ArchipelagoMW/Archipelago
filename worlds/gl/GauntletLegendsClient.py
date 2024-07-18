@@ -270,7 +270,7 @@ class GauntletLegendsContext(CommonContext):
                 await self.socket.read(
                     message_format(
                         READ,
-                        f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 10) * 0x3C}",
+                        f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 2) * 0x3C}",
                     ),
                 ),
             )
@@ -282,28 +282,27 @@ class GauntletLegendsContext(CommonContext):
             self.extra_items = count
         else:
             spawner_count = len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner])
-            for i in range((spawner_count // 101) + 1):
+            count = 0
+            for i in range((spawner_count + 99) // 100):
                 b = RamChunk(
                     await self.socket.read(
                         message_format(
                             READ,
-                            f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min(spawner_count, 100) * 0x3C}",
+                            f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
                         ),
                     ),
                 )
                 b.iterate(0x3C)
-                count = 0
                 for obj in b.split:
                     if obj[0] == 0xFF and obj[1] == 0xFF:
                         count += 1
-                self.extra_items += count
-                spawner_count -= 100
+            self.extra_items += count
 
             b = RamChunk(
                 await self.socket.read(
                     message_format(
                         READ,
-                        f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner])) * 0x3C), 'x')} {(len(self.chest_locations) + 10) * 0x3C}",
+                        f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + spawner_count) * 0x3C), 'x')} {(len(self.chest_locations) + 2) * 0x3C}",
                     ),
                 ),
             )
@@ -312,9 +311,9 @@ class GauntletLegendsContext(CommonContext):
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[0] != 0xFF and obj.raw[1] != 0xFF]
         if mode == 1:
-            self.chest_objects = _obj[: len(self.chest_locations)]
+            self.chest_objects = _obj[:len(self.chest_locations)]
         else:
-            self.item_objects = _obj[: len(self.item_locations)]
+            self.item_objects = _obj[:len(self.item_locations)]
 
     # Update item count of an item.
     # If the item is new, add it to your inventory
