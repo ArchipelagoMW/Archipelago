@@ -689,6 +689,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Overlord", SC2HOTS_LOC_ID_OFFSET + 106, LocationType.EXTRA),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Gas Turrets", SC2HOTS_LOC_ID_OFFSET + 107, LocationType.EXTRA,
                      lambda state: adv_tactics or logic.zerg_common_unit(state)),
+        make_location_data(SC2Mission.LAB_RAT.mission_name, "Win In Under 10 Minutes", SC2HOTS_LOC_ID_OFFSET + 108, LocationType.SPEEDRUN,
+                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
                      lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.EXTRA,
@@ -713,6 +715,10 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Hold Out Finished", SC2HOTS_LOC_ID_OFFSET + 304, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_basic_anti_air(state)),
+        make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Kill All Before Reinforcements", SC2HOTS_LOC_ID_OFFSET + 305, LocationType.SPEEDRUN,
+                     lambda state: logic.zerg_competent_comp(state)
+                                   and logic.zerg_competent_anti_air(state)
+                                   and (logic.basic_kerrigan(state) or kerriganless)),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)),
@@ -1098,6 +1104,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "East Lane", SC2HOTS_LOC_ID_OFFSET + 2003, LocationType.VANILLA,
                      lambda state: logic.the_reckoning_requirement(state)),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Odin", SC2HOTS_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
+                     lambda state: logic.the_reckoning_requirement(state)),
+        make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005, LocationType.SPEEDRUN,
                      lambda state: logic.the_reckoning_requirement(state)),
 
         # LotV Prologue
