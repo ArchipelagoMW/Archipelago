@@ -586,18 +586,18 @@ class SC2Logic:
     def protoss_anti_light_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
             or state.has_any({
-                item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER, item_names.SKYLORD
+                item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER, item_names.CORSAIR, item_names.CARRIER,
             }, self.player)
 
     def protoss_competent_anti_air(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
-            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.PURGER
+            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.SKYLORD, item_names.PURGER
         }, self.player) \
             or (
                     state.has_any({
-                        item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER,
-                        item_names.SKYLORD
+                        item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER,
+                        item_names.CORSAIR, item_names.CARRIER,
                     }, self.player)
                     and state.has_any({
                         item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY

@@ -740,6 +740,7 @@ item_descriptions = {
     item_names.REAVER: "Area damage siege unit. Builds and launches explosive Scarabs for high burst damage.",
     item_names.DISRUPTOR: "Robotic disruption unit. Can use the Purification Nova ability to deal heavy area damage.",
     item_names.MIRAGE: "Air superiority starfighter. Can use Graviton Beam and Phasing Armor abilities.",
+    item_names.SKIRMISHER: "Fast skirmish starfighter.",
     item_names.CORSAIR: "Air superiority starfighter. Can use the Disruption Web ability.",
     item_names.DESTROYER: "Area assault craft. Can use the Destruction Beam ability to attack multiple units at once.",
     item_names.WARP_RAY: "Surgical-strike craft. Damage output increases the longer the Warp Ray remains on target.",
