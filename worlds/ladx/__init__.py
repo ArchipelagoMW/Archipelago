@@ -102,7 +102,7 @@ class LinksAwakeningWorld(World):
        "Instruments": {
            "Full Moon Cello", "Conch Horn", "Sea Lily's Bell", "Surf Harp",
            "Wind Marimba", "Coral Triangle", "Organ of Evening Calm", "Thunder Drum"
-       }
+       },
     }
 
     prefill_dungeon_items = None
