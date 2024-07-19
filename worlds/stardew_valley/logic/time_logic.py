@@ -25,9 +25,11 @@ class TimeLogicMixin(BaseLogicMixin):
 class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin]]):
 
     @cache_self1
-    def has_lived_months(self, number: int) -> StardewRule:
+    def has_lived_months(self, number: Union[int, float]) -> StardewRule:
         if number <= 0:
             return self.logic.true_
+        number = int(number)
+
         number = min(number, MAX_MONTHS)
         return HasProgressionPercent(self.player, number * MONTH_COEFFICIENT)
 
@@ -36,11 +38,11 @@ class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin]]):
         return self.logic.time.has_lived_months(MAX_MONTHS)
 
     @cache_self1
-    def has_lived_year(self, number: int) -> StardewRule:
+    def has_lived_year(self, number: Union[int, float]) -> StardewRule:
         return self.logic.time.has_lived_months(number * ONE_YEAR)
 
     @cache_self1
-    def has_year(self, number: int) -> StardewRule:
+    def has_year(self, number: Union[int, float]) -> StardewRule:
         return self.logic.time.has_lived_year(number - 1)
 
     @cached_property
