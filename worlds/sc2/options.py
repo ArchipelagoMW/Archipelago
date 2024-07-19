@@ -882,6 +882,22 @@ class MasteryLocations(LocationInclusion):
     display_name = "Mastery Locations"
 
 
+class SpeedrunLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for overcoming speedrun challenges.
+    These challenges are often based on speed achievements or community challenges.
+    Enable these locations if you want to be rewarded for going fast.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Speedrun Locations"
+
+
 class MineralsPerItem(Range):
     """
     Configures how many minerals are given per resource item.
@@ -973,6 +989,7 @@ class Starcraft2Options(PerGameCommonOptions):
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations
     mastery_locations: MasteryLocations
+    speedrun_locations: SpeedrunLocations
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem

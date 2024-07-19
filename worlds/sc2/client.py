@@ -29,7 +29,7 @@ from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
+    LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
@@ -665,6 +665,7 @@ class SC2Context(CommonContext):
                 LocationType.EXTRA: args["slot_data"].get("extra_locations", ExtraLocations.default),
                 LocationType.CHALLENGE: args["slot_data"].get("challenge_locations", ChallengeLocations.default),
                 LocationType.MASTERY: args["slot_data"].get("mastery_locations", MasteryLocations.default),
+                LocationType.SPEEDRUN: args["slot_data"].get("speedrun_locations", SpeedrunLocations.default),
             }
             self.plando_locations = args["slot_data"].get("plando_locations", [])
 
