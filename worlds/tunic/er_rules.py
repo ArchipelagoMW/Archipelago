@@ -901,6 +901,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         or state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
+    # a whole lot of stuff to basically say "you need to pray at the overworld fuse"
     swamp_mid_to_cath = regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
         rule=lambda state: (has_ability(prayer, state, world)
@@ -1121,8 +1122,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     connecting_region=regions[dest_region],
                     name=portal_name + " (LS) " + ls_info.origin,
                     rule=lambda state: can_ladder_storage(state, world)
-                    and (state.has("Ladders in South Atoll", player)
-                         or not options.shuffle_ladders  # if ladder shuffle is off, don't gotta worry about ladders
+                    and (has_ladder("Ladders in South Atoll", state, world)
                          or state.has(key, player, 2)  # can do it from the rope
                          or options.ladder_storage >= LadderStorage.option_medium))  # use the little ladder
             # holy cross mid-ls to get in here
@@ -1132,7 +1132,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                         connecting_region=regions[dest_region],
                         name=portal_name + " (LS) " + ls_info.origin,
                         rule=lambda state: can_ladder_storage(state, world) and has_ability(holy_cross, state, world)
-                        and (state.has("Ladders in Swamp", player) or not options.shuffle_ladders))
+                        and has_ladder("Ladders in Swamp", state, world))
                 else:
                     regions[ls_info.origin].connect(
                         connecting_region=regions[dest_region],
