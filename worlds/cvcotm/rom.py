@@ -325,8 +325,38 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_bytes(0x394098, cvcotm_string_to_bytearray(key_tutorial_message, "big top", 4,
                                                                   skip_textbox_controllers=True))
 
-        # Shorten Hugh's post-battle dialogue to give players more time to pick up his item.
-        rom_data.write_bytes(0x393114, cvcotm_string_to_bytearray("Ok! You win!◊", "big top", 4, 2))
+        # Skip all the cutscene dialogue before the ending if the option is enabled.
+        if options["skip_dialogues"]:
+            rom_data.write_byte(0x392372, 0x00)
+            rom_data.write_bytes(0x3923C9, [0x20, 0x80, 0x00])
+            rom_data.write_bytes(0x3924EE, [0x20, 0x81, 0x00])
+            rom_data.write_byte(0x392621, 0x00)
+            rom_data.write_bytes(0x392650, [0x20, 0x81, 0x00])
+            rom_data.write_byte(0x392740, 0x00)
+            rom_data.write_byte(0x3933C8, 0x00)
+            rom_data.write_byte(0x39346E, 0x00)
+            rom_data.write_byte(0x393670, 0x00)
+            rom_data.write_bytes(0x393698, [0x20, 0x80, 0x00])
+            rom_data.write_byte(0x3936A6, 0x00)
+            rom_data.write_byte(0x393741, 0x00)
+            rom_data.write_byte(0x392944, 0x00)
+            rom_data.write_byte(0x392FFB, 0x00)
+            rom_data.write_byte(0x39305D, 0x00)
+            rom_data.write_byte(0x393114, 0x00)
+            rom_data.write_byte(0x392771, 0x00)
+            rom_data.write_byte(0x3928E9, 0x00)
+            rom_data.write_byte(0x393A0C, 0x00)
+            rom_data.write_byte(0x392A3C, 0x00)
+            rom_data.write_byte(0x392A55, 0x00)
+            rom_data.write_byte(0x392A8B, 0x00)
+            rom_data.write_byte(0x392AA4, 0x00)
+            rom_data.write_byte(0x392AF4, 0x00)
+            rom_data.write_byte(0x392B3F, 0x00)
+            rom_data.write_byte(0x392C4D, 0x00)
+            rom_data.write_byte(0x392DEA, 0x00)
+            rom_data.write_byte(0x392E65, 0x00)
+            rom_data.write_byte(0x392F09, 0x00)
+            rom_data.write_byte(0x392FE4, 0x00)
 
         return rom_data.get_bytes()
 
@@ -406,6 +436,7 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
         "countdown": world.options.countdown.value,
         "disable_battle_arena_mp_drain": world.options.disable_battle_arena_mp_drain.value,
         "completion_goal": world.options.completion_goal.value,
+        "skip_dialogues": world.options.skip_dialogues.value,
         "seed": world.multiworld.seed
     }
 

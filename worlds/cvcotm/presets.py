@@ -3,7 +3,7 @@ from typing import Any, Dict
 from Options import Accessibility, ProgressionBalancing
 from .options import IgnoreCleansing, AutoRun, DSSPatch, AlwaysAllowSpeedDash, BreakIronMaidens, BuffRangedFamiliars,\
     BuffSubWeapons, BuffShooterStrength, ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle,\
-    DisableBattleArenaMPDrain, RequireAllBosses, EarlyDouble, DeathLink, CompletionGoal
+    DisableBattleArenaMPDrain, RequireAllBosses, EarlyDouble, DeathLink, CompletionGoal, SkipDialogues
 
 all_random_options = {
     "progression_balancing":         "random",
@@ -25,6 +25,7 @@ all_random_options = {
     "disable_battle_arena_mp_drain": "random",
     "require_all_bosses":            "random",
     "early_double":                  "random",
+    "skip_dialogues":                "random",
     "death_link":                    DeathLink.option_off,
     "completion_goal":               "random",
 }
@@ -49,6 +50,7 @@ beginner_mode_options = {
     "disable_battle_arena_mp_drain": DisableBattleArenaMPDrain.option_true,
     "require_all_bosses":            RequireAllBosses.option_false,
     "early_double":                  EarlyDouble.option_true,
+    "skip_dialogues":                SkipDialogues.option_true,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
@@ -73,6 +75,7 @@ standard_competitive_2022_options = {
     "disable_battle_arena_mp_drain": DisableBattleArenaMPDrain.option_false,
     "require_all_bosses":            RequireAllBosses.option_false,
     "early_double":                  EarlyDouble.option_false,
+    "skip_dialogues":                SkipDialogues.option_false,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
@@ -97,6 +100,7 @@ randomania_2023_options = {
     "disable_battle_arena_mp_drain": DisableBattleArenaMPDrain.option_false,
     "require_all_bosses":            RequireAllBosses.option_false,
     "early_double":                  EarlyDouble.option_false,
+    "skip_dialogues":                SkipDialogues.option_false,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
@@ -121,6 +125,7 @@ competitive_all_bosses_options = {
     "disable_battle_arena_mp_drain": DisableBattleArenaMPDrain.option_false,
     "require_all_bosses":            RequireAllBosses.option_true,
     "early_double":                  EarlyDouble.option_false,
+    "skip_dialogues":                SkipDialogues.option_false,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
@@ -145,6 +150,7 @@ hardcore_mode_options = {
     "disable_battle_arena_mp_drain": DisableBattleArenaMPDrain.option_false,
     "require_all_bosses":            RequireAllBosses.option_false,
     "early_double":                  EarlyDouble.option_false,
+    "skip_dialogues":                SkipDialogues.option_false,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_battle_arena_and_dracula,
 }

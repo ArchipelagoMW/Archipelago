@@ -143,6 +143,13 @@ class EarlyDouble(DefaultOnToggle):
     display_name = "Early Double"
 
 
+class SkipDialogues(Toggle):
+    """
+    Skips all cutscene dialogue before the ending.
+    """
+    display_name = "Skip Dialogues"
+
+
 class DeathLink(Choice):
     """
     When you die, everyone dies. Of course the reverse is true too.
@@ -191,12 +198,14 @@ class CVCotMOptions(PerGameCommonOptions):
     countdown: Countdown
     sub_weapon_shuffle: SubWeaponShuffle
     disable_battle_arena_mp_drain: DisableBattleArenaMPDrain
+    skip_dialogues: SkipDialogues
     death_link: DeathLink
 
 
 cvcotm_option_groups = [
     OptionGroup("gameplay tweaks", [
         AutoRun, DSSPatch, AlwaysAllowSpeedDash, BuffRangedFamiliars, BuffSubWeapons, BuffShooterStrength,
-        ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle, DisableBattleArenaMPDrain, DeathLink
+        ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle, DisableBattleArenaMPDrain,
+        SkipDialogues, DeathLink
     ])
 ]

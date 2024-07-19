@@ -145,7 +145,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             # Get out each of the individual health/magic/heart values.
             hp = int.from_bytes(health_stats_array[0:2], "little")
             max_hp = int.from_bytes(health_stats_array[4:6], "little")
-            # mp = int.from_bytes(health_stats_array[8:10], "little") Not used. Not currently, at least.
+            # mp = int.from_bytes(health_stats_array[8:10], "little") Not used. But it's here if it's ever needed!
             max_mp = int.from_bytes(health_stats_array[12:14], "little")
             hearts = int.from_bytes(health_stats_array[14:16], "little")
             max_hearts = int.from_bytes(health_stats_array[16:], "little")
