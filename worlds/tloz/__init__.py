@@ -88,6 +88,19 @@ class TLoZWorld(World):
         }
     }
 
+    location_name_groups = {
+        "Shops": shop_locations,
+        "Level 1": level_locations[0],
+        "Level 2": level_locations[1],
+        "Level 3": level_locations[2],
+        "Level 4": level_locations[3],
+        "Level 5": level_locations[4],
+        "Level 6": level_locations[5],
+        "Level 7": level_locations[6],
+        "Level 8": level_locations[7],
+        "Level 9": level_locations[8],
+    }
+
     for k, v in item_name_to_id.items():
         item_name_to_id[k] = v + base_id
 
