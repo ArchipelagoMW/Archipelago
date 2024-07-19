@@ -552,7 +552,10 @@ class HKWorld(World):
 
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                state.prog_items[item.player][effect_name] -= effect_value
+                if state.prog_items[item.player][effect_name] == effect_value:
+                    del state.prog_items[item.player][effect_name]
+                else:
+                    state.prog_items[item.player][effect_name] -= effect_value
 
         return change
 
