@@ -1,15 +1,11 @@
 from ..game_content import ContentPack, StardewContent
 from ..mod_registry import register_mod_content_pack
 from ...data.artisan import MachineSource
-from ...data.game_item import ItemTag, Tag
-from ...data.shop import ShopSource
 from ...data.skill import Skill
 from ...mods.mod_data import ModNames
-from ...strings.book_names import ModBook
-from ...strings.craftable_names import ModCraftable, ModMachine
+from ...strings.craftable_names import ModMachine
 from ...strings.fish_names import ModTrash
 from ...strings.metal_names import all_artifacts, all_fossils
-from ...strings.region_names import LogicRegion
 from ...strings.skill_names import ModSkill
 
 
@@ -33,11 +29,6 @@ class ArchaeologyContentPack(ContentPack):
 
 register_mod_content_pack(ArchaeologyContentPack(
     ModNames.archaeology,
-    shop_sources={
-        ModBook.digging_like_worms: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(money_price=500, shop_region=LogicRegion.bookseller_1),),
-    },
     skills=(Skill(name=ModSkill.archaeology, has_mastery=False),),
 
 ))
