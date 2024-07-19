@@ -193,13 +193,13 @@ class PokemonCrystalClient(BizHawkClient):
             if not len(self.phone_trap_locations):
                 phone_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
-                    [(data.rom_addresses["AP_Setting_Phone_Trap_Locations"], 0x40, "ROM")],
+                    [(data.rom_addresses["AP_Setting_Phone_Trap_Locations"], 0x80, "ROM")],
                     [overworld_guard]
                 )
                 if phone_result is not None:
                     read_locations = []
                     for i in range(0, 16):
-                        loc = int.from_bytes(phone_result[0][i * 4:(i + 1) * 4], "little")
+                        loc = int.from_bytes(phone_result[0][i * 8:(i + 1) * 8], "little")
                         read_locations.append(loc)
                     self.phone_trap_locations = read_locations
             else:
