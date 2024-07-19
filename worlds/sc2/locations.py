@@ -733,6 +733,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Nafash", SC2HOTS_LOC_ID_OFFSET + 408, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "20 Unfrozen Structures", SC2HOTS_LOC_ID_OFFSET + 409, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state)),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 500, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
@@ -752,6 +754,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 508, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 509, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Launch Bay", SC2HOTS_LOC_ID_OFFSET + 510, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Center Launch Bay", SC2HOTS_LOC_ID_OFFSET + 511, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Launch Bay", SC2HOTS_LOC_ID_OFFSET + 512, LocationType.CHALLENGE,
                      lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY,
                      lambda state: logic.zerg_pass_vents(state)
@@ -789,6 +797,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.zerg_common_unit(state)),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Northeast Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 709, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)),
+        make_location_data(SC2Mission.DOMINATION.mission_name, "Win Without 100 Eggs", SC2HOTS_LOC_ID_OFFSET + 710, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state)),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 800, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state) and
@@ -821,6 +831,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state) and
                                    logic.spread_creep(state)),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "South Orbital Command Center", SC2HOTS_LOC_ID_OFFSET + 810, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Northwest Orbital Command Center", SC2HOTS_LOC_ID_OFFSET + 811, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Southeast Orbital Command Center", SC2HOTS_LOC_ID_OFFSET + 812, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_competent_comp(state)),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 900, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
@@ -864,6 +880,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1008, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Flawless", SC2HOTS_LOC_ID_OFFSET + 1009, LocationType.CHALLENGE,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
