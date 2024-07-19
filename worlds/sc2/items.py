@@ -1593,6 +1593,9 @@ item_table = {
     item_names.PURGER:
         ItemData(34 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 13, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
+    item_names.SKIRMISHER:
+        ItemData(35 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 14, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"ext"}),
 
     # Protoss Upgrades
     item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"wol", "lotv"}),

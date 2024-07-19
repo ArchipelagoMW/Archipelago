@@ -31,6 +31,7 @@ class LocationType(IntEnum):
     EXTRA = 2  # Additional locations based on mission progression, collecting in-mission rewards, etc. that do not significantly increase the challenge.
     CHALLENGE = 3  # Challenging objectives, often harder than just completing a mission, and often associated with Achievements
     MASTERY = 4  # Extremely challenging objectives often associated with Masteries and Feats of Strength in the original campaign
+    SPEEDRUN = 5  # Objectives based around beating objectives within a time-limit
 
 
 class LocationData(NamedTuple):
@@ -53,9 +54,7 @@ def make_location_data(
 
 def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationType]:
     """
-
-    :param multiworld:
-    :param player:
+    :param world: The starcraft 2 world object
     :param inclusion_type: Level of inclusion to check for
     :return: A list of location types that match the inclusion type
     """
@@ -63,7 +62,8 @@ def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationTy
         ("vanilla_locations", LocationType.VANILLA),
         ("extra_locations", LocationType.EXTRA),
         ("challenge_locations", LocationType.CHALLENGE),
-        ("mastery_locations", LocationType.MASTERY)
+        ("mastery_locations", LocationType.MASTERY),
+        ("speedrun_locations", LocationType.SPEEDRUN),
     ]
     excluded_location_types = set()
     for option_name, location_type in exclusion_options:
