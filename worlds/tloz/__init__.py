@@ -308,7 +308,7 @@ class TLoZWorld(World):
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
             self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
-        return self.multiworld.random.choice(self.filler_items)
+        return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         if self.options.ExpandedPool:
