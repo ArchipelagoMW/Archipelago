@@ -19,11 +19,6 @@ class ShopSource(ItemSource):
         assert self.money_price is not None or self.items_price is not None, "At least money price or items price need to be defined."
         assert self.items_price is None or all(isinstance(p, tuple) for p in self.items_price), "Items price should be a tuple."
 
-        if isinstance(self.seasons, str):
-            super().__setattr__("seasons", (self.seasons,))
-        if isinstance(self.other_requirements, Requirement):
-            super().__setattr__("other_requirements", (self.other_requirements,))
-
 
 @dataclass(frozen=True, **kw_only)
 class MysteryBoxSource(ItemSource):

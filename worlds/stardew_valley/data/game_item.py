@@ -52,10 +52,6 @@ class GenericSource(ItemSource):
     """No region means it's available everywhere."""
     other_requirements: Tuple[Requirement, ...] = ()
 
-    def __post_init__(self):
-        if isinstance(self.regions, str):
-            super().__setattr__("regions", (self.regions,))
-
 
 @dataclass(frozen=True)
 class CustomRuleSource(ItemSource):
