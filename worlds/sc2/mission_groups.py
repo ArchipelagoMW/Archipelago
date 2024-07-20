@@ -30,6 +30,7 @@ class MissionGroupNames:
     VS_TERRAN_MISSIONS = "Vs Terran Missions"
     VS_ZERG_MISSIONS = "Vs Zerg Missions"
     VS_PROTOSS_MISSIONS = "Vs Protoss Missions"
+    RACESWAP_MISSIONS = "Raceswap Missions"
 
     # By planet
     PLANET_MAR_SARA_MISSIONS = "Planet Mar Sara"
@@ -109,6 +110,7 @@ for group_name, flags in (
     (MissionGroupNames.VS_TERRAN_MISSIONS, MissionFlag.VsTerran),
     (MissionGroupNames.VS_ZERG_MISSIONS, MissionFlag.VsZerg),
     (MissionGroupNames.VS_PROTOSS_MISSIONS, MissionFlag.VsProtoss),
+    (MissionGroupNames.RACESWAP_MISSIONS, MissionFlag.RaceSwap),
 ):
     mission_groups[group_name] = [
         mission.mission_name for mission in SC2Mission if flags in mission.flags
