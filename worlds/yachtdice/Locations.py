@@ -28,7 +28,7 @@ def all_locations_fun(max_score):
     return {f"{i} score": LocData(starting_index + i, "Board", i) for i in range(1, max_score + 1)}
 
 
-def ini_locations(goal_score, max_score, number_of_locations, dif):
+def ini_locations(goal_score, max_score, number_of_locations, dif, skip_early_locations, number_of_players):
     """
     function that loads in all locations necessary for the game, so based on options.
     will make sure that goal_score and max_score are included locations
@@ -47,9 +47,16 @@ def ini_locations(goal_score, max_score, number_of_locations, dif):
     # and the next score will always be at least highest_score + 1
     # note that current_score is at most max_score-1
     highest_score = 0
+    start_score = 0
+    
+    if skip_early_locations:
+        scaling = 1.95
+        if number_of_players > 2:
+            scaling = max(1.2, 2.2 - number_of_players * 0.1)
+               
     for i in range(number_of_locations - 1):
         percentage = i / number_of_locations
-        current_score = int(1 + (percentage**scaling) * (max_score - 2))
+        current_score = int(start_score + 1 + (percentage**scaling) * (max_score - start_score - 2))
         if current_score <= highest_score:
             current_score = highest_score + 1
         highest_score = current_score

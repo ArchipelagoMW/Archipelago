@@ -56,7 +56,7 @@ class YachtDiceWorld(World):
 
     item_name_groups = item_groups
 
-    ap_world_version = "2.1.0"
+    ap_world_version = "2.1.1"
 
     def _get_yachtdice_data(self):
         return {
@@ -68,6 +68,7 @@ class YachtDiceWorld(World):
         }
 
     def generate_early(self):
+        print(self.options)
         """
         In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
         """
@@ -95,9 +96,14 @@ class YachtDiceWorld(World):
         else:
             raise Exception(f"[Yacht Dice] Unknown MinimalNumberOfDiceAndRolls options {opt_dice_and_rolls}")
 
+
         # amount of dice and roll fragments needed to get a dice or roll
         self.frags_per_dice = self.options.number_of_dice_fragments_per_dice.value
         self.frags_per_roll = self.options.number_of_roll_fragments_per_roll.value
+        
+        if self.options.minimize_extra_items == MinimizeExtraItems.option_yes_please:
+            self.frags_per_dice = min(self.frags_per_dice, 2)
+            self.frags_per_roll = min(self.frags_per_roll, 2)
 
         # set difficulty
         diff_value = self.options.game_difficulty
@@ -154,22 +160,41 @@ class YachtDiceWorld(World):
                 self.itempool.append(cats[categorylist[index]])
 
         # Also start with one Roll and one Dice
-        self.precollected.append("Roll")
         self.precollected.append("Dice")
+        num_of_dice_to_add = num_of_dice - 1
+        self.precollected.append("Roll")
+        num_of_rolls_to_add = num_of_rolls - 1
+        
+        self.skip_early_locations = False
+        if self.options.minimize_extra_items == MinimizeExtraItems.option_yes_please:
+            self.precollected.append("Dice")
+            num_of_dice_to_add -= 1
+            self.precollected.append("Roll")
+            num_of_rolls_to_add -= 1
+            self.skip_early_locations = True
+            
+        if num_of_dice_to_add > 0:
+            self.itempool.append("Dice")
+            num_of_dice_to_add -= 1
+        if num_of_rolls_to_add > 0:
+            self.itempool.append("Roll")
+            num_of_rolls_to_add -= 1
 
+        
         # if one fragment per dice, just add "Dice" objects
-        if self.frags_per_dice == 1:
-            self.itempool += ["Dice"] * (num_of_dice - 1)  # minus one because one is in start inventory
-        else:
-            self.itempool.append("Dice")  # always add a full dice to make generation easier (will be early)
-            self.itempool += ["Dice Fragment"] * (self.frags_per_dice * (num_of_dice - 2))
+        if num_of_dice_to_add > 0:
+            if self.frags_per_dice == 1:
+                self.itempool += ["Dice"] * num_of_dice_to_add  # minus one because one is in start inventory
+            else:
+                self.itempool += ["Dice Fragment"] * (self.frags_per_dice * num_of_dice_to_add)
 
         # if one fragment per roll, just add "Roll" objects
-        if self.frags_per_roll == 1:
-            self.itempool += ["Roll"] * (num_of_rolls - 1)  # minus one because one is in start inventory
-        else:
-            self.itempool.append("Roll")  # always add a full roll to make generation easier (will be early)
-            self.itempool += ["Roll Fragment"] * (self.frags_per_roll * (num_of_rolls - 2))
+        if num_of_rolls_to_add > 0:
+            if self.frags_per_roll == 1:
+                self.itempool += ["Roll"] * num_of_rolls_to_add  # minus one because one is in start inventory
+            else:
+                self.itempool.append("Roll")  # always add a full roll to make generation easier (will be early)
+                self.itempool += ["Roll Fragment"] * (self.frags_per_roll * num_of_rolls_to_add)
 
         already_items = len(self.itempool)
 
@@ -178,7 +203,7 @@ class YachtDiceWorld(World):
         if self.options.minimize_extra_items == MinimizeExtraItems.option_yes_please:
             extra_percentage = max(0.1, 0.8 - self.multiworld.players / 10)
         elif self.options.minimize_extra_items == MinimizeExtraItems.option_no_dont:
-            extra_percentage = 0.7
+            extra_percentage = 0.72
         else:
             raise Exception(f"[Yacht Dice] Unknown MinimizeExtraItems options {self.options.minimize_extra_items}")
         extra_locations_needed = max(10, math.ceil(already_items * extra_percentage))
@@ -422,7 +447,7 @@ class YachtDiceWorld(World):
 
     def create_regions(self):
         # call the ini_locations function, that generates locations based on the inputs.
-        location_table = ini_locations(self.goal_score, self.max_score, self.number_of_locations, self.difficulty)
+        location_table = ini_locations(self.goal_score, self.max_score, self.number_of_locations, self.difficulty, self.skip_early_locations, self.multiworld.players)
 
         # simple menu-board construction
         menu = Region("Menu", self.player, self.multiworld)
@@ -475,6 +500,8 @@ class YachtDiceWorld(World):
             "allow_manual_input",
         )
         slot_data = {**yacht_dice_data, **yacht_dice_options}  # combine the two
+        slot_data["number_of_dice_fragments_per_dice"] = self.frags_per_dice
+        slot_data["number_of_roll_fragments_per_roll"] = self.frags_per_roll
         slot_data["goal_score"] = self.goal_score
         slot_data["last_check_score"] = self.max_score
         slot_data["allowed_categories"] = self.possible_categories

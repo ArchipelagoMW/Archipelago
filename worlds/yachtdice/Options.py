@@ -195,9 +195,11 @@ class PointsSize(Choice):
 class MinimizeExtraItems(Choice):
     """
     Besides necessary items, Yacht Dice has extra useful/filler items in the item pool.
-    It is possible however to decrease the number of extra items in multiplayer games.
-    Do you want to reduce the number of extra items?
-    (this option only does something in multiplayer games)
+    It is possible however to decrease the number of locations and extra items.
+    This option will:
+    - decrease the number of locations at the start (you'll start with 2 dice and 2 rolls).
+    - will limit the number of dice/roll fragments per dice/roll to 2.
+    - in multiplayer games, it will reduce the number of filler items.
     """
 
     display_name = "Minimize extra items"
