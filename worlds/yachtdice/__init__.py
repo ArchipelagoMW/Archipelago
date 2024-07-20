@@ -96,11 +96,10 @@ class YachtDiceWorld(World):
         else:
             raise Exception(f"[Yacht Dice] Unknown MinimalNumberOfDiceAndRolls options {opt_dice_and_rolls}")
 
-
         # amount of dice and roll fragments needed to get a dice or roll
         self.frags_per_dice = self.options.number_of_dice_fragments_per_dice.value
         self.frags_per_roll = self.options.number_of_roll_fragments_per_roll.value
-        
+
         if self.options.minimize_extra_items == MinimizeExtraItems.option_yes_please:
             self.frags_per_dice = min(self.frags_per_dice, 2)
             self.frags_per_roll = min(self.frags_per_roll, 2)
@@ -164,7 +163,7 @@ class YachtDiceWorld(World):
         num_of_dice_to_add = num_of_dice - 1
         self.precollected.append("Roll")
         num_of_rolls_to_add = num_of_rolls - 1
-        
+
         self.skip_early_locations = False
         if self.options.minimize_extra_items == MinimizeExtraItems.option_yes_please:
             self.precollected.append("Dice")
@@ -172,7 +171,7 @@ class YachtDiceWorld(World):
             self.precollected.append("Roll")
             num_of_rolls_to_add -= 1
             self.skip_early_locations = True
-            
+
         if num_of_dice_to_add > 0:
             self.itempool.append("Dice")
             num_of_dice_to_add -= 1
@@ -180,7 +179,6 @@ class YachtDiceWorld(World):
             self.itempool.append("Roll")
             num_of_rolls_to_add -= 1
 
-        
         # if one fragment per dice, just add "Dice" objects
         if num_of_dice_to_add > 0:
             if self.frags_per_dice == 1:
@@ -447,7 +445,14 @@ class YachtDiceWorld(World):
 
     def create_regions(self):
         # call the ini_locations function, that generates locations based on the inputs.
-        location_table = ini_locations(self.goal_score, self.max_score, self.number_of_locations, self.difficulty, self.skip_early_locations, self.multiworld.players)
+        location_table = ini_locations(
+            self.goal_score,
+            self.max_score,
+            self.number_of_locations,
+            self.difficulty,
+            self.skip_early_locations,
+            self.multiworld.players,
+        )
 
         # simple menu-board construction
         menu = Region("Menu", self.player, self.multiworld)
