@@ -6252,9 +6252,9 @@ def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
         return True
     else:
         if world.options.sword_progression:
-            return (state.has("Sword Upgrade", world.player, 1) and state.has("Glass Cannon", world.player)) or state.has("Sword Upgrade", world.player, 2)  or state.has("Gun", world.player) or state.has("Magic Wand", world.player)
+            return (state.has("Sword Upgrade", world.player, 1) and state.has("Glass Cannon", world.player)) or state.has("Sword Upgrade", world.player, 2)
         else:
-            return (state.has("Stick", world.player, 1) and state.has("Glass Cannon", world.player)) or state.has("Sword", world.player)  or state.has("Gun", world.player) or state.has("Magic Wand", world.player)
+            return (state.has("Stick", world.player, 1) and state.has("Glass Cannon", world.player)) or state.has("Sword", world.player)
 
 
 def set_grass_location_rules(world: "TunicWorld") -> None:
