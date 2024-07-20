@@ -409,7 +409,7 @@ class DarkSouls3World(World):
             and data.category.upgrade_level
             # Because we require the Pyromancy Flame to be available early, don't upgrade it so it
             # doesn't get shuffled around by weapon smoothing.
-            and not data.name == "Pyromancy Flame"
+            and data.name != "Pyromancy Flame"
         ):
             # if the user made an error and set a min higher than the max we default to the max
             max_5 = self.options.max_levels_in_5.value
