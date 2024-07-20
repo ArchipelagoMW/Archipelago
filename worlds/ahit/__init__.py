@@ -330,7 +330,7 @@ class HatInTimeWorld(World):
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         old_count: int = state.count(item.name, self.player)
-        change = super().collect(state, item)
+        change = super().remove(state, item)
         if change and old_count == 1:
             if "Stamp" in item.name:
                 if "2 Stamp" in item.name:
