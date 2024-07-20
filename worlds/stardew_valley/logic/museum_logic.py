@@ -41,7 +41,7 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, TimeLogicMi
         else:
             geodes_rule = False_()
         # monster_rule = self.can_farm_monster(item.monsters)
-        time_needed_to_grind = (20 - item.difficulty) / 2
+        time_needed_to_grind = int((20 - item.difficulty) // 2)
         time_rule = self.logic.time.has_lived_months(time_needed_to_grind)
         pan_rule = False_()
         if item.item_name == Mineral.earth_crystal or item.item_name == Mineral.fire_quartz or item.item_name == Mineral.frozen_tear:
