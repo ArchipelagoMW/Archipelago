@@ -164,19 +164,21 @@ class LingoPlayerLogic:
 
         if location_checks == LocationChecks.option_reduced:
             if door_shuffle == ShuffleDoors.option_doors:
-                raise OptionError("You cannot have reduced location checks when door shuffle is on, because there "
-                                  "would not be enough locations for all of the door items.")
+                raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks when door shuffle"
+                                  f" is on, because there would not be enough locations for all of the door items.")
             if door_shuffle == ShuffleDoors.option_panels:
                 if not world.options.group_doors:
-                    raise OptionError("You cannot have reduced location checks when ungrouped panels mode door shuffle "
-                                      "is on, because there would not be enough locations for all of the panel items.")
+                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks when ungrouped"
+                                      f" panels mode door shuffle is on, because there would not be enough locations for"
+                                      f" all of the panel items.")
                 if color_shuffle:
-                    raise OptionError("You cannot have reduced location checks with both panels mode door shuffle and "
-                                      "color shuffle because there would not be enough locations for all of the items.")
+                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks with both"
+                                      f" panels mode door shuffle and color shuffle because there would not be enough"
+                                      f" locations for all of the items.")
                 if world.options.sunwarp_access >= SunwarpAccess.option_individual:
-                    raise OptionError("You cannot have reduced location checks with both panels mode door shuffle and "
-                                      "individual or progressive sunwarp access because there would not be enough "
-                                      "locations for all of the items.")
+                    raise OptionError(f"Slot \"{world.player_name}\" cannot have reduced location checks with both"
+                                      f" panels mode door shuffle and individual or progressive sunwarp access because"
+                                      f" there would not be enough locations for all of the items.")
 
         # Create door items, where needed.
         door_groups: Set[str] = set()
