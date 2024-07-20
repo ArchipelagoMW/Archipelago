@@ -12,7 +12,8 @@ from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassi
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
-    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
+    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations, \
+    take_any_locations, sword_cave_locations
 from .Options import TlozOptions
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from .Rules import set_rules
@@ -89,6 +90,8 @@ class TLoZWorld(World):
 
     location_name_groups = {
         "Shops": shop_locations,
+        "Take Any": take_any_locations,
+        "Sword Caves": sword_cave_locations,
         "Level 1": level_locations[0],
         "Level 2": level_locations[1],
         "Level 3": level_locations[2],
