@@ -11,8 +11,8 @@ Some steps also assume use of Windows, so may vary with your OS.
 
 ## Installing the Archipelago software
 
-The most recent public release of Archipelago can be found on the GitHub Releases page:
-[Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases).
+The most recent public release of Archipelago can be found on GitHub:
+[Archipelago Latest Release](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
 
 Run the exe file, and after accepting the license agreement you will be asked which components you would like to
 install.

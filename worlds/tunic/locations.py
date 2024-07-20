@@ -86,7 +86,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Hero's Grave - Flowers Relic": TunicLocationData("Eastern Vault Fortress", "Hero Relic - Fortress"),
     "Beneath the Fortress - Bridge": TunicLocationData("Beneath the Vault", "Beneath the Vault Back"),
     "Beneath the Fortress - Cell Chest 1": TunicLocationData("Beneath the Vault", "Beneath the Vault Back"),
-    "Beneath the Fortress - Obscured Behind Waterfall": TunicLocationData("Beneath the Vault", "Beneath the Vault Front"),
+    "Beneath the Fortress - Obscured Behind Waterfall": TunicLocationData("Beneath the Vault", "Beneath the Vault Main"),
     "Beneath the Fortress - Back Room Chest": TunicLocationData("Beneath the Vault", "Beneath the Vault Back"),
     "Beneath the Fortress - Cell Chest 2": TunicLocationData("Beneath the Vault", "Beneath the Vault Back"),
     "Frog's Domain - Near Vault": TunicLocationData("Frog's Domain", "Frog's Domain"),
