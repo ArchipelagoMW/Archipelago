@@ -16,7 +16,7 @@ def generate_phone_traps(world: "PokemonCrystalWorld"):
         else:
             psychic_location = world.multiworld.get_location(data.locations["TM29_PSYCHIC"].label, world.player)
         remote_locs = []
-        for location in world.multiworld.get_locations():
+        for location in world.multiworld.get_locations(world.player):
             if len(remote_locs) > 3:
                 break
             if (location.address is not None and location.item and location.item.player != world.player

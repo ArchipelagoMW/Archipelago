@@ -367,7 +367,7 @@ def generate_output(world: "PokemonCrystalWorld", output_directory: str, patch: 
 
     phone_location_bytes = []
     for loc in world.generated_phone_indices:
-        phone_location_bytes += list(loc.to_bytes(8, "little"))
+        phone_location_bytes += list(loc.to_bytes(2, "little"))
     phone_location_address = data.rom_addresses["AP_Setting_Phone_Trap_Locations"]
     write_bytes(patch, phone_location_bytes, phone_location_address)
 
