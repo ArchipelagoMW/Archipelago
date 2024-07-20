@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-import types
 import typing
 import builtins
 import os
@@ -19,9 +18,9 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Generator, Generic, List, Optional, Set, TypeVar, Dict, Any, Union
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from typing_extensions import TypeGuard
-from yaml import load, load_all, dump, SafeLoader
+from yaml import load, load_all, dump
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -823,14 +822,6 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task: asyncio.Task[typing.Any] = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
-
-
-T = TypeVar("T")
-def flatten(l: List[T] | Generator[T] | T) -> List[T]:
-    if type(l) is list or type(l) is types.GeneratorType:
-        return [ y for x in l for y in flatten(x) ]
-    else:
-        return [ l ]
 
 
 def deprecate(message: str):
