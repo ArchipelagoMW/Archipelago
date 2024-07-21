@@ -213,12 +213,13 @@ class ShiversWorld(World):
     def fill_slot_data(self) -> dict:
 
         return {
-            "storageplacements": self.storage_placements,
-            "excludedlocations": {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
-            "ixupicapturesneeded": {self.options.ixupi_captures_needed.value},
-            "elevatorsstaysolved": {self.options.elevators_stay_solved.value},
-            "earlybeth": {self.options.early_beth.value},
-            "earlylightning": {self.options.early_lightning.value},
+            "StoragePlacements": self.storage_placements,
+            "ExcludedLocations": {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
+            "IxupiCapturesNeeded": self.options.ixupi_captures_needed.value,
+            "ElevatorsStaySolved": self.options.elevators_stay_solved.value,
+            "EarlyBeth": self.options.early_beth.value,
+            "EarlyLightning": self.options.early_lightning.value,
+            "FrontDoorUsable": self.options.front_door_usable
         }
 
 
