@@ -74,7 +74,7 @@ class TestERSpecial(TunicTestBase):
     options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
                options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
                options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
-               options.FixedShop.internal_name: options.FixedShop.option_true,
+               options.FixedShop.internal_name: options.FixedShop.option_false,
                options.IceGrappling.internal_name: options.IceGrappling.option_easy,
                "plando_connections": [
                    {
