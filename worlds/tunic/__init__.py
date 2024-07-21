@@ -171,9 +171,9 @@ class TunicWorld(World):
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
         # if item_data.combat_ic is None, it'll take item_data.classification instead
-        classification: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
-                                              or item_data.classification)
-        return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
+        itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
+                                         or item_data.classification)
+        return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         tunic_items: List[TunicItem] = []
