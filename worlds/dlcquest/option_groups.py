@@ -8,14 +8,14 @@ dlcq_option_groups = [
         ItemShuffle,
         CoinSanity,
     ]),
-    OptionGroup("Tedious and Grind", [
-        TimeIsMoney,
-        DoubleJumpGlitch,
-    ]),
-    OptionGroup("Extra Customization", [
+    OptionGroup("Customization", [
         EndingChoice,
         PermanentCoins,
         CoinSanityRange,
+    ]),
+    OptionGroup("Tedious and Grind", [
+        TimeIsMoney,
+        DoubleJumpGlitch,
     ]),
     OptionGroup("Advanced Options", [
         DeathLink,
