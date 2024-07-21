@@ -2221,7 +2221,7 @@ id,region,name,tags,mod_name
 3817,Shipping,Shipsanity: Raisins,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 3818,Shipping,Shipsanity: Dried Fruit,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 3819,Shipping,Shipsanity: Dried Mushrooms,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
-3820,Shipping,Shipsanity: Stardrop Tea,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3820,Shipping,Shipsanity: Stardrop Tea,"SHIPSANITY",
 3821,Shipping,Shipsanity: Prize Ticket,"SHIPSANITY",
 3822,Shipping,Shipsanity: Treasure Totem,"SHIPSANITY,REQUIRES_MASTERIES",
 3823,Shipping,Shipsanity: Challenge Bait,"SHIPSANITY,REQUIRES_MASTERIES",
