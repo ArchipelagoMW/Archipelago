@@ -72,7 +72,7 @@ class GauntletLegendsWorld(World):
     settings: typing.ClassVar[GLSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 4, 6)
+    required_client_version = (0, 5, 0)
     death: typing.List[Item] = []
     crc32: str = None
 
@@ -154,8 +154,9 @@ class GauntletLegendsWorld(World):
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "characters": characters,
-            "max": self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4,
-            "instant_max": self.options.instant_max.value
+            "max": max(self.options.max_difficulty_value.value, self.options.local_players.value) if self.options.max_difficulty_toggle else 4,
+            "instant_max": self.options.instant_max.value,
+            "death_link": self.options.death_link.value == 1
         }
 
     def create_items(self) -> None:
@@ -163,7 +164,7 @@ class GauntletLegendsWorld(World):
         required_items = []
         precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
         for item in item_list:
-            if item.progression != ItemClassification.filler and item not in precollected:
+            if item.progression != ItemClassification.filler and item.progression != ItemClassification.trap and item not in precollected:
                 if "Obelisk" in item.item_name and self.options.obelisks == 0:
                     continue
                 if "Mirror" in item.item_name and self.options.mirror_shards == 0:
@@ -179,12 +180,27 @@ class GauntletLegendsWorld(World):
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
         for item in item_list:
-            if item.progression == ItemClassification.filler:
+            if item.progression == ItemClassification.filler or item.progression == ItemClassification.trap:
                 if "Key" in item.item_name and self.options.infinite_keys:
                     continue
                 if "Boots" in item.item_name and self.options.permanent_speed:
                     continue
+                if "Poison" in item.item_name and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_none_active):
+                    continue
+                if "Death" in item.item_name and (self.options.traps_choice.value == self.options.traps_choice.option_only_fruit or self.options.traps_choice.value == self.options.traps_choice.option_none_active):
+                    continue
+
                 freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
+
+                if self.options.traps_frequency.value == self.options.traps_frequency.option_large and item.progression == ItemClassification.trap:
+                    freq *= 2
+                elif self.options.traps_frequency.value == self.options.traps_frequency.option_extreme and item.progression == ItemClassification.trap:
+                    freq *= 5
+
+                if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
+                    freq = item_frequencies.get(item.item_name, 1)
+                if item.item_name == "Anti-Death Halo" and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_all_active) and self.options.traps_frequency.value == self.options.traps_frequency.option_extreme:
+                    freq *= 2
                 if freq is None:
                     freq = 1
                 filler_items += [item.item_name for _ in range(freq)]
@@ -196,10 +212,10 @@ class GauntletLegendsWorld(World):
             remaining -= 4
         for i in range(remaining):
             filler_item_name = self.multiworld.random.choice(filler_items)
-            if filler_item_name == "Death":
-                self.death += self.create_item(filler_item_name)
-                continue
             item = self.create_item(filler_item_name)
+            if "Death" in filler_item_name:
+                self.death += [item]
+                continue
             self.multiworld.itempool.append(item)
             filler_items.remove(filler_item_name)
 
@@ -209,7 +225,7 @@ class GauntletLegendsWorld(World):
             "Gates of the Underworld", "Region", self.player,
         )
 
-    def pre_fill(self) -> None:
+    def post_fill(self) -> None:
         fast_fill(self.multiworld, self.death, self.multiworld.get_unfilled_locations(player=self.player))
 
     def create_item(self, name: str) -> GLItem:

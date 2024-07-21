@@ -19,7 +19,7 @@ from .Arrays import (
     level_locations,
     mirror_levels,
     spawners,
-    timers,
+    timers, sounds, colors,
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
@@ -37,9 +37,15 @@ ACTIVE_LEVEL = 0x4EFC0
 PLAYER_COUNT = 0x127764
 PLAYER_LEVEL = 0xFD31B
 PLAYER_ALIVE = 0xFD2EB
+PLAYER_CLASS = 0xFD30F
+PLAYER_COLOR = 0xFD30E
 PLAYER_PORTAL = 0x64A50
 PLAYER_BOSSING = 0x64A54
 PLAYER_MOVEMENT = 0xFD307
+SOUND_ADDRESS = 0xAE740
+SOUND_START = 0xEEFC
+PLAYER_KILL = 0xFD300
+
 BOSS_ADDR = 0x289C08
 TIME = 0xC5B1C
 INPUT = 0xC5BCD
@@ -71,7 +77,7 @@ class RetroSocket:
         for s in response[2:]:
             if "-1" in s:
                 logger.info("-1 response")
-                return None
+                raise Exception("Client tried to read from an invalid address or could not successfully make a connection to Retroarch.")
             b += bytes.fromhex(s)
         return b
 
@@ -151,11 +157,12 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
         super().__init__(ctx)
 
-    async def _cmd_inv(self, *args):
-        await self.ctx.inv_update(" ".join(args[:-1]), int(args[-1]))
-
     def _cmd_connected(self):
-        logger.info(f"Retroarch Status: {self.retro_connected}")
+        logger.info(f"Retroarch Status: {self.ctx.retro_connected}")
+
+    def _cmd_deathlink_toggle(self):
+        self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
+        logger.info(f"Deathlink {'Enabled.' if self.ctx.deathlink_enabled else 'Disabled.'}")
 
 
 class GauntletLegendsContext(CommonContext):
@@ -165,6 +172,9 @@ class GauntletLegendsContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
+        self.deathlink_pending: bool = False
+        self.deathlink_enabled: bool = False
+        self.deathlink_triggered: bool = False
         self.difficulty: int = 0
         self.players: int = 1
         self.gl_sync_task = None
@@ -172,7 +182,6 @@ class GauntletLegendsContext(CommonContext):
         self.glslotdata = None
         self.crc32 = None
         self.socket = RetroSocket()
-        self.awaiting_rom = False
         self.locations_checked: List[int] = []
         self.inventory: List[List[InventoryEntry]] = []
         self.inventory_raw: List[RamChunk] = []
@@ -198,6 +207,10 @@ class GauntletLegendsContext(CommonContext):
         self.init_refactor: bool = False
         self.location_scouts: list[NetworkItem] = []
         self.character_loaded: bool = False
+
+    def on_deathlink(self, data: dict):
+        self.deathlink_pending = True
+        super().on_deathlink(data)
 
     # Return number of items in inventory
     def inv_count(self, player: int) -> int:
@@ -297,7 +310,6 @@ class GauntletLegendsContext(CommonContext):
                     if obj[0] == 0xFF and obj[1] == 0xFF:
                         count += 1
             self.extra_items += count
-
             b = RamChunk(
                 await self.socket.read(
                     message_format(
@@ -309,7 +321,7 @@ class GauntletLegendsContext(CommonContext):
             b.iterate(0x3C)
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
-        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF and obj.raw[1] != 0xFF]
+        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF or obj.raw[1] != 0xFF]
         if mode == 1:
             self.chest_objects = _obj[:len(self.chest_locations)]
         else:
@@ -463,6 +475,16 @@ class GauntletLegendsContext(CommonContext):
         await self.get_username()
         await self.send_connect()
 
+    async def connection_closed(self):
+        self.retro_connected = False
+        await self.var_reset()
+        await super(GauntletLegendsContext, self).connection_closed()
+
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.retro_connected = False
+        await self.var_reset()
+        await super(GauntletLegendsContext, self).disconnect()
+
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.slot = args["slot"]
@@ -470,6 +492,7 @@ class GauntletLegendsContext(CommonContext):
             if self.socket.status():
                 self.retro_connected = True
                 self.players = self.glslotdata["players"]
+                self.deathlink_enabled = self.glslotdata["death_link"]
             else:
                 raise Exception("Retroarch not detected. Please open you patched ROM in Retroarch.")
         elif cmd == "Retrieved":
@@ -677,8 +700,8 @@ class GauntletLegendsContext(CommonContext):
 
     # Returns True of the player is dead
     async def dead(self) -> bool:
-        temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_ALIVE, 'x')} 1"))
-        return temp[0] == 0x0
+        temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_KILL, 'x')} 1"))
+        return (temp[0] & 0x8) == 0x8
 
     # Returns a number that tells if the player is fighting a boss currently
     async def boss(self) -> int:
@@ -696,7 +719,7 @@ class GauntletLegendsContext(CommonContext):
             if self.in_game:
                 if portaling or (self.current_level in boss_level and boss == 0):
                     self.clear_counts[str(self.current_level)] = self.clear_counts.get(str(self.current_level), 0) + 1
-                    if (self.current_level[1] << 4) + self.current_level[0] in mirror_levels:
+                    if self.current_level in mirror_levels:
                         await ctx.send_msgs(
                             [
                                 {
@@ -711,26 +734,31 @@ class GauntletLegendsContext(CommonContext):
                                 },
                             ],
                         )
-                if dead:
-                    if self.current_level == bytes([0x2, 0xF]):
-                        self.clear_counts[str([0x1, 0xF])] = max(self.clear_counts.get(str([0x1, 0xF]), 0) - 1, 0)
-            self.objects_loaded = False
-            self.extra_items = 0
-            self.item_locations = []
-            self.item_objects = []
-            self.chest_locations = []
-            self.chest_objects = []
-            self.obelisk_locations = []
-            self.obelisks = []
-            self.in_game = False
-            self.level_loading = False
-            self.scaled = False
-            self.offset = -1
-            self.movement = 0
-            self.difficulty = 0
-            self.location_scouts = []
+                if dead and not (self.current_level in boss_level and boss == 0):
+                    if self.deathlink_triggered:
+                        self.deathlink_triggered = False
+                    else:
+                        await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
+            await self.var_reset()
             return True
         return False
+
+    async def var_reset(self):
+        self.objects_loaded = False
+        self.extra_items = 0
+        self.item_locations = []
+        self.item_objects = []
+        self.chest_locations = []
+        self.chest_objects = []
+        self.obelisk_locations = []
+        self.obelisks = []
+        self.in_game = False
+        self.level_loading = False
+        self.scaled = False
+        self.offset = -1
+        self.movement = 0
+        self.difficulty = 0
+        self.location_scouts = []
 
     # Prep arrays with locations and objects
     async def load_objects(self, ctx: "GauntletLegendsContext"):
@@ -738,6 +766,18 @@ class GauntletLegendsContext(CommonContext):
         await self.obj_read()
         await self.obj_read(1)
         self.objects_loaded = True
+
+    async def die(self):
+        self.deathlink_triggered = True
+        char = await self.socket.read(message_format(READ, f"0x{format(PLAYER_CLASS, 'x')} 1"))
+        char = char[0]
+        color = await self.socket.read(message_format(READ, f"0x{format(PLAYER_COLOR, 'x')} 1"))
+        color = color[0]
+        await self.socket.write(message_format(WRITE, param_format(SOUND_ADDRESS, int.to_bytes(colors[color], 4, "little") + int.to_bytes(sounds[char], 4, "little") + int.to_bytes(0xBB, 4, "little"))))
+        await self.socket.write(message_format(WRITE, param_format(SOUND_START, int.to_bytes(0xE00AE718, 4, "little"))))
+        await asyncio.sleep(2)
+        await self.socket.write(message_format(WRITE, param_format(SOUND_START, int.to_bytes(0x0, 4, "little"))))
+        await self.socket.write(message_format(WRITE, param_format(PLAYER_KILL, int.to_bytes(0x7, 1, "little"))))
 
     def run_gui(self):
         from kvui import GameManager
@@ -758,7 +798,7 @@ async def _patch_and_run_game(patch_file: str):
 # Checks for player status to see if they are in/loading a level
 # Checks location status inside of levels
 async def gl_sync_task(ctx: GauntletLegendsContext):
-    logger.info("Starting N64 connector. Use /n64 for status information")
+    logger.info("Starting N64 connector...")
     while not ctx.exit_event.is_set():
         if ctx.retro_connected:
             cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
@@ -800,6 +840,9 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     logger.info(traceback.format_exc())
             try:
                 await ctx.handle_items()
+                if ctx.deathlink_pending and ctx.deathlink_enabled:
+                    ctx.deathlink_pending = False
+                    await ctx.die()
             except Exception:
                 logger.info(traceback.format_exc())
             if not ctx.level_loading and not ctx.in_game:

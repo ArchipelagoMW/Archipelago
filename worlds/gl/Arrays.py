@@ -126,7 +126,7 @@ item_dict: Dict[int, bytes] = {
     77780025: [0x2, 0x14],
     77780026: [0x2, 0x15],
     77780027: [0x2, 0x19],
-    77780028: [0x2, 0xD],  #
+    77780028: [0x2, 0xD],
     77780029: [0x2, 0x6],
     77780030: [0x4, 0x1],
     77780031: [0x4, 0x3],
@@ -440,11 +440,32 @@ difficulty_lambda: Dict[int, List[int]] = {
 boss_realm = [2, 1, 7, 9]
 
 # Area and Level ID's for boss levels
-boss_level = [bytes([0x6, 0x2]), bytes([0x5, 0x9]), bytes([0x5, 0x1]), bytes([0x5, 0x7])]
+boss_level = [bytes([0x6, 0x2]), bytes([0x5, 0x9]), bytes([0x5, 0x1]), bytes([0x5, 0x7]), bytes([0x2, 0xF])]
 
-# Area ID << 4 + Level ID for boss levels
-mirror_levels = [0x15, 0x26, 0x75, 0x95]
+# Area and Level ID's for mirror levels
+mirror_levels = [bytes([0x6, 0x2]), bytes([0x5, 0x9]), bytes([0x5, 0x1]), bytes([0x5, 0x7])]
 
 # Levels with obelisks in them in vanilla
 # Values are index of level_locations array
 level_obelisk = [5, 6, 7, 11, 12, 0, 1]
+
+# ID's for names said by announcer
+sounds = {
+    0: 0x9D,
+    1: 0x9E,
+    2: 0xA7,
+    3: 0xA5,
+    5: 0x9F,
+    6: 0xA1,
+    7: 0xA0,
+    8: 0xA2,
+    9: 0xA7,
+}
+
+# ID's for colors said by announcer
+colors = {
+    0: 0xA3,
+    1: 0xA6,
+    2: 0x9C,
+    3: 0xA4,
+}

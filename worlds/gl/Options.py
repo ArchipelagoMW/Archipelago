@@ -23,7 +23,7 @@ class ChestBarrels(Choice):
     All Barrels: Barrels will be added as locations, Chests will not.
     All Both: Both Chests and Barrels will be added as locations.
     """
-
+    display_name = "Chests and Barrels"
     option_none = 0
     option_all_chests = 1
     option_all_barrels = 2
@@ -38,6 +38,7 @@ class Obelisks(Choice):
     All Obelisks: Obelisks will be shuffled into the item pool.
     """
 
+    display_name = "Obelisks"
     option_none = 0
     option_all_obelisks = 1
     default = 1
@@ -50,6 +51,7 @@ class MirrorShards(Choice):
     All Shards: Mirror Shards will be shuffled into the item pool.
     """
 
+    display_name = "Mirror Shards"
     option_none = 0
     option_all_shards = 1
     default = 1
@@ -69,6 +71,8 @@ class MaxDifficultyRange(Range):
     """
     Select the difficulty value you want to be the maximum.
     This does nothing if Change Max Difficulty is set to false.
+    This value has a minimum based on how many local players you have.
+    If you have 3 local players, this will be adjusted to be at least 3.
     """
 
     display_name = "Max Difficulty Value"
@@ -101,6 +105,45 @@ class InfiniteKeys(Toggle):
     """
 
     display_name = "Infinite Keys"
+
+
+class TrapsChoice(Choice):
+    """
+    Choose what traps will be put in the item pool.
+    All Active: Both Death and Poison Fruit will be added to the item pool.
+    Only Death: Death will be added to the item pool.
+    Only Fruit: Poison Fruit will be added to the item pool.
+    None Active: No Traps will be added to the item pool.
+    """
+
+    display_name = "Active Traps"
+    option_all_active = 0
+    option_only_death = 1
+    option_only_fruit = 2
+    option_none_active = 3
+    default = 0
+
+
+class TrapsFrequency(Choice):
+    """
+    Choose the frequency of traps added into the item pool
+    Normal: 75 of each selected trap are added into the item pool.
+    Large: 150 of each selected trap are added into the item pool.
+    Extreme: 375 of each selected trap are added into the item pool.
+    """
+
+    display_name = "Trap Frequency"
+    option_normal = 0
+    option_large = 1
+    option_extreme = 2
+    default = 0
+
+
+class DeathLink(Toggle):
+    """
+    When you die, everyone dies. Of course the reverse is true too.
+    """
+    display_name = "Death Link"
 
 
 class UnlockCharacterOne(Choice):
@@ -177,9 +220,12 @@ class GLOptions(PerGameCommonOptions):
     max_difficulty_toggle: MaxDifficultyToggle
     max_difficulty_value: MaxDifficultyRange
     instant_max: InstantMaxDifficulty
+    infinite_keys: InfiniteKeys
+    permanent_speed: PermaSpeed
+    traps_choice: TrapsChoice
+    traps_frequency: TrapsFrequency
+    death_link: DeathLink
     unlock_character_one: UnlockCharacterOne
     unlock_character_two: UnlockCharacterTwo
     unlock_character_three: UnlockCharacterThree
     unlock_character_four: UnlockCharacterFour
-    infinite_keys: InfiniteKeys
-    permanent_speed: PermaSpeed
