@@ -152,6 +152,9 @@ class AquariaLocations:
 
     locations_arnassi_path = {
         "Arnassi Ruins, Arnassi Statue": 698164,
+    }
+
+    locations_arnassi_cave_transturtle = {
         "Arnassi Ruins, Transturtle": 698217,
     }
 
@@ -402,6 +405,9 @@ class AquariaLocations:
         "Abyss right area, bulb in the middle path": 698110,
         "Abyss right area, bulb behind the rock in the middle path": 698111,
         "Abyss right area, bulb in the left green room": 698112,
+    }
+
+    locations_abyss_r_transturtle = {
         "Abyss right area, Transturtle": 698214,
     }
 
@@ -499,6 +505,7 @@ location_table = {
     **AquariaLocations.locations_skeleton_path_sc,
     **AquariaLocations.locations_arnassi,
     **AquariaLocations.locations_arnassi_path,
+    **AquariaLocations.locations_arnassi_cave_transturtle,
     **AquariaLocations.locations_arnassi_crab_boss,
     **AquariaLocations.locations_sun_temple_l,
     **AquariaLocations.locations_sun_temple_r,
@@ -509,6 +516,7 @@ location_table = {
     **AquariaLocations.locations_abyss_l,
     **AquariaLocations.locations_abyss_lb,
     **AquariaLocations.locations_abyss_r,
+    **AquariaLocations.locations_abyss_r_transturtle,
     **AquariaLocations.locations_energy_temple_1,
     **AquariaLocations.locations_energy_temple_2,
     **AquariaLocations.locations_energy_temple_3,
