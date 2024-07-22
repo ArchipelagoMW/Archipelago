@@ -630,7 +630,8 @@ class AquariaRegions:
                                        self.cathedral_r, self.cathedral_underground)
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral",
                                        self.cathedral_underground, self.cathedral_r,
-                                       lambda state: _has_beast_form(state, self.player))
+                                       lambda state: _has_beast_form(state, self.player) and
+                                                     _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Cathedral boss right area",
                                        self.cathedral_underground, self.cathedral_boss_r)
         self.__connect_one_way_regions("Cathedral boss right area", "Mithalas Cathedral underground",
@@ -814,12 +815,12 @@ class AquariaRegions:
         """
         self.__connect_regions("Body center area", "Body left area",
                                self.body_c, self.body_l,
-                               lambda state: _has_energy_attack_item(state, self.player))
+                               lambda state: _has_energy_form(state, self.player))
         self.__connect_regions("Body center area", "Body right area top path",
                                self.body_c, self.body_rt)
         self.__connect_regions("Body center area", "Body right area bottom path",
                                self.body_c, self.body_rb,
-                               lambda state: _has_energy_attack_item(state, self.player))
+                               lambda state: _has_energy_form(state, self.player))
         self.__connect_regions("Body center area", "Body bottom area",
                                self.body_c, self.body_b,
                                lambda state: _has_dual_form(state, self.player))
@@ -1032,12 +1033,6 @@ class AquariaRegions:
         """
         add_rule(self.multiworld.get_location("Turtle cave, Urchin Costume", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
-        add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
-                 lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has("Sun God beated", self.player))
-        add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
-                 lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has("Sun God beated", self.player))
         add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
 
@@ -1136,6 +1131,10 @@ class AquariaRegions:
              ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location("Kelp Forest top left area, Jelly Egg", self.player),
                  lambda state: _has_beast_form(state, self.player))
+        add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
+                 lambda state: state.has("Sun God beated", self.player))
+        add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
+                 lambda state: state.has("Sun God beated", self.player))
 
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",

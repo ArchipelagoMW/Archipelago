@@ -45,7 +45,7 @@ class AquariaLocations:
         "Home Water, bulb below the grouper fish": 698058,
         "Home Water, bulb in the path below Nautilus Prime": 698059,
         "Home Water, bulb in the little room above the grouper fish": 698060,
-        "Home Water, bulb in the end of the left path from the Verse Cave": 698061,
+        "Home Water, bulb in the end of the path close to the Verse Cave": 698061,
         "Home Water, bulb in the top left path": 698062,
         "Home Water, bulb in the bottom left room": 698063,
         "Home Water, bulb close to Naija's Home": 698064,
@@ -67,7 +67,7 @@ class AquariaLocations:
 
     locations_song_cave = {
         "Song Cave, Erulian spirit": 698206,
-        "Song Cave, bulb in the top left part": 698071,
+        "Song Cave, bulb in the top right part": 698071,
         "Song Cave, bulb in the big anemone room": 698072,
         "Song Cave, bulb in the path to the singing statues": 698073,
         "Song Cave, bulb under the rock in the path to the singing statues": 698074,
