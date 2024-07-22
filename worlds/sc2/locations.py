@@ -1105,8 +1105,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.the_reckoning_requirement(state)),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Odin", SC2HOTS_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
                      lambda state: logic.the_reckoning_requirement(state)),
-        make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005, LocationType.SPEEDRUN,
-                     lambda state: logic.the_reckoning_requirement(state)),
+        make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005,
+                           LocationType.SPEEDRUN,
+                           lambda state: logic.the_reckoning_requirement(state)
+                                         and state.has_any({item_names.INFESTOR, item_names.DEFILER}, player)
+                                         and (not logic.take_over_ai_allies or logic.terran_base_trasher(state))
+                           ),
 
         # LotV Prologue
         make_location_data(SC2Mission.DARK_WHISPERS.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 100, LocationType.VICTORY,
@@ -1682,7 +1686,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.protoss_common_unit(state)),
         make_location_data(SC2Mission.THE_OUTLAWS_P.mission_name, "Close Resource Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 404, LocationType.EXTRA),
         make_location_data(SC2Mission.ZERO_HOUR_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 500, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_defense(state) and 
+                     lambda state: logic.zerg_competent_defense(state) and
                                    logic.zerg_basic_kerriganless_anti_air(state)),
         make_location_data(SC2Mission.ZERO_HOUR_Z.mission_name, "First Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 501, LocationType.VANILLA),
         make_location_data(SC2Mission.ZERO_HOUR_Z.mission_name, "Second Group Rescued", SC2_RACESWAP_LOC_ID_OFFSET + 502, LocationType.VANILLA,
