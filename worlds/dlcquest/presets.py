@@ -1,6 +1,5 @@
 from typing import Any, Dict
 
-from Options import DeathLink
 from .Options import DoubleJumpGlitch, CoinSanity, CoinSanityRange, PermanentCoins, TimeIsMoney, EndingChoice, Campaign, ItemShuffle
 
 all_random_settings = {
