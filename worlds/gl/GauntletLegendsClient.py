@@ -351,8 +351,8 @@ class GauntletLegendsContext(CommonContext):
                         if "Compass" in name:
                             item.count = count
                         elif "Health" in name:
-                            max = await self.item_from_name("Max", player)
-                            item.count = min(item.count + count, max.count)
+                            max_health = await self.item_from_name("Max", player)
+                            item.count = min(max(item.count + count, 0), max_health.count)
                         elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
                             item.count |= count
                         else:
@@ -372,8 +372,8 @@ class GauntletLegendsContext(CommonContext):
                     if "Compass" in name:
                         item.count = count
                     elif "Health" in name:
-                        max = await self.item_from_name("Max", one)
-                        item.count = min(item.count + count, max.count)
+                        max_health = await self.item_from_name("Max", one)
+                        item.count = min(max(item.count + count, 0), max_health.count)
                     elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
                         item.count |= count
                     else:
