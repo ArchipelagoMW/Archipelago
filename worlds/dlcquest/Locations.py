@@ -79,7 +79,6 @@ for i in range(1, 890):
     item_coin_freemium = f"Live Freemium or Die: {i} Coin"
     location_table[item_coin_freemium] = offset + 825 + 58 + i
 
-
 offset_special = 3829200000
 
 if datetime.datetime.today().month == 4:
@@ -90,4 +89,3 @@ if datetime.datetime.today().month == 4:
     for i in range(1, 8891):
         item_coin_piece_freemium = f"Live Freemium or Die: {i} Coin Piece"
         location_table[item_coin_piece_freemium] = offset_special + 8250 + i
-        
