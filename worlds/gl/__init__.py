@@ -78,6 +78,9 @@ class GauntletLegendsWorld(World):
 
     disabled_locations: typing.List[LocationData]
 
+    def generate_early(self) -> None:
+        self.options.max_difficulty_value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
+
     def create_regions(self) -> None:
         self.disabled_locations = []
         if self.options.chests_barrels == 0:
@@ -154,7 +157,7 @@ class GauntletLegendsWorld(World):
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "characters": characters,
-            "max": max(self.options.max_difficulty_value.value, self.options.local_players.value) if self.options.max_difficulty_toggle else 4,
+            "max": (self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4),
             "instant_max": self.options.instant_max.value,
             "death_link": self.options.death_link.value == 1
         }
