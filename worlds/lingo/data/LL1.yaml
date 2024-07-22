@@ -3265,7 +3265,6 @@
         door: Traveled Entrance
       Color Hallways:
         door: Color Hallways Entrance
-        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_traveled_traveled

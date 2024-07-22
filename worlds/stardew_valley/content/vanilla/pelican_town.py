@@ -290,9 +290,6 @@ pelican_town = ContentPack(
         Book.woodcutters_weekly: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.queen_of_sauce_cookbook: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2),),  # Worst book ever
     },
     fishes=(
         fish_data.albacore,
