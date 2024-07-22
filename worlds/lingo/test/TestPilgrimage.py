@@ -29,7 +29,6 @@ class TestPilgrimageWithRoofAndPaintings(LingoTestBase):
                  "Outside The Undeterred - Green Painting"]
 
         for door in doors:
-            print(door)
             self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
             self.collect_by_name(door)
         
@@ -53,7 +52,6 @@ class TestPilgrimageNoRoofYesPaintings(LingoTestBase):
                  "Starting Room - Street Painting"]
 
         for door in doors:
-            print(door)
             self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
             self.collect_by_name(door)
         
@@ -81,7 +79,6 @@ class TestPilgrimageNoRoofNoPaintings(LingoTestBase):
                  "Orange Tower Fourth Floor - Hot Crusts Door"]
 
         for door in doors:
-            print(door)
             self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
             self.collect_by_name(door)
         
@@ -110,7 +107,6 @@ class TestPilgrimageRequireStartingRoom(LingoTestBase):
                  "Number Hunt - Challenge Entrance", "Welcome Back Area - Shortcut to Starting Room"]
 
         for door in doors:
-            print(door)
             self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
             self.collect_by_name(door)
 
@@ -136,7 +132,6 @@ class TestPilgrimageYesRoofNoPaintings(LingoTestBase):
                  "Orange Tower Fifth Floor - Quadruple Intersection"]
 
         for door in doors:
-            print(door)
             self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
             self.collect_by_name(door)
         
