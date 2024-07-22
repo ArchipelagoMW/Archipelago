@@ -33,9 +33,6 @@ class BeastForArnassiArmormAccessTest(AquariaTestBase):
             "Beating Mergog",
             "Beating Crabbius Maximus",
             "Beating Octopus Prime",
-            "King Jellyfish Cave, Jellyfish Costume",
-            "King Jellyfish Cave, bulb in the right path from King Jelly",
-            "Beating King Jellyfish God Prime",
             "Beating Mithalan priests",
             "Sunken City cleared"
         ]

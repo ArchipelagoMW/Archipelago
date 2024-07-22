@@ -762,8 +762,9 @@ class AquariaRegions:
                                self.body_c, self.abyss_lb)
         self.__connect_regions("Abyss left area", "King jellyfish cave",
                                self.abyss_l, self.king_jellyfish_cave,
-                               lambda state: _has_energy_attack_item(state, self.player) and
-                                             _has_beast_form(state, self.player))
+                               lambda state: (_has_energy_form(state, self.player) and
+                                              _has_beast_form(state, self.player)) or
+                                             _has_dual_form(state, self.player))
         self.__connect_regions("Abyss left area", "Abyss right area",
                                self.abyss_l, self.abyss_r)
         self.__connect_one_way_regions("Abyss right area", "Abyss right area, transturtle",

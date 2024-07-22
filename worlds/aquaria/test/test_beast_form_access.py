@@ -23,9 +23,6 @@ class BeastFormAccessTest(AquariaTestBase):
             "Beating the Golem",
             "Beating Mergog",
             "Beating Octopus Prime",
-            "King Jellyfish Cave, Jellyfish Costume",
-            "King Jellyfish Cave, bulb in the right path from King Jelly",
-            "Beating King Jellyfish God Prime",
             "Sunken City cleared",
         ]
         items = [["Beast form"]]
