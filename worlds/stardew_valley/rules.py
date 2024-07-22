@@ -482,8 +482,10 @@ def set_walnut_puzzle_rules(logic, multiworld, player, world_options):
                              logic.has(Mineral.emerald) & logic.has(Mineral.ruby) & logic.has(Mineral.topaz) &
                              logic.region.can_reach_all((Region.island_north, Region.island_west, Region.island_east, Region.island_south)))
     MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Melon", player), logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
-    MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Wheat", player), logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west))
-    MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Garlic", player), logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west))
+    MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Wheat", player), logic.has(Vegetable.wheat) &
+                             logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Gourmand Frog Melon"))
+    MultiWorldRules.add_rule(multiworld.get_location("Gourmand Frog Garlic", player), logic.has(Vegetable.garlic) &
+                             logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Gourmand Frog Wheat"))
     MultiWorldRules.add_rule(multiworld.get_location("Whack A Mole", player), logic.tool.has_tool(Tool.watering_can, ToolMaterial.iridium))
     MultiWorldRules.add_rule(multiworld.get_location("Complete Large Animal Collection", player), logic.can_complete_large_animal_collection())
     MultiWorldRules.add_rule(multiworld.get_location("Complete Snake Collection", player), logic.can_complete_snake_collection())
