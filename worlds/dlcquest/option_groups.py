@@ -1,8 +1,10 @@
-from Options import DeathLink, ProgressionBalancing, Accessibility, OptionGroup
+from typing import List
+
+from Options import ProgressionBalancing, Accessibility, OptionGroup
 from .Options import (Campaign, ItemShuffle, TimeIsMoney, EndingChoice, PermanentCoins, DoubleJumpGlitch, CoinSanity,
                       CoinSanityRange, DeathLink)
 
-dlcq_option_groups = [
+dlcq_option_groups: List[OptionGroup] = [
     OptionGroup("General", [
         Campaign,
         ItemShuffle,
