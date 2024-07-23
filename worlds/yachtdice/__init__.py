@@ -68,7 +68,6 @@ class YachtDiceWorld(World):
         }
 
     def generate_early(self):
-        print(self.options)
         """
         In generate early, we fill the item-pool, then determine the number of locations, and add filler items.
         """
