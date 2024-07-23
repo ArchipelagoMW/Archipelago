@@ -53,8 +53,9 @@ class LevelData:
     objects: List[bytearray]
     chests: List[bytearray]
     end: bytes
-    obelisk = 0
-    item = 0
+    obelisk_items: int = 0
+    obelisk_chests: int = 0
+    item: int = 0
 
     def __init__(self):
         self.items = []
@@ -136,15 +137,15 @@ class GLPatchExtension(APPatchExtension):
                     if "Chest" in location_name or (
                         "Barrel" in location_name and "Barrel of Gold" not in location_name
                     ):
-                        data.chests[j - (len(data.items) + data.obelisk)][12] = 0x27
-                        data.chests[j - (len(data.items) + data.obelisk)][13] = 0x4
+                        data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][12] = 0x27
+                        data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][13] = 0x4
                     else:
-                        data.items[j - data.obelisk][6] = 0x27
-                        data.items[j - data.obelisk][7] = 0x4
+                        data.items[j - data.obelisk_items][6] = 0x27
+                        data.items[j - data.obelisk_items][7] = 0x4
                 else:
                     if "Obelisk" in items_by_id[item[0]].item_name:
                         data.objects += [
-                            bytearray(data.items[j - data.obelisk][0:6])
+                            bytearray(data.items[j - data.obelisk_items][0:6])
                             + bytearray(
                                 [
                                     0x0,
@@ -168,17 +169,19 @@ class GLPatchExtension(APPatchExtension):
                                 ],
                             ),
                         ]
-                        del data.items[j - data.obelisk]
-                        data.obelisk += 1
-                    else:
-                        if "Chest" in location_name or (
-                            "Barrel" in location_name and "Barrel of Gold" not in location_name
-                        ):
-                            data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[item[0]][0]
-                            data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[item[0]][1]
+                        if chest_barrel(location_name):
+                            del data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)]
+                            data.obelisk_chests += 1
                         else:
-                            data.items[j - data.obelisk][6] = item_dict[item[0]][0]
-                            data.items[j - data.obelisk][7] = item_dict[item[0]][1]
+                            del data.items[j - data.obelisk_items]
+                            data.obelisk_items += 1
+                    else:
+                        if chest_barrel(location_name):
+                            data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][12] = item_dict[item[0]][0]
+                            data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][13] = item_dict[item[0]][1]
+                        else:
+                            data.items[j - data.obelisk_items][6] = item_dict[item[0]][0]
+                            data.items[j - data.obelisk_items][7] = item_dict[item[0]][1]
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)
@@ -290,16 +293,16 @@ def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
 # Format is header, items, spawners, objects, barrels/chests, then traps.
 def level_data_reformat(data: LevelData) -> bytes:
     stream = io.BytesIO()
-    obelisk_offset = 24 * (data.obelisk - data.item)
+    obelisk_offset = 24 * (data.obelisk_items - data.item)
     stream.write(int.to_bytes(0x5C, 4, "big"))
-    stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk)), 4, "big"))
-    stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk)), 4, "big"))
-    stream.write(int.to_bytes(data.obj_addr + (12 * (data.item - data.obelisk)), 4, "big"))
-    stream.write(int.to_bytes(data.end_addr + ((12 * (data.item - data.obelisk)) + obelisk_offset), 4, "big"))
-    stream.write(int.to_bytes(data.portal_addr + ((12 * (data.item - data.obelisk)) + obelisk_offset), 4, "big"))
-    stream.write(int.to_bytes(data.chest_addr + ((12 * (data.item - data.obelisk)) + obelisk_offset), 4, "big"))
-    stream.write(int.to_bytes(data.end_addr2 + ((12 * (data.item - data.obelisk)) + obelisk_offset), 4, "big"))
-    stream.write(int.to_bytes(data.end_addr3 + ((12 * (data.item - data.obelisk)) + obelisk_offset), 4, "big"))
+    stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk_items)), 4, "big"))
+    stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk_items)), 4, "big"))
+    stream.write(int.to_bytes(data.obj_addr + (12 * (data.item - data.obelisk_items)), 4, "big"))
+    stream.write(int.to_bytes(data.end_addr + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
+    stream.write(int.to_bytes(data.portal_addr + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
+    stream.write(int.to_bytes(data.chest_addr + ((12 * (data.item - data.obelisk_items)) + obelisk_offset), 4, "big"))
+    stream.write(int.to_bytes(data.end_addr2 + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
+    stream.write(int.to_bytes(data.end_addr3 + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
     stream.seek(1, 1)
     stream.write(bytes([len(data.items)]))
     stream.write(bytes([0x0, 0x0, 0x0]))
@@ -307,8 +310,13 @@ def level_data_reformat(data: LevelData) -> bytes:
     stream.write(bytes([0x0]))
     stream.write(bytes([len(data.objects)]))
     data.stream.seek(stream.tell())
-    stream.write(data.stream.read(48))
+    temp = bytearray(data.stream.read(48))
+    temp[7] = len(data.chests)
+    stream.write(temp)
     for item in data.items + data.spawners + data.objects + data.chests:
         stream.write(bytes(item))
     stream.write(data.end)
     return stream.getvalue()
+
+def chest_barrel(name: str):
+    return ("Chest" in name or ("Barrel" in name and "Barrel of Gold" not in name))

@@ -78,9 +78,6 @@ class GauntletLegendsWorld(World):
 
     disabled_locations: typing.List[LocationData]
 
-    def generate_early(self) -> None:
-        self.options.max_difficulty_value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
-
     def create_regions(self) -> None:
         self.disabled_locations = []
         if self.options.chests_barrels == 0:
@@ -152,7 +149,6 @@ class GauntletLegendsWorld(World):
         ]
         return {
             "player": self.player,
-            "players": self.options.local_players.value,
             "shards": shard_values,
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
@@ -228,8 +224,9 @@ class GauntletLegendsWorld(World):
             "Gates of the Underworld", "Region", self.player,
         )
 
-    def post_fill(self) -> None:
-        fast_fill(self.multiworld, self.death, self.multiworld.get_unfilled_locations(player=self.player))
+    def pre_fill(self) -> None:
+        self.random.shuffle(self.multiworld.get_unfilled_locations(self.player))
+        fast_fill(self.multiworld, self.death, self.multiworld.get_unfilled_locations(self.player))
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]

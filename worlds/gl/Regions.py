@@ -104,7 +104,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(
         world,
         names,
-        "Valley of Fire",
+        "Menu",
         "Castle Courtyard",
         lambda state: state.has("Mountain Obelisk 1", world.player)
         and state.has("Mountain Obelisk 2", world.player)
@@ -117,7 +117,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(
         world,
         names,
-        "Valley of Fire",
+        "Menu",
         "Poisonous Fields",
         lambda state: state.has("Castle Obelisk 1", world.player)
         and state.has("Castle Obelisk 2", world.player),
@@ -129,7 +129,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(
         world,
         names,
-        "Valley of Fire",
+        "Menu",
         "Arctic Docks",
         lambda state: state.has("Town Obelisk 1", world.player)
         and state.has("Town Obelisk 2", world.player),
@@ -141,7 +141,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(
         world,
         names,
-        "Valley of Fire",
+        "Menu",
         "Desecrated Temple",
         lambda state: state.has("Dragon Mirror Shard", world.player)
         and state.has("Chimera Mirror Shard", world.player)
@@ -154,7 +154,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(
         world,
         names,
-        "Valley of Fire",
+        "Menu",
         "Gates of the Underworld",
         lambda state: state.has("Runestone 1", world.player)
         and state.has("Runestone 2", world.player)
