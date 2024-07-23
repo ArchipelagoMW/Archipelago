@@ -20,8 +20,8 @@
 2. In your Steam library, right-click on **A Hat in Time** in the list of games and click on **Properties**.
 
 
-3. Click the **Betas** tab. In the **Beta Participation** dropdown, select `tcplink`.   
-While it downloads, you can subscribe to the [Archipelago workshop mod.]((https://steamcommunity.com/sharedfiles/filedetails/?id=3026842601))
+3. Click the **Betas** tab. In the **Beta Participation** dropdown, select `tcplink`.  
+   While it downloads, you can subscribe to the [Archipelago workshop mod.]((https://steamcommunity.com/sharedfiles/filedetails/?id=3026842601))
 
 
 4. Once the game finishes downloading, start it up.   
