@@ -293,7 +293,7 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
 
-        # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
+        # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
         if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
@@ -301,7 +301,7 @@ class TunicWorld(World):
                 for portal1, portal2 in portal_pairs.items():
                     self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
         else:
-            # for non-ER, non-ladders
+            # uses the original rules, easier to navigate and reference
             for region_name in tunic_regions:
                 region = Region(region_name, self.player, self.multiworld)
                 self.multiworld.regions.append(region)
@@ -322,6 +322,7 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
+        # same reason as in create_regions, could probably be put into create_regions
         if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
             set_er_location_rules(self)
         else:
