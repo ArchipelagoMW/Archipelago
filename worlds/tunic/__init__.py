@@ -13,7 +13,6 @@ from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
-from Utils import get_settings
 
 
 class TunicSettings(Group):
