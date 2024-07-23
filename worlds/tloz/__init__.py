@@ -89,18 +89,18 @@ class TLoZWorld(World):
     }
 
     location_name_groups = {
-        "Shops": shop_locations,
-        "Take Any": take_any_locations,
-        "Sword Caves": sword_cave_locations,
-        "Level 1": level_locations[0],
-        "Level 2": level_locations[1],
-        "Level 3": level_locations[2],
-        "Level 4": level_locations[3],
-        "Level 5": level_locations[4],
-        "Level 6": level_locations[5],
-        "Level 7": level_locations[6],
-        "Level 8": level_locations[7],
-        "Level 9": level_locations[8],
+        "Shops": set(shop_locations),
+        "Take Any": set(take_any_locations),
+        "Sword Caves": set(sword_cave_locations),
+        "Level 1": set(level_locations[0]),
+        "Level 2": set(level_locations[1]),
+        "Level 3": set(level_locations[2]),
+        "Level 4": set(level_locations[3]),
+        "Level 5": set(level_locations[4]),
+        "Level 6": set(level_locations[5]),
+        "Level 7": set(level_locations[6]),
+        "Level 8": set(level_locations[7]),
+        "Level 9": set(level_locations[8])
     }
 
     for k, v in item_name_to_id.items():
