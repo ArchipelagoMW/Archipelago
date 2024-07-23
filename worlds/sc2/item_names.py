@@ -689,6 +689,8 @@ INSTIGATOR_RESOURCE_EFFICIENCY                          = "Resource Efficiency (
 ADEPT_DISRUPTIVE_TRANSFER                               = "Disruptive Transfer (Adept)"
 SLAYER_PHASE_BLINK                                      = "Phase Blink (Slayer)"
 AVENGER_KRYHAS_CLOAK                                    = "Kryhas Cloak (Avenger)"
+DARK_TEMPLAR_LESSER_SHADOW_FURY                         = "Lesser Shadow Fury (Dark Templar)"
+DARK_TEMPLAR_GREATER_SHADOW_FURY                        = "Greater Shadow Fury (Dark Templar)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
