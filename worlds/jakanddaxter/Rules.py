@@ -1,7 +1,7 @@
 import math
 import typing
 from BaseClasses import MultiWorld, CollectionState
-from .JakAndDaxterOptions import JakAndDaxterOptions
+from .JakAndDaxterOptions import JakAndDaxterOptions, EnableOrbsanity
 from .Items import orb_item_table
 from .locs import CellLocations as Cells
 from .Locations import location_table
@@ -16,7 +16,7 @@ def can_reach_orbs(state: CollectionState,
 
     # Global Orbsanity and No Orbsanity both treat orbs as completely interchangeable.
     # Per Level Orbsanity needs to know if you can reach orbs *in a particular level.*
-    if options.enable_orbsanity.value in [0, 2]:
+    if options.enable_orbsanity != EnableOrbsanity.option_per_level:
         return can_reach_orbs_global(state, player, multiworld)
     else:
         return can_reach_orbs_level(state, player, multiworld, level_name)
@@ -57,10 +57,10 @@ def can_trade(state: CollectionState,
               required_orbs: int,
               required_previous_trade: int = None) -> bool:
 
-    if options.enable_orbsanity.value == 1:
+    if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         bundle_size = options.level_orbsanity_bundle_size.value
         return can_trade_orbsanity(state, player, bundle_size, required_orbs, required_previous_trade)
-    elif options.enable_orbsanity.value == 2:
+    elif options.enable_orbsanity == EnableOrbsanity.option_global:
         bundle_size = options.global_orbsanity_bundle_size.value
         return can_trade_orbsanity(state, player, bundle_size, required_orbs, required_previous_trade)
     else:

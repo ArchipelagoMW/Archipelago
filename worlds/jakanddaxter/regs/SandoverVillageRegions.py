@@ -1,7 +1,7 @@
 from typing import List
 from BaseClasses import CollectionState, MultiWorld
 from .RegionBase import JakAndDaxterRegion
-from .. import JakAndDaxterOptions
+from .. import JakAndDaxterOptions, EnableOrbsanity
 from ..Rules import can_free_scout_flies, can_trade, can_reach_orbs
 
 
@@ -71,7 +71,7 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
-    if options.enable_orbsanity.value == 1:
+    if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
 
         bundle_size = options.level_orbsanity_bundle_size.value

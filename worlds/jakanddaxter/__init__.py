@@ -4,7 +4,7 @@ import settings
 from Utils import local_path, visualize_regions
 from BaseClasses import Item, ItemClassification, Tutorial
 from .GameID import jak1_id, jak1_name, jak1_max
-from .JakAndDaxterOptions import JakAndDaxterOptions
+from .JakAndDaxterOptions import JakAndDaxterOptions, EnableOrbsanity
 from .Locations import JakAndDaxterLocation, location_table
 from .Items import JakAndDaxterItem, item_table
 from .locs import (CellLocations as Cells,
@@ -93,13 +93,13 @@ class JakAndDaxterWorld(World):
     # This will also set Locations, Location access rules, Region access rules, etc.
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.options, self.player)
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "jak.puml")
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "jakanddaxter.puml")
 
     # Helper function to get the correct orb bundle size.
     def get_orb_bundle_size(self) -> int:
-        if self.options.enable_orbsanity.value == 1:
+        if self.options.enable_orbsanity == EnableOrbsanity.option_per_level:
             return self.options.level_orbsanity_bundle_size.value
-        elif self.options.enable_orbsanity.value == 2:
+        elif self.options.enable_orbsanity == EnableOrbsanity.option_global:
             return self.options.global_orbsanity_bundle_size.value
         else:
             return 0
@@ -158,9 +158,9 @@ class JakAndDaxterWorld(World):
 
             # Handle Orbsanity option.
             # If it is OFF, don't add any orbs to the item pool.
-            # If it is ON, only add the orb bundle that matches the choice in options.
+            # If it is ON, don't add any orb bundles that don't match the chosen option.
             if (item_name in self.item_name_groups["Precursor Orbs"]
-                and ((self.options.enable_orbsanity.value == 0
+                and ((self.options.enable_orbsanity == EnableOrbsanity.option_off
                       or Orbs.to_game_id(item_id) != self.get_orb_bundle_size()))):
                 continue
 
@@ -181,4 +181,8 @@ class JakAndDaxterWorld(World):
         return self.options.as_dict("enable_move_randomizer",
                                     "enable_orbsanity",
                                     "global_orbsanity_bundle_size",
-                                    "level_orbsanity_bundle_size")
+                                    "level_orbsanity_bundle_size",
+                                    "fire_canyon_cell_count",
+                                    "mountain_pass_cell_count",
+                                    "lava_tube_cell_count",
+                                    "completion_condition")

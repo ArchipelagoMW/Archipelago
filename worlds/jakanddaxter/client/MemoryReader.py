@@ -17,6 +17,7 @@ from ..locs import (OrbLocations as Orbs,
 sizeof_uint64 = 8
 sizeof_uint32 = 4
 sizeof_uint8 = 1
+sizeof_float = 4
 
 
 # IMPORTANT: OpenGOAL memory structures are particular about the alignment, in memory, of member elements according to
@@ -71,6 +72,19 @@ orbsanity_option_offset = offsets.define(sizeof_uint8)
 orbsanity_bundle_offset = offsets.define(sizeof_uint32)
 collected_bundle_level_offset = offsets.define(sizeof_uint8)
 collected_bundle_count_offset = offsets.define(sizeof_uint32)
+
+# Progression and Completion information.
+fire_canyon_unlock_offset = offsets.define(sizeof_float)
+mountain_pass_unlock_offset = offsets.define(sizeof_float)
+lava_tube_unlock_offset = offsets.define(sizeof_float)
+completion_goal_offset = offsets.define(sizeof_uint8)
+completed_offset = offsets.define(sizeof_uint8)
+
+# Text to display in the HUD (32 char max per string).
+their_item_name_offset = offsets.define(sizeof_uint8, 32)
+their_item_owner_offset = offsets.define(sizeof_uint8, 32)
+my_item_name_offset = offsets.define(sizeof_uint8, 32)
+my_item_finder_offset = offsets.define(sizeof_uint8, 32)
 
 # The End.
 end_marker_offset = offsets.define(sizeof_uint8, 4)
@@ -138,6 +152,7 @@ class JakAndDaxterMemoryReader:
     # Orbsanity handling
     orbsanity_enabled: bool = False
     reset_orbsanity: bool = False
+    orbs_paid: int = 0
 
     def __init__(self, marker: ByteString = b'UnLiStEdStRaTs_JaK1\x00'):
         self.marker = marker
@@ -148,7 +163,8 @@ class JakAndDaxterMemoryReader:
                         finish_callback: Callable,
                         deathlink_callback: Callable,
                         deathlink_toggle: Callable,
-                        orbsanity_callback: Callable):
+                        orbsanity_callback: Callable,
+                        paid_orbs_callback: Callable):
         if self.initiated_connect:
             await self.connect()
             self.initiated_connect = False
@@ -171,6 +187,7 @@ class JakAndDaxterMemoryReader:
         # Checked Locations in game. Handle the entire outbox every tick until we're up to speed.
         if len(self.location_outbox) > self.outbox_index:
             location_callback(self.location_outbox)
+            self.save_data()
             self.outbox_index += 1
 
         if self.finished_game:
@@ -185,6 +202,10 @@ class JakAndDaxterMemoryReader:
 
         if self.reset_orbsanity:
             orbsanity_callback()
+
+        if self.orbs_paid > 0:
+            paid_orbs_callback(self.orbs_paid)
+            self.orbs_paid = 0
 
     async def connect(self):
         try:
@@ -219,7 +240,7 @@ class JakAndDaxterMemoryReader:
         logger.info("Memory Reader Status:")
         logger.info("   Game process ID: " + (str(self.gk_process.process_id) if self.gk_process else "None"))
         logger.info("   Game state memory address: " + str(self.goal_address))
-        logger.info("   Last location checked: " + (str(self.location_outbox[self.outbox_index])
+        logger.info("   Last location checked: " + (str(self.location_outbox[self.outbox_index - 1])
                                                     if self.outbox_index else "None"))
 
     def read_memory(self) -> List[int]:
@@ -235,6 +256,16 @@ class JakAndDaxterMemoryReader:
                     self.location_outbox.append(cell_ap_id)
                     logger.debug("Checked power cell: " + str(next_cell))
 
+                    # If orbsanity is ON and next_cell is one of the traders or oracles, then run a callback
+                    # to add their amount to the DataStorage value holding our current orb trade total.
+                    if next_cell in {11, 12, 31, 32, 33, 96, 97, 98, 99}:
+                        self.orbs_paid += 90
+                        logger.debug("Traded 90 orbs!")
+
+                    if next_cell in {13, 14, 34, 35, 100, 101}:
+                        self.orbs_paid += 120
+                        logger.debug("Traded 120 orbs!")
+
             for k in range(0, next_buzzer_index):
                 next_buzzer = self.read_goal_address(buzzers_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 buzzer_ap_id = Flies.to_ap_id(next_buzzer)
@@ -244,19 +275,10 @@ class JakAndDaxterMemoryReader:
 
             for k in range(0, next_special_index):
                 next_special = self.read_goal_address(specials_checked_offset + (k * sizeof_uint32), sizeof_uint32)
-
-                # 112 is the game-task ID of `finalboss-movies`, which is written to this array when you grab
-                # the white eco. This is our victory condition, so we need to catch it and act on it.
-                if next_special == 112 and not self.finished_game:
-                    self.finished_game = True
-                    logger.info("Congratulations! You finished the game!")
-                else:
-
-                    # All other special checks handled as normal.
-                    special_ap_id = Specials.to_ap_id(next_special)
-                    if special_ap_id not in self.location_outbox:
-                        self.location_outbox.append(special_ap_id)
-                        logger.debug("Checked special: " + str(next_special))
+                special_ap_id = Specials.to_ap_id(next_special)
+                if special_ap_id not in self.location_outbox:
+                    self.location_outbox.append(special_ap_id)
+                    logger.debug("Checked special: " + str(next_special))
 
             died = self.read_goal_address(died_offset, sizeof_uint8)
             if died > 0:
@@ -301,6 +323,11 @@ class JakAndDaxterMemoryReader:
                         logger.debug("Checked orb bundle: " + str(bundle_ap_id))
 
                 # self.reset_orbsanity = True
+
+            completed = self.read_goal_address(completed_offset, sizeof_uint8)
+            if completed > 0 and not self.finished_game:
+                self.finished_game = True
+                logger.info("Congratulations! You finished the game!")
 
         except (ProcessError, MemoryReadError, WinAPIError):
             logger.error("The gk process has died. Restart the game and run \"/memr connect\" again.")

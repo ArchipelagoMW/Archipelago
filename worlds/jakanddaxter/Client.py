@@ -8,8 +8,9 @@ import pymem
 from pymem.exception import ProcessNotFound, ProcessError
 
 import Utils
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
+from .JakAndDaxterOptions import EnableOrbsanity
 
 from .GameID import jak1_name
 from .client.ReplClient import JakAndDaxterReplClient
@@ -84,8 +85,8 @@ class JakAndDaxterContext(CommonContext):
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         self.repl = JakAndDaxterReplClient()
         self.memr = JakAndDaxterMemoryReader()
-        # self.memr.load_data()
         # self.repl.load_data()
+        # self.memr.load_data()
         super().__init__(server_address, password)
 
     def run_gui(self):
@@ -110,19 +111,71 @@ class JakAndDaxterContext(CommonContext):
 
         if cmd == "Connected":
             slot_data = args["slot_data"]
-            if slot_data["enable_orbsanity"] == 1:
-                self.repl.setup_orbsanity(slot_data["enable_orbsanity"], slot_data["level_orbsanity_bundle_size"])
-            elif slot_data["enable_orbsanity"] == 2:
-                self.repl.setup_orbsanity(slot_data["enable_orbsanity"], slot_data["global_orbsanity_bundle_size"])
+            orbsanity_option = slot_data["enable_orbsanity"]
+            if orbsanity_option == EnableOrbsanity.option_per_level:
+                orbsanity_bundle = slot_data["level_orbsanity_bundle_size"]
+            elif orbsanity_option == EnableOrbsanity.option_global:
+                orbsanity_bundle = slot_data["global_orbsanity_bundle_size"]
             else:
-                self.repl.setup_orbsanity(slot_data["enable_orbsanity"], 1)
+                orbsanity_bundle = 1
+
+            self.repl.setup_options(orbsanity_option,
+                                    orbsanity_bundle,
+                                    slot_data["fire_canyon_cell_count"],
+                                    slot_data["mountain_pass_cell_count"],
+                                    slot_data["lava_tube_cell_count"],
+                                    slot_data["completion_condition"])
+
+            # Because Orbsanity and the orb traders in the game are intrinsically linked, we need the server
+            # to track our trades at all times to support async play. "Retrieved" will tell us the orbs we lost,
+            # while "ReceivedItems" will tell us the orbs we gained. This will give us the correct balance.
+            if orbsanity_option in [EnableOrbsanity.option_per_level, EnableOrbsanity.option_global]:
+                async def get_orb_balance():
+                    await self.send_msgs([{"cmd": "Get",
+                                           "keys": [f"jakanddaxter_{self.auth}_orbs_paid"]
+                                           }])
+
+                create_task_log_exception(get_orb_balance())
+
+        if cmd == "Retrieved":
+            if f"jakanddaxter_{self.auth}_orbs_paid" in args["keys"]:
+                orbs_traded = args["keys"][f"jakanddaxter_{self.auth}_orbs_paid"]
+                self.repl.subtract_traded_orbs(orbs_traded if orbs_traded is not None else 0)
 
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 logger.debug(f"index: {str(index)}, item: {str(item)}")
                 self.repl.item_inbox[index] = item
-            self.memr.save_data()
-            self.repl.save_data()
+
+    def on_print_json(self, args: dict) -> None:
+        if "type" in args and args["type"] in {"ItemSend"}:
+            item = args["item"]
+            recipient = args["receiving"]
+
+            # Receiving an item from the server.
+            if self.slot_concerns_self(recipient):
+                self.repl.my_item_name = self.item_names.lookup_in_game(item.item)
+
+                # Did we find it, or did someone else?
+                if self.slot_concerns_self(item.player):
+                    self.repl.my_item_finder = "MYSELF"
+                else:
+                    self.repl.my_item_finder = self.player_names[item.player]
+
+            # Sending an item to the server.
+            if self.slot_concerns_self(item.player):
+                self.repl.their_item_name = self.item_names.lookup_in_slot(item.item, recipient)
+
+                # Does it belong to us, or to someone else?
+                if self.slot_concerns_self(recipient):
+                    self.repl.their_item_owner = "MYSELF"
+                else:
+                    self.repl.their_item_owner = self.player_names[recipient]
+
+            # Write to game display.
+            self.repl.write_game_text()
+
+        super(JakAndDaxterContext, self).on_print_json(args)
 
     def on_deathlink(self, data: dict):
         if self.memr.deathlink_enabled:
@@ -174,6 +227,18 @@ class JakAndDaxterContext(CommonContext):
     def on_orbsanity_check(self):
         create_task_log_exception(self.repl_reset_orbsanity())
 
+    async def ap_inform_orb_trade(self, orbs_changed: int):
+        if self.memr.orbsanity_enabled:
+            await self.send_msgs([{"cmd": "Set",
+                                   "key": f"jakanddaxter_{self.auth}_orbs_paid",
+                                   "default": 0,
+                                   "want_reply": False,
+                                   "operations": [{"operation": "add", "value": orbs_changed}]
+                                   }])
+
+    def on_orb_trade(self, orbs_changed: int):
+        create_task_log_exception(self.ap_inform_orb_trade(orbs_changed))
+
     async def run_repl_loop(self):
         while True:
             await self.repl.main_tick()
@@ -185,7 +250,8 @@ class JakAndDaxterContext(CommonContext):
                                       self.on_finish_check,
                                       self.on_deathlink_check,
                                       self.on_deathlink_toggle,
-                                      self.on_orbsanity_check)
+                                      self.on_orbsanity_check,
+                                      self.on_orb_trade)
             await asyncio.sleep(0.1)
 
 

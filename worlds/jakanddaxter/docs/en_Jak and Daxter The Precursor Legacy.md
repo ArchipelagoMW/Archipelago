@@ -128,6 +128,30 @@ This will show you a list of all the moves in the game.
 - Yellow items indicate you possess that move, but you are missing its prerequisites.
 - Light blue items indicate you possess that move, as well as its prerequisites.
 
+## What does Orbsanity do?
+If you enable Orbsanity, Precursor Orbs will be turned into ordered lists of progressive checks. Every time you collect 
+a "bundle" of the correct number of orbs, you will trigger the next release in the list. Likewise, these bundles of orbs 
+will be added to the item pool to be randomized. There are several options to change the difficulty of this challenge. 
+
+- "Per Level" Orbsanity means the lists of orb checks are generated and populated for each level in the game.
+  - (Geyser Rock, Sandover Village, etc.)
+- "Global" Orbsanity means there is only one list of checks for the entire game.
+  - It does not matter where you pick up the orbs, they all count toward the same list.
+- The options with "Bundle Size" in the name indicate how many orbs are in a "bundle." This adds a number of Items 
+  and Locations to the pool inversely proportional to the size of the bundle.
+    - For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
+      you will add 8 items to the pool.
+
+### A WARNING ABOUT ORBSANITY OPTIONS
+
+Unlike other settings, you CANNOT alter Orbsanity options after you generate a seed and start a game. **If you turn 
+Orbsanity OFF in the middle of an Orbsanity game, you will have NO way of completing the orb checks.** This may cause
+you to miss important progression items and prevent you (and others) from completing the run.
+
+When you connect your text client to the Archipelago Server, the server will tell the game what settings were chosen
+for this seed, and the game will apply those settings automatically. You can verify (but DO NOT ALTER) these settings 
+by navigating to `Options`, then `Archipelago Options`.
+
 ## I got soft-locked and can't leave, how do I get out of here?
 Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then to `Warp To Home`. 
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 

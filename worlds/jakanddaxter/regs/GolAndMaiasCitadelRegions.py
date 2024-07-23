@@ -1,7 +1,7 @@
 from typing import List
 from BaseClasses import CollectionState, MultiWorld
 from .RegionBase import JakAndDaxterRegion
-from .. import JakAndDaxterOptions
+from .. import JakAndDaxterOptions, EnableOrbsanity
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs
 
 
@@ -58,6 +58,8 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     final_boss = JakAndDaxterRegion("Final Boss", player, multiworld, level_name, 0)
 
+    final_door = JakAndDaxterRegion("Final Door", player, multiworld, level_name, 0)
+
     # Jump Dive required for a lot of buttons, prepare yourself.
     main_area.connect(robot_scaffolding, rule=lambda state:
                       state.has("Jump Dive", player)
@@ -105,6 +107,9 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     final_boss.connect(rotating_tower)  # Take elevator back down.
 
+    # Final door. Need 100 power cells.
+    final_boss.connect(final_door, rule=lambda state: state.has("Power Cell", player, 100))
+
     multiworld.regions.append(main_area)
     multiworld.regions.append(robot_scaffolding)
     multiworld.regions.append(jump_pad_room)
@@ -112,10 +117,11 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     multiworld.regions.append(bunny_room)
     multiworld.regions.append(rotating_tower)
     multiworld.regions.append(final_boss)
+    multiworld.regions.append(final_door)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
-    if options.enable_orbsanity.value == 1:
+    if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
 
         bundle_size = options.level_orbsanity_bundle_size.value
@@ -130,4 +136,4 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area, final_boss]
+    return [main_area, final_boss, final_door]

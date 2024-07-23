@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice
+from Options import Toggle, PerGameCommonOptions, Choice, Range
 
 
 class EnableMoveRandomizer(Toggle):
@@ -66,9 +66,50 @@ class PerLevelOrbsanityBundleSize(Choice):
     default = 1
 
 
+class FireCanyonCellCount(Range):
+    """Set the number of orbs you need to cross Fire Canyon."""
+    display_name = "Fire Canyon Cell Count"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
+class MountainPassCellCount(Range):
+    """Set the number of orbs you need to reach Klaww and cross Mountain Pass."""
+    display_name = "Mountain Pass Cell Count"
+    range_start = 0
+    range_end = 100
+    default = 45
+
+
+class LavaTubeCellCount(Range):
+    """Set the number of orbs you need to cross Lava Tube."""
+    display_name = "Lava Tube Cell Count"
+    range_start = 0
+    range_end = 100
+    default = 72
+
+
+class CompletionCondition(Choice):
+    """Set the goal for completing the game."""
+    display_name = "Completion Condition"
+    option_cross_fire_canyon = 69
+    option_cross_mountain_pass = 87
+    option_cross_lava_tube = 89
+    option_defeat_dark_eco_plant = 6
+    option_defeat_klaww = 86
+    option_defeat_gol_and_maia = 112
+    option_open_100_cell_door = 116
+    default = 112
+
+
 @dataclass
 class JakAndDaxterOptions(PerGameCommonOptions):
     enable_move_randomizer: EnableMoveRandomizer
     enable_orbsanity: EnableOrbsanity
     global_orbsanity_bundle_size: GlobalOrbsanityBundleSize
     level_orbsanity_bundle_size: PerLevelOrbsanityBundleSize
+    fire_canyon_cell_count: FireCanyonCellCount
+    mountain_pass_cell_count: MountainPassCellCount
+    lava_tube_cell_count: LavaTubeCellCount
+    completion_condition: CompletionCondition

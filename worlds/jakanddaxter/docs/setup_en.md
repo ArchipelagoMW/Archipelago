@@ -73,15 +73,17 @@ At this time, this method of setup works on Windows only, but Linux support is a
     - You should see several messages appear after the compiler has run to 100% completion. If you see `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup.
     - The game should then load in the title screen.
 - You can *minimize* the 2 powershell windows, **BUT DO NOT CLOSE THEM.** They are required for Archipelago and the game to communicate with each other.
+- Use the text client to connect to the Archipelago server while on the title screen. This will communicate your current settings to the game.
 - Start a new game in the title screen, and play through the cutscenes.
-- Once you reach Geyser Rock, you can connect to the Archipelago server.
-  - Provide your slot/player name and hit Enter, and then start the game!
+- Once you reach Geyser Rock, you can start the game!
   - You can leave Geyser Rock immediately if you so choose - just step on the warp gate button.
 
 ***Returning / Async Game***
 
-- One important note is to connect to the Archipelago server **AFTER** you load your save file. This is to allow AP to give you all the items you had previously.
-- Otherwise, the same steps as New Game apply.
+- The same steps as New Game apply, with some exceptions: 
+  - Connect to the Archipelago server **BEFORE** you load your save file. This is to allow AP to give the game your current settings and all the items you had previously.
+  - **THESE SETTINGS AFFECT LOADING AND SAVING OF SAVE FILES, SO IT IS IMPORTANT TO DO THIS FIRST.**
+  - Then, instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **CORRESPONDING TO YOUR CURRENT ARCHIPELAGO CONNECTION.** 
 
 ## Troubleshooting
 
@@ -119,3 +121,4 @@ Input file iso_data/jak1/MUS/TWEAKVAL.MUS does not exist.
 - The game needs to run in debug mode in order to allow the repl to connect to it. We hide the debug text on screen and play the game's introductory cutscenes properly.
 - The powershell windows cannot be run as background processes due to how the repl works, so the best we can do is minimize them.
 - The client is currently not very robust and doesn't handle failures gracefully. This may result in items not being delivered to the game, or location checks not being delivered to the server.
+- Orbsanity checks may show up out of order in the text client.
