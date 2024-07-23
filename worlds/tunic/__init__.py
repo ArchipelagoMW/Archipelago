@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Tuple, TypedDict
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
@@ -12,6 +12,14 @@ from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_opt
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
+from settings import Group, Bool
+
+
+class TunicSettings(Group):
+    class DisableLocalSpoiler(Bool):
+        """Disallows the TUNIC client from creating a local spoiler log."""
+
+    disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
 
 
 class TunicWeb(WebWorld):
@@ -57,6 +65,7 @@ class TunicWorld(World):
 
     options: TunicOptions
     options_dataclass = TunicOptions
+    settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
 
@@ -373,7 +382,8 @@ class TunicWorld(World):
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
-            "Entrance Rando": self.tunic_portal_pairs
+            "Entrance Rando": self.tunic_portal_pairs,
+            "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
