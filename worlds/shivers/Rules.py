@@ -214,12 +214,16 @@ def set_rules(world: "ShiversWorld") -> None:
         for location_name, rule in rules_lookup["locations_puzzle_hints"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
-        # Adding these seem to cause a lot of failures even though the make sense logically
-        # multiworld.get_entrance("To Theater From Lobby", player).access_rule = lambda state: state.can_reach_region("Underground Lake", player)
-        # multiworld.get_entrance("To Clock Tower Staircase From Theater Back Hallway", player).access_rule = lambda state: state.can_reach_region("Three Floor Elevator", player)
-        # multiworld.get_entrance("To Gods Room", player).access_rule = lambda state: state.can_reach_region("Clock Tower", player)
-        # multiworld.get_entrance("To Anansi From Gods Room", player).access_rule = lambda state: state.can_reach_region("Maintenance Tunnels", player)
-        # multiworld.get_entrance("To Maze From Maze Staircase", player).access_rule = lambda state: state.can_reach_region("Projector Room", player)
+        multiworld.get_entrance("To Theater From Lobby", player).access_rule = lambda state: state.can_reach_region("Underground Lake", player)
+        multiworld.register_indirect_condition(world.get_region("Underground Lake"), world.get_entrance("To Theater From Lobby"))
+        multiworld.get_entrance("To Clock Tower Staircase From Theater Back Hallway", player).access_rule = lambda state: state.can_reach_region("Three Floor Elevator", player)
+        multiworld.register_indirect_condition(world.get_region("Three Floor Elevator"), world.get_entrance("To Clock Tower Staircase From Theater Back Hallway"))
+        multiworld.get_entrance("To Gods Room", player).access_rule = lambda state: state.can_reach_region("Clock Tower", player)
+        multiworld.register_indirect_condition(world.get_region("Clock Tower"), world.get_entrance("To Gods Room"))
+        multiworld.get_entrance("To Anansi From Gods Room", player).access_rule = lambda state: state.can_reach_region("Maintenance Tunnels", player)
+        multiworld.register_indirect_condition(world.get_region("Maintenance Tunnels"), world.get_entrance("To Anansi From Gods Room"))
+        multiworld.get_entrance("To Maze From Maze Staircase", player).access_rule = lambda state: state.can_reach_region("Projector Room", player)
+        multiworld.register_indirect_condition(world.get_region("Projector Room"), world.get_entrance("To Maze From Maze Staircase"))
     if world.options.elevators_stay_solved.value:
         for location_name, rule in rules_lookup["elevators"].items():
             multiworld.get_location(location_name, player).access_rule = rule
