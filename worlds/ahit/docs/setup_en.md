@@ -24,8 +24,8 @@
    While it downloads, you can subscribe to the [Archipelago workshop mod.]((https://steamcommunity.com/sharedfiles/filedetails/?id=3026842601))
 
 
-4. Once the game finishes downloading, start it up.   
-In Game Settings, make sure **Enable Developer Console** is checked.
+4. Once the game finishes downloading, start it up.  
+   In Game Settings, make sure **Enable Developer Console** is checked.
 
 
 5. You should now be good to go. See below for more details on how to use the mod and connect to an Archipelago game.
