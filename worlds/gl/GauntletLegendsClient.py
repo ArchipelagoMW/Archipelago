@@ -664,7 +664,7 @@ class GauntletLegendsContext(CommonContext):
         await self.obj_read(1)
         acquired = []
         for i, obj in enumerate(self.item_objects):
-            if obj.raw[:2] == bytes([0xAD, 0xB]):
+            if obj.raw[24] != 0x0:
                 if self.item_locations[i].id not in self.locations_checked:
                     self.locations_checked += [self.item_locations[i].id]
                     acquired += [self.item_locations[i].id]
@@ -675,7 +675,7 @@ class GauntletLegendsContext(CommonContext):
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):
             if "Chest" in self.chest_locations[k].name:
-                if obj.raw[:2] == bytes([0xAD, 0xB]):
+                if obj.raw[24] != 0x0:
                     if self.chest_locations[k].id not in self.locations_checked:
                         self.locations_checked += [self.chest_locations[k].id]
                         acquired += [self.chest_locations[k].id]
