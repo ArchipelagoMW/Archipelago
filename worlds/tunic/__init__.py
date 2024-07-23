@@ -366,8 +366,6 @@ class TunicWorld(World):
                     hint_data[self.player][location.address] = hint_text
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        tunic_settings = get_settings()["tunic_options"]
-
         slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
             "start_with_sword": self.options.start_with_sword.value,
@@ -386,7 +384,7 @@ class TunicWorld(World):
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs,
-            "disable_local_spoiler": max(int(tunic_settings["disable_local_spoiler"]), int(self.multiworld.is_race)),
+            "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
