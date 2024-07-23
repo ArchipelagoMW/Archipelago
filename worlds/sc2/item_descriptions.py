@@ -656,7 +656,7 @@ item_descriptions = {
     item_names.PRIMAL_IGNITER_PRIMAL_TENACITY: "Primal Igniters gain +100 health and +1 armor.",
     item_names.TYRANNOZOR_TYRANTS_PROTECTION: "Tyrannozors grants nearby friendly units 2 armor.",
     item_names.TYRANNOZOR_BARRAGE_OF_SPIKES: "Unleash a Barrage of Spikes, dealing 100 damage to enemy ground and air units around the Tyrannozor.",
-    item_names.TYRANNOZOR_IMPALING_SPIKE: "Ultralisk and Tyrannozor melee attacks have a 20% chance to stun for 2 seconds.",
+    item_names.TYRANNOZOR_IMPALING_STRIKE: "Ultralisk and Tyrannozor melee attacks have a 20% chance to stun for 2 seconds.",
     item_names.TYRANNOZOR_HEALING_ADAPTION: "Ultralisks and Tyrannozors regenerate life quickly when out of combat.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",

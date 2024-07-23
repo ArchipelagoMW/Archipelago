@@ -1392,7 +1392,7 @@ item_table = {
     item_names.TYRANNOZOR_BARRAGE_OF_SPIKES:
         ItemData(293 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 3, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
-    item_names.TYRANNOZOR_IMPALING_SPIKE:
+    item_names.TYRANNOZOR_IMPALING_STRIKE:
         ItemData(294 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 4, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
     item_names.TYRANNOZOR_HEALING_ADAPTION:
