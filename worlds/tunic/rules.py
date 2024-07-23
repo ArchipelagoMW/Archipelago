@@ -59,9 +59,7 @@ def has_sword(state: CollectionState, player: int) -> bool:
 
 
 def laurels_zip(state: CollectionState, world: "TunicWorld") -> bool:
-    if not world.options.laurels_zips:
-        return False
-    return state.has(laurels, world.player)
+    return world.options.laurels_zips and state.has(laurels, world.player)
 
 
 def has_ice_grapple_logic(long_range: bool, difficulty: IceGrappling, state: CollectionState, world: "TunicWorld") -> bool:
@@ -82,17 +80,11 @@ def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
 
 
 def has_mask(state: CollectionState, world: "TunicWorld") -> bool:
-    if world.options.maskless:
-        return True
-    else:
-        return state.has(mask, world.player)
+    return world.options.maskless or state.has(mask, world.player)
 
 
 def has_lantern(state: CollectionState, world: "TunicWorld") -> bool:
-    if world.options.lanternless:
-        return True
-    else:
-        return state.has(lantern, world.player)
+    return world.options.lanternless or state.has(lantern, world.player)
 
 
 def set_region_rules(world: "TunicWorld") -> None:
