@@ -482,6 +482,7 @@ MUTALISK_CORRUPTOR_DEVOURER_ASPECT      = "Devourer Aspect (Mutalisk/Corruptor)"
 ROACH_RAVAGER_ASPECT                    = "Ravager Aspect (Roach)"
 OVERLORD_OVERSEER_ASPECT                = "Overseer Aspect (Overlord)"
 ROACH_PRIMAL_IGNITER_ASPECT             = "Primal Igniter Aspect (Roach)"
+ULTRALISK_TYRANNOZOR_ASPECT             = "TYRANNOZOR Aspect (Ultralisk)"
 
 # Zerg Mercs
 INFESTED_MEDICS      = "Infested Medics"
