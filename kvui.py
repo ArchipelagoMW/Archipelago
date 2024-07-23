@@ -595,8 +595,8 @@ class GameManager(App):
                                              "!help for server commands.")
 
     def connect_button_action(self, button):
+        self.ctx.username = None
         if self.ctx.server:
-            self.ctx.username = None
             async_start(self.ctx.disconnect())
         else:
             async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
@@ -836,6 +836,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         return self._handle_text(node)
 
     def _handle_text(self, node: JSONMessagePart):
+        # All other text goes through _handle_color, and we don't want to escape markup twice,
+        # or mess up text that already has intentional markup applied to it
+        if node.get("type", "text") == "text":
+            node["text"] = escape_markup(node["text"])
         for ref in node.get("refs", []):
             node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
             self.ref_count += 1
