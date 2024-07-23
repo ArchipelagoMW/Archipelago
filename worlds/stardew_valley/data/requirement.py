@@ -50,3 +50,8 @@ class RelationshipRequirement(Requirement):
 @dataclass(frozen=True)
 class FishingRequirement(Requirement):
     region: str
+
+
+@dataclass(frozen=True)
+class WalnutRequirement(Requirement):
+    amount: int

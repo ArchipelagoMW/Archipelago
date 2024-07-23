@@ -13,9 +13,10 @@ from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
+from .walnut_logic import WalnutLogicMixin
 from ..data.game_item import Requirement
 from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
-    RelationshipRequirement, FishingRequirement
+    RelationshipRequirement, FishingRequirement, WalnutRequirement
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -25,7 +26,7 @@ class RequirementLogicMixin(BaseLogicMixin):
 
 
 class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin,
-SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, RelationshipLogicMixin, FishingLogicMixin]]):
+SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, RelationshipLogicMixin, FishingLogicMixin, WalnutLogicMixin]]):
 
     def meet_all_requirements(self, requirements: Iterable[Requirement]):
         if not requirements:
@@ -55,6 +56,10 @@ SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, Relationshi
     @meet_requirement.register
     def _(self, requirement: YearRequirement):
         return self.logic.time.has_year(requirement.year)
+
+    @meet_requirement.register
+    def _(self, requirement: WalnutRequirement):
+        return self.logic.walnut.has_walnut(requirement.amount)
 
     @meet_requirement.register
     def _(self, requirement: CombatRequirement):
