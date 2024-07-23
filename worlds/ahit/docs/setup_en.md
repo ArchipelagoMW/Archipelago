@@ -12,9 +12,9 @@
 
 ## Instructions
 
-1. **BACK UP YOUR SAVE FILES IN YOUR MAIN INSTALL IF YOU CARE ABOUT THEM!!!**   
-Go to `steamapps/common/HatinTime/HatinTimeGame/SaveData/` and copy everything inside that folder over to a safe place.
-**This is important! Changing the game version CAN and WILL break your existing save files!!!**
+1. **BACK UP YOUR SAVE FILES IN YOUR MAIN INSTALL IF YOU CARE ABOUT THEM!!!**  
+   Go to `steamapps/common/HatinTime/HatinTimeGame/SaveData/` and copy everything inside that folder over to a safe place.
+   **This is important! Changing the game version CAN and WILL break your existing save files!!!**
 
 
 2. In your Steam library, right-click on **A Hat in Time** in the list of games and click on **Properties**.
