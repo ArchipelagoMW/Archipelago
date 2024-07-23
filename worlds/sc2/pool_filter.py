@@ -24,6 +24,7 @@ UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() i
 BARRACKS_UNITS = set(item_groups.barracks_units)
 FACTORY_UNITS = set(item_groups.factory_units)
 STARPORT_UNITS = set(item_groups.starport_units)
+INF_TERRAN_UNITS = set(item_groups.infterr_units)
 
 
 def filter_missions(world: 'SC2World') -> Dict[MissionPools, List[SC2Mission]]:
@@ -499,6 +500,10 @@ class ValidInventory:
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Hydralisk)")]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.HYDRALISK_IMPALER_ASPECT]
+        # Remove Infested Terran generic upgrades if no InfTerran units are available
+        if not INF_TERRAN_UNITS & logical_inventory_set:
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.INFESTED_SCV_BUILD_CHARGES]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.INFESTED_SCV_BUILD_CHARGES]
         # LotV
         # Shared unit upgrades between several units
         if not {item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER} & logical_inventory_set:
