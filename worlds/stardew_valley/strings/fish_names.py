@@ -146,11 +146,11 @@ class DistantLandsFish:
     giant_horsehoe_crab = "Giant Horsehoe Crab"
 
 
-class ModWaterItem:
+class SVEWaterItem:
     dulse_seaweed = "Dulse Seaweed"
 
 
-class ModTrash:
+class ArchaeologyTrash:
     rusty_scrap = "Scrap Rust"
 
 

@@ -24,7 +24,7 @@ from ...options import Cropsanity
 from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
 from ...strings.craftable_names import ModCraftable, ModMachine
-from ...strings.fish_names import ModTrash
+from ...strings.fish_names import ArchaeologyTrash
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil
