@@ -681,19 +681,37 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
-        if locations is None:
-            locations = self.multiworld.get_filled_locations()
-        reachable_events = True
+        locations_per_player: Dict[int, Set[Location]]
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.advancement and location not in self.events and
-                     not key_only or getattr(location.item, "locked_dungeon_item", False)}
+        if locations is None:
+            locations_per_player = {}
+            for player in self.multiworld.player_ids:
+                locations_per_player[player] = {location for location in self.multiworld.get_filled_locations(player)
+                                                if location.advancement
+                                                and location not in self.events
+                                                and not key_only
+                                                or getattr(location.item, "locked_dungeon_item", False)}
+        else:
+            locations_per_player = {player: set() for player in self.multiworld.player_ids}
+            for location in locations:
+                if (location.advancement
+                        and location not in self.events
+                        and not key_only
+                        or getattr(location.item, "locked_dungeon_item", False)):
+                    locations_per_player[location.player].add(location)
+            # Remove any empty sets.
+            for player, locations in list(locations_per_player.items()):
+                if not locations:
+                    del locations_per_player[player]
 
+        reachable_events = True
         last_sweep_players = set(self.multiworld.player_ids)
         while reachable_events:
-            reachable_events = {location for location in locations if location.player in last_sweep_players and location.can_reach(self)}
+            loc_gen = itertools.chain.from_iterable(v for k, v in locations_per_player.items() if k in last_sweep_players)
+            reachable_events = {location for location in loc_gen if location.can_reach(self)}
             last_sweep_players.clear()
-            locations -= reachable_events
             for event in reachable_events:
+                locations_per_player[event.player].remove(event)
                 self.events.add(event)
                 item = event.item
                 assert isinstance(item, Item), "tried to collect Event with no Item"
