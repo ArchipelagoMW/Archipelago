@@ -62,6 +62,9 @@ def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequir
     if access.the_master and not lingo_can_use_mastery_location(state, world):
         return False
 
+    if access.postgame and state.has("Prevent Victory", world.player):
+        return False
+
     return True
 
 
