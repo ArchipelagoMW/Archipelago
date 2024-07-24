@@ -625,8 +625,6 @@ class GauntletLegendsContext(CommonContext):
                     "locations": [
                         location.id
                         for location in raw_locations
-                        if "Chest" not in location.name
-                           and ("Barrel" not in location.name or "Barrel of Gold" in location.name)
                     ],
                     "create_as_hint": 0,
                 },

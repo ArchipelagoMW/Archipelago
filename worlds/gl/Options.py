@@ -3,6 +3,18 @@ from dataclasses import dataclass
 from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range
 
 
+class PlayerCount(Range):
+    """
+    Select how many players will be playing this world locally.
+    If 3 players will be active then change this to 3, etc.
+    """
+
+    display_name = "Local Players"
+    range_start = 1
+    range_end = 4
+    default = 1
+
+
 class ChestBarrels(Choice):
     """
     Choose how you want Chests and Barrels to be randomized.
@@ -201,6 +213,7 @@ class UnlockCharacterFour(Choice):
 @dataclass
 class GLOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+    local_players: PlayerCount
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards

@@ -78,6 +78,9 @@ class GauntletLegendsWorld(World):
 
     disabled_locations: typing.List[LocationData]
 
+    def generate_early(self) -> None:
+        self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
+
     def create_regions(self) -> None:
         self.disabled_locations = []
         if self.options.chests_barrels == 0:
@@ -85,19 +88,22 @@ class GauntletLegendsWorld(World):
                 location.name
                 for location in all_locations
                 if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
+                and location.name not in self.disabled_locations
             ]
         elif self.options.chests_barrels == 1:
             self.disabled_locations += [
                 location.name
                 for location in all_locations
                 if "Barrel" in location.name and "Barrel of Gold" not in location.name
+                and location.name not in self.disabled_locations
             ]
         elif self.options.chests_barrels == 2:
-            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
+            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name and location.name not in self.disabled_locations]
 
         if self.options.max_difficulty_toggle:
             self.disabled_locations += [location.name for location in all_locations
-                                        if location.difficulty > self.options.max_difficulty_value]
+                                        if location.difficulty > self.options.max_difficulty_value
+                                        and location.name not in self.disabled_locations]
 
         create_regions(self)
         connect_regions(self)
@@ -149,6 +155,7 @@ class GauntletLegendsWorld(World):
         ]
         return {
             "player": self.player,
+            "players": self.options.local_players.value,
             "shards": shard_values,
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
@@ -169,8 +176,6 @@ class GauntletLegendsWorld(World):
                 if "Mirror" in item.item_name and self.options.mirror_shards == 0:
                     continue
                 freq = item_frequencies.get(item.item_name, 1)
-                if freq is None:
-                    freq = 1
                 required_items += [item.item_name for _ in range(freq)]
 
         for item_name in required_items:
@@ -200,8 +205,6 @@ class GauntletLegendsWorld(World):
                     freq = item_frequencies.get(item.item_name, 1)
                 if item.item_name == "Anti-Death Halo" and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_all_active) and self.options.traps_frequency.value == self.options.traps_frequency.option_extreme:
                     freq *= 2
-                if freq is None:
-                    freq = 1
                 filler_items += [item.item_name for _ in range(freq)]
 
         remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - (2 if not self.options.infinite_keys else 0)
@@ -225,8 +228,10 @@ class GauntletLegendsWorld(World):
         )
 
     def pre_fill(self) -> None:
-        self.random.shuffle(self.multiworld.get_unfilled_locations(self.player))
-        fast_fill(self.multiworld, self.death, self.multiworld.get_unfilled_locations(self.player))
+        if len(self.death) != 0:
+            locations = self.multiworld.get_unfilled_locations(self.player)
+            self.random.shuffle(locations)
+            fast_fill(self.multiworld, self.death, locations)
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]

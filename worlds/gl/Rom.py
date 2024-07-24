@@ -53,9 +53,9 @@ class LevelData:
     objects: List[bytearray]
     chests: List[bytearray]
     end: bytes
-    obelisk_items: int = 0
-    obelisk_chests: int = 0
-    item: int = 0
+    items_replaced_by_obelisks: int = 0
+    chests_replaced_by_obelisks: int = 0
+    obelisks_replaced_by_items: int = 0
 
     def __init__(self):
         self.items = []
@@ -128,7 +128,7 @@ class GLPatchExtension(APPatchExtension):
                             + bytes([0x0, 0x0, 0x0, 0x0]),
                         ]
                         del data.objects[index]
-                        data.item += 1
+                        data.obelisks_replaced_by_items += 1
                     except Exception as e:
                         print(item[0])
                         print(e)
@@ -171,10 +171,10 @@ class GLPatchExtension(APPatchExtension):
                         ]
                         if chest_barrel(location_name):
                             del data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)]
-                            data.obelisk_chests += 1
+                            data.chests_replaced_by_obelisks += 1
                         else:
                             del data.items[j - data.obelisk_items]
-                            data.obelisk_items += 1
+                            data.items_replaced_by_obelisks += 1
                     else:
                         if chest_barrel(location_name):
                             data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][12] = item_dict[item[0]][0]
@@ -286,23 +286,25 @@ def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
         data.stream.seek(i)
         data.chests += [bytearray(data.stream.read(16))]
     data.end = data.stream.read()
-    return (stream, data)
+    return stream, data
 
 
 # Format a LevelData object back into a bytes object
 # Format is header, items, spawners, objects, barrels/chests, then traps.
 def level_data_reformat(data: LevelData) -> bytes:
     stream = io.BytesIO()
-    obelisk_offset = 24 * (data.obelisk_items - data.item)
+    obelisk_offset = 24 * (data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks - data.obelisks_replaced_by_items)
+    item_offset = 12 * (data.obelisks_replaced_by_items - data.items_replaced_by_obelisks)
+    chest_offset = 16 * data.chests_replaced_by_obelisks
     stream.write(int.to_bytes(0x5C, 4, "big"))
-    stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk_items)), 4, "big"))
-    stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk_items)), 4, "big"))
-    stream.write(int.to_bytes(data.obj_addr + (12 * (data.item - data.obelisk_items)), 4, "big"))
-    stream.write(int.to_bytes(data.end_addr + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
-    stream.write(int.to_bytes(data.portal_addr + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
-    stream.write(int.to_bytes(data.chest_addr + ((12 * (data.item - data.obelisk_items)) + obelisk_offset), 4, "big"))
-    stream.write(int.to_bytes(data.end_addr2 + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
-    stream.write(int.to_bytes(data.end_addr3 + ((12 * (data.item - data.obelisk_items)) + obelisk_offset - (data.obelisk_chests * 16)), 4, "big"))
+    stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))
+    stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))
+    stream.write(int.to_bytes(data.obj_addr + item_offset, 4, "big"))
+    stream.write(int.to_bytes(data.end_addr + item_offset + obelisk_offset - chest_offset, 4, "big"))
+    stream.write(int.to_bytes(data.portal_addr + item_offset + obelisk_offset - chest_offset, 4, "big"))
+    stream.write(int.to_bytes(data.chest_addr + item_offset + obelisk_offset, 4, "big"))
+    stream.write(int.to_bytes(data.end_addr2 + item_offset + obelisk_offset - chest_offset, 4, "big"))
+    stream.write(int.to_bytes(data.end_addr3 + item_offset + obelisk_offset - chest_offset, 4, "big"))
     stream.seek(1, 1)
     stream.write(bytes([len(data.items)]))
     stream.write(bytes([0x0, 0x0, 0x0]))
