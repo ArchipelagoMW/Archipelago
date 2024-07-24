@@ -229,7 +229,7 @@ class AquariaRegions:
     """
 
     def __add_region(self, hint: str,
-                     locations: Optional[Dict[str, Optional[int]]]) -> Region:
+                     locations: Optional[Dict[str, int]]) -> Region:
         """
         Create a new Region, add it to the `world` regions and return it.
         Be aware that this function have a side effect on ``world`.`regions`
