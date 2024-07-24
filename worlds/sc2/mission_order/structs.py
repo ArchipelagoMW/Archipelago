@@ -231,32 +231,36 @@ class SC2MissionOrder(MissionOrderNode):
                 self.sorted_missions[diff].extend(missions)
     
     def resolve_unlocks(self):
+        rolling_rule_id = 0
         for campaign in self.campaigns:
             entry_rule = {
                 "rules": campaign.option_entry_rules,
                 "amount": -1
             }
-            campaign.entry_rule = self.dict_to_entry_rule(entry_rule, campaign)
+            campaign.entry_rule = self.dict_to_entry_rule(entry_rule, campaign, rolling_rule_id)
+            rolling_rule_id += 1
             for layout in campaign.layouts:
                 entry_rule = {
                     "rules": layout.option_entry_rules,
                     "amount": -1
                 }
-                layout.entry_rule = self.dict_to_entry_rule(entry_rule, layout)
+                layout.entry_rule = self.dict_to_entry_rule(entry_rule, layout, rolling_rule_id)
+                rolling_rule_id += 1
                 for mission in layout.missions:
                     entry_rule = {
                         "rules": mission.option_entry_rules,
                         "amount": -1
                     }
-                    mission.entry_rule = self.dict_to_entry_rule(entry_rule, mission)
+                    mission.entry_rule = self.dict_to_entry_rule(entry_rule, mission, rolling_rule_id)
+                    rolling_rule_id += 1
                     # Manually make a rule for prev missions
                     mission.entry_rule.target_amount += 1
                     mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
 
-    def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode) -> EntryRule:
+    def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode, rule_id: int = -1) -> EntryRule:
         if "rules" in data:
             rules = [self.dict_to_entry_rule(subrule, searcher) for subrule in data["rules"]]
-            return SubRuleEntryRule(rules, data["amount"])
+            return SubRuleEntryRule(rules, data["amount"], rule_id)
         if "scope" in data:
             objects: List[Tuple[MissionOrderNode, str]] = []
             for address in data["scope"]:

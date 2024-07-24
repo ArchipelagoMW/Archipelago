@@ -265,7 +265,7 @@ class SC2Manager(GameManager):
             text = f"[color={COLOR_MISSION_CLEARED}]{text}[/color]"
         # Map requirements not met
         else:
-            mission_rule, layout_rule, campaign_rule = ctx.mission_rule_mapping[mission_id]
+            mission_rule, layout_rule, campaign_rule = ctx.mission_id_to_entry_rules[mission_id]
             if parent_locked:
                 text = f"[color={COLOR_PARENT_LOCKED}]{text}[/color]"
                 if campaign_id not in available_campaigns:

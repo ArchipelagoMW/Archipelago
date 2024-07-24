@@ -518,8 +518,7 @@ class SC2Context(CommonContext):
         self.enable_morphling = EnableMorphling.default
         self.nerf_unit_baselines: int = NerfUnitBaselines.default
         self.custom_mission_order: typing.List[CampaignSlotData]
-        self.mission_rule_mapping: typing.Dict[int, typing.Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]]
-        self.mission_data_mapping: typing.Dict[int, MissionSlotData]
+        self.mission_id_to_entry_rules: typing.Dict[int, typing.Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]]
         self.final_mission_ids: typing.List[int] = [29]
         self.final_locations: typing.List[int] = []
         self.announcements: queue.Queue = queue.Queue()
@@ -623,13 +622,8 @@ class SC2Context(CommonContext):
                         ]
                     ) for campaign_data in args["slot_data"]["custom_mission_order"]
                 ]
-            self.mission_rule_mapping = {
+            self.mission_id_to_entry_rules = {
                 mission.mission_id: (mission.entry_rule, layout.entry_rule, campaign.entry_rule)
-                for campaign in self.custom_mission_order for layout in campaign.layouts
-                for column in layout.missions for mission in column
-            }
-            self.mission_data_mapping = {
-                mission.mission_id: mission
                 for campaign in self.custom_mission_order for layout in campaign.layouts
                 for column in layout.missions for mission in column
             }
@@ -722,6 +716,7 @@ class SC2Context(CommonContext):
     @staticmethod
     def parse_mission_req_table(mission_req_table: typing.Dict[SC2Campaign, typing.Dict[typing.Any, MissionInfo]]) -> typing.List[CampaignSlotData]:
         campaigns: typing.List[typing.Tuple[int, CampaignSlotData]] = []
+        rolling_rule_id = 0
         for (campaign, campaign_data) in mission_req_table.items():
             if campaign.campaign_name == "Global":
                 campaign_name = ""
@@ -764,7 +759,8 @@ class SC2Context(CommonContext):
                     else:
                         amount = len(missions)
                     sub_rules.append(CountMissionsRuleData(set(missions), amount, missions))
-                entry_rule = SubRuleRuleData(sub_rules, len(sub_rules))
+                entry_rule = SubRuleRuleData(rolling_rule_id, sub_rules, len(sub_rules))
+                rolling_rule_id += 1
                 categories[mission.category].append(MissionSlotData(mission_id, prev_missions, entry_rule))
 
             layouts: typing.List[LayoutSlotData] = []
@@ -1362,54 +1358,24 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
 
     def mission_beaten(mission_id: int) -> bool:
         return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
-    beaten_missions = {mission_id for mission_id in ctx.mission_rule_mapping if mission_beaten(mission_id)}
+    beaten_missions = {mission_id for mission_id in ctx.mission_id_to_entry_rules if mission_beaten(mission_id)}
 
+    accessible_rules: typing.Set[int] = set()
     for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
         available_layouts[campaign_idx] = []
-        if campaign.entry_rule.is_fulfilled(beaten_missions):
+        if campaign.entry_rule.is_accessible(beaten_missions, ctx.mission_id_to_entry_rules, accessible_rules, set()):
             available_campaigns.append(campaign_idx)
             for layout_idx, layout in enumerate(campaign.layouts):
-                if layout.entry_rule.is_fulfilled(beaten_missions):
+                if layout.entry_rule.is_accessible(beaten_missions, ctx.mission_id_to_entry_rules, accessible_rules, set()):
                     available_layouts[campaign_idx].append(layout_idx)
                     for column in layout.missions:
                         for mission in column:
                             if mission.mission_id == -1:
                                 continue
-
-                            if mission_reqs_completed_recursive(ctx, mission.mission_id, beaten_missions, set()):
+                            if mission.entry_rule.is_accessible(beaten_missions, ctx.mission_id_to_entry_rules, accessible_rules, set()):
                                 available_missions.append(mission.mission_id)
 
     return available_missions, available_layouts, available_campaigns
-
-def parse_unlock(unlock: typing.Union[typing.Dict[typing.Literal["connect_to", "campaign"], int], MissionConnection, int]) -> MissionConnection:
-    if isinstance(unlock, int):
-        # Legacy
-        return MissionConnection(unlock)
-    elif isinstance(unlock, MissionConnection):
-        return unlock
-    else:
-        # Multi-campaign
-        return MissionConnection(unlock["connect_to"], lookup_id_to_campaign[unlock["campaign"]])
-
-
-def mission_reqs_completed_recursive(
-    ctx: SC2Context, mission_id: int,
-    beaten_missions: typing.Set[int], seen_missions: typing.Set[int]
-) -> bool:
-    mission_data = ctx.mission_data_mapping[mission_id]
-    if mission_data.entry_rule.is_fulfilled(beaten_missions):
-        prev_missions = set(mission_data.prev_mission_ids)
-        if len(prev_missions) == 0:
-            return True
-        seen_missions.add(mission_id)
-        unseen_prev = prev_missions.difference(seen_missions).intersection(beaten_missions)
-        while len(unseen_prev) > 0:
-            unseen_id = unseen_prev.pop()
-            if mission_reqs_completed_recursive(ctx, unseen_id, beaten_missions, seen_missions):
-                return True
-            seen_missions.add(unseen_id)
-        return False
-    return False
 
 def check_game_install_path() -> bool:
     # First thing: go to the default location for ExecuteInfo.

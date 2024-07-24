@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Set, Callable, Dict, List, Union, TYPE_CHECKING, Any
+from typing import Set, Callable, Dict, List, Union, TYPE_CHECKING, Any, Tuple
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -31,12 +31,15 @@ class EntryRule(ABC):
 @dataclass
 class RuleData(ABC):
     @abstractmethod
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return False
-    
-    @abstractmethod
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         return ""
+
+    @abstractmethod
+    def is_accessible(
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        accessible_rules: Set[int], seen_rules: Set[int]
+    ) -> bool:
+        return False
 
 class BeatMissionsEntryRule(EntryRule):
     missions_to_beat: Set[SC2MOGenMission]
@@ -65,9 +68,6 @@ class BeatMissionsRuleData(RuleData):
     mission_ids: Set[int]
     visual_reqs: List[Union[str, int]]
 
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return beaten_missions.issuperset(self.mission_ids)
-    
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         indent = " ".join("" for _ in range(indents))
         if len(self.visual_reqs) == 1:
@@ -77,6 +77,19 @@ class BeatMissionsRuleData(RuleData):
         reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
         tooltip += f"\n{indent}- ".join(req for req in reqs)
         return tooltip
+    
+    def is_accessible(
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        accessible_rules: Set[int], seen_rules: Set[int]
+    ) -> bool:
+        # Beat rules are accessible if all their missions are beaten and accessible
+        if not beaten_missions.issuperset(self.mission_ids):
+            return False
+        for mission_id in self.mission_ids:
+            for rule in mission_id_to_entry_rules[mission_id]:
+                if not rule.is_accessible(beaten_missions, mission_id_to_entry_rules, accessible_rules, seen_rules):
+                    return False
+        return True
     
 class CountMissionsEntryRule(EntryRule):
     missions_to_count: Set[SC2MOGenMission]
@@ -112,9 +125,6 @@ class CountMissionsRuleData(RuleData):
     amount: int
     visual_reqs: List[Union[str, int]]
 
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return self.amount <= len(beaten_missions.intersection(self.mission_ids))
-    
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         indent = " ".join("" for _ in range(indents))
         if self.amount == len(self.mission_ids):
@@ -135,11 +145,26 @@ class CountMissionsRuleData(RuleData):
         tooltip += f"\n{indent}- ".join(req for req in reqs)
         return tooltip
     
+    def is_accessible(
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        accessible_rules: Set[int], seen_rules: Set[int]
+    ) -> bool:
+        # Count rules are accessible if enough of their missions are beaten and accessible
+        return self.amount <= sum(
+            all(
+                rule.is_accessible(beaten_missions, mission_id_to_entry_rules, accessible_rules, seen_rules)
+                for rule in mission_id_to_entry_rules[mission_id]
+            )
+            for mission_id in beaten_missions.intersection(self.mission_ids)
+        )
+
 class SubRuleEntryRule(EntryRule):
+    rule_id: int
     rules_to_check: List[EntryRule]
     target_amount: int
 
-    def __init__(self, rules_to_check: List[EntryRule], target_amount: int):
+    def __init__(self, rules_to_check: List[EntryRule], target_amount: int, rule_id: int):
+        self.rule_id = rule_id
         self.rules_to_check = rules_to_check
         if target_amount == -1 or target_amount > len(rules_to_check):
             self.target_amount = len(rules_to_check)
@@ -156,21 +181,21 @@ class SubRuleEntryRule(EntryRule):
     def to_slot_data(self) -> RuleData:
         sub_rules = [rule.to_slot_data() for rule in self.rules_to_check]
         return SubRuleRuleData(
+            self.rule_id,
             sub_rules,
             self.target_amount
         )
 
 @dataclass
 class SubRuleRuleData(RuleData):
+    rule_id: int
     sub_rules: List[RuleData]
     amount: int
 
-    def is_fulfilled(self, beaten_missions: Set[int]) -> bool:
-        return self.amount <= sum(rule.is_fulfilled(beaten_missions) for rule in self.sub_rules)
-    
     @staticmethod
     def parse_from_dict(data: Dict[str, Any]) -> SubRuleRuleData:
         amount = data["amount"]
+        rule_id = data["rule_id"]
         sub_rules: List[RuleData] = []
         for rule_data in data["sub_rules"]:
             if "sub_rules" in rule_data:
@@ -185,13 +210,14 @@ class SubRuleRuleData(RuleData):
                 )
             sub_rules.append(rule)
         return SubRuleRuleData(
+            rule_id,
             sub_rules,
             amount
         )
     
     @staticmethod
     def empty() -> SubRuleRuleData:
-        return SubRuleRuleData([], 0)
+        return SubRuleRuleData(-1, [], 0)
     
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         indent = " ".join("" for _ in range(indents))
@@ -204,3 +230,26 @@ class SubRuleRuleData(RuleData):
         tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
         tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 2, missions) for rule in self.sub_rules)
         return tooltip
+
+    def is_accessible(
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        accessible_rules: Set[int], seen_rules: Set[int]
+    ) -> bool:
+        # Early exit check for top-level entry rules
+        if self.rule_id >= 0:
+            if self.rule_id in accessible_rules:
+                return True
+            # Never consider rules discovered via recursion to be accessible
+            # (unless they succeeded, in which case they will be in accessible_rules)
+            if self.rule_id in seen_rules:
+                return False
+            seen_rules.add(self.rule_id)
+        # Sub-rule rules are accessible if enough of their child rules are accessible
+        if self.amount <= sum(
+            rule.is_accessible(beaten_missions, mission_id_to_entry_rules, accessible_rules, seen_rules)
+            for rule in self.sub_rules
+        ):
+            if self.rule_id >= 0:
+                accessible_rules.add(self.rule_id)
+            return True
+        return False
