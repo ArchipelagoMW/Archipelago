@@ -95,9 +95,9 @@ class LingoWorld(World):
                 location.parent_region.locations.remove(location)
 
             if len(self.player_logic.real_items) > len(self.player_logic.real_locations):
-                raise OptionError("There are not enough locations in the world to fit the number of required items "
-                                  "without shuffling the postgame. Either enable postgame shuffling, or choose "
-                                  "different options.")
+                raise OptionError(f"{self.player_name}'s Lingo world does not have enough locations to fit the number"
+                                  f" of required items without shuffling the postgame. Either enable postgame"
+                                  f" shuffling, or choose different options.")
 
     def create_items(self):
         pool = [self.create_item(name) for name in self.player_logic.real_items]
