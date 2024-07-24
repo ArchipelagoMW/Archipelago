@@ -140,6 +140,15 @@
         painting: True
       The Colorful:
         painting: True
+      Welcome Back Area:
+        room: Welcome Back Area
+        door: Shortcut to Starting Room
+      Second Room:
+        door: Main Door
+      Hidden Room:
+        door: Back Right Door
+      Rhyme Room (Looped Square):
+        door: Rhyme Room Entrance
     panels:
       HI:
         id: Entry Room/Panel_hi_hi
@@ -3265,7 +3274,6 @@
         door: Traveled Entrance
       Color Hallways:
         door: Color Hallways Entrance
-        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_traveled_traveled
