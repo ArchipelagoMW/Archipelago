@@ -687,13 +687,21 @@ class CollectionState():
         # since the loop has a good chance to run more than once, only filter the events once
         locations = {location for location in locations if location.advancement and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
+
+        last_sweep_players = set(self.multiworld.player_ids)
         while reachable_events:
-            reachable_events = {location for location in locations if location.can_reach(self)}
+            reachable_events = {location for location in locations if location.player in last_sweep_players and location.can_reach(self)}
+            last_sweep_players.clear()
             locations -= reachable_events
             for event in reachable_events:
                 self.events.add(event)
-                assert isinstance(event.item, Item), "tried to collect Event with no Item"
-                self.collect(event.item, True, event)
+                item = event.item
+                assert isinstance(item, Item), "tried to collect Event with no Item"
+                changed = self.collect(item, True, event)
+                if changed:
+                    last_sweep_players.add(item.player)
+                    # Do we need to also include the player the location belongs to because of custom collect() methods?
+                    # last_sweep_players.add(event.player)
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
