@@ -292,6 +292,14 @@ class World(metaclass=AutoWorldRegister):
     web: ClassVar[WebWorld] = WebWorld()
     """see WebWorld for options"""
 
+    origin_region_name: str = "Menu"
+    """Name of the Region from which accessibility is tested."""
+
+    explicit_indirect_conditions: bool = True
+    """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
+    If False, everything is rechecked at every step, which is slower computationally, 
+    but may be desirable in complex/dynamic worlds."""
+
     multiworld: "MultiWorld"
     """autoset on creation. The MultiWorld object for the currently generating multiworld."""
     player: int
