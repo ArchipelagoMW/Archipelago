@@ -12,7 +12,8 @@ from ..mission_groups import mission_groups
 from .structs import Difficulty, LayoutType
 from .types import Column, Grid, Hopscotch, Gauntlet, Blitz
 from .presets_static import (
-    static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy
+    static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
+    preset_mini_lotv_prologue, preset_mini_lotv, preset_mini_lotv_epilogue, preset_mini_nco
 )
 
 STR_OPTION_VALUES = {
@@ -26,7 +27,15 @@ STR_OPTION_VALUES = {
     "preset": {
         "none": lambda _: {},
         "mini wol + prophecy": static_preset(preset_mini_wol_with_prophecy),
-
+        "mini wol": static_preset(preset_mini_wol),
+        "mini prophecy": static_preset(preset_mini_prophecy),
+        "mini hots": static_preset(preset_mini_hots),
+        "mini prologue": static_preset(preset_mini_lotv_prologue),
+        "mini lotv prologue": static_preset(preset_mini_lotv_prologue),
+        "mini lotv": static_preset(preset_mini_lotv),
+        "mini epilogue": static_preset(preset_mini_lotv_epilogue),
+        "mini lotv epilogue": static_preset(preset_mini_lotv_epilogue),
+        "mini nco": static_preset(preset_mini_nco)
     },
 }
 STR_OPTION_VALUES["min_difficulty"] = STR_OPTION_VALUES["difficulty"]
