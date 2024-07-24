@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, DeathLink
 from collections import defaultdict
 import Utils
 
@@ -523,7 +523,8 @@ ladx_option_groups = [
         Rooster,
         TrendyGame,
         NagMessages,
-        BootsControls
+        BootsControls,
+        DeathLink
     ]),
     OptionGroup("Experimental", [
         DungeonShuffle,
@@ -579,3 +580,4 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    death_link: DeathLink
