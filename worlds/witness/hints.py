@@ -180,7 +180,7 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
     }
 
     locations_in_that_world = {
-        location.name for location in world.multiworld.get_locations(hint_loc.player) if location.address is not None
+        location.name for location in world.multiworld.get_locations(hint_loc.player) if not location.is_event
     }
 
     valid_location_groups: Dict[str, int] = {}
@@ -304,7 +304,7 @@ def get_item_and_location_names_in_random_order(world: "WitnessWorld",
 
     locations_in_this_world = [
         location for location in world.multiworld.get_locations(world.player)
-        if location.item and location.address and location.progress_type != LocationProgressType.EXCLUDED
+        if location.item and not location.is_event and location.progress_type != LocationProgressType.EXCLUDED
     ]
     world.random.shuffle(locations_in_this_world)
 
@@ -464,7 +464,7 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
             for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
             if region in world.player_regions.created_region_names
         ]
-        locations = [location for region in regions for location in region.get_locations() if location.address]
+        locations = [location for region in regions for location in region.get_locations() if not location.is_event
 
         if locations:
             locations_per_area[area] = locations
@@ -679,7 +679,7 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
 
     # -1 if junk hint, address if location hint, area string if area hint
     arg_1: Union[str, int]
-    if location and location.address is not None:
+    if location and not location.is_event:
         arg_1 = location.address
     elif hint.area is not None:
         arg_1 = hint.area
