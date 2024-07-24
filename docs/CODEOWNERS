@@ -70,7 +70,7 @@
 /worlds/heretic/ @Daivuk
 
 # Hollow Knight
-/worlds/hk/ @BadMagic100 @ThePhar
+/worlds/hk/ @BadMagic100 @qwint
 
 # Hylics 2
 /worlds/hylics2/ @TRPG0
@@ -86,9 +86,6 @@
 
 # Lingo
 /worlds/lingo/ @hatkirby
-
-# Links Awakening DX
-/worlds/ladx/ @zig-for
 
 # Lufia II Ancient Cave
 /worlds/lufia2ac/ @el-u
@@ -218,6 +215,8 @@
 # Final Fantasy (1)
 # /worlds/ff1/
 
+# Links Awakening DX
+# /worlds/ladx/
 
 ## Disabled Unmaintained Worlds
 

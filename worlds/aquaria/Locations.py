@@ -30,7 +30,7 @@ class AquariaLocations:
 
     locations_verse_cave_r = {
         "Verse Cave, bulb in the skeleton room": 698107,
-        "Verse Cave, bulb in the path left of the skeleton room": 698108,
+        "Verse Cave, bulb in the path right of the skeleton room": 698108,
         "Verse Cave right area, Big Seed": 698175,
     }
 
@@ -122,6 +122,7 @@ class AquariaLocations:
         "Open Water top right area, second urn in the Mithalas exit": 698149,
         "Open Water top right area, third urn in the Mithalas exit": 698150,
     }
+
     locations_openwater_tr_turtle = {
         "Open Water top right area, bulb in the turtle room": 698009,
         "Open Water top right area, Transturtle": 698211,
@@ -185,7 +186,7 @@ class AquariaLocations:
         "Mithalas City, second bulb at the end of the top path": 698040,
         "Mithalas City, bulb in the top path": 698036,
         "Mithalas City, Mithalas Pot": 698174,
-        "Mithalas City, urn in the Cathedral flower tube entrance": 698128,
+        "Mithalas City, urn in the Castle flower tube entrance": 698128,
     }
 
     locations_mithalas_city_fishpass = {
@@ -195,7 +196,7 @@ class AquariaLocations:
 
     locations_cathedral_l = {
         "Mithalas City Castle, bulb in the flesh hole": 698042,
-        "Mithalas City Castle, Blue banner": 698165,
+        "Mithalas City Castle, Blue Banner": 698165,
         "Mithalas City Castle, urn in the bedroom": 698130,
         "Mithalas City Castle, first urn of the single lamp path": 698131,
         "Mithalas City Castle, second urn of the single lamp path": 698132,
@@ -226,7 +227,7 @@ class AquariaLocations:
         "Mithalas Cathedral, third urn in the path behind the flesh vein": 698146,
         "Mithalas Cathedral, fourth urn in the top right room": 698147,
         "Mithalas Cathedral, Mithalan Dress": 698189,
-        "Mithalas Cathedral right area, urn below the left entrance": 698198,
+        "Mithalas Cathedral, urn below the left entrance": 698198,
     }
 
     locations_cathedral_underground = {
@@ -239,14 +240,14 @@ class AquariaLocations:
     }
 
     locations_cathedral_boss = {
-        "Cathedral boss area, beating Mithalan God": 698202,
+        "Mithalas boss area, beating Mithalan God": 698202,
     }
 
     locations_forest_tl = {
         "Kelp Forest top left area, bulb in the bottom left clearing": 698044,
         "Kelp Forest top left area, bulb in the path down from the top left clearing": 698045,
         "Kelp Forest top left area, bulb in the top left clearing": 698046,
-        "Kelp Forest top left, Jelly Egg": 698185,
+        "Kelp Forest top left area, Jelly Egg": 698185,
     }
 
     locations_forest_tl_fp = {
@@ -269,7 +270,7 @@ class AquariaLocations:
 
     locations_forest_bl = {
         "Kelp Forest bottom left area, bulb close to the spirit crystals": 698054,
-        "Kelp Forest bottom left area, Walker baby": 698186,
+        "Kelp Forest bottom left area, Walker Baby": 698186,
         "Kelp Forest bottom left area, Transturtle": 698212,
     }
 
@@ -332,7 +333,7 @@ class AquariaLocations:
     }
 
     locations_veil_tr_l = {
-        "The Veil top right area, bulb in the top of the waterfall": 698080,
+        "The Veil top right area, bulb at the top of the waterfall": 698080,
         "The Veil top right area, Transturtle": 698210,
     }
 
@@ -451,7 +452,7 @@ class AquariaLocations:
 
     locations_body_c = {
         "The Body center area, breaking Li's cage": 698201,
-        "The Body main area, bulb on the main path blocking tube": 698097,
+        "The Body center area, bulb on the main path blocking tube": 698097,
     }
 
     locations_body_l = {
