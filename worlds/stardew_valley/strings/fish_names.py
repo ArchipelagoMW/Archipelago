@@ -150,7 +150,7 @@ class SVEWaterItem:
     dulse_seaweed = "Dulse Seaweed"
 
 
-class ArchaeologyTrash:
+class ModTrash:
     rusty_scrap = "Scrap Rust"
 
 

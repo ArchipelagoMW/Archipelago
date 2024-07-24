@@ -4,7 +4,7 @@ from ...data.artisan import MachineSource
 from ...data.skill import Skill
 from ...mods.mod_data import ModNames
 from ...strings.craftable_names import ModMachine
-from ...strings.fish_names import ArchaeologyTrash
+from ...strings.fish_names import ModTrash
 from ...strings.metal_names import all_artifacts, all_fossils
 from ...strings.skill_names import ModSkill
 
@@ -15,7 +15,7 @@ class ArchaeologyContentPack(ContentPack):
         display_items = all_artifacts + all_fossils
         for item in display_items:
             self.source_display_items(item, content)
-        content.source_item(ArchaeologyTrash.rusty_scrap, *(MachineSource(item=artifact, machine=ModMachine.grinder) for artifact in all_artifacts))
+        content.source_item(ModTrash.rusty_scrap, *(MachineSource(item=artifact, machine=ModMachine.grinder) for artifact in all_artifacts))
 
     def source_display_items(self, item: str, content: StardewContent):
         wood_display = f"Wooden Display: {item}"
