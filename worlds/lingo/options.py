@@ -194,6 +194,11 @@ class EarlyColorHallways(Toggle):
     display_name = "Early Color Hallways"
 
 
+class ShufflePostgame(Toggle):
+    """When off, locations that could not be reached without also reaching your victory condition are removed."""
+    display_name = "Shuffle Postgame"
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -263,6 +268,7 @@ class LingoOptions(PerGameCommonOptions):
     mastery_achievements: MasteryAchievements
     level_2_requirement: Level2Requirement
     early_color_hallways: EarlyColorHallways
+    shuffle_postgame: ShufflePostgame
     trap_percentage: TrapPercentage
     trap_weights: TrapWeights
     puzzle_skip_percentage: PuzzleSkipPercentage

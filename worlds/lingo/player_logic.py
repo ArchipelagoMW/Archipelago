@@ -19,22 +19,25 @@ class AccessRequirements:
     doors: Set[RoomAndDoor]
     colors: Set[str]
     the_master: bool
+    postgame: bool
 
     def __init__(self):
         self.rooms = set()
         self.doors = set()
         self.colors = set()
         self.the_master = False
+        self.postgame = False
 
     def merge(self, other: "AccessRequirements"):
         self.rooms |= other.rooms
         self.doors |= other.doors
         self.colors |= other.colors
         self.the_master |= other.the_master
+        self.postgame |= other.postgame
 
     def __str__(self):
-        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})," \
-               f" the_master={self.the_master}"
+        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors}," \
+               f" the_master={self.the_master}, postgame={self.postgame})"
 
 
 class PlayerLocation(NamedTuple):
@@ -190,16 +193,6 @@ class LingoPlayerLogic:
         if color_shuffle:
             self.real_items += [name for name, item in ALL_ITEM_TABLE.items() if item.type == ItemType.COLOR]
 
-        # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
-        for room_name, room_data in PANELS_BY_ROOM.items():
-            for panel_name, panel_data in room_data.items():
-                if panel_data.achievement:
-                    access_req = AccessRequirements()
-                    access_req.merge(self.calculate_panel_requirements(room_name, panel_name, world))
-                    access_req.rooms.add(room_name)
-
-                    self.mastery_reqs.append(access_req)
-
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
         # to prevent the actual victory condition from becoming a check.
         self.mastery_location = "Orange Tower Seventh Floor - THE MASTER"
@@ -207,7 +200,7 @@ class LingoPlayerLogic:
 
         if victory_condition == VictoryCondition.option_the_end:
             self.victory_condition = "Orange Tower Seventh Floor - THE END"
-            self.add_location("Orange Tower Seventh Floor", "The End (Solved)", None, [], world)
+            self.add_location("Ending Area", "The End (Solved)", None, [], world)
             self.event_loc_to_item["The End (Solved)"] = "Victory"
         elif victory_condition == VictoryCondition.option_the_master:
             self.victory_condition = "Orange Tower Seventh Floor - THE MASTER"
@@ -230,6 +223,16 @@ class LingoPlayerLogic:
             self.add_location("Pilgrim Antechamber", "PILGRIM (Solved)", None,
                               [RoomAndPanel("Pilgrim Antechamber", "PILGRIM")], world)
             self.event_loc_to_item["PILGRIM (Solved)"] = "Victory"
+
+        # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
+        for room_name, room_data in PANELS_BY_ROOM.items():
+            for panel_name, panel_data in room_data.items():
+                if panel_data.achievement:
+                    access_req = AccessRequirements()
+                    access_req.merge(self.calculate_panel_requirements(room_name, panel_name, world))
+                    access_req.rooms.add(room_name)
+
+                    self.mastery_reqs.append(access_req)
 
         # Create groups of counting panel access requirements for the LEVEL 2 check.
         self.create_panel_hunt_events(world)
@@ -469,6 +472,11 @@ class LingoPlayerLogic:
 
             if panel == "THE MASTER":
                 access_reqs.the_master = True
+
+            # Evil python magic (so sayeth NewSoupVi): this checks victory_condition against the panel's location name
+            # override if it exists, or the auto-generated location name if it's None.
+            if self.victory_condition == (panel_object.location_name or f"{room} - {panel}"):
+                access_reqs.postgame = True
 
             self.panel_reqs[room][panel] = access_reqs
 

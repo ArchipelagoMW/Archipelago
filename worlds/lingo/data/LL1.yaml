@@ -879,6 +879,8 @@
             panel: DRAWL + RUNS
           - room: Owl Hallway
             panel: READS + RUST
+          - room: Ending Area
+            panel: THE END
     paintings:
       - id: eye_painting
         disable: True
@@ -2322,7 +2324,7 @@
         orientation: east
       - id: hi_solved_painting
         orientation: west
-  Orange Tower Seventh Floor:
+  Ending Area:
     entrances:
       Orange Tower Sixth Floor:
         room: Orange Tower
@@ -2334,6 +2336,18 @@
         check: True
         tag: forbid
         non_counting: True
+        location_name: Orange Tower Seventh Floor - THE END
+    doors:
+      End:
+        event: True
+        panels:
+          - THE END
+  Orange Tower Seventh Floor:
+    entrances:
+      Ending Area:
+        room: Ending Area
+        door: End
+    panels:
       THE MASTER:
         # We will set up special rules for this in code.
         id: Countdown Panels/Panel_master_master
