@@ -805,7 +805,7 @@ Swamp Rotating Bridge (Swamp) - Swamp Between Bridges Far - 0x181F5 - Swamp Near
 159334 - 0x036CE (Rotating Bridge CW EP) - 0x181F5 - True
 
 Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02 - The Ocean - 0x09DB8:
-158903 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
+159803 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (Beyond Rotating Bridge 1) - 0x0000A - Shapers & Dots & Full Dots
 158330 - 0x00A1E (Beyond Rotating Bridge 2) - 0x003B2 - Rotated Shapers & Shapers & Dots & Full Dots
@@ -1088,7 +1088,7 @@ Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB 
 158529 - 0x339BB (Left Pillar 4) - 0x03859 - Symmetry & Black/White Squares & Stars & Stars + Same Colored Symbol & Triangles & Colored Dots
 
 Elevator (Mountain Bottom Floor):
-158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True
+158530 - 0x3D9A6 (Elevator Door Close Left) - True - True
 158531 - 0x3D9A7 (Elevator Door Close Right) - True - True
 158532 - 0x3C113 (Elevator Entry Left) - 0x3D9A6 | 0x3D9A7 - True
 158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
