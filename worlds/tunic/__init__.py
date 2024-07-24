@@ -160,9 +160,9 @@ class TunicWorld(World):
                     if new_cxn:
                         cls.seed_groups[group]["plando"].value.append(cxn)
 
-    def create_item(self, name: str) -> TunicItem:
+    def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
-        return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
+        return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
 
@@ -192,14 +192,12 @@ class TunicWorld(World):
                 self.multiworld.get_location("Coins in the Well - 10 Coins", self.player).place_locked_item(laurels)
             elif self.options.laurels_location == "10_fairies":
                 self.multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", self.player).place_locked_item(laurels)
-            self.slot_data_items.append(laurels)
             items_to_create["Hero's Laurels"] = 0
 
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
                 self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
-                self.slot_data_items.append(hex_item)
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
@@ -245,33 +243,30 @@ class TunicWorld(World):
             remove_filler(items_to_create[gold_hexagon])
 
             for hero_relic in item_name_groups["Hero Relics"]:
-                relic_item = TunicItem(hero_relic, ItemClassification.useful, self.item_name_to_id[hero_relic], self.player)
-                tunic_items.append(relic_item)
+                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
                 items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             for page in item_name_groups["Abilities"]:
                 if items_to_create[page] > 0:
-                    page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
-                    tunic_items.append(page_item)
+                    tunic_items.append(self.create_item(page, ItemClassification.useful))
                     items_to_create[page] = 0
 
         if self.options.maskless:
-            mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
-            tunic_items.append(mask_item)
+            tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
             items_to_create["Scavenger Mask"] = 0
 
         if self.options.lanternless:
-            lantern_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
-            tunic_items.append(lantern_item)
+            tunic_items.append(self.create_item("Lantern", ItemClassification.useful))
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
-                tunic_item: TunicItem = self.create_item(item)
-                if item in slot_data_item_names:
-                    self.slot_data_items.append(tunic_item)
-                tunic_items.append(tunic_item)
+                tunic_items.append(self.create_item(item))
+
+        for tunic_item in tunic_items:
+            if tunic_item.name in slot_data_item_names:
+                self.slot_data_items.append(tunic_item)
 
         self.multiworld.itempool += tunic_items
 
