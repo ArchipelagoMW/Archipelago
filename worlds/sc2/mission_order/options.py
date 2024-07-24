@@ -11,6 +11,9 @@ from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
 from .structs import Difficulty, LayoutType
 from .types import Column, Grid, Hopscotch, Gauntlet, Blitz
+from .presets_static import (
+    static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy
+)
 
 STR_OPTION_VALUES = {
     "type": {
@@ -19,6 +22,11 @@ STR_OPTION_VALUES = {
     "difficulty": {
         "relative": Difficulty.RELATIVE, "starter": Difficulty.STARTER, "easy": Difficulty.EASY,
         "medium": Difficulty.MEDIUM, "hard": Difficulty.HARD, "very hard": Difficulty.VERY_HARD
+    },
+    "preset": {
+        "none": lambda _: {},
+        "mini wol + prophecy": static_preset(preset_mini_wol_with_prophecy),
+
     },
 }
 STR_OPTION_VALUES["min_difficulty"] = STR_OPTION_VALUES["difficulty"]
@@ -116,7 +124,6 @@ class CustomMissionOrder(OptionDict):
     })
     
     def __init__(self, value: Dict[str, Dict[str, Any]]):
-        # Make sure all the globals are filled
         self.value: Dict[str, Dict[str, Any]] = {}
         if value == self.default: # If this option is default, it shouldn't mess with its own values
             value = copy.deepcopy(self.default)
@@ -141,21 +148,50 @@ class CustomMissionOrder(OptionDict):
             global_dict = {}
             for name in value[campaign]:
                 if name.lower() == GLOBAL_ENTRY:
-                    global_dict = value[campaign].pop(name, {})
+                    global_dict = value[campaign].pop(name)
                     break
 
-            # Campaign values = default options (except for default layouts) + campaign options
+            # Strip layouts and unknown options from the campaign
+            # The latter are assumed to be preset options
+            preset_key: str = value[campaign].pop("preset", "none")
+            layout_keys = [key for (key, val) in value[campaign].items() if type(val) == dict]
+            layouts = {key: value[campaign].pop(key) for key in layout_keys}
+            preset_option_keys = [key for key in value[campaign] if key not in self.default["Default Campaign"]]
+            preset_options = {key: value[campaign].pop(key) for key in preset_option_keys}
+
+            # Resolve preset
+            preset: Dict[str, Any] = STR_OPTION_VALUES["preset"][preset_key.lower()](preset_options)
+            # Preset global is resolved internally to avoid conflict with user global
+            preset_global_dict = {}
+            for name in preset:
+                if name.lower() == GLOBAL_ENTRY:
+                    preset_global_dict = preset.pop(name)
+                    break
+            preset_layout_keys = [key for (key, val) in preset.items() if type(val) == dict]
+            preset_layouts = {key: preset.pop(key) for key in preset_layout_keys}
+            ordered_layouts = {key: copy.deepcopy(preset_global_dict) for key in preset_layout_keys}
+            for key in preset_layout_keys:
+                ordered_layouts[key].update(preset_layouts[key])
+            # Final layouts are preset layouts (updated by same-name user layouts) followed by custom user layouts
+            for key in layouts:
+                if key in ordered_layouts:
+                    ordered_layouts[key].update(layouts[key])
+                else:
+                    ordered_layouts[key] = layouts[key]
+
+            # Campaign values = default options (except for default layouts) + preset options (except for layouts) +  campaign options
             self.value[campaign] = {key: value for (key, value) in self.default["Default Campaign"].items() if type(value) != dict}
+            self.value[campaign].update(preset)
             self.value[campaign].update(value[campaign])
             _resolve_special_options(self.value[campaign])
 
-            for layout in value[campaign]:
-                if type(value[campaign][layout]) != dict:
-                    continue
+            for layout in ordered_layouts:
+                # if type(value[campaign][layout]) != dict:
+                #     continue
                 # Layout values = default options + campaign's global options + layout options
                 self.value[campaign][layout] = copy.deepcopy(self.default["Default Campaign"][GLOBAL_ENTRY])
                 self.value[campaign][layout].update(global_dict)
-                self.value[campaign][layout].update(value[campaign][layout])
+                self.value[campaign][layout].update(ordered_layouts[layout])
                 _resolve_special_options(self.value[campaign][layout])
 
                 for mission_slot_index in range(len(self.value[campaign][layout]["missions"])):
@@ -207,7 +243,9 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
     if option == "index":
         # All index values could be ranges
         if type(option_value) == list:
-            indices = [_resolve_potential_range(index) for index in option_value]
+            # Flatten any nested lists
+            indices = [idx for val in [idx if type(idx) == list else [idx] for idx in option_value] for idx in val]
+            indices = [_resolve_potential_range(index) for index in indices]
             indices = [idx if type(idx) == int else str(idx) for idx in indices]
             return indices
         else:
