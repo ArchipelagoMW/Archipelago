@@ -857,6 +857,7 @@ item_descriptions = {
     item_names.AVENGER_KRYHAS_CLOAK: "Avenger War Council upgrade. Avengers are now permanently cloaked.",
     item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: "Dark Templar War Council upgrade. Dark Templar gain two strikes of their Shadow Fury ability.",
     item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: "Dark Templar War Council upgrade. Dark Templar gain three strikes of their Shadow Fury ability.",
+    item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: "Blood Hunter War Council upgrade. Blood Hunters attack over twice as quickly.",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.
