@@ -659,6 +659,10 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
             if exit_act.name not in chapter_finales:
                 return False
 
+    exit_chapter: str = act_chapters.get(exit_act.name)
+    # make sure that certain time rift combinations never happen
+    always_block: bool = exit_chapter != "Mafia Town" and exit_chapter != "Subcon Forest"
+    if not ignore_certain_rules or always_block:
         if entrance_act.name in rift_access_regions and exit_act.name in rift_access_regions[entrance_act.name]:
             return False
 
