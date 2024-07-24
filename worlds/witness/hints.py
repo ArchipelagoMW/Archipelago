@@ -174,8 +174,9 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
     allow_regions = world.options.vague_hints == "experimental"
 
     possible_location_groups = {
-        k: v for k, v in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
-        if hint_loc.name in v
+        group_name: group_locations
+        for group_name, group_locations in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
+        if hint_loc.name in group_locations
     }
 
     locations_in_that_world = {
