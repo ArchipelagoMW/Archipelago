@@ -99,10 +99,10 @@ class LinksAwakeningWorld(World):
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
     item_name_groups = {
-       "Instruments": {
-           "Full Moon Cello", "Conch Horn", "Sea Lily's Bell", "Surf Harp",
-           "Wind Marimba", "Coral Triangle", "Organ of Evening Calm", "Thunder Drum"
-       },
+        "Instruments": {
+            "Full Moon Cello", "Conch Horn", "Sea Lily's Bell", "Surf Harp",
+            "Wind Marimba", "Coral Triangle", "Organ of Evening Calm", "Thunder Drum"
+        },
     }
 
     prefill_dungeon_items = None
