@@ -1271,13 +1271,13 @@ item_table = {
                  parent_item=item_names.HYDRALISK_IMPALER_ASPECT, origin={"ext"}),
     item_names.IMPALER_HARDENED_TENTACLE_SPINES:
         ItemData(253 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 23, SC2Race.ZERG,
-                 parent_item=item_names.HYDRALISK_IMPALER_ASPECT, origin={"ext"}),
+                 parent_item=item_names.HYDRALISK_IMPALER_ASPECT, origin={"ext"}, classification=ItemClassification.progression),
     item_names.LURKER_SEISMIC_SPINES:
         ItemData(254 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 24, SC2Race.ZERG,
-                 parent_item=item_names.HYDRALISK_LURKER_ASPECT, origin={"ext"}),
+                 parent_item=item_names.HYDRALISK_LURKER_ASPECT, origin={"ext"}, classification=ItemClassification.progression),
     item_names.LURKER_ADAPTED_SPINES:
         ItemData(255 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 25, SC2Race.ZERG,
-                 parent_item=item_names.HYDRALISK_LURKER_ASPECT, origin={"ext"}),
+                 parent_item=item_names.HYDRALISK_LURKER_ASPECT, origin={"ext"}, classification=ItemClassification.progression),
     item_names.RAVAGER_POTENT_BILE:
         ItemData(256 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 26, SC2Race.ZERG,
                  parent_item=item_names.ROACH_RAVAGER_ASPECT, origin={"ext"}),
@@ -1390,14 +1390,14 @@ item_table = {
 
     item_names.ZERGLING_RAPTOR_STRAIN:
         ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING,
-                 origin={"hots"}),
+                 origin={"hots"}, classification=ItemClassification.progression),
     item_names.ZERGLING_SWARMLING_STRAIN:
         ItemData(301 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 1, SC2Race.ZERG, parent_item=item_names.ZERGLING,
                  origin={"hots"}),
     item_names.ROACH_VILE_STRAIN:
         ItemData(302 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 2, SC2Race.ZERG, parent_item=item_names.ROACH, origin={"hots"}),
     item_names.ROACH_CORPSER_STRAIN:
-        ItemData(303 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 3, SC2Race.ZERG, parent_item=item_names.ROACH, origin={"hots"}),
+        ItemData(303 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 3, SC2Race.ZERG, parent_item=item_names.ROACH, origin={"hots"}, classification=ItemClassification.progression),
     item_names.HYDRALISK_IMPALER_ASPECT:
         ItemData(304 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 0, SC2Race.ZERG, origin={"hots"},
                  classification=ItemClassification.progression),
@@ -1441,8 +1441,8 @@ item_table = {
     item_names.KERRIGAN_WILD_MUTATION: ItemData(409 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 6, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_SPAWN_BANELINGS: ItemData(410 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 7, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_MEND: ItemData(411 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 8, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
-    item_names.TWIN_DRONES: ItemData(412 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 3, SC2Race.ZERG, origin={"hots"}),
-    item_names.MALIGNANT_CREEP: ItemData(413 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 4, SC2Race.ZERG, origin={"hots"}),
+    item_names.TWIN_DRONES: ItemData(412 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 3, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
+    item_names.MALIGNANT_CREEP: ItemData(413 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 4, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.VESPENE_EFFICIENCY: ItemData(414 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 5, SC2Race.ZERG, origin={"hots"}),
     item_names.KERRIGAN_INFEST_BROODLINGS: ItemData(415 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 9, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_FURY: ItemData(416 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 10, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
@@ -1470,7 +1470,7 @@ item_table = {
 
     # Zerg Mercs
     item_names.INFESTED_MEDICS: ItemData(600 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 0, SC2Race.ZERG, origin={"ext"}),
-    item_names.INFESTED_SIEGE_TANKS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 1, SC2Race.ZERG, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANKS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 1, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
     item_names.INFESTED_BANSHEES: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 2, SC2Race.ZERG, origin={"ext"}),
 
     # Misc Upgrades
@@ -1484,7 +1484,7 @@ item_table = {
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: ItemData(801 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 7, SC2Race.ZERG, origin={"bw"}),
     item_names.ROACH_RAVAGER_ASPECT: ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 8, SC2Race.ZERG, origin={"ext"}),
     item_names.OVERLORD_OVERSEER_ASPECT: ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 4, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
-    item_names.ROACH_PRIMAL_IGNITER_ASPECT: ItemData(804 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 9, SC2Race.ZERG, origin={"ext"}),
+    item_names.ROACH_PRIMAL_IGNITER_ASPECT: ItemData(804 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 9, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
 
 
     # Protoss Units (those that aren't as items in WoL (Prophecy))
@@ -1584,7 +1584,7 @@ item_table = {
     item_names.WARP_RAY:
         ItemData(31 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 10, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol"}),
-    item_names.SCORCHER:
+    item_names.DAWNBRINGER:
         ItemData(32 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 11, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
     item_names.SKYLORD:
@@ -1592,6 +1592,9 @@ item_table = {
                  classification=ItemClassification.progression, origin={"ext"}),
     item_names.PURGER:
         ItemData(34 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 13, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.SKIRMISHER:
+        ItemData(35 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 14, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
 
     # Protoss Upgrades
@@ -1650,7 +1653,7 @@ item_table = {
         ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 3, SC2Race.PROTOSS, origin={"wol"}),
     item_names.CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES:
         ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 4, SC2Race.PROTOSS, origin={"bw"}),
-    item_names.VOID_RAY_DESTROYER_WARP_RAY_SCORCHER_FLUX_VANES:
+    item_names.VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES:
         ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 5, SC2Race.PROTOSS, classification=ItemClassification.filler,
                  origin={"ext"}),
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE:
@@ -1712,6 +1715,12 @@ item_table = {
     item_names.STALKER_PHASE_REACTOR: ItemData(503 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 3, SC2Race.PROTOSS, parent_item=item_names.STALKER),
     item_names.DRAGOON_PHALANX_SUIT: ItemData(504 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 4, SC2Race.PROTOSS, parent_item=item_names.DRAGOON),
     item_names.INSTIGATOR_RESOURCE_EFFICIENCY: ItemData(505 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 5, SC2Race.PROTOSS, parent_item=item_names.INSTIGATOR),
+    item_names.ADEPT_DISRUPTIVE_TRANSFER: ItemData(506 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 6, SC2Race.PROTOSS, parent_item=item_names.ADEPT),
+    item_names.SLAYER_PHASE_BLINK: ItemData(507 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 7, SC2Race.PROTOSS, parent_item=item_names.SLAYER),
+    item_names.AVENGER_KRYHAS_CLOAK: ItemData(508 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 8, SC2Race.PROTOSS, parent_item=item_names.AVENGER),
+    item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: ItemData(509 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 9, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
+    item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: ItemData(510 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 10, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
+    item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: ItemData(511 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 11, SC2Race.PROTOSS, parent_item=item_names.BLOOD_HUNTER),
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
@@ -1729,11 +1738,12 @@ item_table = {
 
     # Generic Protoss Upgrades
     item_names.MATRIX_OVERLOAD:
-        ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 0, SC2Race.PROTOSS, origin={"lotv"}),
+        ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 0, SC2Race.PROTOSS, origin={"lotv"}, classification=ItemClassification.progression),
     item_names.QUATRO:
         ItemData(801 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 1, SC2Race.PROTOSS, origin={"ext"}),
     item_names.NEXUS_OVERCHARGE:
-        ItemData(802 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 2, SC2Race.PROTOSS, origin={"lotv"}, important_for_filtering=True),
+        ItemData(802 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 2, SC2Race.PROTOSS, origin={"lotv"},
+                 classification=ItemClassification.progression, important_for_filtering=True),
     item_names.ORBITAL_ASSIMILATORS:
         ItemData(803 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 3, SC2Race.PROTOSS, origin={"lotv"}),
     item_names.WARP_HARMONIZATION:
@@ -1959,9 +1969,9 @@ filler_items: typing.Tuple[str, ...] = (
 
 # Defense rating table
 # Commented defense ratings are handled in LogicMixin
-defense_ratings = {
+tvx_defense_ratings = {
     item_names.SIEGE_TANK: 5,
-    # "Maelstrom Rounds": 2,
+    # "Graduating Range": 1,
     item_names.PLANETARY_FORTRESS: 3,
     # Bunker w/ Marine/Marauder: 3,
     item_names.PERDITION_TURRET: 2,
@@ -1973,15 +1983,59 @@ defense_ratings = {
     item_names.WIDOW_MINE: 1,
     # "Concealment (Widow Mine)": 1
 }
-zerg_defense_ratings = {
+tvz_defense_ratings = {
     item_names.PERDITION_TURRET: 2,
     # Bunker w/ Firebat: 2,
     item_names.LIBERATOR: -2,
     item_names.HIVE_MIND_EMULATOR: 3,
     item_names.PSI_DISRUPTER: 3,
 }
-air_defense_ratings = {
+tvx_air_defense_ratings = {
     item_names.MISSILE_TURRET: 2,
+}
+zvx_defense_ratings = {
+    # Note that this doesn't include Kerrigan because this is just for race swaps, which doesn't involve her (for now)
+    item_names.SPINE_CRAWLER: 2,
+    # w/ Twin Drones: 1
+    item_names.SWARM_QUEEN: 1,
+    item_names.SWARM_HOST: 1,
+    # impaler: 3
+    #  "Hardened Tentacle Spines (Impaler)": 2
+    # lurker: 1
+    #  "Seismic Spines (Lurker)": 2
+    #  "Adapted Spines (Lurker)": 1
+    # brood lord : 2
+    # corpser roach: 1
+    # creep tumors (swarm queen or overseer): 1
+    # w/ malignant creep: 1
+    item_names.INFESTED_SIEGE_TANKS: 5,
+    # "Graduating Range": 1,
+}
+# zvz_defense_ratings = {
+    # corpser roach: 1
+    # primal igniter: 2
+    # lurker: 1
+    # w/ adapted spines: -1
+    # impaler: -1
+# }
+zvx_air_defense_ratings = {
+    item_names.SPORE_CRAWLER: 2,
+    # w/ Twin Drones: 1
+}
+pvx_defense_ratings = {
+    item_names.PHOTON_CANNON: 2,
+    item_names.KHAYDARIN_MONOLITH: 3,
+    item_names.SHIELD_BATTERY: 1,
+    item_names.NEXUS_OVERCHARGE: 2,
+    item_names.CORSAIR: 1,
+    item_names.MATRIX_OVERLOAD: 1,
+    item_names.COLOSSUS: 1,
+}
+pvz_defense_ratings = {
+    item_names.KHAYDARIN_MONOLITH: -2,
+    item_names.COLOSSUS: 2,
+    item_names.VANGUARD: 1,
+    item_names.REAVER: 1,
 }
 
 kerrigan_levels = [

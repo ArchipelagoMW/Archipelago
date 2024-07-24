@@ -2,8 +2,7 @@ from dataclasses import dataclass, fields, Field
 from typing import *
 
 from Utils import is_iterable_except_str
-from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
-    PerGameCommonOptions, Option, VerifyKeys)
+from Options import *
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
@@ -150,7 +149,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 89
+    range_end = 93
     default = 83
 
 
@@ -884,6 +883,22 @@ class MasteryLocations(LocationInclusion):
     display_name = "Mastery Locations"
 
 
+class SpeedrunLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for overcoming speedrun challenges.
+    These challenges are often based on speed achievements or community challenges.
+    Enable these locations if you want to be rewarded for going fast.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Speedrun Locations"
+
+
 class MineralsPerItem(Range):
     """
     Configures how many minerals are given per resource item.
@@ -975,15 +990,19 @@ class Starcraft2Options(PerGameCommonOptions):
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations
     mastery_locations: MasteryLocations
+    speedrun_locations: SpeedrunLocations
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
 
     custom_mission_order: CustomMissionOrder
 
-def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
+def get_option_value(world: Union['SC2World', None], name: str) -> Union[int, FrozenSet]:
     if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
+        if isinstance(field.type, str):
+            if field.type in globals():
+                return globals()[field.type].default
         return field.type.default
 
     player_option = getattr(world.options, name)

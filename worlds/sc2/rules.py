@@ -4,8 +4,9 @@ from BaseClasses import  CollectionState
 from .options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
-from .items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
-    kerrigan_levels, get_full_item_list
+from .items import get_basic_units, tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings, \
+    kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings, \
+    pvz_defense_ratings
 from .mission_tables import SC2Race, SC2Campaign
 from . import item_names
 
@@ -130,7 +131,7 @@ class SC2Logic:
         :param air_enemy:
         :return:
         """
-        defense_score = sum((defense_ratings[item] for item in defense_ratings if state.has(item, self.player)))
+        defense_score = sum((tvx_defense_ratings[item] for item in tvx_defense_ratings if state.has(item, self.player)))
         # Manned Bunker
         if state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 3
@@ -150,9 +151,9 @@ class SC2Logic:
 
         # General enemy-based rules
         if zerg_enemy:
-            defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if state.has(item, self.player)))
+            defense_score += sum((tvz_defense_ratings[item] for item in tvz_defense_ratings if state.has(item, self.player)))
         if air_enemy:
-            defense_score += sum((air_defense_ratings[item] for item in air_defense_ratings if state.has(item, self.player)))
+            defense_score += sum((tvx_air_defense_ratings[item] for item in tvx_air_defense_ratings if state.has(item, self.player)))
         if air_enemy and zerg_enemy and state.has(item_names.VALKYRIE, self.player):
             # Valkyries shred mass Mutas, most common air enemy that's massed in these cases
             defense_score += 2
@@ -338,6 +339,67 @@ class SC2Logic:
                 and state.has_any({item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER, item_names.MISSILE_TURRET}, self.player)
 
     # HotS
+
+    def zerg_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
+        """
+        Ability to handle defensive missions
+        :param state:
+        :param zerg_enemy:
+        :param air_enemy:
+        :return:
+        """
+        defense_score = sum((zvx_defense_ratings[item] for item in zvx_defense_ratings if state.has(item, self.player)))
+        # Twin Drones
+        if state.has(item_names.TWIN_DRONES, self.player):
+            if state.has(item_names.SPINE_CRAWLER, self.player):
+                defense_score += 1
+            if state.has(item_names.SPORE_CRAWLER, self.player) and air_enemy:
+                defense_score += 1
+        # Impaler
+        if self.morph_impaler(state):
+            defense_score += 3
+            if state.has(item_names.IMPALER_HARDENED_TENTACLE_SPINES, self.player):
+                defense_score += 1
+            if zerg_enemy:
+                defense_score += -1
+        # Lurker
+        if self.morph_lurker(state):
+            defense_score += 1
+            if state.has(item_names.LURKER_SEISMIC_SPINES, self.player):
+                defense_score += 2
+            if state.has(item_names.LURKER_ADAPTED_SPINES, self.player) and not zerg_enemy:
+                defense_score += 1
+            if zerg_enemy:
+                defense_score += 1
+        # Brood Lord
+        if self.morph_brood_lord(state):
+            defense_score += 2
+        # Corpser Roach
+        if state.has_all({item_names.ROACH, item_names.ROACH_CORPSER_STRAIN}, self.player):
+            defense_score += 1
+            if zerg_enemy:
+                defense_score += 1
+        # Igniter
+        if self.morph_igniter(state) and zerg_enemy:
+            defense_score += 2
+        # Creep Tumors
+        if state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player):
+            if not zerg_enemy:
+                defense_score += 1
+            if state.has(item_names.MALIGNANT_CREEP, self.player):
+                defense_score += 1
+        # Infested Siege Tanks
+        if state.has_all({item_names.INFESTED_SIEGE_TANKS, item_names.SIEGE_TANK_GRADUATING_RANGE}, self.player):
+            defense_score += 1
+
+        # General enemy-based rules
+        if air_enemy:
+            defense_score += sum((zvx_air_defense_ratings[item] for item in zvx_air_defense_ratings if state.has(item, self.player)))
+        # Advanced Tactics bumps defense rating requirements down by 2
+        if self.advanced_tactics:
+            defense_score += 2
+        return defense_score
+
     def zerg_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_zerg_units, self.player)
 
@@ -362,9 +424,20 @@ class SC2Logic:
         return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
             and state.has(item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
 
-    def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
+    def morph_impaler(self, state: CollectionState) -> bool:
         return (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled) \
-            and state.has_any({item_names.HYDRALISK_IMPALER_ASPECT, item_names.HYDRALISK_LURKER_ASPECT}, self.player)
+            and state.has(item_names.HYDRALISK_IMPALER_ASPECT, self.player)
+
+    def morph_lurker(self, state: CollectionState) -> bool:
+        return (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled) \
+            and state.has(item_names.HYDRALISK_LURKER_ASPECT, self.player)
+
+    def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
+        return self.morph_impaler(state) or self.morph_lurker(state)
+
+    def morph_igniter(self, state: CollectionState) -> bool:
+        return (state.has(item_names.ROACH, self.player) or self.morphling_enabled) \
+            and state.has(item_names.ROACH_PRIMAL_IGNITER_ASPECT, self.player)
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
@@ -472,6 +545,24 @@ class SC2Logic:
 
     # LotV
 
+    def protoss_defense_rating(self, state: CollectionState, zerg_enemy: bool) -> int:
+        """
+        Ability to handle defensive missions
+        :param state:
+        :param zerg_enemy:
+        :param air_enemy:
+        :return:
+        """
+        defense_score = sum((pvx_defense_ratings[item] for item in pvx_defense_ratings if state.has(item, self.player)))
+
+        # No anti-air defense dict here, use an existing logic rule instead
+        if zerg_enemy:
+            defense_score += sum((pvz_defense_ratings[item] for item in pvz_defense_ratings if state.has(item, self.player)))
+        # Advanced Tactics bumps defense rating requirements down by 2
+        if self.advanced_tactics:
+            defense_score += 2
+        return defense_score
+
     def protoss_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_protoss_units, self.player)
 
@@ -488,28 +579,28 @@ class SC2Logic:
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
-            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY, item_names.SCORCHER}, self.player) \
+            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY}, self.player) \
             or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_anti_light_anti_air(self, state: CollectionState) -> bool:
         return self.protoss_competent_anti_air(state) \
             or state.has_any({
-                item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER, item_names.SKYLORD
+                item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER, item_names.CORSAIR, item_names.CARRIER,
             }, self.player)
 
     def protoss_competent_anti_air(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
-            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.PURGER
+            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.SKYLORD, item_names.PURGER
         }, self.player) \
             or (
                     state.has_any({
-                        item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER,
-                        item_names.SKYLORD
+                        item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER,
+                        item_names.CORSAIR, item_names.CARRIER,
                     }, self.player)
                     and state.has_any({
-                        item_names.SCOUT, item_names.WRATHWALKER, item_names.SCORCHER, item_names.WARP_RAY
+                        item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY
                     }, self.player)
             ) \
             or (self.advanced_tactics
@@ -526,7 +617,7 @@ class SC2Logic:
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.SCOUT, item_names.TEMPEST, item_names.CARRIER, item_names.SKYLORD, item_names.PURGER,
-            item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER, item_names.MOTHERSHIP
+            item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER, item_names.MOTHERSHIP
         }, self.player) \
             or self.protoss_has_blink(state) \
             or (state.has(item_names.WARP_PRISM, self.player)
@@ -537,7 +628,7 @@ class SC2Logic:
     def protoss_fleet(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.CARRIER, item_names.SKYLORD, item_names.PURGER, item_names.TEMPEST, item_names.VOID_RAY,
-            item_names.DESTROYER, item_names.WARP_RAY, item_names.SCORCHER
+            item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER
         }, self.player)
 
     def templars_return_requirement(self, state: CollectionState) -> bool:
@@ -601,7 +692,7 @@ class SC2Logic:
     def protoss_basic_splash(self, state: CollectionState) -> bool:
         return state.has_any(
             {item_names.ZEALOT, item_names.COLOSSUS, item_names.VANGUARD, item_names.HIGH_TEMPLAR, item_names.SIGNIFIER,
-             item_names.DARK_TEMPLAR, item_names.REAVER, item_names.ASCENDANT}, self.player)
+             item_names.DARK_TEMPLAR, item_names.REAVER, item_names.ASCENDANT, item_names.DAWNBRINGER}, self.player)
 
     def protoss_static_defense(self, state: CollectionState) -> bool:
         return state.has_any({item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH}, self.player)

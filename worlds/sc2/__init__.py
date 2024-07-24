@@ -15,6 +15,7 @@ from .items import (
 )
 from . import items
 from . import item_groups
+from . import location_groups
 from .locations import get_locations, get_location_types, get_plando_locations
 from .regions import create_regions
 from .options import (
@@ -101,6 +102,7 @@ class SC2World(World):
     options: Starcraft2Options
 
     item_name_groups = item_groups.item_name_groups
+    location_name_groups = location_groups.get_location_groups()
     locked_locations: List[str]
     """Locations locked to contain specific items, such as victory events or forced resources"""
     location_cache: List[Location]
@@ -647,7 +649,6 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
                 item_name = world.random.choice(filler_items)
                 item = create_item_with_correct_settings(world.player, item_name)
                 location.place_locked_item(item)
-                item_list.append(FilterItem(item_name, items.item_table[item_name], 0, ItemFilterFlags.Plando|ItemFilterFlags.Locked))
                 world.locked_locations.append(location.name)
 
 

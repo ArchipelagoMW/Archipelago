@@ -29,7 +29,7 @@ from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
+    LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
@@ -76,7 +76,7 @@ VICTORY_MODULO: int = 100
 # GitHub repo where the Map/mod data is hosted for /download_data command
 DATA_REPO_OWNER = "Ziktofel"
 DATA_REPO_NAME = "Archipelago-SC2-data"
-DATA_API_VERSION = "API3"
+DATA_API_VERSION = "API4"
 
 # Bot controller
 CONTROLLER_HEALTH: int = 38281
@@ -673,6 +673,7 @@ class SC2Context(CommonContext):
                 LocationType.EXTRA: args["slot_data"].get("extra_locations", ExtraLocations.default),
                 LocationType.CHALLENGE: args["slot_data"].get("challenge_locations", ChallengeLocations.default),
                 LocationType.MASTERY: args["slot_data"].get("mastery_locations", MasteryLocations.default),
+                LocationType.SPEEDRUN: args["slot_data"].get("speedrun_locations", SpeedrunLocations.default),
             }
             self.plando_locations = args["slot_data"].get("plando_locations", [])
 
