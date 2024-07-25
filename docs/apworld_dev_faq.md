@@ -6,14 +6,14 @@ This document is meant as a reference tool to show solutions to common problems 
 
 ### My game has a restrictive start that leads to fill errors
 
-Hint to the Generator that an item needs to be in sphere one with local_early_items. Here `1` represents the number of "Sword" items to attempt to place in sphere 1.
+Hint to the Generator that an item needs to be in sphere one with local_early_items. Here `1` represents the number of "Sword" items to attempt to place in sphere one.
 ```py
 early_item_name = "Sword"
 self.multiworld.local_early_items[self.player][early_item_name] = 1
 ```
 
 Some alternative ways to try to fix this problem are:
-* Add more locations to sphere 1 of your world, potentially only when there would be a restrictive start
+* Add more locations to sphere one of your world, potentially only when there would be a restrictive start
 * Pre-place items yourself, such as during `create_items`
 * Put items into the player's starting inventory using `push_precollected`
 * Raise an exception, such as an `OptionError` during `generate_early`, to disallow options that would lead to a restrictive start
