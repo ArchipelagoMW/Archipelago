@@ -123,12 +123,12 @@ class MM2World(World):
                 if location.address is None and location.name is not dr_wily:
                     location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
                                                        None, self.player))
-            if self.options.consumables in (self.options.consumables.option_1up_etank,
-                                            self.options.consumables.option_all):
+            if self.options.consumables in (Consumables.option_1up_etank,
+                                            Consumables.option_all):
                 if region in etank_1ups:
                     stage.add_locations(etank_1ups[region], MM2Location)
-            if self.options.consumables in (self.options.consumables.option_weapon_health,
-                                            self.options.consumables.option_all):
+            if self.options.consumables in (Consumables.option_weapon_health,
+                                            Consumables.option_all):
                 if region in energy_pickups:
                     stage.add_locations(energy_pickups[region], MM2Location)
             self.multiworld.regions.append(stage)
@@ -157,11 +157,11 @@ class MM2World(World):
         itempool.extend([self.create_item(name) for name in robot_master_weapon_table.keys()])
         itempool.extend([self.create_item(name) for name in item_item_table.keys()])
         total_checks = 24
-        if self.options.consumables in (self.options.consumables.option_1up_etank,
-                                        self.options.consumables.option_all):
+        if self.options.consumables in (Consumables.option_1up_etank,
+                                        Consumables.option_all):
             total_checks += 20
-        if self.options.consumables in (self.options.consumables.option_weapon_health,
-                                        self.options.consumables.option_all):
+        if self.options.consumables in (Consumables.option_weapon_health,
+                                        Consumables.option_all):
             total_checks += 27
         remaining = total_checks - len(itempool)
         itempool.extend([self.create_item(name)

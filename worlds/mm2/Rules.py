@@ -4,7 +4,7 @@ from . import Names
 from .Locations import heat_man_locations, air_man_locations, wood_man_locations, bubble_man_locations, \
     quick_man_locations, flash_man_locations, metal_man_locations, crash_man_locations, wily_1_locations, \
     wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations, wily_6_locations
-from .Options import bosses, weapons_to_id
+from .Options import bosses, weapons_to_id, Consumables, RandomWeaknesses
 from worlds.generic.Rules import add_rule, forbid_items
 
 if TYPE_CHECKING:
@@ -86,14 +86,14 @@ def set_rules(world: "MM2World") -> None:
         slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 2"]
         world.weapon_damage = slot_data["weapon_damage"]
     else:
-        if world.options.random_weakness == world.options.random_weakness.option_shuffled:
+        if world.options.random_weakness == RandomWeaknesses.option_shuffled:
             weapon_tables = [table for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
             world.random.shuffle(weapon_tables)
             for i in range(1, 8):
                 world.weapon_damage[i] = weapon_tables.pop()
             world.weapon_damage[8] = [0 for _ in range(14)]
             world.weapon_damage[8][world.random.choice(range(8))] = 2
-        elif world.options.random_weakness == world.options.random_weakness.option_randomized:
+        elif world.options.random_weakness == RandomWeaknesses.option_randomized:
             world.weapon_damage = {i: [] for i in range(9)}
             for boss in range(13):
                 for weapon in world.weapon_damage:
@@ -267,8 +267,8 @@ def set_rules(world: "MM2World") -> None:
         add_rule(world.multiworld.get_entrance("To Quick Man Stage", world.player),
                  lambda state: state.has(Names.time_stopper, world.player))
 
-    if world.options.consumables in (world.options.consumables.option_1up_etank,
-                                     world.options.consumables.option_all):
+    if world.options.consumables in (Consumables.option_1up_etank,
+                                     Consumables.option_all):
         add_rule(world.multiworld.get_location(Names.flash_man_c2, world.player),
                  lambda state: state.has_any([Names.item_1, Names.item_2, Names.item_3], world.player))
         add_rule(world.multiworld.get_location(Names.quick_man_c1, world.player),
@@ -285,8 +285,8 @@ def set_rules(world: "MM2World") -> None:
                  lambda state: state.has(Names.crash_bomber, world.player))
         add_rule(world.multiworld.get_location(Names.wily_3_c2, world.player),
                  lambda state: state.has(Names.crash_bomber, world.player))
-    if world.options.consumables in (world.options.consumables.option_weapon_health,
-                                     world.options.consumables.option_all):
+    if world.options.consumables in (Consumables.option_weapon_health,
+                                     Consumables.option_all):
         add_rule(world.multiworld.get_location(Names.flash_man_c3, world.player),
                  lambda state: state.has(Names.crash_bomber, world.player))
         add_rule(world.multiworld.get_location(Names.flash_man_c4, world.player),

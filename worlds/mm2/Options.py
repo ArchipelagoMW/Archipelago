@@ -78,6 +78,8 @@ class EnableLasers(Toggle):
 class Consumables(Choice):
     """
     When enabled, e-tanks/1-ups/health/weapon energy will be added to the pool of items and included as checks.
+    E-Tanks and 1-Ups add 20 checks to the pool.
+    Weapon/Health Energy add 27 checks to the pool.
     """
     display_name = "Consumables"
     option_none = 0
@@ -192,6 +194,19 @@ class ReduceFlashing(Choice):
     default = 1
 
 
+class RandomMusic(Choice):
+    """
+    Vanilla: music is unchanged
+    Shuffled: stage and certain menu music is shuffled.
+    Randomized: stage and certain menu music is randomly selected
+    None: no music will play
+    """
+    display_name = "Random Music"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_randomized = 2
+    option_none = 3
+
 @dataclass
 class MM2Options(PerGameCommonOptions):
     death_link: DeathLink
@@ -208,3 +223,4 @@ class MM2Options(PerGameCommonOptions):
     palette_shuffle: PaletteShuffle
     quickswap: Quickswap
     reduce_flashing: ReduceFlashing
+    random_music: RandomMusic

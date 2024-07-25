@@ -352,6 +352,7 @@ StoreWilyProgress:
     STA !stage_completion, X
     PLA
     TAX
+    print "Get Equipped Music: ", hex(realbase())
     LDA #$17
     RTS
 

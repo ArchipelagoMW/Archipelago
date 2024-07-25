@@ -10,6 +10,7 @@ from . import Names
 from .Rules import minimum_weakness_requirement
 from .Text import MM2TextEntry
 from .Color import get_colors_for_item, write_palette_shuffle
+from .Options import EnergyLink, Consumables, ReduceFlashing, RandomMusic
 
 if TYPE_CHECKING:
     from . import MM2World
@@ -77,6 +78,7 @@ consumables_ptr: int = 0x3F2FE
 quickswap_ptr: int = 0x3F363
 wily_5_ptr: int = 0x3F3A1
 energylink_ptr: int = 0x3F46B
+get_equipped_sound_ptr: int = 0x3F384
 
 
 class RomData:
@@ -246,10 +248,10 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     if world.options.quickswap:
         patch.write_byte(quickswap_ptr + 1, 0x01)
 
-    if world.options.consumables != world.options.consumables.option_all:
+    if world.options.consumables != Consumables.option_all:
         value_a = 0x7C
         value_b = 0x76
-        if world.options.consumables == world.options.consumables.option_1up_etank:
+        if world.options.consumables == Consumables.option_1up_etank:
             value_b = 0x7A
         else:
             value_a = 0x7A
@@ -262,10 +264,10 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
         patch.write_byte(energylink_ptr + 1, 1)
 
     if world.options.reduce_flashing:
-        if world.options.reduce_flashing.value == world.options.reduce_flashing.option_virtual_console:
+        if world.options.reduce_flashing.value == ReduceFlashing.option_virtual_console:
             color = 0x2D  # Dark Gray
             speed = -1
-        elif world.options.reduce_flashing.value == world.options.reduce_flashing.option_minor:
+        elif world.options.reduce_flashing.value == ReduceFlashing.option_minor:
             color = 0x2D
             speed = 0x08
         else:
@@ -281,7 +283,7 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
         patch.write_bytes(0x2DF14, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])  # Reduce final Alien flash to 1 big flash
         patch.write_byte(0x34132, 0x08)  # Longer flash time, Stage Select
 
-        if world.options.reduce_flashing.value == world.options.reduce_flashing.option_full:
+        if world.options.reduce_flashing.value == ReduceFlashing.option_full:
             # reduce color of stage flashing
             patch.write_bytes(0x344C9, [0x2D, 0x10, 0x00, 0x2D,
                                         0x0F, 0x10, 0x2D, 0x00,
@@ -297,6 +299,35 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
         if speed != -1:
             patch.write_byte(0xFE01, speed)  # Bubble Man Stage
             patch.write_byte(0x1BE01, speed)  # Metal Man Stage
+
+    if world.options.random_music:
+        if world.options.random_music == RandomMusic.option_none:
+            pool = [0xFF] * 13
+            # A couple of additional mutes we want here
+            patch.write_byte(0x37819, 0xFF)  # Credits
+            patch.write_byte(0x378A4, 0xFF)  # Credits #2
+            # patch.write_byte(0x37149, 0xFF)  # Game Over Jingle
+            # patch.write_byte(0x341BA, 0xFF)  # Robot Master Jingle
+            # patch.write_byte(0x2E0B4, 0xFF)  # Robot Master Defeated
+            # patch.write_byte(0x35B78, 0xFF)  # Wily Castle
+            # patch.write_byte(0x2DFA5, 0xFF)  # Wily Defeated
+
+        elif world.options.random_music == RandomMusic.option_shuffled:
+            pool = [0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 9, 9, 0x10, 0xC, 0xB, 0x17, 0x13, 0xE, 0xD]
+            world.random.shuffle(pool)
+        else:
+            pool = world.random.choices(range(10), k=13)
+        patch.write_bytes(0x381E0, pool[:13])
+        patch.write_byte(0x36318, pool[13])  # Game Start
+        patch.write_byte(0x37181, pool[13])  # Game Over
+        patch.write_byte(0x360AE, pool[14])  # RBM Select
+        patch.write_byte(0x39005, pool[15])  # Robot Master Battle
+        patch.write_byte(get_equipped_sound_ptr + 1, pool[16])  # Get Equipped, we actually hook this already lmao
+        patch.write_byte(0x3775A, pool[17])  # Epilogue
+        patch.write_byte(0x36089, pool[18])  # Intro
+        patch.write_byte(0x3)
+
+
 
     from Utils import __version__
     patch.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
