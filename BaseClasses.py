@@ -705,11 +705,10 @@ class CollectionState():
             if not events:
                 del events_per_player[player]
 
-        reachable_events = True
         # The first iteration must check the locations of all players because it is not known which players might have
         # reachable locations.
         players_to_check = set(self.multiworld.player_ids)
-        while reachable_events:
+        while players_to_check:
             # Iterable of all locations belonging to the players to check.
             loc_gen: Iterable[Location] = itertools.chain.from_iterable(
                 locations for player, locations in events_per_player.items() if player in players_to_check)
