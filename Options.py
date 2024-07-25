@@ -945,6 +945,19 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
             self.value = []
             logging.warning(f"The plando texts module is turned off, "
                             f"so text for {player_name} will be ignored.")
+        else:
+            super().verify(world, player_name, plando_options)
+
+    def verify_keys(self) -> None:
+        if self.valid_keys:
+            data = set([text.at for text in self])
+            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
+            extra = dataset - self._valid_keys
+            if extra:
+                raise OptionError(
+                    f"Invalid \"at\" placement {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                    f"Allowed placements: {self._valid_keys}."
+                )
 
     @classmethod
     def from_any(cls, data: PlandoTextsFromAnyType) -> Self:
