@@ -136,8 +136,8 @@ def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, Li
                 try:
                     entrance_world, entrance_stage = connection.entrance.rsplit(" ", 1)
                     stage_world, stage_stage = connection.exit.rsplit(" ", 1)
-                    new_stage = default_levels[LocationName.level_names[stage_world.strip()]][int(stage_stage) - 1]
-                    levels[LocationName.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
+                    new_stage = default_levels[location_name.level_names[stage_world.strip()]][int(stage_stage) - 1]
+                    levels[location_name.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
                     possible_stages.remove(new_stage)
 
                 except Exception:
@@ -148,20 +148,16 @@ def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, Li
         for level in range(1, 6):
             for stage in range(6):
                 # Randomize bosses separately
-                try:
-                    if levels[level][stage] is None:
-                        stage_candidates = [candidate for candidate in possible_stages
-                                            if (enforce_world and candidate in default_levels[level])
-                                            or (enforce_pattern and ((candidate - 1) & 0x00FFFF) % 6 == stage)
-                                            or (enforce_pattern == enforce_world)
+                if levels[level][stage] is None:
+                    stage_candidates = [candidate for candidate in possible_stages
+                                            if (shuffle_mode == 1 and candidate in default_levels[level])
+                                            or (shuffle_mode == 2 and ((candidate - 1) & 0x00FFFF) % 6 == stage)
+                                            or (shuffle_mode == 3)
                                             ]
-                        new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
-                        possible_stages.remove(new_stage)
-
-                except Exception:
-                    raise Exception(
-                            f"Invalid connection: {connection.entrance} =>"
-                            f" {connection.exit} for player {world.player} ({world.player_name})")
+                    if not stage_candidates:
+                        raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
+                    new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
+                    possible_stages.remove(new_stage)
     else:
         levels = deepcopy(default_levels)
         for level in levels:
