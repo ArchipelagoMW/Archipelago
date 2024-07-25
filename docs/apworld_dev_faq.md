@@ -2,7 +2,7 @@
 
 This document is meant as a reference tool to show solutions to common problems when developing an apworld.
 It also is not intended to answer every question about Archipelago and it assumes you have read the other docs, 
-for example: [Contributing](contributing.md), [Adding Games](<adding games.md>), [World Api](<world api.md>)
+for example, [Contributing](contributing.md), [Adding Games](<adding games.md>), and [World API](<world api.md>).
 
 ---
 
