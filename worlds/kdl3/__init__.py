@@ -235,7 +235,8 @@ class KDL3World(World):
                             new_animal = self.random.choice([x for x in ["Rick Spawn", "Coo Spawn", "Kine Spawn",
                                                                          "ChuChu Spawn", "Nago Spawn", "Pitch Spawn"]
                                                              if x not in placed_names])
-                            spawn_location.item = self.create_item(new_animal)
+                            spawn_location.item = None
+                            spawn_location.place_locked_item(self.create_item(new_animal))
                             # logically, this should be sound pre-ER. May need to adjust around it with ER in the future
         else:
             animal_friends = animal_friend_spawns.copy()

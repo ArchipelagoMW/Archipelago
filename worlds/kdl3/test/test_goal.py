@@ -5,7 +5,7 @@ class TestFastGoal(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "fast",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
     }
@@ -30,7 +30,7 @@ class TestNormalGoal(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "normal",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
     }

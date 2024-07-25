@@ -8,7 +8,7 @@ class TestCopyAbilityShuffle(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "normal",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
         "copy_ability_randomization": "enabled",
@@ -117,7 +117,7 @@ class TestAnimalShuffle(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "normal",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
         "animal_randomization": "full",
@@ -189,7 +189,7 @@ class TestAllShuffle(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "normal",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
         "animal_randomization": "full",
