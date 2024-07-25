@@ -15,7 +15,7 @@ class RemoteItems(DefaultOnToggle):
 
 
 class KDL3PlandoConnections(PlandoConnections):
-    entrances = exits = {f"{i} {j}" for i in LocationName.level_names for j in range(1, 7)}
+    entrances = exits = {f"{i} {j}" for i in location_name.level_names for j in range(1, 7)}
 
 
 class Goal(Choice):
