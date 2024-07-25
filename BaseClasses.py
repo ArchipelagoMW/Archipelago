@@ -681,45 +681,54 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
-        locations_per_player: Dict[int, Set[Location]]
+        events_per_player: Dict[int, Set[Location]]
+
         # since the loop has a good chance to run more than once, only filter the events once
+        def event_filter(location: Location):
+            return (location.advancement and location not in self.events and not key_only
+                    or getattr(location.item, "locked_dungeon_item", False))
         if locations is None:
-            locations_per_player = {}
-            for player in self.multiworld.player_ids:
-                locations_per_player[player] = {location for location in self.multiworld.get_filled_locations(player)
-                                                if location.advancement
-                                                and location not in self.events
-                                                and not key_only
-                                                or getattr(location.item, "locked_dungeon_item", False)}
+            # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and
+            # because `location.advancement` in the filter also checks for `location.item is not None`.
+            events_per_player = {player: set(filter(event_filter, locations_dict.values()))
+                                 for player, locations_dict in self.multiworld.regions.location_cache.items()}
         else:
-            locations_per_player = {player: set() for player in self.multiworld.player_ids}
+            # Can't iterate self.multiworld.player_ids because it doesn't include the extra player IDs used for item
+            # links, so iterate the keys of the location_cache.
+            events_per_player = {player: set() for player in self.multiworld.regions.location_cache.keys()}
             for location in locations:
-                if (location.advancement
-                        and location not in self.events
-                        and not key_only
-                        or getattr(location.item, "locked_dungeon_item", False)):
-                    locations_per_player[location.player].add(location)
-            # Remove any empty sets.
-            for player, locations in list(locations_per_player.items()):
-                if not locations:
-                    del locations_per_player[player]
+                if event_filter(location):
+                    events_per_player[location.player].add(location)
+
+        # Remove any empty sets to reduce iterations of `events_per_player`.
+        for player, events in list(events_per_player.items()):
+            if not events:
+                del events_per_player[player]
 
         reachable_events = True
-        last_sweep_players = set(self.multiworld.player_ids)
+        # The first iteration must check the locations of all players because it is not known which players might have
+        # reachable locations.
+        players_to_check = set(self.multiworld.player_ids)
         while reachable_events:
-            loc_gen = itertools.chain.from_iterable(v for k, v in locations_per_player.items() if k in last_sweep_players)
-            reachable_events = {location for location in loc_gen if location.can_reach(self)}
-            last_sweep_players.clear()
+            # Iterable of all locations belonging to the players to check.
+            loc_gen: Iterable[Location] = itertools.chain.from_iterable(
+                locations for player, locations in events_per_player.items() if player in players_to_check)
+            # Iterate reachable events into a list so that the sets in `events_per_player` can be modified while
+            # iterating through the reachable events.
+            reachable_events = [location for location in loc_gen if location.can_reach(self)]
+            # Clear the players to check to prepare for the next iteration.
+            players_to_check.clear()
             for event in reachable_events:
-                locations_per_player[event.player].remove(event)
+                events_per_player[event.player].remove(event)
                 self.events.add(event)
                 item = event.item
                 assert isinstance(item, Item), "tried to collect Event with no Item"
                 changed = self.collect(item, True, event)
                 if changed:
-                    last_sweep_players.add(item.player)
-                    # Do we need to also include the player the location belongs to because of custom collect() methods?
-                    # last_sweep_players.add(event.player)
+                    # Collecting the item logically affected the owning player of the item, so it could mean the owning
+                    # player can now access additional locations, so their locations should be checked in the next
+                    # loop.
+                    players_to_check.add(item.player)
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
