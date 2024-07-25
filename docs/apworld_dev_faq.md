@@ -6,7 +6,7 @@ This document is meant as a reference tool to show solutions to common problems 
 
 ### My game has a restrictive start that leads to fill errors
 
-Hint to the Generator that an item needs to be in sphere one with local_early_items. Here `1` represents the number of "Sword" items to attempt to place in sphere one.
+Hint to the Generator that an item needs to be in sphere one with local_early_items. Here, `1` represents the number of "Sword" items to attempt to place in sphere one.
 ```py
 early_item_name = "Sword"
 self.multiworld.local_early_items[self.player][early_item_name] = 1
