@@ -214,7 +214,6 @@ class ShiversWorld(World):
 
         return {
             "StoragePlacements": self.storage_placements,
-            "ExcludedLocations": {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()},
             "ExcludedLocations": self.options.exclude_locations.value,
             "IxupiCapturesNeeded": self.options.ixupi_captures_needed.value,
             "ElevatorsStaySolved": self.options.elevators_stay_solved.value,
