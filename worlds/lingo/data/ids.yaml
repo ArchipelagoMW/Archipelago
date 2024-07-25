@@ -272,8 +272,9 @@ panels:
     PAINTING (4): 445081
     PAINTING (5): 445082
     ROOM: 445083
-  Orange Tower Seventh Floor:
+  Ending Area:
     THE END: 444620
+  Orange Tower Seventh Floor:
     THE MASTER: 444621
     MASTERY: 444622
   Behind A Smile:
@@ -766,7 +767,6 @@ panels:
     BOUNCE: 445010
     SCRAWL: 445011
     PLUNGE: 445012
-    LEAP: 445013
   Rhyme Room (Circle):
     BIRD: 445014
     LETTER: 445015
@@ -790,6 +790,7 @@ panels:
     GEM: 445031
     INNOVATIVE (Top): 445032
     INNOVATIVE (Bottom): 445033
+    LEAP: 445013
   Room Room:
     DOOR (1): 445034
     DOOR (2): 445035
