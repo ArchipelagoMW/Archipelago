@@ -138,16 +138,16 @@ def handle_uri(path: str) -> Tuple[Union[None, str], Union[None, Component]]:
 
             text_client_button = Button(
                 text=text_client_component.display_name,
-                on_release=lambda *args: launch(get_exe(text_client_component), True, path)
+                on_release=lambda *args: launch(get_exe(text_client_component), True)
             )
             button_row.add_widget(text_client_button)
 
             if client_component is not None:
                 def launch_component(*args) -> None:
                     if client_component.func:
-                        client_component.func(path)
+                        client_component.func()
                     else:
-                        launch(get_exe(client_component), True, path)
+                        launch(get_exe(client_component), True)
 
                 game_client_button = Button(
                     text=client_component.display_name,
@@ -203,21 +203,21 @@ def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
         return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
-def launch(exe, in_terminal=False, *args):
+def launch(exe, in_terminal=False):
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe, *args], shell=True)
+            subprocess.Popen(['start', *exe], shell=True)
             return
         elif is_linux:
             terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
             if terminal:
-                subprocess.Popen([terminal, '-e', shlex.join(exe), *args])
+                subprocess.Popen([terminal, '-e', shlex.join(exe)])
                 return
         elif is_macos:
             terminal = [which('open'), '-W', '-a', 'Terminal.app']
-            subprocess.Popen([*terminal, *exe, *args])
+            subprocess.Popen([*terminal, *exe])
             return
-    subprocess.Popen([*exe, *args])
+    subprocess.Popen(exe)
 
 
 refresh_components: Optional[Callable[[], None]] = None
