@@ -684,9 +684,13 @@ class CollectionState():
         events_per_player: Dict[int, Set[Location]]
 
         # since the loop has a good chance to run more than once, only filter the events once
-        def event_filter(location: Location):
-            return (location.advancement and location not in self.events and not key_only
-                    or getattr(location.item, "locked_dungeon_item", False))
+        if key_only:
+            def event_filter(location: Location):
+                return location.item is not None and getattr(location.item, "locked_dungeon_item", False)
+        else:
+            def event_filter(location: Location):
+                return (location.advancement and location not in self.events
+                        or getattr(location.item, "locked_dungeon_item", False))
         if locations is None:
             # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and
             # because `location.advancement` in the filter also checks for `location.item is not None`.
