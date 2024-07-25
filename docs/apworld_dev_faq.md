@@ -31,19 +31,13 @@ Note: to use self.create_filler(), self.get_filler_item_name() should be defined
 total_locations = len(self.multiworld.get_unfilled_locations(self.player))
 item_pool = self.create_non_filler_items()
 
-while len(item_pool) < total_locations:
+for _ in range(total_locations - len(item_pool)):
     item_pool.append(self.create_filler())
 
 self.multiworld.itempool += item_pool
 ```
 
-One faster alternative to the `while` loop above would be to use a `for` loop:
-```py
-for _ in range(total_locations - len(item_pool)):
-    item_pool.append(self.create_filler())
-```
-
-A yet faster alternative would be to use a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions):
+A faster alternative to the `for` loop would be to use a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions):
 ```py
 item_pool += [self.create_filler() for _ in range(total_locations - len(item_pool))]
 ```
