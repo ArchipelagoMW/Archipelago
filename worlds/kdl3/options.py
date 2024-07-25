@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List
 
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions, Visibility, NamedRange, OptionGroup
+    PerGameCommonOptions, Visibility, NamedRange, OptionGroup, PlandoConnections
 from .names import location_name
 
 
@@ -12,6 +12,10 @@ class RemoteItems(DefaultOnToggle):
     Enables receiving items from your own world, primarily for co-op play.
     """
     display_name = "Remote Items"
+
+
+class KDL3PlandoConnections(PlandoConnections):
+    entrances = exits = {f"{i} {j}" for i in LocationName.level_names for j in range(1, 7)}
 
 
 class Goal(Choice):
@@ -429,6 +433,7 @@ class TotalHeartStars(NamedRange):
 @dataclass
 class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
     remote_items: RemoteItems
+    plando_connections: KDL3PlandoConnections
     game_language: GameLanguage
     goal: Goal
     goal_speed: GoalSpeed

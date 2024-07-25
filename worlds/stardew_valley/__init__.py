@@ -1,28 +1,31 @@
 import logging
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
+from .content import content_packs, StardewContent, unpack_content, create_content
 from .early_items import setup_early_items
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization
+from .option_groups import sv_option_groups
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, EnabledFillerBuffs, NumberOfMovementBuffs, \
+    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, HasProgressionPercent
+from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
-from .strings.region_names import Region as RegionName
+from .strings.metal_names import Ore
+from .strings.region_names import Region as RegionName, LogicRegion
 
 client_version = 0
 
@@ -39,6 +42,7 @@ class StardewWebWorld(WebWorld):
     theme = "dirt"
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
     options_presets = sv_options_presets
+    option_groups = sv_option_groups
 
     tutorials = [
         Tutorial(
@@ -71,11 +75,11 @@ class StardewValleyWorld(World):
             [location.name for location in locations] for group, locations in locations_by_tag.items()
     }
 
-    data_version = 3
     required_client_version = (0, 4, 0)
 
     options_dataclass = StardewValleyOptions
     options: StardewValleyOptions
+    content: StardewContent
     logic: StardewLogic
 
     web = StardewWebWorld()
@@ -93,6 +97,7 @@ class StardewValleyWorld(World):
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
+        self.content = create_content(self.options)
 
     def force_change_options_if_incompatible(self):
         goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
@@ -105,6 +110,11 @@ class StardewValleyWorld(World):
             player_name = self.multiworld.player_name[self.player]
             logging.warning(
                 f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
+        if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
+            self.options.walnutsanity.value = Walnutsanity.preset_none
+            player_name = self.multiworld.player_name[self.player]
+            logging.warning(
+                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({player_name})'s world, so walnutsanity was force disabled")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -114,9 +124,10 @@ class StardewValleyWorld(World):
 
         world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
 
-        self.logic = StardewLogic(self.player, self.options, world_regions.keys())
+        self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random,
                                                 self.logic,
+                                                self.content,
                                                 self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
@@ -124,11 +135,12 @@ class StardewValleyWorld(World):
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(add_location, self.modified_bundles, self.options, self.random)
+        create_locations(add_location, self.modified_bundles, self.options, self.content, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
         self.precollect_starting_season()
+        self.precollect_farm_type_items()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
                             if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
@@ -142,7 +154,7 @@ class StardewValleyWorld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if location.address is not None])
 
-        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options,
+        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options, self.content,
                                      self.random)
 
         self.multiworld.itempool += created_items
@@ -172,10 +184,15 @@ class StardewValleyWorld(World):
         starting_season = self.create_starting_item(self.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
+    def precollect_farm_type_items(self):
+        if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
+            self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
+
     def setup_player_events(self):
         self.setup_construction_events()
         self.setup_quest_events()
         self.setup_action_events()
+        self.setup_logic_events()
 
     def setup_construction_events(self):
         can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
@@ -186,10 +203,26 @@ class StardewValleyWorld(World):
         self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
 
     def setup_action_events(self):
-        can_ship_event = LocationData(None, RegionName.shipping, Event.can_ship_items)
-        self.create_event_location(can_ship_event, True_(), Event.can_ship_items)
+        can_ship_event = LocationData(None, LogicRegion.shipping, Event.can_ship_items)
+        self.create_event_location(can_ship_event, true_, Event.can_ship_items)
         can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
-        self.create_event_location(can_shop_pierre_event, True_(), Event.can_shop_at_pierre)
+        self.create_event_location(can_shop_pierre_event, true_, Event.can_shop_at_pierre)
+
+        spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
+        self.create_event_location(spring_farming, true_, Event.spring_farming)
+        summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
+        self.create_event_location(summer_farming, true_, Event.summer_farming)
+        fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
+        self.create_event_location(fall_farming, true_, Event.fall_farming)
+        winter_farming = LocationData(None, LogicRegion.winter_farming, Event.winter_farming)
+        self.create_event_location(winter_farming, true_, Event.winter_farming)
+
+    def setup_logic_events(self):
+        def register_event(name: str, region: str, rule: StardewRule):
+            event_location = LocationData(None, region, name)
+            self.create_event_location(event_location, rule, name)
+
+        self.logic.setup_events(register_event)
 
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:
@@ -210,7 +243,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_master_angler:
             self.create_event_location(location_table[GoalName.master_angler],
-                                       self.logic.fishing.can_catch_every_fish_in_slot(self.get_all_location_names()),
+                                       self.logic.fishing.can_catch_every_fish_for_fishsanity(),
                                        Event.victory)
         elif self.options.goal == Goal.option_complete_collection:
             self.create_event_location(location_table[GoalName.complete_museum],
@@ -222,7 +255,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_greatest_walnut_hunter:
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
-                                       self.logic.has_walnut(130),
+                                       self.logic.walnut.has_walnut(130),
                                        Event.victory)
         elif self.options.goal == Goal.option_protector_of_the_valley:
             self.create_event_location(location_table[GoalName.protector_of_the_valley],
@@ -269,18 +302,13 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression and item.name != Event.victory:
+        if override_classification == ItemClassification.progression:
             self.total_progression_items += 1
-            # if item.name not in self.all_progression_items:
-            #     self.all_progression_items[item.name] = 0
-            # self.all_progression_items[item.name] += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
 
     def delete_item(self, item: Item):
         if item.classification & ItemClassification.progression:
             self.total_progression_items -= 1
-            # if item.name in self.all_progression_items:
-            #     self.all_progression_items[item.name] -= 1
 
     def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
@@ -298,7 +326,11 @@ class StardewValleyWorld(World):
         location = StardewLocation(self.player, location_data.name, None, region)
         location.access_rule = rule
         region.locations.append(location)
-        location.place_locked_item(self.create_item(item))
+        location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
+
+        # This is not ideal, but the rule count them so...
+        if item != Event.victory:
+            self.total_progression_items += 1
 
     def set_rules(self):
         set_rules(self)
@@ -357,7 +389,7 @@ class StardewValleyWorld(World):
                         quality = ""
                     else:
                         quality = f" ({item.quality.split(' ')[0]})"
-                    spoiler_handle.write(f"\t\t{item.amount}x {item.item_name}{quality}\n")
+                    spoiler_handle.write(f"\t\t{item.amount}x {item.get_item()}{quality}\n")
 
     def add_entrances_to_spoiler_log(self):
         if self.options.entrance_randomization == EntranceRandomization.option_disabled:
@@ -372,9 +404,9 @@ class StardewValleyWorld(World):
             for bundle in room.bundles:
                 bundles[room.name][bundle.name] = {"number_required": bundle.number_required}
                 for i, item in enumerate(bundle.items):
-                    bundles[room.name][bundle.name][i] = f"{item.item_name}|{item.amount}|{item.quality}"
+                    bundles[room.name][bundle.name][i] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
-        excluded_options = [BundleRandomization, NumberOfMovementBuffs, NumberOfLuckBuffs]
+        excluded_options = [BundleRandomization, NumberOfMovementBuffs, EnabledFillerBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names.extend(generic_option_names)
@@ -384,7 +416,29 @@ class StardewValleyWorld(World):
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": bundles,
-            "client_version": "5.0.0",
+            "client_version": "6.0.0",
         })
 
         return slot_data
+
+    def collect(self, state: CollectionState, item: StardewItem) -> bool:
+        change = super().collect(state, item)
+        if change:
+            state.prog_items[self.player][Event.received_walnuts] += self.get_walnut_amount(item.name)
+        return change
+
+    def remove(self, state: CollectionState, item: StardewItem) -> bool:
+        change = super().remove(state, item)
+        if change:
+            state.prog_items[self.player][Event.received_walnuts] -= self.get_walnut_amount(item.name)
+        return change
+
+    @staticmethod
+    def get_walnut_amount(item_name: str) -> int:
+        if item_name == "Golden Walnut":
+            return 1
+        if item_name == "3 Golden Walnuts":
+            return 3
+        if item_name == "5 Golden Walnuts":
+            return 5
+        return 0

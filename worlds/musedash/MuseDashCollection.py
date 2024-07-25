@@ -22,12 +22,15 @@ class MuseDashCollections:
     ]
 
     MUSE_PLUS_DLC: str = "Muse Plus"
+
+    # Ordering matters for webhost. Order goes: Muse Plus, Time Limited Muse Plus Dlcs, Paid Dlcs
     DLC: List[str] = [
-        # MUSE_PLUS_DLC, # To be included when OptionSets are rendered as part of basic settings.
-        # "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
-        "Miku in Museland", # Paid DLC not included in Muse Plus
-        "Rin Len's Mirrorland", # Paid DLC not included in Muse Plus
-        "MSR Anthology", # Now no longer available.
+        MUSE_PLUS_DLC,
+        "CHUNITHM COURSE MUSE",  # Part of Muse Plus. Goes away 22nd May 2027.
+        "maimai DX Limited-time Suite",  # Part of Muse Plus. Goes away 31st Jan 2026.
+        "MSR Anthology",  # Now no longer available.
+        "Miku in Museland",  # Paid DLC not included in Muse Plus
+        "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
     ]
 
     DIFF_OVERRIDES: List[str] = [
@@ -50,7 +53,7 @@ class MuseDashCollections:
     song_items: Dict[str, SongData] = {}
     song_locations: Dict[str, int] = {}
 
-    vfx_trap_items: Dict[str, int] = {
+    trap_items: Dict[str, int] = {
         "Bad Apple Trap": STARTING_CODE + 1,
         "Pixelate Trap": STARTING_CODE + 2,
         "Ripple Trap": STARTING_CODE + 3,
@@ -58,13 +61,15 @@ class MuseDashCollections:
         "Chromatic Aberration Trap": STARTING_CODE + 5,
         "Background Freeze Trap": STARTING_CODE + 6,
         "Gray Scale Trap": STARTING_CODE + 7,
-        "Focus Line Trap": STARTING_CODE + 10,
-    }
-
-    sfx_trap_items: Dict[str, int] = {
         "Nyaa SFX Trap": STARTING_CODE + 8,
         "Error SFX Trap": STARTING_CODE + 9,
+        "Focus Line Trap": STARTING_CODE + 10,  
     }
+
+    sfx_trap_items: List[str] = [
+        "Nyaa SFX Trap",
+        "Error SFX Trap",
+    ]
 
     filler_items: Dict[str, int] = {
         "Great To Perfect (10 Pack)": STARTING_CODE + 30,
@@ -78,7 +83,7 @@ class MuseDashCollections:
         "Extra Life": 1,
     }
 
-    item_names_to_id: ChainMap = ChainMap({}, filler_items, sfx_trap_items, vfx_trap_items)
+    item_names_to_id: ChainMap = ChainMap({}, filler_items, trap_items)
     location_names_to_id: ChainMap = ChainMap(song_locations, album_locations)
 
     def __init__(self) -> None:
@@ -170,6 +175,9 @@ class MuseDashCollections:
                 continue
 
         return filtered_list
+
+    def filter_songs_to_dlc(self, song_list: List[str], dlc_songs: Set[str]) -> List[str]:
+        return [song for song in song_list if self.song_matches_dlc_filter(self.song_items[song], dlc_songs)]
 
     def song_matches_dlc_filter(self, song: SongData, dlc_songs: Set[str]) -> bool:
         if song.album in self.FREE_ALBUMS:
