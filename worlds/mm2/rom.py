@@ -6,11 +6,11 @@ import os
 
 import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
-from . import Names
-from .Rules import minimum_weakness_requirement
-from .Text import MM2TextEntry
-from .Color import get_colors_for_item, write_palette_shuffle
-from .Options import EnergyLink, Consumables, ReduceFlashing, RandomMusic
+from . import names
+from .rules import minimum_weakness_requirement
+from .text import MM2TextEntry
+from .color import get_colors_for_item, write_palette_shuffle
+from .options import EnergyLink, Consumables, ReduceFlashing, RandomMusic
 
 if TYPE_CHECKING:
     from . import MM2World

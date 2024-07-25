@@ -1,7 +1,7 @@
 from math import ceil
 
 from . import MM2TestBase
-from ..Options import bosses
+from ..options import bosses
 
 
 # Need to figure out how this test should work

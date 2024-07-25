@@ -1,12 +1,12 @@
 from typing import Dict, Tuple, List, TYPE_CHECKING, Union
-from . import Names
+from . import names
 from zlib import crc32
 import struct
 import logging
 
 if TYPE_CHECKING:
     from . import MM2World
-    from .Rom import MM2ProcedurePatch
+    from .rom import MM2ProcedurePatch
 
 HTML_TO_NES: Dict[str, int] = {
     'SNOW': 0x20,

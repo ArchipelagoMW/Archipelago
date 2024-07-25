@@ -4,16 +4,16 @@ from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
-from .Names import (dr_wily, heat_man_stage, air_man_stage, wood_man_stage, bubble_man_stage, quick_man_stage,
+from .names import (dr_wily, heat_man_stage, air_man_stage, wood_man_stage, bubble_man_stage, quick_man_stage,
                     flash_man_stage, metal_man_stage, crash_man_stage)
-from .Items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
+from .items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, item_item_table, lookup_item_to_id)
-from .Locations import (MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id,
+from .locations import (MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id,
                         location_groups)
-from .Rom import patch_rom, MM2ProcedurePatch, MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
-from .Options import MM2Options
-from .Client import MegaMan2Client
-from .Rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
+from .rom import patch_rom, MM2ProcedurePatch, MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
+from .options import MM2Options
+from .client import MegaMan2Client
+from .rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
 import os
 import threading
 import base64
