@@ -258,7 +258,6 @@ class KDL3World(World):
             max_heart_stars = remaining_items
         # ensure at least 1 heart star required per world
         required_heart_stars = min(max(int(max_heart_stars * required_percentage), 5), 99)
-        required_heart_stars = min(required_heart_stars, remaining_items)
         filler_items = remaining_items - required_heart_stars
         converted_heart_stars = math.floor((max_heart_stars - required_heart_stars) * (self.options.filler_percentage / 100.0))
         non_required_heart_stars = max_heart_stars - converted_heart_stars - required_heart_stars
