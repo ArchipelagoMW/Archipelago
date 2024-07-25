@@ -32,5 +32,26 @@ class YearRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class CombatRequirement(Requirement):
+    level: str
+
+
+@dataclass(frozen=True)
+class QuestRequirement(Requirement):
+    quest: str
+
+
+@dataclass(frozen=True)
+class RelationshipRequirement(Requirement):
+    npc: str
+    hearts: int
+
+
+@dataclass(frozen=True)
+class FishingRequirement(Requirement):
+    region: str
+
+
+@dataclass(frozen=True)
 class WalnutRequirement(Requirement):
     amount: int

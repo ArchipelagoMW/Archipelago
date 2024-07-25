@@ -3,15 +3,20 @@ from typing import Union, Iterable
 
 from .base_logic import BaseLogicMixin, BaseLogic
 from .book_logic import BookLogicMixin
+from .combat_logic import CombatLogicMixin
+from .fishing_logic import FishingLogicMixin
 from .has_logic import HasLogicMixin
+from .quest_logic import QuestLogicMixin
 from .received_logic import ReceivedLogicMixin
+from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .walnut_logic import WalnutLogicMixin
 from ..data.game_item import Requirement
-from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, WalnutRequirement
+from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
+    RelationshipRequirement, FishingRequirement, WalnutRequirement
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -21,7 +26,7 @@ class RequirementLogicMixin(BaseLogicMixin):
 
 
 class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin,
-SeasonLogicMixin, TimeLogicMixin, WalnutLogicMixin]]):
+SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, RelationshipLogicMixin, FishingLogicMixin, WalnutLogicMixin]]):
 
     def meet_all_requirements(self, requirements: Iterable[Requirement]):
         if not requirements:
@@ -55,3 +60,21 @@ SeasonLogicMixin, TimeLogicMixin, WalnutLogicMixin]]):
     @meet_requirement.register
     def _(self, requirement: WalnutRequirement):
         return self.logic.walnut.has_walnut(requirement.amount)
+
+    @meet_requirement.register
+    def _(self, requirement: CombatRequirement):
+        return self.logic.combat.can_fight_at_level(requirement.level)
+
+    @meet_requirement.register
+    def _(self, requirement: QuestRequirement):
+        return self.logic.quest.can_complete_quest(requirement.quest)
+
+    @meet_requirement.register
+    def _(self, requirement: RelationshipRequirement):
+        return self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+
+    @meet_requirement.register
+    def _(self, requirement: FishingRequirement):
+        return self.logic.fishing.can_fish_at(requirement.region)
+
+
