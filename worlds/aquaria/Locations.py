@@ -272,9 +272,12 @@ class AquariaLocations:
     }
 
     locations_forest_bl = {
+        "Kelp Forest bottom left area, Transturtle": 698212,
+    }
+
+    locations_forest_bl_sc = {
         "Kelp Forest bottom left area, bulb close to the spirit crystals": 698054,
         "Kelp Forest bottom left area, Walker Baby": 698186,
-        "Kelp Forest bottom left area, Transturtle": 698212,
     }
 
     locations_forest_br = {
@@ -538,6 +541,7 @@ location_table = {
     **AquariaLocations.locations_forest_tr,
     **AquariaLocations.locations_forest_tr_fp,
     **AquariaLocations.locations_forest_bl,
+    **AquariaLocations.locations_forest_bl_sc,
     **AquariaLocations.locations_forest_br,
     **AquariaLocations.locations_forest_boss,
     **AquariaLocations.locations_forest_boss_entrance,

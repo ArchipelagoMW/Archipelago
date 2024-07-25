@@ -167,6 +167,7 @@ class AquariaRegions:
     forest_tr: Region
     forest_tr_fp: Region
     forest_bl: Region
+    forest_bl_sc: Region
     forest_br: Region
     forest_boss: Region
     forest_boss_entrance: Region
@@ -338,6 +339,8 @@ class AquariaRegions:
                                               AquariaLocations.locations_forest_tr_fp)
         self.forest_bl = self.__add_region("Kelp Forest bottom left area",
                                            AquariaLocations.locations_forest_bl)
+        self.forest_bl_sc = self.__add_region("Kelp Forest bottom left area, spirit crystals",
+                                              AquariaLocations.locations_forest_bl_sc)
         self.forest_br = self.__add_region("Kelp Forest bottom right area",
                                            AquariaLocations.locations_forest_br)
         self.forest_sprite_cave = self.__add_region("Kelp Forest spirit cave",
@@ -652,6 +655,11 @@ class AquariaRegions:
                                self.forest_br, self.veil_bl)
         self.__connect_regions("Forest bottom right", "Forest bottom left area",
                                self.forest_br, self.forest_bl)
+        self.__connect_one_way_regions("Forest bottom left area", "Forest bottom left area, spirit crystals",
+                                       self.forest_bl, self.forest_bl_sc,
+                                       lambda state: _has_energy_attack_item(state, self.player))
+        self.__connect_one_way_regions("Forest bottom left area, spirit crystals", "Forest bottom left area",
+                               self.forest_bl_sc, self.forest_bl)
         self.__connect_regions("Forest bottom right", "Forest top right area",
                                self.forest_br, self.forest_tr)
         self.__connect_regions("Forest bottom left area", "Forest fish cave",
@@ -1309,6 +1317,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.forest_tr)
         self.multiworld.regions.append(self.forest_tr_fp)
         self.multiworld.regions.append(self.forest_bl)
+        self.multiworld.regions.append(self.forest_bl_sc)
         self.multiworld.regions.append(self.forest_br)
         self.multiworld.regions.append(self.forest_boss)
         self.multiworld.regions.append(self.forest_boss_entrance)
