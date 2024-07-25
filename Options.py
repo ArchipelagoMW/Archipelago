@@ -1515,7 +1515,7 @@ def dump_player_options(multiworld: MultiWorld) -> None:
                 if display_name not in all_options:
                     all_options.append(display_name)
 
-    with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w") as file:
+    with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
         fields = ["Game", "Name", *all_options]
         writer = DictWriter(file, fields)
         writer.writeheader()
