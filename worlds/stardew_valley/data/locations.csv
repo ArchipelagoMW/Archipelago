@@ -2088,7 +2088,7 @@ id,region,name,tags,mod_name
 3472,Farm,Craft Life Elixir,CRAFTSANITY,
 3473,Farm,Craft Oil of Garlic,CRAFTSANITY,
 3474,Farm,Craft Monster Musk,CRAFTSANITY,
-3475,Farm,Craft Fairy Dust,CRAFTSANITY,
+3475,Farm,Craft Fairy Dust,"CRAFTSANITY,GINGER_ISLAND",
 3476,Farm,Craft Warp Totem: Beach,CRAFTSANITY,
 3477,Farm,Craft Warp Totem: Mountains,CRAFTSANITY,
 3478,Farm,Craft Warp Totem: Farm,CRAFTSANITY,

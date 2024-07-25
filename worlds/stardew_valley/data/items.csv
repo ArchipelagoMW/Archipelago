@@ -307,7 +307,7 @@ id,name,classification,groups,mod_name
 322,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 323,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 324,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
-325,Fairy Dust Recipe,progression,,
+325,Fairy Dust Recipe,progression,"GINGER_ISLAND",
 326,Heavy Tapper Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 327,Hyper Speed-Gro Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 328,Deluxe Fertilizer Recipe,progression,QI_CRAFTING_RECIPE,
