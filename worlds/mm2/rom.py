@@ -135,17 +135,17 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     base_address = 0x3F650
     color_address = 0x37F6C
     for i, location in zip(range(11), [
-        Names.atomic_fire_get,
-        Names.air_shooter_get,
-        Names.leaf_shield_get,
-        Names.bubble_lead_get,
-        Names.quick_boomerang_get,
-        Names.time_stopper_get,
-        Names.metal_blade_get,
-        Names.crash_bomber_get,
-        Names.item_1_get,
-        Names.item_2_get,
-        Names.item_3_get
+        names.atomic_fire_get,
+        names.air_shooter_get,
+        names.leaf_shield_get,
+        names.bubble_lead_get,
+        names.quick_boomerang_get,
+        names.time_stopper_get,
+        names.metal_blade_get,
+        names.crash_bomber_get,
+        names.item_1_get,
+        names.item_2_get,
+        names.item_3_get
     ]):
         item = world.multiworld.get_location(location, world.player).item
         if item:

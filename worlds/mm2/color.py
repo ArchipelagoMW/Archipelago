@@ -57,25 +57,25 @@ HTML_TO_NES: Dict[str, int] = {
 }
 
 MM2_COLORS: Dict[str, Tuple[int, int]] = {
-    Names.atomic_fire: (0x28, 0x15),
-    Names.air_shooter: (0x20, 0x11),
-    Names.leaf_shield: (0x20, 0x19),
-    Names.bubble_lead: (0x20, 0x00),
-    Names.time_stopper: (0x34, 0x25),
-    Names.quick_boomerang: (0x34, 0x14),
-    Names.metal_blade: (0x37, 0x18),
-    Names.crash_bomber: (0x20, 0x26),
-    Names.item_1: (0x20, 0x16),
-    Names.item_2: (0x20, 0x16),
-    Names.item_3: (0x20, 0x16),
-    Names.heat_man_stage: (0x28, 0x15),
-    Names.air_man_stage: (0x28, 0x11),
-    Names.wood_man_stage: (0x36, 0x17),
-    Names.bubble_man_stage: (0x30, 0x19),
-    Names.quick_man_stage: (0x28, 0x15),
-    Names.flash_man_stage: (0x30, 0x12),
-    Names.metal_man_stage: (0x28, 0x15),
-    Names.crash_man_stage: (0x30, 0x16)
+    names.atomic_fire: (0x28, 0x15),
+    names.air_shooter: (0x20, 0x11),
+    names.leaf_shield: (0x20, 0x19),
+    names.bubble_lead: (0x20, 0x00),
+    names.time_stopper: (0x34, 0x25),
+    names.quick_boomerang: (0x34, 0x14),
+    names.metal_blade: (0x37, 0x18),
+    names.crash_bomber: (0x20, 0x26),
+    names.item_1: (0x20, 0x16),
+    names.item_2: (0x20, 0x16),
+    names.item_3: (0x20, 0x16),
+    names.heat_man_stage: (0x28, 0x15),
+    names.air_man_stage: (0x28, 0x11),
+    names.wood_man_stage: (0x36, 0x17),
+    names.bubble_man_stage: (0x30, 0x19),
+    names.quick_man_stage: (0x28, 0x15),
+    names.flash_man_stage: (0x30, 0x12),
+    names.metal_man_stage: (0x28, 0x15),
+    names.crash_man_stage: (0x30, 0x16)
 }
 
 MM2_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {

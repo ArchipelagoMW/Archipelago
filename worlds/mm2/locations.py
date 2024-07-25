@@ -12,177 +12,177 @@ class MM2Region(Region):
 
 
 heat_man_locations: Dict[str, Optional[int]] = {
-    Names.heat_man: 0x880001,
-    Names.atomic_fire_get: 0x880101,
-    Names.item_1_get: 0x880111,
+    names.heat_man: 0x880001,
+    names.atomic_fire_get: 0x880101,
+    names.item_1_get: 0x880111,
 }
 
 air_man_locations: Dict[str, Optional[int]] = {
-    Names.air_man: 0x880002,
-    Names.air_shooter_get: 0x880102,
-    Names.item_2_get: 0x880112
+    names.air_man: 0x880002,
+    names.air_shooter_get: 0x880102,
+    names.item_2_get: 0x880112
 }
 
 wood_man_locations: Dict[str, Optional[int]] = {
-    Names.wood_man: 0x880003,
-    Names.leaf_shield_get: 0x880103
+    names.wood_man: 0x880003,
+    names.leaf_shield_get: 0x880103
 }
 
 bubble_man_locations: Dict[str, Optional[int]] = {
-    Names.bubble_man: 0x880004,
-    Names.bubble_lead_get: 0x880104
+    names.bubble_man: 0x880004,
+    names.bubble_lead_get: 0x880104
 }
 
 quick_man_locations: Dict[str, Optional[int]] = {
-    Names.quick_man: 0x880005,
-    Names.quick_boomerang_get: 0x880105,
+    names.quick_man: 0x880005,
+    names.quick_boomerang_get: 0x880105,
 }
 
 flash_man_locations: Dict[str, Optional[int]] = {
-    Names.flash_man: 0x880006,
-    Names.time_stopper_get: 0x880106,
-    Names.item_3_get: 0x880113,
+    names.flash_man: 0x880006,
+    names.time_stopper_get: 0x880106,
+    names.item_3_get: 0x880113,
 }
 
 metal_man_locations: Dict[str, Optional[int]] = {
-    Names.metal_man: 0x880007,
-    Names.metal_blade_get: 0x880107
+    names.metal_man: 0x880007,
+    names.metal_blade_get: 0x880107
 }
 
 crash_man_locations: Dict[str, Optional[int]] = {
-    Names.crash_man: 0x880008,
-    Names.crash_bomber_get: 0x880108
+    names.crash_man: 0x880008,
+    names.crash_bomber_get: 0x880108
 }
 
 wily_1_locations: Dict[str, Optional[int]] = {
-    Names.wily_1: 0x880009,
-    Names.wily_stage_1: None
+    names.wily_1: 0x880009,
+    names.wily_stage_1: None
 }
 
 wily_2_locations: Dict[str, Optional[int]] = {
-    Names.wily_2: 0x88000A,
-    Names.wily_stage_2: None
+    names.wily_2: 0x88000A,
+    names.wily_stage_2: None
 }
 
 wily_3_locations: Dict[str, Optional[int]] = {
-    Names.wily_3: 0x88000B,
-    Names.wily_stage_3: None
+    names.wily_3: 0x88000B,
+    names.wily_stage_3: None
 }
 
 wily_4_locations: Dict[str, Optional[int]] = {
-    Names.wily_4: 0x88000C,
-    Names.wily_stage_4: None
+    names.wily_4: 0x88000C,
+    names.wily_stage_4: None
 }
 
 wily_5_locations: Dict[str, Optional[int]] = {
-    Names.wily_5: 0x88000D,
-    Names.wily_stage_5: None
+    names.wily_5: 0x88000D,
+    names.wily_stage_5: None
 }
 
 wily_6_locations: Dict[str, Optional[int]] = {
-    Names.dr_wily: None
+    names.dr_wily: None
 }
 
 etank_1ups: Dict[str, Dict[str, Optional[int]]] = {
     "Heat Man Stage": {
-        Names.heat_man_c1: 0x880201,
+        names.heat_man_c1: 0x880201,
     },
     "Quick Man Stage": {
-        Names.quick_man_c1: 0x880202,
-        Names.quick_man_c2: 0x880203,
-        Names.quick_man_c3: 0x880204,
-        Names.quick_man_c7: 0x880208,
+        names.quick_man_c1: 0x880202,
+        names.quick_man_c2: 0x880203,
+        names.quick_man_c3: 0x880204,
+        names.quick_man_c7: 0x880208,
     },
     "Flash Man Stage": {
-        Names.flash_man_c2: 0x88020B,
-        Names.flash_man_c6: 0x88020F,
+        names.flash_man_c2: 0x88020B,
+        names.flash_man_c6: 0x88020F,
     },
     "Metal Man Stage": {
-        Names.metal_man_c1: 0x880210,
-        Names.metal_man_c2: 0x880211,
-        Names.metal_man_c3: 0x880212,
+        names.metal_man_c1: 0x880210,
+        names.metal_man_c2: 0x880211,
+        names.metal_man_c3: 0x880212,
     },
     "Crash Man Stage": {
-        Names.crash_man_c2: 0x880214,
-        Names.crash_man_c3: 0x880215,
+        names.crash_man_c2: 0x880214,
+        names.crash_man_c3: 0x880215,
     },
     "Wily Stage 1": {
-        Names.wily_1_c1: 0x880216,
+        names.wily_1_c1: 0x880216,
     },
     "Wily Stage 2": {
-        Names.wily_2_c3: 0x88021A,
-        Names.wily_2_c4: 0x88021B,
-        Names.wily_2_c5: 0x88021C,
-        Names.wily_2_c6: 0x88021D,
+        names.wily_2_c3: 0x88021A,
+        names.wily_2_c4: 0x88021B,
+        names.wily_2_c5: 0x88021C,
+        names.wily_2_c6: 0x88021D,
     },
     "Wily Stage 3": {
-        Names.wily_3_c2: 0x880220,
+        names.wily_3_c2: 0x880220,
     },
     "Wily Stage 4": {
-        Names.wily_4_c3: 0x880225,
-        Names.wily_4_c4: 0x880226,
+        names.wily_4_c3: 0x880225,
+        names.wily_4_c4: 0x880226,
     }
 }
 
 energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
     "Quick Man Stage": {
-        Names.quick_man_c4: 0x880205,
-        Names.quick_man_c5: 0x880206,
-        Names.quick_man_c6: 0x880207,
-        Names.quick_man_c8: 0x880209,
+        names.quick_man_c4: 0x880205,
+        names.quick_man_c5: 0x880206,
+        names.quick_man_c6: 0x880207,
+        names.quick_man_c8: 0x880209,
     },
     "Flash Man Stage": {
-        Names.flash_man_c1: 0x88020A,
-        Names.flash_man_c3: 0x88020C,
-        Names.flash_man_c4: 0x88020D,
-        Names.flash_man_c5: 0x88020E,
+        names.flash_man_c1: 0x88020A,
+        names.flash_man_c3: 0x88020C,
+        names.flash_man_c4: 0x88020D,
+        names.flash_man_c5: 0x88020E,
     },
     "Crash Man Stage": {
-        Names.crash_man_c1: 0x880213,
+        names.crash_man_c1: 0x880213,
     },
     "Wily Stage 1": {
-        Names.wily_1_c2: 0x880217,
+        names.wily_1_c2: 0x880217,
     },
     "Wily Stage 2": {
-        Names.wily_2_c1: 0x880218,
-        Names.wily_2_c2: 0x880219,
-        Names.wily_2_c7: 0x88021E,
-        Names.wily_2_c8: 0x880227,
-        Names.wily_2_c9: 0x880228,
-        Names.wily_2_c10: 0x880229,
-        Names.wily_2_c11: 0x88022A,
-        Names.wily_2_c12: 0x88022B,
-        Names.wily_2_c13: 0x88022C,
-        Names.wily_2_c14: 0x88022D,
-        Names.wily_2_c15: 0x88022E,
-        Names.wily_2_c16: 0x88022F,
+        names.wily_2_c1: 0x880218,
+        names.wily_2_c2: 0x880219,
+        names.wily_2_c7: 0x88021E,
+        names.wily_2_c8: 0x880227,
+        names.wily_2_c9: 0x880228,
+        names.wily_2_c10: 0x880229,
+        names.wily_2_c11: 0x88022A,
+        names.wily_2_c12: 0x88022B,
+        names.wily_2_c13: 0x88022C,
+        names.wily_2_c14: 0x88022D,
+        names.wily_2_c15: 0x88022E,
+        names.wily_2_c16: 0x88022F,
     },
     "Wily Stage 3": {
-        Names.wily_3_c1: 0x88021F,
-        Names.wily_3_c3: 0x880221,
-        Names.wily_3_c4: 0x880222,
+        names.wily_3_c1: 0x88021F,
+        names.wily_3_c3: 0x880221,
+        names.wily_3_c4: 0x880222,
     },
     "Wily Stage 4": {
-        Names.wily_4_c1: 0x880223,
-        Names.wily_4_c2: 0x880224,
+        names.wily_4_c1: 0x880223,
+        names.wily_4_c2: 0x880224,
     }
 }
 
 mm2_regions: Dict[str, Tuple[Tuple[str, ...], Dict[str, Optional[int]], Optional[str]]] = {
-    "Heat Man Stage": ((Names.heat_man_stage,), heat_man_locations, None),
-    "Air Man Stage": ((Names.air_man_stage,), air_man_locations, None),
-    "Wood Man Stage": ((Names.wood_man_stage,), wood_man_locations, None),
-    "Bubble Man Stage": ((Names.bubble_man_stage,), bubble_man_locations, None),
-    "Quick Man Stage": ((Names.quick_man_stage,), quick_man_locations, None),
-    "Flash Man Stage": ((Names.flash_man_stage,), flash_man_locations, None),
-    "Metal Man Stage": ((Names.metal_man_stage,), metal_man_locations, None),
-    "Crash Man Stage": ((Names.crash_man_stage,), crash_man_locations, None),
-    "Wily Stage 1": ((Names.item_1, Names.item_2, Names.item_3), wily_1_locations, None),
-    "Wily Stage 2": ((Names.wily_stage_1,), wily_2_locations, "Wily Stage 1"),
-    "Wily Stage 3": ((Names.wily_stage_2,), wily_3_locations, "Wily Stage 2"),
-    "Wily Stage 4": ((Names.wily_stage_3,), wily_4_locations, "Wily Stage 3"),
-    "Wily Stage 5": ((Names.wily_stage_4,), wily_5_locations, "Wily Stage 4"),
-    "Wily Stage 6": ((Names.wily_stage_5,), wily_6_locations, "Wily Stage 5")
+    "Heat Man Stage": ((names.heat_man_stage,), heat_man_locations, None),
+    "Air Man Stage": ((names.air_man_stage,), air_man_locations, None),
+    "Wood Man Stage": ((names.wood_man_stage,), wood_man_locations, None),
+    "Bubble Man Stage": ((names.bubble_man_stage,), bubble_man_locations, None),
+    "Quick Man Stage": ((names.quick_man_stage,), quick_man_locations, None),
+    "Flash Man Stage": ((names.flash_man_stage,), flash_man_locations, None),
+    "Metal Man Stage": ((names.metal_man_stage,), metal_man_locations, None),
+    "Crash Man Stage": ((names.crash_man_stage,), crash_man_locations, None),
+    "Wily Stage 1": ((names.item_1, names.item_2, names.item_3), wily_1_locations, None),
+    "Wily Stage 2": ((names.wily_stage_1,), wily_2_locations, "Wily Stage 1"),
+    "Wily Stage 3": ((names.wily_stage_2,), wily_3_locations, "Wily Stage 2"),
+    "Wily Stage 4": ((names.wily_stage_3,), wily_4_locations, "Wily Stage 3"),
+    "Wily Stage 5": ((names.wily_stage_4,), wily_5_locations, "Wily Stage 4"),
+    "Wily Stage 6": ((names.wily_stage_5,), wily_6_locations, "Wily Stage 5")
 }
 
 location_table: Dict[str, Optional[int]] = {
@@ -209,17 +209,17 @@ for table in energy_pickups:
 
 location_groups = {
     "Get Equipped": {
-        Names.atomic_fire_get,
-        Names.air_shooter_get,
-        Names.leaf_shield_get,
-        Names.bubble_lead_get,
-        Names.quick_boomerang_get,
-        Names.time_stopper_get,
-        Names.metal_blade_get,
-        Names.crash_bomber_get,
-        Names.item_1_get,
-        Names.item_2_get,
-        Names.item_3_get
+        names.atomic_fire_get,
+        names.air_shooter_get,
+        names.leaf_shield_get,
+        names.bubble_lead_get,
+        names.quick_boomerang_get,
+        names.time_stopper_get,
+        names.metal_blade_get,
+        names.crash_bomber_get,
+        names.item_1_get,
+        names.item_2_get,
+        names.item_3_get
     },
     "Heat Man Stage": {*heat_man_locations.keys(), *etank_1ups["Heat Man Stage"].keys()},
     "Air Man Stage": {*air_man_locations.keys()},
@@ -232,8 +232,8 @@ location_groups = {
     "Metal Man Stage": {*metal_man_locations.keys(), *etank_1ups["Metal Man Stage"].keys()},
     "Crash Man Stage": {*crash_man_locations.keys(), *etank_1ups["Crash Man Stage"].keys(),
                         *energy_pickups["Crash Man Stage"].keys()},
-    "Wily 2 Weapon Energy": {Names.wily_2_c8, Names.wily_2_c9, Names.wily_2_c10, Names.wily_2_c11, Names.wily_2_c12,
-                             Names.wily_2_c13, Names.wily_2_c14, Names.wily_2_c15, Names.wily_2_c16}
+    "Wily 2 Weapon Energy": {names.wily_2_c8, names.wily_2_c9, names.wily_2_c10, names.wily_2_c11, names.wily_2_c12,
+                             names.wily_2_c13, names.wily_2_c14, names.wily_2_c15, names.wily_2_c16}
 }
 
 lookup_location_to_id: Dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}
