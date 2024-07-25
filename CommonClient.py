@@ -1034,12 +1034,12 @@ def run_as_textclient():
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
-        if url.netloc:
+        if url.scheme == "archipelago":
             args.connect = url.netloc
-        if url.username:
-            args.name = urllib.parse.unquote(url.username)
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
+            if url.username:
+                args.name = urllib.parse.unquote(url.username)
+            if url.password:
+                args.password = urllib.parse.unquote(url.password)
 
     colorama.init()
 
