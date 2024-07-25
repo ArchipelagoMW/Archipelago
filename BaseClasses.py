@@ -692,13 +692,13 @@ class CollectionState():
                 return (location.advancement and location not in self.events
                         or getattr(location.item, "locked_dungeon_item", False))
         if locations is None:
-            # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and
-            # because `location.advancement` in the filter also checks for `location.item is not None`.
+            # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
+            # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
             events_per_player = {player: set(filter(event_filter, locations_dict.values()))
                                  for player, locations_dict in self.multiworld.regions.location_cache.items()}
         else:
             # Can't iterate self.multiworld.player_ids because it doesn't include the extra player IDs used for item
-            # links, so iterate the keys of the location_cache.
+            # links, so iterate the keys of the location_cache instead.
             events_per_player = {player: set() for player in self.multiworld.regions.location_cache.keys()}
             for location in locations:
                 if event_filter(location):
@@ -709,7 +709,7 @@ class CollectionState():
             if not events:
                 del events_per_player[player]
 
-        # The first iteration must check the locations of all players because it is not known which players might have
+        # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
         players_to_check = set(self.multiworld.player_ids)
         while players_to_check:
@@ -730,7 +730,7 @@ class CollectionState():
                 if changed:
                     # Collecting the item logically affected the owning player of the item, so it could mean the owning
                     # player can now access additional locations, so their locations should be checked in the next
-                    # outer loop.
+                    # outer loop iteration.
                     players_to_check.add(item.player)
 
     # item name related
