@@ -116,12 +116,19 @@ class KH2Context(CommonContext):
         # self.inBattle = 0x2A0EAC4 + 0x40
         # self.onDeath = 0xAB9078
         # PC Address anchors
-        self.Now = 0x0714DB8
-        self.Save = 0x09A70B0
+        # self.Now = 0x0714DB8 old address
+        # epic addresses
+        self.Now = 0x0716DF8
+        self.Save = 0x09A92F0
+        self.Journal = 0x743260
+        self.Shop = 0x743350
+        self.Slot1 = 0x2A22FD8
         # self.Sys3 = 0x2A59DF0
         # self.Bt10 = 0x2A74880
         # self.BtlEnd = 0x2A0D3E0
-        self.Slot1 = 0x2A20C98
+        # self.Slot1 = 0x2A20C98 old address
+
+        self.kh2_game_version = None  # can be egs or steam
 
         self.chest_set = set(exclusion_table["Chests"])
         self.keyblade_set = set(CheckDupingItems["Weapons"]["Keyblades"])
@@ -227,6 +234,9 @@ class KH2Context(CommonContext):
 
     def kh2_write_int(self, address, value):
         self.kh2.write_int(self.kh2.base_address + address, value)
+
+    def kh2_read_string(self, address, length):
+        return self.kh2.read_string(self.kh2.base_address + address, length)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"RoomInfo"}:
@@ -367,10 +377,26 @@ class KH2Context(CommonContext):
             for weapon_location in all_weapon_slot:
                 all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
             self.all_weapon_location_id = set(all_weapon_location_id)
+
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                logger.info("You are now auto-tracking")
-                self.kh2connected = True
+                if self.kh2_game_version is None:
+                    if self.kh2_read_string(0x09A9830, 4) == "KH2J":
+                        self.kh2_game_version = "STEAM"
+                        self.Now = 0x0717008
+                        self.Save = 0x09A9830
+                        self.Slot1 = 0x2A23518
+                        self.Journal = 0x7434E0
+                        self.Shop = 0x7435D0
+
+                    elif self.kh2_read_string(0x09A92F0, 4) == "KH2J":
+                        self.kh2_game_version = "EGS"
+                    else:
+                        self.kh2_game_version = None
+                        logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
+                if self.kh2_game_version is not None:
+                    logger.info(f"You are now auto-tracking. {self.kh2_game_version}")
+                    self.kh2connected = True
 
             except Exception as e:
                 if self.kh2connected:
@@ -589,8 +615,8 @@ class KH2Context(CommonContext):
         # if journal=-1 and shop = 5 then in shop
         # if journal !=-1 and shop = 10 then journal
 
-        journal = self.kh2_read_short(0x741230)
-        shop = self.kh2_read_short(0x741320)
+        journal = self.kh2_read_short(self.Journal)
+        shop = self.kh2_read_short(self.Shop)
         if (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
             # print("your in the shop")
             sellable_dict = {}
@@ -599,8 +625,8 @@ class KH2Context(CommonContext):
                 amount = self.kh2_read_byte(self.Save + itemdata.memaddr)
                 sellable_dict[itemName] = amount
             while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
-                journal = self.kh2_read_short(0x741230)
-                shop = self.kh2_read_short(0x741320)
+                journal = self.kh2_read_short(self.Journal)
+                shop = self.kh2_read_short(self.Shop)
                 await asyncio.sleep(0.5)
             for item, amount in sellable_dict.items():
                 itemdata = self.item_name_to_data[item]
@@ -750,7 +776,7 @@ class KH2Context(CommonContext):
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0x741320) in {10, 8}:
+                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(self.Shop) in {10, 8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
@@ -802,7 +828,7 @@ class KH2Context(CommonContext):
                                 self.kh2_write_byte(self.Save + 0x2502, current_item_slots + 1)
                             elif self.base_item_slots + amount_of_items < 8:
                                 self.kh2_write_byte(self.Save + 0x2502, self.base_item_slots + amount_of_items)
-                                
+
                 # if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
                 #        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
                 #        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
@@ -905,8 +931,23 @@ async def kh2_watcher(ctx: KH2Context):
                     await asyncio.sleep(15)
                     ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                     if ctx.kh2 is not None:
-                        logger.info("You are now auto-tracking")
-                        ctx.kh2connected = True
+                        if ctx.kh2_game_version is None:
+                            if ctx.kh2_read_string(0x09A9830, 4) == "KH2J":
+                                ctx.kh2_game_version = "STEAM"
+                                ctx.Now = 0x0717008
+                                ctx.Save = 0x09A9830
+                                ctx.Slot1 = 0x2A23518
+                                ctx.Journal = 0x7434E0
+                                ctx.Shop = 0x7435D0
+
+                            elif ctx.kh2_read_string(0x09A92F0, 4) == "KH2J":
+                                ctx.kh2_game_version = "EGS"
+                            else:
+                                ctx.kh2_game_version = None
+                                logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
+                        if ctx.kh2_game_version is not None:
+                            logger.info(f"You are now auto-tracking {ctx.kh2_game_version}")
+                            ctx.kh2connected = True
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False
