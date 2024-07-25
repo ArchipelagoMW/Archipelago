@@ -124,10 +124,10 @@ class WitnessWorld(World):
         )
 
         if not has_locally_relevant_progression and self.multiworld.players == 1:
-            warning(f"{self.player_name(self.player)}'s Witness world doesn't have any progression"
+            warning(f"{self.player_name}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
-            raise OptionError(f"{self.player_name(self.player)}'s Witness world doesn't have enough"
+            raise OptionError(f"{self.player_name}'s Witness world doesn't have enough"
                               f" progression items that can be placed in other players' worlds. Please turn on Symbol"
                               f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
@@ -236,9 +236,10 @@ class WitnessWorld(World):
             self.player_locations.add_location_late(loc)
             self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
 
-            player = self.player_name(self.player)
-
-            warning(f"""Location "{loc}" had to be added to {player}'s world due to insufficient sphere 1 size.""")
+            warning(
+                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                due to insufficient sphere 1 size."""
+            )
 
     def create_items(self) -> None:
         # Determine pool size.
@@ -275,7 +276,7 @@ class WitnessWorld(World):
             self.multiworld.push_precollected(self.create_item(inventory_item_name))
 
         if len(item_pool) > pool_size:
-            error(f"{self.player_name(self.player)}'s Witness world has too few locations ({pool_size})"
+            error(f"{self.player_name}'s Witness world has too few locations ({pool_size})"
                   f" to place its necessary items ({len(item_pool)}).")
             return
 
@@ -285,7 +286,7 @@ class WitnessWorld(World):
         num_puzzle_skips = self.options.puzzle_skip_amount.value
 
         if num_puzzle_skips > remaining_item_slots:
-            warning(f"{self.player_name(self.player)}'s Witness world has insufficient locations"
+            warning(f"{self.player_name}'s Witness world has insufficient locations"
                     f" to place all requested puzzle skips.")
             num_puzzle_skips = remaining_item_slots
         item_pool["Puzzle Skip"] = num_puzzle_skips

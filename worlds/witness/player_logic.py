@@ -716,7 +716,7 @@ class WitnessPlayerLogic:
                     # If we are disabling a laser, something has gone wrong.
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         laser_name = static_witness_logic.ENTITIES_BY_HEX[entity]["checkName"]
-                        player_name = world.player_name(world.player)
+                        player_name = world.player_name
                         raise RuntimeError(f"Somehow, {laser_name} was disabled for player {player_name}."
                                            f" This is not allowed to happen, please report to Violet.")
 
