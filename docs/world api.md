@@ -306,6 +306,7 @@ An access rule is a function that returns `True` or `False` for a `Location` or 
 The two possible ways to make a CollectionRule are:
 - `def rule(state: CollectionState) -> bool:`
 - `lambda state: ... boolean expression ...`
+
 An access rule can be assigned through `set_rule(location, rule)`.
 
 Access rules usually check for one of two things.
