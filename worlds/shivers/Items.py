@@ -167,5 +167,7 @@ item_table = {
     "Heal": ItemData(SHIVERS_ITEM_ID_OFFSET + 112, ItemType.FILLER, ItemClassification.filler),
 
     # Victory item
-    f"Mt. Pleasant Tribune: {years_since_sep_30_1980} year Old Mystery Solved!": ItemData(SHIVERS_ITEM_ID_OFFSET + 113, ItemType.GOAL)
+    f"Mt. Pleasant Tribune: {years_since_sep_30_1980} year Old Mystery Solved!": ItemData(
+        SHIVERS_ITEM_ID_OFFSET + 113, ItemType.GOAL
+    )
 }

@@ -66,19 +66,19 @@ class ShiversWorld(World):
         
         # Locations
         # Build exclusion list
-        self.removed_locations = set()
+        removed_locations = set()
         if not self.options.include_information_plaques:
-            self.removed_locations.update(Constants.exclusion_info["plaques"])
+            removed_locations.update(Constants.exclusion_info["plaques"])
         if not self.options.elevators_stay_solved:
-            self.removed_locations.update(Constants.exclusion_info["elevators"])
+            removed_locations.update(Constants.exclusion_info["elevators"])
         if not self.options.early_lightning:
-            self.removed_locations.update(Constants.exclusion_info["lightning"])
+            removed_locations.update(Constants.exclusion_info["lightning"])
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
-                if loc_name not in self.removed_locations:
+                if loc_name not in removed_locations:
                     loc = ShiversLocation(self.player, loc_name, self.location_name_to_id.get(loc_name, None), region)
                     region.locations.append(loc)
 
@@ -103,7 +103,9 @@ class ShiversWorld(World):
 
         # Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
-        library_location = self.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Storage:")])
+        library_location = self.random.choice(
+            [loc for loc in library_region.locations if not loc.name.startswith("Storage:")]
+        )
 
         # Roll for which escape items will be placed in the Library
         library_random = self.random.randint(1, 3)
@@ -115,11 +117,16 @@ class ShiversWorld(World):
             item_pool = [item for item in item_pool if item.name != "Key for Library"]
         elif library_random == 3:
             library_location.place_locked_item(self.create_item("Key for Three Floor Elevator"))
-            library_location_2 = self.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Storage:") and loc != library_location])
+            library_location_2 = self.random.choice(
+                [loc for loc in library_region.locations if
+                 not loc.name.startswith("Storage:") and loc != library_location]
+            )
             library_location_2.place_locked_item(self.create_item("Key for Egypt Room"))
-            item_pool = [item for item in item_pool if item.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
+            item_pool = [item for item in item_pool if
+                         item.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
 
-        # If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
+        # If front door option is on, determine which set of keys will
+        # be used for lobby access and add front door key to item pool
         lobby_access_keys = 1
         if self.options.front_door_usable:
             lobby_access_keys = self.random.randint(1, 2)
@@ -127,27 +134,27 @@ class ShiversWorld(World):
         else:
             item_pool += [self.create_item("Heal")]
 
+        def set_lobby_access_keys(items: dict[str, int]):
+            if lobby_access_keys == 1:
+                items["Key for Underground Lake"] = 1
+                items["Key for Office Elevator"] = 1
+                items["Key for Office"] = 1
+            elif lobby_access_keys == 2:
+                items["Key for Front Door"] = 1
+
+        # Lobby access:
+        if self.options.lobby_access == 1:
+            set_lobby_access_keys(self.multiworld.early_items[self.player])
+        if self.options.lobby_access == 2:
+            set_lobby_access_keys(self.multiworld.local_early_items[self.player])
+
         # Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
         filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 24
-        item_pool += [self.random.choices([self.create_item("Heal"), self.create_item("Easier Lyre")], weights=[95, 5])[0] for _ in range(filler_needed)]
+        item_pool += self.random.choices(
+            [self.create_item("Heal"), self.create_item("Easier Lyre")], weights=[95, 5], k=filler_needed
+        )
 
         self.multiworld.itempool += item_pool
-
-        # Lobby acess:
-        if self.options.lobby_access == 1:
-            if lobby_access_keys == 1:
-                self.multiworld.early_items[self.player]["Key for Underground Lake"] = 1
-                self.multiworld.early_items[self.player]["Key for Office Elevator"] = 1
-                self.multiworld.early_items[self.player]["Key for Office"] = 1
-            elif lobby_access_keys == 2:
-                self.multiworld.early_items[self.player]["Key for Front Door"] = 1
-        if self.options.lobby_access == 2:
-            if lobby_access_keys == 1:
-                self.multiworld.local_early_items[self.player]["Key for Underground Lake"] = 1
-                self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
-                self.multiworld.local_early_items[self.player]["Key for Office"] = 1
-            elif lobby_access_keys == 2:
-                self.multiworld.local_early_items[self.player]["Key for Front Door"] = 1
 
     def pre_fill(self) -> None:
         # Prefills event storage locations with duplicate pots
@@ -159,7 +166,8 @@ class ShiversWorld(World):
                 if loc_name.startswith("Storage: "):
                     storage_locs.append(self.multiworld.get_location(loc_name, self.player))
 
-        storage_items += [self.create_item(name) for name, data in item_table.items() if data.type == ItemType.POT_DUPLICATE]
+        storage_items += [self.create_item(name) for name, data in item_table.items() if
+                          data.type == ItemType.POT_DUPLICATE]
         storage_items += [self.create_item("Empty") for _ in range(3)]
 
         state = self.multiworld.get_all_state(True)
