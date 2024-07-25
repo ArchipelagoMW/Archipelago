@@ -172,6 +172,7 @@ def set_rules(world: "MM2World") -> None:
                        for boss in [*list(range(8)), 12]}
         flexibility = [(sum(1 if weapon_boss[boss][weapon] > 0 else 0 for weapon in range(9)) *
                         sum(weapon_boss[boss].values()), boss) for boss in weapon_boss if boss != 12]
+        used_weapons = {i: set() for i in [*list(range(8)), 12]}
         for _, boss in [*sorted(flexibility), (0, 12)]:
             boss_damage = weapon_boss[boss]
             weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
@@ -181,11 +182,12 @@ def set_rules(world: "MM2World") -> None:
                 # So we want to make sure that use is absolutely needed
                 weapon_weight[8] = min(weapon_weight[8], 0.001)
             while boss_health[boss] > 0:
-                if boss_damage[0]:
+                if boss_damage[0] > 0:
                     boss_health[boss] = 0  # if we can buster, we should buster
                     continue
                 highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
                 uses = weapon_energy[wp] // weapon_costs[wp]
+                used_weapons[boss].add(wp)
                 if int(uses * boss_damage[wp]) > boss_health[boss]:
                     used = ceil(boss_health[boss] / boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * used
@@ -209,6 +211,7 @@ def set_rules(world: "MM2World") -> None:
                     boss_health[boss] -= int(uses * boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * uses
                     weapon_weight.pop(wp)
+
 
     for i, boss_locations in zip(range(14), [
         heat_man_locations,
