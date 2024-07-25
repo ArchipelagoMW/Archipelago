@@ -295,8 +295,6 @@ class WitnessWorld(World):
 
         self.random.shuffle(early_items)
 
-        player_name = self.multiworld.get_player_name(self.player)
-
         for early_item_name in early_items:
             try:
                 early_item_index, early_item = next(
@@ -304,8 +302,8 @@ class WitnessWorld(World):
                     if item.name == early_item_name and item.player == self.player
                 )
             except StopIteration:
-                warning(f"{early_item_name} could not be placed as the \"early good item\" in {player_name}'s world,"
-                        " as all copies of it were plandoed elsewhere.")
+                warning(f"{early_item_name} could not be placed as the \"early good item\" in {self.player_name}'s"
+                        " world, as all copies of it were plandoed elsewhere.")
                 continue
 
             if pop:
@@ -313,8 +311,8 @@ class WitnessWorld(World):
 
             return early_item
 
-        error(f"No item could be placed as the \"early good item\" in {player_name}'s world,"
-              f" they were all plandoed elsewhere.")
+        error(f"No item could be placed as the \"early good item\" in {self.player_name}'s world,"
+              " they were all plandoed elsewhere.")
 
         return None
 
@@ -344,11 +342,9 @@ class WitnessWorld(World):
         # Done after plando to avoid conflicting with it.
         # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
 
-        player_name = self.multiworld.get_player_name(self.player)
-
         tutorial_gate_open = self.get_location("Tutorial Gate Open")
         if tutorial_gate_open not in fill_locations:
-            error(f"Tried to put an item on {player_name}'s Tutorial Gate Open, but was unsuccessful as the"
+            error(f"Tried to put an item on {self.player_name}'s Tutorial Gate Open, but was unsuccessful as the"
                   " location no longer exists. This could be the result of plando.")
             return
 
