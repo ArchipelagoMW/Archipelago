@@ -60,7 +60,7 @@ class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
     VICTORY_LOCATION: str
-    
+
     def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
         self.YAML_DISABLED_LOCATIONS: Set[str] = disabled_locations
         self.YAML_ADDED_ITEMS: Dict[str, int] = start_inv
