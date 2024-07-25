@@ -792,8 +792,10 @@ class VerifyKeys(metaclass=FreezeValidKeys):
             dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
             extra = dataset - self._valid_keys
             if extra:
-                raise Exception(f"Found unexpected key {', '.join(extra)} in {self}. "
-                                f"Allowed keys: {self._valid_keys}.")
+                raise OptionError(
+                    f"Found unexpected key {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                    f"Allowed keys: {self._valid_keys}."
+                )
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         self.verify_keys()
@@ -981,7 +983,6 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                         texts.append(text)
                 else:
                     raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
-            cls.verify_keys([text.at for text in texts])
             return cls(texts)
         else:
             raise NotImplementedError(f"Cannot Convert from non-list, got {type(data)}")
