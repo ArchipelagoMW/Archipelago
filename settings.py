@@ -3,6 +3,7 @@ Application settings / host.yaml interface using type hints.
 This is different from player options.
 """
 
+import os
 import os.path
 import shutil
 import sys
@@ -11,7 +12,6 @@ import warnings
 from enum import IntEnum
 from threading import Lock
 from typing import cast, Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, Union, TypeVar
-import os
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -798,6 +798,7 @@ class Settings(Group):
             atexit.register(autosave)
 
     def save(self, location: Optional[str] = None) -> None:  # as above
+        from Utils import parse_yaml
         location = location or self._filename
         assert location, "No file specified"
         temp_location = location + ".tmp"  # not using tempfile to test expected file access
@@ -807,10 +808,18 @@ class Settings(Group):
         # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
         with open(temp_location, "w", encoding="utf-8") as f:
             self.dump(f)
-        # replace old with new
-        if os.path.exists(location):
+            f.flush()
+            if hasattr(os, "fsync"):
+                os.fsync(f.fileno())
+        # validate new file is valid yaml
+        with open(temp_location, encoding="utf-8") as f:
+            parse_yaml(f.read())
+        # replace old with new, try atomic operation first
+        try:
+            os.rename(temp_location, location)
+        except (OSError, FileExistsError):
             os.unlink(location)
-        os.rename(temp_location, location)
+            os.rename(temp_location, location)
         self._filename = location
 
     def dump(self, f: TextIO, level: int = 0) -> None:
@@ -832,7 +841,6 @@ def get_settings() -> Settings:
     with _lock:  # make sure we only have one instance
         res = getattr(get_settings, "_cache", None)
         if not res:
-            import os
             from Utils import user_path, local_path
             filenames = ("options.yaml", "host.yaml")
             locations: List[str] = []
