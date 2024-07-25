@@ -96,7 +96,7 @@ def set_rules(world: "MM2World") -> None:
             for boss in range(13):
                 for weapon in world.weapon_damage:
                     world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
-                if not any([world.weapon_damage[weapon][boss] >= 4
+                if not any([world.weapon_damage[weapon][boss] >= max(4, minimum_weakness_requirement[weapon])
                             for weapon in range(1, 7)]):
                     # failsafe, there should be at least one defined non-Buster weakness
                     weapon = world.random.randint(1, 7)
@@ -211,7 +211,6 @@ def set_rules(world: "MM2World") -> None:
                     boss_health[boss] -= int(uses * boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * uses
                     weapon_weight.pop(wp)
-
 
     for i, boss_locations in zip(range(14), [
         heat_man_locations,
