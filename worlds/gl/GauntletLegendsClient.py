@@ -166,10 +166,9 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
 
     def _cmd_players(self, value: int):
         """Set number of local players"""
-        if type(value) is not int:
-            logger.info(f"Invalid Parameters. Usage: /players [number]")
+        value = int(value)
+        logger.info(f"Players set from {self.ctx.players} to {min(value, 4)}.")
         self.ctx.players = min(value, 4)
-        logger.info(f"Players set to {min(value, 4)}.")
 
 
 class GauntletLegendsContext(CommonContext):
@@ -182,6 +181,7 @@ class GauntletLegendsContext(CommonContext):
         self.deathlink_pending: bool = False
         self.deathlink_enabled: bool = False
         self.deathlink_triggered: bool = False
+        self.ignore_deathlink: bool = False
         self.difficulty: int = 0
         self.players: int = 1
         self.gl_sync_task = None
@@ -496,6 +496,8 @@ class GauntletLegendsContext(CommonContext):
         if cmd in {"Connected"}:
             self.slot = args["slot"]
             self.glslotdata = args["slot_data"]
+            self.players = self.glslotdata["players"]
+            logger.info(f"Players set to {self.players}.")
             if self.socket.status():
                 self.retro_connected = True
                 self.deathlink_enabled = self.glslotdata["death_link"]
@@ -688,7 +690,8 @@ class GauntletLegendsContext(CommonContext):
                     if self.chest_locations[k].id not in self.locations_checked:
                         self.locations_checked += [self.chest_locations[k].id]
                         acquired += [self.chest_locations[k].id]
-        if await self.dead():
+        dead = await self.dead()
+        if dead:
             return []
         return acquired
 
@@ -705,7 +708,9 @@ class GauntletLegendsContext(CommonContext):
     # Returns True of the player is dead
     async def dead(self) -> bool:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_KILL, 'x')} 1"))
-        return ((temp[0] & 0x8) == 0x8 or (temp[0] | 0xFF) == 0x1)
+        if (temp[0] & 0xF) == 0x1:
+            self.ignore_deathlink = True
+        return (temp[0] & 0xF) == 0x8 or (temp[0] & 0xF) == 0x1
 
     # Returns a number that tells if the player is fighting a boss currently
     async def boss(self) -> int:
@@ -741,6 +746,8 @@ class GauntletLegendsContext(CommonContext):
                 if dead and not (self.current_level in boss_level and boss == 0):
                     if self.deathlink_triggered:
                         self.deathlink_triggered = False
+                    elif self.ignore_deathlink:
+                        self.ignore_deathlink = False
                     else:
                         await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
             await self.var_reset()
@@ -763,6 +770,7 @@ class GauntletLegendsContext(CommonContext):
         self.movement = 0
         self.difficulty = 0
         self.location_scouts = []
+        self.ignore_deathlink = False
 
     # Prep arrays with locations and objects
     async def load_objects(self, ctx: "GauntletLegendsContext"):
@@ -873,6 +881,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     ctx.in_game = not await ctx.check_loading()
                 except Exception:
                     logger.info(traceback.format_exc())
+                    await ctx.var_reset()
             if ctx.in_game:
                 ctx.level_loading = False
                 try:
@@ -903,6 +912,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         ctx.limbo = True
                         await asyncio.sleep(0.05)
                         continue
+                    await asyncio.sleep(0.1)
                     checking = await ctx.location_loop()
                     if checking:
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
