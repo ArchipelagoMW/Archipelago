@@ -137,15 +137,19 @@ class GLPatchExtension(APPatchExtension):
                     if "Chest" in location_name or (
                         "Barrel" in location_name and "Barrel of Gold" not in location_name
                     ):
-                        data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][12] = 0x27
-                        data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][13] = 0x4
+                        data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12] = 0x27
+                        data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][13] = 0x4
                     else:
-                        data.items[j - data.obelisk_items][6] = 0x27
-                        data.items[j - data.obelisk_items][7] = 0x4
+                        data.items[j - data.items_replaced_by_obelisks][6] = 0x27
+                        data.items[j - data.items_replaced_by_obelisks][7] = 0x4
                 else:
                     if "Obelisk" in items_by_id[item[0]].item_name:
+                        if chest_barrel(location_name):
+                            slice_ = bytearray(data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][0:6])
+                        else:
+                            slice_ = bytearray(data.items[j - data.items_replaced_by_obelisks][0:6])
                         data.objects += [
-                            bytearray(data.items[j - data.obelisk_items][0:6])
+                            slice_
                             + bytearray(
                                 [
                                     0x0,
@@ -170,18 +174,18 @@ class GLPatchExtension(APPatchExtension):
                             ),
                         ]
                         if chest_barrel(location_name):
-                            del data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)]
+                            del data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)]
                             data.chests_replaced_by_obelisks += 1
                         else:
-                            del data.items[j - data.obelisk_items]
+                            del data.items[j - data.items_replaced_by_obelisks]
                             data.items_replaced_by_obelisks += 1
                     else:
                         if chest_barrel(location_name):
-                            data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][12] = item_dict[item[0]][0]
-                            data.chests[j - (len(data.items) + data.obelisk_items + data.obelisk_chests)][13] = item_dict[item[0]][1]
+                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12] = item_dict[item[0]][0]
+                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][13] = item_dict[item[0]][1]
                         else:
-                            data.items[j - data.obelisk_items][6] = item_dict[item[0]][0]
-                            data.items[j - data.obelisk_items][7] = item_dict[item[0]][1]
+                            data.items[j - data.items_replaced_by_obelisks][6] = item_dict[item[0]][0]
+                            data.items[j - data.items_replaced_by_obelisks][7] = item_dict[item[0]][1]
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)

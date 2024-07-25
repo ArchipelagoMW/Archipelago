@@ -705,7 +705,7 @@ class GauntletLegendsContext(CommonContext):
     # Returns True of the player is dead
     async def dead(self) -> bool:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_KILL, 'x')} 1"))
-        return (temp[0] & 0x8) == 0x8
+        return ((temp[0] & 0x8) == 0x8 or (temp[0] | 0xFF) == 0x1)
 
     # Returns a number that tells if the player is fighting a boss currently
     async def boss(self) -> int:
