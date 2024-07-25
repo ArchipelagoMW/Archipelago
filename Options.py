@@ -798,7 +798,10 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                 )
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
-        self.verify_keys()
+        try:
+            self.verify_keys()
+        except OptionError as validation_error:
+            raise OptionError(f"Player {player_name} has invalid option keys:\n{validation_error}")
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
