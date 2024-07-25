@@ -246,26 +246,25 @@ def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch") -> None:
                 for character in palette_pointers:
                     palettes_to_write[character] = real_colors
         # Now we handle the real values
-    if palette_shuffle != 0:
-        if palette_shuffle > 1:
-            if palette_shuffle == 3:
-                # singularity
-                real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
-                for character in palette_pointers:
-                    if character not in palettes_to_write:
-                        palettes_to_write[character] = real_colors
-            else:
-                for character in palette_pointers:
-                    if character not in palettes_to_write:
-                        real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
-                        palettes_to_write[character] = real_colors
-        else:
-            shuffled_colors = list(MM2_COLORS.values())
-            shuffled_colors.append((0x2C, 0x11))  # Mega Buster
-            world.random.shuffle(shuffled_colors)
+    if palette_shuffle == 1:
+        shuffled_colors = list(MM2_COLORS.values())
+        shuffled_colors.append((0x2C, 0x11))  # Mega Buster
+        world.random.shuffle(shuffled_colors)
+        for character in palette_pointers:
+            if character not in palettes_to_write:
+                palettes_to_write[character] = shuffled_colors.pop()
+    elif palette_shuffle > 1:
+        if palette_shuffle == 2:
             for character in palette_pointers:
                 if character not in palettes_to_write:
-                    palettes_to_write[character] = shuffled_colors.pop()
+                    real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
+                    palettes_to_write[character] = real_colors
+        else:
+            # singularity
+            real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
+            for character in palette_pointers:
+                if character not in palettes_to_write:
+                    palettes_to_write[character] = real_colors
 
     for character in palettes_to_write:
         for pointer in palette_pointers[character]:
