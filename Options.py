@@ -955,7 +955,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
 
     def verify_keys(self) -> None:
         if self.valid_keys:
-            data = set([text.at for text in self])
+            data = set(text.at for text in self)
             dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
             extra = dataset - self._valid_keys
             if extra:
