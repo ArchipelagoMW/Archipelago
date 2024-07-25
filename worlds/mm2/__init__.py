@@ -1,5 +1,6 @@
 import hashlib
 import logging
+from copy import deepcopy
 from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar, List
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
@@ -101,7 +102,7 @@ class MM2World(World):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        self.weapon_damage = weapon_damage.copy()
+        self.weapon_damage = deepcopy(weapon_damage)
 
     def create_regions(self) -> None:
         menu = MM2Region("Menu", self.player, self.multiworld)
