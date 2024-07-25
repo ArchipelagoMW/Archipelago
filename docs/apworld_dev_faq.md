@@ -37,7 +37,7 @@ while len(item_pool) < total_locations:
 self.multiworld.itempool += item_pool
 ```
 
-One faster alternatives to the `while` loop above would be to use a `for` loop:
+One faster alternative to the `while` loop above would be to use a `for` loop:
 ```py
 for _ in range(total_locations - len(item_pool)):
     item_pool.append(self.create_filler())
