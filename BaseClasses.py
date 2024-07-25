@@ -700,7 +700,7 @@ class CollectionState():
                 if event_filter(location):
                     events_per_player[location.player].add(location)
 
-        # Remove any empty sets to reduce iterations of `events_per_player`.
+        # Remove empty sets to reduce the number of iterations required to iterate through `events_per_player.items()`.
         for player, events in list(events_per_player.items()):
             if not events:
                 del events_per_player[player]
@@ -726,7 +726,7 @@ class CollectionState():
                 if changed:
                     # Collecting the item logically affected the owning player of the item, so it could mean the owning
                     # player can now access additional locations, so their locations should be checked in the next
-                    # loop.
+                    # outer loop.
                     players_to_check.add(item.player)
 
     # item name related
