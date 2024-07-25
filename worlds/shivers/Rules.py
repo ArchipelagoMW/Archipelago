@@ -1,5 +1,9 @@
-from typing import Dict, TYPE_CHECKING
 from collections.abc import Callable
+from datetime import datetime
+from typing import Dict, TYPE_CHECKING
+
+from dateutil.relativedelta import relativedelta
+
 from BaseClasses import CollectionState
 from worlds.generic.Rules import forbid_item
 
@@ -77,12 +81,6 @@ def first_nine_ixupi_capturable(state: CollectionState, player: int) -> bool:
         and metal_capturable(state, player)
 
 
-# def all_skull_dials_available(state: CollectionState, player: int) -> bool:
-#     return state.can_reach_region("Prehistoric", player) and state.can_reach_region("Tar River", player) \
-#         and state.can_reach_region("Egypt", player) and state.can_reach_region("Burial", player) \
-#         and state.can_reach_region("Gods Room", player) and state.can_reach_region("Werewolf", player)
-
-
 def all_skull_dials_set(state: CollectionState, player: int) -> bool:
     return state.has("Set Skull Dial: Prehistoric", player) \
         and state.has("Set Skull Dial: Tar River", player) \
@@ -93,7 +91,8 @@ def all_skull_dials_set(state: CollectionState, player: int) -> bool:
 
 
 def completion_condition(state: CollectionState, player: int) -> bool:
-    return state.has("Victory", player)
+    years_since_sep_30_1980 = relativedelta(datetime.now(), datetime.fromisoformat("1980-09-30")).years
+    return state.has(f"Mt. Pleasant Tribune: {years_since_sep_30_1980} year Old Mystery Solved!", player)
 
 
 def get_rules_lookup(world: "ShiversWorld", player: int):
@@ -101,7 +100,7 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
         "entrances": {
             "To Office Elevator From Underground Blue Tunnels": lambda state: state.has("Key for Office Elevator", player),
             "To Office Elevator From Office": lambda state: state.has("Key for Office Elevator", player),
-            "To Bedroom Elevator From Office": lambda state: state.has("Use Bedroom Elevator", player),
+            "To Bedroom Elevator From Office": lambda state: state.has_all({"Key for Bedroom Elevator", "Crawling"}, player),
             "To Office From Bedroom Elevator": lambda state: state.has_all({"Key for Bedroom Elevator", "Crawling"}, player),
             "To Three Floor Elevator From Maintenance Tunnels": lambda state: state.has("Key for Three Floor Elevator", player),
             "To Three Floor Elevator From Blue Maze Bottom": lambda state: state.has("Key for Three Floor Elevator", player),
@@ -142,7 +141,8 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "To Burial From Egypt": lambda state: state.can_reach_region("Egypt", player),
             "To Gods Room From Anansi": lambda state: state.can_reach_region("Gods Room", player),
             "To Slide Room": lambda state: all_skull_dials_set(state, player),
-            "To Lobby From Slide Room": lambda state: beths_body_available(state, world, player)
+            "To Lobby From Slide Room": lambda state: beths_body_available(state, world, player),
+            "To Victory": lambda state: first_nine_ixupi_capturable(state, player) and lightning_capturable(state, world, player)
         },
         "locations_required": {
             "Puzzle Solved Anansi Musicbox": lambda state: state.has("Set Jukebox", player),
@@ -167,12 +167,11 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, world, player),
             "Puzzle Solved Skull Dial Door": lambda state: all_skull_dials_set(state, player),
             "Set Jukebox": lambda state: state.can_reach_region("Clock Tower", player),
-            "Victory": lambda state: first_nine_ixupi_capturable(state, player) and lightning_capturable(state, world, player),
-            },
-        "locations_puzzle_hints": {
+        },
+        "puzzle_hints_required": {
             "Puzzle Solved Clock Tower Door": lambda state: state.can_reach_region("Three Floor Elevator", player),
-            "Puzzle Solved Clock Chains": lambda state: state.has("Read Professor Windlenot's Diary", player),
-            "Set Clock Chains": lambda state: state.has("Read Professor Windlenot's Diary", player),
+            "Puzzle Solved Clock Chains": lambda state: state.can_reach_region("Bedroom", player),
+            "Set Clock Chains": lambda state: state.can_reach_region("Bedroom", player),
             "Puzzle Solved Shaman Drums": lambda state: state.can_reach_region("Clock Tower", player),
             "Puzzle Solved Red Door": lambda state: state.can_reach_region("Maintenance Tunnels", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach_region("Library", player),
@@ -180,15 +179,14 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "Puzzle Solved Theater Door": lambda state: state.can_reach_region("Underground Lake", player),
             "Puzzle Solved Columns of RA": lambda state: state.can_reach_region("Underground Lake", player),
             "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, world, player) and state.can_reach_region("Underground Lake", player)
-            },
+        },
         "elevators": {
             "Puzzle Solved Office Elevator": lambda state: (state.can_reach_region("Underground Lake", player) or state.can_reach_region("Office", player))
                                                                   and state.has("Key for Office Elevator", player),
             "Puzzle Solved Bedroom Elevator": lambda state: state.has_all({"Key for Bedroom Elevator", "Crawling"}, player),
-            "Use Bedroom Elevator": lambda state: state.has_all({"Key for Bedroom Elevator", "Crawling"}, player),
             "Puzzle Solved Three Floor Elevator": lambda state: (state.can_reach_region("Maintenance Tunnels", player) or state.can_reach_region("Blue Maze", player))
                                                                   and state.has("Key for Three Floor Elevator", player)
-            },
+        },
         "lightning": {
             "Ixupi Captured Lightning": lambda state: lightning_capturable(state, world, player)
         }
@@ -211,7 +209,7 @@ def set_rules(world: "ShiversWorld") -> None:
 
     # Set option location rules
     if world.options.puzzle_hints_required.value:
-        for location_name, rule in rules_lookup["locations_puzzle_hints"].items():
+        for location_name, rule in rules_lookup["puzzle_hints_required"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
         multiworld.get_entrance("To Theater From Lobby", player).access_rule = lambda state: state.can_reach_region("Underground Lake", player)

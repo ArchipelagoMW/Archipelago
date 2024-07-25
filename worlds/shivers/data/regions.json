@@ -11,7 +11,7 @@
 		["Workshop", ["To Office From Workshop"]],
 		["Bedroom Elevator", ["To Office From Bedroom Elevator", "To Bedroom"]],
 		["Bedroom", ["To Bedroom Elevator From Bedroom"]],
-		["Lobby", ["To Office From Lobby", "To Library From Lobby", "To Theater From Lobby", "To Prehistoric From Lobby", "To Egypt From Lobby", "To Tar River From Lobby", "To Outside From Lobby"]],
+		["Lobby", ["To Office From Lobby", "To Library From Lobby", "To Theater From Lobby", "To Prehistoric From Lobby", "To Egypt From Lobby", "To Tar River From Lobby", "To Outside From Lobby", "To Victory"]],
 		["Library", ["To Lobby From Library", "To Maintenance Tunnels From Library"]],
 		["Maintenance Tunnels", ["To Library From Maintenance Tunnels", "To Three Floor Elevator From Maintenance Tunnels", "To Generator"]],
 		["Generator", ["To Maintenance Tunnels From Generator"]],
@@ -44,10 +44,11 @@
 		["Puzzle Room Mastermind", ["To Torture", "To Puzzle Room Marbles From Puzzle Room Mastermind"]],
 		["Puzzle Room Marbles", ["To Puzzle Room Mastermind From Puzzle Room Marbles", "To Skull Bridge From Puzzle Room Marbles"]],
 		["Skull Bridge", ["To Puzzle Room Marbles From Skull Bridge", "To Slide Room"]],
-		["Slide Room", ["To Skull Bridge From Slide Room", "To Lobby From Slide Room"]]
+		["Slide Room", ["To Skull Bridge From Slide Room", "To Lobby From Slide Room"]],
+		["Victory", []]
     ],
     "mandatory_connections": [
-    ["To Registry", "Registry"],
+		["To Registry", "Registry"],
 		["To Outside From Registry", "Outside"],
 		["To Outside From Underground", "Outside"],
 		["To Outside From Lobby", "Outside"],
@@ -143,6 +144,7 @@
 		["To Puzzle Room Marbles From Skull Bridge", "Puzzle Room Marbles"],
 		["To Skull Bridge From Puzzle Room Marbles", "Skull Bridge"],
 		["To Skull Bridge From Slide Room", "Skull Bridge"],
-		["To Slide Room", "Slide Room"]
+		["To Slide Room", "Slide Room"],
+		["To Victory", "Victory"]
 	]
 }
