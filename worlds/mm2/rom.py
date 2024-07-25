@@ -302,30 +302,30 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
 
     if world.options.random_music:
         if world.options.random_music == RandomMusic.option_none:
-            pool = [0xFF] * 13
+            pool = [0xFF] * 20
             # A couple of additional mutes we want here
             patch.write_byte(0x37819, 0xFF)  # Credits
             patch.write_byte(0x378A4, 0xFF)  # Credits #2
-            # patch.write_byte(0x37149, 0xFF)  # Game Over Jingle
-            # patch.write_byte(0x341BA, 0xFF)  # Robot Master Jingle
-            # patch.write_byte(0x2E0B4, 0xFF)  # Robot Master Defeated
-            # patch.write_byte(0x35B78, 0xFF)  # Wily Castle
-            # patch.write_byte(0x2DFA5, 0xFF)  # Wily Defeated
+            patch.write_byte(0x37149, 0xFF)  # Game Over Jingle
+            patch.write_byte(0x341BA, 0xFF)  # Robot Master Jingle
+            patch.write_byte(0x2E0B4, 0xFF)  # Robot Master Defeated
+            patch.write_byte(0x35B78, 0xFF)  # Wily Castle
+            patch.write_byte(0x2DFA5, 0xFF)  # Wily Defeated
 
         elif world.options.random_music == RandomMusic.option_shuffled:
             pool = [0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 9, 9, 0x10, 0xC, 0xB, 0x17, 0x13, 0xE, 0xD]
             world.random.shuffle(pool)
         else:
-            pool = world.random.choices(range(10), k=13)
+            pool = world.random.choices([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xB, 0xC, 0xD, 0xE, 0x10, 0x13, 0x17], k=20)
         patch.write_bytes(0x381E0, pool[:13])
         patch.write_byte(0x36318, pool[13])  # Game Start
         patch.write_byte(0x37181, pool[13])  # Game Over
-        patch.write_byte(0x360AE, pool[14])  # RBM Select
+        patch.write_byte(0x340AE, pool[14])  # RBM Select
         patch.write_byte(0x39005, pool[15])  # Robot Master Battle
         patch.write_byte(get_equipped_sound_ptr + 1, pool[16])  # Get Equipped, we actually hook this already lmao
         patch.write_byte(0x3775A, pool[17])  # Epilogue
         patch.write_byte(0x36089, pool[18])  # Intro
-        patch.write_byte(0x3)
+        patch.write_byte(0x361F1, pool[19])  # Title
 
 
 
