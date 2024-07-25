@@ -596,6 +596,7 @@ class GameManager(App):
 
     def connect_button_action(self, button):
         self.ctx.username = None
+        self.ctx.password = None
         if self.ctx.server:
             async_start(self.ctx.disconnect())
         else:
