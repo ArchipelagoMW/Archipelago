@@ -91,6 +91,9 @@ def set_rules(world: "MM2World") -> None:
             world.random.shuffle(weapon_tables)
             for i in range(1, 8):
                 world.weapon_damage[i] = weapon_tables.pop()
+            # alien must take minimum required damage from his weakness
+            alien_weakness = next(weapon for weapon in range(8) if world.weapon_damage[weapon][13] != -1)
+            world.weapon_damage[alien_weakness][13] = minimum_weakness_requirement[alien_weakness]
             world.weapon_damage[8] = [0 for _ in range(14)]
             world.weapon_damage[8][world.random.choice(range(8))] = 2
         elif world.options.random_weakness == RandomWeaknesses.option_randomized:
