@@ -158,6 +158,7 @@ def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, Li
                         raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
                     new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
                     possible_stages.remove(new_stage)
+                    levels[level][stage] = new_stage
     else:
         levels = deepcopy(default_levels)
         for level in levels:
