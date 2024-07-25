@@ -71,12 +71,7 @@ weapon_costs = {
 
 
 def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int) -> bool:
-    can_defeat = 0
-
-    for boss in robot_masters:
-        if state.has(robot_masters[boss], player):
-            can_defeat += 1
-    return can_defeat >= required
+    return state.has_from_list(robot_masters.values(), player, required)
 
 
 def set_rules(world: "MM2World") -> None:

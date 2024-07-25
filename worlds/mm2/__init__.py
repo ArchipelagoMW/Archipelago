@@ -184,6 +184,7 @@ class MM2World(World):
                 robot_master_pool.append(4)
             self.options.starting_robot_master.value = self.random.choice(robot_master_pool)
             logger.warning(
+                f"Mega Man 2 ({self.player_name}): "
                 f"Incompatible starting Robot Master, changing to "
                 f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
