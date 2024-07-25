@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, StartInventoryPool
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
@@ -128,6 +128,7 @@ class EnergyBeep(DefaultOnToggle):
 
 
 smz3_options: typing.Dict[str, type(Option)] = {
+    "start_inventory_from_pool": StartInventoryPool,
     "sm_logic": SMLogic,
     "sword_location": SwordLocation,
     "morph_location": MorphLocation,
