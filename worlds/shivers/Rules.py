@@ -150,7 +150,7 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "Storage: Anansi Musicbox": lambda state: state.has("Set Jukebox", player),
             "Storage: Janitor Closet": lambda state: cloth_capturable(state, player),
             "Storage: Tar River": lambda state: oil_capturable(state, player),
-            "Storage: Theater": lambda state: state.can_reach_region("Projector Room", player),
+            "Storage: Theater": lambda state: state.has("Viewed Theater Movie", player),
             "Storage: Slide": lambda state: beths_body_available(state, world, player) and state.can_reach_region("Slide Room", player),
             "Ixupi Captured Water": lambda state: water_capturable(state, player),
             "Ixupi Captured Wax": lambda state: wax_capturable(state, player),

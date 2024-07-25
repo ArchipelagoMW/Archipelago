@@ -82,13 +82,14 @@ class ShiversWorld(World):
                     loc = ShiversLocation(self.player, loc_name, self.location_name_to_id.get(loc_name, None), region)
                     region.locations.append(loc)
 
-        self.create_event_location("Clock Tower Staircase", "Set Clock Chains")
         self.create_event_location("Prehistoric", "Set Skull Dial: Prehistoric")
         self.create_event_location("Tar River", "Set Skull Dial: Tar River")
         self.create_event_location("Egypt", "Set Skull Dial: Egypt")
         self.create_event_location("Burial", "Set Skull Dial: Burial")
         self.create_event_location("Gods Room", "Set Skull Dial: Gods Room")
         self.create_event_location("Werewolf", "Set Skull Dial: Werewolf")
+        self.create_event_location("Projector Room", "Viewed Theater Movie")
+        self.create_event_location("Clock Tower Staircase", "Set Clock Chains")
         self.create_event_location("Clock Tower", "Set Jukebox")
 
     def create_items(self) -> None:
@@ -150,9 +151,9 @@ class ShiversWorld(World):
 
         # Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
         filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 24
-        item_pool += self.random.choices(
-            [self.create_item("Heal"), self.create_item("Easier Lyre")], weights=[95, 5], k=filler_needed
-        )
+        item_pool += map(self.create_item, self.random.choices(
+            ["Heal", "Easier Lyre"], weights=[95, 5], k=filler_needed
+        ))
 
         self.multiworld.itempool += item_pool
 
