@@ -1794,9 +1794,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locs = []
             create_as_hint: int = int(args.get("create_as_hint", 0))
             client_player = client.slot
-            desired_player = client_player
-            if "player" in args:
-                desired_player = int(args["player"])
+            desired_player = int(args.get("player", client_player))
 
             hints = []
             for location in args["locations"]:
