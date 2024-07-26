@@ -273,7 +273,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         print_faction_title()
                         has_printed_faction_title = True
                         (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
-                            (" from ").location(item.location, self.ctx.slot)
+                            (" from ").location(item.location, item.player)
                             (" by ").player(item.player)
                         ).send(self.ctx)
                 
