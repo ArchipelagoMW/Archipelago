@@ -1804,7 +1804,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                           "original_cmd": cmd}])
                     return
 
-                target_item, target_player, flags = ctx.locations[client.slot][location]
+                target_item, target_player, flags = ctx.locations[desired_player][location]
 
                 if client_player != desired_player:
                     # Only allow scouting other players' locations if the item is for client_player,
