@@ -1387,16 +1387,16 @@ item_table = {
         ItemData(291 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 1, SC2Race.ZERG, parent_item=item_names.ROACH_PRIMAL_IGNITER_ASPECT,
                  origin={"ext"}),
     item_names.TYRANNOZOR_TYRANTS_PROTECTION:
-        ItemData(292 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 2, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+        ItemData(292 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 8, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
     item_names.TYRANNOZOR_BARRAGE_OF_SPIKES:
-        ItemData(293 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 3, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+        ItemData(293 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 9, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
     item_names.TYRANNOZOR_IMPALING_STRIKE:
-        ItemData(294 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 4, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+        ItemData(294 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 10, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
     item_names.TYRANNOZOR_HEALING_ADAPTION:
-        ItemData(295 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 5, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+        ItemData(295 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 11, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
 
     item_names.ZERGLING_RAPTOR_STRAIN:
