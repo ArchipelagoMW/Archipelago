@@ -37,7 +37,7 @@ class TestRaccoonBundlesLogic(SVTestBase):
         options.BundlePrice: options.BundlePrice.option_normal,
         options.Craftsanity: options.Craftsanity.option_all,
     }
-    seed = 1234  # Magic seed that does what I want. Might need to get changed if we change the randomness behavior of raccoon bundles
+    seed = 2  # Magic seed that does what I want. Might need to get changed if we change the randomness behavior of raccoon bundles
 
     def test_raccoon_bundles_rely_on_previous_ones(self):
         # The first raccoon bundle is a fishing one
