@@ -461,7 +461,7 @@ def handle_random_range_in_triggers(value: str) -> int:
     return result
 
 
-def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
+def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: dict) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
@@ -480,15 +480,29 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             if len(advanced) % 2 != 1:
                 raise Exception("option_advanced has an illegal number of entries. Please check trigger and fix.")
             for x in range(0, len(advanced), 2):
-                result = get_choice(advanced[x][0], currently_targeted_weights)
-                if advanced[x][0] not in currently_targeted_weights:
-                    logging.warning(f"Specified option name {advanced[x][0]} did not "
-                                    f"match with a root option. "
-                                    f"This is probably in error.")
-                if isinstance(result, str):
-                    if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4, 5]:
-                        result = handle_random_range_in_triggers(result)
+                if type_hints is not None:
+                    option = type_hints[advanced[x][0]]
+                    if advanced[x][0] in currently_targeted_weights:
+                        if not option.supports_weighting:
+                            result = option.from_any(currently_targeted_weights[advanced[x][0]]).current_key
+                        else:
+                            result = option.from_any(get_choice(advanced[x][0], currently_targeted_weights)).current_key
+                    else:
+                        result = option.from_any(option.default).current_key
+                else:
+                    result = get_choice(advanced[x][0], currently_targeted_weights)
+                    if advanced[x][0] not in currently_targeted_weights:
+                        logging.warning(f"Specified option name {advanced[x][0]} did not "
+                                        f"match with a root option. "
+                                        f"This is probably in error.")
+                    if isinstance(result, str):
+                        if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4, 5]:
+                            result = handle_random_range_in_triggers(result)
                 currently_targeted_weights[advanced[x][0]] = result
+                if category:
+                    weights[category][advanced[x][0]] = result
+                else:
+                    weights[advanced[x][0]] = result
                 if len(advanced[x]) == 2:
                     advanced[x].insert(1, "=")
                 if len(advanced[x]) == 3:
@@ -510,7 +524,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                 valid_keys.add(advanced[x][0])
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is invalid. "
-                             f"Please fix your triggers.") from e
+                             f"Please fix your triggers. {enumerate(triggers)}") from e
     return weights
 
 
@@ -539,7 +553,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     valid_keys = set()
     if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"], valid_keys)
+        weights = roll_triggers(weights, weights["triggers"], valid_keys, None)
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -582,7 +596,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception(f"Remove tag cannot be used outside of trigger contexts. Found {weight}")
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"], valid_keys)
+        weights = roll_triggers(weights, game_weights["triggers"], valid_keys, world_type.options_dataclass.type_hints)
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
