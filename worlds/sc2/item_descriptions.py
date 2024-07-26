@@ -861,6 +861,8 @@ item_descriptions = {
     item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: "Sentry War Council upgrade. Sentries can heal the shields of two targets at once.",
     item_names.ENERGIZER_MOBILE_CHRONO_BEAM: "Energizer War Council upgrade. Allows Energizers to use Chrono Beam in Mobile Mode.",
     item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
+    item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
+    # item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

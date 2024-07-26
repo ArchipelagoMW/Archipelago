@@ -1724,6 +1724,20 @@ item_table = {
     item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: ItemData(512 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 12, SC2Race.PROTOSS, parent_item=item_names.SENTRY),
     item_names.ENERGIZER_MOBILE_CHRONO_BEAM: ItemData(513 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 13, SC2Race.PROTOSS, parent_item=item_names.ENERGIZER),
     item_names.HAVOC_ENDURING_SIGHT: ItemData(514 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 14, SC2Race.PROTOSS, parent_item=item_names.HAVOC),
+    item_names.HIGH_TEMPLAR_PLASMA_SURGE: ItemData(515 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 15, SC2Race.PROTOSS, parent_item=item_names.HIGH_TEMPLAR),
+    # 516 reserved for Signifier
+    # 517 reserved for Ascendant
+    # item_names.DARK_ARCHON_INDOMITABLE_WILL: ItemData(518 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 18, SC2Race.PROTOSS),
+    # 518 reserved for Immortal
+    # 519 reserved for Annihilator
+    # 520 reserved for Vanguard
+    # 521 reserved for Stalwart
+    # 522 reserved for Colossus
+    # 523 reserved for Wrathwalker
+    # 524 reserved for Reaver
+    # 525 reserved for Disruptor
+    # 526 reserved for Warp Prism
+    # 527 reserved for Observer
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),

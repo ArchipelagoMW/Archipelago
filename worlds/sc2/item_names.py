@@ -695,6 +695,20 @@ BLOOD_HUNTER_BRUTAL_EFFICIENCY                          = "Brutal Efficiency (Bl
 SENTRY_DOUBLE_SHIELD_RECHARGE                           = "Double Shield Recharge (Sentry)"
 ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (Energizer)"
 HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
+HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
+# Signifier
+# Ascendant
+# DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
+# IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
+# Annihilator
+# Vanguard
+# Stalwart
+# Colossus
+# Wrathwalker
+# Reaver
+# Disruptor
+# Warp Prism
+# Observer
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
