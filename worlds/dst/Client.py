@@ -126,7 +126,8 @@ class DSTContext(CommonContext):
 
             elif cmd == "Connected":
                 self.connected_to_ap = True
-                self.slotdata = args.get('slot_data')
+                self.slotdata = args.get('slot_data', {})
+                async_start(self.update_death_link(self.slotdata.get("death_link", False)))
                 if self.dst_handler.connected:
                     print("Connected to AP!")
                     self.on_dst_connect_to_ap()
@@ -220,7 +221,6 @@ class DSTContext(CommonContext):
             elif eventtype == "Death":
                 if "DeathLink" in self.tags:
                     await self.send_death(event.get("msg"))
-                    self.logger.info("...And so does everyone else.")
                 else:
                     print("Death Link is disabled. Everyone is safe... except you.")
 
