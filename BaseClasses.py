@@ -715,12 +715,12 @@ class CollectionState():
             next_players_to_check = set()
             next_events_per_player = []
 
-            # Accessibility of all locations is checked first.
-            accessible_locations = []
             for player, locations in events_per_player:
                 if player not in players_to_check:
                     next_events_per_player.append((player, locations))
                     continue
+                # Accessibility of all locations is checked first.
+                accessible_locations = []
                 inaccessible_locations = []
                 for location in locations:
                     if location.can_reach(self):
@@ -730,16 +730,16 @@ class CollectionState():
                 if inaccessible_locations:
                     next_events_per_player.append((player, inaccessible_locations))
 
-            for location in accessible_locations:
-                self.events.add(location)
-                item = location.item
-                assert isinstance(item, Item), "tried to collect Event with no Item"
-                changed = self.collect(item, True, location)
-                if changed:
-                    # Collecting the item logically affected the owning player of the item, so it could mean the owning
-                    # player can now access additional locations, so their locations should be checked in the next
-                    # outer loop iteration.
-                    next_players_to_check.add(item.player)
+                for location in accessible_locations:
+                    self.events.add(location)
+                    item = location.item
+                    assert isinstance(item, Item), "tried to collect Event with no Item"
+                    changed = self.collect(item, True, location)
+                    if changed:
+                        # Collecting the item logically affected the owning player of the item, so it could mean the
+                        # owning player can now access additional locations, so their locations should be checked in the
+                        # next outer loop iteration.
+                        next_players_to_check.add(item.player)
 
             events_per_player = next_events_per_player
             players_to_check = next_players_to_check
