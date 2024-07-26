@@ -692,6 +692,9 @@ AVENGER_KRYHAS_CLOAK                                    = "Kryhas Cloak (Avenger
 DARK_TEMPLAR_LESSER_SHADOW_FURY                         = "Lesser Shadow Fury (Dark Templar)"
 DARK_TEMPLAR_GREATER_SHADOW_FURY                        = "Greater Shadow Fury (Dark Templar)"
 BLOOD_HUNTER_BRUTAL_EFFICIENCY                          = "Brutal Efficiency (Blood Hunter)"
+SENTRY_DOUBLE_SHIELD_RECHARGE                           = "Double Shield Recharge (Sentry)"
+ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (Energizer)"
+HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"

@@ -1721,6 +1721,9 @@ item_table = {
     item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: ItemData(509 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 9, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
     item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: ItemData(510 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 10, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
     item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: ItemData(511 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 11, SC2Race.PROTOSS, parent_item=item_names.BLOOD_HUNTER),
+    item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: ItemData(512 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 12, SC2Race.PROTOSS, parent_item=item_names.SENTRY),
+    item_names.ENERGIZER_MOBILE_CHRONO_BEAM: ItemData(513 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 13, SC2Race.PROTOSS, parent_item=item_names.ENERGIZER),
+    item_names.HAVOC_ENDURING_SIGHT: ItemData(514 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 14, SC2Race.PROTOSS, parent_item=item_names.HAVOC),
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
