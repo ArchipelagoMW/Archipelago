@@ -167,6 +167,9 @@ class ExtraDamageAgainstBosses(NamedRange):
 class ShuffleStartingRecipes(Toggle):
     """
     Turn your basic starting recipes into Archipelago items?
+
+    This may leave you vulnerable to darkness on your first night!
+    If you're not okay with this, you may want to add Torch to your starting items.
     """
     display_name = "Shuffle Starting Recipes"
 
