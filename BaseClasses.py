@@ -681,8 +681,6 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
-        events_per_player: List[Tuple[int, List[Location]]]
-
         # since the loop has a good chance to run more than once, only filter the events once
         if key_only:
             def event_filter(location: Location):
@@ -692,6 +690,8 @@ class CollectionState():
         else:
             def event_filter(location: Location):
                 return location.advancement and location not in self.events
+
+        events_per_player: List[Tuple[int, List[Location]]]
         if locations is None:
             # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
             # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
@@ -707,7 +707,8 @@ class CollectionState():
                 if event_filter(location):
                     events_per_player_dict[location.player].append(location)
             # Convert to a list of tuples and remove players without any locations
-            events_per_player = [(player, locations) for player, locations in events_per_player_dict.items() if locations]
+            events_per_player = [(player, locations) for player, locations in events_per_player_dict.items()
+                                 if locations]
 
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
@@ -726,11 +727,11 @@ class CollectionState():
                 for location in locations:
                     # Region accessibility is cached per-player and the cache must be rebuilt when the CollectionState
                     # for a player changes, but the CollectionState should not change while only checking accessibility,
-                    # so check region accessibility first because it should remain cached throughout the iteration of
-                    # `locations`.
+                    # so check region accessibility first because, once cached, it should remain cached throughout the
+                    # iteration of `locations`.
                     # Location.can_reach(), by default, also checks region accessibility if the Location's access rule
-                    # returns True, but because it is known that the region accessibility is cached, it is much faster
-                    # to check region accessibility first, even if `location.can_reach(self)` might cause region
+                    # returns True, but because it is known that the region accessibility is cached, it is faster to
+                    # check region accessibility first, even if `location.can_reach(self)` might cause region
                     # accessibility to be checked a second time.
                     if location.parent_region.can_reach(self) and location.can_reach(self):
                         accessible_locations.append(location)
