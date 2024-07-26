@@ -287,7 +287,8 @@ class WitnessWorld(World):
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
 
-    def find_good_item_from_itempool(self, itempool: List[Item], pop: bool) -> Union[Item, None]:
+    def find_good_item_from_itempool(self, itempool: List[Item], pop: bool,
+                                     location: Optional[Location] = None) -> Union[Item, None]:
         early_items = self.player_items.get_early_items()
 
         if not early_items:
@@ -295,15 +296,19 @@ class WitnessWorld(World):
 
         self.random.shuffle(early_items)
 
+        state = CollectionState(self.multiworld)
+
         for early_item_name in early_items:
             try:
                 early_item_index, early_item = next(
                     (i, item) for i, item in enumerate(itempool)
                     if item.name == early_item_name and item.player == self.player
+                    and (location is None or location.can_fill(state, item, check_access=False))
                 )
             except StopIteration:
                 warning(f"{early_item_name} could not be placed as the \"early good item\" in {self.player_name}'s"
-                        " world, as all copies of it were plandoed elsewhere.")
+                        " world, as all copies of it were plandoed elsewhere,"
+                        " or Tutorial Gate Open wouldn't accept it.")
                 continue
 
             if pop:
@@ -348,7 +353,7 @@ class WitnessWorld(World):
                   " location no longer exists. This could be the result of plando.")
             return
 
-        early_good_item = self.find_good_item_from_itempool(progitempool, True)
+        early_good_item = self.find_good_item_from_itempool(progitempool, True, tutorial_gate_open)
 
         if early_good_item is None:
             return
