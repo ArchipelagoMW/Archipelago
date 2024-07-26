@@ -534,6 +534,7 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
         if not item_types:
             item_types.append("normal")
 
+        # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
         ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + item_descriptions[node["text"]].replace("\n", "<br>")
         node.setdefault("refs", []).append(ref)
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
