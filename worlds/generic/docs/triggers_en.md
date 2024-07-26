@@ -18,7 +18,9 @@ For more information on plando, you can reference the [general plando guide](/tu
 ## Normal Trigger use
 
 Triggers may be defined in either the root or in the relevant game sections. Generally, the best place to do this is the
-bottom of the YAML for clear organization.
+bottom of the YAML for clear organization. Triggers will evaluate in the order they are written, so later triggers will use
+options set by earlier triggers, and later results will take precedence over earlier results.
+Warning: Triggers placed in the root of the yaml, rather than under a specific game, will not be able to use 'random' options.
 
 Each trigger consists of four parts plus one optional part:
 - `option_category` specifies the section which the triggering option is defined in.
@@ -30,9 +32,9 @@ Each trigger consists of four parts plus one optional part:
     - This can be any option from any category defined in the YAML file in either root or a game section.
 - `option_result` specifies the value of the option that activates this trigger.
     - Example: `15`
-    - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
-      results, you would need multiple triggers for this.
-
+    - Each normal trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
+      conditions, you would need multiple triggers for this, or use the advanced trigger options outlined below in "Advanced
+      Trigger Options".
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
   another option also gets selected or placing an item in a certain location. It is possible to have multiple things
   happen in this section.
@@ -88,7 +90,7 @@ For example:
 
 In this example, if your world happens to roll SpecificKeycards, then your game will also start in inverted.
 
-If you wish to the trigger to activate when under conditions OTHER than an exact match, you should include option_compare:
+If you wish for the trigger to activate when under conditions OTHER than an exact match, you should include option_compare:
 
   ```yaml
   triggers:
