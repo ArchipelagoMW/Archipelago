@@ -1,4 +1,4 @@
-from ..test import WitnessTestBase, WitnessMultiworldTestBase
+from ..test import WitnessMultiworldTestBase, WitnessTestBase
 
 
 class TestIndividualDoors(WitnessTestBase):
