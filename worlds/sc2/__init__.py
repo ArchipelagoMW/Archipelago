@@ -623,7 +623,6 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
                 item_name = world.random.choice(filler_items)
                 item = create_item_with_correct_settings(world.player, item_name)
                 location.place_locked_item(item)
-                item_list.append(FilterItem(item_name, items.item_table[item_name], 0, ItemFilterFlags.Plando|ItemFilterFlags.Locked))
                 world.locked_locations.append(location.name)
 
 
