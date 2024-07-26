@@ -15,8 +15,6 @@ class TestEarlySymbolItemFalse(WitnessTestBase):
         "obelisk_keys": False,
     }
 
-    run_default_tests = False
-
     def setUp(self) -> None:
         if self.auto_construct:
             self.world_setup(seed=1)  # Magic seed to prevent false positive
@@ -43,8 +41,6 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
         "obelisk_keys": False,
     }
 
-    run_default_tests = False
-
     def test_early_good_item(self) -> None:
         distribute_items_restrictive(self.multiworld)
 
@@ -68,8 +64,6 @@ class TestEarlySymbolItemTrueButExcluded(WitnessTestBase):
         "shuffle_lasers": False,
         "obelisk_keys": False,
     }
-
-    run_default_tests = False
 
     def setUp(self) -> None:
         super().setUp()
