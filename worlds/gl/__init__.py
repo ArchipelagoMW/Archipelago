@@ -215,9 +215,6 @@ class GauntletLegendsWorld(World):
         for i in range(remaining):
             filler_item_name = self.multiworld.random.choice(filler_items)
             item = self.create_item(filler_item_name)
-            if "Death" in filler_item_name:
-                self.death += [item]
-                continue
             self.multiworld.itempool.append(item)
             filler_items.remove(filler_item_name)
 
@@ -230,8 +227,9 @@ class GauntletLegendsWorld(World):
     def pre_fill(self) -> None:
         if len(self.death) != 0:
             locations = self.multiworld.get_unfilled_locations(self.player)
+            items = [item for item in self.multiworld.itempool if item.name == "Death" and item.player == self.player]
             self.random.shuffle(locations)
-            fast_fill(self.multiworld, self.death, locations)
+            fast_fill(self.multiworld, items, locations)
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]
