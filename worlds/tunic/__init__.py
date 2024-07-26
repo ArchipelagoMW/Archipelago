@@ -112,10 +112,10 @@ class TunicWorld(World):
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
 
-        self.player_location_table = locations.location_name_to_id
+        self.player_location_table = locations.location_name_to_id.copy()
 
         if self.options.grass_randomizer:
-            self.player_location_table.update(grass_location_name_to_id)
+            self.player_location_table.update(grass_location_name_to_id.copy())
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
