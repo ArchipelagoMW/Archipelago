@@ -723,7 +723,15 @@ class CollectionState():
                 accessible_locations = []
                 inaccessible_locations = []
                 for location in locations:
-                    if location.can_reach(self):
+                    # Region accessibility is cached per-player and the cache must be rebuilt when the CollectionState
+                    # for a player changes, but the CollectionState should not change while only checking accessibility,
+                    # so check region accessibility first because it should remain cached throughout the iteration of
+                    # `locations`.
+                    # Location.can_reach(), by default, also checks region accessibility if the Location's access rule
+                    # returns True, but because it is known that the region accessibility is cached, it is much faster
+                    # to check region accessibility first, even if `location.can_reach(self)` might cause region
+                    # accessibility to be checked a second time.
+                    if location.parent_region.can_reach(self) and location.can_reach(self):
                         accessible_locations.append(location)
                     else:
                         inaccessible_locations.append(location)
