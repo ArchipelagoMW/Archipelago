@@ -523,6 +523,10 @@ class SC2JSONtoTextParser(JSONtoTextParser):
 
 class SC2JSONtoKivyParser(KivyJSONtoTextParser):
     def _handle_item_name(self, node: JSONMessagePart):
+        item_name = node["text"]
+        if not item_name in item_descriptions:
+            return super()._handle_item_name(node)
+        
         flags = node.get("flags", 0)
         item_types = []
         if flags & 0b001:  # advancement
@@ -535,7 +539,7 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
             item_types.append("normal")
 
         # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
-        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + item_descriptions[node["text"]].replace("\n", "<br>")
+        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + item_descriptions[item_name].replace("\n", "<br>")
         node.setdefault("refs", []).append(ref)
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
