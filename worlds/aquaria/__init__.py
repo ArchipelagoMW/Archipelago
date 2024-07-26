@@ -156,11 +156,11 @@ class AquariaWorld(World):
         else:
             self.__pre_fill_item("Transturtle Veil top left", "The Veil top left area, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Veil top right", "The Veil top right area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Open Water top right", "Open Water top right area, Transturtle",
+            self.__pre_fill_item("Transturtle Open Waters top right", "Open Waters top right area, Transturtle",
                                  precollected)
-            self.__pre_fill_item("Transturtle Forest bottom left", "Kelp Forest bottom left area, Transturtle",
+            self.__pre_fill_item("Transturtle Kelp Forest bottom left", "Kelp Forest bottom left area, Transturtle",
                                  precollected)
-            self.__pre_fill_item("Transturtle Home Water", "Home Water, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Home Waters", "Home Waters, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly

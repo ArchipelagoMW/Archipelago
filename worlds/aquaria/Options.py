@@ -34,9 +34,18 @@ class TurtleRandomizer(Choice):
     default = 2
 
 
+class EarlyBindSong(DefaultOnToggle):
+    """
+    Force the Bind song to be in a location early in the multiworld (It is not guaranteed to be in your world).
+    """
+    display_name = "Early Bind song"
+
+
 class EarlyEnergyForm(DefaultOnToggle):
-    """ Force the Energy Form to be in a location early in the game """
-    display_name = "Early Energy Form"
+    """
+    Force the Energy form to be in a location early in the multiworld (It is not guaranteed to be in your world).
+    """
+    display_name = "Early Energy form"
 
 
 class AquarianTranslation(Toggle):
@@ -121,9 +130,11 @@ class BlindGoal(Toggle):
 
 class UnconfineHomeWater(Choice):
     """
-    Open the way out of the Home Water area so that Naija can go to open water and beyond without the bind song.
+    Open the way out of the Home Waters area so that Naija can go to open water and beyond without the bind song.
+    Note that if you put this option off, it is recommended to activate the Early Energy form and Early Bind Song
+    options.
     """
-    display_name = "Unconfine Home Water Area"
+    display_name = "Unconfine Home Waters Area"
     option_off = 0
     option_via_energy_door = 1
     option_via_transturtle = 2
@@ -142,6 +153,7 @@ class AquariaOptions(PerGameCommonOptions):
     big_bosses_to_beat: BigBossesToBeat
     turtle_randomizer: TurtleRandomizer
     early_energy_form: EarlyEnergyForm
+    early_bind_song: EarlyBindSong
     light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
     bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
     unconfine_home_water: UnconfineHomeWater

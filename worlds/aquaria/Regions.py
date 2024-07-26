@@ -16,27 +16,27 @@ from worlds.generic.Rules import add_rule, set_rule
 
 def _has_hot_soup(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the hotsoup item"""
-    return state.has_any ({"Hot soup", "Hot soup x 2"}, player)
+    return state.has_any ({"Hot Soup", "Hot Soup x 2"}, player)
 
 
 def _has_tongue_cleared(state:CollectionState, player: int) -> bool:
-    """`player` in `state` has the Body tongue cleared item"""
-    return state.has("Body tongue cleared", player)
+    """`player` in `state` has the Body Tongue cleared item"""
+    return state.has("Body Tongue cleared", player)
 
 
 def _has_sun_crystal(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the Sun crystal item"""
-    return state.has("Has sun crystal", player) and _has_bind_song(state, player)
+    return state.has("Has Sun Crystal", player) and _has_bind_song(state, player)
 
 
 def _has_li(state:CollectionState, player: int) -> bool:
     """`player` in `state` has Li in its team"""
-    return state.has("Li and Li song", player)
+    return state.has("Li and Li Song", player)
 
 
 def _has_damaging_item(state:CollectionState, player: int) -> bool:
-    """`player` in `state` has the shield song item"""
-    return state.has_any({"Energy form",  "Nature form", "Beast form", "Li and Li song", "Baby Nautilus",
+    """`player` in `state` has items that can do damage (not necessary a lot of damage)"""
+    return state.has_any({"Energy Form",  "Nature Form", "Beast Form", "Li and Li Song", "Baby Nautilus",
                          "Baby Piranha", "Baby Blaster"}, player)
 
 
@@ -46,22 +46,22 @@ def _has_energy_attack_item(state:CollectionState, player: int) -> bool:
 
 def _has_shield_song(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
-    return state.has("Shield song", player)
+    return state.has("Shield Song", player)
 
 
 def _has_bind_song(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the bind song item"""
-    return state.has("Bind song", player)
+    return state.has("Bind Song", player)
 
 
 def _has_energy_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the energy form item"""
-    return state.has("Energy form", player)
+    return state.has("Energy Form", player)
 
 
 def _has_beast_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the beast form item"""
-    return state.has("Beast form", player)
+    return state.has("Beast Form", player)
 
 
 def _has_beast_and_soup_form(state:CollectionState, player: int) -> bool:
@@ -76,12 +76,12 @@ def _has_beast_form_or_arnassi_armor(state:CollectionState, player: int) -> bool
 
 def _has_nature_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the nature form item"""
-    return state.has("Nature form", player)
+    return state.has("Nature Form", player)
 
 
 def _has_sun_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the sun form item"""
-    return state.has("Sun form", player)
+    return state.has("Sun Form", player)
 
 
 def _has_light(state:CollectionState, player: int) -> bool:
@@ -91,17 +91,17 @@ def _has_light(state:CollectionState, player: int) -> bool:
 
 def _has_dual_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the dual form item"""
-    return _has_li(state, player) and state.has("Dual form", player)
+    return _has_li(state, player) and state.has("Dual Form", player)
 
 
 def _has_fish_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the fish form item"""
-    return state.has("Fish form", player)
+    return state.has("Fish Form", player)
 
 
 def _has_spirit_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the spirit form item"""
-    return state.has("Spirit form", player)
+    return state.has("Spirit Form", player)
 
 
 def _has_big_bosses(state:CollectionState, player: int) -> bool:
@@ -118,7 +118,7 @@ def _has_mini_bosses(state:CollectionState, player: int) -> bool:
 
 
 def _has_secrets(state:CollectionState, player: int) -> bool:
-    return state.has_all({"First secret obtained", "Second secret obtained", "Third secret obtained"},player)
+    return state.has_all({"First Secret obtained", "Second Secret obtained", "Third Secret obtained"},player)
 
 
 class AquariaRegions:
@@ -129,6 +129,7 @@ class AquariaRegions:
     verse_cave_r: Region
     verse_cave_l: Region
     home_water: Region
+    home_water_behind_rocks:Region
     home_water_nautilus: Region
     home_water_transturtle: Region
     naija_home: Region
@@ -137,33 +138,40 @@ class AquariaRegions:
     energy_temple_2: Region
     energy_temple_3: Region
     energy_temple_boss: Region
+    energy_temple_4: Region
     energy_temple_idol: Region
     energy_temple_blaster_room: Region
     energy_temple_altar: Region
     openwater_tl: Region
     openwater_tr: Region
     openwater_tr_turtle: Region
+    openwater_tr_urns: Region
     openwater_bl: Region
     openwater_br: Region
     skeleton_path: Region
     skeleton_path_sc: Region
     arnassi: Region
     arnassi_cave_transturtle: Region
-    arnassi_path: Region
+    arnassi_cave: Region
     arnassi_crab_boss: Region
     simon: Region
     mithalas_city: Region
+    mithalas_city_urns: Region
     mithalas_city_top_path: Region
     mithalas_city_fishpass: Region
-    cathedral_l: Region
-    cathedral_l_tube: Region
-    cathedral_l_sc: Region
-    cathedral_r: Region
+    mithalas_castle: Region
+    mithalas_castle_urns: Region
+    mithalas_castle_tube: Region
+    mithalas_castle_sc: Region
+    cathedral_top: Region
+    cathedral_top_start: Region
+    cathedral_top_start_urns: Region
+    cathedral_top_end: Region
     cathedral_underground: Region
     cathedral_boss_l: Region
     cathedral_boss_r: Region
     forest_tl: Region
-    forest_tl_fp: Region
+    forest_tl_verse_egg_room: Region
     forest_tr: Region
     forest_tr_fp: Region
     forest_bl: Region
@@ -171,18 +179,19 @@ class AquariaRegions:
     forest_br: Region
     forest_boss: Region
     forest_boss_entrance: Region
-    forest_sprite_cave: Region
-    forest_sprite_cave_tube: Region
+    sprite_cave: Region
+    sprite_cave_tube: Region
     mermog_cave: Region
     mermog_boss: Region
     forest_fish_cave: Region
     veil_tl: Region
     veil_tl_fp: Region
     veil_tr_l: Region
+    veil_tr_l_fp: Region
     veil_tr_r: Region
-    veil_bl: Region
+    veil_b: Region
     veil_b_sc: Region
-    veil_bl_fp: Region
+    veil_b_fp: Region
     veil_br: Region
     octo_cave_t: Region
     octo_cave_b: Region
@@ -197,13 +206,16 @@ class AquariaRegions:
     abyss_r: Region
     abyss_r_transturtle: Region
     ice_cave: Region
+    frozen_feil:Region
     bubble_cave: Region
     bubble_cave_boss: Region
     king_jellyfish_cave: Region
+    abyss_r_whale: Region
     whale: Region
     first_secret: Region
     sunken_city_l: Region
-    sunken_city_r: Region
+    sunken_city_l_crates: Region
+    sunken_city_r_crates: Region
     sunken_city_boss: Region
     sunken_city_l_bedroom: Region
     body_c: Region
@@ -249,11 +261,13 @@ class AquariaRegions:
                                               AquariaLocations.locations_verse_cave_r)
         self.verse_cave_l = self.__add_region("Verse Cave left area",
                                               AquariaLocations.locations_verse_cave_l)
-        self.home_water = self.__add_region("Home Water", AquariaLocations.locations_home_water)
-        self.home_water_nautilus = self.__add_region("Home Water, Nautilus nest",
+        self.home_water = self.__add_region("Home Waters", AquariaLocations.locations_home_water)
+        self.home_water_nautilus = self.__add_region("Home Waters, Nautilus nest",
                                                      AquariaLocations.locations_home_water_nautilus)
-        self.home_water_transturtle = self.__add_region("Home Water, turtle room",
+        self.home_water_transturtle = self.__add_region("Home Waters, turtle room",
                                                      AquariaLocations.locations_home_water_transturtle)
+        self.home_water_behind_rocks = self.__add_region("Home Waters, behind rock",
+                                                        AquariaLocations.locations_home_water_behind_rocks)
         self.naija_home = self.__add_region("Naija's Home", AquariaLocations.locations_naija_home)
         self.song_cave = self.__add_region("Song Cave", AquariaLocations.locations_song_cave)
 
@@ -275,29 +289,32 @@ class AquariaRegions:
                                                     AquariaLocations.locations_energy_temple_idol)
         self.energy_temple_blaster_room = self.__add_region("Energy Temple blaster room",
                                                             AquariaLocations.locations_energy_temple_blaster_room)
+        self.energy_temple_4 = self.__add_region("Energy Temple after boss path", None)
 
     def __create_openwater(self) -> None:
         """
         Create the `openwater_*`, `skeleton_path`, `arnassi*` and `simon`
         regions
         """
-        self.openwater_tl = self.__add_region("Open Water top left area",
+        self.openwater_tl = self.__add_region("Open Waters top left area",
                                               AquariaLocations.locations_openwater_tl)
-        self.openwater_tr = self.__add_region("Open Water top right area",
+        self.openwater_tr = self.__add_region("Open Waters top right area",
                                               AquariaLocations.locations_openwater_tr)
-        self.openwater_tr_turtle = self.__add_region("Open Water top right area, turtle room",
+        self.openwater_tr_turtle = self.__add_region("Open Waters top right area, turtle room",
                                                      AquariaLocations.locations_openwater_tr_turtle)
-        self.openwater_bl = self.__add_region("Open Water bottom left area",
+        self.openwater_tr_urns = self.__add_region("Open Waters top right area, Mithalas entrance",
+                                                   AquariaLocations.locations_openwater_tr_urns)
+        self.openwater_bl = self.__add_region("Open Waters bottom left area",
                                               AquariaLocations.locations_openwater_bl)
-        self.openwater_br = self.__add_region("Open Water bottom right area", None)
-        self.skeleton_path = self.__add_region("Open Water skeleton path",
+        self.openwater_br = self.__add_region("Open Waters bottom right area", None)
+        self.skeleton_path = self.__add_region("Open Waters skeleton path",
                                                AquariaLocations.locations_skeleton_path)
-        self.skeleton_path_sc = self.__add_region("Open Water skeleton path spirit crystal",
+        self.skeleton_path_sc = self.__add_region("Open Waters skeleton path spirit crystal",
                                                   AquariaLocations.locations_skeleton_path_sc)
         self.arnassi = self.__add_region("Arnassi Ruins", AquariaLocations.locations_arnassi)
-        self.arnassi_path = self.__add_region("Arnassi Ruins, back entrance path",
-                                              AquariaLocations.locations_arnassi_path)
-        self.arnassi_cave_transturtle = self.__add_region("Arnassi Ruins, transturtle area",
+        self.arnassi_cave = self.__add_region("Arnassi Ruins cave",
+                                              AquariaLocations.locations_arnassi_cave)
+        self.arnassi_cave_transturtle = self.__add_region("Arnassi Ruins cave, transturtle area",
                                                           AquariaLocations.locations_arnassi_cave_transturtle)
         self.arnassi_crab_boss = self.__add_region("Arnassi Ruins, Crabbius Maximus lair",
                                                    AquariaLocations.locations_arnassi_crab_boss)
@@ -308,22 +325,29 @@ class AquariaRegions:
         """
         self.mithalas_city = self.__add_region("Mithalas City",
                                                AquariaLocations.locations_mithalas_city)
+        self.mithalas_city_urns = self.__add_region("Mithalas City urns", AquariaLocations.locations_mithalas_city_urns)
         self.mithalas_city_fishpass = self.__add_region("Mithalas City fish pass",
                                                         AquariaLocations.locations_mithalas_city_fishpass)
         self.mithalas_city_top_path = self.__add_region("Mithalas City top path",
                                                         AquariaLocations.locations_mithalas_city_top_path)
-        self.cathedral_l = self.__add_region("Mithalas castle", AquariaLocations.locations_cathedral_l)
-        self.cathedral_l_tube = self.__add_region("Mithalas castle, plant tube entrance",
-                                                  AquariaLocations.locations_cathedral_l_tube)
-        self.cathedral_l_sc = self.__add_region("Mithalas castle spirit crystal",
-                                                AquariaLocations.locations_cathedral_l_sc)
-        self.cathedral_r = self.__add_region("Mithalas Cathedral",
-                                             AquariaLocations.locations_cathedral_r)
+        self.mithalas_castle = self.__add_region("Mithalas castle", AquariaLocations.locations_mithalas_castle)
+        self.mithalas_castle_urns = self.__add_region("Mithalas castle urns",
+                                                      AquariaLocations.locations_mithalas_castle_urns)
+        self.mithalas_castle_tube = self.__add_region("Mithalas castle, plant tube entrance",
+                                                  AquariaLocations.locations_mithalas_castle_tube)
+        self.mithalas_castle_sc = self.__add_region("Mithalas castle spirit crystal",
+                                                AquariaLocations.locations_mithalas_castle_sc)
+        self.cathedral_top_start = self.__add_region("Mithalas Cathedral start",
+                                             AquariaLocations.locations_cathedral_top_start)
+        self.cathedral_top_start_urns = self.__add_region("Mithalas Cathedral start urns",
+                                             AquariaLocations.locations_cathedral_top_start_urns)
+        self.cathedral_top_end = self.__add_region("Mithalas Cathedral end",
+                                             AquariaLocations.locations_cathedral_top_end)
         self.cathedral_underground = self.__add_region("Mithalas Cathedral underground",
                                                        AquariaLocations.locations_cathedral_underground)
-        self.cathedral_boss_r = self.__add_region("Mithalas Cathedral, Mithalan God room", None)
-        self.cathedral_boss_l = self.__add_region("Mithalas Cathedral, after Mithalan God room",
+        self.cathedral_boss_l = self.__add_region("Mithalas Cathedral, after Mithalan God",
                                                   AquariaLocations.locations_cathedral_boss)
+        self.cathedral_boss_r = self.__add_region("Mithalas Cathedral, before Mithalan God", None)
 
     def __create_forest(self) -> None:
         """
@@ -331,8 +355,8 @@ class AquariaRegions:
         """
         self.forest_tl = self.__add_region("Kelp Forest top left area",
                                            AquariaLocations.locations_forest_tl)
-        self.forest_tl_fp = self.__add_region("Kelp Forest top left area fish pass",
-                                              AquariaLocations.locations_forest_tl_fp)
+        self.forest_tl_verse_egg_room = self.__add_region("Kelp Forest top left area fish pass",
+                                              AquariaLocations.locations_forest_tl_verse_egg_room)
         self.forest_tr = self.__add_region("Kelp Forest top right area",
                                            AquariaLocations.locations_forest_tr)
         self.forest_tr_fp = self.__add_region("Kelp Forest top right area fish pass",
@@ -343,21 +367,21 @@ class AquariaRegions:
                                               AquariaLocations.locations_forest_bl_sc)
         self.forest_br = self.__add_region("Kelp Forest bottom right area",
                                            AquariaLocations.locations_forest_br)
-        self.forest_sprite_cave = self.__add_region("Kelp Forest spirit cave",
-                                                    AquariaLocations.locations_forest_sprite_cave)
-        self.forest_sprite_cave_tube = self.__add_region("Kelp Forest spirit cave after the plant tube",
-                                                         AquariaLocations.locations_forest_sprite_cave_tube)
+        self.sprite_cave = self.__add_region("Sprite cave",
+                                                    AquariaLocations.locations_sprite_cave)
+        self.sprite_cave_tube = self.__add_region("Sprite cave after the plant tube",
+                                                         AquariaLocations.locations_sprite_cave_tube)
         self.forest_boss = self.__add_region("Kelp Forest Drunian God room",
                                              AquariaLocations.locations_forest_boss)
         self.forest_boss_entrance = self.__add_region("Kelp Forest Drunian God room entrance",
                                                       AquariaLocations.locations_forest_boss_entrance)
-        self.mermog_cave = self.__add_region("Kelp Forest Mermog cave",
+        self.mermog_cave = self.__add_region("Mermog cave",
                                              AquariaLocations.locations_mermog_cave)
-        self.mermog_boss = self.__add_region("Kelp Forest Mermog cave boss",
+        self.mermog_boss = self.__add_region("Mermog cave boss",
                                              AquariaLocations.locations_mermog_boss)
         self.forest_fish_cave = self.__add_region("Kelp Forest fish cave",
                                                   AquariaLocations.locations_forest_fish_cave)
-        self.simon = self.__add_region("Kelp Forest, Simon's room", AquariaLocations.locations_simon)
+        self.simon = self.__add_region("Simon Says area", AquariaLocations.locations_simon)
 
     def __create_veil(self) -> None:
         """
@@ -372,18 +396,19 @@ class AquariaRegions:
                                                     AquariaLocations.locations_turtle_cave_bubble)
         self.veil_tr_l = self.__add_region("The Veil top right area, left of temple",
                                            AquariaLocations.locations_veil_tr_l)
+        self.veil_tr_l_fp = self.__add_region("The Veil top right area, fish pass left of temple", None)
         self.veil_tr_r = self.__add_region("The Veil top right area, right of temple",
                                            AquariaLocations.locations_veil_tr_r)
         self.octo_cave_t = self.__add_region("Octopus Cave top entrance",
                                              AquariaLocations.locations_octo_cave_t)
         self.octo_cave_b = self.__add_region("Octopus Cave bottom entrance",
                                              AquariaLocations.locations_octo_cave_b)
-        self.veil_bl = self.__add_region("The Veil bottom left area",
-                                         AquariaLocations.locations_veil_bl)
+        self.veil_b = self.__add_region("The Veil bottom left area",
+                                         AquariaLocations.locations_veil_b)
         self.veil_b_sc = self.__add_region("The Veil bottom spirit crystal area",
                                            AquariaLocations.locations_veil_b_sc)
-        self.veil_bl_fp = self.__add_region("The Veil bottom left area, in the sunken ship",
-                                            AquariaLocations.locations_veil_bl_fp)
+        self.veil_b_fp = self.__add_region("The Veil bottom left area, in the sunken ship",
+                                            AquariaLocations.locations_veil_b_fp)
         self.veil_br = self.__add_region("The Veil bottom right area",
                                          AquariaLocations.locations_veil_br)
 
@@ -411,26 +436,31 @@ class AquariaRegions:
         self.abyss_r = self.__add_region("Abyss right area", AquariaLocations.locations_abyss_r)
         self.abyss_r_transturtle = self.__add_region("Abyss right area, transturtle",
                                                      AquariaLocations.locations_abyss_r_transturtle)
-        self.ice_cave = self.__add_region("Ice Cave", AquariaLocations.locations_ice_cave)
+        self.abyss_r_whale = self.__add_region("Abyss right area, outside the whale",
+                                                     AquariaLocations.locations_abyss_r_whale)
+        self.ice_cave = self.__add_region("Ice Cavern", AquariaLocations.locations_ice_cave)
+        self.frozen_feil = self.__add_region("Frozen Veil", None)
         self.bubble_cave = self.__add_region("Bubble Cave", AquariaLocations.locations_bubble_cave)
         self.bubble_cave_boss = self.__add_region("Bubble Cave boss area", AquariaLocations.locations_bubble_cave_boss)
         self.king_jellyfish_cave = self.__add_region("Abyss left area, King jellyfish cave",
                                                      AquariaLocations.locations_king_jellyfish_cave)
         self.whale = self.__add_region("Inside the whale", AquariaLocations.locations_whale)
-        self.first_secret = self.__add_region("First secret area", None)
+        self.first_secret = self.__add_region("First Secret area", None)
 
     def __create_sunken_city(self) -> None:
         """
         Create the `sunken_city_*` regions
         """
-        self.sunken_city_l = self.__add_region("Sunken City left area",
-                                               AquariaLocations.locations_sunken_city_l)
+        self.sunken_city_l = self.__add_region("Sunken City left area", None)
+        self.sunken_city_l_crates = self.__add_region("Sunken City left area",
+                                                      AquariaLocations.locations_sunken_city_l)
         self.sunken_city_l_bedroom = self.__add_region("Sunken City left area, bedroom",
                                                        AquariaLocations.locations_sunken_city_l_bedroom)
-        self.sunken_city_r = self.__add_region("Sunken City right area",
-                                               AquariaLocations.locations_sunken_city_r)
+        self.sunken_city_r = self.__add_region("Sunken City right area", None)
+        self.sunken_city_r_crates = self.__add_region("Sunken City right area crates",
+                                                      AquariaLocations.locations_sunken_city_r)
         self.sunken_city_boss = self.__add_region("Sunken City boss area",
-                              AquariaLocations.locations_sunken_city_boss)
+                                                  AquariaLocations.locations_sunken_city_boss)
 
     def __create_body(self) -> None:
         """
@@ -482,19 +512,20 @@ class AquariaRegions:
                                self.menu, self.verse_cave_r)
         self.__connect_regions("Verse Cave left area", "Verse Cave right area",
                                self.verse_cave_l, self.verse_cave_r)
-        self.__connect_regions("Verse Cave", "Home Water", self.verse_cave_l, self.home_water)
-        self.__connect_regions("Home Water", "Haija's home", self.home_water, self.naija_home)
-        self.__connect_regions("Home Water", "Song Cave", self.home_water, self.song_cave)
-        self.__connect_regions("Home Water", "Home Water, nautilus nest",
-                               self.home_water, self.home_water_nautilus,
-                               lambda state: _has_energy_attack_item(state, self.player) and _has_bind_song(state, self.player))
-        self.__connect_regions("Home Water", "Home Water transturtle room",
+        self.__connect_regions("Verse Cave", "Home Waters", self.verse_cave_l, self.home_water)
+        self.__connect_regions("Home Waters", "Haija's home", self.home_water, self.naija_home)
+        self.__connect_regions("Home Waters", "Song Cave", self.home_water, self.song_cave)
+        self.__connect_regions("Home Waters", "Home Waters behind rocks", self.home_water,
+                               self.home_water_behind_rocks, lambda state: _has_bind_song(state, self.player))
+        self.__connect_regions("Home Waters behind rocks", "Home Waters, nautilus nest",
+                               self.home_water_behind_rocks, self.home_water_nautilus,
+                               lambda state: _has_energy_attack_item(state, self.player))
+        self.__connect_regions("Home Waters", "Home Waters transturtle room",
                                self.home_water, self.home_water_transturtle)
-        self.__connect_regions("Home Water", "Energy Temple first area",
-                               self.home_water, self.energy_temple_1,
-                               lambda state: _has_bind_song(state, self.player))
-        self.__connect_regions("Home Water", "Energy Temple_altar",
-                               self.home_water, self.energy_temple_altar,
+        self.__connect_regions("Home Waters behind rocks", "Energy Temple first area",
+                               self.home_water_behind_rocks, self.energy_temple_1)
+        self.__connect_regions("Home Waters behind rocks", "Energy Temple altar",
+                               self.home_water_behind_rocks, self.energy_temple_altar,
                                lambda state: _has_energy_attack_item(state, self.player) and
                                              _has_bind_song(state, self.player))
         self.__connect_regions("Energy Temple first area", "Energy Temple second area",
@@ -507,87 +538,94 @@ class AquariaRegions:
                                self.energy_temple_idol, self.energy_temple_boss,
                                lambda state: _has_energy_attack_item(state, self.player) and
                                              _has_fish_form(state, self.player))
-        self.__connect_one_way_regions("Energy Temple first area", "Energy Temple boss area",
-                                       self.energy_temple_1, self.energy_temple_boss,
-                                       lambda state: _has_beast_form(state, self.player) and
-                                                     _has_energy_attack_item(state, self.player))
-        self.__connect_one_way_regions("Energy Temple boss area", "Energy Temple first area",
-                                       self.energy_temple_boss, self.energy_temple_1,
-                                       lambda state: _has_energy_attack_item(state, self.player))
+        self.__connect_one_way_regions("Energy Temple first area", "Energy Temple after boss path",
+                                       self.energy_temple_1, self.energy_temple_4,
+                                       lambda state: _has_beast_form(state, self.player))
+        self.__connect_one_way_regions("Energy Temple after boss path", "Energy Temple first area",
+                                       self.energy_temple_4, self.energy_temple_1)
+        self.__connect_regions("Energy Temple after boss path", "Energy Temple boss area",
+                               self.energy_temple_4, self.energy_temple_boss,
+                               lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_regions("Energy Temple second area", "Energy Temple third area",
-                               self.energy_temple_2, self.energy_temple_3,
-                               lambda state: _has_energy_form(state, self.player))
-        self.__connect_regions("Energy Temple boss area", "Energy Temple blaster room",
-                               self.energy_temple_boss, self.energy_temple_blaster_room,
+                               self.energy_temple_2, self.energy_temple_3)
+        self.__connect_one_way_regions("Energy Temple third area", "Energy Temple boss area",
+                               self.energy_temple_3, self.energy_temple_boss,
+                               lambda state: _has_bind_song(state, self.player) and
+                                             _has_energy_attack_item(state, self.player))
+        self.__connect_one_way_regions("Energy Temple after boss path", "Energy Temple blaster room",
+                               self.energy_temple_4, self.energy_temple_blaster_room,
                                lambda state: _has_nature_form(state, self.player) and
                                              _has_bind_song(state, self.player) and
                                              _has_energy_attack_item(state, self.player))
-        self.__connect_regions("Energy Temple first area", "Energy Temple blaster room",
-                               self.energy_temple_1, self.energy_temple_blaster_room,
-                               lambda state: _has_nature_form(state, self.player) and
-                                             _has_bind_song(state, self.player) and
-                                             _has_energy_attack_item(state, self.player) and
-                                             _has_beast_form(state, self.player))
-        self.__connect_regions("Home Water", "Open Water top left area",
+        self.__connect_regions("Home Waters", "Open Waters top left area",
                                self.home_water, self.openwater_tl)
 
     def __connect_open_water_regions(self) -> None:
         """
         Connect entrances of the different regions around open water
         """
-        self.__connect_regions("Open Water top left area", "Open Water top right area",
+        self.__connect_regions("Open Waters top left area", "Open Waters top right area",
                                self.openwater_tl, self.openwater_tr)
-        self.__connect_regions("Open Water top left area", "Open Water bottom left area",
+        self.__connect_regions("Open Waters top left area", "Open Waters bottom left area",
                                self.openwater_tl, self.openwater_bl)
-        self.__connect_regions("Open Water top left area", "forest bottom right area",
+        self.__connect_regions("Open Waters top left area", "Kelp forest bottom right area",
                                self.openwater_tl, self.forest_br)
-        self.__connect_regions("Open Water top right area", "Open Water top right area, turtle room",
+        self.__connect_one_way_regions("Open Waters top right area", "Open Waters top right area, turtle room",
                                self.openwater_tr, self.openwater_tr_turtle,
                                lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
-        self.__connect_regions("Open Water top right area", "Open Water bottom right area",
+        self.__connect_one_way_regions("Open Waters top right area, turtle room", "Open Waters top right area",
+                               self.openwater_tr_turtle, self.openwater_tr)
+        self.__connect_one_way_regions("Open Waters top right area", "Open Waters top right area, Mithalas exit urns",
+                               self.openwater_tr, self.openwater_tr_urns,
+                               lambda state: _has_bind_song(state, self.player) or
+                                             _has_damaging_item(state, self.player))
+        self.__connect_regions("Open Waters top right area", "Open Waters bottom right area",
                                self.openwater_tr, self.openwater_br)
-        self.__connect_regions("Open Water top right area", "Mithalas City",
+        self.__connect_regions("Open Waters top right area", "Mithalas City",
                                self.openwater_tr, self.mithalas_city)
-        self.__connect_regions("Open Water top right area", "Veil bottom left area",
-                               self.openwater_tr, self.veil_bl)
-        self.__connect_one_way_regions("Open Water top right area", "Veil bottom right",
+        self.__connect_regions("Open Waters top right area", "Veil bottom left area",
+                               self.openwater_tr, self.veil_b)
+        self.__connect_one_way_regions("Open Waters top right area", "Veil bottom right",
                                        self.openwater_tr, self.veil_br,
                                        lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
-        self.__connect_one_way_regions("Veil bottom right", "Open Water top right area",
+        self.__connect_one_way_regions("Veil bottom right", "Open Waters top right area",
                                        self.veil_br, self.openwater_tr)
-        self.__connect_regions("Open Water bottom left area", "Open Water bottom right area",
+        self.__connect_regions("Open Waters bottom left area", "Open Waters bottom right area",
                                self.openwater_bl, self.openwater_br)
-        self.__connect_regions("Open Water bottom left area", "Skeleton path",
+        self.__connect_regions("Open Waters bottom left area", "Skeleton path",
                                self.openwater_bl, self.skeleton_path)
-        self.__connect_regions("Abyss left area", "Open Water bottom left area",
+        self.__connect_regions("Abyss left area", "Open Waters bottom left area",
                                self.abyss_l, self.openwater_bl)
-        self.__connect_regions("Skeleton path", "skeleton_path_sc",
+        self.__connect_regions("Skeleton path", "Skeleton path spirit cristals",
                                self.skeleton_path, self.skeleton_path_sc,
                                lambda state: _has_spirit_form(state, self.player))
-        self.__connect_regions("Abyss right area", "Open Water bottom right area",
+        self.__connect_regions("Abyss right area", "Open Waters bottom right area",
                                self.abyss_r, self.openwater_br)
-        self.__connect_one_way_regions("Open Water bottom right area", "Arnassi",
+        self.__connect_one_way_regions("Open Waters bottom right area", "Arnassi ruins",
                                        self.openwater_br, self.arnassi,
                                        lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Arnassi", "Open Water bottom right area",
+        self.__connect_one_way_regions("Arnassi ruins", "Open Waters bottom right area",
                                        self.arnassi, self.openwater_br)
-        self.__connect_regions("Arnassi", "Arnassi path",
-                               self.arnassi, self.arnassi_path)
-        self.__connect_regions("Arnassi ruins, transturtle area", "Arnassi path",
-                               self.arnassi_cave_transturtle, self.arnassi_path,
+        self.__connect_regions("Arnassi ruins", "Arnassi ruins cave",
+                               self.arnassi, self.arnassi_cave)
+        self.__connect_regions("Arnassi ruins cave, transturtle area", "Arnassi ruins cave",
+                               self.arnassi_cave_transturtle, self.arnassi_cave,
                                lambda state: _has_fish_form(state, self.player))
-        self.__connect_one_way_regions("Arnassi path", "Arnassi crab boss area",
-                                       self.arnassi_path, self.arnassi_crab_boss,
+        self.__connect_one_way_regions("Arnassi ruins cave", "Arnassi crab boss area",
+                                       self.arnassi_cave, self.arnassi_crab_boss,
                                        lambda state: _has_beast_form_or_arnassi_armor(state, self.player) and
                                                      (_has_energy_attack_item(state, self.player) or
                                                       _has_nature_form(state, self.player)))
-        self.__connect_one_way_regions("Arnassi crab boss area", "Arnassi path",
-                                       self.arnassi_crab_boss, self.arnassi_path)
+        self.__connect_one_way_regions("Arnassi crab boss area", "Arnassi ruins cave",
+                                       self.arnassi_crab_boss, self.arnassi_cave)
 
     def __connect_mithalas_regions(self) -> None:
         """
         Connect entrances of the different regions around Mithalas
         """
+        self.__connect_one_way_regions("Mithalas City", "Mithalas City urns",
+                                       self.mithalas_city, self.mithalas_city_urns,
+                                       lambda state: _has_damaging_item(state, self.player))
         self.__connect_one_way_regions("Mithalas City", "Mithalas City top path",
                                        self.mithalas_city, self.mithalas_city_top_path,
                                        lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
@@ -597,44 +635,54 @@ class AquariaRegions:
                                self.mithalas_city, self.mithalas_city_fishpass,
                                lambda state: _has_fish_form(state, self.player))
         self.__connect_regions("Mithalas City", "Mithalas castle",
-                               self.mithalas_city, self.cathedral_l)
+                               self.mithalas_city, self.mithalas_castle)
         self.__connect_one_way_regions("Mithalas City top path", "Mithalas castle, flower tube",
                                        self.mithalas_city_top_path,
-                                       self.cathedral_l_tube,
+                                       self.mithalas_castle_tube,
                                        lambda state: _has_nature_form(state, self.player) and
                                                      _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Mithalas castle, flower tube area", "Mithalas City top path",
-                                       self.cathedral_l_tube,
+                                       self.mithalas_castle_tube,
                                        self.mithalas_city_top_path,
                                        lambda state: _has_nature_form(state, self.player))
         self.__connect_one_way_regions("Mithalas castle flower tube area", "Mithalas castle, spirit crystals",
-                               self.cathedral_l_tube, self.cathedral_l_sc,
+                               self.mithalas_castle_tube, self.mithalas_castle_sc,
                                lambda state: _has_spirit_form(state, self.player))
-        self.__connect_one_way_regions("Mithalas castle_flower tube area", "Mithalas castle",
-                               self.cathedral_l_tube, self.cathedral_l,
+        self.__connect_one_way_regions("Mithalas castle flower tube area", "Mithalas castle",
+                               self.mithalas_castle_tube, self.mithalas_castle,
                                lambda state: _has_spirit_form(state, self.player))
+        self.__connect_one_way_regions("Mithalas castle", "Mithalas castle urns",
+                               self.mithalas_castle, self.mithalas_castle_urns,
+                               lambda state: _has_damaging_item(state, self.player))
         self.__connect_regions("Mithalas castle", "Mithalas castle, spirit crystals",
-                               self.cathedral_l, self.cathedral_l_sc,
+                               self.mithalas_castle, self.mithalas_castle_sc,
                                lambda state: _has_spirit_form(state, self.player))
         self.__connect_one_way_regions("Mithalas castle", "Cathedral boss right area",
-                                       self.cathedral_l, self.cathedral_boss_r,
+                                       self.mithalas_castle, self.cathedral_boss_r,
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_one_way_regions("Cathedral boss left area", "Mithalas castle",
-                                       self.cathedral_boss_l, self.cathedral_l,
+                                       self.cathedral_boss_l, self.mithalas_castle,
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_regions("Mithalas castle", "Mithalas Cathedral underground",
-                               self.cathedral_l, self.cathedral_underground,
+                               self.mithalas_castle, self.cathedral_underground,
                                lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral",
-                               self.cathedral_l, self.cathedral_r,
-                               lambda state: _has_bind_song(state, self.player) and
-                                             _has_energy_attack_item(state, self.player))
-        self.__connect_one_way_regions("Mithalas Cathedral", "Mithalas Cathedral underground",
-                                       self.cathedral_r, self.cathedral_underground)
-        self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral",
-                                       self.cathedral_underground, self.cathedral_r,
+        self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral start",
+                                       self.mithalas_castle, self.cathedral_top_start,
+                                       lambda state: _has_bind_song(state, self.player))
+        self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral start urns",
+                                       self.cathedral_top_start, self.cathedral_top_start_urns,
+                                       lambda state: _has_damaging_item(state, self.player))
+        self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
+                                       self.cathedral_top_start, self.cathedral_top_end,
+                                       lambda state: _has_energy_attack_item(state, self.player))
+        self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral end",
+                                       self.cathedral_underground, self.cathedral_top_end,
                                        lambda state: _has_beast_form(state, self.player) and
-                                                     _has_energy_attack_item(state, self.player))
+                                                     _has_damaging_item(state, self.player))
+        self.__connect_one_way_regions("Mithalas Cathedral end", "Mithalas Cathedral underground",
+                                       self.cathedral_top_end, self.cathedral_underground,
+                                       lambda state: _has_energy_attack_item(state, self.player)
+                                       )
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Cathedral boss right area",
                                        self.cathedral_underground, self.cathedral_boss_r)
         self.__connect_one_way_regions("Cathedral boss right area", "Mithalas Cathedral underground",
@@ -651,48 +699,53 @@ class AquariaRegions:
         """
         Connect entrances of the different regions around the Kelp Forest
         """
-        self.__connect_regions("Forest bottom right", "Veil bottom left area",
-                               self.forest_br, self.veil_bl)
-        self.__connect_regions("Forest bottom right", "Forest bottom left area",
+        self.__connect_regions("Kelp Forest bottom right area", "Veil bottom left area",
+                               self.forest_br, self.veil_b)
+        self.__connect_regions("Kelp Forest bottom right area", "Kelp Forest bottom left area",
                                self.forest_br, self.forest_bl)
-        self.__connect_one_way_regions("Forest bottom left area", "Forest bottom left area, spirit crystals",
+        self.__connect_one_way_regions("Kelp Forest bottom left area", "Kelp Forest bottom left area, spirit crystals",
                                        self.forest_bl, self.forest_bl_sc,
                                        lambda state: _has_energy_attack_item(state, self.player))
-        self.__connect_one_way_regions("Forest bottom left area, spirit crystals", "Forest bottom left area",
+        self.__connect_one_way_regions("Kelp Forest bottom left area, spirit crystals", "Kelp Forest bottom left area",
                                self.forest_bl_sc, self.forest_bl)
-        self.__connect_regions("Forest bottom right", "Forest top right area",
+        self.__connect_regions("Kelp Forest bottom right area", "Kelp Forest top right area",
                                self.forest_br, self.forest_tr)
-        self.__connect_regions("Forest bottom left area", "Forest fish cave",
+        self.__connect_regions("Kelp Forest bottom left area", "Kelp Forest fish cave",
                                self.forest_bl, self.forest_fish_cave)
-        self.__connect_regions("Forest bottom left area", "Forest top left area",
+        self.__connect_regions("Kelp Forest bottom left area", "Kelp Forest top left area",
                                self.forest_bl, self.forest_tl)
-        self.__connect_regions("Forest bottom left area", "Forest boss entrance",
+        self.__connect_regions("Kelp Forest bottom left area", "Kelp Forest boss entrance",
                                self.forest_bl, self.forest_boss_entrance,
                                lambda state: _has_nature_form(state, self.player))
-        self.__connect_regions("Forest top left area", "Forest top left area, fish pass",
-                               self.forest_tl, self.forest_tl_fp,
+        self.__connect_one_way_regions("Kelp Forest top left area", "Kelp Forest top left area, Verse Egg room",
+                               self.forest_tl, self.forest_tl_verse_egg_room,
                                lambda state: _has_nature_form(state, self.player) and
                                              _has_bind_song(state, self.player) and
                                              _has_energy_attack_item(state, self.player) and
                                              _has_fish_form(state, self.player))
-        self.__connect_regions("Forest top left area", "Forest top right area",
+        self.__connect_one_way_regions("Kelp Forest top left area, Verse Egg room", "Kelp Forest top left area",
+                               self.forest_tl_verse_egg_room, self.forest_tl,
+                               lambda state: _has_fish_form(state, self.player))
+        self.__connect_regions("Kelp Forest top left area", "Kelp Forest top right area",
                                self.forest_tl, self.forest_tr)
-        self.__connect_regions("Forest top left area", "Forest boss entrance",
+        self.__connect_regions("Kelp Forest top left area", "Kelp Forest boss entrance",
                                self.forest_tl, self.forest_boss_entrance)
-        self.__connect_regions("Forest boss area", "Forest boss entrance",
-                               self.forest_boss, self.forest_boss_entrance,
-                               lambda state: _has_energy_attack_item(state, self.player))
-        self.__connect_regions("Forest top right area", "Forest top right area fish pass",
+        self.__connect_one_way_regions("Kelp Forest boss entrance", "Kelp Forest boss area",
+                                       self.forest_boss_entrance, self.forest_boss,
+                                       lambda state: _has_energy_attack_item(state, self.player))
+        self.__connect_one_way_regions("Kelp Forest boss area", "Kelp Forest boss entrance",
+                               self.forest_boss, self.forest_boss_entrance)
+        self.__connect_regions("Kelp Forest top right area", "Kelp Forest top right area fish pass",
                                self.forest_tr, self.forest_tr_fp,
                                lambda state: _has_fish_form(state, self.player))
-        self.__connect_regions("Forest top right area", "Forest sprite cave",
-                               self.forest_tr, self.forest_sprite_cave)
-        self.__connect_regions("Forest sprite cave", "Forest sprite cave flower tube",
-                               self.forest_sprite_cave, self.forest_sprite_cave_tube,
+        self.__connect_regions("Kelp Forest top right area", "Sprite cave",
+                               self.forest_tr, self.sprite_cave)
+        self.__connect_regions("Sprite cave", "Sprite cave flower tube",
+                               self.sprite_cave, self.sprite_cave_tube,
                                lambda state: _has_nature_form(state, self.player))
-        self.__connect_regions("Forest top right area", "Mermog cave",
+        self.__connect_regions("Kelp Forest top right area fish pass", "Mermog cave",
                                self.forest_tr_fp, self.mermog_cave)
-        self.__connect_regions("Fermog cave", "Fermog boss",
+        self.__connect_regions("Mermog cave", "Mergog boss",
                                self.mermog_cave, self.mermog_boss,
                                lambda state: _has_beast_form(state, self.player) and
                                              _has_energy_attack_item(state, self.player))
@@ -702,19 +755,18 @@ class AquariaRegions:
         Connect entrances of the different regions around The Veil
         """
         self.__connect_regions("Veil bottom left area", "Veil bottom left area, fish pass",
-                               self.veil_bl, self.veil_bl_fp,
+                               self.veil_b, self.veil_b_fp,
                                lambda state: _has_fish_form(state, self.player) and
-                                             _has_bind_song(state, self.player) and
-                                             _has_damaging_item(state, self.player))
+                                             _has_bind_song(state, self.player))
         self.__connect_regions("Veil bottom left area", "Veil bottom area spirit crystals path",
-                               self.veil_bl, self.veil_b_sc,
+                               self.veil_b, self.veil_b_sc,
                                lambda state: _has_spirit_form(state, self.player))
         self.__connect_regions("Veil bottom area spirit crystals path", "Veil bottom right",
                                self.veil_b_sc, self.veil_br,
                                lambda state: _has_spirit_form(state, self.player))
         self.__connect_regions("Veil bottom right", "Veil top left area",
                                self.veil_br, self.veil_tl)
-        self.__connect_regions("Veil top left area", "Veil_top left area, fish pass",
+        self.__connect_regions("Veil top left area", "Veil top left area, fish pass",
                                self.veil_tl, self.veil_tl_fp,
                                lambda state: _has_fish_form(state, self.player))
         self.__connect_regions("Veil top left area", "Veil right of sun temple",
@@ -734,30 +786,35 @@ class AquariaRegions:
                                lambda state: _has_light(state, self.player))
         self.__connect_regions("Sun Temple left area", "Veil left of sun temple",
                                self.sun_temple_l, self.veil_tr_l)
-        self.__connect_regions("Sun Temple left area", "Sun Temple before boss area",
+        self.__connect_one_way_regions("Sun Temple left area", "Sun Temple before boss area",
                                self.sun_temple_l, self.sun_temple_boss_path,
                                lambda state: _has_light(state, self.player) or
                                              _has_sun_crystal(state, self.player))
+        self.__connect_one_way_regions("Sun Temple before boss area", "Sun Temple left area",
+                               self.sun_temple_boss_path, self.sun_temple_l)
         self.__connect_regions("Sun Temple before boss area", "Sun Temple boss area",
                                self.sun_temple_boss_path, self.sun_temple_boss,
                                lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Sun Temple boss area", "Veil left of sun temple",
                                        self.sun_temple_boss, self.veil_tr_l)
-        self.__connect_regions("Veil left of sun temple", "Octo cave top path",
-                               self.veil_tr_l, self.octo_cave_t,
-                               lambda state: _has_fish_form(state, self.player) and
-                                             _has_sun_form(state, self.player) and
+        self.__connect_regions("Veil left of sun temple", "Veil fish pass left of sun temple",
+                               self.veil_tr_l, self.veil_tr_l_fp,
+                               lambda state: _has_fish_form(state, self.player))
+        self.__connect_one_way_regions("Veil fish pass left of sun temple", "Octo cave top path",
+                               self.veil_tr_l_fp, self.octo_cave_t,
+                               lambda state: _has_sun_form(state, self.player) and
                                              _has_beast_form(state, self.player) and
                                              _has_energy_attack_item(state, self.player))
-        self.__connect_regions("Veil left of sun temple", "Octo cave bottom path",
-                               self.veil_tr_l, self.octo_cave_b,
-                               lambda state: _has_fish_form(state, self.player))
+        self.__connect_one_way_regions("Octo cave top path", "Veil fish pass left of sun temple",
+                                       self.octo_cave_t, self.veil_tr_l_fp)
+        self.__connect_regions("Veil fish pass left of sun temple", "Octo cave bottom path",
+                               self.veil_tr_l_fp, self.octo_cave_b)
 
     def __connect_abyss_regions(self) -> None:
         """
         Connect entrances of the different regions around The Abyss
         """
-        self.__connect_regions("Abyss left area", "Abyss bottom of left area",
+        self.__connect_regions("Abyss left area", "Abyss left bottom area",
                                self.abyss_l, self.abyss_lb,
                                lambda state: _has_nature_form(state, self.player))
         self.__connect_regions("Abyss left bottom area", "Sunken City right area",
@@ -768,39 +825,46 @@ class AquariaRegions:
                                lambda state: _has_tongue_cleared(state, self.player))
         self.__connect_one_way_regions("Body center area", "Abyss left bottom area",
                                self.body_c, self.abyss_lb)
-        self.__connect_regions("Abyss left area", "King jellyfish cave",
-                               self.abyss_l, self.king_jellyfish_cave,
-                               lambda state: (_has_energy_form(state, self.player) and
-                                              _has_beast_form(state, self.player)) or
-                                             _has_dual_form(state, self.player))
+        self.__connect_one_way_regions("Abyss left area", "King jellyfish cave",
+                                       self.abyss_l, self.king_jellyfish_cave,
+                                       lambda state: _has_dual_form(state, self.player) or
+                                                     (_has_energy_form(state, self.player) and
+                                                      _has_beast_form(state, self.player)))
+        self.__connect_one_way_regions("King jellyfish cave", "Abyss left area",
+                                       self.king_jellyfish_cave, self.abyss_l)
         self.__connect_regions("Abyss left area", "Abyss right area",
                                self.abyss_l, self.abyss_r)
-        self.__connect_one_way_regions("Abyss right area", "Abyss right area, transturtle",
-                               self.abyss_r, self.abyss_r_transturtle)
-        self.__connect_one_way_regions("Abyss right area, transturtle", "Abyss right area",
-                               self.abyss_r_transturtle, self.abyss_r,
-                               lambda state: _has_light(state, self.player))
-        self.__connect_regions("Abyss right area", "Inside the whale",
-                               self.abyss_r, self.whale,
+        self.__connect_regions("Abyss right area", "Abyss right area, outside the whale",
+                               self.abyss_r, self.abyss_r_whale,
                                lambda state: _has_spirit_form(state, self.player) and
                                              _has_sun_form(state, self.player))
-        self.__connect_regions("Abyss right area", "First secret area",
+        self.__connect_regions("Abyss right area, outside the whale", "Inside the whale",
+                               self.abyss_r_whale, self.whale)
+        self.__connect_regions("Abyss right area", "Abyss right area, transturtle",
+                               self.abyss_r, self.abyss_r_transturtle)
+        self.__connect_regions("Abyss right area", "First Secret area",
                                self.abyss_r, self.first_secret,
                                lambda state: _has_spirit_form(state, self.player) and
                                              _has_sun_form(state, self.player) and
                                              _has_bind_song(state, self.player) and
                                              _has_energy_attack_item(state, self.player))
-        self.__connect_regions("Abyss right area", "Ice Cave",
+        self.__connect_regions("Abyss right area", "Ice Cavern",
                                self.abyss_r, self.ice_cave,
                                lambda state: _has_spirit_form(state, self.player))
-        self.__connect_regions("Ice cave", "Bubble Cave",
-                               self.ice_cave, self.bubble_cave,
+        self.__connect_regions("Ice cave", "Frozen Veil",
+                               self.ice_cave, self.frozen_feil)
+        self.__connect_one_way_regions("Frozen Veil", "Bubble Cave",
+                               self.frozen_feil, self.bubble_cave,
                                lambda state: _has_beast_form(state, self.player) or
                                              _has_hot_soup(state, self.player))
-        self.__connect_regions("Bubble Cave boss area", "Bubble Cave",
+        self.__connect_one_way_regions("Bubble Cave", "Frozen Veil",
+                               self.bubble_cave, self.frozen_feil)
+        self.__connect_one_way_regions("Bubble Cave", "Bubble Cave boss area",
                                self.bubble_cave, self.bubble_cave_boss,
                                lambda state: _has_nature_form(state, self.player) and _has_bind_song(state, self.player)
                                )
+        self.__connect_one_way_regions("Bubble Cave boss area", "Bubble Cave",
+                               self.bubble_cave_boss, self.bubble_cave)
 
     def __connect_sunken_city_regions(self) -> None:
         """
@@ -808,9 +872,15 @@ class AquariaRegions:
         """
         self.__connect_regions("Sunken City right area", "Sunken City left area",
                                self.sunken_city_r, self.sunken_city_l)
+        self.__connect_one_way_regions("Sunken City right area", "Sunken City right area crates",
+                                       self.sunken_city_r, self.sunken_city_r_crates,
+                                       lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_regions("Sunken City left area", "Sunken City bedroom",
                                self.sunken_city_l, self.sunken_city_l_bedroom,
                                lambda state: _has_spirit_form(state, self.player))
+        self.__connect_one_way_regions("Sunken City left area", "Sunken City left area crates",
+                                       self.sunken_city_l, self.sunken_city_l_crates,
+                                       lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_regions("Sunken City left area", "Sunken City boss area",
                                self.sunken_city_l, self.sunken_city_boss,
                                lambda state: _has_beast_form(state, self.player) and
@@ -822,14 +892,18 @@ class AquariaRegions:
         """
         Connect entrances of the different regions around The Body
         """
-        self.__connect_regions("Body center area", "Body left area",
-                               self.body_c, self.body_l,
-                               lambda state: _has_energy_form(state, self.player))
+        self.__connect_one_way_regions("Body center area", "Body left area",
+                                       self.body_c, self.body_l,
+                                       lambda state: _has_energy_form(state, self.player))
+        self.__connect_one_way_regions("Body left area", "Body center area",
+                                       self.body_l, self.body_c)
         self.__connect_regions("Body center area", "Body right area top path",
                                self.body_c, self.body_rt)
-        self.__connect_regions("Body center area", "Body right area bottom path",
-                               self.body_c, self.body_rb,
-                               lambda state: _has_energy_form(state, self.player))
+        self.__connect_one_way_regions("Body center area", "Body right area bottom path",
+                                       self.body_c, self.body_rb,
+                                       lambda state: _has_energy_form(state, self.player))
+        self.__connect_one_way_regions("Body right area bottom path", "Body center area",
+                                       self.body_rb, self.body_c)
         self.__connect_regions("Body center area", "Body bottom area",
                                self.body_c, self.body_b,
                                lambda state: _has_dual_form(state, self.player))
@@ -845,7 +919,7 @@ class AquariaRegions:
                                                      _has_dual_form(state, self.player) and
                                                      _has_sun_form(state, self.player) and
                                                      _has_bind_song(state, self.player))
-        self.__connect_one_way_regions("final boss third form area", "final boss end",
+        self.__connect_one_way_regions("Final Boss", "Final Boss end",
                                        self.final_boss, self.final_boss_end)
 
     def __connect_transturtle(self, item_source: str, item_target: str, region_source: Region,
@@ -859,9 +933,9 @@ class AquariaRegions:
         """Connect a single transturtle to all others"""
         self.__connect_transturtle(item, "Transturtle Veil top left", region, self.veil_tl)
         self.__connect_transturtle(item, "Transturtle Veil top right", region, self.veil_tr_l)
-        self.__connect_transturtle(item, "Transturtle Open Water top right", region, self.openwater_tr_turtle)
-        self.__connect_transturtle(item, "Transturtle Forest bottom left", region, self.forest_bl)
-        self.__connect_transturtle(item, "Transturtle Home Water", region, self.home_water_transturtle)
+        self.__connect_transturtle(item, "Transturtle Open Waters top right", region, self.openwater_tr_turtle)
+        self.__connect_transturtle(item, "Transturtle Kelp Forest bottom left", region, self.forest_bl)
+        self.__connect_transturtle(item, "Transturtle Home Waters", region, self.home_water_transturtle)
         self.__connect_transturtle(item, "Transturtle Abyss right", region, self.abyss_r_transturtle)
         self.__connect_transturtle(item, "Transturtle Final Boss", region, self.final_boss_tube)
         self.__connect_transturtle(item, "Transturtle Simon Says", region, self.simon)
@@ -871,9 +945,9 @@ class AquariaRegions:
         """Connect every transturtle with others"""
         self._connect_transturtle_to_other("Transturtle Veil top left", self.veil_tl)
         self._connect_transturtle_to_other("Transturtle Veil top right", self.veil_tr_l)
-        self._connect_transturtle_to_other("Transturtle Open Water top right", self.openwater_tr_turtle)
-        self._connect_transturtle_to_other("Transturtle Forest bottom left", self.forest_bl)
-        self._connect_transturtle_to_other("Transturtle Home Water", self.home_water_transturtle)
+        self._connect_transturtle_to_other("Transturtle Open Waters top right", self.openwater_tr_turtle)
+        self._connect_transturtle_to_other("Transturtle Kelp Forest bottom left", self.forest_bl)
+        self._connect_transturtle_to_other("Transturtle Home Waters", self.home_water_transturtle)
         self._connect_transturtle_to_other("Transturtle Abyss right", self.abyss_r_transturtle)
         self._connect_transturtle_to_other("Transturtle Final Boss", self.final_boss_tube)
         self._connect_transturtle_to_other("Transturtle Simon Says", self.simon)
@@ -942,7 +1016,7 @@ class AquariaRegions:
         self.__add_event_location(self.mermog_boss,
                                   "Beating Mergog",
                                   "Mergog beated")
-        self.__add_event_location(self.cathedral_l_tube,
+        self.__add_event_location(self.mithalas_castle_tube,
                                   "Beating Mithalan priests",
                                   "Mithalan priests beated")
         self.__add_event_location(self.octo_cave_t,
@@ -962,15 +1036,15 @@ class AquariaRegions:
         """
         Add secrets events to the `world`
         """
-        self.__add_event_location(self.first_secret,  # Doit ajouter une région pour le "first secret"
-                                  "First secret",
-                                  "First secret obtained")
+        self.__add_event_location(self.first_secret,  # Doit ajouter une région pour le "First Secret"
+                                  "First Secret",
+                                  "First Secret obtained")
         self.__add_event_location(self.mithalas_city,
-                                  "Second secret",
-                                  "Second secret obtained")
+                                  "Second Secret",
+                                  "Second Secret obtained")
         self.__add_event_location(self.sun_temple_l,
-                                  "Third secret",
-                                  "Third secret obtained")
+                                  "Third Secret",
+                                  "Third Secret obtained")
 
     def add_event_locations(self) -> None:
         """
@@ -981,60 +1055,12 @@ class AquariaRegions:
         self.__add_event_secrets()
         self.__add_event_location(self.sunken_city_boss,
                                   "Sunken City cleared",
-                                  "Body tongue cleared")
+                                  "Body Tongue cleared")
         self.__add_event_location(self.sun_temple_r,
                                   "Sun Crystal",
-                                  "Has sun crystal")
+                                  "Has Sun Crystal")
         self.__add_event_location(self.final_boss_end, "Objective complete",
                                   "Victory")
-
-    def __adjusting_urns_rules(self) -> None:
-        """Since Urns need to be broken, add a damaging item to rules"""
-        add_rule(self.multiworld.get_location("Open Water top right area, first urn in the Mithalas exit", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Open Water top right area, second urn in the Mithalas exit", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Open Water top right area, third urn in the Mithalas exit", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, first urn in one of the homes", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, second urn in one of the homes", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, first urn in the city reserve", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, second urn in the city reserve", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, third urn in the city reserve", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, urn in the Castle flower tube entrance", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City Castle, urn in the bedroom", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City Castle, first urn of the single lamp path", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City Castle, second urn of the single lamp path", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City Castle, urn in the bottom room", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City Castle, first urn on the entrance path", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City Castle, second urn on the entrance path", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, urn inside a home fish pass", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-
-    def __adjusting_crates_rules(self) -> None:
-        """Since Crate need to be broken, add a damaging item to rules"""
-        add_rule(self.multiworld.get_location("Sunken City right area, crate close to the save crystal", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Sunken City right area, crate in the left bottom room", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Sunken City left area, crate in the little pipe room", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Sunken City left area, crate close to the save crystal", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Sunken City left area, crate before the bedroom", self.player),
-                 lambda state: _has_damaging_item(state, self.player))
 
     def __adjusting_soup_rules(self) -> None:
         """
@@ -1042,6 +1068,12 @@ class AquariaRegions:
         """
         add_rule(self.multiworld.get_location("Turtle cave, Urchin Costume", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
+        add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
+                 lambda state: _has_beast_and_soup_form(state, self.player) or
+                               state.has("Sun God beated", self.player))
+        add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
+                 lambda state: _has_beast_and_soup_form(state, self.player) or
+                               state.has("Sun God beated", self.player))
         add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
 
@@ -1049,7 +1081,7 @@ class AquariaRegions:
         """
         Modify rules implying bind song needed for bulb under rocks
         """
-        add_rule(self.multiworld.get_location("Home Water, bulb under the rock in the left path from the Verse Cave",
+        add_rule(self.multiworld.get_location("Home Waters, bulb under the rock in the left path from the Verse Cave",
                                          self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Verse Cave left area, bulb under the rock at the end of the path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
@@ -1061,9 +1093,9 @@ class AquariaRegions:
                                          self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Energy Temple second area, bulb under the rock",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Open Water top left area, bulb under the rock in the right path",
+        add_rule(self.multiworld.get_location("Open Waters top left area, bulb under the rock in the right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Open Water top left area, bulb under the rock in the left path",
+        add_rule(self.multiworld.get_location("Open Waters top left area, bulb under the rock in the left path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Kelp Forest top right area, bulb under the rock in the right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
@@ -1081,13 +1113,15 @@ class AquariaRegions:
                  lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_location("Kelp Forest bottom right area, Odd Container", self.player),
                  lambda state: _has_light(state, self.player))
+        add_rule(self.multiworld.get_entrance("Abyss right area, transturtle to Abyss right area", self.player),
+                 lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_entrance("Body center area to Abyss left bottom area", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.multiworld.get_entrance("Veil left of sun temple to Octo cave top path", self.player),
+        add_rule(self.multiworld.get_entrance("Veil fish pass left of sun temple to Octo cave top path", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.multiworld.get_entrance("Open Water bottom right area to Abyss right area", self.player),
+        add_rule(self.multiworld.get_entrance("Open Waters bottom right area to Abyss right area", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.multiworld.get_entrance("Open Water bottom left area to Abyss left area", self.player),
+        add_rule(self.multiworld.get_entrance("Open Waters bottom left area to Abyss left area", self.player),
                  lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_entrance("Sun Temple left area to Sun Temple right area", self.player),
                  lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
@@ -1099,7 +1133,7 @@ class AquariaRegions:
     def __adjusting_manual_rules(self) -> None:
         add_rule(self.multiworld.get_location("Mithalas Cathedral, Mithalan Dress", self.player),
                  lambda state: _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location("Open Water bottom left area, bulb inside the lowest fish pass", self.player),
+        add_rule(self.multiworld.get_location("Open Waters bottom left area, bulb inside the lowest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
         add_rule(self.multiworld.get_location("Kelp Forest bottom left area, Walker Baby", self.player),
                  lambda state: _has_spirit_form(state, self.player))
@@ -1119,15 +1153,8 @@ class AquariaRegions:
                  lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location("Energy Temple first area, bulb in the bottom room blocked by a rock",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Home Water, bulb in the bottom left room", self.player),
-                 lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Home Water, bulb in the path below Nautilus Prime", self.player),
-                 lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Naija's Home, bulb after the energy door", self.player),
                  lambda state: _has_energy_attack_item(state, self.player))
-        add_rule(self.multiworld.get_location("Abyss right area, bulb behind the rock in the whale room", self.player),
-                 lambda state: _has_spirit_form(state, self.player) and
-                               _has_sun_form(state, self.player))
         add_rule(self.multiworld.get_location("Arnassi Ruins, Arnassi Armor", self.player),
                  lambda state: _has_fish_form(state, self.player) or
                                _has_beast_and_soup_form(state, self.player))
@@ -1140,10 +1167,9 @@ class AquariaRegions:
              ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location("Kelp Forest top left area, Jelly Egg", self.player),
                  lambda state: _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
-                 lambda state: state.has("Sun God beated", self.player))
-        add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
-                 lambda state: state.has("Sun God beated", self.player))
+
+
+
 
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",
@@ -1161,7 +1187,7 @@ class AquariaRegions:
         self.multiworld.get_location("Sunken City, bulb on top of the boss area",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Home Water, Nautilus Egg",
+        self.multiworld.get_location("Home Waters, Nautilus Egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Energy Temple blaster room, Blaster Egg",
@@ -1226,9 +1252,6 @@ class AquariaRegions:
         """
         Modify rules for single location or optional rules
         """
-        self.multiworld.get_entrance("Before Final Boss to Final Boss", self.player)
-        self.__adjusting_urns_rules()
-        self.__adjusting_crates_rules()
         self.__adjusting_soup_rules()
         self.__adjusting_manual_rules()
         if options.light_needed_to_get_to_dark_places:
@@ -1246,14 +1269,11 @@ class AquariaRegions:
             add_rule(self.multiworld.get_entrance("Before Final Boss to Final Boss", self.player),
                      lambda state: _has_secrets(state, self.player))
         if options.unconfine_home_water.value in [0, 1]:
-            add_rule(self.multiworld.get_entrance("Home Water to Home Water transturtle room", self.player),
+            add_rule(self.multiworld.get_entrance("Home Waters to Home Waters transturtle room", self.player),
                      lambda state: _has_bind_song(state, self.player))
         if options.unconfine_home_water.value in [0, 2]:
-            add_rule(self.multiworld.get_entrance("Home Water to Open Water top left area", self.player),
+            add_rule(self.multiworld.get_entrance("Home Waters to Open Waters top left area", self.player),
                      lambda state: _has_bind_song(state, self.player) and _has_energy_attack_item(state, self.player))
-        if options.early_energy_form:
-            self.multiworld.early_items[self.player]["Energy form"] = 1
-
         if options.no_progression_hard_or_hidden_locations:
             self.__no_progression_hard_or_hidden_location()
 
@@ -1288,9 +1308,9 @@ class AquariaRegions:
         self.multiworld.regions.append(self.skeleton_path)
         self.multiworld.regions.append(self.skeleton_path_sc)
         self.multiworld.regions.append(self.arnassi)
-        self.multiworld.regions.append(self.arnassi_path)
-        self.multiworld.regions.append(self.arnassi_crab_boss)
+        self.multiworld.regions.append(self.arnassi_cave)
         self.multiworld.regions.append(self.arnassi_cave_transturtle)
+        self.multiworld.regions.append(self.arnassi_crab_boss)
         self.multiworld.regions.append(self.simon)
 
     def __add_mithalas_regions_to_world(self) -> None:
@@ -1300,10 +1320,12 @@ class AquariaRegions:
         self.multiworld.regions.append(self.mithalas_city)
         self.multiworld.regions.append(self.mithalas_city_top_path)
         self.multiworld.regions.append(self.mithalas_city_fishpass)
-        self.multiworld.regions.append(self.cathedral_l)
-        self.multiworld.regions.append(self.cathedral_l_tube)
-        self.multiworld.regions.append(self.cathedral_l_sc)
-        self.multiworld.regions.append(self.cathedral_r)
+        self.multiworld.regions.append(self.mithalas_castle)
+        self.multiworld.regions.append(self.mithalas_castle_tube)
+        self.multiworld.regions.append(self.mithalas_castle_sc)
+        self.multiworld.regions.append(self.cathedral_top_start)
+        self.multiworld.regions.append(self.cathedral_top_start_urns)
+        self.multiworld.regions.append(self.cathedral_top_end)
         self.multiworld.regions.append(self.cathedral_underground)
         self.multiworld.regions.append(self.cathedral_boss_l)
         self.multiworld.regions.append(self.cathedral_boss_r)
@@ -1313,7 +1335,7 @@ class AquariaRegions:
         Add every region around the kelp forest to the `world`
         """
         self.multiworld.regions.append(self.forest_tl)
-        self.multiworld.regions.append(self.forest_tl_fp)
+        self.multiworld.regions.append(self.forest_tl_verse_egg_room)
         self.multiworld.regions.append(self.forest_tr)
         self.multiworld.regions.append(self.forest_tr_fp)
         self.multiworld.regions.append(self.forest_bl)
@@ -1321,8 +1343,8 @@ class AquariaRegions:
         self.multiworld.regions.append(self.forest_br)
         self.multiworld.regions.append(self.forest_boss)
         self.multiworld.regions.append(self.forest_boss_entrance)
-        self.multiworld.regions.append(self.forest_sprite_cave)
-        self.multiworld.regions.append(self.forest_sprite_cave_tube)
+        self.multiworld.regions.append(self.sprite_cave)
+        self.multiworld.regions.append(self.sprite_cave_tube)
         self.multiworld.regions.append(self.mermog_cave)
         self.multiworld.regions.append(self.mermog_boss)
         self.multiworld.regions.append(self.forest_fish_cave)
@@ -1334,10 +1356,11 @@ class AquariaRegions:
         self.multiworld.regions.append(self.veil_tl)
         self.multiworld.regions.append(self.veil_tl_fp)
         self.multiworld.regions.append(self.veil_tr_l)
+        self.multiworld.regions.append(self.veil_tr_l_fp)
         self.multiworld.regions.append(self.veil_tr_r)
-        self.multiworld.regions.append(self.veil_bl)
+        self.multiworld.regions.append(self.veil_b)
         self.multiworld.regions.append(self.veil_b_sc)
-        self.multiworld.regions.append(self.veil_bl_fp)
+        self.multiworld.regions.append(self.veil_b_fp)
         self.multiworld.regions.append(self.veil_br)
         self.multiworld.regions.append(self.octo_cave_t)
         self.multiworld.regions.append(self.octo_cave_b)
@@ -1355,6 +1378,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.abyss_l)
         self.multiworld.regions.append(self.abyss_lb)
         self.multiworld.regions.append(self.abyss_r)
+        self.multiworld.regions.append(self.abyss_r_whale)
         self.multiworld.regions.append(self.abyss_r_transturtle)
         self.multiworld.regions.append(self.ice_cave)
         self.multiworld.regions.append(self.bubble_cave)

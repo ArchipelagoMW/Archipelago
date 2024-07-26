@@ -29,35 +29,38 @@ class AquariaLocation(Location):
 class AquariaLocations:
 
     locations_verse_cave_r = {
-        "Verse Cave, bulb in the skeleton room": 698107,
-        "Verse Cave, bulb in the path right of the skeleton room": 698108,
+        "Verse Cave right area, bulb in the skeleton room": 698107,
+        "Verse Cave right area, bulb in the path right of the skeleton room": 698108,
         "Verse Cave right area, Big Seed": 698175,
     }
 
     locations_verse_cave_l = {
-        "Verse Cave, the Naija hint about the shield ability": 698200,
+        "Verse Cave left area, the Naija hint about the shield ability": 698200,
         "Verse Cave left area, bulb in the center part": 698021,
         "Verse Cave left area, bulb in the right part": 698022,
         "Verse Cave left area, bulb under the rock at the end of the path": 698023,
     }
 
     locations_home_water = {
-        "Home Water, bulb below the grouper fish": 698058,
-        "Home Water, bulb in the path below Nautilus Prime": 698059,
-        "Home Water, bulb in the little room above the grouper fish": 698060,
-        "Home Water, bulb in the end of the path close to the Verse Cave": 698061,
-        "Home Water, bulb in the top left path": 698062,
-        "Home Water, bulb in the bottom left room": 698063,
-        "Home Water, bulb close to Naija's Home": 698064,
-        "Home Water, bulb under the rock in the left path from the Verse Cave": 698065,
+        "Home Waters, bulb below the grouper fish": 698058,
+        "Home Waters, bulb in the little room above the grouper fish": 698060,
+        "Home Waters, bulb in the end of the path close to the Verse Cave": 698061,
+        "Home Waters, bulb in the top left path": 698062,
+        "Home Waters, bulb close to Naija's Home": 698064,
+        "Home Waters, bulb under the rock in the left path from the Verse Cave": 698065,
+    }
+
+    locations_home_water_behind_rocks = {
+        "Home Waters, bulb in the path below Nautilus Prime": 698059,
+        "Home Waters, bulb in the bottom left room": 698063,
     }
 
     locations_home_water_nautilus = {
-        "Home Water, Nautilus Egg": 698194,
+        "Home Waters, Nautilus Egg": 698194,
     }
 
     locations_home_water_transturtle = {
-        "Home Water, Transturtle": 698213,
+        "Home Waters, Transturtle": 698213,
     }
 
     locations_naija_home = {
@@ -87,7 +90,7 @@ class AquariaLocations:
     }
 
     locations_energy_temple_2 = {
-        "Energy Temple second area, bulb under the rock": 698028,
+        "Energy Temple second area, bulb under the rock": 698028, # This can be accessible via locations_energy_temple_altar too
     }
 
     locations_energy_temple_altar = {
@@ -107,39 +110,42 @@ class AquariaLocations:
     }
 
     locations_openwater_tl = {
-        "Open Water top left area, bulb under the rock in the right path": 698001,
-        "Open Water top left area, bulb under the rock in the left path": 698002,
-        "Open Water top left area, bulb to the right of the save crystal": 698003,
+        "Open Waters top left area, bulb under the rock in the right path": 698001,
+        "Open Waters top left area, bulb under the rock in the left path": 698002,
+        "Open Waters top left area, bulb to the right of the save crystal": 698003,
     }
 
     locations_openwater_tr = {
-        "Open Water top right area, bulb in the small path before Mithalas": 698004,
-        "Open Water top right area, bulb in the path from the left entrance": 698005,
-        "Open Water top right area, bulb in the clearing close to the bottom exit": 698006,
-        "Open Water top right area, bulb in the big clearing close to the save crystal": 698007,
-        "Open Water top right area, bulb in the big clearing to the top exit": 698008,
-        "Open Water top right area, first urn in the Mithalas exit": 698148,
-        "Open Water top right area, second urn in the Mithalas exit": 698149,
-        "Open Water top right area, third urn in the Mithalas exit": 698150,
+        "Open Waters top right area, bulb in the small path before Mithalas": 698004,
+        "Open Waters top right area, bulb in the path from the left entrance": 698005,
+        "Open Waters top right area, bulb in the clearing close to the bottom exit": 698006,
+        "Open Waters top right area, bulb in the big clearing close to the save crystal": 698007,
+        "Open Waters top right area, bulb in the big clearing to the top exit": 698008,
     }
 
     locations_openwater_tr_turtle = {
-        "Open Water top right area, bulb in the turtle room": 698009,
-        "Open Water top right area, Transturtle": 698211,
+        "Open Waters top right area, bulb in the turtle room": 698009,
+        "Open Waters top right area, Transturtle": 698211,
+    }
+
+    locations_openwater_tr_urns = {
+        "Open Waters top right area, first urn in the Mithalas exit": 698148,
+        "Open Waters top right area, second urn in the Mithalas exit": 698149,
+        "Open Waters top right area, third urn in the Mithalas exit": 698150,
     }
 
     locations_openwater_bl = {
-        "Open Water bottom left area, bulb behind the chomper fish": 698011,
-        "Open Water bottom left area, bulb inside the lowest fish pass": 698010,
+        "Open Waters bottom left area, bulb behind the chomper fish": 698011,
+        "Open Waters bottom left area, bulb inside the lowest fish pass": 698010,
     }
 
     locations_skeleton_path = {
-        "Open Water skeleton path, bulb close to the right exit": 698012,
-        "Open Water skeleton path, bulb behind the chomper fish": 698013,
+        "Open Waters skeleton path, bulb close to the right exit": 698012,
+        "Open Waters skeleton path, bulb behind the chomper fish": 698013,
     }
 
     locations_skeleton_path_sc = {
-        "Open Water skeleton path, King Skull": 698177,
+        "Open Waters skeleton path, King Skull": 698177,
     }
 
     locations_arnassi = {
@@ -150,7 +156,7 @@ class AquariaLocations:
         "Arnassi Ruins, Arnassi Armor": 698191,
     }
 
-    locations_arnassi_path = {
+    locations_arnassi_cave = {
         "Arnassi Ruins, Arnassi Statue": 698164,
     }
 
@@ -177,6 +183,9 @@ class AquariaLocations:
         "Mithalas City, bulb in the bottom left part": 698037,
         "Mithalas City, first bulb in one of the homes": 698038,
         "Mithalas City, second bulb in one of the homes": 698039,
+    }
+
+    locations_mithalas_city_urns = {
         "Mithalas City, first urn in one of the homes": 698123,
         "Mithalas City, second urn in one of the homes": 698124,
         "Mithalas City, first urn in the city reserve": 698125,
@@ -197,9 +206,12 @@ class AquariaLocations:
         "Mithalas City, urn inside a home fish pass": 698129,
     }
 
-    locations_cathedral_l = {
+    locations_mithalas_castle = {
         "Mithalas City Castle, bulb in the flesh hole": 698042,
         "Mithalas City Castle, Blue Banner": 698165,
+    }
+
+    locations_mithalas_castle_urns = {
         "Mithalas City Castle, urn in the bedroom": 698130,
         "Mithalas City Castle, first urn of the single lamp path": 698131,
         "Mithalas City Castle, second urn of the single lamp path": 698132,
@@ -208,29 +220,35 @@ class AquariaLocations:
         "Mithalas City Castle, second urn on the entrance path": 698135,
     }
 
-    locations_cathedral_l_tube = {
+    locations_mithalas_castle_tube = {
         "Mithalas City Castle, beating the Priests": 698208,
     }
 
-    locations_cathedral_l_sc = {
+    locations_mithalas_castle_sc = {
         "Mithalas City Castle, Trident Head": 698183,
     }
 
-    locations_cathedral_r = {
+    locations_cathedral_top_start = {
+        "Mithalas Cathedral, bulb in the flesh room with fleas": 698139,
+        "Mithalas Cathedral, Mithalan Dress": 698189,
+    }
+
+    locations_cathedral_top_start_urns = {
         "Mithalas Cathedral, first urn in the top right room": 698136,
         "Mithalas Cathedral, second urn in the top right room": 698137,
         "Mithalas Cathedral, third urn in the top right room": 698138,
-        "Mithalas Cathedral, urn in the flesh room with fleas": 698139,
-        "Mithalas Cathedral, first urn in the bottom right path": 698140,
-        "Mithalas Cathedral, second urn in the bottom right path": 698141,
         "Mithalas Cathedral, urn behind the flesh vein": 698142,
         "Mithalas Cathedral, urn in the top left eyes boss room": 698143,
         "Mithalas Cathedral, first urn in the path behind the flesh vein": 698144,
         "Mithalas Cathedral, second urn in the path behind the flesh vein": 698145,
         "Mithalas Cathedral, third urn in the path behind the flesh vein": 698146,
         "Mithalas Cathedral, fourth urn in the top right room": 698147,
-        "Mithalas Cathedral, Mithalan Dress": 698189,
         "Mithalas Cathedral, urn below the left entrance": 698198,
+    }
+
+    locations_cathedral_top_end = {
+        "Mithalas Cathedral, first urn in the bottom right path": 698140,
+        "Mithalas Cathedral, second urn in the bottom right path": 698141,
     }
 
     locations_cathedral_underground = {
@@ -253,7 +271,7 @@ class AquariaLocations:
         "Kelp Forest top left area, Jelly Egg": 698185,
     }
 
-    locations_forest_tl_fp = {
+    locations_forest_tl_verse_egg_room = {
         "Kelp Forest top left area, bulb close to the Verse Egg": 698047,
         "Kelp Forest top left area, Verse Egg": 698158,
     }
@@ -296,11 +314,11 @@ class AquariaLocations:
         "Kelp Forest bottom left area, Fish Cave puzzle": 698207,
     }
 
-    locations_forest_sprite_cave = {
+    locations_sprite_cave = {
         "Kelp Forest sprite cave, bulb inside the fish pass": 698056,
     }
 
-    locations_forest_sprite_cave_tube = {
+    locations_sprite_cave_tube = {
         "Kelp Forest sprite cave, bulb in the second room": 698057,
         "Kelp Forest sprite cave, Seed Bag": 698176,
     }
@@ -343,7 +361,7 @@ class AquariaLocations:
         "The Veil top right area, Transturtle": 698210,
     }
 
-    locations_veil_bl = {
+    locations_veil_b = {
         "The Veil bottom area, bulb in the left path": 698082,
     }
 
@@ -351,7 +369,7 @@ class AquariaLocations:
         "The Veil bottom area, bulb in the spirit path": 698081,
     }
 
-    locations_veil_bl_fp = {
+    locations_veil_b_fp = {
         "The Veil bottom area, Verse Egg": 698157,
     }
 
@@ -404,10 +422,13 @@ class AquariaLocations:
     }
 
     locations_abyss_r = {
-        "Abyss right area, bulb behind the rock in the whale room": 698109,
         "Abyss right area, bulb in the middle path": 698110,
         "Abyss right area, bulb behind the rock in the middle path": 698111,
         "Abyss right area, bulb in the left green room": 698112,
+    }
+
+    locations_abyss_r_whale = {
+        "Abyss right area, bulb behind the rock in the whale room": 698109,
     }
 
     locations_abyss_r_transturtle = {
@@ -415,11 +436,11 @@ class AquariaLocations:
     }
 
     locations_ice_cave = {
-        "Ice Cave, bulb in the room to the right": 698083,
-        "Ice Cave, first bulb in the top exit room": 698084,
-        "Ice Cave, second bulb in the top exit room": 698085,
-        "Ice Cave, third bulb in the top exit room": 698086,
-        "Ice Cave, bulb in the left room": 698087,
+        "Ice Cavern, bulb in the room to the right": 698083,
+        "Ice Cavern, first bulb in the top exit room": 698084,
+        "Ice Cavern, second bulb in the top exit room": 698085,
+        "Ice Cavern, third bulb in the top exit room": 698086,
+        "Ice Cavern, bulb in the left room": 698087,
     }
 
     locations_bubble_cave = {
@@ -503,11 +524,12 @@ location_table = {
     **AquariaLocations.locations_openwater_tl,
     **AquariaLocations.locations_openwater_tr,
     **AquariaLocations.locations_openwater_tr_turtle,
+    **AquariaLocations.locations_openwater_tr_urns,
     **AquariaLocations.locations_openwater_bl,
     **AquariaLocations.locations_skeleton_path,
     **AquariaLocations.locations_skeleton_path_sc,
     **AquariaLocations.locations_arnassi,
-    **AquariaLocations.locations_arnassi_path,
+    **AquariaLocations.locations_arnassi_cave,
     **AquariaLocations.locations_arnassi_cave_transturtle,
     **AquariaLocations.locations_arnassi_crab_boss,
     **AquariaLocations.locations_sun_temple_l,
@@ -519,6 +541,7 @@ location_table = {
     **AquariaLocations.locations_abyss_l,
     **AquariaLocations.locations_abyss_lb,
     **AquariaLocations.locations_abyss_r,
+    **AquariaLocations.locations_abyss_r_whale,
     **AquariaLocations.locations_abyss_r_transturtle,
     **AquariaLocations.locations_energy_temple_1,
     **AquariaLocations.locations_energy_temple_2,
@@ -528,16 +551,20 @@ location_table = {
     **AquariaLocations.locations_energy_temple_altar,
     **AquariaLocations.locations_energy_temple_idol,
     **AquariaLocations.locations_mithalas_city,
+    **AquariaLocations.locations_mithalas_city_urns,
     **AquariaLocations.locations_mithalas_city_top_path,
     **AquariaLocations.locations_mithalas_city_fishpass,
-    **AquariaLocations.locations_cathedral_l,
-    **AquariaLocations.locations_cathedral_l_tube,
-    **AquariaLocations.locations_cathedral_l_sc,
-    **AquariaLocations.locations_cathedral_r,
+    **AquariaLocations.locations_mithalas_castle,
+    **AquariaLocations.locations_mithalas_castle_urns,
+    **AquariaLocations.locations_mithalas_castle_tube,
+    **AquariaLocations.locations_mithalas_castle_sc,
+    **AquariaLocations.locations_cathedral_top_start,
+    **AquariaLocations.locations_cathedral_top_start_urns,
+    **AquariaLocations.locations_cathedral_top_end,
     **AquariaLocations.locations_cathedral_underground,
     **AquariaLocations.locations_cathedral_boss,
     **AquariaLocations.locations_forest_tl,
-    **AquariaLocations.locations_forest_tl_fp,
+    **AquariaLocations.locations_forest_tl_verse_egg_room,
     **AquariaLocations.locations_forest_tr,
     **AquariaLocations.locations_forest_tr_fp,
     **AquariaLocations.locations_forest_bl,
@@ -545,10 +572,11 @@ location_table = {
     **AquariaLocations.locations_forest_br,
     **AquariaLocations.locations_forest_boss,
     **AquariaLocations.locations_forest_boss_entrance,
-    **AquariaLocations.locations_forest_sprite_cave,
-    **AquariaLocations.locations_forest_sprite_cave_tube,
+    **AquariaLocations.locations_sprite_cave,
+    **AquariaLocations.locations_sprite_cave_tube,
     **AquariaLocations.locations_forest_fish_cave,
     **AquariaLocations.locations_home_water,
+    **AquariaLocations.locations_home_water_behind_rocks,
     **AquariaLocations.locations_home_water_transturtle,
     **AquariaLocations.locations_home_water_nautilus,
     **AquariaLocations.locations_body_l,
@@ -565,9 +593,9 @@ location_table = {
     **AquariaLocations.locations_turtle_cave_bubble,
     **AquariaLocations.locations_veil_tr_r,
     **AquariaLocations.locations_veil_tr_l,
-    **AquariaLocations.locations_veil_bl,
+    **AquariaLocations.locations_veil_b,
     **AquariaLocations.locations_veil_b_sc,
-    **AquariaLocations.locations_veil_bl_fp,
+    **AquariaLocations.locations_veil_b_fp,
     **AquariaLocations.locations_veil_br,
     **AquariaLocations.locations_ice_cave,
     **AquariaLocations.locations_king_jellyfish_cave,
