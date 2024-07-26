@@ -460,7 +460,7 @@ OVERLORD_PNEUMATIZED_CARAPACE           = "Pneumatized Carapace (Overlord)"
 OVERLORD_ANTENNAE                       = "Antennae (Overlord)"
 TYRANNOZOR_BARRAGE_OF_SPIKES            = "Barrage of Spikes (Tyrannozor)"
 TYRANNOZOR_TYRANTS_PROTECTION           = "Tyrant's Protection (Tyrannozor)"
-TYRANNOZOR_HEALING_ADAPTION             = "Healing Adaption (Ultralisk/Tyrannozor)"
+TYRANNOZOR_HEALING_ADAPTATION             = "Healing Adaptation (Ultralisk/Tyrannozor)"
 TYRANNOZOR_IMPALING_STRIKE              = "Impaling Strike (Ultralisk/Tyrannozor)"
 
 # Zerg Strains

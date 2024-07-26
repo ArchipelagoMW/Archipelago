@@ -1395,7 +1395,7 @@ item_table = {
     item_names.TYRANNOZOR_IMPALING_STRIKE:
         ItemData(294 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 10, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
-    item_names.TYRANNOZOR_HEALING_ADAPTION:
+    item_names.TYRANNOZOR_HEALING_ADAPTATION:
         ItemData(295 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 11, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
 
