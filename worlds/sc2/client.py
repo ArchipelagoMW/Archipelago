@@ -25,6 +25,7 @@ from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui
 from Utils import init_logging, is_windows, async_start
 from . import item_names
 from .item_groups import item_name_groups, unlisted_item_name_groups
+from .item_descriptions import item_descriptions
 from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
@@ -63,6 +64,7 @@ from .regions import MissionInfo
 import colorama
 from .options import Option
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
+from kvui import KivyJSONtoTextParser
 from MultiServer import mark_raw
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
@@ -519,6 +521,24 @@ class SC2JSONtoTextParser(JSONtoTextParser):
         return '<c val="' + self.color_codes[code] + '">'
 
 
+class SC2JSONtoKivyParser(KivyJSONtoTextParser):
+    def _handle_item_name(self, node: JSONMessagePart):
+        flags = node.get("flags", 0)
+        item_types = []
+        if flags & 0b001:  # advancement
+            item_types.append("progression")
+        if flags & 0b010:  # useful
+            item_types.append("useful")
+        if flags & 0b100:  # trap
+            item_types.append("trap")
+        if not item_types:
+            item_types.append("normal")
+
+        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + item_descriptions[node["text"]].replace("\n", "<br>")
+        node.setdefault("refs", []).append(ref)
+        return super(KivyJSONtoTextParser, self)._handle_item_name(node)
+
+
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = STARCRAFT2
@@ -733,6 +753,7 @@ class SC2Context(CommonContext):
     def run_gui(self) -> None:
         from .client_gui import start_gui
         start_gui(self)
+        self.ui.json_to_kivy_parser = SC2JSONtoKivyParser(self)
 
 
     async def shutdown(self) -> None:
