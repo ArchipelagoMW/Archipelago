@@ -173,8 +173,8 @@ class EXPMultiplier(NamedRange):
     range_start = default / 4
     range_end = 128
     special_range_names = {
-        "0.25x": default / 4,
-        "0.5x": default / 2,
+        "0.25x": int(default / 4),
+        "0.5x": int(default / 2),
         "1x": default,
         "2x": default * 2,
         "3x": default * 3,
