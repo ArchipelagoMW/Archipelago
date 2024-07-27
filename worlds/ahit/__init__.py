@@ -129,7 +129,7 @@ class HatInTimeWorld(World):
         # place vanilla contract locations if contract shuffle is off
         if not self.options.ShuffleActContracts:
             for name in contract_locations.keys():
-                loc = self.multiworld.get_location(name, self.player)
+                loc = self.get_location(name)
                 loc.place_locked_item(create_item(self, name))
                 if self.options.ShuffleSubconPaintings and loc.name != "Snatcher's Contract - The Subcon Well":
                     add_rule(loc, lambda state: has_paintings(state, self, 1))
