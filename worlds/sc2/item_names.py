@@ -706,7 +706,7 @@ HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc
 HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
 # Signifier
 # Ascendant
-# DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
+DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
 # IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
 # Annihilator
 # Vanguard
