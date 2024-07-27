@@ -154,7 +154,6 @@ class HKWorld(World):
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
     cached_filler_items = {}
-    data_version = 2
 
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
@@ -406,7 +405,7 @@ class HKWorld(World):
                     continue
                 if setting == CostSanity.option_shopsonly and location.basename not in multi_locations:
                     continue
-                if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
+                if location.basename in {'Grubfather', 'Seer', 'Egg_Shop'}:
                     our_weights = dict(weights_geoless)
                 else:
                     our_weights = dict(weights)
@@ -555,7 +554,8 @@ class HKWorld(World):
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 if state.prog_items[item.player][effect_name] == effect_value:
                     del state.prog_items[item.player][effect_name]
-                state.prog_items[item.player][effect_name] -= effect_value
+                else:
+                    state.prog_items[item.player][effect_name] -= effect_value
 
         return change
 
