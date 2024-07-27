@@ -67,7 +67,7 @@ class DarkSouls3World(World):
     location_descriptions = location_descriptions
     item_descriptions = item_descriptions
 
-    yhorm_location: Optional[DS3BossInfo]
+    yhorm_location: DS3BossInfo = default_yhorm_location
     """If enemy randomization is enabled, this is the boss who Yhorm the Giant should replace.
     
     This is used to determine where the Storm Ruler can be placed.
@@ -98,8 +98,6 @@ class DarkSouls3World(World):
                     for boss in all_bosses:
                         if yhorm_data.startswith(boss.name):
                             self.yhorm_location = boss
-                else:
-                    self.yhorm_location = default_yhorm_location
 
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
         elif self.options.randomize_enemies:
@@ -115,8 +113,6 @@ class DarkSouls3World(World):
                 )
             ):
                 self.multiworld.local_early_items[self.player]["Storm Ruler"] = 1
-        else:
-            self.yhorm_location = default_yhorm_location
 
     def _allow_boss_for_yhorm(self, boss: DS3BossInfo) -> bool:
         """Returns whether boss is a valid location for Yhorm in this seed."""
