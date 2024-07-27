@@ -7649,6 +7649,8 @@
       LEAP:
         id: Double Room/Panel_leap_leap
         tag: midwhite
+        required_door:
+          door: Door to Cross
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
