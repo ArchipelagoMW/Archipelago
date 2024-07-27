@@ -1374,8 +1374,10 @@ class DarkSouls3World(World):
         region order, and then the best items in a sphere go into the multiworld.
         """
 
-        locations_by_sphere = [sorted(loc for loc in sphere if loc.item.player == self.player and not loc.locked)
-                               for sphere in self.multiworld.get_spheres()]
+        locations_by_sphere = [
+            sorted(loc for loc in sphere if loc.item.player == self.player and not loc.locked)
+            for sphere in self.multiworld.get_spheres()
+        ]
 
         # All items in the base game in approximately the order they appear
         all_item_order = [
