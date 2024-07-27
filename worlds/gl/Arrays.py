@@ -469,3 +469,7 @@ colors = {
     2: 0x9C,
     3: 0xA4,
 }
+
+no_obelisks = [
+
+]
