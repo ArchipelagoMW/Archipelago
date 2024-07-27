@@ -44,8 +44,7 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     options_dataclass = options.SubnauticaOptions
     options: options.SubnauticaOptions
-    data_version = 10
-    required_client_version = (0, 4, 1)
+    required_client_version = (0, 5, 0)
 
     creatures_to_scan: List[str]
 
