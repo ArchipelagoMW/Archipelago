@@ -87,10 +87,9 @@ class HatInTimeWorld(World):
         if self.is_dw_only():
             return
 
-        start_chapter = self.options.StartingChapter
-
         # Take care of some extremely restrictive starts in other chapters with act shuffle off
         if not self.options.ActRandomizer:
+            start_chapter = self.options.StartingChapter
             if start_chapter == ChapterIndex.ALPINE:
                 self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
                 if self.options.UmbrellaLogic:
