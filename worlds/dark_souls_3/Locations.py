@@ -1,4 +1,4 @@
-from typing import ClassVar, Optional, Dict, List, Set
+from typing import cast, ClassVar, Optional, Dict, List, Set
 from dataclasses import dataclass
 
 from BaseClasses import ItemClassification, Location, Region
@@ -61,7 +61,7 @@ class DS3LocationData:
     that progression balancing and item smoothing is more accurate for DS3.
     """
 
-    ap_code: int = None
+    ap_code: Optional[int] = None
     """Archipelago's internal ID for this location (also known as its "address")."""
 
     region_value: int = 0
@@ -187,9 +187,6 @@ class DS3LocationData:
         """The names of location groups this location should appear in.
 
         This is computed from the properties assigned to this location."""
-        # Events aren't part of any location groups.
-        if self.is_event: return
-
         names = []
         if self.prominent: names.append("Prominent")
         if self.progression: names.append("Progression")
@@ -201,7 +198,7 @@ class DS3LocationData:
         if self.lizard: names.append("Small Crystal Lizards")
         if self.hidden: names.append("Hidden")
 
-        default_item = item_dictionary[self.default_item_name]
+        default_item = item_dictionary[cast(str, self.default_item_name)]
         names.append({
                          DS3ItemCategory.WEAPON_UPGRADE_5: "Weapons",
                          DS3ItemCategory.WEAPON_UPGRADE_10: "Weapons",
@@ -261,7 +258,7 @@ class DarkSouls3Location(Location):
 #   as part of their normal quest, "kill [name]" for items that require killing
 #   them even when they aren't hostile, and just "[name]" for items that are
 #   naturally available as part of their quest.
-location_tables = {
+location_tables: Dict[str, List[DS3LocationData]] = {
     "Cemetery of Ash": [
         DS3LocationData("CA: Soul of a Deserted Corpse - right of spawn",
                         "Soul of a Deserted Corpse"),
@@ -3103,7 +3100,7 @@ for location_name, location_table in location_tables.items():
 
     # Allow entire locations to be added to location sets.
     if not location_name.endswith(" Shop"):
-        location_name_groups[location_name] = frozenset([
+        location_name_groups[location_name] = set([
             location_data.name for location_data in location_table
             if not location_data.is_event
         ])

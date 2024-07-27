@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 import dataclasses
 from enum import IntEnum
-import types
-from typing import ClassVar, Generator, List, Optional, Set, Union
+from typing import cast, ClassVar, Dict, Generator, List, Optional, Set
 
 from BaseClasses import Item, ItemClassification
 
@@ -97,10 +96,10 @@ class DS3ItemData:
     """The next item ID to use when creating item data."""
 
     name: str
-    ds3_code: int
+    ds3_code: Optional[int]
     category: DS3ItemCategory
 
-    base_ds3_code: int = None
+    base_ds3_code: Optional[int] = None
     """If this is an upgradable weapon, the base ID of the weapon it upgrades from.
 
     Otherwise, or if the weapon isn't upgraded, this is the same as ds3_code.
@@ -112,7 +111,7 @@ class DS3ItemData:
     classification: ItemClassification = ItemClassification.filler
     """How important this item is to the game progression."""
 
-    ap_code: int = None
+    ap_code: Optional[int] = None
     """The Archipelago ID for this item."""
 
     is_dlc: bool = False
@@ -130,7 +129,7 @@ class DS3ItemData:
     difference.
     """
 
-    souls: int = None
+    souls: Optional[int] = None
     """If this is a consumable item that gives souls, the number of souls it gives."""
 
     useful_if: UsefulIf = UsefulIf.DEFAULT
@@ -199,7 +198,7 @@ class DS3ItemData:
     @property
     def is_infused(self) -> bool:
         """Returns whether this item is an infused weapon."""
-        return self.ds3_code - self.base_ds3_code >= 100
+        return cast(int, self.ds3_code) - cast(int, self.base_ds3_code) >= 100
 
     def infuse(self, infusion: Infusion) -> "DS3ItemData":
         """Returns this item with the given infusion applied."""
@@ -213,14 +212,14 @@ class DS3ItemData:
         return dataclasses.replace(
             self,
             name = self.name,
-            ds3_code = self.ds3_code + infusion.value,
+            ds3_code = cast(int, self.ds3_code) + infusion.value,
             filler = False,
         )
 
     @property
     def is_upgraded(self) -> bool:
         """Returns whether this item is a weapon that's upgraded beyond level 0."""
-        return (self.ds3_code - self.base_ds3_code) % 100 != 0
+        return (cast(int, self.ds3_code) - cast(int, self.base_ds3_code)) % 100 != 0
 
     def upgrade(self, level: int) -> "DS3ItemData":
         """Upgrades this item to the given level."""
@@ -236,7 +235,7 @@ class DS3ItemData:
         return dataclasses.replace(
             self,
             name = self.name,
-            ds3_code = self.ds3_code + level,
+            ds3_code = cast(int, self.ds3_code) + level,
             filler = False,
         )
 
@@ -246,9 +245,9 @@ class DarkSouls3Item(Item):
     data: DS3ItemData
 
     @property
-    def level(self) -> Union[int, None]:
+    def level(self) -> Optional[int]:
         """This item's upgrade level, if it's a weapon."""
-        return self.data.ds3_code % 100 if self.data.category.upgrade_level else None
+        return cast(int, self.data.ds3_code) % 100 if self.data.category.upgrade_level else None
 
     def __init__(
             self,
@@ -1645,7 +1644,7 @@ _cut_content_items = [
 ]
 
 
-item_name_groups = {
+item_name_groups: Dict[str, Set] = {
     "Progression": set(),
     "Cinders": set(),
     "Weapons": set(),

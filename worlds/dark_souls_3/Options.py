@@ -1,12 +1,13 @@
 from copy import deepcopy
 from dataclasses import dataclass
 import json
-import typing
+from typing import Any, Dict
 
-from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, NamedRange, Option, OptionGroup, \
-    PerGameCommonOptions, Range, Removed, Toggle, VerifyKeys, Visibility
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, NamedRange, Option, OptionGroup, \
+    PerGameCommonOptions, Range, Removed, Toggle, VerifyKeys
 
 ## Game Options
+
 
 class EarlySmallLothricBanner(Choice):
     """Force Small Lothric Banner into an early sphere in your world or across all worlds."""
@@ -292,7 +293,7 @@ class ImpatientMimicsOption(Toggle):
     display_name = "Impatient Mimics"
 
 
-class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
+class RandomEnemyPresetOption(Option[Dict[str, Any]], VerifyKeys):
     """The YAML preset for the static enemy randomizer.
 
     See the static randomizer documentation in `randomizer\\presets\\README.txt` for details.
@@ -305,14 +306,15 @@ class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
                   "OopsAll", "Boss", "Miniboss", "Basic", "BuffBasicEnemiesAsBosses",
                   "DontRandomize", "RemoveSource", "Enemies"]
 
-    def __init__(self, value: typing.Dict[str, typing.Any]):
+    def __init__(self, value: Dict[str, Any]):
         self.value = deepcopy(value)
 
-    def get_option_name(self, value: typing.Dict[str, typing.Any]):
+    @classmethod
+    def get_option_name(cls, value: Dict[str, Any]) -> str:
         return json.dumps(value)
 
     @classmethod
-    def from_any(cls, data: typing.Dict[str, typing.Any]) -> "RandomEnemyPresetOption":
+    def from_any(cls, data: Dict[str, Any]) -> "RandomEnemyPresetOption":
         if isinstance(data, dict):
             cls.verify_keys(data)
             return cls(data)
@@ -324,7 +326,7 @@ class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
 
 class DS3ExcludeLocations(ExcludeLocations):
     """Prevent these locations from having an important item."""
-    default = {"Hidden", "Small Crystal Lizards", "Upgrade", "Small Souls", "Miscellaneous"}
+    default = frozenset({"Hidden", "Small Crystal Lizards", "Upgrade", "Small Souls", "Miscellaneous"})
 
 
 class ExcludedLocationBehaviorOption(Choice):

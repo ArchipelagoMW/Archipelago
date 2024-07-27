@@ -79,19 +79,15 @@ class DarkSouls3World(World):
     holds the old locations so we can ensure they don't get necessary items.
     """
 
-    local_itempool: Optional[List[DarkSouls3Item]]
+    local_itempool: List[DarkSouls3Item] = []
     """The pool of all items within this particular world. This is a subset of
     `self.multiworld.itempool`."""
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.locked_items = []
-        self.locked_locations = []
-        self.main_path_locations = []
-        self.enabled_location_categories = set()
         self.all_excluded_locations = set()
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
         # Inform Universal Tracker where Yhorm is being randomized to.
@@ -151,7 +147,7 @@ class DarkSouls3World(World):
             for location in location_tables["Cemetery of Ash"]
         )
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         # Create Vanilla Regions
         regions: Dict[str, Region] = {"Menu": self.create_region("Menu", {})}
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
@@ -303,7 +299,7 @@ class DarkSouls3World(World):
         self.multiworld.regions.append(new_region)
         return new_region
 
-    def create_items(self):
+    def create_items(self) -> None:
         # Just used to efficiently deduplicate items
         item_set: Set[str] = set()
 
@@ -341,7 +337,7 @@ class DarkSouls3World(World):
         # Add items to itempool
         self.multiworld.itempool += self.local_itempool
 
-    def _create_injectable_items(self, num_required_extra_items: int) -> List[Item]:
+    def _create_injectable_items(self, num_required_extra_items: int) -> List[DarkSouls3Item]:
         """Returns a list of items to inject into the multiworld instead of skipped items.
 
         If there isn't enough room to inject all the necessary progression items
@@ -390,7 +386,7 @@ class DarkSouls3World(World):
 
         return [self.create_item(item) for item in items]
 
-    def create_item(self, item: Union[str, DS3ItemData]) -> Item:
+    def create_item(self, item: Union[str, DS3ItemData]) -> DarkSouls3Item:
         data = item if isinstance(item, DS3ItemData) else item_dictionary[item]
         classification = None
         if self.multiworld and data.useful_if != UsefulIf.DEFAULT and (
@@ -1317,11 +1313,11 @@ class DarkSouls3World(World):
         if not self._is_location_available(location): return
         add_item_rule(self.multiworld.get_location(location, self.player), rule)
 
-    def _can_go_to(self, state, region) -> None:
+    def _can_go_to(self, state, region) -> bool:
         """Returns whether state can access the given region name."""
         return state.can_reach_entrance(f"Go To {region}", self.player)
 
-    def _can_get(self, state, location) -> None:
+    def _can_get(self, state, location) -> bool:
         """Returns whether state can access the given location name."""
         return state.can_reach_location(location, self.player)
 
