@@ -43,3 +43,11 @@ A faster alternative to the `for` loop would be to use a [list comprehension](ht
 ```py
 item_pool += [self.create_filler() for _ in range(total_locations - len(item_pool))]
 ```
+
+---
+
+### I learned about indirect conditions in the world API document, but I want to know more. What are they and why are they necessary?
+
+The world API document mentions indirect conditions and **when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is quite complicated.
+
+It might get its own document in the future, but for now, you can read [this comment written by NewSoupVi](https://github.com/ArchipelagoMW/Archipelago/pull/3128#discussion_r1693843193) (and the other comments in that reply thread if you're still curious to learn more). As of the time of writing, it reflects the most up to date understanding of indirect conditions.
