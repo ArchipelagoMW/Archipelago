@@ -499,7 +499,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ladder("Ladders in Well", state, world)
         and (has_melee(state, player) or state.has(fire_wand, player)))
 
-    regions["Well Boss"].connect(
+    well_boss_to_dt = regions["Well Boss"].connect(
         connecting_region=regions["Dark Tomb Checkpoint"])
     # can laurels through the gate, no setup needed
     regions["Dark Tomb Checkpoint"].connect(
@@ -1274,13 +1274,21 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  or has_combat_reqs("East Forest", state, player))
         set_rule(ow_tunnel_beach,
                  lambda state: has_combat_reqs("East Forest", state, player))
+
         add_rule(atoll_statue,
                  lambda state: has_combat_reqs("Ruined Atoll", state, player))
+        set_rule(frogs_front_to_main,
+                 lambda state: has_combat_reqs("Frog's Domain", state, player))
+
         set_rule(btw_front_main,
                  lambda state: state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player))
         set_rule(btw_back_main,
                  lambda state: has_ladder("Ladders in Well", state, world)
                  and (state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player)))
+        set_rule(well_boss_to_dt,
+                 lambda state: has_combat_reqs("Beneath the Well", state, player)
+                 or laurels_zip(state, world))
+
         add_rule(dt_entry_to_upper,
                  lambda state: has_combat_reqs("Dark Tomb", state, player))
         add_rule(dt_exit_to_main,
@@ -1306,12 +1314,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         add_rule(fort_upper_lower,
                  lambda state: state.has(ice_dagger, player)
                  or has_combat_reqs("Eastern Vault Fortress", state, player))
-
         set_rule(fort_grave_entry_to_combat,
                  lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
-
-        set_rule(frogs_front_to_main,
-                 lambda state: has_combat_reqs("Frog's Domain", state, player))
 
         set_rule(quarry_entry_to_main,
                  lambda state: has_combat_reqs("Quarry", state, player))
