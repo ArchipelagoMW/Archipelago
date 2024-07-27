@@ -714,11 +714,31 @@ class CollectionState():
             events_per_player = list(events_per_player_dict.items())
             del events_per_player_dict
 
+        # If no items logically relevant to a specific world were collected in the previous iteration, then that world's
+        # locations can be skipped in the current iteration. Usually, a world's logic only depends on its own items, but
+        # worlds are allowed to depend on other worlds.
+        # Start with each world only depending on itself.
+        logic_dependent_players: Dict[int, List[int]] = {}
+        worlds = self.multiworld.worlds
+        groups = self.multiworld.groups
+        for player, _locations in events_per_player:
+            if player in groups:
+                # Item link locations have no associated World and use a group ID as the player ID.
+                logic_dependent_players[player] = [player]
+                continue
+            dependencies = worlds[player].player_dependencies
+            if dependencies is not None:
+                for other_player in dependencies:
+                    if other_player in logic_dependent_players:
+                        logic_dependent_players[other_player].append(player)
+                    else:
+                        logic_dependent_players[other_player] = [player]
+
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
-        players_to_check = set(self.multiworld.regions.location_cache.keys())
+        players_to_check: Set[int] = set(self.multiworld.regions.location_cache.keys())
         while players_to_check:
-            next_players_to_check = set()
+            received_advancement_players = set()
             next_events_per_player = []
 
             for player, locations in events_per_player:
@@ -750,13 +770,19 @@ class CollectionState():
                     assert isinstance(item, Item), "tried to collect Event with no Item"
                     changed = self.collect(item, True, location)
                     if changed:
-                        # Collecting the item logically affected the owning player of the item, so it could mean the
-                        # owning player can now access additional locations, so their locations should be checked in the
-                        # next outer loop iteration.
-                        next_players_to_check.add(item.player)
+                        # Collecting the item affected logic, so it could mean the owning player (or any other players
+                        # with logic dependent on the owning player's world) can now access additional locations.
+                        received_advancement_players.add(item.player)
 
             events_per_player = next_events_per_player
-            players_to_check = next_players_to_check
+            # The players to check in the next iteration are all players whose logic depends on a player that received
+            # advancement. Usually this is only the individual players that received advancement, but it's possible for
+            # a world's logic to depend on a different world and its items.
+            # For each player that received advancement, look up the list of players with logic dependent on that player
+            # and then flatten all the lists into a single set of players to check in the next iteration.
+            players_to_check = {dependent_player for received_advancement_player in received_advancement_players
+                                if received_advancement_player in logic_dependent_players
+                                for dependent_player in logic_dependent_players[received_advancement_player]}
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:

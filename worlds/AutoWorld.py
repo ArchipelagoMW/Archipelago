@@ -296,6 +296,11 @@ class World(metaclass=AutoWorldRegister):
     """autoset on creation. The MultiWorld object for the currently generating multiworld."""
     player: int
     """autoset on creation. The player number for this World"""
+    player_dependencies: Set[int]
+    """
+    autoset on creation to `{self.player}`. The player numbers of the worlds this world's logic depends on.
+    If this world's logic depends on worlds other than itself, add the player numbers of the worlds here.
+    """
 
     item_id_to_name: ClassVar[Dict[int, str]]
     """automatically generated reverse lookup of item id to name"""
@@ -326,6 +331,7 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
         multiworld.per_slot_randoms[player] = self.random
+        self.player_dependencies = {player}
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
