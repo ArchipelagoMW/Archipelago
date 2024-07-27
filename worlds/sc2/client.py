@@ -22,6 +22,7 @@ from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from BaseClasses import ItemClassification
 from Utils import init_logging, is_windows, async_start
 from . import item_names
 from .item_groups import item_name_groups, unlisted_item_name_groups
@@ -529,17 +530,18 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
         
         flags = node.get("flags", 0)
         item_types = []
-        if flags & 0b001:  # advancement
+        if flags & ItemClassification.progression:
             item_types.append("progression")
-        if flags & 0b010:  # useful
+        if flags & ItemClassification.useful:
             item_types.append("useful")
-        if flags & 0b100:  # trap
+        if flags & ItemClassification.trap:
             item_types.append("trap")
         if not item_types:
             item_types.append("normal")
 
         # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
-        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + item_descriptions[item_name].replace("\n", "<br>")
+        desc = item_descriptions[item_name].replace(". \n", ".<br>").replace(". ", ".<br>").replace("\n", "<br>")
+        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + desc
         node.setdefault("refs", []).append(ref)
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
