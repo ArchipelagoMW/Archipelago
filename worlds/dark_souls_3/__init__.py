@@ -118,8 +118,7 @@ class DarkSouls3World(World):
                     not self.options.late_basin_of_vows
                 )
             ):
-                self.multiworld.early_items[self.player]["Storm Ruler"] = 1
-                self.options.local_items.value.add("Storm Ruler")
+                self.multiworld.local_early_items[self.player]["Storm Ruler"] = 1
         else:
             self.yhorm_location = default_yhorm_location
 
@@ -336,10 +335,11 @@ class DarkSouls3World(World):
         # Extra filler items for locations containing skip items
         self.local_itempool.extend(self.create_filler() for _ in range(num_required_extra_items))
 
+        # Potentially fill some items locally and remove them from the itempool
+        self._fill_local_items()
+
         # Add items to itempool
         self.multiworld.itempool += self.local_itempool
-
-        self._fill_local_items()
 
     def _create_injectable_items(self, num_required_extra_items: int) -> List[Item]:
         """Returns a list of items to inject into the multiworld instead of skipped items.
@@ -492,7 +492,6 @@ class DarkSouls3World(World):
             and location.item_rule(item)
         ]
 
-        self.multiworld.itempool.remove(item)
         self.local_itempool.remove(item)
 
         if not candidate_locations:
