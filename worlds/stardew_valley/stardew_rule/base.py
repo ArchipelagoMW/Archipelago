@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections import deque
+from collections import deque, Counter
+from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
 from threading import Lock
@@ -295,7 +296,10 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
                 self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
-        return hash((id(self.combinable_rules), self.simplification_state.original_simplifiable_rules))
+        if len(self.combinable_rules) + len(self.simplification_state.original_simplifiable_rules) > 5:
+            return id(self)
+
+        return hash((*self.combinable_rules.values(), self.simplification_state.original_simplifiable_rules))
 
 
 class Or(AggregatingStardewRule):
@@ -323,9 +327,6 @@ class Or(AggregatingStardewRule):
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         return min(left, right, key=lambda x: x.value)
 
-    def get_difficulty(self):
-        return min(rule.get_difficulty() for rule in self.original_rules)
-
 
 class And(AggregatingStardewRule):
     identity = true_
@@ -352,19 +353,34 @@ class And(AggregatingStardewRule):
     def combine(left: CombinableStardewRule, right: CombinableStardewRule) -> CombinableStardewRule:
         return max(left, right, key=lambda x: x.value)
 
-    def get_difficulty(self):
-        return max(rule.get_difficulty() for rule in self.original_rules)
-
 
 class Count(BaseStardewRule):
     count: int
     rules: List[StardewRule]
+    counter: Counter[StardewRule]
+    evaluate: Callable[[CollectionState], bool]
+
+    total: Optional[int]
+    rule_mapping: Optional[Dict[StardewRule, StardewRule]]
 
     def __init__(self, rules: List[StardewRule], count: int):
-        self.rules = rules
         self.count = count
+        self.counter = Counter(rules)
 
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        if len(self.counter) / len(rules) < .66:
+            # Checking if it's worth using the count operation with shortcircuit or not. Value should be fine-tuned when Count has more usage.
+            self.total = sum(self.counter.values())
+            self.rules = sorted(self.counter.keys(), key=lambda x: self.counter[x], reverse=True)
+            self.rule_mapping = {}
+            self.evaluate = self.evaluate_with_shortcircuit
+        else:
+            self.rules = rules
+            self.evaluate = self.evaluate_without_shortcircuit
+
+    def __call__(self, state: CollectionState) -> bool:
+        return self.evaluate(state)
+
+    def evaluate_without_shortcircuit(self, state: CollectionState) -> bool:
         c = 0
         for i in range(self.rules_count):
             self.rules[i], value = self.rules[i].evaluate_while_simplifying(state)
@@ -372,37 +388,58 @@ class Count(BaseStardewRule):
                 c += 1
 
             if c >= self.count:
-                return self, True
+                return True
             if c + self.rules_count - i < self.count:
                 break
 
-        return self, False
+        return False
 
-    def __call__(self, state: CollectionState) -> bool:
-        return self.evaluate_while_simplifying(state)[1]
+    def evaluate_with_shortcircuit(self, state: CollectionState) -> bool:
+        c = 0
+        t = self.total
+
+        for rule in self.rules:
+            evaluation_value = self.call_evaluate_while_simplifying_cached(rule, state)
+            rule_value = self.counter[rule]
+
+            if evaluation_value:
+                c += rule_value
+            else:
+                t -= rule_value
+
+            if c >= self.count:
+                return True
+            elif t < self.count:
+                break
+
+        return False
+
+    def call_evaluate_while_simplifying_cached(self, rule: StardewRule, state: CollectionState) -> bool:
+        try:
+            # A mapping table with the original rule is used here because two rules could resolve to the same rule.
+            #  This would require to change the counter to merge both rules, and quickly become complicated.
+            return self.rule_mapping[rule](state)
+        except KeyError:
+            self.rule_mapping[rule], value = rule.evaluate_while_simplifying(state)
+            return value
+
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
 
     @cached_property
     def rules_count(self):
         return len(self.rules)
 
-    def get_difficulty(self):
-        self.rules = sorted(self.rules, key=lambda x: x.get_difficulty())
-        # In an optimal situation, all the simplest rules will be true. Since the rules are sorted, we know that the most difficult rule we might have to do
-        # is the one at the "self.count".
-        return self.rules[self.count - 1].get_difficulty()
-
     def __repr__(self):
-        return f"Received {self.count} {repr(self.rules)}"
+        return f"Received {self.count} [{', '.join(f'{value}x {repr(rule)}' for rule, value in self.counter.items())}]"
 
 
+@dataclass(frozen=True)
 class Has(BaseStardewRule):
     item: str
     # For sure there is a better way than just passing all the rules everytime
-    other_rules: Dict[str, StardewRule]
-
-    def __init__(self, item: str, other_rules: Dict[str, StardewRule]):
-        self.item = item
-        self.other_rules = other_rules
+    other_rules: Dict[str, StardewRule] = field(repr=False, hash=False, compare=False)
+    group: str = "item"
 
     def __call__(self, state: CollectionState) -> bool:
         return self.evaluate_while_simplifying(state)[1]
@@ -410,21 +447,15 @@ class Has(BaseStardewRule):
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self.other_rules[self.item].evaluate_while_simplifying(state)
 
-    def get_difficulty(self):
-        return self.other_rules[self.item].get_difficulty() + 1
-
     def __str__(self):
         if self.item not in self.other_rules:
-            return f"Has {self.item} -> {MISSING_ITEM}"
-        return f"Has {self.item}"
+            return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
+        return f"Has {self.item} ({self.group})"
 
     def __repr__(self):
         if self.item not in self.other_rules:
-            return f"Has {self.item} -> {MISSING_ITEM}"
-        return f"Has {self.item} -> {repr(self.other_rules[self.item])}"
-
-    def __hash__(self):
-        return hash(self.item)
+            return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
+        return f"Has {self.item} ({self.group}) -> {repr(self.other_rules[self.item])}"
 
 
 class RepeatableChain(Iterable, Sized):
