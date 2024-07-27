@@ -35,6 +35,7 @@ from .options import (
     SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
 )
 from .mission_tables import MissionFlag
+from . import SC2World
 
 
 if __name__ == "__main__":
@@ -416,6 +417,17 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.ctx.__dict__[var_names[faction]] = match_colors.index(color.lower())
             self.ctx.pending_color_update = True
             self.output(f"Color for {faction} set to " + player_colors[self.ctx.__dict__[var_names[faction]]])
+
+    def _cmd_windowed_mode(self, value="") -> None:
+        if not value:
+            pass
+        elif value.casefold() in ('t', 'true', 'yes', 'y'):
+            SC2World.settings.game_windowed_mode = True
+            force_settings_save_on_close()
+        else:
+            SC2World.settings.game_windowed_mode = False
+            force_settings_save_on_close()
+        sc2_logger.info(f"Windowed mode is: {SC2World.settings.game_windowed_mode}")
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -1077,8 +1089,11 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
-        run_game(bot.maps.get(lookup_id_to_mission[mission_id].map_file), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
-                                                                name="Archipelago", fullscreen=True)], realtime=True)
+        run_game(
+            bot.maps.get(lookup_id_to_mission[mission_id].map_file),
+            [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=not SC2World.settings.game_windowed_mode)],
+            realtime=True,
+        )
 
 
 class ArchipelagoBot(bot.bot_ai.BotAI):
@@ -1727,6 +1742,20 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
 def get_location_offset(mission_id):
     return SC2WOL_LOC_ID_OFFSET if mission_id <= SC2Mission.ALL_IN.id \
         else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
+
+
+_has_forced_save = False
+def force_settings_save_on_close() -> None:
+    """
+    Settings has an existing auto-save feature, but it only triggers if a new key was introduced.
+    Force it to mark things as changed by introducing a new key and then cleaning up.
+    """
+    global _has_forced_save
+    if _has_forced_save:
+        return
+    SC2World.settings.update({'invalid_attribute': True})
+    del SC2World.settings.invalid_attribute
+    _has_forced_save = True
 
 
 def launch():

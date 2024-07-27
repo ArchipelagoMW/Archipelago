@@ -14,7 +14,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_missions, parse_unlock
+from worlds.sc2.client import SC2Context, calc_unfinished_missions, parse_unlock, force_settings_save_on_close
 from worlds.sc2.mission_tables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race, SC2Campaign
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type
@@ -72,20 +72,6 @@ class MissionLayout(GridLayout):
 
 class MissionCategory(GridLayout):
     pass
-
-
-_has_forced_save = False
-def force_settings_save_on_close() -> None:
-    """
-    Settings has an existing auto-save feature, but it only triggers if a new key was introduced.
-    Force it to mark things as changed by introducing a new key and then cleaning up.
-    """
-    global _has_forced_save
-    if _has_forced_save:
-        return
-    SC2World.settings.update({'invalid_attribute': True})
-    del SC2World.settings.invalid_attribute
-    _has_forced_save = True
 
 
 class SC2Manager(GameManager):
