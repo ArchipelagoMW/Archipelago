@@ -717,6 +717,14 @@ DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dar
 # Disruptor
 # Warp Prism
 # Observer
+# Phoenix
+# Corsair
+# Mirage
+SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
+# Void Ray
+# Destroyer
+# Warp Ray
+# Dawnbringer
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"

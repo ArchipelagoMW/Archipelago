@@ -870,7 +870,27 @@ item_descriptions = {
     item_names.ENERGIZER_MOBILE_CHRONO_BEAM: "Energizer War Council upgrade. Allows Energizers to use Chrono Beam in Mobile Mode.",
     item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
     item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
+    # Signifier
+    # Ascendant
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
+    # Immortal
+    # Annihilator
+    # Vanguard
+    # Stalwart
+    # Colossus
+    # Wrathwalker
+    # Reaver
+    # Disruptor
+    # Warp Prism
+    # Observer
+    # Phoenix
+    # Corsair
+    # Mirage
+    item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
+    # Void Ray
+    # Destroyer
+    # Warp Ray
+    # Dawnbringer
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

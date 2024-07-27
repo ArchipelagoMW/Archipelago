@@ -79,6 +79,7 @@ class ProtossItemType(ItemTypeEnum):
     Forge_3 = "Forge", 9
     """General Protoss unit upgrades"""
     War_Council = "War Council", 10
+    War_Council_2 = "War Council", 11
     
 
 class FactionlessItemType(ItemTypeEnum):
@@ -1760,6 +1761,14 @@ item_table = {
     # 525 reserved for Disruptor
     # 526 reserved for Warp Prism
     # 527 reserved for Observer
+    # 530 reserved for Phoenix
+    # 531 reserved for Corsair
+    # 532 reserved for Mirage
+    item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, parent_item=item_names.SKIRMISHER),
+    # 534 reserved for Void Ray
+    # 535 reserved for Destroyer
+    # 536 reserved for Warp Ray
+    # 537 reserved for Dawnbringer
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
