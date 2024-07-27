@@ -24,6 +24,7 @@ from .options import (
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems,
 )
+from . import settings
 from .pool_filter import filter_items
 from .mission_tables import (
     MissionInfo, SC2Campaign, SC2Mission, SC2Race, MissionFlag
@@ -84,6 +85,7 @@ class SC2World(World):
 
     game = "Starcraft 2"
     web = Starcraft2WebWorld()
+    settings: ClassVar[settings.Starcraft2Settings]
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None)}

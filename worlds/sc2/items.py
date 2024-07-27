@@ -1098,6 +1098,12 @@ item_table = {
     item_names.DEFILER:
         ItemData(15 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 14, SC2Race.ZERG,
                  classification=ItemClassification.progression, origin={"bw"}),
+    item_names.INFESTED_MARINE:
+        ItemData(16 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 15, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.INFESTED_BUNKER:
+        ItemData(17 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 16, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"ext"}),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
@@ -1380,12 +1386,28 @@ item_table = {
     item_names.CORRUPTOR_RESOURCE_EFFICIENCY:
         ItemData(289 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 29, SC2Race.ZERG, parent_item=item_names.CORRUPTOR,
                  origin={"ext"}),
-
     item_names.PRIMAL_IGNITER_CONCENTRATED_FIRE:
         ItemData(290 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 0, SC2Race.ZERG, parent_item=item_names.ROACH_PRIMAL_IGNITER_ASPECT,
                  origin={"ext"}),
     item_names.PRIMAL_IGNITER_PRIMAL_TENACITY:
         ItemData(291 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 1, SC2Race.ZERG, parent_item=item_names.ROACH_PRIMAL_IGNITER_ASPECT,
+                 origin={"ext"}),
+    item_names.INFESTED_SCV_BUILD_CHARGES:
+        ItemData(292 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 2, SC2Race.ZERG, origin={"ext"}),
+    item_names.INFESTED_MARINE_PLAGUED_MUNITIONS:
+        ItemData(293 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 3, SC2Race.ZERG, parent_item=item_names.INFESTED_MARINE,
+                 origin={"ext"}),
+    item_names.INFESTED_MARINE_RETINAL_AUGMENTATION:
+        ItemData(294 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 4, SC2Race.ZERG, parent_item=item_names.INFESTED_MARINE,
+                 origin={"ext"}),
+    item_names.INFESTED_BUNKER_CALCIFIED_ARMOR:
+        ItemData(295 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 6, SC2Race.ZERG, parent_item=item_names.INFESTED_BUNKER,
+                 origin={"ext"}),
+    item_names.INFESTED_BUNKER_REGENERATIVE_PLATING:
+        ItemData(296 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 5, SC2Race.ZERG, parent_item=item_names.INFESTED_BUNKER,
+                 origin={"ext"}),
+    item_names.INFESTED_BUNKER_ENGORGED_BUNKERS:
+        ItemData(297 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 7, SC2Race.ZERG, parent_item=item_names.INFESTED_BUNKER,
                  origin={"ext"}),
 
     item_names.ZERGLING_RAPTOR_STRAIN:
@@ -1721,6 +1743,23 @@ item_table = {
     item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: ItemData(509 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 9, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
     item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: ItemData(510 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 10, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
     item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: ItemData(511 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 11, SC2Race.PROTOSS, parent_item=item_names.BLOOD_HUNTER),
+    item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: ItemData(512 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 12, SC2Race.PROTOSS, parent_item=item_names.SENTRY),
+    item_names.ENERGIZER_MOBILE_CHRONO_BEAM: ItemData(513 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 13, SC2Race.PROTOSS, parent_item=item_names.ENERGIZER),
+    item_names.HAVOC_ENDURING_SIGHT: ItemData(514 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 14, SC2Race.PROTOSS, parent_item=item_names.HAVOC),
+    item_names.HIGH_TEMPLAR_PLASMA_SURGE: ItemData(515 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 15, SC2Race.PROTOSS, parent_item=item_names.HIGH_TEMPLAR),
+    # 516 reserved for Signifier
+    # 517 reserved for Ascendant
+    item_names.DARK_ARCHON_INDOMITABLE_WILL: ItemData(518 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 18, SC2Race.PROTOSS),
+    # 518 reserved for Immortal
+    # 519 reserved for Annihilator
+    # 520 reserved for Vanguard
+    # 521 reserved for Stalwart
+    # 522 reserved for Colossus
+    # 523 reserved for Wrathwalker
+    # 524 reserved for Reaver
+    # 525 reserved for Disruptor
+    # 526 reserved for Warp Prism
+    # 527 reserved for Observer
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
@@ -2010,6 +2049,7 @@ zvx_defense_ratings = {
     # w/ malignant creep: 1
     item_names.INFESTED_SIEGE_TANKS: 5,
     # "Graduating Range": 1,
+    item_names.INFESTED_BUNKER: 3,
 }
 # zvz_defense_ratings = {
     # corpser roach: 1

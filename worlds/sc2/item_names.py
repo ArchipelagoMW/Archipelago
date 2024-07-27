@@ -327,23 +327,25 @@ NOVA_HOLO_DECOY                         = "Holo Decoy (Nova Gadget)"
 NOVA_NUKE                               = "Tac Nuke Strike (Nova Ability)"
 
 # Zerg Units
-ZERGLING      = "Zergling"
-SWARM_QUEEN   = "Swarm Queen"
-ROACH         = "Roach"
-HYDRALISK     = "Hydralisk"
-ABERRATION    = "Aberration"
-MUTALISK      = "Mutalisk"
-SWARM_HOST    = "Swarm Host"
-INFESTOR      = "Infestor"
-ULTRALISK     = "Ultralisk"
-CORRUPTOR     = "Corruptor"
-SCOURGE       = "Scourge"
-BROOD_QUEEN   = "Brood Queen"
-DEFILER       = "Defiler"
+ZERGLING        = "Zergling"
+SWARM_QUEEN     = "Swarm Queen"
+ROACH           = "Roach"
+HYDRALISK       = "Hydralisk"
+ABERRATION      = "Aberration"
+MUTALISK        = "Mutalisk"
+SWARM_HOST      = "Swarm Host"
+INFESTOR        = "Infestor"
+ULTRALISK       = "Ultralisk"
+CORRUPTOR       = "Corruptor"
+SCOURGE         = "Scourge"
+BROOD_QUEEN     = "Brood Queen"
+DEFILER         = "Defiler"
+INFESTED_MARINE = "Infested Marine"
 
 # Zerg Buildings
-SPORE_CRAWLER = "Spore Crawler"
-SPINE_CRAWLER = "Spine Crawler"
+SPORE_CRAWLER   = "Spore Crawler"
+SPINE_CRAWLER   = "Spine Crawler"
+INFESTED_BUNKER = "Infested Bunker"
 
 # Zerg Weapon / Armor Upgrades
 ZERG_UPGRADE_PREFIX = "Progressive Zerg"
@@ -458,6 +460,12 @@ OVERLORD_VENTRAL_SACS                   = "Ventral Sacs (Overlord)"
 OVERLORD_GENERATE_CREEP                 = "Generate Creep (Overlord)"
 OVERLORD_PNEUMATIZED_CARAPACE           = "Pneumatized Carapace (Overlord)"
 OVERLORD_ANTENNAE                       = "Antennae (Overlord)"
+INFESTED_SCV_BUILD_CHARGES              = "Sustained Cultivation Ventricles (InfSCV Build Charges)"
+INFESTED_MARINE_PLAGUED_MUNITIONS       = "Plagued Munitions (Infested Marine)"
+INFESTED_MARINE_RETINAL_AUGMENTATION    = "Retinal Augmentation (Infested Marine)"
+INFESTED_BUNKER_CALCIFIED_ARMOR         = "Calcified Armor (Infested Bunker)"
+INFESTED_BUNKER_REGENERATIVE_PLATING    = "Regenerative Plating (Infested Bunker)"
+INFESTED_BUNKER_ENGORGED_BUNKERS        = "Engorged Bunkers (Infested Bunker)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
@@ -692,6 +700,23 @@ AVENGER_KRYHAS_CLOAK                                    = "Kryhas Cloak (Avenger
 DARK_TEMPLAR_LESSER_SHADOW_FURY                         = "Lesser Shadow Fury (Dark Templar)"
 DARK_TEMPLAR_GREATER_SHADOW_FURY                        = "Greater Shadow Fury (Dark Templar)"
 BLOOD_HUNTER_BRUTAL_EFFICIENCY                          = "Brutal Efficiency (Blood Hunter)"
+SENTRY_DOUBLE_SHIELD_RECHARGE                           = "Double Shield Recharge (Sentry)"
+ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (Energizer)"
+HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
+HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
+# Signifier
+# Ascendant
+DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
+# IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
+# Annihilator
+# Vanguard
+# Stalwart
+# Colossus
+# Wrathwalker
+# Reaver
+# Disruptor
+# Warp Prism
+# Observer
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
