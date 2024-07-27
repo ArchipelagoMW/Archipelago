@@ -969,6 +969,11 @@ class DarkSouls3World(World):
             self._can_get(state, "US: Soul of the Rotted Greatwood")
             and state.has("Dreamchaser's Ashes", self.player)
         ))
+        # Add indirect condition since reaching AL requires deafeating Pontiff which requires defeating Greatwood in US
+        self.multiworld.register_indirect_condition(
+            self.get_region("Undead Settlement"),
+            self.get_entrance("Go To Anor Londo")
+        )
 
         # Kill Creighton and Aldrich to trigger this opportunity for invasion
         self._add_location_rule([
