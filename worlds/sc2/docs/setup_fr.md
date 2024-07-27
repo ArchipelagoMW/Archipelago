@@ -45,10 +45,6 @@ préférences.
 Prenez soin de vous rappeler du nom de joueur que vous avez inscrit dans la page à options ou dans le fichier *yaml* 
 puisque vous en aurez besoin pour vous connecter à votre monde!
 
-Notez que la page *Player options* ne permet pas de définir certaines des options avancées, e.g., l'exclusion de 
-certaines unités ou de leurs améliorations. 
-Utilisez la page [*Weighted Options*](/weighted-options) pour avoir accès à ces dernières.
-
 Si vous désirez des informations et/ou instructions générales sur l'utilisation d'un fichier *yaml* pour Archipelago, 
 veuillez consulter [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
 

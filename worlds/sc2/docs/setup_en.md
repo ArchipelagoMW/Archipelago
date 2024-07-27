@@ -38,11 +38,6 @@ The template includes descriptions of each option, you just have to edit it in y
 
 Remember the name you enter in the options page or in the yaml file, you'll need it to connect later!
 
-The *Player options* page does not allow you to set some advanced options, such as the exclusion of certain units or 
-their upgrades. 
-You can use the [*Weighted Options*](/weighted-options) page to access these settings.
-
-
 Check out [Creating a YAML](/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
 
 ### Common yaml questions
