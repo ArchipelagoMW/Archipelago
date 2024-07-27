@@ -702,13 +702,17 @@ class CollectionState():
         else:
             # Can't iterate self.multiworld.player_ids because it doesn't include the extra player IDs used for item
             # links, so iterate the keys of the location_cache instead.
-            events_per_player_dict = {player: [] for player in self.multiworld.regions.location_cache.keys()}
+            events_per_player_dict = {}
             for location in locations:
                 if event_filter(location):
-                    events_per_player_dict[location.player].append(location)
-            # Convert to a list of tuples and remove players without any locations
-            events_per_player = [(player, locations) for player, locations in events_per_player_dict.items()
-                                 if locations]
+                    player = location.player
+                    if player in events_per_player_dict:
+                        events_per_player_dict[player].append(location)
+                    else:
+                        events_per_player_dict[player] = [location]
+            # Convert to a list of tuples.
+            events_per_player = list(events_per_player_dict.items())
+            del events_per_player_dict
 
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
