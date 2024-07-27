@@ -40,7 +40,7 @@ def read_json(lines: List[str]) -> List[Dict[str, Any]]:
             creating_object = True
             obj += stripped
             continue
-        elif "}," in stripped:
+        elif "}," in stripped or "}" in stripped and "]" in lines[lines.index(line)+1]:
             creating_object = False
             obj += "}"
             #print(f"obj = {obj}")
@@ -51,9 +51,12 @@ def read_json(lines: List[str]) -> List[Dict[str, Any]]:
         if not creating_object:
             continue
         else:
-            if "}," in lines[lines.index(line)+1] and stripped[-1] == ",":
-                obj += stripped[:-1]
-            else:
+            try:
+                if "}," in lines[lines.index(line)+1] and stripped[-1] == ",":
+                    obj += stripped[:-1]
+                else:
+                    obj += stripped
+            except IndexError:
                 obj += stripped
 
     return loaded
@@ -278,10 +281,10 @@ def remove_duplicates(conditions: List[List[str]]) -> List[List[str]]:
 
 
 def handle_door_visibility(door: Dict[str, Any]) -> Dict[str, Any]:
-    if door.get("VisibilityFlags") == None:
+    if door.get("visibilityFlags") == None:
         return door
     else:
-        flags: List[str] = str(door.get("VisibilityFlags")).split(", ")
+        flags: List[str] = str(door.get("visibilityFlags")).split(", ")
         #print(flags)
         temp_flags: List[str] = []
         this_door: bool = False
@@ -290,8 +293,8 @@ def handle_door_visibility(door: Dict[str, Any]) -> Dict[str, Any]:
         if "ThisDoor" in flags:
             this_door = True
 
-        #if "RequiredDoors" in flags:
-        #    required_doors: str = " || ".join(door.get("RequiredDoors"))
+        #if "requiredDoors" in flags:
+        #    required_doors: str = " || ".join(door.get("requiredDoors"))
 
         if "DoubleJump" in flags:
             temp_flags.append("DoubleJump")
@@ -317,11 +320,11 @@ def handle_door_visibility(door: Dict[str, Any]) -> Dict[str, Any]:
         # remove duplicates
         temp_flags = list(dict.fromkeys(temp_flags))
 
-        original_logic: str = door.get("Logic")
+        original_logic: str = door.get("logic")
         temp_logic: str = ""
 
         if this_door:
-            temp_logic = door.get("Id")
+            temp_logic = door.get("id")
 
         if temp_flags != []:
             if temp_logic != "":
@@ -331,16 +334,16 @@ def handle_door_visibility(door: Dict[str, Any]) -> Dict[str, Any]:
         if temp_logic != "" and original_logic != None:
             if len(original_logic.split()) == 1:
                 if len(temp_logic.split()) == 1:
-                    door["Logic"] = f"{temp_logic} && {original_logic}"
+                    door["logic"] = f"{temp_logic} && {original_logic}"
                 else:
-                    door["Logic"] = f"({temp_logic}) && {original_logic}"
+                    door["logic"] = f"({temp_logic}) && {original_logic}"
             else:
                 if len(temp_logic.split()) == 1:
-                    door["Logic"] = f"{temp_logic} && ({original_logic})"
+                    door["logic"] = f"{temp_logic} && ({original_logic})"
                 else:
-                    door["Logic"] = f"({temp_logic}) && ({original_logic})"
+                    door["logic"] = f"({temp_logic}) && ({original_logic})"
         elif temp_logic != "" and original_logic == None:
-            door["Logic"] = temp_logic
+            door["logic"] = temp_logic
         
         return door
 
@@ -378,16 +381,16 @@ def main(args: argparse.Namespace):
     logic_objects: List[Dict[str, Any]] = []
 
     for door in doors:
-         if door.get("OriginalDoor") != None:
-            if not door.get("Id") in original_connections:
-                original_connections[door.get("Id")] = door.get("OriginalDoor")
-                original_connections[door.get("OriginalDoor")] = door.get("Id")
+         if door.get("originalDoor") != None:
+            if not door.get("id") in original_connections:
+                original_connections[door.get("id")] = door.get("originalDoor")
+                original_connections[door.get("originalDoor")] = door.get("id")
 
-            room: str = get_room_from_door(door.get("OriginalDoor"))
+            room: str = get_room_from_door(door.get("originalDoor"))
             if not room in rooms.keys():
-                rooms[room] = [door.get("Id")]
+                rooms[room] = [door.get("id")]
             else:
-                rooms[room].append(door.get("Id"))
+                rooms[room].append(door.get("id"))
 
     def flip_doors_in_condition(condition: List[str]) -> List[str]:
         new_condition = []
@@ -417,28 +420,28 @@ def main(args: argparse.Namespace):
         logic_objects.append(obj)
 
     for door in doors:
-        if door.get("Direction") == 5:
+        if door.get("direction") == 5:
             continue
 
         handling: str = "Transition"
-        if "Cell" in door.get("Id"):
+        if "Cell" in door.get("id"):
             handling = "Default"
         obj = {
-            "Name": door.get("Id"),
+            "Name": door.get("id"),
             "Logic": [],
             "Handling": handling
         }
 
         visibility_flags: List[str] = []
-        if door.get("VisibilityFlags") != None:
-            visibility_flags = str(door.get("VisibilityFlags")).split(", ")
+        if door.get("visibilityFlags") != None:
+            visibility_flags = str(door.get("visibilityFlags")).split(", ")
             if "1" in visibility_flags:
                 visibility_flags.remove("1")
                 visibility_flags.append("ThisDoor")
 
         required_doors: List[str] = []
-        if door.get("RequiredDoors"):
-            required_doors = door.get("RequiredDoors")
+        if door.get("requiredDoors"):
+            required_doors = door.get("requiredDoors")
 
         if len(visibility_flags) > 0:
             for flag in visibility_flags:
@@ -446,16 +449,16 @@ def main(args: argparse.Namespace):
                     continue
 
                 if flag == "ThisDoor":
-                    flag = original_connections[door.get("Id")]
+                    flag = original_connections[door.get("id")]
                 
-                if door.get("Logic") != None:
-                    logic: str = door.get("Logic")
+                if door.get("logic") != None:
+                    logic: str = door.get("logic")
                     logic = f"{flag} && ({logic})"
-                    logic = preprocess_logic(True, door.get("Id"), logic)
+                    logic = preprocess_logic(True, door.get("id"), logic)
                     conditions = build_logic_conditions(logic)
                     for condition in conditions:
                         condition = flip_doors_in_condition(condition)
-                        state_provider: str = get_room_from_door(door.get("Id"))
+                        state_provider: str = get_room_from_door(door.get("id"))
 
                         if get_state_provider_for_condition(condition) != None:
                             state_provider = get_state_provider_for_condition(condition)
@@ -469,7 +472,7 @@ def main(args: argparse.Namespace):
                         obj["Logic"].append(logic)
                 else:
                     logic = {
-                        "StateProvider": get_room_from_door(door.get("Id")),
+                        "StateProvider": get_room_from_door(door.get("id")),
                         "Conditions": [flag],
                         "StateModifiers": []
                     }
@@ -478,8 +481,8 @@ def main(args: argparse.Namespace):
             if "RequiredDoors" in visibility_flags:
                 for d in required_doors:
                     flipped = original_connections[d]
-                    if door.get("Logic") != None:
-                        logic: str = preprocess_logic(True, door.get("Id"), door.get("Logic"))
+                    if door.get("logic") != None:
+                        logic: str = preprocess_logic(True, door.get("id"), door.get("logic"))
                         conditions = build_logic_conditions(logic)
                         for condition in conditions:
                             condition = flip_doors_in_condition(condition)
@@ -503,12 +506,12 @@ def main(args: argparse.Namespace):
                         obj["Logic"].append(logic)
 
         else:
-            if door.get("Logic") != None:
-                logic: str = preprocess_logic(True, door.get("Id"), door.get("Logic"))
+            if door.get("logic") != None:
+                logic: str = preprocess_logic(True, door.get("id"), door.get("logic"))
                 conditions = build_logic_conditions(logic)
                 for condition in conditions:
                     condition = flip_doors_in_condition(condition)
-                    stateProvider: str = get_room_from_door(door.get("Id"))
+                    stateProvider: str = get_room_from_door(door.get("id"))
 
                     if get_state_provider_for_condition(condition) != None:
                         stateProvider = get_state_provider_for_condition(condition)
@@ -522,7 +525,7 @@ def main(args: argparse.Namespace):
                     obj["Logic"].append(logic)
             else:
                 logic = {
-                    "StateProvider": get_room_from_door(door.get("Id")),
+                    "StateProvider": get_room_from_door(door.get("id")),
                     "Conditions": [],
                     "StateModifiers": []
                 }
@@ -531,20 +534,16 @@ def main(args: argparse.Namespace):
         logic_objects.append(obj)
 
     for location in locations:
-        if location.get("logic") != None:
-            location["Logic"] = location["logic"]
-            del location["logic"]
-        
         obj = {
-            "Name": location.get("Id"),
+            "Name": location.get("id"),
             "Logic": [],
             "Handling": "Location"
         }
 
-        if location.get("Logic") != None:
-            for condition in build_logic_conditions(preprocess_logic(False, location.get("Id"), location.get("Logic"))):
+        if location.get("logic") != None:
+            for condition in build_logic_conditions(preprocess_logic(False, location.get("id"), location.get("logic"))):
                 condition = flip_doors_in_condition(condition)
-                stateProvider: str = location.get("Room")
+                stateProvider: str = location.get("room")
 
                 if get_state_provider_for_condition(condition) != None:
                     stateProvider = get_state_provider_for_condition(condition)
@@ -560,7 +559,7 @@ def main(args: argparse.Namespace):
                 }
                 obj["Logic"].append(logic)
         else:
-            stateProvider: str = location.get("Room")
+            stateProvider: str = location.get("room")
             if stateProvider == "Initial":
                 stateProvider = None
             logic = {
