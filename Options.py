@@ -350,8 +350,8 @@ class NumericOption(Option[int]):
     def __pow__(self, exponent: complex, modulus: typing.Optional[int] = None) -> typing.Any:
         if modulus is None:
             return self.value ** exponent
-        assert isinstance(exponent, typing.SupportsIndex)
-        return pow(self.value, exponent, modulus)  # type: ignore
+        assert isinstance(exponent, int)
+        return pow(self.value, exponent, modulus)
 
     def __rand__(self, other: typing.Any) -> int:
         return int(other) & self.value
