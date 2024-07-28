@@ -1679,9 +1679,7 @@ item_table = {
     item_names.VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES:
         ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 5, SC2Race.PROTOSS, classification=ItemClassification.filler,
                  origin={"ext"}),
-    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE:
-        ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 6, SC2Race.PROTOSS, origin={"ext"},
-                 parent_item=item_names.DESTROYER),
+    item_names.DESTROYER_RESOURCE_EFFICIENCY: ItemData(535 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 6, SC2Race.PROTOSS, parent_item=item_names.DESTROYER),
     item_names.WARP_PRISM_GRAVITIC_DRIVE:
         ItemData(337 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 7, SC2Race.PROTOSS, classification=ItemClassification.filler,
                  origin={"ext"}, parent_item=item_names.WARP_PRISM),
@@ -1767,7 +1765,7 @@ item_table = {
     # 532 reserved for Mirage
     item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.SKIRMISHER),
     # 534 reserved for Void Ray
-    # 535 reserved for Destroyer
+    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 5, SC2Race.PROTOSS, parent_item=item_names.DESTROYER),
     # 536 reserved for Warp Ray
     # 537 reserved for Dawnbringer
 
