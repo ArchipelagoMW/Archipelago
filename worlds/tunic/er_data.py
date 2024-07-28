@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, List, Optional
+from typing import Dict, NamedTuple, List
 from enum import IntEnum
 
 
@@ -7,7 +7,6 @@ class Portal(NamedTuple):
     region: str  # AP region
     destination: str  # vanilla destination scene
     tag: str  # vanilla tag
-    elevation: Optional[int] = None  # elevation of the entrance, for ladder storage rule generation
 
     def scene(self) -> str:  # the actual scene name in Tunic
         if self.region.startswith("Shop"):
