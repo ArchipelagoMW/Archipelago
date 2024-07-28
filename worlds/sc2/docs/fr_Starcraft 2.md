@@ -106,3 +106,19 @@ mission de la chaîne qu'un autre joueur est en train d'entamer.
 l'accès à un *item* n'ont pas été accomplis.
 * `/set_path [path]` Permet de définir manuellement où *StarCraft 2* est installé ce qui est pertinent seulement si la 
 détection automatique de cette dernière échoue.
+
+Notez que le comportement de la commande `/received` a été modifié dans le client *StarCraft 2* par rapport à son 
+utilisation dans le client *Common* d'Archipelago.
+Dans ce dernier, la commande renvoie la liste des *items* reçus dans l'ordre inverse de leur réception.
+Dans le client de *StarCraft 2*, la liste est divisée par races (i.e., *Any*, *Protoss*, *Terran*, et *Zerg*).
+De plus, les améliorations sont regroupées sous leurs unités/bâtiments correspondants.
+Un paramètre de filtrage peut être fourni, e.g., `/received Thor`, pour limiter le nombre d'*items* affichés.
+Tous les *items* dont le nom, la race ou le nom de groupe contient le paramètre fourni seront affichés.
+
+## Problèmes connus
+
+- *StarCraft 2 Archipelago* ne supporte pas la sauvegarde ou le chargement pendant une mission. 
+Pour cette raison, il est recommandé de jouer à un niveau de difficulté inférieur à celui avec lequel vous êtes 
+normalement à l'aise.
+- Un rapport d'erreur est souvent généré lorsqu'une mission est fermée. 
+Cela n'affecte pas le jeu et peut être ignoré.
