@@ -513,10 +513,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
             return self.condition(record)
 
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
     root_logger.addHandler(file_handler)
     if sys.stdout:
+        formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
