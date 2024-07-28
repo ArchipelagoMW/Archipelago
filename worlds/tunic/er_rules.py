@@ -1,6 +1,6 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
-from .options import IceGrappling, LadderStorage, CombatLogic
+from .options import IceGrappling, LadderStorage, CombatLogic, EntranceLayout
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip)
 from .er_data import Portal
@@ -964,7 +964,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
     # zig skip region only gets made if entrance rando and fewer shops are on
-    if options.entrance_rando and options.fixed_shop:
+    if options.entrance_rando and options.entrance_layout == EntranceLayout.option_fixed_shop:
         regions["Zig Skip Exit"].connect(
             connecting_region=regions["Rooted Ziggurat Lower Front"])
 
