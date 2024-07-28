@@ -793,8 +793,8 @@ item_descriptions = {
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
     item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets.",
-    item_names.PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX: "Increases Phoenix and Mirage weapon damage by +2.",
-    item_names.PHOENIX_MIRAGE_ANION_PULSE_CRYSTALS: "Increases Phoenix and Mirage range by +2.",
+    item_names.PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX: "Increases Phoenix, Mirage, and Skirmisher weapon damage by +2.",
+    item_names.PHOENIX_CLASS_ANION_PULSE_CRYSTALS: "Increases Phoenix, Mirage, and Skirmiser range by +2.",
     item_names.CORSAIR_STEALTH_DRIVE: "Corsairs become permanently cloaked.",
     item_names.CORSAIR_ARGUS_JEWEL: "Corsairs can store 2 charges of disruption web.",
     item_names.CORSAIR_SUSTAINING_DISRUPTION: "Corsair disruption webs last longer.",
@@ -870,7 +870,28 @@ item_descriptions = {
     item_names.ENERGIZER_MOBILE_CHRONO_BEAM: "Energizer War Council upgrade. Allows Energizers to use Chrono Beam in Mobile Mode.",
     item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
     item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
+    # Signifier
+    # Ascendant
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
+    # Immortal
+    # Annihilator
+    item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
+    item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
+    # Stalwart
+    # Colossus
+    # Wrathwalker
+    # Reaver
+    # Disruptor
+    # Warp Prism
+    # Observer
+    # Phoenix
+    # Corsair
+    # Mirage
+    item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
+    # Void Ray
+    # Destroyer
+    # Warp Ray
+    # Dawnbringer
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

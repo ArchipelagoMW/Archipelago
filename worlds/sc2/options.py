@@ -935,7 +935,6 @@ class StartingSupplyPerItem(Range):
 
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
-    selected_races: SelectRaces
     game_difficulty: GameDifficulty
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera
