@@ -534,30 +534,6 @@ class SC2JSONtoTextParser(JSONtoTextParser):
         return '<c val="' + self.color_codes[code] + '">'
 
 
-class SC2JSONtoKivyParser(KivyJSONtoTextParser):
-    def _handle_item_name(self, node: JSONMessagePart):
-        item_name = node["text"]
-        if item_name not in item_descriptions:
-            return super()._handle_item_name(node)
-
-        flags = node.get("flags", 0)
-        item_types = []
-        if flags & ItemClassification.progression:
-            item_types.append("progression")
-        if flags & ItemClassification.useful:
-            item_types.append("useful")
-        if flags & ItemClassification.trap:
-            item_types.append("trap")
-        if not item_types:
-            item_types.append("normal")
-
-        # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
-        desc = item_descriptions[item_name].replace(". \n", ".<br>").replace(". ", ".<br>").replace("\n", "<br>")
-        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + desc
-        node.setdefault("refs", []).append(ref)
-        return super(KivyJSONtoTextParser, self)._handle_item_name(node)
-
-
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = STARCRAFT2
