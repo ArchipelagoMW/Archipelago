@@ -506,10 +506,7 @@ item_descriptions = {
     item_names.HIGH_TEMPLAR: "Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon.",
     item_names.DARK_TEMPLAR: "Deadly warrior-assassin. Permanently cloaked. Can use the Shadow Fury ability.",
     item_names.IMMORTAL: "Assault strider. Can use Barrier to absorb damage.",
-    item_names.COLOSSUS: inspect.cleandoc("""
-        Battle strider with a powerful area attack. Can walk up and down cliffs.
-        Attacks set fire to the ground, dealing extra damage to enemies over time.
-    """),
+    item_names.COLOSSUS: "Battle strider with a powerful area attack. Can walk up and down cliffs. Attacks set fire to the ground, dealing extra damage to enemies over time.",
     item_names.PHOENIX: "Air superiority starfighter. Can use Graviton Beam and Phasing Armor abilities.",
     item_names.VOID_RAY: "Surgical strike craft. Has the Prismatic Alignment and Prismatic Range abilities.",
     item_names.CARRIER: "Capital ship. Builds and launches Interceptors that attack enemy targets. Repair Drones heal nearby mechanical units.",
@@ -518,10 +515,7 @@ item_descriptions = {
     item_names.STARTING_SUPPLY: "Increases the starting supply for all missions.",
     item_names.NOTHING: "Does nothing. Used to remove a location from the game.",
     item_names.NOVA_GHOST_VISOR: "Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units.",
-    item_names.NOVA_RANGEFINDER_OCULUS: inspect.cleandoc("""
-        Increases Nova's vision range and non-melee weapon attack range by 2.
-        Also increases range of melee weapons by 1.
-    """),
+    item_names.NOVA_RANGEFINDER_OCULUS: "Increases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
     item_names.NOVA_DOMINATION: "Gives Nova the ability to mind-control a target enemy unit.",
     item_names.NOVA_BLINK: "Gives Nova the ability to teleport a short distance and cloak for 10s.",
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: inspect.cleandoc("""
