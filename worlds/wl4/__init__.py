@@ -8,7 +8,7 @@ from worlds.AutoWorld import WebWorld, World
 from .client import WL4Client
 from .data import data_path
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import location_name_to_id, location_table
+from .locations import get_level_locations, get_level_location_data, location_name_to_id, location_table
 from .options import Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
@@ -64,20 +64,42 @@ class WL4World(World):
     required_client_version = (0, 5, 0)
 
     item_name_groups = {
-        'Golden Treasure': {
-            'Golden Tree Pot',
-            'Golden Apple',
-            'Golden Fish',
-            'Golden Candle Holder',
-            'Golden Lamp',
-            'Golden Crescent Moon Bed',
-            'Golden Teddy Bear',
-            'Golden Lollipop',
-            'Golden Game Boy Advance',
-            'Golden Robot',
-            'Golden Rocket',
-            'Golden Rocking Horse',
-        },
+        'Entry Jewel Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY)),
+        'Emerald Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.EMERALD)),
+        'Ruby Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.RUBY)),
+        'Topaz Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.TOPAZ)),
+        'Sapphire Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.SAPPHIRE)),
+        'Golden Jewel Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.GOLDEN)),
+        'CDs': set(filter_item_names(type=ItemType.CD)),
+        'Abilities': set(filter_item_names(type=ItemType.ABILITY)),
+        'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
+        'Traps': { 'Wario Form Trap', 'Lightning Trap'},
+        'Junk': {'Heart', 'Minigame Coin'},
+    }
+
+    location_name_groups = {
+        'Hall of Hieroglyphs': set(get_level_locations(Passage.ENTRY, 0)),
+        'Palm Tree Paradise': set(get_level_locations(Passage.EMERALD, 0)),
+        'Wildflower Fields': set(get_level_locations(Passage.EMERALD, 1)),
+        'Mystic Lake': set(get_level_locations(Passage.EMERALD, 2)),
+        'Monsoon Jungle': set(get_level_locations(Passage.EMERALD, 3)),
+        'Cractus Treasures': set(k for k, v in get_level_location_data(Passage.EMERALD, 4) if v.source != LocationType.BOSS),
+        'The Curious Factory': set(get_level_locations(Passage.RUBY, 0)),
+        'The Toxic Landfill': set(get_level_locations(Passage.RUBY, 1)),
+        '40 Below Fridge': set(get_level_locations(Passage.RUBY, 2)),
+        'Pinball Zone': set(get_level_locations(Passage.RUBY, 3)),
+        'Cuckoo Condor Treasures': set(k for k, v in get_level_location_data(Passage.RUBY, 4) if v.source != LocationType.BOSS),
+        'Toy Block Tower': set(get_level_locations(Passage.TOPAZ, 0)),
+        'The Big Board': set(get_level_locations(Passage.TOPAZ, 1)),
+        'Doodle Woods': set(get_level_locations(Passage.TOPAZ, 2)),
+        'Domino Row': set(get_level_locations(Passage.TOPAZ, 3)),
+        'Aerodent Treasures': set(k for k, v in get_level_location_data(Passage.TOPAZ, 4) if v.source != LocationType.BOSS),
+        'Crescent Moon Village': set(get_level_locations(Passage.SAPPHIRE, 0)),
+        'Arabian Night': set(get_level_locations(Passage.SAPPHIRE, 1)),
+        'Fiery Cavern': set(get_level_locations(Passage.SAPPHIRE, 2)),
+        'Hotel Horror': set(get_level_locations(Passage.SAPPHIRE, 3)),
+        'Catbat Treasures': set(k for k, v in get_level_location_data(Passage.SAPPHIRE, 4) if v.source != LocationType.BOSS),
+        'Golden Passage': set(get_level_locations(Passage.GOLDEN, 0)),
     }
 
     web = WL4Web()
