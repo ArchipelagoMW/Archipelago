@@ -711,21 +711,16 @@ class CollectionState():
         # locations can be skipped in the current iteration. Usually, a world's logic only depends on its own items, but
         # worlds are allowed to depend on other worlds.
         # Start with each world only depending on itself.
-        logic_dependent_players: Dict[int, List[int]] = {}
+        # Construct a mapping from each player to the list of players with logic dependent on that player.
+        logic_dependent_players: Dict[int, List[int]] = defaultdict(list)
         worlds = self.multiworld.worlds
-        groups = self.multiworld.groups
         for player, _locations in events_per_player:
-            if player in groups:
+            if player in worlds:
+                for dependent_on_player in worlds[player].player_dependencies:
+                    logic_dependent_players[dependent_on_player].append(player)
+            else:
                 # Item link locations have no associated World and use a group ID as the player ID.
-                logic_dependent_players[player] = [player]
-                continue
-            dependencies = worlds[player].player_dependencies
-            if dependencies is not None:
-                for other_player in dependencies:
-                    if other_player in logic_dependent_players:
-                        logic_dependent_players[other_player].append(player)
-                    else:
-                        logic_dependent_players[other_player] = [player]
+                logic_dependent_players[player].append(player)
 
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
