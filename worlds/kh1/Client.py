@@ -150,7 +150,7 @@ class KH1Context(CommonContext):
                 senderID = networkItem.player
                 locationID = networkItem.location
                 if recieverID != self.slot and senderID == self.slot:
-                    itemName = self.item_names[networkItem.item]
+                    itemName = self.item_names.lookup_in_slot(networkItem.item, networkItem.player)
                     itemCategory = networkItem.flags
                     recieverName = self.player_names[recieverID]
                     filename = "sent"
