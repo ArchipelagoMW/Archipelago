@@ -92,7 +92,7 @@ def _get_start_and_max_energy_desc(unit_name_plural: str, starting_amount_increa
 
 def _ability_desc(unit_name_plural: str, ability_name: str, ability_description: str = '') -> str:
     if ability_description:
-        suffix = f", which {ability_description}"
+        suffix = f", \nwhich {ability_description}"
     else:
         suffix = ""
     return f"{unit_name_plural} gain the {ability_name} ability{suffix}."
@@ -515,7 +515,7 @@ item_descriptions = {
     item_names.STARTING_SUPPLY: "Increases the starting supply for all missions.",
     item_names.NOTHING: "Does nothing. Used to remove a location from the game.",
     item_names.NOVA_GHOST_VISOR: "Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units.",
-    item_names.NOVA_RANGEFINDER_OCULUS: "Increaases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
+    item_names.NOVA_RANGEFINDER_OCULUS: "Increases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
     item_names.NOVA_DOMINATION: "Gives Nova the ability to mind-control a target enemy unit.",
     item_names.NOVA_BLINK: "Gives Nova the ability to teleport a short distance and cloak for 10s.",
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: inspect.cleandoc("""
