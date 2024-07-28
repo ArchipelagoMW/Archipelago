@@ -137,7 +137,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         # Note(mm): Bold/underline can help readability, but unfortunately the CommonClient does not filter bold tags from command-line output.
         # Regardless, using `on_print_json` to get formatted text in the GUI and output in the command-line and in the logs,
         # without having to branch code from CommonClient
-        self.ctx.on_print_json({"data": [{"text": text}]})
+        self.ctx.on_print_json({"data": [{"text": text, "keep_markup": True}]})
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""

@@ -100,6 +100,15 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
         node.setdefault("refs", []).append(ref)
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
+    def _handle_text(self, node: JSONMessagePart):
+        if node.get("keep_markup", False):
+            for ref in node.get("refs", []):
+                node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
+                self.ref_count += 1
+            return super(KivyJSONtoTextParser, self)._handle_text(node)
+        else:
+            return super()._handle_text(node)
+
 
 class SC2Manager(GameManager):
     logging_pairs = [
