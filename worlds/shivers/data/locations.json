@@ -182,7 +182,7 @@
     "Three Floor Elevator": [
       "Puzzle Hint Found: Elevator Writing"
     ],
-    "Generator": [
+    "Beth's Body": [
       "Final Riddle: Beth's Body Page 17"
     ],
     "Theater": [
@@ -191,7 +191,7 @@
     "Theater Back Hallway": [
       "Puzzle Solved Clock Tower Door"
     ],
-    "Clock Tower Staircase": [
+    "Clock Chains": [
       "Puzzle Solved Clock Chains"
     ],
     "Clock Tower": [
@@ -311,9 +311,11 @@
     "Torture": [
       "Puzzle Solved Gallows",
       "Storage: Gallows",
-      "Final Riddle: Guillotine Dropped",
       "Puzzle Hint Found: Gallows Information Plaque",
       "Information Plaque: (Torture) Guillotine"
+    ],
+    "Guillotine": [
+      "Final Riddle: Guillotine Dropped"
     ],
     "Puzzle Room Mastermind": [
       "Puzzle Solved Mastermind",

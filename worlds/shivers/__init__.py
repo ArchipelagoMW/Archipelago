@@ -89,8 +89,10 @@ class ShiversWorld(World):
         self.create_event_location("Gods Room", "Set Skull Dial: Gods Room")
         self.create_event_location("Werewolf", "Set Skull Dial: Werewolf")
         self.create_event_location("Projector Room", "Viewed Theater Movie")
-        self.create_event_location("Clock Tower Staircase", "Set Clock Chains")
-        self.create_event_location("Clock Tower", "Set Jukebox")
+        self.create_event_location("Clock Chains", "Clock Chains", "Set Time")
+        self.create_event_location("Clock Tower", "Jukebox", "Set Song")
+        self.create_event_location("Beth's Body", "Beth's Body", "Viewed Page 17")
+        self.create_event_location("Guillotine", "Guillotine", "Lost Your Head")
 
     def create_items(self) -> None:
         # Add items to item pool
