@@ -222,10 +222,8 @@ class WitnessWorld(World):
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
         extra_checks = [
-            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
-            ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
-            ("Desert Outside", "Desert Surface 1"),
-            ("Desert Outside", "Desert Surface 2"),
+            (location, static_witness_logic.ENTITIES_BY_NAME[location]["region"]["name"])
+            for location in static_witness_locations.EXTRA_LOCATIONS
         ]
 
         for i in range(num_early_locs, needed_size):
