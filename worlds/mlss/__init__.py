@@ -157,7 +157,7 @@ class MLSSWorld(World):
         return MLSSItem(item.itemName, item.classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList)))
+        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList))).itemName
 
     def generate_output(self, output_directory: str) -> None:
         patch = MLSSProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
