@@ -1765,7 +1765,7 @@ item_table = {
     # 530 reserved for Phoenix
     # 531 reserved for Corsair
     # 532 reserved for Mirage
-    item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, parent_item=item_names.SKIRMISHER),
+    item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.SKIRMISHER),
     # 534 reserved for Void Ray
     # 535 reserved for Destroyer
     # 536 reserved for Warp Ray
