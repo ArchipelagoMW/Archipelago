@@ -930,7 +930,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                         # If from_pool, try to find an existing item with this name & player in the itempool and use it
                         index_to_delete, item = next(
                             (i, item) for i, item in enumerate(multiworld.itempool)
-                            if item.name == item_name and item.player == player and i not in claimed_indices
+                            if item.player == player and item.name == item_name and i not in claimed_indices
                         )
                     except StopIteration:
                         warn(
