@@ -463,11 +463,6 @@ class PriorityHintItems(ItemSet):
     Items that will have increased priority to be hinted if they exist in the itempool.
     """
     display_name = "Priority Hint Items"
-    default = {
-        "Boat",
-        "Caves Shortcuts",
-        "Progressive Dots",
-    }
 
 
 class PriorityHintLocations(LocationSet):
