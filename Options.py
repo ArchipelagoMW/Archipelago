@@ -224,7 +224,7 @@ class FreeText(Option[str]):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
-class NumericOption(Option[int]):
+class NumericOption(Option[int], abc.ABC):
     default = 0
 
     def __eq__(self, other: typing.Any) -> bool:
