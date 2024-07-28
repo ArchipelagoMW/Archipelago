@@ -8,7 +8,7 @@ import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import Counter, deque
+from collections import Counter, deque, defaultdict
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
@@ -702,14 +702,10 @@ class CollectionState():
         else:
             # Can't iterate self.multiworld.player_ids because it doesn't include the extra player IDs used for item
             # links, so iterate the keys of the location_cache instead.
-            events_per_player_dict = {}
+            events_per_player_dict = defaultdict(list)
             for location in locations:
                 if event_filter(location):
-                    player = location.player
-                    if player in events_per_player_dict:
-                        events_per_player_dict[player].append(location)
-                    else:
-                        events_per_player_dict[player] = [location]
+                    events_per_player_dict[location.player].append(location)
             # Convert to a list of tuples.
             events_per_player = list(events_per_player_dict.items())
             del events_per_player_dict
