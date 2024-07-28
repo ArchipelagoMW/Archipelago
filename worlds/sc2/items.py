@@ -79,6 +79,7 @@ class ProtossItemType(ItemTypeEnum):
     Forge_3 = "Forge", 9
     """General Protoss unit upgrades"""
     War_Council = "War Council", 10
+    War_Council_2 = "War Council", 11
     
 
 class FactionlessItemType(ItemTypeEnum):
@@ -1752,14 +1753,23 @@ item_table = {
     item_names.DARK_ARCHON_INDOMITABLE_WILL: ItemData(518 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 18, SC2Race.PROTOSS),
     # 518 reserved for Immortal
     # 519 reserved for Annihilator
-    # 520 reserved for Vanguard
-    # 521 reserved for Stalwart
-    # 522 reserved for Colossus
-    # 523 reserved for Wrathwalker
-    # 524 reserved for Reaver
-    # 525 reserved for Disruptor
-    # 526 reserved for Warp Prism
-    # 527 reserved for Observer
+    item_names.VANGUARD_RAPIDFIRE_CANNON: ItemData(520 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 20, SC2Race.PROTOSS, parent_item=item_names.VANGUARD),
+    item_names.VANGUARD_FUSION_MORTARS: ItemData(521 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 21, SC2Race.PROTOSS, parent_item=item_names.VANGUARD),
+    # 522 reserved for Stalwart
+    # 523 reserved for Colossus
+    # 524 reserved for Wrathwalker
+    # 525 reserved for Reaver
+    # 526 reserved for Disruptor
+    # 527 reserved for Warp Prism
+    # 528 reserved for Observer
+    # 530 reserved for Phoenix
+    # 531 reserved for Corsair
+    # 532 reserved for Mirage
+    item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.SKIRMISHER),
+    # 534 reserved for Void Ray
+    # 535 reserved for Destroyer
+    # 536 reserved for Warp Ray
+    # 537 reserved for Dawnbringer
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
