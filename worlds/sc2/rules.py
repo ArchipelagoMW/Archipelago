@@ -662,8 +662,7 @@ class SC2Logic:
                     }, self.player)
                     # handle mutas
                     or state.has_any({
-                        item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER,
-                        item_names.CORSAIR,
+                        item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
                     }, self.player)
                     # handle brood lords and virophages
                     and (state.has_any({
