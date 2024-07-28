@@ -555,7 +555,7 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
         desc = item_descriptions[item_name].replace(". \n", ".<br>").replace(". ", ".<br>").replace("\n", "<br>")
         ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + desc
         node.setdefault("refs", []).append(ref)
-        return super()._handle_item_name(node)
+        return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
 
 class SC2Context(CommonContext):
