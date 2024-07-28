@@ -6,18 +6,23 @@ from Options import (
     Choice,
     DefaultOnToggle,
     ItemSet,
+    LocalItems,
     LocationSet,
+    NonLocalItems,
     OptionDict,
     OptionGroup,
     PerGameCommonOptions,
     Range,
+    StartHints,
+    StartInventory,
+    StartLocationHints,
     Toggle,
     Visibility,
 )
 
 from .data import static_items as static_witness_items
-from .data import static_logic as static_witness_logic
 from .data import static_locations as static_witness_locations
+from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
 
 
@@ -516,6 +521,44 @@ class RandomHintsAreItemHintsWeight(Range):
     default = 50
 
 
+class WitnessLocalItems(LocalItems):
+    """Forces these items to be in their native world."""
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
+
+class WitnessNonLocalItems(NonLocalItems):
+    """Forces these items to be outside their native world."""
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
+
+class WitnessStartInventory(StartInventory):
+    """Start with these items."""
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
+
+class WitnessStartHints(StartHints):
+    """Start with these item's locations prefilled into the ``!hint`` command."""
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
+
+class WitnessStartLocationHints(StartLocationHints):
+    """Start with these locations and their item prefilled into the ``!hint`` command."""
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
+
+
+# Excluding locations has special functionality in The Witness and needs to work for all of them
+'''
+class WitnessExcludeLocations(ExcludeLocations):
+    """Prevent these locations from having an important item."""
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
+'''
+
+
+class WitnessPriorityLocations(PriorityHintLocations):
+    """Prevent these locations from having an unimportant item."""
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -558,6 +601,14 @@ class TheWitnessOptions(PerGameCommonOptions):
     priority_hints_percentage_out_of_remaining: PriorityHintsPercentageOutOfRemaining
     priority_hints_percentage_out_of_possible: PriorityHintsPercentageOutOfPossible
     random_hints_are_items_weight: RandomHintsAreItemHintsWeight
+
+    local_items: WitnessLocalItems
+    non_local_items: WitnessNonLocalItems
+    start_inventory: WitnessStartInventory
+    start_hints: WitnessStartHints
+    start_location_hints: WitnessStartLocationHints
+    # exclude_locations: ExcludeLocations  # Needs to support all locations, not just ones that can exist in the world
+    priority_locations: WitnessPriorityLocations
 
 
 witness_option_groups = [
@@ -613,4 +664,13 @@ witness_option_groups = [
         PriorityHintsPercentageOutOfPossible,
         RandomHintsAreItemHintsWeight,
     ], start_collapsed=True),
+    OptionGroup("Item & Location Options", [
+        WitnessLocalItems,
+        WitnessNonLocalItems,
+        WitnessStartInventory,
+        WitnessStartHints,
+        WitnessStartLocationHints,
+        # WitnessExcludeLocations  # See above
+        WitnessPriorityLocations,
+    ]),
 ]
