@@ -720,7 +720,7 @@ item_descriptions = {
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: "Anti-air flyer. Attack inflict Acid Spores. Can attack air units. Morphed from the Mutalisk or Corruptor.",
     item_names.ROACH_RAVAGER_ASPECT: "Ranged artillery. Can use Corrosive Bile. Can attack ground units. Morphed from the Roach.",
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: "Assault unit. Has an area-damage attack. Regenerates life quickly when burrowed. Can attack ground units. Morphed by merging two Roaches.",
-    item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks",
+    item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks.",
     item_names.OBSERVER: "Flying spy. Cloak renders the unit invisible to enemies without detection.",
     item_names.CENTURION: "Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities.",
     item_names.SENTINEL: "Powerful melee warrior. Has the Charge and Reconstruction abilities.",
