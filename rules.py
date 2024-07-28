@@ -253,8 +253,7 @@ location_rules: Mapping[str, Requirement] = {
     'Doodle Woods - Blue Circle Box':                 has('Enemy Jump'),
     'Doodle Woods - Pink Circle Box':                 has('Ground Pound'),
     'Doodle Woods - Gray Square Box':                 has('Ground Pound') | logic(advanced) & has('Grab'),
-    'Doodle Woods - CD Box':
-            (has('Ground Pound') | logic(advanced) & has('Grab')) | not_difficulty(normal),
+    'Doodle Woods - CD Box':                          has('Ground Pound') | not_difficulty(normal),
     'Domino Row - Swimming Detour Box':               has('Head Smash'),
     'Domino Row - Swimming Room Escape Box':          has('Ground Pound'),
     'Domino Row - Keyzer Room Box':                   has('Ground Pound'),

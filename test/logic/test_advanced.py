@@ -17,9 +17,8 @@ class TestAdvancedNormal(TestNormal):
             ['Doodle Woods - Blue Escape Box', True, []],
 
             ['Doodle Woods - CD Box', False, []],
-            ['Doodle Woods - CD Box', False, [], ['Progressive Ground Pound', 'Progressive Grab']],
+            ['Doodle Woods - CD Box', False, [], ['Progressive Ground Pound']],
             ['Doodle Woods - CD Box', True, ['Progressive Ground Pound']],
-            ['Doodle Woods - CD Box', True, ['Progressive Grab']],
         ])
 
     def _test_domino_row(self):
