@@ -79,7 +79,7 @@ class TrackerData:
 
             # Normal lookup tables as well.
             self.item_name_to_id[game] = game_package["item_name_to_id"]
-            self.location_name_to_id[game] = game_package["item_name_to_id"]
+            self.location_name_to_id[game] = game_package["location_name_to_id"]
 
     def get_seed_name(self) -> str:
         """Retrieves the seed name."""
