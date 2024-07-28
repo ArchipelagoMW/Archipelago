@@ -1498,8 +1498,13 @@ def dump_player_options(multiworld: MultiWorld) -> None:
     game_players = dict(sorted(game_players.items()))
 
     output = []
-    all_options = []
+    per_game_option_names = [
+        getattr(option, "display_name", option_key)
+        for option_key, option in PerGameCommonOptions.type_hints.items()
+    ]
+    all_option_names = per_game_option_names.copy()
     for game, players in game_players.items():
+        game_option_names = per_game_option_names.copy()
         for player in players:
             world = multiworld.worlds[player]
             player_output = {
@@ -1512,11 +1517,12 @@ def dump_player_options(multiworld: MultiWorld) -> None:
                     continue
                 display_name = getattr(option, "display_name", option_key)
                 player_output[display_name] = getattr(world.options, option_key).current_option_name
-                if display_name not in all_options:
-                    all_options.append(display_name)
+                if display_name not in game_option_names:
+                    all_option_names.append(display_name)
+                    game_option_names.append(display_name)
 
     with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
-        fields = ["Game", "Name", *all_options]
+        fields = ["Game", "Name", *all_option_names]
         writer = DictWriter(file, fields)
         writer.writeheader()
         writer.writerows(output)
