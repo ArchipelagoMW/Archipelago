@@ -9,7 +9,7 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -83,6 +83,12 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
 
     def generate_early(self) -> None:
+        if self.options.logic_rules >= LogicRules.option_no_major_glitches:
+            self.options.laurels_zips.value = LaurelsZips.option_true
+            self.options.ice_grappling.value = IceGrappling.option_medium
+            if self.options.logic_rules.value == LogicRules.option_unrestricted:
+                self.options.ladder_storage.value = LadderStorage.option_medium
+
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
