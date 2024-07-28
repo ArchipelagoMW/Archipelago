@@ -4,7 +4,7 @@ from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd
 from .er_rules import set_er_region_rules
 from Options import PlandoConnection
-from .options import EntranceRando
+from .options import EntranceRando, EntranceLayout
 from random import Random
 from copy import deepcopy
 
@@ -26,8 +26,13 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     if world.options.entrance_rando:
         for region_name, region_data in tunic_er_regions.items():
             # if fewer shops is off, zig skip is not made
-            if region_name == "Zig Skip Exit" and not world.options.fixed_shop:
-                continue
+            if region_name == "Zig Skip Exit":
+                # need to check if there's a seed group for this first
+                if world.options.entrance_rando.value not in EntranceRando.options.values():
+                    if world.seed_groups[world.options.entrance_rando.value]["entrance_layout"] != EntranceLayout.option_fixed_shop:
+                        continue
+                elif world.options.entrance_layout != EntranceLayout.option_fixed_shop:
+                    continue
             regions[region_name] = Region(region_name, world.player, world.multiworld)
 
         portal_pairs = pair_portals(world, regions)
@@ -152,7 +157,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     laurels_zips = world.options.laurels_zips.value
     ice_grappling = world.options.ice_grappling.value
     ladder_storage = world.options.ladder_storage.value
-    fixed_shop = world.options.fixed_shop
+    entrance_layout = world.options.entrance_layout
     laurels_location = world.options.laurels_location
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
@@ -164,7 +169,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         laurels_zips = seed_group["laurels_zips"]
         ice_grappling = seed_group["ice_grappling"]
         ladder_storage = seed_group["ladder_storage"]
-        fixed_shop = seed_group["fixed_shop"]
+        entrance_layout = seed_group["entrance_layout"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
 
     logic_tricks: Tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
@@ -176,7 +181,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     # need to keep track of which scenes have shops, since you shouldn't have multiple shops connected to the same scene
     shop_scenes: Set[str] = set()
     shop_count = 6
-    if fixed_shop:
+    if entrance_layout == EntranceLayout.option_fixed_shop:
         shop_count = 0
         shop_scenes.add("Overworld Redux")
     else:
@@ -185,6 +190,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             if portal.region == "Zig Skip Exit":
                 portal_map.remove(portal)
                 break
+        # need 8 shops with direction pairs or there won't be a valid set of pairs
+        if entrance_layout == EntranceLayout.option_direction_pairs:
+            shop_count = 8
 
     # If using Universal Tracker, restore portal_map. Could be cleaner, but it does not matter for UT even a little bit
     if hasattr(world.multiworld, "re_gen_passthrough"):
@@ -211,7 +219,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 else:
                     dead_ends.append(portal)
             if portal.region == "Zig Skip Exit":
-                if fixed_shop:
+                if entrance_layout == EntranceLayout.option_fixed_shop:
                     two_plus.append(portal)
                 else:
                     dead_ends.append(portal)
@@ -258,7 +266,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # secret gathering place and zig skip get weird, special handling
         elif region_info.dead_end == DeadEnd.special:
             if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
-                    or (region_name == "Zig Skip Exit" and fixed_shop):
+                    or (region_name == "Zig Skip Exit" and entrance_layout == EntranceLayout.option_fixed_shop):
                 non_dead_end_regions.add(region_name)
 
     if plando_connections:
@@ -362,15 +370,15 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
-    if fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
+    if entrance_layout == EntranceLayout.option_fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
                 portal1 = portal
                 break
         if not portal1:
-            raise Exception(f"Failed to do Fixed Shop option. "
-                            f"Did {player_name} plando connection the Windmill Shop entrance?")
+            raise Exception(f"Failed to do Fixed Shop option for Entrance Layout. "
+                            f"Did {player_name} plando the Windmill Shop entrance?")
 
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                          destination="Previous Region", tag="_")

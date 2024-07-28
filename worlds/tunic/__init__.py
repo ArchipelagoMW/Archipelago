@@ -9,9 +9,9 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation)
+                      LaurelsLocation, EntranceLayout)
 from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection
+from Options import PlandoConnection, OptionError
 from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
@@ -53,7 +53,7 @@ class SeedGroup(TypedDict):
     ice_grappling: int  # ice_grappling value
     ladder_storage: int  # ls value
     laurels_at_10_fairies: bool  # laurels location value
-    fixed_shop: bool  # fixed shop value
+    entrance_layout: int  # entrance layout value
     plando: TunicPlandoConnections  # consolidated plando connections for the seed group
 
 
@@ -131,7 +131,7 @@ class TunicWorld(World):
                               ice_grappling=tunic.options.ice_grappling.value,
                               ladder_storage=tunic.options.ladder_storage.value,
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
-                              fixed_shop=bool(tunic.options.fixed_shop),
+                              entrance_layout=tunic.options.entrance_layout.value,
                               plando=multiworld.plando_connections[tunic.player])
                 continue
 
@@ -148,9 +148,14 @@ class TunicWorld(World):
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
             # more restrictive, overrides the option for others in the same group, which is better than failing imo
-            if tunic.options.fixed_shop:
-                cls.seed_groups[group]["fixed_shop"] = True
+            if tunic.options.entrance_layout:
+                if cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_standard:
+                    cls.seed_groups[group]["entrance_layout"] = tunic.options.entrance_layout.value
+                elif cls.seed_groups[group]["entrance_layout"] != tunic.options.entrance_layout.value:
+                    raise OptionError(f"TUNIC: Conflict between seed group {group}'s Entrance Layout options. "
+                                      f"Seed group cannot have both Fixed Shop and Direction Pairs enabled.")
 
+            # todo: make it break if you don't have matching portal directions with direction pairs on
             if multiworld.plando_connections[tunic.player]:
                 # loop through the connections in the player's yaml
                 for cxn in multiworld.plando_connections[tunic.player]:
@@ -170,10 +175,10 @@ class TunicWorld(World):
                             or cxn.exit == group_cxn.exit and cxn.entrance != group_cxn.entrance
                         )
                         if is_mismatched:
-                            raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
-                                            f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
-                                            f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
-                                            f"connection {cxn.entrance} <-> {cxn.exit}")
+                            raise OptionError(f"TUNIC: Conflict between seed group {group}'s plando "
+                                              f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
+                                              f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
+                                              f"connection {cxn.entrance} <-> {cxn.exit}")
                     if new_cxn:
                         cls.seed_groups[group]["plando"].value.append(cxn)
 

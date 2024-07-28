@@ -271,6 +271,7 @@ class TunicOptions(PerGameCommonOptions):
     ability_shuffling: AbilityShuffling
     shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
+    entrance_layout: EntranceLayout
     plando_connections: TunicPlandoConnections
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
@@ -286,7 +287,7 @@ class TunicOptions(PerGameCommonOptions):
     ladder_storage_without_items: LadderStorageWithoutItems
 
     fixed_shop: FixedShop
-    logic_rules: Removed
+    logic_rules: Removed  # fully removed in the direction pairs update
       
 
 tunic_option_groups = [
