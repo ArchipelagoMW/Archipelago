@@ -774,7 +774,6 @@ class SC2Context(CommonContext):
         warnings = apply_window_defaults()
         from .client_gui import start_gui
         start_gui(self, warnings)
-        self.ui.json_to_kivy_parser = SC2JSONtoKivyParser()
 
     async def shutdown(self) -> None:
         await super(SC2Context, self).shutdown()
