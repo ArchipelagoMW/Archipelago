@@ -1,6 +1,7 @@
-from typing import Dict, Set, cast, List
+from typing import Dict, List, Set, cast
 
-from . import static_logic as static_witness_logic, utils
+from . import static_logic as static_witness_logic
+from . import utils
 
 ID_START = 158000
 
