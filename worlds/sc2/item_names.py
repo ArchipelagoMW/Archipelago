@@ -709,7 +709,8 @@ HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Te
 DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
 # IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
 # Annihilator
-# Vanguard
+VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Vanguard)"
+VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vanguard)"
 # Stalwart
 # Colossus
 # Wrathwalker

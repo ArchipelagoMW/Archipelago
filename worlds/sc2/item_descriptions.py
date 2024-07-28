@@ -875,7 +875,8 @@ item_descriptions = {
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
     # Immortal
     # Annihilator
-    # Vanguard
+    item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 37% faster.",
+    item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
     # Stalwart
     # Colossus
     # Wrathwalker
