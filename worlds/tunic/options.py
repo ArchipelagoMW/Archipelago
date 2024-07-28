@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Removed)
+                     PerGameCommonOptions, OptionGroup, Removed, Visibility)
 from .er_data import portal_mapping
 
 
@@ -119,12 +119,31 @@ class EntranceRando(TextChoice):
 
 class FixedShop(Toggle):
     """
-    Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
-    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
-    Has no effect if Entrance Rando is not enabled.
+    This option has been superseded by the Entrance Layout option.
+    If enabled, it will override the Entrance Layout option.
+    This is kept to keep older yamls working, and will be removed at a later date.
     """
+    visibility = Visibility.none
     internal_name = "fixed_shop"
     display_name = "Fewer Shops in Entrance Rando"
+
+
+class EntranceLayout(Choice):
+    """
+    Decide how the Entrance Randomizer chooses how to pair the entrances.
+    Standard: Entrances are randomly connected. There are 6 shops in the pool with this option.
+    Fixed Shop: Forces the Windmill entrance to lead to a shop, and removes the other shops from the pool.
+    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
+    Direction Pairs: Entrances facing opposite directions are paired together. There are 8 shops in the pool with this option.
+    Note: For seed groups, if one player in a group chooses Fixed Shop and another chooses Direction Pairs, it will error out.
+    Either of these options will override Standard within a seed group.
+    """
+    internal_name = "entrance_layout"
+    display_name = "Entrance Layout"
+    option_standard = 0
+    option_fixed_shop = 1
+    option_direction_pairs = 2
+    default = 0
 
 
 class LaurelsLocation(Choice):
@@ -159,6 +178,9 @@ class TunicPlandoConnections(PlandoConnections):
       exit: "Exit Name"
       percentage: 100
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
+    Note that you will wrong warp if you have multiple shops in the same scene.
+    If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
     """
     entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
     exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
@@ -249,7 +271,7 @@ class TunicOptions(PerGameCommonOptions):
     ability_shuffling: AbilityShuffling
     shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
-    fixed_shop: FixedShop
+    plando_connections: TunicPlandoConnections
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
@@ -262,8 +284,8 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
-    plando_connections: TunicPlandoConnections
 
+    fixed_shop: FixedShop
     logic_rules: Removed
       
 
