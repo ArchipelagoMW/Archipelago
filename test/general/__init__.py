@@ -49,6 +49,7 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
             updated_options = getattr(args, key, {})
             updated_options[player] = option.from_any(option.default)
             setattr(args, key, updated_options)
+    random.seed(None)
     multiworld.set_seed(seed)
     multiworld.set_options(args)
     for step in steps:
