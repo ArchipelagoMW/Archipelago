@@ -92,17 +92,19 @@ Meant for co-op runs where one player can play the next mission in a chain the o
 * `/unfinished` Get what missions are currently available to play and have not had all locations checked
 * `/set_path [path]` Manually set the SC2 install directory (if the automatic detection fails)
 
-Note that the behavior of the command `/received` was modified in the StarCraft 2 Client compared to its behavior in 
-the Common Client of Archipelago.
-In the latter, the command returns the list of items received in the reverse order they were received.
-In the StarCraft 2 Client, the list is divided by races (i.e., Any, Protoss, Terran, and Zerg).
+Note that the behavior of the command `/received` was modified in the StarCraft 2 client.
+In the Common client of Archipelago, the command returns the list of items received in the reverse order they were 
+received.
+In the StarCraft 2 client, the returned list will be divided by races (i.e., Any, Protoss, Terran, and Zerg).
 Additionally, upgrades are grouped beneath their corresponding units or buildings.
 A filter parameter can be provided, e.g., `/received Thor`, to limit the number of items shown.
 Every item whose name, race, or group name contains the provided parameter will be shown.
 
 ## Known issues
 
-- StarCraft 2 Archipelago does not support saving or loading during a mission. 
+- StarCraft 2 Archipelago does not support loading a saved game. 
 For this reason, it is recommended to play on a difficulty level lower than what you are normally comfortable with.
+- StarCraft 2 Archipelago does not support the restart of a mission from the StarCraft 2 menu. 
+To restart a mission, use the StarCraft 2 Client.
 - A crash report is often generated when a mission is closed. 
 This does not affect the game and can be ignored.
