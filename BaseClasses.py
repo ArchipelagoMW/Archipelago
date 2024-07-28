@@ -700,12 +700,9 @@ class CollectionState():
             # Remove empty lists to reduce the length of `events_per_player`, so that it is quicker to iterate.
             events_per_player = [(player, locations) for player, locations in events_per_player if locations]
         else:
-            # Can't iterate self.multiworld.player_ids because it doesn't include the extra player IDs used for item
-            # links, so iterate the keys of the location_cache instead.
             events_per_player_dict = defaultdict(list)
-            for location in locations:
-                if event_filter(location):
-                    events_per_player_dict[location.player].append(location)
+            for location in filter(event_filter, locations):
+                events_per_player_dict[location.player].append(location)
             # Convert to a list of tuples.
             events_per_player = list(events_per_player_dict.items())
             del events_per_player_dict
