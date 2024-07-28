@@ -537,7 +537,7 @@ class SC2JSONtoTextParser(JSONtoTextParser):
 class SC2JSONtoKivyParser(KivyJSONtoTextParser):
     def _handle_item_name(self, node: JSONMessagePart):
         item_name = node["text"]
-        if not item_name in item_descriptions:
+        if item_name not in item_descriptions:
             return super()._handle_item_name(node)
 
         flags = node.get("flags", 0)
