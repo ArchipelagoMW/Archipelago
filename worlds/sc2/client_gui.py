@@ -2,7 +2,9 @@ from typing import *
 import asyncio
 import logging
 
-from kvui import GameManager, HoverBehavior, ServerToolTip
+from BaseClasses import ItemClassification
+from NetUtils import JSONMessagePart
+from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.tabbedpanel import TabbedPanelItem
@@ -14,8 +16,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_missions, parse_unlock, force_settings_save_on_close, \
-    SC2JSONtoKivyParser
+from worlds.sc2.client import SC2Context, calc_unfinished_missions, parse_unlock, force_settings_save_on_close
+from worlds.sc2.item_descriptions import item_descriptions
 from worlds.sc2.mission_tables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race, SC2Campaign
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type
@@ -73,6 +75,30 @@ class MissionLayout(GridLayout):
 
 class MissionCategory(GridLayout):
     pass
+
+
+class SC2JSONtoKivyParser(KivyJSONtoTextParser):
+    def _handle_item_name(self, node: JSONMessagePart):
+        item_name = node["text"]
+        if item_name not in item_descriptions:
+            return super()._handle_item_name(node)
+
+        flags = node.get("flags", 0)
+        item_types = []
+        if flags & ItemClassification.progression:
+            item_types.append("progression")
+        if flags & ItemClassification.useful:
+            item_types.append("useful")
+        if flags & ItemClassification.trap:
+            item_types.append("trap")
+        if not item_types:
+            item_types.append("normal")
+
+        # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
+        desc = item_descriptions[item_name].replace(". \n", ".<br>").replace(". ", ".<br>").replace("\n", "<br>")
+        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + desc
+        node.setdefault("refs", []).append(ref)
+        return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
 
 class SC2Manager(GameManager):

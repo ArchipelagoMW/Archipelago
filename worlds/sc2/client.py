@@ -22,11 +22,9 @@ from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from BaseClasses import ItemClassification
 from Utils import init_logging, is_windows, async_start
 from . import item_names
 from .item_groups import item_name_groups, unlisted_item_name_groups
-from .item_descriptions import item_descriptions
 from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
@@ -66,7 +64,6 @@ from .regions import MissionInfo
 import colorama
 from .options import Option
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
-from kvui import KivyJSONtoTextParser
 from MultiServer import mark_raw
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
