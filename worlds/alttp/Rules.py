@@ -488,7 +488,7 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Turtle Rock - Roller Room - Right', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
     set_rule(multiworld.get_location('Turtle Rock - Big Chest', player), lambda state: state.has('Big Key (Turtle Rock)', player) and (state.has('Cane of Somaria', player) or state.has('Hookshot', player)))
     set_rule(multiworld.get_entrance('Turtle Rock (Big Chest) (North)', player), lambda state: state.has('Cane of Somaria', player) or state.has('Hookshot', player))
-    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10))
+    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10) and can_bomb_or_bonk(state, player))
     set_rule(multiworld.get_location('Turtle Rock - Chain Chomps', player), lambda state: can_use_bombs(state, player) or can_shoot_arrows(state, player)
                                                                                           or has_beam_sword(state, player) or state.has_any(["Blue Boomerang", "Red Boomerang", "Hookshot", "Cane of Somaria", "Fire Rod", "Ice Rod"], player))
     set_rule(multiworld.get_entrance('Turtle Rock (Dark Room) (North)', player), lambda state: state.has('Cane of Somaria', player))
