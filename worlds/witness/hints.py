@@ -3,7 +3,7 @@ import math
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Tuple, Union, cast
 
-from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
+from BaseClasses import CollectionState, Item, Location, MultiWorld, Region
 
 from .data import static_logic as static_witness_logic
 from .data.utils import weighted_sample
@@ -40,132 +40,98 @@ class WitnessWordedHint:
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
-    always = [
-        "Boat",
-        "Caves Shortcuts",
-        "Progressive Dots",
-    ]
+    always = sorted(world.options.always_hint_items.value)
 
     difficulty = world.options.puzzle_randomization
     discards = world.options.shuffle_discarded_panels
     wincon = world.options.victory_condition
 
-    if discards:
+    if discards and world.options.discard_symbol_hint == "always_hint":
         if difficulty == "sigma_expert":
             always.append("Arrows")
         else:
             always.append("Triangles")
 
-    if wincon == "elevator":
-        always += ["Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"]
+    if world.options.final_door_hint == "always_hint":
+        if wincon == "elevator":
+            always += ["Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"]
 
-    if wincon == "challenge":
-        always += ["Challenge Entry (Panel)", "Caves Panels"]
+        if wincon == "challenge":
+            always += ["Challenge Entry (Panel)", "Caves Panels", "Challenge Entry (Door)", "Caves Doors"]
 
     return always
 
 
 def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
-    always = [
-        "Challenge Vault Box",
-        "Mountain Bottom Floor Discard",
-        "Theater Eclipse EP",
-        "Shipwreck Couch EP",
-        "Mountainside Cloud Cycle EP",
-    ]
+    always = sorted(world.options.always_hint_locations.value)
 
-    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
-    if "0x339B6" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        always.append("Town Obelisk Side 6")  # Eclipse EP
+    # For EPs, also make their obelisk side an always hint
+    for location_name in always:
+        location_obj = static_witness_logic.ENTITIES_BY_NAME[location_name]
+        if location_obj["entityType"] != "EP":
+            continue
+        if location_obj["entity_hex"] in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
+            continue
 
-    if "0x3388F" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        always.append("Treehouse Obelisk Side 4")  # Couch EP
-
-    if "0x335AE" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        always.append("Mountainside Obelisk Side 1")  # Cloud Cycle EP.
+        corresponding_obelisk_side = static_witness_logic.EP_TO_OBELISK_SIDE[location_obj["entity_hex"]]
+        always.append(static_witness_logic.ENTITIES_BY_ID[corresponding_obelisk_side]["checkName"])
 
     return always
 
 
 def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
-    priority = {
-        "Caves Mountain Shortcut (Door)",
-        "Caves Swamp Shortcut (Door)",
-        "Swamp Entry (Panel)",
-        "Swamp Laser Shortcut (Door)",
-    }
+    priority = world.options.priority_hint_items.value
 
-    if world.options.shuffle_symbols:
-        symbols = [
-            "Progressive Dots",
-            "Progressive Stars",
-            "Shapers",
-            "Rotated Shapers",
-            "Negative Shapers",
-            "Arrows",
-            "Triangles",
-            "Eraser",
-            "Black/White Squares",
-            "Colored Squares",
-            "Sound Dots",
-            "Progressive Symmetry"
-        ]
+    difficulty = world.options.puzzle_randomization
+    discards = world.options.shuffle_discarded_panels
+    wincon = world.options.victory_condition
 
-        priority.update(world.random.sample(symbols, 5))
-
-    if world.options.shuffle_lasers:
-        lasers = [
-            "Symmetry Laser",
-            "Town Laser",
-            "Keep Laser",
-            "Swamp Laser",
-            "Treehouse Laser",
-            "Monastery Laser",
-            "Jungle Laser",
-            "Quarry Laser",
-            "Bunker Laser",
-            "Shadows Laser",
-        ]
-
-        if world.options.shuffle_doors >= 2:
-            priority.add("Desert Laser")
-            priority.update(world.random.sample(lasers, 5))
-
+    if discards and world.options.discard_symbol_hint == "priority_hint":
+        if difficulty == "sigma_expert":
+            priority.add("Arrows")
         else:
-            lasers.append("Desert Laser")
-            priority.update(world.random.sample(lasers, 6))
+            priority.add("Triangles")
+
+    if world.options.final_door_hint == "priority_hint":
+        if wincon == "elevator":
+            priority |= {"Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"}
+
+        if wincon == "challenge":
+            priority |= {"Challenge Entry (Panel)", "Caves Panels", "Challenge Entry (Door)", "Caves Doors"}
+
+    # Add symbols and lasers in accordance with Priority Symbols and Priority Lasers options
+
+    number_of_symbols = sum(item in world.item_name_groups["Symbols"] for item in priority)
+    number_of_lasers = sum(item in world.item_name_groups["Lasers"] for item in priority)
+
+    needed_symbols = world.options.priority_symbols - number_of_symbols
+    needed_lasers = world.options.priority_lasers - number_of_lasers
+
+    possible_symbols = sorted(world.item_name_groups["Symbols"] - priority)
+    possible_lasers = sorted(world.item_name_groups["Lasers"] - priority)
+
+    if needed_symbols > 0:
+        priority.update(world.random.sample(possible_symbols, needed_symbols))
+
+    if needed_lasers > 0:
+        priority.update(world.random.sample(possible_lasers, needed_lasers))
 
     return sorted(priority)
 
 
 def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
-    priority = [
-        "Tutorial Patio Floor",
-        "Tutorial Patio Flowers EP",
-        "Swamp Purple Underwater",
-        "Shipwreck Vault Box",
-        "Town RGB House Upstairs Left",
-        "Town RGB House Upstairs Right",
-        "Treehouse Green Bridge 7",
-        "Treehouse Green Bridge Discard",
-        "Shipwreck Discard",
-        "Desert Vault Box",
-        "Mountainside Vault Box",
-        "Mountainside Discard",
-        "Tunnels Theater Flowers EP",
-        "Boat Shipwreck Green EP",
-        "Quarry Stoneworks Control Room Left",
-    ]
+    priority = sorted(world.options.priority_hint_locations.value)
 
-    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
-    if "0x33A20" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        priority.append("Town Obelisk Side 6")  # Theater Flowers EP
+    # For EPs, also make their obelisk side a priority hint
+    for location_name in priority:
+        location_obj = static_witness_logic.ENTITIES_BY_NAME[location_name]
+        if location_obj["entityType"] != "EP":
+            continue
+        if location_obj["entity_hex"] in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
+            continue
 
-    if "0x28B29" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        priority.append("Treehouse Obelisk Side 4")  # Shipwreck Green EP
-
-    if "0x33600" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        priority.append("Town Obelisk Side 2")  # Tutorial Patio Flowers EP.
+        corresponding_obelisk_side = static_witness_logic.EP_TO_OBELISK_SIDE[location_obj["entity_hex"]]
+        priority.append(static_witness_logic.ENTITIES_BY_ID[corresponding_obelisk_side]["checkName"])
 
     return priority
 
@@ -304,7 +270,7 @@ def get_item_and_location_names_in_random_order(world: "WitnessWorld",
 
     locations_in_this_world = [
         location for location in world.multiworld.get_locations(world.player)
-        if location.item and not location.is_event and location.progress_type != LocationProgressType.EXCLUDED
+        if location.item and not location.is_event
     ]
     world.random.shuffle(locations_in_this_world)
 
@@ -373,7 +339,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
                               unhinted_locations_for_hinted_areas: Dict[str, Set[Location]]) -> List[WitnessWordedHint]:
     prog_items_in_this_world, locations_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
 
-    next_random_hint_is_location = world.random.randrange(0, 2)
+    next_random_hint_is_location = world.random.randrange(0, 100) >= world.options.random_hints_are_items_weight
 
     hints: List[WitnessWordedHint] = []
 
@@ -606,7 +572,10 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     # Make up to half of the rest of the location hints priority hints, using up to half of the possibly priority hints
     remaining_location_hints = intended_location_hints - always_hints_to_use
-    priority_hints_to_use = int(max(0.0, min(possible_priority_hints / 2, remaining_location_hints / 2)))
+    priority_hints_to_use = int(max(0.0, min(
+        possible_priority_hints * world.options.priority_hints_percentage_out_of_possible / 100,
+        remaining_location_hints * world.options.priority_hints_percentage_out_of_remaining / 100,
+    )))
 
     for _ in range(always_hints_to_use):
         location_hint = always_hints.pop()

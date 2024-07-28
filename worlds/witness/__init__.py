@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -309,6 +309,13 @@ class WitnessWorld(World):
         self.laser_ids_to_hints: Dict[int, CompactItemData] = {}
 
         already_hinted_locations = set()
+
+        # Excluded locations should never be hinted
+
+        already_hinted_locations |= {
+            location.name for location in self.multiworld.get_locations(self.player)
+            if location.progress_type == LocationProgressType.EXCLUDED
+        }
 
         # Laser hints
 
