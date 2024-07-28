@@ -59,7 +59,8 @@ class Difficulty(Choice):
 class Logic(Choice):
     '''
     Advanced logic enables some strategies that are more difficult or can risk forcing a Give Up, many of which involve Grab.
-    See the Discord thread for the tricks Advanced accounts for.
+    The list of tricks in advanced logic can be found at https://discord.com/channels/731205301247803413/1079899101732290620/1203556009776250931
+    Videos of some tricks can be found at https://www.youtube.com/playlist?list=PL9fyDZ3k7Qw0WclTCDDImKQDjNi2Sy0Gp
     '''
     display_name = 'Logic'
     option_basic = 0
