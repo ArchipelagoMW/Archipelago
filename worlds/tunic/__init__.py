@@ -112,8 +112,8 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
-                self.options.fixed_shop.value = self.options.fixed_shop.option_false
-                self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+                self.options.entrance_layout.value = EntranceLayout.option_standard
+                self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.combat_logic.value = passthrough["combat_logic"]
 
     @classmethod
