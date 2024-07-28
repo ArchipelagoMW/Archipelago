@@ -5,7 +5,7 @@ from schema import And, Optional, Or, Schema
 
 from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
     PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
-from worlds.messenger.portals import CHECKPOINTS, PORTALS, SHOP_POINTS
+from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
 class MessengerAccessibility(ItemsAccessibility):

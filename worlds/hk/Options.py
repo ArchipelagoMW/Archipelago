@@ -1,10 +1,12 @@
 import typing
 import re
+from dataclasses import dataclass, make_dataclass
+
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
 from schema import And, Schema, Optional
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -538,3 +540,5 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     },
     **cost_sanity_weights
 }
+
+HKOptions = make_dataclass("HKOptions", [(name, option) for name, option in hollow_knight_options.items()], bases=(PerGameCommonOptions,))
