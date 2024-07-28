@@ -17,6 +17,7 @@ from Options import (
 
 from .data import static_items as static_witness_items
 from .data import static_logic as static_witness_logic
+from .data import static_locations as static_witness_locations
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
 
 
@@ -441,6 +442,8 @@ class AlwaysHintItems(ItemSet):
         "Progressive Dots",
     }
 
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
+
 
 class AlwaysHintLocations(LocationSet):
     """
@@ -457,12 +460,16 @@ class AlwaysHintLocations(LocationSet):
         "Mountainside Cloud Cycle EP",
     }
 
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
+
 
 class PriorityHintItems(ItemSet):
     """
     Items that will have increased priority to be hinted if they exist in the itempool.
     """
     display_name = "Priority Hint Items"
+
+    valid_keys = static_witness_items.POSSIBLE_ITEMS
 
 
 class PriorityHintLocations(LocationSet):
@@ -490,6 +497,8 @@ class PriorityHintLocations(LocationSet):
         "Boat Shipwreck Green EP",
         "Quarry Stoneworks Control Room Left",
     }
+
+    valid_keys = static_witness_locations.POSSIBLE_LOCATIONS
 
 
 class PrioritySymbols(Range):
