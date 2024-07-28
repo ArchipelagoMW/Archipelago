@@ -625,8 +625,8 @@ SCOUT_RESOURCE_EFFICIENCY                               = "Resource Efficiency (
 TEMPEST_TECTONIC_DESTABILIZERS                          = "Tectonic Destabilizers (Tempest)"
 TEMPEST_QUANTIC_REACTOR                                 = "Quantic Reactor (Tempest)"
 TEMPEST_GRAVITY_SLING                                   = "Gravity Sling (Tempest)"
-PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX                    = "Ionic Wavelength Flux (Phoenix/Mirage)"
-PHOENIX_MIRAGE_ANION_PULSE_CRYSTALS                     = "Anion Pulse-Crystals (Phoenix/Mirage)"
+PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX                     = "Ionic Wavelength Flux (Phoenix/Mirage/Skirmisher)"
+PHOENIX_CLASS_ANION_PULSE_CRYSTALS                      = "Anion Pulse-Crystals (Phoenix/Mirage/Skirmisher)"
 CORSAIR_STEALTH_DRIVE                                   = "Stealth Drive (Corsair)"
 CORSAIR_ARGUS_JEWEL                                     = "Argus Jewel (Corsair)"
 CORSAIR_SUSTAINING_DISRUPTION                           = "Sustaining Disruption (Corsair)"
@@ -709,7 +709,8 @@ HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Te
 DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
 # IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
 # Annihilator
-# Vanguard
+VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Vanguard)"
+VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vanguard)"
 # Stalwart
 # Colossus
 # Wrathwalker
@@ -717,6 +718,14 @@ DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dar
 # Disruptor
 # Warp Prism
 # Observer
+# Phoenix
+# Corsair
+# Mirage
+SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
+# Void Ray
+# Destroyer
+# Warp Ray
+# Dawnbringer
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"

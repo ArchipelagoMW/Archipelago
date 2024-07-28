@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from typing import Iterable, Union, List, Tuple, Hashable
 
-from BaseClasses import ItemClassification, CollectionState
+from BaseClasses import CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
-from ..items import item_table
 
 
 class TotalReceived(BaseStardewRule):
@@ -19,11 +18,6 @@ class TotalReceived(BaseStardewRule):
             items_list = [*items]
         else:
             items_list = [items]
-
-        assert items_list, "Can't create a Total Received conditions without items"
-        for item in items_list:
-            assert item_table[item].classification & ItemClassification.progression, \
-                f"Item [{item_table[item].name}] has to be progression to be used in logic"
 
         self.player = player
         self.items = items_list
@@ -40,9 +34,6 @@ class TotalReceived(BaseStardewRule):
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self, self(state)
 
-    def get_difficulty(self):
-        return self.count
-
     def __repr__(self):
         return f"Received {self.count} {self.items}"
 
@@ -52,10 +43,8 @@ class Received(CombinableStardewRule):
     item: str
     player: int
     count: int
-
-    def __post_init__(self):
-        assert item_table[self.item].classification & ItemClassification.progression, \
-            f"Item [{item_table[self.item].name}] has to be progression to be used in logic"
+    event: bool = False
+    """Helps `explain` to know it can dig into a location with the same name."""
 
     @property
     def combination_key(self) -> Hashable:
@@ -73,11 +62,8 @@ class Received(CombinableStardewRule):
 
     def __repr__(self):
         if self.count == 1:
-            return f"Received {self.item}"
-        return f"Received {self.count} {self.item}"
-
-    def get_difficulty(self):
-        return self.count
+            return f"Received {'event ' if self.event else ''}{self.item}"
+        return f"Received {'event ' if self.event else ''}{self.count} {self.item}"
 
 
 @dataclass(frozen=True)
@@ -96,9 +82,6 @@ class Reach(BaseStardewRule):
 
     def __repr__(self):
         return f"Reach {self.resolution_hint} {self.spot}"
-
-    def get_difficulty(self):
-        return 1
 
 
 @dataclass(frozen=True)
@@ -122,19 +105,21 @@ class HasProgressionPercent(CombinableStardewRule):
         stardew_world = state.multiworld.worlds[self.player]
         total_count = stardew_world.total_progression_items
         needed_count = (total_count * self.percent) // 100
+        player_state = state.prog_items[self.player]
+
+        if needed_count <= len(player_state):
+            return True
+
         total_count = 0
-        for item in state.prog_items[self.player]:
-            item_count = state.prog_items[self.player][item]
+        for item, item_count in player_state.items():
             total_count += item_count
             if total_count >= needed_count:
                 return True
+
         return False
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self, self(state)
 
     def __repr__(self):
-        return f"HasProgressionPercent {self.percent}"
-
-    def get_difficulty(self):
-        return self.percent
+        return f"Received {self.percent}% progression items"
