@@ -51,6 +51,13 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",                # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
     "FLAG_PURCHASED_HARBOR_MAIL",
+    "FLAG_REGI_DOORS_OPENED",
+    "FLAG_RETURNED_DEVON_GOODS",
+    "FLAG_DOCK_REJECTED_DEVON_GOODS",
+    "FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY",
+    "FLAG_WINGULL_SENT_ON_ERRAND",
+    "FLAG_WINGULL_DELIVERED_MAIL",
+    "FLAG_MET_PRETTY_PETAL_SHOP_OWNER",
 ]
 EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
 
@@ -84,10 +91,15 @@ KEY_LOCATION_FLAGS = [
     "NPC_GIFT_RECEIVED_OLD_ROD",
     "NPC_GIFT_RECEIVED_GOOD_ROD",
     "NPC_GIFT_RECEIVED_SUPER_ROD",
+    "NPC_GIFT_RECEIVED_EON_TICKET",
+    "NPC_GIFT_RECEIVED_AURORA_TICKET",
+    "NPC_GIFT_RECEIVED_MYSTIC_TICKET",
+    "NPC_GIFT_RECEIVED_OLD_SEA_MAP",
 ]
 KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
-LEGENDARY_NAMES = {
+# .lower() keys for backward compatibility between 0.4.5 and 0.4.6
+LEGENDARY_NAMES = {k.lower(): v for k, v in {
     "Groudon": "GROUDON",
     "Kyogre": "KYOGRE",
     "Rayquaza": "RAYQUAZA",
@@ -98,9 +110,9 @@ LEGENDARY_NAMES = {
     "Registeel": "REGISTEEL",
     "Mew": "MEW",
     "Deoxys": "DEOXYS",
-    "Ho-oh": "HO_OH",
+    "Ho-Oh": "HO_OH",
     "Lugia": "LUGIA",
-}
+}.items()}
 
 DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES.values()}
 CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES.values()}
@@ -197,6 +209,13 @@ class PokemonEmeraldClient(BizHawkClient):
                 "cmd": "ConnectUpdate",
                 "items_handling": ctx.items_handling
             }]))
+
+            # Need to make sure items handling updates and we get the correct list of received items
+            # before continuing. Otherwise we might give some duplicate items and skip others.
+            # Should patch remote_items option value into the ROM in the future to guarantee we get the
+            # right item list before entering this part of the code
+            await asyncio.sleep(0.75)
+            return
 
         try:
             guards: Dict[str, Tuple[int, bytes, str]] = {}
@@ -311,7 +330,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
                 num_caught = 0
                 for legendary, is_caught in caught_legendaries.items():
-                    if is_caught and legendary in [LEGENDARY_NAMES[name] for name in ctx.slot_data["allowed_legendary_hunt_encounters"]]:
+                    if is_caught and legendary in [LEGENDARY_NAMES[name.lower()] for name in ctx.slot_data["allowed_legendary_hunt_encounters"]]:
                         num_caught += 1
 
                 if num_caught >= ctx.slot_data["legendary_hunt_count"]:
@@ -433,7 +452,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     self.death_counter = times_whited_out
                 elif times_whited_out > self.death_counter:
                     await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
-                                        f"{ctx.player_names[ctx.slot]} whited out!")
+                                         f"{ctx.player_names[ctx.slot]} whited out!")
                     self.ignore_next_death_link = True
                     self.death_counter = times_whited_out
 
@@ -664,8 +683,10 @@ class PokemonEmeraldClient(BizHawkClient):
                 "cmd": "SetNotify",
                 "keys": [f"pokemon_wonder_trades_{ctx.team}"],
             }, {
-                "cmd": "Get",
-                "keys": [f"pokemon_wonder_trades_{ctx.team}"],
+                "cmd": "Set",
+                "key": f"pokemon_wonder_trades_{ctx.team}",
+                "default": {"_lock": 0},
+                "operations": [{"operation": "default", "value": None}]  # value is ignored
             }]))
         elif cmd == "SetReply":
             if args.get("key", "") == f"pokemon_wonder_trades_{ctx.team}":

@@ -1,4 +1,4 @@
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 from collections.abc import Callable
 from BaseClasses import CollectionState
 from worlds.generic.Rules import forbid_item
@@ -71,8 +71,14 @@ def first_nine_ixupi_capturable(state: CollectionState, player: int) -> bool:
         and metal_capturable(state, player)
 
 
+def all_skull_dials_available(state: CollectionState, player: int) -> bool:
+    return state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region", player) \
+        and state.can_reach("Egypt", "Region", player) and state.can_reach("Burial", "Region", player) \
+        and state.can_reach("Gods Room", "Region", player) and state.can_reach("Werewolf", "Region", player)
+
+
 def get_rules_lookup(player: int):
-    rules_lookup: Dict[str, List[Callable[[CollectionState], bool]]] = {
+    rules_lookup: Dict[str, Dict[str, Callable[[CollectionState], bool]]] = {
         "entrances": {
             "To Office Elevator From Underground Blue Tunnels": lambda state: state.has("Key for Office Elevator", player),
             "To Office Elevator From Office": lambda state: state.has("Key for Office Elevator", player),
@@ -116,10 +122,7 @@ def get_rules_lookup(player: int):
             "To Tar River From Lobby": lambda state: (state.has("Crawling", player) and oil_capturable(state, player) and state.can_reach("Tar River", "Region", player)),
             "To Burial From Egypt": lambda state: state.can_reach("Egypt", "Region", player),
             "To Gods Room From Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
-            "To Slide Room": lambda state: (
-                        state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region",player) and
-                        state.can_reach("Egypt", "Region", player) and state.can_reach("Burial", "Region", player) and
-                        state.can_reach("Gods Room", "Region", player) and state.can_reach("Werewolf", "Region", player)),
+            "To Slide Room": lambda state: all_skull_dials_available(state, player),
             "To Lobby From Slide Room": lambda state: (beths_body_available(state, player))
         },
         "locations_required": {
@@ -141,6 +144,7 @@ def get_rules_lookup(player: int):
             "Final Riddle: Norse God Stone Message": lambda state: (state.can_reach("Fortune Teller", "Region", player) and state.can_reach("UFO", "Region", player)),
             "Final Riddle: Beth's Body Page 17": lambda state: beths_body_available(state, player),
             "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, player),
+            "Puzzle Solved Skull Dial Door": lambda state: all_skull_dials_available(state, player),
             },
         "locations_puzzle_hints": {
             "Puzzle Solved Clock Tower Door": lambda state: state.can_reach("Three Floor Elevator", "Region", player),
@@ -191,6 +195,15 @@ def set_rules(world: "ShiversWorld") -> None:
         for location_name, rule in rules_lookup["lightning"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
+    # Register indirect conditions
+    multiworld.register_indirect_condition(world.get_region("Burial"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Egypt"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Gods Room"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Tar River"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Werewolf"), world.get_entrance("To Slide Room"))
+    multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Tar River From Lobby"))
+
     # forbid cloth in janitor closet and oil in tar river
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Top DUPE", player)
@@ -222,7 +235,3 @@ def set_rules(world: "ShiversWorld") -> None:
 
     # Set completion condition
     multiworld.completion_condition[player] = lambda state: (first_nine_ixupi_capturable(state, player) and lightning_capturable(state, player))
-
-
-
-

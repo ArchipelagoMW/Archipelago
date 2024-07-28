@@ -1,8 +1,8 @@
 # Factorio
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -36,7 +36,7 @@ inventory.
 ## What is EnergyLink?
 
 EnergyLink is an energy storage supported by certain games that is shared across all worlds in a multiworld.
-In Factorio, if enabled in the player settings, EnergyLink Bridge buildings can be crafted and placed, which allow
+In Factorio, if enabled in the player options, EnergyLink Bridge buildings can be crafted and placed, which allow
 depositing excess energy and supplementing energy deficits, much like Accumulators.
 
 Each placed EnergyLink Bridge provides 10 MW of throughput. The shared storage has unlimited capacity, but 25% of energy

@@ -1,8 +1,8 @@
 # Links Awakening DX
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -85,7 +85,7 @@ Title screen graphics by toomanyteeth✨ (https://instagram.com/toomanyyyteeth)
 <p>The walrus is moved a bit, so that you can access the desert without taking Marin on a date.</p>
 
 <h3>Logic</h3>
-<p>Depending on your settings, you can only steal after you find the sword, always, or never.</p>
+<p>Depending on your options, you can only steal after you find the sword, always, or never.</p>
 <p>Do not forget that there are two items in the rafting ride. You can access this with just Hookshot or Flippers.</p>
 <p>Killing enemies with bombs is in normal logic. You can switch to casual logic if you do not want this.</p>
 <p>D7 confuses some people, but by dropping down pits on the 2nd floor you can access almost all of this dungeon, even without feather and power bracelet.</p>

@@ -27,14 +27,9 @@ local mmbn3Socket = nil
 local frame = 0
 
 -- States
-local ITEMSTATE_NONINITIALIZED = "Game Not Yet Started" -- Game has not yet started
 local ITEMSTATE_NONITEM = "Non-Itemable State" -- Do not send item now. RAM is not capable of holding
 local ITEMSTATE_IDLE = "Item State Ready" -- Ready for the next item if there are any
-local ITEMSTATE_SENT = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
-local itemState = ITEMSTATE_NONINITIALIZED
-
-local itemQueued = nil
-local itemQueueCounter = 120
+local itemState = ITEMSTATE_NONITEM
 
 local debugEnabled = false
 local game_complete = false
@@ -104,21 +99,24 @@ end
 local IsInBattle = function()
     return memory.read_u8(0x020097F8) == 0x08
 end
-local IsItemQueued = function()
-    return memory.read_u8(0x2000224) == 0x01
-end
-
 -- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
 -- don't want to check any locations there either so it's fine.
 local IsOnTitle = function()
     return bit.band(memory.read_u8(0x020097F8),0x04) == 0
 end
+
 local IsItemable = function()
-    return not IsInMenu() and not IsInTransition() and not IsInDialog() and not IsInBattle() and not IsOnTitle() and not IsItemQueued()
+    return not IsInMenu() and not IsInTransition() and not IsInDialog() and not IsInBattle() and not IsOnTitle()
 end
 
 local is_game_complete = function()
-    if IsOnTitle() or itemState == ITEMSTATE_NONINITIALIZED then return game_complete end
+    -- If the Cannary Byte is 0xFF, then the save RAM is untrustworthy
+    if memory.read_u8(canary_byte) == 0xFF then
+        return game_complete
+    end
+
+    -- If on the title screen don't read RAM, RAM can't be trusted yet
+    if IsOnTitle() then return game_complete end
 
     -- If the game is already marked complete, do not read memory
     if game_complete then return true end
@@ -177,14 +175,6 @@ local Check_Progressive_Undernet_ID = function()
     end
     return 9
 end
-local GenerateTextBytes = function(message)
-    bytes = {}
-    for i = 1, #message do
-        local c = message:sub(i,i)
-        table.insert(bytes, charDict[c])
-    end
-    return bytes
-end
 
 -- Item Message Generation functions
 local Next_Progressive_Undernet_ID = function(index)
@@ -195,150 +185,6 @@ local Next_Progressive_Undernet_ID = function(index)
     end
     item_index=ordered_IDs[index]
     return item_index
-end
-local Extra_Progressive_Undernet = function()
-    fragBytes = int32ToByteList_le(20)
-    bytes = {
-        0xF6, 0x50, fragBytes[1], fragBytes[2], fragBytes[3], fragBytes[4], 0xFF, 0xFF, 0xFF
-    }
-    bytes = TableConcat(bytes, GenerateTextBytes("The extra data\ndecompiles into:\n\"20 BugFrags\"!!"))
-    return bytes
-end
-
-local GenerateChipGet = function(chip, code, amt)
-    chipBytes = int16ToByteList_le(chip)
-    bytes = {
-        0xF6, 0x10, chipBytes[1], chipBytes[2], code, amt,
-        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['c'], charDict['h'], charDict['i'], charDict['p'], charDict[' '], charDict['f'], charDict['o'], charDict['r'], charDict['\n'],
-
-    }
-    if chip < 256 then
-        bytes = TableConcat(bytes, {
-            charDict['\"'], 0xF9,0x00,chipBytes[1],0x01,0x00,0xF9,0x00,code,0x03, charDict['\"'],charDict['!'],charDict['!']
-        })
-    else
-        bytes = TableConcat(bytes, {
-            charDict['\"'], 0xF9,0x00,chipBytes[1],0x02,0x00,0xF9,0x00,code,0x03, charDict['\"'],charDict['!'],charDict['!']
-        })
-    end
-    return bytes
-end
-local GenerateKeyItemGet = function(item, amt)
-    bytes = {
-        0xF6, 0x00, item, amt,
-        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'],
-        charDict['\"'], 0xF9, 0x00, item, 0x00, charDict['\"'],charDict['!'],charDict['!']
-    }
-    return bytes
-end
-local GenerateSubChipGet = function(subchip, amt)
-    -- SubChips have an extra bit of trouble. If you have too many, they're supposed to skip to another text bank that doesn't give you the item
-    -- Instead, I'm going to just let it get eaten
-    bytes = {
-        0xF6, 0x20, subchip, amt, 0xFF, 0xFF, 0xFF,
-        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'],
-        charDict['S'], charDict['u'], charDict['b'], charDict['C'], charDict['h'], charDict['i'], charDict['p'], charDict[' '], charDict['f'], charDict['o'], charDict['r'], charDict['\n'],
-        charDict['\"'], 0xF9, 0x00, subchip, 0x00, charDict['\"'],charDict['!'],charDict['!']
-    }
-    return bytes
-end
-local GenerateZennyGet = function(amt)
-    zennyBytes = int32ToByteList_le(amt)
-    bytes = {
-        0xF6, 0x30, zennyBytes[1], zennyBytes[2], zennyBytes[3], zennyBytes[4], 0xFF, 0xFF, 0xFF,
-        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'], charDict['\"']
-    }
-    -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
-    zennyStr = tostring(amt)
-    for i = 1, #zennyStr do
-        local c = zennyStr:sub(i,i)
-        table.insert(bytes, charDict[c])
-    end
-    bytes = TableConcat(bytes, {
-        charDict[' '], charDict['Z'], charDict['e'], charDict['n'], charDict['n'], charDict['y'], charDict['s'], charDict['\"'],charDict['!'],charDict['!']
-    })
-    return bytes
-end
-local GenerateProgramGet = function(program, color, amt)
-    bytes = {
-        0xF6, 0x40, (program * 4), amt, color,
-        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['N'], charDict['a'], charDict['v'], charDict['i'], charDict['\n'],
-        charDict['C'], charDict['u'], charDict['s'], charDict['t'], charDict['o'], charDict['m'], charDict['i'], charDict['z'], charDict['e'], charDict['r'], charDict[' '], charDict['P'], charDict['r'], charDict['o'], charDict['g'], charDict['r'], charDict['a'], charDict['m'], charDict[':'], charDict['\n'],
-        charDict['\"'], 0xF9, 0x00, program, 0x05, charDict['\"'],charDict['!'],charDict['!']
-    }
-
-    return bytes
-end
-local GenerateBugfragGet = function(amt)
-    fragBytes = int32ToByteList_le(amt)
-    bytes = {
-        0xF6, 0x50, fragBytes[1], fragBytes[2], fragBytes[3], fragBytes[4], 0xFF, 0xFF, 0xFF,
-        charDict['G'], charDict['o'], charDict['t'], charDict[':'], charDict['\n'], charDict['\"']
-    }
-    -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
-    bugFragStr = tostring(amt)
-    for i = 1, #bugFragStr do
-        local c = bugFragStr:sub(i,i)
-        table.insert(bytes, charDict[c])
-    end
-    bytes = TableConcat(bytes, {
-        charDict[' '], charDict['B'], charDict['u'], charDict['g'], charDict['F'], charDict['r'], charDict['a'], charDict['g'], charDict['s'], charDict['\"'],charDict['!'],charDict['!']
-    })
-    return bytes
-end
-local GenerateGetMessageFromItem = function(item)
-    --Special case for progressive undernet
-    if item["type"] == "undernet" then
-        undernet_id = Check_Progressive_Undernet_ID()
-        if undernet_id > 8 then
-            return Extra_Progressive_Undernet()
-        end
-        return GenerateKeyItemGet(Next_Progressive_Undernet_ID(undernet_id),1)
-    elseif item["type"] == "chip" then
-        return GenerateChipGet(item["itemID"], item["subItemID"], item["count"])
-    elseif item["type"] == "key" then
-        return GenerateKeyItemGet(item["itemID"], item["count"])
-    elseif item["type"] == "subchip" then
-        return GenerateSubChipGet(item["itemID"], item["count"])
-    elseif item["type"] == "zenny" then
-        return GenerateZennyGet(item["count"])
-    elseif item["type"] == "program" then
-        return GenerateProgramGet(item["itemID"], item["subItemID"], item["count"])
-    elseif item["type"] == "bugfrag" then
-        return GenerateBugfragGet(item["count"])
-    end
-
-    return GenerateTextBytes("Empty Message")
-end
-
-local GetMessage = function(item)
-    startBytes = {0x02, 0x00}
-    playerLockBytes = {0xF8,0x00, 0xF8, 0x10}
-    msgOpenBytes = {0xF1, 0x02}
-    textBytes = GenerateTextBytes("Receiving\ndata from\n"..item["sender"]..".")
-    dotdotWaitBytes = {0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00,0x4D}
-    continueBytes = {0xEB, 0xE9}
-    -- continueBytes = {0xE9}
-    playReceiveAnimationBytes = {0xF8,0x04,0x18}
-    chipGiveBytes = GenerateGetMessageFromItem(item)
-    playerFinishBytes = {0xF8, 0x0C}
-    playerUnlockBytes={0xEB, 0xF8, 0x08}
-    -- playerUnlockBytes={0xF8, 0x08}
-    endMessageBytes = {0xF8, 0x10, 0xE7}
-
-    bytes = {}
-    bytes = TableConcat(bytes,startBytes)
-    bytes = TableConcat(bytes,playerLockBytes)
-    bytes = TableConcat(bytes,msgOpenBytes)
-    bytes = TableConcat(bytes,textBytes)
-    bytes = TableConcat(bytes,dotdotWaitBytes)
-    bytes = TableConcat(bytes,continueBytes)
-    bytes = TableConcat(bytes,playReceiveAnimationBytes)
-    bytes = TableConcat(bytes,chipGiveBytes)
-    bytes = TableConcat(bytes,playerFinishBytes)
-    bytes = TableConcat(bytes,playerUnlockBytes)
-    bytes = TableConcat(bytes,endMessageBytes)
-    return bytes
 end
 
 local getChipCodeIndex = function(chip_id, chip_code)
@@ -353,6 +199,10 @@ local getChipCodeIndex = function(chip_id, chip_code)
 end
 
 local getProgramColorIndex = function(program_id, program_color)
+    -- For whatever reason, OilBody (ID 24) does not follow the rules and should be color index 3
+    if program_id == 24 then
+        return 3
+    end
     -- The general case, most programs use white pink or yellow. This is the values the enums already have
     if program_id >= 20 and program_id <= 47 then
         return program_color-1
@@ -401,11 +251,11 @@ local changeZenny = function(val)
 		return 0
 	end
 	if memory.read_u32_le(0x20018F4) <= math.abs(tonumber(val)) and tonumber(val) < 0 then
-		memory.write_u32_le(0x20018f4, 0)
+		memory.write_u32_le(0x20018F4, 0)
 		val = 0
 		return "empty"
 	end
-	memory.write_u32_le(0x20018f4, memory.read_u32_le(0x20018F4) + tonumber(val))
+	memory.write_u32_le(0x20018F4, memory.read_u32_le(0x20018F4) + tonumber(val))
 	if memory.read_u32_le(0x20018F4) > 999999 then
 		memory.write_u32_le(0x20018F4, 999999)
 	end
@@ -417,28 +267,15 @@ local changeFrags = function(val)
 		return 0
 	end
 	if memory.read_u16_le(0x20018F8) <= math.abs(tonumber(val)) and tonumber(val) < 0 then
-		memory.write_u16_le(0x20018f8, 0)
+		memory.write_u16_le(0x20018F8, 0)
 		val = 0
 		return "empty"
 	end
-	memory.write_u16_le(0x20018f8, memory.read_u16_le(0x20018F8) + tonumber(val))
+	memory.write_u16_le(0x20018F8, memory.read_u16_le(0x20018F8) + tonumber(val))
 	if memory.read_u16_le(0x20018F8) > 9999 then
 		memory.write_u16_le(0x20018F8, 9999)
 	end
 	return val
-end
-
--- Fix Health Pools
-local fix_hp = function()
-	-- Current Health fix
-	if IsInBattle() and not (memory.read_u16_le(0x20018A0) == memory.read_u16_le(0x2037294)) then
-		memory.write_u16_le(0x20018A0, memory.read_u16_le(0x2037294))
-	end
-
-	-- Max Health Fix
-	if IsInBattle() and not (memory.read_u16_le(0x20018A2) == memory.read_u16_le(0x2037296)) then
-		memory.write_u16_le(0x20018A2, memory.read_u16_le(0x2037296))
-	end
 end
 
 local changeRegMemory = function(amt)
@@ -448,34 +285,18 @@ local changeRegMemory = function(amt)
 end
 
 local changeMaxHealth = function(val)
-	fix_hp()
-	if val == nil then
-		fix_hp()
+    if val == nil then
 		return 0
 	end
-	if math.abs(tonumber(val)) >= memory.read_u16_le(0x20018A2) and tonumber(val) < 0 then
-		memory.write_u16_le(0x20018A2, 0)
-		if IsInBattle() then
-			memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
-			if memory.read_u16_le(0x2037296) >= memory.read_u16_le(0x20018A2) then
-				memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
-			end
-		end
-		fix_hp()
-		return "lethal"
-	end
+
 	memory.write_u16_le(0x20018A2, memory.read_u16_le(0x20018A2) + tonumber(val))
 	if memory.read_u16_le(0x20018A2) > 9999 then
 		memory.write_u16_le(0x20018A2, 9999)
 	end
-	if IsInBattle() then
-		memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
-	end
-	fix_hp()
 	return val
 end
 
-local SendItem = function(item)
+local SendItemToGame = function(item)
     if item["type"] == "undernet" then
         undernet_id = Check_Progressive_Undernet_ID()
         if undernet_id > 8 then
@@ -553,13 +374,6 @@ local OpenShortcuts = function()
     end
 end
 
-local RestoreItemRam = function()
-    if backup_bytes ~= nil then
-        memory.write_bytes_as_array(0x203fe10, backup_bytes)
-    end
-    backup_bytes = nil
-end
-
 local process_block = function(block)
     -- Sometimes the block is nothing, if this is the case then quietly stop processing
     if block == nil then
@@ -574,14 +388,7 @@ local process_block = function(block)
 end
 
 local itemStateMachineProcess = function()
-    if itemState == ITEMSTATE_NONINITIALIZED then
-        itemQueueCounter = 120
-        -- Only exit this state the first time a dialog window pops up. This way we know for sure that we're ready to receive
-        if not IsInMenu() and (IsInDialog() or IsInTransition()) then
-            itemState = ITEMSTATE_NONITEM
-        end
-    elseif itemState == ITEMSTATE_NONITEM then
-        itemQueueCounter = 120
+    if itemState == ITEMSTATE_NONITEM then
         -- Always attempt to restore the previously stored memory in this state
         -- Exit this state whenever the game is in an itemable status
         if IsItemable() then
@@ -592,26 +399,11 @@ local itemStateMachineProcess = function()
         if not IsItemable() then
             itemState = ITEMSTATE_NONITEM
         end
-        if itemQueueCounter == 0 then
-            if #itemsReceived > loadItemIndexFromRAM() and not IsItemQueued() then
-                itemQueued = itemsReceived[loadItemIndexFromRAM()+1]
-                SendItem(itemQueued)
-                itemState = ITEMSTATE_SENT
-            end
-        else
-            itemQueueCounter = itemQueueCounter - 1
-        end
-    elseif itemState == ITEMSTATE_SENT then
-        -- Once the item is sent, wait for the dialog to close. Then clear the item bit and be ready for the next item.
-        if IsInTransition() or IsInMenu() or IsOnTitle() then
-            itemState = ITEMSTATE_NONITEM
-            itemQueued = nil
-            RestoreItemRam()
-        elseif not IsInDialog() then
-            itemState = ITEMSTATE_IDLE
+        if #itemsReceived > loadItemIndexFromRAM() then
+            itemQueued = itemsReceived[loadItemIndexFromRAM()+1]
+            SendItemToGame(itemQueued)
             saveItemIndexToRAM(itemQueued["itemIndex"])
-            itemQueued = nil
-            RestoreItemRam()
+            itemState = ITEMSTATE_NONITEM
         end
     end
 end
@@ -702,18 +494,8 @@ function main()
         -- Handle the debug data display
         gui.cleartext()
         if debugEnabled then
-            -- gui.text(0,0,"Item Queued: "..tostring(IsItemQueued()))
-            -- gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
-            -- gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
-            -- gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
-            gui.text(0,48,"Item Wait Time: "..tostring(itemQueueCounter))
-            gui.text(0,64,itemState)
-            if itemQueued == nil then
-                gui.text(0,80,"No item queued")
-            else
-                gui.text(0,80,itemQueued["type"].." "..itemQueued["itemID"])
-            end
-            gui.text(0,96,"Item Index: "..loadItemIndexFromRAM())
+            gui.text(0,0,itemState)
+            gui.text(0,16,"Item Index: "..loadItemIndexFromRAM())
         end
 
         emu.frameadvance()
