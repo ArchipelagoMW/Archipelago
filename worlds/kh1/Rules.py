@@ -82,7 +82,7 @@ def has_offensive_magic(state: CollectionState, player: int) -> bool:
 def has_reports(state: CollectionState, player: int, eotw_required_reports: int) -> bool:
     return state.has_group("Reports", player, eotw_required_reports)
 
-def has_final_rest_door(state: CollectionState, player:int, final_rest_door_requirement: str, final_rest_door_required_reports: int, keyblades_unlock_chests: bool):
+def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_reports: int, keyblades_unlock_chests: bool):
     if final_rest_door_requirement == "reports":
         return state.has_group("Reports", player, final_rest_door_required_reports)
     if final_rest_door_requirement == "puppies":
