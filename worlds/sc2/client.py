@@ -331,7 +331,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
-            ConfigurableOptionInfo('unit_nerfs', 'nerf_unit_baselines', options.NerfUnitBaselines, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -556,7 +555,6 @@ class SC2Context(CommonContext):
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
-        self.nerf_unit_baselines: int = NerfUnitBaselines.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
         self.final_mission: int = 29
         self.announcements: queue.Queue = queue.Queue()
@@ -664,7 +662,6 @@ class SC2Context(CommonContext):
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
-            self.nerf_unit_baselines = args["slot_data"].get("nerf_unit_baselines", NerfUnitBaselines.default)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -822,7 +819,7 @@ async def main():
 
     await ctx.shutdown()
 
-# These items must be given to the player if the game is generated on version 2
+# These items must be given to the player if the game is generated on older versions
 API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.PHOTON_CANNON),
     CompatItemHolder(item_names.OBSERVER),
@@ -834,6 +831,12 @@ API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
     CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
 }
+API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
+    CompatItemHolder(item_name)
+    for item_name, item_data in get_full_item_list().items()
+    if item_data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
+        and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
+}
 
 
 def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[NetworkItem]:
@@ -844,10 +847,14 @@ def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[N
 
 def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     items = ctx.items_received.copy()
-    # Items unlocked in API2 by default (Prophecy default items)
+    # Items unlocked in earlier generator versions by default (Prophecy defaults, war council, rebalances)
     if ctx.slot_data_version < 3:
         for compat_item in API2_TO_API3_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
+    if ctx.slot_data_version < 4:
+        for compat_item in API3_TO_API4_COMPAT_ITEMS:
+            items.extend(compat_item_to_network_items(compat_item))
+
     # API < 4 Orbital Command Count (Deprecated item)
     orbital_command_count: int = 0
 
@@ -913,11 +920,6 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
-    
-    # War council option
-    if not ctx.nerf_unit_baselines:
-        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council.flag_word] = (1 << 30) - 1
-        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council_2.flag_word] = (1 << 30) - 1
 
     # Deprecated Orbital Command handling (Backwards compatibility):
     if orbital_command_count > 0:

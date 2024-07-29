@@ -618,5 +618,6 @@ item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
 )
 
 item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
-    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ProtossItemType.War_Council
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type in (items.ProtossItemType.War_Council, items.ProtossItemType.War_Council_2)
 ]

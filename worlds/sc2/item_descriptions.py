@@ -63,6 +63,7 @@ resource_efficiency_cost_reduction = {
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
     item_names.SCOUT:         (125, 25, 1),
+    item_names.DESTROYER:     (50, 25, 1),
 
     # War Council
     item_names.CENTURION:     (0, 50, 0),
@@ -811,7 +812,7 @@ item_descriptions = {
     item_names.CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
     item_names.CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES: "Carriers gain +2 armour.",
     item_names.VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES: "Increases movement speed of Void Ray variants.",
-    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
+    item_names.DESTROYER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DESTROYER),
     item_names.WARP_PRISM_GRAVITIC_DRIVE: "Increases the movement speed of Warp Prisms.",
     item_names.WARP_PRISM_PHASE_BLASTER: "Equips Warp Prisms with an auto-attack that can hit ground and air targets.",
     item_names.WARP_PRISM_WAR_CONFIGURATION: "Warp Prisms transform faster and gain increased power radius in Phasing Mode.",
@@ -889,7 +890,7 @@ item_descriptions = {
     # Mirage
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
     # Void Ray
-    # Destroyer
+    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
     # Warp Ray
     # Dawnbringer
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
