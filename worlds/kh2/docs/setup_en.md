@@ -89,7 +89,7 @@ Have any questions on what's in logic? This spreadsheet made by Bulcon has the a
 - Why am I not getting magic?
     - If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 - Why did I crash after picking my dream weapon?
-  - This is normally caused by having an outdated GOA mod or having an outdated panacea and or luabackend. To fix this rerun the setup wizard and reinstall luabackend and panacea. Also make sure all your mods are up-to-date. 
+  - This is normally caused by having an outdated GOA mod or having an outdated panacea and/or luabackend. To fix this rerun the setup wizard and reinstall luabackend and panacea. Also make sure all your mods are up-to-date. 
 - Why did I crash?
     - The port of Kingdom Hearts 2 can and will randomly crash, this is the fault of the game not the randomizer or the archipelago client.
       - If you have a continuous/constant crash (in the same area/event every time) you will want to reverify your installed files. This can be done by doing the following: Open Epic Game Store --> Library --> Click Triple Dots --> Manage --> Verify
