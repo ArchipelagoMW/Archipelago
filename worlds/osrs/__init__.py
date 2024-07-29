@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, CollectionRule
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
@@ -10,6 +10,7 @@ from .Locations import OSRSLocation, LocationRow
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
 
+from .LogicCSV.LogicCSVToPython import data_csv_tag
 from .LogicCSV.items_generated import item_rows
 from .LogicCSV.locations_generated import location_rows
 from .LogicCSV.regions_generated import region_rows
@@ -22,7 +23,7 @@ class OSRSWeb(WebWorld):
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Oldschool Runescape Randomizer connected to an Archipelago Multiworld",
+        "A guide to setting up the Old School Runescape Randomizer connected to an Archipelago Multiworld",
         "English",
         "docs/setup_en.md",
         "setup/en",
@@ -38,7 +39,7 @@ class OSRSWorld(World):
     topology_present = True
     web = OSRSWeb()
     base_id = 0x070000
-    data_version = 0
+    data_version = 1
 
     item_name_to_id = {item_rows[i].name: 0x070000 + i for i in range(len(item_rows))}
     location_name_to_id = {location_rows[i].name: 0x070000 + i for i in range(len(location_rows))}
@@ -53,7 +54,7 @@ class OSRSWorld(World):
 
     starting_area_item: str
 
-    locations_by_category: typing.Dict[str, LocationRow]
+    locations_by_category: typing.Dict[str, list[LocationRow]]
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -94,6 +95,16 @@ class OSRSWorld(World):
         # Set Starting Chunk
         self.multiworld.push_precollected(self.create_item(self.starting_area_item))
 
+    """
+    This function pulls from LogicCSVToPython so that it sends the correct tag of the repository to the client.
+    _Make sure to update that value whenever the CSVs change!_
+    """
+
+    def fill_slot_data(self):
+        data = self.options.as_dict("brutal_grinds")
+        data["data_csv_tag"] = data_csv_tag
+        return data
+
     def create_regions(self) -> None:
         """
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
@@ -114,7 +125,7 @@ class OSRSWorld(World):
         if self.starting_area_item in chunksanity_special_region_names:
             starting_area_region = chunksanity_special_region_names[self.starting_area_item]
         else:
-            starting_area_region = self.starting_area_item[len("Area: "):]
+            starting_area_region = self.starting_area_item[6:]  # len("Area: ")
         starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
         starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
         starting_entrance.connect(self.region_name_to_data[starting_area_region])
@@ -180,7 +191,8 @@ class OSRSWorld(World):
             entrance.access_rule = lambda state: state.has(ItemNames.QP_Dorics_Quest, self.player)
             return
         # Special logic for canoes
-        canoe_regions = [RegionNames.Lumbridge, RegionNames.South_Of_Varrock, RegionNames.Barbarian_Village, RegionNames.Edgeville, RegionNames.Wilderness]
+        canoe_regions = [RegionNames.Lumbridge, RegionNames.South_Of_Varrock, RegionNames.Barbarian_Village,
+                         RegionNames.Edgeville, RegionNames.Wilderness]
         if region_row.name in canoe_regions:
             # Skill rules for greater distances
             woodcutting_rule_d1 = self.get_skill_rule("woodcutting", 12)
@@ -343,19 +355,19 @@ class OSRSWorld(World):
         locations_required = 0
         generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
         for item_row in item_rows:
-            locations_required += item_row.count
+            locations_required += item_row.amount
 
         locations_added = 1  # At this point we've already added the starting area, so we start at 1 instead of 0
 
         # Quests are always added
         for i, location_row in enumerate(location_rows):
-            if location_row.category in ["quest", "points", "goal"]:
+            if location_row.category in {"quest", "points", "goal"}:
                 self.create_and_add_location(i)
                 if location_row.category == "quest":
                     locations_added += 1
 
         # Build up the weighted Task Pool
-        rnd = self.multiworld.per_slot_randoms[self.player]
+        rnd = self.random
 
         # Start with the minimum general tasks
         general_tasks = [task for task in self.locations_by_category["general"]]
@@ -363,25 +375,18 @@ class OSRSWorld(World):
             rnd.shuffle(general_tasks)
         else:
             general_tasks.reverse()
-        for i in range(0, self.options.minimum_general_tasks):
+        for i in range(self.options.minimum_general_tasks):
             task = general_tasks.pop()
             self.add_location(task)
             locations_added += 1
 
         general_weight = self.options.general_task_weight if len(general_tasks) > 0 else 0
-        combat_tasks = [task for task in self.locations_by_category["combat"]
-                        if task.skills[0].level <= int(self.options.max_combat_level)]
-        # if not self.options.progressive_tasks:
-        rnd.shuffle(combat_tasks)
-        if not generation_is_fake:
-            combat_tasks = combat_tasks[0:self.options.max_combat_tasks]
-        combat_weight = self.options.combat_task_weight if len(combat_tasks) > 0 else 0
 
         tasks_per_task_type: typing.Dict[str, typing.List[LocationRow]] = {}
         weights_per_task_type: typing.Dict[str, int] = {}
 
-        task_types = ["prayer", "magic", "runecraft", "mining",
-                      "smithing", "fishing", "cooking", "firemaking", "woodcutting"]
+        task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
+                      "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
         for task_type in task_types:
             max_level_for_task_type = getattr(self.options, f"max_{task_type}_level")
             max_amount_for_task_type = getattr(self.options, f"max_{task_type}_tasks")
@@ -405,6 +410,10 @@ class OSRSWorld(World):
             all_tasks.append(tasks_per_task_type[task_type])
             all_weights.append(weights_per_task_type[task_type])
 
+        # Even after the initial forced generals, they can still be rolled randomly
+        all_tasks.append(general_tasks)
+        all_weights.append(general_weight)
+
         while locations_added < locations_required or (generation_is_fake and len(all_tasks) > 0):
             if all_tasks:
                 chosen_task = rnd.choices(all_tasks, all_weights)[0]
@@ -421,24 +430,28 @@ class OSRSWorld(World):
                     del all_weights[index]
 
             else:
-                assert len(general_tasks) > 0, \
-                    "There are not enough available tasks to fill the remaining pool for OSRS. \
-                    Please adjust settings to be less restrictive of tasks."
+                if len(general_tasks) == 0:
+                    raise Exception("There are not enough available tasks to fill the remaining pool for OSRS. \
+                    Please adjust settings to be less restrictive of tasks.")
                 task = general_tasks.pop()
                 self.add_location(task)
                 locations_added += 1
-                pass
 
     def add_location(self, location):
-        index = [i for i in range(0, len(location_rows)) if location_rows[i].name == location.name][0]
+        index = [i for i in range(len(location_rows)) if location_rows[i].name == location.name][0]
         self.create_and_add_location(index)
 
     def create_items(self) -> None:
         for item_row in item_rows:
             if item_row.name != self.starting_area_item:
-                for c in range(item_row.count):
+                for c in range(item_row.amount):
                     item = self.create_item(item_row.name)
                     self.multiworld.itempool.append(item)
+
+    def get_filler_item_name(self) -> str:
+        return self.random.choice(
+            [ItemNames.Progressive_Armor, ItemNames.Progressive_Weapons, ItemNames.Progressive_Magic,
+             ItemNames.Progressive_Tools, ItemNames.Progressive_Range_Armor, ItemNames.Progressive_Range_Weapon])
 
     def create_and_add_location(self, row_index) -> None:
         location_row = location_rows[row_index]
@@ -453,7 +466,7 @@ class OSRSWorld(World):
 
         # Add the location to its first region, or if it doesn't belong to one, to Menu
         region = self.region_name_to_data["Menu"]
-        if len(location_row.regions) > 0:
+        if location_row.regions:
             region = self.region_name_to_data[location_row.regions[0]]
         location.parent_region = region
         region.locations.append(location)
@@ -491,13 +504,14 @@ class OSRSWorld(World):
             # Set up requirements for region
             for region_required_name in location_row.regions:
                 region_required = self.region_name_to_data[region_required_name]
-                add_rule(location, lambda state, region_required=region_required: state.can_reach(region_required, "Region",
-                                                                                                  self.player))
+                add_rule(location,
+                         lambda state, region_required=region_required: state.can_reach(region_required, "Region",
+                                                                                        self.player))
             for skill_req in location_row.skills:
                 add_rule(location, self.get_skill_rule(skill_req.skill, skill_req.level))
             for item_req in location_row.items:
                 add_rule(location, lambda state, item_req=item_req: state.has(item_req, self.player))
-            if location_row.qp != 0:
+            if location_row.qp:
                 add_rule(location, lambda state, location_row=location_row: self.quest_points(state) > location_row.qp)
 
     def create_region(self, name: str) -> "Region":
@@ -583,28 +597,28 @@ class OSRSWorld(World):
             # Crafting is really complex. Need a lot of sub-rules to make this even remotely readable
             def can_spin(state):
                 return state.can_reach(RegionNames.Sheep, "Region", self.player) and \
-                       state.can_reach(RegionNames.Spinning_Wheel, "Region", self.player)
+                    state.can_reach(RegionNames.Spinning_Wheel, "Region", self.player)
 
             def can_pot(state):
                 return state.can_reach(RegionNames.Clay_Rock, "Region", self.player) and \
-                       state.can_reach(RegionNames.Barbarian_Village, "Region", self.player)
+                    state.can_reach(RegionNames.Barbarian_Village, "Region", self.player)
 
             def can_tan(state):
                 return state.can_reach(RegionNames.Milk, "Region", self.player) and \
-                       state.can_reach(RegionNames.Al_Kharid, "Region", self.player)
+                    state.can_reach(RegionNames.Al_Kharid, "Region", self.player)
 
             def mould_access(state):
                 return state.can_reach(RegionNames.Al_Kharid, "Region", self.player) or \
-                       state.can_reach(RegionNames.Rimmington, "Region", self.player)
+                    state.can_reach(RegionNames.Rimmington, "Region", self.player)
 
             def can_silver(state):
 
                 return state.can_reach(RegionNames.Silver_Rock, "Region", self.player) and \
-                       state.can_reach(RegionNames.Furnace, "Region", self.player) and mould_access(state)
+                    state.can_reach(RegionNames.Furnace, "Region", self.player) and mould_access(state)
 
             def can_gold(state):
                 return state.can_reach(RegionNames.Gold_Rock, "Region", self.player) and \
-                       state.can_reach(RegionNames.Furnace, "Region", self.player) and mould_access(state)
+                    state.can_reach(RegionNames.Furnace, "Region", self.player) and mould_access(state)
 
             if self.options.brutal_grinds or level < 5:
                 return lambda state: can_spin(state) or can_pot(state) or can_tan(state)

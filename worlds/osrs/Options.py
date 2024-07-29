@@ -20,9 +20,9 @@ NON_QUEST_LOCATION_COUNT = 22
 class StartingArea(Choice):
     """
     Which chunks are available at the start. The player may need to move through locked chunks to reach the starting
-    area, but any areas that require quests, skills, or coins are not available as starting location.
+    area, but any areas that require quests, skills, or coins are not available as a starting location.
 
-    Any Bank rolls a random region that contains a bank.
+    "Any Bank" rolls a random region that contains a bank.
     Chunksanity can start you in any chunk. Hope you like woodcutting!
     """
     display_name = "Starting Region"

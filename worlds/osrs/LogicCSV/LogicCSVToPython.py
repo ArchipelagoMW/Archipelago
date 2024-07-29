@@ -3,6 +3,12 @@ This is a utility file that converts logic in the form of CSV files into Python 
 directly by the world implementation. Whenever the logic files are updated, this script should be run to re-generate
 the python files containing the data.
 """
+import requests
+
+# The CSVs are updated at this repository to be shared between generator and client.
+data_repository_address = "https://raw.githubusercontent.com/digiholic/osrs-archipelago-logic/"
+# The Github tag of the CSVs this was generated with
+data_csv_tag = "v1.3"
 
 if __name__ == "__main__":
     import sys
@@ -26,27 +32,26 @@ if __name__ == "__main__":
             locPyFile.write("\n")
             locPyFile.write("location_rows = [\n")
 
-            with open(os.path.join(this_dir, "OSRS AP Tasks - Locations.csv"), mode="r",
-                      encoding="utf-8") as locations_csv:
-                locations_reader = csv.reader(list(locations_csv), delimiter=',', quotechar='"')
+            with requests.get(data_repository_address + "/" + data_csv_tag + "/locations.csv") as req:
+                locations_reader = csv.reader(req.text.splitlines())
                 for row in locations_reader:
                     row_line = "LocationRow("
                     row_line += str_format(row[0])
                     row_line += str_format(row[1].lower())
 
-                    region_strings = row[2].split(", ") if len(row[2]) > 0 else []
+                    region_strings = row[2].split(", ") if row[2] else []
                     row_line += f"{str_list_to_py(region_strings)}, "
 
                     skill_strings = row[3].split(", ")
                     row_line += "["
-                    if len(skill_strings) > 0:
+                    if skill_strings:
                         split_skills = [skill.split(" ") for skill in skill_strings if skill != ""]
-                        if len(split_skills) > 0:
+                        if split_skills:
                             for split in split_skills:
                                 row_line += f"SkillRequirement('{split[0]}', {split[1]}), "
                     row_line += "], "
 
-                    item_strings = row[4].split(", ") if len(row[4]) > 0 else []
+                    item_strings = row[4].split(", ") if row[4] else []
                     row_line += f"{str_list_to_py(item_strings)}, "
                     row_line += f"{row[5]})" if row[5] != "" else "0)"
                     locPyFile.write(f"\t{row_line},\n")
@@ -61,9 +66,8 @@ if __name__ == "__main__":
             regPyFile.write("\n")
             regPyFile.write("region_rows = [\n")
 
-            with open(os.path.join(this_dir, "OSRS AP Tasks - Regions.csv"), mode="r",
-                      encoding="utf-8") as regions_csv:
-                regions_reader = csv.reader(list(regions_csv), delimiter=',', quotechar='"')
+            with requests.get(data_repository_address + "/" + data_csv_tag + "/regions.csv") as req:
+                regions_reader = csv.reader(req.text.splitlines())
                 for row in regions_reader:
                     row_line = "RegionRow("
                     row_line += str_format(row[0])
@@ -84,9 +88,8 @@ if __name__ == "__main__":
             resPyFile.write("\n")
             resPyFile.write("resource_rows = [\n")
 
-            with open(os.path.join(this_dir, "OSRS AP Tasks - Resources.csv"), mode="r",
-                      encoding="utf-8") as resource_csv:
-                resource_reader = csv.reader(list(resource_csv), delimiter=',', quotechar='"')
+            with requests.get(data_repository_address + "/" + data_csv_tag + "/resources.csv") as req:
+                resource_reader = csv.reader(req.text.splitlines())
                 for row in resource_reader:
                     name = row[0].replace("'", "\\'")
                     row_line = f"ResourceRow('{name}')"
@@ -104,27 +107,21 @@ if __name__ == "__main__":
             itemPyfile.write("\n")
             itemPyfile.write("item_rows = [\n")
 
-            with open(os.path.join(this_dir, "OSRS AP Tasks - Items.csv"), mode="r",
-                      encoding="utf-8") as items_csv:
-                item_reader = csv.reader(list(items_csv), delimiter=',', quotechar='"')
+            with requests.get(data_repository_address + "/" + data_csv_tag + "/items.csv") as req:
+                item_reader = csv.reader(req.text.splitlines())
                 for row in item_reader:
                     row_line = "ItemRow("
                     row_line += str_format(row[0])
                     row_line += f"{row[1]}, "
 
-                    if row[2] == "progression":
-                        row_line += "ItemClassification.progression)"
-                    elif row[2] == "useful":
-                        row_line += "ItemClassification.useful)"
-                    else:
-                        row_line += "ItemClassification.filler)"
+                    row_line += f"ItemClassification.{row[2]})"
 
                     itemPyfile.write(f"\t{row_line},\n")
             itemPyfile.write("]\n")
 
 
     def str_format(s) -> str:
-        ret_str = s.replace("'","\\'")
+        ret_str = s.replace("'", "\\'")
         return f"'{ret_str}', "
 
 
@@ -134,6 +131,7 @@ if __name__ == "__main__":
             ret_str += f"'{s}', "
         ret_str += "]"
         return ret_str
+
 
 
     load_location_csv()

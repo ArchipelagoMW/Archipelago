@@ -56,6 +56,7 @@ class RegionNames(str, Enum):
     Lobster = "Lobster Spot"
     Mind_Runes = "Mind Runes"
     Canoe_Tree = "Canoe Tree"
+
     __str__ = str.__str__
 
 

@@ -6,7 +6,7 @@ from .Names import ItemNames
 
 class ItemRow(typing.NamedTuple):
     name: str
-    count: int
+    amount: int
     progression: ItemClassification
 
 
