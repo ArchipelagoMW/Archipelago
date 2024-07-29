@@ -108,7 +108,7 @@ def has_defensive_tools(state: CollectionState, player: int) -> bool:
             and (
                 state.has("Second Chance", player) 
                 or state.has("MP Rage", player) 
-                or state.count("Progressive Aero", player) >= 2
+                or state.has("Progressive Aero", player, 2)
             )
         )
 
