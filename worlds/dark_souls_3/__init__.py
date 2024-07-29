@@ -1493,18 +1493,14 @@ class DarkSouls3World(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
-        our_items = {
-            location.item
-            for location in self.multiworld.get_filled_locations()
-            # item.code None is used for events, which we want to skip
-            if location.item.code is not None and location.item.player == self.player
-        }
-
+        # Once all clients support overlapping item IDs, adjust the DS3 AP item IDs to encode the
+        # in-game ID as well as the count so that we don't need to send this information at all.
         ap_ids_to_ds3_ids: Dict[str, int] = {}
         item_counts: Dict[str, int] = {}
-        for item in our_items:
-            if item.data.ds3_code: ap_ids_to_ds3_ids[str(item.code)] = item.data.ds3_code
-            if item.data.count != 1: item_counts[str(item.code)] = item.data.count
+        for item in item_dictionary.values():
+            if item.ap_code is None: continue
+            if item.ds3_code: ap_ids_to_ds3_ids[str(item.ap_code)] = item.ds3_code
+            if item.count != 1: item_counts[str(item.ap_code)] = item.count
 
         # A map from Archipelago's location IDs to the keys the static randomizer uses to identify
         # locations.
