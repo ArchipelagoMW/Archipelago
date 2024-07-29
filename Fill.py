@@ -12,10 +12,11 @@ from worlds.generic.Rules import add_item_rule
 
 
 class FillError(RuntimeError):
-    def __init__(self, *args, **kwargs) -> None:
-        if kwargs["multiworld"]:
-            placements = f"\nAll Placements:\n{[(loc, loc.item) for loc in kwargs['multiworld'].get_filled_locations()]}"
-            args = (*args, placements)
+    def __init__(self, *args: typing.Union[str, typing.Any], **kwargs) -> None:
+        if "multiworld" in kwargs and isinstance(args[0], str):
+            placements = (args[0] + f"\nAll Placements:\n" +
+                          f"{[(loc, loc.item) for loc in kwargs['multiworld'].get_filled_locations()]}")
+            args = (placements, *args[1:])
         super().__init__(*args)
 
 
