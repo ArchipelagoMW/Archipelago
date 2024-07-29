@@ -380,10 +380,10 @@ class KH1Options(PerGameCommonOptions):
     goofy_death_link: GoofyDeathLink
     randomize_keyblade_stats: RandomizeKeybladeStats
     bad_starting_weapons: BadStartingWeapons
-    keyblade_max_str: KeybladeMaxStrength
     keyblade_min_str: KeybladeMinStrength
-    keyblade_max_mp: KeybladeMaxMP
+    keyblade_max_str: KeybladeMaxStrength
     keyblade_min_mp: KeybladeMinMP
+    keyblade_max_mp: KeybladeMaxMP
     level_checks: LevelChecks
     force_stats_on_levels: ForceStatsOnLevels
     strength_increase: StrengthIncrease
