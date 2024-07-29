@@ -84,7 +84,7 @@ def has_reports(state: CollectionState, player: int, eotw_required_reports: int)
 
 def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_reports: int, keyblades_unlock_chests: bool):
     if final_rest_door_requirement == "reports":
-        return state.has_group("Reports", player, final_rest_door_required_reports)
+        return state.has_group_unique("Reports", player, final_rest_door_required_reports)
     if final_rest_door_requirement == "puppies":
         return has_puppies(state, player, 99)
     if final_rest_door_requirement == "postcards":
