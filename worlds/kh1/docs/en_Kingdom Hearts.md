@@ -79,7 +79,7 @@ TopazTK for their work on the `Show Prompt` method and Krujo for their implement
 
 JaredWeakStrike for helping clean up my mess of code.
 
-KSX for their interact in battle code.
+KSX for their `Interact in Battle` code.
 
 RavSpect for their title screen image edit.
 
