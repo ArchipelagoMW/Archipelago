@@ -717,17 +717,16 @@ class CollectionState():
         # If no items logically relevant to a specific world were collected in the previous iteration, then that world's
         # locations can be skipped in the current iteration. Usually, a world's logic only depends on its own items, but
         # worlds are allowed to depend on other worlds.
-        # Start with each world only depending on itself.
         # Construct a mapping from each player to the list of players with logic dependent on that player.
-        logic_dependent_players: Dict[int, List[int]] = defaultdict(list)
+        player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
         worlds = self.multiworld.worlds
         for player, _locations in events_per_player:
             if player in worlds:
                 for dependent_on_player in worlds[player].player_dependencies:
-                    logic_dependent_players[dependent_on_player].append(player)
+                    player_logic_dependents[dependent_on_player].append(player)
             else:
                 # Item link locations have no associated World and use a group ID as the player ID.
-                logic_dependent_players[player].append(player)
+                player_logic_dependents[player].append(player)
 
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
@@ -738,20 +737,19 @@ class CollectionState():
 
             for player, locations in events_per_player:
                 if player not in players_to_check:
+                    # The player did not receive any advancement in the last outer loop, so skip their locations.
                     next_events_per_player.append((player, locations))
                     continue
-                # Accessibility of all locations is checked first.
+                # Accessibility of all locations is checked first to prevent the region accessibility cache for this
+                # player needing to be updated multiple times due to some of their own items being collected into the
+                # state.
                 accessible_locations = []
                 inaccessible_locations = []
                 for location in locations:
-                    # Region accessibility is cached per-player and the cache must be rebuilt when the CollectionState
-                    # for a player changes, but the CollectionState should not change while only checking accessibility,
-                    # so check region accessibility first because, once cached, it should remain cached throughout the
-                    # iteration of `locations`.
                     # Location.can_reach(), by default, also checks region accessibility if the Location's access rule
-                    # returns True, but because it is known that the region accessibility is cached, it is faster to
-                    # check region accessibility first, even if `location.can_reach(self)` might cause region
-                    # accessibility to be checked a second time.
+                    # returns True, but because the region accessibility cache shouldn't need to be updated more than
+                    # once, it is faster to check region accessibility first, even if `location.can_reach(self)` might
+                    # cause region accessibility to be checked a second time.
                     if location.parent_region.can_reach(self) and location.can_reach(self):
                         accessible_locations.append(location)
                     else:
@@ -770,14 +768,12 @@ class CollectionState():
                     received_advancement_players.add(item.player)
 
             events_per_player = next_events_per_player
-            # The players to check in the next iteration are all players whose logic depends on a player that received
-            # advancement. Usually this is only the individual players that received advancement, but it's possible for
-            # a world's logic to depend on a different world and its items.
+            # Find all players whose logic depends on a player that received advancement during this iteration.
             # For each player that received advancement, look up the list of players with logic dependent on that player
-            # and then flatten all the lists into a single set of players to check in the next iteration.
+            # and then flatten all the lists into a single set.
             players_to_check = {dependent_player for received_advancement_player in received_advancement_players
-                                if received_advancement_player in logic_dependent_players
-                                for dependent_player in logic_dependent_players[received_advancement_player]}
+                                if received_advancement_player in player_logic_dependents
+                                for dependent_player in player_logic_dependents[received_advancement_player]}
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
