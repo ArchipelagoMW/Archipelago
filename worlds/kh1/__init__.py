@@ -285,10 +285,7 @@ class KH1World(World):
     
     def determine_reports_in_pool(self) -> int:
         numbers_to_consider = self.get_numbers_of_reports_to_consider()
-        if len(numbers_to_consider) > 0:
-            return max(numbers_to_consider)
-        else:
-            return 0
+        return max(numbers_to_consider, default=0)
     
     def determine_reports_required_to_open_end_of_the_world(self) -> int:
         if self.options.end_of_the_world_unlock.current_key == "reports":
