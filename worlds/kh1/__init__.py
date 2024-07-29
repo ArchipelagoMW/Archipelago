@@ -191,22 +191,6 @@ class KH1World(World):
             "final_rest":      "End of the World Final Rest Chest"
         }
         self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
-        if self.options.junk_in_missable_locations:
-            self.multiworld.get_location("Traverse Town 1st District Leon Gift", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Traverse Town 1st District Aerith Gift", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("End of the World World Terminus Hollow Bastion Chest", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 01:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 02:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 03:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 04:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 05:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 06:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 07:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 08:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 09:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 10:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 11:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
-            self.multiworld.get_location("Neverland Clock Tower 12:00 Door", self.player).place_locked_item(self.create_item("Elixir"))
         if self.options.vanilla_emblem_pieces:
             self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)", self.player).place_locked_item(self.create_item("Emblem Piece (Flame)"))
             self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)", self.player).place_locked_item(self.create_item("Emblem Piece (Statue)"))

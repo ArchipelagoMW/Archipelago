@@ -24,7 +24,7 @@ def get_locations_by_category(category: str) -> Dict[str, KH1LocationData]:
 
 
 location_table: Dict[str, KH1LocationData] = {
-   #"Destiny Islands Chest":                                                            KH1LocationData("Destiny Islands",  265_0011), missable
+    #"Destiny Islands Chest":                                                           KH1LocationData("Destiny Islands",  265_0011), missable
     "Traverse Town 1st District Candle Puzzle Chest":                                   KH1LocationData("Traverse Town",    265_0211),
     "Traverse Town 1st District Accessory Shop Roof Chest":                             KH1LocationData("Traverse Town",    265_0212),
     "Traverse Town 2nd District Boots and Shoes Awning Chest":                          KH1LocationData("Traverse Town",    265_0213),
@@ -225,7 +225,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Grand Hall Steps Right Side Chest":                                 KH1LocationData("Hollow Bastion",   265_4454),
     "Hollow Bastion Grand Hall Oblivion Chest":                                         KH1LocationData("Hollow Bastion",   265_4491),
     "Hollow Bastion Grand Hall Left of Gate Chest":                                     KH1LocationData("Hollow Bastion",   265_4492),
-   #"Hollow Bastion Entrance Hall Push the Statue Chest":                               KH1LocationData("Hollow Bastion",   265_4493), --handled later
+    #"Hollow Bastion Entrance Hall Push the Statue Chest":                              KH1LocationData("Hollow Bastion",   265_4493), --handled later
     "Hollow Bastion Entrance Hall Left of Emblem Door Chest":                           KH1LocationData("Hollow Bastion",   265_4212),
     "Hollow Bastion Rising Falls White Trinity Chest":                                  KH1LocationData("Hollow Bastion",   265_4494),
     "End of the World Final Dimension 1st Chest":                                       KH1LocationData("End of the World", 265_4531),
@@ -252,10 +252,10 @@ location_table: Dict[str, KH1LocationData] = {
     "End of the World World Terminus Halloween Town Chest":                             KH1LocationData("End of the World", 265_4732),
     "End of the World World Terminus Neverland Chest":                                  KH1LocationData("End of the World", 265_4733),
     "End of the World World Terminus 100 Acre Wood Chest":                              KH1LocationData("End of the World", 265_4734),
-    "End of the World World Terminus Hollow Bastion Chest":                             KH1LocationData("End of the World", 265_4771),
+    #"End of the World World Terminus Hollow Bastion Chest":                            KH1LocationData("End of the World", 265_4771),
     "End of the World Final Rest Chest":                                                KH1LocationData("End of the World", 265_4772),
     "Monstro Chamber 6 White Trinity Chest":                                            KH1LocationData("End of the World", 265_5092),
-   #"Awakening Chest":                                                                  KH1LocationData("Awakening",        265_5093), missable
+    #"Awakening Chest":                                                                 KH1LocationData("Awakening",        265_5093), missable
    
     "Traverse Town Defeat Guard Armor Dodge Roll Event":                                KH1LocationData("Traverse Town",    265_6011),
     "Traverse Town Defeat Guard Armor Fire Event":                                      KH1LocationData("Traverse Town",    265_6012),
@@ -330,10 +330,10 @@ location_table: Dict[str, KH1LocationData] = {
     "Atlantica Undersea Garden Clam":                                                   KH1LocationData("Atlantica",        265_6215),
     "Atlantica Undersea Cave Clam":                                                     KH1LocationData("Atlantica",        265_6216),
     
-   #"Traverse Town Magician's Study Turn in Naturespark":                               KH1LocationData("Traverse Town",    265_6300),
-   #"Traverse Town Magician's Study Turn in Watergleam":                                KH1LocationData("Traverse Town",    265_6301),
-   #"Traverse Town Magician's Study Turn in Fireglow":                                  KH1LocationData("Traverse Town",    265_6302),
-   #"Traverse Town Magician's Study Turn in all Summon Gems":                           KH1LocationData("Traverse Town",    265_6303),
+    #"Traverse Town Magician's Study Turn in Naturespark":                              KH1LocationData("Traverse Town",    265_6300),
+    #"Traverse Town Magician's Study Turn in Watergleam":                               KH1LocationData("Traverse Town",    265_6301),
+    #"Traverse Town Magician's Study Turn in Fireglow":                                 KH1LocationData("Traverse Town",    265_6302),
+    #"Traverse Town Magician's Study Turn in all Summon Gems":                          KH1LocationData("Traverse Town",    265_6303),
     "Traverse Town Geppetto's House Geppetto Reward 1":                                 KH1LocationData("Traverse Town",    265_6304),
     "Traverse Town Geppetto's House Geppetto Reward 2":                                 KH1LocationData("Traverse Town",    265_6305),
     "Traverse Town Geppetto's House Geppetto Reward 3":                                 KH1LocationData("Traverse Town",    265_6306),
@@ -361,18 +361,18 @@ location_table: Dict[str, KH1LocationData] = {
     "Olympus Coliseum Defeat Ice Titan Diamond Dust Event":                             KH1LocationData("Olympus Coliseum", 265_6329),
     "Olympus Coliseum Gates Purple Jar After Defeating Hades":                          KH1LocationData("Olympus Coliseum", 265_6330),
     "Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times":                    KH1LocationData("Halloween Town",   265_6331),
-    "Neverland Clock Tower 01:00 Door":                                                 KH1LocationData("Neverland",        265_6332),
-    "Neverland Clock Tower 02:00 Door":                                                 KH1LocationData("Neverland",        265_6333),
-    "Neverland Clock Tower 03:00 Door":                                                 KH1LocationData("Neverland",        265_6334),
-    "Neverland Clock Tower 04:00 Door":                                                 KH1LocationData("Neverland",        265_6335),
-    "Neverland Clock Tower 05:00 Door":                                                 KH1LocationData("Neverland",        265_6336),
-    "Neverland Clock Tower 06:00 Door":                                                 KH1LocationData("Neverland",        265_6337),
-    "Neverland Clock Tower 07:00 Door":                                                 KH1LocationData("Neverland",        265_6338),
-    "Neverland Clock Tower 08:00 Door":                                                 KH1LocationData("Neverland",        265_6339),
-    "Neverland Clock Tower 09:00 Door":                                                 KH1LocationData("Neverland",        265_6340),
-    "Neverland Clock Tower 10:00 Door":                                                 KH1LocationData("Neverland",        265_6341),
-    "Neverland Clock Tower 11:00 Door":                                                 KH1LocationData("Neverland",        265_6342),
-    "Neverland Clock Tower 12:00 Door":                                                 KH1LocationData("Neverland",        265_6343),
+    #"Neverland Clock Tower 01:00 Door":                                                KH1LocationData("Neverland",        265_6332),
+    #"Neverland Clock Tower 02:00 Door":                                                KH1LocationData("Neverland",        265_6333),
+    #"Neverland Clock Tower 03:00 Door":                                                KH1LocationData("Neverland",        265_6334),
+    #"Neverland Clock Tower 04:00 Door":                                                KH1LocationData("Neverland",        265_6335),
+    #"Neverland Clock Tower 05:00 Door":                                                KH1LocationData("Neverland",        265_6336),
+    #"Neverland Clock Tower 06:00 Door":                                                KH1LocationData("Neverland",        265_6337),
+    #"Neverland Clock Tower 07:00 Door":                                                KH1LocationData("Neverland",        265_6338),
+    #"Neverland Clock Tower 08:00 Door":                                                KH1LocationData("Neverland",        265_6339),
+    #"Neverland Clock Tower 09:00 Door":                                                KH1LocationData("Neverland",        265_6340),
+    #"Neverland Clock Tower 10:00 Door":                                                KH1LocationData("Neverland",        265_6341),
+    #"Neverland Clock Tower 11:00 Door":                                                KH1LocationData("Neverland",        265_6342),
+    #"Neverland Clock Tower 12:00 Door":                                                KH1LocationData("Neverland",        265_6343),
     "Neverland Hold Aero Chest":                                                        KH1LocationData("Neverland",        265_6344),
     "100 Acre Wood Bouncing Spot Turn in Rare Nut 1":                                   KH1LocationData("100 Acre Wood",    265_6345),
     "100 Acre Wood Bouncing Spot Turn in Rare Nut 2":                                   KH1LocationData("100 Acre Wood",    265_6346),
@@ -436,8 +436,8 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Entrance Hall Emblem Piece (Chest)":                                KH1LocationData("Hollow Bastion",   265_6517),
     "Hollow Bastion Entrance Hall Emblem Piece (Statue)":                               KH1LocationData("Hollow Bastion",   265_6518),
     "Hollow Bastion Entrance Hall Emblem Piece (Fountain)":                             KH1LocationData("Hollow Bastion",   265_6519),
-    "Traverse Town 1st District Leon Gift":                                             KH1LocationData("Traverse Town",    265_6520),
-    "Traverse Town 1st District Aerith Gift":                                           KH1LocationData("Traverse Town",    265_6521),
+    #"Traverse Town 1st District Leon Gift":                                            KH1LocationData("Traverse Town",    265_6520),
+    #"Traverse Town 1st District Aerith Gift":                                          KH1LocationData("Traverse Town",    265_6521),
     "Hollow Bastion Library Speak to Belle Divine Rose":                                KH1LocationData("Hollow Bastion",   265_6522),
     "Hollow Bastion Library Speak to Aerith Cure":                                      KH1LocationData("Hollow Bastion",   265_6523),
     

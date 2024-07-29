@@ -346,17 +346,6 @@ class VanillaEmblemPieces(DefaultOnToggle):
     """
     display_name = "Vanilla Emblem Pieces"
 
-class JunkInMissableLocations(DefaultOnToggle):
-    """
-    If on, will place Elixirs in missable locations.  If turned off, there is a chance you will need to play the game multiple times to check missed locations.
-    Locations include:
-        Leon Gift
-        Aerith Gift
-        Clock Tower Doors
-        World Terminus Hollow Bastion Chest
-    """
-    display_name = "Junk in Missable Locations"
-
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
@@ -387,7 +376,6 @@ class KH1Options(PerGameCommonOptions):
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
     vanilla_emblem_pieces: VanillaEmblemPieces
-    junk_in_missable_locations: JunkInMissableLocations
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
     randomize_keyblade_stats: RandomizeKeybladeStats

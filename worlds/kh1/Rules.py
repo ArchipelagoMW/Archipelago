@@ -1196,9 +1196,6 @@ def set_rules(kh1world):
     multiworld.get_location("End of the World World Terminus 100 Acre Wood Chest"                          , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
         )
-    multiworld.get_location("End of the World World Terminus Hollow Bastion Chest"                         , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
-        )
     multiworld.get_location("End of the World Final Rest Chest"                                            , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
         )
@@ -1457,78 +1454,6 @@ def set_rules(kh1world):
         )
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 2"                          , player).access_rule = lambda state: (
             has_puppies(state, player, 99)
-        )
-    multiworld.get_location("Neverland Clock Tower 01:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 02:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 03:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 04:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 05:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 06:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 07:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 08:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 09:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 10:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 11:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
-        )
-    multiworld.get_location("Neverland Clock Tower 12:00 Door"                                             , player).access_rule = lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Hold Aero Chest"                                                    , player).access_rule = lambda state: (
             state.has("Yellow Trinity", player)
