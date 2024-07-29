@@ -88,7 +88,7 @@ class ItemSlotIncrease(Range):
 
 class Atlantica(Toggle):
     """
-    Toggle whether to include Atlantica locations/items.
+    Toggle whether to include checks in Atlantica.
     """
     display_name = "Atlantica"
 
