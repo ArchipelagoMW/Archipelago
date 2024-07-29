@@ -2,9 +2,9 @@ from math import ceil
 
 from BaseClasses import MultiWorld, CollectionState, Item
 from . import progression_items
-from .. import checksmate
+from . import Locations
 
-from ..generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import set_rule, add_rule
 from .Options import CMOptions
 
 
@@ -135,7 +135,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
-    for name, item in checksmate.Locations.location_table.items():
+    for name, item in Locations.location_table.items():
         if not super_sized and item.material_expectations == -1:
             continue
         if not opts.enable_tactics.value == opts.enable_tactics.option_all and item.is_tactic:
