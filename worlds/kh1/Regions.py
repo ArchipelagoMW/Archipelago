@@ -475,7 +475,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
     for i in range(options.level_checks):
-        regions["Levels"].locations.append("Level " + str(i+1).rjust(3,'0'))
+        regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0'))
     if options.goal.current_key == "final_ansem":
         regions["End of the World"].locations.append("Final Ansem")
 
