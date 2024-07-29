@@ -58,7 +58,7 @@ class Downfall(Toggle):
 
 
 class DeathLink(Range):
-    """percentage of health to lose when a death-link is received."""
+    """Percentage of health to lose when a death link is received."""
     display_name = "Death Link %"
     range_start = 0
     range_end = 100
