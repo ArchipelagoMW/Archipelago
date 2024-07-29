@@ -529,5 +529,5 @@ item_name_groups: Dict[str, Set[str]] = {}
 for item in item_table.keys():
     category = item_table[item].category
     if category not in item_name_groups.keys():
-        item_name_groups[category] = set([])
+        item_name_groups[category] = set()
     item_name_groups[category].add(item)
