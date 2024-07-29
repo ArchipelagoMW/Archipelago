@@ -1,28 +1,5 @@
 # Kingdom Hearts (PC)
 
-## Credits
-This is a collaborative effort from several individuals in the Kingdom Hearts community, but most of all, denhonator.
-
-Denho's original KH rando laid the foundation for the work here and makes everything here possible, so thank you Denho for such a blast of a randomizer.
-
-Other credits include:
-
-Sonicshadowsilver2 for their work finding many memory addresses, working to identify and resolve bugs, and converting the code base to the latest EGS update.
-
-Shananas and the rest of the OpenKH team for providing such an amazing tool for us to utilize on this project.
-
-TopazTK for their work on the `Show Prompt` method and Krujo for their implementation of the method in AP.
-
-JaredWeakStrike for helping clean up my mess of code.
-
-KSX for their interact in battle code.
-
-RavSpect for their title screen image edit.
-
-SunCatMC for their work on ChecksFinder, which I used as a basis for game-to-client communication.
-
-ThePhar for their work on Rogue Legacy AP, which I used as a basis for the apworld creation.
-
 ## Where is the options page?
 
 The [player options page for this game](../player-options) contains most of the options you need to 
@@ -86,3 +63,26 @@ Find `Theon Vol. 6` in the multiworld.
 ##How do I enter the End of the World?
 
 You can enter End of the World by obtaining a number of Ansem's Reports or by finding `End of the World` in the multiworld, depending on your options.
+
+## Credits
+This is a collaborative effort from several individuals in the Kingdom Hearts community, but most of all, denhonator.
+
+Denho's original KH rando laid the foundation for the work here and makes everything here possible, so thank you Denho for such a blast of a randomizer.
+
+Other credits include:
+
+Sonicshadowsilver2 for their work finding many memory addresses, working to identify and resolve bugs, and converting the code base to the latest EGS update.
+
+Shananas and the rest of the OpenKH team for providing such an amazing tool for us to utilize on this project.
+
+TopazTK for their work on the `Show Prompt` method and Krujo for their implementation of the method in AP.
+
+JaredWeakStrike for helping clean up my mess of code.
+
+KSX for their interact in battle code.
+
+RavSpect for their title screen image edit.
+
+SunCatMC for their work on ChecksFinder, which I used as a basis for game-to-client communication.
+
+ThePhar for their work on Rogue Legacy AP, which I used as a basis for the apworld creation.
