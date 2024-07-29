@@ -242,14 +242,8 @@ class KH1World(World):
                 if i < 4 and self.options.bad_starting_weapons:
                     slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + "1,0,"
                 else:
-                    if min_str_bonus != max_str_bonus:
-                        str_bonus = int(self.random.randrange(min_str_bonus,max_str_bonus))
-                    else:
-                        str_bonus = int(min_str_bonus)
-                    if min_mp_bonus != max_mp_bonus:
-                        mp_bonus = int(self.random.randrange(min_mp_bonus,max_mp_bonus))
-                    else:
-                        mp_bonus = int(min_mp_bonus)
+                    str_bonus = int(self.random.randint(min_str_bonus, max_str_bonus))
+                    mp_bonus = int(self.random.randint(min_mp_bonus, max_mp_bonus))
                     slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + str(str_bonus) + "," + str(mp_bonus) + ","
             slot_data["keyblade_stats"] = slot_data["keyblade_stats"][:-1]
         if self.options.donald_death_link:
