@@ -138,7 +138,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["End of the World"].locations.append("End of the World World Terminus Atlantica Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Deep Jungle Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Halloween Town Chest")
-    regions["End of the World"].locations.append("End of the World World Terminus Hollow Bastion Chest")
+    #regions["End of the World"].locations.append("End of the World World Terminus Hollow Bastion Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Neverland Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Olympus Coliseum Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Traverse Town Chest")
