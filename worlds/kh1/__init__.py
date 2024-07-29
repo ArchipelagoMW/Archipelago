@@ -57,7 +57,7 @@ class KH1World(World):
                 possible_starting_worlds.append("Atlantica")
             if self.options.end_of_the_world_unlock == "item":
                 possible_starting_worlds.append("End of the World")
-            starting_worlds = self.random.sample(possible_starting_worlds, min(self.options.starting_worlds, len(possible_starting_worlds)))
+            starting_worlds = self.random.sample(possible_starting_worlds.value, min(self.options.starting_worlds, len(possible_starting_worlds)))
             for starting_world in starting_worlds:
                 self.multiworld.push_precollected(self.create_item(starting_world))
         
