@@ -47,6 +47,10 @@ class KH1World(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
+    fillers = {}
+    fillers.update(get_items_by_category("Item"))
+    fillers.update(get_items_by_category("Camping"))
+    fillers.update(get_items_by_category("Stat Ups"))
 
     def create_items(self):
         #Handle starting worlds
@@ -196,13 +200,8 @@ class KH1World(World):
             self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)", self.player).place_locked_item(self.create_item("Emblem Piece (Chest)"))
 
     def get_filler_item_name(self) -> str:
-        fillers = {}
-        disclude = []
-        fillers.update(get_items_by_category("Item", disclude))
-        fillers.update(get_items_by_category("Camping", disclude))
-        fillers.update(get_items_by_category("Stat Ups", disclude))
-        weights = [data.weight for data in fillers.values()]
-        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        weights = [data.weight for data in self.fillers.values()]
+        return self.random.choices([filler for filler in self.fillers.keys()], weights, k=1)[0]
 
     def fill_slot_data(self) -> dict:
         slot_data = {"xpmult": int(self.options.exp_multiplier)/16,

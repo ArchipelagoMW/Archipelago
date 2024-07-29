@@ -15,10 +15,10 @@ class KH1ItemData(NamedTuple):
     weight: int = 1
 
 
-def get_items_by_category(category: str, disclude: list) -> Dict[str, KH1ItemData]:
+def get_items_by_category(category: str) -> Dict[str, KH1ItemData]:
     item_dict: Dict[str, KH1ItemData] = {}
     for name, data in item_table.items():
-        if data.category == category and all(x not in name for x in disclude):
+        if data.category == category:
             item_dict.setdefault(name, data)
 
     return item_dict
