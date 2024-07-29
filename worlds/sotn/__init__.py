@@ -7,18 +7,22 @@ from Options import AssembleOptions
 
 
 from .Items import (item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, IType, boost_table,
-                    trap_table)
+                    trap_table, BOOST_QTY, TRAPS_QTY)
 from .Locations import location_table, SotnLocation, exp_locations_token
 from .Regions import create_regions
 from .Rules import set_rules, set_rules_limited
 from .Options import sotn_option_definitions
 from .Rom import SOTNDeltaPatch, patch_rom, get_base_rom_path
 from .client import SotNClient
-# from .test_client import SotNTestClient
+#from .test_client import SotNTestClient
 
-BOOST_QTY = 12
-TRAPS_QTY = 21
 
+# Thanks for Fuzzy for Archipelago Manual it all started there
+# Thanks for Wild Mouse for it´s randomizer and a lot of stuff over here
+# Thanks for TalicZealot with a lot of rom addresses
+# Thanks for all decomp folks
+# I wish I have discovered most of those earlier, would save me a lot of RAM searches
+# Thanks for all the help from the folks at Long Library and AP Discords.
 
 class SotnSettings(settings.Group):
     class RomFile(settings.UserFilePath):
@@ -80,8 +84,6 @@ class SotnWorld(World):
 
     def generate_early(self) -> None:
         difficult = self.options.difficult
-        tt = self.options.num_talisman
-        per_tt = self.options.per_talisman
 
         if difficult == 0:
             self.multiworld.early_items[self.player]["Soul of bat"] = 1
@@ -116,6 +118,10 @@ class SotnWorld(World):
         goal = self.options.goal
         per_tt = self.options.per_talisman
         rules = self.options.rand_rules
+
+        if goal not in [3, 5]:
+            required = 0
+            exp = 0
 
         added_items = 0
         itempool: typing.List[SotnItem] = []
@@ -511,7 +517,8 @@ class SotnWorld(World):
         for item in itempool:
             added = False
             if goal == 0:
-                if item.name == "Holy glasses" or "of vlad" in item.name:
+                # Holy glasses can´t be just useful. Fail to generate
+                if "of vlad" in item.name:
                     data = item_table[item.name]
                     items_to_be_added += [SotnItem(item.name, ItemClassification.useful, data.index, self.player)]
                     added = True
