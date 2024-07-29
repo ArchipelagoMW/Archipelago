@@ -101,7 +101,7 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
 def has_defensive_tools(state: CollectionState, player: int) -> bool:
     return (
             (
-                state.count("Progressive Cure", player) >= 2 
+                state.has("Progressive Cure", player, 2)
                 and state.has("Leaf Bracer", player) 
                 and state.has("Dodge Roll", player)
             ) 
