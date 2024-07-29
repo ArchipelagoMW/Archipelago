@@ -66,7 +66,7 @@ class SpireWorld(World):
         slot_data = {
             'seed': "".join(self.random.choice(string.ascii_letters) for i in range(16))
         }
-        slot_data.update(self.options.as_dict("character", "ascension", "final_act", "downfall"))
+        slot_data.update(self.options.as_dict("character", "ascension", "final_act", "downfall", "death_link"))
         return slot_data
 
     def get_filler_item_name(self) -> str:
