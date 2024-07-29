@@ -22,8 +22,8 @@ class KH1Web(WebWorld):
     theme = "ocean"
     tutorials = [Tutorial(
             "Multiworld Setup Guide",
-            "A guide to setting up the Kingdom Hearts Randomizer software on your computer. This guide covers single-player, "
-            "multiworld, and related software.",
+            "A guide to setting up the Kingdom Hearts Randomizer software on your computer."
+            "This guide covers single-player, multiworld, and related software.",
             "English",
             "kh1_en.md",
             "kh1/en",
