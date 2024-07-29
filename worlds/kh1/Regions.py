@@ -238,7 +238,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Monstro"].locations.append("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest")
     regions["Monstro"].locations.append("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest")
     regions["Monstro"].locations.append("Monstro Chamber 6 White Trinity Chest")
-    regions["Monstro"].locations.append("Monstro Defeat Parasite Cage I Goofy Cheer Event"),
+    regions["Monstro"].locations.append("Monstro Defeat Parasite Cage I Goofy Cheer Event")
     regions["Monstro"].locations.append("Monstro Defeat Parasite Cage II Stop Event")
     regions["Monstro"].locations.append("Monstro Mouth Boat Deck Chest")
     regions["Monstro"].locations.append("Monstro Mouth Green Trinity Top of Boat Chest")
