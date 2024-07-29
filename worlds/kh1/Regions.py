@@ -5,13 +5,13 @@ from .Locations import KH1Location, location_table
 
 
 class KH1RegionData(NamedTuple):
-    locations: Optional[List[str]]
+    locations: List[str]
     region_exits: Optional[List[str]]
 
 
 def create_regions(multiworld: MultiWorld, player: int, options):
     regions: Dict[str, KH1RegionData] = {
-        "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
+        "Menu":             KH1RegionData([], ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
         "Destiny Islands":  KH1RegionData([],   ["Traverse Town"]),
         "Traverse Town":    KH1RegionData([],   ["World Map"]),
