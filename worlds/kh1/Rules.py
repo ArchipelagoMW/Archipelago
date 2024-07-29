@@ -52,12 +52,12 @@ def has_postcards(state: CollectionState, player: int, postcards_required: int) 
     return state.has("Postcard", player, postcards_required)
 
 def has_puppies(state: CollectionState, player: int, puppies_required: int) -> bool:
-    puppies_available = state.count_from_list(SINGLE_PUPPIES, player)
-    puppies_available = puppies_available + (state.count_from_list(TRIPLE_PUPPIES, player) * 3)
+    puppies_available = state.count_from_list_unique(SINGLE_PUPPIES, player)
+    puppies_available = puppies_available + (state.count_from_list_unique(TRIPLE_PUPPIES, player) * 3)
     return (puppies_available >= puppies_required) or state.has("All Puppies", player)
 
 def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> bool:
-    return state.count_from_list(TORN_PAGES, player) >= pages_required
+    return state.count_from_list_unique(TORN_PAGES, player) >= pages_required
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
     return state.has_all({"Fire Arts", "Blizzard Arts", "Thunder Arts", "Cure Arts", "Gravity Arts", "Stop Arts", "Aero Arts"}, player)
