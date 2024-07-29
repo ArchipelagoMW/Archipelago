@@ -681,6 +681,13 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
+        """
+        Sweep through the locations that contain uncollected advancement items, collecting the items into the state
+        until there are no more reachable locations that contain uncollected advancement items.
+
+        :param key_only: Whether the locations to sweep through should be limited to only locked_dungeon_item locations.
+        :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
+        """
         # since the loop has a good chance to run more than once, only filter the events once
         if key_only:
             def event_filter(location: Location):
