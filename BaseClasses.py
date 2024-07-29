@@ -756,11 +756,11 @@ class CollectionState():
                     self.events.add(location)
                     item = location.item
                     assert isinstance(item, Item), "tried to collect Event with no Item"
-                    changed = self.collect(item, True, location)
-                    if changed:
-                        # Collecting the item affected logic, so it could mean the owning player (or any other players
-                        # with logic dependent on the owning player's world) can now access additional locations.
-                        received_advancement_players.add(item.player)
+                    self.collect(item, True, location)
+                    # Collecting an advancement item is always considered to affect logic, so it could mean the owning
+                    # player (or any other players with logic dependent on the owning player's world) can now access
+                    # additional locations.
+                    received_advancement_players.add(item.player)
 
             events_per_player = next_events_per_player
             # The players to check in the next iteration are all players whose logic depends on a player that received
