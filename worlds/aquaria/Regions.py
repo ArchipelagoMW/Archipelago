@@ -663,16 +663,18 @@ class AquariaRegions:
         self.__connect_one_way_regions("Cathedral boss left area", "Mithalas castle",
                                        self.cathedral_boss_l, self.mithalas_castle,
                                        lambda state: _has_beast_form(state, self.player))
-        self.__connect_regions("Mithalas castle", "Mithalas Cathedral underground",
-                               self.mithalas_castle, self.cathedral_underground,
-                               lambda state: _has_beast_form(state, self.player))
+        self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral underground",
+                                       self.mithalas_castle, self.cathedral_underground,
+                                       lambda state: _has_beast_form(state, self.player))
+        self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas castle",
+                               self.cathedral_underground, self.mithalas_castle)
         self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral start",
                                        self.mithalas_castle, self.cathedral_top_start,
                                        lambda state: _has_bind_song(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral start urns",
                                        self.cathedral_top_start, self.cathedral_top_start_urns,
                                        lambda state: _has_damaging_item(state, self.player))
-        self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
+        self.__connect_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
                                        self.cathedral_top_start, self.cathedral_top_end,
                                        lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral end",
@@ -1167,8 +1169,8 @@ class AquariaRegions:
              ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location("Kelp Forest top left area, Jelly Egg", self.player),
                  lambda state: _has_beast_form(state, self.player))
-
-
+        add_rule(self.multiworld.get_location("The Body center area, breaking Li's cage", self.player),
+                 lambda state: _has_tongue_cleared(state, self.player))
 
 
     def __no_progression_hard_or_hidden_location(self) -> None:

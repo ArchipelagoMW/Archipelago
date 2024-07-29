@@ -18,9 +18,9 @@ class BindSongAccessTest(AquariaTestBase):
         """Test locations that require Bind song"""
         locations = [
             "Verse Cave right area, Big Seed",
-            "Home Water, bulb in the path below Nautilus Prime",
-            "Home Water, bulb in the bottom left room",
-            "Home Water, Nautilus Egg",
+            "Home Waters, bulb in the path below Nautilus Prime",
+            "Home Waters, bulb in the bottom left room",
+            "Home Waters, Nautilus Egg",
             "Song Cave, Verse Egg",
             "Energy Temple first area, beating the Energy Statue",
             "Energy Temple first area, bulb in the bottom room blocked by a rock",
@@ -32,5 +32,5 @@ class BindSongAccessTest(AquariaTestBase):
             "Energy Temple blaster room, Blaster Egg",
             *after_home_water_locations
         ]
-        items = [["Bind song"]]
+        items = [["Bind Song"]]
         self.assertAccessDependency(locations, items)

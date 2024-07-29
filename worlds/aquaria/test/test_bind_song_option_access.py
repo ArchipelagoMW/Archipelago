@@ -20,13 +20,13 @@ class BindSongOptionAccessTest(AquariaTestBase):
         locations = [
             "Verse Cave right area, Big Seed",
             "Verse Cave left area, bulb under the rock at the end of the path",
-            "Home Water, bulb under the rock in the left path from the Verse Cave",
+            "Home Waters, bulb under the rock in the left path from the Verse Cave",
             "Song Cave, bulb under the rock close to the song door",
             "Song Cave, bulb under the rock in the path to the singing statues",
             "Naija's Home, bulb under the rock at the right of the main path",
-            "Home Water, bulb in the path below Nautilus Prime",
-            "Home Water, bulb in the bottom left room",
-            "Home Water, Nautilus Egg",
+            "Home Waters, bulb in the path below Nautilus Prime",
+            "Home Waters, bulb in the bottom left room",
+            "Home Waters, Nautilus Egg",
             "Song Cave, Verse Egg",
             "Energy Temple first area, beating the Energy Statue",
             "Energy Temple first area, bulb in the bottom room blocked by a rock",
@@ -38,5 +38,5 @@ class BindSongOptionAccessTest(AquariaTestBase):
             "Energy Temple blaster room, Blaster Egg",
             *after_home_water_locations
         ]
-        items = [["Bind song"]]
+        items = [["Bind Song"]]
         self.assertAccessDependency(locations, items)

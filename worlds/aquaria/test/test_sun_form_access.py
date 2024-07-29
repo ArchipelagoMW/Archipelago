@@ -13,7 +13,7 @@ class SunFormAccessTest(AquariaTestBase):
     def test_sun_form_location(self) -> None:
         """Test locations that require sun form"""
         locations = [
-            "First secret",
+            "First Secret",
             "The Whale, Verse Egg",
             "Abyss right area, bulb behind the rock in the whale room",
             "Octopus Cave, Dumbo Egg",
@@ -24,5 +24,5 @@ class SunFormAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete"
         ]
-        items = [["Sun form"]]
+        items = [["Sun Form"]]
         self.assertAccessDependency(locations, items)

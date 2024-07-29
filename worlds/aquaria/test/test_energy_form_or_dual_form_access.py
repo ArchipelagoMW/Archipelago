@@ -17,7 +17,7 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
         """Test locations that require Energy form or dual form"""
         locations = [
             "Naija's Home, bulb after the energy door",
-            "Home Water, Nautilus Egg",
+            "Home Waters, Nautilus Egg",
             "Energy Temple second area, bulb under the rock",
             "Energy Temple bottom entrance, Krotite Armor",
             "Energy Temple third area, bulb in the bottom path",
@@ -25,20 +25,6 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
             "Energy Temple boss area, Fallen God Tooth",
             "Mithalas City Castle, beating the Priests",
             "Mithalas boss area, beating Mithalan God",
-            "Mithalas Cathedral, first urn in the top right room",
-            "Mithalas Cathedral, second urn in the top right room",
-            "Mithalas Cathedral, third urn in the top right room",
-            "Mithalas Cathedral, urn in the flesh room with fleas",
-            "Mithalas Cathedral, first urn in the bottom right path",
-            "Mithalas Cathedral, second urn in the bottom right path",
-            "Mithalas Cathedral, urn behind the flesh vein",
-            "Mithalas Cathedral, urn in the top left eyes boss room",
-            "Mithalas Cathedral, first urn in the path behind the flesh vein",
-            "Mithalas Cathedral, second urn in the path behind the flesh vein",
-            "Mithalas Cathedral, third urn in the path behind the flesh vein",
-            "Mithalas Cathedral, fourth urn in the top right room",
-            "Mithalas Cathedral, Mithalan Dress",
-            "Mithalas Cathedral, urn below the left entrance",
             "Kelp Forest top left area, bulb close to the Verse Egg",
             "Kelp Forest top left area, Verse Egg",
             "Kelp Forest bottom left area, bulb close to the spirit crystals",
@@ -87,8 +73,8 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
             "Beating King Jellyfish God Prime",
             "Beating the Golem",
             "Sunken City cleared",
-            "First secret",
+            "First Secret",
             "Objective complete"
         ]
-        items = [["Energy form", "Dual form", "Li and Li song", "Body tongue cleared"]]
+        items = [["Energy Form", "Dual Form", "Li and Li Song", "Body Tongue cleared"]]
         self.assertAccessDependency(locations, items)

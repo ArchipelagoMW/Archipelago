@@ -41,5 +41,5 @@ class LiAccessTest(AquariaTestBase):
             "Sunken City cleared",
             "Objective complete"
         ]
-        items = [["Li and Li song", "Body tongue cleared"]]
+        items = [["Li and Li Song", "Body Tongue cleared"]]
         self.assertAccessDependency(locations, items)

@@ -22,5 +22,5 @@ class LiAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete"
         ]
-        items = [["Dual form"]]
+        items = [["Dual Form"]]
         self.assertAccessDependency(locations, items)

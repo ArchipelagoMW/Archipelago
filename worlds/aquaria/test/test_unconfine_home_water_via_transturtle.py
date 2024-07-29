@@ -16,5 +16,5 @@ class UnconfineHomeWaterTransturtleAccessTest(AquariaTestBase):
 
     def test_unconfine_home_water_transturtle_location(self) -> None:
         """Test locations accessible with unconfined home water via transportation turtle"""
-        self.assertTrue(self.can_reach_region("Home Water, turtle room"), "Cannot reach Home Water, turtle room")
-        self.assertFalse(self.can_reach_region("Open Water top left area"), "Can reach Open Water top left area")
+        self.assertTrue(self.can_reach_region("Home Waters, turtle room"), "Cannot reach Home Waters, turtle room")
+        self.assertFalse(self.can_reach_region("Open Waters top left area"), "Can reach Open Waters top left area")

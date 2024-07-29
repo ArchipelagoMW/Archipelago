@@ -15,21 +15,21 @@ class SpiritFormAccessTest(AquariaTestBase):
         locations = [
             "The Veil bottom area, bulb in the spirit path",
             "Mithalas City Castle, Trident Head",
-            "Open Water skeleton path, King Skull",
+            "Open Waters skeleton path, King Skull",
             "Kelp Forest bottom left area, Walker Baby",
             "Abyss right area, bulb behind the rock in the whale room",
             "The Whale, Verse Egg",
-            "Ice Cave, bulb in the room to the right",
-            "Ice Cave, first bulb in the top exit room",
-            "Ice Cave, second bulb in the top exit room",
-            "Ice Cave, third bulb in the top exit room",
-            "Ice Cave, bulb in the left room",
+            "Ice Cavern, bulb in the room to the right",
+            "Ice Cavern, first bulb in the top exit room",
+            "Ice Cavern, second bulb in the top exit room",
+            "Ice Cavern, third bulb in the top exit room",
+            "Ice Cavern, bulb in the left room",
             "Bubble Cave, bulb in the left cave wall",
             "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
             "Bubble Cave, Verse Egg",
             "Sunken City left area, Girl Costume",
             "Beating Mantis Shrimp Prime",
-            "First secret",
+            "First Secret",
         ]
-        items = [["Spirit form"]]
+        items = [["Spirit Form"]]
         self.assertAccessDependency(locations, items)

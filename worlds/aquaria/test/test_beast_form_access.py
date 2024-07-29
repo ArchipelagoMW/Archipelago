@@ -25,5 +25,5 @@ class BeastFormAccessTest(AquariaTestBase):
             "Beating Octopus Prime",
             "Sunken City cleared",
         ]
-        items = [["Beast form"]]
+        items = [["Beast Form"]]
         self.assertAccessDependency(locations, items)

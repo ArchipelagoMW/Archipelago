@@ -22,7 +22,7 @@ class FishFormAccessTest(AquariaTestBase):
             "Mithalas City, urn inside a home fish pass",
             "Kelp Forest top right area, bulb in the top fish pass",
             "The Veil bottom area, Verse Egg",
-            "Open Water bottom left area, bulb inside the lowest fish pass",
+            "Open Waters bottom left area, bulb inside the lowest fish pass",
             "Kelp Forest top left area, bulb close to the Verse Egg",
             "Kelp Forest top left area, Verse Egg",
             "Mermog cave, bulb in the left part of the cave",
@@ -33,5 +33,5 @@ class FishFormAccessTest(AquariaTestBase):
             "Beating Octopus Prime",
             "Abyss left area, bulb in the bottom fish pass"
         ]
-        items = [["Fish form"]]
+        items = [["Fish Form"]]
         self.assertAccessDependency(locations, items)

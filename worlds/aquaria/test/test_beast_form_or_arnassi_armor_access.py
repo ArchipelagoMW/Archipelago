@@ -36,5 +36,5 @@ class BeastForArnassiArmormAccessTest(AquariaTestBase):
             "Beating Mithalan priests",
             "Sunken City cleared"
         ]
-        items = [["Beast form", "Arnassi Armor"]]
+        items = [["Beast Form", "Arnassi Armor"]]
         self.assertAccessDependency(locations, items)

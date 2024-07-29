@@ -19,7 +19,7 @@ class LightAccessTest(AquariaTestBase):
         locations = [
             # Since the `assertAccessDependency` sweep for events even if I tell it not to, those location cannot be
             # tested.
-            # "Third secret",
+            # "Third Secret",
             # "Sun Temple, bulb in the top left part",
             # "Sun Temple, bulb in the top right part",
             # "Sun Temple, bulb at the top of the high dark room",
@@ -39,11 +39,11 @@ class LightAccessTest(AquariaTestBase):
             "Abyss right area, bulb in the middle path",
             "Abyss right area, bulb behind the rock in the middle path",
             "Abyss right area, bulb in the left green room",
-            "Ice Cave, bulb in the room to the right",
-            "Ice Cave, first bulb in the top exit room",
-            "Ice Cave, second bulb in the top exit room",
-            "Ice Cave, third bulb in the top exit room",
-            "Ice Cave, bulb in the left room",
+            "Ice Cavern, bulb in the room to the right",
+            "Ice Cavern, first bulb in the top exit room",
+            "Ice Cavern, second bulb in the top exit room",
+            "Ice Cavern, third bulb in the top exit room",
+            "Ice Cavern, bulb in the left room",
             "Bubble Cave, bulb in the left cave wall",
             "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
             "Bubble Cave, Verse Egg",
@@ -52,7 +52,7 @@ class LightAccessTest(AquariaTestBase):
             "King Jellyfish Cave, Jellyfish Costume",
             "Beating King Jellyfish God Prime",
             "The Whale, Verse Egg",
-            "First secret",
+            "First Secret",
             "Sunken City right area, crate close to the save crystal",
             "Sunken City right area, crate in the left bottom room",
             "Sunken City left area, crate in the little pipe room",
@@ -66,5 +66,5 @@ class LightAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete",
         ]
-        items = [["Sun form", "Baby Dumbo", "Has sun crystal"]]
+        items = [["Sun Form", "Baby Dumbo", "Has Sun Crystal"]]
         self.assertAccessDependency(locations, items)

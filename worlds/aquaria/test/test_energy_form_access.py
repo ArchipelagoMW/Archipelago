@@ -29,5 +29,5 @@ class EnergyFormAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete",
         ]
-        items = [["Energy form"]]
+        items = [["Energy Form"]]
         self.assertAccessDependency(locations, items)

@@ -53,5 +53,5 @@ class NatureFormAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete"
         ]
-        items = [["Nature form"]]
+        items = [["Nature Form"]]
         self.assertAccessDependency(locations, items)
