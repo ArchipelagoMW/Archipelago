@@ -58,12 +58,12 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
 <h2 style="text-transform:none";>Common Pitfalls</h2>
 
 - Having an old GOA Lua Script in your `C:\Users\*YourName*\Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\kh2` folder.
-  - Pressing F2 while in game should look like this. ![image](https://i.imgur.com/ABSdtPC.png)
+    - Pressing F2 while in game should look like this. ![image](https://i.imgur.com/ABSdtPC.png)
 - Not having Lua Backend Configured Correctly.
-  - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Lua Backend Configuration Step.
+    - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Lua Backend Configuration Step.
 
 - Loading into Simulated Twilight Town Instead of the GOA.
-  - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Panacea and Lua Backend Steps.
+    - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Panacea and Lua Backend Steps.
 
 <h2 style="text-transform:none"; >Best Practices</h2>
 
@@ -90,13 +90,13 @@ Have any questions on what's in logic? This spreadsheet made by Bulcon has the a
 - Why did I not load into the correct visit?
     - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
-  - Currently the `only` supported versions are `Epic Games Version 1.0.0.9_WW` and `Steam Version Build Version 14716933`.
+    - Currently the `only` supported versions are `Epic Games Version 1.0.0.9_WW` and `Steam Version Build Version 14716933`.
 - Why am I getting wallpapered while going into a world for the first time?
-  - Your `Lua Backend` was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
+    - Your `Lua Backend` was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
 - Why am I not getting magic?
     - If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 - Why did I crash after picking my dream weapon?
-  - This is normally caused by having an outdated GOA mod or having an outdated panacea and or luabackend. To fix this rerun the setup wizard and reinstall luabackend and panacea. Also make sure all your mods are up-to-date.
+    - This is normally caused by having an outdated GOA mod or having an outdated panacea and/or luabackend. To fix this rerun the setup wizard and reinstall luabackend and panacea. Also make sure all your mods are up-to-date.
 - Why did I crash?
     - The port of Kingdom Hearts 2 can and will randomly crash, this is the fault of the game not the randomizer or the archipelago client.
       - If you have a continuous/constant crash (in the same area/event every time) you will want to reverify your installed files. This can be done by doing the following: Open Epic Game Store --> Library --> Click Triple Dots --> Manage --> Verify
