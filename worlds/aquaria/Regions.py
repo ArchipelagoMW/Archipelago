@@ -1144,6 +1144,9 @@ class AquariaRegions:
                  lambda state: state.has("Sun God beated", self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: state.has("Sun God beated", self.player))
+        add_rule(self.multiworld.get_location("The Body center area, breaking Li's cage", self.player),
+                 lambda state: _has_tongue_cleared(state, self.player))
+
 
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",
