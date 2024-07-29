@@ -201,7 +201,7 @@ class KH1World(World):
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
-        return self.random.choices([filler for filler in self.fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in self.fillers.keys()], weights)[0]
 
     def fill_slot_data(self) -> dict:
         slot_data = {"xpmult": int(self.options.exp_multiplier)/16,
