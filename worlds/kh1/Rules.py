@@ -80,7 +80,7 @@ def has_offensive_magic(state: CollectionState, player: int) -> bool:
     return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
 
 def has_reports(state: CollectionState, player: int, eotw_required_reports: int) -> bool:
-    return state.has_group("Reports", player, eotw_required_reports)
+    return state.has_group_unique("Reports", player, eotw_required_reports)
 
 def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_reports: int, keyblades_unlock_chests: bool):
     if final_rest_door_requirement == "reports":
