@@ -233,10 +233,10 @@ class KH1World(World):
                     "atlantica": bool(self.options.atlantica),
                     "goal": str(self.options.goal.current_key)}
         if self.options.randomize_keyblade_stats:
-            min_str_bonus = min(self.options.keyblade_min_str, self.options.keyblade_max_str)
-            max_str_bonus = max(self.options.keyblade_min_str, self.options.keyblade_max_str)
-            min_mp_bonus = min(self.options.keyblade_min_mp, self.options.keyblade_max_mp)
-            max_mp_bonus = max(self.options.keyblade_min_mp, self.options.keyblade_max_mp)
+            min_str_bonus = min(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
+            max_str_bonus = max(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
+            min_mp_bonus = min(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
+            max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
             slot_data["keyblade_stats"] = ""
             for i in range(22):
                 if i < 4 and self.options.bad_starting_weapons:
