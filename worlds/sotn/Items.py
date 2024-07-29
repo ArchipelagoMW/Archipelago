@@ -5,6 +5,9 @@ from BaseClasses import ItemClassification, Item
 base_item_id = 127000000
 tile_id_offset = 0X80
 
+BOOST_QTY = 12
+TRAPS_QTY = 21
+
 
 class IType(Enum):
     HEART = 0
