@@ -4,7 +4,7 @@ from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, PerGameC
 
 class StrengthIncrease(Range):
     """
-    Number of Strength Increases to add to the multiworld
+    Determines the number of Strength Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -16,7 +16,7 @@ class StrengthIncrease(Range):
 
 class DefenseIncrease(Range):
     """
-    Number of Defense Increases to add to the multiworld
+    Determines the number of Defense Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -28,7 +28,7 @@ class DefenseIncrease(Range):
 
 class HPIncrease(Range):
     """
-    Number of HP Increases to add to the multiworld
+    Determines the number of HP Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -40,7 +40,7 @@ class HPIncrease(Range):
 
 class APIncrease(Range):
     """
-    Number of AP Increases to add to the multiworld
+    Determines the number of AP Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -52,7 +52,7 @@ class APIncrease(Range):
 
 class MPIncrease(Range):
     """
-    Number of MP Increases to add to the multiworld
+    Determines the number of MP Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -64,7 +64,7 @@ class MPIncrease(Range):
 
 class AccessorySlotIncrease(Range):
     """
-    Number of Accessory Slot Increases to add to the multiworld
+    Determines the number of Accessory Slot Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -76,7 +76,7 @@ class AccessorySlotIncrease(Range):
 
 class ItemSlotIncrease(Range):
     """
-    Number of Item Slot Increases to add to the multiworld
+    Determines the number of Item Slot Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
@@ -132,19 +132,22 @@ class Goal(Choice):
     default = 3
 
 class EndoftheWorldUnlock(Choice):
-    """Determines how End of the World is Unlocked"""
+    """Determines how End of the World is Unlocked.
+    
+    Item: You can receive an item called "End of the World" which unlocks the world
+    Reports: A certain amount of reports are required to unlock End of the World, which is defined in your options"""
     display_name = "End of the World Unlock"
     option_item = 0
     option_reports = 1
     default = 1
 
 class FinalRestDoor(Choice):
-    """Determines what conditions need to be met to manifest the door in Final Rest, allowing the player to challenge Ansem
+    """Determines what conditions need to be met to manifest the door in Final Rest, allowing the player to challenge Ansem.
     
-    Reports: A certain number of Ansem's Reports are required, determined by the "Reports to Open Final Rest Door" option.
-    Puppies: Having all 99 puppies is required.
-    Postcards: Turning in all 10 postcards is required.
-    Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom are required.
+    Reports: A certain number of Ansem's Reports are required, determined by the "Reports to Open Final Rest Door" option
+    Puppies: Having all 99 puppies is required
+    Postcards: Turning in all 10 postcards is required
+    Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom are required
     """
     display_name = "Final Rest Door"
     option_reports = 0
@@ -167,7 +170,7 @@ class Puppies(Choice):
 
 class EXPMultiplier(NamedRange):
     """
-    Determines the multiplier to apply to EXP gained
+    Determines the multiplier to apply to EXP gained.
     """
     display_name = "EXP Multiplier"
     default = 16
@@ -212,13 +215,13 @@ class ReportsInPool(Range):
 
 class RandomizeKeybladeStats(DefaultOnToggle):
     """
-    Determines whether Keyblade stats should be randomized
+    Determines whether Keyblade stats should be randomized.
     """
     display_name = "Randomize Keyblade Stats"
 
 class KeybladeMinStrength(Range):
     """
-    Determines the minimum STR bonus a keyblade can have
+    Determines the minimum STR bonus a keyblade can have.
     """
     display_name = "Keyblade Minimum STR Bonus"
     default = 3
@@ -227,7 +230,7 @@ class KeybladeMinStrength(Range):
 
 class KeybladeMaxStrength(Range):
     """
-    Determines the maximum STR bonus a keyblade can have
+    Determines the maximum STR bonus a keyblade can have.
     """
     display_name = "Keyblade Maximum STR Bonus"
     default = 14
@@ -236,7 +239,7 @@ class KeybladeMaxStrength(Range):
 
 class KeybladeMinMP(Range):
     """
-    Determines the minimum MP bonus a keyblade can have
+    Determines the minimum MP bonus a keyblade can have.
     """
     display_name = "Keyblade Minimum MP Bonus"
     default = -2
@@ -245,7 +248,7 @@ class KeybladeMinMP(Range):
 
 class KeybladeMaxMP(Range):
     """
-    Determines the maximum MP bonus a keyblade can have
+    Determines the maximum MP bonus a keyblade can have.
     """
     display_name = "Keyblade Maximum MP Bonus"
     default = 3
@@ -263,7 +266,7 @@ class LevelChecks(Range):
 
 class ForceStatsOnLevels(NamedRange):
     """
-    If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations
+    If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations.
     For example, if you want to be able to find any multiworld item from levels 1-50, then just stat ups for levels 51-100, set this value to 51.
     """
     display_name = "Force Stats on Level Starting From"
@@ -278,7 +281,7 @@ class ForceStatsOnLevels(NamedRange):
 
 class BadStartingWeapons(Toggle):
     """
-    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have bad stats
+    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have bad stats.
     """
     display_name = "Bad Starting Weapons"
 
@@ -315,7 +318,7 @@ class KeybladesUnlockChests(Toggle):
 
 class InteractInBattle(Toggle):
     """
-    Allow Sora to talk, examine, and open chests in battle
+    Allow Sora to talk to people, examine objects, and open chests in battle.
     """
     display_name = "Interact in Battle"
 

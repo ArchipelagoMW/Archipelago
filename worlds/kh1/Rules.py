@@ -1,16 +1,8 @@
 from BaseClasses import CollectionState
 
-SINGLE_PUPPIES = []
-for i in range(1,100):
-    SINGLE_PUPPIES.append("Puppy " + str(i).rjust(2,"0"))
-
-TRIPLE_PUPPIES = []
-for i in range(1,34):
-    TRIPLE_PUPPIES.append("Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0"))
-
-TORN_PAGES = []
-for i in range(1,6):
-    TORN_PAGES.append("Torn Page " + str(i))
+SINGLE_PUPPIES = ["Puppy " + str(i).rjust(2,"0") for i in range(1,100)]
+TRIPLE_PUPPIES = ["Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0") for i in range(1,34)]
+TORN_PAGES = ["Torn Page " + str(i) for i in range(1,6)]
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool) -> bool:
     worlds_acquired = 0.0
@@ -23,33 +15,13 @@ def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keybla
             worlds_acquired = worlds_acquired + 0.5
     return worlds_acquired >= num_of_worlds
 
-def has_slides(state: CollectionState, player: int) -> bool:
-    return state.has("Slides", player)
-
-def has_evidence(state: CollectionState, player: int) -> bool:
-    return state.has("Footprints", player)
-
-def can_glide(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Glide", player) or state.has("Superglide", player)
-
 def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bool) -> bool:
-    return (
-                state.has("Emblem Piece (Flame)", player)
-                and state.has("Emblem Piece (Chest)", player)
-                and state.has("Emblem Piece (Statue)", player)
-                and state.has("Emblem Piece (Fountain)", player)
-                and state.has("Hollow Bastion", player)
-                and has_x_worlds(state, player, 5, keyblades_unlock_chests)
-            )
-
-def has_item(state: CollectionState, player: int, item: str) -> bool:
-    return state.has(item, player)
-
-def has_at_least(state: CollectionState, player: int, item: str, x: int) -> bool:
-    return state.has(item, player, x)
-
-def has_postcards(state: CollectionState, player: int, postcards_required: int) -> bool:
-    return state.has("Postcard", player, postcards_required)
+    return state.has_all({
+        "Emblem Piece (Flame)",
+        "Emblem Piece (Chest)",
+        "Emblem Piece (Statue)",
+        "Emblem Piece (Fountain)",
+        "Hollow Bastion"}, player) and has_x_worlds(state, player, 5, keyblades_unlock_chests)
 
 def has_puppies(state: CollectionState, player: int, puppies_required: int) -> bool:
     puppies_available = state.count_from_list_unique(SINGLE_PUPPIES, player)
@@ -66,15 +38,14 @@ def has_all_summons(state: CollectionState, player: int) -> bool:
     return state.has_all({"Simba", "Bambi", "Genie", "Dumbo", "Mushu", "Tinker Bell"}, player)
 
 def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
-    return (
-            state.count("Progressive Fire",         player) >= level
-            and state.count("Progressive Blizzard", player) >= level
-            and state.count("Progressive Thunder",  player) >= level
-            and state.count("Progressive Cure",     player) >= level
-            and state.count("Progressive Gravity",  player) >= level
-            and state.count("Progressive Aero",     player) >= level
-            and state.count("Progressive Stop",     player) >= level
-        )
+    return state.has_all_counts({
+        "Progressive Fire": 3,
+        "Progressive Blizzard": 3,
+        "Progressive Thunder": 3,
+        "Progressive Cure": 3,
+        "Progressive Gravity": 3,
+        "Progressive Aero": 3,
+        "Progressive Stop": 3}, player)
 
 def has_offensive_magic(state: CollectionState, player: int) -> bool:
     return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
@@ -88,26 +59,26 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
     if final_rest_door_requirement == "puppies":
         return has_puppies(state, player, 99)
     if final_rest_door_requirement == "postcards":
-        return has_postcards(state, player, 10)
+        return state.has("Postcard", player, 10)
     if final_rest_door_requirement == "superbosses":
         return (
-                state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup", "Entry Pass"}, player) 
-                and has_emblems(state, player, keyblades_unlock_chests) 
-                and has_all_magic_lvx(state, player, 2) 
-                and has_defensive_tools(state, player) 
-                and has_x_worlds(state, player, 7, keyblades_unlock_chests) 
+                state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup", "Entry Pass"}, player)
+                and has_emblems(state, player, keyblades_unlock_chests)
+                and has_all_magic_lvx(state, player, 2)
+                and has_defensive_tools(state, player)
+                and has_x_worlds(state, player, 7, keyblades_unlock_chests)
             )
 
 def has_defensive_tools(state: CollectionState, player: int) -> bool:
     return (
             (
                 state.has("Progressive Cure", player, 2)
-                and state.has("Leaf Bracer", player) 
+                and state.has("Leaf Bracer", player)
                 and state.has("Dodge Roll", player)
-            ) 
+            )
             and (
-                state.has("Second Chance", player) 
-                or state.has("MP Rage", player) 
+                state.has("Second Chance", player)
+                or state.has("MP Rage", player)
                 or state.has("Progressive Aero", player, 2)
             )
         )
@@ -117,16 +88,16 @@ def has_keyblade(state: CollectionState, player: int, keyblade_required: bool, i
 
 def can_dumbo_skip(state: CollectionState, player: int) -> bool:
     return (
-            state.has("Dumbo", player) 
+            state.has("Dumbo", player)
             and state.has_group("Magic", player)
         )
 
 def has_oogie_manor(state: CollectionState, player: int, advanced_logic: bool) -> bool:
     return (
-                has_item(state, player, "Progressive Fire") 
-                or (advanced_logic and has_at_least(state, player, "High Jump", 2)) 
-                or (advanced_logic and has_item(state, player, "High Jump") and can_glide(state, player))
-           )
+                state.has("Progressive Fire", player)
+                or (advanced_logic and state.has("High Jump", player, 2))
+                or (advanced_logic and state.has("High Jump", player) and state.has("Progressive Glide", player))
+        )
 
 def set_rules(kh1world):
     multiworld                       = kh1world.multiworld
@@ -135,10 +106,10 @@ def set_rules(kh1world):
     eotw_required_reports            = kh1world.determine_reports_required_to_open_end_of_the_world()
     final_rest_door_required_reports = kh1world.determine_reports_required_to_open_final_rest_door()
     final_rest_door_requirement      = kh1world.options.final_rest_door.current_key
-    
+   
     multiworld.get_location("Traverse Town 1st District Candle Puzzle Chest"                               , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
-            and has_item(state, player, "Progressive Blizzard")
+            and state.has("Progressive Blizzard", player)
         )
     multiworld.get_location("Traverse Town 1st District Accessory Shop Roof Chest"                         , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
@@ -172,12 +143,12 @@ def set_rules(kh1world):
         )
     multiworld.get_location("Traverse Town Mystical House Yellow Trinity Chest"                            , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
-            and has_item(state, player, "Progressive Fire")
+            and state.has("Progressive Fire", player)
             and
             (
-                has_item(state, player, "Yellow Trinity")
-                or (options.advanced_logic and has_item(state, player, "High Jump"))
-                or has_at_least(state, player, "High Jump", 2)
+                state.has("Yellow Trinity", player)
+                or (options.advanced_logic and state.has("High Jump", player))
+                or state.has("High Jump", player, 2)
             )
         )
     multiworld.get_location("Traverse Town Accessory Shop Chest"                                           , player).access_rule = lambda state: (
@@ -185,15 +156,15 @@ def set_rules(kh1world):
         )
     multiworld.get_location("Traverse Town Secret Waterway White Trinity Chest"                            , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
-            and has_item(state, player, "White Trinity")
+            and state.has("White Trinity", player)
         )
     multiworld.get_location("Traverse Town Geppetto's House Chest"                                         , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
-            and has_item(state, player, "Monstro")
+            and state.has("Monstro", player)
             and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
@@ -201,51 +172,51 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
             and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town 1st District Blue Trinity Balcony Chest"                        , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
             and
             (
-                (has_item(state, player, "Blue Trinity") and can_glide(state, player))
-                or (options.advanced_logic and can_glide(state, player))
+                (state.has("Blue Trinity", player) and state.has("Progressive Glide", player))
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Traverse Town Mystical House Glide Chest"                                     , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
-            and 
+            and
             (
-                can_glide(state, player)
-                or 
+                state.has("Progressive Glide", player)
+                or
                 (
                     options.advanced_logic
-                    and 
+                    and
                     (
-                        (has_item(state, player, "High Jump") and has_item(state, player, "Yellow Trinity"))
-                        or has_at_least(state, player, "High Jump", 2)
+                        (state.has("High Jump", player) and state.has("Yellow Trinity", player))
+                        or state.has("High Jump", player, 2)
                     )
-                    and has_item(state, player, "Combo Master")
+                    and state.has("Combo Master", player)
                 )
                 or
                 (
                     options.advanced_logic
-                    and has_item(state, player, "Mermaid Kick")
+                    and state.has("Mermaid Kick", player)
                 )
             )
-            and has_item(state, player, "Progressive Fire")
+            and state.has("Progressive Fire", player)
         )
     multiworld.get_location("Traverse Town Alleyway Behind Crates Chest"                                   , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
-            and has_item(state, player, "Red Trinity")
+            and state.has("Red Trinity", player)
         )
     multiworld.get_location("Traverse Town Item Workshop Left Chest"                                       , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lionheart")
             and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Secret Waterway Near Stairs Chest"                              , player).access_rule = lambda state: (
@@ -253,7 +224,7 @@ def set_rules(kh1world):
         )
     multiworld.get_location("Wonderland Rabbit Hole Green Trinity Chest"                                   , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
-            and has_item(state, player, "Green Trinity")
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Wonderland Rabbit Hole Defeat Heartless 1 Chest"                              , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
@@ -267,55 +238,55 @@ def set_rules(kh1world):
         )
     multiworld.get_location("Wonderland Bizarre Room Green Trinity Chest"                                  , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
-            and has_item(state, player, "Green Trinity")
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Wonderland Queen's Castle Hedge Left Red Chest"                               , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
-            and 
+            and
             (
-                has_evidence(state, player)
-                or has_item(state, player, "High Jump")
-                or can_glide(state, player)
+                state.has("Footprints", player)
+                or state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("Wonderland Queen's Castle Hedge Right Blue Chest"                             , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
-            and 
+            and
             (
-                has_evidence(state, player)
-                or has_item(state, player, "High Jump")
-                or can_glide(state, player)
+                state.has("Footprints", player)
+                or state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("Wonderland Queen's Castle Hedge Right Red Chest"                              , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
-            and 
+            and
             (
-                has_evidence(state, player)
-                or has_item(state, player, "High Jump")
-                or can_glide(state, player)
+                state.has("Footprints", player)
+                or state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("Wonderland Lotus Forest Thunder Plant Chest"                                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and has_item(state, player, "Progressive Thunder") 
-            and has_evidence(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and state.has("Progressive Thunder", player)
+            and state.has("Footprints", player)
         )
     multiworld.get_location("Wonderland Lotus Forest Through the Painting Thunder Plant Chest"             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and has_item(state, player, "Progressive Thunder") 
-            and has_evidence(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and state.has("Progressive Thunder", player)
+            and state.has("Footprints", player)
         )
     multiworld.get_location("Wonderland Lotus Forest Glide Chest"                                          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and
             (
-                can_glide(state, player)
+                state.has("Progressive Glide", player)
                 or
                 (
                     options.advanced_logic
-                    and (has_item(state, player, "High Jump") or can_dumbo_skip(state, player))
-                    and has_evidence(state, player)
+                    and (state.has("High Jump", player) or can_dumbo_skip(state, player))
+                    and state.has("Footprints", player)
                 )
             )
         )
@@ -323,78 +294,78 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
         )
     multiworld.get_location("Wonderland Lotus Forest Corner Chest"                                         , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and
             (
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
                 or options.advanced_logic
             )
         )
     multiworld.get_location("Wonderland Bizarre Room Lamp Chest"                                           , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and has_evidence(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and state.has("Footprints", player)
         )
     multiworld.get_location("Wonderland Tea Party Garden Above Lotus Forest Entrance 2nd Chest"            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and
             (
-                can_glide(state, player)
-                or 
+                state.has("Progressive Glide", player)
+                or
                 (
                     options.advanced_logic
-                    and has_item(state, player, "High Jump")
-                    and has_evidence(state, player)
+                    and state.has("High Jump", player)
+                    and state.has("Footprints", player)
                 )
             )
         )
     multiworld.get_location("Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest"            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and
             (
-                can_glide(state, player)
-                or 
+                state.has("Progressive Glide", player)
+                or
                 (
                     options.advanced_logic
-                    and has_item(state, player, "High Jump")
-                    and has_evidence(state, player)
+                    and state.has("High Jump", player)
+                    and state.has("Footprints", player)
                 )
             )
         )
     multiworld.get_location("Wonderland Tea Party Garden Bear and Clock Puzzle Chest"                      , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and
             (
-                has_evidence(state, player)
-                or (options.advanced_logic and can_glide(state, player))
-                or has_at_least(state, player, "High Jump", 2)
+                state.has("Footprints", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
+                or state.has("High Jump", player, 2)
             )
         )
     multiworld.get_location("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest"          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and
             (
-                can_glide(state, player)
-                or 
+                state.has("Progressive Glide", player)
+                or
                 (
-                    has_at_least(state, player, "High Jump", 3) 
-                    and has_evidence(state, player)
+                    state.has("High Jump", player, 3)
+                    and state.has("Footprints", player)
                 )
-                or 
+                or
                 (
                     options.advanced_logic
-                    and has_item(state, player, "High Jump") 
-                    and has_evidence(state, player)
-                    and has_item(state, player, "Combo Master")
+                    and state.has("High Jump", player)
+                    and state.has("Footprints", player)
+                    and state.has("Combo Master", player)
                 )
             )
         )
     multiworld.get_location("Wonderland Lotus Forest Through the Painting White Trinity Chest"             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck") 
-            and has_item(state, player, "White Trinity") 
-            and has_evidence(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Lady Luck")
+            and state.has("White Trinity", player)
+            and state.has("Footprints", player)
         )
     multiworld.get_location("Deep Jungle Tree House Beneath Tree House Chest"                              , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
@@ -409,11 +380,11 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
         )
     multiworld.get_location("Deep Jungle Hippo's Lagoon Right Chest"                                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player)
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
                 or options.advanced_logic
             )
         )
@@ -424,39 +395,39 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
         )
     multiworld.get_location("Deep Jungle Climbing Trees Blue Trinity Chest"                                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_item(state, player, "Blue Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("Blue Trinity", player)
         )
     multiworld.get_location("Deep Jungle Tunnel Chest"                                                     , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
         )
     multiworld.get_location("Deep Jungle Cavern of Hearts White Trinity Chest"                             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_item(state, player, "White Trinity") 
-            and has_slides(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("White Trinity", player)
+            and state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Camp Blue Trinity Chest"                                          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_item(state, player, "Blue Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("Blue Trinity", player)
         )
     multiworld.get_location("Deep Jungle Tent Chest"                                                       , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
         )
     multiworld.get_location("Deep Jungle Waterfall Cavern Low Chest"                                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_slides(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Waterfall Cavern Middle Chest"                                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_slides(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Waterfall Cavern High Wall Chest"                                 , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_slides(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Waterfall Cavern High Middle Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and has_slides(state, player)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Cliff Right Cliff Left Chest"                                     , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
@@ -465,10 +436,10 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
         )
     multiworld.get_location("Deep Jungle Tree House Suspended Boat Chest"                                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Jungle King")
+            and
             (
-                can_glide(state, player)
+                state.has("Progressive Glide", player)
                 or options.advanced_logic
             )
         )
@@ -497,11 +468,11 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
         )
     multiworld.get_location("Agrabah Main Street High Above Palace Gates Entrance Chest"                   , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player)
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
                 or (options.advanced_logic and can_dumbo_skip(state, player))
             )
         )
@@ -509,37 +480,37 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
         )
     multiworld.get_location("Agrabah Palace Gates High Opposite Palace Chest"                              , player).access_rule = lambda state: (
-             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-             and 
+             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+             and
              (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or options.advanced_logic
              )
         )
     multiworld.get_location("Agrabah Palace Gates High Close to Palace Chest"                              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and
             (
                 (
-                    has_item(state, player, "High Jump") 
-                    and can_glide(state, player)
+                    state.has("High Jump", player)
+                    and state.has("Progressive Glide", player)
                     or
                     (
                         options.advanced_logic
-                        and 
+                        and
                         (
-                            has_item(state, player, "Combo Master")
+                            state.has("Combo Master", player)
                             or can_dumbo_skip(state, player)
                         )
                     )
                 )
-                or has_at_least(state, player, "High Jump", 3)
-                or (options.advanced_logic and can_glide(state, player))
+                or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Agrabah Storage Green Trinity Chest"                                          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and has_item(state, player, "Green Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Agrabah Storage Behind Barrel Chest"                                          , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
@@ -548,13 +519,13 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
         )
     multiworld.get_location("Agrabah Cave of Wonders Entrance Tall Tower Chest"                            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and
             (
-                can_glide(state, player)
-                or (options.advanced_logic and has_item(state, player, "Combo Master"))
+                state.has("Progressive Glide", player)
+                or (options.advanced_logic and state.has("Combo Master", player))
                 or (options.advanced_logic and can_dumbo_skip(state, player))
-                or has_at_least(state, player, "High Jump", 2)
+                or state.has("High Jump", player, 2)
             )
         )
     multiworld.get_location("Agrabah Cave of Wonders Hall High Left Chest"                                 , player).access_rule = lambda state: (
@@ -567,11 +538,11 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
         )
     multiworld.get_location("Agrabah Cave of Wonders Bottomless Hall Pillar Chest"                         , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player)
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
                 or options.advanced_logic
             )
         )
@@ -609,25 +580,25 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
         )
     multiworld.get_location("Agrabah Cave of Wonders Silent Chamber Blue Trinity Chest"                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and has_item(state, player, "Blue Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and state.has("Blue Trinity", player)
         )
     multiworld.get_location("Agrabah Cave of Wonders Hidden Room Right Chest"                              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and
             (
-                has_item(state, player, "Yellow Trinity") 
-                or has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("Yellow Trinity", player)
+                or state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Agrabah Cave of Wonders Hidden Room Left Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and
             (
-                has_item(state, player, "Yellow Trinity") 
-                or has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("Yellow Trinity", player)
+                or state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Agrabah Aladdin's House Main Street Entrance Chest"                           , player).access_rule = lambda state: (
@@ -637,222 +608,222 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
         )
     multiworld.get_location("Agrabah Cave of Wonders Entrance White Trinity Chest"                         , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes") 
-            and has_item(state, player, "White Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Three Wishes")
+            and state.has("White Trinity", player)
         )
     multiworld.get_location("Monstro Chamber 6 Other Platform Chest"                                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and has_item(state, player, "Combo Master"))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Combo Master", player))
             )
         )
     multiworld.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"                     , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or options.advanced_logic
             )
         )
     multiworld.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and has_item(state, player, "Combo Master"))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Combo Master", player))
             )
         )
     multiworld.get_location("Monstro Chamber 6 Low Chest"                                                  , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Halloween Town Moonlight Hill White Trinity Chest"                            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "White Trinity")
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("White Trinity", player)
+            and state.has("Forget-Me-Not", player)
         )
     multiworld.get_location("Halloween Town Bridge Under Bridge"                                           , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box")
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
         )
     multiworld.get_location("Halloween Town Boneyard Tombstone Puzzle Chest"                               , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
-            and has_item(state, player, "Forget-Me-Not")
+            and state.has("Forget-Me-Not", player)
         )
     multiworld.get_location("Halloween Town Bridge Right of Gate Chest"                                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
+            and
             (
-                can_glide(state, player)
+                state.has("Progressive Glide", player)
                 or options.advanced_logic
             )
         )
     multiworld.get_location("Halloween Town Cemetary Behind Grave Chest"                                   , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
-            and has_oogie_manor(state, player, options)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
+            and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Cemetary By Cat Shape Chest"                                   , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Cemetary Between Graves Chest"                                 , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Oogie's Manor Lower Iron Cage Chest"                           , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Oogie's Manor Upper Iron Cage Chest"                           , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Oogie's Manor Hollow Chest"                                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Oogie's Manor Grounds Red Trinity Chest"                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
-            and has_item(state, player, "Red Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
+            and state.has("Red Trinity", player)
         )
     multiworld.get_location("Halloween Town Guillotine Square High Tower Chest"                            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and
             (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or (options.advanced_logic and can_dumbo_skip(state, player))
-                or (options.advanced_logic and can_glide(state, player))
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Halloween Town Guillotine Square Pumpkin Structure Left Chest"                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
             and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
-            and 
+            and
             (
-                can_glide(state, player)
-                or (options.advanced_logic and has_item(state, player, "Combo Master"))
-                or has_at_least(state, player, "High Jump", 2)
+                state.has("Progressive Glide", player)
+                or (options.advanced_logic and state.has("Combo Master", player))
+                or state.has("High Jump", player, 2)
             )
         )
     multiworld.get_location("Halloween Town Oogie's Manor Entrance Steps Chest"                            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box")
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
         )
     multiworld.get_location("Halloween Town Oogie's Manor Inside Entrance Chest"                           , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box")
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
         )
     multiworld.get_location("Halloween Town Bridge Left of Gate Chest"                                     , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
+            and
             (
-                can_glide(state, player) 
-                or has_item(state, player, "High Jump")
+                state.has("Progressive Glide", player)
+                or state.has("High Jump", player)
                 or options.advanced_logic
             )
         )
     multiworld.get_location("Halloween Town Cemetary By Striped Grave Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
-            and has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
+            and state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Guillotine Square Under Jack's House Stairs Chest"             , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
         )
     multiworld.get_location("Halloween Town Guillotine Square Pumpkin Structure Right Chest"               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
             and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
-            and 
+            and
             (
-                can_glide(state, player)
-                or (options.advanced_logic and has_item(state, player, "Combo Master"))
-                or has_at_least(state, player, "High Jump", 2)
+                state.has("Progressive Glide", player)
+                or (options.advanced_logic and state.has("Combo Master", player))
+                or state.has("High Jump", player, 2)
             )
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Left Behind Columns Chest"                    , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia")
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Right Blue Trinity Chest"                     , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia") 
-            and has_item(state, player, "Blue Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia")
+            and state.has("Blue Trinity", player)
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Left Blue Trinity Chest"                      , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia") 
-            and has_item(state, player, "Blue Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia")
+            and state.has("Blue Trinity", player)
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates White Trinity Chest"                          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia") 
-            and has_item(state, player, "White Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia")
+            and state.has("White Trinity", player)
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Blizzara Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia") 
-            and has_at_least(state, player, "Progressive Blizzard", 2)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia")
+            and state.has("Progressive Blizzard", player, 2)
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Blizzaga Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia") 
-            and has_at_least(state, player, "Progressive Blizzard", 3)
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Olympia")
+            and state.has("Progressive Blizzard", player, 3)
         )
     multiworld.get_location("Monstro Mouth Boat Deck Chest"                                                , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Monstro Mouth High Platform Boat Side Chest"                                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player)
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("Monstro Mouth High Platform Across from Boat Chest"                           , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player)
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("Monstro Mouth Near Ship Chest"                                                , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Monstro Mouth Green Trinity Top of Boat Chest"                                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player)
-            ) 
-            and has_item(state, player, "Green Trinity")
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
+            )
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Monstro Chamber 2 Ground Chest"                                               , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
@@ -861,17 +832,17 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Monstro Chamber 5 Platform Chest"                                             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and has_item(state, player, "High Jump")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and state.has("High Jump", player)
         )
     multiworld.get_location("Monstro Chamber 3 Ground Chest"                                               , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest"                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or options.advanced_logic
             )
         )
@@ -879,10 +850,10 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Monstro Chamber 3 Platform Near Chamber 6 Entrance Chest"                     , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or options.advanced_logic
             )
         )
@@ -890,10 +861,10 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Monstro Chamber 5 Atop Barrel Chest"                                          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and
             (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or options.advanced_logic
             )
         )
@@ -904,59 +875,59 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
         )
     multiworld.get_location("Neverland Pirate Ship Deck White Trinity Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "White Trinity") 
-            and has_item(state, player, "Green Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("White Trinity", player)
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Pirate Ship Crows Nest Chest"                                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Green Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Hold Yellow Trinity Right Blue Chest"                               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Yellow Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Yellow Trinity", player)
         )
     multiworld.get_location("Neverland Hold Yellow Trinity Left Blue Chest"                                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Yellow Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Yellow Trinity", player)
         )
     multiworld.get_location("Neverland Galley Chest"                                                       , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
         )
     multiworld.get_location("Neverland Cabin Chest"                                                        , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Green Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Hold Flight 1st Chest "                                             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or can_glide(state, player)
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("Progressive Glide", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Neverland Clock Tower Chest"                                                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Green Trinity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Green Trinity", player)
             and has_all_magic_lvx(state, player, 2)
         )
     multiworld.get_location("Neverland Hold Flight 2nd Chest"                                              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or can_glide(state, player)
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("Progressive Glide", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Neverland Hold Yellow Trinity Green Chest"                                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Yellow Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Yellow Trinity", player)
         )
     multiworld.get_location("Neverland Captain's Cabin Chest"                                              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp") 
-            and has_item(state, player, "Green Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Fairy Harp")
+            and state.has("Green Trinity", player)
         )
     multiworld.get_location("Hollow Bastion Rising Falls Water's Surface Chest"                            , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
@@ -965,112 +936,112 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
         )
     multiworld.get_location("Hollow Bastion Rising Falls Under Water 2nd Chest"                            , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Rising Falls Floating Platform Near Save Chest"                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player) 
-                or has_item(state, player, "Progressive Blizzard")
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
+                or state.has("Progressive Blizzard", player)
             )
          )
     multiworld.get_location("Hollow Bastion Rising Falls Floating Platform Near Bubble Chest"              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player) 
-                or has_item(state, player, "Progressive Blizzard")
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
+                or state.has("Progressive Blizzard", player)
             )
         )
     multiworld.get_location("Hollow Bastion Rising Falls High Platform Chest"                              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and
             (
-                can_glide(state, player)
-                or has_item(state, player, "Progressive Blizzard")
-                or (options.advanced_logic and has_item(state, player, "Combo Master"))
+                state.has("Progressive Glide", player)
+                or state.has("Progressive Blizzard", player)
+                or (options.advanced_logic and state.has("Combo Master", player))
             )
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Castle Gates Gravity Chest"                                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
+            and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and has_at_least(state, player, "High Jump", 2) and can_glide(state,player))
-                or (options.advanced_logic and can_dumbo_skip(state, player) and can_glide(state,player))
+                or (options.advanced_logic and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Hollow Bastion Castle Gates Freestanding Pillar Chest"                        , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or has_at_least(state, player, "High Jump", 2)
+                or state.has("High Jump", player, 2)
                 or (options.advanced_logic and can_dumbo_skip(state, player))
             )
         )
     multiworld.get_location("Hollow Bastion Castle Gates High Pillar Chest"                                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or has_at_least(state, player, "High Jump", 2)
+                or state.has("High Jump", player, 2)
                 or (options.advanced_logic and can_dumbo_skip(state, player))
             )
         )
     multiworld.get_location("Hollow Bastion Great Crest Lower Chest"                                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Great Crest After Battle Platform Chest"                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion High Tower 2nd Gravity Chest"                                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion High Tower 1st Gravity Chest"                                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion High Tower Above Sliding Blocks Chest"                         , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Library Top of Bookshelf Chest"                                , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
         )
     multiworld.get_location("Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest"  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Lift Stop Library Node Gravity Chest"                          , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
         )
     multiworld.get_location("Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest"               , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_emblems(state, player, options.keyblades_unlock_chests) 
-            and can_glide(state, player)
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and state.has("Progressive Glide", player)
+            and state.has("Progressive Gravity", player)
         )
     multiworld.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
         )
     multiworld.get_location("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest"                  , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "Progressive Gravity") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("Progressive Gravity", player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Base Level Bubble Under the Wall Platform Chest"               , player).access_rule = lambda state: (
@@ -1086,11 +1057,11 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
         )
     multiworld.get_location("Hollow Bastion Waterway Blizzard on Bubble Chest"                             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and
             (
-                (has_item(state, player, "Progressive Blizzard") and has_item(state, player, "High Jump"))
-                or has_at_least(state, player, "High Jump", 3)
+                (state.has("Progressive Blizzard", player) and state.has("High Jump", player))
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Hollow Bastion Waterway Unlock Passage from Base Level Chest"                 , player).access_rule = lambda state: (
@@ -1103,22 +1074,22 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
         )
     multiworld.get_location("Hollow Bastion Grand Hall Steps Right Side Chest"                             , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Grand Hall Oblivion Chest"                                     , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Grand Hall Left of Gate Chest"                                 , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Entrance Hall Left of Emblem Door Chest"                       , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and
             (
-                has_item(state, player, "High Jump")
+                state.has("High Jump", player)
                 or
                 (
                     options.advanced_logic
@@ -1128,8 +1099,8 @@ def set_rules(kh1world):
             )
         )
     multiworld.get_location("Hollow Bastion Rising Falls White Trinity Chest"                              , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose") 
-            and has_item(state, player, "White Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")
+            and state.has("White Trinity", player)
         )
     multiworld.get_location("End of the World Final Dimension 1st Chest"                                   , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
@@ -1165,27 +1136,27 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
         )
     multiworld.get_location("End of the World Giant Crevasse 5th Chest"                                    , player).access_rule = lambda state: (
-            has_item(state, player, "High Jump") or can_glide(state, player) 
+            state.has("High Jump", player) or state.has("Progressive Glide", player)
             and has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
         )
     multiworld.get_location("End of the World Giant Crevasse 1st Chest"                                    , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
             and
             (
-                has_item(state, player, "High Jump") 
-                or can_glide(state, player) 
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("End of the World Giant Crevasse 4th Chest"                                    , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
+            and
             (
                 (
                     options.advanced_logic
-                    and has_item(state, player, "High Jump") 
-                    and has_item(state, player, "Combo Master")
+                    and state.has("High Jump", player)
+                    and state.has("Combo Master", player)
                 )
-                or can_glide(state, player)
+                or state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("End of the World Giant Crevasse 2nd Chest"                                    , player).access_rule = lambda state: (
@@ -1204,15 +1175,15 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
         )
     multiworld.get_location("End of the World World Terminus Agrabah Chest"                                , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion") 
-            and 
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
+            and
             (
-                has_item(state, player, "High Jump")
-                or 
+                state.has("High Jump", player)
+                or
                 (
                     options.advanced_logic
                     and can_dumbo_skip(state, player)
-                    and can_glide(state, player)
+                    and state.has("Progressive Glide", player)
                 )
             )
         )
@@ -1232,78 +1203,78 @@ def set_rules(kh1world):
             has_keyblade(state, player, options.keyblades_unlock_chests, "Oblivion")
         )
     multiworld.get_location("Monstro Chamber 6 White Trinity Chest"                                        , player).access_rule = lambda state: (
-            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star") 
-            and has_item(state, player, "White Trinity")
+            has_keyblade(state, player, options.keyblades_unlock_chests, "Wishing Star")
+            and state.has("White Trinity", player)
         )
     multiworld.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"                         , player).access_rule = lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests) 
-            and has_item(state, player,"Hollow Bastion") 
+            has_emblems(state, player, options.keyblades_unlock_chests)
+            and state.has("Hollow Bastion", player)
             and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Deep Jungle Defeat Sabor White Fang Event"                                    , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Defeat Clayton Cure Event"                                        , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Seal Keyhole Jungle King Event"                                   , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Seal Keyhole Red Trinity Event"                                   , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"                          , player).access_rule = lambda state: (
-            has_item(state, player, "Entry Pass")
+            state.has("Entry Pass", player)
         )
     multiworld.get_location("Olympus Coliseum Cloud Sonic Blade Event"                                     , player).access_rule = lambda state: (
-            has_item(state, player, "Entry Pass")
+            state.has("Entry Pass", player)
         )
     multiworld.get_location("Wonderland Defeat Trickmaster Blizzard Event"                                 , player).access_rule = lambda state: (
-            has_evidence(state, player)
+            state.has("Footprints", player)
         )
     multiworld.get_location("Wonderland Defeat Trickmaster Ifrit's Horn Event"                             , player).access_rule = lambda state: (
-            has_evidence(state, player)
+            state.has("Footprints", player)
         )
     multiworld.get_location("Monstro Defeat Parasite Cage II Stop Event"                                   , player).access_rule = lambda state: (
-            has_item(state, player, "High Jump")
+            state.has("High Jump", player)
             or
             (
                 options.advanced_logic
-                and can_glide(state, player)
+                and state.has("Progressive Glide", player)
             )
         )
     multiworld.get_location("Halloween Town Defeat Oogie Boogie Holy Circlet Event"                        , player).access_rule = lambda state: (
-            has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Defeat Oogie's Manor Gravity Event"                            , player).access_rule = lambda state: (
-            has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Halloween Town Seal Keyhole Pumpkinhead Event"                                , player).access_rule = lambda state: (
-            has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
+            state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
     multiworld.get_location("Neverland Defeat Anti Sora Raven's Claw Event"                                , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Encounter Hook Cure Event"                                          , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Seal Keyhole Fairy Harp Event"                                      , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Seal Keyhole Tinker Bell Event"                                     , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Seal Keyhole Glide Event"                                           , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"                              , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"                          , player).access_rule = lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests)
@@ -1321,37 +1292,37 @@ def set_rules(kh1world):
             has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Mail Postcard 01 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 1)
+            state.has("Postcard", player)
         )
     multiworld.get_location("Traverse Town Mail Postcard 02 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 2)
+            state.has("Postcard", player, 2)
         )
     multiworld.get_location("Traverse Town Mail Postcard 03 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 3)
+            state.has("Postcard", player, 3)
         )
     multiworld.get_location("Traverse Town Mail Postcard 04 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 4)
+            state.has("Postcard", player, 4)
         )
     multiworld.get_location("Traverse Town Mail Postcard 05 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 5)
+            state.has("Postcard", player, 5)
         )
     multiworld.get_location("Traverse Town Mail Postcard 06 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 6)
+            state.has("Postcard", player, 6)
         )
     multiworld.get_location("Traverse Town Mail Postcard 07 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 7)
+            state.has("Postcard", player, 7)
         )
     multiworld.get_location("Traverse Town Mail Postcard 08 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 8)
+            state.has("Postcard", player, 8)
         )
     multiworld.get_location("Traverse Town Mail Postcard 09 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 9)
+            state.has("Postcard", player, 9)
         )
     multiworld.get_location("Traverse Town Mail Postcard 10 Event"                                         , player).access_rule = lambda state: (
-            has_postcards(state, player, 10)
+            state.has("Postcard", player, 10)
         )
     multiworld.get_location("Traverse Town Defeat Opposite Armor Aero Event"                               , player).access_rule = lambda state: (
-            has_item(state, player, "Red Trinity")
+            state.has("Red Trinity", player)
         )
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"                            , player).access_rule = lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests)
@@ -1366,83 +1337,83 @@ def set_rules(kh1world):
             has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Halloween Town Defeat Oogie Boogie Ansem's Report 7"                          , player).access_rule = lambda state: (
-            has_item(state, player, "Jack-In-The-Box") 
-            and has_item(state, player, "Forget-Me-Not")
-            and has_item(state, player, "Progressive Fire")
+            state.has("Jack-In-The-Box", player)
+            and state.has("Forget-Me-Not", player)
+            and state.has("Progressive Fire", player)
         )
     multiworld.get_location("Neverland Defeat Hook Ansem's Report 9"                                       , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"                           , player).access_rule = lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 1"                             , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
-            and 
+            state.has("Monstro", player)
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 2"                             , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
-            and 
+            state.has("Monstro", player)
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 3"                             , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
-            and 
+            state.has("Monstro", player)
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 4"                             , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
-            and 
+            state.has("Monstro", player)
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto Reward 5"                             , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
-            and 
+            state.has("Monstro", player)
+            and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Geppetto All Summons Reward"                   , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
+            state.has("Monstro", player)
             and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_all_summons(state, player)
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Geppetto's House Talk to Pinocchio"                             , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
+            state.has("Monstro", player)
             and
             (
-                has_item(state, player, "High Jump")
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
             and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Magician's Study Obtained All Arts Items"                       , player).access_rule = lambda state: (
-            has_all_magic_lvx(state, player, 1) 
-            and has_all_arts(state, player) 
+            has_all_magic_lvx(state, player, 1)
+            and has_all_arts(state, player)
             and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Traverse Town Magician's Study Obtained All LV1 Magic"                        , player).access_rule = lambda state: (
@@ -1488,231 +1459,231 @@ def set_rules(kh1world):
             has_puppies(state, player, 99)
         )
     multiworld.get_location("Neverland Clock Tower 01:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 02:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 03:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 04:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 05:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 06:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 07:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 08:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 09:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 10:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 11:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Clock Tower 12:00 Door"                                             , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
-            and has_all_magic_lvx(state, player, 2) 
-            and has_defensive_tools(state, player) 
+            state.has("Green Trinity", player)
+            and has_all_magic_lvx(state, player, 2)
+            and has_defensive_tools(state, player)
             and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Neverland Hold Aero Chest"                                                    , player).access_rule = lambda state: (
-            has_item(state, player, "Yellow Trinity")
+            state.has("Yellow Trinity", player)
         )
     multiworld.get_location("Deep Jungle Camp Hi-Potion Experiment"                                        , player).access_rule = lambda state: (
-            has_item(state, player, "Progressive Fire")
+            state.has("Progressive Fire", player)
         )
     multiworld.get_location("Deep Jungle Camp Ether Experiment"                                            , player).access_rule = lambda state: (
-            has_item(state, player, "Progressive Blizzard")
+            state.has("Progressive Blizzard", player)
         )
     multiworld.get_location("Deep Jungle Camp Replication Experiment"                                      , player).access_rule = lambda state: (
-            has_item(state, player, "Progressive Blizzard")
+            state.has("Progressive Blizzard", player)
         )
     multiworld.get_location("Deep Jungle Cliff Save Gorillas"                                              , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Tree House Save Gorillas"                                         , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Camp Save Gorillas"                                               , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Bamboo Thicket Save Gorillas"                                     , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Climbing Trees Save Gorillas"                                     , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Jungle Slider 10 Fruits"                                          , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Jungle Slider 20 Fruits"                                          , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Jungle Slider 30 Fruits"                                          , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Jungle Slider 40 Fruits"                                          , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Deep Jungle Jungle Slider 50 Fruits"                                          , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: (
-            has_evidence(state, player)
+            state.has("Footprints", player)
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Green Trinity"                                , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity")
+            state.has("Green Trinity", player)
         )
     multiworld.get_location("Olympus Coliseum Coliseum Gates Hero's License Event"                         , player).access_rule = lambda state: (
-            has_item(state, player, "Entry Pass")
+            state.has("Entry Pass", player)
         )
     multiworld.get_location("Deep Jungle Cavern of Hearts Navi-G Piece Event"                              , player).access_rule = lambda state: (
-            has_slides(state, player)
+            state.has("Slides", player)
         )
     multiworld.get_location("Wonderland Bizarre Room Navi-G Piece Event"                                   , player).access_rule = lambda state: (
-            has_evidence(state, player)
+            state.has("Footprints", player)
         )
     multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: (
-            has_at_least(state, player, "Empty Bottle", 6) 
-            and 
+            state.has("Empty Bottle", player, 6)
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: (
-            has_at_least(state, player, "Empty Bottle", 6) 
-            and 
+            state.has("Empty Bottle", player, 6)
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Synth Rope"                                                     , player).access_rule = lambda state: (
-            has_at_least(state, player, "Empty Bottle", 6) 
-            and 
+            state.has("Empty Bottle", player, 6)
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Synth Seagull Egg"                                              , player).access_rule = lambda state: (
-            has_at_least(state, player, "Empty Bottle", 6) 
-            and 
+            state.has("Empty Bottle", player, 6)
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Synth Fish"                                                     , player).access_rule = lambda state: (
-            has_at_least(state, player, "Empty Bottle", 6) 
-            and 
+            state.has("Empty Bottle", player, 6)
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Synth Mushroom"                                                 , player).access_rule = lambda state: (
-            has_at_least(state, player, "Empty Bottle", 6) 
-            and 
+            state.has("Empty Bottle", player, 6)
+            and
             (
-                has_item(state, player, "Green Trinity")
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Green Trinity", player)
+                or state.has("High Jump", player, 3)
             )
         )
     multiworld.get_location("Traverse Town Gizmo Shop Postcard 1"                                          , player).access_rule = lambda state: (
-            has_item(state, player, "Progressive Thunder")
+            state.has("Progressive Thunder", player)
         )
     multiworld.get_location("Traverse Town Gizmo Shop Postcard 2"                                          , player).access_rule = lambda state: (
-            has_item(state, player, "Progressive Thunder")
+            state.has("Progressive Thunder", player)
         )
     multiworld.get_location("Traverse Town Item Workshop Postcard"                                         , player).access_rule = lambda state: (
-            has_item(state, player, "Green Trinity") 
-            or has_at_least(state, player, "High Jump", 3)
+            state.has("Green Trinity", player)
+            or state.has("High Jump", player, 3)
         )
     multiworld.get_location("Traverse Town Geppetto's House Postcard"                                      , player).access_rule = lambda state: (
-            has_item(state, player, "Monstro") 
-            and 
+            state.has("Monstro", player)
+            and
             (
-                has_item(state, player, "High Jump") 
-                or (options.advanced_logic and can_glide(state, player))
+                state.has("High Jump", player)
+                or (options.advanced_logic and state.has("Progressive Glide", player))
             )
         )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)"                            , player).access_rule = lambda state: (
             (
-                has_item(state, player, "Theon Vol. 6") 
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Theon Vol. 6", player)
+                or state.has("High Jump", player, 3)
                 or has_emblems(state, player, options.keyblades_unlock_chests)
             )
-            and has_item(state, player, "Progressive Fire")
+            and state.has("Progressive Fire", player)
             and
             (
-                has_item(state, player, "High Jump")
-                or can_glide(state, player)
-                or has_item(state, player, "Progressive Thunder")
+                state.has("High Jump", player)
+                or state.has("Progressive Glide", player)
+                or state.has("Progressive Thunder", player)
                 or options.advanced_logic
             )
         )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)"                            , player).access_rule = lambda state: (
-            has_item(state, player, "Theon Vol. 6") 
-            or has_at_least(state, player, "High Jump", 3)
+            state.has("Theon Vol. 6", player)
+            or state.has("High Jump", player, 3)
             or has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)"                           , player).access_rule = lambda state: (
             (
-                has_item(state, player, "Theon Vol. 6") 
-                or has_at_least(state, player, "High Jump", 3)
+                state.has("Theon Vol. 6", player)
+                or state.has("High Jump", player, 3)
                 or has_emblems(state, player, options.keyblades_unlock_chests)
             )
-            and has_item(state, player, "Red Trinity")
+            and state.has("Red Trinity", player)
         )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)"                         , player).access_rule = lambda state: (
-            has_item(state, player, "Theon Vol. 6") 
-            or has_at_least(state, player, "High Jump", 3)
+            state.has("Theon Vol. 6", player)
+            or state.has("High Jump", player, 3)
             or has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Library Speak to Belle Divine Rose"                            , player).access_rule = lambda state: (
@@ -1726,20 +1697,20 @@ def set_rules(kh1world):
                 has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"                             , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
                 and has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"                      , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
                 and has_keyblade(state, player, options.keyblades_unlock_chests, "Oathkeeper")
             )
@@ -1751,35 +1722,35 @@ def set_rules(kh1world):
                 has_torn_pages(state, player, 4)
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 2"                           , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 3"                           , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"                           , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"                           , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
             )
         multiworld.get_location("100 Acre Wood Pooh's House Owl Cheer"                                     , player).access_rule = lambda state: (
@@ -1807,212 +1778,208 @@ def set_rules(kh1world):
                 has_torn_pages(state, player, 4)
             )
         multiworld.get_location("100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh"        , player).access_rule = lambda state: (
-                has_torn_pages(state, player, 4) 
-                and 
+                has_torn_pages(state, player, 4)
+                and
                 (
-                    has_item(state, player, "High Jump") 
-                    or can_glide(state, player)
+                    state.has("High Jump", player)
+                    or state.has("Progressive Glide", player)
                 )
             )
     if options.atlantica:
         multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                         , player).access_rule = lambda state: (
-                has_item(state, player, "Progressive Fire")
-                and has_item(state, player, "Crystal Trident")
+                state.has("Progressive Fire", player)
+                and state.has("Crystal Trident", player)
             )
         multiworld.get_location("Atlantica Triton's Palace White Trinity Chest"                            , player).access_rule = lambda state: (
-                has_item(state, player, "White Trinity")
+                state.has("White Trinity", player)
             )
         multiworld.get_location("Atlantica Defeat Ursula I Mermaid Kick Event"                             , player).access_rule = lambda state: (
-                has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
-                and has_offensive_magic(state, player)
-                and has_item(state, player, "Crystal Trident")
+                has_offensive_magic(state, player)
+                and state.has("Crystal Trident", player)
             )
         multiworld.get_location("Atlantica Defeat Ursula II Thunder Event"                                 , player).access_rule = lambda state: (
-                has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
-                and has_item(state, player, "Mermaid Kick") 
+                state.has("Mermaid Kick", player)
                 and has_offensive_magic(state, player)
-                and has_item(state, player, "Crystal Trident")
+                and state.has("Crystal Trident", player)
             )
         multiworld.get_location("Atlantica Seal Keyhole Crabclaw Event"                                    , player).access_rule = lambda state: (
-                has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
-                and has_item(state, player, "Mermaid Kick") 
+                state.has("Mermaid Kick", player)
                 and has_offensive_magic(state, player)
-                and has_item(state, player, "Crystal Trident")
+                and state.has("Crystal Trident", player)
             )
         multiworld.get_location("Atlantica Undersea Gorge Blizzard Clam"                                   , player).access_rule = lambda state: (
-                has_item(state, player, "Progressive Blizzard")
+                state.has("Progressive Blizzard", player)
             )
         multiworld.get_location("Atlantica Undersea Valley Fire Clam"                                      , player).access_rule = lambda state: (
-                has_item(state, player, "Progressive Fire")
+                state.has("Progressive Fire", player)
             )
         multiworld.get_location("Atlantica Triton's Palace Thunder Clam"                                   , player).access_rule = lambda state: (
-                has_item(state, player, "Progressive Thunder")
+                state.has("Progressive Thunder", player)
             )
         multiworld.get_location("Atlantica Cavern Nook Clam"                                               , player).access_rule = lambda state: (
-                has_item(state, player, "Crystal Trident")
+                state.has("Crystal Trident", player)
             )
         multiworld.get_location("Atlantica Defeat Ursula II Ansem's Report 3"                              , player).access_rule = lambda state: (
-                has_keyblade(state, player, options.keyblades_unlock_chests, "Crabclaw") 
-                and has_item(state, player, "Mermaid Kick") 
+                state.has("Mermaid Kick", player)
                 and has_offensive_magic(state, player)
-                and has_item(state, player, "Crystal Trident")
+                and state.has("Crystal Trident", player)
             )
     if options.cups:
         multiworld.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"                           , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Phil Cup"                                                        , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup")
-                and has_item(state, player, "Entry Pass")
+                state.has("Phil Cup", player)
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Phil Cup Solo"                                                   , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup")
-                and has_item(state, player, "Entry Pass")
+                state.has("Phil Cup", player)
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Phil Cup Time Trial"                                             , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup")
-                and has_item(state, player, "Entry Pass")
+                state.has("Phil Cup", player)
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Pegasus Cup"                                                     , player).access_rule = lambda state: (
-                has_item(state, player, "Pegasus Cup")
-                and has_item(state, player, "Entry Pass")
+                state.has("Pegasus Cup", player)
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Pegasus Cup Solo"                                                , player).access_rule = lambda state: (
-                has_item(state, player, "Pegasus Cup")
-                and has_item(state, player, "Entry Pass")
+                state.has("Pegasus Cup", player)
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Pegasus Cup Time Trial"                                          , player).access_rule = lambda state: (
-                has_item(state, player, "Pegasus Cup")
-                and has_item(state, player, "Entry Pass")
+                state.has("Pegasus Cup", player)
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Hercules Cup"                                                    , player).access_rule = lambda state: (
-                has_item(state, player, "Hercules Cup") 
+                state.has("Hercules Cup", player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Hercules Cup Solo"                                               , player).access_rule = lambda state: (
-                has_item(state, player, "Hercules Cup") 
+                state.has("Hercules Cup", player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Hercules Cup Time Trial"                                         , player).access_rule = lambda state: (
-                has_item(state, player, "Hercules Cup") 
+                state.has("Hercules Cup", player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Hades Cup"                                                       , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Hades Cup Solo"                                                  , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Complete Hades Cup Time Trial"                                            , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hades Cup Defeat Cloud and Leon Event"                                    , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hades Cup Defeat Yuffie Event"                                            , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hades Cup Defeat Cerberus Event"                                          , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hades Cup Defeat Behemoth Event"                                          , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hades Cup Defeat Hades Event"                                             , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hercules Cup Defeat Cloud Event"                                          , player).access_rule = lambda state: (
-                has_item(state, player, "Hercules Cup") 
+                state.has("Hercules Cup", player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Hercules Cup Yellow Trinity Event"                                        , player).access_rule = lambda state: (
-                has_item(state, player, "Hercules Cup") 
+                state.has("Hercules Cup", player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"                     , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
-                and has_item(state, player, "Guard") 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                and state.has("Guard", player)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"                  , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Olympus Coliseum Olympia Chest"                                           , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
     if options.super_bosses:
         multiworld.get_location("Neverland Defeat Phantom Stop Event"                                      , player).access_rule = lambda state: (
-                has_item(state, player, "Green Trinity") 
-                and has_all_magic_lvx(state, player, 2) 
-                and has_defensive_tools(state, player) 
+                state.has("Green Trinity", player)
+                and has_all_magic_lvx(state, player, 2)
+                and has_defensive_tools(state, player)
                 and has_emblems(state, player, options.keyblades_unlock_chests)
             )
         multiworld.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"                               , player).access_rule = lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             )
         multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: (
@@ -2020,29 +1987,29 @@ def set_rules(kh1world):
             )
     if options.super_bosses or options.goal.current_key == "sephiroth":
         multiworld.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"                      , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
         multiworld.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"                 , player).access_rule = lambda state: (
-                has_item(state, player, "Phil Cup") 
-                and has_item(state, player, "Pegasus Cup") 
-                and has_item(state, player, "Hercules Cup") 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                state.has("Phil Cup", player)
+                and state.has("Pegasus Cup", player)
+                and state.has("Hercules Cup", player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and has_item(state, player, "Entry Pass")
+                and state.has("Entry Pass", player)
             )
     if options.super_bosses or options.goal.current_key == "unknown":
         multiworld.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"                          , player).access_rule = lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) 
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             )
         multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) 
+                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             )
     for i in range(options.level_checks):
@@ -2054,17 +2021,17 @@ def set_rules(kh1world):
                 has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_reports, options.keyblades_unlock_chests)
             )
 
-    multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Olympus Coliseum"                                                             , player).access_rule = lambda state: has_item(state, player,"Olympus Coliseum") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Deep Jungle"                                                                  , player).access_rule = lambda state: has_item(state, player,"Deep Jungle") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Agrabah"                                                                      , player).access_rule = lambda state: has_item(state, player,"Agrabah") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Monstro"                                                                      , player).access_rule = lambda state: has_item(state, player,"Monstro") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: state.has("Wonderland", player)       and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Olympus Coliseum"                                                             , player).access_rule = lambda state: state.has("Olympus Coliseum", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Deep Jungle"                                                                  , player).access_rule = lambda state: state.has("Deep Jungle", player)      and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Agrabah"                                                                      , player).access_rule = lambda state: state.has("Agrabah", player)          and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Monstro"                                                                      , player).access_rule = lambda state: state.has("Monstro", player)          and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
     if options.atlantica:
-        multiworld.get_entrance("Atlantica"                                                                , player).access_rule = lambda state: has_item(state, player,"Atlantica") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: has_item(state, player,"Halloween Town") and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 3, options.keyblades_unlock_chests)
-    multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
-    multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and (has_reports(state, player, eotw_required_reports) or has_item(state, player,"End of the World"))
-    multiworld.get_entrance("100 Acre Wood"                                                                , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
+        multiworld.get_entrance("Atlantica"                                                                , player).access_rule = lambda state: state.has("Atlantica", player)        and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: state.has("Halloween Town", player)   and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: state.has("Neverland", player)        and has_x_worlds(state, player, 3, options.keyblades_unlock_chests)
+    multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: state.has("Hollow Bastion", player)   and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
+    multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and (has_reports(state, player, eotw_required_reports) or state.has("End of the World", player))
+    multiworld.get_entrance("100 Acre Wood"                                                                , player).access_rule = lambda state: state.has("Progressive Fire", player)
 
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

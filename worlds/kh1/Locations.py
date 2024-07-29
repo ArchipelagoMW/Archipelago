@@ -11,7 +11,7 @@ class KH1Location(Location):
 
 class KH1LocationData(NamedTuple):
     category: str
-    code: Optional[int] = None
+    code: int
 
 
 def get_locations_by_category(category: str) -> Dict[str, KH1LocationData]:
