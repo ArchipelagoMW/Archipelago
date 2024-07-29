@@ -75,7 +75,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_prologue_missions': False,
             'enable_lotv_missions': False,
             'enable_epilogue_missions': False,
-            'mission_order': options.MissionOrder.option_mini_campaign,
+            'mission_order': options.MissionOrder.option_vanilla_shuffled,
             'excluded_items': {
                 item_groups.ItemGroupNames.TERRAN_ITEMS: 0,
             },
