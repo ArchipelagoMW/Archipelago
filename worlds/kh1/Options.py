@@ -321,7 +321,7 @@ class InteractInBattle(Toggle):
 
 class AdvancedLogic(Toggle):
     """
-    If on, logic may expect you to do advanced skips like combo master, dumbo, and other unusual methods for reaching locations.
+    If on, logic may expect you to do advanced skips like using Combo Master, Dumbo, and other unusual methods to reach locations.
     """
     display_name = "Advanced Logic"
 
