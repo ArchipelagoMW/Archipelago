@@ -504,6 +504,11 @@ class ValidInventory:
         if not INF_TERRAN_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.INFESTED_SCV_BUILD_CHARGES]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.INFESTED_SCV_BUILD_CHARGES]
+        if item_names.ULTRALISK not in logical_inventory_set and not enable_morphling:
+            inventory = [item for item in inventory if item.name != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
         # LotV
         # Shared unit upgrades between several units
         if not {item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER} & logical_inventory_set:

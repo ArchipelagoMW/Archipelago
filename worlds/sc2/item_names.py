@@ -466,6 +466,10 @@ INFESTED_MARINE_RETINAL_AUGMENTATION    = "Retinal Augmentation (Infested Marine
 INFESTED_BUNKER_CALCIFIED_ARMOR         = "Calcified Armor (Infested Bunker)"
 INFESTED_BUNKER_REGENERATIVE_PLATING    = "Regenerative Plating (Infested Bunker)"
 INFESTED_BUNKER_ENGORGED_BUNKERS        = "Engorged Bunkers (Infested Bunker)"
+TYRANNOZOR_BARRAGE_OF_SPIKES            = "Barrage of Spikes (Tyrannozor)"
+TYRANNOZOR_TYRANTS_PROTECTION           = "Tyrant's Protection (Tyrannozor)"
+TYRANNOZOR_HEALING_ADAPTATION           = "Healing Adaptation (Ultralisk/Tyrannozor)"
+TYRANNOZOR_IMPALING_STRIKE              = "Impaling Strike (Ultralisk/Tyrannozor)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
@@ -490,6 +494,7 @@ MUTALISK_CORRUPTOR_DEVOURER_ASPECT      = "Devourer Aspect (Mutalisk/Corruptor)"
 ROACH_RAVAGER_ASPECT                    = "Ravager Aspect (Roach)"
 OVERLORD_OVERSEER_ASPECT                = "Overseer Aspect (Overlord)"
 ROACH_PRIMAL_IGNITER_ASPECT             = "Primal Igniter Aspect (Roach)"
+ULTRALISK_TYRANNOZOR_ASPECT             = "Tyrannozor Aspect (Ultralisk)"
 
 # Zerg Mercs
 INFESTED_MEDICS      = "Infested Medics"

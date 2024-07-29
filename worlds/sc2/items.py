@@ -80,7 +80,7 @@ class ProtossItemType(ItemTypeEnum):
     """General Protoss unit upgrades"""
     War_Council = "War Council", 10
     War_Council_2 = "War Council", 11
-    
+
 
 class FactionlessItemType(ItemTypeEnum):
     Minerals = "Minerals", 0
@@ -1452,6 +1452,19 @@ item_table = {
         ItemData(313 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 13, SC2Race.ZERG, parent_item=item_names.ULTRALISK,
                  origin={"hots"}),
 
+    item_names.TYRANNOZOR_TYRANTS_PROTECTION:
+        ItemData(350 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 8, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+                 origin={"ext"}),
+    item_names.TYRANNOZOR_BARRAGE_OF_SPIKES:
+        ItemData(351 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 9, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+                 origin={"ext"}),
+    item_names.TYRANNOZOR_IMPALING_STRIKE:
+        ItemData(352 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 10, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+                 origin={"ext"}),
+    item_names.TYRANNOZOR_HEALING_ADAPTATION:
+        ItemData(353 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 11, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+                 origin={"ext"}),
+
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_LEAPING_STRIKE: ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 2, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
@@ -1508,6 +1521,7 @@ item_table = {
     item_names.ROACH_RAVAGER_ASPECT: ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 8, SC2Race.ZERG, origin={"ext"}),
     item_names.OVERLORD_OVERSEER_ASPECT: ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 4, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: ItemData(804 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 9, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
+    item_names.ULTRALISK_TYRANNOZOR_ASPECT: ItemData(805 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 10, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
 
 
     # Protoss Units (those that aren't as items in WoL (Prophecy))
