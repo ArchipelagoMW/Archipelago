@@ -220,7 +220,7 @@ item_descriptions = {
     item_names.GOLIATH_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Goliaths", "Factory"),
     item_names.SIEGE_TANK_SHAPED_HULL: "Increases Siege Tank life by 25.",
     item_names.SIEGE_TANK_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SIEGE_TANK),
-    item_names.PREDATOR_CLOAK: CLOAK_DESCRIPTION_TEMPLATE.format("Predators"),
+    item_names.PREDATOR_CLOAK: "Allows Predators to briefly cloak. Predators ignore unit collision while cloaked.",
     item_names.PREDATOR_CHARGE: "Allows Predators to intercept enemy ground units.",
     item_names.MEDIVAC_SCATTER_VEIL: "Medivacs get 100 shields.",
     item_names.REAPER_PROGRESSIVE_STIMPACK: STIMPACK_SMALL_DESCRIPTION,
@@ -438,7 +438,8 @@ item_descriptions = {
     item_names.PLANETARY_FORTRESS_ADVANCED_TARGETING: "Planetary Fortress can attack air units.",
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
     item_names.VALKYRIE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.VALKYRIE),
-    item_names.PREDATOR_PREDATOR_S_FURY: "Predators can use an attack that jumps between targets.",
+    item_names.PREDATOR_PREDATOR_S_FURY: "Predators build up bonus attack speed out of combat, which is consumed over their first few attacks.",
+    item_names.PREDATOR_ADAPTIVE_DEFENSES: "Predators generate a temporary shield when they deal damage.",
     item_names.BATTLECRUISER_BEHEMOTH_PLATING: "Increases Battlecruiser armor by 2.",
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES: "Increases Battlecruiser movement speed.",
     item_names.PLANETARY_FORTRESS_ORBITAL_MODULE: inspect.cleandoc("""
