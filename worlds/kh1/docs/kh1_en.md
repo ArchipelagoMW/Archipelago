@@ -1,6 +1,6 @@
 # Kingdom Hearts Randomizer Setup Guide
 
-##Setting up the required mods
+## Setting up the required mods
 
 BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
 
