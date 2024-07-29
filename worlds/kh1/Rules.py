@@ -662,19 +662,19 @@ def set_rules(kh1world):
                 or options.advanced_logic
             )
         )
-    multiworld.get_location("Halloween Town Cemetary Behind Grave Chest"                                   , player).access_rule = lambda state: (
+    multiworld.get_location("Halloween Town Cemetery Behind Grave Chest"                                   , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
             and state.has("Jack-In-The-Box", player)
             and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
-    multiworld.get_location("Halloween Town Cemetary By Cat Shape Chest"                                   , player).access_rule = lambda state: (
+    multiworld.get_location("Halloween Town Cemetery By Cat Shape Chest"                                   , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
             and state.has("Jack-In-The-Box", player)
             and state.has("Forget-Me-Not", player)
             and has_oogie_manor(state, player, options.advanced_logic)
         )
-    multiworld.get_location("Halloween Town Cemetary Between Graves Chest"                                 , player).access_rule = lambda state: (
+    multiworld.get_location("Halloween Town Cemetery Between Graves Chest"                                 , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
             and state.has("Jack-In-The-Box", player)
             and state.has("Forget-Me-Not", player)
@@ -748,7 +748,7 @@ def set_rules(kh1world):
                 or options.advanced_logic
             )
         )
-    multiworld.get_location("Halloween Town Cemetary By Striped Grave Chest"                               , player).access_rule = lambda state: (
+    multiworld.get_location("Halloween Town Cemetery By Striped Grave Chest"                               , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Pumpkinhead")
             and state.has("Jack-In-The-Box", player)
             and state.has("Forget-Me-Not", player)
