@@ -97,7 +97,7 @@ class KH1World(World):
                 starting_level_for_stats_only += 1
         
         #Calculate prefilled locations and items
-        if True: #Allow notepad++ to collpase this section
+        if True: #Allow notepad++ to collapse this section
             prefilled_items = []
             prefilled_locations = 1 #Victory
             if self.options.junk_in_missable_locations:
