@@ -153,7 +153,7 @@ class FinalRestDoor(Choice):
 
 class Puppies(Choice):
     """
-    Determines how dalmation puppies are shuffled into the pool.
+    Determines how dalmatian puppies are shuffled into the pool.
     Full: All puppies are in one location
     Triplets: Puppies are found in triplets just as they are in the base game
     Individual: One puppy can be found per location
