@@ -203,6 +203,11 @@ class PlayerColorZergPrimal(ColorChoice):
     display_name = "Zerg Player Color (Primal)"
 
 
+class PlayerColorNova(ColorChoice):
+    """Determines in-game team color for playable Zerg factions after Kerrigan becomes Primal Kerrigan."""
+    display_name = "Terran Player Color (Nova)"
+
+
 class EnableWolMissions(DefaultOnToggle):
     """
     Enables missions from main Wings of Liberty campaign.
@@ -930,7 +935,6 @@ class StartingSupplyPerItem(Range):
 
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
-    selected_races: SelectRaces
     game_difficulty: GameDifficulty
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera
@@ -943,6 +947,7 @@ class Starcraft2Options(PerGameCommonOptions):
     player_color_protoss: PlayerColorProtoss
     player_color_zerg: PlayerColorZerg
     player_color_zerg_primal: PlayerColorZergPrimal
+    player_color_nova: PlayerColorNova
     selected_races: SelectRaces
     enable_wol_missions: EnableWolMissions
     enable_prophecy_missions: EnableProphecyMissions

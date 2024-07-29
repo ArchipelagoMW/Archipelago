@@ -606,28 +606,34 @@ class SC2Logic:
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
 
     def protoss_anti_light_anti_air(self, state: CollectionState) -> bool:
-        return self.protoss_competent_anti_air(state) \
+        return (
+            self.protoss_competent_anti_air(state)
             or state.has_any({
-                item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER, item_names.CORSAIR, item_names.CARRIER,
+                item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER,
             }, self.player)
+            or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
+        )
 
     def protoss_competent_anti_air(self, state: CollectionState) -> bool:
-        return state.has_any({
-            item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
-            item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.SKYLORD, item_names.PURGER
-        }, self.player) \
-            or (
+        return (
+            state.has_any({
+                item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
+                item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.SKYLORD, item_names.PURGER
+            }, self.player)
+            or ((
                     state.has_any({
-                        item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER,
-                        item_names.CORSAIR, item_names.CARRIER,
+                        item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER,
                     }, self.player)
-                    and state.has_any({
-                        item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY
-                    }, self.player)
-            ) \
+                    or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
+                )
+                and state.has_any({
+                    item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY
+                }, self.player)
+            )
             or (self.advanced_tactics
                 and state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
+        )
 
     def protoss_has_blink(self, state: CollectionState) -> bool:
         return state.has_any({item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER}, self.player) \

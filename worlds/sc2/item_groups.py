@@ -113,6 +113,7 @@ class ItemGroupNames:
     ZERG_GENERIC_UPGRADES = "Zerg Generic Upgrades"
     """+attack/armour upgrades"""
     HOTS_UNITS = "HotS Units"
+    HOTS_BUILDINGS = "HotS Buildings"
     HOTS_STRAINS = "HotS Strains"
     """Vanilla HotS strains (the upgrades you play a mini-mission for)"""
     HOTS_MUTATIONS = "HotS Mutations"
@@ -134,6 +135,10 @@ class ItemGroupNames:
     ZERG_MORPHS = "Zerg Morphs"
     ZERG_MERCS = "Zerg Mercenaries"
     ZERG_BUILDINGS = "Zerg Buildings"
+    INF_TERRAN_ITEMS = "Infested Terran Items"
+    """All items from Stukov co-op subfaction"""
+    INF_TERRAN_UNITS = "Infested Terran Units"
+    INF_TERRAN_UPGRADES = "Infested Terran Upgrades"
 
     PROTOSS_ITEMS = "Protoss Items"
     PROTOSS_UNITS = "Protoss Units"
@@ -381,7 +386,10 @@ item_name_groups[ItemGroupNames.ZERG_ITEMS] = zerg_items = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.race == SC2Race.ZERG
 ]
-item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [item_names.SPINE_CRAWLER, item_names.SPORE_CRAWLER]
+item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [
+    item_names.SPINE_CRAWLER,
+    item_names.SPORE_CRAWLER,
+    item_names.INFESTED_BUNKER]
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type in (items.ZergItemType.Unit, items.ZergItemType.Mercenary, items.ZergItemType.Morph)
@@ -400,6 +408,10 @@ item_name_groups[ItemGroupNames.HOTS_UNITS] = hots_units = [
     item_names.HYDRALISK_IMPALER_ASPECT,
     item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
     item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
+]
+item_name_groups[ItemGroupNames.HOTS_BUILDINGS] = hots_buildings = [
+    item_names.SPINE_CRAWLER,
+    item_names.SPORE_CRAWLER,
 ]
 item_name_groups[ItemGroupNames.HOTS_MORPHS] = hots_morphs = [
     item_names.ZERGLING_BANELING_ASPECT,
@@ -474,7 +486,7 @@ item_name_groups[ItemGroupNames.HOTS_GLOBAL_UPGRADES] = hots_global_upgrades = [
 ]
 item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
     hots_units
-    + zerg_buildings
+    + hots_buildings
     + kerrigan_abilities
     + hots_mutations
     + hots_strains
@@ -482,6 +494,22 @@ item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
     + zerg_generic_upgrades
 )
 
+# Zerg - Infested Terran (Stukov Co-op)
+item_name_groups[ItemGroupNames.INF_TERRAN_UNITS] = infterr_units = [
+    item_names.INFESTED_MARINE,
+    item_names.INFESTED_BUNKER]
+item_name_groups[ItemGroupNames.INF_TERRAN_UPGRADES] = infterr_upgrades = [
+    item_names.INFESTED_SCV_BUILD_CHARGES,
+    item_names.INFESTED_MARINE_PLAGUED_MUNITIONS,
+    item_names.INFESTED_MARINE_RETINAL_AUGMENTATION,
+    item_names.INFESTED_BUNKER_CALCIFIED_ARMOR,
+    item_names.INFESTED_BUNKER_REGENERATIVE_PLATING,
+    item_names.INFESTED_BUNKER_ENGORGED_BUNKERS
+]
+item_name_groups[ItemGroupNames.INF_TERRAN_ITEMS] = (
+    infterr_units
+    + infterr_upgrades
+)
 
 # Protoss
 item_name_groups[ItemGroupNames.PROTOSS_ITEMS] = protoss_items = [
@@ -590,5 +618,6 @@ item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
 )
 
 item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
-    item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ProtossItemType.War_Council
+    item_name for item_name, item_data in items.item_table.items()
+    if item_data.type in (items.ProtossItemType.War_Council, items.ProtossItemType.War_Council_2)
 ]
