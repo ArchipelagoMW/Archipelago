@@ -51,4 +51,4 @@ you can customize your settings by visiting the [Kingdom Hearts Options Page](/g
 
 For first-time players, it is recommended to open your KH1 Client first before opening the game.
 
-On the title screen, open your KH1 Client and connect to your MultiServer.
+On the title screen, open your KH1 Client and connect to your multiworld.
