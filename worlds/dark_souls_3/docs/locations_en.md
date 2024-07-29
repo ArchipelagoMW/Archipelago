@@ -43,7 +43,7 @@ at once:
 * **Progression:** Locations that contain items in vanilla which unlock other
   locations.
 
-* **Boss rewards:** Boss drops. Does not include soul transfusions or shop
+* **Boss Rewards:** Boss drops. Does not include soul transfusions or shop
   items.
 
 * **Miniboss Rewards:** Miniboss drops. Minibosses are large enemies that don't
