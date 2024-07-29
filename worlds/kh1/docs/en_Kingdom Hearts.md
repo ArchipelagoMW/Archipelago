@@ -44,7 +44,7 @@ Any weapon, accessory, spell, trinity, summon, world, key item, stat up, consuma
 
 ###Locations
 
-Locations the player can find items include chests, event rewards, Atlantica clams, level up rewards, 101 Dalmation rewards, and postcard rewards.
+Locations the player can find items include chests, event rewards, Atlantica clams, level up rewards, 101 Dalmatian rewards, and postcard rewards.
 
 ## Which items can be in another player's world?
 
