@@ -1104,7 +1104,7 @@ arctic_docks: typing.List[LocationData] = [
     LocationData("Arctic Docks - Small Pile of Gold (Dif. 2)", 88870439, 2),
     LocationData("Arctic Docks - Fire Shield", 88870440, 1),
     LocationData("Arctic Docks - Key 1", 88870441, 1),
-    LocationData("Arctic Docks - Drumstick", 88870442, 1),
+    LocationData("Arctic Docks - Meat", 88870442, 1),
     LocationData("Arctic Docks - Light Potion 3 (Dif. 2)", 88870443, 2),
     LocationData("Arctic Docks - Runestone", 88870444, 1),
     LocationData("Arctic Docks - Key 2", 88870445, 1),
@@ -1623,7 +1623,7 @@ battle_trenches: typing.List[LocationData] = [
 ]
 
 battle_towers: typing.List[LocationData] = [
-    LocationData("Battle Towers - Ham (Dif. 3)", 88870560, 3),
+    LocationData("Battle Towers - Meat (Dif. 3)", 88870560, 3),
     LocationData("Battle Towers - Key 1", 88870561, 1),
     LocationData("Battle Towers - Large Pile of Gold (Dif. 3)", 88870562, 3),
     LocationData("Battle Towers - Small Pile of Gold (Dif. 2)", 88870563, 2),
