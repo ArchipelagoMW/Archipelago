@@ -121,7 +121,7 @@ def has_keyblade(state: CollectionState, player: int, keyblade_required: bool, i
 def can_dumbo_skip(state: CollectionState, player: int) -> bool:
     return (
             state.has("Dumbo", player) 
-            and state.has_group("Magic", player, 1)
+            and state.has_group("Magic", player)
         )
 
 def has_oogie_manor(state: CollectionState, player: int, advanced_logic: bool) -> bool:
