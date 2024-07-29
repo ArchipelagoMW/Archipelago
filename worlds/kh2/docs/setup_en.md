@@ -5,7 +5,7 @@
 - [Player Options Page](../../../../games/Kingdom%20Hearts%202/player-options)
 
 <h2 style="text-transform:none";>Required Software:</h2>
- `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts)
+ `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)<br>
     1. `3.2.0 OpenKH Mod Manager with Panacea`<br>
     2. `Lua Backend from the OpenKH Mod Manager`
