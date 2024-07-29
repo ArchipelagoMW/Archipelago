@@ -18,7 +18,7 @@ from Utils import is_windows, messagebox, tuplize_version
 MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
 
 
-def launch_game() -> None:
+def launch_game(*args) -> None:
     """Check the game installation, then launch it"""
     def courier_installed() -> bool:
         """Check if Courier is installed"""
@@ -154,7 +154,7 @@ def launch_game() -> None:
 
     parser = argparse.ArgumentParser(description="Messenger Client Launcher")
     parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     if not is_windows:
         if args.url:
             open_file(f"steam://rungameid/764790//{args.url}/")

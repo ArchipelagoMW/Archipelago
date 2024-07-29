@@ -108,7 +108,7 @@ components.extend([
 ])
 
 
-def handle_uri(path: str) -> Tuple[Union[None, str], Union[None, Component]]:
+def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
     client_component = None
@@ -138,20 +138,14 @@ def handle_uri(path: str) -> Tuple[Union[None, str], Union[None, Component]]:
 
             text_client_button = Button(
                 text=text_client_component.display_name,
-                on_release=lambda *args: launch(get_exe(text_client_component), True)
+                on_release=lambda *args: run_component(text_client_component, *launch_args)
             )
             button_row.add_widget(text_client_button)
 
             if client_component is not None:
-                def launch_component(*args) -> None:
-                    if client_component.func:
-                        client_component.func()
-                    else:
-                        launch(get_exe(client_component), True)
-
                 game_client_button = Button(
                     text=client_component.display_name,
-                    on_release=launch_component
+                    on_release=lambda *args: run_component(client_component, *launch_args)
                 )
                 button_row.add_widget(game_client_button)
 
@@ -161,15 +155,10 @@ def handle_uri(path: str) -> Tuple[Union[None, str], Union[None, Component]]:
 
     Popup().run()
 
-    # prevents launcher from trying to start up its gui
-    return path, None
-
 
 def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
     if path is None:
         return None, None
-    if path.startswith("archipelago://"):
-        return handle_uri(path)
     for component in components:
         if component.handles_file(path):
             return path, component
@@ -359,14 +348,18 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif not args:
         args = {}
 
-    if args.get("Patch|Game|Component", None) is not None:
-        file, component = identify(args["Patch|Game|Component"])
+    path = args.get("Patch|Game|Component|url", None)
+    if path is not None:
+        if path.startswith("archipelago://"):
+            handle_uri(path, args.get("args", ()))
+            return
+        file, component = identify(path)
         if file:
             args['file'] = file
         if component:
             args['component'] = component
         if not component:
-            logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
+            logging.warning(f"Could not identify Component responsible for {path}")
 
     if args["update_settings"]:
         update_settings()
@@ -386,8 +379,9 @@ if __name__ == '__main__':
     run_group = parser.add_argument_group("Run")
     run_group.add_argument("--update_settings", action="store_true",
                            help="Update host.yaml and exit.")
-    run_group.add_argument("Patch|Game|Component", type=str, nargs="?",
-                           help="Pass either a patch file, a generated game or the name of a component to run.")
+    run_group.add_argument("Patch|Game|Component|url", type=str, nargs="?",
+                           help="Pass either a patch file, a generated game, the component name to run, or a url to "
+                                "connect with.")
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
     main(parser.parse_args())
