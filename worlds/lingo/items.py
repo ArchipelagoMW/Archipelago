@@ -3,7 +3,7 @@ from typing import Dict, List, NamedTuple, Set
 
 from BaseClasses import Item, ItemClassification
 from .static_logic import DOORS_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, get_door_item_id, \
-    get_progressive_item_id, get_special_item_id
+    get_progressive_item_id, get_special_item_id, PANEL_DOORS_BY_ROOM, get_panel_door_item_id, get_panel_group_item_id
 
 
 class ItemType(Enum):
@@ -64,6 +64,21 @@ def load_item_data():
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
                                          ItemClassification.progression, ItemType.NORMAL, True, [])
         ITEMS_BY_GROUP.setdefault("Doors", []).append(group)
+
+    panel_groups: Set[str] = set()
+    for room_name, panel_doors in PANEL_DOORS_BY_ROOM.items():
+        for panel_door_name, panel_door in panel_doors.items():
+            if panel_door.panel_group is not None:
+                panel_groups.add(panel_door.panel_group)
+
+            ALL_ITEM_TABLE[panel_door.item_name] = ItemData(get_panel_door_item_id(room_name, panel_door_name),
+                                                            ItemClassification.progression, ItemType.NORMAL, False, [])
+            ITEMS_BY_GROUP.setdefault("Panels", []).append(panel_door.item_name)
+
+    for group in panel_groups:
+        ALL_ITEM_TABLE[group] = ItemData(get_panel_group_item_id(group), ItemClassification.progression,
+                                         ItemType.NORMAL, False, [])
+        ITEMS_BY_GROUP.setdefault("Panels", []).append(group)
 
     special_items: Dict[str, ItemClassification] = {
         ":)":                        ItemClassification.filler,
