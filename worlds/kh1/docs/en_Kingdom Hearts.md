@@ -1,6 +1,6 @@
 # Kingdom Hearts (PC)
 
-##Credits
+## Credits
 This is a collaborative effort from several individuals in the Kingdom Hearts community, but most of all, denhonator.
 
 Denho's original KH rando laid the foundation for the work here and makes everything here possible, so thank you Denho for such a blast of a randomizer.
