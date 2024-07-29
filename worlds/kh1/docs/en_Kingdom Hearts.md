@@ -15,11 +15,11 @@ The default goal is to enter End of the World and defeat Final Ansem.
 
 ## What items and locations get shuffled?
 
-###Items
+### Items
 
 Any weapon, accessory, spell, trinity, summon, world, key item, stat up, consumable, or ability can be found in any location.
 
-###Locations
+### Locations
 
 Locations the player can find items include chests, event rewards, Atlantica clams, level up rewards, 101 Dalmatian rewards, and postcard rewards.
 
