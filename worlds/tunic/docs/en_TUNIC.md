@@ -53,6 +53,7 @@ You can also use the Universal Tracker (by Faris and qwint) to find a complete l
 ## What should I know regarding logic?
 In general:
 - Nighttime is not considered in logic. Every check in the game is obtainable during the day.
+- Bushes are not considered in logic. It is assumed that the player will find a way past them, whether it is with a sword, a bomb, fire, luring an enemy, etc. There is also an option in the in-game randomizer settings menu to clear some of the early bushes.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
 
@@ -64,11 +65,8 @@ For the Entrance Randomizer:
 - The portal in the trophy room of the Old House is active from the start.
 - The elevator in Cathedral is immediately usable without activating the fuse. Activating the fuse does nothing.
 
-## What item groups are there?
-Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
-
-## What location groups are there?
-Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), shop, bosses (for the bosses with checks associated with them), hero relic (for the 6 hero grave checks), and ladders (for the ladder items when you have shuffle ladders enabled).
+## Does this game have item and location groups?
+Yes! To find what they are, open up the Archipelago Text Client while connected to a TUNIC session and type in `/item_groups` or `/location_groups`.
 
 ## Is Connection Plando supported?
 Yes. The host needs to enable it in their `host.yaml`, and the player's yaml needs to contain a plando_connections block.
@@ -84,8 +82,13 @@ Notes:
 - The Entrance Randomizer option must be enabled for it to work.
 - The `direction` field is not supported. Connections are always coupled.
 - For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
-- There is no limit to the number of Shops hard-coded into place.
+- There is no limit to the number of Shops you can plando.
 - If you have more than one shop in a scene, you may be wrong warped when exiting a shop.
 - If you have a shop in every scene, and you have an odd number of shops, it will error out.
 
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
+
+## Is there anything else I should know?
+You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
+You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
+You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
