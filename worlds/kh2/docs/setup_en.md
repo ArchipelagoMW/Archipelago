@@ -83,7 +83,7 @@ Have any questions on what's in logic? This spreadsheet made by Bulcon has the a
 - Why did I not load into the correct visit?
     - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
-    - Currently the `only` supported versions are `Epic Games Version 1.0.0.9_WW` and `Steam Version Build Version 14716933` .
+    - Currently the `only` supported versions are `Epic Games Version 1.0.0.9_WW` and `Steam Build Version 14716933` .
 - Why am I getting wallpapered while going into a world for the first time?
   - Your `Lua Backend` was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
 - Why am I not getting magic?
