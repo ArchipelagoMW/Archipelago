@@ -100,8 +100,6 @@ class KH1World(World):
         if True: #Allow notepad++ to collapse this section
             prefilled_items = []
             prefilled_locations = 1 #Victory
-            if self.options.junk_in_missable_locations:
-                prefilled_locations = prefilled_locations + 15
             if self.options.vanilla_emblem_pieces:
                 prefilled_locations = prefilled_locations + 4
                 prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
