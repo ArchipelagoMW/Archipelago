@@ -85,4 +85,4 @@ Find `Theon Vol. 6` in the multiworld.
 
 ##How do I enter the End of the World?
 
-You can enter End of the World by obtaining a number of Ansem's Reports or by finding `End of the World` in the multiworld, depending on your settings.
+You can enter End of the World by obtaining a number of Ansem's Reports or by finding `End of the World` in the multiworld, depending on your options.
