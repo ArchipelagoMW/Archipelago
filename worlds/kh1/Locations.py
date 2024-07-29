@@ -580,7 +580,6 @@ event_location_table: Dict[str, KH1LocationData] = {}
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
 
-location_name_groups: Dict[str, Set[str]]
 
 #Make location categories
 location_name_groups: Dict[str, Set[str]] = {}
