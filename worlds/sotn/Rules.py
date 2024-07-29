@@ -1159,7 +1159,6 @@ def set_rules_limited(world: MultiWorld, player: int, options: dict) -> None:
     goal = options["goal"]
     talisman = options["talisman"]
     tt = options["tt"]
-    required_talisman = int((talisman / 100) * tt)
 
     # Dracula rule already on Reverse Center Cube region
     if goal == 0 or goal == 2:
@@ -1359,6 +1358,14 @@ def set_rules_limited(world: MultiWorld, player: int, options: dict) -> None:
 
     location = world.get_location("NO3 - Jewel sword", player)
     set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player))
+
+    if esanity and rules == 2:
+        location = world.get_location("Enemysanity: 84 - Gurkha", player)
+        set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
+
+    if dsanity and rules == 2:
+        location = world.get_location("Dropsanity: 84 - Gurkha", player)
+        set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
 
     if no4:
         # With backdoor open, every item beyond waterfall need some kinda of flying or jewel + regular need
