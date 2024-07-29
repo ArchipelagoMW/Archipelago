@@ -1,4 +1,4 @@
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import CollectionState
 
 SINGLE_PUPPIES = []
 for i in range(1,100):
