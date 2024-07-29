@@ -7,7 +7,7 @@ Denho's original KH rando laid the foundation for the work here and makes everyt
 
 Other credits include:
 
-Sonicshadowsilver2 for their work finding many memory addresses, working to idenitify and resolve bugs, and coverting the code base to the latest EGS update.
+Sonicshadowsilver2 for their work finding many memory addresses, working to identify and resolve bugs, and converting the code base to the latest EGS update.
 
 Shananas and the rest of the OpenKH team for providing such an amazing tool for us to utilize on this project.
 
