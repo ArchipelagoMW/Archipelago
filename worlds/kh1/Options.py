@@ -94,7 +94,7 @@ class Atlantica(Toggle):
 
 class HundredAcreWood(Toggle):
     """
-    Toggle whether to include checks in the 100 Acre Wood
+    Toggle whether to include checks in the 100 Acre Wood.
     """
     display_name = "100 Acre Wood"
 
