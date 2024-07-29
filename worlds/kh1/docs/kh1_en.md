@@ -24,7 +24,7 @@ BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
     
 2. Open `OpenKh.Tools.ModsManager.exe`
 
-3. Click the drop down menu at the top-right and choose `Kingdom Hearts 1`
+3. Click the drop-down menu at the top-right and choose `Kingdom Hearts 1`
 
 4. Click `Mods>Install a New Mod`
 
