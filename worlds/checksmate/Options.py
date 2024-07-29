@@ -106,12 +106,12 @@ class EnemyPieceTypes(Choice):
     """
     When you start a new match, chooses the CPU's piece types (such as whether a minor piece is a Knight or Bishop).
 
-    Chaos: Chooses random valid options.
+    Chaos: Chooses random valid options. NOT IMPLEMENTED.
 
     Stable: As Chaos, but doesn't change between matches. You'll only ever add pieces. NOT IMPLEMENTED.
 
     Book: Uses the standard Chess army. Adds pieces inward, then kingside. For example, minor pieces are added in order
-    of the King's Bishop, then both Knights, then a Bishop. NOT IMPLEMENTED.
+    of the King's Bishop, then both Knights, then a Bishop.
     """
     display_name = "Enemy Piece Types"
     # option_chaos = 0
@@ -225,7 +225,7 @@ class FairyChessPieceCollection(Choice):
     default = 0
 
 
-class FairyChessPieces(OptionSet):
+class FairyChessPieceCollectionConfigure(OptionSet):
     """
     THIS OPTION IS INCOMPATIBLE WITH FairyChessPieceCollection. Set that option to "Configure" to use this option.
 
@@ -247,7 +247,7 @@ class FairyChessPieces(OptionSet):
     Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0). (The Knight is a 2,1
     leaper.)
     """
-    display_name = "Fairy Chess Pieces"
+    display_name = "Fairy Chess Piece Collection Configure"
     valid_keys = frozenset([
         "FIDE",
         "Rookies",
@@ -400,7 +400,7 @@ class CMOptions(PerGameCommonOptions):
     max_kings: MaximumKings
     fairy_kings: FairyKings
     fairy_chess_piece_collection: FairyChessPieceCollection
-    fairy_chess_pieces: FairyChessPieces
+    fairy_chess_piece_collection_configure: FairyChessPieceCollectionConfigure
     fairy_chess_army: FairyChessArmy
     fairy_chess_pawns: FairyChessPawns
     minor_piece_limit_by_type: MinorPieceLimitByType

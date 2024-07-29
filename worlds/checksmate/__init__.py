@@ -85,11 +85,11 @@ class CMWorld(World):
         elif piece_collection == self.options.fairy_chess_piece_collection.option_full:
             army_options = [0, 1, 2, 3, 4, 5]
         elif piece_collection == self.options.fairy_chess_piece_collection.option_configure:
-            which_pieces = self.options.fairy_chess_pieces
+            which_pieces = self.options.fairy_chess_piece_collection_configure
             # TODO: I am not ok with this
             if (which_pieces.value is None or which_pieces.value == 'None' or
                     None in which_pieces.value or 'None' in which_pieces.value):
-                raise Exception("This ChecksMate YAML is invalid! Add text after fairy_chess_pieces.")
+                raise Exception("This ChecksMate YAML is invalid! Add text after fairy_chess_piece_collection_configure.")
             # FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
             if "FIDE" in which_pieces.value:
                 army_options += [0]
@@ -130,7 +130,7 @@ class CMWorld(World):
             cursed_knowledge["army"] = self.armies[self.player]
         # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
         option_names = ["goal", "difficulty", "enemy_piece_types", "piece_locations", "piece_types",
-                        "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pawns",
+                        "fairy_chess_army", "fairy_chess_piece_collection_configure", "fairy_chess_pawns",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
                         "pocket_limit_by_pocket"]
         return dict(cursed_knowledge, **self.options.as_dict(*option_names))
