@@ -141,7 +141,7 @@ class EndoftheWorldUnlock(Choice):
 class FinalRestDoor(Choice):
     """Determines what conditions need to be met to manifest the door in Final Rest, allowing the player to challenge Ansem
     
-    Reports: A certain number of Ansem's Reports are required.  That number is defined in another setting.
+    Reports: A certain number of Ansem's Reports are required, determined by the "Reports to Open Final Rest Door" option.
     Puppies: Having all 99 puppies is required.
     Postcards: Turning in all 10 postcards is required.
     Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom are required.
