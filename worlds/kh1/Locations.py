@@ -586,5 +586,5 @@ location_name_groups: Dict[str, Set[str]] = {}
 for location in location_table.keys():
     category = location_table[location].category
     if category not in location_name_groups.keys():
-        location_name_groups[category] = set([])
+        location_name_groups[category] = set()
     location_name_groups[category].add(location)
