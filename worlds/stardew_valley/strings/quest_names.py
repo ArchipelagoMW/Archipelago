@@ -4,6 +4,7 @@ class Quest:
     getting_started = "Getting Started"
     to_the_beach = "To The Beach"
     raising_animals = "Raising Animals"
+    feeding_animals = "Feeding Animals"
     advancement = "Advancement"
     archaeology = "Archaeology"
     rat_problem = "Rat Problem"
@@ -49,12 +50,13 @@ class Quest:
     dark_talisman = "Dark Talisman"
     goblin_problem = "Goblin Problem"
     magic_ink = "Magic Ink"
+    giant_stump = "The Giant Stump"
 
 
 class ModQuest:
     MrGinger = "Mr.Ginger's request"
     AyeishaEnvelope = "Missing Envelope"
-    AyeishaRing = "Lost Emerald Ring"
+    AyeishaRing = "Ayeisha's Lost Ring"
     JunaCola = "Juna's Drink Request"
     JunaSpaghetti = "Juna's BFF Request"
     RailroadBoulder = "The Railroad Boulder"
