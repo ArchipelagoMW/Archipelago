@@ -1812,7 +1812,88 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
         # 110X/120X - Safe Haven
-        # 130X/140X - Haven's Fall
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "North Hive", SC2_RACESWAP_LOC_ID_OFFSET + 1301, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "East Hive", SC2_RACESWAP_LOC_ID_OFFSET + 1302, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "South Hive", SC2_RACESWAP_LOC_ID_OFFSET + 1303, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Northeast Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1304, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "East Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1305, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Middle Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1306, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southeast Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1307, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southwest Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1308, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southwest Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1309, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   state.has(item_names.OVERLORD_VENTRAL_SACS, player) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "East Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   state.has(item_names.OVERLORD_VENTRAL_SACS, player) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Southeast Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1311, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   state.has(item_names.OVERLORD_VENTRAL_SACS, player) and
+                                   logic.zerg_competent_anti_air(state) and
+                                   logic.zerg_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "North Hive", SC2_RACESWAP_LOC_ID_OFFSET + 1401, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "East Hive", SC2_RACESWAP_LOC_ID_OFFSET + 1402, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "South Hive", SC2_RACESWAP_LOC_ID_OFFSET + 1403, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Northeast Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1404, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "East Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1405, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Middle Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1406, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Southeast Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1407, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Southwest Colony Base", SC2_RACESWAP_LOC_ID_OFFSET + 1408, LocationType.CHALLENGE,
+                     lambda state: logic.protoss_respond_to_colony_infestations(state)),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Southwest Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1409, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   state.has(item_names.WARP_PRISM, player) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "East Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1410, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   state.has(item_names.WARP_PRISM, player) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
+        make_location_data(SC2Mission.HAVENS_FALL_P.mission_name, "Southeast Gas Pickups", SC2_RACESWAP_LOC_ID_OFFSET + 1411, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   state.has(item_names.WARP_PRISM, player) and
+                                   logic.protoss_competent_anti_air(state) and
+                                   logic.protoss_defense_rating(state, True) >= 3),
         make_location_data(SC2Mission.SMASH_AND_GRAB_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
                                    (adv_tactics and logic.zerg_basic_anti_air(state)

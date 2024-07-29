@@ -424,6 +424,10 @@ class SC2Logic:
         return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
             and state.has(item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
 
+    def morph_devourer(self, state: CollectionState) -> bool:
+        return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
+            and state.has(item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, self.player)
+    
     def morph_impaler(self, state: CollectionState) -> bool:
         return (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled) \
             and state.has(item_names.HYDRALISK_IMPALER_ASPECT, self.player)
@@ -468,6 +472,24 @@ class SC2Logic:
                         or state.has(item_names.SPINE_CRAWLER, self.player))
                 )
             )
+        )
+    
+    def zerg_respond_to_colony_infestations(self, state: CollectionState) -> bool:
+        """
+        Can deal quickly with Brood Lords and Mutas in Haven's Fall and being able to progress the mission
+        :param state:
+        :return:
+        """
+        return (
+            self.zerg_common_unit(state)
+            and self.zerg_competent_anti_air(state)
+            and (
+                    self.morph_devourer(state)
+                    or self.advanced_tactics and self.morph_viper(state)
+                    or state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player)
+                    or self.advanced_tactics and state.has_any({item_names.BROOD_QUEEN, item_names.SCOURGE}, self.player)
+                )
+            and self.zerg_defense_rating(state, True) >= 3
         )
 
     def basic_kerrigan(self, state: CollectionState) -> bool:
@@ -630,6 +652,36 @@ class SC2Logic:
                 and (self.protoss_common_unit(state) or state.has(item_names.WARP_PRISM_PHASE_BLASTER, self.player))) \
             or (self.advanced_tactics
                 and state.has_any({item_names.ORACLE, item_names.ARBITER}, self.player))
+
+    def protoss_respond_to_colony_infestations(self, state: CollectionState) -> bool:
+        """
+        Can deal quickly with Brood Lords and Mutas in Haven's Fall and being able to progress the mission
+        :param state:
+        :return:
+        """
+        return (
+            self.protoss_common_unit(state)
+            and self.protoss_competent_anti_air(state)
+            and (
+                    state.has_any({
+                        item_names.CARRIER, item_names.SKYLORD,
+                    }, self.player)
+                    # handle mutas
+                    or (state.has_any({
+                            item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
+                        }, self.player)
+                        or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
+                        )
+                    # handle brood lords and virophages
+                    and (state.has_any({
+                            item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY,
+                            item_names.TEMPEST
+                        }, self.player)
+                        or self.advanced_tactics and state.has_all({item_names.SCOUT, item_names.WARP_PRISM}, self.player)
+                    )
+                )
+            and self.protoss_defense_rating(state, True) >= 3
+        )
 
     def protoss_fleet(self, state: CollectionState) -> bool:
         return state.has_any({
