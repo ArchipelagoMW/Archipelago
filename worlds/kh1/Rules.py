@@ -39,13 +39,13 @@ def has_all_summons(state: CollectionState, player: int) -> bool:
 
 def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
     return state.has_all_counts({
-        "Progressive Fire": 3,
-        "Progressive Blizzard": 3,
-        "Progressive Thunder": 3,
-        "Progressive Cure": 3,
-        "Progressive Gravity": 3,
-        "Progressive Aero": 3,
-        "Progressive Stop": 3}, player)
+        "Progressive Fire": level,
+        "Progressive Blizzard": level,
+        "Progressive Thunder": level,
+        "Progressive Cure": level,
+        "Progressive Gravity": level,
+        "Progressive Aero": level,
+        "Progressive Stop": level}, player)
 
 def has_offensive_magic(state: CollectionState, player: int) -> bool:
     return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
