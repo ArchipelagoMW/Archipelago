@@ -58,7 +58,7 @@ When the player receives an item, your client will display a message displaying 
 
 Please reach out to Gicu#7034 on Discord.
 
-## How do I progress a in certain world?
+## How do I progress in a certain world?
 
 ###The evidence boxes aren't spawning in Wonderland.
 
