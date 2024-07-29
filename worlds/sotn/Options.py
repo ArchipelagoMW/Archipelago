@@ -254,6 +254,20 @@ class InfiniteWing(Toggle):
     display_name = "Infinite wing smash while transform into bat"
 
 
+class AutoHeal(Toggle):
+    """
+        Heal just by entering a save room
+    """
+    display_name = "Heal when enter a save room"
+
+
+class MultipleTrap(Toggle):
+    """
+        Traps are applied all at once when possible
+    """
+    display_name = "Multiple Traps"
+
+
 class ExtraPool(FreeText):
     """Extra item added to the pool"""
     display_name = "Extra items"
@@ -291,6 +305,8 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "trapweight": TrapWeight,
     "rand_rules": RandRules,
     "infinite_wing": InfiniteWing,
+    "auto_heal": AutoHeal,
+    "multiple_trap": MultipleTrap,
     "extra_pool": ExtraPool
 }
 
