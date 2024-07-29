@@ -30,7 +30,7 @@ configure and export a config file.
 
 ## What does randomization do to this game?
 
-The Kingdom Hearts AP Randomizer randomizes most rewards in the game, and adds several items which are used to unlock worlds, Olympus Coliseum cups, and world progression.
+The Kingdom Hearts AP Randomizer randomizes most rewards in the game and adds several items which are used to unlock worlds, Olympus Coliseum cups, and world progression.
 
 Worlds can only be accessed by finding the corresponding item.  For example, you need to find the `Monstro` item to enter Monstro.
 
