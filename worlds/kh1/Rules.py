@@ -113,10 +113,7 @@ def has_defensive_tools(state: CollectionState, player: int) -> bool:
         )
 
 def has_keyblade(state: CollectionState, player: int, keyblade_required: bool, item: str) -> bool:
-    if keyblade_required:
-        return state.has(item, player)
-    else:
-        return True
+    return not keyblade_required or state.has(item, player)
 
 def can_dumbo_skip(state: CollectionState, player: int) -> bool:
     return (
