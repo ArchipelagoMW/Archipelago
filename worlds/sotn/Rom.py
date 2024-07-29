@@ -118,8 +118,7 @@ class SOTNDeltaPatch(APDeltaPatch):
             logger.info("Track 2 already exist")
         else:
             logger.info("Copying track 2")
-            with open(get_settings().sotn_settings.audio_file, "rb") as infile:
-                audio_rom = bytearray(infile.read())
+            audio_rom = bytearray(get_base_rom_bytes(True))
             with open(audio_name, "wb") as stream:
                 stream.write(audio_rom)
 
@@ -128,21 +127,14 @@ class SOTNDeltaPatch(APDeltaPatch):
 
             with open(patch_path, "rb") as infile:
                 diff_patch = bytes(infile.read())
-            with open(get_settings().sotn_settings.rom_file, "rb") as infile:
-                original_rom = bytearray(infile.read())
+
+            original_rom = bytearray(get_base_rom_bytes())
 
             patched_rom = original_rom.copy()
             music_slice = original_rom[0x000affd0:0x000b9ea5]  # Size 0x9ed5 / 40661
             original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
 
             patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
-
-            # Patch Clock Room cutscene
-            write_char(patched_rom, 0x0aeaa0, 0x00)
-            write_char(patched_rom, 0x119af4, 0x00)
-
-            # patchPowerOfSireFlashing Patches researched by MottZilla.
-            write_word(patched_rom, 0x00136580, 0x03e00008)
 
             patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
             patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
@@ -160,6 +152,55 @@ class SOTNDeltaPatch(APDeltaPatch):
             if patched_rom[0x438d48a] >= 4:
                 # Talisman farm on, remove item quantity limitation
                 write_char(patched_rom, 0x1171f4, 0xff)
+
+            # Acessibility Patches researched by MottZilla.
+            # Patch Clock Room cutscene
+            write_char(patched_rom, 0x0aeaa0, 0x00)
+            write_char(patched_rom, 0x119af4, 0x00)
+            # Power of Sire flashing
+            write_word(patched_rom, 0x00136580, 0x03e00008)
+            # Clock Tower puzzle gate
+            write_char(patched_rom, 0x05574dee, 0x80)
+            write_char(patched_rom, 0x055a110c, 0xe0)
+            # Olrox death
+            write_char(patched_rom, 0x05fe6914, 0x80)
+            # Scylla door
+            write_char(patched_rom, 0x061ce8ec, 0xce)
+            write_word(patched_rom, 0x061cb734, 0x304200fe)
+            # Minotaur & Werewolf
+            offset = 0x0613a640
+            write_word(patched_rom, 0x061294dc, 0x0806d732)
+            offset = write_word(patched_rom, offset, 0x3c028007)
+            offset = write_word(patched_rom, offset, 0x34423404)
+            offset = write_word(patched_rom, offset, 0x34030005)
+            offset = write_word(patched_rom, offset, 0x90420000)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0x1043000b)
+            offset = write_word(patched_rom, offset, 0x34030018)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0x10430008)
+            offset = write_word(patched_rom, offset, 0x34030009)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0x10430005)
+            offset = write_word(patched_rom, offset, 0x34030019)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0x10430002)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0x0806d747)
+            offset = write_word(patched_rom, offset, 0x34020001)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0xac82002c)
+            offset = write_word(patched_rom, offset, 0x00000000)
+            offset = write_word(patched_rom, offset, 0x3c028007)
+            offset = write_word(patched_rom, offset, 0x944233da)
+            write_word(patched_rom, offset, 0x08069bc3)
+            # Softlock when using gold & silver ring
+            offset = 0x492df64
+            offset = write_word(patched_rom, offset, 0xa0202ee8)
+            offset = write_word(patched_rom, offset, 0x080735cc)
+            write_word(patched_rom, offset, 0x00000000)
+            write_word(patched_rom, 0x4952454, 0x0806b647)
+            write_word(patched_rom, 0x4952474, 0x0806b647)
 
             with open(target[:-4] + ".bin", "wb") as stream:
                 stream.write(patched_rom)
@@ -201,24 +242,27 @@ class SOTNDeltaPatch(APDeltaPatch):
             logger.info("Patched ROM already exist")
 
 
-def get_base_rom_bytes() -> bytes:
-    with open(get_settings().sotn_settings.rom_file, "rb") as infile:
-        base_rom_bytes = bytes(infile.read())
+def get_base_rom_bytes(audio: bool = False) -> bytes:
+    if not audio:
+        file_name = get_settings().sotn_settings.rom_file
+        with open(file_name, "rb") as infile:
+            base_rom_bytes = bytes(infile.read())
 
-    with open(get_settings().sotn_settings.audio_file, "rb") as infile:
-        audio_rom_bytes = bytes(infile.read())
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if USHASH != basemd5.hexdigest():
+            raise Exception('Supplied Track 1 Base Rom does not match known MD5 for SLU067 release. '
+                            'Get the correct game and version, then dump it')
+    else:
+        file_name = get_settings().sotn_settings.audio_file
+        with open(file_name, "rb") as infile:
+            base_rom_bytes = bytes(infile.read())
 
-    basemd5 = hashlib.md5()
-    basemd5.update(base_rom_bytes)
-    if USHASH != basemd5.hexdigest():
-        raise Exception('Supplied Track 1 Base Rom does not match known MD5 for SLU067 release. '
-                        'Get the correct game and version, then dump it')
-
-    audiomd5 = hashlib.md5()
-    audiomd5.update(audio_rom_bytes)
-    if AUDIOHASH != audiomd5.hexdigest():
-        raise Exception('Supplied Track 2 Audio Rom does not match known MD5 for SLU067 release. '
-                        'Get the correct game and version, then dump it')
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if AUDIOHASH != basemd5.hexdigest():
+            raise Exception('Supplied Track 2 Audio Rom does not match known MD5 for SLU067 release. '
+                            'Get the correct game and version, then dump it')
 
     return base_rom_bytes
 
@@ -295,6 +339,8 @@ def patch_rom(world: World, output_directory: str) -> None:
     goal = world.options.goal
     wing_smash = world.options.infinite_wing
     rules = world.options.rand_rules
+    auto_heal = world.options.auto_heal
+    multiple_trap = world.options.multiple_trap
 
     relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -627,8 +673,12 @@ def patch_rom(world: World, output_directory: str) -> None:
         mon_atk = player_att / 100
     if player_hp != 0:
         mon_hp = player_hp / 100
+
     if player_drp != 0:
         mon_drp = player_drp
+    else:
+        if not dsanity:
+            mon_drp = 0
 
     # Replace talisman from Bone Musket on talisman farm mode and rng_drops off for a Magic missile
     if 4 <= goal <= 5 and drops == 0:
@@ -645,6 +695,10 @@ def patch_rom(world: World, output_directory: str) -> None:
         sanity |= (1 << 1)
     if wing_smash:
         sanity |= (1 << 2)
+    if auto_heal:
+        sanity |= (1 << 3)
+    if multiple_trap:
+        sanity |= (1 << 4)
 
     player_name = world.multiworld.get_player_name(world.player)
     player_num = world.player
@@ -765,16 +819,6 @@ def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_l
     for b in third_line:
         write_char(buffer, start_address, b)
         start_address += 1
-
-
-def write_to_file(buffer, filename=""):
-    if filename == "":
-        output_file = get_settings().sotn_settings.rom_file
-    else:
-        output_file = filename
-
-    with open(output_file, 'wb') as outfile:
-        outfile.write(buffer)
 
 
 def randomize_music(buffer):
@@ -900,7 +944,6 @@ def randomize_candles(buffer, rng_choice, prog, goal):
     rng_type = 0
     for candle in Candles:
         if candle.name == "Stopwatch" and (candle.zone == "NO0" or candle.zone == "RNO0"):
-            print(f"DEBUG: Don't change stopwatch")
             continue
         if rng_choice == 1:
             if candle.name in ["Heart", "Big heart"]:
