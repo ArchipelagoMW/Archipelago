@@ -288,7 +288,7 @@ def remaining_fill(multiworld: MultiWorld,
                         f"Unfilled locations:\n"
                         f"{', '.join(str(location) for location in locations)}\n"
                         f"Already placed {len(placements)}:\n"
-                        f"{', '.join(str(place) for place in placements)}")
+                        f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     itempool.extend(unplaced_items)
 
