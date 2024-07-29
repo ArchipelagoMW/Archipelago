@@ -229,7 +229,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.mapping_cave_systems: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            GenericSource(regions=Region.adventurer_guild_bedroom),
+            GenericSource(regions=(Region.adventurer_guild_bedroom,)),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.monster_compendium: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
@@ -243,7 +243,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
         Book.the_alleyway_buffet: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            GenericSource(regions=Region.town,
+            GenericSource(regions=(Region.town,),
                           other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), ToolRequirement(Tool.pickaxe, ToolMaterial.iron))),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (
@@ -287,9 +287,6 @@ pelican_town = ContentPack(
         Book.woodcutters_weekly: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.queen_of_sauce_cookbook: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2),),  # Worst book ever
     },
     fishes=(
         fish_data.albacore,
