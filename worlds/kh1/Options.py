@@ -106,7 +106,8 @@ class SuperBosses(Toggle):
 
 class Cups(Toggle):
     """
-    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.  Please note that the cup items will still appear in the multiworld even if toggled off, as they are required to challenge Sephiroth.
+    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.
+    Please note that the cup items will still appear in the multiworld even if toggled off, as they are required to challenge Sephiroth.
     """
     display_name = "Cups"
 
