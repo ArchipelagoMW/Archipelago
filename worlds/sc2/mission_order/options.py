@@ -13,7 +13,9 @@ from .structs import Difficulty, LayoutType
 from .types import Column, Grid, Hopscotch, Gauntlet, Blitz
 from .presets_static import (
     static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
-    preset_mini_lotv_prologue, preset_mini_lotv, preset_mini_lotv_epilogue, preset_mini_nco
+    preset_mini_lotv_prologue, preset_mini_lotv, preset_mini_lotv_epilogue, preset_mini_nco,
+    preset_wol_with_prophecy, preset_wol, preset_prophecy, preset_hots, preset_lotv_prologue,
+    preset_lotv_epilogue, preset_lotv, preset_nco
 )
 
 STR_OPTION_VALUES = {
@@ -26,6 +28,16 @@ STR_OPTION_VALUES = {
     },
     "preset": {
         "none": lambda _: {},
+        "wol + prophecy": static_preset(preset_wol_with_prophecy),
+        "wol": static_preset(preset_wol),
+        "prophecy": static_preset(preset_prophecy),
+        "hots": static_preset(preset_hots),
+        "prologue": static_preset(preset_lotv_prologue),
+        "lotv prologue": static_preset(preset_lotv_prologue),
+        "lotv": static_preset(preset_lotv),
+        "epilogue": static_preset(preset_lotv_epilogue),
+        "lotv epilogue": static_preset(preset_lotv_epilogue),
+        "nco": static_preset(preset_nco),
         "mini wol + prophecy": static_preset(preset_mini_wol_with_prophecy),
         "mini wol": static_preset(preset_mini_wol),
         "mini prophecy": static_preset(preset_mini_prophecy),
@@ -169,7 +181,7 @@ class CustomMissionOrder(OptionDict):
             preset_options = {key: value[campaign].pop(key) for key in preset_option_keys}
 
             # Resolve preset
-            preset: Dict[str, Any] = STR_OPTION_VALUES["preset"][preset_key.lower()](preset_options)
+            preset: Dict[str, Any] = _resovle_string_option_single("preset", preset_key)(preset_options)
             # Preset global is resolved internally to avoid conflict with user global
             preset_global_dict = {}
             for name in preset:
@@ -226,10 +238,7 @@ def _resolve_special_options(data: Dict[str, Any]):
 def _resolve_special_option(option: str, option_value: Any) -> Any:
     # Option values can be string representations of values
     if option in STR_OPTION_VALUES:
-        if type(option_value) == list:
-            return [STR_OPTION_VALUES[option][val.lower()] for val in option_value]
-        else:
-            return STR_OPTION_VALUES[option][option_value.lower()]
+        return _resolve_string_option(option, option_value)
     
     if option == "mission_pool":
         return _resolve_mission_pool(option_value)
@@ -263,6 +272,15 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
 
     # Option values can be ranges
     return _resolve_potential_range(option_value)
+
+def _resovle_string_option_single(option: str, option_value: str) -> Any:
+    return STR_OPTION_VALUES[option][option_value.lower().replace("_", " ")]
+
+def _resolve_string_option(option: str, option_value: Union[List[str], str]) -> Any:
+    if type(option_value) == list:
+        return [_resovle_string_option_single(option, val) for val in option_value]
+    else:
+        return _resovle_string_option_single(option, option_value)
 
 def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
     resolved: Dict[str, Any] = {}
