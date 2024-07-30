@@ -190,15 +190,15 @@ async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
                                 break
 
                         if ctx.auth:
-                           name = msg.get("name", "")
-                           if name != "" and name != ctx.auth:
-                               logger.info("Aborting proxy connection: player name mismatch from save file")
-                               logger.info(f"Expected: {ctx.auth}, got: {name}")
-                               text = encode([{"cmd": "PrintJSON",
-                                               "data": [{"text": "Connection aborted - player name mismatch"}]}])
-                               await ctx.send_msgs_proxy(text)
-                               await ctx.disconnect_proxy()
-                               break
+                            name = msg.get("name", "")
+                            if name != "" and name != ctx.auth:
+                                logger.info("Aborting proxy connection: player name mismatch from save file")
+                                logger.info(f"Expected: {ctx.auth}, got: {name}")
+                                text = encode([{"cmd": "PrintJSON",
+                                                "data": [{"text": "Connection aborted - player name mismatch"}]}])
+                                await ctx.send_msgs_proxy(text)
+                                await ctx.disconnect_proxy()
+                                break
 
                         if ctx.connected_msg and ctx.is_connected():
                             await ctx.send_msgs_proxy(ctx.connected_msg)
