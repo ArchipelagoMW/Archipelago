@@ -159,7 +159,10 @@ class SA2BWorld(World):
                                  self.options.fishing_trap_weight.value + \
                                  self.options.trivia_trap_weight.value + \
                                  self.options.pokemon_trivia_trap_weight.value + \
-                                 self.options.pokemon_count_trap_weight.value
+                                 self.options.pokemon_count_trap_weight.value + \
+                                 self.options.number_sequence_trap_weight.value + \
+                                 self.options.light_up_path_trap_weight.value + \
+                                 self.options.pinball_trap_weight.value
 
             if valid_trap_weights == 0:
                 self.options.exposition_trap_weight.value = 4
@@ -171,6 +174,9 @@ class SA2BWorld(World):
                 self.options.trivia_trap_weight.value = 4
                 self.options.pokemon_trivia_trap_weight.value = 4
                 self.options.pokemon_count_trap_weight.value = 4
+                self.options.number_sequence_trap_weight.value = 4
+                self.options.light_up_path_trap_weight.value = 4
+                self.options.pinball_trap_weight.value = 4
 
             if self.options.kart_race_checks.value == 0:
                 self.options.kart_race_checks.value = 2
@@ -312,6 +318,9 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.trivia_trap] * self.options.trivia_trap_weight.value)
         trap_weights += ([ItemName.pokemon_trivia_trap] * self.options.pokemon_trivia_trap_weight.value)
         trap_weights += ([ItemName.pokemon_count_trap] * self.options.pokemon_count_trap_weight.value)
+        trap_weights += ([ItemName.number_sequence_trap] * self.options.number_sequence_trap_weight.value)
+        trap_weights += ([ItemName.light_up_path_trap] * self.options.light_up_path_trap_weight.value)
+        trap_weights += ([ItemName.pinball_trap] * self.options.pinball_trap_weight.value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))

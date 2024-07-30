@@ -64,12 +64,15 @@ cutscene_trap   = "Cutscene Trap"
 reverse_trap    = "Reverse Trap"
 literature_trap = "Literature Trap"
 
-pong_trap           = "Pong Trap"
-platformer_trap     = "Platformer Trap"
-fishing_trap        = "Fishing Trap"
-trivia_trap         = "Trivia Trap"
-pokemon_trivia_trap = "Pokemon Trivia Trap"
-pokemon_count_trap  = "Pokemon Count Trap"
+pong_trap            = "Pong Trap"
+platformer_trap      = "Platformer Trap"
+fishing_trap         = "Fishing Trap"
+trivia_trap          = "Trivia Trap"
+pokemon_trivia_trap  = "Pokemon Trivia Trap"
+pokemon_count_trap   = "Pokemon Count Trap"
+number_sequence_trap = "Number Sequence Trap"
+light_up_path_trap   = "Light Up Path Trap"
+pinball_trap         = "Pinball Trap"
 
 
 # Chaos Emeralds

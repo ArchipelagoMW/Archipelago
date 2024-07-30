@@ -246,6 +246,27 @@ class PokemonCountTrapWeight(BaseTrapWeight):
     display_name = "Pokemon Count Trap Weight"
 
 
+class NumberSequenceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Number Sequence minigame
+    """
+    display_name = "Number Sequence Trap Weight"
+
+
+class LightUpPathTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Light Up Path minigame
+    """
+    display_name = "Light Up Path Trap Weight"
+
+
+class PinballTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pinball minigame
+    """
+    display_name = "Pinball Trap Weight"
+
+
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
@@ -996,6 +1017,9 @@ sa2b_option_groups = [
         TriviaTrapWeight,
         PokemonTriviaTrapWeight,
         PokemonCountTrapWeight,
+        NumberSequenceTrapWeight,
+        LightUpPathTrapWeight,
+        PinballTrapWeight,
         MinigameTrapDifficulty,
     ]),
     OptionGroup("Speed Missions", [
@@ -1102,6 +1126,9 @@ class SA2BOptions(PerGameCommonOptions):
     trivia_trap_weight: TriviaTrapWeight
     pokemon_trivia_trap_weight: PokemonTriviaTrapWeight
     pokemon_count_trap_weight: PokemonCountTrapWeight
+    number_sequence_trap_weight: NumberSequenceTrapWeight
+    light_up_path_trap_weight: LightUpPathTrapWeight
+    pinball_trap_weight: PinballTrapWeight
     minigame_trap_difficulty: MinigameTrapDifficulty
 
     sadx_music: SADXMusic
