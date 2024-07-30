@@ -702,10 +702,11 @@ class CollectionState():
         if locations is None:
             # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
             # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
-            events_per_player = [(player, list(filter(event_filter, locations_dict.values())))
-                                 for player, locations_dict in self.multiworld.regions.location_cache.items()]
-            # Remove empty lists to reduce the length of `events_per_player`, so that it is quicker to iterate.
-            events_per_player = [(player, locations) for player, locations in events_per_player if locations]
+            events_per_player = []
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                filtered_locations = list(filter(event_filter, locations_dict.values()))
+                if filtered_locations:
+                    events_per_player.append((player, filtered_locations))
         else:
             events_per_player_dict = defaultdict(list)
             for location in filter(event_filter, locations):
