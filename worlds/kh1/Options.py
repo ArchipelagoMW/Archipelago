@@ -402,7 +402,7 @@ kh1_option_groups = [
         FinalRestDoor,
         RequiredReportsDoor,
         RequiredReportsEotW,
-        ReportsInPool
+        ReportsInPool,
     ]),
     OptionGroup("Locations", [
         SuperBosses,
