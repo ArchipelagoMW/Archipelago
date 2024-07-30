@@ -418,10 +418,10 @@ class ExpModifier(NamedRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
     default = 16
-    range_start = default / 4
+    range_start = default // 4
     range_end = 255
     special_range_names = {
-        "half": default / 2,
+        "half": default // 2,
         "normal": default,
         "double": default * 2,
         "triple": default * 3,
