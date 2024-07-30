@@ -90,7 +90,26 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
     def can_rocksmash(state: CollectionState):
         return state.has("TM08 Rock Smash", world.player)
 
-    def has_badge_item(state: CollectionState, badge):
+    if world.options.randomize_badges.value == 0:
+        badge_items = {"zephyr": "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
+                       "hive": "EVENT_HIVE_BADGE_FROM_BUGSY",
+                       "plain": "EVENT_PLAIN_BADGE_FROM_WHITNEY",
+                       "fog": "EVENT_FOG_BADGE_FROM_MORTY",
+                       "mineral": "EVENT_STORM_BADGE_FROM_CHUCK",
+                       "storm": "EVENT_MINERAL_BADGE_FROM_JASMINE",
+                       "glacier": "EVENT_GLACIER_BADGE_FROM_PRYCE",
+                       "rising": "EVENT_RISING_BADGE_FROM_CLAIR",
+
+                       "boulder": "EVENT_BOULDER_BADGE_FROM_BROCK",
+                       "cascade": "EVENT_CASCADE_BADGE_FROM_MISTY",
+                       "thunder": "EVENT_THUNDER_BADGE_FROM_LTSURGE",
+                       "rainbow": "EVENT_RAINBOW_BADGE_FROM_ERIKA",
+                       "soul": "EVENT_SOUL_BADGE_FROM_JANINE",
+                       "marsh": "EVENT_MARSH_BADGE_FROM_SABRINA",
+                       "volcano": "EVENT_VOLCANO_BADGE_FROM_BLAINE",
+                       "earth": "EVENT_EARTH_BADGE_FROM_BLUE"
+                       }
+    else:
         badge_items = {"zephyr": "Zephyr Badge",
                        "hive": "Hive Badge",
                        "plain": "Plain Badge",
@@ -109,53 +128,12 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
                        "volcano": "Volcano Badge",
                        "earth": "Earth Badge"
                        }
-        return state.has(badge_items[badge], world.player)
-
-    def has_badge_flag(state: CollectionState, badge):
-        badge_flags = {"zephyr": "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
-                       "hive": "EVENT_HIVE_BADGE_FROM_BUGSY",
-                       "plain": "EVENT_PLAIN_BADGE_FROM_WHITNEY",
-                       "fog": "EVENT_FOG_BADGE_FROM_MORTY",
-                       "mineral": "EVENT_STORM_BADGE_FROM_CHUCK",
-                       "storm": "EVENT_MINERAL_BADGE_FROM_JASMINE",
-                       "glacier": "EVENT_GLACIER_BADGE_FROM_PRYCE",
-                       "rising": "EVENT_RISING_BADGE_FROM_CLAIR",
-
-                       "boulder": "EVENT_BOULDER_BADGE_FROM_BROCK",
-                       "cascade": "EVENT_CASCADE_BADGE_FROM_MISTY",
-                       "thunder": "EVENT_THUNDER_BADGE_FROM_LTSURGE",
-                       "rainbow": "EVENT_RAINBOW_BADGE_FROM_ERIKA",
-                       "soul": "EVENT_SOUL_BADGE_FROM_JANINE",
-                       "marsh": "EVENT_MARSH_BADGE_FROM_SABRINA",
-                       "volcano": "EVENT_VOLCANO_BADGE_FROM_BLAINE",
-                       "earth": "EVENT_EARTH_BADGE_FROM_BLUE"
-                       }
-        return state.has(badge_flags[badge], world.player)
 
     def has_badge(state: CollectionState, badge):
-        if world.options.randomize_badges.value == 0:
-            return has_badge_flag(state, badge)
-        return has_badge_item(state, badge)
+        return state.has(badge_items[badge], world.player)
 
     def has_n_badges(state: CollectionState, n: int) -> bool:
-        return sum([has_badge(state, i) for i in [
-            "zephyr",
-            "hive",
-            "plain",
-            "fog",
-            "mineral",
-            "storm",
-            "glacier",
-            "rising",
-            "boulder",
-            "cascade",
-            "thunder",
-            "rainbow",
-            "soul",
-            "marsh",
-            "volcano",
-            "earth"
-        ]]) >= n
+        return state.has_from_list_unique(badge_items.values(), world.player, n)
 
     def has_rocket_badges(state: CollectionState):
         return has_n_badges(state, world.options.elite_four_badges.value - 1)
