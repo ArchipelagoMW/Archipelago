@@ -704,8 +704,8 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 ### Tags
 Tags are represented as a list of strings, the common client tags follow:
 
-| Name       | Notes                                                                                                                             |
-|------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Name      | Notes                                                                                                                                |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------|
 | AP        | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.    |
 | DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets.                             |
 | HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message¹, `game` is optional².      |
