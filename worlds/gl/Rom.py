@@ -113,7 +113,7 @@ class GLPatchExtension(APPatchExtension):
         for i in range(len(level_locations)):
             level: Dict[str, Tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
-            stream, data = get_level_data(stream, level_size[i])
+            stream, data = get_level_data(stream, level_size[i], i)
             for j, (location_name, item) in enumerate(level.items()):
                 if item[0] == 0:
                     continue
@@ -233,6 +233,22 @@ def locations_to_dict(locations: List[Location]) -> Dict[str, Tuple]:
     return {location.name: (location.item.code, location.item.player) if location.item is not None else (0, 0) for location in locations}
 
 
+def patch_docks(data: LevelData) -> LevelData:
+    data.stream.seek(0x19AC, 0)
+    data.stream.write(bytes([0x2, 0xF0, 0x0, 0x18, 0x1, 0x6F]))
+    data.stream.seek(0x80, 0)
+    data.stream.write(bytes([0x3, 0x4E, 0x0, 0x1A, 0x1, 0x32]))
+    return data
+
+
+def patch_camp(data: LevelData) -> LevelData:
+    data.stream.seek(0x1B74, 0)
+    data.stream.write(bytes([0xFF, 0x2, 0x0, 0x3B, 0xFF, 0xF9]))
+    data.stream.seek(0x1B64, 0)
+    data.stream.write(bytes([0xFE, 0x6B, 0x0, 0x3D, 0xFF, 0xEE]))
+    return data
+
+
 # Zlib decompression with wbits set to -15
 def zdec(data):
     """
@@ -262,9 +278,13 @@ def zenc(data):
 
 
 # Create a LevelData object from raw decompressed bytes of a level
-def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
+def get_level_data(stream: io.BytesIO, size: int, level=0) -> (io.BytesIO, LevelData):
     data = LevelData()
     data.stream = io.BytesIO(zdec(stream.read(size)))
+    if level == 17:
+        data = patch_docks(data)
+    if level == 18:
+        data = patch_camp(data)
     data.header = data.stream.read(0x5C)
     data.stream.seek(0)
     data.item_addr = int.from_bytes(data.stream.read(4), "big")

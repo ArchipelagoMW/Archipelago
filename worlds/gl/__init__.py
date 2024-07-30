@@ -161,7 +161,7 @@ class GauntletLegendsWorld(World):
             "characters": characters,
             "max": (self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4),
             "instant_max": self.options.instant_max.value,
-            "death_link": self.options.death_link.value == 1
+            "death_link": bool((self.options.death_link.value == 1))
         }
 
     def create_items(self) -> None:
