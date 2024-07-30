@@ -672,7 +672,7 @@ item_descriptions = {
     item_names.NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN: f"Removes emerge time for {DISPLAY_NAME_WORMS}, and allows them to be salvaged, returning the cost spent on them.", 
     item_names.NYDUS_WORM_RAVENOUS_APPETITE: "Allows Nydus Worms to unload and load units nearly instantly.",
     item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(DISPLAY_NAME_WORMS),
-    item_names.OMEGA_WORM_OUROBOROS_STRAIN: "Allows Omega Worms to train a limited assortment of combat units (Zerglings, Roachs, Hydralisks, and Aberrations) at a reduced time and cost",
+    item_names.OMEGA_WORM_OUROBOROS_STRAIN: "Allows Omega Worms to train a limited assortment of combat units (Zerglings, Roachs, Hydralisks, and Aberrations) at a reduced time and cost.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",
