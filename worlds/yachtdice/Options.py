@@ -36,7 +36,7 @@ class ScoreForLastCheck(Range):
 class ScoreForGoal(Range):
     """
     This option determines what score you need to reach to finish the game.
-    It cannot be higher than the score for the last check (if it is, it is changed automatically).
+    It cannot be higher than the score for the last check (if it is, this option is changed automatically).
     """
 
     display_name = "Score for goal"
@@ -96,7 +96,7 @@ class AlternativeCategories(Range):
     These alternative categories can be randomly selected to replace the default categories.
     They are a little strange, but can give a fun new experience.
     In the game, you can hover over categories to check what they do.
-    How many alternative categories would you like to see in your game?
+    This option determines the number of alternative categories in your game.
     """
 
     display_name = "Number of alternative categories"
@@ -169,7 +169,10 @@ class ChanceOfDoubleCategory(Range):
 
 class ChanceOfPoints(Range):
     """
-    Getting points gives you... points. You can get 1 point, 10 points, and even 100 points.
+    Are you tired of rolling dice countless times and tallying up points one by one, all by yourself? 
+    Worry not, as this option will simply add some points items to the item pool! 
+    And getting one of these points items gives you... points!
+    Imagine how nice it would be to find tons of them. Or even better, having others find them FOR you!
     """
 
     display_name = "Weight of adding Points"
@@ -180,8 +183,8 @@ class ChanceOfPoints(Range):
 
 class PointsSize(Choice):
     """
-    If you choose to add points to the item pool, do you prefer many small points,
-    medium-size points, a few larger points, or a mix of them?
+    If you choose to add points to the item pool, you can choose to have many small points,
+    medium-size points, a few larger points, or a mix of them.
     """
 
     display_name = "Size of points"
@@ -211,7 +214,7 @@ class MinimizeExtraItems(Choice):
 class AddExtraPoints(Choice):
     """
     Yacht Dice typically has space for extra items.
-    If there is space, would you like bonus points shuffled in the item pool?
+    This option determines if bonus points are put into the item pool.
     They make the game a little bit easier, as they are not considered in the logic.
 
     All Of It: fill all locations with extra points
@@ -229,7 +232,7 @@ class AddExtraPoints(Choice):
 class AddStoryChapters(Choice):
     """
     Yacht Dice typically has space for more items.
-    If there is space, would you like story chapters shuffled in the item pool?
+    This option determines if extra story chapters are put into the item pool.
     Note: if you have extra points on "all_of_it", there will not be story chapters.
 
     All Of It: fill all locations with story chapters
@@ -248,8 +251,7 @@ class WhichStory(Choice):
     """
     The most important part of Yacht Dice is the narrative.
     Of course you will need to add story chapters to the item pool.
-    You can read story chapters in the feed on the website.
-    Which story would you like to read?
+    You can read story chapters in the feed on the website and there are several stories to choose from.
     """
 
     display_name = "Story"
@@ -265,10 +267,9 @@ class WhichStory(Choice):
 
 class AllowManual(Choice):
     """
-    Yacht Dice allows players to roll IRL dice.
+    If allowed, players can roll IRL dice and input them manually into the game.
     By sending "manual" in the chat, an input field appears where you can type your dice rolls.
     Of course, we cannot check anymore if the player is playing fair.
-    Do you want to allow manual input of rolls?
     """
 
     display_name = "Allow manual inputs"
