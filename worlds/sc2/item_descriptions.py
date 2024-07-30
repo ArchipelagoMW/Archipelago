@@ -30,6 +30,7 @@ CLOAK_DESCRIPTION_TEMPLATE = "Allows {} to use the Cloak ability."
 
 DISPLAY_NAME_BROOD_LORD = "Brood Lord"
 DISPLAY_NAME_CLOAKED_ASSASSIN = "Dark Templar, Avenger, and Blood Hunter"
+DISPLAY_NAME_WORMS = "Nydus Worm and Omega Worm"
 
 resource_efficiency_cost_reduction = {
     item_names.REAPER:        (0, 50, 0),
@@ -667,6 +668,11 @@ item_descriptions = {
     item_names.TYRANNOZOR_BARRAGE_OF_SPIKES: "Unleash a Barrage of Spikes, dealing 100 damage to enemy ground and air units around the Tyrannozor.",
     item_names.TYRANNOZOR_IMPALING_STRIKE: "Ultralisk and Tyrannozor melee attacks have a 20% chance to stun for 2 seconds.",
     item_names.TYRANNOZOR_HEALING_ADAPTATION: "Ultralisks and Tyrannozors regenerate life quickly when out of combat.",
+    item_names.NYDUS_WORM_OMEGA_WORM_SUBTERRANEAN_SCALES: f"Increases {DISPLAY_NAME_WORMS} maximum health by 250 and armor by 1.",
+    item_names.NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN: f"Removes emerge time for {DISPLAY_NAME_WORMS}, and allows them to be salvaged, returning the cost spent on them.", 
+    item_names.NYDUS_WORM_RAVENOUS_APPETITE: "Allows Nydus Worms to unload and load units nearly instantly.",
+    item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(DISPLAY_NAME_WORMS),
+    item_names.OMEGA_WORM_OUROBOROS_STRAIN: "Allows Omega Worms to train a limited assortment of combat units (Zerglings, Roachs, Hydralisks, and Aberrations) at a reduced time and cost",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",
@@ -729,6 +735,8 @@ item_descriptions = {
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: "Anti-air flyer. Attack inflict Acid Spores. Can attack air units. Morphed from the Mutalisk or Corruptor.",
     item_names.ROACH_RAVAGER_ASPECT: "Ranged artillery. Can use Corrosive Bile. Can attack ground units. Morphed from the Roach.",
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: "Assault unit. Has an area-damage attack. Regenerates life quickly when burrowed. Can attack ground units. Morphed by merging two Roaches.",
+    item_names.NYDUS_WORM: "Long-range transport network. Nydus Worms and Nydus Networks can load friendly ground units to be unloaded to any other Nydus structure on the map.",
+    item_names:OMEGA_WORM: "Long-range deployable base. Can't load and unload units, but can generate creep and Creep Tumors. Can also serve as a dropoff point for resources, like a Hatchery.",
     item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks.",
     item_names.OBSERVER: "Flying spy. Cloak renders the unit invisible to enemies without detection.",
     item_names.CENTURION: "Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities.",

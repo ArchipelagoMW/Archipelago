@@ -346,6 +346,8 @@ INFESTED_MARINE = "Infested Marine"
 SPORE_CRAWLER   = "Spore Crawler"
 SPINE_CRAWLER   = "Spine Crawler"
 INFESTED_BUNKER = "Infested Bunker"
+NYDUS_WORM      = "Nydus Worm"
+OMEGA_WORM      = "Omega Worm"
 
 # Zerg Weapon / Armor Upgrades
 ZERG_UPGRADE_PREFIX = "Progressive Zerg"
@@ -470,6 +472,11 @@ TYRANNOZOR_BARRAGE_OF_SPIKES            = "Barrage of Spikes (Tyrannozor)"
 TYRANNOZOR_TYRANTS_PROTECTION           = "Tyrant's Protection (Tyrannozor)"
 TYRANNOZOR_HEALING_ADAPTATION           = "Healing Adaptation (Ultralisk/Tyrannozor)"
 TYRANNOZOR_IMPALING_STRIKE              = "Impaling Strike (Ultralisk/Tyrannozor)"
+NYDUS_WORM_OMEGA_WORM_SUBTERRANEAN_SCALES   = "Subterranean Scales (Nydus Worm/Omega Worm)"
+NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN    = "Jormungandr Strain (Nydus Worm/Omega Worm)"
+NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY   = "Resource Efficiency (Nydus Worm/Omega Worm)"
+NYDUS_WORM_RAVENOUS_APPETITE                = "Ravenous Appetite (Nydus Worm)"
+OMEGA_WORM_OUROBOROS_STRAIN                 = "Ouroboros Strain (Omega Worm)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
