@@ -329,7 +329,7 @@ def set_normal_rules(world: "YoshisIslandWorld") -> None:
 
     set_rule(world.multiworld.get_location("GO! GO! MARIO!!: Red Coins", player), lambda state: state.has("Super Star", player))
     set_rule(world.multiworld.get_location("GO! GO! MARIO!!: Flowers", player), lambda state: state.has("Super Star", player))
-    set_rule(world.multiworld.get_location("GO! GO! MARIO!!: Stars", player), lambda state: state.has("Super Star", player))
+    set_rule(world.multiworld.get_location("GO! GO! MARIO!!: Stars", player), lambda state: logic.has_midring(state) or state.has("Tulip", player))
     set_rule(world.multiworld.get_location("GO! GO! MARIO!!: Level Clear", player), lambda state: state.has("Super Star", player))
 
     set_rule(world.multiworld.get_location("The Cave Of The Lakitus: Red Coins", player), lambda state: state.has_all({"Large Spring Ball", "! Switch", "Egg Launcher"}, player))
