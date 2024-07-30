@@ -247,12 +247,11 @@ MainLoopHook:
     CMP #$0000 ; did we get a gooey trap
     BEQ .Slowness ; branch if we did not
     JSL GooeySpawn
-    STZ $8080
+    DEC $8080
     .Slowness:
     LDA $8082 ; slowness
     BEQ .Eject ; are we under the effects of a slowness trap
-    DEC
-    STA $8082 ; dec by 1 each frame
+    DEC $8082 ; dec by 1 each frame
     .Eject:
     PHX
     PHY
@@ -262,7 +261,7 @@ MainLoopHook:
     BEQ .PullVars ; branch if we haven't received eject
     LDA #$2000 ; select button press
     STA $60C1 ; write to controller mirror
-    STZ $8084
+    DEC $8084
     .PullVars:
     PLY
     PLX
@@ -338,8 +337,6 @@ ParseItemQueue:
     AND #$000F
     ASL
     TAY
-    LDA $8080,Y
-    BNE .LoopCheck
     JSL .ApplyNegative
     RTL
     .ApplyAbility:
@@ -420,11 +417,21 @@ ParseItemQueue:
     CPY #$0005
     BCS .PlayNone
     LDA $8080,Y
-    BNE .Return
+    CPY #$0002
+    BNE .Increment
+    CLC
     LDA #$0384
+    ADC $8080, Y
+    BVC .PlayNegative
+    LDA #$FFFF
+    .PlayNegative:
     STA $8080,Y
     LDA #$00A7
     BRA .PlaySFXLong
+    .Increment:
+    INC
+    STA $8080, Y
+    BRA .PlayNegative
     .PlayNone:
     LDA #$0000
     BRA .PlaySFXLong
