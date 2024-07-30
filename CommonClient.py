@@ -61,6 +61,7 @@ class ClientCommandProcessor(CommandProcessor):
         if address:
             self.ctx.server_address = None
             self.ctx.username = None
+            self.ctx.password = None
         elif not self.ctx.server_address:
             self.output("Please specify an address.")
             return False
@@ -514,6 +515,7 @@ class CommonContext:
     async def shutdown(self):
         self.server_address = ""
         self.username = None
+        self.password = None
         self.cancel_autoreconnect()
         if self.server and not self.server.socket.closed:
             await self.server.socket.close()

@@ -34,7 +34,7 @@ class RuleExplanation:
         if not self.sub_rules:
             return self.summary(depth)
 
-        return self.summary(depth) + "\n" + "\n".join(RuleExplanation.__str__(i, depth + 1)
+        return self.summary(depth) + "\n" + "\n".join(i.__str__(depth + 1)
                                                       if i.result is not self.expected else i.summary(depth + 1)
                                                       for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
 
@@ -42,7 +42,7 @@ class RuleExplanation:
         if not self.sub_rules:
             return self.summary(depth)
 
-        return self.summary(depth) + "\n" + "\n".join(RuleExplanation.__repr__(i, depth + 1)
+        return self.summary(depth) + "\n" + "\n".join(i.__repr__(depth + 1)
                                                       for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
 
     @cached_property
@@ -59,6 +59,33 @@ class RuleExplanation:
             self.explored_rules_key.add(rule_key)
 
         return [_explain(i, self.state, self.expected, self.explored_rules_key) for i in self.sub_rules]
+
+
+@dataclass
+class CountSubRuleExplanation(RuleExplanation):
+    count: int = 1
+
+    @staticmethod
+    def from_explanation(expl: RuleExplanation, count: int) -> CountSubRuleExplanation:
+        return CountSubRuleExplanation(expl.rule, expl.state, expl.expected, expl.sub_rules, expl.explored_rules_key, expl.current_rule_explored, count)
+
+    def summary(self, depth=0) -> str:
+        summary = "  " * depth + f"{self.count}x {str(self.rule)} -> {self.result}"
+        if self.current_rule_explored:
+            summary += " [Already explained]"
+        return summary
+
+
+@dataclass
+class CountExplanation(RuleExplanation):
+    rule: Count
+
+    @cached_property
+    def explained_sub_rules(self) -> List[RuleExplanation]:
+        return [
+            CountSubRuleExplanation.from_explanation(_explain(rule, self.state, self.expected, self.explored_rules_key), count)
+            for rule, count in self.rule.counter.items()
+        ]
 
 
 def explain(rule: CollectionRule, state: CollectionState, expected: bool = True) -> RuleExplanation:
@@ -80,7 +107,7 @@ def _(rule: AggregatingStardewRule, state: CollectionState, expected: bool, expl
 
 @_explain.register
 def _(rule: Count, state: CollectionState, expected: bool, explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
-    return RuleExplanation(rule, state, expected, rule.rules, explored_rules_key=explored_spots)
+    return CountExplanation(rule, state, expected, rule.rules, explored_rules_key=explored_spots)
 
 
 @_explain.register
