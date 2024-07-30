@@ -400,9 +400,9 @@ class OSRSWorld(World):
             tasks_for_this_type = tasks_for_this_type[:max_amount_for_task_type]
             weight_for_this_type = getattr(self.options,
                                                        f"{task_type}_task_weight")
-            if weight_for_this_type > 0:
+            if weight_for_this_type > 0 and tasks_for_this_type:
                 tasks_per_task_type[task_type] = tasks_for_this_type
-                weights_per_task_type[task_type] = weight_for_this_type if tasks_for_this_type else 0
+                weights_per_task_type[task_type] = weight_for_this_type
 
         # Build a list of collections and weights in a matching order for rnd.choices later
         all_tasks = []
