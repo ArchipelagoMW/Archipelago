@@ -1614,6 +1614,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Use !hint_location {location_name},
         for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
+    
+    def _cmd_roll(self):
+        """Outputs a random number from 1-100."""
+        num = random.randint(1, 100)
+        name = self.ctx.get_aliased_name(self.client.team, self.client.slot)
+        self.ctx.broadcast_text_all(f"{name} rolled {num}")
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
