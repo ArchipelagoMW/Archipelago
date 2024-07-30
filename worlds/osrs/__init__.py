@@ -408,8 +408,9 @@ class OSRSWorld(World):
         all_tasks = []
         all_weights = []
         for task_type in task_types:
-            all_tasks.append(tasks_per_task_type[task_type])
-            all_weights.append(weights_per_task_type[task_type])
+            if task_type in tasks_per_task_type:
+                all_tasks.append(tasks_per_task_type[task_type])
+                all_weights.append(weights_per_task_type[task_type])
 
         # Even after the initial forced generals, they can still be rolled randomly
         if general_weight > 0:
