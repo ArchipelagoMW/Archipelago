@@ -46,9 +46,9 @@ def process_trainer_data(world):
                       or world.options.randomize_legendary_pokemon.value == 3]
     evolved_mons = [mon for mon in mons_list if mon not in unevolved_mons]
     rival_map = {
-        "Charmander": world.multiworld.get_location("Oak's Lab - Starter 1", world.player).item.name[9:],# strip the
+        "Charmander": world.multiworld.get_location("Oak's Lab - Starter 1", world.player).item.name[9:],  # strip the
         "Squirtle": world.multiworld.get_location("Oak's Lab - Starter 2", world.player).item.name[9:],  # 'Missable'
-        "Bulbasaur": world.multiworld.get_location("Oak's Lab - Starter 3", world.player).item.name[9:], # from the name
+        "Bulbasaur": world.multiworld.get_location("Oak's Lab - Starter 3", world.player).item.name[9:],  # from the name
     }
 
     def add_evolutions():
