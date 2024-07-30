@@ -89,8 +89,8 @@ class PokemonRedBlueWorld(World):
 
     web = PokemonWebWorld()
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.item_pool = []
         self.total_key_items = None
         self.fly_map = None

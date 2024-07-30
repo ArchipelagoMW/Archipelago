@@ -2593,10 +2593,10 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 region.entrance_hint = check_region(region)
 
 
-def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
+def connect(multiworld: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
             one_way=False, name=None):
-    source_region = world.get_region(source, player)
-    target_region = world.get_region(target, player)
+    source_region = multiworld.get_region(source, player)
+    target_region = multiworld.get_region(target, player)
 
     if name is None:
         name = source + " to " + target
@@ -2612,7 +2612,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
     source_region.exits.append(connection)
     connection.connect(target_region)
     if not one_way:
-        connect(world, player, target, source, rule, True)
+        connect(multiworld, player, target, source, rule, True)
 
 
 class PokemonRBWarp(Entrance):
