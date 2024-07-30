@@ -1,8 +1,9 @@
 import typing
 
+from BaseClasses import ItemClassification
 from worlds.generic.Rules import add_rule, forbid_item
 
-from .Arrays import difficulty_lambda, level_locations
+from .Arrays import difficulty_lambda, level_locations, no_obelisks
 from .Items import item_list
 from .Locations import all_locations, chimeras_keep, dragons_lair, gates_of_the_underworld
 
@@ -22,14 +23,16 @@ def set_rules(world: "GauntletLegendsWorld"):
     runestones = [item.item_name for item in item_list if "Runestone" in item.item_name]
     obelisks = [item.item_name for item in item_list if "Obelisk" in item.item_name]
     mirror_shards = [item.item_name for item in item_list if "Mirror" in item.item_name]
+    boss_weapons = [item.item_name for item in item_list if item.progression == ItemClassification.useful]
 
     for location in [
         location
         for location in all_locations
-           if "Mirror" in location.name
-           or location in dragons_lair
-           or location in chimeras_keep
-           or location in gates_of_the_underworld
+            if "Mirror" in location.name
+            or location in dragons_lair
+            or location in chimeras_keep
+            or location in gates_of_the_underworld
+            or location.id in no_obelisks
     ] + [location for location in all_locations if "Obelisk" in location.name and world.options.obelisks == 1]:
         for item in obelisks:
             if location.name not in world.disabled_locations:
@@ -38,7 +41,7 @@ def set_rules(world: "GauntletLegendsWorld"):
     for location in [
         location for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name
     ]:
-        for item in runestones + mirror_shards:
+        for item in runestones + mirror_shards + boss_weapons:
             if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(location.name), item, world.player)
 
