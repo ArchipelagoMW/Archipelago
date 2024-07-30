@@ -690,12 +690,12 @@ class CollectionState():
         """
         # since the loop has a good chance to run more than once, only filter the events once
         if key_only:
-            def event_filter(location: Location):
+            def event_filter(location: Location) -> bool:
                 return (location.advancement
                         and location not in self.events
                         and getattr(location.item, "locked_dungeon_item", False))
         else:
-            def event_filter(location: Location):
+            def event_filter(location: Location) -> bool:
                 return location.advancement and location not in self.events
 
         events_per_player: List[Tuple[int, List[Location]]]
@@ -708,7 +708,8 @@ class CollectionState():
                 if filtered_locations:
                     events_per_player.append((player, filtered_locations))
         else:
-            events_per_player_dict = defaultdict(list)
+            # Filter and separate the locations into a list for each player.
+            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
             for location in filter(event_filter, locations):
                 events_per_player_dict[location.player].append(location)
             # Convert to a list of tuples.
@@ -732,6 +733,9 @@ class CollectionState():
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
         players_to_check: Set[int] = set(self.multiworld.regions.location_cache.keys())
+        next_events_per_player: List[Tuple[int, List[Location]]]
+        accessible_locations: List[Location]
+        inaccessible_locations: List[Location]
         while players_to_check:
             received_advancement_players = set()
             next_events_per_player = []
@@ -741,23 +745,27 @@ class CollectionState():
                     # The player did not receive any advancement in the last outer loop, so skip their locations.
                     next_events_per_player.append((player, locations))
                     continue
-                # Accessibility of all locations is checked first to prevent the region accessibility cache for this
-                # player needing to be updated multiple times due to some of their own items being collected into the
-                # state.
+
+                # Accessibility of each location is checked first because a player's region accessibility cache becomes
+                # stale whenever one of their own items is collected into the state.
                 accessible_locations = []
                 inaccessible_locations = []
                 for location in locations:
                     # Location.can_reach(), by default, also checks region accessibility if the Location's access rule
-                    # returns True, but because the region accessibility cache shouldn't need to be updated more than
-                    # once, it is faster to check region accessibility first, even if `location.can_reach(self)` might
-                    # cause region accessibility to be checked a second time.
+                    # returns True, but because the player's region accessibility cache shouldn't need to be updated
+                    # more than once per loop, it is faster to check region accessibility first, even if
+                    # `location.can_reach(self)` might cause region accessibility to be checked a second time.
                     if location.parent_region.can_reach(self) and location.can_reach(self):
+                        # Locations containing Items that do not belong to `player` could be collected immediately
+                        # instead of being appended because they won't stale `player`'s region accessibility cache, but,
+                        # for simplicity, all the accessible locations are collected in a single loop.
                         accessible_locations.append(location)
                     else:
                         inaccessible_locations.append(location)
                 if inaccessible_locations:
                     next_events_per_player.append((player, inaccessible_locations))
 
+                # Collect all the accessible items.
                 for location in accessible_locations:
                     self.events.add(location)
                     item = location.item
