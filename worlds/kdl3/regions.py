@@ -15,27 +15,27 @@ if TYPE_CHECKING:
     from . import KDL3World
 
 default_levels = {
-    1: [0x770001, 0x770002, 0x770003, 0x770004, 0x770005, 0x770006, 0x770200],
-    2: [0x770007, 0x770008, 0x770009, 0x77000A, 0x77000B, 0x77000C, 0x770201],
-    3: [0x77000D, 0x77000E, 0x77000F, 0x770010, 0x770011, 0x770012, 0x770202],
-    4: [0x770013, 0x770014, 0x770015, 0x770016, 0x770017, 0x770018, 0x770203],
-    5: [0x770019, 0x77001A, 0x77001B, 0x77001C, 0x77001D, 0x77001E, 0x770204],
+    1: [0x770000, 0x770001, 0x770002, 0x770003, 0x770004, 0x770005, 0x770200],
+    2: [0x770006, 0x770007, 0x770008, 0x770009, 0x77000A, 0x77000B, 0x770201],
+    3: [0x77000C, 0x77000D, 0x77000E, 0x77000F, 0x770010, 0x770011, 0x770202],
+    4: [0x770012, 0x770013, 0x770014, 0x770015, 0x770016, 0x770017, 0x770203],
+    5: [0x770018, 0x770019, 0x77001A, 0x77001B, 0x77001C, 0x77001D, 0x770204],
 }
 
 first_stage_blacklist = {
     # We want to confirm that the first stage can be completed without any items
-    0x77000B,  # 2-5 needs Kine
-    0x770011,  # 3-5 needs Cutter
-    0x77001C,  # 5-4 needs Burning
+    0x77000A,  # 2-5 needs Kine
+    0x770010,  # 3-5 needs Cutter
+    0x77001B,  # 5-4 needs Burning
 }
 
 first_world_limit = {
     # We need to limit the number of very restrictive stages in level 1 on solo gens
     *first_stage_blacklist,  # all three of the blacklist stages need 2+ items for both checks
+    0x770006,
     0x770007,
-    0x770008,
-    0x770013,
-    0x77001E,
+    0x770012,
+    0x77001D,
 
 }
 
@@ -48,8 +48,8 @@ def generate_valid_level(world: "KDL3World", level: int, stage: int,
             possible_stages.remove(new_stage)
             return generate_valid_level(world, level, stage, possible_stages, placed_stages)
         elif (not (world.multiworld.players > 1 or world.options.consumables or world.options.starsanity) and
-                new_stage in first_world_limit and
-                sum(p_stage in first_world_limit for p_stage in placed_stages)
+              new_stage in first_world_limit and
+              sum(p_stage in first_world_limit for p_stage in placed_stages)
               >= (2 if world.options.open_world else 1)):
             return generate_valid_level(world, level, stage, possible_stages, placed_stages)
     return new_stage
@@ -65,7 +65,7 @@ def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None
                         room_entry["default_exits"], room_entry["animal_pointers"], room_entry["enemies"],
                         room_entry["entity_load"], room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
-                            None for location in room_entry["locations"]
+        None for location in room_entry["locations"]
                             if (not any(x in location for x in ["1-Up", "Maxim"]) or
                                 world.options.consumables.value) and ("Star" not in location
                                                                       or world.options.starsanity.value)},
@@ -85,7 +85,7 @@ def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None
             if room.stage == 7:
                 first_rooms[0x770200 + room.level - 1] = room
             else:
-                first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage] = room
+                first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage - 1] = room
         exits: Dict[str, Callable[[CollectionState], bool]] = dict()
         for def_exit in room.default_exits:
             target = f"{level_names[room.level]} {room.stage} - {def_exit['room']}"
@@ -117,7 +117,7 @@ def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None
         if world.options.open_world:
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
         else:
-            world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][5]], world.player)\
+            world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][5]], world.player) \
                 .parent_region.add_exits([first_rooms[0x770200 + level - 1].name])
 
 
@@ -151,12 +151,13 @@ def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, Li
                 # Randomize bosses separately
                 if levels[level][stage] is None:
                     stage_candidates = [candidate for candidate in possible_stages
-                                            if (shuffle_mode == 1 and candidate in default_levels[level])
-                                            or (shuffle_mode == 2 and ((candidate - 1) & 0x00FFFF) % 6 == stage)
-                                            or (shuffle_mode == 3)
-                                            ]
+                                        if (shuffle_mode == 1 and candidate in default_levels[level])
+                                        or (shuffle_mode == 2 and ((candidate - 1) & 0x00FFFF) % 6 == stage)
+                                        or (shuffle_mode == 3)
+                                        ]
                     if not stage_candidates:
-                        raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
+                        raise Exception(
+                            f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
                     new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
                     possible_stages.remove(new_stage)
                     levels[level][stage] = new_stage
