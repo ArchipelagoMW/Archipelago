@@ -212,7 +212,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
-    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
+    if len(set(name.lower().replace("_", " ") for name in erargs.name.values())) != len(erargs.name):
         raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
 
     if args.yaml_output:
