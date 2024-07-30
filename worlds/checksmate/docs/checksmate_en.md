@@ -25,19 +25,12 @@ You can customize your settings by visiting the [ChecksMate Player Settings Page
 Some examples of certain outcomes are available in [this valid players file](checksmate-example.yaml), which can be used
 to generate a multiplayer multiworld (but should instead be used for your own inspiration).
 
-#### Warning: Locations Accessibility not supported
+#### Diffculty and Material via Progression Balancing
 
-It is strongly recommended that you **do not use *Accessibility: Locations***. Most testing is at *Minimal*, although
-*Items* should also function. (Generation will often fail. The custom item pool generation does not guarantee that you
-will receive the combinations the logic believes necessary to access every location. Once location distribution begins,
-there is no way to revisit item pool generation.)
-
-#### Opinion: Material Balancing
-
-One of the most important settings determines how many pieces will be distributed through your multiworld, defined in
-terms of material value. Although your multiworld's item pool may contain more than 39 material, you should not expect
-to have all of your material before reaching your goal: The logic requires that you equal the CPU army, not that you
-complete your collection.
+Increased progression balancing will place your pieces earlier, including pocket pieces and consuls. However, the game
+can be much easier with useful and filler items, since the AI makes weaker chess moves for each useful item you acquire.
+Since progression balancing tends to move useful items later, you may actually find the game easier at lower progression
+balancing.
 
 A normal (FIDE) army has 8 points of pawns plus 31 points of pieces (12 from 4 minor pieces, 10 from 2 rooks, and 9 from
 1 queen). Material isn't everything: An army of 27 pawns plus 4 Knights is considered to be extremely powerful.
