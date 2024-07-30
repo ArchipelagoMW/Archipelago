@@ -106,7 +106,7 @@ class SC2Mission(Enum):
     EVACUATION = 4, "Evacuation (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.EASY, "ap_evacuation", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     OUTBREAK = 5, "Outbreak (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.EASY, "ap_outbreak", MissionFlag.Terran|MissionFlag.Defense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     SAFE_HAVEN = 6, "Safe Haven", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_safe_haven", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss
-    HAVENS_FALL = 7, "Haven's Fall", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Terran|MissionFlag.VsZerg
+    HAVENS_FALL = 7, "Haven's Fall (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     SMASH_AND_GRAB = 8, "Smash and Grab (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.HasRaceSwap
     THE_DIG = 9, "The Dig", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_dig", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsProtoss
     THE_MOEBIUS_FACTOR = 10, "The Moebius Factor", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_moebius_factor", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsZerg
@@ -207,9 +207,50 @@ class SC2Mission(Enum):
     OUTBREAK_Z = 92, "Outbreak (Zerg)", SC2Campaign.WOL, "Colonist", SC2Race.ZERG, MissionPools.EASY, "ap_outbreak", MissionFlag.Zerg|MissionFlag.Defense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     OUTBREAK_P = 93, "Outbreak (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.EASY, "ap_outbreak", MissionFlag.Protoss|MissionFlag.Defense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 94/95 - Safe Haven
-    # 96/97 - Haven's Fall
+    HAVENS_FALL_Z = 96, "Haven's Fall (Zerg)", SC2Campaign.WOL, "Colonist", SC2Race.ZERG, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    HAVENS_FALL_P = 97, "Haven's Fall (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
     SMASH_AND_GRAB_Z = 98, "Smash and Grab (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
     SMASH_AND_GRAB_P = 99, "Smash and Grab (Protoss)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
+    # 100/101 - The Dig
+    # 102/103 - Moebius Factor
+    # 104/105 - Supernova
+    # 106/107 - Maw of the Void
+    # 108/109 - Devil's Playground
+    # 110/111 - Welcome to the Jungle
+    # 112/113 - Breakout
+    # 114/115 - Ghost of a Chance
+    # 116/117 - Great Train Robbery
+    # 118/119 - Cutthroat
+    # 120/121 - Engine of Destruction
+    # 122/123 - Media Blitz
+    # 124/125 - Piercing the Shroud
+    # 126/127 - Whispers of Doom
+    # 128/129 - A Sinister Turn
+    # 130/131 - Echoes of the Future
+    # 132/133 - In Utter Darkness
+    # 134/135 - Gates of Hell
+    # 136/137 - Belly of the Beast
+    # 138/139 - Shatter the Sky
+    # 140/141 - All In
+    # 142/143 - Lab Rat
+    # 144/145 - Back in the Saddle
+    # 146/147 - Rendezvous
+    # 148/149 - Harvest of Screams
+    # 150/151 - Shoot the Messenger
+    # 152/153 - Enemy Within
+    # 154/155 - Fire in the Sky
+    # 156/157 - Old Soldiers
+    # 158/159 - Waking the Ancient
+    # 160/161 - The Crucible
+    # 162/163 - Supreme
+    # 164/165 - Infested
+    # 166/167 - Hand of Darkness
+    # 168/169 - Phantoms of the Void
+    # 170/171 - With Friends Like These
+    # 172/173 - Conviction
+    # 174/175 - Planetfall
+    # 176/177 - Death From Above
+    # 178/179 - The Reckoning
 
 
 class MissionConnection:

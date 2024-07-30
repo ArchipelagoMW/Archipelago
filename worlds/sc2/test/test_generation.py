@@ -472,7 +472,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.PLANETARY_FORTRESS, itempool)
         self.assertNotIn(item_names.PLANETARY_FORTRESS_ORBITAL_MODULE, itempool)
 
-    def test_disabling_unit_nerfs_removes_war_council_upgrades(self) -> None:
+    def test_disabling_unit_nerfs_start_inventories_war_council_upgrades(self) -> None:
         world_options = {
             'enable_wol_missions': False,
             'enable_prophecy_missions': True,
@@ -489,6 +489,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         war_council_item_names = set(item_groups.item_name_groups[item_groups.ItemGroupNames.WAR_COUNCIL])
         present_war_council_items = war_council_item_names.intersection(itempool)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        starting_war_council_items = war_council_item_names.intersection(starting_inventory)
 
         self.assertTrue(itempool)
         self.assertFalse(present_war_council_items, f'Found war council upgrades when nerf_unit_baselines is false: {present_war_council_items}')
+        self.assertEqual(war_council_item_names, starting_war_council_items)

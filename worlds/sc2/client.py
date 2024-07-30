@@ -37,6 +37,7 @@ from .options import (
 from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
 from .mission_tables import MissionFlag
+from . import SC2World
 
 
 if __name__ == "__main__":
@@ -138,7 +139,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         # Note(mm): Bold/underline can help readability, but unfortunately the CommonClient does not filter bold tags from command-line output.
         # Regardless, using `on_print_json` to get formatted text in the GUI and output in the command-line and in the logs,
         # without having to branch code from CommonClient
-        self.ctx.on_print_json({"data": [{"text": text}]})
+        self.ctx.on_print_json({"data": [{"text": text, "keep_markup": True}]})
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
@@ -273,7 +274,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         print_faction_title()
                         has_printed_faction_title = True
                         (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
-                            (" from ").location(item.location, self.ctx.slot)
+                            (" from ").location(item.location, item.player)
                             (" by ").player(item.player)
                         ).send(self.ctx)
                 
@@ -332,7 +333,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
-            ConfigurableOptionInfo('unit_nerfs', 'nerf_unit_baselines', options.NerfUnitBaselines, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -418,6 +418,17 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.ctx.__dict__[var_names[faction]] = match_colors.index(color.lower())
             self.ctx.pending_color_update = True
             self.output(f"Color for {faction} set to " + player_colors[self.ctx.__dict__[var_names[faction]]])
+
+    def _cmd_windowed_mode(self, value="") -> None:
+        if not value:
+            pass
+        elif value.casefold() in ('t', 'true', 'yes', 'y'):
+            SC2World.settings.game_windowed_mode = True
+            force_settings_save_on_close()
+        else:
+            SC2World.settings.game_windowed_mode = False
+            force_settings_save_on_close()
+        sc2_logger.info(f"Windowed mode is: {SC2World.settings.game_windowed_mode}")
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -516,7 +527,6 @@ class SC2Context(CommonContext):
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
-        self.nerf_unit_baselines: int = NerfUnitBaselines.default
         self.custom_mission_order: typing.List[CampaignSlotData]
         self.mission_id_to_entry_rules: typing.Dict[int, typing.Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]]
         self.final_mission_ids: typing.List[int] = [29]
@@ -660,7 +670,6 @@ class SC2Context(CommonContext):
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
-            self.nerf_unit_baselines = args["slot_data"].get("nerf_unit_baselines", NerfUnitBaselines.default)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -792,9 +801,10 @@ class SC2Context(CommonContext):
         super(SC2Context, self).on_print_json(args)
 
     def run_gui(self) -> None:
+        from .gui_config import apply_window_defaults
+        warnings = apply_window_defaults()
         from .client_gui import start_gui
-        start_gui(self)
-
+        start_gui(self, warnings)
 
     async def shutdown(self) -> None:
         await super(SC2Context, self).shutdown()
@@ -877,7 +887,7 @@ async def main():
 
     await ctx.shutdown()
 
-# These items must be given to the player if the game is generated on version 2
+# These items must be given to the player if the game is generated on older versions
 API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.PHOTON_CANNON),
     CompatItemHolder(item_names.OBSERVER),
@@ -889,6 +899,12 @@ API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
     CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
 }
+API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
+    CompatItemHolder(item_name)
+    for item_name, item_data in get_full_item_list().items()
+    if item_data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
+        and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
+}
 
 
 def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[NetworkItem]:
@@ -899,10 +915,14 @@ def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[N
 
 def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     items = ctx.items_received.copy()
-    # Items unlocked in API2 by default (Prophecy default items)
+    # Items unlocked in earlier generator versions by default (Prophecy defaults, war council, rebalances)
     if ctx.slot_data_version < 3:
         for compat_item in API2_TO_API3_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
+    if ctx.slot_data_version < 4:
+        for compat_item in API3_TO_API4_COMPAT_ITEMS:
+            items.extend(compat_item_to_network_items(compat_item))
+
     # API < 4 Orbital Command Count (Deprecated item)
     orbital_command_count: int = 0
 
@@ -968,10 +988,6 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_item = item_list[item_names.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][shield_upgrade_item.type.flag_word] += 1 << shield_upgrade_item.number
-    
-    # War council option
-    if not ctx.nerf_unit_baselines:
-        accumulators[SC2Race.PROTOSS][ProtossItemType.War_Council.flag_word] = (1 << 30) - 1
 
     # Deprecated Orbital Command handling (Backwards compatibility):
     if orbital_command_count > 0:
@@ -1144,8 +1160,11 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
-        run_game(bot.maps.get(lookup_id_to_mission[mission_id].map_file), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
-                                                                name="Archipelago", fullscreen=True)], realtime=True)
+        run_game(
+            bot.maps.get(lookup_id_to_mission[mission_id].map_file),
+            [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id), name="Archipelago", fullscreen=not SC2World.settings.game_windowed_mode)],
+            realtime=True,
+        )
 
 
 class ArchipelagoBot(bot.bot_ai.BotAI):
@@ -1596,6 +1615,20 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
 def get_location_offset(mission_id):
     return SC2WOL_LOC_ID_OFFSET if mission_id <= SC2Mission.ALL_IN.id \
         else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
+
+
+_has_forced_save = False
+def force_settings_save_on_close() -> None:
+    """
+    Settings has an existing auto-save feature, but it only triggers if a new key was introduced.
+    Force it to mark things as changed by introducing a new key and then cleaning up.
+    """
+    global _has_forced_save
+    if _has_forced_save:
+        return
+    SC2World.settings.update({'invalid_attribute': True})
+    del SC2World.settings.invalid_attribute
+    _has_forced_save = True
 
 
 def launch():

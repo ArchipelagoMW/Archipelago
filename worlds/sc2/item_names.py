@@ -327,23 +327,25 @@ NOVA_HOLO_DECOY                         = "Holo Decoy (Nova Gadget)"
 NOVA_NUKE                               = "Tac Nuke Strike (Nova Ability)"
 
 # Zerg Units
-ZERGLING      = "Zergling"
-SWARM_QUEEN   = "Swarm Queen"
-ROACH         = "Roach"
-HYDRALISK     = "Hydralisk"
-ABERRATION    = "Aberration"
-MUTALISK      = "Mutalisk"
-SWARM_HOST    = "Swarm Host"
-INFESTOR      = "Infestor"
-ULTRALISK     = "Ultralisk"
-CORRUPTOR     = "Corruptor"
-SCOURGE       = "Scourge"
-BROOD_QUEEN   = "Brood Queen"
-DEFILER       = "Defiler"
+ZERGLING        = "Zergling"
+SWARM_QUEEN     = "Swarm Queen"
+ROACH           = "Roach"
+HYDRALISK       = "Hydralisk"
+ABERRATION      = "Aberration"
+MUTALISK        = "Mutalisk"
+SWARM_HOST      = "Swarm Host"
+INFESTOR        = "Infestor"
+ULTRALISK       = "Ultralisk"
+CORRUPTOR       = "Corruptor"
+SCOURGE         = "Scourge"
+BROOD_QUEEN     = "Brood Queen"
+DEFILER         = "Defiler"
+INFESTED_MARINE = "Infested Marine"
 
 # Zerg Buildings
-SPORE_CRAWLER = "Spore Crawler"
-SPINE_CRAWLER = "Spine Crawler"
+SPORE_CRAWLER   = "Spore Crawler"
+SPINE_CRAWLER   = "Spine Crawler"
+INFESTED_BUNKER = "Infested Bunker"
 
 # Zerg Weapon / Armor Upgrades
 ZERG_UPGRADE_PREFIX = "Progressive Zerg"
@@ -458,6 +460,16 @@ OVERLORD_VENTRAL_SACS                   = "Ventral Sacs (Overlord)"
 OVERLORD_GENERATE_CREEP                 = "Generate Creep (Overlord)"
 OVERLORD_PNEUMATIZED_CARAPACE           = "Pneumatized Carapace (Overlord)"
 OVERLORD_ANTENNAE                       = "Antennae (Overlord)"
+INFESTED_SCV_BUILD_CHARGES              = "Sustained Cultivation Ventricles (InfSCV Build Charges)"
+INFESTED_MARINE_PLAGUED_MUNITIONS       = "Plagued Munitions (Infested Marine)"
+INFESTED_MARINE_RETINAL_AUGMENTATION    = "Retinal Augmentation (Infested Marine)"
+INFESTED_BUNKER_CALCIFIED_ARMOR         = "Calcified Armor (Infested Bunker)"
+INFESTED_BUNKER_REGENERATIVE_PLATING    = "Regenerative Plating (Infested Bunker)"
+INFESTED_BUNKER_ENGORGED_BUNKERS        = "Engorged Bunkers (Infested Bunker)"
+TYRANNOZOR_BARRAGE_OF_SPIKES            = "Barrage of Spikes (Tyrannozor)"
+TYRANNOZOR_TYRANTS_PROTECTION           = "Tyrant's Protection (Tyrannozor)"
+TYRANNOZOR_HEALING_ADAPTATION           = "Healing Adaptation (Ultralisk/Tyrannozor)"
+TYRANNOZOR_IMPALING_STRIKE              = "Impaling Strike (Ultralisk/Tyrannozor)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
@@ -482,6 +494,7 @@ MUTALISK_CORRUPTOR_DEVOURER_ASPECT      = "Devourer Aspect (Mutalisk/Corruptor)"
 ROACH_RAVAGER_ASPECT                    = "Ravager Aspect (Roach)"
 OVERLORD_OVERSEER_ASPECT                = "Overseer Aspect (Overlord)"
 ROACH_PRIMAL_IGNITER_ASPECT             = "Primal Igniter Aspect (Roach)"
+ULTRALISK_TYRANNOZOR_ASPECT             = "Tyrannozor Aspect (Ultralisk)"
 
 # Zerg Mercs
 INFESTED_MEDICS      = "Infested Medics"
@@ -617,8 +630,8 @@ SCOUT_RESOURCE_EFFICIENCY                               = "Resource Efficiency (
 TEMPEST_TECTONIC_DESTABILIZERS                          = "Tectonic Destabilizers (Tempest)"
 TEMPEST_QUANTIC_REACTOR                                 = "Quantic Reactor (Tempest)"
 TEMPEST_GRAVITY_SLING                                   = "Gravity Sling (Tempest)"
-PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX                    = "Ionic Wavelength Flux (Phoenix/Mirage)"
-PHOENIX_MIRAGE_ANION_PULSE_CRYSTALS                     = "Anion Pulse-Crystals (Phoenix/Mirage)"
+PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX                     = "Ionic Wavelength Flux (Phoenix/Mirage/Skirmisher)"
+PHOENIX_CLASS_ANION_PULSE_CRYSTALS                      = "Anion Pulse-Crystals (Phoenix/Mirage/Skirmisher)"
 CORSAIR_STEALTH_DRIVE                                   = "Stealth Drive (Corsair)"
 CORSAIR_ARGUS_JEWEL                                     = "Argus Jewel (Corsair)"
 CORSAIR_SUSTAINING_DISRUPTION                           = "Sustaining Disruption (Corsair)"
@@ -635,7 +648,7 @@ ARBITER_ENHANCED_CLOAK_FIELD                            = "Enhanced Cloak Field 
 CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT                = "Graviton Catapult (Carrier/Skylord/Purger)"
 CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES             = "Hull of Past Glories (Carrier/Skylord/Purger)"
 VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES      = "Flux Vanes (Void Ray/Destroyer/Warp Ray/Dawnbringer)"
-DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
+DESTROYER_RESOURCE_EFFICIENCY                           = "Resource Efficiency (Destroyer)"
 WARP_PRISM_GRAVITIC_DRIVE                               = "Gravitic Drive (Warp Prism)"
 WARP_PRISM_PHASE_BLASTER                                = "Phase Blaster (Warp Prism)"
 WARP_PRISM_WAR_CONFIGURATION                            = "War Configuration (Warp Prism)"
@@ -692,6 +705,32 @@ AVENGER_KRYHAS_CLOAK                                    = "Kryhas Cloak (Avenger
 DARK_TEMPLAR_LESSER_SHADOW_FURY                         = "Lesser Shadow Fury (Dark Templar)"
 DARK_TEMPLAR_GREATER_SHADOW_FURY                        = "Greater Shadow Fury (Dark Templar)"
 BLOOD_HUNTER_BRUTAL_EFFICIENCY                          = "Brutal Efficiency (Blood Hunter)"
+SENTRY_DOUBLE_SHIELD_RECHARGE                           = "Double Shield Recharge (Sentry)"
+ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (Energizer)"
+HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
+HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
+# Signifier
+# Ascendant
+DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
+# IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
+# Annihilator
+VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Vanguard)"
+VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vanguard)"
+# Stalwart
+# Colossus
+# Wrathwalker
+# Reaver
+# Disruptor
+# Warp Prism
+# Observer
+# Phoenix
+# Corsair
+# Mirage
+SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
+# Void Ray
+DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
+# Warp Ray
+# Dawnbringer
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"

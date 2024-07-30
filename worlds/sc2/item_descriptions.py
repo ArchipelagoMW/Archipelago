@@ -63,6 +63,7 @@ resource_efficiency_cost_reduction = {
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
     item_names.SCOUT:         (125, 25, 1),
+    item_names.DESTROYER:     (50, 25, 1),
 
     # War Council
     item_names.CENTURION:     (0, 50, 0),
@@ -92,7 +93,7 @@ def _get_start_and_max_energy_desc(unit_name_plural: str, starting_amount_increa
 
 def _ability_desc(unit_name_plural: str, ability_name: str, ability_description: str = '') -> str:
     if ability_description:
-        suffix = f", which {ability_description}"
+        suffix = f", \nwhich {ability_description}"
     else:
         suffix = ""
     return f"{unit_name_plural} gain the {ability_name} ability{suffix}."
@@ -515,7 +516,7 @@ item_descriptions = {
     item_names.STARTING_SUPPLY: "Increases the starting supply for all missions.",
     item_names.NOTHING: "Does nothing. Used to remove a location from the game.",
     item_names.NOVA_GHOST_VISOR: "Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units.",
-    item_names.NOVA_RANGEFINDER_OCULUS: "Increaases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
+    item_names.NOVA_RANGEFINDER_OCULUS: "Increases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
     item_names.NOVA_DOMINATION: "Gives Nova the ability to mind-control a target enemy unit.",
     item_names.NOVA_BLINK: "Gives Nova the ability to teleport a short distance and cloak for 10s.",
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: inspect.cleandoc("""
@@ -552,6 +553,8 @@ item_descriptions = {
     item_names.SCOURGE: "Flying anti-air suicide unit. Hatches in pairs from a single larva.",
     item_names.BROOD_QUEEN: "Flying support caster. Can cast the Ocular Symbiote and Spawn Broodlings abilities.",
     item_names.DEFILER: "Support caster. Can use the Dark Swarm, Consume, and Plague abilities.",
+    item_names.INFESTED_MARINE: "General-purpose Infested infantry. Has a timed life of 90 seconds.",
+    item_names.INFESTED_BUNKER: "Defensive structure. Periodically spawns Infested infantry that fight from inside. Acts as a mobile ground transport while uprooted.",
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "melee ground units"),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "ranged ground units"),
     item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: GENERIC_UPGRADE_TEMPLATE.format("armor", ZERG, "ground units"),
@@ -654,6 +657,16 @@ item_descriptions = {
     item_names.CORRUPTOR_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.CORRUPTOR),
     item_names.PRIMAL_IGNITER_CONCENTRATED_FIRE: "Primal Igniters deal +15 damage vs light armor.",
     item_names.PRIMAL_IGNITER_PRIMAL_TENACITY: "Primal Igniters gain +100 health and +1 armor.",
+    item_names.INFESTED_SCV_BUILD_CHARGES: "Starting Infested SCV charges increased to 3. Maximum charges increased to 5.",
+    item_names.INFESTED_MARINE_PLAGUED_MUNITIONS: "Infested Marines deal an extra 50 damage over 15 seconds to targets they attack.",
+    item_names.INFESTED_MARINE_RETINAL_AUGMENTATION: "Infested Marines gain +1 range.",
+    item_names.INFESTED_BUNKER_CALCIFIED_ARMOR: "Infested Bunkers gain +3 armor.",
+    item_names.INFESTED_BUNKER_REGENERATIVE_PLATING: "Infested Bunkers gain increased life regeneration while rooted.",
+    item_names.INFESTED_BUNKER_ENGORGED_BUNKERS: "Infested Bunkers gain +2 cargo slots. Infested Trooper spawn cooldown is reduced by 20%.",
+    item_names.TYRANNOZOR_TYRANTS_PROTECTION: "Tyrannozors grants nearby friendly units 2 armor.",
+    item_names.TYRANNOZOR_BARRAGE_OF_SPIKES: "Unleash a Barrage of Spikes, dealing 100 damage to enemy ground and air units around the Tyrannozor.",
+    item_names.TYRANNOZOR_IMPALING_STRIKE: "Ultralisk and Tyrannozor melee attacks have a 20% chance to stun for 2 seconds.",
+    item_names.TYRANNOZOR_HEALING_ADAPTATION: "Ultralisks and Tyrannozors regenerate life quickly when out of combat.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",
@@ -716,6 +729,7 @@ item_descriptions = {
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: "Anti-air flyer. Attack inflict Acid Spores. Can attack air units. Morphed from the Mutalisk or Corruptor.",
     item_names.ROACH_RAVAGER_ASPECT: "Ranged artillery. Can use Corrosive Bile. Can attack ground units. Morphed from the Roach.",
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: "Assault unit. Has an area-damage attack. Regenerates life quickly when burrowed. Can attack ground units. Morphed by merging two Roaches.",
+    item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks.",
     item_names.OBSERVER: "Flying spy. Cloak renders the unit invisible to enemies without detection.",
     item_names.CENTURION: "Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities.",
     item_names.SENTINEL: "Powerful melee warrior. Has the Charge and Reconstruction abilities.",
@@ -785,8 +799,8 @@ item_descriptions = {
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
     item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets.",
-    item_names.PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX: "Increases Phoenix and Mirage weapon damage by +2.",
-    item_names.PHOENIX_MIRAGE_ANION_PULSE_CRYSTALS: "Increases Phoenix and Mirage range by +2.",
+    item_names.PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX: "Increases Phoenix, Mirage, and Skirmisher weapon damage by +2.",
+    item_names.PHOENIX_CLASS_ANION_PULSE_CRYSTALS: "Increases Phoenix, Mirage, and Skirmiser range by +2.",
     item_names.CORSAIR_STEALTH_DRIVE: "Corsairs become permanently cloaked.",
     item_names.CORSAIR_ARGUS_JEWEL: "Corsairs can store 2 charges of disruption web.",
     item_names.CORSAIR_SUSTAINING_DISRUPTION: "Corsair disruption webs last longer.",
@@ -803,7 +817,7 @@ item_descriptions = {
     item_names.CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
     item_names.CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES: "Carriers gain +2 armour.",
     item_names.VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES: "Increases movement speed of Void Ray variants.",
-    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
+    item_names.DESTROYER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DESTROYER),
     item_names.WARP_PRISM_GRAVITIC_DRIVE: "Increases the movement speed of Warp Prisms.",
     item_names.WARP_PRISM_PHASE_BLASTER: "Equips Warp Prisms with an auto-attack that can hit ground and air targets.",
     item_names.WARP_PRISM_WAR_CONFIGURATION: "Warp Prisms transform faster and gain increased power radius in Phasing Mode.",
@@ -858,6 +872,32 @@ item_descriptions = {
     item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: "Dark Templar War Council upgrade. Dark Templar gain two strikes of their Shadow Fury ability.",
     item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: "Dark Templar War Council upgrade. Dark Templar gain three strikes of their Shadow Fury ability.",
     item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: "Blood Hunter War Council upgrade. Blood Hunters attack over twice as quickly.",
+    item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: "Sentry War Council upgrade. Sentries can heal the shields of two targets at once.",
+    item_names.ENERGIZER_MOBILE_CHRONO_BEAM: "Energizer War Council upgrade. Allows Energizers to use Chrono Beam in Mobile Mode.",
+    item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
+    item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
+    # Signifier
+    # Ascendant
+    item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
+    # Immortal
+    # Annihilator
+    item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
+    item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
+    # Stalwart
+    # Colossus
+    # Wrathwalker
+    # Reaver
+    # Disruptor
+    # Warp Prism
+    # Observer
+    # Phoenix
+    # Corsair
+    # Mirage
+    item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
+    # Void Ray
+    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
+    # Warp Ray
+    # Dawnbringer
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

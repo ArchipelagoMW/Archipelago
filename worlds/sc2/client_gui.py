@@ -1,7 +1,10 @@
 from typing import *
 import asyncio
+import logging
 
-from kvui import GameManager, HoverBehavior, ServerToolTip
+from BaseClasses import ItemClassification
+from NetUtils import JSONMessagePart
+from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.tabbedpanel import TabbedPanelItem
@@ -13,7 +16,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_nodes
+from worlds.sc2.client import SC2Context, calc_unfinished_nodes, force_settings_save_on_close
+from worlds.sc2.item_descriptions import item_descriptions
 from worlds.sc2.mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type
@@ -78,6 +82,40 @@ class MissionLayout(GridLayout):
 class MissionCategory(GridLayout):
     pass
 
+
+class SC2JSONtoKivyParser(KivyJSONtoTextParser):
+    def _handle_item_name(self, node: JSONMessagePart):
+        item_name = node["text"]
+        if item_name not in item_descriptions:
+            return super()._handle_item_name(node)
+
+        flags = node.get("flags", 0)
+        item_types = []
+        if flags & ItemClassification.progression:
+            item_types.append("progression")
+        if flags & ItemClassification.useful:
+            item_types.append("useful")
+        if flags & ItemClassification.trap:
+            item_types.append("trap")
+        if not item_types:
+            item_types.append("normal")
+
+        # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
+        desc = item_descriptions[item_name].replace(". \n", ".<br>").replace(". ", ".<br>").replace("\n", "<br>")
+        ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + desc
+        node.setdefault("refs", []).append(ref)
+        return super(KivyJSONtoTextParser, self)._handle_item_name(node)
+
+    def _handle_text(self, node: JSONMessagePart):
+        if node.get("keep_markup", False):
+            for ref in node.get("refs", []):
+                node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
+                self.ref_count += 1
+            return super(KivyJSONtoTextParser, self)._handle_text(node)
+        else:
+            return super()._handle_text(node)
+
+
 class SC2Manager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -96,9 +134,36 @@ class SC2Manager(GameManager):
     first_mission = ""
     ctx: SC2Context
 
-    def __init__(self, ctx) -> None:
+    def __init__(self, ctx: SC2Context, startup_warnings: List[str]) -> None:
         super().__init__(ctx)
+        self.json_to_kivy_parser = SC2JSONtoKivyParser(ctx)
+        self.startup_warnings = startup_warnings
+        self.minimized = False
+        from kivy.core.window import Window
+        Window.bind(on_maximize=self.on_maximize)
+        Window.bind(on_minimize=self.on_minimize)
+        Window.bind(on_restore=self.on_restore)
 
+    def on_start(self) -> None:
+        super().on_start()
+        for startup_warning in self.startup_warnings:
+            logging.getLogger("Starcraft2").warning(f"Startup WARNING: {startup_warning}")
+
+    def on_maximize(self, window) -> None:
+        SC2World.settings.window_maximized = True
+        force_settings_save_on_close()
+
+    def on_minimize(self, window) -> None:
+        self.minimized = True
+
+    def on_restore(self, window) -> None:
+        if self.minimized:
+            self.minimized = False
+        else:
+            # Restoring from maximized
+            SC2World.settings.window_maximized = False
+            force_settings_save_on_close()
+    
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
             App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
@@ -374,8 +439,8 @@ class SC2Manager(GameManager):
             title += ""
         return title
 
-def start_gui(context: SC2Context):
-    context.ui = SC2Manager(context)
+def start_gui(context: SC2Context, startup_warnings: List[str]):
+    context.ui = SC2Manager(context, startup_warnings)
     context.ui_task = asyncio.create_task(context.ui.async_run(), name="UI")
     import pkgutil
     data = pkgutil.get_data(SC2World.__module__, "starcraft2.kv").decode()
