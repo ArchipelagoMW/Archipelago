@@ -421,7 +421,7 @@ kh1_option_groups = [
         APIncrease,
         MPIncrease,
         AccessorySlotIncrease,
-        ItemSlotIncrease
+        ItemSlotIncrease,
     ]),
     OptionGroup("Keyblades", [
         KeybladesUnlockChests,
