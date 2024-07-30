@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool
+from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool, OptionGroup
 
 class StrengthIncrease(Range):
     """
@@ -395,3 +395,51 @@ class KH1Options(PerGameCommonOptions):
     item_slot_increase: ItemSlotIncrease
     start_inventory_from_pool: StartInventoryPool
     
+kh1_option_groups = [
+    OptionGroup("Goal", [
+        Goal,
+        EndoftheWorldUnlock,
+        FinalRestDoor,
+        RequiredReportsDoor,
+        RequiredReportsEotW,
+        ReportsInPool
+    ]),
+    OptionGroup("Locations", [
+        SuperBosses,
+        Atlantica,
+        Cups,
+        HundredAcreWood,
+        VanillaEmblemPieces,
+    ]),
+    OptionGroup("Levels", [
+        EXPMultiplier,
+        LevelChecks,
+        ForceStatsOnLevels,
+        StrengthIncrease,
+        DefenseIncrease,
+        HPIncrease,
+        APIncrease,
+        MPIncrease,
+        AccessorySlotIncrease,
+        ItemSlotIncrease
+    ]),
+    OptionGroup("Keyblades", [
+        KeybladesUnlockChests,
+        RandomizeKeybladeStats,
+        BadStartingWeapons,
+        KeybladeMaxStrength,
+        KeybladeMinStrength,
+        KeybladeMaxMP,
+        KeybladeMinMP
+    ]),
+    OptionGroup("Misc", [
+        StartingWorlds,
+        Puppies,
+        InteractInBattle,
+        AdvancedLogic,
+        ExtraSharedAbilities,
+        EXPZeroInPool,
+        DonaldDeathLink,
+        GoofyDeathLink,
+    ])
+]
