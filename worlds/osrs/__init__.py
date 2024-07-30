@@ -434,8 +434,8 @@ class OSRSWorld(World):
 
             else:
                 if len(general_tasks) == 0:
-                    raise Exception(f"There are not enough available tasks to fill the remaining pool for OSRS. " +
-                                    f"Please adjust settings to be less restrictive of tasks.")
+                    raise Exception(f"There are not enough available tasks to fill the remaining pool for OSRS " +
+                                    f"Please adjust {self.player_name}'s settings to be less restrictive of tasks.")
                 task = general_tasks.pop()
                 self.add_location(task)
                 locations_added += 1
