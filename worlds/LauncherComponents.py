@@ -56,10 +56,10 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None):
+def launch_subprocess(func: Callable, name: str = None, args=()):
     global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name)
+    process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
 
@@ -78,9 +78,9 @@ class SuffixIdentifier:
         return False
 
 
-def launch_textclient():
+def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient, name="TextClient")
+    launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
