@@ -398,10 +398,11 @@ class OSRSWorld(World):
                 tasks_for_this_type.reverse()
 
             tasks_for_this_type = tasks_for_this_type[:max_amount_for_task_type]
-
-            tasks_per_task_type[task_type] = tasks_for_this_type
-            weights_per_task_type[task_type] = getattr(self.options,
-                                                       f"{task_type}_task_weight") if tasks_for_this_type else 0
+            weight_for_this_type = getattr(self.options,
+                                                       f"{task_type}_task_weight")
+            if weight_for_this_type > 0:
+                tasks_per_task_type[task_type] = tasks_for_this_type
+                weights_per_task_type[task_type] = weight_for_this_type if tasks_for_this_type else 0
 
         # Build a list of collections and weights in a matching order for rnd.choices later
         all_tasks = []
@@ -411,8 +412,9 @@ class OSRSWorld(World):
             all_weights.append(weights_per_task_type[task_type])
 
         # Even after the initial forced generals, they can still be rolled randomly
-        all_tasks.append(general_tasks)
-        all_weights.append(general_weight)
+        if general_weight > 0:
+            all_tasks.append(general_tasks)
+            all_weights.append(general_weight)
 
         while locations_added < locations_required or (generation_is_fake and len(all_tasks) > 0):
             if all_tasks:
