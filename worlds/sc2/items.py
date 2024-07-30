@@ -1481,7 +1481,7 @@ item_table = {
                  origin={"ext"}, classification=ItemClassification.useful),
     item_names.NYDUS_WORM_RAVENOUS_APPETITE:
         ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent_item=item_names.NYDUS_WORM,
-                 origin={"ext"}, classification=ItemClassification.filler),
+                 origin={"ext"}, classification=ItemClassification.useful),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
