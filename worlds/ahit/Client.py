@@ -101,11 +101,27 @@ class AHITContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
-            self.connected_msg = encode([args])
+            json = args
+            # This data is not needed and causes the game to freeze for long periods of time in large asyncs.
+            if json["slot_info"]:
+                json["slot_info"] = {}
+            if json["players"]:
+                json["players"] = []
+            if DEBUG:
+                print(json)
+            self.connected_msg = encode([json])
             if self.awaiting_info:
                 self.server_msgs.append(self.room_info)
                 self.update_items()
                 self.awaiting_info = False
+
+        elif cmd == "RoomUpdate":
+            # Same story as above
+            json = args
+            if json["players"]:
+                json["players"] = []
+
+            self.server_msgs.append(encode(json))
 
         elif cmd == "ReceivedItems":
             if args["index"] == 0:
