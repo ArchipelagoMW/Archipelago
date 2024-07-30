@@ -430,7 +430,7 @@ kh1_option_groups = [
         KeybladeMaxStrength,
         KeybladeMinStrength,
         KeybladeMaxMP,
-        KeybladeMinMP
+        KeybladeMinMP,
     ]),
     OptionGroup("Misc", [
         StartingWorlds,
