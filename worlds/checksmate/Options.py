@@ -58,12 +58,13 @@ class EnableTactics(Choice):
 
     All: Allows the Fork positions to contain progression, useful, trash or other items.
 
-    None: Completely removes the Fork positions from all item pools.
+    None: Completely removes the Fork positions from all item pools. Note that the player will have 6 fewer items, as
+    well as 6 fewer locations.
     """
     display_name = "Enable Tactics"
     option_all = 0
     option_none = 1
-    default = 0
+    default = 1
 
 
 class PieceLocations(Choice):
@@ -201,7 +202,7 @@ class FairyKings(Range):
     default = 0
 
 
-class FairyChessPieceCollection(Choice):
+class FairyChessPieces(Choice):
     """
     Which collection of fairy pieces to allow, if any. Choose FIDE to disable fairy chess pieces. Choose Configure to
     disable this option in favor of the more precise FairyChessPieces option.
@@ -217,7 +218,7 @@ class FairyChessPieceCollection(Choice):
     Configure: Allows you to specify your own pieces using the FairyChessPieces option. See also FairyChessPieces (an
     OptionSet, which is not typically visible on the Archipelago Settings UI) for advanced, specific configuration.
     """
-    display_name = "Fairy Chess Piece Collection"
+    display_name = "Fairy Chess Pieces"
     option_fide = 0
     option_betza = 1
     option_full = 2
@@ -225,9 +226,9 @@ class FairyChessPieceCollection(Choice):
     default = 0
 
 
-class FairyChessPieceCollectionConfigure(OptionSet):
+class FairyChessPiecesConfigure(OptionSet):
     """
-    THIS OPTION IS INCOMPATIBLE WITH FairyChessPieceCollection. Set that option to "Configure" to use this option.
+    THIS OPTION IS INCOMPATIBLE WITH FairyChessPieces. Set that option to "Configure" to use this option.
 
     Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies. If omitted,
     the default allows for all following fairy chess pieces, as well as the standard pieces defined by FIDE.
@@ -247,7 +248,7 @@ class FairyChessPieceCollectionConfigure(OptionSet):
     Camel: Adds a custom army themed after 3,x leapers like the Camel (3,1) and Tribbabah (3,0). (The Knight is a 2,1
     leaper.)
     """
-    display_name = "Fairy Chess Piece Collection Configure"
+    display_name = "Fairy Chess Pieces Configure"
     valid_keys = frozenset([
         "FIDE",
         "Rookies",

@@ -6,7 +6,7 @@ ChecksMate:
   early_material:
     off: 1  # this allows the generator to work out its own logical progression
   fairy_chess_pieces:
-    - FIDE  # this excludes all fairy chess pieces, although you may see many rooks, or no bishops, etc
+    fide: 1  # this excludes all fairy chess pieces, although you may see many rooks, or no bishops, etc
   fairy_chess_pawns:
     vanilla: 1  # this excludes Berolina pawns, so every pawn will be a traditional pawn
 
@@ -17,22 +17,20 @@ name: Traditional
 game:
   ChecksMate: 15
 ChecksMate:
-  progression_balancing:
-    random-low: 1
-  accessibility:
-    minimal: 1
+  goal:
+    single: 1
+  difficulty:
+    daily: 1
+  enable_tactics:
+    all: 1
   early_material:
     pawn: 1 # not counted against locked_items (this may be changed)
-  min_material:
-    41: 1
-  max_material:
-    46: 1 # excludes so many items that it can never get more than 45 material
   max_engine_penalties:
     4: 1
   max_pocket:
     0: 1
   fairy_chess_pieces:
-    - FIDE
+    fide: 1
   fairy_chess_pawns:
     vanilla: 1
   minor_piece_limit_by_type:
@@ -45,12 +43,29 @@ ChecksMate:
     Progressive Minor Piece: 4
     Progressive Major Piece: 3
     Progressive Major To Queen: 1
-  start_hints:
-    - Play as White
-  start_location_hints:
-    - King to E2/E7 Early
-    - Capture Everything
-    - Fork, True Royal
+
+---
+
+description: 'Horde Chess, but with random additional pieces'
+name: OopsAllPawns
+game:
+  ChecksMate: 15
+ChecksMate:
+  accessibility:
+    items: 1
+  difficulty:
+    relaxed: 1 # raises material requirement for goal far beyond just 32 pawns, therefore, player will get a lot
+  early_material:
+    pawn: 1
+  fairy_chess_pieces:
+    betza: 1
+  fairy_chess_pawns:
+    vanilla: 1
+  pocket_limit_by_pocket:
+    1: 1
+  locked_items:
+    Progressive Pawn: 31 # the 32nd pawn is early material
+    Progressive Pocket: 3
 
 ---
 
@@ -59,35 +74,19 @@ name: SleevedAce
 game:
   ChecksMate: 15
 ChecksMate:
-  progression_balancing:
-    random-low: 1
-  accessibility:
-    minimal: 1
+  difficulty:
+    daily: 1
   piece_types:
     chaos: 1
   early_material:
     major: 1
-  min_material:
-    45: 1
-  max_material:
-    51: 1
   fairy_chess_pieces:
-    - FIDE
-    - Rookies
-    - Clobberers
-    - Nutty
-    - Cannon
+    betza: 1
   fairy_chess_pawns:
     vanilla: 1
     berolina: 1
   locked_items:
     Progressive Pocket: 12
-  start_hints:
-    - Play as White
-  start_location_hints:
-    - King to E2/E7 Early
-    - Capture Everything
-    - Fork, True Royal
 
 ---
 
@@ -96,21 +95,17 @@ name: DifferentArmy
 game:
   ChecksMate: 15
 ChecksMate:
-  progression_balancing:
-    random-low: 1
-  accessibility:
-    minimal: 1
+  difficulty:
+    daily: 1
   piece_locations:
     stable: 1
   piece_types:
     stable: 1
   early_material:
     piece: 1
-  min_material:
-    45: 1
-  max_material:
-    51: 1
   fairy_chess_pieces:
+    configure: 1
+  fairy_chess_pieces_configure:
     - Rookies
     - Clobberers
     - Nutty
@@ -118,15 +113,9 @@ ChecksMate:
   fairy_chess_army:
     stable: 1
   fairy_chess_pawns:
-    vanilla: 3
+    vanilla: 20
     mixed: 1
-    berolina: 2
-  start_hints:
-    - Play as White
-  start_location_hints:
-    - King to E2/E7 Early
-    - Capture Everything
-    - Fork, True Royal
+    berolina: 8
 
 ---
 
@@ -135,28 +124,18 @@ name: PowerCouples
 game:
   ChecksMate: 15
 ChecksMate:
-  progression_balancing:
-    random-high: 1
-  accessibility:
-    minimal: 1
+  difficulty:
+    daily: 1
   piece_types:
     chaos: 1
   early_material:
     major: 1
-  min_material:
-    45: 1
-  max_material:
-    51: 1
   max_kings:
     3: 1
   fairy_kings:
     2: 1
   fairy_chess_pieces:
-    - FIDE
-    - Rookies
-    - Clobberers
-    - Nutty
-    - Camel
+    full: 1
   fairy_chess_army:
     chaos: 1
   fairy_chess_pawns:
@@ -173,9 +152,40 @@ ChecksMate:
     Progressive King Promotion: 2
     Progressive Major Piece: 2 # the 3rd is granted as Early Material!
     Progressive Major To Queen: 3
-  start_hints:
-    - Play as White
-  start_location_hints:
-    - King to E2/E7 Early
-    - Capture Everything
-    - Fork, True Royal
+
+
+---
+
+description: 'Skip the first half to learn the second half'
+name: Endgame
+game:
+  ChecksMate: 15
+ChecksMate:
+  goal:
+    super: 1
+  difficulty:
+    daily: 1
+  piece_types:
+    chaos: 1
+  early_material:
+    major: 1
+  max_kings:
+    3: 1
+  fairy_kings:
+    2: 1
+  fairy_chess_pieces:
+    betza: 1
+  fairy_chess_army:
+    chaos: 1
+  fairy_chess_pawns:
+    vanilla: 1
+  locked_items:
+    Progressive Consul: 1
+    Progressive King Promotion: 1
+    Progressive Major Piece: 1
+  start_inventory:
+    Progressive Consul: 1
+    Progressive Pawn: 6
+    Progressive Minor Piece: 2
+    Progressive Major Piece: 2
+    Progressive Major To Queen: 1
