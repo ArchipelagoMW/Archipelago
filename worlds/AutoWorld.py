@@ -388,7 +388,7 @@ class World(metaclass=AutoWorldRegister):
         # collect any events from our already reachable locations
         for location in early_locations[self.player]:
             if location.is_event and location.advancement:
-                sweep_state.collect(location.item, location=location)
+                sweep_state.collect(location.item, event=True, location=location)
         early_locations[self.player] += self.multiworld.get_reachable_locations(sweep_state, self.player)
 
     def fill_hook(self,
