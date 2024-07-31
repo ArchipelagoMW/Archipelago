@@ -62,7 +62,7 @@ Because most games do not check for region access inside of entrance access cond
 
 However, because some games *did* start using things like `region.can_reach` inside entrance access conditions, we provided a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
 This keeps almost all of the performance upsides. Even a game making heavy use of indirect conditions (See: The Witness) is still way way faster than if it just blanket "rechecked all entrances until nothing new is found".
-The reason `location.can_reach` and `entrance.can_reach` are also affected is simple: They call `region.can_reach` on their respective parent/source region.
+The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is simple: They call `region.can_reach` on their respective parent/source region.
 
 We recognize it's a pretty bad beginner's trap (heck, not even a "beginner's" trap, just a trap - even for experienced AP devs), and some games are very complex with their access rules.
 There is an open Pull Request that makes this behavior optional via a world class attribute: [Core: Region handling customization](https://github.com/ArchipelagoMW/Archipelago/pull/3682).
