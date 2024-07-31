@@ -244,7 +244,7 @@ class SMZ3World(World):
             set_rule(entrance, lambda state, region=region: region.CanEnter(state.smz3state[self.player]))
             for loc in region.Locations:
                 l = self.locations[loc.Name]
-                if self.multiworld.accessibility[self.player] != 'locations':
+                if self.multiworld.accessibility[self.player] != 'full':
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(item.item, state.smz3state[self.player])

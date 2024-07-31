@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink
+from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink, ItemsAccessibility
 
 
 class GameVersion(Choice):
@@ -287,7 +287,7 @@ class AllPokemonSeen(Toggle):
 
 class DexSanity(NamedRange):
     """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify a percentage of Pokemon to
-    have checks added. If Accessibility is set to locations, this will be the percentage of all logically reachable
+    have checks added. If Accessibility is set to full, this will be the percentage of all logically reachable
     Pokemon that will get a location check added to it. With items or minimal Accessibility, it will be the percentage
     of all 151 Pokemon.
     If Pokedex is required, the items for Pokemon acquired before acquiring the Pokedex can be found by talking to
@@ -861,6 +861,7 @@ class RandomizePokemonPalettes(Choice):
 
 
 pokemon_rb_options = {
+    "accessibility": ItemsAccessibility,
     "game_version": GameVersion,
     "trainer_name": TrainerName,
     "rival_name": RivalName,
