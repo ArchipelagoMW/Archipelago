@@ -1,7 +1,8 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
-from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
+                    combat_items)
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
@@ -346,6 +347,21 @@ class TunicWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
+
+    # cache whether you can get through combat logic areas
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change:
+            if item.name in combat_items:
+                state.prog_items[self.player]["need_to_reset_combat_state"] = 1
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change:
+            if item.name in combat_items:
+                state.prog_items[self.player]["need_to_reset_combat_state"] = 1
+        return change
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:

@@ -45,7 +45,61 @@ area_data: Dict[str, AreaStats] = {
 }
 
 
-def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
+# these are used for caching which areas can currently be reached in state
+boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
+non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss]
+
+
+def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
+    # we're caching whether you've met the combat reqs before if the state didn't change first
+    player_state = state.prog_items[player]
+    # if the combat state is stale, mark each area's combat state as stale
+    if player_state["need_to_reset_combat_state"]:
+        player_state["need_to_reset_combat_state"] = 0
+        for name in boss_areas:
+            player_state["combat_state_calced_for_" + name] = 0
+        for name in non_boss_areas:
+            player_state["combat_state_calced_for_" + name] = 0
+        player_state["combat_state_calced_for_Gauntlet"] = 0
+
+    met_combat_reqs = check_combat_reqs(area_name, state, player)
+    if player_state["combat_state_calced_for_" + area_name]:
+        return met_combat_reqs
+
+    # loop through the lists and set the easier/harder area states accordingly
+    if area_name in boss_areas:
+        area_list = boss_areas
+    elif area_name in non_boss_areas:
+        area_list = non_boss_areas
+    else:
+        area_list = [area_name]
+
+    if area_name in area_list:
+        if met_combat_reqs:
+            # set the state as true for each area until you get to the area we're looking at
+            for name in area_list:
+                player_state["combat_state_calced_for_" + name] = 1
+                player_state["combat_reqs_met_for_" + name] = 1
+                if name == area_name:
+                    break
+        else:
+            # set the state as false for the area we're looking at and each area after that
+            reached_name = False
+            for name in area_list:
+                if name == area_name:
+                    reached_name = True
+                if reached_name:
+                    player_state["combat_state_calced_for_" + name] = 1
+                    player_state["combat_reqs_met_for_" + name] = 0
+
+    return check_combat_reqs(area_name, state, player)
+
+
+def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
+    # if our cache says we've already calced this, we don't need to go through these calculations again
+    if state.prog_items[player]["combat_state_calced_for_" + area_name]:
+        return bool(state.prog_items[player]["combat_reqs_met_for_" + area_name])
+
     data = alt_data or area_data[area_name]
     extra_att_needed = 0
     extra_def_needed = 0
@@ -108,7 +162,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_dat
             more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
                                             data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
                                             equip_list)
-            if has_combat_reqs("none", state, player, more_modified_stats):
+            if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
 
             # and we need to check if you would have the required stats if you didn't have magic
@@ -116,7 +170,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_dat
             more_modified_stats = AreaStats(data.att_level + 2, data.def_level + 2, data.potion_level,
                                             data.hp_level, data.sp_level, data.mp_level - 16, data.potion_count,
                                             equip_list)
-            if has_combat_reqs("none", state, player, more_modified_stats):
+            if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
 
         elif stick_bool and "Stick" in data.equipment and "Magic" in data.equipment:
@@ -125,7 +179,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_dat
             more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
                                             data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
                                             equip_list)
-            if has_combat_reqs("none", state, player, more_modified_stats):
+            if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
         else:
             return False
@@ -163,12 +217,11 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
             free_def = player_def - def_offerings
             free_sp = player_sp - sp_offerings
             paid_stats = data.def_level + data.sp_level - free_def - free_sp
-            def_to_buy = 0
             sp_to_buy = 0
 
             if paid_stats <= 0:
                 # if you don't have to pay for any stats, you don't need money for these upgrades
-                pass
+                def_to_buy = 0
             elif paid_stats <= def_offerings:
                 # get the amount needed to buy these def offerings
                 def_to_buy = paid_stats
