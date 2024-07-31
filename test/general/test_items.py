@@ -8,7 +8,7 @@ class TestBase(unittest.TestCase):
     def test_create_item(self):
         """Test that a world can successfully create all items in its datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            multiworld = setup_solo_multiworld(world_type, ())
+            multiworld = setup_solo_multiworld(world_type, steps=("generate_early", "create_regions", "create_items"))
             proxy_world = multiworld.worlds[1]
             empty_prog_items = multiworld.state.prog_items.copy()
             for item_name in world_type.item_name_to_id:
