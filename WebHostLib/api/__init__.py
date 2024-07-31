@@ -5,7 +5,6 @@ from uuid import UUID
 from flask import Blueprint, abort, url_for
 
 import worlds.Files
-from .. import cache
 from ..models import Room, Seed
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
@@ -76,4 +75,4 @@ def get_datapackage_checksums():
     return version_package
 
 
-from . import generate, user, tracker  # trigger registration
+from . import datapackage, generate, tracker, user  # trigger registration

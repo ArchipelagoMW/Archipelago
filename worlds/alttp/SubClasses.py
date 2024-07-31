@@ -76,10 +76,6 @@ class ALttPItem(Item):
         if self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
             return self.type
 
-    @property
-    def locked_dungeon_item(self):
-        return self.location.locked and self.dungeon_item
-
 
 class LTTPRegionType(IntEnum):
     LightWorld = 1

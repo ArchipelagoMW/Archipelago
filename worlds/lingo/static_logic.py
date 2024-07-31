@@ -4,15 +4,17 @@ import pickle
 from io import BytesIO
 from typing import Dict, List, Set
 
-from .datatypes import Door, Painting, Panel, Progression, Room
+from .datatypes import Door, Painting, Panel, PanelDoor, Progression, Room
 
 ALL_ROOMS: List[Room] = []
 DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
 PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
+PANEL_DOORS_BY_ROOM: Dict[str, Dict[str, PanelDoor]] = {}
 PAINTINGS: Dict[str, Painting] = {}
 
-PROGRESSIVE_ITEMS: List[str] = []
-PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+PROGRESSIVE_ITEMS: Set[str] = set()
+PROGRESSIVE_DOORS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+PROGRESSIVE_PANELS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 
 PAINTING_ENTRANCES: int = 0
 PAINTING_EXIT_ROOMS: Set[str] = set()
@@ -28,6 +30,8 @@ PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
+PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
 HASHES: Dict[str, str] = {}
@@ -68,6 +72,20 @@ def get_door_group_item_id(name: str):
     return DOOR_GROUP_ITEM_IDS[name]
 
 
+def get_panel_door_item_id(room: str, name: str):
+    if room not in PANEL_DOOR_ITEM_IDS or name not in PANEL_DOOR_ITEM_IDS[room]:
+        raise Exception(f"Item ID for panel door {room} - {name} not found in ids.yaml.")
+
+    return PANEL_DOOR_ITEM_IDS[room][name]
+
+
+def get_panel_group_item_id(name: str):
+    if name not in PANEL_GROUP_ITEM_IDS:
+        raise Exception(f"Item ID for panel group {name} not found in ids.yaml.")
+
+    return PANEL_GROUP_ITEM_IDS[name]
+
+
 def get_progressive_item_id(name: str):
     if name not in PROGRESSIVE_ITEM_IDS:
         raise Exception(f"Item ID for progressive item {name} not found in ids.yaml.")
@@ -97,8 +115,10 @@ def load_static_data_from_file():
     ALL_ROOMS.extend(pickdata["ALL_ROOMS"])
     DOORS_BY_ROOM.update(pickdata["DOORS_BY_ROOM"])
     PANELS_BY_ROOM.update(pickdata["PANELS_BY_ROOM"])
-    PROGRESSIVE_ITEMS.extend(pickdata["PROGRESSIVE_ITEMS"])
-    PROGRESSION_BY_ROOM.update(pickdata["PROGRESSION_BY_ROOM"])
+    PANEL_DOORS_BY_ROOM.update(pickdata["PANEL_DOORS_BY_ROOM"])
+    PROGRESSIVE_ITEMS.update(pickdata["PROGRESSIVE_ITEMS"])
+    PROGRESSIVE_DOORS_BY_ROOM.update(pickdata["PROGRESSIVE_DOORS_BY_ROOM"])
+    PROGRESSIVE_PANELS_BY_ROOM.update(pickdata["PROGRESSIVE_PANELS_BY_ROOM"])
     PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]
     PAINTING_EXIT_ROOMS.update(pickdata["PAINTING_EXIT_ROOMS"])
     PAINTING_EXITS = pickdata["PAINTING_EXITS"]
@@ -111,6 +131,8 @@ def load_static_data_from_file():
     DOOR_LOCATION_IDS.update(pickdata["DOOR_LOCATION_IDS"])
     DOOR_ITEM_IDS.update(pickdata["DOOR_ITEM_IDS"])
     DOOR_GROUP_ITEM_IDS.update(pickdata["DOOR_GROUP_ITEM_IDS"])
+    PANEL_DOOR_ITEM_IDS.update(pickdata["PANEL_DOOR_ITEM_IDS"])
+    PANEL_GROUP_ITEM_IDS.update(pickdata["PANEL_GROUP_ITEM_IDS"])
     PROGRESSIVE_ITEM_IDS.update(pickdata["PROGRESSIVE_ITEM_IDS"])
 
 
