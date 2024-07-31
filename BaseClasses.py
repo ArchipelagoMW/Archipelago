@@ -680,38 +680,30 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
+    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
         """
         Sweep through the locations that contain uncollected advancement items, collecting the items into the state
         until there are no more reachable locations that contain uncollected advancement items.
 
-        :param key_only: Whether the locations to sweep through should be limited to only locked_dungeon_item locations.
         :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
         """
         # since the loop has a good chance to run more than once, only filter the events once
-        if key_only:
-            def event_filter(location: Location) -> bool:
-                return (location.advancement
-                        and location not in self.events
-                        and getattr(location.item, "locked_dungeon_item", False))
-        else:
-            def event_filter(location: Location) -> bool:
-                return location.advancement and location not in self.events
-
         events_per_player: List[Tuple[int, List[Location]]]
         if locations is None:
             # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
             # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
             events_per_player = []
             for player, locations_dict in self.multiworld.regions.location_cache.items():
-                filtered_locations = list(filter(event_filter, locations_dict.values()))
+                filtered_locations = [location for location in locations_dict.values()
+                                      if location.advancement and location not in self.events]
                 if filtered_locations:
                     events_per_player.append((player, filtered_locations))
         else:
             # Filter and separate the locations into a list for each player.
             events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
-            for location in filter(event_filter, locations):
-                events_per_player_dict[location.player].append(location)
+            for location in locations:
+                if location.advancement and location not in self.events:
+                    events_per_player_dict[location.player].append(location)
             # Convert to a list of tuples.
             events_per_player = list(events_per_player_dict.items())
             del events_per_player_dict
