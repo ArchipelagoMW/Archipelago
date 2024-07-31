@@ -11,10 +11,10 @@ class ProgressionStyle(Choice):
     None: No progressive items will be included. This means you can get district upgrades that won't be usable until the relevant district is unlocked.
     """
     display_name = "Progression Style"
-    option_districts_only = "Districts Only"
-    option_eras_and_districts = "Eras and Districts"
-    option_none = "None"
-    default = "districts_only"
+    option_districts_only = 0
+    option_eras_and_districts = 1
+    option_none = 2
+    default = option_districts_only
 
 
 class ShuffleGoodyHuts(DefaultOnToggle):
@@ -50,11 +50,11 @@ class PreHintItems(Choice):
     None: No items are pre hinted.
     """
     display_name = "Tech/Civic Tree Pre Hinted Items"
-    option_all = "All Tree Locations"
-    option_progression_items = "Progression Tree Locations"
-    option_no_junk = "No Junk"
-    option_none = "None"
-    default = "progression_items"
+    option_all = 0
+    option_progression_items = 1
+    option_no_junk = 2
+    option_none = 3
+    default = option_progression_items
 
 
 class HideItemNames(Toggle):
@@ -73,13 +73,13 @@ class DeathLinkEffect(Choice):
     Era score is decrased by 1.\n
     Any will select any of these options any time a death link is received."""
     display_name = "Death Link Effect"
-    option_unit_killed = "Unit Killed"
-    option_era_score = "Era Score"
-    option_gold = "Gold"
-    option_faith = "Faith"
-    option_any = "Any"
-    option_any_except_era_score = "Any Except Era Score"
-    default = "unit_killed"
+    option_unit_killed = 0
+    option_era_score = 1
+    option_gold = 2
+    option_faith = 3
+    option_any = 4
+    option_any_except_era_score = 5
+    default = option_unit_killed
 
 
 class DeathLinkEffectPercent(Range):
