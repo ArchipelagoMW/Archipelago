@@ -1372,8 +1372,6 @@ class Spoiler:
         state = CollectionState(multiworld)
         collection_spheres = []
         while required_locations:
-            state.sweep_for_events(key_only=True)
-
             sphere = set(filter(state.can_reach, required_locations))
 
             for location in sphere:

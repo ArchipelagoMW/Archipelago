@@ -441,6 +441,16 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
     for i in range(1, len(test_options) + 1):
         multiworld.game[i] = StardewValleyWorld.game
         multiworld.player_name.update({i: f"Tester{i}"})
+    args = create_args(test_options)
+    multiworld.set_options(args)
+
+    for step in gen_steps:
+        call_all(multiworld, step)
+
+    return multiworld
+
+
+def create_args(test_options):
     args = Namespace()
     for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
         options = {}
@@ -449,9 +459,4 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
             value = option(player_options[name]) if name in player_options else option.from_any(option.default)
             options.update({i: value})
         setattr(args, name, options)
-    multiworld.set_options(args)
-
-    for step in gen_steps:
-        call_all(multiworld, step)
-
-    return multiworld
+    return args
