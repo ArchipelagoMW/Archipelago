@@ -663,18 +663,16 @@ class AquariaRegions:
         self.__connect_one_way_regions("Cathedral boss left area", "Mithalas castle",
                                        self.cathedral_boss_l, self.mithalas_castle,
                                        lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral underground",
-                                       self.mithalas_castle, self.cathedral_underground,
-                                       lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas castle",
-                               self.cathedral_underground, self.mithalas_castle)
+        self.__connect_regions("Mithalas castle", "Mithalas Cathedral underground",
+                               self.mithalas_castle, self.cathedral_underground,
+                               lambda state: _has_beast_form(state, self.player))
         self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral start",
                                        self.mithalas_castle, self.cathedral_top_start,
                                        lambda state: _has_bind_song(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral start urns",
                                        self.cathedral_top_start, self.cathedral_top_start_urns,
                                        lambda state: _has_damaging_item(state, self.player))
-        self.__connect_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
+        self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
                                        self.cathedral_top_start, self.cathedral_top_end,
                                        lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral end",
@@ -955,7 +953,6 @@ class AquariaRegions:
         self._connect_transturtle_to_other("Transturtle Simon Says", self.simon)
         self._connect_transturtle_to_other("Transturtle Arnassi Ruins", self.arnassi_cave_transturtle)
 
-
     def connect_regions(self) -> None:
         """
         Connect every region (entrances and exits)
@@ -1172,7 +1169,6 @@ class AquariaRegions:
         add_rule(self.multiworld.get_location("The Body center area, breaking Li's cage", self.player),
                  lambda state: _has_tongue_cleared(state, self.player))
 
-
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",
                                      self.player).item_rule =\
@@ -1250,12 +1246,105 @@ class AquariaRegions:
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
 
+    def __no_progression_area(self, area: dict) -> None:
+        """Be sure to not put any progression items in location of an `area`"""
+        for location in area:
+            self.multiworld.get_location(location, self.player).item_rule = \
+                lambda item: item.classification != ItemClassification.progression
+
+    def __no_progression_kelp_forest(self):
+        """Be sure to not put any progression items in Kelp forest"""
+        self.__no_progression_area(AquariaLocations.locations_forest_tl)
+        self.__no_progression_area(AquariaLocations.locations_forest_tl_verse_egg_room)
+        self.__no_progression_area(AquariaLocations.locations_forest_tr)
+        self.__no_progression_area(AquariaLocations.locations_forest_tr_fp)
+        self.__no_progression_area(AquariaLocations.locations_forest_bl)
+        self.__no_progression_area(AquariaLocations.locations_forest_bl_sc)
+        self.__no_progression_area(AquariaLocations.locations_forest_br)
+        self.__no_progression_area(AquariaLocations.locations_forest_boss)
+        self.__no_progression_area(AquariaLocations.locations_forest_boss_entrance)
+        self.__no_progression_area(AquariaLocations.locations_forest_fish_cave)
+        self.__no_progression_area(AquariaLocations.locations_sprite_cave)
+        self.__no_progression_area(AquariaLocations.locations_sprite_cave_tube)
+        self.__no_progression_area(AquariaLocations.locations_mermog_cave)
+        self.__no_progression_area(AquariaLocations.locations_mermog_boss)
+
+    def __no_progression_veil(self):
+        """Be sure to not put any progression items in The Veil"""
+        self.__no_progression_area(AquariaLocations.locations_veil_tl)
+        self.__no_progression_area(AquariaLocations.locations_veil_tl_fp)
+        self.__no_progression_area(AquariaLocations.locations_turtle_cave)
+        self.__no_progression_area(AquariaLocations.locations_turtle_cave_bubble)
+        self.__no_progression_area(AquariaLocations.locations_veil_tr_r)
+        self.__no_progression_area(AquariaLocations.locations_veil_tr_l)
+        self.__no_progression_area(AquariaLocations.locations_veil_b)
+        self.__no_progression_area(AquariaLocations.locations_veil_b_sc)
+        self.__no_progression_area(AquariaLocations.locations_veil_b_fp)
+        self.__no_progression_area(AquariaLocations.locations_veil_br)
+        self.__no_progression_area(AquariaLocations.locations_octo_cave_t)
+        self.__no_progression_area(AquariaLocations.locations_octo_cave_b)
+        self.__no_progression_area(AquariaLocations.locations_sun_temple_l)
+        self.__no_progression_area(AquariaLocations.locations_sun_temple_r)
+        self.__no_progression_area(AquariaLocations.locations_sun_temple_boss_path)
+        self.__no_progression_area(AquariaLocations.locations_sun_temple_boss)
+
+    def __no_progression_mithalas(self):
+        """Be sure to not put any progression items in Mithalas"""
+        self.__no_progression_area(AquariaLocations.locations_mithalas_city)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_city_urns)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_city_top_path)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_city_fishpass)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_castle)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_castle_urns)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_castle_tube)
+        self.__no_progression_area(AquariaLocations.locations_mithalas_castle_sc)
+        self.__no_progression_area(AquariaLocations.locations_cathedral_top_start)
+        self.__no_progression_area(AquariaLocations.locations_cathedral_top_start_urns)
+        self.__no_progression_area(AquariaLocations.locations_cathedral_top_end)
+        self.__no_progression_area(AquariaLocations.locations_cathedral_underground)
+        self.__no_progression_area(AquariaLocations.locations_cathedral_boss)
+
+    def __no_progression_energy_temple(self):
+        """Be sure to not put any progression items in the Energy Temple"""
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_1)
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_idol)
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_2)
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_altar)
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_3)
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_boss)
+        self.__no_progression_area(AquariaLocations.locations_energy_temple_blaster_room)
+
+    def __no_progression_areas(self, options: AquariaOptions) -> None:
+        """Manage options that remove progression items from areas around the Aquaria world"""
+        if options.no_progression_simon_says:
+            self.__no_progression_area(AquariaLocations.locations_simon)
+        if options.no_progression_kelp_forest:
+            self.__no_progression_kelp_forest()
+        if options.no_progression_veil:
+            self.__no_progression_veil()
+        if options.no_progression_mithalas:
+            self.__no_progression_mithalas()
+        if options.no_progression_energy_temple:
+            self.__no_progression_energy_temple()
+        if options.no_progression_arnassi_ruins:
+            self.__no_progression_area(AquariaLocations.locations_arnassi)
+            self.__no_progression_area(AquariaLocations.locations_arnassi_cave)
+            self.__no_progression_area(AquariaLocations.locations_arnassi_cave_transturtle)
+            self.__no_progression_area(AquariaLocations.locations_arnassi_crab_boss)
+            if options.turtle_randomizer == 0:
+                self.__no_progression_area(AquariaLocations.locations_simon)
+        if options.no_progression_frozen_veil:
+            self.__no_progression_area(AquariaLocations.locations_ice_cave)
+            self.__no_progression_area(AquariaLocations.locations_bubble_cave)
+            self.__no_progression_area(AquariaLocations.locations_bubble_cave_boss)
+
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
         Modify rules for single location or optional rules
         """
         self.__adjusting_soup_rules()
         self.__adjusting_manual_rules()
+        self.__no_progression_areas(options)
         if options.light_needed_to_get_to_dark_places:
             self.__adjusting_light_in_dark_place_rules()
         if options.bind_song_needed_to_get_under_rock_bulb:

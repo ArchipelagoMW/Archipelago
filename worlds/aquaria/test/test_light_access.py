@@ -19,7 +19,7 @@ class LightAccessTest(AquariaTestBase):
         locations = [
             # Since the `assertAccessDependency` sweep for events even if I tell it not to, those location cannot be
             # tested.
-            # "Third Secret",
+            # "Third secret",
             # "Sun Temple, bulb in the top left part",
             # "Sun Temple, bulb in the top right part",
             # "Sun Temple, bulb at the top of the high dark room",

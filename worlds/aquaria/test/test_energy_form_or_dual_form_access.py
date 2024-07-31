@@ -17,11 +17,11 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
         """Test locations that require Energy form or dual form"""
         locations = [
             "Naija's Home, bulb after the energy door",
-            "Home Waters, Nautilus Egg",
             "Energy Temple second area, bulb under the rock",
             "Energy Temple bottom entrance, Krotite Armor",
             "Energy Temple third area, bulb in the bottom path",
             "Energy Temple blaster room, Blaster Egg",
+            "Home Waters, Nautilus Egg",
             "Energy Temple boss area, Fallen God Tooth",
             "Mithalas City Castle, beating the Priests",
             "Mithalas boss area, beating Mithalan God",
@@ -70,6 +70,7 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
             "Beating Mergog",
             "Beating Mithalan priests",
             "Beating Octopus Prime",
+            # "Beating Crabbius Maximus",
             "Beating King Jellyfish God Prime",
             "Beating the Golem",
             "Sunken City cleared",

@@ -105,6 +105,59 @@ class NoProgressionHardOrHiddenLocation(Toggle):
     display_name = "No progression in hard or hidden locations"
 
 
+class NoProgressionSimonSays(Toggle):
+    """
+    Make sure that there are no progression items in the says area
+    """
+    display_name = "No progression in Simon says area"
+
+
+class NoProgressionKelpForest(Toggle):
+    """
+    Make sure that there are no progression items in Kelp Forest (excluding Simon says area).
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in Kelp Forest"
+
+
+class NoProgressionVeil(Toggle):
+    """
+    Make sure that there are no progression items in the Veil. Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Veil"
+
+
+class NoProgressionMithalas(Toggle):
+    """
+    Make sure that there are no progression items in the Mithalas (city, castle and cathedral).
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in Mithalas"
+
+
+class NoProgressionEnergyTemple(Toggle):
+    """
+    Make sure that there are no progression items in the Energy Temple. Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Energy Temple"
+
+
+class NoProgressionArnassiRuins(Toggle):
+    """
+    Make sure that there are no progression items in the Arnassi Ruins. Can be usefull to get smaller runs.
+    Note that if the Transportation turtle are not randomize, this include Simon Says area.
+    """
+    display_name = "No progression in Arnassi Ruins"
+
+
+class NoProgressionFrozenVeil(Toggle):
+    """
+    Make sure that there are no progression items in the Frozen Veil (including Ice Cavern and Bubble Cave)
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Frozen Veil"
+
+
 class LightNeededToGetToDarkPlaces(DefaultOnToggle):
     """
     Make sure that the sun form or the dumbo pet can be acquired before getting to dark places.
@@ -126,6 +179,22 @@ class BlindGoal(Toggle):
     what is needed to access the boss.
     """
     display_name = "Hide the goal's requirements"
+
+
+class InfiniteHotSoup(DefaultOnToggle):
+    """
+    As soon as a hot soup is received, the user will never run out of those dishes.
+    This option is recommended if using Ingredient randomization since Hot soup ingredients can be hard to get.
+    """
+    display_name = "Infinite Hot Soup"
+
+
+class SkipFinalBoss3rdForm(DefaultOnToggle):
+    """
+    The Final boss third form (the hide and seek form) can be easy and quite long. So, this option can be used
+    to skip this form.
+    """
+    display_name = "Skip final boss third form"
 
 
 class UnconfineHomeWater(Choice):
@@ -158,8 +227,17 @@ class AquariaOptions(PerGameCommonOptions):
     bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
     unconfine_home_water: UnconfineHomeWater
     no_progression_hard_or_hidden_locations: NoProgressionHardOrHiddenLocation
+    no_progression_simon_says: NoProgressionSimonSays
+    no_progression_kelp_forest: NoProgressionKelpForest
+    no_progression_veil: NoProgressionVeil
+    no_progression_mithalas: NoProgressionMithalas
+    no_progression_energy_temple: NoProgressionEnergyTemple
+    no_progression_arnassi_ruins: NoProgressionArnassiRuins
+    no_progression_frozen_veil: NoProgressionFrozenVeil
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
     skip_first_vision: SkipFirstVision
     blind_goal: BlindGoal
+    infinite_hot_soup: InfiniteHotSoup
+    skip_final_boss_3rd_form: SkipFinalBoss3rdForm

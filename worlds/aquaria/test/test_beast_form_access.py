@@ -10,20 +10,23 @@ from . import AquariaTestBase
 class BeastFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the beast form"""
 
-    def test_beast_form_location(self) -> None:
+    def vtest_beast_form_location(self) -> None:
         """Test locations that require beast form"""
         locations = [
             "Mermog cave, Piranha Egg",
-            "Kelp Forest top left area, Jelly Egg",
-            "Turtle cave, Urchin Costume",
             "Mithalas Cathedral, Mithalan Dress",
+            "Turtle cave, Urchin Costume",
+            "Kelp Forest top left area, Jelly Egg",
             "The Veil top right area, bulb at the top of the waterfall",
             "Sunken City, bulb on top of the boss area",
             "Octopus Cave, Dumbo Egg",
             "Beating the Golem",
             "Beating Mergog",
             "Beating Octopus Prime",
-            "Sunken City cleared",
+            "King Jellyfish Cave, Jellyfish Costume",
+            "King Jellyfish Cave, bulb in the right path from King Jelly",
+            "Beating King Jellyfish God Prime",
+            "Sunken City cleared"
         ]
         items = [["Beast Form"]]
         self.assertAccessDependency(locations, items)

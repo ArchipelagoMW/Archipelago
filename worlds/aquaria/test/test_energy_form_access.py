@@ -19,6 +19,7 @@ class EnergyFormAccessTest(AquariaTestBase):
         locations = [
             "Energy Temple second area, bulb under the rock",
             "Energy Temple third area, bulb in the bottom path",
+            "Final Boss area, bulb in the boss third form room",
             "The Body left area, first bulb in the top face room",
             "The Body left area, second bulb in the top face room",
             "The Body left area, bulb below the water stream",
@@ -26,7 +27,6 @@ class EnergyFormAccessTest(AquariaTestBase):
             "The Body left area, bulb in the bottom face room",
             "The Body right area, bulb in the top path to the bottom face room",
             "The Body right area, bulb in the bottom face room",
-            "Final Boss area, bulb in the boss third form room",
             "Objective complete",
         ]
         items = [["Energy Form"]]
