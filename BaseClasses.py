@@ -715,12 +715,8 @@ class CollectionState():
         player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
         worlds = self.multiworld.worlds
         for player, _locations in events_per_player:
-            if player in worlds:
-                for dependent_on_player in worlds[player].player_dependencies:
-                    player_logic_dependents[dependent_on_player].append(player)
-            else:
-                # Item link locations have no associated World and use a group ID as the player ID.
-                player_logic_dependents[player].append(player)
+            for dependent_on_player in worlds[player].player_dependencies:
+                player_logic_dependents[dependent_on_player].append(player)
 
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
