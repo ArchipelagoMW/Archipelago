@@ -1,7 +1,7 @@
 from BaseClasses import Region, Entrance, Tutorial, ItemClassification
 from .Items import ChecksFinderItem, item_table
 from .Locations import ChecksFinderLocation, advancement_table
-from Options import PerGameCommonOptions
+from Options import OptionError, PerGameCommonOptions
 from .Rules import set_rules, set_completion_rules
 from worlds.AutoWorld import World, WebWorld
 
@@ -41,6 +41,10 @@ class ChecksFinderWorld(World):
             'client_version': client_version,
             'race': self.multiworld.is_race,
         }
+
+    def generate_early(self):
+        if not self.player_name.isascii():
+            raise OptionError(f"{self.player_name}'s name must be only ASCII characters.")
 
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
