@@ -54,7 +54,7 @@ Region sweep (the algorithm that determines which regions are reachable) is a Br
 
 However, if entrance access conditions depend on regions, then it is possible for this to happen:
 1. An entrance that depends on a region is checked and determined to be untraversable because the region hasn't been reached yet during the graph search.
-2. After that, the region is reached by the graph search. The entrance *would* now be determined as traversible if it were rechecked.
+2. After that, the region is reached by the graph search. The entrance *would* now be determined to be traversable if it were rechecked.
 
 To account for this case, we would have to recheck all entrances every time a new region is reached, until no new regions are reached.
 
