@@ -353,14 +353,14 @@ class TunicWorld(World):
         change = super().collect(state, item)
         if change:
             if item.name in combat_items:
-                state.prog_items[self.player]["need_to_reset_combat_state"] = 1
+                state.prog_items[self.player]["need_to_reset_combat_state_from_collect"] = 1
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
         if change:
             if item.name in combat_items:
-                state.prog_items[self.player]["need_to_reset_combat_state"] = 1
+                state.prog_items[self.player]["need_to_reset_combat_state_from_remove"] = 1
         return change
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:

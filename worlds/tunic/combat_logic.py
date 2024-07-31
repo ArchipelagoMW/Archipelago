@@ -1,4 +1,5 @@
 from typing import Dict, List, NamedTuple, Tuple, Optional
+from enum import IntEnum
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
 
@@ -50,20 +51,40 @@ boss_areas: List[str] = [name for name, data in area_data.items() if data.is_bos
 non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss]
 
 
+class CombatState(IntEnum):
+    unchecked = 0
+    failed = 1
+    succeeded = 2
+
+
 def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
     # we're caching whether you've met the combat reqs before if the state didn't change first
     player_state = state.prog_items[player]
     # if the combat state is stale, mark each area's combat state as stale
-    if player_state["need_to_reset_combat_state"]:
-        player_state["need_to_reset_combat_state"] = 0
+    if player_state["need_to_reset_combat_state_from_collect"]:
+        player_state["need_to_reset_combat_state_from_collect"] = 0
         for name in boss_areas:
-            player_state["combat_state_calced_for_" + name] = 0
+            if player_state["combat_reqs_met_for_" + name] == CombatState.failed:
+                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
         for name in non_boss_areas:
-            player_state["combat_state_calced_for_" + name] = 0
-        player_state["combat_state_calced_for_Gauntlet"] = 0
+            if player_state["combat_reqs_met_for_" + name] == CombatState.failed:
+                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
+        if player_state["combat_reqs_met_for_Gauntlet"] == CombatState.failed:
+            player_state["combat_reqs_met_for_Gauntlet"] = CombatState.unchecked
+
+    if player_state["need_to_reset_combat_state_from_remove"]:
+        player_state["need_to_reset_combat_state_from_remove"] = 0
+        for name in boss_areas:
+            if player_state["combat_reqs_met_for_" + name] == CombatState.succeeded:
+                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
+        for name in non_boss_areas:
+            if player_state["combat_reqs_met_for_" + name] == CombatState.succeeded:
+                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
+        if player_state["combat_reqs_met_for_Gauntlet"] == CombatState.succeeded:
+            player_state["combat_reqs_met_for_Gauntlet"] = CombatState.unchecked
 
     met_combat_reqs = check_combat_reqs(area_name, state, player)
-    if player_state["combat_state_calced_for_" + area_name]:
+    if player_state["combat_reqs_met_for_" + area_name] > CombatState.unchecked:
         return met_combat_reqs
 
     # loop through the lists and set the easier/harder area states accordingly
@@ -78,8 +99,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
         if met_combat_reqs:
             # set the state as true for each area until you get to the area we're looking at
             for name in area_list:
-                player_state["combat_state_calced_for_" + name] = 1
-                player_state["combat_reqs_met_for_" + name] = 1
+                player_state["combat_reqs_met_for_" + name] = CombatState.succeeded
                 if name == area_name:
                     break
         else:
@@ -89,16 +109,15 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
                 if name == area_name:
                     reached_name = True
                 if reached_name:
-                    player_state["combat_state_calced_for_" + name] = 1
-                    player_state["combat_reqs_met_for_" + name] = 0
+                    player_state["combat_reqs_met_for_" + name] = CombatState.failed
 
     return check_combat_reqs(area_name, state, player)
 
 
 def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
     # if our cache says we've already calced this, we don't need to go through these calculations again
-    if state.prog_items[player]["combat_state_calced_for_" + area_name]:
-        return bool(state.prog_items[player]["combat_reqs_met_for_" + area_name])
+    if state.prog_items[player]["combat_reqs_met_for_" + area_name] > CombatState.unchecked:
+        return state.prog_items[player]["combat_reqs_met_for_" + area_name] > CombatState.failed
 
     data = alt_data or area_data[area_name]
     extra_att_needed = 0
