@@ -343,6 +343,8 @@ class CommonContext:
 
         self.item_names = self.NameLookupDict(self, "item")
         self.location_names = self.NameLookupDict(self, "location")
+        self.versions = {}
+        self.checksums = {}
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
@@ -552,8 +554,8 @@ class CommonContext:
                 needed_updates.add(game)
                 continue
 
-            local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
-            local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
+            local_version: int = self.versions.get(game, 0)
+            local_checksum: typing.Optional[str] = self.checksums.get("checksum")
             # no action required if local version is new enough
             if (not remote_checksum and (remote_version > local_version or remote_version == 0)) \
                     or remote_checksum != local_checksum:
@@ -572,6 +574,8 @@ class CommonContext:
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
+        self.versions[game] = game_package.get("version", 0)
+        self.checksums[game] = game_package.get("checksum")
 
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():
