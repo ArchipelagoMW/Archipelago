@@ -2,6 +2,18 @@ from typing import Dict, NamedTuple, List
 from enum import IntEnum
 
 
+# the direction you go to enter a portal
+class Direction(IntEnum):
+    none = 0  # for when the direction isn't relevant
+    north = 1
+    south = 2
+    east = 3
+    west = 4
+    floor = 5
+    ladder_up = 6
+    ladder_down = 7
+
+
 class Portal(NamedTuple):
     name: str  # human-readable name
     region: str  # AP region
@@ -19,18 +31,6 @@ class Portal(NamedTuple):
 
     def destination_scene(self) -> str:  # the vanilla connection
         return self.destination + ", " + self.scene() + self.tag
-
-
-# the direction you go to enter a portal
-class Direction(IntEnum):
-    none = 0  # for when the direction isn't relevant
-    north = 1
-    south = 2
-    east = 3
-    west = 4
-    floor = 5
-    ladder_up = 6
-    ladder_down = 7
 
 
 portal_mapping: List[Portal] = [
