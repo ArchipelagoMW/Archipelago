@@ -285,7 +285,7 @@ def handle_level_sprites(stages: List[Tuple[int, ...]], sprites: List[bytearray]
     out_palettes = list()
     for i in range(5):
         for j in range(6):
-            palettes[i][10 + j] = palette_by_level[stages[i][j] - 1]
+            palettes[i][10 + j] = palette_by_level[stages[i][j]]
         out_palettes.append(bytearray([x for palette in palettes[i] for x in palette]))
     tiles_by_level = list()
     for spritesheet in sprites:
@@ -294,7 +294,7 @@ def handle_level_sprites(stages: List[Tuple[int, ...]], sprites: List[bytearray]
         tiles_by_level.extend([[tiles[x] for x in stage_tiles[stage]] for stage in stage_tiles])
     out_sprites = list()
     for world in range(5):
-        levels = [stages[world][x] - 1 for x in range(6)]
+        levels = [stages[world][x] for x in range(6)]
         world_tiles: typing.List[bytes] = [bytes() for _ in range(72)]
         for i in range(6):
             for x in range(12):

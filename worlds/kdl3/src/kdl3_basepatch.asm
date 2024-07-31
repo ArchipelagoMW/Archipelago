@@ -290,7 +290,7 @@ HeartStarGraphicFix:
     ASL
     TAX
     LDA $07D080, X ; table of original stage number
-    CMP #$0003 ; is the current stage a minigame stage?
+    CMP #$0002 ; is the current stage a minigame stage?
     BEQ .ReturnTrue ; branch if so
     CLC
     BRA .Return
@@ -543,7 +543,6 @@ ConsumableSet:
     ASL
     TAX
     LDA $07D020, X ; current stage
-    DEC
     ASL #6
     TAX
     PLA
@@ -614,7 +613,7 @@ FinalIcebergFix:
     ASL
     TAX
     LDA $07D020, X
-    CMP #$001E
+    CMP #$001D
     BEQ .ReturnTrue
     CLC
     BRA .Return
@@ -695,7 +694,6 @@ StageCompleteSet:
     ASL
     TAX
     LDA $9020, X ; load the stage we completed
-    DEC
     ASL
     TAX
     PHX
@@ -747,7 +745,6 @@ OpenWorldBossUnlock:
     .LoopStage:
     PLX
     LDY $9020, X ; get stage id
-    DEY
     INX
     INX
     PHA
@@ -1078,7 +1075,6 @@ HeartStarSelectFix:
     ASL
     TAX
     LDA $9020, X
-    DEC
     TAX
     .LoopHead:
     CMP #$0006
@@ -1213,7 +1209,6 @@ StarsSet:
     ASL
     TAX
     LDA $07D020, X
-    DEC
     ASL
     ASL
     ASL
