@@ -30,6 +30,7 @@ L2AC_RX_ADDR: int = SRAM_START + 0x2800
 
 class L2ACSNIClient(SNIClient):
     game: str = "Lufia II Ancient Cave"
+    patch_suffix = ".apl2ac"
 
     async def validate_rom(self, ctx: SNIContext) -> bool:
         from SNIClient import snes_read
@@ -113,14 +114,15 @@ class L2ACSNIClient(SNIClient):
                         }],
                     }])
 
-            total_blue_chests_checked: int = min(sum(blue_chests_checked.values()), BlueChestCount.range_end)
+            total_blue_chests_checked: int = min(sum(blue_chests_checked.values()), BlueChestCount.overall_max)
             snes_buffered_write(ctx, L2AC_TX_ADDR + 8, total_blue_chests_checked.to_bytes(2, "little"))
             location_ids: List[int] = [locations_start_id + i for i in range(total_blue_chests_checked)]
 
-            loc_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR + 32, snes_other_locations_checked * 2)
-            if loc_data is not None:
-                location_ids.extend(locations_start_id + int.from_bytes(loc_data[2 * i:2 * i + 2], "little")
-                                    for i in range(snes_other_locations_checked))
+            if snes_other_locations_checked:
+                loc_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR + 32, snes_other_locations_checked * 2)
+                if loc_data is not None:
+                    location_ids.extend(locations_start_id + int.from_bytes(loc_data[2 * i:2 * i + 2], "little")
+                                        for i in range(snes_other_locations_checked))
 
             if new_location_ids := [loc_id for loc_id in location_ids if loc_id not in ctx.locations_checked]:
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_location_ids}])
@@ -145,9 +147,9 @@ class L2ACSNIClient(SNIClient):
                 snes_items_received += 1
 
                 snes_logger.info("Received %s from %s (%s) (%d/%d in list)" % (
-                    ctx.item_names[item.item],
+                    ctx.item_names.lookup_in_game(item.item),
                     ctx.player_names[item.player],
-                    ctx.location_names[item.location],
+                    ctx.location_names.lookup_in_slot(item.location, item.player),
                     snes_items_received, len(ctx.items_received)))
                 snes_buffered_write(ctx, L2AC_RX_ADDR + 2 * (snes_items_received + 1), item_code.to_bytes(2, "little"))
                 snes_buffered_write(ctx, L2AC_RX_ADDR, snes_items_received.to_bytes(2, "little"))

@@ -22,7 +22,7 @@ def set_rules(multiworld, player):
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if multiworld.accessibility[player] != "locations":
+    if multiworld.accessibility[player] != "full":
         multiworld.get_location("Cerulean Bicycle Shop", player).always_allow = (lambda state, item:
                                                                                    item.name == "Bike Voucher"
                                                                                    and item.player == player)
@@ -103,25 +103,25 @@ def set_rules(multiworld, player):
         "Route 22 - Trainer Parties": lambda state: state.has("Oak's Parcel", player),
 
         # # Rock Tunnel
-        # "Rock Tunnel 1F - PokeManiac": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel 1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel 1F - Hiker 2": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel 1F - Hiker 3": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel 1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel 1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel 1F - Jr. Trainer F 3": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - PokeManiac 1": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - PokeManiac 2": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - PokeManiac 3": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Hiker 2": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Hiker 3": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - North Item": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Northwest Item": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - Southwest Item": lambda state: logic.rock_tunnel(state, player),
-        # "Rock Tunnel B1F - West Item": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - PokeManiac": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - Hiker 2": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - Hiker 3": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - Jr. Trainer F 3": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - PokeManiac 1": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - PokeManiac 2": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - PokeManiac 3": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Hiker 2": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Hiker 3": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - North Item": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Northwest Item": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - Southwest Item": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel B1F - West Item": lambda state: logic.rock_tunnel(state, player),
 
         # Pokédex check
         "Oak's Lab - Oak's Parcel Reward": lambda state: state.has("Oak's Parcel", player),

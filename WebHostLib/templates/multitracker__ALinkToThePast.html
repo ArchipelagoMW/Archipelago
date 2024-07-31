@@ -1,0 +1,248 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
+{% endblock %}
+
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Blue Shield": "https://www.zeldadungeon.net/wiki/images/thumb/c/c3/FightersShield-ALttP-Sprite.png/100px-FightersShield-ALttP-Sprite.png",
+    "Red Shield": "https://www.zeldadungeon.net/wiki/images/thumb/9/9e/FireShield-ALttP-Sprite.png/111px-FireShield-ALttP-Sprite.png",
+    "Mirror Shield": "https://www.zeldadungeon.net/wiki/images/thumb/e/e3/MirrorShield-ALttP-Sprite.png/105px-MirrorShield-ALttP-Sprite.png",
+    "Progressive Sword": "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/c/cc/ALttP_Master_Sword_Sprite.png",
+    "Progressive Bow": "https://www.zeldadungeon.net/wiki/images/thumb/8/8c/BowArrows-ALttP-Sprite.png/120px-BowArrows-ALttP-Sprite.png",
+    "Progressive Glove": "https://www.zeldadungeon.net/wiki/images/thumb/4/41/PowerGlove-ALttP-Sprite.png/105px-PowerGlove-ALttP-Sprite.png",
+    "Pegasus Boots": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Pegasus_Shoes_Sprite.png",
+    "Flippers": "https://www.zeldadungeon.net/wiki/images/thumb/b/bc/ZoraFlippers-ALttP-Sprite.png/112px-ZoraFlippers-ALttP-Sprite.png",
+    "Moon Pearl": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Moon_Pearl_Sprite.png",
+    "Blue Boomerang": "https://www.zeldadungeon.net/wiki/images/thumb/f/f0/Boomerang-ALttP-Sprite.png/86px-Boomerang-ALttP-Sprite.png",
+    "Red Boomerang": "https://www.zeldadungeon.net/wiki/images/thumb/3/3c/MagicalBoomerang-ALttP-Sprite.png/86px-MagicalBoomerang-ALttP-Sprite.png",
+    "Hookshot": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/24/Hookshot.png",
+    "Mushroom": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/35/ALttP_Mushroom_Sprite.png",
+    "Magic Powder": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Powder_Sprite.png",
+    "Fire Rod": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d6/FireRod.png",
+    "Ice Rod": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d7/ALttP_Ice_Rod_Sprite.png",
+    "Bombos": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/8c/ALttP_Bombos_Medallion_Sprite.png",
+    "Ether": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/Ether.png",
+    "Quake": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/56/ALttP_Quake_Medallion_Sprite.png",
+    "Lamp": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Lantern_Sprite.png",
+    "Hammer": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d1/ALttP_Hammer_Sprite.png",
+    "Shovel": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/c4/ALttP_Shovel_Sprite.png",
+    "Flute": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/db/Flute.png",
+    "Bug Catching Net": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/54/Bug-CatchingNet.png",
+    "Book of Mudora": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/2/22/ALttP_Book_of_Mudora_Sprite.png",
+    "Bottles": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ef/ALttP_Magic_Bottle_Sprite.png",
+    "Cane of Somaria": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e1/ALttP_Cane_of_Somaria_Sprite.png",
+    "Cane of Byrna": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Cane_of_Byrna_Sprite.png",
+    "Cape": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1c/ALttP_Magic_Cape_Sprite.png",
+    "Magic Mirror": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Mirror_Sprite.png",
+    "Triforce": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png",
+    "Triforce Piece": "https://www.zeldadungeon.net/wiki/images/thumb/5/54/Triforce_Fragment_-_BS_Zelda.png/62px-Triforce_Fragment_-_BS_Zelda.png",
+    "Bombs": "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/3/38/ALttP_Bomb_Sprite.png",
+    "Small Key": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/f/f1/ALttP_Small_Key_Sprite.png",
+    "Big Key": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Big_Key_Sprite.png",
+    "Chest": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Treasure_Chest_Sprite.png?version=5f530ecd98dcb22251e146e8049c0dda",
+    "Light World": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e7/ALttP_Soldier_Green_Sprite.png?version=d650d417934cd707a47e496489c268a6",
+    "Dark World": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/94/ALttP_Moblin_Sprite.png?version=ebf50e33f4657c377d1606bcc0886ddc",
+    "Hyrule Castle": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/d/d3/ALttP_Ball_and_Chain_Trooper_Sprite.png?version=1768a87c06d29cc8e7ddd80b9fa516be",
+    "Agahnims Tower": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/1/1e/ALttP_Agahnim_Sprite.png?version=365956e61b0c2191eae4eddbe591dab5",
+    "Desert Palace": "https://www.zeldadungeon.net/wiki/images/2/25/Lanmola-ALTTP-Sprite.png",
+    "Eastern Palace": "https://www.zeldadungeon.net/wiki/images/d/dc/RedArmosKnight.png",
+    "Tower of Hera": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/3c/ALttP_Moldorm_Sprite.png?version=c588257bdc2543468e008a6b30f262a7",
+    "Palace of Darkness": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Helmasaur_King_Sprite.png?version=ab8a4a1cfd91d4fc43466c56cba30022",
+    "Swamp Palace": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Arrghus_Sprite.png?version=b098be3122e53f751b74f4a5ef9184b5",
+    "Skull Woods": "https://alttp-wiki.net/images/6/6a/Mothula.png",
+    "Thieves Town": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/86/ALttP_Blind_the_Thief_Sprite.png?version=3833021bfcd112be54e7390679047222",
+    "Ice Palace": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Kholdstare_Sprite.png?version=e5a1b0e8b2298e550d85f90bf97045c0",
+    "Misery Mire": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/85/ALttP_Vitreous_Sprite.png?version=92b2e9cb0aa63f831760f08041d8d8d8",
+    "Turtle Rock": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/9/91/ALttP_Trinexx_Sprite.png?version=0cc867d513952aa03edd155597a0c0be",
+    "Ganons Tower": "https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b9/ALttP_Ganon_Sprite.png?version=956f51f054954dfff53c1a9d4f929c74",
+} %}
+
+{% set inventory_order = [
+    "Progressive Sword",
+    "Progressive Bow",
+    "Blue Boomerang",
+    "Red Boomerang",
+    "Hookshot",
+    "Bombs",
+    "Mushroom",
+    "Magic Powder",
+    "Fire Rod",
+    "Ice Rod",
+    "Bombos",
+    "Ether",
+    "Quake",
+    "Lamp",
+    "Hammer",
+    "Flute",
+    "Bug Catching Net",
+    "Book of Mudora",
+    "Cane of Somaria",
+    "Cane of Byrna",
+    "Cape",
+    "Magic Mirror",
+    "Shovel",
+    "Pegasus Boots",
+    "Flippers",
+    "Progressive Glove",
+    "Moon Pearl",
+    "Bottles",
+    "Triforce Piece",
+    "Triforce",
+] %}
+
+{% set dungeon_keys = {
+    "Hyrule Castle": ("Small Key (Hyrule Castle)", "Big Key (Hyrule Castle)"),
+    "Agahnims Tower": ("Small Key (Agahnims Tower)", "Big Key (Agahnims Tower)"),
+    "Eastern Palace": ("Small Key (Eastern Palace)", "Big Key (Eastern Palace)"),
+    "Desert Palace": ("Small Key (Desert Palace)", "Big Key (Desert Palace)"),
+    "Tower of Hera": ("Small Key (Tower of Hera)", "Big Key (Tower of Hera)"),
+    "Palace of Darkness": ("Small Key (Palace of Darkness)", "Big Key (Palace of Darkness)"),
+    "Thieves Town": ("Small Key (Thieves Town)", "Big Key (Thieves Town)"),
+    "Skull Woods": ("Small Key (Skull Woods)", "Big Key (Skull Woods)"),
+    "Swamp Palace": ("Small Key (Swamp Palace)", "Big Key (Swamp Palace)"),
+    "Ice Palace": ("Small Key (Ice Palace)", "Big Key (Ice Palace)"),
+    "Misery Mire": ("Small Key (Misery Mire)", "Big Key (Misery Mire)"),
+    "Turtle Rock": ("Small Key (Turtle Rock)", "Big Key (Turtle Rock)"),
+    "Ganons Tower": ("Small Key (Ganons Tower)", "Big Key (Ganons Tower)"),
+} %}
+
+{% set multi_items = [
+    "Progressive Sword",
+    "Progressive Glove",
+    "Progressive Bow",
+    "Bottles",
+    "Triforce Piece",
+] %}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        {%- if item in icons -%}
+            <th class="center-column">
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}">
+            </th>
+        {%- endif %}
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {{ inventories[(team, player)][item] }}
+                {% else %}
+                    ✔️
+                {% endif %}
+            </td>
+        {%- else -%}
+            <td></td>
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
+
+{% block custom_tables %}
+
+{% for team in total_team_locations %}
+    <div class="table-wrapper">
+        <table class="table non-unique-item-table">
+            <thead>
+                <tr>
+                    <th rowspan="2">#</th>
+                    <th rowspan="2">Name</th>
+                    {% for region in known_regions %}
+                        {% set colspan = 1 %}
+                        {% if region == "Agahnims Tower" %}
+                            {% set colspan = 2 %}
+                        {% elif region in dungeon_keys %}
+                            {% set colspan = 3 %}
+                        {% endif %}
+
+                        {% if region in icons %}
+                            <th colspan="{{ colspan }}" class="center-column upper-row">
+                                <img class="icon-sprite" src="{{ icons[region] }}" alt="{{ region }}" title="{{ region }}">
+                            </th>
+                        {% else %}
+                            <th colspan="{{ colspan }}" class="center-column">{{ region }}</th>
+                        {% endif %}
+                    {% endfor %}
+
+                    <th class="center-column">Total</th>
+                </tr>
+                <tr>
+                    {% for region in known_regions %}
+                        <th class="center-column lower-row fraction">
+                            <img class="icon-sprite" src="{{ icons["Chest"] }}" alt="Checks" title="Checks Complete">
+                        </th>
+
+                        {% if region in dungeon_keys %}
+                            <th class="center-column lower-row number">
+                                <img class="icon-sprite" src="{{ icons["Small Key"] }}" alt="Small Key" title="Small Keys">
+                            </th>
+
+                            {# Special check just for Agahnims Tower, which has no big keys. #}
+                            {% if region != "Agahnims Tower" %}
+                                <th class="center-column lower-row number">
+                                    <img class="icon-sprite" src="{{ icons["Big Key"] }}" alt="Big Key" title="Big Keys">
+                                </th>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {# For "total" checks #}
+                    <th class="center-column lower-row fraction">
+                        <img class="icon-sprite" src="{{ icons["Chest"] }}" alt="Checks" title="Total Checks Complete">
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for (player_team, player), player_regions in regions.items() if team == player_team %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">
+                                {{ player }}
+                            </a>
+                        </td>
+                        <td>{{ player_names_with_alias[(team, player)] | e }}</td>
+
+                        {% for region, counts in player_regions.items() %}
+                            <td class="item-acquired center-column">
+                                {{ counts.checked }}/{{ counts.total }}
+                            </td>
+
+                            {% if region in dungeon_keys %}
+                                <td class="center-column">
+                                    {{ inventories[(team, player)][dungeon_keys[region][0]] }}
+                                </td>
+
+                                {# Special check just for Agahnims Tower, which has no big keys. #}
+                                {% if region != "Agahnims Tower" %}
+                                    <td class="center-column">
+                                        {% if inventories[(team, player)][dungeon_keys[region][1]] %}
+                                            ✔️
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+{% endfor %}
+
+{% endblock %}

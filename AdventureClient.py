@@ -80,7 +80,7 @@ class AdventureContext(CommonContext):
         self.local_item_locations = {}
         self.dragon_speed_info = {}
 
-        options = Utils.get_options()
+        options = Utils.get_settings()
         self.display_msgs = options["adventure_options"]["display_msgs"]
 
     async def server_auth(self, password_requested: bool = False):
@@ -102,7 +102,7 @@ class AdventureContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
-            if Utils.get_options()["adventure_options"].get("death_link", False):
+            if Utils.get_settings()["adventure_options"].get("death_link", False):
                 self.set_deathlink = True
             async_start(self.get_freeincarnates_used())
         elif cmd == "RoomInfo":
@@ -112,14 +112,15 @@ class AdventureContext(CommonContext):
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
+            msg = f"Received {', '.join([self.item_names.lookup_in_game(item.item) for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "Retrieved":
-            self.freeincarnates_used = args["keys"][f"adventure_{self.auth}_freeincarnates_used"]
-            if self.freeincarnates_used is None:
-                self.freeincarnates_used = 0
-            self.freeincarnates_used += self.freeincarnate_pending
-            self.send_pending_freeincarnates()
+            if f"adventure_{self.auth}_freeincarnates_used" in args["keys"]:
+                self.freeincarnates_used = args["keys"][f"adventure_{self.auth}_freeincarnates_used"]
+                if self.freeincarnates_used is None:
+                    self.freeincarnates_used = 0
+                self.freeincarnates_used += self.freeincarnate_pending
+                self.send_pending_freeincarnates()
         elif cmd == "SetReply":
             if args["key"] == f"adventure_{self.auth}_freeincarnates_used":
                 self.freeincarnates_used = args["value"]
@@ -414,8 +415,8 @@ async def atari_sync_task(ctx: AdventureContext):
 
 
 async def run_game(romfile):
-    auto_start = Utils.get_options()["adventure_options"].get("rom_start", True)
-    rom_args = Utils.get_options()["adventure_options"].get("rom_args")
+    auto_start = Utils.get_settings()["adventure_options"].get("rom_start", True)
+    rom_args = Utils.get_settings()["adventure_options"].get("rom_args")
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)

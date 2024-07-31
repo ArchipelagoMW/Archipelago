@@ -2,14 +2,21 @@ import csv
 import enum
 from dataclasses import dataclass
 from random import Random
-from typing import Optional, Dict, Protocol, List, FrozenSet
+from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 
-from . import options, data
-from .data.fish_data import legendary_fish, special_fish, all_fish
+from . import data
+from .bundles.bundle_room import BundleRoom
+from .content.game_content import StardewContent
+from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
-from .data.villagers_data import all_villagers
+from .mods.mod_data import ModNames
+from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
+    FestivalLocations, SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, FarmType
+from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
-from .strings.region_names import Region
+from .strings.quest_names import ModQuest, Quest
+from .strings.region_names import Region, LogicRegion
+from .strings.villager_names import NPC
 
 LOCATION_CODE_OFFSET = 717000
 
@@ -25,6 +32,7 @@ class LocationTags(enum.Enum):
     BULLETIN_BOARD_BUNDLE = enum.auto()
     VAULT_BUNDLE = enum.auto()
     COMMUNITY_CENTER_ROOM = enum.auto()
+    RACCOON_BUNDLES = enum.auto()
     BACKPACK = enum.auto()
     TOOL_UPGRADE = enum.auto()
     HOE_UPGRADE = enum.auto()
@@ -33,6 +41,7 @@ class LocationTags(enum.Enum):
     WATERING_CAN_UPGRADE = enum.auto()
     TRASH_CAN_UPGRADE = enum.auto()
     FISHING_ROD_UPGRADE = enum.auto()
+    PAN_UPGRADE = enum.auto()
     THE_MINES_TREASURE = enum.auto()
     CROPSANITY = enum.auto()
     ELEVATOR = enum.auto()
@@ -42,8 +51,9 @@ class LocationTags(enum.Enum):
     FORAGING_LEVEL = enum.auto()
     COMBAT_LEVEL = enum.auto()
     MINING_LEVEL = enum.auto()
+    MASTERY_LEVEL = enum.auto()
     BUILDING_BLUEPRINT = enum.auto()
-    QUEST = enum.auto()
+    STORY_QUEST = enum.auto()
     ARCADE_MACHINE = enum.auto()
     ARCADE_MACHINE_VICTORY = enum.auto()
     JOTPK = enum.auto()
@@ -56,10 +66,42 @@ class LocationTags(enum.Enum):
     FRIENDSANITY = enum.auto()
     FESTIVAL = enum.auto()
     FESTIVAL_HARD = enum.auto()
+    DESERT_FESTIVAL_CHEF = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
+    REQUIRES_QI_ORDERS = enum.auto()
+    REQUIRES_MASTERIES = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
+    WALNUTSANITY = enum.auto()
+    WALNUTSANITY_PUZZLE = enum.auto()
+    WALNUTSANITY_BUSH = enum.auto()
+    WALNUTSANITY_DIG = enum.auto()
+    WALNUTSANITY_REPEATABLE = enum.auto()
+
+    BABY = enum.auto()
+    MONSTERSANITY = enum.auto()
+    MONSTERSANITY_GOALS = enum.auto()
+    MONSTERSANITY_PROGRESSIVE_GOALS = enum.auto()
+    MONSTERSANITY_MONSTER = enum.auto()
+    SHIPSANITY = enum.auto()
+    SHIPSANITY_CROP = enum.auto()
+    SHIPSANITY_FISH = enum.auto()
+    SHIPSANITY_FULL_SHIPMENT = enum.auto()
+    COOKSANITY = enum.auto()
+    COOKSANITY_QOS = enum.auto()
+    CHEFSANITY = enum.auto()
+    CHEFSANITY_QOS = enum.auto()
+    CHEFSANITY_PURCHASE = enum.auto()
+    CHEFSANITY_FRIENDSHIP = enum.auto()
+    CHEFSANITY_SKILL = enum.auto()
+    CHEFSANITY_STARTER = enum.auto()
+    CRAFTSANITY = enum.auto()
+    BOOKSANITY = enum.auto()
+    BOOKSANITY_POWER = enum.auto()
+    BOOKSANITY_SKILL = enum.auto()
+    BOOKSANITY_LOST = enum.auto()
+    # Mods
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()
@@ -110,10 +152,17 @@ events_locations = [
     LocationData(None, Region.community_center, Goal.community_center),
     LocationData(None, Region.mines_floor_120, Goal.bottom_of_the_mines),
     LocationData(None, Region.skull_cavern_100, Goal.cryptic_note),
-    LocationData(None, Region.farm, Goal.master_angler),
+    LocationData(None, Region.beach, Goal.master_angler),
     LocationData(None, Region.museum, Goal.complete_museum),
     LocationData(None, Region.farm_house, Goal.full_house),
     LocationData(None, Region.island_west, Goal.greatest_walnut_hunter),
+    LocationData(None, Region.adventurer_guild, Goal.protector_of_the_valley),
+    LocationData(None, LogicRegion.shipping, Goal.full_shipment),
+    LocationData(None, LogicRegion.kitchen, Goal.gourmet_chef),
+    LocationData(None, Region.farm, Goal.craft_master),
+    LocationData(None, LogicRegion.shipping, Goal.legend),
+    LocationData(None, Region.farm, Goal.mystery_of_the_stardrops),
+    LocationData(None, Region.farm, Goal.allsanity),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 
@@ -133,17 +182,24 @@ def initialize_groups():
 initialize_groups()
 
 
-def extend_cropsanity_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.Cropsanity] == options.Cropsanity.option_disabled:
+def extend_cropsanity_locations(randomized_locations: List[LocationData], content: StardewContent):
+    cropsanity = content.features.cropsanity
+    if not cropsanity.is_enabled:
         return
 
-    cropsanity_locations = locations_by_tag[LocationTags.CROPSANITY]
-    cropsanity_locations = filter_ginger_island(world_options, cropsanity_locations)
-    randomized_locations.extend(cropsanity_locations)
+    randomized_locations.extend(location_table[cropsanity.to_location_name(item.name)]
+                                for item in content.find_tagged_items(ItemTag.CROPSANITY))
 
 
-def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_number_of_quests: int):
-    for i in range(0, desired_number_of_quests):
+def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.quest_locations < 0:
+        return
+
+    story_quest_locations = locations_by_tag[LocationTags.STORY_QUEST]
+    story_quest_locations = filter_disabled_locations(options, story_quest_locations)
+    randomized_locations.extend(story_quest_locations)
+
+    for i in range(0, options.quest_locations.value):
         batch = i // 7
         index_this_batch = i % 7
         if index_this_batch < 4:
@@ -157,109 +213,95 @@ def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
-def extend_fishsanity_locations(randomized_locations: List[LocationData], world_options, random: Random):
-    prefix = "Fishsanity: "
-    if world_options[options.Fishsanity] == options.Fishsanity.option_none:
+def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random):
+    fishsanity = content.features.fishsanity
+    if not fishsanity.is_enabled:
         return
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_legendaries:
-        randomized_locations.extend(location_table[f"{prefix}{legendary.name}"] for legendary in legendary_fish)
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_special:
-        randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_randomized:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if random.random() < 0.4]
-        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_all:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish]
-        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_exclude_legendaries:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish not in legendary_fish]
-        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_exclude_hard_fish:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish.difficulty < 80]
-        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
-    elif world_options[options.Fishsanity] == options.Fishsanity.option_only_easy_fish:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish.difficulty < 50]
-        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
+
+    for fish in content.fishes.values():
+        if not fishsanity.is_included(fish):
+            continue
+
+        if fishsanity.is_randomized and random.random() >= fishsanity.randomization_ratio:
+            continue
+
+        randomized_locations.append(location_table[fishsanity.to_location_name(fish.name)])
 
 
-def extend_museumsanity_locations(randomized_locations: List[LocationData], museumsanity: int, random: Random):
+def extend_museumsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
     prefix = "Museumsanity: "
-    if museumsanity == options.Museumsanity.option_none:
+    if options.museumsanity == Museumsanity.option_none:
         return
-    elif museumsanity == options.Museumsanity.option_milestones:
+    elif options.museumsanity == Museumsanity.option_milestones:
         randomized_locations.extend(locations_by_tag[LocationTags.MUSEUM_MILESTONES])
-    elif museumsanity == options.Museumsanity.option_randomized:
-        randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"]
+    elif options.museumsanity == Museumsanity.option_randomized:
+        randomized_locations.extend(location_table[f"{prefix}{museum_item.item_name}"]
                                     for museum_item in all_museum_items if random.random() < 0.4)
-    elif museumsanity == options.Museumsanity.option_all:
-        randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"] for museum_item in all_museum_items)
+    elif options.museumsanity == Museumsanity.option_all:
+        randomized_locations.extend(location_table[f"{prefix}{museum_item.item_name}"] for museum_item in all_museum_items)
 
 
-def extend_friendsanity_locations(randomized_locations: List[LocationData], world_options: options.StardewOptions):
-    if world_options[options.Friendsanity] == options.Friendsanity.option_none:
+def extend_friendsanity_locations(randomized_locations: List[LocationData], content: StardewContent):
+    friendsanity = content.features.friendsanity
+    if not friendsanity.is_enabled:
         return
 
-    exclude_leo = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
-    exclude_non_bachelors = world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
-    exclude_locked_villagers = world_options[options.Friendsanity] == options.Friendsanity.option_starting_npcs or \
-                               world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
-    include_post_marriage_hearts = world_options[options.Friendsanity] == options.Friendsanity.option_all_with_marriage
-    heart_size = world_options[options.FriendsanityHeartSize]
-    for villager in all_villagers:
-        if villager.mod_name not in world_options[options.Mods] and villager.mod_name is not None:
-            continue
-        if not villager.available and exclude_locked_villagers:
-            continue
-        if not villager.bachelor and exclude_non_bachelors:
-            continue
-        if villager.name == "Leo" and exclude_leo:
-            continue
-        heart_cap = 8 if villager.bachelor else 10
-        if include_post_marriage_hearts and villager.bachelor:
-            heart_cap = 14
-        for heart in range(1, 15):
-            if heart > heart_cap:
-                break
-            if heart % heart_size == 0 or heart == heart_cap:
-                randomized_locations.append(location_table[f"Friendsanity: {villager.name} {heart} <3"])
-    if not exclude_non_bachelors:
-        for heart in range(1, 6):
-            if heart % heart_size == 0 or heart == 5:
-                randomized_locations.append(location_table[f"Friendsanity: Pet {heart} <3"])
+    randomized_locations.append(location_table[f"Spouse Stardrop"])
+    extend_baby_locations(randomized_locations)
+
+    for villager in content.villagers.values():
+        for heart in friendsanity.get_randomized_hearts(villager):
+            randomized_locations.append(location_table[friendsanity.to_location_name(villager.name, heart)])
+
+    for heart in friendsanity.get_pet_randomized_hearts():
+        randomized_locations.append(location_table[friendsanity.to_location_name(NPC.pet, heart)])
 
 
-def extend_festival_locations(randomized_locations: List[LocationData], festival_option: int):
-    if festival_option == options.FestivalLocations.option_disabled:
+def extend_baby_locations(randomized_locations: List[LocationData]):
+    baby_locations = [location for location in locations_by_tag[LocationTags.BABY]]
+    randomized_locations.extend(baby_locations)
+
+
+def extend_festival_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
+    if options.festival_locations == FestivalLocations.option_disabled:
         return
 
     festival_locations = locations_by_tag[LocationTags.FESTIVAL]
     randomized_locations.extend(festival_locations)
-    extend_hard_festival_locations(randomized_locations, festival_option)
+    extend_hard_festival_locations(randomized_locations, options)
+    extend_desert_festival_chef_locations(randomized_locations, options, random)
 
 
-def extend_hard_festival_locations(randomized_locations, festival_option: int):
-    if festival_option != options.FestivalLocations.option_hard:
+def extend_hard_festival_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.festival_locations != FestivalLocations.option_hard:
         return
 
     hard_festival_locations = locations_by_tag[LocationTags.FESTIVAL_HARD]
     randomized_locations.extend(hard_festival_locations)
 
 
-def extend_special_order_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
-        return
+def extend_desert_festival_chef_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
+    festival_chef_locations = locations_by_tag[LocationTags.DESERT_FESTIVAL_CHEF]
+    number_to_add = 5 if options.festival_locations == FestivalLocations.option_easy else 10
+    locations_to_add = random.sample(festival_chef_locations, number_to_add)
+    randomized_locations.extend(locations_to_add)
 
-    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-    board_locations = filter_disabled_locations(world_options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
-    randomized_locations.extend(board_locations)
-    if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island:
-        include_arcade = world_options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_disabled
-        qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if include_arcade or LocationTags.JUNIMO_KART not in location.tags]
+
+def extend_special_order_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.special_order_locations & SpecialOrderLocations.option_board:
+        board_locations = filter_disabled_locations(options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
+        randomized_locations.extend(board_locations)
+
+    include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
+    if options.special_order_locations & SpecialOrderLocations.value_qi and include_island:
+        include_arcade = options.arcade_machine_locations != ArcadeMachineLocations.option_disabled
+        qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if
+                     include_arcade or LocationTags.JUNIMO_KART not in location.tags]
         randomized_locations.extend(qi_orders)
 
 
-def extend_walnut_purchase_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+def extend_walnut_purchase_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
     randomized_locations.append(location_table["Repair Ticket Machine"])
     randomized_locations.append(location_table["Repair Boat Hull"])
@@ -269,82 +311,249 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], w
     randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
 
 
-def extend_mandatory_locations(randomized_locations: List[LocationData], world_options):
+def extend_mandatory_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
     mandatory_locations = [location for location in locations_by_tag[LocationTags.MANDATORY]]
-    filtered_mandatory_locations = filter_disabled_locations(world_options, mandatory_locations)
+    filtered_mandatory_locations = filter_disabled_locations(options, mandatory_locations)
     randomized_locations.extend(filtered_mandatory_locations)
 
 
-def extend_backpack_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.BackpackProgression] == options.BackpackProgression.option_vanilla:
+def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.quest_locations < 0:
+        return
+    if ModNames.distant_lands in options.mods:
+        if ModNames.alecto in options.mods:
+            randomized_locations.append(location_table[ModQuest.WitchOrder])
+        else:
+            randomized_locations.append(location_table[ModQuest.CorruptedCropsTask])
+
+
+def extend_bundle_locations(randomized_locations: List[LocationData], bundle_rooms: List[BundleRoom]):
+    for room in bundle_rooms:
+        room_location = f"Complete {room.name}"
+        if room_location in location_table:
+            randomized_locations.append(location_table[room_location])
+        for bundle in room.bundles:
+            randomized_locations.append(location_table[bundle.name])
+
+
+def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.backpack_progression == BackpackProgression.option_vanilla:
         return
     backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK]]
-    filtered_backpack_locations = filter_modded_locations(world_options, backpack_locations)
+    filtered_backpack_locations = filter_modded_locations(options, backpack_locations)
     randomized_locations.extend(filtered_backpack_locations)
 
 
-def extend_elevator_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.ElevatorProgression] == options.ElevatorProgression.option_vanilla:
+def extend_elevator_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.elevator_progression == ElevatorProgression.option_vanilla:
         return
     elevator_locations = [location for location in locations_by_tag[LocationTags.ELEVATOR]]
-    filtered_elevator_locations = filter_modded_locations(world_options, elevator_locations)
+    filtered_elevator_locations = filter_modded_locations(options, elevator_locations)
     randomized_locations.extend(filtered_elevator_locations)
 
 
+def extend_monstersanity_locations(randomized_locations: List[LocationData], options):
+    monstersanity = options.monstersanity
+    if monstersanity == Monstersanity.option_none:
+        return
+    if monstersanity == Monstersanity.option_one_per_monster or monstersanity == Monstersanity.option_split_goals:
+        monster_locations = [location for location in locations_by_tag[LocationTags.MONSTERSANITY_MONSTER]]
+        filtered_monster_locations = filter_disabled_locations(options, monster_locations)
+        randomized_locations.extend(filtered_monster_locations)
+        return
+    goal_locations = [location for location in locations_by_tag[LocationTags.MONSTERSANITY_GOALS]]
+    filtered_goal_locations = filter_disabled_locations(options, goal_locations)
+    randomized_locations.extend(filtered_goal_locations)
+    if monstersanity != Monstersanity.option_progressive_goals:
+        return
+    progressive_goal_locations = [location for location in locations_by_tag[LocationTags.MONSTERSANITY_PROGRESSIVE_GOALS]]
+    filtered_progressive_goal_locations = filter_disabled_locations(options, progressive_goal_locations)
+    randomized_locations.extend(filtered_progressive_goal_locations)
+
+
+def extend_shipsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    shipsanity = options.shipsanity
+    if shipsanity == Shipsanity.option_none:
+        return
+    if shipsanity == Shipsanity.option_everything:
+        ship_locations = [location for location in locations_by_tag[LocationTags.SHIPSANITY]]
+        filtered_ship_locations = filter_disabled_locations(options, ship_locations)
+        randomized_locations.extend(filtered_ship_locations)
+        return
+    shipsanity_locations = set()
+    if shipsanity == Shipsanity.option_fish or shipsanity == Shipsanity.option_full_shipment_with_fish:
+        shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FISH]})
+    if shipsanity == Shipsanity.option_crops:
+        shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_CROP]})
+    if shipsanity == Shipsanity.option_full_shipment or shipsanity == Shipsanity.option_full_shipment_with_fish:
+        shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]})
+
+    filtered_shipsanity_locations = filter_disabled_locations(options, list(shipsanity_locations))
+    randomized_locations.extend(filtered_shipsanity_locations)
+
+
+def extend_cooksanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    cooksanity = options.cooksanity
+    if cooksanity == Cooksanity.option_none:
+        return
+    if cooksanity == Cooksanity.option_queen_of_sauce:
+        cooksanity_locations = (location for location in locations_by_tag[LocationTags.COOKSANITY_QOS])
+    else:
+        cooksanity_locations = (location for location in locations_by_tag[LocationTags.COOKSANITY])
+
+    filtered_cooksanity_locations = filter_disabled_locations(options, cooksanity_locations)
+    randomized_locations.extend(filtered_cooksanity_locations)
+
+
+def extend_chefsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    chefsanity = options.chefsanity
+    if chefsanity == Chefsanity.option_none:
+        return
+
+    chefsanity_locations_by_name = {}  # Dictionary to not make duplicates
+
+    if chefsanity & Chefsanity.option_queen_of_sauce:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_QOS]})
+    if chefsanity & Chefsanity.option_purchases:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_PURCHASE]})
+    if chefsanity & Chefsanity.option_friendship:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_FRIENDSHIP]})
+    if chefsanity & Chefsanity.option_skills:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_SKILL]})
+
+    filtered_chefsanity_locations = filter_disabled_locations(options, list(chefsanity_locations_by_name.values()))
+    randomized_locations.extend(filtered_chefsanity_locations)
+
+
+def extend_craftsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.craftsanity == Craftsanity.option_none:
+        return
+
+    craftsanity_locations = [craft for craft in locations_by_tag[LocationTags.CRAFTSANITY]]
+    filtered_craftsanity_locations = filter_disabled_locations(options, craftsanity_locations)
+    randomized_locations.extend(filtered_craftsanity_locations)
+
+
+def extend_book_locations(randomized_locations: List[LocationData], content: StardewContent):
+    booksanity = content.features.booksanity
+    if not booksanity.is_enabled:
+        return
+
+    book_locations = []
+    for book in content.find_tagged_items(ItemTag.BOOK):
+        if booksanity.is_included(book):
+            book_locations.append(location_table[booksanity.to_location_name(book.name)])
+
+    book_locations.extend(location_table[booksanity.to_location_name(book)] for book in booksanity.get_randomized_lost_books())
+
+    randomized_locations.extend(book_locations)
+
+
+def extend_walnutsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if not options.walnutsanity:
+        return
+
+    if "Puzzles" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_PUZZLE])
+    if "Bushes" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_BUSH])
+    if "Dig Spots" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_DIG])
+    if "Repeatables" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_REPEATABLE])
+
+
 def create_locations(location_collector: StardewLocationCollector,
-                     world_options: options.StardewOptions,
+                     bundle_rooms: List[BundleRoom],
+                     options: StardewValleyOptions,
+                     content: StardewContent,
                      random: Random):
     randomized_locations = []
 
-    extend_mandatory_locations(randomized_locations, world_options)
-    extend_backpack_locations(randomized_locations, world_options)
+    extend_mandatory_locations(randomized_locations, options)
+    extend_bundle_locations(randomized_locations, bundle_rooms)
+    extend_backpack_locations(randomized_locations, options)
 
-    if not world_options[options.ToolProgression] == options.ToolProgression.option_vanilla:
+    if options.tool_progression & ToolProgression.option_progressive:
         randomized_locations.extend(locations_by_tag[LocationTags.TOOL_UPGRADE])
 
-    extend_elevator_locations(randomized_locations, world_options)
+    extend_elevator_locations(randomized_locations, options)
 
-    if not world_options[options.SkillProgression] == options.SkillProgression.option_vanilla:
+    if not options.skill_progression == SkillProgression.option_vanilla:
         for location in locations_by_tag[LocationTags.SKILL_LEVEL]:
-            if location.mod_name is None or location.mod_name in world_options[options.Mods]:
-                randomized_locations.append(location_table[location.name])
+            if location.mod_name is not None and location.mod_name not in options.mods:
+                continue
+            if LocationTags.MASTERY_LEVEL in location.tags and options.skill_progression != SkillProgression.option_progressive_with_masteries:
+                continue
+            randomized_locations.append(location_table[location.name])
 
-    if not world_options[options.BuildingProgression] == options.BuildingProgression.option_vanilla:
+    if options.building_progression & BuildingProgression.option_progressive:
         for location in locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
-            if location.mod_name is None or location.mod_name in world_options[options.Mods]:
+            if location.mod_name is None or location.mod_name in options.mods:
                 randomized_locations.append(location_table[location.name])
 
-    if world_options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_disabled:
+    if options.arcade_machine_locations != ArcadeMachineLocations.option_disabled:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE_VICTORY])
 
-    if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
+    if options.arcade_machine_locations == ArcadeMachineLocations.option_full_shuffling:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
 
-    extend_cropsanity_locations(randomized_locations, world_options)
-    extend_help_wanted_quests(randomized_locations, world_options[options.HelpWantedLocations])
-    extend_fishsanity_locations(randomized_locations, world_options, random)
-    extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)
-    extend_friendsanity_locations(randomized_locations, world_options)
+    extend_cropsanity_locations(randomized_locations, content)
+    extend_fishsanity_locations(randomized_locations, content, random)
+    extend_museumsanity_locations(randomized_locations, options, random)
+    extend_friendsanity_locations(randomized_locations, content)
 
-    extend_festival_locations(randomized_locations, world_options[options.FestivalLocations])
-    extend_special_order_locations(randomized_locations, world_options)
-    extend_walnut_purchase_locations(randomized_locations, world_options)
+    extend_festival_locations(randomized_locations, options, random)
+    extend_special_order_locations(randomized_locations, options)
+    extend_walnut_purchase_locations(randomized_locations, options)
+
+    extend_monstersanity_locations(randomized_locations, options)
+    extend_shipsanity_locations(randomized_locations, options)
+    extend_cooksanity_locations(randomized_locations, options)
+    extend_chefsanity_locations(randomized_locations, options)
+    extend_craftsanity_locations(randomized_locations, options)
+    extend_quests_locations(randomized_locations, options)
+    extend_book_locations(randomized_locations, content)
+    extend_walnutsanity_locations(randomized_locations, options)
+
+    # Mods
+    extend_situational_quest_locations(randomized_locations, options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
-def filter_ginger_island(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
-    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-    return [location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags]
+def filter_farm_type(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    # On Meadowlands, "Feeding Animals" replaces "Raising Animals"
+    if options.farm_type == FarmType.option_meadowlands:
+        return (location for location in locations if location.name != Quest.raising_animals)
+    else:
+        return (location for location in locations if location.name != Quest.feeding_animals)
 
 
-def filter_modded_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
-    current_mod_names = world_options[options.Mods]
-    return [location for location in locations if location.mod_name is None or location.mod_name in current_mod_names]
+def filter_ginger_island(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
+    return (location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags)
 
 
-def filter_disabled_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
-    locations_first_pass = filter_ginger_island(world_options, locations)
-    locations_second_pass = filter_modded_locations(world_options, locations_first_pass)
-    return locations_second_pass
+def filter_qi_order_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    include_qi_orders = options.special_order_locations & SpecialOrderLocations.value_qi
+    return (location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags)
+
+
+def filter_masteries_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    include_masteries = options.skill_progression == SkillProgression.option_progressive_with_masteries
+    return (location for location in locations if include_masteries or LocationTags.REQUIRES_MASTERIES not in location.tags)
+
+
+def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    return (location for location in locations if location.mod_name is None or location.mod_name in options.mods)
+
+
+def filter_disabled_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    locations_farm_filter = filter_farm_type(options, locations)
+    locations_island_filter = filter_ginger_island(options, locations_farm_filter)
+    locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
+    locations_masteries_filter = filter_masteries_locations(options, locations_qi_filter)
+    locations_mod_filter = filter_modded_locations(options, locations_masteries_filter)
+    return locations_mod_filter

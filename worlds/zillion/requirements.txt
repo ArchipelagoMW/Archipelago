@@ -1,1 +1,2 @@
-zilliandomizer @ git+https://github.com/beauxq/zilliandomizer@cd6a940ad7b585c75a560b91468d6b9eee030559#0.5.2
+zilliandomizer @ git+https://github.com/beauxq/zilliandomizer@33045067f626266850f91c8045b9d3a9f52d02b0#0.9.0
+typing-extensions>=4.7, <5

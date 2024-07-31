@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Lufia II Ancient Cave Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
@@ -14,11 +14,12 @@ modded SNES minis are currently not supported by SNI**
 
 ## Installation Procedures
 
-1. Download and install SNIClient from the link above, making sure to install the most recent version.
-   **The installer file is located in the assets section at the bottom of the version information**.
-    - During setup, you will be asked to locate your base ROM file. This is your American Lufia II - Rise of the Sinistrals ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. 
+   This is your American Lufia II - Rise of the Sinistrals ROM file. This only needs to be done once.
 
-2. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
+3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
     2. Right-click on a ROM file and select **Open with...**
@@ -38,17 +39,17 @@ options.
 
 ### Where do I get a config file?
 
-The [Player Settings](/games/Lufia%20II%20Ancient%20Cave/player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
+The [Player Options](/games/Lufia%20II%20Ancient%20Cave/player-options) page on the website allows you to configure
+your personal options and export a config file from them.
 
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the
-[YAML Validator](/mysterycheck) page.
+[YAML Validator](/check) page.
 
 ## Generating a Single-Player Game
 
-1. Navigate to the [Player Settings](/games/Lufia%20II%20Ancient%20Cave/player-settings) page, configure your options,
+1. Navigate to the [Player Options](/games/Lufia%20II%20Ancient%20Cave/player-options) page, configure your options,
    and click the "Generate Game" button.
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
@@ -82,8 +83,7 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
@@ -94,9 +94,8 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
     - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
 2. Load your ROM file if it hasn't already been loaded.
    If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
-3. Drag+drop the `Connector.lua` file that you downloaded above onto the main EmuHawk window.
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+3. Drag+drop the `Connector.lua` file included with your client onto the main EmuHawk window.
+    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
     - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
       with the file picker.
 

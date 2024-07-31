@@ -21,3 +21,8 @@ class ModNames:
     ayeisha = "Ayeisha - The Postal Worker (Custom NPC)"
     riley = "Custom NPC - Riley"
     skull_cavern_elevator = "Skull Cavern Elevator"
+    sve = "Stardew Valley Expanded"
+    alecto = "Alecto the Witch"
+    distant_lands = "Distant Lands - Witch Swamp Overhaul"
+    lacey = "Hat Mouse Lacey"
+    boarding_house = "Boarding House and Bus Stop Extension"

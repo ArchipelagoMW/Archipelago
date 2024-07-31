@@ -1,8 +1,8 @@
 # MegaMan Battle Network 3
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and
+The [player options page for this game](../player-options) contains all the options you need to configure and
 export a config file.
 
 ## What does randomization do to this game?
@@ -72,3 +72,10 @@ what item and what player is receiving the item
 
 Whenever you have an item pending, the next time you are not in a battle, menu, or dialog box, you will receive a
 message on screen notifying you of the item and sender, and the item will be added directly to your inventory.
+
+## Unique Local Commands
+
+The following commands are only available when using the MMBN3Client to play with Archipelago.
+
+- `/gba` Check GBA Connection State
+- `/debug` Toggle the Debug Text overlay in ROM

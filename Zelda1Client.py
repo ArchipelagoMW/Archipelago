@@ -13,7 +13,6 @@ from typing import List
 
 import Utils
 from Utils import async_start
-from worlds import lookup_any_location_id_to_name
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
 
@@ -153,7 +152,7 @@ def get_payload(ctx: ZeldaContext):
 
 
 def reconcile_shops(ctx: ZeldaContext):
-    checked_location_names = [lookup_any_location_id_to_name[location] for location in ctx.checked_locations]
+    checked_location_names = [ctx.location_names.lookup_in_game(location) for location in ctx.checked_locations]
     shops = [location for location in checked_location_names if "Shop" in location]
     left_slots = [shop for shop in shops if "Left" in shop]
     middle_slots = [shop for shop in shops if "Middle" in shop]
@@ -191,7 +190,7 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
         locations_checked = []
         location = None
         for location in ctx.missing_locations:
-            location_name = lookup_any_location_id_to_name[location]
+            location_name = ctx.location_names.lookup_in_game(location)
 
             if location_name in Locations.overworld_locations and zone == "overworld":
                 status = locations_array[Locations.major_location_offsets[location_name]]
