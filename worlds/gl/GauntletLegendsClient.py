@@ -24,8 +24,6 @@ from .Arrays import (
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
 
-SYSTEM_MESSAGE_ID = 0
-
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
 INV_ADDR = 0xC5BF0
