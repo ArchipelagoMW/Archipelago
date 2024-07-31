@@ -2,7 +2,7 @@ import os
 import typing
 
 import settings
-from BaseClasses import ItemClassification, Tutorial, Item
+from BaseClasses import ItemClassification, Tutorial
 from Fill import fast_fill
 
 from worlds.AutoWorld import WebWorld, World
@@ -73,7 +73,6 @@ class GauntletLegendsWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 5, 0)
-    death: typing.List[Item] = []
     crc32: str = None
 
     disabled_locations: typing.List[LocationData]
@@ -162,7 +161,7 @@ class GauntletLegendsWorld(World):
             "characters": characters,
             "max": (self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4),
             "instant_max": self.options.instant_max.value,
-            "death_link": self.options.death_link.value == 1
+            "death_link": bool((self.options.death_link.value == 1))
         }
 
     def create_items(self) -> None:
