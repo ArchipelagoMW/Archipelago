@@ -16,7 +16,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 def _has_hot_soup(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the hotsoup item"""
-    return state.has_any ({"Hot Soup", "Hot Soup x 2"}, player)
+    return state.has_any({"Hot soup", "Hot soup x 2"}, player)
 
 
 def _has_tongue_cleared(state:CollectionState, player: int) -> bool:
