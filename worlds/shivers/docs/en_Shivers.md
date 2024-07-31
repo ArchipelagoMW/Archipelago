@@ -12,8 +12,8 @@ these are randomized. Crawling has been added and is required to use any crawl s
 
 ## What is considered a location check in Shivers?
 
-1. All puzzle solves are location checks excluding elevator puzzles. 
-2. All Ixupi captures are location checks excluding Lightning.
+1. All puzzle solves are location checks. 
+2. All Ixupi captures are location checks.
 3. Puzzle hints/solutions are location checks. For example, looking at the Atlantis map.
 4. Optionally information plaques are location checks.
 
@@ -23,9 +23,9 @@ If the player receives a key then the corresponding door will be unlocked. If th
 
 ## What is the victory condition?
 
-Victory is achieved when the player captures Lightning in the generator room.
+Victory is achieved when the player has captured the required number Ixupi set in their options.
 
 ## Encountered a bug?
 
-Please contact GodlFire on Discord for bugs related to Shivers world generation.\
+Please contact GodlFire on Discord for bugs related to Shivers world generation.<br>
 Please contact GodlFire or mouse on Discord for bugs related to the Shivers Randomizer.
