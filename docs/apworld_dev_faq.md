@@ -65,4 +65,4 @@ This keeps almost all of the performance upsides. Even a game making heavy use o
 The reason `location.can_reach` and `entrance.can_reach` are also affected is simple: They call `region.can_reach` on their respective parent/source region.
 
 We recognize it's a pretty bad beginner's trap (heck, not even a "beginner's" trap, just a trap - even for experienced AP devs), and some games are very complex with their access rules.
-There is an open Pull Request that makes this behavior optional via a world class attribute: [Core: Region handling customization](https://github.com/ArchipelagoMW/Archipelago/pull/3682)
+There is an open Pull Request that makes this behavior optional via a world class attribute: [Core: Region handling customization](https://github.com/ArchipelagoMW/Archipelago/pull/3682).
