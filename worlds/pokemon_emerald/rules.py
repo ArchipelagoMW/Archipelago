@@ -464,7 +464,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Slateport City
     set_rule(
-        get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_ROUTE134/WEST"),
+        get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_SLATEPORT_CITY/WATER"),
         hm_rules["HM03 Surf"]
     )
     set_rule(
@@ -557,6 +557,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     set_rule(
         get_location("NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON"),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", world.player)
+    )
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_COIN_CASE"),
+        lambda state: state.has("EVENT_BUY_HARBOR_MAIL", world.player)
     )
 
     # Route 117
@@ -992,6 +996,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if "Lilycove City Wailmer" not in world.options.remove_roadblocks.value:
         set_rule(
             get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN"),
+            lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", world.player)
+        )
+        set_rule(
+            get_entrance("REGION_ROUTE124/MAIN -> REGION_LILYCOVE_CITY/SEA"),
             lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", world.player)
         )
 
@@ -1531,6 +1539,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.dexsanity:
         for i in range(NUM_REAL_SPECIES):
             species = data.species[NATIONAL_ID_TO_SPECIES_ID[i + 1]]
+
+            if species.species_id in world.blacklisted_wilds:
+                continue
+
             set_rule(
                 get_location(f"Pokedex - {species.label}"),
                 lambda state, species_name=species.name: state.has(f"CATCH_{species_name}", world.player)
@@ -1538,7 +1550,8 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
         # Legendary hunt prevents Latios from being a wild spawn so the roamer
         # can be tracked, and also guarantees that the roamer is a Latios.
-        if world.options.goal == Goal.option_legendary_hunt:
+        if world.options.goal == Goal.option_legendary_hunt and \
+                data.constants["SPECIES_LATIOS"] not in world.blacklisted_wilds:
             set_rule(
                 get_location(f"Pokedex - Latios"),
                 lambda state: state.has("EVENT_ENCOUNTER_LATIOS", world.player)
@@ -1628,10 +1641,6 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         set_rule(
             get_location("NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"),
             lambda state: state.has("EVENT_DEFEAT_NORMAN", world.player) and state.has("EVENT_TURN_OFF_GENERATOR", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_COIN_CASE"),
-            lambda state: state.has("EVENT_BUY_HARBOR_MAIL", world.player)
         )
 
         # Fallarbor Town

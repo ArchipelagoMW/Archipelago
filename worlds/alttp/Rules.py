@@ -10,7 +10,7 @@ from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
 from .Items import item_factory, item_name_groups, item_table, progression_items
 from .Options import small_key_shuffle
-from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
+from .OverworldGlitchRules import overworld_glitches_rules
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
@@ -33,7 +33,6 @@ def set_rules(world):
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
-            no_logic_rules(world, player)
             for exit in world.get_region('Menu', player).exits:
                 exit.hide_path = True
             return
@@ -64,20 +63,24 @@ def set_rules(world):
 
     if world.glitches_required[player] == 'no_glitches':
         no_glitches_rules(world, player)
+        forbid_bomb_jump_requirements(world, player)
     elif world.glitches_required[player] == 'overworld_glitches':
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
+        forbid_bomb_jump_requirements(world, player)
     elif world.glitches_required[player] in ['hybrid_major_glitches', 'no_logic']:
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
+        bomb_jump_requirements(world, player)
     elif world.glitches_required[player] == 'minor_glitches':
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
+        forbid_bomb_jump_requirements(world, player)
     else:
         raise NotImplementedError(f'Not implemented yet: Logic - {world.glitches_required[player]}')
 
@@ -290,6 +293,9 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has('Hookshot', player) or state.has('Pegasus Boots', player))
     set_rule(multiworld.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
 
+    set_rule(multiworld.get_location('Hyrule Castle - Map Guard Key Drop', player),
+             lambda state: can_kill_most_things(state, player, 1))
+
     set_rule(multiworld.get_entrance('Sewers Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) or (
                      multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal and multiworld.mode[
@@ -392,23 +398,21 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
     if not multiworld.small_key_shuffle[player] and multiworld.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
         forbid_item(multiworld.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
-    set_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    set_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     if multiworld.pot_shuffle[player]:
         # key can (and probably will) be moved behind bombable wall
         set_rule(multiworld.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
 
     set_rule(multiworld.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
-
     if multiworld.worlds[player].dungeons["Thieves Town"].boss.enemizer_name == "Blind":
         set_rule(multiworld.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3) and can_use_bombs(state, player))
-
     set_rule(multiworld.get_location('Thieves\' Town - Big Chest', player),
              lambda state: ((state._lttp_has_key('Small Key (Thieves Town)', player, 3)) or (location_item_name(state, 'Thieves\' Town - Big Chest', player) == ("Small Key (Thieves Town)", player)) and state._lttp_has_key('Small Key (Thieves Town)', player, 2)) and state.has('Hammer', player))
-
+    set_rule(multiworld.get_location('Thieves\' Town - Blind\'s Cell', player),
+             lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
     if multiworld.accessibility[player] != 'locations' and not multiworld.key_drop_shuffle[player]:
         set_always_allow(multiworld.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player)
-
     set_rule(multiworld.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
     set_rule(multiworld.get_location('Thieves\' Town - Spike Switch Pot Key', player),
              lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
@@ -484,7 +488,7 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Turtle Rock - Roller Room - Right', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
     set_rule(multiworld.get_location('Turtle Rock - Big Chest', player), lambda state: state.has('Big Key (Turtle Rock)', player) and (state.has('Cane of Somaria', player) or state.has('Hookshot', player)))
     set_rule(multiworld.get_entrance('Turtle Rock (Big Chest) (North)', player), lambda state: state.has('Cane of Somaria', player) or state.has('Hookshot', player))
-    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10))
+    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10) and can_bomb_or_bonk(state, player))
     set_rule(multiworld.get_location('Turtle Rock - Chain Chomps', player), lambda state: can_use_bombs(state, player) or can_shoot_arrows(state, player)
                                                                                           or has_beam_sword(state, player) or state.has_any(["Blue Boomerang", "Red Boomerang", "Hookshot", "Cane of Somaria", "Fire Rod", "Ice Rod"], player))
     set_rule(multiworld.get_entrance('Turtle Rock (Dark Room) (North)', player), lambda state: state.has('Cane of Somaria', player))
@@ -536,6 +540,8 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Ganons Tower - Bob\'s Torch', player), lambda state: state.has('Pegasus Boots', player))
     set_rule(multiworld.get_entrance('Ganons Tower (Tile Room)', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(multiworld.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
+    if multiworld.pot_shuffle[player]:
+        set_rule(multiworld.get_location('Ganons Tower - Conveyor Cross Pot Key', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
     set_rule(multiworld.get_entrance('Ganons Tower (Map Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
                 location_item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player)] and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
 
@@ -554,8 +560,8 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Ganons Tower - Firesnake Room', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or
                                                                                              ((item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) or item_name_in_location_names(state, 'Small Key (Ganons Tower)', player, [('Ganons Tower - Firesnake Room', player)])) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
     for location in randomizer_room_chests:
-        set_rule(multiworld.get_location(location, player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
-                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
+        set_rule(multiworld.get_location(location, player), lambda state: can_use_bombs(state, player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6))))
 
     # Once again it is possible to need more than 7 keys...
     set_rule(multiworld.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
@@ -900,7 +906,6 @@ def no_glitches_rules(world, player):
 
     add_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse', player), lambda state: False)  # no glitches does not require block override
-    forbid_bomb_jump_requirements(world, player)
     add_conditional_lamps(world, player)
 
 def fake_flipper_rules(world, player):
@@ -928,12 +933,20 @@ def fake_flipper_rules(world, player):
         set_rule(world.get_entrance('East Dark World River Pier', player), lambda state: state.has('Moon Pearl', player))
 
 
-def forbid_bomb_jump_requirements(world, player):
+def bomb_jump_requirements(multiworld, player):
     DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
     for location in DMs_room_chests:
-        add_rule(world.get_location(location, player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
-    set_rule(world.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
+        add_rule(multiworld.get_location(location, player), lambda state: can_use_bombs(state, player), combine="or")
+    set_rule(multiworld.get_entrance('Paradox Cave Bomb Jump', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: can_use_bombs(state, player))
+
+
+def forbid_bomb_jump_requirements(multiworld, player):
+    DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
+    for location in DMs_room_chests:
+        add_rule(multiworld.get_location(location, player), lambda state: state.has('Hookshot', player))
+    set_rule(multiworld.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
+    set_rule(multiworld.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
 
 
 DW_Entrances = ['Bumper Cave (Bottom)',
@@ -1012,9 +1025,6 @@ def add_conditional_lamps(world, player):
 
 def open_rules(world, player):
 
-    set_rule(world.get_location('Hyrule Castle - Map Guard Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 1))
-
     def basement_key_rule(state):
         if location_item_name(state, 'Sewers - Key Rat Key Drop', player) == ("Small Key (Hyrule Castle)", player):
             return state._lttp_has_key("Small Key (Hyrule Castle)", player, 2)
@@ -1023,7 +1033,7 @@ def open_rules(world, player):
 
     set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
              lambda state: basement_key_rule(state) and can_kill_most_things(state, player, 2))
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), basement_key_rule)
+    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: basement_key_rule(state) and can_kill_most_things(state, player, 1))
 
     set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3) and can_kill_most_things(state, player, 1))
@@ -1031,8 +1041,10 @@ def open_rules(world, player):
     set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) and can_kill_most_things(state, player, 1))
     set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) and
-                           state.has('Big Key (Hyrule Castle)', player))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4)
+                           and state.has('Big Key (Hyrule Castle)', player)
+                           and (world.enemy_health[player] in ("easy", "default")
+                                or can_kill_most_things(state, player, 1)))
 
 
 def swordless_rules(world, player):
@@ -1062,6 +1074,7 @@ def add_connection(parent_name, target_name, entrance_name, world, player):
     parent.exits.append(connection)
     connection.connect(target)
 
+
 def standard_rules(world, player):
     add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
     world.get_entrance('Uncle S&Q', player).hide_path = True
@@ -1073,18 +1086,23 @@ def standard_rules(world, player):
 
     if world.small_key_shuffle[player] != small_key_shuffle.option_universal:
         set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
+                               and can_kill_most_things(state, player, 2))
         set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
+                               and can_kill_most_things(state, player, 1))
 
         set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2) and
-                               state.has('Big Key (Hyrule Castle)', player))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2)
+                               and state.has('Big Key (Hyrule Castle)', player)
+                               and (world.enemy_health[player] in ("easy", "default")
+                                    or can_kill_most_things(state, player, 1)))
 
         set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3)
+                               and can_kill_most_things(state, player, 1))
     else:
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state.has('Big Key (Hyrule Castle)', player))

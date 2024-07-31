@@ -482,7 +482,7 @@ Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 
 158207 - 0x03713 (Laser Shortcut Panel) - True - True
 Door - 0x0364E (Laser Shortcut) - 0x03713
 158208 - 0x00B10 (Entry Left) - True - True
-158209 - 0x00C92 (Entry Right) - True - True
+158209 - 0x00C92 (Entry Right) - 0x00B10 - True
 Door - 0x0C128 (Entry Inner) - 0x00B10
 Door - 0x0C153 (Entry Outer) - 0x00C92
 158210 - 0x00290 (Outside 1) - 0x09D9B - True
@@ -805,7 +805,7 @@ Swamp Rotating Bridge (Swamp) - Swamp Between Bridges Far - 0x181F5 - Swamp Near
 159334 - 0x036CE (Rotating Bridge CW EP) - 0x181F5 - True
 
 Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02 - The Ocean - 0x09DB8:
-158903 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
+159803 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (Beyond Rotating Bridge 1) - 0x0000A - Rotated Shapers
 158330 - 0x00A1E (Beyond Rotating Bridge 2) - 0x003B2 - Rotated Shapers
@@ -1028,7 +1028,7 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
 
-Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Beyond Bridge - 0x09E86 - Mountain Floor 2 At Door - 0x09ED8 & 0x09E86 - Mountain Pink Bridge EP - TrueOneWay:
+Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Beyond Bridge - 0x09E86 - Mountain Floor 2 Above The Abyss - True - Mountain Pink Bridge EP - TrueOneWay:
 158426 - 0x09FD3 (Near Row 1) - True - Colored Squares
 158427 - 0x09FD4 (Near Row 2) - 0x09FD3 - Colored Squares & Dots
 158428 - 0x09FD6 (Near Row 3) - 0x09FD4 - Stars & Colored Squares & Stars + Same Colored Symbol
@@ -1036,7 +1036,7 @@ Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 
 158430 - 0x09FD8 (Near Row 5) - 0x09FD7 - Colored Squares
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
-Mountain Floor 2 At Door (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EDD:
+Mountain Floor 2 Above The Abyss (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EDD & 0x09ED8 & 0x09E86:
 Door - 0x09EDD (Elevator Room Entry) - 0x09ED8 & 0x09E86
 
 Mountain Floor 2 Light Bridge Room Near (Mountain Floor 2):
@@ -1088,7 +1088,7 @@ Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB 
 158529 - 0x339BB (Left Pillar 4) - 0x03859 - Black/White Squares & Stars & Symmetry
 
 Elevator (Mountain Bottom Floor):
-158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True
+158530 - 0x3D9A6 (Elevator Door Close Left) - True - True
 158531 - 0x3D9A7 (Elevator Door Close Right) - True - True
 158532 - 0x3C113 (Elevator Entry Left) - 0x3D9A6 | 0x3D9A7 - True
 158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
