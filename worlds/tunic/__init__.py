@@ -351,14 +351,14 @@ class TunicWorld(World):
     # cache whether you can get through combat logic areas
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
-        if change:
+        if change and self.options.combat_logic:
             if item.name in combat_items:
                 state.prog_items[self.player]["need_to_reset_combat_state_from_collect"] = 1
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
-        if change:
+        if change and self.options.combat_logic:
             if item.name in combat_items:
                 state.prog_items[self.player]["need_to_reset_combat_state_from_remove"] = 1
         return change
