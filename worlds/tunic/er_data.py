@@ -7,7 +7,7 @@ class Portal(NamedTuple):
     region: str  # AP region
     destination: str  # vanilla destination scene
     tag: str  # vanilla tag
-    direction: int  # the direction you go to enter a portal
+    direction: int = Direction.none  # the direction you go to enter a portal
 
     def scene(self) -> str:  # the actual scene name in Tunic
         if self.region.startswith("Shop"):
@@ -23,7 +23,7 @@ class Portal(NamedTuple):
 
 # the direction you go to enter a portal
 class Direction(IntEnum):
-    none = 0  # for zig skip since it's excluded entirely from this direction pairing mode
+    none = 0  # for when the direction isn't relevant
     north = 1
     south = 2
     east = 3
