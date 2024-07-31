@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import UUID
 
-from flask import abort, jsonify
+from flask import abort
 
 from MultiServer import Context
 from NetUtils import NetworkItem, SlotType, encode
@@ -141,8 +141,7 @@ def tracker_data(tracker: UUID):
     }
     """Slot data for each player."""
 
-    return jsonify(
-        {
+    return {
             "groups": groups,
             "player_names": player_names,
             "player_aliases": player_aliases,
@@ -156,7 +155,7 @@ def tracker_data(tracker: UUID):
             "player_status": player_status,
             "slot_data": encode(slot_data),
             "datapackage": tracker_data._multidata["datapackage"],
-        })
+        }
 
 
 @api_endpoints.route("/datapackage/<suuid:tracker>/<string:game>")
