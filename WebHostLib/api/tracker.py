@@ -13,7 +13,7 @@ from WebHostLib.models import GameDataPackage, Room
 from WebHostLib.tracker import TrackerData
 
 
-@api_endpoints.route('/tracker/<suuid:tracker>')
+@api_endpoints.route("/tracker/<suuid:tracker>")
 @cache.memoize(timeout=60)
 def tracker_data(tracker: UUID):
     """outputs json data to <root_path>/api/tracker/<id of current session tracker>"""
@@ -156,14 +156,3 @@ def tracker_data(tracker: UUID):
             "slot_data": encode(slot_data),
             "datapackage": tracker_data._multidata["datapackage"],
         }
-
-
-@api_endpoints.route("/datapackage/<suuid:tracker>/<string:game>")
-@cache.cached()
-def get_gamepackage(tracker: UUID, game: str):
-    room = Room.get(tracker=tracker)
-    if room is None:
-        return abort(404)
-    multidata = Context.decompress(room.seed.multidata)
-    return restricted_loads(GameDataPackage.get(checksum=multidata["datapackage"][game]["checksum"]).data)
-
