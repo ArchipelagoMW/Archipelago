@@ -27,7 +27,6 @@ class LayoutType(ABC):
         This should include at least one entrance and exit."""
         return []
     
-    @abstractmethod
     def parse_index(self, term: str) -> Union[Set[int], None]:
         """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
 
@@ -56,9 +55,6 @@ class Column(LayoutType):
     def get_visual_layout(self) -> List[List[int]]:
         return [list(range(self.size))]
 
-    def parse_index(self, term: str) -> Union[Set[int], None]:
-        raise NotImplementedError
-    
 class Grid(LayoutType):
     """Rectangular grid. Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
     width: int
@@ -258,9 +254,6 @@ class Hopscotch(LayoutType):
 
         return final_cols
 
-    def parse_index(self, term: str) -> Union[Set[int], None]:
-        raise NotImplementedError
-    
 class Gauntlet(LayoutType):
     """Long, linear layout. Goes horizontally and wraps around.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
@@ -294,9 +287,6 @@ class Gauntlet(LayoutType):
 
         return columns
 
-    def parse_index(self, term: str) -> Union[Set[int], None]:
-        raise NotImplementedError
-    
 class Blitz(LayoutType):
     """Rows of missions, one mission per row required.
     Default entrances are every mission in the top row, default exit is a central mission in the bottom row."""
@@ -320,7 +310,7 @@ class Blitz(LayoutType):
         for idx in range(self.width):
             slots[idx].option_entrance = True
         
-        # TODO: this works, but I'm not 100% sure on the intent
+        # TODO: this is copied from the original mission order and works, but I'm not sure on the intent
         # middle_column = self.width // 2
         # if self.size % self.width > middle_column:
         #     final_row = self.width * (self.size // self.width)
@@ -350,9 +340,6 @@ class Blitz(LayoutType):
 
         return columns
     
-    def parse_index(self, term: str) -> Union[Set[int], None]:
-        raise NotImplementedError
-
 def fill_to_longest(columns: List[List[int]]):
     longest = max(len(col) for col in columns)
     for idx in range(len(columns)):

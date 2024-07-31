@@ -17,6 +17,7 @@ from .presets_static import (
     preset_wol_with_prophecy, preset_wol, preset_prophecy, preset_hots, preset_lotv_prologue,
     preset_lotv_epilogue, preset_lotv, preset_nco
 )
+from .presets_scripted import make_golden_path
 
 STR_OPTION_VALUES = {
     "type": {
@@ -47,7 +48,8 @@ STR_OPTION_VALUES = {
         "mini lotv": static_preset(preset_mini_lotv),
         "mini epilogue": static_preset(preset_mini_lotv_epilogue),
         "mini lotv epilogue": static_preset(preset_mini_lotv_epilogue),
-        "mini nco": static_preset(preset_mini_nco)
+        "mini nco": static_preset(preset_mini_nco),
+        "golden path": make_golden_path
     },
 }
 STR_OPTION_VALUES["min_difficulty"] = STR_OPTION_VALUES["difficulty"]
@@ -82,6 +84,7 @@ class CustomMissionOrder(OptionDict):
     default = {
         "Default Campaign": {
             "display_name": "null",
+            "unique_name": False,
             "entry_rules": [],
             "goal": True,
             "min_difficulty": "relative",
@@ -89,6 +92,7 @@ class CustomMissionOrder(OptionDict):
             "single_layout_campaign": False,
             GLOBAL_ENTRY: {
                 "display_name": "null",
+                "unique_name": False,
                 "entry_rules": [],
                 "goal": False,
                 "exit": False,
@@ -107,6 +111,7 @@ class CustomMissionOrder(OptionDict):
         # Campaigns
         str: {
             "display_name": [str],
+            "unique_name": bool,
             "entry_rules": [EntryRule],
             "goal": bool,
             "min_difficulty": Difficulty,
@@ -114,13 +119,14 @@ class CustomMissionOrder(OptionDict):
             "single_layout_campaign": bool,
             # Layouts
             str: {
+                "display_name": [str],
+                "unique_name": bool,
                 # Type options
                 "type": lambda val: issubclass(val, LayoutType),
                 "size": IntOne,
                 # Link options
                 "exit": bool,
                 "goal": bool,
-                "display_name": [str],
                 "entry_rules": [EntryRule],
                 # Mission pool options
                 "mission_pool": {int},
@@ -196,9 +202,13 @@ class CustomMissionOrder(OptionDict):
             # Final layouts are preset layouts (updated by same-name user layouts) followed by custom user layouts
             for key in layouts:
                 if key in ordered_layouts:
+                    # Mission slots for presets should go before user mission slots
+                    if "missions" in layouts[key] and "missions" in ordered_layouts[key]:
+                        layouts[key]["missions"] = ordered_layouts[key]["missions"] + layouts[key]["missions"]
                     ordered_layouts[key].update(layouts[key])
                 else:
                     ordered_layouts[key] = layouts[key]
+                    
 
             # Campaign values = default options (except for default layouts) + preset options (except for layouts) +  campaign options
             self.value[campaign] = {key: value for (key, value) in self.default["Default Campaign"].items() if type(value) != dict}

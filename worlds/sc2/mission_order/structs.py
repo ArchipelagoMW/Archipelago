@@ -1,6 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union, TypeVar, TYPE_CHECKING
-from collections.abc import Iterable
+from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union, TYPE_CHECKING
 from weakref import ref, ReferenceType
 from dataclasses import dataclass, asdict
 from abc import ABC, abstractmethod
@@ -80,13 +79,28 @@ class SC2MissionOrder(MissionOrderNode):
                 if layout.option_goal:
                     self.goal_missions.update(layout.exits)
                 for mission in layout.missions:
-                    if mission.option_goal:
+                    if mission.option_goal and not mission.option_empty:
                         self.goal_missions.add(mission)
 
         # If not, set the last defined campaign as goal
         if len(self.goal_missions) == 0:
             self.campaigns[-1].option_goal = True
             self.goal_missions.update(mission for mission in self.campaigns[-1].exits)
+
+        # Resolve names
+        used_names: Set[str] = set()
+        for campaign in self.campaigns:
+            names = [campaign.option_name] if len(campaign.option_display_name) == 0 else campaign.option_display_name
+            if campaign.option_unique_name:
+                names = [name for name in names if name not in used_names]
+            campaign.display_name = world.random.choice(names)
+            used_names.add(campaign.display_name)
+            for layout in campaign.layouts:
+                names = [layout.option_name] if len(layout.option_display_name) == 0 else layout.option_display_name
+                if layout.option_unique_name:
+                    names = [name for name in names if name not in used_names]
+                layout.display_name = world.random.choice(names)
+                used_names.add(layout.display_name)
     
     def get_used_flags(self) -> Dict[MissionFlag, int]:
         """Returns a dictionary of all used flags and their appearance count within the mission order.
@@ -104,6 +118,7 @@ class SC2MissionOrder(MissionOrderNode):
             for campaign in self.campaigns if campaign.is_always_unlocked()
             for layout in campaign.layouts if layout.is_always_unlocked()
             for mission in layout.missions if mission.is_always_unlocked()
+            if not mission.option_empty
         }
 
     def get_completion_condition(self, player: int) -> Callable[[CollectionState], bool]:
@@ -148,7 +163,8 @@ class SC2MissionOrder(MissionOrderNode):
         for campaign in self.campaigns:
             for layout in campaign.layouts:
                 for mission in layout.missions:
-                    mission.make_connections(world, names)
+                    if not mission.option_empty:
+                        mission.make_connections(world, names)
 
     def fill_min_steps(self) -> None:
         steps = 0
@@ -210,13 +226,13 @@ class SC2MissionOrder(MissionOrderNode):
         # Make sure we didn't miss anything
         assert len(accessible_campaigns) == len(self.campaigns)
         assert len(accessible_layouts) == sum(len(campaign.layouts) for campaign in self.campaigns)
-        assert len(beaten_missions) == sum(len(layout.missions) for campaign in self.campaigns for layout in campaign.layouts)
+        assert len(beaten_missions) == sum(len([mission for mission in layout.missions if not mission.option_empty]) for campaign in self.campaigns for layout in campaign.layouts)
 
         # Fill campaign/layout step values as min/max of their children
         for campaign in self.campaigns:
             for layout in campaign.layouts:
-                layout.min_steps = min(mission.min_steps for mission in layout.missions)
-                layout.max_steps = max(mission.min_steps for mission in layout.missions)
+                layout.min_steps = min(mission.min_steps for mission in layout.missions if not mission.option_empty)
+                layout.max_steps = max(mission.min_steps for mission in layout.missions if not mission.option_empty)
             campaign.min_steps = min(layout.min_steps for layout in campaign.layouts)
             campaign.max_steps = max(layout.max_steps for layout in campaign.layouts)
 
@@ -254,8 +270,9 @@ class SC2MissionOrder(MissionOrderNode):
                     mission.entry_rule = self.dict_to_entry_rule(entry_rule, mission, rolling_rule_id)
                     rolling_rule_id += 1
                     # Manually make a rule for prev missions
-                    mission.entry_rule.target_amount += 1
-                    mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
+                    if len(mission.prev) > 0:
+                        mission.entry_rule.target_amount += 1
+                        mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
 
     def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode, rule_id: int = -1) -> EntryRule:
         if "rules" in data:
@@ -268,7 +285,9 @@ class SC2MissionOrder(MissionOrderNode):
                 objects.append((resolved, address))
             visual_reqs = [obj.get_visual_requirement() for (obj, _) in objects]
             if "amount" in data:
-                missions = {mission for (obj, _) in objects for mission in obj.get_missions()}
+                missions = {mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty}
+                if len(missions) == 0:
+                    raise ValueError(f"Count rule did not find any missions at scopes: {data['scope']}")
                 return CountMissionsEntryRule(missions, data["amount"], visual_reqs)
             missions = set()
             for (obj, address) in objects:
@@ -346,6 +365,7 @@ class SC2MissionOrder(MissionOrderNode):
 class SC2MOGenCampaign(MissionOrderNode):
     option_name: str # name of this campaign
     option_display_name: List[str]
+    option_unique_name: bool
     option_entry_rules: List[Dict[str, Any]]
     option_goal: bool # whether this campaign is required to beat the game
     # minimum difficulty of this campaign
@@ -370,6 +390,7 @@ class SC2MOGenCampaign(MissionOrderNode):
         self.parent = parent
         self.option_name = name
         self.option_display_name = data["display_name"]
+        self.option_unique_name = data["unique_name"]
         self.option_goal = data["goal"]
         self.option_entry_rules = data["entry_rules"]
         self.option_min_difficulty = data["min_difficulty"]
@@ -392,12 +413,6 @@ class SC2MOGenCampaign(MissionOrderNode):
             self.layouts[-1].option_exit = True
             self.exits.update(self.layouts[-1].exits)
         
-        # Pick a random display name
-        if len(self.option_display_name) == 0:
-            self.display_name = self.option_name
-        else:
-            self.display_name = world.random.choice(self.option_display_name)
-    
     def is_beaten(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return beaten_missions.issuperset(self.exits)
 
@@ -450,6 +465,7 @@ class SC2MOGenCampaign(MissionOrderNode):
 class SC2MOGenLayout(MissionOrderNode):
     option_name: str # name of this layout
     option_display_name: List[str] # visual name of this layout
+    option_unique_name: bool
     option_type: Type[LayoutType] # type of this layout
     option_size: int # amount of missions in this layout
     option_goal: bool # whether this layout is required to beat the game
@@ -480,6 +496,7 @@ class SC2MOGenLayout(MissionOrderNode):
         self.parent: ReferenceType[SC2MOGenCampaign] = parent
         self.option_name = name
         self.option_display_name = data.pop("display_name")
+        self.option_unique_name = data.pop("unique_name")
         self.option_type = data.pop("type")
         self.option_size = data.pop("size")
         self.option_goal = data.pop("goal")
@@ -585,12 +602,6 @@ class SC2MOGenLayout(MissionOrderNode):
         if all_empty:
             raise Exception(f"Layout \"{self.option_name}\" only contains empty mission slots.")
 
-        # Pick a random display name
-        if len(self.option_display_name) == 0:
-            self.display_name = self.option_name
-        else:
-            self.display_name = world.random.choice(self.option_display_name)
-    
     def is_beaten(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return beaten_missions.issuperset(self.exits)
 
@@ -674,7 +685,7 @@ class SC2MOGenLayout(MissionOrderNode):
     def get_slot_data(self) -> LayoutSlotData:
         mission_slots = [
             [
-                asdict(self.missions[idx].get_slot_data() if idx >= 0 else MissionSlotData.empty())
+                asdict(self.missions[idx].get_slot_data() if (idx >= 0 and not self.missions[idx].option_empty) else MissionSlotData.empty())
                 for idx in column
             ]
             for column in self.layout_type.get_visual_layout()
