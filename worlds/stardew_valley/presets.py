@@ -58,7 +58,7 @@ all_random_settings = {
 
 easy_settings = {
     "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "very rich",
@@ -104,7 +104,7 @@ easy_settings = {
 
 medium_settings = {
     "progression_balancing":                25,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "rich",
@@ -150,7 +150,7 @@ medium_settings = {
 
 hard_settings = {
     "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_grandpa_evaluation,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "extra",
@@ -196,7 +196,7 @@ hard_settings = {
 
 nightmare_settings = {
     "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "vanilla",
@@ -242,7 +242,7 @@ nightmare_settings = {
 
 short_settings = {
     "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.option_bottom_of_the_mines,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "filthy rich",
@@ -334,7 +334,7 @@ minsanity_settings = {
 
 allsanity_settings = {
     "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_locations,
+    "accessibility":                        Accessibility.option_full,
     Goal.internal_name:                     Goal.default,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            StartingMoney.default,
