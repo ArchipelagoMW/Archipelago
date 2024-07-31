@@ -725,12 +725,9 @@ class CollectionState():
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
         players_to_check: Set[int] = set(self.multiworld.regions.location_cache.keys())
-        next_events_per_player: List[Tuple[int, List[Location]]]
-        accessible_locations: List[Location]
-        inaccessible_locations: List[Location]
         while players_to_check:
             received_advancement_players = set()
-            next_events_per_player = []
+            next_events_per_player: List[Tuple[int, List[Location]]] = []
 
             for player, locations in events_per_player:
                 if player not in players_to_check:
@@ -740,8 +737,8 @@ class CollectionState():
 
                 # Accessibility of each location is checked first because a player's region accessibility cache becomes
                 # stale whenever one of their own items is collected into the state.
-                accessible_locations = []
-                inaccessible_locations = []
+                accessible_locations: List[Location] = []
+                inaccessible_locations: List[Location] = []
                 for location in locations:
                     # Location.can_reach(), by default, also checks region accessibility if the Location's access rule
                     # returns True, but because the player's region accessibility cache shouldn't need to be updated
