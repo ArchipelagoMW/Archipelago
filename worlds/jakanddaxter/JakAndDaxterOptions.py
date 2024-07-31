@@ -112,4 +112,4 @@ class JakAndDaxterOptions(PerGameCommonOptions):
     fire_canyon_cell_count: FireCanyonCellCount
     mountain_pass_cell_count: MountainPassCellCount
     lava_tube_cell_count: LavaTubeCellCount
-    completion_condition: CompletionCondition
+    jak_completion_condition: CompletionCondition

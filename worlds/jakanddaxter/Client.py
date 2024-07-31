@@ -119,12 +119,18 @@ class JakAndDaxterContext(CommonContext):
             else:
                 orbsanity_bundle = 1
 
+            # Keep compatibility with 0.0.8 at least for now
+            if "completion_condition" in slot_data:
+                goal_id = slot_data["completion_condition"]
+            else:
+                goal_id = slot_data["jak_completion_condition"]
+
             self.repl.setup_options(orbsanity_option,
                                     orbsanity_bundle,
                                     slot_data["fire_canyon_cell_count"],
                                     slot_data["mountain_pass_cell_count"],
                                     slot_data["lava_tube_cell_count"],
-                                    slot_data["completion_condition"])
+                                    goal_id)
 
             # Because Orbsanity and the orb traders in the game are intrinsically linked, we need the server
             # to track our trades at all times to support async play. "Retrieved" will tell us the orbs we lost,

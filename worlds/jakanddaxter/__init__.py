@@ -185,4 +185,4 @@ class JakAndDaxterWorld(World):
                                     "fire_canyon_cell_count",
                                     "mountain_pass_cell_count",
                                     "lava_tube_cell_count",
-                                    "completion_condition")
+                                    "jak_completion_condition")

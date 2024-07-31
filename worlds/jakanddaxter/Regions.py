@@ -108,25 +108,25 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     lt.connect(gmc)  # gmc->fb connection defined internally by GolAndMaiasCitadelRegions.
 
     # Set the completion condition.
-    if options.completion_condition == CompletionCondition.option_cross_fire_canyon:
+    if options.jak_completion_condition == CompletionCondition.option_cross_fire_canyon:
         multiworld.completion_condition[player] = lambda state: state.can_reach(rv, "Region", player)
 
-    elif options.completion_condition == CompletionCondition.option_cross_mountain_pass:
+    elif options.jak_completion_condition == CompletionCondition.option_cross_mountain_pass:
         multiworld.completion_condition[player] = lambda state: state.can_reach(vc, "Region", player)
 
-    elif options.completion_condition == CompletionCondition.option_cross_lava_tube:
+    elif options.jak_completion_condition == CompletionCondition.option_cross_lava_tube:
         multiworld.completion_condition[player] = lambda state: state.can_reach(gmc, "Region", player)
 
-    elif options.completion_condition == CompletionCondition.option_defeat_dark_eco_plant:
+    elif options.jak_completion_condition == CompletionCondition.option_defeat_dark_eco_plant:
         multiworld.completion_condition[player] = lambda state: state.can_reach(fjp, "Region", player)
 
-    elif options.completion_condition == CompletionCondition.option_defeat_klaww:
+    elif options.jak_completion_condition == CompletionCondition.option_defeat_klaww:
         multiworld.completion_condition[player] = lambda state: state.can_reach(mp, "Region", player)
 
-    elif options.completion_condition == CompletionCondition.option_defeat_gol_and_maia:
+    elif options.jak_completion_condition == CompletionCondition.option_defeat_gol_and_maia:
         multiworld.completion_condition[player] = lambda state: state.can_reach(fb, "Region", player)
 
-    elif options.completion_condition == CompletionCondition.option_open_100_cell_door:
+    elif options.jak_completion_condition == CompletionCondition.option_open_100_cell_door:
         multiworld.completion_condition[player] = lambda state: state.can_reach(fd, "Region", player)
 
     # As a final sanity check on these options, verify that we have enough locations to allow us to cross
