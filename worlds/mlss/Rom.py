@@ -272,9 +272,6 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
     # Bake seed name into ROM
     patch.write_token(APTokenTypes.WRITE, 0xDF00A0, world.multiworld.seed_name.encode("UTF-8"))
 
-    # Bake patch into header
-    patch.write_token(APTokenTypes.WRITE, 0xAD, "P".encode("UTF-8"))
-
     # Intro Skip
     patch.write_token(
         APTokenTypes.WRITE,
@@ -309,8 +306,7 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
     if world.options.scale_stats:
         patch.write_token(APTokenTypes.WRITE, 0xD00002, bytes([0x1]))
 
-    if world.options.xp_multiplier:
-        patch.write_token(APTokenTypes.WRITE, 0xD00003, bytes([world.options.xp_multiplier.value]))
+    patch.write_token(APTokenTypes.WRITE, 0xD00003, bytes([world.options.xp_multiplier.value]))
 
     if world.options.tattle_hp:
         patch.write_token(APTokenTypes.WRITE, 0xD00000, bytes([0x1]))
