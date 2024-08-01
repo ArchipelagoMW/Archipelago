@@ -16,10 +16,9 @@ def set_completion_rules(multiworld: MultiWorld, player: int):
     width_req = 5  # 10 - 5
     height_req = 5  # 10 - 5
     bomb_req = 15  # 20 - 5
-    completion_requirements = lambda state: state.has_all_counts(
+    multiworld.completion_condition[player] = lambda state: state.has_all_counts(
         {
             "Map Width": width_req,
             "Map Height": height_req,
             "Map Bombs": bomb_req,
         }, player)
-    multiworld.completion_condition[player] = lambda state: completion_requirements(state)

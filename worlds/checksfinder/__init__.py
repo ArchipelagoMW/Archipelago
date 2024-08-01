@@ -32,16 +32,6 @@ class ChecksFinderWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    def _get_checksfinder_data(self):
-        return {
-            'world_seed': self.random.getrandbits(32),
-            'seed_name': self.multiworld.seed_name,
-            'player_name': self.player_name,
-            'player_id': self.player,
-            'client_version': client_version,
-            'race': self.multiworld.is_race,
-        }
-
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
         board = Region("Board", self.player, self.multiworld)
@@ -57,10 +47,10 @@ class ChecksFinderWorld(World):
         # Generate item pool
         itempool = []
         # Add the map width and height stuff
-        itempool += ["Map Width"] * (10-5)
-        itempool += ["Map Height"] * (10-5)
+        itempool += ["Map Width"] * 5  # 10 - 5
+        itempool += ["Map Height"] * 5  # 10 - 5
         # Add the map bombs
-        itempool += ["Map Bombs"] * (20-5)
+        itempool += ["Map Bombs"] * 15  # 20 - 5
         # Convert itempool into real items
         itempool = [self.create_item(item) for item in itempool]
 
@@ -71,10 +61,15 @@ class ChecksFinderWorld(World):
         set_completion_rules(self.multiworld, self.player)
 
     def fill_slot_data(self):
-        slot_data = self._get_checksfinder_data()
-        return slot_data
+        return {
+            "world_seed": self.random.getrandbits(32),
+            "eed_name": self.multiworld.seed_name,
+            "player_name": self.player_name,
+            "player_id": self.player,
+            "client_version": client_version,
+            "race": self.multiworld.is_race,
+        }
 
     def create_item(self, name: str) -> ChecksFinderItem:
         item_data = item_table[name]
-        item = ChecksFinderItem(name, ItemClassification.progression, item_data.code, self.player)
-        return item
+        return ChecksFinderItem(name, ItemClassification.progression, item_data.code, self.player)
