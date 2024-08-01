@@ -736,11 +736,7 @@ class CollectionState():
                 accessible_locations: List[Location] = []
                 inaccessible_locations: List[Location] = []
                 for location in locations:
-                    # Location.can_reach(), by default, also checks region accessibility if the Location's access rule
-                    # returns True, but because the player's region accessibility cache shouldn't need to be updated
-                    # more than once per loop, it is faster to check region accessibility first, even if
-                    # `location.can_reach(self)` might cause region accessibility to be checked a second time.
-                    if location.parent_region.can_reach(self) and location.can_reach(self):
+                    if location.can_reach(self):
                         # Locations containing Items that do not belong to `player` could be collected immediately
                         # instead of being appended because they won't stale `player`'s region accessibility cache, but,
                         # for simplicity, all the accessible locations are collected in a single loop.
