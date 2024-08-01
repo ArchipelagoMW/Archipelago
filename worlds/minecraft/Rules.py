@@ -237,8 +237,8 @@ def get_rules_lookup(player: int):
                 state.has('Progressive Resource Crafting', player, 2)),
             "Wax Off": lambda state: (has_copper_ingots(state, player) and state.has('Campfire', player) and
                 state.has('Progressive Resource Crafting', player, 2)),
-            "The Cutest Predator": lambda state: has_iron_ingots(state, player) and state.has('Bucket', player),
-            "The Healing Power of Friendship": lambda state: has_iron_ingots(state, player) and state.has('Bucket', player),
+            "The Cutest Predator": lambda state: can_adventure(state, player) and has_iron_ingots(state, player) and state.has('Bucket', player),
+            "The Healing Power of Friendship": lambda state: can_adventure(state, player) and has_iron_ingots(state, player) and state.has('Bucket', player),
             "Is It a Bird?": lambda state: has_spyglass(state, player) and can_adventure(state, player),
             "Is It a Balloon?": lambda state: has_spyglass(state, player),
             "Is It a Plane?": lambda state: has_spyglass(state, player) and can_respawn_ender_dragon(state, player),
