@@ -472,7 +472,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
                                                       option_set["option_result"]]]
                 else:
                     option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
-            currently_targeted_weights = copy.deepcopy(weights)
+            currently_targeted_weights = weights
             category = option_set.get("option_category", None)
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
@@ -480,7 +480,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
             if len(advanced) % 2 != 1:
                 raise Exception("option_advanced has an illegal number of entries. Please check trigger and fix.")
             for x in range(0, len(advanced), 2):
-                if type_hints is not None:
+                if type_hints is not None and advanced[x][0] in type_hints:
                     option = type_hints[advanced[x][0]]
                     if advanced[x][0] in currently_targeted_weights:
                         if not option.supports_weighting:
@@ -496,16 +496,15 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
                                         f"match with a root option. "
                                         f"This is probably in error.")
                     if isinstance(result, str):
-                        if len(result) > 12 and result[0:13] == "random-range-" and len(result.split("-")) in [4, 5]:
+                        if result.startswith("random-range-") and len(result.split("-")) in [4, 5]:
                             result = handle_random_range_in_triggers(result)
-                if result.name_lookup != {}:
-                    currently_targeted_weights[advanced[x][0]] = result.current_key
+                if hasattr(result, "name_lookup"):
+                    if result.name_lookup != {}:
+                        currently_targeted_weights[advanced[x][0]] = result.current_key
+                    else:
+                        currently_targeted_weights[advanced[x][0]] = result.value
                 else:
-                    currently_targeted_weights[advanced[x][0]] = result.value
-                if category:
-                    weights[category][advanced[x][0]] =  currently_targeted_weights[advanced[x][0]]
-                else:
-                    weights[advanced[x][0]] =  currently_targeted_weights[advanced[x][0]]
+                    currently_targeted_weights[advanced[x][0]] = result
                 if len(advanced[x]) == 2:
                     advanced[x].insert(1, "=")
                 if len(advanced[x]) == 3:
