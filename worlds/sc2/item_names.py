@@ -346,7 +346,8 @@ INFESTED_MARINE = "Infested Marine"
 SPORE_CRAWLER   = "Spore Crawler"
 SPINE_CRAWLER   = "Spine Crawler"
 INFESTED_BUNKER = "Infested Bunker"
-cc
+NYDUS_WORM      = "Nydus Worm"
+OMEGA_WORM      = "Omega Worm"
 
 # Zerg Weapon / Armor Upgrades
 ZERG_UPGRADE_PREFIX = "Progressive Zerg"
