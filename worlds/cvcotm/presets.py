@@ -32,7 +32,7 @@ all_random_options = {
 
 beginner_mode_options = {
     "progression_balancing":         ProgressionBalancing.default,
-    "accessibility":                 Accessibility.option_items,
+    "accessibility":                 Accessibility.option_minimal,
     "ignore_cleansing":              IgnoreCleansing.option_false,
     "auto_run":                      AutoRun.option_true,
     "dss_patch":                     DSSPatch.option_true,
@@ -57,7 +57,7 @@ beginner_mode_options = {
 
 standard_competitive_2022_options = {
     "progression_balancing":         ProgressionBalancing.default,
-    "accessibility":                 Accessibility.option_items,
+    "accessibility":                 Accessibility.option_minimal,
     "ignore_cleansing":              IgnoreCleansing.option_false,
     "auto_run":                      AutoRun.option_false,
     "dss_patch":                     DSSPatch.option_true,
@@ -82,7 +82,7 @@ standard_competitive_2022_options = {
 
 randomania_2023_options = {
     "progression_balancing":         ProgressionBalancing.default,
-    "accessibility":                 Accessibility.option_items,
+    "accessibility":                 Accessibility.option_minimal,
     "ignore_cleansing":              IgnoreCleansing.option_false,
     "auto_run":                      AutoRun.option_false,
     "dss_patch":                     DSSPatch.option_true,
@@ -107,7 +107,7 @@ randomania_2023_options = {
 
 competitive_all_bosses_options = {
     "progression_balancing":         ProgressionBalancing.default,
-    "accessibility":                 Accessibility.option_items,
+    "accessibility":                 Accessibility.option_minimal,
     "ignore_cleansing":              IgnoreCleansing.option_false,
     "auto_run":                      AutoRun.option_false,
     "dss_patch":                     DSSPatch.option_true,
@@ -132,7 +132,7 @@ competitive_all_bosses_options = {
 
 hardcore_mode_options = {
     "progression_balancing":         ProgressionBalancing.default,
-    "accessibility":                 Accessibility.option_locations,
+    "accessibility":                 Accessibility.option_full,
     "ignore_cleansing":              IgnoreCleansing.option_true,
     "auto_run":                      AutoRun.option_false,
     "dss_patch":                     DSSPatch.option_true,
