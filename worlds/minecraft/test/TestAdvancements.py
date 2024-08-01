@@ -1193,19 +1193,21 @@ class TestAdvancements(MCTestBase):
     def test_42094(self):
         self.run_location_tests([
             ["The Cutest Predator", False, []],
+            ["The Cutest Predator", False, [], ["Progressive Weapons"]],
             ["The Cutest Predator", False, [], ["Progressive Tools"]],
             ["The Cutest Predator", False, [], ["Progressive Resource Crafting"]],
             ["The Cutest Predator", False, [], ["Bucket"]],
-            ["The Cutest Predator", True, ["Progressive Tools", "Progressive Resource Crafting", "Bucket"]],
+            ["The Cutest Predator", True, ["Progressive Weapons", "Progressive Tools", "Progressive Resource Crafting", "Bucket"]],
             ])
 
     def test_42095(self):
         self.run_location_tests([
             ["The Healing Power of Friendship", False, []],
+            ["The Healing Power of Friendship", False, [], ["Progressive Weapons"]],
             ["The Healing Power of Friendship", False, [], ["Progressive Tools"]],
             ["The Healing Power of Friendship", False, [], ["Progressive Resource Crafting"]],
             ["The Healing Power of Friendship", False, [], ["Bucket"]],
-            ["The Healing Power of Friendship", True, ["Progressive Tools", "Progressive Resource Crafting", "Bucket"]],
+            ["The Healing Power of Friendship", True, ["Progressive Weapons", "Progressive Tools", "Progressive Resource Crafting", "Bucket"]],
             ])
 
     def test_42096(self):
