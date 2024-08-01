@@ -1,7 +1,7 @@
 Items:
 - buildings
 - other game mechanics normally unlocked by levels
-- speed upgrades (some bigger than others)
+- speed upgrades (x1 as useful, x.1 as filler for additional checks)
 - Copy paste shapes (filler for additional checks)
 @code: just execute code when package received, look at vanilla code to know how to give those
     items, receiving buildings and other mechanics flips a boolean, speed upgrades add to speed, copy
@@ -36,6 +36,33 @@ Goals
 - Efficiency III (Deliver 500 blueprint shapes / second to the hub)
 @code: look into similar achievement
 
+Options:
+- required amount of delivered shapes multiplier (range 1 to 100, divided by 10)
+- randomize level requirements (boolean)
+- progressive level requirements (only if randomized level requirements):
+    vanilla (1 free, 2-4 cutter, 5-6 rotator, 7-8 painter, 9-10 mixer, 11+ stacker),
+    shuffled (order of all 5 buildings shuffled, afflicted levels stay the same),
+    stretched vanilla (all 6 phases being floor(maxlevel/6) levels long (last one being a bit longer) with same order),
+    stretched shuffled (like stretched vanilla, but shuffled),
+    hardcore (all complete random except level 1)
+- randomize upgrade requirements (boolean)
+- progressive upgrade requirements (only if randomized upgrade requirements):
+    vanilla-like (2 free, 3 random building #1, 4 random building #2, 5+ all),
+    linear (2 free, 3-6 each another random building, 7+ all),
+    stretched (all 6 phases being floor(maxtier/6) tiers long (last one being a bit longer)),
+    hardcore (all complete random except all tier 2 upgrades)
+- same late upgrade requirements (boolean, only if randomized upgrade requirements)
+- goal:
+    vanilla (level 26),
+    meta (level >26, additional achievements),
+    even fasterer (all upgrades at specific tier >8),
+    efficiency III (500 blueprint shapes / second)
+- goal amount (range 9-1000, error if meta with <27)
+- include achievements
+- exclude lang play time achievements
+- exclude softlock achievements
+- traps replacing fillers percentage
+
 Additional Randomization:
 - level completion Shapes
 - upgrade Shapes
@@ -43,7 +70,8 @@ Additional Randomization:
 - complete random toggle in options
 - progressive machine requirements (level 1-3 need only one machine,…), can be toggeled to vanilla, can be
     toggeled to stretching
-@code: look at vanilla levels after 26
+@code: look at vanilla levels after 26, stacked shapes need to have a full layer between two partial layers,
+    mixed shape veins are ignored for logic, generate shapes with decision tree
 
 Logical requirements:
 - vertical half shapes > cutter
@@ -57,10 +85,11 @@ Logical requirements:
 
 Region connections:
 - Menu
-- one for each row of levels with new kind of shape (6), connects to lower region, lowest connects to menu
+- one for each row of levels with new kind of shape (5 or 6), connects to lower region, lowest connects to menu
 - goal, connects to highest levels region
 - upgrades tier 2
 - upgrades tier 3-9+, connects to lower tier
+@code level rows and upgrade tiers need access rules
 
 @code Connection details:
 - save login details in save file
@@ -78,3 +107,5 @@ Region connections:
 @code other details:
 - no console input, need text client
 - active mod = only playing AP
+- create bare bone structure of code like in docs, then fill like other worlds
+- all upgrades available from start
