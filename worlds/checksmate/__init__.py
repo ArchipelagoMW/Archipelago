@@ -131,7 +131,7 @@ class CMWorld(World):
             cursed_knowledge["army"] = self.armies[self.player]
         # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
         option_names = ["goal", "difficulty", "enemy_piece_types", "piece_locations", "piece_types",
-                        "fairy_chess_army", "fairy_chess_piece_collection_configure", "fairy_chess_pawns",
+                        "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pieces_configure", "fairy_chess_pawns",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
                         "pocket_limit_by_pocket"]
         return dict(cursed_knowledge, **self.options.as_dict(*option_names))
@@ -444,6 +444,8 @@ class CMWorld(World):
         self.multiworld.regions.append(region)
 
     def get_filler_item_name(self) -> str:
+        if self.player not in self.items_used:
+            return "Progressive Pawn Forwardness"
         if self.items_used[self.player].get("Progressive Pocket", 0) > 0 and \
                 self.items_used[self.player].get("Progressive Pocket Range", 0) < \
                 item_table["Progressive Pocket Range"].quantity:
