@@ -854,7 +854,7 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmer
                 for _ in range(32)
             ])
 
-            # Make sure Dig tutor has reasonable (>50%) compatibility
+            # Make sure Dig tutor has reasonable (>=50%) compatibility
             if world.options.tm_tutor_compatibility.value < 50:
                 compatibility &= ~(1 << FORTREE_MOVE_TUTOR_INDEX)
                 if world.random.random() < 0.5:
