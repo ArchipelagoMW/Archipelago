@@ -400,8 +400,8 @@ class CMOptions(PerGameCommonOptions):
     max_pocket: MaximumPocket
     max_kings: MaximumKings
     fairy_kings: FairyKings
-    fairy_chess_piece_collection: FairyChessPieceCollection
-    fairy_chess_piece_collection_configure: FairyChessPieceCollectionConfigure
+    fairy_chess_pieces: FairyChessPieces
+    fairy_chess_pieces_configure: FairyChessPiecesConfigure
     fairy_chess_army: FairyChessArmy
     fairy_chess_pawns: FairyChessPawns
     minor_piece_limit_by_type: MinorPieceLimitByType
