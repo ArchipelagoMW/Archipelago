@@ -276,15 +276,13 @@ def _str_to_pokemon_data_type(string: str) -> TrainerPokemonDataTypeEnum:
         return TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES
 
 
-@dataclass
-class TrainerPokemonData:
+class TrainerPokemonData(NamedTuple):
     species_id: int
     level: int
     moves: Optional[Tuple[int, int, int, int]]
 
 
-@dataclass
-class TrainerPartyData:
+class TrainerPartyData(NamedTuple):
     pokemon: List[TrainerPokemonData]
     pokemon_data_type: TrainerPokemonDataTypeEnum
     address: int

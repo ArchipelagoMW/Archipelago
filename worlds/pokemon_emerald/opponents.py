@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List, Set
 
-from .data import NUM_REAL_SPECIES, UNEVOLVED_POKEMON, TrainerPokemonData, data
+from .data import NUM_REAL_SPECIES, UNEVOLVED_POKEMON, data
 from .options import RandomizeTrainerParties
 from .pokemon import filter_species_by_nearby_bst
 from .util import int_to_bool_array
@@ -111,6 +111,6 @@ def randomize_opponent_parties(world: "PokemonEmeraldWorld") -> None:
                 hm_moves[3] if world.random.random() < 0.25 else level_up_moves[3]
             )
 
-            new_party.append(TrainerPokemonData(new_species.species_id, pokemon.level, new_moves))
+            new_party.append(pokemon._replace(species_id=new_species.species_id, moves=new_moves))
 
-        trainer.party.pokemon = new_party
+        trainer.party = trainer.party._replace(pokemon=new_party)

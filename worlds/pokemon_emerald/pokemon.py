@@ -4,8 +4,7 @@ Functions related to pokemon species and moves
 import functools
 from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
-from .data import (NUM_REAL_SPECIES, OUT_OF_LOGIC_MAPS, EncounterTableData, LearnsetMove, MiscPokemonData,
-                   SpeciesData, data)
+from .data import (NUM_REAL_SPECIES, OUT_OF_LOGIC_MAPS, EncounterTableData, LearnsetMove, SpeciesData, data)
 from .options import (Goal, HmCompatibility, LevelUpMoves, RandomizeAbilities, RandomizeLegendaryEncounters,
                       RandomizeMiscPokemon, RandomizeStarters, RandomizeTypes, RandomizeWildPokemon,
                       TmTutorCompatibility)
@@ -461,7 +460,7 @@ def randomize_learnsets(world: "PokemonEmeraldWorld") -> None:
                                            type_bias, normal_bias, species.types)
             else:
                 new_move = 0
-            new_learnset.append(LearnsetMove(old_learnset[cursor].level, new_move))
+            new_learnset.append(old_learnset[cursor]._replace(move_id=new_move))
             cursor += 1
 
         # All moves from here onward are actual moves.
@@ -473,7 +472,7 @@ def randomize_learnsets(world: "PokemonEmeraldWorld") -> None:
                 new_move = get_random_move(world.random,
                                            {move.move_id for move in new_learnset} | world.blacklisted_moves,
                                            type_bias, normal_bias, species.types)
-            new_learnset.append(LearnsetMove(old_learnset[cursor].level, new_move))
+            new_learnset.append(old_learnset[cursor]._replace(move_id=new_move))
             cursor += 1
 
         species.learnset = new_learnset
@@ -581,8 +580,10 @@ def randomize_starters(world: "PokemonEmeraldWorld") -> None:
             picked_evolution = world.random.choice(potential_evolutions)
 
         for trainer_name, starter_position, is_evolved in rival_teams[i]:
+            new_species_id = picked_evolution if is_evolved else starter.species_id
             trainer_data = world.modified_trainers[data.constants[trainer_name]]
-            trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter.species_id
+            trainer_data.party.pokemon[starter_position] = \
+                trainer_data.party.pokemon[starter_position]._replace(species_id=new_species_id)
 
 
 def randomize_legendary_encounters(world: "PokemonEmeraldWorld") -> None:
@@ -594,10 +595,7 @@ def randomize_legendary_encounters(world: "PokemonEmeraldWorld") -> None:
         world.random.shuffle(shuffled_species)
 
         for i, encounter in enumerate(data.legendary_encounters):
-            world.modified_legendary_encounters.append(MiscPokemonData(
-                shuffled_species[i],
-                encounter.address
-            ))
+            world.modified_legendary_encounters.append(encounter._replace(species_id=shuffled_species[i]))
     else:
         should_match_bst = world.options.legendary_encounters in {
             RandomizeLegendaryEncounters.option_match_base_stats,
@@ -621,9 +619,8 @@ def randomize_legendary_encounters(world: "PokemonEmeraldWorld") -> None:
             if should_match_bst:
                 candidates = filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
 
-            world.modified_legendary_encounters.append(MiscPokemonData(
-                world.random.choice(candidates).species_id,
-                encounter.address
+            world.modified_legendary_encounters.append(encounter._replace(
+                species_id=world.random.choice(candidates).species_id
             ))
 
 
@@ -637,10 +634,7 @@ def randomize_misc_pokemon(world: "PokemonEmeraldWorld") -> None:
 
         world.modified_misc_pokemon = []
         for i, encounter in enumerate(data.misc_pokemon):
-            world.modified_misc_pokemon.append(MiscPokemonData(
-                shuffled_species[i],
-                encounter.address
-            ))
+            world.modified_misc_pokemon.append(encounter._replace(species_id=shuffled_species[i]))
     else:
         should_match_bst = world.options.misc_pokemon in {
             RandomizeMiscPokemon.option_match_base_stats,
@@ -672,9 +666,8 @@ def randomize_misc_pokemon(world: "PokemonEmeraldWorld") -> None:
             if len(player_filtered_candidates) > 0:
                 candidates = player_filtered_candidates
 
-            world.modified_misc_pokemon.append(MiscPokemonData(
-                world.random.choice(candidates).species_id,
-                encounter.address
+            world.modified_misc_pokemon.append(encounter._replace(
+                species_id=world.random.choice(candidates).species_id
             ))
 
 
