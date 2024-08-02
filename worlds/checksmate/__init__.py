@@ -89,7 +89,8 @@ class CMWorld(World):
             # TODO: I am not ok with this
             if (which_pieces.value is None or which_pieces.value == 'None' or
                     None in which_pieces.value or 'None' in which_pieces.value):
-                raise Exception("This ChecksMate YAML is invalid! Add text after fairy_chess_piece_collection_configure.")
+                raise Exception(
+                    "This ChecksMate YAML is invalid! Add text after fairy_chess_piece_collection_configure.")
             # FIDE: Contains the standard chess pieces, consisting of the Bishop, Knight, Rook, and Queen.
             if "FIDE" in which_pieces.value:
                 army_options += [0]
@@ -441,6 +442,18 @@ class CMWorld(World):
                     continue
             region.locations.append(CMLocation(self.player, loc_name, loc_data.code, region))
         self.multiworld.regions.append(region)
+
+    def get_filler_item_name(self) -> str:
+        if self.items_used[self.player].get("Progressive Pocket", 0) > 0 and \
+                self.items_used[self.player].get("Progressive Pocket Range", 0) < \
+                item_table["Progressive Pocket Range"].quantity:
+            return "Progressive Pocket Range"
+        if self.items_used[self.player].get("Progressive Pawn Forwardness", 0) < \
+                min(item_table["Progressive Pawn Forwardness"].quantity,
+                    item_table["Progressive Pawn Forwardness"].parents[0][1]
+                    * self.items_used[self.player].get("Progressive Pawn", 0)):
+            return "Progressive Pawn Forwardness"
+        return "Progressive Pocket Gems"
 
     def generate_basic(self):
         if self.options.goal.value == self.options.goal.option_single:
