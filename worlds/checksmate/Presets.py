@@ -42,7 +42,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "difficulty": 2,
         "max_engine_penalties": 5,
         "max_pocket": 12,
-        "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
+        "fairy_chess_pieces": FairyChessPieces.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_chaos,
 
@@ -65,7 +65,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "difficulty": 2,
         "max_engine_penalties": 5,
         "max_pocket": 12,
-        "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
+        "fairy_chess_pieces": FairyChessPieces.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_stable,
 
@@ -90,7 +90,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "difficulty": 2,
         "max_engine_penalties": 5,
         "max_pocket": 12,
-        "fairy_chess_piece_collection": FairyChessPieceCollection.option_betza,
+        "fairy_chess_pieces": FairyChessPieces.option_betza,
         "fairy_chess_pawns": FairyChessPawns.option_berolina,
         "fairy_chess_army": FairyChessArmy.option_chaos,
 
