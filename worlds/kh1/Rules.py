@@ -962,10 +962,9 @@ def set_rules(kh1world):
             and
             (
                 state.has("Progressive Glide", player)
-                or state.has("Progressive Blizzard", player)
+                or (state.has("Progressive Blizzard", player) and has_emblems(state, player, options.keyblades_unlock_chests))
                 or (options.advanced_logic and state.has("Combo Master", player))
             )
-            and has_emblems(state, player, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Castle Gates Gravity Chest"                                    , player).access_rule = lambda state: (
             has_keyblade(state, player, options.keyblades_unlock_chests, "Divine Rose")

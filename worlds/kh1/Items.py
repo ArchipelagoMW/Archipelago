@@ -518,7 +518,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Phil Cup":                          KH1ItemData("Cups",             code = 264_9001, classification = ItemClassification.progression,                  ),
     "Pegasus Cup":                       KH1ItemData("Cups",             code = 264_9002, classification = ItemClassification.progression,                  ),
     "Hercules Cup":                      KH1ItemData("Cups",             code = 264_9003, classification = ItemClassification.progression,                  ),
-   #"Hades Cup":                         KH1ItemData("Cups",             code = 264_9004, classification = ItemClassification.progression,                  ),
+    #"Hades Cup":                        KH1ItemData("Cups",             code = 264_9004, classification = ItemClassification.progression,                  ),
 }
 
 event_item_table: Dict[str, KH1ItemData] = {}
