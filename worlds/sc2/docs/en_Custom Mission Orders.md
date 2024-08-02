@@ -148,7 +148,7 @@ This section is meant to offer some guidance when making your own mission order 
 
 To begin making your own mission order, think about how you visually want your missions laid out. This should inform the layout `type`s you want to use, and give you some idea about the overall structure of your mission order.
 
-For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of `type: column`. If you want a Hopscotch layout with certain missions or races, a single layout with `type: hopscotch` will suffice. If you want to play through a funny shape, a single large `type: grid` will be your best starting point. If you just want to make a minor change to a vanilla campaign, you will want to start with a `preset` campaign. (Note: presets aren't implemented yet) <!-- TODO -->
+For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of `type: column`. If you want a Hopscotch layout with certain missions or races, a single layout with `type: hopscotch` will suffice. If you want to play through a funny shape, a single large `type: grid` will be your best starting point. If you just want to make a minor change to a vanilla campaign, you will want to start with a `preset` campaign.
 
 The natural flow of a mission order is defined by the types of its layouts. It makes sense for a mission to unlock its neighbors, it makes sense for a Hopscotch layout to wrap around the sides, and it makes sense for a Column's final mission to be at the bottom. Layout types create their flow by setting `next`, `entrance`, `exit`, and `entry_rules` on missions. More on these in a little bit.
 
@@ -194,7 +194,7 @@ These are the options that campaigns, layouts and missions have in common, thoug
 # For campaigns and layouts
 display_name: "null"
 ```
-As shown in the examples, every campaign and layout is defined with a name in your YAML. This name is used to find campaigns and layouts within the mission order (see `entry_rules` section), and by default, meaning with `display_name: "null"`, it is also shown in the client.
+As shown in the examples, every campaign and layout is defined with a name in your YAML. This name is used to find campaigns and layouts within the mission order (see `entry_rules` section), and by default (meaning with `display_name: "null"`) it is also shown in the client.
 
 This option changes the name shown in the client without affecting the definition name.
 
@@ -210,6 +210,14 @@ display_name:
   - My Second Choice
   - My Third Choice
 ```
+
+---
+### Unique name
+```yaml
+# For campaigns and layouts
+unique_name: false
+```
+This option prevents names from showing up multiple times in the client. It is recommended to be used in combination with lists of `display_name`s to prevent the generator from picking duplicate names.
 
 ---
 ### Goal
@@ -420,10 +428,11 @@ The first instruction in a pool must always be an addition.
           - and kerrigan missions
           - + Lab Rat
       Layout A-2:
-        0:
-          mission_pool:
-            - For Aiur!
-            - Liberation Day
+        missions:
+          - index: 0
+            mission_pool:
+              - For Aiur!
+              - Liberation Day
 ```
 The following pools are constructed in this example:
 - `Campaign` defines a pool that contains Terran missions, and then removes all No-Build missions from it.
@@ -433,7 +442,80 @@ The following pools are constructed in this example:
 
 ## Campaign Options
 
-Campaigns have no further options at this time.
+These options can only be used in campaigns.
+
+---
+### Preset
+```yaml
+preset: none
+```
+This option loads a pre-built campaign into your mission order. Presets may accept additional options in addition to regular campaign options.
+
+With all presets, you can override their layout options by defining the layouts like normal in your YAML.
+```yaml
+  custom_mission_order:
+    My Campaign:
+      preset: wol + prophecy
+      missions: vanilla_shuffled
+      Prophecy:
+        mission_pool:
+          - zerg missions
+```
+This example loads the Wol + Prophecy preset and then changes Prophecy's missions to be Zerg instead of Protoss.
+
+See the following section for available presets.
+
+## Campaign Presets
+
+There are two kinds of presets: Static presets that are based on vanilla campaigns, and scripted preset that dynamically create a complex campaign based on extra required options.
+
+---
+### Static Presets
+Available static presets are the following:
+- `WoL + Prophecy`
+- `WoL`
+- `Prophecy`
+- `HotS`
+- `Prologue`, `LotV Prologue`
+- `LotV`
+- `Epilogue`, `LotV Epilogue`
+- `NCO`
+- `Mini WoL + Prophecy`
+- `Mini WoL`
+- `Mini Prophecy`
+- `Mini HotS`
+- `Mini Prologue`, `Mini LotV Prologue`
+- `Mini LotV`
+- `Mini Epilogue`, `Mini LotV Epilogue`
+- `Mini NCO`
+
+For these presets, the layout names used to override settings match the names shown in the client, with some exceptions:
+- Prophecy, Prologue and Epilogue contain a single Gauntlet each, which are named `Prophecy`, `Prologue` and `Epilogue` respectively.
+- The Gauntlets in the Mini variants of the above are also named `Prophecy`, `Prologue` and `Epilogue`.
+- NCO and Mini NCO contain three columns each, named `Mission Pack 1`, `Mission Pack 2` and `Mission Pack 3`.
+
+All static presets accept a `missions` option, as shown in the example above. Possible values are:
+- `random`, which removes pre-defined `mission_pool` options from layouts and missions, meaning all missions will follow the pool defined in your campaign's `global` layout. This is the default if you don't define the `missions` option.
+- `vanilla_shuffled`, which will leave `mission_pool`s on layouts to shuffle vanilla missions within their respective campaigns.
+- `vanilla`, which will leave all missions as they are in the vanilla campaigns.
+
+---
+### Golden Path
+```yaml
+preset: golden path
+```
+Golden Path aims to create a dynamically-sized campaign with branching paths to create a similar experience to the Wings of Liberty campaign. It accomplishes this by having a main column that requires an increasing number of missions to be beaten to advance, and a number of side columns that require progressing the main column to advance. The exit of a Golden Path campaign is the last mission of the main column.
+
+Golden Path requires one option:
+```yaml
+size: # There is no default
+```
+This option defines the number of missions in the campaign.
+
+The columns in a Golden Path get random names from a `display_name` list and have `unique_name: true` set on them. Their definition names for overriding options are `"0"`, `"1"`, `"2"`, etc., with `"0"` always being the main column, `"1"` being the left-most side column, and so on.
+
+Since the number of side columns depends on the number of missions, it is best to generate a test game for a given size to see how many columns are generated.
+
 
 ## Layout Options
 
@@ -450,6 +532,9 @@ Determines how missions are placed relative to one another within a layout, as w
 Currently, valid values are:
 - Column
 - Grid
+- Hopscotch
+- Gauntlet
+- Blitz
 
 Details about specific layout types are covered at the end of this document.
 
