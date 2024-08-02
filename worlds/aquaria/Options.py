@@ -203,7 +203,7 @@ class MaximumIngredientAmount(Range):
     """
     display_name = "Maximum ingredient amount"
     range_start = 2
-    range_end = 12
+    range_end = 20
     default = 8
 
 
