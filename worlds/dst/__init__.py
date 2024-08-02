@@ -14,7 +14,7 @@ def launch_client():
     launch_subprocess(launch, name="DontStarveTogetherClient")
 
 
-components.append(Component("Don't Starve Together Client", "DontStarveTogetherClient", func=launch_client, 
+components.append(Component("Don't Starve Together Client", func=launch_client, 
                             component_type=Type.CLIENT))
 
 class DSTWeb(WebWorld):
