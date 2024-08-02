@@ -517,15 +517,17 @@ class LinksAwakeningContext(CommonContext):
         self.disconnected_intentionally = True
         CommonContext.event_invalid_slot(self)
 
-    enable_deathlink = False
     async def send_deathlink(self):
-        if self.enable_deathlink:
-            message = [{"cmd": 'Deathlink',
-                        'time': time.time(),
-                        'cause': 'Had a nightmare',
-                        # 'source': self.slot_info[self.slot].name,
-                        }]
-            await self.send_msgs(message)
+        if "DeathLink" in self.tags:
+            await self.send_msgs([{
+                "cmd": "Bounce",
+                "tags": ["Deathlink"],
+                "data": {
+                    "time": time.time(),
+                    "source": self.slot_info[self.slot].name,
+                    "cause": self.slot_info[self.slot].name + " had a nightmare",
+                }
+            }])
 
     async def send_victory(self):
         if not self.won:
@@ -536,7 +538,7 @@ class LinksAwakeningContext(CommonContext):
             self.won = True
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        if self.enable_deathlink:
+        if "DeathLink" in self.tags:
             self.client.pending_deathlink = True
 
     def new_checks(self, item_ids, ladxr_ids):
@@ -565,7 +567,7 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
-                self.enable_deathlink = true
+                self.update_death_link(true)
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
