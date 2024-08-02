@@ -402,7 +402,7 @@ kh1_option_groups = [
         FinalRestDoor,
         RequiredReportsDoor,
         RequiredReportsEotW,
-        ReportsInPool
+        ReportsInPool,
     ]),
     OptionGroup("Locations", [
         SuperBosses,
@@ -421,7 +421,7 @@ kh1_option_groups = [
         APIncrease,
         MPIncrease,
         AccessorySlotIncrease,
-        ItemSlotIncrease
+        ItemSlotIncrease,
     ]),
     OptionGroup("Keyblades", [
         KeybladesUnlockChests,
@@ -430,7 +430,7 @@ kh1_option_groups = [
         KeybladeMaxStrength,
         KeybladeMinStrength,
         KeybladeMaxMP,
-        KeybladeMinMP
+        KeybladeMinMP,
     ]),
     OptionGroup("Misc", [
         StartingWorlds,
