@@ -63,7 +63,7 @@ class ChecksFinderWorld(World):
     def fill_slot_data(self):
         return {
             "world_seed": self.random.getrandbits(32),
-            "eed_name": self.multiworld.seed_name,
+            "seed_name": self.multiworld.seed_name,
             "player_name": self.player_name,
             "player_id": self.player,
             "client_version": client_version,
