@@ -879,14 +879,14 @@ item_descriptions = {
     # Signifier
     # Ascendant
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
-    # Immortal
-    # Annihilator
+    item_names.IMMORTAL_IMPROVED_BARRIER: "Immortal War Council upgrade. The Immortal's Barrier ability absorbs an additional +100 damage.",
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
     item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
+    item_names.ANNIHILATOR_AERIAL_TRACKING: "Annihilator War Council upgrade. The Annihilator's Shadow Cannon ability can now target air units.",
     # Stalwart
     # Colossus
     # Wrathwalker
-    # Reaver
+    item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
     # Disruptor
     # Warp Prism
     # Observer

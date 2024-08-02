@@ -712,14 +712,14 @@ HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Te
 # Signifier
 # Ascendant
 DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
-# IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
-# Annihilator
+IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
 VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Vanguard)"
 VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vanguard)"
+ANNIHILATOR_AERIAL_TRACKING                             = "Aerial Tracking (Annihilator)"
 # Stalwart
 # Colossus
 # Wrathwalker
-# Reaver
+REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
 # Disruptor
 # Warp Prism
 # Observer
