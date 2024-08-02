@@ -104,7 +104,7 @@ item_table = {
     "King's Skull": ItemData(698025, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_skull
     "Song Plant Spore": ItemData(698026, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_spore_seed
     "Stone Head": ItemData(698027, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_stone_head
-    "Sun Key": ItemData(698028, 1, ItemType.NORMAL, ItemGroup.COLLECTIBLE),  # collectible_sun_key
+    "Sun Key": ItemData(698028, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_sun_key
     "Girl Costume": ItemData(698029, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_teen_costume
     "Odd Container": ItemData(698030, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_treasure_chest
     "Trident": ItemData(698031, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_trident_head

@@ -207,6 +207,14 @@ class AquariaWorld(World):
         self.ingredients_substitution.extend(dishes_substitution)
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        """
+        Send some usefull informations to the client.
+        """
+        location_items = [-1] * len(Locations.location_table)
+        for location in self.multiworld.get_filled_locations(self.player):
+            if (location.item.player != self.player and location.address != None):
+                location_items[location.address - self.base_id] = location.item.classification.as_flag()
+
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
@@ -218,4 +226,6 @@ class AquariaWorld(World):
                 "infinite_hot_soup": bool(self.options.infinite_hot_soup.value),
                 "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
                 "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
+                "locations_item_types": location_items,
+                "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value
                 }

@@ -197,6 +197,16 @@ class SkipFinalBoss3rdForm(DefaultOnToggle):
     display_name = "Skip final boss third form"
 
 
+class MaximumIngredientAmount(Range):
+    """
+    The maximum number of the same ingredients that can be stacked on the ingredient inventory
+    """
+    display_name = "Maximum ingredient amount"
+    range_start = 2
+    range_end = 12
+    default = 8
+
+
 class UnconfineHomeWater(Choice):
     """
     Open the way out of the Home Waters area so that Naija can go to open water and beyond without the bind song.
@@ -240,4 +250,5 @@ class AquariaOptions(PerGameCommonOptions):
     skip_first_vision: SkipFirstVision
     blind_goal: BlindGoal
     infinite_hot_soup: InfiniteHotSoup
+    maximum_ingredient_amount: MaximumIngredientAmount
     skip_final_boss_3rd_form: SkipFinalBoss3rdForm
