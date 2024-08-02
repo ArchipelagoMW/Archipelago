@@ -76,16 +76,16 @@ class CMWorld(World):
 
     # TODO: this probably can go in some other method now??
     def generate_early(self) -> None:
-        piece_collection = self.options.fairy_chess_piece_collection.value
+        piece_collection = self.options.fairy_chess_pieces.value
         army_options = []
-        if piece_collection == self.options.fairy_chess_piece_collection.option_fide:
+        if piece_collection == self.options.fairy_chess_pieces.option_fide:
             army_options = [0]
-        elif piece_collection == self.options.fairy_chess_piece_collection.option_betza:
+        elif piece_collection == self.options.fairy_chess_pieces.option_betza:
             army_options = [0, 1, 2, 3]
-        elif piece_collection == self.options.fairy_chess_piece_collection.option_full:
+        elif piece_collection == self.options.fairy_chess_pieces.option_full:
             army_options = [0, 1, 2, 3, 4, 5]
-        elif piece_collection == self.options.fairy_chess_piece_collection.option_configure:
-            which_pieces = self.options.fairy_chess_piece_collection_configure
+        elif piece_collection == self.options.fairy_chess_pieces.option_configure:
+            which_pieces = self.options.fairy_chess_pieces_configure
             # TODO: I am not ok with this
             if (which_pieces.value is None or which_pieces.value == 'None' or
                     None in which_pieces.value or 'None' in which_pieces.value):
