@@ -1766,7 +1766,7 @@ item_table = {
     item_names.IMMORTAL_IMPROVED_BARRIER: ItemData(519 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 19, SC2Race.PROTOSS, parent_item=item_names.IMMORTAL),
     item_names.VANGUARD_RAPIDFIRE_CANNON: ItemData(520 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 20, SC2Race.PROTOSS, parent_item=item_names.VANGUARD),
     item_names.VANGUARD_FUSION_MORTARS: ItemData(521 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 21, SC2Race.PROTOSS, parent_item=item_names.VANGUARD),
-    # 522 reserved for Annihilator
+    item_names.ANNIHILATOR_AERIAL_TRACKING: ItemData(522 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 22, SC2Race.PROTOSS, parent_item=item_names.ANNIHILATOR),
     # 523 reserved for Stalwart
     # 524 reserved for Colossus
     # 525 reserved for Wrathwalker
