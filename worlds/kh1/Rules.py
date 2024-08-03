@@ -1576,6 +1576,7 @@ def set_rules(kh1world):
                 state.has("High Jump", player)
                 or (options.advanced_logic and state.has("Progressive Glide", player))
             )
+            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         )
     multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)"                            , player).access_rule = lambda state: (
             (
