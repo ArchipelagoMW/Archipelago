@@ -166,3 +166,4 @@ PAL versions of the game seem to require additional troubleshooting/setup in ord
 - The powershell windows cannot be run as background processes due to how the repl works, so the best we can do is minimize them.
 - The client is currently not very robust and doesn't handle failures gracefully. This may result in items not being delivered to the game, or location checks not being delivered to the server.
 - Orbsanity checks may show up out of order in the text client.
+- Large item releases may take up to several minutes for the game to process them all. 
