@@ -12,9 +12,7 @@ DefaultOffToggle = Options.Toggle
 class ShopSanity(Choice):
     """Adds a client shop with items for sale"""
     display_name = "Shopsanity"
-    option_1 = 1
-    option_2 = 2
     option_3 = 3
     option_4 = 4
 
-    default = 1
+    default = 4
