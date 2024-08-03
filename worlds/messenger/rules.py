@@ -231,6 +231,8 @@ class MessengerRules:
                 self.is_aerobatic,
             "Autumn Hills Seal - Trip Saws":
                 self.has_wingsuit,
+            "Autumn Hills Seal - Double Swing Saws":
+                self.has_vertical,
             # forlorn temple
             "Forlorn Temple Seal - Rocket Maze":
                 self.has_vertical,
@@ -430,6 +432,8 @@ class MessengerHardRules(MessengerRules):
             {
                 "Autumn Hills Seal - Spike Ball Darts":
                     lambda state: self.has_vertical(state) and self.has_windmill(state) or self.is_aerobatic(state),
+                "Autumn Hills Seal - Double Swing Saws":
+                    lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
                 "Bamboo Creek - Claustro":
                     self.has_wingsuit,
                 "Bamboo Creek Seal - Spike Ball Pits":
@@ -523,7 +527,7 @@ class MessengerOOBRules(MessengerRules):
 
 def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
     # locations where these placements are always valid
-    allow_self_locking_items(world.get_location("Searing Crags - Key of Strength"), "Power Thistle")
+    allow_self_locking_items(world.get_location("Searing Crags - Key of Strength").parent_region, "Power Thistle")
     allow_self_locking_items(world.get_location("Sunken Shrine - Key of Love"), "Sun Crest", "Moon Crest")
-    allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage"), "Demon King Crown")
+    allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage").parent_region, "Demon King Crown")
     allow_self_locking_items(world.get_location("Elemental Skylands Seal - Water"), "Currents Master")

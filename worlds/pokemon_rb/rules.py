@@ -22,7 +22,7 @@ def set_rules(multiworld, player):
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if multiworld.accessibility[player] != "locations":
+    if multiworld.accessibility[player] != "full":
         multiworld.get_location("Cerulean Bicycle Shop", player).always_allow = (lambda state, item:
                                                                                    item.name == "Bike Voucher"
                                                                                    and item.player == player)

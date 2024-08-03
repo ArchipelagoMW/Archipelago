@@ -1540,7 +1540,6 @@ def create_regions(self):
                     item = self.create_filler()
                 elif location.original_item == "Pokedex":
                     if self.multiworld.randomize_pokedex[self.player] == "vanilla":
-                        location_object.event = True
                         event = True
                     item = self.create_item("Pokedex")
                 elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
@@ -1561,7 +1560,7 @@ def create_regions(self):
                             <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                         item = self.create_item(self.select_trap())
 
-                if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement):
+                if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement) and location.original_item != "Exp. All":
                     continue
 
                 if item.name in start_inventory and start_inventory[item.name] > 0 and \
@@ -1948,7 +1947,7 @@ def create_regions(self):
                 for entrance in reversed(region.exits):
                     if isinstance(entrance, PokemonRBWarp):
                         region.exits.remove(entrance)
-            multiworld.regions.entrance_cache[self.player] = cache
+            multiworld.regions.entrance_cache[self.player] = cache.copy()
             if badge_locs:
                 for loc in badge_locs:
                     loc.item = None

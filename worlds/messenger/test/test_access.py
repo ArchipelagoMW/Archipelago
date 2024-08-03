@@ -1,3 +1,5 @@
+import typing
+
 from . import MessengerTestBase
 from ..constants import NOTES, PHOBEKINS
 
@@ -208,5 +210,8 @@ class ItemsAccessTest(MessengerTestBase):
             for item_name in location_lock_pairs[loc]:
                 item = self.get_item_by_name(item_name)
                 with self.subTest("Fulfills Accessibility", location=loc, item=item_name):
-                    self.assertTrue(self.multiworld.get_location(loc, self.player).can_fill(self.multiworld.state, item,
-                                                                                            True))
+                    location = self.multiworld.get_location(loc, self.player)
+                    self.assertTrue(location.can_fill(self.multiworld.state, item, True))
+                    location.item = item
+                    self.multiworld.state.update_reachable_regions(self.player)
+                    self.assertTrue(self.can_reach_location(loc))

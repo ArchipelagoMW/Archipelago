@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/labeler@v5
         with:
-          sync-labels: true
+          sync-labels: false
   peer_review:
     name: 'Apply peer review label'
     needs: labeler
