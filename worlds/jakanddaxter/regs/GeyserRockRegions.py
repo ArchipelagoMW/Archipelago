@@ -16,9 +16,9 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     cliff.add_cell_locations([94])
 
     main_area.connect(cliff, rule=lambda state:
-                      ((state.has("Crouch", player) and state.has("Crouch Jump", player))
-                       or (state.has("Crouch", player) and state.has("Crouch Uppercut", player))
-                       or state.has("Double Jump", player)))
+                      state.has("Double Jump", player)
+                      or state.has_all({"Crouch", "Crouch Jump"}, player)
+                      or state.has_all({"Crouch", "Crouch Uppercut"}, player))
 
     cliff.connect(main_area)  # Jump down or ride blue eco elevator.
 

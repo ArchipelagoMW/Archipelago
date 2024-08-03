@@ -19,8 +19,7 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # Need jump dive to activate button, double jump to reach blue eco to unlock cache.
     first_room_orb_cache.add_cache_locations([14507], access_rule=lambda state:
-                                             state.has("Jump Dive", player)
-                                             and state.has("Double Jump", player))
+                                             state.has_all({"Jump Dive", "Double Jump"}, player))
 
     first_hallway = JakAndDaxterRegion("First Hallway", player, multiworld, level_name, 10)
     first_hallway.add_fly_locations([131121], access_rule=lambda state: can_free_scout_flies(state, player))
@@ -59,19 +58,16 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     # Use jump dive to activate button inside the capsule. Blue eco vent can ready the chamber and get the scout fly.
     capsule_room.add_cell_locations([47], access_rule=lambda state:
                                     state.has("Jump Dive", player)
-                                    and (state.has("Double Jump", player)
-                                         or state.has("Jump Kick", player)
-                                         or (state.has("Punch", player)
-                                             and state.has("Punch Uppercut", player))))
+                                    and (state.has_any({"Double Jump", "Jump Kick"}, player)
+                                         or state.has_all({"Punch", "Punch Uppercut"}, player)))
     capsule_room.add_fly_locations([327729])
 
     second_slide = JakAndDaxterRegion("Second Slide", player, multiworld, level_name, 31)
 
     helix_room = JakAndDaxterRegion("Helix Chamber", player, multiworld, level_name, 30)
     helix_room.add_cell_locations([46], access_rule=lambda state:
-                                  state.has("Double Jump", player)
-                                  or state.has("Jump Kick", player)
-                                  or (state.has("Punch", player) and state.has("Punch Uppercut", player)))
+                                  state.has_any({"Double Jump", "Jump Kick"}, player)
+                                  or state.has_all({"Punch", "Punch Uppercut"}, player))
     helix_room.add_cell_locations([50], access_rule=lambda state:
                                   state.has("Double Jump", player)
                                   or can_fight(state, player))
@@ -86,11 +82,9 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # Needs some movement to reach these orbs and orb cache.
     first_room_lower.connect(first_room_orb_cache, rule=lambda state:
-                             state.has("Jump Dive", player)
-                             and state.has("Double Jump", player))
+                             state.has_all({"Jump Dive", "Double Jump"}, player))
     first_room_orb_cache.connect(first_room_lower, rule=lambda state:
-                                 state.has("Jump Dive", player)
-                                 and state.has("Double Jump", player))
+                                 state.has_all({"Jump Dive", "Double Jump"}, player))
 
     first_hallway.connect(first_room_upper)                         # Run and jump down.
     first_hallway.connect(second_room)                              # Run and jump (floating platforms).

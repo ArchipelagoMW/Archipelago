@@ -22,18 +22,18 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     # The rest of the crystals can be destroyed with yellow eco in main_area.
     dark_crystals.add_cell_locations([79], access_rule=lambda state:
                                      can_fight(state, player)
-                                     and (state.has("Roll", player) and state.has("Roll Jump", player)))
+                                     and state.has_all({"Roll", "Roll Jump"}, player))
 
     dark_cave = JakAndDaxterRegion("Dark Cave", player, multiworld, level_name, 5)
     dark_cave.add_cell_locations([80], access_rule=lambda state:
                                  can_fight(state, player)
-                                 and ((state.has("Crouch", player) and state.has("Crouch Jump", player))
-                                      or state.has("Double Jump", player)))
+                                 and (state.has("Double Jump", player)
+                                      or state.has_all({"Crouch", "Crouch Jump"}, player)))
     dark_cave.add_fly_locations([262229], access_rule=lambda state:
                                 can_fight(state, player)
                                 and can_free_scout_flies(state, player)
-                                and ((state.has("Crouch", player) and state.has("Crouch Jump", player))
-                                     or state.has("Double Jump", player)))
+                                and (state.has("Double Jump", player)
+                                     or state.has_all({"Crouch", "Crouch Jump"}, player)))
 
     robot_cave = JakAndDaxterRegion("Robot Cave", player, multiworld, level_name, 0)
 

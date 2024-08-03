@@ -13,31 +13,29 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     def can_jump_farther(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
                 or state.has("Jump Kick", p)
-                or (state.has("Punch", p) and state.has("Punch Uppercut", p)))
+                or state.has_all({"Punch", "Punch Uppercut"}, p))
 
     def can_triple_jump(state: CollectionState, p: int) -> bool:
-        return state.has("Double Jump", p) and state.has("Jump Kick", p)
+        return state.has_all({"Double Jump", "Jump Kick"}, p)
 
     def can_jump_stairs(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
-                or (state.has("Crouch", p) and state.has("Crouch Jump", p))
-                or (state.has("Crouch", p) and state.has("Crouch Uppercut", p))
-                or state.has("Jump Dive", p))
+                or state.has("Jump Dive", p)
+                or state.has_all({"Crouch", "Crouch Jump"}, p)
+                or state.has_all({"Crouch", "Crouch Uppercut"}, p))
 
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 0)
     main_area.add_fly_locations([91], access_rule=lambda state: can_free_scout_flies(state, player))
 
     robot_scaffolding = JakAndDaxterRegion("Scaffolding Around Robot", player, multiworld, level_name, 8)
-    robot_scaffolding.add_fly_locations([196699], access_rule=lambda state:
-                                        can_free_scout_flies(state, player))
+    robot_scaffolding.add_fly_locations([196699], access_rule=lambda state: can_free_scout_flies(state, player))
 
     jump_pad_room = JakAndDaxterRegion("Jump Pad Chamber", player, multiworld, level_name, 88)
     jump_pad_room.add_cell_locations([73], access_rule=lambda state: can_fight(state, player))
     jump_pad_room.add_special_locations([73], access_rule=lambda state: can_fight(state, player))
     jump_pad_room.add_fly_locations([131163])  # Blue eco vent is right next to it.
     jump_pad_room.add_fly_locations([65627], access_rule=lambda state:
-                                    can_free_scout_flies(state, player)
-                                    and can_jump_farther(state, player))
+                                    can_free_scout_flies(state, player) and can_jump_farther(state, player))
 
     blast_furnace = JakAndDaxterRegion("Blast Furnace", player, multiworld, level_name, 39)
     blast_furnace.add_cell_locations([71], access_rule=lambda state: can_fight(state, player))
@@ -47,14 +45,12 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     bunny_room = JakAndDaxterRegion("Bunny Chamber", player, multiworld, level_name, 45)
     bunny_room.add_cell_locations([72], access_rule=lambda state: can_fight(state, player))
     bunny_room.add_special_locations([72], access_rule=lambda state: can_fight(state, player))
-    bunny_room.add_fly_locations([262235], access_rule=lambda state:
-                                 can_free_scout_flies(state, player))
+    bunny_room.add_fly_locations([262235], access_rule=lambda state: can_free_scout_flies(state, player))
 
     rotating_tower = JakAndDaxterRegion("Rotating Tower", player, multiworld, level_name, 20)
     rotating_tower.add_cell_locations([70], access_rule=lambda state: can_fight(state, player))
     rotating_tower.add_special_locations([70], access_rule=lambda state: can_fight(state, player))
-    rotating_tower.add_fly_locations([327771], access_rule=lambda state:
-                                     can_free_scout_flies(state, player))
+    rotating_tower.add_fly_locations([327771], access_rule=lambda state: can_free_scout_flies(state, player))
 
     final_boss = JakAndDaxterRegion("Final Boss", player, multiworld, level_name, 0)
 
@@ -62,48 +58,43 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # Jump Dive required for a lot of buttons, prepare yourself.
     main_area.connect(robot_scaffolding, rule=lambda state:
-                      state.has("Jump Dive", player)
-                      or (state.has("Roll", player) and state.has("Roll Jump", player)))
+                      state.has("Jump Dive", player) or state.has_all({"Roll", "Roll Jump"}, player))
     main_area.connect(jump_pad_room)
 
     robot_scaffolding.connect(main_area, rule=lambda state: state.has("Jump Dive", player))
     robot_scaffolding.connect(blast_furnace, rule=lambda state:
                               state.has("Jump Dive", player)
                               and can_jump_farther(state, player)
-                              and ((state.has("Roll", player) and state.has("Roll Jump", player))
-                                   or can_triple_jump(state, player)))
+                              and (can_triple_jump(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
     robot_scaffolding.connect(bunny_room, rule=lambda state:
                               state.has("Jump Dive", player)
                               and can_jump_farther(state, player)
-                              and ((state.has("Roll", player) and state.has("Roll Jump", player))
-                                   or can_triple_jump(state, player)))
+                              and (can_triple_jump(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
 
     jump_pad_room.connect(main_area)
     jump_pad_room.connect(robot_scaffolding, rule=lambda state:
                           state.has("Jump Dive", player)
-                          and ((state.has("Roll", player) and state.has("Roll Jump", player))
-                               or can_triple_jump(state, player)))
+                          and (can_triple_jump(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
 
     blast_furnace.connect(robot_scaffolding)  # Blue eco elevator takes you right back.
 
     bunny_room.connect(robot_scaffolding, rule=lambda state:
                        state.has("Jump Dive", player)
-                       and ((state.has("Roll", player) and state.has("Roll Jump", player))
-                            or can_jump_farther(state, player)))
+                       and (can_jump_farther(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
 
     # Final climb.
     robot_scaffolding.connect(rotating_tower, rule=lambda state:
-                              state.has("Freed The Blue Sage", player)
-                              and state.has("Freed The Red Sage", player)
-                              and state.has("Freed The Yellow Sage", player)
-                              and can_jump_stairs(state, player))
+                              can_jump_stairs(state, player)
+                              and state.has_all({"Freed The Blue Sage",
+                                                 "Freed The Red Sage",
+                                                 "Freed The Yellow Sage"}, player))
 
     rotating_tower.connect(main_area)  # Take stairs back down.
 
     # Final elevator. Need to break boxes at summit to get blue eco for platform.
     rotating_tower.connect(final_boss, rule=lambda state:
-                           state.has("Freed The Green Sage", player)
-                           and can_fight(state, player))
+                           can_fight(state, player)
+                           and state.has("Freed The Green Sage", player))
 
     final_boss.connect(rotating_tower)  # Take elevator back down.
 

@@ -10,22 +10,20 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # We need a few helper functions.
     def can_cross_main_gap(state: CollectionState, p: int) -> bool:
-        return ((state.has("Roll", player)
-                 and state.has("Roll Jump", player))
-                or (state.has("Double Jump", player)
-                    and state.has("Jump Kick", player)))
+        return (state.has_all({"Roll", "Roll Jump"}, p)
+                or state.has_all({"Double Jump", "Jump Kick"}, p))
 
     def can_cross_frozen_cave(state: CollectionState, p: int) -> bool:
         return (state.has("Jump Kick", p)
                 and (state.has("Double Jump", p)
-                     or (state.has("Roll", p) and state.has("Roll Jump", p))))
+                     or state.has_all({"Roll", "Roll Jump"}, p)))
 
     def can_jump_blockers(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
-                or (state.has("Crouch", p) and state.has("Crouch Jump", p))
-                or (state.has("Crouch", p) and state.has("Crouch Uppercut", p))
-                or (state.has("Punch", p) and state.has("Punch Uppercut", p))
-                or state.has("Jump Dive", p))
+                or state.has("Jump Dive", p)
+                or state.has_all({"Crouch", "Crouch Jump"}, p)
+                or state.has_all({"Crouch", "Crouch Uppercut"}, p)
+                or state.has_all({"Punch", "Punch Uppercut"}, p))
 
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 0)
     main_area.add_fly_locations([65], access_rule=lambda state: can_free_scout_flies(state, player))
@@ -145,25 +143,22 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
                           can_jump_blockers(state, player))
 
     fort_interior.connect(fort_interior_caches, rule=lambda state:              # Just need a little height.
-                          (state.has("Crouch", player)
-                           and state.has("Crouch Jump", player))
-                          or state.has("Double Jump", player))
+                          state.has("Double Jump", player)
+                          or state.has_all({"Crouch", "Crouch Jump"}, player))
     fort_interior.connect(fort_interior_base, rule=lambda state:                # Just need a little height.
-                          (state.has("Crouch", player)
-                           and state.has("Crouch Jump", player))
-                          or state.has("Double Jump", player))
+                          state.has("Double Jump", player)
+                          or state.has_all({"Crouch", "Crouch Jump"}, player))
     fort_interior.connect(fort_interior_course_end, rule=lambda state:          # Just need a little distance.
-                          (state.has("Punch", player)
-                           and state.has("Punch Uppercut", player))
-                          or state.has("Double Jump", player))
+                          state.has("Double Jump", player)
+                          or state.has_all({"Punch", "Punch Uppercut"}, player))
 
     flut_flut_course.connect(fort_exterior)                                     # Ride the elevator.
 
     # Must fight way through cave, but there is also a grab-less ledge we must jump over.
     bunny_cave_start.connect(bunny_cave_end, rule=lambda state:
                              can_fight(state, player)
-                             and ((state.has("Crouch", player) and state.has("Crouch Jump", player))
-                                  or state.has("Double Jump", player)))
+                             and (state.has("Double Jump", player)
+                                  or state.has_all({"Crouch", "Crouch Jump"}, player)))
 
     # All jump down.
     fort_interior_caches.connect(fort_interior)

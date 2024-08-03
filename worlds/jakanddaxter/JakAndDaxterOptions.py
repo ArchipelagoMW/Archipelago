@@ -1,18 +1,21 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, Range
+from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range
 
 
 class EnableMoveRandomizer(Toggle):
-    """Enable to include movement options as items in the randomizer. Jak is only able to run, swim, and single jump,
-    until you find his other moves. This adds 11 items to the pool."""
+    """Enable to include movement options as items in the randomizer. Jak is only able to run, swim, and single jump
+    until you find his other moves.
+
+    This adds 11 items to the pool."""
     display_name = "Enable Move Randomizer"
 
 
 class EnableOrbsanity(Choice):
-    """Enable to include bundles of Precursor Orbs as an ordered list of progressive checks. Every time you collect
-    the chosen number of orbs, you will trigger the next release in the list. "Per Level" means these lists are
-    generated and populated for each level in the game (Geyser Rock, Sandover Village, etc.). "Global" means there is
-    only one list for the entire game.
+    """Enable to include bundles of Precursor Orbs as an ordered list of progressive checks. Every time you collect the
+    chosen number of orbs, you will trigger the next release in the list.
+
+    "Per Level" means these lists are generated and populated for each level in the game. "Global" means there
+    is only one list for the entire game.
 
     This adds a number of Items and Locations to the pool inversely proportional to the size of the bundle.
     For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
@@ -25,8 +28,7 @@ class EnableOrbsanity(Choice):
 
 
 class GlobalOrbsanityBundleSize(Choice):
-    """Set the size of the bundle for Global Orbsanity.
-    This only applies if "Enable Orbsanity" is set to "Global."
+    """Set the orb bundle size for Global Orbsanity. This only applies if "Enable Orbsanity" is set to "Global."
     There are 2000 orbs in the game, so your bundle size must be a factor of 2000."""
     display_name = "Global Orbsanity Bundle Size"
     option_1_orb = 1
@@ -53,8 +55,7 @@ class GlobalOrbsanityBundleSize(Choice):
 
 
 class PerLevelOrbsanityBundleSize(Choice):
-    """Set the size of the bundle for Per Level Orbsanity.
-    This only applies if "Enable Orbsanity" is set to "Per Level."
+    """Set the orb bundle size for Per Level Orbsanity. This only applies if "Enable Orbsanity" is set to "Per Level."
     There are 50, 150, or 200 orbs per level, so your bundle size must be a factor of 50."""
     display_name = "Per Level Orbsanity Bundle Size"
     option_1_orb = 1
@@ -113,3 +114,4 @@ class JakAndDaxterOptions(PerGameCommonOptions):
     mountain_pass_cell_count: MountainPassCellCount
     lava_tube_cell_count: LavaTubeCellCount
     jak_completion_condition: CompletionCondition
+    start_inventory_from_pool: StartInventoryPool

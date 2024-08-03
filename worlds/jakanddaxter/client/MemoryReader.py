@@ -70,8 +70,7 @@ moverando_enabled_offset = offsets.define(sizeof_uint8)
 # Orbsanity information.
 orbsanity_option_offset = offsets.define(sizeof_uint8)
 orbsanity_bundle_offset = offsets.define(sizeof_uint32)
-collected_bundle_level_offset = offsets.define(sizeof_uint8)
-collected_bundle_count_offset = offsets.define(sizeof_uint32)
+collected_bundle_offset = offsets.define(sizeof_uint32, 17)
 
 # Progression and Completion information.
 fire_canyon_unlock_offset = offsets.define(sizeof_float)
@@ -151,7 +150,6 @@ class JakAndDaxterMemoryReader:
 
     # Orbsanity handling
     orbsanity_enabled: bool = False
-    reset_orbsanity: bool = False
     orbs_paid: int = 0
 
     def __init__(self, marker: ByteString = b'UnLiStEdStRaTs_JaK1\x00'):
@@ -163,7 +161,6 @@ class JakAndDaxterMemoryReader:
                         finish_callback: Callable,
                         deathlink_callback: Callable,
                         deathlink_toggle: Callable,
-                        orbsanity_callback: Callable,
                         paid_orbs_callback: Callable):
         if self.initiated_connect:
             await self.connect()
@@ -199,9 +196,6 @@ class JakAndDaxterMemoryReader:
 
         if self.send_deathlink:
             deathlink_callback()
-
-        if self.reset_orbsanity:
-            orbsanity_callback()
 
         if self.orbs_paid > 0:
             paid_orbs_callback(self.orbs_paid)
@@ -303,26 +297,40 @@ class JakAndDaxterMemoryReader:
             # self.moverando_enabled = bool(moverando_flag)
 
             orbsanity_option = self.read_goal_address(orbsanity_option_offset, sizeof_uint8)
-            orbsanity_bundle = self.read_goal_address(orbsanity_bundle_offset, sizeof_uint32)
+            bundle_size = self.read_goal_address(orbsanity_bundle_offset, sizeof_uint32)
             self.orbsanity_enabled = orbsanity_option > 0
 
-            # Treat these values like the Deathlink flag. They need to be reset once they are checked.
-            collected_bundle_level = self.read_goal_address(collected_bundle_level_offset, sizeof_uint8)
-            collected_bundle_count = self.read_goal_address(collected_bundle_count_offset, sizeof_uint32)
+            # Per Level Orbsanity option. Only need to do this loop if we chose this setting.
+            if orbsanity_option == 1:
+                for level in range(0, 16):
+                    collected_bundles = self.read_goal_address(collected_bundle_offset + (level * sizeof_uint32),
+                                                               sizeof_uint32)
 
-            if orbsanity_option > 0 and collected_bundle_count > 0:
-                # Count up from the first bundle, by bundle size, until you reach the latest collected bundle.
-                # e.g. {25, 50, 75, 100, 125...}
-                for k in range(orbsanity_bundle,
-                               orbsanity_bundle + collected_bundle_count,  # Range max is non-inclusive.
-                               orbsanity_bundle):
+                    # Count up from the first bundle, by bundle size, until you reach the latest collected bundle.
+                    # e.g. {25, 50, 75, 100, 125...}
+                    if collected_bundles > 0:
+                        for bundle in range(bundle_size,
+                                            bundle_size + collected_bundles,  # Range max is non-inclusive.
+                                            bundle_size):
 
-                    bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(collected_bundle_level, k, orbsanity_bundle))
-                    if bundle_ap_id not in self.location_outbox:
-                        self.location_outbox.append(bundle_ap_id)
-                        logger.debug("Checked orb bundle: " + str(bundle_ap_id))
+                            bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(level, bundle, bundle_size))
+                            if bundle_ap_id not in self.location_outbox:
+                                self.location_outbox.append(bundle_ap_id)
+                                logger.debug("Checked orb bundle: " + str(bundle_ap_id))
 
-                # self.reset_orbsanity = True
+            # Global Orbsanity option. Index 16 refers to all orbs found regardless of level.
+            if orbsanity_option == 2:
+                collected_bundles = self.read_goal_address(collected_bundle_offset + (16 * sizeof_uint32),
+                                                           sizeof_uint32)
+                if collected_bundles > 0:
+                    for bundle in range(bundle_size,
+                                        bundle_size + collected_bundles,  # Range max is non-inclusive.
+                                        bundle_size):
+
+                        bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(16, bundle, bundle_size))
+                        if bundle_ap_id not in self.location_outbox:
+                            self.location_outbox.append(bundle_ap_id)
+                            logger.debug("Checked orb bundle: " + str(bundle_ap_id))
 
             completed = self.read_goal_address(completed_offset, sizeof_uint8)
             if completed > 0 and not self.finished_game:

@@ -27,13 +27,9 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     # Only these specific attacks can push the flut flut egg off the cliff.
     flut_flut_egg = JakAndDaxterRegion("Flut Flut Egg", player, multiworld, level_name, 0)
     flut_flut_egg.add_cell_locations([17], access_rule=lambda state:
-                                     state.has("Punch", player)
-                                     or state.has("Kick", player)
-                                     or state.has("Jump Kick", player))
+                                     state.has_any({"Punch", "Kick", "Jump Kick"}, player))
     flut_flut_egg.add_special_locations([17], access_rule=lambda state:
-                                        state.has("Punch", player)
-                                        or state.has("Kick", player)
-                                        or state.has("Jump Kick", player))
+                                        state.has_any({"Punch", "Kick", "Jump Kick"}, player))
 
     eco_harvesters = JakAndDaxterRegion("Eco Harvesters", player, multiworld, level_name, 0)
     eco_harvesters.add_cell_locations([15], access_rule=lambda state: can_fight(state, player))
@@ -55,15 +51,15 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # You don't need any kind of uppercut to reach this place, just a high jump from a convenient nearby ledge.
     main_area.connect(green_ridge, rule=lambda state:
-                      (state.has("Crouch", player) and state.has("Crouch Jump", player))
-                      or state.has("Double Jump", player))
+                      state.has("Double Jump", player)
+                      or state.has_all({"Crouch", "Crouch Jump"}, player))
 
     # Can either uppercut the log and jump from it, or use the blue eco jump pad.
     main_area.connect(blue_ridge, rule=lambda state:
                       state.has("Blue Eco Switch", player)
                       or (state.has("Double Jump", player)
-                          and ((state.has("Crouch", player) and state.has("Crouch Uppercut", player))
-                               or (state.has("Punch", player) and state.has("Punch Uppercut", player)))))
+                          and (state.has_all({"Crouch", "Crouch Uppercut"}, player)
+                               or state.has_all({"Punch", "Punch Uppercut"}, player))))
 
     main_area.connect(cannon_tower, rule=lambda state: state.has("Blue Eco Switch", player))
 

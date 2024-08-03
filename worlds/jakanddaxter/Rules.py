@@ -100,13 +100,8 @@ def can_trade_orbsanity(state: CollectionState,
 
 
 def can_free_scout_flies(state: CollectionState, player: int) -> bool:
-    return (state.has("Jump Dive", player)
-            or (state.has("Crouch", player)
-                and state.has("Crouch Uppercut", player)))
+    return state.has("Jump Dive", player) or state.has_all({"Crouch", "Crouch Uppercut"}, player)
 
 
 def can_fight(state: CollectionState, player: int) -> bool:
-    return (state.has("Jump Dive", player)
-            or state.has("Jump Kick", player)
-            or state.has("Punch", player)
-            or state.has("Kick", player))
+    return state.has_any({"Jump Dive", "Jump Kick", "Punch", "Kick"}, player)
