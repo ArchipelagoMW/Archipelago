@@ -160,7 +160,6 @@ class MultiWorld():
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
-
             set_player_attr('plando_items', [])
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
