@@ -122,4 +122,4 @@ class HasProgressionPercent(CombinableStardewRule):
         return self, self(state)
 
     def __repr__(self):
-        return f"Received {self.percent}% progression items."
+        return f"Received {self.percent}% progression items"
