@@ -557,3 +557,53 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic)
 
     return connected_regions
+
+
+# which directions are opposites
+direction_pairs: Dict[int, int] = {
+    Direction.north: Direction.south,
+    Direction.south: Direction.north,
+    Direction.east: Direction.west,
+    Direction.west: Direction.east,
+    Direction.ladder_up: Direction.ladder_down,
+    Direction.ladder_down: Direction.ladder_up,
+    Direction.floor: Direction.floor,
+}
+
+
+# verify that two portals are in compatible directions
+def verify_direction_pair(portal1: Portal, portal2: Portal) -> bool:
+    if portal1.direction == direction_pairs[portal2.direction]:
+        return True
+    elif portal1.name.startswith("Shop"):
+        if portal2.direction in [Direction.north, Direction.east]:
+            return True
+    elif portal2.name.startswith("Shop"):
+        if portal1.direction in [Direction.north, Direction.east]:
+            return True
+    else:
+        return False
+
+
+# verify that two plando'd portals are in compatible directions
+def verify_plando_directions(connection: PlandoConnection) -> bool:
+    entrance_portal = None
+    exit_portal = None
+    for portal in portal_mapping:
+        if connection.entrance == portal.name:
+            entrance_portal = portal
+        if connection.exit == portal.name:
+            exit_portal = portal
+    if entrance_portal and exit_portal:
+        if entrance_portal.direction == direction_pairs[exit_portal.direction]:
+            return True
+    # this is two shop portals, they can never pair directions
+    elif not entrance_portal and not exit_portal:
+        return False
+    # if one of them is none, it's a shop, which has two possible directions
+    elif not entrance_portal:
+        if exit_portal.direction in [Direction.north, Direction.east]:
+            return True
+    elif not exit_portal:
+        if entrance_portal.direction in [Direction.north, Direction.east]:
+            return True

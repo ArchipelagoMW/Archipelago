@@ -146,6 +146,15 @@ class EntranceLayout(Choice):
     default = 0
 
 
+class Decoupled(Toggle):
+    """
+    Decouple the entrances, so that when you go from one entrance to another, the return trip won't necessarily bring you back to the same place.
+    Note: For seed groups, if any player in a seed group does not have Decoupled enabled, no one in the seed group will have Decoupled entrances.
+    """
+    internal_name = "decoupled"
+    display_name = "Decoupled Entrances"
+
+
 class LaurelsLocation(Choice):
     """
     Force the Hero's Laurels to be placed at a location in your world.
@@ -176,7 +185,9 @@ class TunicPlandoConnections(PlandoConnections):
     Generic connection plando. Format is:
     - entrance: "Entrance Name"
       exit: "Exit Name"
+      direction: "Direction"
       percentage: 100
+    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
     If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
     Note that you will wrong warp if you have multiple shops in the same scene.
@@ -272,6 +283,7 @@ class TunicOptions(PerGameCommonOptions):
     shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
     entrance_layout: EntranceLayout
+    decoupled: Decoupled
     plando_connections: TunicPlandoConnections
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
@@ -298,8 +310,14 @@ tunic_option_groups = [
         LaurelsZips,
         IceGrappling,
         LadderStorage,
-        LadderStorageWithoutItems
-    ])
+        LadderStorageWithoutItems,
+    ]),
+    OptionGroup("Entrance Randomizer", [
+        EntranceRando,
+        EntranceLayout,
+        Decoupled,
+        PlandoConnections,
+    ]),
 ]
 
 tunic_option_presets: Dict[str, Dict[str, Any]] = {

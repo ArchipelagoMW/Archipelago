@@ -54,6 +54,7 @@ class SeedGroup(TypedDict):
     ladder_storage: int  # ls value
     laurels_at_10_fairies: bool  # laurels location value
     entrance_layout: int  # entrance layout value
+    decoupled: bool
     plando: TunicPlandoConnections  # consolidated plando connections for the seed group
 
 
@@ -113,6 +114,7 @@ class TunicWorld(World):
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.entrance_layout.value = EntranceLayout.option_standard
+                self.options.decoupled = passthrough["decoupled"]
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.combat_logic.value = passthrough["combat_logic"]
 
@@ -132,7 +134,8 @@ class TunicWorld(World):
                               ladder_storage=tunic.options.ladder_storage.value,
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
                               entrance_layout=tunic.options.entrance_layout.value,
-                              plando=multiworld.plando_connections[tunic.player])
+                              decoupled=bool(tunic.options.decoupled),
+                              plando=tunic.options.plando_connections)
                 continue
 
             # off is more restrictive
@@ -154,33 +157,41 @@ class TunicWorld(World):
                 elif cls.seed_groups[group]["entrance_layout"] != tunic.options.entrance_layout.value:
                     raise OptionError(f"TUNIC: Conflict between seed group {group}'s Entrance Layout options. "
                                       f"Seed group cannot have both Fixed Shop and Direction Pairs enabled.")
-
-            # todo: make it break if you don't have matching portal directions with direction pairs on
-            if multiworld.plando_connections[tunic.player]:
+            # decoupled loses to coupled, I could instead make this fail but eh
+            if not tunic.options.decoupled:
+                cls.seed_groups[group]["decoupled"] = False
+            if tunic.options.plando_connections:
                 # loop through the connections in the player's yaml
-                for cxn in multiworld.plando_connections[tunic.player]:
+                for cxn in tunic.options.plando_connections:
                     new_cxn = True
+                    # if they used the entrance direction, just swap it around
+                    if cxn.direction == "entrance" and cls.seed_groups[group]["decoupled"]:
+                        player_cxn = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="exit", percentage=cxn.percentage)
+                    else:
+                        player_cxn = cxn
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         # if neither entrance nor exit match anything in the group, add to group
-                        if ((cxn.entrance == group_cxn.entrance and cxn.exit == group_cxn.exit)
-                                or (cxn.exit == group_cxn.entrance and cxn.entrance == group_cxn.exit)):
+                        if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
+                                # if decoupled is off, the entrance and exit can be swapped
+                                or (player_cxn.exit == group_cxn.entrance and player_cxn.entrance == group_cxn.exit
+                                    and not cls.seed_groups[group]["decoupled"])):
                             new_cxn = False
                             break
-                                   
+
                         # check if this pair is the same as a pair in the group already
                         is_mismatched = (
-                            cxn.entrance == group_cxn.entrance and cxn.exit != group_cxn.exit
-                            or cxn.entrance == group_cxn.exit and cxn.exit != group_cxn.entrance
-                            or cxn.exit == group_cxn.entrance and cxn.entrance != group_cxn.exit
-                            or cxn.exit == group_cxn.exit and cxn.entrance != group_cxn.entrance
+                            player_cxn.entrance == group_cxn.entrance and player_cxn.exit != group_cxn.exit
+                            or player_cxn.entrance == group_cxn.exit and player_cxn.exit != group_cxn.entrance
+                            or player_cxn.exit == group_cxn.entrance and player_cxn.entrance != group_cxn.exit
+                            or player_cxn.exit == group_cxn.exit and player_cxn.entrance != group_cxn.entrance
                         )
                         if is_mismatched:
                             raise OptionError(f"TUNIC: Conflict between seed group {group}'s plando "
                                               f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
                                               f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
-                                              f"connection {cxn.entrance} <-> {cxn.exit}")
+                                              f"connection {player_cxn.entrance} <-> {player_cxn.exit}")
                     if new_cxn:
-                        cls.seed_groups[group]["plando"].value.append(cxn)
+                        cls.seed_groups[group]["plando"].value.append(player_cxn)
 
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
@@ -400,6 +411,7 @@ class TunicWorld(World):
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
+            "decoupled": self.options.decoupled.value,
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
