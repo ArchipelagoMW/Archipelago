@@ -37,7 +37,6 @@ class Group(TypedDict, total=False):
 
 class ThreadBarrierProxy:
     """Passes through getattr while passthrough is True"""
-
     def __init__(self, obj: object) -> None:
         self.passthrough = True
         self.obj = obj
@@ -98,9 +97,9 @@ class MultiWorld():
         location_cache: Dict[int, Dict[str, Location]]
 
         def __init__(self, players: int):
-            self.region_cache = {player: {} for player in range(1, players + 1)}
-            self.entrance_cache = {player: {} for player in range(1, players + 1)}
-            self.location_cache = {player: {} for player in range(1, players + 1)}
+            self.region_cache = {player: {} for player in range(1, players+1)}
+            self.entrance_cache = {player: {} for player in range(1, players+1)}
+            self.location_cache = {player: {} for player in range(1, players+1)}
 
         def __iadd__(self, other: Iterable[Region]):
             self.extend(other)
@@ -167,7 +166,7 @@ class MultiWorld():
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
-                                                    "world's random object instead (usually self.random)")
+                                                      "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -452,8 +451,7 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
-    def find_items_in_locations(self, items: Set[str], player: int, resolve_group_locations: bool = False) -> List[
-        Location]:
+    def find_items_in_locations(self, items: Set[str], player: int, resolve_group_locations: bool = False) -> List[Location]:
         if resolve_group_locations:
             player_groups = self.get_player_groups(player)
             return [location for location in self.get_locations() if
@@ -500,15 +498,13 @@ class MultiWorld():
     def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is not None]
 
-    def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[
-        Location]:
+    def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
         state: CollectionState = state if state else self.state
         return [location for location in self.get_locations(player) if location.can_reach(state)]
 
     def get_placeable_locations(self, state=None, player=None) -> List[Location]:
         state: CollectionState = state if state else self.state
-        return [location for location in self.get_locations(player) if
-                location.item is None and location.can_reach(state)]
+        return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
 
     def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
         for player in players:
@@ -967,7 +963,7 @@ class Region:
         def __delitem__(self, index: int) -> None:
             location: Location = self._list.__getitem__(index)
             self._list.__delitem__(index)
-            del (self.region_manager.location_cache[location.player][location.name])
+            del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
             assert value.name not in self.region_manager.location_cache[value.player], \
@@ -979,7 +975,7 @@ class Region:
         def __delitem__(self, index: int) -> None:
             entrance: Entrance = self._list.__getitem__(index)
             self._list.__delitem__(index)
-            del (self.region_manager.entrance_cache[entrance.player][entrance.name])
+            del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
             assert value.name not in self.region_manager.entrance_cache[value.player], \
@@ -1094,8 +1090,7 @@ class Region:
         return self.__str__()
 
     def __str__(self):
-        return self.multiworld.get_name_string_for_object(
-            self) if self.multiworld else f'{self.name} (Player {self.player})'
+        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
 
 
 class LocationProgressType(IntEnum):
