@@ -6,7 +6,7 @@ from .locations import location_table, location_name_groups, location_name_to_id
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
-from .er_scripts import create_er_regions
+from .er_scripts import create_er_regions, verify_plando_directions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, EntranceLayout)
@@ -95,6 +95,12 @@ class TunicWorld(World):
                     replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
                     self.options.plando_connections.value.remove(cxn)
                     self.options.plando_connections.value.insert(index, replacement)
+
+                if (self.options.entrance_layout == EntranceLayout.option_direction_pairs
+                        and not verify_plando_directions(cxn)):
+                    raise OptionError(f"TUNIC: Player {self.player_name} has invalid plando connections. "
+                                      f"They have Direction Pairs enabled and the connection "
+                                      f"{cxn.entrance} --> {cxn.exit} does not abide by this option.")
 
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):

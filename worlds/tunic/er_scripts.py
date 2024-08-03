@@ -323,11 +323,11 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 # if it's not a dead end, it might be a shop
                 if p_exit == "Shop Portal":
                     # 6 of the shops have south exits, 2 of them have west exits
-                    dir = Direction.south
+                    shop_dir = Direction.south
                     if world.shop_num > 6:
-                        dir = Direction.west
+                        shop_dir = Direction.west
                     portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                                     destination="Previous Region", tag="_", direction=dir)
+                                     destination="Previous Region", tag="_", direction=shop_dir)
                     create_shop_region(world, regions)
                     shop_count -= 1
                     # need to maintain an even number of portals total
@@ -472,11 +472,11 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
         # 6 of the shops have south exits, 2 of them have west exits
-        dir = Direction.south
+        shop_dir = Direction.south
         if world.shop_num > 6:
-            dir = Direction.west
+            shop_dir = Direction.west
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                         destination="Previous Region", tag="_", direction=dir)
+                         destination="Previous Region", tag="_", direction=shop_dir)
         create_shop_region(world, regions)
         
         portal_pairs[portal1] = portal2
