@@ -555,7 +555,7 @@ class CommonContext:
                 continue
 
             cached_version: int = self.versions.get(game, 0)
-            cached_checksum: typing.Optional[str] = self.checksums.get("checksum")
+            cached_checksum: typing.Optional[str] = self.checksums.get(game)
             # no action required if cached version is new enough
             if (not remote_checksum and (remote_version > cached_version or remote_version == 0)) \
                     or remote_checksum != cached_checksum:
