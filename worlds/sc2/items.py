@@ -1105,6 +1105,12 @@ item_table = {
     item_names.INFESTED_BUNKER:
         ItemData(17 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 16, SC2Race.ZERG,
                  classification=ItemClassification.progression, origin={"ext"}),
+    item_names.NYDUS_WORM:
+        ItemData(18 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 17, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.OMEGA_WORM:
+        ItemData(19 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 18, SC2Race.ZERG,
+                 classification=ItemClassification.useful, origin={"ext"}),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
@@ -1464,6 +1470,18 @@ item_table = {
     item_names.TYRANNOZOR_HEALING_ADAPTATION:
         ItemData(353 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 11, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
+    item_names.NYDUS_WORM_OMEGA_WORM_SUBTERRANEAN_SCALES:
+        ItemData(354 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 12, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.filler),
+    item_names.NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN:
+        ItemData(355 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 13, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.useful),
+    item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY:
+        ItemData(356 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 14, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.useful),
+    item_names.OMEGA_WORM_OUROBOROS_STRAIN:
+        ItemData(357 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 15, SC2Race.ZERG, parent_item=item_names.OMEGA_WORM,
+                 origin={"ext"}, classification=ItemClassification.useful),
+    item_names.NYDUS_WORM_RAVENOUS_APPETITE:
+        ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent_item=item_names.NYDUS_WORM,
+                 origin={"ext"}, classification=ItemClassification.useful),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
