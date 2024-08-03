@@ -3,15 +3,15 @@ from BaseClasses import CollectionState
 SINGLE_PUPPIES = ["Puppy " + str(i).rjust(2,"0") for i in range(1,100)]
 TRIPLE_PUPPIES = ["Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0") for i in range(1,34)]
 TORN_PAGES = ["Torn Page " + str(i) for i in range(1,6)]
+WORLDS =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World"]
+KEYBLADES = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool) -> bool:
     worlds_acquired = 0.0
-    worlds =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World"]
-    keyblades = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
-    for i in range(len(worlds)):
-        if state.has(worlds[i], player):
+    for i in range(len(WORLDS)):
+        if state.has(WORLDS[i], player):
             worlds_acquired = worlds_acquired + 0.5
-        if (state.has(worlds[i], player) and has_keyblade(state, player, keyblades_unlock_chests, keyblades[i])) or (state.has(worlds[i], player) and worlds[i] == "Atlantica"):
+        if (state.has(WORLDS[i], player) and has_keyblade(state, player, keyblades_unlock_chests, KEYBLADES[i])) or (state.has(WORLDS[i], player) and WORLDS[i] == "Atlantica"):
             worlds_acquired = worlds_acquired + 0.5
     return worlds_acquired >= num_of_worlds
 
