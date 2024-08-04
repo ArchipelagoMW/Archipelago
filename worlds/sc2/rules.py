@@ -85,6 +85,27 @@ class SC2Logic:
             self.terran_competent_ground_to_air(state)
             or self.terran_air_anti_air(state)
         )
+    
+    def terran_outbreak_requirement(self, state: CollectionState) -> bool:
+        """Outbreak mission requirement"""
+        return (
+            self.terran_defense_rating(state, True, False) >= 4
+            and (self.terran_common_unit(state) or state.has(item_names.REAPER, self.player))
+        )
+
+    def terran_safe_haven_requirement(self, state: CollectionState) -> bool:
+        """Safe Haven mission requirement"""
+        return (
+            self.terran_common_unit(state)
+            and self.terran_competent_anti_air(state)
+        )
+
+    def terran_gates_of_hell_requirement(self, state: CollectionState) -> bool:
+        """Gates of Hell mission requirement"""
+        return (
+            self.terran_competent_comp(state)
+            and (self.terran_defense_rating(state, True) > 6)
+        )
 
     def welcome_to_the_jungle_requirement(self, state: CollectionState) -> bool:
         """
