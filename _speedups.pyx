@@ -293,9 +293,9 @@ cdef class LocationStore:
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
         cdef set checked = state[team, slot]
-        return sorted([entry.item for
-                       entry in self.entries[start:start+count] if
-                       entry.location not in checked])
+        return sorted([(entry.receiver, entry.item) for
+                        entry in self.entries[start:start+count] if
+                        entry.location not in checked])
 
 
 @cython.auto_pickle(False)

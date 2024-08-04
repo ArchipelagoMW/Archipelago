@@ -400,9 +400,9 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                       ) -> typing.List[int]:
         checked = state[team, slot]
         player_locations = self[slot]
-        return sorted([player_locations[location_id][0] for
-                       location_id in player_locations if
-                       location_id not in checked])
+        return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
+                        location_id in player_locations if
+                        location_id not in checked])
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
