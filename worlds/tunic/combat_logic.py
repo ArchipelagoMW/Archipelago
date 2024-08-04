@@ -86,7 +86,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
         area_list = [area_name]
 
     # we want to skip the "none area"
-    if area_name in area_list:
+    if area_name in area_data.keys():
         if met_combat_reqs:
             # set the state as true for each area until you get to the area we're looking at
             for name in area_list:
