@@ -663,11 +663,9 @@ class AquariaRegions:
         self.__connect_one_way_regions("Cathedral boss left area", "Mithalas castle",
                                        self.cathedral_boss_l, self.mithalas_castle,
                                        lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral underground",
-                                       self.mithalas_castle, self.cathedral_underground,
-                                       lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas castle",
-                               self.cathedral_underground, self.mithalas_castle)
+        self.__connect_regions("Mithalas castle", "Mithalas Cathedral underground",
+                               self.mithalas_castle, self.cathedral_underground,
+                               lambda state: _has_beast_form(state, self.player))
         self.__connect_one_way_regions("Mithalas castle", "Mithalas Cathedral start",
                                        self.mithalas_castle, self.cathedral_top_start,
                                        lambda state: _has_bind_song(state, self.player))
@@ -675,8 +673,8 @@ class AquariaRegions:
                                        self.cathedral_top_start, self.cathedral_top_start_urns,
                                        lambda state: _has_damaging_item(state, self.player))
         self.__connect_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
-                                       self.cathedral_top_start, self.cathedral_top_end,
-                                       lambda state: _has_energy_attack_item(state, self.player))
+                               self.cathedral_top_start, self.cathedral_top_end,
+                               lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral end",
                                        self.cathedral_underground, self.cathedral_top_end,
                                        lambda state: _has_beast_form(state, self.player) and
@@ -955,7 +953,6 @@ class AquariaRegions:
         self._connect_transturtle_to_other("Transturtle Simon Says", self.simon)
         self._connect_transturtle_to_other("Transturtle Arnassi Ruins", self.arnassi_cave_transturtle)
 
-
     def connect_regions(self) -> None:
         """
         Connect every region (entrances and exits)
@@ -1171,7 +1168,6 @@ class AquariaRegions:
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("The Body center area, breaking Li's cage", self.player),
                  lambda state: _has_tongue_cleared(state, self.player))
-
 
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",
