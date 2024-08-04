@@ -452,7 +452,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     self.death_counter = times_whited_out
                 elif times_whited_out > self.death_counter:
                     await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
-                                        f"{ctx.player_names[ctx.slot]} whited out!")
+                                         f"{ctx.player_names[ctx.slot]} whited out!")
                     self.ignore_next_death_link = True
                     self.death_counter = times_whited_out
 

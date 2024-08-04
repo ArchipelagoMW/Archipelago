@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import collections
 import copy
 import itertools
 import functools
@@ -63,7 +64,6 @@ class MultiWorld():
     state: CollectionState
 
     plando_options: PlandoOptions
-    accessibility: Dict[int, Options.Accessibility]
     early_items: Dict[int, Dict[str, int]]
     local_early_items: Dict[int, Dict[str, int]]
     local_items: Dict[int, Options.LocalItems]
@@ -287,6 +287,84 @@ class MultiWorld():
             group["local_items"] = item_link["local_items"]
             group["non_local_items"] = item_link["non_local_items"]
             group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
+
+    def link_items(self) -> None:
+        """Called to link together items in the itempool related to the registered item link groups."""
+        for group_id, group in self.groups.items():
+            def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
+                Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+            ]:
+                classifications: Dict[str, int] = collections.defaultdict(int)
+                counters = {player: {name: 0 for name in shared_pool} for player in players}
+                for item in self.itempool:
+                    if item.player in counters and item.name in shared_pool:
+                        counters[item.player][item.name] += 1
+                        classifications[item.name] |= item.classification
+        
+                for player in players.copy():
+                    if all([counters[player][item] == 0 for item in shared_pool]):
+                        players.remove(player)
+                        del (counters[player])
+        
+                if not players:
+                    return None, None
+        
+                for item in shared_pool:
+                    count = min(counters[player][item] for player in players)
+                    if count:
+                        for player in players:
+                            counters[player][item] = count
+                    else:
+                        for player in players:
+                            del (counters[player][item])
+                return counters, classifications
+        
+            common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
+            if not common_item_count:
+                continue
+        
+            new_itempool: List[Item] = []
+            for item_name, item_count in next(iter(common_item_count.values())).items():
+                for _ in range(item_count):
+                    new_item = group["world"].create_item(item_name)
+                    # mangle together all original classification bits
+                    new_item.classification |= classifications[item_name]
+                    new_itempool.append(new_item)
+        
+            region = Region("Menu", group_id, self, "ItemLink")
+            self.regions.append(region)
+            locations = region.locations
+            for item in self.itempool:
+                count = common_item_count.get(item.player, {}).get(item.name, 0)
+                if count:
+                    loc = Location(group_id, f"Item Link: {item.name} -> {self.player_name[item.player]} {count}",
+                        None, region)
+                    loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
+                        state.has(item_name, group_id_, count_)
+        
+                    locations.append(loc)
+                    loc.place_locked_item(item)
+                    common_item_count[item.player][item.name] -= 1
+                else:
+                    new_itempool.append(item)
+        
+            itemcount = len(self.itempool)
+            self.itempool = new_itempool
+        
+            while itemcount > len(self.itempool):
+                items_to_add = []
+                for player in group["players"]:
+                    if group["link_replacement"]:
+                        item_player = group_id
+                    else:
+                        item_player = player
+                    if group["replacement_items"][player]:
+                        items_to_add.append(AutoWorld.call_single(self, "create_item", item_player,
+                            group["replacement_items"][player]))
+                    else:
+                        items_to_add.append(AutoWorld.call_single(self, "create_filler", item_player))
+                self.random.shuffle(items_to_add)
+                self.itempool.extend(items_to_add[:itemcount - len(self.itempool)])
 
     def secure(self):
         self.random = ThreadBarrierProxy(secrets.SystemRandom())
@@ -523,26 +601,22 @@ class MultiWorld():
         players: Dict[str, Set[int]] = {
             "minimal": set(),
             "items": set(),
-            "locations": set()
+            "full": set()
         }
-        for player, access in self.accessibility.items():
-            players[access.current_key].add(player)
+        for player, world in self.worlds.items():
+            players[world.options.accessibility.current_key].add(player)
 
         beatable_fulfilled = False
 
-        def location_condition(location: Location):
+        def location_condition(location: Location) -> bool:
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if location.player in players["locations"] or (location.item and location.item.player not in
-                                                           players["minimal"]):
-                return True
-            return False
+            return location.player in players["full"] or \
+                (location.item and location.item.player not in players["minimal"])
 
-        def location_relevant(location: Location):
+        def location_relevant(location: Location) -> bool:
             """Determine if this location is relevant to sweep."""
-            if location.progress_type != LocationProgressType.EXCLUDED \
-               and (location.player in players["locations"] or location.advancement):
-                return True
-            return False
+            return location.progress_type != LocationProgressType.EXCLUDED \
+                and (location.player in players["full"] or location.advancement)
 
         def all_done() -> bool:
             """Check if all access rules are fulfilled"""
@@ -680,13 +754,13 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
+    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.multiworld.get_filled_locations()
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.advancement and location not in self.events and
-                     not key_only or getattr(location.item, "locked_dungeon_item", False)}
+        locations = {location for location in locations if location.advancement and location not in self.events}
+
         while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}
             locations -= reachable_events
@@ -1291,8 +1365,6 @@ class Spoiler:
         state = CollectionState(multiworld)
         collection_spheres = []
         while required_locations:
-            state.sweep_for_events(key_only=True)
-
             sphere = set(filter(state.can_reach, required_locations))
 
             for location in sphere:
