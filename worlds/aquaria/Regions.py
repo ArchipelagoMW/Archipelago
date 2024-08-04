@@ -657,7 +657,8 @@ class AquariaRegions:
                                self.forest_br, self.forest_bl)
         self.__connect_one_way_regions("Forest bottom left area", "Forest bottom left area, spirit crystals",
                                        self.forest_bl, self.forest_bl_sc,
-                                       lambda state: _has_energy_attack_item(state, self.player))
+                                       lambda state: _has_energy_attack_item(state, self.player) or
+                                                     _has_fish_form(state, self.player))
         self.__connect_one_way_regions("Forest bottom left area, spirit crystals", "Forest bottom left area",
                                self.forest_bl_sc, self.forest_bl)
         self.__connect_regions("Forest bottom right", "Forest top right area",
@@ -1041,7 +1042,7 @@ class AquariaRegions:
         Modify rules for location that need soup
         """
         add_rule(self.multiworld.get_location("Turtle cave, Urchin Costume", self.player),
-                 lambda state: _has_beast_and_soup_form(state, self.player))
+                 lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
 
