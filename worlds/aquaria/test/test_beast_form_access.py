@@ -14,6 +14,7 @@ class BeastFormAccessTest(AquariaTestBase):
         """Test locations that require beast form"""
         locations = [
             "Mermog cave, Piranha Egg",
+            "Kelp Forest top left area, Jelly Egg",
             "Mithalas Cathedral, Mithalan Dress",
             "Turtle cave, Urchin Costume",
             "Kelp Forest top left area, Jelly Egg",

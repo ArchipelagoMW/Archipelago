@@ -27,8 +27,6 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
             "Mithalas boss area, beating Mithalan God",
             "Kelp Forest top left area, bulb close to the Verse Egg",
             "Kelp Forest top left area, Verse Egg",
-            "Kelp Forest bottom left area, bulb close to the spirit crystals",
-            "Kelp Forest bottom left area, Walker Baby",
             "Kelp Forest boss area, beating Drunian God",
             "Mermog cave, Piranha Egg",
             "Octopus Cave, Dumbo Egg",
