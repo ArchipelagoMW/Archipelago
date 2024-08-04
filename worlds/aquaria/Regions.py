@@ -672,9 +672,9 @@ class AquariaRegions:
         self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral start urns",
                                        self.cathedral_top_start, self.cathedral_top_start_urns,
                                        lambda state: _has_damaging_item(state, self.player))
-        self.__connect_one_way_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
-                                       self.cathedral_top_start, self.cathedral_top_end,
-                                       lambda state: _has_energy_attack_item(state, self.player))
+        self.__connect_regions("Mithalas Cathedral start", "Mithalas Cathedral end",
+                               self.cathedral_top_start, self.cathedral_top_end,
+                               lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions("Mithalas Cathedral underground", "Mithalas Cathedral end",
                                        self.cathedral_underground, self.cathedral_top_end,
                                        lambda state: _has_beast_form(state, self.player) and
@@ -705,7 +705,8 @@ class AquariaRegions:
                                self.forest_br, self.forest_bl)
         self.__connect_one_way_regions("Kelp Forest bottom left area", "Kelp Forest bottom left area, spirit crystals",
                                        self.forest_bl, self.forest_bl_sc,
-                                       lambda state: _has_energy_attack_item(state, self.player))
+                                       lambda state: _has_energy_attack_item(state, self.player) or
+                                                     _has_fish_form(state, self.player))
         self.__connect_one_way_regions("Kelp Forest bottom left area, spirit crystals", "Kelp Forest bottom left area",
                                self.forest_bl_sc, self.forest_bl)
         self.__connect_regions("Kelp Forest bottom right area", "Kelp Forest top right area",
@@ -1066,7 +1067,7 @@ class AquariaRegions:
         Modify rules for location that need soup
         """
         add_rule(self.multiworld.get_location("Turtle cave, Urchin Costume", self.player),
-                 lambda state: _has_beast_and_soup_form(state, self.player))
+                 lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
                                state.has("Sun God beated", self.player))
