@@ -312,7 +312,7 @@ CobwebShoeboxTower = "(SA Main Cobweb) Shoebox Tower"
 FlameTowerSteps = "(SA Main) Flame Tower Steps"
 FlameTowerTop1 = "(SA Main) Flame Tower Top 1"
 FlameTowerTop2 = "(SA Main) Flame Tower Top 2"
-CobwebFlameTowerArch = "(SA Main) Flame Tower Arch"
+CobwebFlameTowerArch = "(SA Main Cobweb) Flame Tower Arch"
 # Completion
 SashasShootingGalleryComplete = "(SA Main) Sasha's Shooting Gallery Complete"
 

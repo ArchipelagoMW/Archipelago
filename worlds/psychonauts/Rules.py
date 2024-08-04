@@ -187,7 +187,7 @@ class PsyRules:
 
             RegionName.MMI1Powerlines: self.has_cobweb_duster,
 
-            RegionName.MMDM: self.has_invisibility,
+            RegionName.MMDM: lambda state: self.has_invisibility(state) and self.has_telekinesis(state),
 
             RegionName.THMS: self.has_gloria_mind,
 
