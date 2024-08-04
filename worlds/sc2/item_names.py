@@ -725,7 +725,7 @@ VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vangu
 ANNIHILATOR_AERIAL_TRACKING                             = "Aerial Tracking (Annihilator)"
 STALWART_DUALITY_CHARGE                                 = "Duality Charge (Stalwart)"
 # Colossus
-# Wrathwalker
+WRATHWALKER_AERIAL_TRACKING                             = "Aerial Tracking (Wrathwalker)"
 REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
 # Disruptor
 # Warp Prism

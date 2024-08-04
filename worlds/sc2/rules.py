@@ -589,22 +589,26 @@ class SC2Logic:
         return state.has_any(self.basic_protoss_units, self.player)
 
     def protoss_basic_anti_air(self, state: CollectionState) -> bool:
-        return self.protoss_competent_anti_air(state) \
+        return (
+            self.protoss_competent_anti_air(state)
             or state.has_any({
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER, item_names.SKYLORD,
-                item_names.SCOUT, item_names.DARK_ARCHON, item_names.WRATHWALKER, item_names.MOTHERSHIP
-            }, self.player) \
-            or state.has_all({item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER}, self.player) \
+                item_names.SCOUT, item_names.DARK_ARCHON, item_names.MOTHERSHIP
+            }, self.player)
+            or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
+            or state.has_all({item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER}, self.player)
             or self.advanced_tactics and state.has_any(
                 {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_TEMPLAR,
                  item_names.SENTRY, item_names.ENERGIZER}, self.player)
+        )
 
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return (
             self.protoss_competent_anti_air(state)
-            or state.has_any({item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY}, self.player)
+            or state.has_any({item_names.SCOUT, item_names.WARP_RAY}, self.player)
             or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS, self.player))
+            or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
             or state.has_all({
                 item_names.STALWART,
                 item_names.STALWART_DUALITY_CHARGE,
@@ -633,9 +637,10 @@ class SC2Logic:
                     }, self.player)
                     or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
                 )
-                and state.has_any({
-                    item_names.SCOUT, item_names.WRATHWALKER, item_names.WARP_RAY
-                }, self.player)
+                and (
+                    state.has_any({item_names.SCOUT, item_names.WARP_RAY}, self.player)
+                    or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
+                )
             )
             or (self.advanced_tactics
                 and state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
