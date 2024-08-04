@@ -2,6 +2,7 @@ from typing import Dict, List, NamedTuple, Tuple, Optional
 from enum import IntEnum
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
+from worlds.AutoWorld import LogicMixin
 
 
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
@@ -59,34 +60,23 @@ class CombatState(IntEnum):
 
 def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
     # we're caching whether you've met the combat reqs before if the state didn't change first
-    player_state = state.prog_items[player]
     # if the combat state is stale, mark each area's combat state as stale
-    if player_state["need_to_reset_combat_state_from_collect"]:
-        player_state["need_to_reset_combat_state_from_collect"] = 0
-        for name in boss_areas:
-            if player_state["combat_reqs_met_for_" + name] == CombatState.failed:
-                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
-        for name in non_boss_areas:
-            if player_state["combat_reqs_met_for_" + name] == CombatState.failed:
-                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
-        if player_state["combat_reqs_met_for_Gauntlet"] == CombatState.failed:
-            player_state["combat_reqs_met_for_Gauntlet"] = CombatState.unchecked
+    if state.tunic_need_to_reset_combat_from_collect[player]:
+        state.tunic_need_to_reset_combat_from_collect[player] = 0
+        for name in area_data.keys():
+            if state.tunic_area_combat_state[player][name] == CombatState.failed:
+                state.tunic_area_combat_state[player][name] = CombatState.unchecked
 
-    if player_state["need_to_reset_combat_state_from_remove"]:
-        player_state["need_to_reset_combat_state_from_remove"] = 0
-        for name in boss_areas:
-            if player_state["combat_reqs_met_for_" + name] == CombatState.succeeded:
-                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
-        for name in non_boss_areas:
-            if player_state["combat_reqs_met_for_" + name] == CombatState.succeeded:
-                player_state["combat_reqs_met_for_" + name] = CombatState.unchecked
-        if player_state["combat_reqs_met_for_Gauntlet"] == CombatState.succeeded:
-            player_state["combat_reqs_met_for_Gauntlet"] = CombatState.unchecked
+    if state.tunic_need_to_reset_combat_from_remove[player]:
+        state.tunic_need_to_reset_combat_from_remove[player] = 0
+        for name in area_data.keys():
+            if state.tunic_area_combat_state[player][name] == CombatState.succeeded:
+                state.tunic_area_combat_state[player][name] = CombatState.unchecked
+
+    if state.tunic_area_combat_state[player][area_name] > CombatState.unchecked:
+        return state.tunic_area_combat_state[player][area_name] == CombatState.succeeded
 
     met_combat_reqs = check_combat_reqs(area_name, state, player)
-    if player_state["combat_reqs_met_for_" + area_name] > CombatState.unchecked:
-        return met_combat_reqs
-
     # loop through the lists and set the easier/harder area states accordingly
     if area_name in boss_areas:
         area_list = boss_areas
@@ -95,30 +85,25 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     else:
         area_list = [area_name]
 
-    if area_name in area_list:
-        if met_combat_reqs:
-            # set the state as true for each area until you get to the area we're looking at
-            for name in area_list:
-                player_state["combat_reqs_met_for_" + name] = CombatState.succeeded
-                if name == area_name:
-                    break
-        else:
-            # set the state as false for the area we're looking at and each area after that
-            reached_name = False
-            for name in area_list:
-                if name == area_name:
-                    reached_name = True
-                if reached_name:
-                    player_state["combat_reqs_met_for_" + name] = CombatState.failed
+    if met_combat_reqs:
+        # set the state as true for each area until you get to the area we're looking at
+        for name in area_list:
+            state.tunic_area_combat_state[player][name] = CombatState.succeeded
+            if name == area_name:
+                break
+    else:
+        # set the state as false for the area we're looking at and each area after that
+        reached_name = False
+        for name in area_list:
+            if name == area_name:
+                reached_name = True
+            if reached_name:
+                state.tunic_area_combat_state[player][name] = CombatState.failed
 
-    return check_combat_reqs(area_name, state, player)
+    return met_combat_reqs
 
 
 def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
-    # if our cache says we've already calced this, we don't need to go through these calculations again
-    if state.prog_items[player]["combat_reqs_met_for_" + area_name] > CombatState.unchecked:
-        return state.prog_items[player]["combat_reqs_met_for_" + area_name] > CombatState.failed
-
     data = alt_data or area_data[area_name]
     extra_att_needed = 0
     extra_def_needed = 0
@@ -413,3 +398,13 @@ def get_money_count(state: CollectionState, player: int) -> int:
         money += money_per_break
         money_per_break = min(512, money_per_break * 2)
     return money
+
+
+class TunicState(LogicMixin):
+    # the per-player need to reset the combat state when collecting a combat item
+    tunic_need_to_reset_combat_from_collect: Dict[int, bool] = {}
+    # the per-player need to reset the combat state when removing a combat item
+    tunic_need_to_reset_combat_from_remove: Dict[int, bool] = {}
+    # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
+    tunic_area_combat_state: Dict[int, Dict[str, int]] = {}
+

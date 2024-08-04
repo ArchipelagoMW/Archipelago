@@ -11,6 +11,7 @@ from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
+from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -127,6 +128,15 @@ class TunicWorld(World):
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
         tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
         for tunic in tunic_worlds:
+            # setting up state combat logic stuff, see has_combat_reqs for its use
+            # and this is magic so pycharm doesn't like it, unfortunately
+            if tunic.options.combat_logic:
+                multiworld.state.tunic_need_to_reset_combat_from_collect[tunic.player] = False
+                multiworld.state.tunic_need_to_reset_combat_from_remove[tunic.player] = False
+                multiworld.state.tunic_area_combat_state[tunic.player] = {}
+                for area_name in area_data.keys():
+                    multiworld.state.tunic_area_combat_state[tunic.player][area_name] = CombatState.unchecked
+
             # if it's one of the options, then it isn't a custom seed group
             if tunic.options.entrance_rando.value in EntranceRando.options.values():
                 continue
@@ -352,13 +362,13 @@ class TunicWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
         if change and self.options.combat_logic and item.name in combat_items:
-            state.prog_items[self.player]["need_to_reset_combat_state_from_collect"] = 1
+            state.tunic_need_to_reset_combat_from_collect[self.player] = True
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
         if change and self.options.combat_logic and item.name in combat_items:
-            state.prog_items[self.player]["need_to_reset_combat_state_from_remove"] = 1
+            state.tunic_need_to_reset_combat_from_remove[self.player] = True
         return change
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
