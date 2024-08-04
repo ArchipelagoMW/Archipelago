@@ -1111,6 +1111,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         'can_read_game',
         'last_received_update',
     ]
+    ctx: SC2Context
 
     def __init__(self, ctx: SC2Context, mission_id: int):
         self.game_running = False
@@ -1245,8 +1246,14 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
     def get_uncollected_objectives(self) -> typing.List[int]:
-        return [location % VICTORY_MODULO for location in
-                self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])]
+        result = [
+            location % VICTORY_MODULO for location in
+            self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
+        ]
+        if self.mission_id == self.ctx.final_mission:
+            # Always make the final mission's victory location collectable
+            result.append(0)
+        return result
 
     def missions_beaten_count(self):
         return len([location for location in self.ctx.checked_locations if location % VICTORY_MODULO == 0])
