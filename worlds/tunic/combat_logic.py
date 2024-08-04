@@ -322,31 +322,31 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
 
 # returns a tuple of your max attack level, the number of attack offerings
 def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
-    att_offering_count = state.count("ATT Offering", player)
+    att_offerings = state.count("ATT Offering", player)
     att_upgrades = state.count("Hero Relic - ATT", player)
     sword_level = state.count("Sword Upgrade", player)
     if sword_level >= 3:
         att_upgrades += min(2, sword_level - 2)
     # attack falls off, can just cap it at 8 for simplicity
-    return min(8, 1 + att_offering_count + att_upgrades), att_offering_count
+    return min(8, 1 + att_offerings + att_upgrades), att_offerings
 
 
 # returns a tuple of your max defense level, the number of defense offerings
 def get_def_level(state: CollectionState, player: int) -> Tuple[int, int]:
-    def_offering_count = state.count("DEF Offering", player)
+    def_offerings = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
-    return (min(8, 1 + def_offering_count
+    return (min(8, 1 + def_offerings
                 + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)),
-            def_offering_count)
+            def_offerings)
 
 
 # returns a tuple of your max potion level, the number of potion offerings
 def get_potion_level(state: CollectionState, player: int) -> Tuple[int, int]:
-    potion_offering_count = min(2, state.count("Potion Offering", player))
+    potion_offerings = min(2, state.count("Potion Offering", player))
     # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
-    return (1 + potion_offering_count
+    return (1 + potion_offerings
             + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player),
-            potion_offering_count)
+            potion_offerings)
 
 
 # returns a tuple of your max hp level, the number of hp offerings
