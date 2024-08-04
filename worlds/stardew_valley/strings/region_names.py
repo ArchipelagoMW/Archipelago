@@ -296,6 +296,7 @@ class SVERegion:
     sprite_spring_cave = "Sprite Spring Cave"
     willy_bedroom = "Willy's Bedroom"
     gunther_bedroom = "Gunther's Bedroom"
+    highlands_pond = "Highlands Pond"
 
 
 class AlectoRegion:

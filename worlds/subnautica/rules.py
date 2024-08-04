@@ -150,7 +150,7 @@ def has_ultra_glide_fins(state: "CollectionState", player: int) -> bool:
 
 
 def get_max_swim_depth(state: "CollectionState", player: int) -> int:
-    swim_rule: SwimRule = state.multiworld.swim_rule[player]
+    swim_rule: SwimRule = state.multiworld.worlds[player].options.swim_rule
     depth: int = swim_rule.base_depth
     if swim_rule.consider_items:
         if has_seaglide(state, player):
@@ -296,7 +296,7 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
         set_location_rule(multiworld, player, loc)
 
     if subnautica_world.creatures_to_scan:
-        option = multiworld.creature_scan_logic[player]
+        option = multiworld.worlds[player].options.creature_scan_logic
 
         for creature_name in subnautica_world.creatures_to_scan:
             location = set_creature_rule(multiworld, player, creature_name)
