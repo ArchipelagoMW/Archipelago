@@ -1,4 +1,4 @@
-from enum import IntEnum
+import enum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
 from . import item_names
 from .options import (get_option_value, RequiredTactics,
@@ -25,7 +25,7 @@ class SC2Location(Location):
     game: str = "Starcraft2"
 
 
-class LocationType(IntEnum):
+class LocationType(enum.IntEnum):
     VICTORY = 0  # Winning a mission
     VANILLA = 1  # Objectives that provided metaprogression in the original campaign, along with a few other locations for a balanced experience
     EXTRA = 2  # Additional locations based on mission progression, collecting in-mission rewards, etc. that do not significantly increase the challenge.
@@ -34,12 +34,21 @@ class LocationType(IntEnum):
     SPEEDRUN = 5  # Objectives based around beating objectives within a time-limit
 
 
+class LocationFlag(enum.IntFlag):
+    NONE = 0
+    SPEEDRUN = enum.auto()
+    """Locations that are about doing something fast"""
+    PREVENTATIVE = enum.auto()
+    """Locations that are about preventing something from happening"""
+
+
 class LocationData(NamedTuple):
     region: str
     name: str
     code: int
     type: LocationType
     rule: Callable[['CollectionState'], bool] = Location.access_rule
+    tags: LocationFlag = LocationFlag.NONE
 
 
 def make_location_data(
@@ -47,9 +56,10 @@ def make_location_data(
     name: str,
     code: int,
     type: LocationType,
-    rule: Callable[['CollectionState'], bool] = Location.access_rule
+    rule: Callable[['CollectionState'], bool] = Location.access_rule,
+    flags: LocationFlag = LocationFlag.NONE,
 ) -> LocationData:
-    return LocationData(region, f'{region}: {name}', code, type, rule)
+    return LocationData(region, f'{region}: {name}', code, type, rule, flags)
 
 
 def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationType]:
@@ -163,10 +173,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.EVACUATION.mission_name, "Reach Hanson", SC2WOL_LOC_ID_OFFSET + 404, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION.mission_name, "Secret Resource Stash", SC2WOL_LOC_ID_OFFSET + 405, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION.mission_name, "Flawless", SC2WOL_LOC_ID_OFFSET + 406, LocationType.CHALLENGE,
-                     lambda state: logic.terran_early_tech(state) and
-                                   logic.terran_defense_rating(state, True, False) >= 2 and
-                                   (adv_tactics and logic.terran_basic_anti_air(state)
-                                    or logic.terran_competent_anti_air(state))),
+            lambda state: logic.terran_early_tech(state) and
+                        logic.terran_defense_rating(state, True, False) >= 2 and
+                        (adv_tactics and logic.terran_basic_anti_air(state)
+                        or logic.terran_competent_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE),
         make_location_data(SC2Mission.OUTBREAK.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 500, LocationType.VICTORY,
                      lambda state: logic.terran_defense_rating(state, True, False) >= 4 and
                                    (logic.terran_common_unit(state) or state.has(item_names.REAPER, player))),
@@ -422,23 +433,39 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    and logic.terran_beats_protoss_deathball(state)
                                    and logic.terran_base_trasher(state)),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "No Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1406, LocationType.CHALLENGE,
-                     lambda state: logic.welcome_to_the_jungle_requirement(state)
-                                    and logic.terran_competent_ground_to_air(state)
-                                   and logic.terran_beats_protoss_deathball(state)),
+            lambda state: (
+                logic.welcome_to_the_jungle_requirement(state)
+                and logic.terran_competent_ground_to_air(state)
+                and logic.terran_beats_protoss_deathball(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Up to 1 Terrazine Node Sealed", SC2WOL_LOC_ID_OFFSET + 1407, LocationType.CHALLENGE,
-                     lambda state: logic.welcome_to_the_jungle_requirement(state)
-                                   and logic.terran_competent_ground_to_air(state)
-                                   and logic.terran_beats_protoss_deathball(state)),
+            lambda state: (
+                logic.welcome_to_the_jungle_requirement(state)
+                and logic.terran_competent_ground_to_air(state)
+                and logic.terran_beats_protoss_deathball(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Up to 2 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1408, LocationType.CHALLENGE,
-                     lambda state: logic.welcome_to_the_jungle_requirement(state)
-                                   and logic.terran_beats_protoss_deathball(state)),
+            lambda state: (
+                logic.welcome_to_the_jungle_requirement(state)
+                and logic.terran_beats_protoss_deathball(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Up to 3 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1409, LocationType.CHALLENGE,
-                     lambda state: logic.welcome_to_the_jungle_requirement(state)
-                                   and logic.terran_competent_comp(state)),
+            lambda state: (
+                logic.welcome_to_the_jungle_requirement(state)
+                and logic.terran_competent_comp(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Up to 4 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1410, LocationType.EXTRA,
-                     lambda state: logic.welcome_to_the_jungle_requirement(state)),
+            logic.welcome_to_the_jungle_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Up to 5 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1411, LocationType.EXTRA,
-                     lambda state: logic.welcome_to_the_jungle_requirement(state)),
+            logic.welcome_to_the_jungle_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.BREAKOUT.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1500, LocationType.VICTORY),
         make_location_data(SC2Mission.BREAKOUT.mission_name, "Diamondback Prison", SC2WOL_LOC_ID_OFFSET + 1501, LocationType.VANILLA),
         make_location_data(SC2Mission.BREAKOUT.mission_name, "Siege Tank Prison", SC2WOL_LOC_ID_OFFSET + 1502, LocationType.VANILLA),
@@ -467,8 +494,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.great_train_robbery_train_stopper(state) and
                                    logic.terran_basic_anti_air(state)),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "Flawless", SC2WOL_LOC_ID_OFFSET + 1711, LocationType.CHALLENGE,
-                     lambda state: logic.great_train_robbery_train_stopper(state) and
-                                   logic.terran_basic_anti_air(state)),
+            lambda state:(
+                logic.great_train_robbery_train_stopper(state)
+                and logic.terran_basic_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "2 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1712, LocationType.EXTRA,
                      lambda state: logic.great_train_robbery_train_stopper(state)),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "4 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1713, LocationType.EXTRA,
@@ -891,8 +921,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Flawless", SC2HOTS_LOC_ID_OFFSET + 1009, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state)
+                          and logic.zerg_competent_anti_air(state),
+            flags=LocationFlag.PREVENTATIVE),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_defense(state) and
                                    logic.zerg_competent_anti_air(state)),
@@ -1737,32 +1768,43 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                     or logic.zerg_competent_anti_air(state))),
         make_location_data(SC2Mission.EVACUATION_Z.mission_name, "North Chrysalis", SC2_RACESWAP_LOC_ID_OFFSET + 701, LocationType.VANILLA),
         make_location_data(SC2Mission.EVACUATION_Z.mission_name, "West Chrysalis", SC2_RACESWAP_LOC_ID_OFFSET + 702, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit),
         make_location_data(SC2Mission.EVACUATION_Z.mission_name, "East Chrysalis", SC2_RACESWAP_LOC_ID_OFFSET + 703, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit),
         make_location_data(SC2Mission.EVACUATION_Z.mission_name, "Reach Hanson", SC2_RACESWAP_LOC_ID_OFFSET + 704, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION_Z.mission_name, "Secret Resource Stash", SC2_RACESWAP_LOC_ID_OFFSET + 705, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION_Z.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 706, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_defense(state) and
-                                   (adv_tactics and logic.zerg_basic_kerriganless_anti_air(state)
-                                    or logic.zerg_competent_anti_air(state))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_competent_defense(state)
+                and (adv_tactics
+                    and logic.zerg_basic_kerriganless_anti_air(state)
+                    or logic.zerg_competent_anti_air(state))),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 800, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   (adv_tactics and logic.protoss_basic_anti_air(state)
-                                    or logic.protoss_competent_anti_air(state))),
+            lambda state: (
+                logic.protoss_common_unit(state)
+                and (adv_tactics
+                    and logic.protoss_basic_anti_air(state)
+                    or logic.protoss_competent_anti_air(state)))
+        ),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "North Chrysalis", SC2_RACESWAP_LOC_ID_OFFSET + 801, LocationType.VANILLA),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "West Chrysalis", SC2_RACESWAP_LOC_ID_OFFSET + 802, LocationType.VANILLA,
-                     lambda state: logic.protoss_common_unit(state)),
+            logic.protoss_common_unit),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "East Chrysalis", SC2_RACESWAP_LOC_ID_OFFSET + 803, LocationType.VANILLA,
-                     lambda state: logic.protoss_common_unit(state)),
+            logic.protoss_common_unit),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Reach Hanson", SC2_RACESWAP_LOC_ID_OFFSET + 804, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Secret Resource Stash", SC2_RACESWAP_LOC_ID_OFFSET + 805, LocationType.EXTRA),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 806, LocationType.CHALLENGE,
-                     lambda state: logic.protoss_defense_rating(state, True) >= 2 and
-                                   logic.protoss_common_unit(state) and
-                                   (adv_tactics and logic.protoss_basic_anti_air(state)
-                                    or logic.protoss_competent_anti_air(state))),
+            lambda state: (
+                logic.protoss_defense_rating(state, True) >= 2
+                and logic.protoss_common_unit(state)
+                and (adv_tactics
+                    and logic.protoss_basic_anti_air(state)
+                    or logic.protoss_competent_anti_air(state))),
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.OUTBREAK_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 900, LocationType.VICTORY,
                      lambda state: logic.zerg_defense_rating(state, True, False) >= 4 and
                                    logic.zerg_common_unit(state)),
