@@ -1,0 +1,126 @@
+from .Options import InscryptionOptions, Goal, EpitaphPiecesRandomization, PaintingChecksBalancing
+from .Items import act1_items, act2_items, act3_items, filler_items, base_id, InscryptionItem, ItemDict
+from .Locations import act1_locations, act2_locations, act3_locations, regions_to_locations
+from .Regions import inscryption_regions_all, inscryption_regions_act_1
+from typing import Dict, Any
+from . import Rules
+from BaseClasses import Region, Item, Tutorial, ItemClassification, LocationProgressType
+from worlds.AutoWorld import World, WebWorld
+
+
+class InscrypWeb(WebWorld):
+    theme = "dirt"
+
+    guide_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Inscryption Archipelago Multiworld",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["DrBibop"]
+    )
+
+    guide_fr = Tutorial(
+        "Multiworld Setup Guide",
+        "Un guide pour configurer Inscryption Archipelago Multiworld",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Glowbuzz"]
+    )
+
+    tutorials = [guide_en, guide_fr]
+
+    bug_report_page = "https://github.com/DrBibop/Archipelago_Inscryption/issues"
+
+
+class InscryptionWorld(World):
+    """
+    Inscryption is an inky black card-based odyssey that blends the deckbuilding roguelike,
+    escape-room style puzzles, and psychological horror into a blood-laced smoothie.
+    Darker still are the secrets inscrybed upon the cards...
+    """
+    game = "Inscryption"
+    web = InscrypWeb()
+    options_dataclass = InscryptionOptions
+    options: InscryptionOptions
+    all_items = act1_items + act2_items + act3_items + filler_items
+    item_name_to_id = {item['name']: i + base_id for i, item in enumerate(all_items)}
+    all_locations = act1_locations + act2_locations + act3_locations
+    location_name_to_id = {location: i + base_id for i, location in enumerate(all_locations)}
+
+    def create_item(self, name: str) -> Item:
+        item_id = self.item_name_to_id[name]
+        item_data = self.all_items[item_id - base_id]
+        return InscryptionItem(name, item_data['classification'], item_id, self.player)
+
+    def create_items(self) -> None:
+        nb_items_added = 0
+        useful_items = (act1_items + act2_items + act3_items) if self.options.goal != Goal.option_first_act \
+            else act1_items
+
+        if self.options.goal != Goal.option_first_act:
+            if self.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_all_pieces:
+                useful_items.remove(act2_items[3])
+            elif self.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_in_groups:
+                useful_items.remove(act2_items[2])
+                useful_items[len(act1_items) + 2]['count'] = 3
+            else:
+                useful_items.remove(act2_items[2])
+                useful_items[len(act1_items) + 2]['count'] = 1
+
+        for item in useful_items:
+            for _ in range(item["count"]):
+                new_item = self.create_item(item['name'])
+                self.multiworld.itempool.append(new_item)
+                nb_items_added += 1
+
+        filler_count = len(self.all_locations if self.options.goal != Goal.option_first_act else act1_locations)
+        filler_count -= nb_items_added
+
+        for i in range(filler_count):
+            index = i % len(filler_items)
+            filler_item = filler_items[index]
+            new_item = self.create_item(filler_item['name'])
+            self.multiworld.itempool.append(new_item)
+
+    def create_regions(self) -> None:
+        used_regions = inscryption_regions_all if self.options.goal != Goal.option_first_act \
+            else inscryption_regions_act_1
+        for region_name in used_regions.keys():
+            self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
+
+        for region_name, region_connections in used_regions.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            region.add_exits(region_connections)
+            region.add_locations({
+                location: self.location_name_to_id[location] for location in regions_to_locations[region_name]
+            })
+
+    def set_rules(self) -> None:
+        Rules.InscryptionRules(self).set_all_rules()
+        if self.options.painting_checks_balancing.value == PaintingChecksBalancing.option_balanced:
+            Rules.InscryptionRules(self).set_painting_rules()
+        elif self.options.painting_checks_balancing.value == PaintingChecksBalancing.option_force_filler and \
+                sum(item.classification == ItemClassification.filler for item in self.multiworld.itempool) >= 2:
+            region = self.multiworld.get_region("Act 1", self.player)
+            loc = next((x for x in region.locations if x.name == "Act 1 - Painting 2"), None)
+            if loc is not None:
+                loc.progress_type = LocationProgressType.EXCLUDED
+            loc = next((x for x in region.locations if x.name == "Act 1 - Painting 3"), None)
+            if loc is not None:
+                loc.progress_type = LocationProgressType.EXCLUDED
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return {
+            "death_link": self.options.death_link.value,
+            "act1_death_link_behaviour": self.options.act1_death_link_behaviour.value,
+            "goal": self.options.goal.value,
+            "randomize_codes": self.options.randomize_codes.value,
+            "randomize_deck": self.options.randomize_deck.value,
+            "randomize_sigils": self.options.randomize_sigils.value,
+            "optional_death_card": self.options.optional_death_card.value,
+            "skip_tutorial": self.options.skip_tutorial.value,
+            "skip_epilogue": self.options.skip_epilogue.value,
+            "epitaph_pieces_randomization": self.options.epitaph_pieces_randomization.value
+        }
