@@ -702,7 +702,6 @@ StageCompleteSet:
     BNE .ApplyClear
     TXA
     LSR
-    INC
     JSL ApplyLocalCheck
     .ApplyClear:
     PLX
