@@ -82,8 +82,11 @@ class TunicWorld(World):
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
+    combat_logic_enabled: bool = False
 
     def generate_early(self) -> None:
+        if self.options.combat_logic:
+            combat_logic_enabled = True
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
             self.options.ice_grappling.value = IceGrappling.option_medium
@@ -351,16 +354,14 @@ class TunicWorld(World):
     # cache whether you can get through combat logic areas
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
-        if change and self.options.combat_logic:
-            if item.name in combat_items:
-                state.prog_items[self.player]["need_to_reset_combat_state_from_collect"] = 1
+        if change and self.options.combat_logic and item.name in combat_items:
+            state.prog_items[self.player]["need_to_reset_combat_state_from_collect"] = 1
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
-        if change and self.options.combat_logic:
-            if item.name in combat_items:
-                state.prog_items[self.player]["need_to_reset_combat_state_from_remove"] = 1
+        if change and self.options.combat_logic and item.name in combat_items:
+            state.prog_items[self.player]["need_to_reset_combat_state_from_remove"] = 1
         return change
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
