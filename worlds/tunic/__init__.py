@@ -82,11 +82,8 @@ class TunicWorld(World):
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
-    combat_logic_enabled: bool = False
 
     def generate_early(self) -> None:
-        if self.options.combat_logic:
-            combat_logic_enabled = True
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
             self.options.ice_grappling.value = IceGrappling.option_medium
