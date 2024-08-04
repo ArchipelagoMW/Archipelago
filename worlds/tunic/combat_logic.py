@@ -85,20 +85,22 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     else:
         area_list = [area_name]
 
-    if met_combat_reqs:
-        # set the state as true for each area until you get to the area we're looking at
-        for name in area_list:
-            state.tunic_area_combat_state[player][name] = CombatState.succeeded
-            if name == area_name:
-                break
-    else:
-        # set the state as false for the area we're looking at and each area after that
-        reached_name = False
-        for name in area_list:
-            if name == area_name:
-                reached_name = True
-            if reached_name:
-                state.tunic_area_combat_state[player][name] = CombatState.failed
+    # we want to skip the "none area"
+    if area_name in area_list:
+        if met_combat_reqs:
+            # set the state as true for each area until you get to the area we're looking at
+            for name in area_list:
+                state.tunic_area_combat_state[player][name] = CombatState.succeeded
+                if name == area_name:
+                    break
+        else:
+            # set the state as false for the area we're looking at and each area after that
+            reached_name = False
+            for name in area_list:
+                if name == area_name:
+                    reached_name = True
+                if reached_name:
+                    state.tunic_area_combat_state[player][name] = CombatState.failed
 
     return met_combat_reqs
 
