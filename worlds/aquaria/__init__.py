@@ -212,13 +212,17 @@ class AquariaWorld(World):
         """
         location_items = [-1] * len(Locations.location_table)
         for location in self.multiworld.get_filled_locations(self.player):
-            if (location.item.player != self.player and location.address != None):
-                location_items[location.address - self.base_id] = location.item.classification.as_flag()
+            if location.address != None:
+                if (location.item.player != self.player):
+                    location_items[location.address - self.base_id] = -(location.item.classification.as_flag() + 1)
+                else:
+                    location_items[location.address - self.base_id] = location.item.code - self.base_id
 
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
                 "secret_needed": self.options.objective.value > 0,
+                "locations_item_types": location_items,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
@@ -226,6 +230,5 @@ class AquariaWorld(World):
                 "infinite_hot_soup": bool(self.options.infinite_hot_soup.value),
                 "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
                 "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
-                "locations_item_types": location_items,
                 "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value
                 }
