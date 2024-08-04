@@ -1,0 +1,21 @@
+regions: dict[str, list] = {
+    "Menu": [],
+    "Levels with 1 Building": [],
+    "Levels with 2 Buildings": [],
+    "Levels with 3 Buildings": [],
+    "Levels with 4 Buildings": [],
+    "Levels with 5 Buildings": [],
+    "Upgrades with 1 Building": [],
+    "Upgrades with 2 Buildings": [],
+    "Upgrades with 3 Buildings": [],
+    "Upgrades with 4 Buildings": [],
+    "Upgrades with 5 Buildings": [],
+    "Cut Shape Achievements": [],
+    "Rotated Shape Achievements": [],
+    "Stacked Shape Achievements": [],
+    "Painted Shape Achievements": [],
+    "Stored Shape Achievements": [],
+    "Trashed Shape Achievements": [],
+    "Wiring Achievements": [],
+    "All Buildings Shapes": []
+}
