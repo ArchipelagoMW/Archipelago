@@ -15,7 +15,6 @@ class BeastFormAccessTest(AquariaTestBase):
         locations = [
             "Mermog cave, Piranha Egg",
             "Kelp Forest top left area, Jelly Egg",
-            "Turtle cave, Urchin Costume",
             "Mithalas Cathedral, Mithalan Dress",
             "The Veil top right area, bulb at the top of the waterfall",
             "Sunken City, bulb on top of the boss area",

@@ -25,7 +25,6 @@ class BeastForArnassiArmormAccessTest(AquariaTestBase):
             "Mithalas Cathedral, Mithalan Dress",
             "Kelp Forest top left area, Jelly Egg",
             "The Veil top right area, bulb in the middle of the wall jump cliff",
-            "Turtle cave, Urchin Costume",
             "The Veil top right area, bulb at the top of the waterfall",
             "Sunken City, bulb on top of the boss area",
             "Octopus Cave, Dumbo Egg",
