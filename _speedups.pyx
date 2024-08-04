@@ -287,7 +287,7 @@ cdef class LocationStore:
                     entry in self.entries[start:start + count] if
                     entry.location not in checked]
 
-    def get_remaining(self, state: State, team: int, slot: int) -> List[int]:
+    def get_remaining(self, state: State, team: int, slot: int) -> List[Tuple[int, int]]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start

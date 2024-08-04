@@ -991,7 +991,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[typing.Tuple[int, int]]:
     return ctx.locations.get_remaining(ctx.location_checks, team, slot)
 
 
