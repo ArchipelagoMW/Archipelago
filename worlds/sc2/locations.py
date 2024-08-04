@@ -290,12 +290,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HAVENS_FALL.mission_name, "Southwest Colony Base", SC2WOL_LOC_ID_OFFSET + 708, LocationType.CHALLENGE,
             logic.terran_respond_to_colony_infestations
         ),
-        make_location_data(SC2Mission.HAVENS_FALL.mission_name, "Southwest Gas Pickups", SC2WOL_LOC_ID_OFFSET + 709, LocationType.EXTRA,
-            lambda state: (
-                logic.terran_common_unit(state)
-                and logic.terran_competent_anti_air(state)
-                and logic.terran_defense_rating(state, True) >= 3)
-        ),
+        make_location_data(SC2Mission.HAVENS_FALL.mission_name, "Southwest Gas Pickups", SC2WOL_LOC_ID_OFFSET + 709, LocationType.EXTRA),
         make_location_data(SC2Mission.HAVENS_FALL.mission_name, "East Gas Pickups", SC2WOL_LOC_ID_OFFSET + 710, LocationType.EXTRA,
             lambda state: (
                 logic.terran_common_unit(state)
