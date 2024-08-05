@@ -21,7 +21,7 @@ def _has_hot_soup(state: CollectionState, player: int) -> bool:
 
 def _has_tongue_cleared(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the Body tongue cleared item"""
-    return state.has("Body tongue cleared", player)
+    return state.has("Body Tongue cleared", player)
 
 
 def _has_sun_crystal(state: CollectionState, player: int) -> bool:
@@ -36,7 +36,7 @@ def _has_li(state: CollectionState, player: int) -> bool:
 
 def _has_damaging_item(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
-    return state.has_any({"Energy form", "Nature form", "Beast form", "Li and Li song", "Baby Nautilus",
+    return state.has_any({"Energy Form", "Nature Form", "Beast Form", "Li and Li Song", "Baby Nautilus",
                           "Baby Piranha", "Baby Blaster"}, player)
 
 
