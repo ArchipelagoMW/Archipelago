@@ -448,7 +448,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Ziggurat Portal Room Entrance", region="Rooted Ziggurat Portal Room Entrance",
            destination="ziggurat2020_FTRoom", tag="_", direction=Direction.north),
     # only if fixed shop is on, removed otherwise
-    Portal(name="Ziggurat Lower Falling Entrance", region="Zig Skip Exit",
+    Portal(name="Ziggurat Lower Falling Entrance", region="Zig Skip Exit",  # not a real region
            destination="ziggurat2020_1", tag="_zig2_skip", direction=Direction.none),
 
     Portal(name="Ziggurat Portal Room Exit", region="Rooted Ziggurat Portal Room Exit",

@@ -159,6 +159,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     ladder_storage = world.options.ladder_storage.value
     entrance_layout = world.options.entrance_layout
     laurels_location = world.options.laurels_location
+    decoupled = world.options.decoupled
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
     waterfall_plando = False
@@ -171,6 +172,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         ladder_storage = seed_group["ladder_storage"]
         entrance_layout = seed_group["entrance_layout"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
+        decoupled = seed_group["decoupled"]
 
     logic_tricks: Tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
 
@@ -178,12 +180,13 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         has_laurels = False
 
-    # need to keep track of which scenes have shops, since you shouldn't have multiple shops connected to the same scene
-    shop_scenes: Set[str] = set()
+    # for the direction pairs option
+    two_plus_direction_tracker: Dict[int, int] = {direction: 0 for direction in range(8)}
+    dead_end_direction_tracker: Dict[int, int] = {direction: 0 for direction in range(8)}
+
     shop_count = 6
     if entrance_layout == EntranceLayout.option_fixed_shop:
         shop_count = 0
-        shop_scenes.add("Overworld Redux")
     else:
         # if fixed shop is off, remove this portal
         for portal in portal_map:
@@ -204,13 +207,17 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         dead_end_status = tunic_er_regions[portal.region].dead_end
         if dead_end_status == DeadEnd.free:
             two_plus.append(portal)
+            two_plus_direction_tracker[portal.direction] += 1
         elif dead_end_status == DeadEnd.all_cats:
             dead_ends.append(portal)
+            dead_end_direction_tracker[portal.direction] += 1
         elif dead_end_status == DeadEnd.restricted:
             if ice_grappling:
                 two_plus.append(portal)
+                two_plus_direction_tracker[portal.direction] += 1
             else:
                 dead_ends.append(portal)
+                dead_end_direction_tracker[portal.direction] += 1
         # these two get special handling
         elif dead_end_status == DeadEnd.special:
             if portal.region == "Secret Gathering Place":
@@ -218,7 +225,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     two_plus.append(portal)
                 else:
                     dead_ends.append(portal)
+                    dead_end_direction_tracker[portal.direction] += 1
             if portal.region == "Zig Skip Exit":
+                # direction isn't meaningful here since zig skip cannot be in direction pairs mode
                 if entrance_layout == EntranceLayout.option_fixed_shop:
                     two_plus.append(portal)
                 else:
@@ -258,15 +267,20 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
     non_dead_end_regions = set()
     for region_name, region_info in tunic_er_regions.items():
-        if not region_info.dead_end:
+        # this is not a real region, it is only there to be descriptive
+        if region_name == "Zig Skip Exit":
+            continue
+        # dead ends aren't real in decoupled
+        if decoupled:
+            non_dead_end_regions.add(region_name)
+        elif not region_info.dead_end:
             non_dead_end_regions.add(region_name)
         # if ice grappling to places is in logic, both places stop being dead ends
         elif region_info.dead_end == DeadEnd.restricted and ice_grappling:
             non_dead_end_regions.add(region_name)
         # secret gathering place and zig skip get weird, special handling
         elif region_info.dead_end == DeadEnd.special:
-            if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
-                    or (region_name == "Zig Skip Exit" and entrance_layout == EntranceLayout.option_fixed_shop):
+            if region_name == "Secret Gathering Place" and laurels_location == "10_fairies":
                 non_dead_end_regions.add(region_name)
 
     if plando_connections:
@@ -334,10 +348,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     # need to maintain an even number of portals total
                     if shop_count < 0:
                         shop_count += 2
-                    for p in portal_mapping:
-                        if p.name == p_entrance:
-                            shop_scenes.add(p.scene())
-                            break
                 # and if it's neither shop nor dead end, it just isn't correct
                 else:
                     if not portal2:
@@ -386,11 +396,12 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                             f"Did {player_name} plando the Windmill Shop entrance?")
 
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                         destination="Previous Region", tag="_")
+                         destination="Previous Region", tag="_", direction=Direction.south)
         create_shop_region(world, regions)
 
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
+        two_plus_direction_tracker[Direction.north] -= 1
 
     random_object: Random = world.random
     # use the seed given in the options to shuffle the portals
@@ -463,15 +474,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             shop_count = 0
     
     for _ in range(shop_count):
-        portal1 = None
-        for portal in two_plus:
-            if portal.scene() not in shop_scenes:
-                shop_scenes.add(portal.scene())
-                portal1 = portal
-                two_plus.remove(portal)
-                break
-        if portal1 is None:
-            raise Exception("Too many shops in the pool, or something else went wrong.")
+        portal1 = two_plus.pop()
 
         # 6 of the shops have south exits, 2 of them have west exits
         shop_dir = Direction.south
