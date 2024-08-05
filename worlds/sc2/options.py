@@ -1098,10 +1098,10 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
         while len(swaps) > 0:
             curr = swaps[0]
             variants = list([mission for mission in swaps if mission.map_file == curr.map_file])
+            swaps = [mission for mission in swaps if mission not in variants]
             if len(variants) > 1:
                 variants.pop(world.random.randint(0, len(variants)-1))
                 excluded_missions = excluded_missions.union(variants)
-            swaps = [mission for mission in swaps if mission not in variants]
 
     return excluded_missions
 
