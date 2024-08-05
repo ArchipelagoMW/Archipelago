@@ -903,6 +903,23 @@ class SpeedrunLocations(LocationInclusion):
     display_name = "Speedrun Locations"
 
 
+class PreventativeLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for overcoming preventative challenges.
+    These challenges are about winning or achieving something while preventing something else from happening,
+    such as beating Evacuation without losing a colonist.
+    Enable these locations if you want to be rewarded for achieving a higher standard on some locations.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Preventative Locations"
+
+
 class MineralsPerItem(Range):
     """
     Configures how many minerals are given per resource item.
@@ -995,6 +1012,7 @@ class Starcraft2Options(PerGameCommonOptions):
     challenge_locations: ChallengeLocations
     mastery_locations: MasteryLocations
     speedrun_locations: SpeedrunLocations
+    preventative_locations: PreventativeLocations
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem

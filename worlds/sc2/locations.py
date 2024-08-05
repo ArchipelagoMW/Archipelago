@@ -31,7 +31,6 @@ class LocationType(enum.IntEnum):
     EXTRA = 2  # Additional locations based on mission progression, collecting in-mission rewards, etc. that do not significantly increase the challenge.
     CHALLENGE = 3  # Challenging objectives, often harder than just completing a mission, and often associated with Achievements
     MASTERY = 4  # Extremely challenging objectives often associated with Masteries and Feats of Strength in the original campaign
-    SPEEDRUN = 5  # Objectives based around beating objectives within a time-limit
 
 
 class LocationFlag(enum.IntFlag):
@@ -48,7 +47,7 @@ class LocationData(NamedTuple):
     code: int
     type: LocationType
     rule: Callable[['CollectionState'], bool] = Location.access_rule
-    tags: LocationFlag = LocationFlag.NONE
+    flags: LocationFlag = LocationFlag.NONE
 
 
 def make_location_data(
@@ -73,13 +72,26 @@ def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationTy
         ("extra_locations", LocationType.EXTRA),
         ("challenge_locations", LocationType.CHALLENGE),
         ("mastery_locations", LocationType.MASTERY),
-        ("speedrun_locations", LocationType.SPEEDRUN),
     ]
     excluded_location_types = set()
     for option_name, location_type in exclusion_options:
         if get_option_value(world, option_name) is inclusion_type:
             excluded_location_types.add(location_type)
     return excluded_location_types
+
+
+def get_location_flags(world: 'SC2World', inclusion_type: int) -> LocationFlag:
+    """
+    :param world: The starcraft 2 world object
+    :param inclusion_type: Level of inclusion to check for
+    :return: A list of location types that match the inclusion type
+    """
+    matching_location_flags = LocationFlag.NONE
+    if world.options.speedrun_locations.value == inclusion_type:
+        matching_location_flags |= LocationFlag.SPEEDRUN
+    if world.options.preventative_locations.value == inclusion_type:
+        matching_location_flags |= LocationFlag.PREVENTATIVE
+    return matching_location_flags
 
 
 def get_plando_locations(world: World) -> List[str]:
@@ -931,8 +943,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Gas Turrets", SC2HOTS_LOC_ID_OFFSET + 107, LocationType.EXTRA,
             lambda state: adv_tactics or logic.zerg_common_unit(state)
         ),
-        make_location_data(SC2Mission.LAB_RAT.mission_name, "Win In Under 10 Minutes", SC2HOTS_LOC_ID_OFFSET + 108, LocationType.SPEEDRUN,
-            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        make_location_data(SC2Mission.LAB_RAT.mission_name, "Win In Under 10 Minutes", SC2HOTS_LOC_ID_OFFSET + 108, LocationType.CHALLENGE,
+            lambda state: adv_tactics or logic.zerg_common_unit(state),
+            flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
             lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted
@@ -971,11 +984,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 logic.zerg_common_unit(state)
                 and logic.zerg_basic_anti_air(state))
         ),
-        make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Kill All Before Reinforcements", SC2HOTS_LOC_ID_OFFSET + 305, LocationType.SPEEDRUN,
+        make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Kill All Before Reinforcements", SC2HOTS_LOC_ID_OFFSET + 305, LocationType.MASTERY,
             lambda state: (
                 logic.zerg_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
-                and (logic.basic_kerrigan(state) or kerriganless))
+                and (logic.basic_kerrigan(state) or kerriganless)),
+            flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
             lambda state: (
@@ -1513,12 +1527,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Odin", SC2HOTS_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
             logic.the_reckoning_requirement
         ),
-        make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005,
-            LocationType.SPEEDRUN,
+        make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005, LocationType.MASTERY,
             lambda state: (
                 logic.the_reckoning_requirement(state)
                 and state.has_any({item_names.INFESTOR, item_names.DEFILER}, player)
-                and (not logic.take_over_ai_allies or logic.terran_base_trasher(state)))
+                and (not logic.take_over_ai_allies or logic.terran_base_trasher(state))),
+            flags=LocationFlag.SPEEDRUN
         ),
 
         # LotV Prologue
@@ -2685,12 +2699,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
     # Filtering out excluded locations
     if world is not None:
         excluded_location_types = get_location_types(world, LocationInclusion.option_disabled)
+        excluded_location_flags = get_location_flags(world, LocationInclusion.option_disabled)
         plando_locations = get_plando_locations(world)
         exclude_locations = world.options.exclude_locations.value
-        location_table = [location for location in location_table
-                          if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
-                          and location.type not in excluded_location_types
-                          or location.name in plando_locations]
+        location_table = [
+            location for location in location_table
+            if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
+                and location.type not in excluded_location_types
+                and not (location.flags & excluded_location_flags)
+            or location.name in plando_locations
+        ]
     for i, location_data in enumerate(location_table):
         # Removing all item-based logic on No Logic
         if logic_level == RequiredTactics.option_no_logic:
@@ -2703,4 +2721,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             )
     return tuple(location_table + beat_events)
 
-lookup_location_id_to_type = {loc.code: loc.type for loc in get_locations(None) if loc.code is not None}
+
+DEFAULT_LOCATION_LIST = get_locations(None)
+"""A location table with `None` as the input world; does not contain logic rules"""
+
+lookup_location_id_to_type = {loc.code: loc.type for loc in DEFAULT_LOCATION_LIST if loc.code is not None}
+lookup_location_id_to_flags = {loc.code: loc.flags for loc in DEFAULT_LOCATION_LIST if loc.code is not None}

@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import item_groups, item_names, items, mission_groups, mission_tables, options
+from .. import item_groups, item_names, items, mission_groups, mission_tables, options, locations
 from .. import get_all_missions
 
 
@@ -495,3 +495,25 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertTrue(itempool)
         self.assertFalse(present_war_council_items, f'Found war council upgrades when nerf_unit_baselines is false: {present_war_council_items}')
         self.assertEqual(war_council_item_names, starting_war_council_items)
+
+    def test_disabling_speedrun_locations_removes_them_from_the_pool(self) -> None:
+        world_options = {
+            'enable_wol_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': True,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'mission_order': options.MissionOrder.option_grid,
+            'speedrun_locations': options.SpeedrunLocations.option_disabled,
+            'preventative_locations': options.PreventativeLocations.option_resources,
+        }
+
+        self.generate_world(world_options)
+        world_regions = list(self.multiworld.regions)
+        world_location_names = [location.name for region in world_regions for location in region.locations]
+        all_location_names = [location_data.name for location_data in locations.DEFAULT_LOCATION_LIST]
+        speedrun_location_name = f"{mission_tables.SC2Mission.LAB_RAT.mission_name}: Win In Under 10 Minutes"
+        self.assertIn(speedrun_location_name, all_location_names)
+        self.assertNotIn(speedrun_location_name, world_location_names)
