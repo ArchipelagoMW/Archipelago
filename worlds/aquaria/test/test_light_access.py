@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
 
 
 class LightAccessTest(AquariaTestBase):
@@ -66,5 +67,5 @@ class LightAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete",
         ]
-        items = [["Sun Form", "Baby Dumbo", "Has Sun Crystal"]]
+        items = [[ItemNames.SUN_FORM, ItemNames.BABY_DUMBO, ItemNames.HAS_SUN_CRYSTAL]]
         self.assertAccessDependency(locations, items)

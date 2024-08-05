@@ -7,7 +7,7 @@ Description: Main module for Aquaria game multiworld randomizer
 from typing import List, Dict, ClassVar, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification
-from .Items import item_table, AquariaItem, ItemType, ItemGroup
+from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames
 from .Locations import location_table
 from .Options import AquariaOptions
 from .Regions import AquariaRegions
@@ -70,10 +70,10 @@ class AquariaWorld(World):
     "The name and associated ID of each item of the world"
 
     item_name_groups = {
-        "Damage": {"Energy form", "Nature form", "Beast form",
-                   "Li and Li song", "Baby Nautilus", "Baby Piranha",
-                   "Baby Blaster"},
-        "Light": {"Sun form", "Baby Dumbo"}
+        "Damage": {ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM,
+                   ItemNames.LI_AND_LI_SONG, ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA,
+                   ItemNames.BABY_BLASTER},
+        "Light": {ItemNames.SUN_FORM, ItemNames.BABY_DUMBO}
     }
     """Grouping item make it easier to find them"""
 
@@ -152,20 +152,20 @@ class AquariaWorld(World):
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
         if self.options.turtle_randomizer.value > 0:
             if self.options.turtle_randomizer.value == 2:
-                self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, "Final Boss area, Transturtle", precollected)
         else:
-            self.__pre_fill_item("Transturtle Veil top left", "The Veil top left area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Veil top right", "The Veil top right area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Open Waters top right", "Open Waters top right area, Transturtle",
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, "The Veil top left area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, "The Veil top right area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS, "Open Waters top right area, Transturtle",
                                  precollected)
-            self.__pre_fill_item("Transturtle Kelp Forest bottom left", "Kelp Forest bottom left area, Transturtle",
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST, "Kelp Forest bottom left area, Transturtle",
                                  precollected)
-            self.__pre_fill_item("Transturtle Home Waters", "Home Waters, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, "Home Waters, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, "Abyss right area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, "Final Boss area, Transturtle", precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected)
-            self.__pre_fill_item("Transturtle Arnassi Ruins", "Simon Says area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, "Arnassi Ruins, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, "Simon Says area, Transturtle", precollected)
         for name, data in item_table.items():
             if name not in self.exclude:
                 for i in range(data.count):
@@ -178,12 +178,12 @@ class AquariaWorld(World):
         """
 
         if self.options.early_energy_form:
-            self.multiworld.early_items[self.player]["Energy form"] = 1
+            self.multiworld.early_items[self.player][ItemNames.ENERGY_FORM] = 1
         if self.options.early_bind_song:
-            self.multiworld.early_items[self.player]["Bind song"] = 1
+            self.multiworld.early_items[self.player][ItemNames.BIND_SONG] = 1
         self.regions.adjusting_rules(self.options)
         self.multiworld.completion_condition[self.player] = lambda \
-            state: state.has("Victory", self.player)
+            state: state.has(ItemNames.VICTORY, self.player)
 
     def generate_basic(self) -> None:
         """

@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
 
 
 class LiAccessTest(AquariaTestBase):
@@ -41,5 +42,5 @@ class LiAccessTest(AquariaTestBase):
             "Sunken City cleared",
             "Objective complete"
         ]
-        items = [["Li and Li Song", "Body Tongue cleared"]]
+        items = [[ItemNames.LI_AND_LI_SONG, ItemNames.BODY_TONGUE_CLEARED]]
         self.assertAccessDependency(locations, items)

@@ -6,7 +6,7 @@ Description: Used to manage Regions in the Aquaria game multiworld randomizer
 
 from typing import Dict, Optional
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, CollectionState
-from .Items import AquariaItem
+from .Items import AquariaItem, ItemNames
 from .Locations import AquariaLocations, AquariaLocation
 from .Options import AquariaOptions
 from worlds.generic.Rules import add_rule, set_rule
@@ -16,28 +16,28 @@ from worlds.generic.Rules import add_rule, set_rule
 
 def _has_hot_soup(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the hotsoup item"""
-    return state.has_any({"Hot Soup", "Hot Soup x 2"}, player)
+    return state.has_any({ItemNames.HOT_SOUP, ItemNames.HOT_SOUP_X_2}, player)
 
 
 def _has_tongue_cleared(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the Body tongue cleared item"""
-    return state.has("Body Tongue cleared", player)
+    return state.has(ItemNames.BODY_TONGUE_CLEARED, player)
 
 
 def _has_sun_crystal(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the Sun crystal item"""
-    return state.has("Has Sun Crystal", player) and _has_bind_song(state, player)
+    return state.has(ItemNames.HAS_SUN_CRYSTAL, player) and _has_bind_song(state, player)
 
 
 def _has_li(state: CollectionState, player: int) -> bool:
     """`player` in `state` has Li in its team"""
-    return state.has("Li and Li Song", player)
+    return state.has(ItemNames.LI_AND_LI_SONG, player)
 
 
 def _has_damaging_item(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
-    return state.has_any({"Energy Form", "Nature Form", "Beast Form", "Li and Li Song", "Baby Nautilus",
-                          "Baby Piranha", "Baby Blaster"}, player)
+    return state.has_any({ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM, ItemNames.LI_AND_LI_SONG,
+                          ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA, ItemNames.BABY_BLASTER}, player)
 
 
 def _has_energy_attack_item(state: CollectionState, player: int) -> bool:
@@ -47,22 +47,22 @@ def _has_energy_attack_item(state: CollectionState, player: int) -> bool:
 
 def _has_shield_song(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
-    return state.has("Shield Song", player)
+    return state.has(ItemNames.SHIELD_SONG, player)
 
 
 def _has_bind_song(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the bind song item"""
-    return state.has("Bind Song", player)
+    return state.has(ItemNames.BIND_SONG, player)
 
 
 def _has_energy_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the energy form item"""
-    return state.has("Energy Form", player)
+    return state.has(ItemNames.ENERGY_FORM, player)
 
 
 def _has_beast_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the beast form item"""
-    return state.has("Beast Form", player)
+    return state.has(ItemNames.BEAST_FORM, player)
 
 
 def _has_beast_and_soup_form(state: CollectionState, player: int) -> bool:
@@ -72,51 +72,57 @@ def _has_beast_and_soup_form(state: CollectionState, player: int) -> bool:
 
 def _has_beast_form_or_arnassi_armor(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the beast form item"""
-    return _has_beast_form(state, player) or state.has("Arnassi Armor", player)
+    return _has_beast_form(state, player) or state.has(ItemNames.ARNASSI_ARMOR, player)
 
 
 def _has_nature_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the nature form item"""
-    return state.has("Nature Form", player)
+    return state.has(ItemNames.NATURE_FORM, player)
 
 
 def _has_sun_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the sun form item"""
-    return state.has("Sun Form", player)
+    return state.has(ItemNames.SUN_FORM, player)
 
 
 def _has_light(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the light item"""
-    return state.has("Baby Dumbo", player) or _has_sun_form(state, player)
+    return state.has(ItemNames.BABY_DUMBO, player) or _has_sun_form(state, player)
 
 
 def _has_dual_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the dual form item"""
-    return _has_li(state, player) and state.has("Dual Form", player)
+    return _has_li(state, player) and state.has(ItemNames.DUAL_FORM, player)
 
 
 def _has_fish_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the fish form item"""
-    return state.has("Fish Form", player)
+    return state.has(ItemNames.FISH_FORM, player)
 
 
 def _has_spirit_form(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the spirit form item"""
-    return state.has("Spirit Form", player)
+    return state.has(ItemNames.SPIRIT_FORM, player)
 
 
 def _has_big_bosses(state: CollectionState, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
-    return state.has_all({"Fallen God beated", "Mithalan God beated", "Drunian God beated",
-                         "Lumerean God beated", "The Golem beated"}, player)
+    return state.has_all({ItemNames.FALLEN_GOD_BEATED, ItemNames.MITHALAN_GOD_BEATED, ItemNames.DRUNIAN_GOD_BEATED,
+                          ItemNames.LUMEREAN_GOD_BEATED, ItemNames.THE_GOLEM_BEATED}, player)
 
 
 def _has_mini_bosses(state: CollectionState, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
-    return state.has_all({"Nautilus Prime beated", "Blaster Peg Prime beated", "Mergog beated",
-                          "Mithalan priests beated", "Octopus Prime beated", "Crabbius Maximus beated",
-                          "Mantis Shrimp Prime beated", "King Jellyfish God Prime beated"}, player)
+    return state.has_all({ItemNames.NAUTILUS_PRIME_BEATED, ItemNames.BLASTER_PEG_PRIME_BEATED, ItemNames.MERGOG_BEATED,
+                          ItemNames.MITHALAN_PRIESTS_BEATED, ItemNames.OCTOPUS_PRIME_BEATED,
+                          ItemNames.CRABBIUS_MAXIMUS_BEATED, ItemNames.MANTIS_SHRIMP_PRIME_BEATED,
+                          ItemNames.KING_JELLYFISH_GOD_PRIME_BEATED}, player)
 
+
+
+def _has_secrets(state: CollectionState, player: int) -> bool:
+    return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
+                          ItemNames.THIRD_SECRET_OBTAINED}, player)
 
 class AquariaRegions:
     """
@@ -510,7 +516,7 @@ class AquariaRegions:
         self.__connect_regions("Verse Cave left area", "Verse Cave right area",
                                self.verse_cave_l, self.verse_cave_r)
         self.__connect_regions("Verse Cave", "Home Waters", self.verse_cave_l, self.home_water)
-        self.__connect_regions("Home Waters", "Haija's home", self.home_water, self.naija_home)
+        self.__connect_regions("Home Waters", "Naija's home", self.home_water, self.naija_home)
         self.__connect_regions("Home Waters", "Song Cave", self.home_water, self.song_cave)
         self.__connect_regions("Home Waters", "Home Waters behind rocks", self.home_water,
                                self.home_water_behind_rocks, lambda state: _has_bind_song(state, self.player))
@@ -929,27 +935,27 @@ class AquariaRegions:
 
     def _connect_transturtle_to_other(self, item: str, region: Region) -> None:
         """Connect a single transturtle to all others"""
-        self.__connect_transturtle(item, "Transturtle Veil top left", region, self.veil_tl)
-        self.__connect_transturtle(item, "Transturtle Veil top right", region, self.veil_tr_l)
-        self.__connect_transturtle(item, "Transturtle Open Waters top right", region, self.openwater_tr_turtle)
-        self.__connect_transturtle(item, "Transturtle Kelp Forest bottom left", region, self.forest_bl)
-        self.__connect_transturtle(item, "Transturtle Home Waters", region, self.home_water_transturtle)
-        self.__connect_transturtle(item, "Transturtle Abyss right", region, self.abyss_r_transturtle)
-        self.__connect_transturtle(item, "Transturtle Final Boss", region, self.final_boss_tube)
-        self.__connect_transturtle(item, "Transturtle Simon Says", region, self.simon)
-        self.__connect_transturtle(item, "Transturtle Arnassi Ruins", region, self.arnassi_cave_transturtle)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, region, self.veil_tl)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, region, self.veil_tr_l)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_OPEN_WATERS, region, self.openwater_tr_turtle)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_KELP_FOREST, region, self.forest_bl)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_HOME_WATERS, region, self.home_water_transturtle)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_ABYSS, region, self.abyss_r_transturtle)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_BODY, region, self.final_boss_tube)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_SIMON_SAYS, region, self.simon)
+        self.__connect_transturtle(item, ItemNames.TRANSTURTLE_ARNASSI_RUINS, region, self.arnassi_cave_transturtle)
 
     def __connect_transturtles(self) -> None:
         """Connect every transturtle with others"""
-        self._connect_transturtle_to_other("Transturtle Veil top left", self.veil_tl)
-        self._connect_transturtle_to_other("Transturtle Veil top right", self.veil_tr_l)
-        self._connect_transturtle_to_other("Transturtle Open Waters top right", self.openwater_tr_turtle)
-        self._connect_transturtle_to_other("Transturtle Kelp Forest bottom left", self.forest_bl)
-        self._connect_transturtle_to_other("Transturtle Home Waters", self.home_water_transturtle)
-        self._connect_transturtle_to_other("Transturtle Abyss right", self.abyss_r_transturtle)
-        self._connect_transturtle_to_other("Transturtle Final Boss", self.final_boss_tube)
-        self._connect_transturtle_to_other("Transturtle Simon Says", self.simon)
-        self._connect_transturtle_to_other("Transturtle Arnassi Ruins", self.arnassi_cave_transturtle)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, self.veil_tl)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, self.veil_tr_l)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_OPEN_WATERS, self.openwater_tr_turtle)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_KELP_FOREST, self.forest_bl)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_HOME_WATERS, self.home_water_transturtle)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_ABYSS, self.abyss_r_transturtle)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_BODY, self.final_boss_tube)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_SIMON_SAYS, self.simon)
+        self._connect_transturtle_to_other(ItemNames.TRANSTURTLE_ARNASSI_RUINS, self.arnassi_cave_transturtle)
 
     def connect_regions(self) -> None:
         """
@@ -985,19 +991,19 @@ class AquariaRegions:
         """
         self.__add_event_location(self.energy_temple_boss,
                                   "Beating Fallen God",
-                                  "Fallen God beated")
+                                  ItemNames.FALLEN_GOD_BEATED)
         self.__add_event_location(self.cathedral_boss_l,
                                   "Beating Mithalan God",
-                                  "Mithalan God beated")
+                                  ItemNames.MITHALAN_GOD_BEATED)
         self.__add_event_location(self.forest_boss,
                                   "Beating Drunian God",
-                                  "Drunian God beated")
+                                  ItemNames.DRUNIAN_GOD_BEATED)
         self.__add_event_location(self.sun_temple_boss,
                                   "Beating Lumerean God",
-                                  "Lumerean God beated")
+                                  ItemNames.LUMEREAN_GOD_BEATED)
         self.__add_event_location(self.sunken_city_boss,
                                   "Beating the Golem",
-                                  "The Golem beated")
+                                  ItemNames.THE_GOLEM_BEATED)
 
     def __add_event_mini_bosses(self) -> None:
         """
@@ -1006,28 +1012,28 @@ class AquariaRegions:
         """
         self.__add_event_location(self.home_water_nautilus,
                                   "Beating Nautilus Prime",
-                                  "Nautilus Prime beated")
+                                  ItemNames.NAUTILUS_PRIME_BEATED)
         self.__add_event_location(self.energy_temple_blaster_room,
                                   "Beating Blaster Peg Prime",
-                                  "Blaster Peg Prime beated")
+                                  ItemNames.BLASTER_PEG_PRIME_BEATED)
         self.__add_event_location(self.mermog_boss,
                                   "Beating Mergog",
-                                  "Mergog beated")
+                                  ItemNames.MERGOG_BEATED)
         self.__add_event_location(self.mithalas_castle_tube,
                                   "Beating Mithalan priests",
-                                  "Mithalan priests beated")
+                                  ItemNames.MITHALAN_PRIESTS_BEATED)
         self.__add_event_location(self.octo_cave_t,
                                   "Beating Octopus Prime",
-                                  "Octopus Prime beated")
+                                  ItemNames.OCTOPUS_PRIME_BEATED)
         self.__add_event_location(self.arnassi_crab_boss,
                                   "Beating Crabbius Maximus",
-                                  "Crabbius Maximus beated")
+                                  ItemNames.CRABBIUS_MAXIMUS_BEATED)
         self.__add_event_location(self.bubble_cave_boss,
                                   "Beating Mantis Shrimp Prime",
-                                  "Mantis Shrimp Prime beated")
+                                  ItemNames.MANTIS_SHRIMP_PRIME_BEATED)
         self.__add_event_location(self.king_jellyfish_cave,
                                   "Beating King Jellyfish God Prime",
-                                  "King Jellyfish God Prime beated")
+                                  ItemNames.KING_JELLYFISH_GOD_PRIME_BEATED)
 
     def __add_event_secrets(self) -> None:
         """
@@ -1035,13 +1041,13 @@ class AquariaRegions:
         """
         self.__add_event_location(self.first_secret,  # Doit ajouter une région pour le "First Secret"
                                   "First Secret",
-                                  "First Secret obtained")
+                                  ItemNames.FIRST_SECRET_OBTAINED)
         self.__add_event_location(self.mithalas_city,
                                   "Second Secret",
-                                  "Second Secret obtained")
+                                  ItemNames.SECOND_SECRET_OBTAINED)
         self.__add_event_location(self.sun_temple_l,
                                   "Third Secret",
-                                  "Third Secret obtained")
+                                  ItemNames.THIRD_SECRET_OBTAINED)
 
     def add_event_locations(self) -> None:
         """
@@ -1052,12 +1058,12 @@ class AquariaRegions:
         self.__add_event_secrets()
         self.__add_event_location(self.sunken_city_boss,
                                   "Sunken City cleared",
-                                  "Body Tongue cleared")
+                                  ItemNames.BODY_TONGUE_CLEARED)
         self.__add_event_location(self.sun_temple_r,
                                   "Sun Crystal",
-                                  "Has Sun Crystal")
+                                  ItemNames.HAS_SUN_CRYSTAL)
         self.__add_event_location(self.final_boss_end, "Objective complete",
-                                  "Victory")
+                                  ItemNames.VICTORY)
 
     def __adjusting_soup_rules(self) -> None:
         """
@@ -1067,10 +1073,10 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has("Lumerean God beated", self.player))
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has("Lumerean God beated", self.player))
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
         add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
 

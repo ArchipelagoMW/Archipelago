@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
 
 
 class LiAccessTest(AquariaTestBase):
@@ -22,5 +23,5 @@ class LiAccessTest(AquariaTestBase):
             "Final Boss area, bulb in the boss third form room",
             "Objective complete"
         ]
-        items = [["Dual Form"]]
+        items = [[ItemNames.DUAL_FORM]]
         self.assertAccessDependency(locations, items)

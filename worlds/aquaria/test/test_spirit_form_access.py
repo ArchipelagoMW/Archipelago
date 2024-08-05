@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
 
 
 class SpiritFormAccessTest(AquariaTestBase):
@@ -31,5 +32,5 @@ class SpiritFormAccessTest(AquariaTestBase):
             "Beating Mantis Shrimp Prime",
             "First Secret",
         ]
-        items = [["Spirit Form"]]
+        items = [[ItemNames.SPIRIT_FORM]]
         self.assertAccessDependency(locations, items)

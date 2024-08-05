@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
 
 
 class EnergyFormDualFormAccessTest(AquariaTestBase):
@@ -74,5 +75,5 @@ class EnergyFormDualFormAccessTest(AquariaTestBase):
             "First Secret",
             "Objective complete"
         ]
-        items = [["Energy Form", "Dual Form", "Li and Li Song", "Body Tongue cleared"]]
+        items = [[ItemNames.ENERGY_FORM, ItemNames.DUAL_FORM, ItemNames.LI_AND_LI_SONG, ItemNames.BODY_TONGUE_CLEARED]]
         self.assertAccessDependency(locations, items)

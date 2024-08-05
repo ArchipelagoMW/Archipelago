@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
 
 
 class BeastFormAccessTest(AquariaTestBase):
@@ -24,5 +25,5 @@ class BeastFormAccessTest(AquariaTestBase):
             "Beating Octopus Prime",
             "Sunken City cleared",
         ]
-        items = [["Beast Form"]]
+        items = [[ItemNames.BEAST_FORM]]
         self.assertAccessDependency(locations, items)

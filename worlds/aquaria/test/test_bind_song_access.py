@@ -6,6 +6,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase, after_home_water_locations
+from ..Items import ItemNames
 
 
 class BindSongAccessTest(AquariaTestBase):
@@ -32,5 +33,5 @@ class BindSongAccessTest(AquariaTestBase):
             "Energy Temple blaster room, Blaster Egg",
             *after_home_water_locations
         ]
-        items = [["Bind Song"]]
+        items = [[ItemNames.BIND_SONG]]
         self.assertAccessDependency(locations, items)

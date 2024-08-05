@@ -7,6 +7,7 @@ Description: Unit test used to test accessibility of locations with and without 
 
 from . import AquariaTestBase
 from .test_bind_song_access import after_home_water_locations
+from ..Items import ItemNames
 
 
 class BindSongOptionAccessTest(AquariaTestBase):
@@ -38,5 +39,5 @@ class BindSongOptionAccessTest(AquariaTestBase):
             "Energy Temple blaster room, Blaster Egg",
             *after_home_water_locations
         ]
-        items = [["Bind Song"]]
+        items = [[ItemNames.BIND_SONG]]
         self.assertAccessDependency(locations, items)
