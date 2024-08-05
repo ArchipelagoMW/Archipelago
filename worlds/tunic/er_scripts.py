@@ -157,7 +157,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     laurels_zips = world.options.laurels_zips.value
     ice_grappling = world.options.ice_grappling.value
     ladder_storage = world.options.ladder_storage.value
-    fixed_shop = world.options.fixed_shop
+    entrance_layout = world.options.entrance_layout
     laurels_location = world.options.laurels_location
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
@@ -169,7 +169,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         laurels_zips = seed_group["laurels_zips"]
         ice_grappling = seed_group["ice_grappling"]
         ladder_storage = seed_group["ladder_storage"]
-        fixed_shop = seed_group["fixed_shop"]
+        entrance_layout = seed_group["entrance_layout"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
 
     logic_tricks: Tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
@@ -181,7 +181,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     # need to keep track of which scenes have shops, since you shouldn't have multiple shops connected to the same scene
     shop_scenes: Set[str] = set()
     shop_count = 6
-    if fixed_shop:
+    if entrance_layout == EntranceLayout.option_fixed_shop:
         shop_count = 0
         shop_scenes.add("Overworld Redux")
     else:
@@ -190,6 +190,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             if portal.region == "Zig Skip Exit":
                 portal_map.remove(portal)
                 break
+        # need 8 shops with direction pairs or there won't be a valid set of pairs
+        if entrance_layout == EntranceLayout.option_direction_pairs:
+            shop_count = 8
 
     # If using Universal Tracker, restore portal_map. Could be cleaner, but it does not matter for UT even a little bit
     if hasattr(world.multiworld, "re_gen_passthrough"):
@@ -216,7 +219,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 else:
                     dead_ends.append(portal)
             if portal.region == "Zig Skip Exit":
-                if fixed_shop:
+                if entrance_layout == EntranceLayout.option_fixed_shop:
                     two_plus.append(portal)
                 else:
                     dead_ends.append(portal)
@@ -263,7 +266,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # secret gathering place and zig skip get weird, special handling
         elif region_info.dead_end == DeadEnd.special:
             if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
-                    or (region_name == "Zig Skip Exit" and fixed_shop):
+                    or (region_name == "Zig Skip Exit" and entrance_layout == EntranceLayout.option_fixed_shop):
                 non_dead_end_regions.add(region_name)
 
     if plando_connections:
@@ -319,8 +322,13 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         break
                 # if it's not a dead end, it might be a shop
                 if p_exit == "Shop Portal":
+                    # 6 of the shops have south exits, 2 of them have west exits
+                    shop_dir = Direction.south
+                    if world.shop_num > 6:
+                        shop_dir = Direction.west
+
                     portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                                     destination="Previous Region", tag="_")
+                                     destination="Previous Region", tag="_", direction=shop_dir)
                     create_shop_region(world, regions)
                     shop_count -= 1
                     # need to maintain an even number of portals total
@@ -367,15 +375,15 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
-    if fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
+    if entrance_layout == EntranceLayout.option_fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
                 portal1 = portal
                 break
         if not portal1:
-            raise Exception(f"Failed to do Fixed Shop option. "
-                            f"Did {player_name} plando connection the Windmill Shop entrance?")
+            raise Exception(f"Failed to do Fixed Shop option for Entrance Layout. "
+                            f"Did {player_name} plando the Windmill Shop entrance?")
 
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                          destination="Previous Region", tag="_")
@@ -454,7 +462,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if "TUNIC" in world.multiworld.re_gen_passthrough:
             shop_count = 0
     
-    for i in range(shop_count):
+    for _ in range(shop_count):
         portal1 = None
         for portal in two_plus:
             if portal.scene() not in shop_scenes:
@@ -464,8 +472,13 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
+
+        # 6 of the shops have south exits, 2 of them have west exits
+        shop_dir = Direction.south
+        if world.shop_num > 6:
+            shop_dir = Direction.west
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                         destination="Previous Region", tag="_")
+                         destination="Previous Region", tag="_", direction=shop_dir)
         create_shop_region(world, regions)
         
         portal_pairs[portal1] = portal2
@@ -546,3 +559,53 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic)
 
     return connected_regions
+
+
+# which directions are opposites
+direction_pairs: Dict[int, int] = {
+    Direction.north: Direction.south,
+    Direction.south: Direction.north,
+    Direction.east: Direction.west,
+    Direction.west: Direction.east,
+    Direction.ladder_up: Direction.ladder_down,
+    Direction.ladder_down: Direction.ladder_up,
+    Direction.floor: Direction.floor,
+}
+
+
+# verify that two portals are in compatible directions
+def verify_direction_pair(portal1: Portal, portal2: Portal) -> bool:
+    if portal1.direction == direction_pairs[portal2.direction]:
+        return True
+    elif portal1.name.startswith("Shop"):
+        if portal2.direction in [Direction.north, Direction.east]:
+            return True
+    elif portal2.name.startswith("Shop"):
+        if portal1.direction in [Direction.north, Direction.east]:
+            return True
+    else:
+        return False
+
+
+# verify that two plando'd portals are in compatible directions
+def verify_plando_directions(connection: PlandoConnection) -> bool:
+    entrance_portal = None
+    exit_portal = None
+    for portal in portal_mapping:
+        if connection.entrance == portal.name:
+            entrance_portal = portal
+        if connection.exit == portal.name:
+            exit_portal = portal
+    if entrance_portal and exit_portal:
+        if entrance_portal.direction == direction_pairs[exit_portal.direction]:
+            return True
+    # this is two shop portals, they can never pair directions
+    elif not entrance_portal and not exit_portal:
+        return False
+    # if one of them is none, it's a shop, which has two possible directions
+    elif not entrance_portal:
+        if exit_portal.direction in [Direction.north, Direction.east]:
+            return True
+    elif not exit_portal:
+        if entrance_portal.direction in [Direction.north, Direction.east]:
+            return True
