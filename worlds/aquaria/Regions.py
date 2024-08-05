@@ -118,6 +118,10 @@ def _has_mini_bosses(state: CollectionState, player: int) -> bool:
                           "Mantis Shrimp Prime beated", "King Jellyfish God Prime beated"}, player)
 
 
+def _has_secrets(state: CollectionState, player: int) -> bool:
+    return state.has_all({"First secret obtained", "Second secret obtained", "Third secret obtained"}, player)
+
+
 class AquariaRegions:
     """
     Class used to create regions of the Aquaria game
