@@ -54,27 +54,29 @@ location_description = {  # TODO
     "GPS": "TODO"
 }
 
+translate: list[tuple[int, str]] = [
+    (1000, "M"),
+    (900, "CM"),
+    (500, "D"),
+    (400, "CD"),
+    (100, "C"),
+    (90, "XC"),
+    (50, "L"),
+    (40, "XL"),
+    (10, "X"),
+    (9, "IX"),
+    (5, "V"),
+    (4, "IV"),
+    (1, "I")
+]
+
 
 def roman(num: int) -> str:
-    translate: set[tuple[int, str]] = {
-        (1000, "M"),
-        (900, "CM"),
-        (500, "D"),
-        (400, "CD"),
-        (100, "C"),
-        (90, "XC"),
-        (50, "L"),
-        (40, "XL"),
-        (10, "X"),
-        (9, "IX"),
-        (5, "V"),
-        (4, "IV"),
-        (1, "I")
-    }
     rom: str = ""
-    for (key, val) in translate:
+    for key, val in translate:
         while num > key:
             rom += val
+            num -= key
     return rom
 
 
@@ -102,11 +104,11 @@ all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
 def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with all level locations based on given options (maxlevel INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
-    locations: dict[str, tuple[str, LocationProgressType]] = {}
 
     # Level 1 is always directly accessible
-    locations["Level 1"] = ("Menu", LocationProgressType.PRIORITY)
-    locations["Level 1 Additional"] = ("Menu", LocationProgressType.DEFAULT)
+    locations: dict[str, tuple[str, LocationProgressType]] = {"Level 1": ("Main", LocationProgressType.PRIORITY),
+                                                              "Level 1 Additional": (
+                                                              "Main", LocationProgressType.DEFAULT)}
 
     if logictype == 0 or logictype == 1:
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
@@ -125,13 +127,13 @@ def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationPro
         phaselength = maxlevel//6
         l20phase = 20//phaselength
         if l20phase == 0:
-            locations["Level 20 Additional"] = ("Menu", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional"] = ("Main", LocationProgressType.DEFAULT)
         elif l20phase == 1:
             locations["Level 20 Additional"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         else:
             locations["Level 20 Additional"] = (f"Levels with {min(l20phase, 5)} Buildings", LocationProgressType.DEFAULT)
         for x in range(2, phaselength):
-            locations[f"Level {x}"] = ("Menu", LocationProgressType.DEFAULT)
+            locations[f"Level {x}"] = ("Main", LocationProgressType.DEFAULT)
         for x in range(phaselength, phaselength*2):
             locations[f"Level {x}"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         for x in range(phaselength*2, phaselength*3):
@@ -153,11 +155,12 @@ def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationPro
 def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with all upgrade locations based on given options (finaltier INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
+
     locations: dict[str, tuple[str, LocationProgressType]] = {}
     categories = ["Routing", "Extracting", "Shape Processing", "Color Processing"]
 
     for cat in categories:
-        locations[f"{cat} Upgrade Tier II"] = ("Menu", LocationProgressType.PRIORITY)
+        locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.PRIORITY)
 
     if logictype == 0:
         for cat in categories:
@@ -186,6 +189,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
                     maxlevel: int, levellogictype: int, finaltier: int, upgradelogictype: int,
                     goal: int) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with all achievement locations based on given options."""
+
     locations: dict[str, tuple[str, LocationProgressType]] = {}
     phaselength = maxlevel//6
     l12phase = 12//phaselength
@@ -207,7 +211,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
         locations["Wires"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
     else:
         if l20phase == 0:
-            locations["Wires"] = ("Menu", LocationProgressType.DEFAULT)
+            locations["Wires"] = ("Main", LocationProgressType.DEFAULT)
         elif l20phase == 1:
             locations["Wires"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         else:
@@ -218,7 +222,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
             locations["Freedom"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         else:
             if l26phase == 0:
-                locations["Freedom"] = ("Menu", LocationProgressType.DEFAULT)
+                locations["Freedom"] = ("Main", LocationProgressType.DEFAULT)
             elif l26phase == 1:
                 locations["Freedom"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
             else:
@@ -231,7 +235,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     locations["Preparing to launch"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["SpaceY"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["Stack overflow"] = ("Stacked Shape Achievements", LocationProgressType.DEFAULT)
-    locations["It's a mess"] = ("Menu", LocationProgressType.DEFAULT)
+    locations["It's a mess"] = ("Main", LocationProgressType.DEFAULT)
     if upgradelogictype == 1:
         locations["Faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
         if finaltier > 8:
@@ -246,7 +250,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
             locations["Can't stop"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         else:
             if l50phase == 0:
-                locations["Can't stop"] = ("Menu", LocationProgressType.DEFAULT)
+                locations["Can't stop"] = ("Main", LocationProgressType.DEFAULT)
             elif l50phase == 1:
                 locations["Can't stop"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
             else:
@@ -256,12 +260,12 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
             locations["Is this the end?"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         else:
             if l100phase == 0:
-                locations["Is this the end?"] = ("Menu", LocationProgressType.DEFAULT)
+                locations["Is this the end?"] = ("Main", LocationProgressType.DEFAULT)
             elif l100phase == 1:
                 locations["Is this the end?"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
             else:
                 locations["Is this the end?"] = (f"Levels with {min(l100phase, 5)} Buildings", LocationProgressType.DEFAULT)
-    locations["Getting into it"] = ("Menu", LocationProgressType.DEFAULT)
+    locations["Getting into it"] = ("Main", LocationProgressType.DEFAULT)
     locations["Now it's easy"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["Computer Guy"] = ("Wiring Achievements", LocationProgressType.DEFAULT)
     locations["Efficiency 2"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
@@ -272,59 +276,59 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
             locations["MAM (Make Anything Machine)"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         else:
             if l27phase == 0:
-                locations["MAM (Make Anything Machine)"] = ("Menu", LocationProgressType.DEFAULT)
+                locations["MAM (Make Anything Machine)"] = ("Main", LocationProgressType.DEFAULT)
             elif l27phase == 1:
                 locations["MAM (Make Anything Machine)"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
             else:
                 locations["MAM (Make Anything Machine)"] = (f"Levels with {min(l27phase, 5)} Buildings", LocationProgressType.DEFAULT)
-    locations["Perfectionist"] = ("Menu", LocationProgressType.DEFAULT)
+    locations["Perfectionist"] = ("Main", LocationProgressType.DEFAULT)
     locations["The next dimension"] = ("Wiring Achievements", LocationProgressType.DEFAULT)
-    locations["Oops"] = ("Menu", LocationProgressType.DEFAULT)
+    locations["Oops"] = ("Main", LocationProgressType.DEFAULT)
     locations["Copy-Pasta"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["I've seen that before ..."] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["Memories from the past"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["I need trains"] = ("Menu", LocationProgressType.DEFAULT)
-    locations["GPS"] = ("Menu", LocationProgressType.DEFAULT)
+    locations["I need trains"] = ("Main", LocationProgressType.DEFAULT)
+    locations["GPS"] = ("Main", LocationProgressType.DEFAULT)
 
     if excludeprogressive:
-        type = LocationProgressType.EXCLUDED
+        unreasonable_type = LocationProgressType.EXCLUDED
     else:
-        type = LocationProgressType.DEFAULT
+        unreasonable_type = LocationProgressType.DEFAULT
 
     if not excludesoftlock:
         if levellogictype in [0, 1, 4]:
-            locations["Speedrun Master"] = ("Levels with 5 Buildings", type)
-            locations["Speedrun Novice"] = ("Levels with 5 Buildings", type)
-            locations["Not an idle game"] = ("Levels with 5 Buildings", type)
-            locations["It's so slow"] = ("Levels with 5 Buildings", type)
-            locations["King of Inefficiency"] = ("Levels with 5 Buildings", type)
+            locations["Speedrun Master"] = ("Levels with 5 Buildings", unreasonable_type)
+            locations["Speedrun Novice"] = ("Levels with 5 Buildings", unreasonable_type)
+            locations["Not an idle game"] = ("Levels with 5 Buildings", unreasonable_type)
+            locations["It's so slow"] = ("Levels with 5 Buildings", unreasonable_type)
+            locations["King of Inefficiency"] = ("Levels with 5 Buildings", unreasonable_type)
         else:
             if l12phase == 0:
-                locations["Speedrun Master"] = ("Menu", type)
-                locations["Speedrun Novice"] = ("Menu", type)
-                locations["Not an idle game"] = ("Menu", type)
-                locations["It's so slow"] = ("Menu", type)
+                locations["Speedrun Master"] = ("Main", unreasonable_type)
+                locations["Speedrun Novice"] = ("Main", unreasonable_type)
+                locations["Not an idle game"] = ("Main", unreasonable_type)
+                locations["It's so slow"] = ("Main", unreasonable_type)
             elif l12phase == 1:
-                locations["Speedrun Master"] = ("Levels with 1 Building", type)
-                locations["Speedrun Novice"] = ("Levels with 1 Building", type)
-                locations["Not an idle game"] = ("Levels with 1 Building", type)
-                locations["It's so slow"] = ("Levels with 1 Building", type)
+                locations["Speedrun Master"] = ("Levels with 1 Building", unreasonable_type)
+                locations["Speedrun Novice"] = ("Levels with 1 Building", unreasonable_type)
+                locations["Not an idle game"] = ("Levels with 1 Building", unreasonable_type)
+                locations["It's so slow"] = ("Levels with 1 Building", unreasonable_type)
             else:
-                locations["Speedrun Master"] = (f"Levels with {min(l12phase, 5)} Buildings", type)
-                locations["Speedrun Novice"] = (f"Levels with {min(l12phase, 5)} Buildings", type)
-                locations["Not an idle game"] = (f"Levels with {min(l12phase, 5)} Buildings", type)
-                locations["It's so slow"] = (f"Levels with {min(l12phase, 5)} Buildings", type)
+                locations["Speedrun Master"] = (f"Levels with {min(l12phase, 5)} Buildings", unreasonable_type)
+                locations["Speedrun Novice"] = (f"Levels with {min(l12phase, 5)} Buildings", unreasonable_type)
+                locations["Not an idle game"] = (f"Levels with {min(l12phase, 5)} Buildings", unreasonable_type)
+                locations["It's so slow"] = (f"Levels with {min(l12phase, 5)} Buildings", unreasonable_type)
             if l14phase == 0:
-                locations["King of Inefficiency"] = ("Menu", type)
+                locations["King of Inefficiency"] = ("Main", unreasonable_type)
             elif l14phase == 1:
-                locations["King of Inefficiency"] = ("Levels with 1 Building", type)
+                locations["King of Inefficiency"] = ("Levels with 1 Building", unreasonable_type)
             else:
-                locations["King of Inefficiency"] = (f"Levels with {min(l14phase, 5)} Buildings", type)
-        locations["A bit early?"] = ("All Buildings Shapes", type)
+                locations["King of Inefficiency"] = (f"Levels with {min(l14phase, 5)} Buildings", unreasonable_type)
+        locations["A bit early?"] = ("All Buildings Shapes", unreasonable_type)
 
     if not excludelong:
-        locations["It's been a long time"] = ("Menu", LocationProgressType.DEFAULT)
-        locations["Addicted"] = ("Menu", LocationProgressType.DEFAULT)
+        locations["It's been a long time"] = ("Main", unreasonable_type)
+        locations["Addicted"] = ("Main", unreasonable_type)
 
     return locations
 

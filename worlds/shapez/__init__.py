@@ -55,18 +55,15 @@ class ShapezWorld(World):
     # TODO TestBase, Docs
 
     base_id = 20010707
-    location_count: int
-    level_logic: list[str]
-    upgrade_logic: list[str]
-    maxlevel: int
-    finaltier: int
-    included_locations: dict[str, tuple[str, LocationProgressType]]
+    location_count: int = 0
+    level_logic: list[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+    upgrade_logic: list[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+    maxlevel: int = 25
+    finaltier: int = 8
+    included_locations: dict[str, tuple[str, LocationProgressType]] = dict()
     # victory_loc = MyGameLocation(self.player, "Victory", None)
     # victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
     item_name_to_id = {name: id for
                        id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for
@@ -106,6 +103,7 @@ class ShapezWorld(World):
                 self.level_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
         else:
             self.level_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+
         if randomize_upgrade_requirements:
             if randomize_upgrade_logic == 2:
                 self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
@@ -148,6 +146,7 @@ class ShapezWorld(World):
                                       + [self.create_item(name) for name in buildings_wires.keys()]
                                       + [self.create_item(name) for name in gameplay_unlocks.keys()]
                                       + [self.create_item(name) for name in big_upgrades for _ in range(7)])
+
         # Get value from traps probability option and convert into float
         traps_probability = self.options.traps_percentage.value/100
         # Fill remaining locations with fillers

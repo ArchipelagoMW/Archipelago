@@ -41,16 +41,11 @@ def create_entrance(player: int, name: str, parent: Region, connects: Region, ru
 
 
 def create_shapez_regions(world: ShapezWorld) -> list[ShapezRegion]:
-    regions = {name: ShapezRegion(name, world.player, world.multiworld) for name in all_regions}
+    regions: dict[str, ShapezRegion] = {name: ShapezRegion(name, world.player, world.multiworld) for name in all_regions}
 
     # Creates ShapezLocations for every included location and puts them into the correct region
     for name, data in world.included_locations.items():
         regions[data[0]].locations += ShapezLocation(world.player, name, world.location_name_to_id[name], regions[data[0]], data[1])
-
-    # Delete unused regions
-    for name, region in regions.items():
-        if len(region.locations) == 0:
-            regions.pop(name)
 
     # Create Entrances for regions
     create_entrance(world.player, "Cutter needed", regions["Main"], regions["Cut Shape Achievements"],
@@ -133,4 +128,9 @@ def create_shapez_regions(world: ShapezWorld) -> list[ShapezRegion]:
                         regions["Upgrades Tier II"], regions["Upgrades with 5 Buildings"],
                         lambda state: state.has_all(world.upgrade_logic, world.player))
 
-    return list(regions.values())
+    # Return a regions list without empty regions
+    returned_list: list[ShapezRegion] = []
+    for key, value in regions.items():
+      if not len(value.locations) == 0:
+        returned_list.append(value)
+    return returned_list
