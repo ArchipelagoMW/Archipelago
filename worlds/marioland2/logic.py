@@ -421,6 +421,8 @@ def macro_zone_3_coins(state, player, coins):
             reachable_coins += 36
     elif has_pipe_down(state, player):
         reachable_coins += 18
+    if state.has("Macro Zone 3 - Midway Bell", player):
+        reachable_coins = max(reachable_coins, 30)
     return coins <= reachable_coins
 
 
