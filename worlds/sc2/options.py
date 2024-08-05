@@ -1094,7 +1094,11 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
     # Omitting unwanted mission variants
     if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_pick_one:
-        swaps: List[SC2Mission] = list([mission for mission in set(SC2Mission).difference(excluded_missions).intersection(get_missions_with_any_flags_in_list(MissionFlag.HasRaceSwap|MissionFlag.RaceSwap))])
+        swaps = [
+            mission for mission in SC2Mission
+            if mission not in excluded_missions
+            and mission.flags & (MissionFlag.HasRaceSwap|MissionFlag.RaceSwap)
+        ]
         while len(swaps) > 0:
             curr = swaps[0]
             variants = list([mission for mission in swaps if mission.map_file == curr.map_file])
