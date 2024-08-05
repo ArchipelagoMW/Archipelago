@@ -914,441 +914,612 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
 
         # HotS
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 100, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Gather Minerals", SC2HOTS_LOC_ID_OFFSET + 101, LocationType.VANILLA),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "South Zergling Group", SC2HOTS_LOC_ID_OFFSET + 102, LocationType.VANILLA,
-                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        ),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "East Zergling Group", SC2HOTS_LOC_ID_OFFSET + 103, LocationType.VANILLA,
-                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        ),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104, LocationType.VANILLA,
-                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        ),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Hatchery", SC2HOTS_LOC_ID_OFFSET + 105, LocationType.EXTRA),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Overlord", SC2HOTS_LOC_ID_OFFSET + 106, LocationType.EXTRA),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Gas Turrets", SC2HOTS_LOC_ID_OFFSET + 107, LocationType.EXTRA,
-                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        ),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Win In Under 10 Minutes", SC2HOTS_LOC_ID_OFFSET + 108, LocationType.SPEEDRUN,
-                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
-                     lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
+            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted
+        ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.EXTRA,
-                     lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
+            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted
+        ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202, LocationType.VANILLA),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203, LocationType.VANILLA),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Reach the Sublevel", SC2HOTS_LOC_ID_OFFSET + 204, LocationType.EXTRA),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Door Section Cleared", SC2HOTS_LOC_ID_OFFSET + 205, LocationType.EXTRA,
-                     lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
+            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted
+        ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 300, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Right Queen", SC2HOTS_LOC_ID_OFFSET + 301, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Center Queen", SC2HOTS_LOC_ID_OFFSET + 302, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Left Queen", SC2HOTS_LOC_ID_OFFSET + 303, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Hold Out Finished", SC2HOTS_LOC_ID_OFFSET + 304, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Kill All Before Reinforcements", SC2HOTS_LOC_ID_OFFSET + 305, LocationType.SPEEDRUN,
-                     lambda state: logic.zerg_competent_comp(state)
-                                   and logic.zerg_competent_anti_air(state)
-                                   and (logic.basic_kerrigan(state) or kerriganless)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_competent_anti_air(state)
+                and (logic.basic_kerrigan(state) or kerriganless))
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "First Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 401, LocationType.VANILLA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "North Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 402, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "West Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 403, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Lost Brood", SC2HOTS_LOC_ID_OFFSET + 404, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Northeast Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 405, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Northwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 406, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Southwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 407, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Nafash", SC2HOTS_LOC_ID_OFFSET + 408, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "20 Unfrozen Structures", SC2HOTS_LOC_ID_OFFSET + 409, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 500, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 501, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Center Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 502, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) or adv_tactics),
+            lambda state: logic.zerg_common_unit(state) or adv_tactics
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 503, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Destroy 4 Shuttles", SC2HOTS_LOC_ID_OFFSET + 504, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Frozen Expansion", SC2HOTS_LOC_ID_OFFSET + 505, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Southwest Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 506, LocationType.EXTRA),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Southeast Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 507, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) or adv_tactics),
+            lambda state: logic.zerg_common_unit(state) or adv_tactics
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 508, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+            logic.zerg_common_unit_basic_aa
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 509, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)),
+            logic.zerg_common_unit_competent_aa
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Launch Bay", SC2HOTS_LOC_ID_OFFSET + 510, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Center Launch Bay", SC2HOTS_LOC_ID_OFFSET + 511, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Launch Bay", SC2HOTS_LOC_ID_OFFSET + 512, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state) and logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY,
-                     lambda state: logic.zerg_pass_vents(state)
-                                   and (logic.story_tech_granted
-                                        or state.has_any({item_names.ZERGLING_RAPTOR_STRAIN, item_names.ROACH,
-                                                         item_names.HYDRALISK, item_names.INFESTOR}, player))
-                     ),
+            lambda state: (
+                logic.zerg_pass_vents(state)
+                and (logic.story_tech_granted
+                    or state.has_any({
+                        item_names.ZERGLING_RAPTOR_STRAIN,
+                        item_names.ROACH,
+                        item_names.HYDRALISK,
+                        item_names.INFESTOR
+                    }, player)))
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.VANILLA,
-                     lambda state: logic.zerg_pass_vents(state)),
+            logic.zerg_pass_vents
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602, LocationType.VANILLA,
-                     lambda state: logic.zerg_pass_vents(state)),
+            logic.zerg_pass_vents
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603, LocationType.VANILLA,
-                     lambda state: logic.zerg_pass_vents(state)),
+            logic.zerg_pass_vents
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604, LocationType.VANILLA,
-                     lambda state: logic.zerg_pass_vents(state)),
+            logic.zerg_pass_vents
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Warp Drive", SC2HOTS_LOC_ID_OFFSET + 605, LocationType.EXTRA,
-                     lambda state: logic.zerg_pass_vents(state)),
+            logic.zerg_pass_vents
+        ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Stasis Quadrant", SC2HOTS_LOC_ID_OFFSET + 606, LocationType.EXTRA,
-                     lambda state: logic.zerg_pass_vents(state)),
+            logic.zerg_pass_vents
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 700, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+            logic.zerg_common_unit_basic_aa
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Center Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 701, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "North Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 702, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703, LocationType.EXTRA),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Close Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 704, LocationType.EXTRA),
         make_location_data(SC2Mission.DOMINATION.mission_name, "South Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 705, LocationType.EXTRA,
-                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+            lambda state: adv_tactics or logic.zerg_common_unit(state)
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Southwest Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 706, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Southeast Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 707, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+            logic.zerg_common_unit_basic_aa
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "North Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 708, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Northeast Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 709, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Win Without 100 Eggs", SC2HOTS_LOC_ID_OFFSET + 710, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 800, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "West Biomass", SC2HOTS_LOC_ID_OFFSET + 801, LocationType.VANILLA),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "North Biomass", SC2HOTS_LOC_ID_OFFSET + 802, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "South Biomass", SC2HOTS_LOC_ID_OFFSET + 803, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Destroy 3 Gorgons", SC2HOTS_LOC_ID_OFFSET + 804, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Close Zerg Rescue", SC2HOTS_LOC_ID_OFFSET + 805, LocationType.EXTRA),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "South Zerg Rescue", SC2HOTS_LOC_ID_OFFSET + 806, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)),
+            logic.zerg_common_unit
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "North Zerg Rescue", SC2HOTS_LOC_ID_OFFSET + 807, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "West Queen Rescue", SC2HOTS_LOC_ID_OFFSET + 808, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "East Queen Rescue", SC2HOTS_LOC_ID_OFFSET + 809, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "South Orbital Command Center", SC2HOTS_LOC_ID_OFFSET + 810, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state)),
+            logic.zerg_competent_comp
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Northwest Orbital Command Center", SC2HOTS_LOC_ID_OFFSET + 811, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state)),
+            logic.zerg_competent_comp
+        ),
         make_location_data(SC2Mission.FIRE_IN_THE_SKY.mission_name, "Southeast Orbital Command Center", SC2HOTS_LOC_ID_OFFSET + 812, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_competent_comp(state)),
+            logic.zerg_competent_comp
+        ),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 900, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "East Science Lab", SC2HOTS_LOC_ID_OFFSET + 901, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "North Science Lab", SC2HOTS_LOC_ID_OFFSET + 902, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "Get Nuked", SC2HOTS_LOC_ID_OFFSET + 903, LocationType.EXTRA),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "Entrance Gate", SC2HOTS_LOC_ID_OFFSET + 904, LocationType.EXTRA),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "Citadel Gate", SC2HOTS_LOC_ID_OFFSET + 905, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "South Expansion", SC2HOTS_LOC_ID_OFFSET + 906, LocationType.EXTRA),
         make_location_data(SC2Mission.OLD_SOLDIERS.mission_name, "Rich Mineral Expansion", SC2HOTS_LOC_ID_OFFSET + 907, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Center Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1001, LocationType.VANILLA),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1002, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   (adv_tactics and logic.zerg_basic_anti_air(state)
-                                    or logic.zerg_competent_anti_air(state))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and (adv_tactics
+                    and logic.zerg_basic_anti_air(state)
+                    or logic.zerg_competent_anti_air(state)))
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "South Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1003, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   (adv_tactics and logic.zerg_basic_anti_air(state)
-                                    or logic.zerg_competent_anti_air(state))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and (adv_tactics
+                    and logic.zerg_basic_anti_air(state)
+                    or logic.zerg_competent_anti_air(state)))
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Finish Feeding", SC2HOTS_LOC_ID_OFFSET + 1004, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_common_unit_competent_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "South Proxy Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1005, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_common_unit_competent_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Proxy Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1006, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_common_unit_competent_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "South Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1007, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_common_unit_competent_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1008, LocationType.CHALLENGE,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_common_unit_competent_aa
+        ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Flawless", SC2HOTS_LOC_ID_OFFSET + 1009, LocationType.CHALLENGE,
-            lambda state: logic.zerg_common_unit(state)
-                          and logic.zerg_competent_anti_air(state),
-            flags=LocationFlag.PREVENTATIVE),
+            logic.zerg_common_unit_competent_aa,
+            flags=LocationFlag.PREVENTATIVE,
+        ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_defense(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_competent_defense(state)
+                and logic.zerg_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Tyrannozor", SC2HOTS_LOC_ID_OFFSET + 1101, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_defense(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_competent_defense(state)
+                and logic.zerg_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Reach the Pool", SC2HOTS_LOC_ID_OFFSET + 1102, LocationType.VANILLA),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "15 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1103, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_defense(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_competent_defense(state)
+                and logic.zerg_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "5 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1104, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_defense(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_competent_defense(state)
+                and logic.zerg_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Pincer Attack", SC2HOTS_LOC_ID_OFFSET + 1105, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_defense(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_competent_defense(state)
+                and logic.zerg_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Yagdra Claims Brakk's Pack", SC2HOTS_LOC_ID_OFFSET + 1106, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_defense(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: (
+                logic.zerg_competent_defense(state)
+                and logic.zerg_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "First Relic", SC2HOTS_LOC_ID_OFFSET + 1201, LocationType.VANILLA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202, LocationType.VANILLA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.VANILLA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.VANILLA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Yagdra", SC2HOTS_LOC_ID_OFFSET + 1205, LocationType.EXTRA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Kraith", SC2HOTS_LOC_ID_OFFSET + 1206, LocationType.EXTRA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Slivan", SC2HOTS_LOC_ID_OFFSET + 1207, LocationType.EXTRA,
-                     lambda state: logic.supreme_requirement(state)),
+            logic.supreme_requirement
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   ((logic.zerg_competent_anti_air(state) and state.has(item_names.INFESTOR, player)) or
-                                   (adv_tactics and logic.zerg_basic_anti_air(state)))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and (
+                    (logic.zerg_competent_anti_air(state) and state.has(item_names.INFESTOR, player))
+                    or (adv_tactics and logic.zerg_basic_anti_air(state))
+                ))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "East Science Facility", SC2HOTS_LOC_ID_OFFSET + 1301, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Center Science Facility", SC2HOTS_LOC_ID_OFFSET + 1302, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "West Science Facility", SC2HOTS_LOC_ID_OFFSET + 1303, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_basic_anti_air(state) and
-                                   logic.spread_creep(state)),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and logic.spread_creep(state))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "First Intro Garrison", SC2HOTS_LOC_ID_OFFSET + 1304, LocationType.EXTRA),
         make_location_data(SC2Mission.INFESTED.mission_name, "Second Intro Garrison", SC2HOTS_LOC_ID_OFFSET + 1305, LocationType.EXTRA),
         make_location_data(SC2Mission.INFESTED.mission_name, "Base Garrison", SC2HOTS_LOC_ID_OFFSET + 1306, LocationType.EXTRA),
         make_location_data(SC2Mission.INFESTED.mission_name, "East Garrison", SC2HOTS_LOC_ID_OFFSET + 1307, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and (adv_tactics or state.has(item_names.INFESTOR, player)))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Mid Garrison", SC2HOTS_LOC_ID_OFFSET + 1308, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and (adv_tactics or state.has(item_names.INFESTOR, player)))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "North Garrison", SC2HOTS_LOC_ID_OFFSET + 1309, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and (adv_tactics or state.has(item_names.INFESTOR, player)))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Close Southwest Garrison", SC2HOTS_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and (adv_tactics or state.has(item_names.INFESTOR, player)))
+        ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Far Southwest Garrison", SC2HOTS_LOC_ID_OFFSET + 1311, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state)
-                                   and logic.zerg_basic_anti_air(state)
-                                   and (adv_tactics or state.has(item_names.INFESTOR, player))),
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and logic.zerg_basic_anti_air(state)
+                and (adv_tactics or state.has(item_names.INFESTOR, player)))
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "North Brutalisk", SC2HOTS_LOC_ID_OFFSET + 1401, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "South Brutalisk", SC2HOTS_LOC_ID_OFFSET + 1402, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 1 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1403, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 2 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1404, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 3 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1405, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 4 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1406, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 5 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1407, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 6 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1408, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.HAND_OF_DARKNESS.mission_name, "Kill 7 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1409, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_basic_anti_air(state)),
+            logic.zerg_competent_comp_basic_aa
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Northwest Crystal", SC2HOTS_LOC_ID_OFFSET + 1501, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Northeast Crystal", SC2HOTS_LOC_ID_OFFSET + 1502, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "South Crystal", SC2HOTS_LOC_ID_OFFSET + 1503, LocationType.VANILLA),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Base Established", SC2HOTS_LOC_ID_OFFSET + 1504, LocationType.EXTRA),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Close Temple", SC2HOTS_LOC_ID_OFFSET + 1505, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Mid Temple", SC2HOTS_LOC_ID_OFFSET + 1506, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Southeast Temple", SC2HOTS_LOC_ID_OFFSET + 1507, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Northeast Temple", SC2HOTS_LOC_ID_OFFSET + 1508, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID.mission_name, "Northwest Temple", SC2HOTS_LOC_ID_OFFSET + 1509, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+            lambda state: (
+                logic.zerg_competent_comp(state)
+                and (logic.zerg_competent_anti_air(state) or adv_tactics))
+        ),
         make_location_data(SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1600, LocationType.VICTORY),
         make_location_data(SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name, "Pirate Capital Ship", SC2HOTS_LOC_ID_OFFSET + 1601, LocationType.VANILLA),
         make_location_data(SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name, "First Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1602, LocationType.VANILLA),
         make_location_data(SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name, "Second Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1603, LocationType.VANILLA),
         make_location_data(SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name, "Third Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1604, LocationType.VANILLA),
         make_location_data(SC2Mission.CONVICTION.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
-                     lambda state: logic.two_kerrigan_actives(state) and
-                                   (logic.basic_kerrigan(state) or logic.story_tech_granted) or kerriganless),
+            lambda state: (
+                kerriganless
+                or (
+                    logic.two_kerrigan_actives(state)
+                    and (logic.basic_kerrigan(state) or logic.story_tech_granted)
+                ))
+        ),
         make_location_data(SC2Mission.CONVICTION.mission_name, "First Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1701, LocationType.VANILLA,
-                     lambda state: logic.two_kerrigan_actives(state) or kerriganless),
+            lambda state: logic.two_kerrigan_actives(state) or kerriganless
+        ),
         make_location_data(SC2Mission.CONVICTION.mission_name, "Second Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1702, LocationType.VANILLA,
-                     lambda state: logic.two_kerrigan_actives(state) and
-                                   (logic.basic_kerrigan(state) or logic.story_tech_granted) or kerriganless),
+            lambda state: (
+                kerriganless
+                or (
+                    logic.two_kerrigan_actives(state)
+                    and (logic.basic_kerrigan(state) or logic.story_tech_granted)
+                ))
+        ),
         make_location_data(SC2Mission.CONVICTION.mission_name, "Power Coupling", SC2HOTS_LOC_ID_OFFSET + 1703, LocationType.EXTRA,
-                     lambda state: logic.two_kerrigan_actives(state) or kerriganless),
+            lambda state: logic.two_kerrigan_actives(state) or kerriganless
+        ),
         make_location_data(SC2Mission.CONVICTION.mission_name, "Door Blasted", SC2HOTS_LOC_ID_OFFSET + 1704, LocationType.EXTRA,
-                     lambda state: logic.two_kerrigan_actives(state) or kerriganless),
+            lambda state: logic.two_kerrigan_actives(state) or kerriganless
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "East Gate", SC2HOTS_LOC_ID_OFFSET + 1801, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "Northwest Gate", SC2HOTS_LOC_ID_OFFSET + 1802, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "North Gate", SC2HOTS_LOC_ID_OFFSET + 1803, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "1 Bile Launcher Deployed", SC2HOTS_LOC_ID_OFFSET + 1804, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "2 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1805, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "3 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1806, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "4 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1807, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "5 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1808, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "Sons of Korhal", SC2HOTS_LOC_ID_OFFSET + 1809, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "Night Wolves", SC2HOTS_LOC_ID_OFFSET + 1810, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "West Expansion", SC2HOTS_LOC_ID_OFFSET + 1811, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.PLANETFALL.mission_name, "Mid Expansion", SC2HOTS_LOC_ID_OFFSET + 1812, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE.mission_name, "First Power Link", SC2HOTS_LOC_ID_OFFSET + 1901, LocationType.VANILLA),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE.mission_name, "Second Power Link", SC2HOTS_LOC_ID_OFFSET + 1902, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE.mission_name, "Third Power Link", SC2HOTS_LOC_ID_OFFSET + 1903, LocationType.VANILLA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE.mission_name, "Expansion Command Center", SC2HOTS_LOC_ID_OFFSET + 1904, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE.mission_name, "Main Path Command Center", SC2HOTS_LOC_ID_OFFSET + 1905, LocationType.EXTRA,
-                     lambda state: logic.zerg_competent_comp(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            logic.zerg_competent_comp_competent_aa
+        ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
-                     lambda state: logic.the_reckoning_requirement(state)),
+            logic.the_reckoning_requirement
+        ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "South Lane", SC2HOTS_LOC_ID_OFFSET + 2001, LocationType.VANILLA,
-                     lambda state: logic.the_reckoning_requirement(state)),
+            logic.the_reckoning_requirement
+        ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "North Lane", SC2HOTS_LOC_ID_OFFSET + 2002, LocationType.VANILLA,
-                     lambda state: logic.the_reckoning_requirement(state)),
+            logic.the_reckoning_requirement
+        ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "East Lane", SC2HOTS_LOC_ID_OFFSET + 2003, LocationType.VANILLA,
-                     lambda state: logic.the_reckoning_requirement(state)),
+            logic.the_reckoning_requirement
+        ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Odin", SC2HOTS_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
-                     lambda state: logic.the_reckoning_requirement(state)),
+            logic.the_reckoning_requirement
+        ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005,
-                           LocationType.SPEEDRUN,
-                           lambda state: logic.the_reckoning_requirement(state)
-                                         and state.has_any({item_names.INFESTOR, item_names.DEFILER}, player)
-                                         and (not logic.take_over_ai_allies or logic.terran_base_trasher(state))
-                           ),
+            LocationType.SPEEDRUN,
+            lambda state: (
+                logic.the_reckoning_requirement(state)
+                and state.has_any({item_names.INFESTOR, item_names.DEFILER}, player)
+                and (not logic.take_over_ai_allies or logic.terran_base_trasher(state)))
+        ),
 
         # LotV Prologue
         make_location_data(SC2Mission.DARK_WHISPERS.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 100, LocationType.VICTORY,

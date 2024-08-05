@@ -467,14 +467,33 @@ class SC2Logic:
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
         core_unit = state.has_any({item_names.ROACH, item_names.ABERRATION, item_names.ZERGLING}, self.player)
-        support_unit = state.has_any({item_names.SWARM_QUEEN, item_names.HYDRALISK}, self.player) \
-                       or self.morph_brood_lord(state) \
-                       or advanced and (state.has_any({item_names.INFESTOR, item_names.DEFILER}, self.player) or self.morph_viper(state))
+        support_unit = (
+            state.has_any({item_names.SWARM_QUEEN, item_names.HYDRALISK}, self.player)
+            or self.morph_brood_lord(state)
+            or advanced and (
+                state.has_any({item_names.INFESTOR, item_names.DEFILER}, self.player)
+                or self.morph_viper(state)
+            )
+        )
         if core_unit and support_unit:
             return True
-        vespene_unit = state.has_any({item_names.ULTRALISK, item_names.ABERRATION}, self.player) \
-                       or advanced and self.morph_viper(state)
+        vespene_unit = (
+            state.has_any({item_names.ULTRALISK, item_names.ABERRATION}, self.player)
+            or advanced and self.morph_viper(state)
+        )
         return vespene_unit and state.has_any({item_names.ZERGLING, item_names.SWARM_QUEEN}, self.player)
+    
+    def zerg_common_unit_basic_aa(self, state: CollectionState) -> bool:
+        return self.zerg_common_unit(state) and self.zerg_basic_anti_air(state)
+
+    def zerg_common_unit_competent_aa(self, state: CollectionState) -> bool:
+        return self.zerg_common_unit(state) and self.zerg_competent_anti_air(state)
+    
+    def zerg_competent_comp_basic_aa(self, state: CollectionState) -> bool:
+        return self.zerg_competent_comp(state) and self.zerg_basic_anti_air(state)
+    
+    def zerg_competent_comp_competent_aa(self, state: CollectionState) -> bool:
+        return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state)
 
     def spread_creep(self, state: CollectionState) -> bool:
         return self.advanced_tactics or state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player)
