@@ -14,8 +14,13 @@ class TestBooksLogic(SVTestBase):
 
         self.assert_reach_location_false(location, self.multiworld.state)
 
-        self.collect("Progressive Weapon")
+        self.collect("Progressive Mine Elevator")
+        self.collect("Progressive Mine Elevator")
+        self.collect("Progressive Mine Elevator")
+        self.collect("Progressive Mine Elevator")
+        self.assert_reach_location_false(location, self.multiworld.state)
 
+        self.collect("Progressive Weapon")
         self.assert_reach_location_true(location, self.multiworld.state)
 
 
