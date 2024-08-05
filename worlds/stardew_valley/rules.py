@@ -39,6 +39,7 @@ from .strings.crop_names import Fruit, Vegetable
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
     SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
 from .strings.forageable_names import Forageable
+from .strings.generic_names import Generic
 from .strings.geode_names import Geode
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar, Mineral
@@ -261,7 +262,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, LogicEntrance.buy_experience_books, logic.time.has_lived_months(2))
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year1_books, logic.time.has_year_two)
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year3_books, logic.time.has_year_three)
-    set_entrance_rule(multiworld, player, Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Monster.green_slime))
+    set_entrance_rule(multiworld, player, Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewValleyOptions):
