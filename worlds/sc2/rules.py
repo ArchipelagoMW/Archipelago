@@ -1,12 +1,16 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import  CollectionState
-from .options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
-    GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
+from .options import (
+    get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap,
+    GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence,
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
-from .items import get_basic_units, tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings, \
-    kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings, \
+)
+from .items import (
+    get_basic_units, tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings,
+    kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings,
     pvz_defense_ratings
+)
 from .mission_tables import SC2Race, SC2Campaign
 from . import item_names
 
@@ -138,8 +142,8 @@ class SC2Logic:
             or self.advanced_tactics and (
                 state.has_any((item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR), self.player)
                 or (
-                        state.has_all((item_names.SIEGE_TANK, item_names.MEDIVAC), self.player)
-                        and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
+                    state.has_all((item_names.SIEGE_TANK, item_names.MEDIVAC), self.player)
+                    and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
                 )
             )
         )
@@ -244,11 +248,14 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has_any({
-            item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_MAGRAIL_MUNITIONS, item_names.MEDIC_STABILIZER_MEDPACKS
-        }, self.player) \
+        return (
+            state.has_any({
+                item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_MAGRAIL_MUNITIONS, item_names.MEDIC_STABILIZER_MEDPACKS
+            }, self.player)
             or (state.count(item_names.MARINE_PROGRESSIVE_STIMPACK, self.player) >= 2
-                and state.has_group("Missions", self.player, 1))
+                and state.has_group("Missions", self.player, 1)
+            )
+        )
 
     def terran_survives_rip_field(self, state: CollectionState) -> bool:
         """
@@ -265,14 +272,17 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has(item_names.SCIENCE_VESSEL, self.player) \
-            or state.has_all({item_names.MEDIC, item_names.MEDIC_ADAPTIVE_MEDPACKS}, self.player) \
-            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3 \
+        return (
+            state.has(item_names.SCIENCE_VESSEL, self.player)
+            or state.has_all({item_names.MEDIC, item_names.MEDIC_ADAPTIVE_MEDPACKS}, self.player)
+            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3
             or (self.advanced_tactics
                 and (
-                        state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
-                        or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2)
+                    state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+                    or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2
                 )
+            )
+        )
 
     def terran_bio_heal(self, state: CollectionState) -> bool:
         """
@@ -280,8 +290,12 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has_any({item_names.MEDIC, item_names.MEDIVAC}, self.player) \
-            or self.advanced_tactics and state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+        return (
+            state.has_any({item_names.MEDIC, item_names.MEDIVAC}, self.player)
+            or (self.advanced_tactics
+                and state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+            )
+        )
 
     def terran_base_trasher(self, state: CollectionState) -> bool:
         """
@@ -289,17 +303,21 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return state.has(item_names.SIEGE_TANK, self.player) \
-            or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player) \
-            or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player) \
+        return (
+            state.has(item_names.SIEGE_TANK, self.player)
+            or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player)
+            or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
             or (self.advanced_tactics
-                and ((state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
-                      or self.can_nuke(state))
-                     and (
-                             state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
-                             or state.has_all({item_names.BANSHEE, item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY}, self.player))
-                     )
+                and (
+                    state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
+                    or self.can_nuke(state)
                 )
+                and (
+                    state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
+                    or state.has_all({item_names.BANSHEE, item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY}, self.player)
+                )
+            )
+        )
 
     def terran_mobile_detector(self, state: CollectionState) -> bool:
         return state.has_any({item_names.RAVEN, item_names.SCIENCE_VESSEL, item_names.COMMAND_CENTER_SCANNER_SWEEP}, self.player)
@@ -331,10 +349,14 @@ class SC2Logic:
         )
 
     def engine_of_destruction_requirement(self, state: CollectionState):
-        return self.marine_medic_upgrade(state) \
-        and (
-                self.terran_competent_anti_air(state)
-                and self.terran_common_unit(state) or state.has(item_names.WRAITH, self.player)
+        return (
+            self.marine_medic_upgrade(state)
+            and (state.has(item_names.WRAITH, self.player)
+                or (
+                    self.terran_competent_anti_air(state)
+                    and self.terran_common_unit(state)
+                )
+            )
         )
 
     def all_in_requirement(self, state: CollectionState):
@@ -343,9 +365,11 @@ class SC2Logic:
         :param state:
         :return:
         """
-        beats_kerrigan = state.has_any({item_names.MARINE, item_names.BANSHEE, item_names.GHOST}, self.player) \
-                         or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player) \
-                         or self.advanced_tactics
+        beats_kerrigan = (
+            state.has_any({item_names.MARINE, item_names.BANSHEE, item_names.GHOST}, self.player)
+            or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player)
+            or self.advanced_tactics
+        )
         if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
@@ -355,9 +379,11 @@ class SC2Logic:
         else:
             # Air
             defense_rating = self.terran_defense_rating(state, True, True)
-            return defense_rating >= 9 and beats_kerrigan \
-                and state.has_any({item_names.VIKING, item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player) \
+            return (
+                defense_rating >= 9 and beats_kerrigan
+                and state.has_any({item_names.VIKING, item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player)
                 and state.has_any({item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER, item_names.MISSILE_TURRET}, self.player)
+            )
 
     # HotS
 
@@ -425,44 +451,60 @@ class SC2Logic:
         return state.has_any(self.basic_zerg_units, self.player)
 
     def zerg_competent_anti_air(self, state: CollectionState) -> bool:
-        return state.has_any({item_names.HYDRALISK, item_names.MUTALISK, item_names.CORRUPTOR, item_names.BROOD_QUEEN}, self.player) \
-            or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) \
-            or state.has_all({item_names.SCOURGE, item_names.SCOURGE_RESOURCE_EFFICIENCY}, self.player) \
+        return (
+            state.has_any({item_names.HYDRALISK, item_names.MUTALISK, item_names.CORRUPTOR, item_names.BROOD_QUEEN}, self.player)
+            or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_PRESSURIZED_GLANDS}, self.player)
+            or state.has_all({item_names.SCOURGE, item_names.SCOURGE_RESOURCE_EFFICIENCY}, self.player)
             or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
+        )
 
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
         return self.zerg_basic_kerriganless_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available
 
     def zerg_basic_kerriganless_anti_air(self, state: CollectionState) -> bool:
-        return self.zerg_competent_anti_air(state) or state.has_any({item_names.SWARM_QUEEN, item_names.SCOURGE}, self.player) \
+        return (
+            self.zerg_competent_anti_air(state) or state.has_any({item_names.SWARM_QUEEN, item_names.SCOURGE}, self.player)
             or (self.advanced_tactics and state.has(item_names.SPORE_CRAWLER, self.player))
+        )
 
     def morph_brood_lord(self, state: CollectionState) -> bool:
-        return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
+        return (
+            (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
             and state.has(item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
+        )
     
     def morph_viper(self, state: CollectionState) -> bool:
-        return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
+        return (
+            (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
             and state.has(item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
+        )
 
     def morph_devourer(self, state: CollectionState) -> bool:
-        return (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled) \
+        return (
+            (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
             and state.has(item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, self.player)
+        )
     
     def morph_impaler(self, state: CollectionState) -> bool:
-        return (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled) \
+        return (
+            (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled)
             and state.has(item_names.HYDRALISK_IMPALER_ASPECT, self.player)
+        )
 
     def morph_lurker(self, state: CollectionState) -> bool:
-        return (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled) \
+        return (
+            (state.has(item_names.HYDRALISK, self.player) or self.morphling_enabled)
             and state.has(item_names.HYDRALISK_LURKER_ASPECT, self.player)
+        )
 
     def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
         return self.morph_impaler(state) or self.morph_lurker(state)
 
     def morph_igniter(self, state: CollectionState) -> bool:
-        return (state.has(item_names.ROACH, self.player) or self.morphling_enabled) \
+        return (
+            (state.has(item_names.ROACH, self.player) or self.morphling_enabled)
             and state.has(item_names.ROACH_PRIMAL_IGNITER_ASPECT, self.player)
+        )
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
@@ -534,16 +576,21 @@ class SC2Logic:
 
     def basic_kerrigan(self, state: CollectionState) -> bool:
         # One active ability that can be used to defeat enemies directly on Standard
-        if not self.advanced_tactics and \
-            not state.has_any({item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE,
-                              item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
-                              item_names.KERRIGAN_SPAWN_BANELINGS}, self.player):
+        if (not self.advanced_tactics
+            and not state.has_any({
+                item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE,
+                item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
+                item_names.KERRIGAN_SPAWN_BANELINGS
+            }, self.player)
+        ):
             return False
         # Two non-ultimate abilities
         count = 0
-        for item in (item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_HEROIC_FORTITUDE,
-                     item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
-                     item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY):
+        for item in (
+            item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_HEROIC_FORTITUDE,
+            item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
+            item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY
+        ):
             if state.has(item, self.player):
                 count += 1
             if count >= 2:
@@ -558,24 +605,29 @@ class SC2Logic:
         return count >= 2
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
-        return self.story_tech_granted \
-            or state.has_any({item_names.ZERGLING, item_names.HYDRALISK, item_names.ROACH}, self.player) \
+        return (
+            self.story_tech_granted
+            or state.has_any({item_names.ZERGLING, item_names.HYDRALISK, item_names.ROACH}, self.player)
             or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
+        )
 
     def supreme_requirement(self, state: CollectionState) -> bool:
-        return self.story_tech_granted \
-            or not self.kerrigan_unit_available \
+        return (
+            self.story_tech_granted
+            or not self.kerrigan_unit_available
             or (
                 state.has_all({item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_MEND}, self.player)
                 and self.kerrigan_levels(state, 35)
             )
+        )
 
     def kerrigan_levels(self, state: CollectionState, target: int) -> bool:
         if self.story_levels_granted or not self.kerrigan_unit_available:
             return True  # Levels are granted
-        if self.kerrigan_levels_per_mission_completed > 0 \
-           and self.kerrigan_levels_per_mission_completed_cap > 0 \
-           and not self.is_item_placement(state):
+        if (self.kerrigan_levels_per_mission_completed > 0
+            and self.kerrigan_levels_per_mission_completed_cap > 0
+            and not self.is_item_placement(state)
+        ):
             # Levels can be granted from mission completion.
             # Item pool filtering isn't aware of missions beaten. Assume that missions beaten will fulfill this rule.
             return True
@@ -597,13 +649,15 @@ class SC2Logic:
 
     def the_reckoning_requirement(self, state: CollectionState) -> bool:
         if self.take_over_ai_allies:
-            return self.terran_competent_comp(state) \
-                and self.zerg_competent_comp(state) \
+            return (
+                self.terran_competent_comp(state)
+                and self.zerg_competent_comp(state)
                 and (self.zerg_competent_anti_air(state)
-                     or self.terran_competent_anti_air(state))
+                    or self.terran_competent_anti_air(state)
+                )
+            )
         else:
-            return self.zerg_competent_comp(state) \
-                and self.zerg_competent_anti_air(state)
+            return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state)
 
     # LotV
 
@@ -1024,8 +1078,10 @@ class SC2Logic:
         )
 
     def the_escape_requirement(self, state: CollectionState) -> bool:
-        return self.the_escape_first_stage_requirement(state) \
+        return (
+            self.the_escape_first_stage_requirement(state)
             and (self.the_escape_stuff_granted() or self.nova_splash(state))
+        )
 
     def terran_cliffjumper(self, state: CollectionState) -> bool:
         return (
@@ -1254,8 +1310,11 @@ class SC2Logic:
         self.logic_level = get_option_value(world, 'required_tactics')
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
         self.take_over_ai_allies = get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true
-        self.kerrigan_unit_available = get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available \
-            and SC2Campaign.HOTS in get_enabled_campaigns(world) and SC2Race.ZERG in get_enabled_races(world)
+        self.kerrigan_unit_available = (
+            get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available
+            and SC2Campaign.HOTS in get_enabled_campaigns(world)
+            and SC2Race.ZERG in get_enabled_races(world)
+        )
         self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
         self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")
         self.kerrigan_total_level_cap = get_option_value(world, "kerrigan_total_level_cap")
