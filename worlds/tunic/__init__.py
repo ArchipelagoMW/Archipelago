@@ -1,7 +1,8 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
-from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
+                    combat_items)
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
@@ -9,7 +10,8 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions, verify_plando_directions
 from .er_data import portal_mapping
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation, EntranceLayout)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout)
+from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
 from decimal import Decimal, ROUND_HALF_UP
@@ -84,6 +86,12 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
 
     def generate_early(self) -> None:
+        if self.options.logic_rules >= LogicRules.option_no_major_glitches:
+            self.options.laurels_zips.value = LaurelsZips.option_true
+            self.options.ice_grappling.value = IceGrappling.option_medium
+            if self.options.logic_rules.value == LogicRules.option_unrestricted:
+                self.options.ladder_storage.value = LadderStorage.option_medium
+
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
@@ -128,6 +136,15 @@ class TunicWorld(World):
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
         tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
         for tunic in tunic_worlds:
+            # setting up state combat logic stuff, see has_combat_reqs for its use
+            # and this is magic so pycharm doesn't like it, unfortunately
+            if tunic.options.combat_logic:
+                multiworld.state.tunic_need_to_reset_combat_from_collect[tunic.player] = False
+                multiworld.state.tunic_need_to_reset_combat_from_remove[tunic.player] = False
+                multiworld.state.tunic_area_combat_state[tunic.player] = {}
+                for area_name in area_data.keys():
+                    multiworld.state.tunic_area_combat_state[tunic.player][area_name] = CombatState.unchecked
+
             # if it's one of the options, then it isn't a custom seed group
             if tunic.options.entrance_rando.value in EntranceRando.options.values():
                 continue
@@ -362,6 +379,19 @@ class TunicWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
+
+    # cache whether you can get through combat logic areas
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change and self.options.combat_logic and item.name in combat_items:
+            state.tunic_need_to_reset_combat_from_collect[self.player] = True
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change and self.options.combat_logic and item.name in combat_items:
+            state.tunic_need_to_reset_combat_from_remove[self.player] = True
+        return change
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:

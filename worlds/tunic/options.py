@@ -263,14 +263,32 @@ class LadderStorage(Choice):
 
 class LadderStorageWithoutItems(Toggle):
     """
-    If disabled, you logically require Stick, Sword, or Magic Orb to Ladder Storage.
-    If enabled, you will be expected to Ladder Storage without progression items.
+    If disabled, you logically require Stick, Sword, or Magic Orb to perform Ladder Storage.
+    If enabled, you will be expected to perform Ladder Storage without progression items.
     This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 
     This option has no effect if you do not have Ladder Storage Logic enabled
     """
     internal_name = "ladder_storage_without_items"
     display_name = "Ladder Storage without Items"
+
+
+class LogicRules(Choice):
+    """
+    This option has been superseded by the individual trick options.
+    If set to nmg, it will set Ice Grappling to medium and Laurels Zips on.
+    If set to ur, it will do nmg as well as set Ladder Storage to medium.
+    It is here to avoid breaking old yamls, and will be removed at a later date.
+    """
+    visibility = Visibility.none
+    internal_name = "logic_rules"
+    display_name = "Logic Rules"
+    option_restricted = 0
+    option_no_major_glitches = 1
+    alias_nmg = 1
+    option_unrestricted = 2
+    alias_ur = 2
+    default = 0
 
 
 @dataclass
@@ -297,6 +315,7 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+    plando_connections: TunicPlandoConnections
 
     fixed_shop: FixedShop
     logic_rules: Removed  # fully removed in the direction pairs update

@@ -208,6 +208,10 @@ slot_data_item_names = [
     "Gold Questagon",
 ]
 
+combat_items: List[str] = [name for name, data in item_table.items()
+                           if data.combat_ic and IC.progression in data.combat_ic]
+combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels"])
+
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
 
 filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler]

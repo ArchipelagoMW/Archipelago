@@ -1,6 +1,8 @@
 from typing import Dict, List, NamedTuple, Tuple, Optional
+from enum import IntEnum
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
+from worlds.AutoWorld import LogicMixin
 
 
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
@@ -45,7 +47,68 @@ area_data: Dict[str, AreaStats] = {
 }
 
 
-def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
+# these are used for caching which areas can currently be reached in state
+boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
+non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss]
+
+
+class CombatState(IntEnum):
+    unchecked = 0
+    failed = 1
+    succeeded = 2
+
+
+def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool:
+    # we're caching whether you've met the combat reqs before if the state didn't change first
+    # if the combat state is stale, mark each area's combat state as stale
+    if state.tunic_need_to_reset_combat_from_collect[player]:
+        state.tunic_need_to_reset_combat_from_collect[player] = 0
+        for name in area_data.keys():
+            if state.tunic_area_combat_state[player][name] == CombatState.failed:
+                state.tunic_area_combat_state[player][name] = CombatState.unchecked
+
+    if state.tunic_need_to_reset_combat_from_remove[player]:
+        state.tunic_need_to_reset_combat_from_remove[player] = 0
+        for name in area_data.keys():
+            if state.tunic_area_combat_state[player][name] == CombatState.succeeded:
+                state.tunic_area_combat_state[player][name] = CombatState.unchecked
+
+    if state.tunic_area_combat_state[player][area_name] > CombatState.unchecked:
+        return state.tunic_area_combat_state[player][area_name] == CombatState.succeeded
+
+    met_combat_reqs = check_combat_reqs(area_name, state, player)
+
+    # we want to skip the "none area" since we don't record its results
+    if area_name not in area_data.keys():
+        return met_combat_reqs
+
+    # loop through the lists and set the easier/harder area states accordingly
+    if area_name in boss_areas:
+        area_list = boss_areas
+    elif area_name in non_boss_areas:
+        area_list = non_boss_areas
+    else:
+        area_list = [area_name]
+
+    if met_combat_reqs:
+        # set the state as true for each area until you get to the area we're looking at
+        for name in area_list:
+            state.tunic_area_combat_state[player][name] = CombatState.succeeded
+            if name == area_name:
+                break
+    else:
+        # set the state as false for the area we're looking at and each area after that
+        reached_name = False
+        for name in area_list:
+            if name == area_name:
+                reached_name = True
+            if reached_name:
+                state.tunic_area_combat_state[player][name] = CombatState.failed
+
+    return met_combat_reqs
+
+
+def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
     data = alt_data or area_data[area_name]
     extra_att_needed = 0
     extra_def_needed = 0
@@ -108,7 +171,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_dat
             more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
                                             data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
                                             equip_list)
-            if has_combat_reqs("none", state, player, more_modified_stats):
+            if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
 
             # and we need to check if you would have the required stats if you didn't have magic
@@ -116,8 +179,9 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_dat
             more_modified_stats = AreaStats(data.att_level + 2, data.def_level + 2, data.potion_level,
                                             data.hp_level, data.sp_level, data.mp_level - 16, data.potion_count,
                                             equip_list)
-            if has_combat_reqs("none", state, player, more_modified_stats):
+            if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
+            return False
 
         elif stick_bool and "Stick" in data.equipment and "Magic" in data.equipment:
             # we need to check if you would have the required stats if you didn't have the stick
@@ -125,8 +189,9 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int, alt_dat
             more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
                                             data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
                                             equip_list)
-            if has_combat_reqs("none", state, player, more_modified_stats):
+            if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
+            return False
         else:
             return False
     return True
@@ -163,12 +228,11 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
             free_def = player_def - def_offerings
             free_sp = player_sp - sp_offerings
             paid_stats = data.def_level + data.sp_level - free_def - free_sp
-            def_to_buy = 0
             sp_to_buy = 0
 
             if paid_stats <= 0:
                 # if you don't have to pay for any stats, you don't need money for these upgrades
-                pass
+                def_to_buy = 0
             elif paid_stats <= def_offerings:
                 # get the amount needed to buy these def offerings
                 def_to_buy = paid_stats
@@ -265,31 +329,31 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
 
 # returns a tuple of your max attack level, the number of attack offerings
 def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
-    att_offering_count = state.count("ATT Offering", player)
+    att_offerings = state.count("ATT Offering", player)
     att_upgrades = state.count("Hero Relic - ATT", player)
     sword_level = state.count("Sword Upgrade", player)
     if sword_level >= 3:
         att_upgrades += min(2, sword_level - 2)
     # attack falls off, can just cap it at 8 for simplicity
-    return min(8, 1 + att_offering_count + att_upgrades), att_offering_count
+    return min(8, 1 + att_offerings + att_upgrades), att_offerings
 
 
 # returns a tuple of your max defense level, the number of defense offerings
 def get_def_level(state: CollectionState, player: int) -> Tuple[int, int]:
-    def_offering_count = state.count("DEF Offering", player)
+    def_offerings = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
-    return (min(8, 1 + def_offering_count
+    return (min(8, 1 + def_offerings
                 + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)),
-            def_offering_count)
+            def_offerings)
 
 
 # returns a tuple of your max potion level, the number of potion offerings
 def get_potion_level(state: CollectionState, player: int) -> Tuple[int, int]:
-    potion_offering_count = min(2, state.count("Potion Offering", player))
+    potion_offerings = min(2, state.count("Potion Offering", player))
     # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
-    return (1 + potion_offering_count
+    return (1 + potion_offerings
             + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player),
-            potion_offering_count)
+            potion_offerings)
 
 
 # returns a tuple of your max hp level, the number of hp offerings
@@ -341,3 +405,13 @@ def get_money_count(state: CollectionState, player: int) -> int:
         money += money_per_break
         money_per_break = min(512, money_per_break * 2)
     return money
+
+
+class TunicState(LogicMixin):
+    # the per-player need to reset the combat state when collecting a combat item
+    tunic_need_to_reset_combat_from_collect: Dict[int, bool] = {}
+    # the per-player need to reset the combat state when removing a combat item
+    tunic_need_to_reset_combat_from_remove: Dict[int, bool] = {}
+    # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
+    tunic_area_combat_state: Dict[int, Dict[str, int]] = {}
+

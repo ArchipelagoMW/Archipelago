@@ -925,7 +925,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Upper Entry"].connect(
         connecting_region=regions["Rooted Ziggurat Upper Front"])
 
-    regions["Rooted Ziggurat Upper Front"].connect(
+    zig_upper_front_back = regions["Rooted Ziggurat Upper Front"].connect(
         connecting_region=regions["Rooted Ziggurat Upper Back"],
         rule=lambda state: state.has(laurels, player) or has_sword(state, player))
     regions["Rooted Ziggurat Upper Back"].connect(
@@ -1328,6 +1328,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(lower_quarry_empty_to_combat,
                  lambda state: has_combat_reqs("Quarry", state, player))
 
+        set_rule(zig_upper_front_back,
+                 lambda state: state.has(laurels, player) 
+                 or has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(zig_low_entry_to_front,
                  lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(zig_low_mid_to_front,
@@ -1651,17 +1654,14 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         # laurel means you can dodge the enemies freely with the laurels
         if set_instead:
             set_rule(multiworld.get_location(loc_name, player),
-                     # someome tell me if you actually need to do the p=player and c=combat_req_area, lambdas scary
-                     lambda state, p=player, c=combat_req_area, d=dagger, la=laurel:
-                     has_combat_reqs(c, state, p)
-                     or (state.has(ice_dagger, player) if d else False)
-                     or (state.has(laurels, player) if la else False))
+                     lambda state: has_combat_reqs(combat_req_area, state, player)
+                     or (dagger and state.has(ice_dagger, player))
+                     or (laurel and state.has(laurels, player)))
         else:
             add_rule(multiworld.get_location(loc_name, player),
-                     lambda state, p=player, c=combat_req_area, d=dagger, la=laurel:
-                     has_combat_reqs(c, state, p)
-                     or (state.has(ice_dagger, player) if d else True)
-                     or (state.has(laurels, player) if la else False))
+                     lambda state: has_combat_reqs(combat_req_area, state, player)
+                     or (dagger and state.has(ice_dagger, player))
+                     or (laurel and state.has(laurels, player)))
 
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         # garden knight is in the regions part above
