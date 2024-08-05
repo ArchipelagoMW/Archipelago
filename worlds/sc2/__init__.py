@@ -16,7 +16,7 @@ from .items import (
 from . import items
 from . import item_groups
 from . import location_groups
-from .locations import get_locations, get_location_types, get_plando_locations
+from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
 from .regions import create_regions
 from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
@@ -88,7 +88,7 @@ class SC2World(World):
     settings: ClassVar[settings.Starcraft2Settings]
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None)}
+    location_name_to_id = {location.name: location.code for location in DEFAULT_LOCATION_LIST}
     options_dataclass = Starcraft2Options
     options: Starcraft2Options
 
@@ -614,13 +614,16 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
     open_locations = [location for location in world.location_cache if location.item is None]
     plando_locations = get_plando_locations(world)
     resource_location_types = get_location_types(world, LocationInclusion.option_resources)
+    resource_location_flags = get_location_flags(world, LocationInclusion.option_resources)
     location_data = {sc2_location.name: sc2_location for sc2_location in get_locations(world)}
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
             # The location is not plando'd
             sc2_location = location_data[location.name]
-            if sc2_location.type in resource_location_types:
+            if (sc2_location.type in resource_location_types
+                or (sc2_location.flags & resource_location_flags)
+            ):
                 item_name = world.random.choice(filler_items)
                 item = create_item_with_correct_settings(world.player, item_name)
                 location.place_locked_item(item)
