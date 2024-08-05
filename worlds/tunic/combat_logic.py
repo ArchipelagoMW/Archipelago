@@ -164,7 +164,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                                data.hp_level, data.sp_level, data.mp_level + extra_mp_needed, data.potion_count)
     if not has_required_stats(modified_stats, state, player):
         # we may need to check if you would have the required stats if you were missing a weapon
-        # if someone has a better way of doing this, please tell me lmao
+        # it's kinda janky, but these only get hit in less than once per 100 generations, so whatever
         if sword_bool and "Sword" in data.equipment and "Magic" in data.equipment:
             # we need to check if you would have the required stats if you didn't have melee
             equip_list = [item for item in data.equipment if item != "Sword"]
