@@ -1,6 +1,6 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
-from .options import IceGrappling, LadderStorage, CombatLogic, EntranceLayout
+from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip)
 from .er_data import Portal
@@ -568,11 +568,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["West Garden before Terry"])
 
     regions["West Garden Portal"].connect(
+        connecting_region=regions["West Garden by Portal"])
+    regions["West Garden by Portal"].connect(
+        connecting_region=regions["West Garden Portal"],
+        rule=lambda state: has_ability(prayer, state, world) and state.has("Activate West Garden Fuse", player))
+
+    regions["West Garden by Portal"].connect(
         connecting_region=regions["West Garden Portal Item"],
         rule=lambda state: state.has(laurels, player))
     regions["West Garden Portal Item"].connect(
-        connecting_region=regions["West Garden Portal"],
-        rule=lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+        connecting_region=regions["West Garden by Portal"],
+        rule=lambda state: state.has(laurels, player))
 
     # can ice grapple to and from the item behind the magic dagger house
     regions["West Garden Portal Item"].connect(
@@ -660,14 +666,19 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     # Library
     regions["Library Exterior Tree Region"].connect(
+        connecting_region=regions["Library Exterior by Tree"])
+    regions["Library Exterior by Tree"].connect(
+        connecting_region=regions["Library Exterior Tree Region"],
+        rule=lambda state: has_ability(prayer, state, world))
+
+    regions["Library Exterior by Tree"].connect(
         connecting_region=regions["Library Exterior Ladder Region"],
         rule=lambda state: state.has_any({grapple, laurels}, player)
         and has_ladder("Ladders in Library", state, world))
     regions["Library Exterior Ladder Region"].connect(
-        connecting_region=regions["Library Exterior Tree Region"],
-        rule=lambda state: has_ability(prayer, state, world)
-        and ((state.has(laurels, player) and has_ladder("Ladders in Library", state, world))
-             or state.has(grapple, player)))
+        connecting_region=regions["Library Exterior by Tree"],
+        rule=lambda state: state.has(grapple, player)
+        or (state.has(laurels, player) and has_ladder("Ladders in Library", state, world)))
 
     regions["Library Hall Bookshelf"].connect(
         connecting_region=regions["Library Hall"],
@@ -713,13 +724,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         and has_ladder("Ladders in Library", state, world))
 
     regions["Library Lab"].connect(
-        connecting_region=regions["Library Portal"],
-        rule=lambda state: has_ability(prayer, state, world)
-        and has_ladder("Ladders in Library", state, world))
-    regions["Library Portal"].connect(
+        connecting_region=regions["Library Lab on Portal Pad"],
+        rule=lambda state: has_ladder("Ladders in Library", state, world))
+    regions["Library Lab on Portal Pad"].connect(
         connecting_region=regions["Library Lab"],
         rule=lambda state: has_ladder("Ladders in Library", state, world)
         or state.has(laurels, player))
+
+    regions["Library Lab on Portal Pad"].connect(
+        connecting_region=regions["Library Portal"],
+        rule=lambda state: has_ability(prayer, state, world))
+    regions["Library Portal"].connect(
+        connecting_region=regions["Library Lab on Portal Pad"])
 
     regions["Library Lab"].connect(
         connecting_region=regions["Library Lab to Librarian"],
@@ -963,17 +979,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
-    # zig skip region only gets made if entrance rando and fewer shops are on
-    if options.entrance_rando and options.entrance_layout == EntranceLayout.option_fixed_shop:
-        regions["Zig Skip Exit"].connect(
-            connecting_region=regions["Rooted Ziggurat Lower Front"])
-
     regions["Rooted Ziggurat Portal"].connect(
+        connecting_region=regions["Rooted Ziggurat Portal Room"])
+    regions["Rooted Ziggurat Portal Room"].connect(
+        connecting_region=regions["Rooted Ziggurat Portal"],
+        rule=lambda state: has_ability(prayer, state, world))
+
+    regions["Rooted Ziggurat Portal Room"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
         rule=lambda state: state.has("Activate Ziggurat Fuse", player))
     regions["Rooted Ziggurat Portal Room Exit"].connect(
-        connecting_region=regions["Rooted Ziggurat Portal"],
-        rule=lambda state: has_ability(prayer, state, world))
+        connecting_region=regions["Rooted Ziggurat Portal Room"])
 
     # Swamp and Cathedral
     regions["Swamp Front"].connect(
