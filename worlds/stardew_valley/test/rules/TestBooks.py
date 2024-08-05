@@ -8,7 +8,7 @@ class TestBooksLogic(SVTestBase):
     }
 
     def test_need_weapon_for_mapping_cave_systems(self):
-        self.collect_all_the_money()
+        self.collect_lots_of_money(0.5)
 
         location = self.multiworld.get_location("Read Mapping Cave Systems", self.player)
 
