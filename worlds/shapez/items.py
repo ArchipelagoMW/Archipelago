@@ -96,18 +96,6 @@ fillers = [
     "Blueprint Shapes Bundle"
 ]
 
-item_groups = {
-    "Routing Buildings": {buildings_routing.keys()},
-    "Processing Buildings": {buildings_processing.keys()},
-    "Other Buildings": {buildings_other.keys()},
-    "Top Row Buildings": {buildings_top_row.keys()},
-    "Wire Buildings": {buildings_wires.keys()},
-    "Gameplay Unlocks": {gameplay_unlocks.keys()},
-    "Upgrades": {upgrades.keys()},
-    "Bundles": {bundles.keys()},
-    "Traps": {traps.keys()},
-}
-
 item_descriptions = {  # TODO
     # Items
     "Balancer": "A routing building, that can merge two belts into one, split a belt in two, " +
