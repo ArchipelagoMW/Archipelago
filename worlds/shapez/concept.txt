@@ -7,8 +7,7 @@ Items:
     items, receiving buildings and other mechanics flips a boolean, speed upgrades add to speed, copy
     paste shapes add to inventory (look at what happens when shape delivered to hub)
 @generating: minimum 25 levels (+2 additional checks) and 4x7 upgrades contain all game mechanics
-    and 28 x1 upgrades, additional upgrades (always packs of four) contain x.1 upgrades, softlock and
-    long play time achievements contain additional x1 upgrades or fillers if not fitting, reasonable
+    and 28 x1 upgrades, additional upgrades contain x.1 upgrades, reasonable
     achievements contain random copy paste shape bundles and x.1 upgrades (aka fillers)
 
 Traps:
@@ -53,7 +52,7 @@ Options:
     hardcore (all complete random except level 1)
 - randomize upgrade requirements (boolean)
 - progressive upgrade requirements (only if randomized upgrade requirements):
-    vanilla-like (2 free, 3 random building #1, 4 random building #2, 5+ all),
+    vanilla-like (2 free, 3 random building #123, 4+ all),
     linear (2 free, 3-6 each another random building, 7+ all),
     hardcore (all complete random except all tier 2 upgrades)
 - same late upgrade requirements (boolean, only if randomized upgrade requirements)
@@ -61,7 +60,7 @@ Options:
 - exclude lang play time achievements
 - exclude softlock achievements
 - exclude progression items from softlock and long playtime achievements
-- traps replacing fillers percentage
+- traps replacing fillers probability
 
 Additional Randomization:
 - level completion Shapes
@@ -83,12 +82,23 @@ Logical requirements:
 - goal > cutter, stacker, painter, mixer, balancer, rotator, tunnel, blueprints
 - upgrades access > upgrades unlocker
 
-Region connections:
-- Menu
-- one for each row of levels with new kind of shape (5 or 6), connects to lower region, lowest connects to menu
-- upgrades tier 2
-- upgrades tier 3-9+, connects to lower tier
-@code level rows and upgrade tiers need access rules
+Regions:
+- Main > Levels with 1 Building, Levels with 5 Buildings, Upgrades Tier II,
+         Cut Shape Achievements, Rotated Shape Achievements, Stacked Shape Achievements, Painted Shape Achievements,
+         Stored Shape Achievements, Trashed Shape Achievements, Wiring Achievements
+- Levels with 1 Building > Levels with 2 Buildings
+- Levels with 2 Buildings > Levels with 3 Buildings
+- Levels with 3 Buildings > Levels with 4 Buildings
+- Levels with 4 Buildings > Levels with 5 Buildings
+- Upgrades Tier II > Upgrades with 1 Building, Upgrades with 3 Building, Upgrades with 5 Buildings
+- Upgrades with 1 Building > Upgrades with 2 Buildings
+- Upgrades with 2 Buildings > Upgrades with 3 Buildings
+- Upgrades with 3 Buildings > Upgrades with 4 Buildings, Upgrades with 5 Building
+- Upgrades with 4 Buildings > Upgrades with 5 Buildings
+- Cut Shape Achievements > All Buildings Shapes
+- Rotated Shape Achievements > All Buildings Shapes
+- Stacked Shape Achievements > All Buildings Shapes
+- Painted Shape Achievements > All Buildings Shapes
 
 @code Connection details:
 - save login details in save file
@@ -101,13 +111,13 @@ Region connections:
 - save ordered list of received items in save file
 - save index of last received item in save file
 - playing offline is a nice idea but NOT PLANNED for initial release
-- receive AP seed and buildings order logic from server and use them to generate the save file
+- receive AP seed, buildings order logic, and options from server and use them to generate the save file
 
 @code other details:
 - no console input, need text client
 - active mod = only playing AP
 - create bare bone structure of code like in docs, then fill like other worlds
-- all upgrades available from start
+- all upgrades available from receiving upgrades unlock
 
 achievements and conditions:
 - Painter -         paint a shape: always, painted shapes
@@ -161,3 +171,8 @@ Funny idea: randomize MUSIC
 - unlocking background music shuffled into item pool
 - one song always in starting inventory
 - only randomized if achievements included
+
+Oh god I have another idea: Languages
+- Add choice option to choose language
+- changes names of items and locations and maybe everything else that is a string
+- rather easy to implement

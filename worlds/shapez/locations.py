@@ -1,11 +1,107 @@
-from BaseClasses import Location, LocationProgressType
+from BaseClasses import Location, LocationProgressType, Region
 
-included_locations: dict[str, tuple[str, LocationProgressType]] = {}
-"""Name: (region name, LocationProgressType)"""
+location_description = {  # TODO
+    "Level 1": "TODO",
+    "Level 1 Additional": "TODO",
+    "Level 20 Additional": "TODO",
+    "Routing Upgrade Tier II": "TODO",
+    "Extracting Upgrade Tier II": "TODO",
+    "Shape Processing Upgrade Tier II": "TODO",
+    "Color Processing Upgrade Tier II": "TODO",
+    "Painter": "TODO",
+    "Cutter": "TODO",
+    "Rotater": "TODO",
+    "Wait, they stack?": "TODO",
+    "Wires": "TODO",
+    "Storage": "TODO",
+    "Freedom": "TODO",
+    "The logo!": "TODO",
+    "To the moon": "TODO",
+    "It's piling up": "TODO",
+    "I'll use it later": "TODO",
+    "Efficiency 1": "TODO",
+    "Preparing to launch": "TODO",
+    "SpaceY": "TODO",
+    "Stack overflow": "TODO",
+    "It's a mess": "TODO",
+    "Faster": "TODO",
+    "Even faster": "TODO",
+    "Get rid of them": "TODO",
+    "It's been a long time": "TODO",
+    "Addicted": "TODO",
+    "Can't stop": "TODO",
+    "Is this the end?": "TODO",
+    "Getting into it": "TODO",
+    "Now it's easy": "TODO",
+    "Computer Guy": "TODO",
+    "Speedrun Master": "TODO",
+    "Speedrun Novice": "TODO",
+    "Not an idle game": "TODO",
+    "Efficiency 2": "TODO",
+    "Branding specialist 1": "TODO",
+    "Branding specialist 2": "TODO",
+    "King of Inefficiency": "TODO",
+    "It's so slow": "TODO",
+    "MAM (Make Anything Machine)": "TODO",
+    "Perfectionist": "TODO",
+    "The next dimension": "TODO",
+    "Oops": "TODO",
+    "Copy-Pasta": "TODO",
+    "I've seen that before ...": "TODO",
+    "Memories from the past": "TODO",
+    "I need trains": "TODO",
+    "A bit early?": "TODO",
+    "GPS": "TODO"
+}
+
+
+def roman(num: int) -> str:
+    translate: set[tuple[int, str]] = {
+        (1000, "M"),
+        (900, "CM"),
+        (500, "D"),
+        (400, "CD"),
+        (100, "C"),
+        (90, "XC"),
+        (50, "L"),
+        (40, "XL"),
+        (10, "X"),
+        (9, "IX"),
+        (5, "V"),
+        (4, "IV"),
+        (1, "I")
+    }
+    rom: str = ""
+    for (key, val) in translate:
+        while num > key:
+            rom += val
+    return rom
+
+
+all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
+                            + [f"Level {x}" for x in range(1, 1001)]
+                            + [f"Routing Upgrade Tier {roman(x)}" for x in range(2, 1001)]
+                            + [f"Extracting Upgrade Tier {roman(x)}" for x in range(2, 1001)]
+                            + [f"Shape Processing Upgrade Tier {roman(x)}" for x in range(2, 1001)]
+                            + [f"Color Processing Upgrade Tier {roman(x)}" for x in range(2, 1001)]
+                            + ["Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage",
+                               "Freedom", "The logo!", "To the moon", "It's piling up", "I'll use it later",
+                               "Efficiency 1", "Preparing to launch", "SpaceY", "Stack overflow", "It's a mess",
+                               "Faster", "Even faster", "Get rid of them", "It's been a long time", "Addicted",
+                               "Can't stop", "Is this the end?", "Getting into it", "Now it's easy", "Computer Guy",
+                               "Speedrun Master", "Speedrun Novice", "Not an idle game", "Efficiency 2",
+                               "Branding specialist 1", "Branding specialist 2", "King of Inefficiency", "It's so slow",
+                               "MAM (Make Anything Machine)", "Perfectionist", "The next dimension", "Oops",
+                               "Copy-Pasta", "I've seen that before ...", "Memories from the past", "I need trains",
+                               "A bit early?", "GPS", ])
+
+# included_locations: dict[str, tuple[str, LocationProgressType]]
+# """Name: (region name, LocationProgressType)"""
 
 
 def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
-    """Returns a dictionary with all level locations based on given options (maxlevel INCLUDED)."""
+    """Returns a dictionary with all level locations based on given options (maxlevel INCLUDED).
+    If shape requirements are not randomized, give logic type 0."""
     locations: dict[str, tuple[str, LocationProgressType]] = {}
 
     # Level 1 is always directly accessible
@@ -55,7 +151,8 @@ def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationPro
 
 
 def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
-    """Returns a dictionary with all upgrade locations based on given options (finaltier INCLUDED)."""
+    """Returns a dictionary with all upgrade locations based on given options (finaltier INCLUDED).
+    If shape requirements are not randomized, give logic type 0."""
     locations: dict[str, tuple[str, LocationProgressType]] = {}
     categories = ["Routing", "Extracting", "Shape Processing", "Color Processing"]
 
@@ -64,10 +161,8 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
 
     if logictype == 0:
         for cat in categories:
-            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
-        for cat in categories:
-            locations[f"{cat} Upgrade Tier IV"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
-        for x in range(5, finaltier+1):
+            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+        for x in range(4, finaltier+1):
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     elif logictype == 1:
@@ -107,7 +202,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     locations["Painter"] = ("Painted Shape Achievements", LocationProgressType.DEFAULT)
     locations["Cutter"] = ("Cut Shape Achievements", LocationProgressType.DEFAULT)
     locations["Rotater"] = ("Rotated Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Wait, they stack"] = ("Stacked Shape Achievements", LocationProgressType.DEFAULT)
+    locations["Wait, they stack?"] = ("Stacked Shape Achievements", LocationProgressType.DEFAULT)
     if levellogictype in [0, 1, 4]:
         locations["Wires"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
     else:
@@ -139,10 +234,12 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     locations["It's a mess"] = ("Menu", LocationProgressType.DEFAULT)
     if upgradelogictype == 1:
         locations["Faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
-        locations["Even faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+        if finaltier > 8:
+            locations["Even faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
     else:
         locations["Faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Even faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
+        if finaltier > 8:
+            locations["Even faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     locations["Get rid of them"] = ("Trashed Shape Achievements", LocationProgressType.DEFAULT)
     if goal > 1 or maxlevel > 50:
         if levellogictype in [0, 1, 4]:
@@ -232,28 +329,9 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     return locations
 
 
-def roman(num: int) -> str:
-    translate: set[tuple[int, str]] = {
-        (1000, "M"),
-        (900, "CM"),
-        (500, "D"),
-        (400, "CD"),
-        (100, "C"),
-        (90, "XC"),
-        (50, "L"),
-        (40, "XL"),
-        (10, "X"),
-        (9, "IX"),
-        (5, "V"),
-        (4, "IV"),
-        (1, "I")
-    }
-    rom: str = ""
-    for (key, val) in translate:
-        while num > key:
-            rom += val
-    return rom
-
-
 class ShapezLocation(Location):
     game = "Shapez"
+
+    def __init__(self, player: int, name: str, address: int, region: Region, progress_type: LocationProgressType):
+        super(ShapezLocation, self).__init__(player, name, address, region)
+        self.progress_type = progress_type

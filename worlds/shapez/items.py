@@ -81,6 +81,21 @@ item_table: dict[str, ItemClassification] = {
     **traps
 }
 
+big_upgrades = [
+    "Big Routing Upgrade",
+    "Big Extraction Upgrade",
+    "Big Shape Processing Upgrade",
+    "Big Color Processing Upgrade"
+]
+
+fillers = [
+    "Small Routing Upgrade",
+    "Small Extraction Upgrade",
+    "Small Shape Processing Upgrade",
+    "Small Color Processing Upgrade",
+    "Blueprint Shapes Bundle"
+]
+
 item_groups = {
     "Routing Buildings": {buildings_routing.keys()},
     "Processing Buildings": {buildings_processing.keys()},
@@ -93,7 +108,7 @@ item_groups = {
     "Traps": {traps.keys()},
 }
 
-item_descriptions = {
+item_descriptions = {  # TODO
     # Items
     "Balancer": "A routing building, that can merge two belts into one, split a belt in two, " +
                 "or balance the items of two belts",
@@ -114,7 +129,7 @@ item_descriptions = {
                     "wire inputs for each color to work",
     "Trash": "A building, that destroys unused shapes",
     "Chaining Extractor": "An upgrade to extractors, that can increase the output without balancers or mergers",
-    "Belt Reader": "TODO",  # TODO
+    "Belt Reader": "TODO",
     "Storage": "TODO",
     "Item Filter": "TODO",
     "Display": "TODO",

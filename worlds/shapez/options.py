@@ -56,7 +56,7 @@ class RandomizeLevelLogic(Choice):
     Shuffled: Same as vanilla, but with shuffled order of buildings.
     Stretched vanilla: After every floor(maxlevel/6) levels, another building is required, with the same order as vanilla.
     Stretched shuffled: Same as stretched vanilla, but with shuffled order of buildings.
-    Hardcore: All levels (except level 1) have completely random shape requirements. Expect long and early BKs."""
+    Hardcore: All levels (except level 1) have completely random shape requirements. Expect early BKs."""
     display_name = "Randomize level logic"
     option_vanilla = 0
     option_shuffled = 1
@@ -69,10 +69,10 @@ class RandomizeLevelLogic(Choice):
 class RandomizeUpgradeLogic(Choice):
     """If upgrade requirements are randomized, this sets how those random shapes are generated
     and how logic works for upgrades. All four categories will have the same logic.
-    Vanilla-like: Tier II requires nothing, III requires one random building, IV requires another random building,
-                  and V and onwards require all processing buildings.
+    Vanilla-like: Tier II requires nothing, III requires three random buildings,
+                  and IV and onwards require all processing buildings.
     Linear: Tier II requires nothing, III-VI require another random building each, and VII and onwards require all buildings.
-    Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect long and early BKs."""
+    Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
     display_name = "Randomize upgrade logic"
     option_vanilla_like = 0
     option_linear = 1
@@ -110,15 +110,15 @@ class ExcludeProgressionSoftlockLongPlaytime(Toggle):
     default = True
 
 
-class TrapsPercentage(Range):
-    """The amount of filler items (in percent) being replaced by traps."""
+class TrapsProbability(Range):
+    """The probability of any filler item (in percent) being replaced by a trap."""
     display_name = "Traps Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
 
-#class IncludeBackgroundMusic(Toggle):
+# class IncludeBackgroundMusic(Toggle):
 #    """Include background music in the item pool. Requires achievements to be included as locations."""
 #    display_name = "Include background music"
 
@@ -137,6 +137,6 @@ class ShapezOptions(PerGameCommonOptions):
     exclude_softlock_achievements: ExcludeSoftlockAchievements
     exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
     exclude_progression_softlock_long_playtime: ExcludeProgressionSoftlockLongPlaytime
-    traps_percentage: TrapsPercentage
+    traps_percentage: TrapsProbability
 #    include_background_music: IncludeBackgroundMusic
 
