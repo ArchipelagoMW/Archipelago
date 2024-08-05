@@ -507,6 +507,7 @@ ULTRALISK_TYRANNOZOR_ASPECT             = "Tyrannozor Aspect (Ultralisk)"
 INFESTED_MEDICS      = "Infested Medics"
 INFESTED_SIEGE_TANKS = "Infested Siege Tanks"
 INFESTED_BANSHEES    = "Infested Banshees"
+DEVOURING_ONES_MERCS = "Devouring Ones"
 HUNTER_KILLERS       = "Hunter Killers"
     
 # Kerrigan Upgrades
