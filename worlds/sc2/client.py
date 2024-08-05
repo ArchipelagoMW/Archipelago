@@ -419,8 +419,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.output(f"Color for {faction} set to " + player_colors[self.ctx.__dict__[var_names[faction]]])
 
     def _cmd_windowed_mode(self, value="") -> None:
+        """Controls whether sc2 will launch in Windowed mode. Persists across sessions."""
         if not value:
-            pass
+            sc2_logger.info("Use `/windowed_mode [true|false]` to set the windowed mode")
         elif value.casefold() in ('t', 'true', 'yes', 'y'):
             SC2World.settings.game_windowed_mode = True
             force_settings_save_on_close()
