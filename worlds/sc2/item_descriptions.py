@@ -899,7 +899,7 @@ item_descriptions = {
     # Disruptor
     # Warp Prism
     # Observer
-    # Phoenix
+    item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: "Phoenix War Council upgrade. Phoenixes can now use Graviton Beam to lift two targets at once.",
     # Corsair
     # Mirage
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
