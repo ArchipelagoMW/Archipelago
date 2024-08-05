@@ -1811,7 +1811,48 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.OUTBREAK_P.mission_name, "South Bar", SC2_RACESWAP_LOC_ID_OFFSET + 1007, LocationType.EXTRA,
                      lambda state: logic.protoss_defense_rating(state, True) >= 2 and
                                    logic.protoss_common_unit(state)),
-        # 110X/120X - Safe Haven
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "North Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1101, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "East Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1102, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "South Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1103, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "First Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1104, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "Second Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1105, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "Third Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1106, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "North Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1201, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "East Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1202, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "South Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1203, LocationType.EXTRA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "First Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1204, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "Second Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1205, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
+        make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "Third Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1206, LocationType.VANILLA,
+                     lambda state: logic.protoss_common_unit(state) and
+                                   logic.protoss_competent_anti_air(state)),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state) and
