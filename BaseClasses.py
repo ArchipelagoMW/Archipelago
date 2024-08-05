@@ -537,34 +537,93 @@ class MultiWorld():
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
     def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
+        beaten_game_players = set()
+        num_players = self.players
+        players = range(1, num_players + 1)
         if starting_state:
-            if self.has_beaten_game(starting_state):
+            for player in players:
+                if self.has_beaten_game(starting_state, player):
+                    beaten_game_players.add(player)
+            if len(beaten_game_players) == num_players:
                 return True
             state = starting_state.copy()
         else:
-            if self.has_beaten_game(self.state):
+            for player in players:
+                if self.has_beaten_game(self.state, player):
+                    beaten_game_players.add(player)
+            if len(beaten_game_players) == num_players:
                 return True
             state = CollectionState(self)
-        prog_locations = {location for location in self.get_locations() if location.item
-                          and location.item.advancement and location not in state.locations_checked}
 
-        while prog_locations:
-            sphere: Set[Location] = set()
-            # build up spheres of collection radius.
-            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for location in prog_locations:
-                if location.can_reach(state):
-                    sphere.add(location)
+        # Same setup as used in CollectionState.sweep_for_events, but with an early return once all players have beaten
+        # their game.
+        prog_locations_per_player: List[Tuple[int, List[Location]]] = []
+        for player, locations_dict in self.regions.location_cache.items():
+            filtered_locations = [location for location in locations_dict.values()
+                                  if location.advancement and location not in state.locations_checked]
+            if filtered_locations:
+                prog_locations_per_player.append((player, filtered_locations))
 
-            if not sphere:
-                # ran out of places and did not finish yet, quit
-                return False
+        # If no items logically relevant to a specific world were collected in the previous iteration, then that world's
+        # locations can be skipped in the current iteration. Usually, a world's logic only depends on its own items, but
+        # worlds are allowed to depend on other worlds.
+        # Construct a mapping from each player to the list of players with logic dependent on that player.
+        player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
+        worlds = self.worlds
+        for player, _locations in prog_locations_per_player:
+            for dependent_on_player in worlds[player].player_dependencies:
+                player_logic_dependents[dependent_on_player].append(player)
 
-            for location in sphere:
-                state.collect(location.item, True, location)
-            prog_locations -= sphere
+        # The first iteration must check the locations for all players because it is not known which players might have
+        # reachable locations.
+        players_to_check: Set[int] = set(self.regions.location_cache.keys())
+        while players_to_check:
+            received_advancement_players = set()
+            next_events_per_player: List[Tuple[int, List[Location]]] = []
 
-            if self.has_beaten_game(state):
+            for player, locations in prog_locations_per_player:
+                if player not in players_to_check:
+                    # The player did not receive any advancement in the last outer loop, so skip their locations.
+                    next_events_per_player.append((player, locations))
+                    continue
+
+                # Accessibility of each location is checked first because a player's region accessibility cache becomes
+                # stale whenever one of their own items is collected into the state.
+                accessible_locations: List[Location] = []
+                inaccessible_locations: List[Location] = []
+                for location in locations:
+                    if location.can_reach(state):
+                        # Locations containing Items that do not belong to `player` could be collected immediately
+                        # instead of being appended because they won't stale `player`'s region accessibility cache, but,
+                        # for simplicity, all the accessible locations are collected in a single loop.
+                        accessible_locations.append(location)
+                    else:
+                        inaccessible_locations.append(location)
+                if inaccessible_locations:
+                    next_events_per_player.append((player, inaccessible_locations))
+
+                # Collect all the accessible items.
+                for location in accessible_locations:
+                    item = location.item
+                    state.collect(item, True, location)
+                    # Collecting an advancement item is always considered to affect logic, so it could mean the owning
+                    # player (or any other players with logic dependent on the owning player's world) can now access
+                    # additional locations.
+                    received_advancement_players.add(item.player)
+
+            prog_locations_per_player = next_events_per_player
+            # Find all players whose logic depends on a player that received advancement during this iteration.
+            # For each player that received advancement, look up the list of players with logic dependent on that player
+            # and then flatten all the lists into a single set.
+            players_to_check = {dependent_player for received_advancement_player in received_advancement_players
+                                if received_advancement_player in player_logic_dependents
+                                for dependent_player in player_logic_dependents[received_advancement_player]}
+
+            for player in players_to_check:
+                if player not in beaten_game_players and self.has_beaten_game(state, player):
+                    beaten_game_players.add(player)
+
+            if len(beaten_game_players) == num_players:
                 return True
 
         return False
