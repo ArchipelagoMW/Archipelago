@@ -181,6 +181,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                                             equip_list)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
+            return False
 
         elif stick_bool and "Stick" in data.equipment and "Magic" in data.equipment:
             # we need to check if you would have the required stats if you didn't have the stick
@@ -190,6 +191,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                                             equip_list)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
+            return False
         else:
             return False
     return True
