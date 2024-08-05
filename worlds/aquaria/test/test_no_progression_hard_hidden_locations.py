@@ -18,7 +18,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
         "Energy Temple boss area, Fallen God Tooth",
         "Mithalas boss area, beating Mithalan God",
         "Kelp Forest boss area, beating Drunian God",
-        "Sun Temple boss area, beating Sun God",
+        "Sun Temple boss area, beating Lumerean God",
         "Sunken City, bulb on top of the boss area",
         "Home Waters, Nautilus Egg",
         "Energy Temple blaster room, Blaster Egg",
