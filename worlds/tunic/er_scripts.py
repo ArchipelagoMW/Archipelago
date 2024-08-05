@@ -166,12 +166,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         has_laurels = False
 
-    # need to keep track of which scenes have shops, since you shouldn't have multiple shops connected to the same scene
-    shop_scenes: Set[str] = set()
     shop_count = 6
     if fixed_shop:
         shop_count = 0
-        shop_scenes.add("Overworld Redux")
     else:
         # if fixed shop is off, remove this portal
         for portal in portal_map:
@@ -314,10 +311,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     # need to maintain an even number of portals total
                     if shop_count < 0:
                         shop_count += 2
-                    for p in portal_mapping:
-                        if p.name == p_entrance:
-                            shop_scenes.add(p.scene())
-                            break
                 # and if it's neither shop nor dead end, it just isn't correct
                 else:
                     if not portal2:
@@ -442,13 +435,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             shop_count = 0
     
     for i in range(shop_count):
-        portal1 = None
-        for portal in two_plus:
-            if portal.scene() not in shop_scenes:
-                shop_scenes.add(portal.scene())
-                portal1 = portal
-                two_plus.remove(portal)
-                break
+        # todo: put a try except here for when the pop fails to say "too many shops plando'd"
+        portal1 = two_plus.pop()
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
