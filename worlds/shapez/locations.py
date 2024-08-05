@@ -74,7 +74,7 @@ translate: list[tuple[int, str]] = [
 def roman(num: int) -> str:
     rom: str = ""
     for key, val in translate:
-        while num > key:
+        while num >= key:
             rom += val
             num -= key
     return rom
@@ -108,7 +108,7 @@ def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationPro
     # Level 1 is always directly accessible
     locations: dict[str, tuple[str, LocationProgressType]] = {"Level 1": ("Main", LocationProgressType.PRIORITY),
                                                               "Level 1 Additional": (
-                                                              "Main", LocationProgressType.DEFAULT)}
+                                                              "Main", LocationProgressType.PRIORITY)}
 
     if logictype == 0 or logictype == 1:
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
@@ -160,17 +160,19 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
     categories = ["Routing", "Extracting", "Shape Processing", "Color Processing"]
 
     for cat in categories:
-        locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.PRIORITY)
+        locations[f"{cat} Upgrade Tier II"] = ("Upgrades Tier II", LocationProgressType.PRIORITY)
 
     if logictype == 0:
-        for cat in categories:
-            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+        locations["Routing Upgrade Tier III"] = ("Upgrades with 2 Buildings", LocationProgressType.PRIORITY)
+        locations["Extracting Upgrade Tier III"] = ("Upgrades with 2 Buildings", LocationProgressType.PRIORITY)
+        locations["Shape Processing Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.PRIORITY)
+        locations["Color Processing Upgrade Tier III"] = ("Upgrades with 3 Buildings", LocationProgressType.PRIORITY)
         for x in range(4, finaltier+1):
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     elif logictype == 1:
         for cat in categories:
-            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
+            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.PRIORITY)
         for x in range(4, 7):
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = (f"Upgrades with {x-2} Buildings", LocationProgressType.DEFAULT)
@@ -178,7 +180,9 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     else: # logictype == 2
-        for x in range(3, finaltier+1):
+        for cat in categories:
+            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 5 Buildings", LocationProgressType.PRIORITY)
+        for x in range(4, finaltier+1):
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
 
@@ -239,7 +243,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     if upgradelogictype == 1:
         locations["Faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
         if finaltier > 8:
-            locations["Even faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+            locations["Even faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     else:
         locations["Faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
         if finaltier > 8:

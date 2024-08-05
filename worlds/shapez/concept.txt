@@ -52,7 +52,7 @@ Options:
     hardcore (all complete random except level 1)
 - randomize upgrade requirements (boolean)
 - progressive upgrade requirements (only if randomized upgrade requirements):
-    vanilla-like (2 free, 3 random building #123, 4+ all),
+    vanilla-like (2 free, 3 random building #12/#12/#1/#123, 4+ all),
     linear (2 free, 3-6 each another random building, 7+ all),
     hardcore (all complete random except all tier 2 upgrades)
 - same late upgrade requirements (boolean, only if randomized upgrade requirements)
@@ -127,9 +127,9 @@ achievements and conditions:
 - Wires -           complete level 20: always, according levels region
 - Storage -         store a shape in storage: always, stored shapes
 - Freedom -         complete level 26: goal not vanilla, according levels region
-- The logo! -       produze logo: always, all buildings
+- The logo! -       produce logo: always, all buildings
 - To the moon       produce rocket shape: always, all buildings
-- It's piling up    100k bluieprint shapes in hub: always, all buildings
+- It's piling up    100k blueprint shapes in hub: always, all buildings
 - I'll use it later 1mil blueprint shapes in hub: always, all buildings
 - Efficiency 1      25 blueprint shapes / sec: always, all buildings
 - Preparing to launch       10 rocket shapes / sec: always, all buildings

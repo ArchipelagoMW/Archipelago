@@ -2,11 +2,13 @@ from typing import Mapping, Any
 
 import settings
 import typing
+
+from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
     big_upgrades, fillers  # data used below to add items to the World
-from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements
+from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description
 from .presets import options_presets
 from .options import ShapezOptions
 from worlds.AutoWorld import World, WebWorld
@@ -42,6 +44,7 @@ class ShapezWeb(WebWorld):
     )
     tutorials = [setup_en, setup_de]
     item_descriptions = item_descriptions
+    location_descriptions = location_description
 
 
 class ShapezWorld(World):
@@ -51,8 +54,9 @@ class ShapezWorld(World):
     options: ShapezOptions  # typing hints for option results
     settings: typing.ClassVar[ShapezSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
+    web = ShapezWeb
 
-    # TODO TestBase, Docs
+    # TODO TestBase, Docs, shapez lowercase
 
     base_id = 20010707
     location_count: int = 0
@@ -77,6 +81,9 @@ class ShapezWorld(World):
         randomize_upgrade_requirements = self.options.randomize_upgrade_requirements
         randomize_level_logic = self.options.randomize_level_logic
         randomize_upgrade_logic = self.options.randomize_upgrade_logic
+
+        if goal == 1 and goal_amount < 27:
+            raise OptionError("When setting goal to 'mam', goal_amount must be at least 27")
 
         # Determines maxlevel and finaltier, which are needed for location and item generation
         if goal == 0:
@@ -133,14 +140,18 @@ class ShapezWorld(World):
                                                      self.maxlevel, self.options.randomize_level_logic.value,
                                                      self.finaltier, self.options.randomize_upgrade_logic.value,
                                                      self.options.goal.value)}
-        menu_region.connect(self.multiworld.get_region("Main", self.player))
         self.location_count = len(self.included_locations)
-        self.multiworld.regions.extend(create_shapez_regions(self))
+        self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld, self.included_locations,
+                                                             self.location_name_to_id,
+                                                             self.options.randomize_level_logic.value,
+                                                             self.options.randomize_upgrade_logic.value,
+                                                             self.level_logic, self.upgrade_logic))
+        menu_region.connect(self.multiworld.get_region("Main", self.player))
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)
-        included_items: list[Item] = ([self.create_item(name) for name in buildings_routing.keys()]
-                                      + [self.create_item(name) for name in buildings_processing.keys()]
+        included_items: list[Item] = ([self.create_item(name) for name in buildings_processing.keys()]
+                                      + [self.create_item(name) for name in buildings_routing.keys()]
                                       + [self.create_item(name) for name in buildings_other.keys()]
                                       + [self.create_item(name) for name in buildings_top_row.keys()]
                                       + [self.create_item(name) for name in buildings_wires.keys()]
@@ -157,6 +168,9 @@ class ShapezWorld(World):
             else:
                 # Fil with random filler item (all equal chance)
                 included_items.append(self.create_item(fillers[self.multiworld.random.randint(0, len(fillers)-1)]))
+
+        # Upgrades needs to be in sphere 1 in case of both hardcore logic types
+        self.multiworld.local_early_items[self.player]["Upgrades"] = 1
 
         self.multiworld.itempool += included_items
 

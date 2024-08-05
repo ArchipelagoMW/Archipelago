@@ -5,14 +5,6 @@ from BaseClasses import Item, ItemClassification
 
 # Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
 # would be unreasonably complicated and time-consuming.
-buildings_routing = {
-    "Balancer": ItemClassification.progression,
-    "Tunnel": ItemClassification.progression,
-    "Compact Merger": ItemClassification.useful,
-    "Tunnel Tier II": ItemClassification.useful,
-    "Compact Splitter": ItemClassification.useful
-}
-
 buildings_processing = {
     "Cutter": ItemClassification.progression,
     "Rotator": ItemClassification.progression,
@@ -26,14 +18,22 @@ buildings_processing = {
     "Quad Painter": ItemClassification.useful
 }
 
+buildings_routing = {
+    "Balancer": ItemClassification.progression,
+    "Tunnel": ItemClassification.progression,
+    "Compact Merger": ItemClassification.useful,
+    "Tunnel Tier II": ItemClassification.useful,
+    "Compact Splitter": ItemClassification.useful
+}
+
 buildings_other = {
-    "Trash": ItemClassification.useful,
+    "Trash": ItemClassification.progression,
     "Chaining Extractor": ItemClassification.useful
 }
 
 buildings_top_row = {
     "Belt Reader": ItemClassification.progression,
-    "Storage": ItemClassification.useful,
+    "Storage": ItemClassification.progression,
     "Item Filter": ItemClassification.progression,
     "Display": ItemClassification.useful
 }
@@ -70,8 +70,8 @@ traps = {
 }
 
 item_table: dict[str, ItemClassification] = {
-    **buildings_routing,
     **buildings_processing,
+    **buildings_routing,
     **buildings_other,
     **buildings_top_row,
     **buildings_wires,

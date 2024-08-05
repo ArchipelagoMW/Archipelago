@@ -19,7 +19,7 @@ class Goal(Choice):
 
 class GoalAmount(Range):
     """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
-    If MAM is set as the goal and this is set to less than 27, it will be set to 27 instead."""
+    If MAM is set as the goal and this is set to less than 27, it will raise an OptionError."""
     display_name = "Goal amount"
     range_start = 9
     range_end = 1000
@@ -69,7 +69,7 @@ class RandomizeLevelLogic(Choice):
 class RandomizeUpgradeLogic(Choice):
     """If upgrade requirements are randomized, this sets how those random shapes are generated
     and how logic works for upgrades. All four categories will have the same logic.
-    Vanilla-like: Tier II requires nothing, III requires three random buildings,
+    Vanilla-like: Tier II requires nothing, III requires up to three random buildings,
                   and IV and onwards require all processing buildings.
     Linear: Tier II requires nothing, III-VI require another random building each, and VII and onwards require all buildings.
     Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
