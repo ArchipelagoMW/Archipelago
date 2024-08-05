@@ -35,6 +35,9 @@
                             {% elif patch.game == "Kingdom Hearts 2" %}
                             <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                 Download Kingdom Hearts 2 Mod...</a>
+                            {% elif patch.game == "Psychonauts" %}
+                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                                Download Psychonauts Mod...</a>
                             {% elif patch.game == "Ocarina of Time" %}
                             <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                 Download APZ5 File...</a>
