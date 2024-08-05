@@ -56,7 +56,7 @@ class AquarianTranslation(Toggle):
 class BigBossesToBeat(Range):
     """
     The number of big bosses to beat before having access to the creator (the final boss). The big bosses are
-    "Fallen God", "Mithalan God", "Drunian God", "Sun God" and "The Golem".
+    "Fallen God", "Mithalan God", "Drunian God", "Lumerean God" and "The Golem".
     """
     display_name = "Big bosses to beat"
     range_start = 0

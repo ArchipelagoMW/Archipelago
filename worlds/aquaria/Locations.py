@@ -407,7 +407,7 @@ class AquariaLocations:
     }
 
     locations_sun_temple_boss = {
-        "Sun Temple boss area, beating Sun God": 698203,
+        "Sun Temple boss area, beating Lumerean God": 698203,
     }
 
     locations_abyss_l = {

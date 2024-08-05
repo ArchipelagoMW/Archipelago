@@ -107,7 +107,7 @@ def _has_spirit_form(state:CollectionState, player: int) -> bool:
 def _has_big_bosses(state:CollectionState, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
     return state.has_all({"Fallen God beated", "Mithalan God beated", "Drunian God beated",
-                         "Sun God beated", "The Golem beated"}, player)
+                         "Lumerean God beated", "The Golem beated"}, player)
 
 
 def _has_mini_bosses(state:CollectionState, player: int) -> bool:
@@ -996,8 +996,8 @@ class AquariaRegions:
                                   "Beating Drunian God",
                                   "Drunian God beated")
         self.__add_event_location(self.sun_temple_boss,
-                                  "Beating Sun God",
-                                  "Sun God beated")
+                                  "Beating Lumerean God",
+                                  "Lumerean God beated")
         self.__add_event_location(self.sunken_city_boss,
                                   "Beating the Golem",
                                   "The Golem beated")
@@ -1070,10 +1070,10 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has("Sun God beated", self.player))
+                               state.has("Lumerean God beated", self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has("Sun God beated", self.player))
+                               state.has("Lumerean God beated", self.player))
         add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player))
 
@@ -1180,7 +1180,7 @@ class AquariaRegions:
         self.multiworld.get_location("Kelp Forest boss area, beating Drunian God",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Sun Temple boss area, beating Sun God",
+        self.multiworld.get_location("Sun Temple boss area, beating Lumerean God",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sunken City, bulb on top of the boss area",
