@@ -227,12 +227,15 @@ def remaining_fill(multiworld: MultiWorld,
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     total = min(len(itempool),  len(locations))
     placed = 0
+
+    state = CollectionState(multiworld)
+
     while locations and itempool:
         item_to_place = itempool.pop()
         spot_to_fill: typing.Optional[Location] = None
 
         for i, location in enumerate(locations):
-            if location.item_rule(item_to_place):
+            if location.can_fill(state, item_to_place, check_access=False):
                 # popping by index is faster than removing by content,
                 spot_to_fill = locations.pop(i)
                 # skipping a scan for the element
@@ -253,7 +256,7 @@ def remaining_fill(multiworld: MultiWorld,
 
                 location.item = None
                 placed_item.location = None
-                if location.item_rule(item_to_place):
+                if location.can_fill(state, item_to_place, check_access=False):
                     # Add this item to the existing placement, and
                     # add the old item to the back of the queue
                     spot_to_fill = placements.pop(i)
