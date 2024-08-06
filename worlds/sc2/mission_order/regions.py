@@ -30,7 +30,7 @@ def mission_order_regions(
     mission_order.resolve_unlocks()
     
     # Ensure total accessibilty and resolve relative difficulties
-    mission_order.fill_min_steps()
+    mission_order.fill_depths()
     mission_order.resolve_difficulties()
     
     # Build the mission order

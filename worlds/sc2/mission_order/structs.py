@@ -57,7 +57,7 @@ class SC2MissionOrder(MissionOrderNode):
     fixed_missions: Set[SC2MOGenMission]
     mission_pools: SC2MOGenMissionPools
     goal_missions: Set[SC2MOGenMission]
-    max_steps: int
+    max_depth: int
 
     def __init__(self, world: World, data: Dict[str, Any]):
         self.campaigns = []
@@ -166,9 +166,7 @@ class SC2MissionOrder(MissionOrderNode):
                     if not mission.option_empty:
                         mission.make_connections(world, names)
 
-    def fill_min_steps(self) -> None:
-        steps = 0
-
+    def fill_depths(self) -> None:
         accessible_campaigns: Set[SC2MOGenCampaign] = {campaign for campaign in self.campaigns if campaign.is_always_unlocked()}
         next_campaigns: Set[SC2MOGenCampaign] = set(self.campaigns).difference(accessible_campaigns)
 
@@ -186,6 +184,7 @@ class SC2MissionOrder(MissionOrderNode):
         if len(next_missions) == 0:
             raise Exception("Mission order has no possibly accessible missions")
 
+        iterations = 0
         while len(next_missions) > 0:
             # Check for accessible missions
             cur_missions: Set[SC2MOGenMission] = {
@@ -193,17 +192,20 @@ class SC2MissionOrder(MissionOrderNode):
                 if mission.is_unlocked(beaten_missions)
             }
             if len(cur_missions) == 0:
-                raise Exception(f"Mission order ran out of accessible missions at depth {steps}")
+                raise Exception(f"Mission order ran out of accessible missions during iteration {iterations}")
             next_missions.difference_update(cur_missions)
-            # Set the step counters of all currently accessible missions
+            # Set the depth counters of all currently accessible missions
+            new_beaten_missions: Set[SC2MOGenMission] = set()
             while len(cur_missions) > 0:
                 mission = cur_missions.pop()
-                beaten_missions.add(mission)
-                mission.min_steps = steps
-                next_missions.update(mission.next.difference(cur_missions, beaten_missions))
+                new_beaten_missions.add(mission)
+                # If the beaten missions at depth X unlock a mission, said mission can be beaten at depth X+1 
+                mission.min_depth = mission.entry_rule.get_depth(beaten_missions) + 1
+                next_missions.update(mission.next.difference(cur_missions, beaten_missions, new_beaten_missions))
             
             # Any campaigns/layouts/missions added after this point will be seen in the next iteration at the earliest
-            steps += 1
+            iterations += 1
+            beaten_missions.update(new_beaten_missions)
 
             # Check for newly accessible campaigns & layouts
             new_campaigns: Set[SC2MOGenCampaign] = set()
@@ -214,6 +216,8 @@ class SC2MissionOrder(MissionOrderNode):
                 accessible_campaigns.add(campaign)
                 next_layouts.update(campaign.layouts)
                 next_campaigns.remove(campaign)
+                for layout in campaign.layouts:
+                    layout.entry_rule.min_depth = campaign.entry_rule.get_depth(beaten_missions)
             new_layouts: Set[SC2MOGenLayout] = set()
             for layout in next_layouts:
                 if layout.is_unlocked(beaten_missions):
@@ -222,26 +226,31 @@ class SC2MissionOrder(MissionOrderNode):
                 accessible_layouts.add(layout)
                 next_missions.update(layout.entrances)
                 next_layouts.remove(layout)
+                for mission in layout.entrances:
+                    mission.entry_rule.min_depth = layout.entry_rule.get_depth(beaten_missions)
     
         # Make sure we didn't miss anything
         assert len(accessible_campaigns) == len(self.campaigns)
         assert len(accessible_layouts) == sum(len(campaign.layouts) for campaign in self.campaigns)
-        assert len(beaten_missions) == sum(len([mission for mission in layout.missions if not mission.option_empty]) for campaign in self.campaigns for layout in campaign.layouts)
+        assert len(beaten_missions) == sum(
+            len([mission for mission in layout.missions if not mission.option_empty])
+            for campaign in self.campaigns for layout in campaign.layouts
+        )
 
-        # Fill campaign/layout step values as min/max of their children
+        # Fill campaign/layout depth values as min/max of their children
         for campaign in self.campaigns:
             for layout in campaign.layouts:
-                layout.min_steps = min(mission.min_steps for mission in layout.missions if not mission.option_empty)
-                layout.max_steps = max(mission.min_steps for mission in layout.missions if not mission.option_empty)
-            campaign.min_steps = min(layout.min_steps for layout in campaign.layouts)
-            campaign.max_steps = max(layout.max_steps for layout in campaign.layouts)
-
-        self.max_steps = steps - 1
+                depths = [mission.min_depth for mission in layout.missions if not mission.option_empty]
+                layout.min_depth = min(depths)
+                layout.max_depth = max(depths)
+            campaign.min_depth = min(layout.min_depth for layout in campaign.layouts)
+            campaign.max_depth = max(layout.max_depth for layout in campaign.layouts)
+        self.max_depth = max(campaign.max_depth for campaign in self.campaigns)
 
     
     def resolve_difficulties(self) -> None:
         for campaign in self.campaigns:
-            (campaign_sorted, campaign_fixed) = campaign.resolve_difficulties(self.max_steps)
+            (campaign_sorted, campaign_fixed) = campaign.resolve_difficulties(self.max_depth)
             self.fixed_missions.update(campaign_fixed)
             for (diff, missions) in campaign_sorted.items():
                 self.sorted_missions[diff].extend(missions)
@@ -382,9 +391,8 @@ class SC2MOGenCampaign(MissionOrderNode):
     entry_rule: SubRuleEntryRule
     display_name: str
 
-    # TODO these two are currently unused
-    min_steps: int
-    max_steps: int
+    min_depth: int
+    max_depth: int
 
     def __init__(self, world: World, parent: ReferenceType[SC2MissionOrder], name: str, data: Dict[str, Any]):
         self.parent = parent
@@ -422,11 +430,14 @@ class SC2MOGenCampaign(MissionOrderNode):
     def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.entry_rule.is_fulfilled(beaten_missions)
 
-    def resolve_difficulties(self, total_steps: int) -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
+    def resolve_difficulties(self, max_depth: int) -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
         sorted_missions: Dict[Difficulty, Set[SC2MOGenMission]] = {diff: set() for diff in Difficulty if diff != Difficulty.RELATIVE}
         fixed_missions: Set[SC2MOGenMission] = set()
         for layout in self.layouts:
-            (layout_sorted, layout_fixed) = layout.resolve_difficulties(total_steps, self.option_min_difficulty, self.option_max_difficulty)
+            (layout_sorted, layout_fixed) = layout.resolve_difficulties(
+                max_depth, self.min_depth, self.max_depth,
+                self.option_min_difficulty, self.option_max_difficulty
+            )
             fixed_missions.update(layout_fixed)
             for (diff, missions) in layout_sorted.items():
                 sorted_missions[diff].update(missions)
@@ -489,8 +500,8 @@ class SC2MOGenLayout(MissionOrderNode):
     entry_rule: SubRuleEntryRule
     display_name: str
 
-    min_steps: int
-    max_steps: int
+    min_depth: int
+    max_depth: int
 
     def __init__(self, world: World, parent: ReferenceType[SC2MOGenCampaign], name: str, data: Dict):
         self.parent: ReferenceType[SC2MOGenCampaign] = parent
@@ -611,25 +622,33 @@ class SC2MOGenLayout(MissionOrderNode):
     def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.entry_rule.is_fulfilled(beaten_missions)
 
-    def resolve_difficulties(self, total_steps: int, parent_min: Difficulty, parent_max: Difficulty) \
-        -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
+    def resolve_difficulties(self,
+        order_max_depth: int, parent_min_depth: int, parent_max_depth: int,
+        parent_min_diff: Difficulty, parent_max_diff: Difficulty
+    ) -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
         if self.option_min_difficulty == Difficulty.RELATIVE:
-            min_diff = parent_min
-            min_steps = 0
+            min_diff = parent_min_diff
+            if min_diff == Difficulty.RELATIVE:
+                min_depth = 0
+            else:
+                min_depth = parent_min_depth
         else:
             min_diff = self.option_min_difficulty
-            min_steps = self.min_steps
+            min_depth = self.min_depth
         if self.option_max_difficulty == Difficulty.RELATIVE:
-            max_diff = parent_max
-            max_steps = total_steps
+            max_diff = parent_max_diff
+            if max_diff == Difficulty.RELATIVE:
+                max_depth = order_max_depth
+            else:
+                max_depth = parent_max_depth
         else:
             max_diff = self.option_max_difficulty
-            max_steps = self.max_steps
-        step_range = max_steps - min_steps
-        if step_range == 0:
+            max_depth = self.max_depth
+        depth_range = max_depth - min_depth
+        if depth_range == 0:
             # This can happen if layout size is 1 or layout is all entrances
             # Use minimum difficulty in this case
-            step_range = 1
+            depth_range = 1
         # If min/max aren't relative, assume the limits are meant to show up
         layout_thresholds = modified_difficulty_thresholds(min_diff, max_diff)
         thresholds = sorted(layout_thresholds.keys())
@@ -642,7 +661,7 @@ class SC2MOGenLayout(MissionOrderNode):
                 fixed_missions.add(mission)
                 continue
             if mission.option_difficulty == Difficulty.RELATIVE:
-                mission_thresh = int((mission.min_steps - min_steps) * 100 / step_range)
+                mission_thresh = int((mission.min_depth - min_depth) * 100 / depth_range)
                 for i in range(len(thresholds)):
                     if thresholds[i] > mission_thresh:
                         mission.option_difficulty = layout_thresholds[thresholds[i - 1]]
@@ -709,7 +728,7 @@ class SC2MOGenMission(MissionOrderNode):
     option_mission_pool: Set[int] # Allowed mission IDs for this slot
 
     entry_rule: SubRuleEntryRule
-    min_steps: int # Smallest amount of missions to beat before this slot is accessible
+    min_depth: int # Smallest amount of missions to beat before this slot is accessible
 
     mission: SC2Mission
     region: Region
@@ -729,6 +748,7 @@ class SC2MOGenMission(MissionOrderNode):
         self.option_difficulty = Difficulty.RELATIVE
         self.next = set()
         self.prev = set()
+        self.min_depth = -1
 
     def update_with_data(self, data: Dict):
         self.option_goal = data.get("goal", self.option_goal)

@@ -10,14 +10,37 @@ if TYPE_CHECKING:
     from .structs import SC2MOGenMission
 
 class EntryRule(ABC):
+    buffer_fulfilled: bool
+    buffer_depth: int
+
+    def __init__(self) -> None:
+        self.buffer_fulfilled = False
+        self.buffer_depth = -1
+    
     def is_always_fulfilled(self) -> bool:
         return self.is_fulfilled(set())
 
     @abstractmethod
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         """Used during region creation to ensure a beatable mission order."""
         return False
+
+    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+        self.buffer_fulfilled = self.buffer_fulfilled or self._is_fulfilled(beaten_missions)
+        return self.buffer_fulfilled
+
+    @abstractmethod
+    def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
+        """Used during region creation to determine the minimum depth this entry rule can be cleared at."""
+        return -1
     
+    def get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
+        if not self.is_fulfilled(beaten_missions):
+            return -1
+        if self.buffer_depth == -1:
+            self.buffer_depth = self._get_depth(beaten_missions)
+        return self.buffer_depth
+
     @abstractmethod
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         """Passed to Archipelago for use during item placement."""
@@ -46,12 +69,16 @@ class BeatMissionsEntryRule(EntryRule):
     visual_reqs: List[Union[str, SC2MOGenMission]]
 
     def __init__(self, missions_to_beat: Set[SC2MOGenMission], visual_reqs: List[Union[str, SC2MOGenMission]]):
+        super().__init__()
         self.missions_to_beat = missions_to_beat
         self.visual_reqs = visual_reqs
     
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return beaten_missions.issuperset(self.missions_to_beat)
     
+    def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
+        return max(mission.min_depth for mission in self.missions_to_beat)
+
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         return lambda state: state.has_all([mission.beat_item() for mission in self.missions_to_beat], player)
     
@@ -97,6 +124,7 @@ class CountMissionsEntryRule(EntryRule):
     visual_reqs: List[Union[str, SC2MOGenMission]]
 
     def __init__(self, missions_to_count: Set[SC2MOGenMission], target_amount: int, visual_reqs: List[Union[str, SC2MOGenMission]]):
+        super().__init__()
         self.missions_to_count = missions_to_count
         if target_amount == -1 or target_amount > len(missions_to_count):
             self.target_amount = len(missions_to_count)
@@ -104,9 +132,14 @@ class CountMissionsEntryRule(EntryRule):
             self.target_amount = target_amount
         self.visual_reqs = visual_reqs
 
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.target_amount <= len(beaten_missions.intersection(self.missions_to_count))
     
+    def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
+        sorted_missions = sorted(beaten_missions.intersection(self.missions_to_count), key = lambda mission: mission.min_depth)
+        mission_depth = max(mission.min_depth for mission in sorted_missions[:self.target_amount])
+        return max(mission_depth, self.target_amount)
+
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         return lambda state: self.target_amount <= sum(state.has(mission.beat_item(), player) for mission in self.missions_to_count)
     
@@ -162,18 +195,30 @@ class SubRuleEntryRule(EntryRule):
     rule_id: int
     rules_to_check: List[EntryRule]
     target_amount: int
+    min_depth: int
 
     def __init__(self, rules_to_check: List[EntryRule], target_amount: int, rule_id: int):
+        super().__init__()
         self.rule_id = rule_id
         self.rules_to_check = rules_to_check
+        self.min_depth = -1
         if target_amount == -1 or target_amount > len(rules_to_check):
             self.target_amount = len(rules_to_check)
         else:
             self.target_amount = target_amount
 
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.target_amount <= sum(rule.is_fulfilled(beaten_missions) for rule in self.rules_to_check)
     
+    def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
+        if len(self.rules_to_check) == 0:
+            return -1
+        # It should be guaranteed by is_fulfilled that enough rules have a valid depth because they are fulfilled
+        filtered_rules = [rule for rule in self.rules_to_check if rule.get_depth(beaten_missions) > -1]
+        sorted_rules = sorted(filtered_rules, key = lambda rule: rule.get_depth(beaten_missions))
+        required_depth = max(rule.get_depth(beaten_missions) for rule in sorted_rules[:self.target_amount])
+        return max(required_depth, self.target_amount, self.min_depth)
+
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         sub_lambdas = [rule.to_lambda(player) for rule in self.rules_to_check]
         return lambda state, sub_lambdas=sub_lambdas: self.target_amount <= sum(sub_lambda(state) for sub_lambda in sub_lambdas)

@@ -106,6 +106,7 @@ class SC2MOGenMissionPools:
         and marks it as present in the mission order."""
         # Use a locked mission if possible in this slot
         base_pool = slot.option_mission_pool.intersection(self.master_list)
+        # TODO: This won't work, it'll almost always put locked missions early into the mission order
         allowed_locked = base_pool.intersection(locked_ids)
         if len(allowed_locked) > 0:
             pool = allowed_locked
