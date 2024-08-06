@@ -104,8 +104,8 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
     menu = Region("Menu", player, world.multiworld)
     world.multiworld.regions.append(menu)
 
-    has_progressive_items = options.progression_style.current_key != "none"
-    has_progressive_eras = options.progression_style.current_key == "eras_and_districts"
+    has_progressive_items = options.progression_style != "none"
+    has_progressive_eras = options.progression_style == "eras_and_districts"
     has_goody_huts = options.shuffle_goody_hut_rewards
     has_boosts = options.boostsanity
 

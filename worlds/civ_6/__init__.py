@@ -133,12 +133,12 @@ class CivVIWorld(World):
             boost_data = get_boosts_data()
             num_filler_items += len(boost_data)
 
-        filler_count = {rarity: FILLER_DISTRIBUTION[rarity] * num_filler_items for rarity in FillerItemRarity.__reversed__()}
+        filler_count = {rarity: math.ceil(FILLER_DISTRIBUTION[rarity] * num_filler_items) for rarity in FillerItemRarity.__reversed__()}
         min_count = 1
         # Add filler items by rarity
         total_created = 0
         for rarity, count in filler_count.items():
-            for _ in range(max(min_count, math.ceil(count))):
+            for _ in range(max(min_count, count)):
                 if total_created >= num_filler_items:
                     break
                 self.multiworld.itempool += [self.create_item(

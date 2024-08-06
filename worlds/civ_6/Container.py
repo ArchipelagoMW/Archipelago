@@ -157,7 +157,7 @@ def generate_setup_file(world) -> str:
     Generates the Lua for the setup file. This sets initial variables and state that affect gameplay around Progressive Eras
     """
     setup = "-- Setup"
-    if world.options.progression_style.current_key == "eras_and_districts":
+    if world.options.progression_style == "eras_and_districts":
         setup += f"""
     -- Init Progressive Era Value if it hasn't been set already
     if Game.GetProperty("MaxAllowedEra") == nil then

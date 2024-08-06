@@ -28,7 +28,7 @@ def create_boost_rules(world: 'CivVIWorld'):
         if not boost_data or boost_data.PrereqRequiredCount == 0:
             continue
 
-        has_progressive_items = world.options.progression_style.current_key != "none"
+        has_progressive_items = world.options.progression_style != "none"
         set_rule(world_location,
                  generate_has_required_items_lambda(boost_data.Prereq, boost_data.PrereqRequiredCount, has_progressive_items, world.player)
                  )
