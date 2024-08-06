@@ -40,6 +40,14 @@ class LocationFlag(enum.IntFlag):
     PREVENTATIVE = enum.auto()
     """Locations that are about preventing something from happening"""
 
+    def values(self):
+        """Hacky iterator for backwards-compatibility with Python <= 3.10. Not necessary on Python 3.11+"""
+        return tuple(
+            val for val in (
+                LocationFlag.SPEEDRUN, LocationFlag.PREVENTATIVE,
+            ) if val in self
+        )
+
 
 class LocationData(NamedTuple):
     region: str
@@ -1944,7 +1952,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_HOST.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
             logic.the_host_requirement
         ),
-        make_location_data(SC2Mission.THE_HOST.mission_name, "Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.VICTORY,
+        make_location_data(SC2Mission.THE_HOST.mission_name, "Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.EXTRA,
             logic.the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "South Void Shard", SC2LOTV_LOC_ID_OFFSET + 2102, LocationType.EXTRA,
