@@ -6,7 +6,7 @@ from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, ItemClassification
+from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item, ItemClassification
 from Options import VerifyKeys
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -365,7 +365,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
         if issubclass(option, VerifyKeys):
             # Values should already be verified, but just in case...
-            option.verify_keys(value.value)
+            value.verify(StardewValleyWorld, "Tester", PlandoOptions.bosses)
 
         setattr(args, name, {1: value})
     multiworld.set_options(args)
