@@ -1,3 +1,9 @@
+# 2.3.0
+
+### Features
+
+- Added many new item and location groups
+
 # 2.2.0
 
 ### Features
