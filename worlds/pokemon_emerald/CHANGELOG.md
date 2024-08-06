@@ -1,3 +1,10 @@
+# 2.3.0
+
+### Features
+
+- Dexsanity locations for species that evolve via item contribute their evolution item to the item pool instead of a
+great/ultra ball.
+
 # 2.2.0
 
 ### Features
