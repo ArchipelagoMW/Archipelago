@@ -55,7 +55,6 @@ class TunerClient:
 
     async def send_command(self, command_string: str, size: int = 64):
         """Send a raw commannd"""
-        self.logger.debug("Sending Command: " + command_string)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setblocking(False)
 
@@ -83,8 +82,6 @@ class TunerClient:
 
             received_data = await self.async_recv(sock)
             response = decode_mixed_string(received_data)
-            self.logger.debug('Received:')
-            self.logger.debug(response)
             return self.__parse_response(response)
 
         except socket.timeout:
@@ -97,9 +94,9 @@ class TunerClient:
                 "The remote computer refused the network connection",
             ]
             if any(error in str(e) for error in connection_errors):
-              raise TunerConnectionException(e)
+                raise TunerConnectionException(e)
             else:
-              raise TunerErrorException(e)
+                raise TunerErrorException(e)
         finally:
             sock.close()
 

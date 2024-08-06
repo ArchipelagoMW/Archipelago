@@ -1,7 +1,7 @@
 import math
 import os
 import random
-from typing import Dict
+from typing import Dict, Optional
 import typing
 
 from .Data import get_boosts_data
@@ -19,7 +19,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 
-def run_client():
+def run_client(url: Optional[str] = None):
     print("Running Civ6 Client")
     from .Civ6Client import main  # lazy import
     launch_subprocess(main, name="Civ6Client")
@@ -183,7 +183,7 @@ class CivVIWorld(World):
     def generate_output(self, output_directory: str):
         mod_name = f"AP-{self.multiworld.get_file_safe_player_name(self.player)}"
         mod_dir = os.path.join(
-            output_directory, mod_name + "_" + Utils.__version__)
+            output_directory, mod_name + "_" + self.multiworld.seed_name)
         mod_files = {
             f"NewItems.xml": generate_new_items(self),
             f"InitOptions.lua": generate_setup_file(self),

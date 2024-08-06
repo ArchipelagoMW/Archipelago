@@ -36,7 +36,7 @@ class CivVIContainer(APContainer):
                  player=None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
-        container_path = os.path.join(output_directory, base_path + ".zip")
+        container_path = os.path.join(output_directory, base_path + ".apcivvi")
         super().__init__(container_path, player, player_name, server)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:

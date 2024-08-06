@@ -1,7 +1,9 @@
 import asyncio
 import logging
+import os
 import traceback
 from typing import Dict, List
+import zipfile
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
 from .Data import get_progressive_districts_data
@@ -68,11 +70,12 @@ class CivVIContext(CommonContext):
         item.name: item.code for item in generate_item_table().values()}
     connection_state = ConnectionState.DISCONNECTED
 
-    def __init__(self, server_address, password):
+    def __init__(self, server_address, password, apcivvi_file=None):
         super().__init__(server_address, password)
         self.game_interface = CivVIInterface(logger)
         location_by_era = generate_era_location_table()
         self.item_table = generate_item_table()
+        self.apcivvi_file = apcivvi_file
 
         # Get tables formatted in a way that is easier to use here
         for era, locations in location_by_era.items():
@@ -151,7 +154,6 @@ async def tuner_sync_task(ctx: CivVIContext):
         else:
             try:
                 if ctx.processing_multiple_items == True:
-                    logger.debug("Waiting for items to finish processing")
                     await asyncio.sleep(3)
                 else:
                     state = await ctx.game_interface.is_in_game()
@@ -203,7 +205,6 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
     try:
         last_received_index = last_received_index_override or await ctx.game_interface.get_last_received_index()
         if len(ctx.items_received) - last_received_index > 1:
-            logger.debug("Multiple items received")
             ctx.processing_multiple_items = True
 
         progressive_districts: List[CivVIItemData] = []
@@ -244,8 +245,6 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
             elif item.item_type == CivVICheckType.ERA:
                 progressive_eras.append(item)
 
-        if ctx.processing_multiple_items:
-            logger.debug("DONE")
         ctx.processing_multiple_items = False
     finally:
         # If something errors out, then unblock item processing
@@ -253,7 +252,6 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
 
 
 async def handle_check_goal_complete(ctx: CivVIContext):
-    # logger.debug("Sending Goal Complete")
     result = await ctx.game_interface.check_victory()
     if result:
         logger.info("Sending Victory to server!")
@@ -285,7 +283,22 @@ def main(connect=None, password=None, name=None):
     Utils.init_logging("Civilization VI Client")
 
     async def _main(connect, password, name):
-        ctx = CivVIContext(connect, password)
+        parser = get_base_parser()
+        parser.add_argument('apcivvi_file', default="", type=str, nargs='?', help="Path to apcivvi file")
+        args = parser.parse_args()
+        ctx = CivVIContext(connect, password, args.apcivvi_file)
+
+        if args.apcivvi_file:
+            parent_dir = os.path.dirname(args.apcivvi_file)
+            target_name = os.path.basename(args.apcivvi_file).replace(".apcivvi", "-MOD-FILES")
+            target_path = os.path.join(parent_dir, target_name)
+            if not os.path.exists(target_path):
+                os.makedirs(target_path, exist_ok=True)
+                logger.info("Extracting mod files to %s", target_path)
+                with zipfile.ZipFile(args.apcivvi_file, 'r') as zip_ref:
+                    for member in zip_ref.namelist():
+                        zip_ref.extract(member, target_path)
+
         ctx.auth = name
         ctx.server_task = asyncio.create_task(
             server_loop(ctx), name="ServerLoop")
@@ -314,6 +327,7 @@ def main(connect=None, password=None, name=None):
 
 def debug_main():
     parser = get_base_parser()
+    parser.add_argument('apcivvi_file', default="", type=str, nargs='?', help="Path to apcivvi file")
     parser.add_argument('--name', default=None,
                         help="Slot Name to connect as.")
     parser.add_argument('--debug', default=None,
