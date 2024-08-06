@@ -73,7 +73,7 @@ class CivVIWorld(World):
             for _item_name, location in locations.items():
                 self.location_table[location.name] = location
 
-    def get_filler_item_name(self):
+    def get_filler_item_name(self) -> str:
         return get_random_filler_by_rarity(self, FillerItemRarity.COMMON, self.item_table).name
 
     def create_regions(self):

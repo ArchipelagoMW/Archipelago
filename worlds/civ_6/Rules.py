@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, Callable, List, Dict
 from BaseClasses import CollectionState
 from .Items import get_item_by_civ_name
 from .Data import get_boosts_data
@@ -12,9 +12,9 @@ if TYPE_CHECKING:
     from . import CivVIWorld
 
 
-def generate_has_required_items_lambda(prereqs: List[str], required_count: int, has_progressive_items: bool, player: int):
+def generate_has_required_items_lambda(prereqs: List[str], required_count: int, player: int) -> Callable[[CollectionState, int], bool]:
     def has_required_items_lambda(state: CollectionState):
-        return has_required_items(state, prereqs, required_count, has_progressive_items, player)
+        return has_required_items(state, prereqs, required_count, player)
     return has_required_items_lambda
 
 
@@ -28,17 +28,18 @@ def create_boost_rules(world: 'CivVIWorld'):
         if not boost_data or boost_data.PrereqRequiredCount == 0:
             continue
 
-        has_progressive_items = world.options.progression_style != "none"
         set_rule(world_location,
-                 generate_has_required_items_lambda(boost_data.Prereq, boost_data.PrereqRequiredCount, has_progressive_items, world.player)
+                 generate_has_required_items_lambda(boost_data.Prereq, boost_data.PrereqRequiredCount, world.player)
                  )
 
 
-def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, has_progressive_items: bool, player: int):
+def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, player: int) -> bool:
+    world: 'CivVIWorld' = state.multiworld.worlds[player]
+    has_progressive_items = world.options.progression_style != "none"
     if has_progressive_items:
-        items = [get_item_by_civ_name(item, state.multiworld.worlds[player].item_table).name for item in convert_items_to_have_progression(prereqs)]
-        progressive_items: Dict[str, int] = {}
         count = 0
+        items = [get_item_by_civ_name(item, world.item_table).name for item in convert_items_to_have_progression(prereqs)]
+        progressive_items: Dict[str, int] = {}
         for item in items:
             if "Progressive" in item:
                 if not progressive_items.get(item):
@@ -49,14 +50,12 @@ def has_required_items(state: CollectionState, prereqs: List[str], required_coun
                     count += 1
 
         for item, required_progressive_item_count in progressive_items.items():
-            if state.count(item, player) >= required_progressive_item_count:
+            if state.has(item, player, required_progressive_item_count):
                 count += required_progressive_item_count
-        if count > 0:
-            pass
         return count >= required_count
     else:
-        count = 0
-        for prereq in prereqs:
-            if state.has(get_item_by_civ_name(prereq, state.multiworld.worlds[player].item_table).name, player):
-                count += 1
-        return count >= required_count
+        total = state.count_from_list_unique(
+            [
+                get_item_by_civ_name(prereq, state.multiworld.worlds[player].item_table).name for prereq in prereqs
+            ], player)
+        return total >= required_count

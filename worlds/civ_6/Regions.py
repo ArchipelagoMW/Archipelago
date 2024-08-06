@@ -12,13 +12,6 @@ if TYPE_CHECKING:
     from Items import CivVIItemData
 
 
-def get_required_items_for_era(era: EraType):
-    """Gets the specific techs/civics that are required for the specified era"""
-    era_required_items = {}
-    era_required_items = get_era_required_items_data()
-    return era_required_items[era.value]
-
-
 def get_cumulative_prereqs_for_era(end_era: EraType, exclude_progressive_items: bool = True, item_table: Dict[str, 'CivVIItemData'] = None) -> List['CivVIItemData']:
     """Gets the specific techs/civics that are required for the specified era as well as all previous eras"""
     cumulative_prereqs = []
@@ -44,7 +37,7 @@ def get_cumulative_prereqs_for_era(end_era: EraType, exclude_progressive_items: 
     return [get_item_by_civ_name(prereq, item_table) for prereq in cumulative_prereqs]
 
 
-def has_required_progressive_districts(state: CollectionState, era: EraType, player: int):
+def has_required_progressive_districts(state: CollectionState, era: EraType, player: int) -> bool:
     """ If player has progressive items enabled, it will count how many progressive techs it should have, otherwise return the default array"""
     progressive_districts = get_progressive_districts_data()
 
@@ -73,7 +66,7 @@ def has_required_progressive_districts(state: CollectionState, era: EraType, pla
     return True
 
 
-def has_required_progressive_eras(state: CollectionState, era: EraType, player: int):
+def has_required_progressive_eras(state: CollectionState, era: EraType, player: int) -> bool:
     """Checks, for the given era, how many are required to proceed to the next era. Ancient = 1, Classical = 2, etc. Assumes 2 required for classical and starts from there so as to decrease odds of hard locking without the turns to get the items"""
     if era == EraType.ERA_FUTURE or era == EraType.ERA_INFORMATION:
         return True
@@ -83,19 +76,21 @@ def has_required_progressive_eras(state: CollectionState, era: EraType, player: 
     return state.has(format_item_name("PROGRESSIVE_ERA"), player, era_index + 2)
 
 
-def has_required_items(state: CollectionState, era: EraType, player: int, has_progressive_districts: bool, has_progressive_eras: bool):
-    required_items = False
-    required_eras = False
+def has_required_items(state: CollectionState, era: EraType, world: 'CivVIWorld') -> bool:
+    player = world.player
+    has_progressive_districts = world.options.progression_style != "none"
+    has_progressive_eras = world.options.progression_style == "eras_and_districts"
+
     if has_progressive_districts:
         required_items = has_required_progressive_districts(state, era, player)
     else:
-        era_required_items = [get_item_by_civ_name(item, state.multiworld.worlds[player].item_table).name for item in get_era_required_items_data()[era.value]]
+        era_required_items = [get_item_by_civ_name(item, world.item_table).name for item in get_era_required_items_data()[era.value]]
         required_items = state.has_all(era_required_items, player)
 
-    if has_progressive_eras:
-        required_eras = has_required_progressive_eras(state, era, player)
-    else:
-        required_eras = True
+    if not required_items:
+        return False
+
+    required_eras = has_required_progressive_eras(state, era, player) if has_progressive_eras else True
 
     return required_items and required_eras
 
@@ -104,7 +99,6 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
     menu = Region("Menu", player, world.multiworld)
     world.multiworld.regions.append(menu)
 
-    has_progressive_items = options.progression_style != "none"
     has_progressive_eras = options.progression_style == "eras_and_districts"
     has_goody_huts = options.shuffle_goody_hut_rewards
     has_boosts = options.boostsanity
@@ -115,7 +109,6 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
         era_locations = {location.name: location.code for key,
                          location in world.location_by_era[era.value].items()}
 
-        # If progressive_eras is not enabled, then era check types from the era_locations
         if not has_progressive_eras:
             era_locations = {key: value for key, value in era_locations.items() if key.split("_")[0] != "ERA"}
         if not has_goody_huts:
@@ -133,41 +126,41 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
     world.get_region(EraType.ERA_ANCIENT.value).connect(
         world.get_region(EraType.ERA_CLASSICAL.value), None,
         lambda state: has_required_items(
-            state, EraType.ERA_ANCIENT, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_ANCIENT, world)
     )
 
     world.get_region(EraType.ERA_CLASSICAL.value).connect(
         world.get_region(EraType.ERA_MEDIEVAL.value), None, lambda state: has_required_items(
-            state, EraType.ERA_CLASSICAL, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_CLASSICAL, world)
     )
 
     world.get_region(EraType.ERA_MEDIEVAL.value).connect(
         world.get_region(EraType.ERA_RENAISSANCE.value), None, lambda state: has_required_items(
-            state, EraType.ERA_MEDIEVAL, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_MEDIEVAL, world)
     )
 
     world.get_region(EraType.ERA_RENAISSANCE.value).connect(
         world.get_region(EraType.ERA_INDUSTRIAL.value), None, lambda state: has_required_items(
-            state, EraType.ERA_RENAISSANCE, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_RENAISSANCE, world)
     )
 
     world.get_region(EraType.ERA_INDUSTRIAL.value).connect(
         world.get_region(EraType.ERA_MODERN.value), None, lambda state: has_required_items(
-            state, EraType.ERA_INDUSTRIAL, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_INDUSTRIAL, world)
     )
 
     world.get_region(EraType.ERA_MODERN.value).connect(
         world.get_region(EraType.ERA_ATOMIC.value), None, lambda state: has_required_items(
-            state, EraType.ERA_MODERN, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_MODERN, world)
     )
 
     world.get_region(EraType.ERA_ATOMIC.value).connect(
         world.get_region(EraType.ERA_INFORMATION.value), None, lambda state: has_required_items(
-            state, EraType.ERA_ATOMIC, player, has_progressive_items, has_progressive_eras)
+            state, EraType.ERA_ATOMIC, world)
     )
 
     world.get_region(EraType.ERA_INFORMATION.value).connect(
-        world.get_region(EraType.ERA_FUTURE.value), None, lambda state: has_required_items(state, EraType.ERA_INFORMATION, player, has_progressive_items, has_progressive_eras))
+        world.get_region(EraType.ERA_FUTURE.value), None, lambda state: has_required_items(state, EraType.ERA_INFORMATION, world))
 
     world.multiworld.completion_condition[player] = lambda state: state.can_reach(
         EraType.ERA_FUTURE.value, "Region", player)
