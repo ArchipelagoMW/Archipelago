@@ -383,8 +383,8 @@ progressive_rows["progressive-processing"] = (
     "uranium-processing", "kovarex-enrichment-process", "nuclear-fuel-reprocessing")
 progressive_rows["progressive-rocketry"] = ("rocketry", "explosive-rocketry", "atomic-bomb")
 progressive_rows["progressive-vehicle"] = ("automobilism", "tank", "spidertron")
-progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon",
-                                                 "automated-rail-transportation", "rail-signals")
+progressive_rows["progressive-fluid-handling"] = ("fluid-handling", "fluid-wagon")
+progressive_rows["progressive-train-network"] = ("railway", "automated-rail-transportation", "rail-signals")
 progressive_rows["progressive-engine"] = ("engine", "electric-engine")
 progressive_rows["progressive-armor"] = ("heavy-armor", "modular-armor", "power-armor", "power-armor-mk2")
 progressive_rows["progressive-personal-battery"] = ("battery-equipment", "battery-mk2-equipment")
