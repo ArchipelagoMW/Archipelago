@@ -3,17 +3,17 @@ from collections.abc import Sequence
 from collections import defaultdict
 import json
 from logging import warning
-from typing import Any, Callable, Dict, Set, List, Optional, TextIO, Union
+from typing import cast, Any, Callable, Dict, Set, List, Optional, TextIO, Union
 
-from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
+from BaseClasses import CollectionState, MultiWorld, Region, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import CollectionRule, ItemRule, add_rule, add_item_rule
 
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
-from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_descriptions, item_dictionary, item_name_groups
+from .Items import DarkSouls3Item, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_descriptions, item_dictionary, item_name_groups
 from .Locations import DarkSouls3Location, DS3LocationData, location_tables, location_descriptions, location_dictionary, location_name_groups, region_order
-from .Options import DarkSouls3Options, EarlySmallLothricBanner, option_groups
+from .Options import DarkSouls3Options, option_groups
 
 
 class DarkSouls3Web(WebWorld):
@@ -1495,9 +1495,20 @@ class DarkSouls3World(World):
 
         # Once all clients support overlapping item IDs, adjust the DS3 AP item IDs to encode the
         # in-game ID as well as the count so that we don't need to send this information at all.
+        #
+        # We include all the items the game knows about so that users can manually request items
+        # that aren't randomized, and then we _also_ include all the items that are placed in
+        # practice `item_dictionary.values()` doesn't include upgraded or infused weapons.
+        all_items = {
+            cast(DS3ItemData, location.item).data
+            for location in self.multiworld.get_filled_locations()
+            # item.code None is used for events, which we want to skip
+            if location.item.code is not None and location.item.player == self.player
+        }.union(item_dictionary.values())
+
         ap_ids_to_ds3_ids: Dict[str, int] = {}
         item_counts: Dict[str, int] = {}
-        for item in item_dictionary.values():
+        for item in all_items:
             if item.ap_code is None: continue
             if item.ds3_code: ap_ids_to_ds3_ids[str(item.ap_code)] = item.ds3_code
             if item.count != 1: item_counts[str(item.ap_code)] = item.count
