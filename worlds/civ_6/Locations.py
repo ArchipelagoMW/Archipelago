@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import Any, List, Optional, Dict
+from typing import List, Optional, Dict
 from BaseClasses import Location, LocationProgressType, Region
 
 from .Data import get_boosts_data, get_new_civic_prereqs_data, get_new_civics_data, get_new_tech_prereqs_data, get_new_techs_data
@@ -106,8 +105,6 @@ class CivVILocation(Location):
                 self.progress_type = LocationProgressType.EXCLUDED
 
 
-
-
 def generate_flat_location_table() -> Dict[str, CivVILocationData]:
     """
     Generates a flat location table in the following format:
@@ -182,8 +179,8 @@ def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]
         id_base += 1
 # Goody Huts, defaults to 10 goody huts as location checks (rarely will a player get more than this)
     for i in range(10):
-        era_locations[EraType.ERA_ANCIENT.value]["GOODY_HUT_" + str(i+1)] = CivVILocationData(
-            "GOODY_HUT_" + str(i+1), 0, 0, id_base, EraType.ERA_ANCIENT, CivVICheckType.GOODY)
+        era_locations[EraType.ERA_ANCIENT.value]["GOODY_HUT_" + str(i + 1)] = CivVILocationData(
+            "GOODY_HUT_" + str(i + 1), 0, 0, id_base, EraType.ERA_ANCIENT, CivVICheckType.GOODY)
         id_base += 1
 # Boosts
     boosts = get_boosts_data()

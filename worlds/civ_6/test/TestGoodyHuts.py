@@ -1,7 +1,7 @@
 from typing import Dict
 from BaseClasses import ItemClassification
 from Fill import distribute_items_restrictive
-from ..Items import FILLER_DISTRIBUTION, FillerItemRarity, get_filler_item_data
+from ..Items import FillerItemRarity, get_filler_item_data
 from . import CivVITestBase
 
 

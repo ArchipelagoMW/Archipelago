@@ -1,13 +1,10 @@
 import math
 import os
-import random
-from typing import Dict, Optional
-import typing
+from typing import Dict, Optional, Set
 
 from .Data import get_boosts_data
 
 from .Rules import create_boost_rules
-import Utils
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
 from .Enum import CivVICheckType
 from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
@@ -77,7 +74,7 @@ class CivVIWorld(World):
                 self.location_table[location.name] = location
 
     def get_filler_item_name(self):
-        return get_random_filler_by_rarity(FillerItemRarity.COMMON, self.item_table).name
+        return get_random_filler_by_rarity(self, FillerItemRarity.COMMON, self.item_table).name
 
     def create_regions(self):
         create_regions(self, self.options, self.player)
@@ -145,7 +142,7 @@ class CivVIWorld(World):
                 if total_created >= num_filler_items:
                     break
                 self.multiworld.itempool += [self.create_item(
-                    get_random_filler_by_rarity(rarity, self.item_table).name)]
+                    get_random_filler_by_rarity(self, rarity, self.item_table).name)]
                 total_created += 1
 
     def post_fill(self):
@@ -158,7 +155,7 @@ class CivVIWorld(World):
             ItemClassification.filler: self.options.pre_hint_items.current_key == "all",
         }
 
-        start_location_hints: typing.Set[str] = self.options.start_location_hints.value
+        start_location_hints: Set[str] = self.options.start_location_hints.value
         for location_name, location_data in self.location_table.items():
             if location_data.location_type != CivVICheckType.CIVIC and location_data.location_type != CivVICheckType.TECH:
                 continue

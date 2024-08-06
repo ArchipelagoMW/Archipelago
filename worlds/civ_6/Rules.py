@@ -1,5 +1,4 @@
-import typing
-
+from typing import TYPE_CHECKING, List, Dict
 from BaseClasses import CollectionState
 from .Items import get_item_by_civ_name
 from .Data import get_boosts_data
@@ -9,11 +8,11 @@ from .ProgressiveDistricts import convert_items_to_have_progression
 from worlds.generic.Rules import forbid_item, set_rule
 
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from . import CivVIWorld
 
 
-def generate_has_required_items_lambda(prereqs: typing.List[str], required_count: int, has_progressive_items: bool, player: int):
+def generate_has_required_items_lambda(prereqs: List[str], required_count: int, has_progressive_items: bool, player: int):
     def has_required_items_lambda(state: CollectionState):
         return has_required_items(state, prereqs, required_count, has_progressive_items, player)
     return has_required_items_lambda
@@ -35,10 +34,10 @@ def create_boost_rules(world: 'CivVIWorld'):
                  )
 
 
-def has_required_items(state: CollectionState, prereqs: typing.List[str], required_count: int, has_progressive_items: bool, player: int):
+def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, has_progressive_items: bool, player: int):
     if has_progressive_items:
         items = [get_item_by_civ_name(item, state.multiworld.worlds[player].item_table).name for item in convert_items_to_have_progression(prereqs)]
-        progressive_items: typing.Dict[str, int] = {}
+        progressive_items: Dict[str, int] = {}
         count = 0
         for item in items:
             if "Progressive" in item:

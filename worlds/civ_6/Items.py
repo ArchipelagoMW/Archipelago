@@ -1,14 +1,11 @@
 from enum import Enum
-import json
-import os
-import pkgutil
-import random
-from typing import Dict, List, Optional
-import typing
+from typing import Dict, List, Optional, TYPE_CHECKING, List
 from BaseClasses import Item, ItemClassification
 from .Data import get_era_required_items_data, get_existing_civics_data, get_existing_techs_data, get_goody_hut_rewards_data, get_progressive_districts_data
-from .Enum import CivVICheckType, EraType
+from .Enum import CivVICheckType
 from .ProgressiveDistricts import get_flat_progressive_districts
+if TYPE_CHECKING:
+    from . import CivVIWorld
 CIV_VI_AP_ITEM_ID_BASE = 5041000
 
 NON_PROGRESSION_DISTRICTS = [
@@ -98,7 +95,7 @@ class CivVIItemData:
     progression_name: Optional[str]
     civ_name: Optional[str]
 
-    def __init__(self, name, civ_vi_id: int, cost: int,  item_type: CivVICheckType, id_offset: int, classification: ItemClassification, progression_name: Optional[str], civ_name: Optional[str] = None):
+    def __init__(self, name, civ_vi_id: int, cost: int, item_type: CivVICheckType, id_offset: int, classification: ItemClassification, progression_name: Optional[str], civ_name: Optional[str] = None):
         self.classification = classification
         self.civ_vi_id = civ_vi_id
         self.name = name
@@ -125,7 +122,7 @@ def format_item_name(name: str) -> str:
     return " ".join([part.capitalize() for part in name_parts])
 
 
-def get_item_by_civ_name(item_name: typing.List[str], item_table: typing.Dict[str, 'CivVIItemData']) -> 'CivVIItemData':
+def get_item_by_civ_name(item_name: List[str], item_table: Dict[str, 'CivVIItemData']) -> 'CivVIItemData':
     """Gets the names of the items in the item_table"""
     for item in item_table.values():
         if item_name == item.civ_name:
@@ -291,9 +288,9 @@ def get_items_by_type(item_type: CivVICheckType, item_table: Dict[str, CivVIItem
     return [item for item in item_table.values() if item.item_type == item_type]
 
 
-def get_random_filler_by_rarity(rarity: FillerItemRarity, item_table: Dict[str, CivVIItemData]) -> CivVIItemData:
+def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity, item_table: Dict[str, CivVIItemData]) -> CivVIItemData:
     """
     Returns a random filler item by rarity
     """
     items = [item for item in get_filler_item_data().values() if item.rarity == rarity]
-    return items[random.randint(0, len(items) - 1)]
+    return items[world.random.randint(0, len(items) - 1)]

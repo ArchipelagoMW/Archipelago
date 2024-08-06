@@ -1,6 +1,5 @@
 import asyncio
 from logging import Logger
-import select
 import socket
 
 ADDRESS = "127.0.0.1"
