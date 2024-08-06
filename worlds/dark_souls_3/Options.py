@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import json
 from typing import Any, Dict
 
-from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, NamedRange, Option, OptionGroup, \
-    PerGameCommonOptions, Range, Removed, Toggle, VerifyKeys
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, NamedRange, OptionDict, \
+    OptionGroup, PerGameCommonOptions, Range, Removed, Toggle
 
 ## Game Options
 
@@ -293,10 +293,17 @@ class ImpatientMimicsOption(Toggle):
     display_name = "Impatient Mimics"
 
 
-class RandomEnemyPresetOption(Option[Dict[str, Any]], VerifyKeys):
+class RandomEnemyPresetOption(OptionDict):
     """The YAML preset for the static enemy randomizer.
 
     See the static randomizer documentation in `randomizer\\presets\\README.txt` for details.
+    Include this as nested YAML. For example:
+
+    .. code-block:: YAML
+
+      random_enemy_preset:
+        RemoveSource: Ancient Wyvern; Darkeater Midir
+        DontRandomize: Iudex Gundyr
     """
     display_name = "Random Enemy Preset"
     supports_weighting = False
@@ -312,14 +319,6 @@ class RandomEnemyPresetOption(Option[Dict[str, Any]], VerifyKeys):
     @classmethod
     def get_option_name(cls, value: Dict[str, Any]) -> str:
         return json.dumps(value)
-
-    @classmethod
-    def from_any(cls, data: Dict[str, Any]) -> "RandomEnemyPresetOption":
-        if isinstance(data, dict):
-            cls.verify_keys(data)
-            return cls(data)
-        else:
-            raise NotImplementedError(f"Must be a dictionary, got {type(data)}")
 
 
 ## Item & Location
