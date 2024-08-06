@@ -14,7 +14,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
 from .gen_data import GenData
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import ZillionOptions, validate
+from .options import ZillionOptions, validate, z_option_groups
 from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -62,6 +62,8 @@ class ZillionWebWorld(WebWorld):
         ["beauxq"]
     )]
 
+    option_groups = z_option_groups
+
 
 class ZillionWorld(World):
     """
@@ -83,11 +85,6 @@ class ZillionWorld(World):
     # map names to their IDs
     item_name_to_id = _item_name_to_id
     location_name_to_id = _loc_name_to_id
-
-    # increment this every time something in your world's names/id mappings changes.
-    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
-    # retrieved by clients on every connection.
-    data_version = 1
 
     logger: logging.Logger
 
@@ -148,10 +145,10 @@ class ZillionWorld(World):
         self._item_counts = item_counts
 
         with redirect_stdout(self.lsi):  # type: ignore
-            self.zz_system.make_randomizer(zz_op)
-
-            self.zz_system.seed(self.multiworld.seed)
+            self.zz_system.set_options(zz_op)
+            self.zz_system.seed(self.random.randrange(1999999999))
             self.zz_system.make_map()
+            self.zz_system.make_randomizer()
 
         # just in case the options changed anything (I don't think they do)
         assert self.zz_system.randomizer, "init failed"
@@ -332,7 +329,7 @@ class ZillionWorld(World):
             assert isinstance(z_loc, ZillionLocation)
             # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
             if z_loc.item is None:
-                self.logger.warn("generate_output location has no item - is that ok?")
+                self.logger.warning("generate_output location has no item - is that ok?")
                 z_loc.zz_loc.item = empty
             elif z_loc.item.player == self.player:
                 z_item = z_loc.item

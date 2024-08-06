@@ -32,7 +32,7 @@ from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys, Accessibility
+from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
@@ -150,8 +150,6 @@ class OOTWorld(World):
     location_name_to_id = location_name_to_id
     web = OOTWeb()
 
-    data_version = 3
-
     required_client_version = (0, 4, 0)
 
     item_name_groups = {
@@ -175,6 +173,15 @@ class OOTWorld(World):
         "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom",
             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
             "Eyeball Frog", "Eyedrops", "Claim Check"},
+        "Keys": {"Small Key (Bottom of the Well)", "Small Key (Fire Temple)", "Small Key (Forest Temple)",
+                 "Small Key (Ganons Castle)", "Small Key (Gerudo Training Ground)", "Small Key (Shadow Temple)",
+                 "Small Key (Spirit Temple)", "Small Key (Thieves Hideout)", "Small Key (Water Temple)",
+                 "Small Key Ring (Bottom of the Well)", "Small Key Ring (Fire Temple)",
+                 "Small Key Ring (Forest Temple)", "Small Key Ring (Ganons Castle)",
+                 "Small Key Ring (Gerudo Training Ground)", "Small Key Ring (Shadow Temple)",
+                 "Small Key Ring (Spirit Temple)", "Small Key Ring (Thieves Hideout)", "Small Key Ring (Water Temple)",
+                 "Boss Key (Fire Temple)", "Boss Key (Forest Temple)", "Boss Key (Ganons Castle)",
+                 "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
     }
 
     location_name_groups = build_location_name_groups()
@@ -202,6 +209,8 @@ class OOTWorld(World):
             elif isinstance(result, Toggle):
                 option_value = bool(result)
             elif isinstance(result, VerifyKeys):
+                option_value = result.value
+            elif isinstance(result, PlandoConnections):
                 option_value = result.value
             else:
                 option_value = result.current_key
@@ -717,7 +726,6 @@ class OOTWorld(World):
             item = self.create_item(name, allow_arbitrary_name=True)
         self.multiworld.push_item(location, item, collect=False)
         location.locked = True
-        location.event = True
         if name not in item_table:
             location.internal = True
         return item
@@ -842,7 +850,7 @@ class OOTWorld(World):
         all_state.sweep_for_events(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
-                       (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
+                       (loc.internal or loc.type == 'Drop') and loc.address is None and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
@@ -972,7 +980,6 @@ class OOTWorld(World):
                     for location in song_locations:
                         location.item = None
                         location.locked = False
-                        location.event = False
                 else:
                     break
 
@@ -1034,6 +1041,31 @@ class OOTWorld(World):
 
 
     def generate_output(self, output_directory: str):
+
+        # Write entrances to spoiler log
+        all_entrances = self.get_shuffled_entrances()
+        all_entrances.sort(reverse=True, key=lambda x: (x.type, x.name))
+        if not self.decouple_entrances:
+            while all_entrances:
+                loadzone = all_entrances.pop()
+                if loadzone.type != 'Overworld':
+                    if loadzone.primary:
+                        entrance = loadzone
+                    else:
+                        entrance = loadzone.reverse
+                    if entrance.reverse is not None:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
+                    else:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                else:
+                    reverse = loadzone.replaces.reverse
+                    if reverse in all_entrances:
+                        all_entrances.remove(reverse)
+                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
+        else:
+            for entrance in all_entrances:
+                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+
         if self.hints != 'none':
             self.hint_data_available.wait()
 
@@ -1150,10 +1182,35 @@ class OOTWorld(World):
 
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
-        return {
+
+        slot_data = {
             'collectible_override_flags': self.collectible_override_flags,
             'collectible_flag_offsets': self.collectible_flag_offsets
         }
+        slot_data.update(self.options.as_dict(
+            "open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
+            "bridge", "bridge_stones", "bridge_medallions", "bridge_rewards", "bridge_tokens", "bridge_hearts",
+            "shuffle_ganon_bosskey", "ganon_bosskey_medallions", "ganon_bosskey_stones", "ganon_bosskey_rewards",
+            "ganon_bosskey_tokens", "ganon_bosskey_hearts", "trials",
+            "triforce_hunt", "triforce_goal", "extra_triforce_percentage",
+            "shopsanity", "shop_slots", "shopsanity_prices", "tokensanity",
+            "dungeon_shortcuts", "dungeon_shortcuts_list",
+            "mq_dungeons_mode", "mq_dungeons_list", "mq_dungeons_count",
+            "shuffle_interior_entrances", "shuffle_grotto_entrances", "shuffle_dungeon_entrances",
+            "shuffle_overworld_entrances", "shuffle_bosses", "key_rings", "key_rings_list", "enhance_map_compass",
+            "shuffle_mapcompass", "shuffle_smallkeys", "shuffle_hideoutkeys", "shuffle_bosskeys",
+            "logic_rules", "logic_no_night_tokens_without_suns_song", "logic_tricks",
+            "warp_songs", "shuffle_song_items","shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
+            "shuffle_scrubs", "shuffle_child_trade", "shuffle_freestanding_items", "shuffle_pots", "shuffle_crates",
+            "shuffle_cows", "shuffle_beehives", "shuffle_kokiri_sword", "shuffle_ocarinas", "shuffle_gerudo_card",
+            "shuffle_beans", "starting_age", "bombchus_in_logic", "spawn_positions", "owl_drops",
+            "no_epona_race", "skip_some_minigame_phases", "complete_mask_quest", "free_scarecrow", "plant_beans",
+            "chicken_count", "big_poe_count", "fae_torch_count", "blue_fire_arrows",
+            "damage_multiplier", "deadly_bonks", "starting_tod", "junk_ice_traps",
+            "start_with_consumables", "adult_trade_start", "plando_connections"
+            )
+        )
+        return slot_data
 
 
     def modify_multidata(self, multidata: dict):
@@ -1229,37 +1286,14 @@ class OOTWorld(World):
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
+        if required_trials_str == "":
+            required_trials_str = "None"
         spoiler_handle.write(f"\n\nTrials ({self.multiworld.get_player_name(self.player)}): {required_trials_str}\n")
 
         if self.shopsanity != 'off':
             spoiler_handle.write(f"\nShop Prices ({self.multiworld.get_player_name(self.player)}):\n")
             for k, v in self.shop_prices.items():
                 spoiler_handle.write(f"{k}: {v} Rupees\n")
-
-        # Write entrances to spoiler log
-        all_entrances = self.get_shuffled_entrances()
-        all_entrances.sort(reverse=True, key=lambda x: x.name)
-        all_entrances.sort(reverse=True, key=lambda x: x.type)
-        if not self.decouple_entrances:
-            while all_entrances:
-                loadzone = all_entrances.pop()
-                if loadzone.type != 'Overworld':
-                    if loadzone.primary:
-                        entrance = loadzone
-                    else:
-                        entrance = loadzone.reverse
-                    if entrance.reverse is not None:
-                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
-                    else:
-                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
-                else:
-                    reverse = loadzone.replaces.reverse
-                    if reverse in all_entrances:
-                        all_entrances.remove(reverse)
-                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
-        else:
-            for entrance in all_entrances:
-                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
 
     # Key ring handling:

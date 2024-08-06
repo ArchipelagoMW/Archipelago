@@ -123,7 +123,7 @@ class SMSNIClient(SNIClient):
             location_id = locations_start_id + item_index
 
             ctx.locations_checked.add(location_id)
-            location = ctx.location_names[location_id]
+            location = ctx.location_names.lookup_in_game(location_id)
             snes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
@@ -139,7 +139,7 @@ class SMSNIClient(SNIClient):
         if item_out_ptr < len(ctx.items_received):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id
-            if bool(ctx.items_handling & 0b010):
+            if bool(ctx.items_handling & 0b010) or item.location < 0: # item.location < 0 for !getitem to work
                 location_id = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
             else:
                 location_id = 0x00 #backward compat
@@ -151,9 +151,8 @@ class SMSNIClient(SNIClient):
             snes_buffered_write(ctx, SM_RECV_QUEUE_WCOUNT,
                                 bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], item_out_ptr, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), item_out_ptr, len(ctx.items_received)))
 
         await snes_flush_writes(ctx)
-

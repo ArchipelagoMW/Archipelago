@@ -2,7 +2,7 @@
 
 ## Quick Links
 - [Main Page](../../../../games/Muse%20Dash/info/en)
-- [Settings Page](../../../../games/Muse%20Dash/player-settings)
+- [Options Page](../../../../games/Muse%20Dash/player-options)
 
 ## Required Software
 
@@ -17,17 +17,18 @@
 ## Installing the Archipelago mod to Muse Dash
 
 1. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest) and run it.
-2. Choose the automated tab, click the select button and browse to `MuseDash.exe`. Then click install.
+2. Choose the automated tab, click the select button and browse to `MuseDash.exe`.
   - You can find the folder in steam by finding the game in your library, right clicking it and choosing *Manage→Browse Local Files*.
   - If you click the bar at the top telling you your current folder, this will give you a path you can copy. If you paste that into the window popped up by **MelonLoader**, it will automatically go to the same folder.
-3. Run the game once, and wait until you get to the Muse Dash start screen before exiting.
-4. Download the latest [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) and then extract that into the newly created `/Mods/` folder in MuseDash's install location.
+3. Uncheck "Latest" and select v0.6.1. Then click install.
+4. Run the game once, and wait until you get to the Muse Dash start screen before exiting.
+5. Download the latest [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) and then extract that into the newly created `/Mods/` folder in MuseDash's install location.
   - All files must be under the `/Mods/` folder and not within a sub folder inside of `/Mods/`
 
 If you've successfully installed everything, a button will appear in the bottom right which will allow you to log into an Archipelago server.
 
 ## Generating a MultiWorld Game
-1. Visit the [Player Settings](/games/Muse%20Dash/player-settings) page and configure the game-specific settings to your taste.
+1. Visit the [Player Options](/games/Muse%20Dash/player-options) page and configure the game-specific options to your taste.
 2. Export your yaml file and use it to generate a new randomized game
   - (For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](/tutorial/Archipelago/setup/en))
 

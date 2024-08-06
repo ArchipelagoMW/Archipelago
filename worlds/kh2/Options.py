@@ -306,16 +306,16 @@ class CorSkipToggle(Toggle):
 
     Toggle does not negate fight logic but is an alternative.
 
-    Final Chest is also can be put into logic with this skip.
+    Full Cor Skip is also affected by this Toggle.
     """
-    display_name = "CoR Skip Toggle."
+    display_name = "CoR Skip Toggle"
     default = False
 
 
 class CustomItemPoolQuantity(ItemDict):
     """Add more of an item into the itempool. Note: You cannot take out items from the pool."""
     display_name = "Custom Item Pool"
-    verify_item_name = True
+    valid_keys = default_itempool_option.keys()
     default = default_itempool_option
 
 
