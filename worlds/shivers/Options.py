@@ -1,5 +1,6 @@
-from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions, Range
 from dataclasses import dataclass
+
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 
 class IxupiCapturesNeeded(Range):

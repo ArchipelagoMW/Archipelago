@@ -57,7 +57,7 @@
 		["Crystal Capture", []],
 		["Sand Capture", []],
 		["Metal Capture", []],
-        ["Victory", []]
+		["Victory", []]
     ],
     "mandatory_connections": [
 		["To Registry", "Registry"],
@@ -183,6 +183,6 @@
 		["To Metal Capture From Bedroom", "Metal Capture"],
 		["To Metal Capture From Projector Room", "Metal Capture"],
 		["To Metal Capture From Prehistoric", "Metal Capture"],
-        ["To Victory", "Victory"]
+		["To Victory", "Victory"]
 	]
 }
