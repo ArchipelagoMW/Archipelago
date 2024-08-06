@@ -5,7 +5,6 @@ from uuid import UUID
 from flask import Blueprint, abort, url_for
 
 import worlds.Files
-from .. import cache
 from ..models import Room, Seed
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
@@ -49,21 +48,4 @@ def room_info(room: UUID):
     }
 
 
-@api_endpoints.route('/datapackage')
-@cache.cached()
-def get_datapackage():
-    from worlds import network_data_package
-    return network_data_package
-
-
-@api_endpoints.route('/datapackage_checksum')
-@cache.cached()
-def get_datapackage_checksums():
-    from worlds import network_data_package
-    version_package = {
-        game: game_data["checksum"] for game, game_data in network_data_package["games"].items()
-    }
-    return version_package
-
-
-from . import generate, user  # trigger registration
+from . import generate, user, datapackage  # trigger registration

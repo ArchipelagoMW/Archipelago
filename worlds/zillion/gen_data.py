@@ -28,6 +28,13 @@ class GenData:
     def from_json(gen_data_str: str) -> "GenData":
         """ the reverse of `to_json` """
         from_json = json.loads(gen_data_str)
+
+        # backwards compatibility for seeds generated before new map_gen options
+        room_gen = from_json["zz_game"]["options"].get("room_gen", None)
+        if room_gen is not None:
+            from_json["zz_game"]["options"]["map_gen"] = {False: "none", True: "rooms"}.get(room_gen, "none")
+            del from_json["zz_game"]["options"]["room_gen"]
+
         return GenData(
             from_json["multi_items"],
             ZzGame.from_jsonable(from_json["zz_game"]),
