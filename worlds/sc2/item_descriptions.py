@@ -30,6 +30,7 @@ CLOAK_DESCRIPTION_TEMPLATE = "Allows {} to use the Cloak ability."
 
 DISPLAY_NAME_BROOD_LORD = "Brood Lord"
 DISPLAY_NAME_CLOAKED_ASSASSIN = "Dark Templar, Avenger, and Blood Hunter"
+DISPLAY_NAME_WORMS = "Nydus Worm and Omega Worm"
 
 resource_efficiency_cost_reduction = {
     item_names.REAPER:        (0, 50, 0),
@@ -64,6 +65,7 @@ resource_efficiency_cost_reduction = {
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
     item_names.SCOUT:         (125, 25, 1),
     item_names.DESTROYER:     (50, 25, 1),
+    DISPLAY_NAME_WORMS:       (75, 75, 0),
 
     # War Council
     item_names.CENTURION:     (0, 50, 0),
@@ -667,6 +669,11 @@ item_descriptions = {
     item_names.TYRANNOZOR_BARRAGE_OF_SPIKES: "Unleash a Barrage of Spikes, dealing 100 damage to enemy ground and air units around the Tyrannozor.",
     item_names.TYRANNOZOR_IMPALING_STRIKE: "Ultralisk and Tyrannozor melee attacks have a 20% chance to stun for 2 seconds.",
     item_names.TYRANNOZOR_HEALING_ADAPTATION: "Ultralisks and Tyrannozors regenerate life quickly when out of combat.",
+    item_names.NYDUS_WORM_OMEGA_WORM_SUBTERRANEAN_SCALES: f"Increases {DISPLAY_NAME_WORMS} maximum health by 250 and armor by 1.",
+    item_names.NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN: f"Removes emerge time for {DISPLAY_NAME_WORMS}, and allows them to be salvaged, returning the cost spent on them.", 
+    item_names.NYDUS_WORM_RAVENOUS_APPETITE: "Allows Nydus Worms to unload and load units nearly instantly.",
+    item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(DISPLAY_NAME_WORMS),
+    item_names.OMEGA_WORM_OUROBOROS_STRAIN: "Allows Omega Worms to train a limited assortment of combat units (Zerglings, Roachs, Hydralisks, and Aberrations) at a reduced time and cost.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",
@@ -729,6 +736,8 @@ item_descriptions = {
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: "Anti-air flyer. Attack inflict Acid Spores. Can attack air units. Morphed from the Mutalisk or Corruptor.",
     item_names.ROACH_RAVAGER_ASPECT: "Ranged artillery. Can use Corrosive Bile. Can attack ground units. Morphed from the Roach.",
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: "Assault unit. Has an area-damage attack. Regenerates life quickly when burrowed. Can attack ground units. Morphed by merging two Roaches.",
+    item_names.NYDUS_WORM: "Long-range transport network. Nydus Worms and Nydus Networks can load friendly ground units to be unloaded to any other Nydus structure on the map.",
+    item_names.OMEGA_WORM: "Long-range deployable base. Can't load and unload units, but can generate creep and Creep Tumors. Can also serve as a dropoff point for resources, like a Hatchery.",
     item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks.",
     item_names.OBSERVER: "Flying spy. Cloak renders the unit invisible to enemies without detection.",
     item_names.CENTURION: "Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities.",
@@ -883,16 +892,16 @@ item_descriptions = {
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
     item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
     item_names.ANNIHILATOR_AERIAL_TRACKING: "Annihilator War Council upgrade. The Annihilator's Shadow Cannon ability can now target air units.",
-    # Stalwart
+    item_names.STALWART_DUALITY_CHARGE: "Stalwart War Council upgrade. Stalwarts gain +4 range.",
     # Colossus
-    # Wrathwalker
+    item_names.WRATHWALKER_AERIAL_TRACKING: "Wrathwalker War Council upgrade. Wrathwalkers can now target air units.",
     item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
     # Disruptor
     # Warp Prism
     # Observer
-    # Phoenix
+    item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: "Phoenix War Council upgrade. Phoenixes can now use Graviton Beam to lift two targets at once.",
     # Corsair
-    # Mirage
+    item_names.MIRAGE_GRAVITON_BEAM: "Mirage War Council upgrade. Allows Mirages to use Graviton Beam.",
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
     # Void Ray
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",

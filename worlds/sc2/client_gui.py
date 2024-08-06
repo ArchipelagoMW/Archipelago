@@ -20,7 +20,7 @@ from worlds.sc2.client import SC2Context, calc_unfinished_nodes, force_settings_
 from worlds.sc2.item_descriptions import item_descriptions
 from worlds.sc2.mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
-from worlds.sc2.locations import LocationType, lookup_location_id_to_type
+from worlds.sc2.locations import LocationType, lookup_location_id_to_type, lookup_location_id_to_flags
 from worlds.sc2.options import LocationInclusion
 from worlds.sc2 import SC2World
 
@@ -317,7 +317,7 @@ class SC2Manager(GameManager):
 
         text = mission_obj.mission_name
         tooltip: str = ""
-        remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations_custom_order(mission_id)
+        remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_id)
         parent_locked = campaign_id not in available_campaigns or layout_id not in available_layouts[campaign_id]
 
         # Map has uncollected locations
@@ -362,15 +362,16 @@ class SC2Manager(GameManager):
             if tooltip:
                 tooltip += "\n\n"
             tooltip += f"[b][color={COLOR_MISSION_IMPORTANT}]Uncollected locations[/color][/b]"
-            for loctype in LocationType:
-                if len(remaining_locations[loctype]) > 0:
-                    if loctype == LocationType.VICTORY:
-                        # tooltip += f"\n[color={COLOR_MISSION_IMPORTANT}]{self.get_location_type_title(loctype)}:[/color]"
-                        victory_loc = remaining_locations[loctype][0].replace(":", f":[color={COLOR_VICTORY_LOCATION}]")
-                        tooltip += f"\n- {victory_loc}[/color]"
-                    else:
-                        tooltip += f"\n[color={COLOR_MISSION_IMPORTANT}]{self.get_location_type_title(loctype)}:[/color]\n- "
-                        tooltip += "\n- ".join(remaining_locations[loctype])
+            last_location_type = LocationType.VICTORY
+            for location_type, location_name, _ in remaining_locations:
+                if location_type != last_location_type:
+                    tooltip += f"\n[color={COLOR_MISSION_IMPORTANT}]{self.get_location_type_title(location_type)}:[/color]"
+                    last_location_type = location_type
+                if location_type == LocationType.VICTORY:
+                    victory_loc = location_name.replace(":", f":[color={COLOR_VICTORY_LOCATION}]")
+                    tooltip += f"\n- {victory_loc}[/color]"
+                else:
+                    tooltip += f"\n- {location_name}"
             if len(plando_locations) > 0:
                 tooltip += f"\n[b]Plando:[/b]\n- "
                 tooltip += "\n- ".join(plando_locations)
@@ -389,43 +390,39 @@ class SC2Manager(GameManager):
     def finish_launching(self, dt):
         self.launching = False
     
-    def sort_unfinished_locations_custom_order(self, mission_id: int) -> Tuple[Dict[LocationType, List[str]], List[str], int]:
-        locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
-        count = 0
+    def sort_unfinished_locations(self, mission_id: int) -> Tuple[List[Tuple[LocationType, str, int]], List[str], int]:
+        locations: List[Tuple[LocationType, str, int]] = []
+        location_name_to_index: Dict[str, int] = {}
         for loc in self.ctx.locations_for_mission_id(mission_id):
             if loc in self.ctx.missing_locations:
-                count += 1
-                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
+                location_name = self.ctx.location_names.lookup_in_game(loc)
+                location_name_to_index[location_name] = len(locations)
+                locations.append((
+                    lookup_location_id_to_type[loc],
+                    location_name,
+                    loc,
+                ))
+        count = len(locations)
 
         plando_locations = []
-        for plando_loc in self.ctx.plando_locations:
-            for loctype in LocationType:
-                if plando_loc in locations[loctype]:
-                    locations[loctype].remove(plando_loc)
-                    plando_locations.append(plando_loc)
+        elements_to_remove: Set[Tuple[LocationType, str, int]] = set()
+        for plando_loc_name in self.ctx.plando_locations:
+            if plando_loc_name in location_name_to_index:
+                elements_to_remove.add(locations[location_name_to_index[plando_loc_name]])
+                plando_locations.append(plando_loc_name)
+        for element in elements_to_remove:
+            locations.remove(element)
 
-        return locations, plando_locations, count
-    
-    def sort_unfinished_locations(self, mission: SC2Mission) -> Tuple[Dict[LocationType, List[str]], List[str], int]:
-        locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
-        count = 0
-        for loc in self.ctx.locations_for_mission(mission):
-            if loc in self.ctx.missing_locations:
-                count += 1
-                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names.lookup_in_game(loc))
+        return sorted(locations), plando_locations, count
 
-        plando_locations = []
-        for plando_loc in self.ctx.plando_locations:
-            for loctype in LocationType:
-                if plando_loc in locations[loctype]:
-                    locations[loctype].remove(plando_loc)
-                    plando_locations.append(plando_loc)
-
-        return locations, plando_locations, count
-
-    def any_valuable_locations(self, locations: Dict[LocationType, List[str]]) -> bool:
-        for loctype in LocationType:
-            if len(locations[loctype]) > 0 and self.ctx.location_inclusions[loctype] == LocationInclusion.option_enabled:
+    def any_valuable_locations(self, locations: List[Tuple[LocationType, str, int]]) -> bool:
+        for location_type, _, location_id in locations:
+            if (self.ctx.location_inclusions[location_type] == LocationInclusion.option_enabled
+                and all(
+                    self.ctx.location_inclusions_by_flag[flag] == LocationInclusion.option_enabled
+                    for flag in lookup_location_id_to_flags[location_id]
+                )
+            ):
                 return True
         return False
 

@@ -1105,6 +1105,12 @@ item_table = {
     item_names.INFESTED_BUNKER:
         ItemData(17 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 16, SC2Race.ZERG,
                  classification=ItemClassification.progression, origin={"ext"}),
+    item_names.NYDUS_WORM:
+        ItemData(18 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 17, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.OMEGA_WORM:
+        ItemData(19 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 18, SC2Race.ZERG,
+                 classification=ItemClassification.useful, origin={"ext"}),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
@@ -1464,6 +1470,18 @@ item_table = {
     item_names.TYRANNOZOR_HEALING_ADAPTATION:
         ItemData(353 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 11, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT,
                  origin={"ext"}),
+    item_names.NYDUS_WORM_OMEGA_WORM_SUBTERRANEAN_SCALES:
+        ItemData(354 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 12, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.filler),
+    item_names.NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN:
+        ItemData(355 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 13, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.useful),
+    item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY:
+        ItemData(356 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 14, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.useful),
+    item_names.OMEGA_WORM_OUROBOROS_STRAIN:
+        ItemData(357 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 15, SC2Race.ZERG, parent_item=item_names.OMEGA_WORM,
+                 origin={"ext"}, classification=ItemClassification.useful),
+    item_names.NYDUS_WORM_RAVENOUS_APPETITE:
+        ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent_item=item_names.NYDUS_WORM,
+                 origin={"ext"}, classification=ItemClassification.useful),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
@@ -1767,16 +1785,16 @@ item_table = {
     item_names.VANGUARD_RAPIDFIRE_CANNON: ItemData(520 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 20, SC2Race.PROTOSS, parent_item=item_names.VANGUARD),
     item_names.VANGUARD_FUSION_MORTARS: ItemData(521 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 21, SC2Race.PROTOSS, parent_item=item_names.VANGUARD),
     item_names.ANNIHILATOR_AERIAL_TRACKING: ItemData(522 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 22, SC2Race.PROTOSS, parent_item=item_names.ANNIHILATOR),
-    # 523 reserved for Stalwart
+    item_names.STALWART_DUALITY_CHARGE: ItemData(523 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 23, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.STALWART),
     # 524 reserved for Colossus
-    # 525 reserved for Wrathwalker
+    item_names.WRATHWALKER_AERIAL_TRACKING: ItemData(525 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 25, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.WRATHWALKER),
     item_names.REAVER_KHALAI_REPLICATORS: ItemData(526 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 26, SC2Race.PROTOSS, parent_item=item_names.REAVER),
     # 527 reserved for Disruptor
     # 528 reserved for Warp Prism
     # 529 reserved for Observer
-    # 530 reserved for Phoenix
+    item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: ItemData(530 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 0, SC2Race.PROTOSS, parent_item=item_names.PHOENIX),
     # 531 reserved for Corsair
-    # 532 reserved for Mirage
+    item_names.MIRAGE_GRAVITON_BEAM: ItemData(532 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 2, SC2Race.PROTOSS, parent_item=item_names.MIRAGE),
     item_names.SKIRMISHER_PEER_CONTEMPT: ItemData(533 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 3, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.SKIRMISHER),
     # 534 reserved for Void Ray
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 5, SC2Race.PROTOSS, parent_item=item_names.DESTROYER),
