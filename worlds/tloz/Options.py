@@ -33,8 +33,17 @@ class StartingPosition(Choice):
     option_dangerous = 2
     option_very_dangerous = 3
 
+class ArrowLocation(Choice):
+    """Bow requires you to also find an Arrow in order to use it.
+    Shop means that Arrow is guaranteed to appear in one of the shops in your world.
+    Anywhere shuffles Arrow into the pool to be placed in any game in the multiworld."""
+    display_name = "Arrow Location"
+    option_shop = 0
+    option_anywhere = 1
+
 @dataclass
 class TlozOptions(PerGameCommonOptions):
     ExpandedPool: ExpandedPool
     TriforceLocations: TriforceLocations
     StartingPosition: StartingPosition
+    ArrowLocation: ArrowLocation

@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
-from .Options import TriforceLocations, StartingPosition
+from .Options import TriforceLocations, StartingPosition, ArrowLocation
 
 # Swords are in starting_weapons
 overworld_items = {
@@ -87,8 +87,13 @@ def get_pool_core(world):
     minor_items = dict(minor_dungeon_items)
 
     # Guaranteed Shop Items
-    reserved_store_slots = random.sample(shop_locations[0:9], 4)
-    for location, item in zip(reserved_store_slots, guaranteed_shop_items):
+    arrow = "Arrow"
+    copy_shop_items = guaranteed_shop_items.copy()
+    if (world.options.ArrowLocation == ArrowLocation.option_anywhere) and (arrow in copy_shop_items):
+        copy_shop_items.remove(arrow)
+        pool.append(arrow)
+    reserved_store_slots = random.sample(shop_locations[0:9], len(copy_shop_items))
+    for location, item in zip(reserved_store_slots, copy_shop_items):
         placed_items[location] = item
 
     # Starting Weapon
