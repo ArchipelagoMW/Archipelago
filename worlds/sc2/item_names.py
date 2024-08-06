@@ -732,7 +732,7 @@ REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (R
 # Observer
 PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam (Phoenix)"
 # Corsair
-# Mirage
+MIRAGE_GRAVITON_BEAM                                    = "Graviton Beam (Mirage)"
 SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
 # Void Ray
 DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"

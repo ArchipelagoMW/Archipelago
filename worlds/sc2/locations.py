@@ -40,6 +40,14 @@ class LocationFlag(enum.IntFlag):
     PREVENTATIVE = enum.auto()
     """Locations that are about preventing something from happening"""
 
+    def values(self):
+        """Hacky iterator for backwards-compatibility with Python <= 3.10. Not necessary on Python 3.11+"""
+        return tuple(
+            val for val in (
+                LocationFlag.SPEEDRUN, LocationFlag.PREVENTATIVE,
+            ) if val in self
+        )
+
 
 class LocationData(NamedTuple):
     region: str
