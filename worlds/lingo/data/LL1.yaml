@@ -1556,6 +1556,8 @@
         room: Owl Hallway
         door: Shortcut to Hedge Maze
       Roof: True
+      The Incomparable:
+        door: Observant Entrance
     panels:
       DOWN:
         id: Maze Room/Panel_down_up
@@ -1967,6 +1969,9 @@
         door: Eight Door
       Orange Tower Sixth Floor:
         painting: True
+      Hedge Maze:
+        room: Hedge Maze
+        door: Observant Entrance
     panels:
       Achievement:
         id: Countdown Panels/Panel_incomparable_incomparable
@@ -7649,6 +7654,8 @@
       LEAP:
         id: Double Room/Panel_leap_leap
         tag: midwhite
+        required_door:
+          door: Door to Cross
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a

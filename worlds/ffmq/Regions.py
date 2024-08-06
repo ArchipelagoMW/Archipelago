@@ -216,7 +216,7 @@ def stage_set_rules(multiworld):
                                               multiworld.worlds[player].options.accessibility == "minimal"]) * 3):
         for player in no_enemies_players:
             for location in vendor_locations:
-                if multiworld.worlds[player].options.accessibility == "locations":
+                if multiworld.worlds[player].options.accessibility == "full":
                     multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
                 else:
                     multiworld.get_location(location, player).access_rule = lambda state: False
