@@ -229,7 +229,7 @@ def remaining_fill(multiworld: MultiWorld,
     total = min(len(itempool),  len(locations))
     placed = 0
 
-    # Optimisation: Decide whether to do full location.can_fill check (excluded), or only check the item rule
+    # Optimisation: Decide whether to do full location.can_fill check (respect excluded), or only check the item rule
     if check_location_can_fill:
         state = CollectionState(multiworld)
 
