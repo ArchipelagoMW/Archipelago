@@ -107,7 +107,7 @@ class CivVIWorld(World):
 
                 # If we're using progressive districts, we need to check if we need to create a different item instead
             item_to_create = item_name
-            if self.options.progression_style.current_key != "none":
+            if self.options.progression_style != "none":
                 item: CivVIItemData = self.item_table[item_name]
                 if item.progression_name != None:
                     item_to_create = self.item_table[item.progression_name].name
@@ -116,7 +116,7 @@ class CivVIWorld(World):
                 item_to_create)]
 
         # Era items
-        if self.options.progression_style.current_key == "eras_and_districts":
+        if self.options.progression_style == "eras_and_districts":
             # Add one less than the total number of eras (start in ancient, don't need to find it)
             for era in EraType:
                 if era.value == "ERA_ANCIENT":
@@ -146,13 +146,13 @@ class CivVIWorld(World):
                 total_created += 1
 
     def post_fill(self):
-        if self.options.pre_hint_items.current_key == "none":
+        if self.options.pre_hint_items == "none":
             return
 
         show_flags = {
-            ItemClassification.progression: self.options.pre_hint_items.current_key != "none",
-            ItemClassification.useful: self.options.pre_hint_items.current_key == "no_junk" or self.options.pre_hint_items.current_key == "all",
-            ItemClassification.filler: self.options.pre_hint_items.current_key == "all",
+            ItemClassification.progression: self.options.pre_hint_items != "none",
+            ItemClassification.useful: self.options.pre_hint_items == "no_junk" or self.options.pre_hint_items == "all",
+            ItemClassification.filler: self.options.pre_hint_items == "all",
         }
 
         start_location_hints: Set[str] = self.options.start_location_hints.value
@@ -169,7 +169,7 @@ class CivVIWorld(World):
 
     def fill_slot_data(self):
         return {
-            "progression_style": self.options.progression_style.current_key,
+            "progression_style": self.options.progression_style,
             "death_link": self.options.death_link,
             "research_cost_multiplier": self.options.research_cost_multiplier,
             "death_link_effect": self.options.death_link_effect,

@@ -20,17 +20,17 @@ class ProgressionStyle(Choice):
 class ShuffleGoodyHuts(DefaultOnToggle):
     """Shuffles the goody hut rewards. Goody huts will only contain junk items and location checks are received sequentially (GOODY_HUT_1, GOODY_HUT_2, etc)."""
     display_name = "Shuffle Goody Hut Rewards"
-    default = True
 
 
 class BoostSanity(Toggle):
     """Boosts for Civics/Techs are location checks. Boosts can now be triggered even if the item has already been researched. If it is dependent upon a unit that is now obsolete, you can click toggle on/off the relevant tech in the tech tree."""
-    default = False
+    display_name = "Boostsanity"
+
 
 
 class ExcludeMissableBoosts(Toggle):
     """If boostsanity is enabled, this will prevent any boosts that are 'missable' from having progression items. Disabling this will potentially require multiple playthroughs to complete the seed."""
-    default = True
+    display_name = "Exclude Missable Boosts"
 
 
 class ResearchCostMultiplier(Choice):
@@ -59,13 +59,12 @@ class PreHintItems(Choice):
 
 class HideItemNames(Toggle):
     """Each Tech and Civic Location will have a title of 'Unrevealed' until its prereqs have been researched. Note that hints will still be pre collected if that option is enabled."""
-    default = False
+    display_name = "Hide Item Names"
 
 
 class InGameFlagProgressionItems(DefaultOnToggle):
     """If enabled, an advisor icon will be added to any location that contains a progression item"""
-    default = True
-
+    display_name = "Advisor Indicates Progression Items"
 
 class DeathLinkEffect(Choice):
     """What happens when a unit dies. Default is Unit Killed.\n
