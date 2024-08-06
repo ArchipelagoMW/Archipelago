@@ -59,11 +59,11 @@ class SC2MissionOrder(MissionOrderNode):
     goal_missions: Set[SC2MOGenMission]
     max_depth: int
 
-    def __init__(self, world: World, data: Dict[str, Any]):
+    def __init__(self, world: World, mission_pools: SC2MOGenMissionPools, data: Dict[str, Any]):
         self.campaigns = []
         self.sorted_missions = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
         self.fixed_missions = set()
-        self.mission_pools = SC2MOGenMissionPools()
+        self.mission_pools = mission_pools
         self.goal_missions = set()
         self.parent = None
 
@@ -111,6 +111,13 @@ class SC2MissionOrder(MissionOrderNode):
         """Returns a set of all missions used in the mission order."""
         return self.mission_pools.get_used_missions()
     
+    def get_mission_count(self) -> int:
+        """Returns the amount of missions in the mission order."""
+        return sum(
+            len([mission for mission in layout.missions if not mission.option_empty])
+            for campaign in self.campaigns for layout in campaign.layouts
+        )
+
     def get_starting_missions(self) -> Set[SC2Mission]:
         """Returns a set containing all the missions that are accessible without beating any other missions."""
         return {
@@ -578,7 +585,8 @@ class SC2MOGenLayout(MissionOrderNode):
         for mission in self.missions:
             if mission.option_empty:
                 for next_mission in mission.next:
-                    next_mission.prev.remove(mission)
+                    if mission in next_mission.prev:
+                        next_mission.prev.remove(mission)
                 mission.next.clear()
                 for prev_mission in mission.prev:
                     prev_mission.next.remove(mission)

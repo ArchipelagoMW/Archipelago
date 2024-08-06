@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import TYPE_CHECKING, Dict, Set, List
 
-from ..mission_tables import SC2Mission, lookup_id_to_mission, lookup_name_to_mission, MissionFlag
+from ..mission_tables import SC2Mission, lookup_id_to_mission, lookup_name_to_mission, MissionFlag, SC2Campaign
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
@@ -57,11 +57,22 @@ class SC2MOGenMissionPools:
         self._used_flags = {}
         self._used_missions = set()
 
-    def set_exclusions(self, excluded: List[str], unexcluded: List[str]) -> None:
+    def set_exclusions(self, excluded: List[SC2Mission], unexcluded: List[SC2Mission]) -> None:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
         from appearing in the mission order."""
-        total_exclusions = [lookup_name_to_mission[name] for name in excluded if name not in unexcluded]
+        total_exclusions = [mission.id for mission in excluded if mission not in unexcluded]
         self.master_list.difference_update(total_exclusions)
+
+    def get_allowed_mission_count(self) -> int:
+        return len(self.master_list)
+    
+    def count_allowed_missions(self, campaign: SC2Campaign) -> int:
+        allowed_missions = [
+            mission_id
+            for mission_id in self.master_list
+            if lookup_id_to_mission[mission_id].campaign == campaign
+        ]
+        return len(allowed_missions)
 
     def move_mission(self, mission: SC2Mission, old_diff: Difficulty, new_diff: Difficulty) -> None:
         """Changes the difficulty of the given `mission`. Does nothing if the mission is not allowed to appear

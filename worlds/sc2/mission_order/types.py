@@ -60,12 +60,16 @@ class Grid(LayoutType):
     width: int
     height: int
     num_corners_to_remove: int
+    two_start_positions: bool
 
     # 0 1 2
     # 3 4 5
     # 6 7 8
 
     def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        self.two_start_positions = options.pop("two_start_positions", False)
+        if self.two_start_positions:
+            self.size += 1
         width: int = options.pop("width", 0)
         if width < 1:
             self.width, self.height, self.num_corners_to_remove = Grid.get_grid_dimensions(self.size)
@@ -117,7 +121,12 @@ class Grid(LayoutType):
 
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         missions = [mission_factory() for _ in range(self.width * self.height)]
-        missions[0].option_entrance = True
+        if self.two_start_positions:
+            missions[0].option_empty = True
+            missions[1].option_entrance = True
+            missions[self.get_grid_index(0, 1)].option_entrance = True
+        else:
+            missions[0].option_entrance = True
         missions[-1].option_exit = True
 
         for x in range(self.width):
@@ -184,6 +193,7 @@ class Hopscotch(LayoutType):
     """Alternating between one and two available missions.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
     width: int
+    two_start_positions: bool
 
     # 0 2
     # 1 3 5
@@ -191,13 +201,21 @@ class Hopscotch(LayoutType):
     #     7
 
     def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        self.two_start_positions = options.pop("two_start_positions", False)
+        if self.two_start_positions:
+            self.size += 1
         width: int = options.pop("width", 7)
         self.width = max(width, 4)
         return options
 
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         slots = [mission_factory() for _ in range(self.size)]
-        slots[0].option_entrance = True
+        if self.two_start_positions:
+            slots[0].option_empty = True
+            slots[1].option_entrance = True
+            slots[2].option_entrance = True
+        else:
+            slots[0].option_entrance = True
         slots[-1].option_exit = True
 
         cycle = 0

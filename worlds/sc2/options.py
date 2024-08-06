@@ -130,6 +130,7 @@ class MissionOrder(Choice):
     Grid: Missions are arranged into a grid. Completing a mission unlocks the adjacent missions. Corners may be omitted to make the grid more square. Complete the bottom-right mission to win.
     Golden Path: A required line of missions with several optional branches, similar to the Wings of Liberty campaign.
     Hopscotch: Missions alternate between mandatory missions and pairs of optional missions.
+    Custom: Uses the YAML's custom mission order option. See documentation for usage.
     """
     display_name = "Mission Order"
     option_vanilla = 0
@@ -140,6 +141,7 @@ class MissionOrder(Choice):
     option_grid = 9
     option_golden_path = 10
     option_hopscotch = 11
+    option_custom = 99
 
 
 class MaximumCampaignSize(Range):

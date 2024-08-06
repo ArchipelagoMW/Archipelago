@@ -241,7 +241,7 @@ class SC2Manager(GameManager):
             if longest_column == 1:
                 campaign_layout_height = 115
             else:
-                campaign_layout_height = (longest_column + 2) * 50
+                campaign_layout_height = (longest_column + 2) * 56
             multi_campaign_layout_height += campaign_layout_height
             campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
             campaign_layout.add_widget(
