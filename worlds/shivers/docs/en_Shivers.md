@@ -27,5 +27,4 @@ Victory is achieved when the player has captured the required number Ixupi set i
 
 ## Encountered a bug?
 
-Please contact GodlFire on Discord for bugs related to Shivers world generation.<br>
-Please contact GodlFire or mouse on Discord for bugs related to the Shivers Randomizer.
+Please contact GodlFire or Cynbel_Terreus on Discord for bugs related to Shivers world generation or the Shivers Randomizer.

@@ -13,7 +13,9 @@ class ShiversItem(Item):
 
 class ItemType(enum.Enum):
     POT = "pot"
+    POT_COMPLETE = "pot-complete"
     POT_DUPLICATE = "pot-duplicate"
+    POT_COMPELTE_DUPLICATE = "pot-complete-duplicate"
     KEY = "key"
     KEY_OPTIONAL = "key-optional"
     ABILITY = "ability"
@@ -53,16 +55,16 @@ item_table = {
     "Lightning Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 17, ItemType.POT),
     "Sand Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 18, ItemType.POT),
     "Metal Pot Top": ItemData(SHIVERS_ITEM_ID_OFFSET + 19, ItemType.POT),
-    "Water Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 20, "pot_type2"),
-    "Wax Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 21, "pot_type2"),
-    "Ash Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 22, "pot_type2"),
-    "Oil Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 23, "pot_type2"),
-    "Cloth Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 24, "pot_type2"),
-    "Wood Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 25, "pot_type2"),
-    "Crystal Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 26, "pot_type2"),
-    "Lightning Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 27, "pot_type2"),
-    "Sand Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 28, "pot_type2"),
-    "Metal Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 29, "pot_type2"),
+    "Water Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 20, ItemType.POT_COMPLETE),
+    "Wax Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 21, ItemType.POT_COMPLETE),
+    "Ash Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 22, ItemType.POT_COMPLETE),
+    "Oil Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 23, ItemType.POT_COMPLETE),
+    "Cloth Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 24, ItemType.POT_COMPLETE),
+    "Wood Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 25, ItemType.POT_COMPLETE),
+    "Crystal Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 26, ItemType.POT_COMPLETE),
+    "Lightning Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 27, ItemType.POT_COMPLETE),
+    "Sand Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 28, ItemType.POT_COMPLETE),
+    "Metal Pot Complete": ItemData(SHIVERS_ITEM_ID_OFFSET + 29, ItemType.POT_COMPLETE),
 
     # Keys
     "Key for Office Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 30, ItemType.KEY),
@@ -110,16 +112,16 @@ item_table = {
     "Lightning Pot Top DUPE": ItemData(None, ItemType.POT_DUPLICATE),
     "Sand Pot Top DUPE": ItemData(None, ItemType.POT_DUPLICATE),
     "Metal Pot Top DUPE": ItemData(None, ItemType.POT_DUPLICATE),
-    "Water Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 140, "potduplicate_type2"),
-    "Wax Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 141, "potduplicate_type2"),
-    "Ash Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 142, "potduplicate_type2"),
-    "Oil Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 143, "potduplicate_type2"),
-    "Cloth Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 144, "potduplicate_type2"),
-    "Wood Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 145, "potduplicate_type2"),
-    "Crystal Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 146, "potduplicate_type2"),
-    "Lightning Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 147, "potduplicate_type2"),
-    "Sand Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 148, "potduplicate_type2"),
-    "Metal Pot Complete DUPE": ItemData(SHIVERS_ITEM_ID_OFFSET + 149, "potduplicate_type2"),
+    "Water Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Wax Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Ash Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Oil Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Cloth Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Wood Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Crystal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Lightning Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Sand Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Metal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
 
     # Filler
     "Empty": ItemData(SHIVERS_ITEM_ID_OFFSET + 90, ItemType.FILLER, ItemClassification.filler),

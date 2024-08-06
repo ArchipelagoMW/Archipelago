@@ -5,7 +5,7 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from . import Constants, Rules
-from .Items import ItemType, ShiversItem, item_table
+from .Items import ItemType, SHIVERS_ITEM_ID_OFFSET, ShiversItem, item_table
 from .Options import ShiversOptions
 from .Rules import set_rules
 
@@ -36,7 +36,6 @@ class ShiversWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
     storage_placements = []
-    shivers_item_id_offset = 27000
     pot_completed_list: List[int]
 
     def generate_early(self):
@@ -104,27 +103,30 @@ class ShiversWorld(World):
         # Add items to item pool
         item_pool = []
         for name, data in item_table.items():
-            if data.type in {ItemType.KEY, ItemType.ABILITY, ItemType.IXUPI_AVAILABILITY}:
+            if data.type in [ItemType.KEY, ItemType.ABILITY, ItemType.IXUPI_AVAILABILITY]:
                 item_pool.append(self.create_item(name))
 
         # Pot pieces/Completed/Mixed:
-        for i in range(10):
-            if self.options.full_pots == "pieces":
-                item_pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + i]))
-                item_pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 10 + i]))
-            elif self.options.full_pots == "complete":
-                item_pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 20 + i]))
-            else:
-                # Roll for if pieces or a complete pot will be used.
-                # Pot Pieces
+        if self.options.full_pots == "pieces":
+            item_pool += [self.create_item(name) for name, data in item_table.items() if data.type == ItemType.POT]
+        elif self.options.full_pots == "complete":
+            item_pool += [self.create_item(name) for name, data in item_table.items() if
+                          data.type == ItemType.POT_COMPLETE]
+        else:
+            # Roll for if pieces or a complete pot will be used.
+            # Pot Pieces
+            pieces = [self.create_item(name) for name, data in item_table.items() if data.type == ItemType.POT]
+            complete = [self.create_item(name) for name, data in item_table.items() if
+                        data.type == ItemType.POT_COMPLETE]
+            for i in range(10):
                 if self.random.randint(0, 1) == 0:
                     self.pot_completed_list.append(0)
-                    item_pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + i]))
-                    item_pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 10 + i]))
+                    item_pool.append(pieces[i])
+                    item_pool.append(pieces[i + 10])
                 # Completed Pot
                 else:
                     self.pot_completed_list.append(1)
-                    item_pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 20 + i]))
+                    item_pool.append(complete[i])
 
         # Add Easier Lyre
         item_pool += [self.create_item("Easier Lyre") for _ in range(9)]
@@ -155,19 +157,19 @@ class ShiversWorld(World):
 
         # If front door option is on, determine which set of keys will
         # be used for lobby access and add front door key to item pool
-        lobby_access_keys = 1
+        lobby_access_keys = 0
         if self.options.front_door_usable:
-            lobby_access_keys = self.random.randint(1, 2)
-            item_pool += [self.create_item("Key for Front Door")]
+            lobby_access_keys = self.random.randint(0, 1)
+            item_pool.append(self.create_item("Key for Front Door"))
         else:
-            item_pool += [self.create_item("Heal")]
+            item_pool.append(self.create_item("Heal"))
 
         def set_lobby_access_keys(items: dict[str, int]):
-            if lobby_access_keys == 1:
+            if lobby_access_keys == 0:
                 items["Key for Underground Lake"] = 1
                 items["Key for Office Elevator"] = 1
                 items["Key for Office"] = 1
-            elif lobby_access_keys == 2:
+            elif lobby_access_keys == 1:
                 items["Key for Front Door"] = 1
 
         # Lobby access:
@@ -185,10 +187,10 @@ class ShiversWorld(World):
         # Pot piece shuffle location:
         if self.options.location_pot_pieces == "own_world":
             self.options.local_items.value |= {name for name, data in item_table.items() if
-                                               data.type == "pot" or data.type == "pot_type2"}
+                                               data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
         if self.options.location_pot_pieces == "different_world":
             self.options.non_local_items.value |= {name for name, data in item_table.items() if
-                                                   data.type == "pot" or data.type == "pot_type2"}
+                                                   data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
 
         self.multiworld.itempool += item_pool
 
@@ -208,18 +210,22 @@ class ShiversWorld(World):
                               data.type == ItemType.POT_DUPLICATE]
         elif self.options.full_pots == "complete":
             storage_items += [self.create_item(name) for name, data in item_table.items() if
-                              data.type == 'potduplicate_type2']
-            storage_items += [self.create_item("Empty") for i in range(10)]
+                              data.type == ItemType.POT_COMPELTE_DUPLICATE]
+            storage_items += [self.create_item("Empty") for _ in range(10)]
         else:
+            pieces = [self.create_item(name) for name, data in item_table.items() if
+                      data.type == ItemType.POT_DUPLICATE]
+            complete = [self.create_item(name) for name, data in item_table.items() if
+                        data.type == ItemType.POT_COMPELTE_DUPLICATE]
             for i in range(10):
                 # Pieces
                 if self.pot_completed_list[i] == 0:
-                    storage_items += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i])]
-                    storage_items += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 80 + i])]
+                    storage_items.append(pieces[i])
+                    storage_items.append(pieces[i + 10])
                 # Complete
                 else:
-                    storage_items += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i])]
-                    storage_items += [self.create_item("Empty")]
+                    storage_items.append(complete[i])
+                    storage_items.append(self.create_item("Empty"))
 
         storage_items += [self.create_item("Empty") for _ in range(3)]
 

@@ -11,6 +11,7 @@ class IxupiCapturesNeeded(Range):
     range_end = 10
     default = 10
 
+
 class LobbyAccess(Choice):
     """
     Chooses how keys needed to reach the lobby are placed.
@@ -29,7 +30,8 @@ class PuzzleHintsRequired(DefaultOnToggle):
     """
     If turned on puzzle hints/solutions will be available before the corresponding puzzle is required.
 
-    For example: The Red Door puzzle will be logically required only after access to the Beth's Address Book which gives you the solution.
+    For example: The Red Door puzzle will be logically required only after access to the Beth's Address Book
+    which gives you the solution.
 
     Turning this off allows for greater randomization.
     """
@@ -61,7 +63,8 @@ class ElevatorsStaySolved(DefaultOnToggle):
 
 class EarlyBeth(DefaultOnToggle):
     """
-    Beth's body is open at the start of the game. This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle.
+    Beth's body is open at the start of the game.
+    This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle.
     """
     display_name = "Early Beth"
 
@@ -72,6 +75,7 @@ class EarlyLightning(Toggle):
     (1 Location)
     """
     display_name = "Early Lightning"
+
 
 class LocationPotPieces(Choice):
     """
@@ -84,6 +88,8 @@ class LocationPotPieces(Choice):
     option_own_world = 0
     option_different_world = 1
     option_any_world = 2
+    default = 2
+
 
 class FullPots(Choice):
     """
