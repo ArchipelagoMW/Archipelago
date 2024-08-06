@@ -80,13 +80,13 @@ class CivVIWorld(World):
         create_regions(self, self.options, self.player)
 
     def set_rules(self) -> None:
-        if self.options.boostsanity.value:
+        if self.options.boostsanity:
             create_boost_rules(self)
 
     def create_item(self, name: str) -> Item:
         item: CivVIItemData = self.item_table[name]
         classification = item.classification
-        if self.options.boostsanity.value:
+        if self.options.boostsanity:
             if item.civ_name in BOOSTSANITY_PROGRESSION_ITEMS:
                 classification = ItemClassification.progression
 
@@ -126,10 +126,10 @@ class CivVIWorld(World):
 
         num_filler_items = 0
         # Goody items, create 10 by default if options are enabled
-        if self.options.shuffle_goody_hut_rewards.value:
+        if self.options.shuffle_goody_hut_rewards:
             num_filler_items += 10
 
-        if self.options.boostsanity.value:
+        if self.options.boostsanity:
             boost_data = get_boosts_data()
             num_filler_items += len(boost_data)
 
@@ -170,10 +170,10 @@ class CivVIWorld(World):
     def fill_slot_data(self):
         return {
             "progression_style": self.options.progression_style.current_key,
-            "death_link": self.options.death_link.value,
-            "research_cost_multiplier": self.options.research_cost_multiplier.value,
-            "death_link_effect": self.options.death_link_effect.value,
-            "death_link_effect_percent": self.options.death_link_effect_percent.value,
+            "death_link": self.options.death_link,
+            "research_cost_multiplier": self.options.research_cost_multiplier,
+            "death_link_effect": self.options.death_link_effect,
+            "death_link_effect_percent": self.options.death_link_effect_percent,
 
         }
 

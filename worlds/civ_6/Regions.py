@@ -106,8 +106,8 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
 
     has_progressive_items = options.progression_style.current_key != "none"
     has_progressive_eras = options.progression_style.current_key == "eras_and_districts"
-    has_goody_huts = options.shuffle_goody_hut_rewards.value
-    has_boosts = options.boostsanity.value
+    has_goody_huts = options.shuffle_goody_hut_rewards
+    has_boosts = options.boostsanity
 
     regions: List[Region] = []
     for era in EraType:
@@ -172,7 +172,7 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
     world.multiworld.completion_condition[player] = lambda state: state.can_reach(
         EraType.ERA_FUTURE.value, "Region", player)
 
-    if world.options.boostsanity.value and not world.options.exclude_missable_boosts.value:
+    if world.options.boostsanity and not world.options.exclude_missable_boosts:
         _update_boost_locations_to_include_missable(world)
 
 

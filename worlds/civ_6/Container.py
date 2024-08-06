@@ -65,7 +65,7 @@ def get_formatted_player_name(world, player) -> str:
 
 
 def get_advisor_type(world: 'CivVIWorld', location: Location) -> str:
-    if world.options.advisor_show_progression_items.value and location.item.classification == ItemClassification.progression:
+    if world.options.advisor_show_progression_items and location.item.classification == ItemClassification.progression:
         return "ADVISOR_PROGRESSIVE"
     else:
         return "ADVISOR_GENERIC"
@@ -87,13 +87,13 @@ def generate_new_items(world: 'CivVIWorld') -> str:
 
     hidden_techs = []
     hidden_civics = []
-    if world.options.boostsanity.value:
+    if world.options.boostsanity:
         boost_techs = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "TECH"]
         boost_civics = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "CIVIC"]
         techs += boost_techs
         civics += boost_civics
 
-    if world.options.hide_item_names.value:
+    if world.options.hide_item_names:
         hidden_techs = [tech.name for tech in techs]
         hidden_civics = [civic.name for civic in civics]
 
@@ -166,7 +166,7 @@ def generate_setup_file(world) -> str:
     end
     """
 
-    if world.options.boostsanity.value:
+    if world.options.boostsanity:
         setup += f"""
     -- Init Boosts
     if Game.GetProperty("BoostsAsChecks") == nil then
@@ -182,7 +182,7 @@ def generate_goody_hut_sql(world) -> str:
     Generates the SQL for the goody huts or an empty string if they are disabled since the mod expects the file to be there
     """
 
-    if world.options.shuffle_goody_hut_rewards.value:
+    if world.options.shuffle_goody_hut_rewards:
         return f"""
         UPDATE GoodyHutSubTypes SET Description = NULL WHERE GoodyHut NOT IN ('METEOR_GOODIES', 'GOODYHUT_SAILOR_WONDROUS', 'DUMMY_GOODY_BUILDIER') AND Weight > 0;
 
@@ -218,7 +218,7 @@ def generate_update_boosts_sql(world) -> str:
     Generates the SQL for existing boosts in boostsanity or an empty string if they are disabled since the mod expects the file to be there
     """
 
-    if world.options.boostsanity.value:
+    if world.options.boostsanity:
         return f"""
 UPDATE Boosts
 SET TechnologyType = 'BOOST_' || TechnologyType
