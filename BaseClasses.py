@@ -759,35 +759,12 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def _sweep_for_events(self, locations: Optional[Iterable[Location]], yield_each_sweep: bool,
-                          checked_locations: Optional[Set[Location]]) -> Iterable[Iterator[int]]:
+    def _sweep_for_events(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
+                          ) -> Iterable[Iterator[int]]:
         """
         The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
         yield statement.
         """
-        if checked_locations is None:
-            checked_locations = self.events
-        # since the loop has a good chance to run more than once, only filter the events once
-        events_per_player: List[Tuple[int, List[Location]]]
-        if locations is None:
-            # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
-            # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
-            events_per_player = []
-            for player, locations_dict in self.multiworld.regions.location_cache.items():
-                filtered_locations = [location for location in locations_dict.values()
-                                      if location.advancement and location not in checked_locations]
-                if filtered_locations:
-                    events_per_player.append((player, filtered_locations))
-        else:
-            # Filter and separate the locations into a list for each player.
-            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
-            for location in locations:
-                if location.advancement and location not in checked_locations:
-                    events_per_player_dict[location.player].append(location)
-            # Convert to a list of tuples.
-            events_per_player = list(events_per_player_dict.items())
-            del events_per_player_dict
-
         # If no items logically relevant to a specific world were collected in the previous iteration, then that world's
         # locations can be skipped in the current iteration. Usually, a world's logic only depends on its own items, but
         # worlds are allowed to depend on other worlds.
@@ -862,12 +839,36 @@ class CollectionState():
         :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
         self.events when None.
         """
+        if checked_locations is None:
+            checked_locations = self.events
+
+        # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
+        events_per_player: List[Tuple[int, List[Location]]]
+        if locations is None:
+            # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
+            # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
+            events_per_player = []
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                filtered_locations = [location for location in locations_dict.values()
+                                      if location.advancement and location not in checked_locations]
+                if filtered_locations:
+                    events_per_player.append((player, filtered_locations))
+        else:
+            # Filter and separate the locations into a list for each player.
+            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
+            for location in locations:
+                if location.advancement and location not in checked_locations:
+                    events_per_player_dict[location.player].append(location)
+            # Convert to a list of tuples.
+            events_per_player = list(events_per_player_dict.items())
+            del events_per_player_dict
+
         if yield_each_sweep:
             # Return the generator.
-            return self._sweep_for_events(locations, True, checked_locations)
+            return self._sweep_for_events(events_per_player, True)
         else:
             # Exhaust the generator.
-            for _ in self._sweep_for_events(locations, False, checked_locations):
+            for _ in self._sweep_for_events(events_per_player, False):
                 pass
 
     # item name related
