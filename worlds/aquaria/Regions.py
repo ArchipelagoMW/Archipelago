@@ -125,7 +125,8 @@ def _has_secrets(state: CollectionState, player: int) -> bool:
 
 
 def _has_secrets(state: CollectionState, player: int) -> bool:
-    return state.has_all({"First secret obtained", "Second secret obtained", "Third secret obtained"}, player)
+    return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
+                          ItemNames.THIRD_SECRET_OBTAINED}, player)
 
 
 class AquariaRegions:
