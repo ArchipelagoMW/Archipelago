@@ -19,8 +19,8 @@ from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..locations import locations_by_tag, LocationTags
 from ..options import Chefsanity
 from ..options import ExcludeGingerIsland
-from ..stardew_rule import StardewRule, True_, False_, And
-from ..strings.region_names import Region
+from ..stardew_rule import StardewRule, True_, False_
+from ..strings.region_names import LogicRegion
 from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
 
@@ -39,7 +39,7 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
 
     # Should be cached
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
-        cook_rule = self.logic.region.can_reach(Region.kitchen)
+        cook_rule = self.logic.region.can_reach(LogicRegion.kitchen)
         if recipe is None:
             return cook_rule
 
@@ -65,7 +65,7 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
             return self.logic.cooking.received_recipe(meal_name)
         if isinstance(source, QueenOfSauceSource) and self.options.chefsanity & Chefsanity.option_queen_of_sauce:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, ShopFriendshipSource) and self.options.chefsanity & Chefsanity.option_friendship:
+        if isinstance(source, ShopFriendshipSource) and self.options.chefsanity & Chefsanity.option_purchases:
             return self.logic.cooking.received_recipe(meal_name)
         return self.logic.cooking.can_learn_recipe(source)
 
@@ -105,4 +105,4 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
                 continue
             all_recipes_names.append(location.name[len(cooksanity_prefix):])
         all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
-        return And(*(self.logic.cooking.can_cook(recipe) for recipe in all_recipes))
+        return self.logic.and_(*(self.logic.cooking.can_cook(recipe) for recipe in all_recipes))
