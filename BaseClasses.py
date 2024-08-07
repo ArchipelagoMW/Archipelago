@@ -794,7 +794,7 @@ class CollectionState():
         # Construct a mapping from each player to the list of players with logic dependent on that player.
         player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
         worlds = self.multiworld.worlds
-        for player, _locations in events_per_player:
+        for player in self.multiworld.get_all_ids():
             for dependent_on_player in worlds[player].player_dependencies:
                 player_logic_dependents[dependent_on_player].append(player)
 
@@ -842,7 +842,6 @@ class CollectionState():
             # For each player that received advancement, look up the list of players with logic dependent on that player
             # and then flatten all the lists into a single set.
             players_to_check = {dependent_player for received_advancement_player in received_advancement_players
-                                if received_advancement_player in player_logic_dependents
                                 for dependent_player in player_logic_dependents[received_advancement_player]}
             if yield_each_sweep:
                 # Yielding lets the caller respond to changes in the CollectionState during the sweep and respond to
