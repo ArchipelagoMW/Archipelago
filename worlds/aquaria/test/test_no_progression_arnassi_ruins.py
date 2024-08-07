@@ -6,6 +6,7 @@ Description: Unit test used to test that no progression items can be put in Arna
 
 from . import AquariaTestBase
 from BaseClasses import ItemClassification
+from ..Locations import AquariaLocationNames
 
 
 class NoProgressionArnassiRuinsTest(AquariaTestBase):
@@ -15,14 +16,14 @@ class NoProgressionArnassiRuinsTest(AquariaTestBase):
     }
 
     unfillable_locations = [
-        "Arnassi Ruins, bulb in the right part",
-        "Arnassi Ruins, bulb in the left part",
-        "Arnassi Ruins, bulb in the center part",
-        "Arnassi Ruins, Song Plant Spore",
-        "Arnassi Ruins, Arnassi Armor",
-        "Arnassi Ruins, Arnassi Statue",
-        "Arnassi Ruins, Transturtle",
-        "Arnassi Ruins, Crab Armor",
+        AquariaLocationNames.ARNASSI_RUINS_BULB_IN_THE_RIGHT_PART,
+        AquariaLocationNames.ARNASSI_RUINS_BULB_IN_THE_LEFT_PART,
+        AquariaLocationNames.ARNASSI_RUINS_BULB_IN_THE_CENTER_PART,
+        AquariaLocationNames.ARNASSI_RUINS_SONG_PLANT_SPORE,
+        AquariaLocationNames.ARNASSI_RUINS_ARNASSI_ARMOR,
+        AquariaLocationNames.ARNASSI_RUINS_ARNASSI_STATUE,
+        AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE,
+        AquariaLocationNames.ARNASSI_RUINS_CRAB_ARMOR,
     ]
 
     def test_no_progression_arnassi_ruins(self) -> None:

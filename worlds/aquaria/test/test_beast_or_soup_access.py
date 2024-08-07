@@ -5,6 +5,7 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Locations import AquariaLocationNames
 
 
 class BeastOrSoupAccessTest(AquariaTestBase):
@@ -13,21 +14,21 @@ class BeastOrSoupAccessTest(AquariaTestBase):
     def test_beast_or_soup_location(self) -> None:
         """Test locations that require beast form or hot soup"""
         locations = [
-            "Mermog cave, Piranha Egg",
-            "Mithalas Cathedral, Mithalan Dress",
-            "Kelp Forest top left area, Jelly Egg",
-            "Turtle cave, Urchin Costume",
-            "The Veil top right area, bulb at the top of the waterfall",
-            "Sunken City, bulb on top of the boss area",
-            "Octopus Cave, Dumbo Egg",
-            "Bubble Cave, bulb in the left cave wall",
-            "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
-            "Bubble Cave, Verse Egg",
-            "Beating Mantis Shrimp Prime",
-            "Beating the Golem",
-            "Beating Mergog",
-            "Beating Octopus Prime",
-            "Sunken City cleared"
+            AquariaLocationNames.MERMOG_CAVE_PIRANHA_EGG,
+            AquariaLocationNames.MITHALAS_CATHEDRAL_MITHALAN_DRESS,
+            AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG,
+            AquariaLocationNames.TURTLE_CAVE_URCHIN_COSTUME,
+            AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
+            AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
+            AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
+            AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_LEFT_CAVE_WALL,
+            AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_RIGHT_CAVE_WALL_BEHIND_THE_ICE_CRYSTAL,
+            AquariaLocationNames.BUBBLE_CAVE_VERSE_EGG,
+            AquariaLocationNames.BEATING_MANTIS_SHRIMP_PRIME,
+            AquariaLocationNames.BEATING_THE_GOLEM,
+            AquariaLocationNames.BEATING_MERGOG,
+            AquariaLocationNames.BEATING_OCTOPUS_PRIME,
+            AquariaLocationNames.SUNKEN_CITY_CLEARED
         ]
         items = [["Beast Form", "Hot Soup", "Hot Soup x 2"]]
         self.assertAccessDependency(locations, items)

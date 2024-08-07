@@ -5,7 +5,7 @@ Description: Unit test used to test that progression items can be put in Energy 
 """
 
 from . import AquariaTestBase
-from BaseClasses import ItemClassification
+from ..Locations import AquariaLocationNames
 
 
 class ProgressionEnergyTempleTest(AquariaTestBase):
@@ -15,14 +15,14 @@ class ProgressionEnergyTempleTest(AquariaTestBase):
     }
 
     unfillable_locations = [
-        "Energy Temple first area, beating the Energy Statue",
-        "Energy Temple first area, bulb in the bottom room blocked by a rock",
-        "Energy Temple first area, Energy Idol",
-        "Energy Temple second area, bulb under the rock",
-        "Energy Temple bottom entrance, Krotite Armor",
-        "Energy Temple third area, bulb in the bottom path",
-        "Energy Temple boss area, Fallen God Tooth",
-        "Energy Temple blaster room, Blaster Egg",
+        AquariaLocationNames.ENERGY_TEMPLE_FIRST_AREA_BEATING_THE_ENERGY_STATUE,
+        AquariaLocationNames.ENERGY_TEMPLE_FIRST_AREA_BULB_IN_THE_BOTTOM_ROOM_BLOCKED_BY_A_ROCK,
+        AquariaLocationNames.ENERGY_TEMPLE_ENERGY_IDOL,
+        AquariaLocationNames.ENERGY_TEMPLE_SECOND_AREA_BULB_UNDER_THE_ROCK,
+        AquariaLocationNames.ENERGY_TEMPLE_BOTTOM_ENTRANCE_KROTITE_ARMOR,
+        AquariaLocationNames.ENERGY_TEMPLE_THIRD_AREA_BULB_IN_THE_BOTTOM_PATH,
+        AquariaLocationNames.ENERGY_TEMPLE_BOSS_AREA_FALLEN_GOD_TOOTH,
+        AquariaLocationNames.ENERGY_TEMPLE_BLASTER_ROOM_BLASTER_EGG,
     ]
 
     def test_progression_energy_temple(self) -> None:

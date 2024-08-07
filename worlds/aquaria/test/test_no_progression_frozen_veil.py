@@ -6,6 +6,7 @@ Description: Unit test used to test that no progression items can be put in Froz
 
 from . import AquariaTestBase
 from BaseClasses import ItemClassification
+from ..Locations import AquariaLocationNames
 
 
 class NoProgressionFrozenVeilTest(AquariaTestBase):
@@ -15,14 +16,14 @@ class NoProgressionFrozenVeilTest(AquariaTestBase):
     }
 
     unfillable_locations = [
-        "Ice Cavern, bulb in the room to the right",
-        "Ice Cavern, first bulb in the top exit room",
-        "Ice Cavern, second bulb in the top exit room",
-        "Ice Cavern, third bulb in the top exit room",
-        "Ice Cavern, bulb in the left room",
-        "Bubble Cave, bulb in the left cave wall",
-        "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
-        "Bubble Cave, Verse Egg",
+        AquariaLocationNames.ICE_CAVERN_BULB_IN_THE_ROOM_TO_THE_RIGHT,
+        AquariaLocationNames.ICE_CAVERN_FIRST_BULB_IN_THE_TOP_EXIT_ROOM,
+        AquariaLocationNames.ICE_CAVERN_SECOND_BULB_IN_THE_TOP_EXIT_ROOM,
+        AquariaLocationNames.ICE_CAVERN_THIRD_BULB_IN_THE_TOP_EXIT_ROOM,
+        AquariaLocationNames.ICE_CAVERN_BULB_IN_THE_LEFT_ROOM,
+        AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_LEFT_CAVE_WALL,
+        AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_RIGHT_CAVE_WALL_BEHIND_THE_ICE_CRYSTAL,
+        AquariaLocationNames.BUBBLE_CAVE_VERSE_EGG,
     ]
 
     def test_no_progression_frozen_veil(self) -> None:

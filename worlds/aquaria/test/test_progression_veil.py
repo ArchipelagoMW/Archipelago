@@ -5,7 +5,7 @@ Description: Unit test used to test that progression items can be put in the Vei
 """
 
 from . import AquariaTestBase
-from BaseClasses import ItemClassification
+from ..Locations import AquariaLocationNames
 
 
 class ProgressionVeilTest(AquariaTestBase):
@@ -15,37 +15,37 @@ class ProgressionVeilTest(AquariaTestBase):
     }
 
     unfillable_locations = [
-        "The Veil top left area, In Li's cave",
-        "The Veil top left area, bulb under the rock in the top right path",
-        "The Veil top left area, bulb hidden behind the blocking rock",
-        "The Veil top left area, Transturtle",
-        "The Veil top left area, bulb inside the fish pass",
-        "Turtle cave, Turtle Egg",
-        "Turtle cave, bulb in Bubble Cliff",
-        "Turtle cave, Urchin Costume",
-        "The Veil top right area, bulb in the middle of the wall jump cliff",
-        "The Veil top right area, Golden Starfish",
-        "The Veil top right area, bulb at the top of the waterfall",
-        "The Veil top right area, Transturtle",
-        "The Veil bottom area, bulb in the left path",
-        "The Veil bottom area, bulb in the spirit path",
-        "The Veil bottom area, Verse Egg",
-        "The Veil bottom area, Stone Head",
-        "Octopus Cave, Dumbo Egg",
-        "Octopus Cave, bulb in the path below the Octopus Cave path",
-        "Sun Temple, bulb in the top left part",
-        "Sun Temple, bulb in the top right part",
-        "Sun Temple, bulb at the top of the high dark room",
-        "Sun Temple, Golden Gear",
-        "Sun Temple, first bulb of the temple",
-        "Sun Temple, bulb on the right part",
-        "Sun Temple, bulb in the hidden room of the right part",
-        "Sun Temple, Sun Key",
-        "Sun Worm path, first path bulb",
-        "Sun Worm path, second path bulb",
-        "Sun Worm path, first cliff bulb",
-        "Sun Worm path, second cliff bulb",
-        "Sun Temple boss area, beating Sun God",
+        AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_IN_LI_S_CAVE,
+        AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_BULB_UNDER_THE_ROCK_IN_THE_TOP_RIGHT_PATH,
+        AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_BULB_HIDDEN_BEHIND_THE_BLOCKING_ROCK,
+        AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE,
+        AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_BULB_INSIDE_THE_FISH_PASS,
+        AquariaLocationNames.TURTLE_CAVE_TURTLE_EGG,
+        AquariaLocationNames.TURTLE_CAVE_BULB_IN_BUBBLE_CLIFF,
+        AquariaLocationNames.TURTLE_CAVE_URCHIN_COSTUME,
+        AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_IN_THE_MIDDLE_OF_THE_WALL_JUMP_CLIFF,
+        AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_GOLDEN_STARFISH,
+        AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
+        AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE,
+        AquariaLocationNames.THE_VEIL_BOTTOM_AREA_BULB_IN_THE_LEFT_PATH,
+        AquariaLocationNames.THE_VEIL_BOTTOM_AREA_BULB_IN_THE_SPIRIT_PATH,
+        AquariaLocationNames.THE_VEIL_BOTTOM_AREA_VERSE_EGG,
+        AquariaLocationNames.THE_VEIL_BOTTOM_AREA_STONE_HEAD,
+        AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
+        AquariaLocationNames.OCTOPUS_CAVE_BULB_IN_THE_PATH_BELOW_THE_OCTOPUS_CAVE_PATH,
+        AquariaLocationNames.SUN_TEMPLE_BULB_IN_THE_TOP_LEFT_PART,
+        AquariaLocationNames.SUN_TEMPLE_BULB_IN_THE_TOP_RIGHT_PART,
+        AquariaLocationNames.SUN_TEMPLE_BULB_AT_THE_TOP_OF_THE_HIGH_DARK_ROOM,
+        AquariaLocationNames.SUN_TEMPLE_GOLDEN_GEAR,
+        AquariaLocationNames.SUN_TEMPLE_FIRST_BULB_OF_THE_TEMPLE,
+        AquariaLocationNames.SUN_TEMPLE_BULB_ON_THE_RIGHT_PART,
+        AquariaLocationNames.SUN_TEMPLE_BULB_IN_THE_HIDDEN_ROOM_OF_THE_RIGHT_PART,
+        AquariaLocationNames.SUN_TEMPLE_SUN_KEY,
+        AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_PATH_BULB,
+        AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_PATH_BULB,
+        AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB,
+        AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB,
+        AquariaLocationNames.SUN_TEMPLE_BOSS_AREA_BEATING_LUMEREAN_GOD,
     ]
 
     def test_progression_veil(self) -> None:

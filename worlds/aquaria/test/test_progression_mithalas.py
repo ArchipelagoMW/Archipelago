@@ -5,7 +5,7 @@ Description: Unit test used to test that progression items can be put in Mithala
 """
 
 from . import AquariaTestBase
-from BaseClasses import ItemClassification
+from ..Locations import AquariaLocationNames
 
 
 class ProgressionMithalasTest(AquariaTestBase):
@@ -15,8 +15,8 @@ class ProgressionMithalasTest(AquariaTestBase):
     }
 
     unfillable_locations = [
-        "Simon Says area, beating Simon Says",
-        "Simon Says area, Transturtle",
+        AquariaLocationNames.SIMON_SAYS_AREA_BEATING_SIMON_SAYS,
+        AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
     ]
 
     def test_progression_mithalas(self) -> None:
