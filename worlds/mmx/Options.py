@@ -10,8 +10,11 @@ from .Weaknesses import boss_weaknesses, weapons_chaotic
 class EnergyLink(DefaultOnToggle):
     """
     Enable EnergyLink support.
-    EnergyLink works as a big Sub Tank/HP pool where players can request HP manually or automatically when
-    they lose HP. You make use of this feature by typing /pool, /heal <amount> or /autoheal in the client.
+
+    EnergyLink in MMX2 works as a big HP and Weapon Energy pool that the players can use to request HP
+    or Weapon Energy whenever they need to.
+    
+    You make use of this feature by typing /heal <amount> or /refill <amount> in the client.
     """
     display_name = "Energy Link"
 
@@ -22,7 +25,7 @@ class StartingLifeCount(Range):
     """
     display_name = "Starting Life Count"
     range_start = 0
-    range_end = 9
+    range_end = 99
     default = 2
 
 class StartingHP(Range):
@@ -266,7 +269,7 @@ class LongJumps(Toggle):
 
 class ChillPenguinTweaks(OptionSet):
     """
-    Additional behavior to Chill Penguin
+    Behavior options for Chill Penguin. Everything can be stacked.
     """
     display_name = "Chill Penguin Tweaks"
     valid_keys = {
@@ -289,7 +292,7 @@ class ChillPenguinTweaks(OptionSet):
 
 class ArmoredArmadilloTweaks(OptionSet):
     """
-    Additional behavior to Armored Armadillo
+    Behavior options for Armored Armadillo. Everything can be stacked.
     """
     display_name = "Armored Armadillo Tweaks"
     valid_keys = {
@@ -309,7 +312,7 @@ class ArmoredArmadilloTweaks(OptionSet):
 
 class SparkMandrillTweaks(OptionSet):
     """
-    Additional behavior to Spark Mandrill
+    Behavior options for Spark Mandrill. Everything can be stacked.
     """
     display_name = "Spark Mandrill Tweaks"
     valid_keys = {

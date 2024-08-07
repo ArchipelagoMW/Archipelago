@@ -1,4 +1,5 @@
 from worlds.generic.Rules import add_rule, set_rule
+from BaseClasses import CollectionState
 
 from . import MMXWorld
 from .Names import LocationName, ItemName, RegionName, EventName
@@ -111,7 +112,7 @@ def set_rules(world: MMXWorld):
 
     # Sigma Fortress level rules
     if world.options.sigma_all_levels:
-        set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_boss} -> {RegionName.sigma_fortress_4}", player),
+        set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress} -> {RegionName.sigma_fortress_4}", player),
                  lambda state: (
                      state.has(EventName.sigma_fortress_1_clear, player) and 
                      state.has(EventName.sigma_fortress_2_clear, player) and 
@@ -233,6 +234,14 @@ def add_pickupsanity_logic(world: MMXWorld):
              ))
 
 
+def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> bool:
+    states = list()
+    for i in range(len(rulesets)):
+        valid = state.has_all_counts(rulesets[i], player)
+        states.append(valid)
+    return any(states)
+
+
 def add_boss_weakness_logic(world: MMXWorld):
     player = world.player
     multiworld = world.multiworld
@@ -240,22 +249,28 @@ def add_boss_weakness_logic(world: MMXWorld):
 
     for boss, regions in bosses.items():
         weaknesses = world.boss_weaknesses[boss]
+        rulesets = list()
         for weakness in weaknesses:
             if weakness[0] is None:
-                continue
+                rulesets = None
+                break
             weakness = weakness[0]
+            ruleset = dict()
+            if "Check Charge" in weakness[0]:
+                ruleset[ItemName.arms] = jammed_buster + int(weakness[0][-1:]) - 1
+            elif "Check Dash" in weakness[0]:
+                ruleset[ItemName.legs] = 1
+            else:
+                ruleset[weakness[0]] = 1
+            if len(weakness) != 1:
+                ruleset[weakness[1]] = 1
+            rulesets.append(ruleset)
+
+        if rulesets is not None:
             for region in regions:
-                ruleset = {}
-                if "Check Charge" in weakness[0]:
-                    ruleset[ItemName.arms] = jammed_buster + int(weakness[0][-1:]) - 1
-                elif "Check Dash" in weakness[0]:
-                    ruleset[ItemName.legs] = 1
-                else:
-                    ruleset[weakness[0]] = 1
-                if len(weakness) != 1:
-                    ruleset[weakness[1]] = 1
                 add_rule(multiworld.get_entrance(region, player),
-                         lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
+                            lambda state, rulesets=rulesets: check_weaknesses(state, player, rulesets))
+
 
 def add_charged_shotgun_ice_logic(world: MMXWorld):
     player = world.player

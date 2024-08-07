@@ -177,7 +177,7 @@ def adjust_boss_damage_table(world: World, patch: MMXProcedurePatch):
             data[i] = entry[1]
             i += 1
         patch.write_bytes(offset, bytearray(data))
-        print (f"Boss: {_} | Offset: 0x{offset - 0x17E9A2:04X}")
+        #print (f"Boss: {_} | Offset: 0x{offset - 0x17E9A2:04X}")
         offset += 8
 
 
@@ -279,7 +279,7 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
         final_value = 0
         for tweak in selected_tweaks:
             final_value |= enemy_tweaks_indexes[boss][tweak]
-        print (f"Boss: {boss} | Offset: 0x{offset:06X} | Config: 0x{final_value:04X}")
+        #print (f"Boss: {boss} | Offset: 0x{offset:06X} | Config: 0x{final_value:04X}")
         patch.write_bytes(offset, bytearray([final_value & 0xFF, (final_value >> 8) & 0xFF]))
 
     # Edit the ROM header
@@ -301,23 +301,23 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
         value |= 0x08
     if "Sub Tanks" in sigma_open:
         value |= 0x10
-    patch.write_byte(0x17FFE0, value)
-    patch.write_byte(0x17FFE1, world.options.sigma_medal_count.value)
-    patch.write_byte(0x17FFE2, world.options.sigma_weapon_count.value)
-    patch.write_byte(0x17FFE3, world.options.sigma_upgrade_count.value)
-    patch.write_byte(0x17FFE4, world.options.sigma_heart_tank_count.value)
-    patch.write_byte(0x17FFE5, world.options.sigma_sub_tank_count.value)
-    patch.write_byte(0x17FFE6, world.options.starting_life_count.value)
-    patch.write_byte(0x17FFE7, world.options.pickupsanity.value)
-    patch.write_byte(0x17FFE8, world.options.energy_link.value)
-    patch.write_byte(0x17FFE9, world.options.death_link.value)
-    patch.write_byte(0x17FFEA, world.options.jammed_buster.value)
-    patch.write_byte(0x17FFEB, world.options.logic_boss_weakness.value)
-    patch.write_byte(0x17FFEC, world.options.boss_weakness_rando.value)
-    patch.write_byte(0x17FFED, world.options.starting_hp.value)
-    patch.write_byte(0x17FFEE, world.options.heart_tank_effectiveness.value)
-    patch.write_byte(0x17FFEF, world.options.sigma_all_levels.value)
-    patch.write_byte(0x17FFF0, world.options.boss_weakness_strictness.value)
+    patch.write_byte(0x167C20, value)
+    patch.write_byte(0x167C21, world.options.sigma_medal_count.value)
+    patch.write_byte(0x167C22, world.options.sigma_weapon_count.value)
+    patch.write_byte(0x167C23, world.options.sigma_upgrade_count.value)
+    patch.write_byte(0x167C24, world.options.sigma_heart_tank_count.value)
+    patch.write_byte(0x167C25, world.options.sigma_sub_tank_count.value)
+    patch.write_byte(0x167C26, world.options.starting_life_count.value)
+    patch.write_byte(0x167C27, world.options.pickupsanity.value)
+    patch.write_byte(0x167C28, world.options.energy_link.value)
+    patch.write_byte(0x167C29, world.options.death_link.value)
+    patch.write_byte(0x167C2A, world.options.jammed_buster.value)
+    patch.write_byte(0x167C2B, world.options.logic_boss_weakness.value)
+    patch.write_byte(0x167C2C, world.options.boss_weakness_rando.value)
+    patch.write_byte(0x167C2D, world.options.starting_hp.value)
+    patch.write_byte(0x167C2E, world.options.heart_tank_effectiveness.value)
+    patch.write_byte(0x167C2F, world.options.sigma_all_levels.value)
+    patch.write_byte(0x167C30, world.options.boss_weakness_strictness.value)
 
     value = 0
     if world.options.better_walljump.value:
@@ -326,7 +326,7 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
         value |= 0x02
     if world.options.long_jumps.value:
         value |= 0x04
-    patch.write_byte(0x17FFF1, value)
+    patch.write_byte(0x167C31, value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

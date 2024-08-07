@@ -41,15 +41,27 @@ class MMXWeb(WebWorld):
         "setup/en",
         ["lx5"]
     )
+    
+    setup_es = Tutorial(
+        "Guía de configuración de Multiworld",
+        "Guía para jugar Mega Man X en Archipelago",
+        "Spanish",
+        "setup_es.md",
+        "setup/es",
+        ["lx5"]
+    )
 
-    tutorials = [setup_en]
+    tutorials = [setup_en, setup_es]
 
     option_groups = mmx_option_groups
 
 
 class MMXWorld(World):
     """
-    Mega Man X WIP
+    Mega Man X for the SNES is a classic action-platformer game released in 1993. It's a spin-off of 
+    the original Mega Man series and introduces players to a new protagonist, X, a Maverick Hunter in a 
+    futuristic world. The game features upgraded gameplay mechanics, such as the ability to dash and 
+    climb walls, which were new to the series at the time.
     """
     game = "Mega Man X"
     web = MMXWeb()
@@ -59,7 +71,7 @@ class MMXWorld(World):
     options_dataclass = MMXOptions
     options: MMXOptions
     
-    required_client_version = (0, 4, 6)
+    required_client_version = (0, 5, 0)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -228,7 +240,13 @@ class MMXWorld(World):
 
     def set_rules(self):
         from .Rules import set_rules
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                if "Mega Man X" in self.multiworld.re_gen_passthrough:
+                    slot_data = self.multiworld.re_gen_passthrough["Mega Man X"]
+                    self.boss_weaknesses = slot_data["weakness_rules"]
         set_rules(self)
+
 
 
     def fill_slot_data(self):
@@ -264,13 +282,15 @@ class MMXWorld(World):
         slot_data["sigma_heart_tank_count"] = self.options.sigma_heart_tank_count.value
         slot_data["sigma_sub_tank_count"] = self.options.sigma_sub_tank_count.value
 
-        # Write boss weaknesses to slot_data
+        # Write boss weaknesses to slot_data (and for UT)
         slot_data["boss_weaknesses"] = {}
+        slot_data["weakness_rules"] = {}
         for boss, entries in self.boss_weaknesses.items():
+            slot_data["weakness_rules"][boss] = entries.copy()
             slot_data["boss_weaknesses"][boss] = []
             for entry in entries:
                 slot_data["boss_weaknesses"][boss].append(entry[1])
-        
+                
         return slot_data
 
 
@@ -278,10 +298,18 @@ class MMXWorld(World):
         if ItemName.legs not in self.options.start_inventory_from_pool and self.options.early_legs:
             self.multiworld.early_items[self.player][ItemName.legs] = 1
             
-        self.boss_weaknesses = {}
+        # Generate weaknesses
         self.boss_weakness_data = {}
+        self.boss_weaknesses = {}
         handle_weaknesses(self)
 
+
+    def interpret_slot_data(self, slot_data):
+        local_weaknesses = dict()
+        for boss, entries in slot_data["weakness_rules"].items():
+            local_weaknesses[boss] = entries.copy()
+        return {"weakness_rules": local_weaknesses}
+    
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         if self.options.boss_weakness_rando != "vanilla":
