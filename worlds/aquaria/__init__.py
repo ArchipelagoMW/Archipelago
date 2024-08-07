@@ -8,7 +8,7 @@ from typing import List, Dict, ClassVar, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification
 from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames
-from .Locations import location_table
+from .Locations import location_table, AquariaLocationNames
 from .Options import AquariaOptions
 from .Regions import AquariaRegions
 
@@ -152,20 +152,20 @@ class AquariaWorld(World):
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
         if self.options.turtle_randomizer.value > 0:
             if self.options.turtle_randomizer.value == 2:
-                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, "Final Boss area, Transturtle", precollected)
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE, precollected)
         else:
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, "The Veil top left area, Transturtle", precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, "The Veil top right area, Transturtle", precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS, "Open Waters top right area, Transturtle",
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS, AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE,
                                  precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST, "Kelp Forest bottom left area, Transturtle",
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST, AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE,
                                  precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, "Home Waters, Transturtle", precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, "Abyss right area, Transturtle", precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, "Final Boss area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE, precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, "Arnassi Ruins, Transturtle", precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, "Simon Says area, Transturtle", precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE, precollected)
         for name, data in item_table.items():
             if name not in self.exclude:
                 for i in range(data.count):

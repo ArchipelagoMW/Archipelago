@@ -73,6 +73,9 @@ class ItemData:
         self.group = group
 
 class ItemNames:
+    """
+    Constants used to represent the mane of every items.
+    """
     # Normal items
     ANEMONE = "Anemone"
     ARNASSI_STATUE = "Arnassi Statue"
