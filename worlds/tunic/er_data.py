@@ -19,7 +19,7 @@ class Portal(NamedTuple):
     region: str  # AP region
     destination: str  # vanilla destination scene
     tag: str  # vanilla tag
-    direction: int = Direction.none  # the direction you go to enter a portal
+    direction: int  # the direction you go to enter a portal
 
     def scene(self) -> str:  # the actual scene name in Tunic
         if self.region.startswith("Shop"):
@@ -178,7 +178,7 @@ portal_mapping: List[Portal] = [
            destination="Overworld Redux", tag="_beach", direction=Direction.south),
 
     Portal(name="Special Shop Exit", region="Special Shop",
-           destination="Overworld Redux", tag="_", direction=Direction.south),
+           destination="Overworld Redux", tag="_", direction=Direction.west),
 
     Portal(name="Temple Rafters Exit", region="Sealed Temple Rafters",
            destination="Overworld Redux", tag="_rafters", direction=Direction.west),
@@ -1300,6 +1300,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Library Hall Bookshelf":
             [],
         "Library Hero's Grave Region":
+            [],
+        "Library Hall to Rotunda":
             [],
     },
     "Library Hero's Grave Region": {
