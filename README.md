@@ -72,7 +72,10 @@ Currently, the following games are supported:
 * Aquaria
 * Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
 * A Hat in Time
+* Old School Runescape
 * Super Mario Land 2: 6 Golden Coins
+
+
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

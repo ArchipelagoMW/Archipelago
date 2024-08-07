@@ -300,7 +300,7 @@ class AquariaRegions:
                                                 AquariaLocations.locations_cathedral_l_sc)
         self.cathedral_r = self.__add_region("Mithalas Cathedral",
                                              AquariaLocations.locations_cathedral_r)
-        self.cathedral_underground = self.__add_region("Mithalas Cathedral Underground area",
+        self.cathedral_underground = self.__add_region("Mithalas Cathedral underground",
                                                        AquariaLocations.locations_cathedral_underground)
         self.cathedral_boss_r = self.__add_region("Mithalas Cathedral, Mithalan God room",
                                                   AquariaLocations.locations_cathedral_boss)
@@ -597,22 +597,22 @@ class AquariaRegions:
                                lambda state: _has_beast_form(state, self.player) and
                                              _has_energy_form(state, self.player) and
                                              _has_bind_song(state, self.player))
-        self.__connect_regions("Mithalas castle", "Cathedral underground",
+        self.__connect_regions("Mithalas castle", "Mithalas Cathedral underground",
                                self.cathedral_l, self.cathedral_underground,
                                lambda state: _has_beast_form(state, self.player) and
                                              _has_bind_song(state, self.player))
-        self.__connect_regions("Mithalas castle", "Cathedral right area",
+        self.__connect_regions("Mithalas castle", "Mithalas Cathedral",
                                self.cathedral_l, self.cathedral_r,
                                lambda state: _has_bind_song(state, self.player) and
                                              _has_energy_form(state, self.player))
-        self.__connect_regions("Cathedral right area", "Cathedral underground",
+        self.__connect_regions("Mithalas Cathedral", "Mithalas Cathedral underground",
                                self.cathedral_r, self.cathedral_underground,
                                lambda state: _has_energy_form(state, self.player))
-        self.__connect_one_way_regions("Cathedral underground", "Cathedral boss left area",
+        self.__connect_one_way_regions("Mithalas Cathedral underground", "Cathedral boss left area",
                                        self.cathedral_underground, self.cathedral_boss_r,
                                        lambda state: _has_energy_form(state, self.player) and
                                                      _has_bind_song(state, self.player))
-        self.__connect_one_way_regions("Cathedral boss left area", "Cathedral underground",
+        self.__connect_one_way_regions("Cathedral boss left area", "Mithalas Cathedral underground",
                                        self.cathedral_boss_r, self.cathedral_underground,
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_regions("Cathedral boss right area", "Cathedral boss left area",
@@ -771,6 +771,7 @@ class AquariaRegions:
         self.__connect_regions("Sunken City left area", "Sunken City boss area",
                                self.sunken_city_l, self.sunken_city_boss,
                                lambda state: _has_beast_form(state, self.player) and
+                                             _has_sun_form(state, self.player) and
                                              _has_energy_form(state, self.player) and
                                              _has_bind_song(state, self.player))
 
@@ -983,7 +984,7 @@ class AquariaRegions:
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas City, third urn in the city reserve", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.multiworld.get_location("Mithalas City, urn in the Cathedral flower tube entrance", self.player),
+        add_rule(self.multiworld.get_location("Mithalas City, urn in the Castle flower tube entrance", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas City Castle, urn in the bedroom", self.player),
                  lambda state: _has_damaging_item(state, self.player))
@@ -1023,7 +1024,7 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location("The Veil top right area, bulb in the top of the waterfall", self.player),
+        add_rule(self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
 
     def __adjusting_under_rock_location(self) -> None:
@@ -1098,7 +1099,7 @@ class AquariaRegions:
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location("Open Water bottom left area, bulb inside the lowest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
-        add_rule(self.multiworld.get_location("Kelp Forest bottom left area, Walker baby", self.player),
+        add_rule(self.multiworld.get_location("Kelp Forest bottom left area, Walker Baby", self.player),
                  lambda state: _has_spirit_form(state, self.player))
         add_rule(self.multiworld.get_location("The Veil top left area, bulb hidden behind the blocking rock", self.player),
                  lambda state: _has_bind_song(state, self.player))
@@ -1133,7 +1134,7 @@ class AquariaRegions:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Cathedral boss area, beating Mithalan God",
+        self.multiworld.get_location("Mithalas boss area, beating Mithalan God",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Kelp Forest boss area, beating Drunian God",
@@ -1175,7 +1176,7 @@ class AquariaRegions:
         self.multiworld.get_location("Sun Worm path, second cliff bulb",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("The Veil top right area, bulb in the top of the waterfall",
+        self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble Cave, bulb in the left cave wall",
@@ -1190,7 +1191,7 @@ class AquariaRegions:
         self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit crystals",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Kelp Forest bottom left area, Walker baby",
+        self.multiworld.get_location("Kelp Forest bottom left area, Walker Baby",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun Temple, Sun Key",

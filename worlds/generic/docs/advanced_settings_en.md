@@ -102,10 +102,10 @@ See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `accessibility` determines the level of access to the game the generation will expect you to have in order to reach
-  your completion goal. This supports `items`, `locations`, and `minimal` and is set to `locations` by default.
-    * `locations` will guarantee all locations are accessible in your world.
+  your completion goal. This supports `full`, `items`, and `minimal` and is set to `full` by default.
+    * `full` will guarantee all locations are accessible in your world.
     * `items` will guarantee you can acquire all logically relevant items in your world. Some items, such as keys, may
-      be self-locking.
+      be self-locking. This value only exists in and affects some worlds.
     * `minimal` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically
       but may not be able to access all locations or acquire all items. A good example of this is having a big key in
       the big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
