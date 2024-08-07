@@ -1183,6 +1183,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Library Hero's Grave Region":
             [],
+        "Library Hall to Rotunda":
+            [],
     },
     "Library Hero's Grave Region": {
         "Library Hall":
