@@ -99,7 +99,7 @@ item_table = {
     "Mutant Costume": ItemData(698020, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mutant_costume
     "Baby Nautilus": ItemData(698021, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_nautilus
     "Baby Piranha": ItemData(698022, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_piranha
-    "Arnassi Armor": ItemData(698023, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_seahorse_costume
+    "Arnassi Armor": ItemData(698023, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_seahorse_costume
     "Seed Bag": ItemData(698024, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_seed_bag
     "King's Skull": ItemData(698025, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_skull
     "Song Plant Spore": ItemData(698026, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_spore_seed
