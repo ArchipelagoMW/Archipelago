@@ -355,6 +355,7 @@ boss_excluded_weapons = {
         "Charged Silk Shot (Leaves)",
         "Charged Speed Burner",
         "Charged Bubble Splash",
+        "Uncharged Speed Burner (Underwater)",
     ],
     "Violen": [
         "Speed Burner (Underwater)",
