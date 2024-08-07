@@ -568,9 +568,8 @@ class MultiWorld():
             for player in received_advancement:
                 if player not in beaten_game_players and self.has_beaten_game(state, player):
                     beaten_game_players.add(player)
-
-            if len(beaten_game_players) == all_games_beaten_length:
-                return True
+                    if len(beaten_game_players) == all_games_beaten_length:
+                        return True
 
         return False
 
