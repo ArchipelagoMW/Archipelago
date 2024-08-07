@@ -10,7 +10,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import Collection, MutableSequence, Hashable
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
                    TypedDict, Union, Type, ClassVar
@@ -20,6 +20,7 @@ import Options
 import Utils
 
 if typing.TYPE_CHECKING:
+    from entrance_rando import ERPlacementState
     from worlds import AutoWorld
 
 
@@ -418,12 +419,12 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool) -> CollectionState:
+    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()
 
-        ret = CollectionState(self)
+        ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
@@ -667,10 +668,11 @@ class CollectionState():
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
     stale: Dict[int, bool]
+    allow_partial_entrances: bool
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
-    def __init__(self, parent: MultiWorld):
+    def __init__(self, parent: MultiWorld, allow_partial_entrances: bool = False):
         self.prog_items = {player: Counter() for player in parent.get_all_ids()}
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
@@ -679,6 +681,7 @@ class CollectionState():
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in parent.get_all_ids()}
+        self.allow_partial_entrances = allow_partial_entrances
         for function in self.additional_init_functions:
             function(self, parent)
         for items in parent.precollected_items.values():
@@ -705,6 +708,8 @@ class CollectionState():
             if new_region in reachable_regions:
                 blocked_connections.remove(connection)
             elif connection.can_reach(self):
+                if self.allow_partial_entrances and not new_region:
+                    continue
                 assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
                 reachable_regions.add(new_region)
                 blocked_connections.remove(connection)
@@ -727,6 +732,7 @@ class CollectionState():
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
+        ret.allow_partial_entrances = self.allow_partial_entrances
         for function in self.additional_copy_functions:
             ret = function(self, ret)
         return ret
@@ -890,6 +896,11 @@ class CollectionState():
             self.stale[item.player] = True
 
 
+class EntranceType(IntEnum):
+    ONE_WAY = 1
+    TWO_WAY = 2
+
+
 class Entrance:
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
@@ -897,18 +908,23 @@ class Entrance:
     name: str
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
+    randomization_group: int
+    randomization_type: EntranceType
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
-    def __init__(self, player: int, name: str = '', parent: Region = None):
+    def __init__(self, player: int, name: str = "", parent: Region = None,
+                 randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY):
         self.name = name
         self.parent_region = parent
         self.player = player
+        self.randomization_group = randomization_group
+        self.randomization_type = randomization_type
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
-            if not self.hide_path and not self in state.path:
+            if not self.hide_path and self not in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
 
@@ -919,6 +935,31 @@ class Entrance:
         self.target = target
         self.addresses = addresses
         region.entrances.append(self)
+
+    def is_valid_source_transition(self, er_state: "ERPlacementState") -> bool:
+        """
+        Determines whether this is a valid source transition, that is, whether the entrance
+        randomizer is allowed to pair it to place any other regions. By default, this is the
+        same as a reachability check, but can be modified by Entrance implementations to add
+        other restrictions based on the placement state.
+
+        :param er_state: The current (partial) state of the ongoing entrance randomization
+        """
+        return self.can_reach(er_state.collection_state)
+
+    def can_connect_to(self, other: Entrance, er_state: "ERPlacementState") -> bool:
+        """
+        Determines whether a given Entrance is a valid target transition, that is, whether
+        the entrance randomizer is allowed to pair this Entrance to that Entrance. By default,
+        only allows connection between entrances of the same type (one ways only go to one ways,
+        two ways always go to two ways) and prevents connecting an exit to itself in coupled mode.
+
+        :param other: The proposed Entrance to connect to
+        :param er_state: The current (partial) state of the ongoing entrance randomization
+        """
+        # the implementation of coupled causes issues for self-loops since the reverse entrance will be the
+        # same as the forward entrance. In uncoupled they are ok.
+        return self.randomization_type == other.randomization_type and (not er_state.coupled or self.name != other.name)
 
     def __repr__(self):
         return self.__str__()
@@ -1071,6 +1112,16 @@ class Region:
         exit_ = self.entrance_type(self.player, name, self)
         self.exits.append(exit_)
         return exit_
+
+    def create_er_target(self, name: str) -> Entrance:
+        """
+        Creates and returns an Entrance object as an entrance to this region
+
+        :param name: name of the Entrance being created
+        """
+        entrance = self.entrance_type(self.player, name)
+        entrance.connect(self)
+        return entrance
 
     def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
                   rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
