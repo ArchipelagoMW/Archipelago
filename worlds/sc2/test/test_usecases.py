@@ -4,6 +4,7 @@ Unit tests for yaml usecases we want to support
 
 from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, item_groups, item_names, items, mission_tables, options
+from ..mission_tables import vanilla_mission_req_table, SC2Campaign, SC2Race
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -260,3 +261,24 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
                              ([mission_tables.SC2Campaign.EPILOGUE]),
                              f"{region} is an epilogue mission!")
+
+    def test_race_swap_pick_one_has_correct_length_and_includes_swaps(self) -> None:
+        world_options = {
+            'selected_races': options.SelectRaces.option_all,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_pick_one,
+            'enable_wol_missions': True,
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'mission_order': options.MissionOrder.option_grid,
+            'excluded_missions': [mission_tables.SC2Mission.ZERO_HOUR.mission_name],
+        }
+        self.generate_world(world_options)
+        world_regions = [region.name for region in self.multiworld.regions]
+        world_regions.remove('Menu')
+        self.assertEqual(len(world_regions), len(vanilla_mission_req_table.get(SC2Campaign.WOL)))
+        races = set(mission_tables.lookup_name_to_mission[mission].race for mission in world_regions)
+        self.assertTrue(SC2Race.ZERG in races or SC2Race.PROTOSS in races)

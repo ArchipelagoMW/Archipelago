@@ -29,10 +29,11 @@ from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-    LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, ChallengeLocations, VanillaLocations,
+    LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, PreventativeLocations, ChallengeLocations,
+    VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, NerfUnitBaselines, LEGACY_GRID_ORDERS,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
 )
 from .mission_tables import MissionFlag
 from . import SC2World
@@ -54,7 +55,7 @@ from .items import (
     race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles, upgrade_included_names,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
+from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET
 from .mission_tables import (
     lookup_id_to_mission, SC2Campaign, lookup_name_to_mission,
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
@@ -418,8 +419,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.output(f"Color for {faction} set to " + player_colors[self.ctx.__dict__[var_names[faction]]])
 
     def _cmd_windowed_mode(self, value="") -> None:
+        """Controls whether sc2 will launch in Windowed mode. Persists across sessions."""
         if not value:
-            pass
+            sc2_logger.info("Use `/windowed_mode [true|false]` to set the windowed mode")
         elif value.casefold() in ('t', 'true', 'yes', 'y'):
             SC2World.settings.game_windowed_mode = True
             force_settings_save_on_close()
@@ -564,6 +566,7 @@ class SC2Context(CommonContext):
         self.generic_upgrade_research = 0
         self.generic_upgrade_items = 0
         self.location_inclusions: typing.Dict[LocationType, int] = {}
+        self.location_inclusions_by_flag: typing.Dict[LocationFlag, int] = {}
         self.plando_locations: typing.List[str] = []
         self.current_tooltip = None
         self.difficulty_override = -1
@@ -674,7 +677,10 @@ class SC2Context(CommonContext):
                 LocationType.EXTRA: args["slot_data"].get("extra_locations", ExtraLocations.default),
                 LocationType.CHALLENGE: args["slot_data"].get("challenge_locations", ChallengeLocations.default),
                 LocationType.MASTERY: args["slot_data"].get("mastery_locations", MasteryLocations.default),
-                LocationType.SPEEDRUN: args["slot_data"].get("speedrun_locations", SpeedrunLocations.default),
+            }
+            self.location_inclusions_by_flag = {
+                LocationFlag.SPEEDRUN: args["slot_data"].get("speedrun_locations", SpeedrunLocations.default),
+                LocationFlag.PREVENTATIVE: args["slot_data"].get("preventative_locations", PreventativeLocations.default),
             }
             self.plando_locations = args["slot_data"].get("plando_locations", [])
 
@@ -1111,6 +1117,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         'can_read_game',
         'last_received_update',
     ]
+    ctx: SC2Context
 
     def __init__(self, ctx: SC2Context, mission_id: int):
         self.game_running = False
@@ -1245,8 +1252,14 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
     def get_uncollected_objectives(self) -> typing.List[int]:
-        return [location % VICTORY_MODULO for location in
-                self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])]
+        result = [
+            location % VICTORY_MODULO for location in
+            self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
+        ]
+        if self.mission_id == self.ctx.final_mission:
+            # Always make the final mission's victory location collectable
+            result.append(0)
+        return result
 
     def missions_beaten_count(self):
         return len([location for location in self.ctx.checked_locations if location % VICTORY_MODULO == 0])

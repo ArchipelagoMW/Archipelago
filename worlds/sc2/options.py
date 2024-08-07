@@ -148,7 +148,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 95
+    range_end = 97
     default = 83
 
 
@@ -270,13 +270,12 @@ class EnableRaceSwapVariants(Choice):
     designed for. NOTE: Cutscenes are always skipped on race-swapped mission variants.
 
     Disabled: Don't shuffle any non-vanilla map variants into the pool.
+    Pick One: Shuffle up to 1 valid version of each map into the pool, depending on other settings.
     Shuffle All: Each version of a map can appear in the same pool (so a map can appear up to 3 times as different races)
-    ("Pick Just One At Random" coming soon)
     """
     display_name = "Enable Race-Swapped Mission Variants"
     option_disabled = 0
-    # TODO: Implement pick-one logic
-    # option_pick_one = 1
+    option_pick_one = 1
     option_shuffle_all = 2
     default = option_disabled
 
@@ -903,6 +902,23 @@ class SpeedrunLocations(LocationInclusion):
     display_name = "Speedrun Locations"
 
 
+class PreventativeLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for overcoming preventative challenges.
+    These challenges are about winning or achieving something while preventing something else from happening,
+    such as beating Evacuation without losing a colonist.
+    Enable these locations if you want to be rewarded for achieving a higher standard on some locations.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Resources: Forces these locations to contain Starting Resources
+    Disabled: Removes item rewards from these locations.
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Preventative Locations"
+
+
 class MineralsPerItem(Range):
     """
     Configures how many minerals are given per resource item.
@@ -995,6 +1011,7 @@ class Starcraft2Options(PerGameCommonOptions):
     challenge_locations: ChallengeLocations
     mastery_locations: MasteryLocations
     speedrun_locations: SpeedrunLocations
+    preventative_locations: PreventativeLocations
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
@@ -1093,6 +1110,21 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
+    # Omitting unwanted mission variants
+    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_pick_one:
+        swaps = [
+            mission for mission in SC2Mission
+            if mission not in excluded_missions
+            and mission.flags & (MissionFlag.HasRaceSwap|MissionFlag.RaceSwap)
+        ]
+        while len(swaps) > 0:
+            curr = swaps[0]
+            variants = [mission for mission in swaps if mission.map_file == curr.map_file]
+            variants.sort(key=lambda mission: mission.id)
+            swaps = [mission for mission in swaps if mission not in variants]
+            if len(variants) > 1:
+                variants.pop(world.random.randint(0, len(variants)-1))
+                excluded_missions = excluded_missions.union(variants)
 
     return excluded_missions
 

@@ -3,12 +3,12 @@ Location group definitions
 """
 
 from typing import Dict, Set, Iterable
-from .locations import get_locations, LocationData
+from .locations import DEFAULT_LOCATION_LIST, LocationData
 from .mission_tables import lookup_name_to_mission, MissionFlag
 
 def get_location_groups() -> Dict[str, Set[str]]:
     result: Dict[str, Set[str]] = {}
-    locations: Iterable[LocationData] = get_locations(None)
+    locations: Iterable[LocationData] = DEFAULT_LOCATION_LIST
 
     for location in locations:
         if location.code is None:

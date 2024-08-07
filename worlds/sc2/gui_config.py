@@ -14,10 +14,13 @@ def apply_window_defaults() -> List[str]:
     # or from spamming the logs.
     # Must happen before importing kivy.config
     import os
+    import Utils
     os.environ["KIVY_NO_CONSOLELOG"] = "1"
     os.environ["KIVY_NO_FILELOG"] = "1"
     os.environ["KIVY_NO_ARGS"] = "1"
     os.environ["KIVY_LOG_ENABLE"] = "0"
+    if Utils.is_frozen():
+        os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
     # validate settings
     warnings: List[str] = []
