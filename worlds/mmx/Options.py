@@ -190,8 +190,8 @@ class SigmaWeaponCount(Range):
     """
     display_name = "Sigma Weapon Count"
     range_start = 0
-    range_end = 8
-    default = 8
+    range_end = 6
+    default = 6
 
 class SigmaArmorUpgradeCount(Range):
     """
@@ -208,8 +208,8 @@ class SigmaHeartTankCount(Range):
     """
     display_name = "Sigma Heart Tank Count"
     range_start = 0
-    range_end = 8
-    default = 8
+    range_end = 6
+    default = 6
 
 class SigmaSubTankCount(Range):
     """
@@ -217,8 +217,8 @@ class SigmaSubTankCount(Range):
     """
     display_name = "Sigma Sub Tank Count"
     range_start = 0
-    range_end = 4
-    default = 4
+    range_end = 2
+    default = 2
 
 class ButtonConfiguration(OptionDict):
     """
