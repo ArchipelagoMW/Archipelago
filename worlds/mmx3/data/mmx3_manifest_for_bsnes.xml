@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cartridge region="NTSC">
+  <rom>
+    <map mode="linear" address="00-7f:8000-ffff"/>
+    <map mode="linear" address="80-ff:8000-ffff"/>
+  </rom>
+  <cx4>
+    <map address="00-3f:6000-7fff"/>
+    <map address="80-bf:6000-7fff"/>
+  </cx4>
+</cartridge>

@@ -1,13 +1,15 @@
 import typing
-import bsdiff4
 import Utils
 import hashlib
 import os
-from typing import Optional
+import io
+from pathlib import Path
 from pkgutil import get_data
 
 from worlds.AutoWorld import World
-from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
+
+from .Graphics import graphics_slots
 
 action_names = ("SHOT", "JUMP", "DASH", "SELECT_L", "SELECT_R", "MENU")
 action_buttons = ("Y", "B", "A", "L", "R", "X", "START", "SELECT")
@@ -109,6 +111,32 @@ boss_hp_caps_offsets = {
 }
 
 
+class MMX3PatchExtension(APPatchExtension):
+    game = "Mega Man X3"
+
+    @staticmethod
+    def relocate_graphics(caller: APProcedurePatch, rom: bytes):
+        stream = io.BytesIO(rom)
+        rom = bytearray(rom)
+        rom += bytearray([0xFF for _ in range(0x100000)])
+
+        for _, data in graphics_slots.items():
+            pc_ptr = data[1]
+            compressed_size = data[2]
+            new_pc_ptr = pc_ptr + 0x130000
+            stream.seek(pc_ptr)
+            rom[new_pc_ptr:new_pc_ptr + compressed_size] = stream.read(compressed_size)
+            rom[pc_ptr:pc_ptr + compressed_size] = bytearray([0x00 for _ in range(compressed_size)])
+
+        return bytes(rom)
+    
+    @staticmethod
+    def output_xml(caller: APProcedurePatch, rom: bytes):
+        manifest = caller.get_file("mmx3_manifest_for_bsnes.xml")
+        with open(f"{Path(caller.path).stem}.xml", "wb") as f:
+            f.write(manifest)
+        return rom
+
 class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [HASH_US, HASH_LEGACY]
     game = "Mega Man X3"
@@ -116,8 +144,10 @@ class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
     result_file_ending = ".sfc"
     name: bytearray
     procedure = [
+        ("relocate_graphics", []),
         ("apply_tokens", ["token_patch.bin"]),
         ("apply_bsdiff4", ["mmx3_basepatch.bsdiff4"]),
+        ("output_xml", []),
     ]
 
     @classmethod
@@ -332,7 +362,6 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x17FFF1, value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
-
     
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)

@@ -1,4 +1,5 @@
 from worlds.generic.Rules import add_rule, set_rule
+from BaseClasses import CollectionState
 
 from . import MMX3World, item_groups
 from .Names import LocationName, ItemName, RegionName, EventName
@@ -149,7 +150,7 @@ def set_rules(world: MMX3World):
 
     # Doppler Lab level rules
     if world.options.doppler_all_labs:
-        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}", player),
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab} -> {RegionName.dr_doppler_lab_4}", player),
                  lambda state: (
                      state.has(EventName.dr_doppler_lab_1_clear, player) and 
                      state.has(EventName.dr_doppler_lab_2_clear, player) and 
@@ -335,36 +336,51 @@ def set_rules(world: MMX3World):
         add_pickupsanity_logic(world)
 
 
+def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> bool:
+    states = list()
+    for i in range(len(rulesets)):
+        valid = state.has_all_counts(rulesets[i], player)
+        states.append(valid)
+    return any(states)
+
+
 def add_boss_weakness_logic(world: MMX3World):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value
 
-    if world.options.doppler_lab_3_boss_rematch_count.value == 0:
-        for boss in mavericks:
-            bosses[boss].pop()
-            bosses[boss].pop()
-
+    boss_dict = {}
     for boss, regions in bosses.items():
+        boss_dict[boss] = regions.copy()
+        if boss in mavericks and world.options.doppler_lab_3_boss_rematch_count.value == 0:
+            boss_dict[boss].pop()
+            boss_dict[boss].pop()
+
+    for boss, regions in boss_dict.items():
         weaknesses = world.boss_weaknesses[boss]
+        rulesets = list()
         for weakness in weaknesses:
             if weakness[0] is None:
-                continue
+                rulesets = None
+                break
             weakness = weakness[0]
+            ruleset = dict()
+            if "Check Charge" in weakness[0]:
+                ruleset[ItemName.third_armor_arms] = jammed_buster + int(weakness[0][-1:]) - 1
+            else:
+                ruleset[weakness[0]] = 1
+            if len(weakness) != 1:
+                ruleset[weakness[1]] = 1
+            rulesets.append(ruleset)
+
+        if rulesets is not None:
             for region in regions:
-                ruleset = {}
-                if "Check Charge" in weakness[0]:
-                    ruleset[ItemName.third_armor_arms] = jammed_buster + int(weakness[0][-1:]) - 1
-                else:
-                    ruleset[weakness[0]] = 1
-                if len(weakness) != 1:
-                    ruleset[weakness[1]] = 1
                 if "->" in region:
                     add_rule(multiworld.get_entrance(region, player),
-                             lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
+                                lambda state, rulesets=rulesets: check_weaknesses(state, player, rulesets))
                 else:
                     add_rule(multiworld.get_location(region, player),
-                             lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
+                                lambda state, rulesets=rulesets: check_weaknesses(state, player, rulesets))
 
 
 def add_pickupsanity_logic(world: MMX3World):
@@ -372,9 +388,9 @@ def add_pickupsanity_logic(world: MMX3World):
     multiworld = world.multiworld
 
     # Volt Catfish
-    set_rule(multiworld.get_location(LocationName.volt_catfish_energy_2, player),
+    set_rule(multiworld.get_location(LocationName.volt_catfish_energy_1, player),
              lambda state: state.has_group("Ride Armors", player, 1))
-    set_rule(multiworld.get_location(LocationName.volt_catfish_energy_3, player),
+    set_rule(multiworld.get_location(LocationName.volt_catfish_energy_2, player),
              lambda state: state.has_group("Ride Armors", player, 1))
     set_rule(multiworld.get_location(LocationName.volt_catfish_hp_3, player),
              lambda state: state.has_group("Ride Armors", player, 1))

@@ -433,16 +433,19 @@ def connect_regions(world: World):
     connect(world, RegionName.intro_stage, RegionName.dr_doppler_lab)
 
     # Connect Dr. Doppler Lab levels
-    connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_1)
-
-    connect(world, RegionName.dr_doppler_lab_1, RegionName.dr_doppler_lab_2)
-
-    connect(world, RegionName.dr_doppler_lab_2, RegionName.dr_doppler_lab_3)
+    if world.options.doppler_all_labs.value:
+        connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_1)
+        connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_2)
+        connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_3)
+        connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_4)
+    else:
+        connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_1)
+        connect(world, RegionName.dr_doppler_lab_1, RegionName.dr_doppler_lab_2)
+        connect(world, RegionName.dr_doppler_lab_2, RegionName.dr_doppler_lab_3)
+        connect(world, RegionName.dr_doppler_lab_3_boss, RegionName.dr_doppler_lab_4)
+    
     connect(world, RegionName.dr_doppler_lab_3, RegionName.dr_doppler_lab_3_rematches)
     connect(world, RegionName.dr_doppler_lab_3_rematches, RegionName.dr_doppler_lab_3_boss)
-
-    connect(world, RegionName.dr_doppler_lab_3_boss, RegionName.dr_doppler_lab_4)
-    
     
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
     ret = Region(name, player, multiworld)

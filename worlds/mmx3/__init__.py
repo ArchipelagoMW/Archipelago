@@ -8,7 +8,6 @@ import threading
 import pkgutil
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import MMX3Item, ItemData, item_table, junk_table, item_groups
 from .Locations import MMX3Location, setup_locations, all_locations, location_groups
@@ -19,6 +18,8 @@ from .Client import MMX3SNIClient
 from .Levels import location_id_to_level_id
 from .Weaknesses import handle_weaknesses, weapon_id
 from .Rom import patch_rom, MMX3ProcedurePatch, HASH_US, HASH_LEGACY
+
+from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar, List
 
 class MMX3Settings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -41,15 +42,26 @@ class MMX3Web(WebWorld):
         "setup/en",
         ["lx5"]
     )
+    
+    setup_es = Tutorial(
+        "Guía de configuración de Multiworld",
+        "Guía para jugar Mega Man X3 en Archipelago",
+        "Spanish",
+        "setup_es.md",
+        "setup/es",
+        ["lx5"]
+    )
 
-    tutorials = [setup_en]
+    tutorials = [setup_en, setup_es]
 
     option_groups = mmx3_option_groups
 
 
 class MMX3World(World):
     """
-    Mega Man X3 WIP
+    Mega Man X3, released in 1995 for the SNES, is the third game in Capcom's "Mega Man X" series. 
+    Players once again control Mega Man X, who must thwart a rebellion led by the Maverick Reploid scientist 
+    Dr. Doppler. The game introduces the ability to play as Zero for limited segments, adding variety to the gameplay.
     """
     game = "Mega Man X3"
     web = MMX3Web()
@@ -59,7 +71,7 @@ class MMX3World(World):
     options_dataclass = MMX3Options
     options: MMX3Options
 
-    required_client_version = (0, 4, 6)
+    required_client_version = (0, 5, 0)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -234,8 +246,14 @@ class MMX3World(World):
 
     def set_rules(self):
         from .Rules import set_rules
+        
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                if "Mega Man X3" in self.multiworld.re_gen_passthrough:
+                    slot_data = self.multiworld.re_gen_passthrough["Mega Man X3"]
+                    self.boss_weaknesses = slot_data["weakness_rules"]
         set_rules(self)
-    
+
 
     def fill_slot_data(self):
         slot_data = {}
@@ -293,9 +311,11 @@ class MMX3World(World):
         slot_data["logic_boss_weakness"] = self.options.logic_boss_weakness.value
         slot_data["logic_vile_required"] = self.options.logic_vile_required.value
 
-        # Write boss weaknesses to slot_data
+        # Write boss weaknesses to slot_data (and for UT)
         slot_data["boss_weaknesses"] = {}
+        slot_data["weakness_rules"] = {}
         for boss, entries in self.boss_weaknesses.items():
+            slot_data["weakness_rules"][boss] = entries.copy()
             slot_data["boss_weaknesses"][boss] = []
             for entry in entries:
                 slot_data["boss_weaknesses"][boss].append(entry[1])
@@ -304,49 +324,18 @@ class MMX3World(World):
 
 
     def generate_early(self):
-        # Attempt to fix potential Fill issues by lowering Doppler & Vile values if they're too high if pickupsanity is disabled
-        if self.options.pickupsanity:
-            doppler_item_count = 0
-            doppler_open = self.options.doppler_open.value
-            if "Medals" in doppler_open:
-                doppler_item_count += self.options.doppler_medal_count.value
-            if "Weapons" in doppler_open:
-                doppler_item_count += self.options.doppler_weapon_count.value
-            if "Armor Upgrades" in doppler_open:
-                doppler_item_count += self.options.doppler_upgrade_count.value
-            if "Heart Tanks" in doppler_open:
-                doppler_item_count += self.options.doppler_heart_tank_count.value
-            if "Sub Tanks" in doppler_open:
-                doppler_item_count += self.options.doppler_sub_tank_count.value
-            vile_item_count = 0
-            vile_open = self.options.vile_open.value
-            if "Medals" in vile_open:
-                vile_item_count += self.options.vile_medal_count.value
-            if "Weapons" in vile_open:
-                vile_item_count += self.options.vile_weapon_count.value
-            if "Armor Upgrades" in vile_open:
-                vile_item_count += self.options.vile_upgrade_count.value
-            if "Heart Tanks" in vile_open:
-                vile_item_count += self.options.vile_heart_tank_count.value
-            if "Sub Tanks" in vile_open:
-                vile_item_count += self.options.vile_sub_tank_count.value
+        # Enforce Vile stage options to have lower count than the Lab
+        if self.options.doppler_medal_count.value >= self.options.vile_medal_count.value:
+            self.options.vile_medal_count.value = max(self.options.doppler_medal_count.value - 1, 0)
+        if self.options.doppler_weapon_count.value >= self.options.vile_weapon_count.value:
+            self.options.vile_weapon_count.value = max(self.options.doppler_weapon_count.value - 1, 0)
+        if self.options.doppler_upgrade_count.value >= self.options.vile_upgrade_count.value:
+            self.options.vile_upgrade_count.value = max(self.options.doppler_upgrade_count.value - 1, 0)
+        if self.options.doppler_heart_tank_count.value >= self.options.vile_heart_tank_count.value:
+            self.options.vile_heart_tank_count.value = max(self.options.doppler_heart_tank_count.value - 1, 0)
+        if self.options.doppler_sub_tank_count.value >= self.options.vile_sub_tank_count.value:
+            self.options.vile_sub_tank_count.value = max(self.options.doppler_sub_tank_count.value - 1, 0)
 
-            if doppler_item_count > 31:
-                print (f"[{self.multiworld.player_name[self.player]}] Doppler item counts will be lowered due to a high concentration of progressive items")
-                self.options.doppler_medal_count.value -= min(self.options.doppler_medal_count.value, 1)
-                self.options.doppler_weapon_count.value -= min(self.options.doppler_weapon_count.value, 1)
-                self.options.doppler_upgrade_count.value -= min(self.options.doppler_upgrade_count.value, 1)
-                self.options.doppler_heart_tank_count.value -= min(self.options.doppler_heart_tank_count.value, 1)
-                self.options.doppler_sub_tank_count.value -= min(self.options.doppler_sub_tank_count.value, 1)
-            
-            if vile_item_count > 31:
-                print (f"[{self.multiworld.player_name[self.player]}] Vile item counts will be lowered due to a high concentration of progressive items")
-                self.options.vile_medal_count.value -= min(self.options.vile_medal_count.value, 1)
-                self.options.vile_weapon_count.value -= min(self.options.vile_weapon_count.value, 1)
-                self.options.vile_upgrade_count.value -= min(self.options.vile_upgrade_count.value, 1)
-                self.options.vile_heart_tank_count.value -= min(self.options.vile_heart_tank_count.value, 1)
-                self.options.vile_sub_tank_count.value -= min(self.options.vile_sub_tank_count.value, 1)
-        
         # Adjust bit and byte medal counts
         if self.options.bit_medal_count.value == 0 and self.options.byte_medal_count.value == 0:
             self.options.byte_medal_count.value = 1
@@ -355,10 +344,18 @@ class MMX3World(World):
                 self.options.bit_medal_count.value = 6
             self.options.byte_medal_count.value = self.options.bit_medal_count.value + 1
 
-        self.boss_weaknesses = {}
+        # Generate weaknesses
         self.boss_weakness_data = {}
+        self.boss_weaknesses = {}
         handle_weaknesses(self)
 
+
+    def interpret_slot_data(self, slot_data):
+        local_weaknesses = dict()
+        for boss, entries in slot_data["weakness_rules"].items():
+            local_weaknesses[boss] = entries.copy()
+        return {"weakness_rules": local_weaknesses}
+    
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         spoiler_handle.write(f"\nMega Man X3 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
@@ -452,6 +449,7 @@ class MMX3World(World):
         try:
             patch = MMX3ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
             patch.write_file("mmx3_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mmx3_basepatch.bsdiff4"))
+            patch.write_file("mmx3_manifest_for_bsnes.xml", pkgutil.get_data(__name__, "data/mmx3_manifest_for_bsnes.xml"))
             patch_rom(self, patch)
 
             self.rom_name = patch.name
