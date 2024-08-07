@@ -206,7 +206,7 @@ portal_mapping: List[Portal] = [
            destination="East Forest Redux", tag="_lower"),
     Portal(name="East Forest Hero's Grave", region="Forest Hero's Grave",
            destination="RelicVoid", tag="_teleporter_relic plinth"),
-    
+
     Portal(name="Guard House 1 Dance Fox Exit", region="Guard House 1 West",
            destination="East Forest Redux", tag="_upper"),
     Portal(name="Guard House 1 Lower Exit", region="Guard House 1 West",
@@ -215,17 +215,17 @@ portal_mapping: List[Portal] = [
            destination="East Forest Redux", tag="_gate"),
     Portal(name="Guard House 1 to Guard Captain Room", region="Guard House 1 East",
            destination="Forest Boss Room", tag="_"),
-    
+
     Portal(name="Guard House 2 Lower Exit", region="Guard House 2 Lower",
            destination="East Forest Redux", tag="_lower"),
     Portal(name="Guard House 2 Upper Exit", region="Guard House 2 Upper",
            destination="East Forest Redux", tag="_upper"),
-    
+
     Portal(name="Guard Captain Room Non-Gate Exit", region="Forest Boss Room",
            destination="East Forest Redux Laddercave", tag="_"),
     Portal(name="Guard Captain Room Gate Exit", region="Forest Boss Room",
            destination="Forest Belltower", tag="_"),
-    
+
     Portal(name="Well Ladder Exit", region="Beneath the Well Ladder Exit",
            destination="Overworld Redux", tag="_entrance"),
     Portal(name="Well to Well Boss", region="Beneath the Well Back",
@@ -279,12 +279,12 @@ portal_mapping: List[Portal] = [
            destination="Overworld Redux", tag="_"),
     Portal(name="Fortress Courtyard Shop", region="Fortress Exterior near cave",
            destination="Shop", tag="_"),
-    
+
     Portal(name="Beneath the Vault to Fortress Interior", region="Beneath the Vault Back",
            destination="Fortress Main", tag="_"),
     Portal(name="Beneath the Vault to Fortress Courtyard", region="Beneath the Vault Ladder Exit",
            destination="Fortress Courtyard", tag="_"),
-    
+
     Portal(name="Fortress Interior Main Exit", region="Eastern Vault Fortress",
            destination="Fortress Courtyard", tag="_Big Door"),
     Portal(name="Fortress Interior to Beneath the Earth", region="Eastern Vault Fortress",
@@ -297,14 +297,14 @@ portal_mapping: List[Portal] = [
            destination="Fortress East", tag="_upper"),
     Portal(name="Fortress Interior to East Fortress Lower", region="Eastern Vault Fortress",
            destination="Fortress East", tag="_lower"),
-    
+
     Portal(name="East Fortress to Interior Lower", region="Fortress East Shortcut Lower",
            destination="Fortress Main", tag="_lower"),
     Portal(name="East Fortress to Courtyard", region="Fortress East Shortcut Upper",
            destination="Fortress Courtyard", tag="_"),
     Portal(name="East Fortress to Interior Upper", region="Fortress East Shortcut Upper",
            destination="Fortress Main", tag="_upper"),
-    
+
     Portal(name="Fortress Grave Path Lower Exit", region="Fortress Grave Path",
            destination="Fortress Courtyard", tag="_Lower"),
     Portal(name="Fortress Hero's Grave", region="Fortress Hero's Grave Region",
@@ -316,11 +316,67 @@ portal_mapping: List[Portal] = [
 
     Portal(name="Dusty Exit", region="Fortress Leaf Piles",
            destination="Fortress Reliquary", tag="_"),
-    
+
     Portal(name="Siege Engine Arena to Fortress", region="Fortress Arena",
            destination="Fortress Main", tag="_"),
     Portal(name="Fortress to Far Shore", region="Fortress Arena Portal",
            destination="Transit", tag="_teleporter_spidertank"),
+
+    Portal(name="Atoll Upper Exit", region="Ruined Atoll",
+           destination="Overworld Redux", tag="_upper"),
+    Portal(name="Atoll Lower Exit", region="Ruined Atoll Lower Entry Area",
+           destination="Overworld Redux", tag="_lower"),
+    Portal(name="Atoll Shop", region="Ruined Atoll",
+           destination="Shop", tag="_"),
+    Portal(name="Atoll to Far Shore", region="Ruined Atoll Portal",
+           destination="Transit", tag="_teleporter_atoll"),
+    Portal(name="Atoll Statue Teleporter", region="Ruined Atoll Statue",
+           destination="Library Exterior", tag="_"),
+    Portal(name="Frog Stairs Eye Entrance", region="Ruined Atoll Frog Eye",
+           destination="Frog Stairs", tag="_eye"),
+    Portal(name="Frog Stairs Mouth Entrance", region="Ruined Atoll Frog Mouth",
+           destination="Frog Stairs", tag="_mouth"),
+    
+    Portal(name="Frog Stairs Eye Exit", region="Frog Stairs Eye Exit",
+           destination="Atoll Redux", tag="_eye"),
+    Portal(name="Frog Stairs Mouth Exit", region="Frog Stairs Upper",
+           destination="Atoll Redux", tag="_mouth"),
+    Portal(name="Frog Stairs to Frog's Domain's Entrance", region="Frog Stairs to Frog's Domain",
+           destination="frog cave main", tag="_Entrance"),
+    Portal(name="Frog Stairs to Frog's Domain's Exit", region="Frog Stairs Lower",
+           destination="frog cave main", tag="_Exit"),
+    
+    Portal(name="Frog's Domain Ladder Exit", region="Frog's Domain Entry",
+           destination="Frog Stairs", tag="_Entrance"),
+    Portal(name="Frog's Domain Orb Exit", region="Frog's Domain Back",
+           destination="Frog Stairs", tag="_Exit"),
+    
+    Portal(name="Library Exterior Tree", region="Library Exterior Tree Region",
+           destination="Atoll Redux", tag="_"),
+    Portal(name="Library Exterior Ladder", region="Library Exterior Ladder Region",
+           destination="Library Hall", tag="_"),
+    
+    Portal(name="Library Hall Bookshelf Exit", region="Library Hall Bookshelf",
+           destination="Library Exterior", tag="_"),
+    Portal(name="Library Hero's Grave", region="Library Hero's Grave Region",
+           destination="RelicVoid", tag="_teleporter_relic plinth"),
+    Portal(name="Library Hall to Rotunda", region="Library Hall to Rotunda",
+           destination="Library Rotunda", tag="_"),
+    
+    Portal(name="Library Rotunda Lower Exit", region="Library Rotunda to Hall",
+           destination="Library Hall", tag="_"),
+    Portal(name="Library Rotunda Upper Exit", region="Library Rotunda to Lab",
+           destination="Library Lab", tag="_"),
+    
+    Portal(name="Library Lab to Rotunda", region="Library Lab Lower",
+           destination="Library Rotunda", tag="_"),
+    Portal(name="Library to Far Shore", region="Library Portal",
+           destination="Transit", tag="_teleporter_library teleporter"),
+    Portal(name="Library Lab to Librarian Arena", region="Library Lab to Librarian",
+           destination="Library Arena", tag="_"),
+    
+    Portal(name="Librarian Arena Exit", region="Library Arena",
+           destination="Library Lab", tag="_"),
     
     Portal(name="Atoll Upper Exit", region="Ruined Atoll",
            destination="Overworld Redux", tag="_upper"),
