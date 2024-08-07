@@ -200,8 +200,8 @@ class BaseWeaponCount(Range):
     """
     display_name = "Base Weapon Count"
     range_start = 0
-    range_end = 8
-    default = 8
+    range_end = 6
+    default = 6
 
 class BaseArmorUpgradeCount(Range):
     """
@@ -218,8 +218,8 @@ class BaseHeartTankCount(Range):
     """
     display_name = "Base Heart Tank Count"
     range_start = 0
-    range_end = 8
-    default = 8
+    range_end = 6
+    default = 6
 
 class BaseSubTankCount(Range):
     """
@@ -227,8 +227,8 @@ class BaseSubTankCount(Range):
     """
     display_name = "Base Sub Tank Count"
     range_start = 0
-    range_end = 4
-    default = 4
+    range_end = 2
+    default = 2
 
 class XHuntersMedalCount(Range):
     """
