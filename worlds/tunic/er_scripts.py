@@ -310,6 +310,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             continue
         # dead ends aren't real in decoupled
         if decoupled:
+            if region_name in {"Menu", "Shop", "Spirit Arena Victory", "Overworld Holy Cross"}:
+                continue
             non_dead_end_regions.add(region_name)
         elif not region_info.dead_end:
             non_dead_end_regions.add(region_name)
@@ -423,6 +425,16 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
+    if decoupled:
+        # add the dead ends to the two plus list, since dead ends aren't real in decoupled
+        two_plus.extend(dead_ends)
+        dead_ends.clear()
+        # if decoupled is on, we make a second two_plus list, where the first is entrances and the second is exits
+        two_plus2 = two_plus.copy()
+    else:
+        # if decoupled is off, the two lists are the same list, since entrances and exits are intertwined
+        two_plus2 = two_plus
+
     if entrance_layout == EntranceLayout.option_fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         for portal in two_plus:
@@ -439,17 +451,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
-        two_plus_direction_tracker[Direction.north] -= 1
-
-    if decoupled:
-        # add the dead ends to the two plus list, since dead ends aren't real in decoupled
-        two_plus.extend(dead_ends)
-        dead_ends.clear()
-        # if decoupled is on, we make a second two_plus list, where the first is entrances and the second is exits
-        two_plus2 = two_plus.copy()
-    else:
-        # if decoupled is off, the two lists are the same list, since entrances and exits are intertwined
-        two_plus2 = two_plus
+        if decoupled:
+            two_plus2.append(portal2)
 
     # use the seed given in the options to shuffle the portals
     if isinstance(world.options.entrance_rando.value, str):
@@ -464,6 +467,10 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     previous_conn_num = 0
     fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
+        print(len(connected_regions))
+        print(len(non_dead_end_regions))
+        print(non_dead_end_regions - connected_regions)
+        print(connected_regions - non_dead_end_regions)
         # print("phase 1")
         # if this is universal tracker, just break immediately and move on
         if hasattr(world.multiworld, "re_gen_passthrough"):
@@ -540,7 +547,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         continue
 
                 portal2 = portal
-                connected_regions.add(portal.region)
+                if not portal.region.startswith("Shop "):
+                    connected_regions.add(tunic_er_regions[portal.region].outlet_region or portal.region)
                 two_plus2.remove(portal)
                 break
 
@@ -553,6 +561,12 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 two_plus.append(portal1)
                 continue
             else:
+                for portal in two_plus:
+                    if portal.region not in connected_regions:
+                        print(portal.name)
+                for portal in two_plus2:
+                    if portal.region not in connected_regions:
+                        print(portal.name)
                 raise Exception("TUNIC: Failed to pair portals at second part of first phase.")
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
