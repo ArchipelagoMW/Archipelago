@@ -452,9 +452,12 @@ class Context:
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
 
         # load start inventory:
-        for slot, item_codes in decoded_obj["precollected_items"].items():
-            self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
-
+        for slot, items in decoded_obj["precollected_items"].items():
+            # TODO: remove conditionals after version 0.4.5 and reject loading old multidata
+            if items and isinstance(items[0], tuple):
+                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0, flags) for item_code, flags in items]
+            else:
+                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in items]
         for slot, hints in decoded_obj["precollected_hints"].items():
             self.hints[0, slot].update(hints)
 
