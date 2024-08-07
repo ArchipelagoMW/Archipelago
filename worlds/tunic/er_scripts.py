@@ -38,8 +38,14 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
-        for portal1, portal2 in portal_pairs.items():
-            world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+        sorted_portal_pairs = sort_portals(portal_pairs)
+        if not world.options.decoupled:
+            for portal1, portal2 in sorted_portal_pairs.items():
+                world.multiworld.spoiler.set_entrance(portal1, portal2, "both", world.player)
+        else:
+            for portal1, portal2 in sorted_portal_pairs.items():
+                world.multiworld.spoiler.set_entrance(portal1, portal2, "entrance", world.player)
+
     else:
         for region_name, region_data in tunic_er_regions.items():
             # filter out regions that are inaccessible in non-er
@@ -48,7 +54,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         portal_pairs = vanilla_portals(world, regions)
 
-    create_randomized_entrances(portal_pairs, regions)
+    create_randomized_entrances(portal_pairs, regions, bool(world.options.decoupled))
 
     set_er_region_rules(world, regions, portal_pairs)
 
@@ -629,19 +635,17 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             raise Exception("Something went wrong with the remaining two plus portals. Contact the TUNIC rando devs.")
         portal_pairs[portal1] = portal2
 
-    if len(two_plus) == 1:
-        raise Exception("two plus had an odd number of portals, investigate this. last portal is " + two_plus[0].name)
-
     return portal_pairs
 
 
 # loop through our list of paired portals and make two-way connections
-def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dict[str, Region]) -> None:
+def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dict[str, Region], decoupled: bool) -> None:
     for portal1, portal2 in portal_pairs.items():
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
         region1.connect(connecting_region=region2, name=portal1.name)
-        region2.connect(connecting_region=region1, name=portal2.name)
+        if not decoupled:
+            region2.connect(connecting_region=region1, name=portal2.name)
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
@@ -732,3 +736,27 @@ def verify_plando_directions(connection: PlandoConnection) -> bool:
     elif not exit_portal:
         if entrance_portal.direction in [Direction.north, Direction.east]:
             return True
+
+
+# sort the portal dict by the name of the first portal, referring to the portal order in the master portal list
+def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
+    sorted_pairs: Dict[str, str] = {}
+    reference_list: List[str] = [portal.name for portal in portal_mapping]
+    reference_list.append("Shop Portal")
+
+    # note: this is not necessary yet since the shop portals aren't numbered yet -- they will be when decoupled happens
+    # due to plando, there can be a variable number of shops
+    # I could either do it like this, or just go up to like 200, this seemed better
+    # shop_count = 0
+    # for portal1, portal2 in portal_pairs.items():
+    #     if portal1.name.startswith("Shop"):
+    #         shop_count += 1
+    #     if portal2.name.startswith("Shop"):
+    #         shop_count += 1
+    # reference_list.extend([f"Shop Portal {i + 1}" for i in range(shop_count)])
+
+    for name in reference_list:
+        for portal1, portal2 in portal_pairs.items():
+            if name == portal1.name:
+                sorted_pairs[portal1.name] = portal2.name
+    return sorted_pairs
