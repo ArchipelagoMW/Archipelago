@@ -1,10 +1,8 @@
 
 from BaseClasses import Item, ItemClassification
 
-# Don't know at this moment, whether buildings variants need the base variant to be placeable ingame or not.
+# TODO Don't know at this moment, whether buildings variants need the base variant to be placeable ingame or not.
 
-# Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
-# would be unreasonably complicated and time-consuming.
 buildings_processing = {
     "Cutter": ItemClassification.progression,
     "Rotator": ItemClassification.progression,
@@ -18,6 +16,8 @@ buildings_processing = {
     "Quad Painter": ItemClassification.useful
 }
 
+# Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
+# would be unreasonably complicated and time-consuming
 buildings_routing = {
     "Balancer": ItemClassification.progression,
     "Tunnel": ItemClassification.progression,
@@ -88,13 +88,23 @@ big_upgrades = [
     "Big Color Processing Upgrade"
 ]
 
-fillers = [
+small_upgrades = [
     "Small Routing Upgrade",
     "Small Extraction Upgrade",
     "Small Shape Processing Upgrade",
-    "Small Color Processing Upgrade",
-    "Blueprint Shapes Bundle"
+    "Small Color Processing Upgrade"
 ]
+
+
+def filler(random: float) -> str:
+    """Returns a random filler item."""
+    if random < 0.16:  # These float values are intentionally just estimates of 1/6 and 2/3
+        return big_upgrades[int(random*4/0.16)]
+    elif random < 0.66:
+        return small_upgrades[int((random-0.16)*4/0.5)]  # Yes, I want this calculation to be written that way
+    else:
+        return "Blueprint Shapes Bundle"
+
 
 item_descriptions = {  # TODO
     # Items
@@ -137,9 +147,8 @@ item_descriptions = {  # TODO
     "Small Color Processing Upgrade": "TODO",
     "Blueprint Shapes Bundle": "TODO",
     "Inventory Draining Trap": "TODO"
-    # Item groups
 }
 
 
 class ShapezItem(Item):
-    game = "Shapez"
+    game = "shapez"

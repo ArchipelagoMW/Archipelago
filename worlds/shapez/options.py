@@ -54,7 +54,8 @@ class RandomizeLevelLogic(Choice):
     Vanilla: Level 1 requires nothing, 2-4 require the cutter, 5-6 require the rotator, 7-8 require the painter,
              9-10 require the color mixer, and 11 and onwards require the stacker.
     Shuffled: Same as vanilla, but with shuffled order of buildings.
-    Stretched vanilla: After every floor(maxlevel/6) levels, another building is required, with the same order as vanilla.
+    Stretched vanilla: After every floor(maxlevel/6) levels, another building is required,
+                       with the same order as vanilla.
     Stretched shuffled: Same as stretched vanilla, but with shuffled order of buildings.
     Hardcore: All levels (except level 1) have completely random shape requirements. Expect early BKs."""
     display_name = "Randomize level logic"
@@ -71,7 +72,8 @@ class RandomizeUpgradeLogic(Choice):
     and how logic works for upgrades. All four categories will have the same logic.
     Vanilla-like: Tier II requires nothing, III requires up to three random buildings,
                   and IV and onwards require all processing buildings.
-    Linear: Tier II requires nothing, III-VI require another random building each, and VII and onwards require all buildings.
+    Linear: Tier II requires nothing, III-VI require another random building each,
+            and VII and onwards require all buildings.
     Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
     display_name = "Randomize upgrade logic"
     option_vanilla_like = 0
@@ -81,15 +83,20 @@ class RandomizeUpgradeLogic(Choice):
 
 
 class SameLateUpgradeRequirements(Toggle):
-    """If upgrade requirements are randomized, should the last 3 shapes for each category be the same, like in vanilla?"""
+    """If upgrade requirements are randomized, should the last 3 shapes for each category
+    be the same, like in vanilla?"""
     display_name = "Same late upgrade requirements"
     default = True
 
 
-class IncludeAchievements(Toggle):
-    """Include up to 45 achievements (depending on other options) as additional locations."""
-    display_name = "Include achievements"
-    default = True
+class AdditionalLocations(Choice):
+    """Achievements: Include up to 44 achievements (depending on other options) as additional locations.
+    Shapesanity: Include up to 1696 shapes as additional locations."""
+    display_name = "Additional locations"
+    option_achievements = 0
+    option_shapesanity = 1
+    option_both = 2
+    default = 0
 
 
 class ExcludeSoftlockAchievements(Toggle):
@@ -104,10 +111,18 @@ class ExcludeLongPlaytimeAchievements(Toggle):
     default = True
 
 
-class ExcludeProgressionSoftlockLongPlaytime(Toggle):
+class ExcludeProgressionUnreasonable(Toggle):
     """Exclude progression and useful items from being placed into softlock and long playtime achievements."""
     display_name = "Exclude progression items in softlock and long playtime achievements"
     default = True
+
+
+class ShapesanityAmount(Range):
+    """Amount of one-layer-shapes that will be included as locations."""
+    display_name = "Shapesanity amount"
+    range_start = 20
+    range_end = 2144
+    default = 20
 
 
 class TrapsProbability(Range):
@@ -121,6 +136,7 @@ class TrapsProbability(Range):
 # class IncludeBackgroundMusic(Toggle):
 #    """Include background music in the item pool. Requires achievements to be included as locations."""
 #    display_name = "Include background music"
+#    default = False
 
 
 @dataclass
@@ -133,10 +149,11 @@ class ShapezOptions(PerGameCommonOptions):
     randomize_level_logic: RandomizeLevelLogic
     randomize_upgrade_logic: RandomizeUpgradeLogic
     same_late_upgrade_requirements: SameLateUpgradeRequirements
-    include_achievements: IncludeAchievements
+    additional_locations: AdditionalLocations
     exclude_softlock_achievements: ExcludeSoftlockAchievements
     exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
-    exclude_progression_softlock_long_playtime: ExcludeProgressionSoftlockLongPlaytime
+    exclude_progression_unreasonable: ExcludeProgressionUnreasonable
+    shapesanity_amount: ShapesanityAmount
     traps_percentage: TrapsProbability
 #    include_background_music: IncludeBackgroundMusic
 

@@ -1,23 +1,17 @@
 from typing import Mapping, Any
 
-import settings
-import typing
-
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
-    big_upgrades, fillers  # data used below to add items to the World
-from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description
+    big_upgrades, filler
+from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
+    addshapesanity
 from .presets import options_presets
 from .options import ShapezOptions
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Item, ItemClassification, Tutorial, LocationProgressType
+from BaseClasses import Region, Item, Tutorial, LocationProgressType, ItemClassification
 from .regions import create_shapez_regions
-
-
-class ShapezSettings(settings.Group):
-    game = "Shapez"
 
 
 class ShapezWeb(WebWorld):
@@ -28,7 +22,7 @@ class ShapezWeb(WebWorld):
     game_info_languages = ['en', 'de']
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Shapez with Archipelago.",
+        "A guide to playing shapez with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -36,7 +30,7 @@ class ShapezWeb(WebWorld):
     )
     setup_de = Tutorial(
         "Multiworld-Setup-Anleitung",
-        "Eine Anleitung zum Spielen von Shapez in Archipelago",
+        "Eine Anleitung zum Spielen von shapez in Archipelago",
         "Deutsch",
         "setup_de.md",
         "setup/de",
@@ -48,15 +42,13 @@ class ShapezWeb(WebWorld):
 
 
 class ShapezWorld(World):
-    """Insert description of the world/game here."""
-    game = "Shapez"  # name of the game/world
-    options_dataclass = ShapezOptions  # options the player can set
-    options: ShapezOptions  # typing hints for option results
-    settings: typing.ClassVar[ShapezSettings]  # will be automatically assigned from type hint
-    topology_present = True  # show path to required location checks in spoiler
+    game = "shapez"
+    options_dataclass = ShapezOptions
+    options: ShapezOptions
+    topology_present = True
     web = ShapezWeb
 
-    # TODO TestBase, Docs, shapez lowercase
+    # TODO TestBase, web docs, item and location descriptions
 
     base_id = 20010707
     location_count: int = 0
@@ -65,8 +57,7 @@ class ShapezWorld(World):
     maxlevel: int = 25
     finaltier: int = 8
     included_locations: dict[str, tuple[str, LocationProgressType]] = dict()
-    # victory_loc = MyGameLocation(self.player, "Victory", None)
-    # victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
+    client_seed: int = 123
 
     item_name_to_id = {name: id for
                        id, name in enumerate(item_table.keys(), base_id)}
@@ -74,34 +65,31 @@ class ShapezWorld(World):
                            id, name in enumerate(all_locations, base_id)}
 
     def generate_early(self):
-        # Load necessary options atm
-        goal = self.options.goal
-        goal_amount = self.options.goal_amount
-        randomize_level_requirements = self.options.randomize_level_requirements
-        randomize_upgrade_requirements = self.options.randomize_upgrade_requirements
-        randomize_level_logic = self.options.randomize_level_logic
-        randomize_upgrade_logic = self.options.randomize_upgrade_logic
-
-        if goal == 1 and goal_amount < 27:
-            raise OptionError("When setting goal to 'mam', goal_amount must be at least 27")
+        # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
+        # both goal amounts for "MAM" and "Even fasterer" are set in a single option.
+        if self.options.goal.value == 1 and self.options.goal_amount.value < 27:
+            raise OptionError("When setting goal to 1 ('mam'), goal_amount must be at least 27")
 
         # Determines maxlevel and finaltier, which are needed for location and item generation
-        if goal == 0:
+        if self.options.goal.value == 0:
             self.maxlevel = 25
             self.finaltier = 8
-        elif goal == 1:
-            self.maxlevel = goal_amount.value - 1
+        elif self.options.goal.value == 1:
+            self.maxlevel = self.options.goal_amount.value - 1
             self.finaltier = 8
-        elif goal == 2:
+        elif self.options.goal.value == 2:
             self.maxlevel = 26
-            self.finaltier = goal_amount.value
+            self.finaltier = self.options.goal_amount.value
         else:
             self.maxlevel = 26
             self.finaltier = 8
 
-        # Determines the order of buildings for logic
-        if randomize_level_requirements:
-            if randomize_level_logic in [1, 3]:
+        # Setting the seed for the game before any other randomization call is done TODO check actual seed range in game
+        self.client_seed = self.random.randint(0, 2**32)
+
+        # Determines the order of buildings for levels und upgrades logic
+        if self.options.randomize_level_requirements.value:
+            if self.options.randomize_level_logic.value in [1, 3]:
                 vanilla_list = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
                 for i in range(4, -1, -1):
                     next_building = self.random.randint(0, i)
@@ -111,8 +99,8 @@ class ShapezWorld(World):
         else:
             self.level_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 
-        if randomize_upgrade_requirements:
-            if randomize_upgrade_logic == 2:
+        if self.options.randomize_upgrade_requirements.value:
+            if self.options.randomize_upgrade_logic.value == 2:
                 self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
             else:
                 vanilla_list = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
@@ -125,27 +113,34 @@ class ShapezWorld(World):
     def create_item(self, name: str) -> Item:
         return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
 
-    def create_event_item(self, event: str) -> Item:
-        return ShapezItem(event, ItemClassification.progression, None, self.player)
-
     def create_regions(self) -> None:
+        # Create Menu region like in docs
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
+
+        # Create list of all included locations based on player options
         self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.value),
                                    **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.value),
-                                   **addachievements(bool(self.options.include_achievements.value),
+                                   **addachievements(bool(self.options.additional_locations.value in [0, 2]),
                                                      bool(self.options.exclude_softlock_achievements.value),
                                                      bool(self.options.exclude_long_playtime_achievements.value),
-                                                     bool(self.options.exclude_progression_softlock_long_playtime.value),
+                                                     bool(self.options.exclude_progression_unreasonable.value),
                                                      self.maxlevel, self.options.randomize_level_logic.value,
-                                                     self.finaltier, self.options.randomize_upgrade_logic.value,
-                                                     self.options.goal.value)}
+                                                     self.options.randomize_upgrade_logic.value,
+                                                     self.options.goal.value),
+                                   **addshapesanity(self.options.shapesanity_amount.value, self.random,
+                                                    bool(self.options.additional_locations.value > 0))}
         self.location_count = len(self.included_locations)
+
+        # Create regions and entrances based on included locations and player options
         self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld, self.included_locations,
                                                              self.location_name_to_id,
-                                                             self.options.randomize_level_logic.value,
-                                                             self.options.randomize_upgrade_logic.value,
                                                              self.level_logic, self.upgrade_logic))
+
+        goal_location = ShapezLocation(self.player, "Goal", None, None, None)
+        goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression, None, self.player))
+
+        # Connect Menu to rest of regions
         menu_region.connect(self.multiworld.get_region("Main", self.player))
 
     def create_items(self) -> None:
@@ -158,37 +153,39 @@ class ShapezWorld(World):
                                       + [self.create_item(name) for name in gameplay_unlocks.keys()]
                                       + [self.create_item(name) for name in big_upgrades for _ in range(7)])
 
-        # Get value from traps probability option and convert into float
+        # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage.value/100
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
-            # Fill with trap (only 1 kind of traps atm)
-            if self.multiworld.random.random() < traps_probability:
+            if self.random.random() < traps_probability:
+                # Fill with trap (only 1 kind of traps atm)
                 included_items.append(self.create_item("Inventory Draining Trap"))
             else:
-                # Fil with random filler item (all equal chance)
-                included_items.append(self.create_item(fillers[self.multiworld.random.randint(0, len(fillers)-1)]))
+                # Fil with random filler item
+                included_items.append(self.create_item(filler(self.random.random())))
+
+        # Add correct number of items to itempool
+        self.multiworld.itempool += included_items
 
         # Upgrades needs to be in sphere 1 in case of both hardcore logic types
         self.multiworld.local_early_items[self.player]["Upgrades"] = 1
 
-        self.multiworld.itempool += included_items
-
     def fill_slot_data(self) -> Mapping[str, Any]:
+        # Buildings logic; all buildings as individual parameters
         level_logic_data = {f"Level building {x+1}": self.level_logic[x] for x in range(5)}
         upgrade_logic_data = {f"Upgrade building {x+1}": self.upgrade_logic[x] for x in range(5)}
+
+        # Options that are relevant to the mod
         option_data = {
             "goal": self.options.goal.value,
-            "goal_amount": self.options.goal_amount.value,
+            "finaltier": self.finaltier,
             "required_shapes_multiplier": self.options.required_shapes_multiplier.value,
             "randomize_level_requirements": bool(self.options.randomize_level_requirements.value),
             "randomize_upgrade_requirements": bool(self.options.randomize_upgrade_requirements.value),
             "randomize_level_logic": self.options.randomize_level_logic.value,
             "randomize_upgrade_logic": self.options.randomize_upgrade_logic.value,
-            "same_late_upgrade_requirements": self.options.same_late_upgrade_requirements.value,
-            "include_achievements": self.options.include_achievements.value,
-            "exclude_softlock_achievements": self.options.exclude_softlock_achievements.value,
-            "exclude_long_playtime_achievements": self.options.exclude_long_playtime_achievements.value
+            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value)
         }
-        # Client also needs the seed, do I need to send it per slot data?
-        return {**level_logic_data, **upgrade_logic_data, **option_data}
+
+        return {**level_logic_data, **upgrade_logic_data, **option_data, "seed": self.client_seed}
+

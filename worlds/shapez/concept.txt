@@ -18,12 +18,13 @@ Traps:
 Locations:
 - All 25 Levels before goal (or even more), double checks for levels 1 and 20
 @code: override level up method, use different cases for different options, override info screen
-- upgrades up to level 8 (or even more)
+- upgrades up to tier VIII (or even more), double checks for all tier II upgrades
 @code: override button actions
 - optional reasonable achievements (36)
 - optional softlock achievements (6) with only normal, trap, or useful items
 - optional long play time achievements (2) with only normal, trap, or useful items
 - activate darkmode achievement MUST BE EXCLUDED
+- shapesanity
 @code: achievements probably not gathered in a single place, complete override to not get steam achievements
 
 Goals
@@ -99,6 +100,12 @@ Regions:
 - Rotated Shape Achievements > All Buildings Shapes
 - Stacked Shape Achievements > All Buildings Shapes
 - Painted Shape Achievements > All Buildings Shapes
+
+Shapesanity:
+- No stacking, up to 2 different kinds of parts, rotated versions excluded
+- combinations of up to 2 kinds of shapes, with empty, but no empty-empty
+- both sides have 1-3 parts with no empty space (except empty is one side)
+- both sides can be in another color
 
 @code Connection details:
 - save login details in save file
