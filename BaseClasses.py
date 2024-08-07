@@ -777,14 +777,14 @@ class CollectionState():
 
         # The first iteration must check the locations for all players because it is not known which players might have
         # reachable locations.
-        players_to_check: Set[int] = set(self.multiworld.regions.location_cache.keys())
-        while players_to_check:
+        players_logically_affected_by_last_sweep: Set[int] = set(self.multiworld.get_all_ids())
+        while players_logically_affected_by_last_sweep:
             received_advancement_players = set()
             next_events_per_player: List[Tuple[int, List[Location]]] = []
 
             for player, locations in events_per_player:
-                if player not in players_to_check:
-                    # The player did not receive any advancement in the last outer loop, so skip their locations.
+                if player not in players_logically_affected_by_last_sweep:
+                    # If the player was not affected by the last sweep, skip their locations.
                     next_events_per_player.append((player, locations))
                     continue
 
@@ -795,8 +795,8 @@ class CollectionState():
                 for location in locations:
                     if location.can_reach(self):
                         # Locations containing Items that do not belong to `player` could be collected immediately
-                        # instead of being appended because they won't stale `player`'s region accessibility cache, but,
-                        # for simplicity, all the accessible locations are collected in a single loop.
+                        # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
+                        # accessible locations are collected in a single loop.
                         accessible_locations.append(location)
                     else:
                         inaccessible_locations.append(location)
@@ -818,13 +818,13 @@ class CollectionState():
             # Find all players whose logic depends on a player that received advancement during this iteration.
             # For each player that received advancement, look up the list of players with logic dependent on that player
             # and then flatten all the lists into a single set.
-            players_to_check = {dependent_player for received_advancement_player in received_advancement_players
-                                for dependent_player in player_logic_dependents[received_advancement_player]}
+            players_logically_affected_by_last_sweep = {dependent_player for player in received_advancement_players
+                                                        for dependent_player in player_logic_dependents[player]}
             if yield_each_sweep:
                 # Yielding lets the caller respond to changes in the CollectionState during the sweep and respond to
                 # which players have been logically affected by the current sweep.
                 # Yield the iterator rather than the set itself so that the set cannot be modified.
-                yield iter(players_to_check)
+                yield iter(players_logically_affected_by_last_sweep)
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
                          checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[Iterator[int]]]:
