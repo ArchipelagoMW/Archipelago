@@ -1,4 +1,5 @@
 from worlds.generic.Rules import add_rule, set_rule
+from BaseClasses import CollectionState
 
 from . import MMX2World
 from .Names import LocationName, ItemName, RegionName, EventName
@@ -148,7 +149,7 @@ def set_rules(world: MMX2World):
 
     # X-Hunter Base rules
     if world.options.base_all_levels.value:
-        set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_4_voice} -> {RegionName.x_hunter_stage_5}", player),
+        set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage} -> {RegionName.x_hunter_stage_4}", player),
                  lambda state: (
                      state.has(EventName.x_hunter_stage_1_clear, player) and 
                      state.has(EventName.x_hunter_stage_2_clear, player) and 
@@ -161,6 +162,7 @@ def set_rules(world: MMX2World):
                  lambda state: state.has(EventName.x_hunter_stage_2_clear, player))
         set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_3_boss} -> {RegionName.x_hunter_stage_4}", player),
                  lambda state: state.has(EventName.x_hunter_stage_3_clear, player))
+        
     set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_4_voice} -> {RegionName.x_hunter_stage_5}", player),
                 lambda state: state.has(EventName.x_hunter_stage_4_clear, player))
         
@@ -278,36 +280,51 @@ def set_rules(world: MMX2World):
         add_pickupsanity_logic(world)
 
 
+def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> bool:
+    states = list()
+    for i in range(len(rulesets)):
+        valid = state.has_all_counts(rulesets[i], player)
+        states.append(valid)
+    return any(states)
+
+
 def add_boss_weakness_logic(world: MMX2World):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value
 
-    if world.options.base_boss_rematch_count.value == 0:
-        for boss in mavericks:
-            bosses[boss].pop()
-            bosses[boss].pop()
-
+    boss_dict = {}
     for boss, regions in bosses.items():
+        boss_dict[boss] = regions.copy()
+        if boss in mavericks and world.options.base_boss_rematch_count.value == 0:
+            boss_dict[boss].pop()
+            boss_dict[boss].pop()
+
+    for boss, regions in boss_dict.items():
         weaknesses = world.boss_weaknesses[boss]
+        rulesets = list()
         for weakness in weaknesses:
             if weakness[0] is None:
-                continue
+                rulesets = None
+                break
             weakness = weakness[0]
+            ruleset = dict()
+            if "Check Charge" in weakness[0]:
+                ruleset[ItemName.arms] = jammed_buster + int(weakness[0][-1:]) - 1
+            else:
+                ruleset[weakness[0]] = 1
+            if len(weakness) != 1:
+                ruleset[weakness[1]] = 1
+            rulesets.append(ruleset)
+
+        if rulesets is not None:
             for region in regions:
-                ruleset = {}
-                if "Check Charge" in weakness[0]:
-                    ruleset[ItemName.arms] = jammed_buster + int(weakness[0][-1:]) - 1
-                else:
-                    ruleset[weakness[0]] = 1
-                if len(weakness) != 1:
-                    ruleset[weakness[1]] = 1
                 if "->" in region:
                     add_rule(multiworld.get_entrance(region, player),
-                             lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
+                                lambda state, rulesets=rulesets: check_weaknesses(state, player, rulesets))
                 else:
                     add_rule(multiworld.get_location(region, player),
-                             lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
+                                lambda state, rulesets=rulesets: check_weaknesses(state, player, rulesets))
 
 
 def add_pickupsanity_logic(world: MMX2World):
@@ -329,6 +346,14 @@ def add_pickupsanity_logic(world: MMX2World):
                     state.has(ItemName.bubble_splash, player)
                 )
              ))
+    
+    # Morph Moth
+    add_rule(multiworld.get_location(LocationName.morph_moth_1up_1, player),
+             lambda state: state.has(ItemName.crystal_hunter, player))
+
+    # Flame Stag
+    add_rule(multiworld.get_location(LocationName.flame_stag_1up_3, player),
+             lambda state: state.has(ItemName.legs, player))
 
     # Overdrive Ostrich
     add_rule(multiworld.get_location(LocationName.overdrive_ostrich_hp_1, player),

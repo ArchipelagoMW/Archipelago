@@ -14,7 +14,7 @@ class EnergyLink(DefaultOnToggle):
     EnergyLink in MMX2 works as a big HP and Weapon Energy pool that the players can use to request HP
     or Weapon Energy whenever they need to.
     
-    You make use of this feature by typing /pool, /heal <amount>, /refill <amount> or /autoheal in the client.
+    You make use of this feature by typing /heal <amount> or /refill <amount> in the client.
     """
     display_name = "Energy Link"
 
@@ -26,7 +26,7 @@ class StartingLifeCount(Range):
     """
     display_name = "Starting Life Count"
     range_start = 0
-    range_end = 9
+    range_end = 99
     default = 2
 
 class StartingHP(Range):
@@ -149,7 +149,7 @@ class BaseBossRematchCount(Range):
     """
     How many boss rematches are needed in the fourth X-Hunter's Base stage.
     """
-    display_name = "Doppler Lab 3 Rematch count"
+    display_name = "X-Hunter Base 4 Rematch count"
     range_start = 0
     range_end = 8
     default = 8

@@ -457,11 +457,13 @@ def connect_regions(world: World):
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_1)
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_2)
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_3)
+        connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_4)
     else:
         connect(world, RegionName.x_hunter_stage, RegionName.x_hunter_stage_1)
         connect(world, RegionName.x_hunter_stage_1_boss, RegionName.x_hunter_stage_2)
         connect(world, RegionName.x_hunter_stage_2_boss, RegionName.x_hunter_stage_3)
-    connect(world, RegionName.x_hunter_stage_3_boss, RegionName.x_hunter_stage_4)
+        connect(world, RegionName.x_hunter_stage_3_boss, RegionName.x_hunter_stage_4)
+        
     connect(world, RegionName.x_hunter_stage_4_voice, RegionName.x_hunter_stage_5)
 
 

@@ -39,15 +39,28 @@ class MMX2Web(WebWorld):
         "setup/en",
         ["lx5"]
     )
+    
+    setup_es = Tutorial(
+        "Guía de configuración de Multiworld",
+        "Guía para jugar Mega Man X2 en Archipelago",
+        "Spanish",
+        "setup_es.md",
+        "setup/es",
+        ["lx5"]
+    )
 
-    tutorials = [setup_en]
+    tutorials = [setup_en, setup_es]
+
 
     option_groups = mmx2_option_groups
 
 
 class MMX2World(World):
     """
-    Mega Man X2 WIP
+    Mega Man X2, released in 1994 for the SNES, is the second game in Capcom's "Mega Man X" series. 
+    Players control Mega Man X, a Maverick Hunter, as he battles a new group of Mavericks and the X-Hunters, 
+    who have taken parts of his ally Zero. The game features classic run-and-gun gameplay with challenging levels, 
+    boss battles that grant new weapons, and the use of the Cx4 chip for enhanced graphics.
     """
     game = "Mega Man X2"
     web = MMX2Web()
@@ -57,7 +70,7 @@ class MMX2World(World):
     options_dataclass = MMX2Options
     options: MMX2Options
 
-    required_client_version = (0, 4, 6)
+    required_client_version = (0, 5, 0)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -214,8 +227,13 @@ class MMX2World(World):
 
     def set_rules(self):
         from .Rules import set_rules
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                if "Mega Man X2" in self.multiworld.re_gen_passthrough:
+                    slot_data = self.multiworld.re_gen_passthrough["Mega Man X2"]
+                    self.boss_weaknesses = slot_data["weakness_rules"]
         set_rules(self)
-    
+
 
     def fill_slot_data(self):
         slot_data = {}
@@ -248,9 +266,11 @@ class MMX2World(World):
         slot_data["base_sub_tank_count"] = self.options.base_sub_tank_count.value
         slot_data["base_all_levels"] = self.options.base_all_levels.value
         
-        # Write boss weaknesses to slot_data
+        # Write boss weaknesses to slot_data (and for UT)
         slot_data["boss_weaknesses"] = {}
+        slot_data["weakness_rules"] = {}
         for boss, entries in self.boss_weaknesses.items():
+            slot_data["weakness_rules"][boss] = entries.copy()
             slot_data["boss_weaknesses"][boss] = []
             for entry in entries:
                 slot_data["boss_weaknesses"][boss].append(entry[1])
@@ -259,10 +279,18 @@ class MMX2World(World):
 
 
     def generate_early(self):
-        self.boss_weaknesses = {}
+        # Generate weaknesses
         self.boss_weakness_data = {}
+        self.boss_weaknesses = {}
         handle_weaknesses(self)
 
+
+    def interpret_slot_data(self, slot_data):
+        local_weaknesses = dict()
+        for boss, entries in slot_data["weakness_rules"].items():
+            local_weaknesses[boss] = entries.copy()
+        return {"weakness_rules": local_weaknesses}
+    
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         spoiler_handle.write(f"\nMega Man X2 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")

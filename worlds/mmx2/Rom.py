@@ -125,6 +125,8 @@ def adjust_boss_damage_table(world: World, patch: MMX2ProcedurePatch):
         if boss == "Serges Tank":
             for x in range(len(data)):
                 data[x] = data[x]*3 if data[x] < 0x80 else data[x]
+        elif boss == "Wheel Gator":
+            patch.write_bytes(0x37669, bytearray(data))
                 
         patch.write_bytes(offset, bytearray(data))
 
@@ -249,7 +251,7 @@ def patch_rom(world: World, patch: MMX2ProcedurePatch):
         patch.write_byte(action_offsets[action], button_values[button])
 
     # Starting HP
-    patch.write_byte(0x01D6A, 0xFF)
+    patch.write_byte(0x01D6A, 0x7F)
     
     # Write options to the ROM
     value = 0
