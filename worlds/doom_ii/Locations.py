@@ -1470,7 +1470,7 @@ location_table: Dict[int, LocationDict] = {
              'map': 6,
              'index': 102,
              'doom_type': 2006,
-             'region': "Tenements (MAP17) Main"},
+             'region': "Tenements (MAP17) Yellow"},
     361243: {'name': 'Tenements (MAP17) - Plasma gun',
              'episode': 2,
              'map': 6,
