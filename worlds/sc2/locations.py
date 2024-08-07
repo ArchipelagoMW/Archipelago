@@ -2707,9 +2707,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1600, LocationType.VICTORY,
             lambda state: (
-                logic.zerg_common_unit(state)
-                and ((adv_tactics and logic.zerg_basic_kerriganless_anti_air(state))
-                    or logic.zerg_competent_anti_air(state)
+                logic.protoss_common_unit(state)
+                and ((adv_tactics and logic.protoss_basic_anti_air(state))
+                    or logic.protoss_competent_anti_air(state)
                 ))
         ),
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "First Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1601, LocationType.VANILLA),
