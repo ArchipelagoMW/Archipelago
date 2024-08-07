@@ -26,8 +26,8 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Click `View Folder`. 
   - In the new file explorer window, take note of the current path. It should contain `gk.exe` and `goalc.exe`.
 - Verify that the mod launcher copied the extracted ISO files to the mod directory:
-  - `C:\Users\<YourName>\AppData\Roaming\OpenGOAL-Mods\archipelagoal\iso_data` should have *all* the same files as
-  - `C:\Users\<YourName>\AppData\Roaming\OpenGOAL-Mods\_iso_data`, if it doesn't, copy those files over manually.
+  - `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data` should have *all* the same files as
+  - `%appdata%/OpenGOAL-Mods/_iso_data`, if it doesn't, copy those files over manually.
   - And then `Recompile` if you needed to copy the files over.
 - **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE MOD LAUNCHER.** It will run in retail mode, which is incompatible with Archipelago. We need it to run in debug mode (see below).
 
@@ -41,15 +41,15 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - In the text file that opens, enter the name you want and remember it for later.
 - Save this file in `Archipelago/players`. You can now close the file.
 - Back in the Archipelago Launcher, click `Open host.yaml`.
-- In the text file that opens, search for `jakanddaxter_options`. If you do not see it, you will need it add it.
-  - Change (or add) the `root_directory` entry and provide the path you noted earlier containing `gk.exe` and `goalc.exe`. 
-  - **CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/ `.**
-   - The result should look like this. You can now save and close the file.
+- In the text file that opens, search for `jakanddaxter_options`.
+  - You should see the block of YAML below. If you do not see it, you will need to add it.
+  - If the default path does not contain `gk.exe` and `goalc.exe`, you will need to provide the path you noted earlier. **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/ `.**
 
 ```
 jakanddaxter_options:
   # Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe).
-  root_directory: "C:/Users/<YourName>/AppData/Roaming/OpenGOAL-Mods/archipelagoal"
+  # Ensure this path contains forward slashes (/) only.
+  root_directory: "%appdata%/OpenGOAL-Mods/archipelagoal"
 ```
 
 - Back in the Launcher, from the left-most list, click `Generate`. A window will appear to generate your seed and close itself.
@@ -108,8 +108,8 @@ jakanddaxter_options:
 Input file iso_data/jak1/MUS/TWEAKVAL.MUS does not exist.
 ```
   - If this occurs, you may need to copy the extracted data to the mod folder manually.
-    - From a location like this: `C:\Users\<YourName>\AppData\Roaming\OpenGOAL-Mods\_iso_data`
-    - To a location like this: `C:\Users\<YourName>\AppData\Roaming\OpenGOAL-Mods\archipelagoal\iso_data`
+    - From a location like this: `%appdata%/OpenGOAL-Mods/_iso_data`
+    - To a location like this: `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data`
     - Then try clicking `Recompile` in the Mod Launcher (ensure you have selected the right mod first!)
 
 ***Game Failure***
@@ -136,10 +136,10 @@ PAL versions of the game seem to require additional troubleshooting/setup in ord
 
 - If you have `-- Compilation Error! --` after pressing `Recompile` or Launching the ArchipelaGOAL mod. Try this:
   - Remove these folders if you have them: 
-    - `%appdata%\OpenGOAL-Mods\iso_data`
-    - `%appdata%\OpenGOAL-Mods\archipelagoal\iso_data`
-    - `%appdata%\OpenGOAL-Mods\archipelagoal\data\iso_data`
-  - Place Jak1 ISO in: `%appdata%\OpenGOAL-Mods\archipelagoal` rename it to `JakAndDaxter.iso`
+    - `%appdata%/OpenGOAL-Mods/iso_data`
+    - `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data`
+    - `%appdata%/OpenGOAL-Mods/archipelagoal/data/iso_data`
+  - Place Jak1 ISO in: `%appdata%/OpenGOAL-Mods/archipelagoal` rename it to `JakAndDaxter.iso`
   - Type "CMD" in Windows search, Right click Command Prompt, and pick "Run as Administrator"
   - Run: `cd %appdata%\OpenGOAL-Mods\archipelagoal`
   - Then run: `extractor.exe --extract --extract-path .\data\iso_data "JakAndDaxter.iso"` 
