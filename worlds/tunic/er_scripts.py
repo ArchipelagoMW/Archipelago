@@ -527,5 +527,6 @@ def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
         for portal1, portal2 in portal_pairs.items():
             if name == portal1.name:
                 sorted_pairs[portal1.name] = portal2.name
+                break
     return sorted_pairs
 
