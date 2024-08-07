@@ -556,8 +556,10 @@ class MultiWorld():
             state = CollectionState(self)
 
         # CollectionState.sweep_for_events also yields group IDs, but those don't have a game to beat, so consider them
-        # to all have beaten their game.
+        # to all have beaten their game from the start.
         beaten_game_players.update(self.groups.keys())
+        # The total number of players + groups. Once `beaten_game_players` equals this, all games are beaten.
+        all_games_beaten_length = num_players + len(self.groups)
 
         # Sweep through all locations that contain uncollected advancement items and get the players that received
         # advancement at each sweep iteration. These players may now be able to beat their game, so should be checked.
@@ -567,7 +569,7 @@ class MultiWorld():
                 if player not in beaten_game_players and self.has_beaten_game(state, player):
                     beaten_game_players.add(player)
 
-            if len(beaten_game_players) == num_players:
+            if len(beaten_game_players) == all_games_beaten_length:
                 return True
 
         return False
