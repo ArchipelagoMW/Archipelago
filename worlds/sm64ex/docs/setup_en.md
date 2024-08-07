@@ -35,7 +35,7 @@ Then continue to `Using the Launcher`
 4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps.
     - Windows: If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
 5. When finished, use `Compile default SM64AP build` to continue.
-    - **Advanced configuration:** If you want to use off-by-default game options such as Better Camera, No Drawing Distance, etc or apply game patches such as 60FPS, Enhanced Moveset, etc, then use the `Compile custom build` option:
+    - **Advanced configuration:** If you want to use additional build options such as Better Camera, No Drawing Distance, etc or apply game patches such as 60FPS, Enhanced Moveset, etc, then use the `Compile custom build` option:
       - Set a name for your build, e.g. "archipelago" or whatever you like.
       - Press the `Download Files` button.
       - Set Make Flags, e.g. `-j8 BETTERCAMERA=1 NODRAWINGDISTANCE=1` to enable Better Camera and No Drawing Distance.
