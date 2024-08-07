@@ -461,19 +461,19 @@ weapons_chaotic = {
         [[ItemName.strike_chain], 0x0C, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Strike Chain": [
-        [[ItemName.strike_chain], 0x15, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.strike_chain], 0x15, WEAKNESS_CHARGED_DMG],
     ],
     "Spin Wheel": [
         [[ItemName.spin_wheel], 0x0A, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Spin Wheel": [
-        [[ItemName.spin_wheel], 0x13, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.spin_wheel], 0x13, WEAKNESS_CHARGED_DMG],
     ],
     "Bubble Splash": [
         [[ItemName.bubble_splash], 0x08, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Bubble Splash": [
-        [[ItemName.bubble_splash], 0x11, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.bubble_splash], 0x11, WEAKNESS_CHARGED_DMG],
     ],
     "Speed Burner": [
         [[ItemName.speed_burner], 0x0E, WEAKNESS_UNCHARGED_DMG],
@@ -482,43 +482,43 @@ weapons_chaotic = {
         [[ItemName.speed_burner], 0x23, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Speed Burner": [
-        [[ItemName.speed_burner], 0x17, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.speed_burner], 0x17, WEAKNESS_CHARGED_DMG],
     ],
     "Silk Shot (Rocks)": [
         [[ItemName.silk_shot], 0x09, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Silk Shot (Rocks)": [
-        [[ItemName.silk_shot], 0x12, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.silk_shot], 0x12, WEAKNESS_CHARGED_DMG],
     ],
     "Silk Shot (Junk)": [
         [[ItemName.silk_shot], 0x1B, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Silk Shot (Junk)": [
-        [[ItemName.silk_shot], 0x20, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.silk_shot], 0x20, WEAKNESS_CHARGED_DMG],
     ],
     "Silk Shot (Leaves)": [
         [[ItemName.silk_shot], 0x1C, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Silk Shot (Leaves)": [
-        [[ItemName.silk_shot], 0x21, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.silk_shot], 0x21, WEAKNESS_CHARGED_DMG],
     ],
     "Silk Shot (Crystals)": [
         [[ItemName.silk_shot], 0x1E, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Silk Shot (Crystals)": [
-        [[ItemName.silk_shot], 0x22, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.silk_shot], 0x22, WEAKNESS_CHARGED_DMG],
     ],
     "Silk Shot (Black Rock)": [
         [[ItemName.silk_shot], 0x18, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Silk Shot (Black Rock)": [
-        [[ItemName.silk_shot], 0x1F, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.silk_shot], 0x1F, WEAKNESS_CHARGED_DMG],
     ],
     "Magnet Mine": [
         [[ItemName.magnet_mine], 0x0D, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Magnet Mine": [
-        [[ItemName.magnet_mine], 0x16, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.magnet_mine], 0x16, WEAKNESS_CHARGED_DMG],
     ],
     #"Crystal Hunter": [   <- removed because it crashes the game
     #    [[ItemName.crystal_hunter], 0x07, WEAKNESS_UNCHARGED_DMG],
@@ -527,7 +527,7 @@ weapons_chaotic = {
         [[ItemName.sonic_slicer], 0x0B, WEAKNESS_UNCHARGED_DMG],
     ],
     "Charged Sonic Slicer": [
-        [[ItemName.sonic_slicer], 0x14, WEAKNESS_CHARGED_DMG],
+        [["Check Charge 2", ItemName.sonic_slicer], 0x14, WEAKNESS_CHARGED_DMG],
     ],
 }
 
