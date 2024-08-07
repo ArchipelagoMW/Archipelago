@@ -222,8 +222,8 @@ class DopplerWeaponCount(Range):
     """
     display_name = "Doppler Weapon Count"
     range_start = 0
-    range_end = 8
-    default = 8
+    range_end = 6
+    default = 6
 
 class DopplerArmorUpgradeCount(Range):
     """
@@ -231,8 +231,8 @@ class DopplerArmorUpgradeCount(Range):
     """
     display_name = "Doppler Armor Upgrade Count"
     range_start = 0
-    range_end = 8
-    default = 5
+    range_end = 5
+    default = 4
 
 class DopplerHeartTankCount(Range):
     """
@@ -240,8 +240,8 @@ class DopplerHeartTankCount(Range):
     """
     display_name = "Doppler Heart Tank Count"
     range_start = 0
-    range_end = 8
-    default = 8
+    range_end = 6
+    default = 6
 
 class DopplerSubTankCount(Range):
     """
@@ -249,8 +249,8 @@ class DopplerSubTankCount(Range):
     """
     display_name = "Doppler Sub Tank Count"
     range_start = 0
-    range_end = 4
-    default = 4
+    range_end = 2
+    default = 2
 
 class VileOpen(OptionSet):
     """
@@ -290,7 +290,7 @@ class VileWeaponCount(Range):
     """
     display_name = "Vile Weapon Count"
     range_start = 0
-    range_end = 8
+    range_end = 6
     default = 2
 
 class VileArmorUpgradeCount(Range):
@@ -299,7 +299,7 @@ class VileArmorUpgradeCount(Range):
     """
     display_name = "Vile Armor Upgrade Count"
     range_start = 0
-    range_end = 8
+    range_end = 5
     default = 4
 
 class VileHeartTankCount(Range):
@@ -308,7 +308,7 @@ class VileHeartTankCount(Range):
     """
     display_name = "Vile Heart Tank Count"
     range_start = 0
-    range_end = 8
+    range_end = 6
     default = 4
 
 class VileSubTankCount(Range):
@@ -317,7 +317,7 @@ class VileSubTankCount(Range):
     """
     display_name = "Vile Sub Tank Count"
     range_start = 0
-    range_end = 4
+    range_end = 2
     default = 2
 
 class BitMedalCount(Range):
