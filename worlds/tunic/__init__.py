@@ -8,7 +8,7 @@ from .rules import set_location_rules, set_region_rules, randomize_ability_unloc
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions, verify_plando_directions
-from .er_data import portal_mapping
+from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout)
 from .combat_logic import area_data, CombatState
@@ -84,8 +84,11 @@ class TunicWorld(World):
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
+    er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
     def generate_early(self) -> None:
+        if self.options.entrance_rando:
+            self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
                 if (self.options.entrance_layout == EntranceLayout.option_direction_pairs

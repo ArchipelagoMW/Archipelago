@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd, Direction
+from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, Direction, RegionInfo
 from .er_rules import set_er_region_rules
 from Options import PlandoConnection
 from .options import EntranceRando, EntranceLayout
@@ -24,7 +24,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
 
     if world.options.entrance_rando:
-        for region_name, region_data in tunic_er_regions.items():
+        for region_name, region_data in world.er_regions.items():
             # if fewer shops is off, zig skip is not made
             if region_name == "Zig Skip Exit":
                 # need to check if there's a seed group for this first
@@ -47,14 +47,14 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
                 world.multiworld.spoiler.set_entrance(portal1, portal2, "entrance", world.player)
 
     else:
-        for region_name, region_data in tunic_er_regions.items():
+        for region_name, region_data in world.er_regions.items():
             # filter out regions that are inaccessible in non-er
             if region_name not in ["Zig Skip Exit", "Purgatory"]:
                 regions[region_name] = Region(region_name, world.player, world.multiworld)
 
         portal_pairs = vanilla_portals(world, regions)
 
-    create_randomized_entrances(portal_pairs, regions, bool(world.options.decoupled))
+    create_randomized_entrances(world, portal_pairs, regions)
 
     set_er_region_rules(world, regions, portal_pairs)
 
@@ -117,6 +117,7 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 # so, we need a bunch of shop regions that connect to the actual shop, but the actual shop cannot connect back
 def create_shop_region(world: "TunicWorld", regions: Dict[str, Region]) -> None:
     new_shop_name = f"Shop {world.shop_num}"
+    world.er_regions[new_shop_name] = RegionInfo("Shop", dead_end=DeadEnd.all_cats)
     new_shop_region = Region(new_shop_name, world.player, world.multiworld)
     new_shop_region.connect(regions["Shop"])
     regions[new_shop_name] = new_shop_region
@@ -214,7 +215,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
     # create separate lists for dead ends and non-dead ends
     for portal in portal_map:
-        dead_end_status = tunic_er_regions[portal.region].dead_end
+        dead_end_status = world.er_regions[portal.region].dead_end
         if dead_end_status == DeadEnd.free:
             two_plus.append(portal)
             two_plus_direction_tracker[portal.direction] += 1
@@ -304,14 +305,12 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
     # put together the list of non-deadend regions
     non_dead_end_regions = set()
-    for region_name, region_info in tunic_er_regions.items():
-        # this is not a real region, it is only there to be descriptive
-        if region_name == "Zig Skip Exit":
+    for region_name, region_info in world.er_regions.items():
+        # these are not real regions, they are just here to be descriptive
+        if region_info.is_fake_region or region_name == "Shop":
             continue
         # dead ends aren't real in decoupled
         if decoupled:
-            if region_name in {"Menu", "Shop", "Spirit Arena Victory", "Overworld Holy Cross"}:
-                continue
             non_dead_end_regions.add(region_name)
         elif not region_info.dead_end:
             non_dead_end_regions.add(region_name)
@@ -453,6 +452,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         two_plus.remove(portal1)
         if decoupled:
             two_plus2.append(portal2)
+            non_dead_end_regions.add(portal2.region)
 
     # use the seed given in the options to shuffle the portals
     if isinstance(world.options.entrance_rando.value, str):
@@ -467,10 +467,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     previous_conn_num = 0
     fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
-        print(len(connected_regions))
-        print(len(non_dead_end_regions))
-        print(non_dead_end_regions - connected_regions)
-        print(connected_regions - non_dead_end_regions)
         # print("phase 1")
         # if this is universal tracker, just break immediately and move on
         if hasattr(world.multiworld, "re_gen_passthrough"):
@@ -547,8 +543,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         continue
 
                 portal2 = portal
-                if not portal.region.startswith("Shop "):
-                    connected_regions.add(tunic_er_regions[portal.region].outlet_region or portal.region)
+                connected_regions.add(world.er_regions[portal.region].outlet_region or portal.region)
                 two_plus2.remove(portal)
                 break
 
@@ -582,21 +577,13 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if two_plus != two_plus2:
             random_object.shuffle(two_plus2)
 
-        print(len(connected_regions))
-        print(len(non_dead_end_regions))
-        print(non_dead_end_regions - connected_regions)
-        print(connected_regions - non_dead_end_regions)
+        # print(len(connected_regions))
+        # print(len(non_dead_end_regions))
+        # print(non_dead_end_regions - connected_regions)
+        # print(connected_regions - non_dead_end_regions)
 
     # connect dead ends to random non-dead ends
     # there are no dead ends in decoupled
-    floor_count = 0
-    for portal in two_plus:
-        if portal.direction == Direction.floor:
-            floor_count += 1
-    for portal in dead_ends:
-        if portal.direction == Direction.floor:
-            floor_count += 1
-    # print(f"floor count is {floor_count}")
     while len(dead_ends) > 0:
         # print("phase 2")
         if hasattr(world.multiworld, "re_gen_passthrough"):
@@ -604,6 +591,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         portal2 = dead_ends[0]
         for portal in two_plus:
             if entrance_layout == EntranceLayout.option_direction_pairs and not verify_direction_pair(portal, portal2):
+                continue
+            if entrance_layout == EntranceLayout.option_fixed_shop and portal.region == "Zig Skip Exit":
                 continue
             portal1 = portal
             portal_pairs[portal1] = portal2
@@ -658,13 +647,16 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
 
 # loop through our list of paired portals and make two-way connections
-def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dict[str, Region], decoupled: bool) -> None:
+def create_randomized_entrances(world: "TunicWorld", portal_pairs: Dict[Portal, Portal], regions: Dict[str, Region]) -> None:
     for portal1, portal2 in portal_pairs.items():
-        region1 = regions[portal1.region]
-        region2 = regions[portal2.region]
-        region1.connect(connecting_region=region2, name=portal1.name)
-        if not decoupled:
-            region2.connect(connecting_region=region1, name=portal2.name)
+        # connect to the outlet region if there is one, if not connect to the actual region
+        regions[portal1.region].connect(
+            connecting_region=regions[world.er_regions[portal2.region].outlet_region or portal2.region],
+            name=portal1.name)
+        if not world.options.decoupled:
+            regions[portal2.region].connect(
+                connecting_region=regions[world.er_regions[portal1.region].outlet_region or portal1.region],
+                name=portal2.name)
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
