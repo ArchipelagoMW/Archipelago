@@ -731,7 +731,7 @@ REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (R
 # Warp Prism
 # Observer
 PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam (Phoenix)"
-# Corsair
+CORSAIR_NETWORK_DISRUPTION                              = "Network Disruption (Corsair)"
 MIRAGE_GRAVITON_BEAM                                    = "Graviton Beam (Mirage)"
 SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
 # Void Ray
