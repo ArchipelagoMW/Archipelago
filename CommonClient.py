@@ -994,7 +994,7 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-def run_as_textclient():
+def run_as_textclient(*args):
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
         tags = CommonContext.tags | {"TextOnly"}
@@ -1033,7 +1033,7 @@ def run_as_textclient():
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
@@ -1051,4 +1051,4 @@ def run_as_textclient():
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)  # force log-level to work around log level resetting to WARNING
-    run_as_textclient()
+    run_as_textclient(*sys.argv[1:])  # default value for parse_args

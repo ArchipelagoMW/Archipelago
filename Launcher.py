@@ -322,15 +322,28 @@ if __name__ == '__main__':
     init_logging('Launcher')
     Utils.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
-    parser = argparse.ArgumentParser(description='Archipelago Launcher')
+    parser = argparse.ArgumentParser(
+        description='Archipelago Launcher',
+        usage="[-h] [--update_settings] [Patch|Game|Component] [-- component args here]"
+        )
     run_group = parser.add_argument_group("Run")
     run_group.add_argument("--update_settings", action="store_true",
                            help="Update host.yaml and exit.")
     run_group.add_argument("Patch|Game|Component", type=str, nargs="?",
                            help="Pass either a patch file, a generated game or the name of a component to run.")
-    run_group.add_argument("args", nargs="*",
-                           help="Arguments to pass to component.")
-    main(parser.parse_args())
+    run_group.add_argument("--",
+                           help="Arguments to pass to component.",
+                           dest="args", default=[])
+    args = sys.argv[1:]
+    if "--" in args:
+        i = args.index("--")
+        passthrough_args = args[i+1:]
+        args = args[:i]
+        args = parser.parse_args(args)
+        args.args = passthrough_args
+    else:
+        args = parser.parse_args()
+    main(args)
 
     from worlds.LauncherComponents import processes
     for process in processes:
