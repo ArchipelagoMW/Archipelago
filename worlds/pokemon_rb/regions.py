@@ -2439,7 +2439,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             state_copy = state.copy()
             state_copy.collect(item, True)
-            state.sweep_for_events(locations=event_locations)
+            state.sweep_for_advancements(locations=event_locations)
             new_reachable_entrances = len([entrance for entrance in entrances if entrance in reachable_entrances or
                                            entrance.parent_region.can_reach(state_copy)])
             return new_reachable_entrances > len(reachable_entrances)
@@ -2480,7 +2480,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         while entrances:
             state.update_reachable_regions(player)
-            state.sweep_for_events(locations=event_locations)
+            state.sweep_for_advancements(locations=event_locations)
 
             multiworld.random.shuffle(entrances)
 

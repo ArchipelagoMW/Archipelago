@@ -431,7 +431,7 @@ class MultiWorld():
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
                 subworld.collect(ret, item)
-        ret.sweep_for_events()
+        ret.sweep_for_advancements()
 
         if use_cache:
             self._all_state = ret
@@ -663,7 +663,7 @@ class CollectionState():
     multiworld: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
     blocked_connections: Dict[int, Set[Entrance]]
-    events: Set[Location]
+    advancements: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
     stale: Dict[int, bool]
@@ -675,7 +675,7 @@ class CollectionState():
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
-        self.events = set()
+        self.advancements = set()
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in parent.get_all_ids()}
@@ -724,7 +724,7 @@ class CollectionState():
                                  self.reachable_regions}
         ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
                                    self.blocked_connections}
-        ret.events = copy.copy(self.events)
+        ret.advancements = copy.copy(self.advancements)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
         for function in self.additional_copy_functions:
@@ -757,19 +757,24 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
+        logging.error("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
+                      "Please switch over to sweep_for_advancements.")
+        self.sweep_for_advancements(locations)
+
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.multiworld.get_filled_locations()
-        reachable_events = True
-        # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.advancement and location not in self.events}
+        reachable_advancements = True
+        # since the loop has a good chance to run more than once, only filter the advancements once
+        locations = {location for location in locations if location.advancement and location not in self.advancements}
 
-        while reachable_events:
-            reachable_events = {location for location in locations if location.can_reach(self)}
-            locations -= reachable_events
-            for event in reachable_events:
-                self.events.add(event)
-                assert isinstance(event.item, Item), "tried to collect Event with no Item"
-                self.collect(event.item, True, event)
+        while reachable_advancements:
+            reachable_advancements = {location for location in locations if location.can_reach(self)}
+            locations -= reachable_advancements
+            for advancement in reachable_advancements:
+                self.advancements.add(advancement)
+                assert isinstance(advancement.item, Item), "tried to collect Event with no Item"
+                self.collect(advancement.item, True, advancement)
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
@@ -877,7 +882,7 @@ class CollectionState():
         self.stale[item.player] = True
 
         if changed and not event:
-            self.sweep_for_events()
+            self.sweep_for_advancements()
 
         return changed
 
