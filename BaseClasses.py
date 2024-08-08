@@ -540,20 +540,17 @@ class MultiWorld():
         beaten_game_players: Set[int] = set()
         num_players = self.players
         players = range(1, num_players + 1)
-        if starting_state:
-            for player in players:
-                if self.has_beaten_game(starting_state, player):
-                    beaten_game_players.add(player)
-            if len(beaten_game_players) == num_players:
-                return True
+
+        state = CollectionState(self) if starting_state is None else starting_state
+        for player in players:
+            if self.has_beaten_game(state, player):
+                beaten_game_players.add(player)
+        if len(beaten_game_players) == num_players:
+            return True
+
+        if state is starting_state:
+            # `starting_state` must not be modified by the sweep.
             state = starting_state.copy()
-        else:
-            state = CollectionState(self)
-            for player in players:
-                if self.has_beaten_game(state, player):
-                    beaten_game_players.add(player)
-            if len(beaten_game_players) == num_players:
-                return True
 
         # CollectionState.sweep_for_events also yields group IDs, but those don't have a game to beat, so consider them
         # to all have beaten their game from the start.
