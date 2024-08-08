@@ -303,6 +303,31 @@ generation (entrance randomization).
 An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based on the current `state`
 (items that have been collected).
 
+The two possible ways to make a CollectionRule are:
+- `def rule(state: CollectionState) -> bool:`
+- `lambda state: ... boolean expression ...`
+
+An access rule can be assigned through `set_rule(location, rule)`.
+
+Access rules usually check for one of two things.
+- Items that have been collected (e.g. `state.has("Sword", player)`)
+- Locations, Regions or Entrances that have been reached (e.g. `state.can_reach_region("Boss Room")`)
+
+Keep in mind that entrances and locations implicitly check for the accessibility of their parent region, so you do not need to check explicitly for it.
+
+#### An important note on Entrance access rules:
+When using `state.can_reach` within an entrance access condition, you must also use `multiworld.register_indirect_condition`.
+
+For efficiency reasons, every time reachable regions are searched, every entrance is only checked once in a somewhat non-deterministic order.
+This is fine when checking for items using `state.has`, because items do not change during a region sweep.
+However, `state.can_reach` checks for the very same thing we are updating: Regions.
+This can lead to non-deterministic behavior and, in the worst case, even generation failures.
+Even doing `state.can_reach_location` or `state.can_reach_entrance` is problematic, as these functions call `state.can_reach_region` on the respective parent region.
+
+**Therefore, it is considered unsafe to perform `state.can_reach` from within an access condition for an entrance**, unless you are checking for something that sits in the source region of the entrance.
+You can use `multiworld.register_indirect_condition(region, entrance)` to explicitly tell the generator that, when a given region becomes accessible, it is necessary to re-check a specific entrance.
+You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
+
 ### Item Rules
 
 An item rule is a function that returns `True` or `False` for a `Location` based on a single item. It can be used to
