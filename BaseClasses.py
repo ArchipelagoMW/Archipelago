@@ -537,37 +537,40 @@ class MultiWorld():
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
     def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
-        beaten_game_players: Set[int] = set()
-        num_players = self.players
-        players = range(1, num_players + 1)
-
+        # First check if the game can already be beaten from the starting state.
+        player_ids = self.player_ids
         state = CollectionState(self) if starting_state is None else starting_state
-        for player in players:
+        beaten_game_players: Set[int] = set()
+        for player in player_ids:
             if self.has_beaten_game(state, player):
                 beaten_game_players.add(player)
-        if len(beaten_game_players) == num_players:
+        # The game can only be beaten once all players can beat their game.
+        num_player_ids = len(player_ids)
+        if len(beaten_game_players) == num_player_ids:
             return True
 
+        # Sweeping modifies the state, so copy `starting_state` to prevent modifying the original.
         if state is starting_state:
-            # `starting_state` must not be modified by the sweep.
             state = starting_state.copy()
 
-        # CollectionState.sweep_for_events also yields group IDs, but those don't have a game to beat, so consider them
-        # to all have beaten their game from the start.
+        # CollectionState.sweep_for_events also yields group IDs, but those don't have a game to beat, so consider all
+        # groups to be able to beat their games from the start.
         beaten_game_players.update(self.groups.keys())
-        # The total number of players + groups. Once `beaten_game_players` equals this, all games are beaten.
-        all_games_beaten_length = num_players + len(self.groups)
+        all_games_beaten_length = num_player_ids + len(self.groups)
 
-        # Sweep through all locations that contain uncollected advancement items and get the players that received
-        # advancement at each sweep iteration. These players may now be able to beat their game, so should be checked.
-        for received_advancement in state.sweep_for_events(yield_each_sweep=True,
-                                                           checked_locations=state.locations_checked):
-            for player in received_advancement:
+        # Sweep through all locations that contain uncollected advancement items and, at the end of each sweep
+        # iteration, get the players that were logically affected by that sweep iteration.
+        for players_affected_by_sweep in state.sweep_for_events(yield_each_sweep=True,
+                                                                checked_locations=state.locations_checked):
+            for player in players_affected_by_sweep:
+                # Each player affected by the sweep iteration might now be able to beat their game.
+                # Skip any players than could already beat their game from a previous iteration.
                 if player not in beaten_game_players and self.has_beaten_game(state, player):
                     beaten_game_players.add(player)
                     if len(beaten_game_players) == all_games_beaten_length:
+                        # All players can now beat their games.
                         return True
-
+        # The sweep ran out of accessible locations before all players were able to beat their games.
         return False
 
     def get_spheres(self) -> Iterator[Set[Location]]:
