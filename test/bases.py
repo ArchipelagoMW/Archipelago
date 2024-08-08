@@ -5,6 +5,7 @@ import unittest
 from argparse import Namespace
 
 from Generate import get_seed_name
+from Options import Game
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import World, call_all
@@ -156,7 +157,7 @@ class WorldTestBase(unittest.TestCase):
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
         self.multiworld = MultiWorld(1)
-        self.multiworld.game[self.player] = self.game
+        self.multiworld.game[self.player] = Game.from_any(self.game)
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
         self.multiworld.state = CollectionState(self.multiworld)
