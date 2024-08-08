@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 def launch_client(*args) -> None:
     from .context import launch
-    launch_subprocess(launch, name="BizHawkClient")
+    launch_subprocess(launch, name="BizHawkClient", args=args)
 
 
 component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
