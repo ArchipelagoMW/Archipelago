@@ -616,7 +616,7 @@ class HKWorld(World):
                 if state.prog_items[item.player][effect_name] == effect_value:
                     del state.prog_items[item.player][effect_name]
                 else:
-                state.prog_items[item.player][effect_name] -= effect_value
+                    state.prog_items[item.player][effect_name] -= effect_value
 
         return change
 
