@@ -637,23 +637,6 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.filler}
 ]
 
-event_table: Dict[str, str] = {
-    "OpenedDCGateW": "D01Z05S24",
-    "OpenedDCGateE": "D01Z05S12",
-    "OpenedDCLadder": "D01Z05S20",
-    "OpenedWOTWCave": "D02Z01S06",
-    "RodeGOTPElevator": "D02Z02S11",
-    "OpenedConventLadder": "D02Z03S11",
-    "BrokeJondoBellW": "D03Z02S09",
-    "BrokeJondoBellE": "D03Z02S05",
-    "OpenedMOMLadder": "D04Z02S06",
-    "OpenedTSCGate": "D05Z02S11",
-    "OpenedARLadder": "D06Z01S23",
-    "BrokeBOTTCStatue": "D08Z01S02",
-    "OpenedWOTHPGate": "D09Z01S05",
-    "OpenedBOTSSLadder": "D17Z01S04"
-}
-
 group_table: Dict[str, Set[str]] = {
     "wounds"  : ["Holy Wound of Attrition",
                  "Holy Wound of Contrition",
@@ -746,7 +729,14 @@ group_table: Dict[str, Set[str]] = {
                  "Romance to the Crimson Mist",
                  "Zambra to the Resplendent Crown",
                  "Cantina of the Blue Rose",
-                 "Mirabras of the Return to Port"]
+                 "Mirabras of the Return to Port"],
+
+    "toe"     : ["Little Toe made of Limestone",
+                 "Big Toe made of Limestone",
+                 "Fourth Toe made of Limestone"],
+    
+    "eye"     : ["Severed Right Eye of the Traitor",
+                 "Broken Left Eye of the Traitor"]
 }
 
 tears_set: Set[str] = [
