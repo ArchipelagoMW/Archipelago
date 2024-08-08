@@ -1904,7 +1904,7 @@ advanced_basic_units = {
     })
 }
 
-no_logic_starting_units = {
+no_logic_basic_units = {
     SC2Race.TERRAN: advanced_basic_units[SC2Race.TERRAN].union({
         item_names.FIREBAT,
         item_names.GHOST,
@@ -1949,7 +1949,7 @@ not_balanced_starting_units = {
 def get_basic_units(world: 'SC2World', race: SC2Race) -> typing.Set[str]:
     logic_level = get_option_value(world, 'required_tactics')
     if logic_level == RequiredTactics.option_no_logic:
-        return no_logic_starting_units[race]
+        return no_logic_basic_units[race]
     elif logic_level == RequiredTactics.option_advanced:
         return advanced_basic_units[race]
     else:
