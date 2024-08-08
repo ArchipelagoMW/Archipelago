@@ -458,7 +458,7 @@ def set_rules(world: "MLSSWorld", excluded):
                 lambda state: StateLogic.canCrash(state, world.player),
             )
 
-    if world.options.randomize_enemies.value != 0:
+    if world.options.randomize_bosses.value != 0:
         add_rule(
             world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot1),
             lambda state: StateLogic.hammers(state, world.player)
