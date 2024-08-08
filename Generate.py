@@ -175,7 +175,13 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
-                                yaml[category_name][key] = option
+                                if key == "triggers":
+                                    if "triggers" not in yaml[category_name]:
+                                        yaml[category_name][key] = []
+                                    for trigger in option:
+                                        yaml[category_name][key].append(trigger)
+                                else:
+                                    yaml[category_name][key] = option
 
     player_path_cache = {}
     for player in range(1, args.multi + 1):
@@ -372,6 +378,8 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
             return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
