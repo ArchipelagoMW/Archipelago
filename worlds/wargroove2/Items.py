@@ -1,7 +1,5 @@
-import typing
-
 from BaseClasses import Item, ItemClassification
-from typing import Dict, List
+from typing import Dict, List, NamedTuple, Optional
 
 PROGRESSION = ItemClassification.progression
 PROGRESSION_SKIP_BALANCING = ItemClassification.progression_skip_balancing
