@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import dataclasses
 from enum import IntEnum
-from typing import cast, ClassVar, Dict, Generator, List, Optional, Set
+from typing import Any, cast, ClassVar, Dict, Generator, List, Optional, Set
 
 from BaseClasses import Item, ItemClassification
 
@@ -242,7 +242,7 @@ class DS3ItemData:
     def __hash__(self) -> int:
         return (self.name, self.ds3_code).__hash__()
     
-    def __eq__(self, other: any) -> bool:
+    def __eq__(self, other: Any) -> bool:
         if isinstance(other, self.__class__):
             return self.name == other.name and self.ds3_code == other.ds3_code
         else:
