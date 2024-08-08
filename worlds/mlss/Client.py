@@ -155,6 +155,10 @@ class MLSSClient(BizHawkClient):
                         ],
                         [(0x3057, [0x0], "EWRAM")]
                     )
+                    if result:
+                        total = 0
+                    if total >= 1:
+                        break
                 if not result:
                     break
                 await bizhawk.write(

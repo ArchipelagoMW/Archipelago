@@ -8,7 +8,7 @@ from BaseClasses import Item, Location
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .Items import item_table
-from .Locations import shop, badge, pants, location_table, hidden, all_locations
+from .Locations import shop, badge, pants, location_table, all_locations
 
 if TYPE_CHECKING:
     from . import MLSSWorld
