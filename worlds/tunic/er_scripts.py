@@ -137,7 +137,7 @@ def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Por
 
         if portal2_sdt.startswith("Shop,"):
             portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                             destination="Previous Region", tag="_", direction=Direction.none)
+                             destination=str(world.shop_num), tag="_", direction=Direction.none)
             create_shop_region(world, regions)
 
         for portal in portal_map:
@@ -266,7 +266,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if world.shop_num > 6:
             shop_dir = Direction.west
         shop_portal = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                             destination="Previous Region", tag="_", direction=shop_dir)
+                             destination=str(world.shop_num), tag="_", direction=shop_dir)
         create_shop_region(world, regions)
         dead_ends.append(shop_portal)
 
@@ -382,7 +382,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         shop_dir = Direction.west
 
                     portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                                     destination="Previous Region", tag="_", direction=shop_dir)
+                                     destination=str(world.shop_num), tag="_", direction=shop_dir)
                     create_shop_region(world, regions)
                     shop_count -= 1
                     # need to maintain an even number of portals total
@@ -446,7 +446,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                             f"Did {player_name} plando the Windmill Shop entrance?")
 
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                         destination="Previous Region", tag="_", direction=Direction.south)
+                         destination=str(world.shop_num), tag="_", direction=Direction.south)
         create_shop_region(world, regions)
 
         portal_pairs[portal1] = portal2
@@ -581,6 +581,11 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         random_object.shuffle(two_plus)
         if two_plus != two_plus2:
             random_object.shuffle(two_plus2)
+
+        print(len(connected_regions))
+        print(len(non_dead_end_regions))
+        print(non_dead_end_regions - connected_regions)
+        print(connected_regions - non_dead_end_regions)
 
     # connect dead ends to random non-dead ends
     # there are no dead ends in decoupled

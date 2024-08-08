@@ -533,6 +533,7 @@ class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
     outlet_region: Optional[str] = None
+    is_fake_region: bool = False
 
 
 class DeadEnd(IntEnum):
@@ -545,9 +546,9 @@ class DeadEnd(IntEnum):
 
 # key is the AP region name. "Fake" in region info just means the mod won't receive that info at all
 tunic_er_regions: Dict[str, RegionInfo] = {
-    "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
+    "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats, is_fake_region=True),
     "Overworld": RegionInfo("Overworld Redux"),  # main overworld, the central area
-    "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats),  # main overworld holy cross checks
+    "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats, is_fake_region=True),  # main overworld holy cross checks
     "Overworld Belltower": RegionInfo("Overworld Redux"),  # the area with the belltower and chest
     "Overworld Belltower at Bell": RegionInfo("Overworld Redux"),  # being able to ring the belltower, basically
     "Overworld Swamp Upper Entry": RegionInfo("Overworld Redux"),  # upper swamp entry spot
@@ -640,7 +641,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
     "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # main west garden
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
-    "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux", outlet_region="West Garden"),
+    "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux", outlet_region="West Garden before Terry"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
     "Ruined Atoll Lower Entry Area": RegionInfo("Atoll Redux"),
     "Ruined Atoll Ladder Tops": RegionInfo("Atoll Redux"),  # at the top of the 5 ladders in south Atoll
@@ -721,7 +722,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the front for combat logic
     "Rooted Ziggurat Lower Mid Checkpoint": RegionInfo("ziggurat2020_3"),  # the mid-checkpoint before double admin
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
-    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special, outlet_region="Rooted Ziggurat Lower Front"),  # for use with fixed shop on
+    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special, outlet_region="Rooted Ziggurat Lower Entry", is_fake_region=True),  # for use with fixed shop on
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
     "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom", outlet_region="Rooted Ziggurat Portal Room"),
     "Rooted Ziggurat Portal Room": RegionInfo("ziggurat2020_FTRoom"),
@@ -757,7 +758,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Purgatory": RegionInfo("Purgatory"),
     "Shop": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats),
-    "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats)
+    "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats, is_fake_region=True),
 }
 
 

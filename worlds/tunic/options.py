@@ -193,9 +193,9 @@ class TunicPlandoConnections(PlandoConnections):
     Note that you will wrong warp if you have multiple shops in the same scene.
     If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
     """
-    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
-    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
-
+    entrances = {*(portal.name for portal in portal_mapping), "Shop Portal"}
+    exits = {*(portal.name for portal in portal_mapping), "Shop Portal"}
+    # todo: find a way to allow arbitrary numbering
     duplicate_exits = True
 
 

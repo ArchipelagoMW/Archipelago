@@ -88,16 +88,6 @@ class TunicWorld(World):
     def generate_early(self) -> None:
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
-                # making shops second to simplify other things later
-                if cxn.entrance.startswith("Shop"):
-                    replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
-                elif cxn.exit.startswith("Shop"):
-                    replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
-
                 if (self.options.entrance_layout == EntranceLayout.option_direction_pairs
                         and not verify_plando_directions(cxn)):
                     raise OptionError(f"TUNIC: Player {self.player_name} has invalid plando connections. "
