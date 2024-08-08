@@ -619,7 +619,10 @@ def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[st
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    mission_requirements = [(location.name, location.access_rule) for location in location_cache]
+    if world.options.required_tactics.value == RequiredTactics.option_no_logic:
+        mission_requirements = []
+    else:
+        mission_requirements = [(location.name, location.access_rule) for location in location_cache]
     valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
