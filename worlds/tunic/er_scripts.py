@@ -556,7 +556,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     elif portal.region != "Secret Gathering Place":
                         continue
                 # if they're not facing opposite directions, just continue
-                if (entrance_layout == EntranceLayout.option_direction_pairs and not verify_direction_pair(portal, portal1):
+                if entrance_layout == EntranceLayout.option_direction_pairs and not verify_direction_pair(portal, portal1):
                     continue
                 if not decoupled and entrance_layout == EntranceLayout.option_direction_pairs:
                     should_continue = False
