@@ -9,7 +9,7 @@ class Wargroove2Logic(LogicMixin):
     pass
 
 
-def set_rules(world, level_list: [Wargroove2Level],
+def set_rules(multiworld, level_list: [Wargroove2Level],
               first_level: Wargroove2Level,
               final_levels: [Wargroove2Level],
               player: int):
