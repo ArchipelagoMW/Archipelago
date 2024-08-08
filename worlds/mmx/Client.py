@@ -431,9 +431,9 @@ class MMXSNIClient(SNIClient):
         new_hadouken = False
         cleared_levels = list(await snes_read(ctx, MMX_COMPLETED_LEVELS, 0x20))
         collected_pickups = list(await snes_read(ctx, MMX_COLLECTED_PICKUPS, 0x40))
+        defeated_bosses = list(await snes_read(ctx, MMX_DEFEATED_BOSSES, 0x20))
         collected_heart_tanks = int.from_bytes(await snes_read(ctx, MMX_COLLECTED_HEART_TANKS, 0x01))
         collected_upgrades = int.from_bytes(await snes_read(ctx, MMX_COLLECTED_UPGRADES, 0x01))
-        defeated_bosses = list(await snes_read(ctx, MMX_DEFEATED_BOSSES, 0x20))
         collected_hadouken = int.from_bytes(await snes_read(ctx, MMX_COLLECTED_HADOUKEN, 0x01))
         i = 0
         for loc_id in ctx.checked_locations:
@@ -480,19 +480,19 @@ class MMXSNIClient(SNIClient):
                     collected_pickups[data_bit] = 0x01
                     new_pickup = True
 
-            if new_cleared_level:
-                snes_buffered_write(ctx, MMX_COMPLETED_LEVELS, bytes(cleared_levels))
-            if new_boss_clears:
-                snes_buffered_write(ctx, MMX_DEFEATED_BOSSES, bytes(defeated_bosses))
-            if new_pickup:
-                snes_buffered_write(ctx, MMX_COLLECTED_PICKUPS, bytes(collected_pickups))
-            if new_hadouken:
-                snes_buffered_write(ctx, MMX_COLLECTED_HADOUKEN, bytearray([collected_hadouken]))
-            if new_upgrade:
-                snes_buffered_write(ctx, MMX_COLLECTED_UPGRADES, bytearray([collected_upgrades]))
-            if new_heart_tank:
-                snes_buffered_write(ctx, MMX_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks]))
-            await snes_flush_writes(ctx)
+        if new_cleared_level:
+            snes_buffered_write(ctx, MMX_COMPLETED_LEVELS, bytes(cleared_levels))
+        if new_boss_clears:
+            snes_buffered_write(ctx, MMX_DEFEATED_BOSSES, bytes(defeated_bosses))
+        if new_pickup:
+            snes_buffered_write(ctx, MMX_COLLECTED_PICKUPS, bytes(collected_pickups))
+        if new_hadouken:
+            snes_buffered_write(ctx, MMX_COLLECTED_HADOUKEN, bytearray([collected_hadouken]))
+        if new_upgrade:
+            snes_buffered_write(ctx, MMX_COLLECTED_UPGRADES, bytearray([collected_upgrades]))
+        if new_heart_tank:
+            snes_buffered_write(ctx, MMX_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks]))
+        await snes_flush_writes(ctx)
 
     def on_package(self, ctx, cmd: str, args: dict):
         super().on_package(ctx, cmd, args)
