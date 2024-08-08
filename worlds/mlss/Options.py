@@ -243,7 +243,7 @@ class HarhallsPants(Toggle):
     This will remove the Harhall's Pants check from the pool.
     """
 
-    display_name = "Remove Harhall's Pants"
+    display_name = "Disable Harhall's Pants"
 
 
 class DifficultLogic(Toggle):
@@ -282,7 +282,7 @@ class MLSSOptions(PerGameCommonOptions):
     extra_pipes: ExtraPipes
     skip_minecart: SkipMinecart
     disable_surf: DisableSurf
-    harhalls_pants: HarhallsPants
+    disable_harhalls_pants: HarhallsPants
     block_visibility: HiddenVisible
     chuckle_beans: ChuckleBeans
     music_options: MusicOptions

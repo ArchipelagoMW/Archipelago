@@ -71,7 +71,7 @@ class MLSSWorld(World):
             self.disabled_locations += [LocationName.HoohooMountainBaseMinecartCaveDigspot]
         if self.options.disable_surf:
             self.disabled_locations += [LocationName.SurfMinigame]
-        if self.options.harhalls_pants:
+        if self.options.disable_harhalls_pants:
             self.disabled_locations += [LocationName.HarhallsPants]
         if not self.options.coins:
             self.disabled_locations += [location.name for location in all_locations if location in coins]
@@ -96,7 +96,7 @@ class MLSSWorld(World):
             "CastleSkip": self.options.castle_skip.value,
             "SkipMinecart": self.options.skip_minecart.value,
             "DisableSurf": self.options.disable_surf.value,
-            "HarhallsPants": self.options.harhalls_pants.value,
+            "HarhallsPants": self.options.disable_harhalls_pants.value,
             "ChuckleBeans": self.options.chuckle_beans.value,
             "DifficultLogic": self.options.difficult_logic.value,
             "Coins": self.options.coins.value,
@@ -111,7 +111,7 @@ class MLSSWorld(World):
                 freq = item_frequencies.get(item.itemName, 1)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
-                if self.options.harhalls_pants and "Harhall's" in item.itemName:
+                if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:
                     continue
                 required_items += [item.itemName for _ in range(freq)]
 
