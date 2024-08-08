@@ -25,8 +25,6 @@ ChecksMate:
     all: 1
   early_material:
     pawn: 1 # not counted against locked_items (this may be changed)
-  max_engine_penalties:
-    4: 1
   max_pocket:
     0: 1
   fairy_chess_pieces:
@@ -172,17 +170,13 @@ ChecksMate:
   max_kings:
     3: 1
   fairy_kings:
-    2: 1
+    1: 1
   fairy_chess_pieces:
     betza: 1
   fairy_chess_army:
     chaos: 1
   fairy_chess_pawns:
     vanilla: 1
-  locked_items:
-    Progressive Consul: 1
-    Progressive King Promotion: 1
-    Progressive Major Piece: 1
   start_inventory:
     Progressive Consul: 1
     Progressive Pawn: 6
