@@ -88,7 +88,7 @@ class Wargroove2World(World):
         low_victory_checks_levels = list(level for level in self.level_list if level.low_victory_checks)
         high_victory_checks_levels = list(level for level in self.level_list if not level.low_victory_checks)
         if self.multiworld.level_shuffle_seed[self.player] == 0:
-            random = self.multiworld.random
+            random = self.random
         else:
             random = Random(str(self.multiworld.level_shuffle_seed[self.player]))
 
