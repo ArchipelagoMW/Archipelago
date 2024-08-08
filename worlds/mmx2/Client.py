@@ -517,21 +517,21 @@ class MMX2SNIClient(SNIClient):
                     collected_pickups[data_bit] = 0x01
                     new_pickup = True
 
-            if new_cleared_level:
-                snes_buffered_write(ctx, MMX2_LEVEL_CLEARED, bytes(cleared_levels))
-            if new_boss_clears:
-                snes_buffered_write(ctx, MMX2_DEFEATED_BOSSES, bytes(defeated_bosses))
-            if new_pickup:
-                snes_buffered_write(ctx, MMX2_COLLECTED_PICKUPS, bytes(collected_pickups))
-            if new_shoryuken:
-                snes_buffered_write(ctx, MMX2_COLLECTED_SHORYUKEN, bytearray([collected_shoryuken_data]))
-            if new_sigma_access:
-                snes_buffered_write(ctx, MMX2_COLLECTED_SIGMA_ACCESS, bytearray([collected_sigma_access]))
-            if new_upgrade:
-                snes_buffered_write(ctx, MMX2_COLLECTED_UPGRADES, bytearray([collected_upgrades_data]))
-            if new_heart_tank:
-                snes_buffered_write(ctx, MMX2_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks_data]))
-            await snes_flush_writes(ctx)
+        if new_cleared_level:
+            snes_buffered_write(ctx, MMX2_LEVEL_CLEARED, bytes(cleared_levels))
+        if new_boss_clears:
+            snes_buffered_write(ctx, MMX2_DEFEATED_BOSSES, bytes(defeated_bosses))
+        if new_pickup:
+            snes_buffered_write(ctx, MMX2_COLLECTED_PICKUPS, bytes(collected_pickups))
+        if new_shoryuken:
+            snes_buffered_write(ctx, MMX2_COLLECTED_SHORYUKEN, bytearray([collected_shoryuken_data]))
+        if new_sigma_access:
+            snes_buffered_write(ctx, MMX2_COLLECTED_SIGMA_ACCESS, bytearray([collected_sigma_access]))
+        if new_upgrade:
+            snes_buffered_write(ctx, MMX2_COLLECTED_UPGRADES, bytearray([collected_upgrades_data]))
+        if new_heart_tank:
+            snes_buffered_write(ctx, MMX2_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks_data]))
+        await snes_flush_writes(ctx)
 
 
     async def handle_hp_trade(self, ctx):
