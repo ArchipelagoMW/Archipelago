@@ -33,19 +33,23 @@ end
 configured_rooms = Set["Menu"]
 configured_doors = Set[]
 configured_panels = Set[]
+configured_panel_doors = Set[]
 
 mentioned_rooms = Set[]
 mentioned_doors = Set[]
 mentioned_panels = Set[]
+mentioned_panel_doors = Set[]
 mentioned_sunwarp_entrances = Set[]
 mentioned_sunwarp_exits = Set[]
 mentioned_paintings = Set[]
 
 door_groups = {}
+panel_groups = {}
 
-directives = Set["entrances", "panels", "doors", "paintings", "sunwarps", "progression"]
+directives = Set["entrances", "panels", "doors", "panel_doors", "paintings", "sunwarps", "progression"]
 panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt", "location_name"]
 door_directives = Set["id", "painting_id", "panels", "item_name", "item_group", "location_name", "skip_location", "skip_item", "door_group", "include_reduce", "event", "warp_id"]
+panel_door_directives = Set["panels", "item_name", "panel_group"]
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
 non_counting = 0
@@ -253,6 +257,43 @@ config.each do |room_name, room|
     end
   end
 
+  (room["panel_doors"] || {}).each do |panel_door_name, panel_door|
+    configured_panel_doors.add("#{room_name} - #{panel_door_name}")
+
+    if panel_door.include?("panels")
+      panel_door["panels"].each do |panel|
+        if panel.kind_of? Hash then
+          other_room = panel.include?("room") ? panel["room"] : room_name
+          mentioned_panels.add("#{other_room} - #{panel["panel"]}")
+        else
+          other_room = panel.include?("room") ? panel["room"] : room_name
+          mentioned_panels.add("#{room_name} - #{panel}")
+        end
+      end
+    else
+      puts "#{room_name} - #{panel_door_name} :::: Missing panels field"
+    end
+
+    if panel_door.include?("panel_group")
+      panel_groups[panel_door["panel_group"]] ||= 0
+      panel_groups[panel_door["panel_group"]] += 1
+    end
+
+    bad_subdirectives = []
+    panel_door.keys.each do |key|
+      unless panel_door_directives.include?(key) then
+        bad_subdirectives << key
+      end
+    end
+    unless bad_subdirectives.empty? then
+      puts "#{room_name} - #{panel_door_name} :::: Panel door has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
+    end
+
+    unless ids.include?("panel_doors") and ids["panel_doors"].include?(room_name) and ids["panel_doors"][room_name].include?(panel_door_name)
+      puts "#{room_name} - #{panel_door_name} :::: Panel door is missing an item ID"
+    end
+  end
+
   (room["paintings"] || []).each do |painting|
     if painting.include?("id") and painting["id"].kind_of? String then
       unless paintings.include? painting["id"] then
@@ -327,12 +368,24 @@ config.each do |room_name, room|
     end
   end
 
-  (room["progression"] || {}).each do |progression_name, door_list|
-    door_list.each do |door|
-      if door.kind_of? Hash then
-        mentioned_doors.add("#{door["room"]} - #{door["door"]}")
-      else
-        mentioned_doors.add("#{room_name} - #{door}")
+  (room["progression"] || {}).each do |progression_name, pdata|
+    if pdata.include? "doors" then
+      pdata["doors"].each do |door|
+        if door.kind_of? Hash then
+          mentioned_doors.add("#{door["room"]} - #{door["door"]}")
+        else
+          mentioned_doors.add("#{room_name} - #{door}")
+        end
+      end
+    end
+
+    if pdata.include? "panel_doors" then
+      pdata["panel_doors"].each do |panel_door|
+        if panel_door.kind_of? Hash then
+          mentioned_panel_doors.add("#{panel_door["room"]} - #{panel_door["panel_door"]}")
+        else
+          mentioned_panel_doors.add("#{room_name} - #{panel_door}")
+        end
       end
     end
 
@@ -344,17 +397,22 @@ end
 
 errored_rooms = mentioned_rooms - configured_rooms
 unless errored_rooms.empty? then
-  puts "The folloring rooms are mentioned but do not exist: " + errored_rooms.to_s
+  puts "The following rooms are mentioned but do not exist: " + errored_rooms.to_s
 end
 
 errored_panels = mentioned_panels - configured_panels
 unless errored_panels.empty? then
-  puts "The folloring panels are mentioned but do not exist: " + errored_panels.to_s
+  puts "The following panels are mentioned but do not exist: " + errored_panels.to_s
 end
 
 errored_doors = mentioned_doors - configured_doors
 unless errored_doors.empty? then
-  puts "The folloring doors are mentioned but do not exist: " + errored_doors.to_s
+  puts "The following doors are mentioned but do not exist: " + errored_doors.to_s
+end
+
+errored_panel_doors = mentioned_panel_doors - configured_panel_doors
+unless errored_panel_doors.empty? then
+  puts "The following panel doors are mentioned but do not exist: " + errored_panel_doors.to_s
 end
 
 door_groups.each do |group,num|
@@ -364,6 +422,16 @@ door_groups.each do |group,num|
 
   unless ids.include?("door_groups") and ids["door_groups"].include?(group)
     puts "#{group} :::: Door group is missing an item ID"
+  end
+end
+
+panel_groups.each do |group,num|
+  if num == 1 then
+    puts "Panel group \"#{group}\" only has one panel in it"
+  end
+
+  unless ids.include?("panel_groups") and ids["panel_groups"].include?(group)
+    puts "#{group} :::: Panel group is missing an item ID"
   end
 end
 
