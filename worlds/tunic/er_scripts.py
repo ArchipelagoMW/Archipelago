@@ -39,7 +39,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
-        sorted_portal_pairs = sort_portals(portal_pairs)
+        sorted_portal_pairs = sort_portals(portal_pairs, world)
         if not world.options.decoupled:
             for portal1, portal2 in sorted_portal_pairs.items():
                 world.multiworld.spoiler.set_entrance(portal1, portal2, "both", world.player)
@@ -805,7 +805,7 @@ def verify_plando_directions(connection: PlandoConnection) -> bool:
 
 
 # sort the portal dict by the name of the first portal, referring to the portal order in the master portal list
-def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
+def sort_portals(portal_pairs: Dict[Portal, Portal], world: "TunicWorld") -> Dict[str, str]:
     sorted_pairs: Dict[str, str] = {}
     reference_list: List[str] = [portal.name for portal in portal_mapping]
 
