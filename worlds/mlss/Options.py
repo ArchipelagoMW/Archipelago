@@ -1,4 +1,4 @@
-from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions, Range
+from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions, Range, Removed
 from dataclasses import dataclass
 
 
@@ -243,7 +243,7 @@ class HarhallsPants(Toggle):
     This will remove the Harhall's Pants check from the pool.
     """
 
-    display_name = "Disable Harhall's Pants"
+    display_name = "Remove Harhall's Pants"
 
 
 class DifficultLogic(Toggle):
@@ -283,6 +283,7 @@ class MLSSOptions(PerGameCommonOptions):
     skip_minecart: SkipMinecart
     disable_surf: DisableSurf
     disable_harhalls_pants: HarhallsPants
+    harhalls_pants: Removed
     block_visibility: HiddenVisible
     chuckle_beans: ChuckleBeans
     music_options: MusicOptions
