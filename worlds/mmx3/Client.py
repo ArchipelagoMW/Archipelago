@@ -577,21 +577,21 @@ class MMX3SNIClient(SNIClient):
                     collected_pickups[pickup_id] = 0xFF
                     new_pickup = True
 
-            if new_cleared_level:
-                snes_buffered_write(ctx, MMX3_LEVEL_CLEARED, bytes(cleared_levels))
-            if new_boss_clears:
-                snes_buffered_write(ctx, MMX3_DEFEATED_BOSSES, bytes(defeated_bosses))
-            if new_bit_byte_vile:
-                snes_buffered_write(ctx, MMX3_BIT_BYTE_VILE, bytearray([bit_byte_vile]))
-            if new_pickup:
-                snes_buffered_write(ctx, MMX3_COLLECTED_PICKUPS, bytes(collected_pickups))
-            if new_upgrade:
-                snes_buffered_write(ctx, MMX3_COLLECTED_UPGRADES, bytearray([collected_upgrades]))
-            if new_heart_tank:
-                snes_buffered_write(ctx, MMX3_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks]))
-            if new_ride_chip:
-                snes_buffered_write(ctx, MMX3_COLLECTED_RIDE_CHIPS, bytearray([collected_ride_chips]))
-            await snes_flush_writes(ctx)
+        if new_cleared_level:
+            snes_buffered_write(ctx, MMX3_LEVEL_CLEARED, bytes(cleared_levels))
+        if new_boss_clears:
+            snes_buffered_write(ctx, MMX3_DEFEATED_BOSSES, bytes(defeated_bosses))
+        if new_bit_byte_vile:
+            snes_buffered_write(ctx, MMX3_BIT_BYTE_VILE, bytearray([bit_byte_vile]))
+        if new_pickup:
+            snes_buffered_write(ctx, MMX3_COLLECTED_PICKUPS, bytes(collected_pickups))
+        if new_upgrade:
+            snes_buffered_write(ctx, MMX3_COLLECTED_UPGRADES, bytearray([collected_upgrades]))
+        if new_heart_tank:
+            snes_buffered_write(ctx, MMX3_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks]))
+        if new_ride_chip:
+            snes_buffered_write(ctx, MMX3_COLLECTED_RIDE_CHIPS, bytearray([collected_ride_chips]))
+        await snes_flush_writes(ctx)
 
 
     async def handle_hp_trade(self, ctx):
