@@ -28,6 +28,7 @@ def collect_fishing_abilities(tester: SVTestBase):
     tester.multiworld.state.collect(tester.world.create_item("Winter"), event=False)
     tester.multiworld.state.collect(tester.world.create_item(Transportation.desert_obelisk), event=False)
     tester.multiworld.state.collect(tester.world.create_item("Railroad Boulder Removed"), event=False)
+    tester.multiworld.state.collect(tester.world.create_item("Beach Bridge"), event=False)
     tester.multiworld.state.collect(tester.world.create_item("Island North Turtle"), event=False)
     tester.multiworld.state.collect(tester.world.create_item("Island West Turtle"), event=False)
 
