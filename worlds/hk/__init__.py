@@ -497,7 +497,7 @@ class HKWorld(World):
 
             for player, grub_player_count in per_player_grubs_per_player.items():
                 if player in all_grub_players:
-                    set_goal(player, lambda state, g=grub_player_count: all([state.has("Grub", owner, count) for owner, count in g.items()]))
+                    set_goal(player, lambda state, g=grub_player_count: all(state.has("Grub", owner, count) for owner, count in g.items()))
 
         for world in worlds:
             if world.player not in all_grub_players:
