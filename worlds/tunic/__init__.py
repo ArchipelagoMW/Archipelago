@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
@@ -83,7 +83,7 @@ class TunicWorld(World):
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
-    shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
+    used_shop_numbers: Set[int]
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
     def generate_early(self) -> None:

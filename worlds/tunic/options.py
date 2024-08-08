@@ -190,12 +190,13 @@ class TunicPlandoConnections(PlandoConnections):
     Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
     If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
-    Note that you will wrong warp if you have multiple shops in the same scene.
     If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
+    Shop Portal 1-6 are South portals, and Shop Portal 7-8 are West portals.
     """
-    entrances = {*(portal.name for portal in portal_mapping), "Shop Portal"}
-    exits = {*(portal.name for portal in portal_mapping), "Shop Portal"}
-    # todo: find a way to allow arbitrary numbering
+    shops = {f"Shop Portal {i + 1}" for i in range(500)}
+    entrances = {portal.name for portal in portal_mapping}.union(shops)
+    exits = {portal.name for portal in portal_mapping}.union(shops)
+
     duplicate_exits = True
 
 
