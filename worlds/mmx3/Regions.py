@@ -438,6 +438,7 @@ def connect_regions(world: World):
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_2)
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_3)
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_4)
+        connect(world, RegionName.dr_doppler_lab_3_boss, RegionName.dr_doppler_lab_4)
     else:
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_1)
         connect(world, RegionName.dr_doppler_lab_1, RegionName.dr_doppler_lab_2)
