@@ -58,7 +58,6 @@ class Wargroove2World(World):
     settings: typing.ClassVar[Wargroove2Settings]
     game = "Wargroove 2"
     topology_present = True
-    data_version = 1
     web = Wargroove2Web()
     level_list: [Wargroove2Level] = None
     first_level: Wargroove2Level = None
