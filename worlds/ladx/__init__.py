@@ -1,6 +1,8 @@
 import binascii
 import dataclasses
 import os
+import copy
+import itertools
 import pkgutil
 import tempfile
 import typing
@@ -8,24 +10,27 @@ import typing
 import bsdiff4
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, CollectionState, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name)
 from .LADXR import generator
+from .LADXR.entranceInfo import ENTRANCE_INFO, entrances_by_type
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
+from .LADXR.logic.requirements import RequirementsSettings
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
-from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
-                        create_regions_from_ladxr, get_locations_to_id)
-from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
+from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion, create_regions_from_ladxr, get_locations_to_id,
+                        connector_info)
+from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups, EntranceShuffle
 from .Rom import LADXDeltaPatch, get_base_rom_path
+
 
 DEVELOPER_MODE = False
 
@@ -55,6 +60,7 @@ class LinksAwakeningSettings(settings.Group):
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
 
+
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -66,6 +72,7 @@ class LinksAwakeningWebWorld(WebWorld):
     )]
     theme = "dirt"
     option_groups = ladx_option_groups
+
 
 class LinksAwakeningWorld(World):
     """
@@ -89,7 +96,7 @@ class LinksAwakeningWorld(World):
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
     item_name_to_id = {
-        item.item_name : BASE_ID + item.item_id for item in links_awakening_items
+        item.item_name: BASE_ID + item.item_id for item in links_awakening_items
     }
 
     item_name_to_data = links_awakening_items_by_name
@@ -121,14 +128,239 @@ class LinksAwakeningWorld(World):
         ItemName.RUPEES_500: 500,
     }
 
+    world_setup = None
+    prefill_original_dungeon = [[], [], [], [], [], [], [], [], []]
+    prefill_own_dungeons = []
+    pre_fill_items = []
+    dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]
+
     def convert_ap_options_to_ladxr_logic(self):
         self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
-
         self.ladxr_settings.validate()
-        world_setup = LADXRWorldSetup()
-        world_setup.randomize(self.ladxr_settings, self.random)
-        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
+        self.world_setup = LADXRWorldSetup()
+        self.world_setup.randomize(self.ladxr_settings, self.random)
+        self.randomize_entrances()
+        self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=self.world_setup)
+        self.ladxr_itempool: typing.Dict[str, int] = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
+
+    def randomize_entrances(self):
+        banned_starts = [
+            # All of these lead directly to nothing or another connector
+            "obstacle_cave_outside_chest",
+            "multichest_top",
+            "right_taltal_connector2",
+            "right_taltal_connector3",
+            "right_taltal_connector4",
+            "right_taltal_connector5",
+            "right_fairy",
+            "castle_upper_left",
+            "castle_upper_right",
+            "prairie_madbatter_connector_exit",
+            "prairie_madbatter",
+            # Risky, two exits
+            "prairie_right_cave_high",
+            "richard_maze",
+            # Three
+            "multichest_right",
+            "right_taltal_connector1",
+            # Inside castle - funny but only if we force the castle button to be available (or open)
+            "castle_main_entrance",
+            "castle_secret_exit",
+            # Five exits
+            # This drops you down into the water, required flippers start
+            # "right_taltal_connector6",
+            # "d7"
+        ]
+
+        from .LADXR.logic.overworld import World
+        entrance_pools = {}
+        indoor_pools = {}
+        entrance_pool_mapping = {}
+
+        random = self.multiworld.per_slot_randoms[self.player]
+        world = World(self.ladxr_settings, self.world_setup, RequirementsSettings(self.ladxr_settings))
+        # First shuffle the start location, if needed
+        start = world.start
+        start_entrance = "start_house"
+
+        start_shuffle = self.options.start_shuffle
+
+        start_type_mappings = {}
+
+        for option_name, option in dataclasses.asdict(self.options).items():
+            if isinstance(option, EntranceShuffle):
+                for cat in option.entrance_type:
+                    start_type_mappings[option_name] = cat
+                if option.value == EntranceShuffle.option_simple:
+                    entrance_pool_mapping[option.entrance_type[0]] = option.entrance_type[0]
+                elif option.value == EntranceShuffle.option_mixed:
+                    entrance_pool_mapping[option.entrance_type[0]] = "mixed"
+                else:
+                    continue
+                pool = entrance_pools.setdefault(entrance_pool_mapping[option.entrance_type[0]], [])
+                indoor_pool = indoor_pools.setdefault(entrance_pool_mapping[option.entrance_type[0]], [])
+
+                # TODO: Gross N*M behavior, we can just iterate the entrance info once or twice
+                for entrance_name, entrance in ENTRANCE_INFO.items():
+                    if entrance.type in option.entrance_type:
+                        pool.append(entrance_name)
+                        # Connectors have special handling
+                        if entrance.type != "connector":
+                            indoor_pool.append(entrance_name)
+
+        # Shuffle starting location
+        if start_shuffle.value:
+            start_candidates = []
+
+            # Find all possible start locations
+            for category in start_shuffle.value:
+                start_candidates += entrances_by_type[category]
+                # TODO: cleaner plz
+                if category == "single":
+                    start_candidates += entrances_by_type["trade"]
+
+            # Some start locations result in either
+            # (A) requiring certain arrangements of connectors
+            # (B) immediately deadending
+            # these could be fixed with chaos entrance rando or smarter connector shuffle
+            # but for now we aren't gonna handle it
+
+            start_candidates = [c for c in start_candidates if c not in banned_starts]
+            if start_candidates:
+                start_candidates.sort()
+                start_entrance = random.choice(start_candidates)
+                self.world_setup.entrance_mapping[start_entrance] = "start_house"
+                start = world.overworld_entrance[start_entrance].location
+                for pool in entrance_pools.values():
+                    if start_entrance in pool:
+                        pool.remove(start_entrance)
+                        pool.append("start_house")
+                        break
+                else:
+                    # This entrance wasn't shuffled, just map back
+                    self.world_setup.entrance_mapping["start_house"] = start_entrance
+
+        for pool in itertools.chain(entrance_pools.values(), indoor_pools.values()):
+            # Sort first so that we get the same result every time
+            pool.sort()
+
+        has_castle_button = False
+
+        # NOTE: this code uses LADXR terms for things where:
+        # Region -> Location
+        # Location -> ItemInfo
+        # Item -> ...also Item? but not used here
+        # Helper to apply function to every ladxr region
+
+        # If we haven't found the castle button, don't allow going back and forth over the gate
+        def check_castle_button(a, b):
+            if has_castle_button:
+                return True
+            gate_names = ("Kanalet Castle Front Door", "Ukuku Prairie")
+            return a.name not in gate_names or b.name not in gate_names
+
+        def walk_locations(callback, current_location, filter=lambda _: True, walked=None) -> None:
+            walked = walked or set()
+            if current_location in walked:
+                return
+            if not filter(current_location):
+                return
+            callback(current_location)
+            walked.add(current_location)
+
+            for o, req in itertools.chain(current_location.simple_connections, current_location.gated_connections):
+                if check_castle_button(current_location, o):
+                    walk_locations(callback, o, filter, walked)
+
+        # First shuffle connectors, as they will fail if shuffled randomly
+        if "connector" in entrance_pool_mapping:
+            # Get the list of unshuffled connectors
+            unshuffled_connectors = copy.copy(connector_info)
+            random.shuffle(unshuffled_connectors)
+
+            # Get the list of unshuffled candidates connector entrances
+            unseen_entrances = copy.copy(entrance_pools[entrance_pool_mapping["connector"]])
+
+            location_to_entrances = {}
+            for k, v in world.overworld_entrance.items():
+                location_to_entrances.setdefault(v.location, []).append(k)
+
+            unshuffled_entrances = entrance_pools[entrance_pool_mapping["connector"]]
+            seen_locations = set()
+
+            def mark_location(l):
+                if l in location_to_entrances:
+                    for entrance in location_to_entrances[l]:
+                        seen_locations.add(entrance)
+                        if entrance in unseen_entrances:
+                            unseen_entrances.remove(entrance)
+
+            # TODO: we can reuse our walked location cache
+            walked = set()
+            walk_locations(callback=mark_location, current_location=start, walked=walked)
+
+            while unseen_entrances:
+                # Find the places we haven't yet seen
+                # Pick one
+                unseen_entrance_to_connect = random.choice(unseen_entrances)
+
+                # Pick an unshuffled seen entrance
+                l = list(seen_locations.intersection(unshuffled_entrances))
+                l.sort()
+                seen_entrance_to_connect = random.choice(l)
+
+                # Pick a connector
+                connector = unshuffled_connectors.pop()
+                if connector.castle_button:
+                    has_castle_button = True
+                # Pick the connector direction
+                entrances = connector.entrances
+                if not connector.oneway:
+                    entrances = list(entrances)
+                    random.shuffle(entrances)
+                else:
+                    assert len(connector.entrances) == 2
+                A = connector.entrances[0]
+                B = connector.entrances[1]
+                C = len(connector.entrances) > 2 and connector.entrances[2] or None
+
+                # Flag the two doors as connected
+                self.world_setup.entrance_mapping[seen_entrance_to_connect] = A
+                self.world_setup.entrance_mapping[unseen_entrance_to_connect] = B
+                # Walk the new locations
+                walk_locations(callback=mark_location, current_location=world.overworld_entrance[unseen_entrance_to_connect].location)
+                assert unseen_entrance_to_connect not in unseen_entrances
+                unshuffled_entrances.remove(seen_entrance_to_connect)
+                unshuffled_entrances.remove(unseen_entrance_to_connect)
+                if C:
+                    third_entrance_to_connect = random.choice(list(unshuffled_entrances))
+                    self.world_setup.entrance_mapping[third_entrance_to_connect] = C
+                    walk_locations(callback=mark_location, current_location=world.overworld_entrance[third_entrance_to_connect].location)
+                    unshuffled_entrances.remove(third_entrance_to_connect)
+
+            # Shuffle the remainder
+            random.shuffle(unshuffled_entrances)
+            random.shuffle(unshuffled_connectors)
+            while unshuffled_connectors:
+                connector = unshuffled_connectors.pop()
+                for entrance in connector.entrances:
+                    self.world_setup.entrance_mapping[unshuffled_entrances.pop()] = entrance
+
+        # Now for each pool of entrances, shuffle
+        for pool_name, pool in entrance_pools.items():
+            random.shuffle(pool)
+            indoor_pool = indoor_pools[pool_name]
+            random.shuffle(indoor_pool)
+            for a, b in zip(pool, indoor_pool):
+                self.world_setup.entrance_mapping[a] = b
+
+        seen_keys = set()
+        seen_values = set()
+        for k, v in self.world_setup.entrance_mapping.items():
+            assert k not in seen_keys
+            assert v not in seen_values, v
+            seen_keys.add(k)
+            seen_values.add(v)
 
     def create_regions(self) -> None:
         # Initialize
@@ -139,11 +371,11 @@ class LinksAwakeningWorld(World):
         # Connect Menu -> Start
         start = None
         for region in regions:
-            if region.name == "Start House":
+            if region.name == "Tarin's House":
                 start = region
                 break
 
-        assert(start)
+        assert start
 
         menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)        
         menu_region.exits = [Entrance(self.player, "Start Game", menu_region)]
@@ -166,22 +398,27 @@ class LinksAwakeningWorld(World):
         
         self.multiworld.completion_condition[self.player] = lambda state: state.has("An Alarm Clock", player=self.player)
 
-    def create_item(self, item_name: str):
+    def create_item(self, item_name: str) -> LinksAwakeningItem:
         return LinksAwakeningItem(self.item_name_to_data[item_name], self, self.player)
 
     def create_event(self, event: str):
         return Item(event, ItemClassification.progression, None, self.player)
 
+    def get_regions(self, player: int) -> typing.Collection[LinksAwakeningRegion]:
+        regions = self.multiworld.get_regions(player)
+        for region in regions:
+            typing.cast(LinksAwakeningRegion, region)
+        regions = typing.cast(typing.Collection[LinksAwakeningRegion], regions)
+        return regions
+
     def create_items(self) -> None:
+        itempool = []
+
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         dungeon_item_types = {
 
         }
-
-        self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
-        self.prefill_own_dungeons = []
-        self.pre_fill_items = []
         # For any and different world, set item rule instead
         
         for dungeon_item_type in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
@@ -216,7 +453,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Master Stalfos' Message"))
+                    itempool.append(self.create_item("Master Stalfos' Message"))
                 else:
                     item = self.create_item(item_name)
 
@@ -234,7 +471,7 @@ class LinksAwakeningWorld(World):
                             # Find instrument, lock
                             # TODO: we should be able to pinpoint the region we want, save a lookup table please
                             found = False
-                            for r in self.multiworld.get_regions(self.player):
+                            for r in self.get_regions(self.player):
                                 if r.dungeon_index != item.item_data.dungeon_index:
                                     continue
                                 for loc in r.locations:
@@ -255,9 +492,9 @@ class LinksAwakeningWorld(World):
                                 self.prefill_own_dungeons.append(item)
                                 self.pre_fill_items.append(item)
                             else:
-                                self.multiworld.itempool.append(item)
+                                itempool.append(item)
                     else:
-                        self.multiworld.itempool.append(item)
+                        itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
@@ -266,42 +503,59 @@ class LinksAwakeningWorld(World):
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-       
-        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
-        for r in self.multiworld.get_regions(self.player):
+
+        for r in self.get_regions(self.player):
             # Set aside dungeon locations
             if r.dungeon_index:
                 self.dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
                 for location in r.locations:
+                    # This probably isn't needed any more, but we'll see
                     # Don't place dungeon items on pit button chest, to reduce chance of the filler blowing up
                     # TODO: no need for this if small key shuffle
                     if location.name == "Pit Button Chest (Tail Cave)" or location.item:
                         self.dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
+        if self.options.tarin_gifts_your_item:
+            self.force_start_item(itempool)
+
+        self.multiworld.itempool += itempool
 
         # For now, special case first item
         FORCE_START_ITEM = True
         if FORCE_START_ITEM:
-            self.force_start_item()
+            self.force_start_item(itempool)
 
-    def force_start_item(self):    
+    def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
-            possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
-                if item.player == self.player 
-                    and item.item_data.ladxr_id in start_loc.ladxr_item.OPTIONS and not item.location]
-            if possible_start_items:
-                index = self.random.choice(possible_start_items)
-                start_item = self.multiworld.itempool.pop(index)
-                start_loc.place_locked_item(start_item)
+            """
+            Find an item that forces progression for the player
+            """
+            base_collection_state = CollectionState(self.multiworld)
+            base_collection_state.update_reachable_regions(self.player)
+            reachable_count = len(base_collection_state.reachable_regions[self.player])
+
+            def gives_progression(item):
+                collection_state = base_collection_state.copy()
+                collection_state.collect(item)
+                # Why isn't this needed?
+                # collection_state.update_reachable_regions(self.player)
+                return len(collection_state.reachable_regions[self.player]) > reachable_count
+            possible_start_items = [item for item in itempool if item.advancement]
+            self.random.shuffle(possible_start_items)
+
+            for item in possible_start_items:
+                if gives_progression(item):
+                    itempool.remove(item)
+                    start_loc.place_locked_item(item)
+                    return
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
-
 
         # Set up filter rules
 
@@ -330,9 +584,9 @@ class LinksAwakeningWorld(World):
                 # 2. Either
                 #    2a. it's not a restricted dungeon item
                 #    2b. it's a restricted dungeon item and this location is specified as allowed
-                location.item_rule = lambda item, location=location, orig_rule=orig_rule: \
-                    (item not in allowed_locations_by_item or location in allowed_locations_by_item[item]) and orig_rule(item)
-
+                # the weird names were to get pycharm to shut up
+                location.item_rule = lambda itm, loc=location, orig=orig_rule: \
+                    ((itm not in allowed_locations_by_item or loc in allowed_locations_by_item[itm]) and orig(itm))
         # Now set up the allow-list for any-dungeon items
         for item in self.prefill_own_dungeons:
             # They of course get to go in any spot
@@ -368,9 +622,11 @@ class LinksAwakeningWorld(World):
             all_state.remove(item)
         
         # Finally, fill!
-        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
+        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True,
+                         single_player_placement=True, allow_partial=False)
 
     name_cache = {}
+
     # Tries to associate an icon from another game with an icon we have
     def guess_icon_for_other_world(self, other):
         if not self.name_cache:
@@ -423,8 +679,7 @@ class LinksAwakeningWorld(World):
                 assert name in self.name_cache, name
                 assert name in CHEST_ITEMS, name
             self.name_cache.update(others)
-            
-        
+
         uppered = other.upper()
         if "BIG KEY" in uppered:
             return 'NIGHTMARE_KEY'
@@ -449,7 +704,7 @@ class LinksAwakeningWorld(World):
         for r in self.multiworld.get_regions(self.player):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
-                    assert(loc.item)
+                    assert loc.item
                         
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):

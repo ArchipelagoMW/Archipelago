@@ -1,3 +1,4 @@
+from collections import defaultdict
 
 class EntranceInfo:
     def __init__(self, room, alt_room=None, *, type=None, dungeon=None, index=None, instrument_room=None, target=None):
@@ -48,12 +49,12 @@ ENTRANCE_INFO = {
     "d2":                           EntranceInfo(0x24, target=0x136, dungeon=2, instrument_room=0x12A),
     "moblin_cave":                  EntranceInfo(0x35, target=0x2f0, type="single"),
     "photo_house":                  EntranceInfo(0x37, target=0x2b5, type="dummy"),
-    "mambo":                        EntranceInfo(0x2A, target=0x2fd, type="single"),
+    "mambo":                        EntranceInfo(0x2A, target=0x2fd, type="water"),
     "d4":                           EntranceInfo(0x2B, "Alt2B", target=0x17a, dungeon=4, index=0, instrument_room=0x162),
     # TODO
     #  "d4_connector":                 EntranceInfo(0x2B, "Alt2B", index=1),
     #  "d4_connector_exit":            EntranceInfo(0x2D),
-    "heartpiece_swim_cave":         EntranceInfo(0x2E, target=0x1f2, type="single"),
+    "heartpiece_swim_cave":         EntranceInfo(0x2E, target=0x1f2, type="water"),
     "raft_return_exit":             EntranceInfo(0x2F, target=0x1e7, type="connector"),
     "raft_house":                   EntranceInfo(0x3F, target=0x2b0, type="insanity"),
     "raft_return_enter":            EntranceInfo(0x8F, target=0x1f7, type="connector"),
@@ -134,3 +135,8 @@ ENTRANCE_INFO = {
     "animal_cave":                  EntranceInfo(0xCD, target=0x2f7, type="single", index=0),
     "desert_cave":                  EntranceInfo(0xCF, target=0x1f9, type="single"),
 }
+
+entrances_by_type = defaultdict(list)
+
+for name, entrance in ENTRANCE_INFO.items():
+    entrances_by_type[entrance.type or "dungeon"].append(name)
