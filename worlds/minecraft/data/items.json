@@ -46,7 +46,8 @@
 		"Dragon Egg Shard",
 		"Spyglass",
 		"Lead",
-		"Bee Trap"
+		"Bee Trap",
+		"Brush"
 	],
 	"progression_items": [
 		"Archery",
@@ -77,7 +78,8 @@
 		"Structure Compass (End City)",
 		"Dragon Egg Shard",
 		"Spyglass",
-		"Lead"
+		"Lead",
+		"Brush"
 	],
 	"useful_items": [
 		"Sharpness III Book",
@@ -113,7 +115,8 @@
 	    "3 Ender Pearls": 4,
 	    "Saddle": 1,
 	    "Spyglass": 1,
-	    "Lead": 1
+	    "Lead": 1,
+	    "Brush": 1
 	},
 	"junk_weights": {
 	    "4 Emeralds": 2,

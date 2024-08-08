@@ -318,9 +318,10 @@ class TestAdvancements(MCTestBase):
             ["Two by Two", False, [], ['Progressive Tools']],
             ["Two by Two", False, [], ['Progressive Weapons']],
             ["Two by Two", False, [], ['Bucket']],
+            ["Two by Two", False, [], ['Brush']],
             ["Two by Two", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']],
             ["Two by Two", False, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons']],
-            ["Two by Two", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons']],
+            ["Two by Two", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Brush']],
             ])
 
     def test_42023(self):
@@ -1296,17 +1297,17 @@ class TestAdvancements(MCTestBase):
     # bucket, fishing rod, saddle, combat
     def test_42104(self):
         self.run_location_tests([
-            ["Feels like home", False, []],
-            ["Feels like home", False, [], ['Progressive Resource Crafting']],
-            ["Feels like home", False, [], ['Progressive Tools']],
-            ["Feels like home", False, [], ['Progressive Weapons']],
-            ["Feels like home", False, [], ['Progressive Armor', 'Shield']],
-            ["Feels like home", False, [], ['Fishing Rod']],
-            ["Feels like home", False, [], ['Saddle']],
-            ["Feels like home", False, [], ['Bucket']],
-            ["Feels like home", False, [], ['Flint and Steel']],
-            ["Feels like home", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
-            ["Feels like home", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
+            ["Feels Like Home", False, []],
+            ["Feels Like Home", False, [], ['Progressive Resource Crafting']],
+            ["Feels Like Home", False, [], ['Progressive Tools']],
+            ["Feels Like Home", False, [], ['Progressive Weapons']],
+            ["Feels Like Home", False, [], ['Progressive Armor', 'Shield']],
+            ["Feels Like Home", False, [], ['Fishing Rod']],
+            ["Feels Like Home", False, [], ['Saddle']],
+            ["Feels Like Home", False, [], ['Bucket']],
+            ["Feels Like Home", False, [], ['Flint and Steel']],
+            ["Feels Like Home", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
+            ["Feels Like Home", True, ['Saddle', 'Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
             ])
 
     # iron pick, combat
