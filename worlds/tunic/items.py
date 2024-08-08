@@ -166,6 +166,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Swamp": TunicItemData(ItemClassification.progression, 0, 150, "Ladders"),
 }
 
+# items to be replaced by fool traps
 fool_tiers: List[List[str]] = [
     [],
     ["Money x1", "Money x10", "Money x15", "Money x16"],
@@ -173,6 +174,7 @@ fool_tiers: List[List[str]] = [
     ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"],
 ]
 
+# items we'll want the location of in slot data, for generating in-game hints
 slot_data_item_names = [
     "Stick",
     "Sword",
