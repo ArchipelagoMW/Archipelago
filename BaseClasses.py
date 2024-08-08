@@ -548,12 +548,12 @@ class MultiWorld():
                 return True
             state = starting_state.copy()
         else:
+            state = CollectionState(self)
             for player in players:
-                if self.has_beaten_game(self.state, player):
+                if self.has_beaten_game(state, player):
                     beaten_game_players.add(player)
             if len(beaten_game_players) == num_players:
                 return True
-            state = CollectionState(self)
 
         # CollectionState.sweep_for_events also yields group IDs, but those don't have a game to beat, so consider them
         # to all have beaten their game from the start.
