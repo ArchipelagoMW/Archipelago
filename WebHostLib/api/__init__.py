@@ -16,11 +16,12 @@ def get_players(seed: Seed) -> List[Tuple[str, str]]:
     return [(slot.player_name, slot.game) for slot in seed.slots]
 
 
-@api_endpoints.route('/room_status/<suuid:room>')
+@api_endpoints.route("/room_status/<suuid:room>")
 def room_info(room: UUID):
     room = Room.get(id=room)
     if room is None:
         return abort(404)
+    from base64 import urlsafe_b64encode
     
     def supports_apdeltapatch(game: str):
         return game in worlds.Files.AutoPatchRegister.patch_types
@@ -39,7 +40,7 @@ def room_info(room: UUID):
             }
             downloads.append(slot_download)
     return {
-        "tracker": room.tracker,
+        "tracker": urlsafe_b64encode(room.tracker.bytes).rstrip(b"=").decode("ascii"),
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
@@ -48,4 +49,4 @@ def room_info(room: UUID):
     }
 
 
-from . import generate, user, datapackage  # trigger registration
+from . import datapackage, generate, tracker, user  # trigger registration
