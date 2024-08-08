@@ -19,7 +19,7 @@ from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shu
 from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
 
 components.append(
-    Component("The Messenger", component_type=Type.CLIENT, func=launch_game)#, game_name="The Messenger", supports_uri=True)
+    Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
 )
 
 
