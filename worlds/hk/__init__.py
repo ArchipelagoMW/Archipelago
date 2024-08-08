@@ -448,13 +448,13 @@ class HKWorld(World):
             pass  # will set in stage_pre_fill()
         else:
             # Any goal
-            multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state, player) and _hk_can_beat_radiance(state, player) and state.count("Godhome_Flower_Quest", player)
+            multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state, player) and \
+                _hk_can_beat_radiance(state, player) and state.count("Godhome_Flower_Quest", player)
 
         set_rules(self)
 
-    def stage_pre_fill(multiworld: "MultiWorld"):
-        cls = HKWorld
-
+    @classmethod
+    def stage_pre_fill(cls, multiworld: "MultiWorld"):
         def set_goal(player, grub_rule: typing.Callable[[CollectionState], bool]):
             world = multiworld.worlds[player]
 
