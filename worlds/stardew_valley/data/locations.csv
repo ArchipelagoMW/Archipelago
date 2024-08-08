@@ -2088,7 +2088,7 @@ id,region,name,tags,mod_name
 3472,Farm,Craft Life Elixir,CRAFTSANITY,
 3473,Farm,Craft Oil of Garlic,CRAFTSANITY,
 3474,Farm,Craft Monster Musk,CRAFTSANITY,
-3475,Farm,Craft Fairy Dust,CRAFTSANITY,
+3475,Farm,Craft Fairy Dust,"CRAFTSANITY,GINGER_ISLAND",
 3476,Farm,Craft Warp Totem: Beach,CRAFTSANITY,
 3477,Farm,Craft Warp Totem: Mountains,CRAFTSANITY,
 3478,Farm,Craft Warp Totem: Farm,CRAFTSANITY,
@@ -2212,7 +2212,7 @@ id,region,name,tags,mod_name
 3808,Shipping,Shipsanity: Mystery Box,"SHIPSANITY",
 3809,Shipping,Shipsanity: Golden Tag,"SHIPSANITY",
 3810,Shipping,Shipsanity: Deluxe Bait,"SHIPSANITY",
-3811,Shipping,Shipsanity: Moss,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
+3811,Shipping,Shipsanity: Moss,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 3812,Shipping,Shipsanity: Mossy Seed,"SHIPSANITY",
 3813,Shipping,Shipsanity: Sonar Bobber,"SHIPSANITY",
 3814,Shipping,Shipsanity: Tent Kit,"SHIPSANITY",
@@ -2221,7 +2221,7 @@ id,region,name,tags,mod_name
 3817,Shipping,Shipsanity: Raisins,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 3818,Shipping,Shipsanity: Dried Fruit,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 3819,Shipping,Shipsanity: Dried Mushrooms,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
-3820,Shipping,Shipsanity: Stardrop Tea,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3820,Shipping,Shipsanity: Stardrop Tea,"SHIPSANITY",
 3821,Shipping,Shipsanity: Prize Ticket,"SHIPSANITY",
 3822,Shipping,Shipsanity: Treasure Totem,"SHIPSANITY,REQUIRES_MASTERIES",
 3823,Shipping,Shipsanity: Challenge Bait,"SHIPSANITY,REQUIRES_MASTERIES",
@@ -2252,7 +2252,7 @@ id,region,name,tags,mod_name
 3848,Shipping,Shipsanity: Way Of The Wind pt. 1,"SHIPSANITY",
 3849,Shipping,Shipsanity: Mapping Cave Systems,"SHIPSANITY",
 3850,Shipping,Shipsanity: Price Catalogue,"SHIPSANITY",
-3851,Shipping,Shipsanity: Queen Of Sauce Cookbook,"SHIPSANITY",
+3851,Shipping,Shipsanity: Queen Of Sauce Cookbook,"SHIPSANITY,GINGER_ISLAND",
 3852,Shipping,Shipsanity: The Diamond Hunter,"SHIPSANITY,GINGER_ISLAND",
 3853,Shipping,Shipsanity: Book of Mysteries,"SHIPSANITY",
 3854,Shipping,Shipsanity: Animal Catalogue,"SHIPSANITY",
@@ -2292,7 +2292,7 @@ id,region,name,tags,mod_name
 4032,Farm,Read Book Of Stars,"BOOKSANITY,BOOKSANITY_SKILL",
 4033,Farm,Read Combat Quarterly,"BOOKSANITY,BOOKSANITY_SKILL",
 4034,Farm,Read Mining Monthly,"BOOKSANITY,BOOKSANITY_SKILL",
-4035,Farm,Read Queen Of Sauce Cookbook,"BOOKSANITY,BOOKSANITY_SKILL",
+4035,Farm,Read Queen Of Sauce Cookbook,"BOOKSANITY,BOOKSANITY_SKILL,GINGER_ISLAND",
 4036,Farm,Read Stardew Valley Almanac,"BOOKSANITY,BOOKSANITY_SKILL",
 4037,Farm,Read Woodcutter's Weekly,"BOOKSANITY,BOOKSANITY_SKILL",
 4051,Museum,Read Tips on Farming,"BOOKSANITY,BOOKSANITY_LOST",
@@ -2900,7 +2900,6 @@ id,region,name,tags,mod_name
 7055,Abandoned Mines - 3,Abandoned Treasure - Floor 3,MANDATORY,Boarding House and Bus Stop Extension
 7056,Abandoned Mines - 4,Abandoned Treasure - Floor 4,MANDATORY,Boarding House and Bus Stop Extension
 7057,Abandoned Mines - 5,Abandoned Treasure - Floor 5,MANDATORY,Boarding House and Bus Stop Extension
-7351,Farm,Read Digging Like Worms,"BOOKSANITY,BOOKSANITY_SKILL",Archaeology
 7401,Farm,Cook Magic Elixir,COOKSANITY,Magic
 7402,Farm,Craft Travel Core,CRAFTSANITY,Magic
 7403,Farm,Craft Haste Elixir,CRAFTSANITY,Stardew Valley Expanded
@@ -3280,10 +3279,10 @@ id,region,name,tags,mod_name
 8237,Shipping,Shipsanity: Pterodactyl R Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
 8238,Shipping,Shipsanity: Scrap Rust,SHIPSANITY,Archaeology
 8239,Shipping,Shipsanity: Rusty Path,SHIPSANITY,Archaeology
-8240,Shipping,Shipsanity: Digging Like Worms,SHIPSANITY,Archaeology
 8241,Shipping,Shipsanity: Digger's Delight,SHIPSANITY,Archaeology
 8242,Shipping,Shipsanity: Rocky Root Coffee,SHIPSANITY,Archaeology
 8243,Shipping,Shipsanity: Ancient Jello,SHIPSANITY,Archaeology
 8244,Shipping,Shipsanity: Bone Fence,SHIPSANITY,Archaeology
 8245,Shipping,Shipsanity: Grilled Cheese,SHIPSANITY,Binning Skill
 8246,Shipping,Shipsanity: Fish Casserole,SHIPSANITY,Binning Skill
+8247,Shipping,Shipsanity: Snatcher Worm,SHIPSANITY,Stardew Valley Expanded

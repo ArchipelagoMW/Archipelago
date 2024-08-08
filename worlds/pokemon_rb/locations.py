@@ -427,7 +427,7 @@ location_data = [
     LocationData("Seafoam Islands B3F", "Hidden Item Rock", "Max Elixir", rom_addresses['Hidden_Item_Seafoam_Islands_B3F'], Hidden(50), inclusion=hidden_items),
     LocationData("Vermilion City", "Hidden Item In Water Near Fan Club", "Max Ether", rom_addresses['Hidden_Item_Vermilion_City'], Hidden(51), inclusion=hidden_items),
     LocationData("Cerulean City-Badge House Backyard", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), inclusion=hidden_items),
-    LocationData("Route 4-E", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
+    LocationData("Route 4-C", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
 
 
     LocationData("Oak's Lab", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38)),
