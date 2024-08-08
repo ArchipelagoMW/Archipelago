@@ -54,6 +54,8 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         portal_pairs = vanilla_portals(world, regions)
 
+    print(world.options.plando_connections)
+
     create_randomized_entrances(world, portal_pairs, regions)
 
     set_er_region_rules(world, regions, portal_pairs)
@@ -299,8 +301,11 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         portal_name2 = portal.name
                         # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
                 # shops have special handling
-                if not portal_name2 and portal2 == "Shop, Previous Region_":
-                    portal_name2 = "Shop Portal"
+                if not portal_name1 and portal1.startswith("Shop"):
+                    # it should show up as "Shop, 1_" for shop 1
+                    portal_name1 = "Shop Portal " + str(portal1).split(", ")[1].split("_", 0)[0]
+                if not portal_name2 and portal2.startswith("Shop"):
+                    portal_name2 = "Shop Portal " + str(portal2).split(", ")[1].split("_", 0)[0]
                 plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
     # put together the list of non-deadend regions
@@ -327,7 +332,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             p_entrance = connection.entrance
             p_exit = connection.exit
             # if you plando secret gathering place, need to know that during portal pairing
-            if "Secret Gathering Place Exit" in [p_entrance, p_exit]:
+            if p_exit == "Secret Gathering Place Exit":
+                waterfall_plando = True
+            if p_entrance == "Secret Gathering Place Exit" and not decoupled:
                 waterfall_plando = True
             portal1_dead_end = True
             portal2_dead_end = True
@@ -373,26 +380,12 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     if p_exit == portal.name:
                         portal2 = portal
                         break
-                # if it's not a dead end, it might be a shop
-                if p_exit == "Shop Portal":
-                    # 6 of the shops have south exits, 2 of them have west exits
-                    shop_dir = Direction.south
-                    if world.shop_num > 6:
-                        shop_dir = Direction.west
-
-                    portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
-                                     destination=str(world.shop_num), tag="_", direction=shop_dir)
-                    create_shop_region(world, regions)
-                    shop_count -= 1
-                    # need to maintain an even number of portals total
-                    if shop_count < 0:
-                        shop_count += 2
-                # and if it's neither shop nor dead end, it just isn't correct
+                # if it's not a dead end, then it doesn't exist -- I don't think this code is actually reachable
                 else:
                     if not portal2:
                         raise Exception(f"Could not find entrance named {p_exit} for "
                                         f"plando connections in {player_name}'s YAML.")
-                    dead_ends.remove(portal2)
+                dead_ends.remove(portal2)
 
             # update the traversal chart to say you can get from portal1's region to portal2's and vice versa
             if not portal1_dead_end and not portal2_dead_end:
