@@ -7,8 +7,8 @@ USEFUL = ItemClassification.useful
 FILLER = ItemClassification.filler
 
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+class ItemData(NamedTuple):
+    code: Optional[int]
     type: str
     classification: ItemClassification = PROGRESSION
 
@@ -77,7 +77,7 @@ for name in item_table.keys():
         item_id_name[id] = name
 
 
-class CommanderData(typing.NamedTuple):
+class CommanderData(NamedTuple):
     name: str
     internal_name: str
     alt_name: str = None

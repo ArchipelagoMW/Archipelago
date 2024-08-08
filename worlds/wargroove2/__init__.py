@@ -5,6 +5,7 @@ import string
 import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification
+from Options import NumericOption
 from .Items import item_table, faction_table, Wargroove2Item
 from .Levels import Wargroove2Level, get_level_table, get_first_level, get_final_levels, region_names, FINAL_LEVEL_1, \
     FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT
@@ -13,7 +14,7 @@ from .Presets import wargroove2_option_presets
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from .Options import wargroove2_options
+from .Options import Wargroove2Options
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 
@@ -53,8 +54,8 @@ class Wargroove2World(World):
     """
     Command an army, in the sequel to the hit turn based strategy game Wargroove!
     """
-
-    option_definitions = wargroove2_options
+    options: Wargroove2Options
+    options_dataclass = Wargroove2Options
     settings: typing.ClassVar[Wargroove2Settings]
     game = "Wargroove 2"
     topology_present = True
@@ -87,10 +88,10 @@ class Wargroove2World(World):
         self.level_list = get_level_table(self.player)
         low_victory_checks_levels = list(level for level in self.level_list if level.low_victory_checks)
         high_victory_checks_levels = list(level for level in self.level_list if not level.low_victory_checks)
-        if self.multiworld.level_shuffle_seed[self.player] == 0:
+        if self.options.level_shuffle_seed == 0:
             random = self.random
         else:
-            random = Random(str(self.multiworld.level_shuffle_seed[self.player]))
+            random = Random(str(self.options.level_shuffle_seed))
 
         random.shuffle(low_victory_checks_levels)
         random.shuffle(high_victory_checks_levels)
@@ -109,7 +110,7 @@ class Wargroove2World(World):
         self.final_levels = final_levels_no_ocean[0:1] + non_north_levels
 
         # Selecting a random starting faction
-        if self.multiworld.commander_choice[self.player] == 2:
+        if self.options.commander_choice == 2:
             factions = [faction for faction in faction_table.keys() if faction != "Starter"]
             starting_faction = Wargroove2Item(self.multiworld.random.choice(factions) + ' Commanders', self.player)
             self.multiworld.push_precollected(starting_faction)
@@ -118,7 +119,7 @@ class Wargroove2World(World):
         # Fill out our pool with our items from the item table
         pool = []
         precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
-        ignore_faction_items = self.multiworld.commander_choice[self.player] == 0
+        ignore_faction_items = self.options.commander_choice == 0
         for name, data in item_table.items():
             if data.code is not None and name not in precollected_item_names and \
                     not data.classification == ItemClassification.filler:
@@ -149,7 +150,7 @@ class Wargroove2World(World):
             self.multiworld.get_location(final_level.victory_locations[0], self.player).place_locked_item(victory)
         # Placing victory event at final location
         self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has("Wargroove 2 Victory", self.player, self.multiworld.final_levels[self.player])
+            state.has("Wargroove 2 Victory", self.player, self.options.final_levels)
 
     def set_rules(self):
         set_rules(self.multiworld, self.level_list, self.first_level, self.final_levels, self.player)
@@ -162,9 +163,13 @@ class Wargroove2World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        for option_name in wargroove2_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+        s = self.options.__dict__.keys()
+        for option_name in self.options.__dict__.keys():
+            option = getattr(self.options, option_name)
+            if isinstance(option, NumericOption):
+                slot_data[option_name] = int(option.value)
+            else:
+                slot_data[option_name] = str(option.value)
         for i in range(0, min(LEVEL_COUNT, len(self.level_list))):
             slot_data[f"Level File #{i}"] = self.level_list[i].file_name
             slot_data[region_names[i]] = self.level_list[i].name

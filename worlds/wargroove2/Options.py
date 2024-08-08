@@ -1,5 +1,6 @@
-import typing
-from Options import Choice, Option, Range, DeathLink
+from dataclasses import dataclass
+
+from Options import Choice, Range, DeathLink, PerGameCommonOptions
 
 
 class IncomeBoost(Range):
@@ -54,12 +55,12 @@ class FinalLevels(Range):
     default = 2
 
 
-wargroove2_options: typing.Dict[str, type(Option)] = {
-    "income_boost": IncomeBoost,
-    "commander_defense_boost": CommanderDefenseBoost,
-    "groove_boost": GrooveBoost,
-    "level_shuffle_seed": LevelShuffleSeed,
-    "commander_choice": CommanderChoice,
-    "final_levels": FinalLevels,
-    "death_link": DeathLink
-}
+@dataclass
+class Wargroove2Options(PerGameCommonOptions):
+    income_boost: IncomeBoost
+    commander_defense_boost: CommanderDefenseBoost
+    groove_boost: GrooveBoost
+    level_shuffle_seed: LevelShuffleSeed
+    commander_choice: CommanderChoice
+    final_levels: FinalLevels
+    death_link: DeathLink
