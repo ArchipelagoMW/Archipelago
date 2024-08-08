@@ -163,7 +163,6 @@ class Wargroove2World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        s = self.options.__dict__.keys()
         for option_name in self.options.__dict__.keys():
             option = getattr(self.options, option_name)
             if isinstance(option, NumericOption):
