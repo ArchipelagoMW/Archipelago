@@ -808,21 +808,14 @@ def verify_plando_directions(connection: PlandoConnection) -> bool:
 def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
     sorted_pairs: Dict[str, str] = {}
     reference_list: List[str] = [portal.name for portal in portal_mapping]
-    reference_list.append("Shop Portal")
 
-    # note: this is not necessary yet since the shop portals aren't numbered yet -- they will be when decoupled happens
     # due to plando, there can be a variable number of shops
-    # I could either do it like this, or just go up to like 200, this seemed better
-    # shop_count = 0
-    # for portal1, portal2 in portal_pairs.items():
-    #     if portal1.name.startswith("Shop"):
-    #         shop_count += 1
-    #     if portal2.name.startswith("Shop"):
-    #         shop_count += 1
-    # reference_list.extend([f"Shop Portal {i + 1}" for i in range(shop_count)])
+    largest_shop_number = max(world.used_shop_numbers)
+    reference_list.extend([f"Shop Portal {i + 1}" for i in range(largest_shop_number)])
 
     for name in reference_list:
         for portal1, portal2 in portal_pairs.items():
             if name == portal1.name:
                 sorted_pairs[portal1.name] = portal2.name
+                break
     return sorted_pairs
