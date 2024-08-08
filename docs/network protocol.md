@@ -261,6 +261,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | key            | str  | The key that was updated.                                                                  |
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
+| slot           | int  | The slot that originally sent the Set package causing this change.                         |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
