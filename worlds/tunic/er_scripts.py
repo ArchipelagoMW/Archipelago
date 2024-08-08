@@ -55,8 +55,6 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         portal_pairs = vanilla_portals(world, regions)
 
-    print(world.options.plando_connections)
-
     create_randomized_entrances(world, portal_pairs, regions)
 
     set_er_region_rules(world, regions, portal_pairs)
@@ -80,6 +78,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     return portal_pairs
 
 
+# keys are event names, values are event regions
 tunic_events: Dict[str, str] = {
     "Eastern Bell": "Forest Belltower Upper",
     "Western Bell": "Overworld Belltower at Bell",
@@ -171,7 +170,6 @@ def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Por
 
 # pairing off portals, starting with dead ends
 def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
-    print(f"player is {world.player}")
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
@@ -203,24 +201,17 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         has_laurels = False
 
-    # for the direction pairs option
+    # for the direction pairs option with decoupled off
+    # tracks how many portals are in each direction in each list
     two_plus_direction_tracker: Dict[int, int] = {direction: 0 for direction in range(8)}
     dead_end_direction_tracker: Dict[int, int] = {direction: 0 for direction in range(8)}
 
     # for ensuring we have enough entrances in directions left that we don't leave dead ends without any
     def too_few_portals_for_direction_pairs(direction: int, offset: int) -> bool:
-        # print(f"direction is {direction} and count is {two_plus_direction_tracker[direction]} "
-        #       f"vs {dead_end_direction_tracker[direction_pairs[direction]] + offset}.")
         if two_plus_direction_tracker[direction] <= (dead_end_direction_tracker[direction_pairs[direction]] + offset):
-            # print("compare_direction_trackers returning false in first part")
             return False
-        # print(f"direction is {direction_pairs[direction]} "
-        #       f"and count is {two_plus_direction_tracker[direction_pairs[direction]]} "
-        #       f"vs {dead_end_direction_tracker[direction] + offset}")
         if two_plus_direction_tracker[direction_pairs[direction]] <= dead_end_direction_tracker[direction] + offset:
-            # print("compare_direction_trackers returning false in second part")
             return False
-        # print(f"returning true for direction {direction}")
         return True
 
     # If using Universal Tracker, restore portal_map. Could be cleaner, but it does not matter for UT even a little bit
@@ -475,7 +466,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
-    print(len(world.used_shop_numbers))
     # if there are an odd number of shops after plando, add another one
     if len(world.used_shop_numbers) % 2 == 1 and not decoupled:
         if entrance_layout == EntranceLayout.option_direction_pairs:
@@ -520,7 +510,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     previous_conn_num = 0
     fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
-        # print("phase 1")
         # if this is universal tracker, just break immediately and move on
         if hasattr(world.multiworld, "re_gen_passthrough"):
             break
@@ -529,9 +518,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if previous_conn_num == len(connected_regions):
             fail_count += 1
             if fail_count >= 500:
-                for portal in two_plus:
-                    if portal.direction == Direction.ladder_down or portal.direction == Direction.ladder_up:
-                        print(portal.name)
                 raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for errors. "
                                 f"Unconnected regions: {non_dead_end_regions - connected_regions}.\n"
                                 f"Unconnected portals: {[portal.name for portal in two_plus]}")
@@ -569,8 +555,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     # if not waterfall_plando, then we just want to pair secret gathering place now
                     elif portal.region != "Secret Gathering Place":
                         continue
-                if (entrance_layout == EntranceLayout.option_direction_pairs
-                        and direction_pairs[portal.direction] != portal1.direction):
+                # if they're not facing opposite directions, just continue
+                if (entrance_layout == EntranceLayout.option_direction_pairs and not verify_direction_pair(portal, portal1):
                     continue
                 if not decoupled and entrance_layout == EntranceLayout.option_direction_pairs:
                     should_continue = False
@@ -583,7 +569,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         for test_portal in two_plus:
                             if test_portal.name in south_problems:
                                 should_continue = True
-                                # print(f"Skipped {portal.name} because of zig upper, zig mid, or belltower")
                     # at risk of connecting frog's domain entry ladder to librarian exit
                     if (portal.direction == Direction.ladder_down
                             or portal.direction == Direction.ladder_up and portal.name != "Frog's Domain Ladder Exit"
@@ -591,7 +576,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         for test_portal in two_plus:
                             if test_portal.name == "Frog's Domain Ladder Exit":
                                 should_continue = True
-                                # print(f"Skipped {portal.name} because of frog's domain ladder exit")
                     if should_continue:
                         continue
 
@@ -603,18 +587,10 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if not portal2:
             if entrance_layout == EntranceLayout.option_direction_pairs:
                 # portal1 doesn't have a valid direction pair yet, throw it back and start over
-                # print(f"throwing {portal1.name} back in")
-                # if portal1.name == "Frog's Domain Ladder Exit":
-                #     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                connected_regions.remove(world.er_regions[portal.region].outlet_region or portal.region)
                 two_plus.append(portal1)
                 continue
             else:
-                for portal in two_plus:
-                    if portal.region not in connected_regions:
-                        print(portal.name)
-                for portal in two_plus2:
-                    if portal.region not in connected_regions:
-                        print(portal.name)
                 raise Exception("TUNIC: Failed to pair portals at second part of first phase.")
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
@@ -630,15 +606,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if two_plus != two_plus2:
             random_object.shuffle(two_plus2)
 
-        # print(len(connected_regions))
-        # print(len(non_dead_end_regions))
-        # print(non_dead_end_regions - connected_regions)
-        # print(connected_regions - non_dead_end_regions)
-
     # connect dead ends to random non-dead ends
     # there are no dead ends in decoupled
     while len(dead_ends) > 0:
-        # print("phase 2")
         if hasattr(world.multiworld, "re_gen_passthrough"):
             break
         portal2 = dead_ends[0]
@@ -651,22 +621,13 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             portal_pairs[portal1] = portal2
             two_plus.remove(portal1)
             dead_ends.remove(portal2)
-            if portal2.name.startswith("Shop"):
-                print(portal2.name)
             break
         else:
-            # for portal in two_plus:
-            #     if verify_direction_pair(portal, portal2):
-            #         print("found match")
-            # for portal in dead_ends:
-            #     if verify_direction_pair(portal, portal2):
-            #         print(f"found match, it is {portal.name}")
             raise Exception(f"Failed to pair {portal2.name} with anything in two_plus")
 
     # then randomly connect the remaining portals to each other
     final_pair_number = 0
     while len(two_plus) > 0:
-        # print("phase 3")
         if hasattr(world.multiworld, "re_gen_passthrough"):
             break
         final_pair_number += 1
@@ -682,19 +643,10 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         else:
             for portal in two_plus2:
                 if verify_direction_pair(portal1, portal):
-                    # print(f"Paired {portal1.name} with {portal.name}")
                     portal2 = portal
                     two_plus2.remove(portal2)
                     break
-                # else:
-                #     print(f"Did not pair {portal1.name} with {portal.name}")
         if portal2 is None:
-            # dt = {direction: 0 for direction in range(8)}
-            # for portal in two_plus:
-            #     dt[portal.direction] += 1
-            # dt[portal1.direction] += 1
-            # print(dt)
-
             raise Exception("Something went wrong with the remaining two plus portals. Contact the TUNIC rando devs.")
         portal_pairs[portal1] = portal2
 
@@ -774,10 +726,7 @@ direction_pairs: Dict[int, int] = {
 
 # verify that two portals are in compatible directions
 def verify_direction_pair(portal1: Portal, portal2: Portal) -> bool:
-    if portal1.direction == direction_pairs[portal2.direction]:
-        return True
-    else:
-        return False
+    return portal1.direction == direction_pairs[portal2.direction]
 
 
 # verify that two plando'd portals are in compatible directions
@@ -789,19 +738,22 @@ def verify_plando_directions(connection: PlandoConnection) -> bool:
             entrance_portal = portal
         if connection.exit == portal.name:
             exit_portal = portal
+        if entrance_portal and exit_portal:
+            break
+    # neither of these are shops, so verify the pair
     if entrance_portal and exit_portal:
-        if entrance_portal.direction == direction_pairs[exit_portal.direction]:
-            return True
+        return verify_direction_pair(entrance_portal, exit_portal)
     # this is two shop portals, they can never pair directions
     elif not entrance_portal and not exit_portal:
         return False
     # if one of them is none, it's a shop, which has two possible directions
     elif not entrance_portal:
-        if exit_portal.direction in [Direction.north, Direction.east]:
-            return True
+        return exit_portal.direction in [Direction.north, Direction.east]
     elif not exit_portal:
-        if entrance_portal.direction in [Direction.north, Direction.east]:
-            return True
+        return entrance_portal.direction in [Direction.north, Direction.east]
+    else:
+        # shouldn't be reachable, more of a just in case
+        raise Exception("Something went very wrong with verify_plando_directions")
 
 
 # sort the portal dict by the name of the first portal, referring to the portal order in the master portal list
