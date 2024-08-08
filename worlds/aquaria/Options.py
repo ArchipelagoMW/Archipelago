@@ -158,6 +158,30 @@ class NoProgressionFrozenVeil(Toggle):
     display_name = "No progression in the Frozen Veil"
 
 
+class NoProgressionAbyss(Toggle):
+    """
+    Make sure that there are no progression items in the Abyss
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Abyss"
+
+
+class NoProgressionSunkenCity(Toggle):
+    """
+    Make sure that there are no progression items in the Sunken City
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Sunken City"
+
+
+class NoProgressionBody(Toggle):
+    """
+    Make sure that there are no progression items in the Body (including the before boss transturtle room
+    and the boss location. Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Body"
+
+
 class LightNeededToGetToDarkPlaces(DefaultOnToggle):
     """
     Make sure that the sun form or the dumbo pet can be acquired before getting to dark places.
@@ -189,7 +213,14 @@ class InfiniteHotSoup(DefaultOnToggle):
     display_name = "Infinite Hot Soup"
 
 
-class SkipFinalBoss3rdForm(DefaultOnToggle):
+class OpenBodyTongue(Toggle):
+    """
+    Remove the body tongue making the body accessible without going in the sunken city
+    """
+    display_name = "Open the body tongue"
+
+
+class SkipFinalBoss3rdForm(Toggle):
     """
     The Final boss third form (the hide and seek form) can be easy and quite long. So, this option can be used
     to skip this form.
@@ -244,11 +275,15 @@ class AquariaOptions(PerGameCommonOptions):
     no_progression_energy_temple: NoProgressionEnergyTemple
     no_progression_arnassi_ruins: NoProgressionArnassiRuins
     no_progression_frozen_veil: NoProgressionFrozenVeil
+    no_progression_abyss: NoProgressionAbyss
+    no_progression_sunken_city: NoProgressionSunkenCity
+    no_progression_body: NoProgressionBody
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
     skip_first_vision: SkipFirstVision
     blind_goal: BlindGoal
     infinite_hot_soup: InfiniteHotSoup
+    open_body_tongue: OpenBodyTongue
     maximum_ingredient_amount: MaximumIngredientAmount
     skip_final_boss_3rd_form: SkipFinalBoss3rdForm

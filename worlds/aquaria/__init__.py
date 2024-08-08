@@ -228,6 +228,7 @@ class AquariaWorld(World):
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
                 "skip_final_boss_3rd_form": bool(self.options.skip_final_boss_3rd_form.value),
                 "infinite_hot_soup": bool(self.options.infinite_hot_soup.value),
+                "open_body_tongue": bool(self.options.open_body_tongue.value),
                 "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
                 "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
                 "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value

@@ -1161,7 +1161,7 @@ class AquariaRegions:
             self.multiworld.get_location(location, self.player).item_rule = \
                 lambda item: item.classification != ItemClassification.progression
 
-    def __no_progression_kelp_forest(self):
+    def __no_progression_kelp_forest(self) -> None:
         """Be sure to not put any progression items in Kelp forest"""
         self.__no_progression_area(AquariaLocations.locations_forest_tl)
         self.__no_progression_area(AquariaLocations.locations_forest_tl_verse_egg_room)
@@ -1178,7 +1178,7 @@ class AquariaRegions:
         self.__no_progression_area(AquariaLocations.locations_mermog_cave)
         self.__no_progression_area(AquariaLocations.locations_mermog_boss)
 
-    def __no_progression_veil(self):
+    def __no_progression_veil(self) -> None:
         """Be sure to not put any progression items in The Veil"""
         self.__no_progression_area(AquariaLocations.locations_veil_tl)
         self.__no_progression_area(AquariaLocations.locations_veil_tl_fp)
@@ -1197,7 +1197,7 @@ class AquariaRegions:
         self.__no_progression_area(AquariaLocations.locations_sun_temple_boss_path)
         self.__no_progression_area(AquariaLocations.locations_sun_temple_boss)
 
-    def __no_progression_mithalas(self):
+    def __no_progression_mithalas(self) -> None:
         """Be sure to not put any progression items in Mithalas"""
         self.__no_progression_area(AquariaLocations.locations_mithalas_city)
         self.__no_progression_area(AquariaLocations.locations_mithalas_city_urns)
@@ -1213,7 +1213,7 @@ class AquariaRegions:
         self.__no_progression_area(AquariaLocations.locations_cathedral_underground)
         self.__no_progression_area(AquariaLocations.locations_cathedral_boss)
 
-    def __no_progression_energy_temple(self):
+    def __no_progression_energy_temple(self) -> None:
         """Be sure to not put any progression items in the Energy Temple"""
         self.__no_progression_area(AquariaLocations.locations_energy_temple_1)
         self.__no_progression_area(AquariaLocations.locations_energy_temple_idol)
@@ -1222,6 +1222,53 @@ class AquariaRegions:
         self.__no_progression_area(AquariaLocations.locations_energy_temple_3)
         self.__no_progression_area(AquariaLocations.locations_energy_temple_boss)
         self.__no_progression_area(AquariaLocations.locations_energy_temple_blaster_room)
+
+    def __no_progression_arnassi_ruins(self, options: AquariaOptions) -> None:
+        """Be sure to not put any progression items in the Arnassi ruins"""
+        self.__no_progression_area(AquariaLocations.locations_arnassi)
+        self.__no_progression_area(AquariaLocations.locations_arnassi_cave)
+        self.__no_progression_area(AquariaLocations.locations_arnassi_cave_transturtle)
+        self.__no_progression_area(AquariaLocations.locations_arnassi_crab_boss)
+        if options.turtle_randomizer == 0:
+            self.__no_progression_area(AquariaLocations.locations_simon)
+
+    def __no_progression_frozen_veil(self) -> None:
+        """Be sure to not put any progression items in the Frozen Veil"""
+        self.__no_progression_area(AquariaLocations.locations_ice_cave)
+        self.__no_progression_area(AquariaLocations.locations_bubble_cave)
+        self.__no_progression_area(AquariaLocations.locations_bubble_cave_boss)
+
+    def __no_progression_frozen_veil(self) -> None:
+        """Be sure to not put any progression items in the Frozen Veil"""
+        self.__no_progression_area(AquariaLocations.locations_ice_cave)
+        self.__no_progression_area(AquariaLocations.locations_bubble_cave)
+        self.__no_progression_area(AquariaLocations.locations_bubble_cave_boss)
+
+    def __no_progression_abyss(self) -> None:
+        """Be sure to not put any progression items in the Abyss"""
+        self.__no_progression_area(AquariaLocations.locations_abyss_l)
+        self.__no_progression_area(AquariaLocations.locations_abyss_lb)
+        self.__no_progression_area(AquariaLocations.locations_abyss_r)
+        self.__no_progression_area(AquariaLocations.locations_abyss_r_whale)
+        self.__no_progression_area(AquariaLocations.locations_abyss_r_transturtle)
+        self.__no_progression_area(AquariaLocations.locations_king_jellyfish_cave)
+
+    def __no_progression_sunken_city(self) -> None:
+        """Be sure to not put any progression items in the Sunken City"""
+        self.__no_progression_area(AquariaLocations.locations_sunken_city_r)
+        self.__no_progression_area(AquariaLocations.locations_sunken_city_l)
+        self.__no_progression_area(AquariaLocations.locations_sunken_city_l_bedroom)
+        self.__no_progression_area(AquariaLocations.locations_sunken_city_boss)
+
+    def __no_progression_body(self) -> None:
+        """Be sure to not put any progression items in the Body"""
+        self.__no_progression_area(AquariaLocations.locations_body_c)
+        self.__no_progression_area(AquariaLocations.locations_body_l)
+        self.__no_progression_area(AquariaLocations.locations_body_rt)
+        self.__no_progression_area(AquariaLocations.locations_body_rb)
+        self.__no_progression_area(AquariaLocations.locations_body_b)
+        self.__no_progression_area(AquariaLocations.locations_final_boss_tube)
+        self.__no_progression_area(AquariaLocations.locations_final_boss)
 
     def __no_progression_areas(self, options: AquariaOptions) -> None:
         """Manage options that remove progression items from areas around the Aquaria world"""
@@ -1236,16 +1283,16 @@ class AquariaRegions:
         if options.no_progression_energy_temple:
             self.__no_progression_energy_temple()
         if options.no_progression_arnassi_ruins:
-            self.__no_progression_area(AquariaLocations.locations_arnassi)
-            self.__no_progression_area(AquariaLocations.locations_arnassi_cave)
-            self.__no_progression_area(AquariaLocations.locations_arnassi_cave_transturtle)
-            self.__no_progression_area(AquariaLocations.locations_arnassi_crab_boss)
-            if options.turtle_randomizer == 0:
-                self.__no_progression_area(AquariaLocations.locations_simon)
+            self.__no_progression_arnassi_ruins(options)
         if options.no_progression_frozen_veil:
-            self.__no_progression_area(AquariaLocations.locations_ice_cave)
-            self.__no_progression_area(AquariaLocations.locations_bubble_cave)
-            self.__no_progression_area(AquariaLocations.locations_bubble_cave_boss)
+            self.__no_progression_frozen_veil()
+        if options.no_progression_abyss:
+            self.__no_progression_abyss()
+        if options.no_progression_sunken_city:
+            self.__no_progression_sunken_city()
+        if options.no_progression_body:
+            self.__no_progression_body()
+
 
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
