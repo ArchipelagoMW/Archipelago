@@ -116,6 +116,8 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
         region.locations.append(location)
 
 
+# keeping track of which shop numbers have been used already to avoid duplicates
+# due to plando, shops can be added out of order, so a set is the best way to make this work smoothly
 def get_shop_num(world: "TunicWorld") -> int:
     portal_num = -1
     for i in range(500):
@@ -138,6 +140,7 @@ def create_shop_region(world: "TunicWorld", regions: Dict[str, Region], portal_n
     regions[new_shop_name] = new_shop_region
 
 
+# for non-ER that uses the ER rules, we create a vanilla set of portal pairs
 def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
@@ -169,7 +172,13 @@ def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Por
     return portal_pairs
 
 
-# pairing off portals, starting with dead ends
+# the really long function that gives us our portal pairs
+# before we start pairing, we separate the portals into dead ends and non-dead ends (two_plus)
+# then, we do a few other important tasks to accommodate options and seed gropus
+# first phase: pick a two_plus in a reachable region and non-reachable region and pair them
+# repeat this phase until all regions are reachable
+# second phase: randomly pair dead ends to random two_plus
+# third phase: randomly pair the remaining two_plus to each other
 def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
