@@ -873,6 +873,9 @@ class ItemDict(CounterOption):
 
         super(ItemDict, self).__init__(value)
 
+    def __contains__(self, item):
+        return item in self.value
+
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # Supports duplicate entries and ordering.
