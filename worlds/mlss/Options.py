@@ -1,4 +1,4 @@
-from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions, Range
+from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions, Range, Removed
 from dataclasses import dataclass
 
 
@@ -282,7 +282,8 @@ class MLSSOptions(PerGameCommonOptions):
     extra_pipes: ExtraPipes
     skip_minecart: SkipMinecart
     disable_surf: DisableSurf
-    harhalls_pants: HarhallsPants
+    disable_harhalls_pants: HarhallsPants
+    harhalls_pants: Removed
     block_visibility: HiddenVisible
     chuckle_beans: ChuckleBeans
     music_options: MusicOptions

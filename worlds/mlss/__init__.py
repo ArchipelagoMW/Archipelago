@@ -55,7 +55,7 @@ class MLSSWorld(World):
     settings: typing.ClassVar[MLSSSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 5, 0)
 
     disabled_locations: List[str]
 
@@ -71,7 +71,7 @@ class MLSSWorld(World):
             self.disabled_locations += [LocationName.HoohooMountainBaseMinecartCaveDigspot]
         if self.options.disable_surf:
             self.disabled_locations += [LocationName.SurfMinigame]
-        if self.options.harhalls_pants:
+        if self.options.disable_harhalls_pants:
             self.disabled_locations += [LocationName.HarhallsPants]
         if not self.options.coins:
             self.disabled_locations += [location.name for location in all_locations if location in coins]
@@ -96,7 +96,7 @@ class MLSSWorld(World):
             "CastleSkip": self.options.castle_skip.value,
             "SkipMinecart": self.options.skip_minecart.value,
             "DisableSurf": self.options.disable_surf.value,
-            "HarhallsPants": self.options.harhalls_pants.value,
+            "HarhallsPants": self.options.disable_harhalls_pants.value,
             "ChuckleBeans": self.options.chuckle_beans.value,
             "DifficultLogic": self.options.difficult_logic.value,
             "Coins": self.options.coins.value,
@@ -111,7 +111,7 @@ class MLSSWorld(World):
                 freq = item_frequencies.get(item.itemName, 1)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
-                if self.options.harhalls_pants and "Harhall's" in item.itemName:
+                if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:
                     continue
                 required_items += [item.itemName for _ in range(freq)]
 
@@ -135,21 +135,7 @@ class MLSSWorld(World):
             filler_items += [item.itemName for _ in range(freq)]
 
         # And finally take as many fillers as we need to have the same amount of items and locations.
-        remaining = len(all_locations) - len(required_items) - 5
-        if self.options.castle_skip:
-            remaining -= len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0)
-        if self.options.skip_minecart and self.options.chuckle_beans == 2:
-            remaining -= 1
-        if self.options.disable_surf:
-            remaining -= 1
-        if self.options.harhalls_pants:
-            remaining -= 1
-        if self.options.chuckle_beans == 0:
-            remaining -= 192
-        if self.options.chuckle_beans == 1:
-            remaining -= 59
-        if not self.options.coins:
-            remaining -= len(coins)
+        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 5
 
         self.multiworld.itempool += [
             self.create_item(filler_item_name) for filler_item_name in self.random.sample(filler_items, remaining)
@@ -171,7 +157,7 @@ class MLSSWorld(World):
         return MLSSItem(item.itemName, item.classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList)))
+        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList))).itemName
 
     def generate_output(self, output_directory: str) -> None:
         patch = MLSSProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
