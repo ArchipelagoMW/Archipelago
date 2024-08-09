@@ -724,7 +724,7 @@ VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Va
 VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vanguard)"
 ANNIHILATOR_AERIAL_TRACKING                             = "Aerial Tracking (Annihilator)"
 STALWART_DUALITY_CHARGE                                 = "Duality Charge (Stalwart)"
-# Colossus
+COLOSSUS_FIRE_LANCE                                     = "Fire Lance (Colossus)"
 WRATHWALKER_AERIAL_TRACKING                             = "Aerial Tracking (Wrathwalker)"
 REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
 # Disruptor
