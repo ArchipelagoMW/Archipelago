@@ -1,0 +1,185 @@
+description: 'Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material'
+name: NoDumbPieces
+game:
+  ChecksMate: 1
+ChecksMate:
+  early_material:
+    off: 1  # this allows the generator to work out its own logical progression
+  fairy_chess_pieces:
+    fide: 1  # this excludes all fairy chess pieces, although you may see many rooks, or no bishops, etc
+  fairy_chess_pawns:
+    vanilla: 1  # this excludes Berolina pawns, so every pawn will be a traditional pawn
+
+---
+
+description: 'A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)'
+name: Traditional
+game:
+  ChecksMate: 15
+ChecksMate:
+  goal:
+    single: 1
+  difficulty:
+    daily: 1
+  enable_tactics:
+    all: 1
+  early_material:
+    pawn: 1 # not counted against locked_items (this may be changed)
+  max_pocket:
+    0: 1
+  fairy_chess_pieces:
+    fide: 1
+  fairy_chess_pawns:
+    vanilla: 1
+  minor_piece_limit_by_type:
+    2: 1
+  major_piece_limit_by_type:
+    2: 1
+  queen_piece_limit:
+    1: 1
+  locked_items:
+    Progressive Minor Piece: 4
+    Progressive Major Piece: 3
+    Progressive Major To Queen: 1
+
+---
+
+description: 'Horde Chess, but with random additional pieces'
+name: OopsAllPawns
+game:
+  ChecksMate: 15
+ChecksMate:
+  accessibility:
+    items: 1
+  difficulty:
+    relaxed: 1 # raises material requirement for goal far beyond just 32 pawns, therefore, player will get a lot
+  early_material:
+    pawn: 1
+  fairy_chess_pieces:
+    betza: 1
+  fairy_chess_pawns:
+    vanilla: 1
+  pocket_limit_by_pocket:
+    1: 1
+  locked_items:
+    Progressive Pawn: 31 # the 32nd pawn is early material
+    Progressive Pocket: 3
+
+---
+
+description: 'Chaos and pocket pieces'
+name: SleevedAce
+game:
+  ChecksMate: 15
+ChecksMate:
+  difficulty:
+    daily: 1
+  piece_types:
+    chaos: 1
+  early_material:
+    major: 1
+  fairy_chess_pieces:
+    betza: 1
+  fairy_chess_pawns:
+    vanilla: 1
+    berolina: 1
+  locked_items:
+    Progressive Pocket: 12
+
+---
+
+description: 'Weird Fairy Chess with opportunity to study the opening'
+name: DifferentArmy
+game:
+  ChecksMate: 15
+ChecksMate:
+  difficulty:
+    daily: 1
+  piece_locations:
+    stable: 1
+  piece_types:
+    stable: 1
+  early_material:
+    piece: 1
+  fairy_chess_pieces:
+    configure: 1
+  fairy_chess_pieces_configure:
+    - Rookies
+    - Clobberers
+    - Nutty
+    - Camel
+  fairy_chess_army:
+    stable: 1
+  fairy_chess_pawns:
+    vanilla: 20
+    mixed: 1
+    berolina: 8
+
+---
+
+description: 'Many exotic royal pieces'
+name: PowerCouples
+game:
+  ChecksMate: 15
+ChecksMate:
+  difficulty:
+    daily: 1
+  piece_types:
+    chaos: 1
+  early_material:
+    major: 1
+  max_kings:
+    3: 1
+  fairy_kings:
+    2: 1
+  fairy_chess_pieces:
+    full: 1
+  fairy_chess_army:
+    chaos: 1
+  fairy_chess_pawns:
+    vanilla: 1
+    berolina: 1
+  minor_piece_limit_by_type:
+    1: 1
+  major_piece_limit_by_type:
+    1: 1
+  queen_piece_limit_by_type:
+    1: 1
+  locked_items:
+    Progressive Consul: 2
+    Progressive King Promotion: 2
+    Progressive Major Piece: 2 # the 3rd is granted as Early Material!
+    Progressive Major To Queen: 3
+
+
+---
+
+description: 'Skip the first half to learn the second half'
+name: Endgame
+game:
+  ChecksMate: 15
+ChecksMate:
+  goal:
+    super: 1
+  difficulty:
+    daily: 1
+  piece_types:
+    chaos: 1
+  early_material:
+    major: 1
+  max_kings:
+    3: 1
+  fairy_kings:
+    1: 1
+  fairy_chess_pieces:
+    betza: 1
+  fairy_chess_army:
+    chaos: 1
+  fairy_chess_pawns:
+    vanilla: 1
+  start_inventory:
+    Progressive Consul: 1
+    Progressive Pawn: 6
+    Progressive Minor Piece: 2
+    Progressive Major Piece: 2
+    Progressive Major To Queen: 1
