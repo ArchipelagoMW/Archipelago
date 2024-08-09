@@ -115,7 +115,7 @@ class Wargroove2World(World):
             starting_faction = Wargroove2Item(self.multiworld.random.choice(factions) + ' Commanders', self.player)
             self.multiworld.push_precollected(starting_faction)
 
-    def create_items(self):
+    def create_items(self) -> None:
         # Fill out our pool with our items from the item table
         pool = []
         precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
