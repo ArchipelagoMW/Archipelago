@@ -10,12 +10,10 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
     # A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)
     "Strict Traditional": {
-        "progression_balancing": 31,
-
         "early_material": EarlyMaterial.option_pawn,  # not counted against locked_items (this may be changed)
 
         "difficulty": 0,  # excludes so many items that it can never get more than 45 material
-        "max_engine_penalties": 4,
+        "max_engine_penalties": 5,
         "max_pocket": 0,
         "fairy_chess_pieces": ['FIDE'],
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
@@ -35,8 +33,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
     # Chaos and pocket pieces
     "Sleeved Ace": {
-        "progression_balancing": 31,
-
         "early_material": EarlyMaterial.option_pawn,
 
         "difficulty": 2,
@@ -58,8 +54,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
 
     # Weird Fairy Chess with opportunity to study the opening
     "Different Army": {
-        "progression_balancing": 31,
-
         "early_material": EarlyMaterial.option_piece,
 
         "difficulty": 2,

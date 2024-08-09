@@ -6,6 +6,7 @@ from . import Locations
 
 from worlds.generic.Rules import set_rule, add_rule
 from .Options import CMOptions
+from .Locations import Tactic
 
 
 def has_french_move(state: CollectionState, player: int) -> bool:
@@ -138,8 +139,11 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
     for name, item in Locations.location_table.items():
         if not super_sized and item.material_expectations == -1:
             continue
-        if not opts.enable_tactics.value == opts.enable_tactics.option_all and item.is_tactic:
-            continue
+        if item.is_tactic is not None:
+            if opts.enable_tactics.value == opts.enable_tactics.option_none:
+                continue
+            elif opts.enable_tactics.value == opts.enable_tactics.option_turns and item.is_tactic == Tactic.Fork:
+                continue
         # AI avoids making trades except where it wins material or secures victory, so require that much material
         material_cost = item.material_expectations if not super_sized else (
             item.material_expectations_grand if always_super_sized else max(

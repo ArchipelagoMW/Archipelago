@@ -56,14 +56,18 @@ class EnableTactics(Choice):
     """
     When you start a new match, chooses the player's piece types (such as whether a minor piece is a Knight or Bishop).
 
-    All: Allows the Fork positions to contain progression, useful, trash or other items.
+    All: Allows the Fork and Play Turns positions to contain progression, useful, trash or other items.
 
-    None: Completely removes the Fork positions from all item pools. Note that the player will have 6 fewer items, as
-    well as 6 fewer locations.
+    Turns: Allows the Play Turns positions to contain progression, useful, trash or other items. Removes the Fork
+    positions from all item pools. (This removes 6 locations and items from the pool.)
+
+    None: Completely removes the Fork and Play Turns positions from all item pools. (Note that the player will have 10
+    fewer items, as well as 10 fewer locations.)
     """
     display_name = "Enable Tactics"
     option_all = 0
-    option_none = 1
+    option_turns = 1
+    option_none = 2
     default = 1
 
 

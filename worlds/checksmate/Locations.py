@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Location
@@ -5,6 +6,11 @@ from BaseClasses import Location
 
 class CMLocation(Location):
     game: str = "ChecksMate"
+
+
+class Tactic(Enum):
+    Fork = 0
+    Turns = 1
 
 
 class CMLocationData(NamedTuple):
@@ -17,7 +23,7 @@ class CMLocationData(NamedTuple):
     # material in grand chess mode
     material_expectations_grand: int
     chessmen_expectations: int = 0
-    is_tactic: bool = False
+    is_tactic: Tactic = None
 
 
 location_table = {
@@ -51,38 +57,38 @@ location_table = {
     # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
     "King to E2/E7 Early": CMLocationData(4_902_015, 0, 0),
     "King to Center": CMLocationData(4_902_016, 50, 50),
-    "King to A File": CMLocationData(4_902_017, 0, 0),
-    "King Captures Anything": CMLocationData(4_902_018, 150, 150),
-    "King to Back Rank": CMLocationData(4_902_019, 1950, 3150),  # requires reaching a rather late-game state
+    "King to A File": CMLocationData(4_902_017, 0, 50),
+    "King Captures Anything": CMLocationData(4_902_018, 150, 350),
+    "King to Back Rank": CMLocationData(4_902_019, 2250, 5150),  # requires reaching a rather late-game state
     # capture series of pieces and pawns within 1 game
-    "Capture 2 Pawns": CMLocationData(4_902_020, 550, 550, 1),
-    "Capture 3 Pawns": CMLocationData(4_902_021, 950, 950, 2),
-    "Capture 4 Pawns": CMLocationData(4_902_022, 1440, 1440, 3),
-    "Capture 5 Pawns": CMLocationData(4_902_023, 1920, 1920, 4),
-    "Capture 6 Pawns": CMLocationData(4_902_024, 2375, 2375, 5),
-    "Capture 7 Pawns": CMLocationData(4_902_025, 2855, 2855, 6),
-    "Capture 8 Pawns": CMLocationData(4_902_026, 3345, 3345, 7),
-    "Capture 9 Pawns": CMLocationData(4_902_120, -1, 3745, 8),
-    "Capture 10 Pawns": CMLocationData(4_902_121, -1, 4145, 9),
+    "Capture 2 Pawns": CMLocationData(4_902_020, 750, 850, 1),
+    "Capture 3 Pawns": CMLocationData(4_902_021, 1150, 1350, 2),
+    "Capture 4 Pawns": CMLocationData(4_902_022, 1640, 1840, 3),
+    "Capture 5 Pawns": CMLocationData(4_902_023, 2120, 2320, 4),
+    "Capture 6 Pawns": CMLocationData(4_902_024, 2575, 2975, 5),
+    "Capture 7 Pawns": CMLocationData(4_902_025, 2955, 3555, 6),
+    "Capture 8 Pawns": CMLocationData(4_902_026, 3445, 4145, 7),
+    "Capture 9 Pawns": CMLocationData(4_902_120, -1, 4645, 8),
+    "Capture 10 Pawns": CMLocationData(4_902_121, -1, 5245, 9),
     # Specific pieces should not be guaranteed to be accessible early, so we add +4 material (1piece+1pawn more)
-    "Capture 2 Pieces": CMLocationData(4_902_027, 1300, 1300, 1),
-    "Capture 3 Pieces": CMLocationData(4_902_028, 1900, 1900, 2),
-    "Capture 4 Pieces": CMLocationData(4_902_029, 2150, 2150, 3),
-    "Capture 5 Pieces": CMLocationData(4_902_030, 2550, 2550, 4),
-    "Capture 6 Pieces": CMLocationData(4_902_031, 2900, 2900, 5),
-    "Capture 7 Pieces": CMLocationData(4_902_032, 3600, 3600, 6),
-    "Capture 8 Pieces": CMLocationData(4_902_122, -1, 3600, 7),
-    "Capture 9 Pieces": CMLocationData(4_902_123, -1, 3600, 8),
+    "Capture 2 Pieces": CMLocationData(4_902_027, 1400, 2300, 1),
+    "Capture 3 Pieces": CMLocationData(4_902_028, 1900, 2600, 2),
+    "Capture 4 Pieces": CMLocationData(4_902_029, 2270, 3150, 3),
+    "Capture 5 Pieces": CMLocationData(4_902_030, 2650, 3650, 4),
+    "Capture 6 Pieces": CMLocationData(4_902_031, 3100, 4100, 5),
+    "Capture 7 Pieces": CMLocationData(4_902_032, 3650, 4600, 6),
+    "Capture 8 Pieces": CMLocationData(4_902_122, -1, 4900, 7),
+    "Capture 9 Pieces": CMLocationData(4_902_123, -1, 5400, 8),
     "Capture 2 Of Each": CMLocationData(4_902_033, 1600, 1600, 3),
     "Capture 3 Of Each": CMLocationData(4_902_034, 2150, 2150, 5),
     "Capture 4 Of Each": CMLocationData(4_902_035, 2550, 2550, 7),
-    "Capture 5 Of Each": CMLocationData(4_902_036, 3000, 3000, 9),
-    "Capture 6 Of Each": CMLocationData(4_902_037, 3500, 3500, 11),
-    "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 3850, 13),
-    "Capture 8 Of Each": CMLocationData(4_902_130, -1, 3850, 15),
-    "Capture 9 Of Each": CMLocationData(4_902_131, -1, 3850, 17),
+    "Capture 5 Of Each": CMLocationData(4_902_036, 3000, 4200, 9),
+    "Capture 6 Of Each": CMLocationData(4_902_037, 3500, 4600, 11),
+    "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 5150, 13),
+    "Capture 8 Of Each": CMLocationData(4_902_130, -1, 5550, 15),
+    "Capture 9 Of Each": CMLocationData(4_902_131, -1, 5950, 17),
     "Capture Everything": CMLocationData(4_902_039, 4020, 6050, -1),
-    "Capture Any 2": CMLocationData(4_902_070, 600, 750, 1),
+    "Capture Any 2": CMLocationData(4_902_070, 750, 850, 1),
     "Capture Any 3": CMLocationData(4_902_071, 1050, 1350, 2),
     "Capture Any 4": CMLocationData(4_902_072, 1450, 2050, 3),
     "Capture Any 5": CMLocationData(4_902_073, 1850, 2750, 4),
@@ -99,6 +105,10 @@ location_table = {
     "Capture Any 16": CMLocationData(4_902_084, -1, 5750, 15),
     "Capture Any 17": CMLocationData(4_902_085, -1, 5850, 16),
     "Capture Any 18": CMLocationData(4_902_086, -1, 5900, 17),
+    "Current Objective: Survive 3 Turns": CMLocationData(4_902_140, 0, 0, 0, is_tactic=Tactic.Turns),
+    "Current Objective: Survive 5 Turns": CMLocationData(4_902_141, 100, 130, 1, is_tactic=Tactic.Turns),
+    "Current Objective: Survive 10 Turns": CMLocationData(4_902_142, 1500, 2500, 7, is_tactic=Tactic.Turns),
+    "Current Objective: Survive 20 Turns": CMLocationData(4_902_143, 3800, 5800, 15, is_tactic=Tactic.Turns),
     # some easier interaction moves
     "Threaten Pawn": CMLocationData(4_902_040, 0, 0),
     "Threaten Minor": CMLocationData(4_902_041, 200, 400),
@@ -108,14 +118,14 @@ location_table = {
     # special moves and tactics
     # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
     # "French Move": CMLocationData(4_902_050, 0),
-    "Fork, Sacrificial": CMLocationData(4_902_052, 700, 1100, 6, is_tactic=True),
-    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, 2700, 9, is_tactic=True),
+    "Fork, Sacrificial": CMLocationData(4_902_052, 700, 1100, 6, is_tactic=Tactic.Fork),
+    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, 2700, 9, is_tactic=Tactic.Fork),
     # AI really hates getting royal forked
-    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, 5200, 12, is_tactic=True),
-    "Fork, True": CMLocationData(4_902_055, 2550, 4550, 10, is_tactic=True),
-    "Fork, True Triple": CMLocationData(4_902_056, 3450, 5450, 12, is_tactic=True),
+    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, 5200, 12, is_tactic=Tactic.Fork),
+    "Fork, True": CMLocationData(4_902_055, 2550, 4550, 10, is_tactic=Tactic.Fork),
+    "Fork, True Triple": CMLocationData(4_902_056, 3450, 5450, 12, is_tactic=Tactic.Fork),
     # I sincerely believe this should be filler
-    "Fork, True Royal": CMLocationData(4_902_057, 4020, 6020, 14, is_tactic=True),
+    "Fork, True Royal": CMLocationData(4_902_057, 4020, 6020, 14, is_tactic=Tactic.Fork),
     "O-O Castle": CMLocationData(4_902_058, 0, 0, 2),
     "O-O-O Castle": CMLocationData(4_902_059, 0, 0, 2),
     # "Discovered Attack": CMLocationData(4_902_060, 0),

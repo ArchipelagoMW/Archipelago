@@ -10,7 +10,8 @@ from worlds.AutoWorld import WebWorld, World
 from .Options import CMOptions, piece_type_limit_options, piece_limit_options
 from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
                     useful_items, item_name_groups, CMItemData)
-from .Locations import CMLocation, location_table, highest_chessmen_requirement_small, highest_chessmen_requirement
+from .Locations import CMLocation, location_table, highest_chessmen_requirement_small, highest_chessmen_requirement, \
+    Tactic
 from .Presets import checksmate_option_presets
 from .Rules import set_rules, determine_difficulty, determine_relaxation, determine_min_material, determine_max_material
 
@@ -251,7 +252,9 @@ class CMWorld(World):
         if not super_sized:
             max_items -= len([loc for loc in location_table if location_table[loc].material_expectations == -1])
         if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
-            max_items -= len([loc for loc in location_table if location_table[loc].is_tactic])
+            max_items -= len([loc for loc in location_table if location_table[loc].is_tactic is not None])
+        elif self.options.enable_tactics.value == self.options.enable_tactics.option_turns:
+            max_items -= len([loc for loc in location_table if location_table[loc].is_tactic == Tactic.Fork])
 
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
                material < max_material and len(my_progression_items) > 0):
