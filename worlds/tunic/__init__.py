@@ -186,9 +186,10 @@ class TunicWorld(World):
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         # verify that it abides by direction pairs if enabled
                         if (cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_direction_pairs
-                                and not verify_plando_directions(cxn)):
+                                and not verify_plando_directions(player_cxn)):
+                            player_dir = "<->" if player_cxn.direction == "both" else "-->"
                             raise Exception(f"TUNIC: Conflict between Entrance Layout option and Plando Connection: "
-                                            f"entrance: {cxn.entrance}, exit: {cxn.exit}, direction: {cxn.direction}")
+                                            f"{player_cxn.entrance} {player_dir} {player_cxn.exit}")
                         # check if this pair is the same as a pair in the group already
                         if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
                             or (player_cxn.entrance == group_cxn.exit and player_cxn.exit == group_cxn.entrance
