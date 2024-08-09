@@ -358,9 +358,9 @@ def distribute_early_items(multiworld: MultiWorld,
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
         base_state = multiworld.state.copy()
-        base_state.sweep_for_events(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
+        per_player_early_locations = get_early_locations(multiworld)
         for i, loc in enumerate(fill_locations):
-            if loc.can_reach(base_state):
+            if loc in per_player_early_locations[loc.player]:
                 if loc.progress_type == LocationProgressType.PRIORITY:
                     early_priority_locations.append(loc)
                 else:
@@ -821,17 +821,6 @@ def distribute_planned(multiworld: MultiWorld) -> None:
         else:
             warn(warning, force)
 
-    swept_state = multiworld.state.copy()
-    swept_state.sweep_for_events()
-    reachable = frozenset(multiworld.get_reachable_locations(swept_state))
-    early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
-    non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
-    for loc in multiworld.get_unfilled_locations():
-        if loc in reachable:
-            early_locations[loc.player].append(loc.name)
-        else:  # not reachable with swept state
-            non_early_locations[loc.player].append(loc.name)
-
     world_name_lookup = multiworld.world_name_lookup
 
     block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any], str]
@@ -911,12 +900,21 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 locations = block['locations']
             if isinstance(locations, str):
                 locations = [locations]
-
-            if isinstance(locations, dict):
+            elif isinstance(locations, dict):
                 location_list = []
                 for key, value in locations.items():
                     location_list += [key] * value
                 locations = location_list
+
+            if "early_locations" in locations or "non_early_locations" in locations:
+                per_player_early_locations = get_early_locations(multiworld)
+                early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+                non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+                for loc in multiworld.get_unfilled_locations():
+                    if loc in per_player_early_locations[loc.player]:
+                        early_locations[loc.player].append(loc.name)
+                    else:  # not reachable with swept state
+                        non_early_locations[loc.player].append(loc.name)
 
             if "early_locations" in locations:
                 locations.remove("early_locations")
@@ -1015,3 +1013,12 @@ def distribute_planned(multiworld: MultiWorld) -> None:
         except Exception as e:
             raise Exception(
                 f"Error running plando for player {player} ({multiworld.player_name[player]})") from e
+
+
+def get_early_locations(multiworld: MultiWorld) -> typing.Dict[int, typing.List[Location]]:
+    early_locations = collections.defaultdict(list)
+    base_state = multiworld.state.copy()
+    for location in multiworld.get_reachable_locations(base_state):
+        early_locations[location.player].append(location)
+    call_all(multiworld, "modify_early_locations", early_locations)
+    return early_locations

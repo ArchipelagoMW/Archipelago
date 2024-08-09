@@ -378,6 +378,19 @@ class World(metaclass=AutoWorldRegister):
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
         pass
 
+    def modify_early_locations(self, early_locations: Dict[int, List["Location"]]) -> None:
+        """
+        Gets called as part of distribute_early_items and early items plando.
+        Can be used to modify which locations are considered early.
+        """
+        # make a clean copy of state with just start inventory
+        sweep_state = self.multiworld.state.copy()
+        # collect any events from our already reachable locations
+        for location in early_locations[self.player]:
+            if location.is_event and location.advancement:
+                sweep_state.collect(location.item, event=True, location=location)
+        early_locations[self.player] += self.multiworld.get_reachable_locations(sweep_state, self.player)
+
     def fill_hook(self,
                   progitempool: List["Item"],
                   usefulitempool: List["Item"],
@@ -391,6 +404,7 @@ class World(metaclass=AutoWorldRegister):
         Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
+        pass
 
     def generate_output(self, output_directory: str) -> None:
         """
