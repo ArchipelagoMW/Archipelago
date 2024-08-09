@@ -675,6 +675,39 @@ Some uses could be to add additional variables to the state object, or to have a
 with the state.
 Please do this with caution and only when necessary.
 
+### Logic Dependent On Other Players
+
+Some worlds may want to connect different players' worlds together using logic rules that reference items/locations/etc.
+that belong to a different player. Each player's World instance has `self.player_dependencies`, a set of player numbers
+that the world's logic depends on. By default, this set contains only the player number of the world itself, but it can
+be modified to add any additional player numbers that the world's logic depends on.
+
+```python
+# __init__.py
+
+from worlds.generic.Rules import set_rule
+
+class MyGameWorld(World):
+    # ...
+    @classmethod
+    def stage_set_rules(cls, multiworld: MultiWorld) -> None:
+        # Consider a game where players in the multiworld can trade some items between each other, and where the logic
+        # accounts for the players trading items to help each other progress.
+        players = multiworld.get_game_players(cls.game)
+        
+        # Require any player of this game in the multiworld to have "Tradable Item".
+        def anyone_has_tradable(state: CollectionState) -> bool:
+            return any(state.has("Tradable Item", player_number) for player_number in players)
+
+        for player in players:
+            world = multiworld.worlds[player]
+            my_location = world.get_location("Requires Tradable Item Location")
+            set_rule(my_location, anyone_has_tradable)
+            # The logic for `my_location` depends on every player of this game, so the world's logic as a whole depends
+            # on every player of this game.
+            world.player_dependencies.update(players)
+```
+
 #### pre_fill
 
 ```python

@@ -8,7 +8,7 @@ import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import Counter, deque
+from collections import Counter, deque, defaultdict
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
@@ -536,36 +536,40 @@ class MultiWorld():
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
     def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
-        if starting_state:
-            if self.has_beaten_game(starting_state):
-                return True
+        # First check if the game can already be beaten from the starting state.
+        player_ids = self.player_ids
+        state = CollectionState(self) if starting_state is None else starting_state
+        beaten_game_players: Set[int] = set()
+        for player in player_ids:
+            if self.has_beaten_game(state, player):
+                beaten_game_players.add(player)
+        # The game can only be beaten once all players can beat their game.
+        num_player_ids = len(player_ids)
+        if len(beaten_game_players) == num_player_ids:
+            return True
+
+        # Sweeping modifies the state, so copy `starting_state` to prevent modifying the original.
+        if state is starting_state:
             state = starting_state.copy()
-        else:
-            if self.has_beaten_game(self.state):
-                return True
-            state = CollectionState(self)
-        prog_locations = {location for location in self.get_locations() if location.item
-                          and location.item.advancement and location not in state.locations_checked}
 
-        while prog_locations:
-            sphere: Set[Location] = set()
-            # build up spheres of collection radius.
-            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for location in prog_locations:
-                if location.can_reach(state):
-                    sphere.add(location)
+        # CollectionState.sweep_for_events also yields group IDs, but those don't have a game to beat, so consider all
+        # groups to be able to beat their games from the start.
+        beaten_game_players.update(self.groups.keys())
+        all_games_beaten_length = num_player_ids + len(self.groups)
 
-            if not sphere:
-                # ran out of places and did not finish yet, quit
-                return False
-
-            for location in sphere:
-                state.collect(location.item, True, location)
-            prog_locations -= sphere
-
-            if self.has_beaten_game(state):
-                return True
-
+        # Sweep through all locations that contain uncollected advancement items and, at the end of each sweep
+        # iteration, get the players that were logically affected by that sweep iteration.
+        for players_affected_by_sweep in state.sweep_for_events(yield_each_sweep=True,
+                                                                checked_locations=state.locations_checked):
+            for player in players_affected_by_sweep:
+                # Each player affected by the sweep iteration might now be able to beat their game.
+                # Skip any players than could already beat their game from a previous iteration.
+                if player not in beaten_game_players and self.has_beaten_game(state, player):
+                    beaten_game_players.add(player)
+                    if len(beaten_game_players) == all_games_beaten_length:
+                        # All players can now beat their games.
+                        return True
+        # The sweep ran out of accessible locations before all players were able to beat their games.
         return False
 
     def get_spheres(self) -> Iterator[Set[Location]]:
@@ -755,20 +759,120 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
-        if locations is None:
-            locations = self.multiworld.get_filled_locations()
-        reachable_events = True
-        # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.advancement and location not in self.events}
+    def _sweep_for_events(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
+                          ) -> Iterable[Iterator[int]]:
+        """
+        The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
+        yield statement.
+        """
+        # Usually, a world's logic only depends on its own items/locations/etc., but worlds are allowed to logically
+        # depend on other worlds.
+        # Construct a mapping from each player number to the list of player numbers with logic dependent on that player.
+        player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
+        worlds = self.multiworld.worlds
+        for player in self.multiworld.get_all_ids():
+            for dependent_on_player in worlds[player].player_dependencies:
+                player_logic_dependents[dependent_on_player].append(player)
 
-        while reachable_events:
-            reachable_events = {location for location in locations if location.can_reach(self)}
-            locations -= reachable_events
-            for event in reachable_events:
-                self.events.add(event)
-                assert isinstance(event.item, Item), "tried to collect Event with no Item"
-                self.collect(event.item, True, event)
+        # If no items logically relevant to a player's world were collected in a sweep iteration, then that world's
+        # locations can be skipped in the next sweep iteration because that world should not have any reachable
+        # locations at the start of the next sweep iteration.
+        # The first iteration must check the locations for all players' worlds because it is not known which worlds
+        # might have reachable locations.
+        players_logically_affected_by_last_sweep: Set[int] = set(self.multiworld.get_all_ids())
+        while players_logically_affected_by_last_sweep:
+            received_advancement_players = set()
+            next_events_per_player: List[Tuple[int, List[Location]]] = []
+
+            for player, locations in events_per_player:
+                if player not in players_logically_affected_by_last_sweep:
+                    # If the player was not affected by the last sweep, skip their locations.
+                    next_events_per_player.append((player, locations))
+                    continue
+
+                # Accessibility of each location is checked first because a player's region accessibility cache becomes
+                # stale whenever one of their own items is collected into the state.
+                accessible_locations: List[Location] = []
+                inaccessible_locations: List[Location] = []
+                for location in locations:
+                    if location.can_reach(self):
+                        # Locations containing Items that do not belong to `player` could be collected immediately
+                        # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
+                        # accessible locations are collected in a single loop.
+                        accessible_locations.append(location)
+                    else:
+                        inaccessible_locations.append(location)
+                if inaccessible_locations:
+                    next_events_per_player.append((player, inaccessible_locations))
+
+                # Collect all the items from the accessible locations.
+                for location in accessible_locations:
+                    self.events.add(location)
+                    item = location.item
+                    assert isinstance(item, Item), "tried to collect Event with no Item"
+                    self.collect(item, True, location)
+                    # Collecting an advancement item is always considered to affect logic, so it could mean the owning
+                    # player (or any other players with logic dependent on the owning player's world) can now access
+                    # additional locations.
+                    received_advancement_players.add(item.player)
+
+            events_per_player = next_events_per_player
+            # Find all players whose logic depends on a player that received advancement during this iteration.
+            # For each player that received advancement, look up the list of players with logic dependent on that player
+            # and then flatten all the lists into a single set.
+            players_logically_affected_by_last_sweep = {dependent_player for player in received_advancement_players
+                                                        for dependent_player in player_logic_dependents[player]}
+            if yield_each_sweep:
+                # Yielding lets the caller respond to changes in the CollectionState during the sweep and respond to
+                # which players have been logically affected by the current sweep.
+                # Yield the iterator rather than the set itself so that the set cannot be modified.
+                yield iter(players_logically_affected_by_last_sweep)
+
+    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
+                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[Iterator[int]]]:
+        """
+        Sweep through the locations that contain uncollected advancement items, collecting the items into the state
+        until there are no more reachable locations that contain uncollected advancement items.
+
+        :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
+        :param yield_each_sweep: When True, return a generator that yields at the end of each sweep iteration. The
+        yielded value is an iterator of unordered player numbers and group IDs that were logically affected by the sweep
+        iteration.
+        :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
+        self.events when None.
+        """
+        if checked_locations is None:
+            checked_locations = self.events
+
+        # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
+        # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
+        events_per_player: List[Tuple[int, List[Location]]]
+        if locations is None:
+            # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
+            events_per_player = []
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                filtered_locations = [location for location in locations_dict.values()
+                                      if location.advancement and location not in checked_locations]
+                if filtered_locations:
+                    events_per_player.append((player, filtered_locations))
+        else:
+            # Filter and separate the locations into a list for each player.
+            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
+            for location in locations:
+                if location.advancement and location not in checked_locations:
+                    events_per_player_dict[location.player].append(location)
+            # Convert to a list of tuples.
+            events_per_player = list(events_per_player_dict.items())
+            del events_per_player_dict
+
+        if yield_each_sweep:
+            # Return a generator that will yield at the end of each sweep iteration.
+            return self._sweep_for_events(events_per_player, True)
+        else:
+            # Create the generator, but tell it not to yield anything, so it will run to completion in zero iterations
+            # once started, then start and exhaust the generator by attempting to iterate it.
+            for _ in self._sweep_for_events(events_per_player, False):
+                assert False, "Generator yielded when it should have run to completion without yielding"
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
