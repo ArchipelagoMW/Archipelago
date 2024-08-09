@@ -152,7 +152,7 @@ class Wargroove2World(World):
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Wargroove 2 Victory", self.player, self.options.final_levels)
 
-    def set_rules(self):
+    def set_rules(self) -> None:
         set_rules(self.multiworld, self.level_list, self.first_level, self.final_levels, self.player)
 
     def create_item(self, name: str) -> Item:
