@@ -25,7 +25,7 @@ class TestCraftsanityLogic(SVTestBase):
         self.collect_all_the_money()
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Marble Brazier Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Marble Brazier Recipe"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
 
     def test_can_learn_crafting_recipe(self):
@@ -38,16 +38,16 @@ class TestCraftsanityLogic(SVTestBase):
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
-        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Torch Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Torch Recipe"), prevent_sweep=False)
         self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Fall"), event=False)
+        self.multiworld.state.collect(self.create_item("Fall"), prevent_sweep=False)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
 
 
@@ -62,16 +62,16 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
-        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Fall"), event=False)
+        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Fall"), prevent_sweep=False)
         self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), prevent_sweep=False)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Torch Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Torch Recipe"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
 
 
@@ -92,7 +92,7 @@ class TestNoCraftsanityLogic(SVTestBase):
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
-        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), event=False)
+        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), prevent_sweep=False)
         self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         result = rule(self.multiworld.state)
@@ -113,11 +113,11 @@ class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
-        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Fall"), event=False)
+        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Fall"), prevent_sweep=False)
         self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)

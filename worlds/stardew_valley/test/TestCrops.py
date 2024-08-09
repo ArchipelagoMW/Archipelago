@@ -11,10 +11,10 @@ class TestCropsanityRules(SVTestBase):
         harvest_cactus = self.world.logic.region.can_reach_location("Harvest Cactus Fruit")
         self.assert_rule_false(harvest_cactus, self.multiworld.state)
 
-        self.multiworld.state.collect(self.world.create_item("Cactus Seeds"), event=False)
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        self.multiworld.state.collect(self.world.create_item("Desert Obelisk"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Cactus Seeds"), prevent_sweep=False)
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
+        self.multiworld.state.collect(self.world.create_item("Desert Obelisk"), prevent_sweep=False)
         self.assert_rule_false(harvest_cactus, self.multiworld.state)
 
-        self.multiworld.state.collect(self.world.create_item("Greenhouse"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Greenhouse"), prevent_sweep=False)
         self.assert_rule_true(harvest_cactus, self.multiworld.state)
