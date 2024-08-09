@@ -77,27 +77,20 @@ bosses = {
     "Vile": [
         f"{RegionName.vile_before} -> {RegionName.vile_boss}",
     ],
-    "Press Disposer": [
+    "Dr. Doppler's Lab 1 Boss": [
         LocationName.doppler_lab_1_boss,
         EventName.dr_doppler_lab_1_clear
     ],
-    "Godkarmachine": [
-        LocationName.doppler_lab_1_boss,
-        EventName.dr_doppler_lab_1_clear
-    ],
-    "Dr. Doppler's Lab 2 Boss": [
-        LocationName.doppler_lab_2_boss,
-        EventName.dr_doppler_lab_2_clear
-    ],
+    "Dr. Doppler's Lab 2 Boss": [],
     "Doppler": [
-        LocationName.doppler_lab_3_boss,
+        f"{RegionName.dr_doppler_lab_3_after_rematches} -> {RegionName.dr_doppler_lab_3_boss}",
         EventName.dr_doppler_lab_3_clear
     ],
     "Sigma": [
-        f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}"
+        f"{RegionName.dr_doppler_lab_4} -> {RegionName.dr_doppler_lab_4_boss}"
     ],
     "Kaiser Sigma": [
-        f"{RegionName.dr_doppler_lab_3_boss} -> {RegionName.dr_doppler_lab_4}"
+        f"{RegionName.dr_doppler_lab_4} -> {RegionName.dr_doppler_lab_4_boss}"
     ]
 }
 
@@ -166,7 +159,7 @@ def set_rules(world: MMX3World):
         
     # Set Boss rematch rules
     if world.options.doppler_lab_3_boss_rematch_count.value > 0:
-        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_boss}", player),
+        set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_after_rematches}", player),
                 lambda state: state.has(EventName.boss_rematch_clear, player, world.options.doppler_lab_3_boss_rematch_count.value))
     
     # Vile entrance rules
@@ -226,7 +219,8 @@ def set_rules(world: MMX3World):
     
     # Set Byte rules
     set_rule(multiworld.get_location(LocationName.byte_defeat, player),
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.byte_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.options.byte_medal_count.value) and
+                           state.can_reach_location(LocationName.bit_defeat, player))
     set_rule(multiworld.get_location(EventName.byte_defeated, player),
              lambda state: state.has(ItemName.maverick_medal, player, world.options.byte_medal_count.value))
 
@@ -335,6 +329,10 @@ def set_rules(world: MMX3World):
     if world.options.pickupsanity.value:
         add_pickupsanity_logic(world)
 
+    # Handle helmet logic
+    if world.options.logic_helmet_checkpoints.value:
+        add_helmet_logic(world)
+
 
 def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> bool:
     states = list()
@@ -352,10 +350,31 @@ def add_boss_weakness_logic(world: MMX3World):
     boss_dict = {}
     for boss, regions in bosses.items():
         boss_dict[boss] = regions.copy()
+
         if boss in mavericks and world.options.doppler_lab_3_boss_rematch_count.value == 0:
             boss_dict[boss].pop()
             boss_dict[boss].pop()
 
+        if boss == "Dr. Doppler's Lab 1 Boss":
+            world.boss_weaknesses["Dr. Doppler's Lab 1 Boss"] = list()
+            for weakness in world.boss_weaknesses["Godkarmachine"]:
+                world.boss_weaknesses["Dr. Doppler's Lab 1 Boss"].append(weakness)
+            for weakness in world.boss_weaknesses["Press Disposer"]:
+                world.boss_weaknesses["Dr. Doppler's Lab 1 Boss"].append(weakness)
+
+        if boss == "Dr. Doppler's Lab 2 Boss":
+            if world.options.doppler_lab_2_boss == "vile":
+                boss_dict["Vile Goliath"] = list()
+                boss_dict["Vile Goliath"].append(LocationName.doppler_lab_2_boss)
+                boss_dict["Vile Goliath"].append(EventName.dr_doppler_lab_2_clear)
+                boss_dict["Vile"].append(LocationName.doppler_lab_2_boss)
+                boss_dict["Vile"].append(EventName.dr_doppler_lab_2_clear)
+            else:
+                boss_dict["Volt Kurageil"] = list()
+                boss_dict["Volt Kurageil"].append(LocationName.doppler_lab_2_boss)
+                boss_dict["Volt Kurageil"].append(EventName.dr_doppler_lab_2_clear)
+            del boss_dict["Dr. Doppler's Lab 2 Boss"]
+        
     for boss, regions in boss_dict.items():
         weaknesses = world.boss_weaknesses[boss]
         rulesets = list()
@@ -405,3 +424,27 @@ def add_pickupsanity_logic(world: MMX3World):
     set_rule(multiworld.get_location(LocationName.crush_crawfish_1up_2, player),
              lambda state: state.has(ItemName.tornado_fang, player))
     
+def add_helmet_logic(world: MMX3World):
+    player = world.player
+    multiworld = world.multiworld
+
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_underwater}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_dam}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_wall_jump}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_climbing}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger} -> {RegionName.neon_tiger_bit_byte}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger} -> {RegionName.neon_tiger_hill}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet} -> {RegionName.blast_hornet_outside}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3} -> {RegionName.dr_doppler_lab_3_after_rematches}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))

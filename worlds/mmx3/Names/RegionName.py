@@ -71,6 +71,8 @@ dr_doppler_lab_2 = "Dr. Doppler's Lab 2"
 
 dr_doppler_lab_3 = "Dr. Doppler's Lab 3"
 dr_doppler_lab_3_rematches = "Dr. Doppler's Lab 3 - Rematches"
+dr_doppler_lab_3_after_rematches = "Dr. Doppler's Lab 3 - After Rematches"
 dr_doppler_lab_3_boss = "Dr. Doppler's Lab 3 - Boss"
 
 dr_doppler_lab_4 = "Dr. Doppler's Lab 4"
+dr_doppler_lab_4_boss = "Dr. Doppler's Lab 4 - Sigma"

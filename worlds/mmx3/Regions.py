@@ -78,8 +78,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     dr_doppler_lab_2 = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_2)
     dr_doppler_lab_3 = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_3)
     dr_doppler_lab_3_rematches = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_3_rematches)
+    dr_doppler_lab_3_after_rematches = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_3_after_rematches)
     dr_doppler_lab_3_boss = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_3_boss)
     dr_doppler_lab_4 = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_4)
+    dr_doppler_lab_4_boss = create_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_4_boss)
 
     bit_byte = create_region(multiworld, player, active_locations, RegionName.bit_byte)
 
@@ -143,8 +145,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         dr_doppler_lab_2,
         dr_doppler_lab_3,
         dr_doppler_lab_3_rematches,
+        dr_doppler_lab_3_after_rematches,
         dr_doppler_lab_3_boss,
         dr_doppler_lab_4,
+        dr_doppler_lab_4_boss,
         bit_byte,
     ]
 
@@ -247,7 +251,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_event_to_region(multiworld, player, RegionName.dr_doppler_lab_3_boss, EventName.dr_doppler_lab_3_clear)
 
     # Dr. Doppler Lab 4
-    add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_4, LocationName.victory)
+    add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_4_boss, LocationName.victory)
 
     # Vile
     add_location_to_region(multiworld, player, active_locations, RegionName.vile_boss, LocationName.vile_stage_boss)
@@ -327,7 +331,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_1, LocationName.doppler_lab_1_hp_2)
         
         # Dr. Doppler Lab 3
-        add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_3_boss, LocationName.doppler_lab_3_hp)
+        add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_3_after_rematches, LocationName.doppler_lab_3_hp)
 
         # Vile
         add_location_to_region(multiworld, player, active_locations, RegionName.vile_before, LocationName.vile_stage_hp_1)
@@ -438,7 +442,6 @@ def connect_regions(world: World):
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_2)
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_3)
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_4)
-        connect(world, RegionName.dr_doppler_lab_3_boss, RegionName.dr_doppler_lab_4)
     else:
         connect(world, RegionName.dr_doppler_lab, RegionName.dr_doppler_lab_1)
         connect(world, RegionName.dr_doppler_lab_1, RegionName.dr_doppler_lab_2)
@@ -446,7 +449,31 @@ def connect_regions(world: World):
         connect(world, RegionName.dr_doppler_lab_3_boss, RegionName.dr_doppler_lab_4)
     
     connect(world, RegionName.dr_doppler_lab_3, RegionName.dr_doppler_lab_3_rematches)
-    connect(world, RegionName.dr_doppler_lab_3_rematches, RegionName.dr_doppler_lab_3_boss)
+    connect(world, RegionName.dr_doppler_lab_3_rematches, RegionName.dr_doppler_lab_3_after_rematches)
+    connect(world, RegionName.dr_doppler_lab_3_after_rematches, RegionName.dr_doppler_lab_3_boss)
+    
+    connect(world, RegionName.dr_doppler_lab_4, RegionName.dr_doppler_lab_4_boss)
+
+    # Connect checkpoints
+    if world.options.logic_helmet_checkpoints.value:
+        # Connect Toxic Seahorse
+        connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_underwater)
+        connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_dam)
+
+        # Connect Tunnel Rhino
+        connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_wall_jump)
+        connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_climbing)
+
+        # Connect Neon Tiger
+        connect(world, RegionName.neon_tiger, RegionName.neon_tiger_bit_byte)
+        connect(world, RegionName.neon_tiger, RegionName.neon_tiger_hill)
+
+        # Connect Blast Hornet
+        connect(world, RegionName.blast_hornet, RegionName.blast_hornet_outside)
+        
+        # Connect Dr. Doppler Lab levels
+        connect(world, RegionName.dr_doppler_lab_3, RegionName.dr_doppler_lab_3_after_rematches)
+
     
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
     ret = Region(name, player, multiworld)

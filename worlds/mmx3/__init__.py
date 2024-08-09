@@ -156,7 +156,10 @@ class MMX3World(World):
             itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2 + self.options.jammed_buster.value)]
         else:
-            itempool += [self.create_item(ItemName.third_armor_helmet, ItemClassification.useful) for _ in range(2)]
+            if self.options.logic_helmet_checkpoints.value:
+                itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
+            else:
+                itempool += [self.create_item(ItemName.third_armor_helmet, ItemClassification.useful) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_body, ItemClassification.useful) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms, ItemClassification.useful)]
             itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(1 + self.options.jammed_buster.value)]

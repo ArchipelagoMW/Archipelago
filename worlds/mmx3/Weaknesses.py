@@ -612,7 +612,7 @@ def handle_weaknesses(world):
     if world.options.doppler_lab_2_boss == "volt_kurageil":
         world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"] = world.boss_weaknesses["Volt Kurageil"].copy()
     else:
-        world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"] = []
+        world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"] = list()
         for weakness in world.boss_weaknesses["Vile"]:
             world.boss_weaknesses["Dr. Doppler's Lab 2 Boss"].append(weakness)
         for weakness in world.boss_weaknesses["Vile Goliath"]:
