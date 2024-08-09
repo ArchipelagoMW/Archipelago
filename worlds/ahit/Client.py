@@ -4,7 +4,7 @@ import websockets
 import functools
 from copy import deepcopy
 from typing import List, Any, Iterable
-from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkItem
+from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkItem, NetworkPlayer
 from MultiServer import Endpoint
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 
@@ -101,11 +101,34 @@ class AHITContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
-            self.connected_msg = encode([args])
+            json = args
+            # This data is not needed and causes the game to freeze for long periods of time in large asyncs.
+            if "slot_info" in json.keys():
+                json["slot_info"] = {}
+            if "players" in json.keys():
+                me: NetworkPlayer
+                for n in json["players"]:
+                    if n.slot == json["slot"] and n.team == json["team"]:
+                        me = n
+                        break
+
+                # Only put our player info in there as we actually need it
+                json["players"] = [me]
+            if DEBUG:
+                print(json)
+            self.connected_msg = encode([json])
             if self.awaiting_info:
                 self.server_msgs.append(self.room_info)
                 self.update_items()
                 self.awaiting_info = False
+
+        elif cmd == "RoomUpdate":
+            # Same story as above
+            json = args
+            if "players" in json.keys():
+                json["players"] = []
+
+            self.server_msgs.append(encode(json))
 
         elif cmd == "ReceivedItems":
             if args["index"] == 0:
@@ -162,6 +185,17 @@ async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
                                 logger.info(f"Expected: {ctx.seed_name}, got: {seed_name}")
                                 text = encode([{"cmd": "PrintJSON",
                                                 "data": [{"text": "Connection aborted - save file to seed mismatch"}]}])
+                                await ctx.send_msgs_proxy(text)
+                                await ctx.disconnect_proxy()
+                                break
+
+                        if ctx.auth:
+                            name = msg.get("name", "")
+                            if name != "" and name != ctx.auth:
+                                logger.info("Aborting proxy connection: player name mismatch from save file")
+                                logger.info(f"Expected: {ctx.auth}, got: {name}")
+                                text = encode([{"cmd": "PrintJSON",
+                                                "data": [{"text": "Connection aborted - player name mismatch"}]}])
                                 await ctx.send_msgs_proxy(text)
                                 await ctx.disconnect_proxy()
                                 break
