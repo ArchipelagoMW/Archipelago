@@ -63,8 +63,8 @@ class Wargroove2Level:
             state.can_reach(self.region, 'Region', self.player) and rule(state) and additional_rule(state))
         set_region_exit_rules(self.region, multiworld, self.player, self.victory_locations, operator='and')
 
-    def define_region(self, name: str, world: MultiWorld, exits=None) -> Region:
-        self.region = Region(name, self.player, world)
+    def define_region(self, name: str, multiworld: MultiWorld, exits=None) -> Region:
+        self.region = Region(name, self.player, multiworld)
         if self.location_rules.keys():
             for location in self.location_rules.keys():
                 loc_id = location_table.get(location, 0)
