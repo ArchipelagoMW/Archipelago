@@ -1,10 +1,15 @@
 from dataclasses import dataclass
-from typing import Dict
 
-from schema import And, Schema
-
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility, \
-    ItemDict
+from Options import (
+    Choice,
+    DefaultOnToggle,
+    ItemDict,
+    OptionGroup,
+    PerGameCommonOptions,
+    Range,
+    Toggle,
+    Visibility,
+)
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
