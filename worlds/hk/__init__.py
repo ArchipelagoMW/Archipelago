@@ -467,7 +467,7 @@ class HKWorld(World):
         worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.Goal in ["any", "grub_hunt"]]
         if worlds:
             grubs = [item for item in multiworld.get_items() if item.name == "Grub"]
-        all_grub_players = [world.player for world in multiworld.worlds.values() if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]]
+        all_grub_players = [world.player for world in worlds if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]]
 
         if all_grub_players:
             group_lookup = defaultdict(set)
