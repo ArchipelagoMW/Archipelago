@@ -80,7 +80,7 @@ class Wargroove2World(World):
             'death_link': self.options.death_link.value == 1,
         }
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         # First level
         self.first_level = get_first_level(self.player)
 
