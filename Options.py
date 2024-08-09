@@ -872,7 +872,7 @@ class ItemDict(CounterOption):
         if any(item_count < 0 for item_count in value.values()):
             raise Exception("Cannot have negative item counts.")
 
-        # Backwards compatibility: Cull 0s to make "in" checks behave the same way as before
+        # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a CounterOption
         value = {item_name: amount for item_name, amount in value.items() if amount != 0}
 
         super(ItemDict, self).__init__(value)
