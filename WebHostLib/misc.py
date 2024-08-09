@@ -79,6 +79,11 @@ def terms(lang):
     return render_template("glossary.html", lang=lang)
 
 
+@app.route('/changelog')
+def changelog():
+    return render_template("changelog.html")
+
+
 @app.route('/seed/<suuid:seed>')
 def view_seed(seed: UUID):
     seed = Seed.get(id=seed)

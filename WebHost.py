@@ -1,6 +1,6 @@
-import os
-import multiprocessing
 import logging
+import multiprocessing
+import os
 import typing
 
 import ModuleUpdate
@@ -11,6 +11,7 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 import settings
+import shutil
 
 if typing.TYPE_CHECKING:
     from flask import Flask
@@ -45,7 +46,6 @@ def get_app() -> "Flask":
 
 def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
     import json
-    import shutil
     import zipfile
 
     zfile: zipfile.ZipInfo
@@ -110,9 +110,18 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
         for games in data:
             if 'Archipelago' in games['gameTitle']:
                 generic_data = data.pop(data.index(games))
+                break
         sorted_data = [generic_data] + Utils.title_sorted(data, key=lambda entry: entry["gameTitle"])
         json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
     return sorted_data
+
+
+def copy_base_files():
+    base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
+    base_files = ["changelog.md"]
+    for file in base_files:
+        shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), file),
+                        Utils.local_path(base_target_path, file))
 
 
 if __name__ == "__main__":
@@ -132,6 +141,7 @@ if __name__ == "__main__":
     app = get_app()
     create_options_files()
     create_ordered_tutorials_file()
+    copy_base_files()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:
