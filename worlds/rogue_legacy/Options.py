@@ -1,6 +1,8 @@
 from typing import Dict
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
+
+from dataclasses import dataclass
 
 
 class StartingGender(Choice):
@@ -340,38 +342,39 @@ class AvailableClasses(OptionSet):
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 
-rl_options: Dict[str, type(Option)] = {
-    "starting_gender": StartingGender,
-    "starting_class": StartingClass,
-    "available_classes": AvailableClasses,
-    "new_game_plus": NewGamePlus,
-    "fairy_chests_per_zone": FairyChestsPerZone,
-    "chests_per_zone": ChestsPerZone,
-    "universal_fairy_chests": UniversalFairyChests,
-    "universal_chests": UniversalChests,
-    "vendors": Vendors,
-    "architect": Architect,
-    "architect_fee": ArchitectFee,
-    "disable_charon": DisableCharon,
-    "require_purchasing": RequirePurchasing,
-    "progressive_blueprints": ProgressiveBlueprints,
-    "gold_gain_multiplier": GoldGainMultiplier,
-    "number_of_children": NumberOfChildren,
-    "free_diary_on_generation": FreeDiaryOnGeneration,
-    "khidr": ChallengeBossKhidr,
-    "alexander": ChallengeBossAlexander,
-    "leon": ChallengeBossLeon,
-    "herodotus": ChallengeBossHerodotus,
-    "health_pool": HealthUpPool,
-    "mana_pool": ManaUpPool,
-    "attack_pool": AttackUpPool,
-    "magic_damage_pool": MagicDamageUpPool,
-    "armor_pool": ArmorUpPool,
-    "equip_pool": EquipUpPool,
-    "crit_chance_pool": CritChanceUpPool,
-    "crit_damage_pool": CritDamageUpPool,
-    "allow_default_names": AllowDefaultNames,
-    "additional_lady_names": AdditionalNames,
-    "additional_sir_names": AdditionalNames,
-    "death_link": DeathLink,
-}
+@dataclass
+class RLOptions(PerGameCommonOptions):
+    starting_gender: StartingGender
+    starting_class: StartingClass
+    available_classes: AvailableClasses
+    new_game_plus: NewGamePlus
+    fairy_chests_per_zone: FairyChestsPerZone
+    chests_per_zone: ChestsPerZone
+    universal_fairy_chests: UniversalFairyChests
+    universal_chests: UniversalChests
+    vendors: Vendors
+    architect: Architect
+    architect_fee: ArchitectFee
+    disable_charon: DisableCharon
+    require_purchasing: RequirePurchasing
+    progressive_blueprints: ProgressiveBlueprints
+    gold_gain_multiplier: GoldGainMultiplier
+    number_of_children: NumberOfChildren
+    free_diary_on_generation: FreeDiaryOnGeneration
+    khidr: ChallengeBossKhidr
+    alexander: ChallengeBossAlexander
+    leon: ChallengeBossLeon
+    herodotus: ChallengeBossHerodotus
+    health_pool: HealthUpPool
+    mana_pool: ManaUpPool
+    attack_pool: AttackUpPool
+    magic_damage_pool: MagicDamageUpPool
+    armor_pool: ArmorUpPool
+    equip_pool: EquipUpPool
+    crit_chance_pool: CritChanceUpPool
+    crit_damage_pool: CritDamageUpPool
+    allow_default_names: AllowDefaultNames
+    additional_lady_names: AdditionalNames
+    additional_sir_names: AdditionalNames
+    death_link: DeathLink
+
