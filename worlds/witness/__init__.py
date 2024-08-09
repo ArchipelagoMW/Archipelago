@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -222,10 +222,8 @@ class WitnessWorld(World):
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
         extra_checks = [
-            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
-            ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
-            ("Desert Outside", "Desert Surface 1"),
-            ("Desert Outside", "Desert Surface 2"),
+            (location, static_witness_logic.ENTITIES_BY_NAME[location]["region"]["name"])
+            for location in static_witness_locations.EXTRA_LOCATIONS
         ]
 
         for i in range(num_early_locs, needed_size):
@@ -309,6 +307,13 @@ class WitnessWorld(World):
         self.laser_ids_to_hints: Dict[int, CompactItemData] = {}
 
         already_hinted_locations = set()
+
+        # Excluded locations should never be hinted
+
+        already_hinted_locations |= {
+            location.name for location in self.multiworld.get_locations(self.player)
+            if location.progress_type == LocationProgressType.EXCLUDED
+        }
 
         # Laser hints
 
