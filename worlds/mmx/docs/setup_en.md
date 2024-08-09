@@ -16,7 +16,7 @@ provide these.
 
 ## Optional Software
 - [Map & Level tracker for Mega Man X Archipelago](https://github.com/BrianCumminger/megamanx-ap-poptracker/releases), 
-para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+to be used with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 - [Emulator Lua Scripts](https://github.com/Coltaho/emulator_lua_scripts), 
 for [snes9x-rr](https://github.com/gocha/snes9x-rr/releases) and [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory)
 
