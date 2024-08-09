@@ -67,7 +67,7 @@ class Wargroove2World(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    def _get_slot_data(self):
+    def _get_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             'seed': "".join(
                 self.random.choice(string.ascii_letters) for i in range(16)),
