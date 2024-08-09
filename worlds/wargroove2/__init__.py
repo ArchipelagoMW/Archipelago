@@ -110,7 +110,7 @@ class Wargroove2World(World):
         self.final_levels = final_levels_no_ocean[0:1] + non_north_levels
 
         # Selecting a random starting faction
-        if self.options.commander_choice == 2:
+        if self.options.commander_choice == "random_starting_faction":
             factions = [faction for faction in faction_table.keys() if faction != "Starter"]
             starting_faction = Wargroove2Item(self.multiworld.random.choice(factions) + ' Commanders', self.player)
             self.multiworld.push_precollected(starting_faction)
