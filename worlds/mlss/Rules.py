@@ -218,9 +218,9 @@ def set_rules(world: "MLSSWorld", excluded):
     add_rule(
         world.get_location(LocationName.BeanbeanOutskirtsUltraHammerUpgrade),
         lambda state: StateLogic.thunder(state, world.player)
-                      and StateLogic.pieces(state, world.player)
-                      and StateLogic.castleTown(state, world.player)
-                      and StateLogic.rose(state, world.player),
+                        and StateLogic.pieces(state, world.player)
+                        and StateLogic.castleTown(state, world.player)
+                        and StateLogic.rose(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.BeanbeanOutskirtsSoloLuigiCaveMole),
@@ -462,8 +462,8 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot1),
             lambda state: StateLogic.hammers(state, world.player)
-            or StateLogic.fire(state, world.player)
-            or StateLogic.thunder(state, world.player),
+                          or StateLogic.fire(state, world.player)
+                          or StateLogic.thunder(state, world.player),
         )
         add_rule(
             world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot2),
@@ -646,24 +646,23 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.GwarharLagoonFirstUnderwaterAreaRoom2CoinBlock),
             lambda state: StateLogic.canDash(state, world.player)
-                          and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
+            and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
         )
         add_rule(
             world.get_location(LocationName.JokesEndSecondFloorWestRoomCoinBlock),
             lambda state: StateLogic.ultra(state, world.player)
-                          and StateLogic.fire(state, world.player)
-                          and (
-                                  StateLogic.membership(state, world.player)
-                                  or (StateLogic.canDig(state, world.player) and StateLogic.canMini(state,
-                                                                                                    world.player))
-                          ),
+                            and StateLogic.fire(state, world.player)
+                            and (StateLogic.membership(state, world.player)
+                            or (StateLogic.canDig(state, world.player)
+                            and StateLogic.canMini(state, world.player))),
         )
         add_rule(
             world.get_location(LocationName.JokesEndNorthofBridgeRoomCoinBlock),
             lambda state: StateLogic.ultra(state, world.player)
-                          and StateLogic.fire(state, world.player)
-                          and StateLogic.canDig(state, world.player)
-                          and (StateLogic.membership(state, world.player) or StateLogic.canMini(state, world.player)),
+                            and StateLogic.fire(state, world.player)
+                            and StateLogic.canDig(state, world.player)
+                            and (StateLogic.membership(state, world.player)
+                            or StateLogic.canMini(state, world.player)),
         )
         if not world.options.difficult_logic:
             add_rule(
