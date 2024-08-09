@@ -93,8 +93,8 @@
                                         {% elif issubclass(option, Options.FreeText) %}
                                             {{ inputs.FreeText(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option) }}
+                                        {% elif issubclass(option, Options.CounterOption) and option.valid_keys %}
+                                            {{ inputs.CounterOption(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                             {{ inputs.OptionList(option_name, option) }}
@@ -133,8 +133,8 @@
                                         {% elif issubclass(option, Options.FreeText) %}
                                             {{ inputs.FreeText(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option) }}
+                                        {% elif issubclass(option, Options.CounterOption) and option.valid_keys %}
+                                            {{ inputs.CounterOption(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                             {{ inputs.OptionList(option_name, option) }}

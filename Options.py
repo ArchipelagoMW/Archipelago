@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import collections
 import functools
 import logging
 import math
@@ -855,13 +856,13 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
         return self.value.__len__()
 
 
-class ItemDict(OptionDict):
-    verify_item_name = True
-
+class CounterOption(OptionDict):
     def __init__(self, value: typing.Dict[str, int]):
-        if any(item_count < 1 for item_count in value.values()):
-            raise Exception("Cannot have non-positive item counts.")
-        super(ItemDict, self).__init__(value)
+        super(CounterOption, self).__init__(collections.Counter(value))
+
+
+class ItemDict(CounterOption):
+    verify_item_name = True
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):

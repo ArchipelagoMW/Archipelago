@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
-from schema import And, Schema
+from schema import And, Schema, Optional
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility, \
+    CounterOption
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -234,23 +235,26 @@ class TrapPercentage(Range):
     default = 20
 
 
-class TrapWeights(OptionDict):
+_default_trap_weights = {
+    trap_name: item_definition.weight
+    for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
+    if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
+}
+
+
+class TrapWeights(CounterOption):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
     If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
+    valid_keys = _default_trap_weights.keys()
+
     display_name = "Trap Weights"
     schema = Schema({
-        trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
-        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
+        Optional(trap_name): And(int, lambda n: n >= 0) for trap_name in _default_trap_weights
     })
-    default = {
-        trap_name: item_definition.weight
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
-        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
-    }
+    default = _default_trap_weights
 
 
 class PuzzleSkipAmount(Range):

@@ -113,7 +113,7 @@
     {{ TextChoice(option_name, option) }}
 {% endmacro %}
 
-{% macro ItemDict(option_name, option, world) %}
+{% macro CounterOption(option_name, option, world) %}
     <div class="dict-container">
         {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
             <div class="dict-entry">

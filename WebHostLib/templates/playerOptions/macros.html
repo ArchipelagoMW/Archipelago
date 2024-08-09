@@ -111,7 +111,7 @@
     </div>
 {% endmacro %}
 
-{% macro ItemDict(option_name, option) %}
+{% macro CounterOption(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
         {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
