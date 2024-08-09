@@ -1098,6 +1098,15 @@ HeartStarCutsceneFix:
     BNE .Return
     PHX
     TXA
+    .Loop:
+    CMP #$0007
+    BCC .Continue
+    SEC
+    SBC #$0007
+    DEX
+    BRA .Loop
+    .Continue:
+    TXA
     ORA #$0100
     JSL ApplyLocalCheck
     PLX
