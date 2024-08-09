@@ -77,7 +77,7 @@ class Wargroove2World(World):
             'level_shuffle_seed': self.options.level_shuffle_seed.value,
             'can_choose_commander': self.options.commander_choice.value != 0,
             'final_levels': self.options.final_levels.value,
-            'death_link': self.options.death_link.value == 1
+            'death_link': self.options.death_link.value == 1,
         }
 
     def generate_early(self):
