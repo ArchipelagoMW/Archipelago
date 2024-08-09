@@ -161,7 +161,7 @@ class Wargroove2World(World):
     def create_regions(self) -> None:
         create_regions(self)
 
-    def fill_slot_data(self) -> dict:
+    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         slot_data = self._get_slot_data()
         for option_name in self.options.__dict__.keys():
             option = getattr(self.options, option_name)
