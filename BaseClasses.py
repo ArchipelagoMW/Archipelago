@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import collections
-import copy
 import itertools
 import functools
 import logging
@@ -719,14 +718,14 @@ class CollectionState():
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
-        ret.prog_items = copy.deepcopy(self.prog_items)
-        ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
-                                 self.reachable_regions}
-        ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
-                                   self.blocked_connections}
-        ret.events = copy.copy(self.events)
-        ret.path = copy.copy(self.path)
-        ret.locations_checked = copy.copy(self.locations_checked)
+        ret.prog_items = {player: counter.copy() for player, counter in self.prog_items.items()}
+        ret.reachable_regions = {player: region_set.copy() for player, region_set in
+                                 self.reachable_regions.items()}
+        ret.blocked_connections = {player: entrance_set.copy() for player, entrance_set in
+                                   self.blocked_connections.items()}
+        ret.events = self.events.copy()
+        ret.path = self.path.copy()
+        ret.locations_checked = self.locations_checked.copy()
         for function in self.additional_copy_functions:
             ret = function(self, ret)
         return ret
