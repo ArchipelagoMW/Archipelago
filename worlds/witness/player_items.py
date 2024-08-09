@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Dict, List, Set, cast
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
-from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -155,16 +154,12 @@ class WitnessPlayerItems:
         """
         output: Set[str] = set()
         if self._world.options.shuffle_symbols:
-            output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+            discards_on = self._world.options.shuffle_discarded_panels
+            mode = self._world.options.puzzle_randomization.current_key
 
-            if self._world.options.shuffle_discarded_panels:
-                if self._world.options.puzzle_randomization == "sigma_expert":
-                    output.add("Arrows")
-                else:
-                    output.add("Triangles")
-
-            # Replace progressive items with their parents.
-            output = {static_witness_logic.get_parent_progressive_item(item) for item in output}
+            output = static_witness_items.ALWAYS_GOOD_SYMBOL_ITEMS | static_witness_items.MODE_SPECIFIC_GOOD_ITEMS[mode]
+            if discards_on:
+                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[mode]
 
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned

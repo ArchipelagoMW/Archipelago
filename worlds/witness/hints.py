@@ -49,7 +49,7 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     wincon = world.options.victory_condition
 
     if discards:
-        if difficulty == "sigma_expert":
+        if difficulty == "sigma_expert" or difficulty == "umbra_variety":
             always.append("Arrows")
         else:
             always.append("Triangles")
