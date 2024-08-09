@@ -15,7 +15,7 @@
    You can find the folder in steam by finding the game in your library,
    right clicking it and choosing *Manage→Browse Local Files*. The WAD file is in the `/base/` folder.
 
-## Joining a MultiWorld Game
+## Joining a MultiWorld Game (via Launcher)
 
 1. Launch apdoom-launcher.exe
 2. Select `DOOM II` from the drop-down
@@ -25,6 +25,24 @@
 
 To continue a game, follow the same connection steps.
 Connecting with a different seed won't erase your progress in other seeds.
+
+## Joining a MultiWorld Game (via command line)
+
+1. In your command line, navigate to the directory where APDOOM is installed.
+2. Run `crispy-apdoom -game doom2 -apserver <server> -applayer <slot name>`, where:
+    - `<server>` is the Archipelago server address, e.g. "`archipelago.gg:38281`"
+    - `<slot name>` is your slot name; if it contains spaces, surround it with double quotes
+    - If the server has a password, add `-password`, followed by the server password
+3. Enjoy!
+
+Optionally, you can override some randomization settings from the command line:
+- `-apmonsterrando 0` will disable monster rando.
+- `-apitemrando 0` will disable item rando.
+- `-apmusicrando 0` will disable music rando.
+- `-apfliplevels 0` will disable flipping levels.
+- `-apresetlevelondeath 0` will disable resetting the level on death.
+- `-apdeathlinkoff` will force DeathLink off if it's enabled.
+- `-skill <1-5>` changes the game difficulty, from 1 (I'm too young to die) to 5 (Nightmare!)
 
 ## Archipelago Text Client
 
