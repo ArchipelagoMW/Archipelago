@@ -183,11 +183,13 @@ class ShuffleLadders(Toggle):
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
-    - entrance: "Entrance Name"
-      exit: "Exit Name"
-      direction: "Direction"
+    - entrance: Entrance Name
+      exit: Exit Name
+      direction: Direction
       percentage: 100
-    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
+    Direction must be one of entrance, exit, or both, and defaults to both if omitted.
+    Direction entrance means the entrance leads to the exit. Direction exit means the exit leads to the entrance.
+    If you do not have Decoupled enabled, you do not need the direction line, as it will only use both.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
     If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
     If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.

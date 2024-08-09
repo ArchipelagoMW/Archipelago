@@ -174,9 +174,9 @@ class TunicWorld(World):
                 # loop through the connections in the player's yaml
                 for cxn in tunic.options.plando_connections:
                     new_cxn = True
-                    # if they used the entrance direction, just swap it around
-                    if cxn.direction == "entrance" and cls.seed_groups[group]["decoupled"]:
-                        player_cxn = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="exit", percentage=cxn.percentage)
+                    # if they used the entrance direction, just swap it around so we don't have to deal with it
+                    if cxn.direction == "exit" and cls.seed_groups[group]["decoupled"]:
+                        player_cxn = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="entrance", percentage=cxn.percentage)
                     else:
                         player_cxn = cxn
                     for group_cxn in cls.seed_groups[group]["plando"]:
