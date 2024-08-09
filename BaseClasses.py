@@ -766,18 +766,20 @@ class CollectionState():
         The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
         yield statement.
         """
-        # If no items logically relevant to a specific world were collected in the previous iteration, then that world's
-        # locations can be skipped in the current iteration. Usually, a world's logic only depends on its own items, but
-        # worlds are allowed to depend on other worlds.
-        # Construct a mapping from each player to the list of players with logic dependent on that player.
+        # Usually, a world's logic only depends on its own items/locations/etc., but worlds are allowed to logically
+        # depend on other worlds.
+        # Construct a mapping from each player number to the list of player numbers with logic dependent on that player.
         player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
         worlds = self.multiworld.worlds
         for player in self.multiworld.get_all_ids():
             for dependent_on_player in worlds[player].player_dependencies:
                 player_logic_dependents[dependent_on_player].append(player)
 
-        # The first iteration must check the locations for all players because it is not known which players might have
-        # reachable locations.
+        # If no items logically relevant to a player's world were collected in a sweep iteration, then that world's
+        # locations can be skipped in the next sweep iteration because that world should not have any reachable
+        # locations at the start of the next sweep iteration.
+        # The first iteration must check the locations for all players' worlds because it is not known which worlds
+        # might have reachable locations.
         players_logically_affected_by_last_sweep: Set[int] = set(self.multiworld.get_all_ids())
         while players_logically_affected_by_last_sweep:
             received_advancement_players = set()
@@ -804,7 +806,7 @@ class CollectionState():
                 if inaccessible_locations:
                     next_events_per_player.append((player, inaccessible_locations))
 
-                # Collect all the accessible items.
+                # Collect all the items from the accessible locations.
                 for location in accessible_locations:
                     self.events.add(location)
                     item = location.item
@@ -844,10 +846,10 @@ class CollectionState():
             checked_locations = self.events
 
         # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
+        # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
         events_per_player: List[Tuple[int, List[Location]]]
         if locations is None:
-            # `self.multiworld.get_filled_locations(player)` is avoided because it first iterates into a list and also
-            # because `location.advancement` in `event_filter` also checks for `location.item is not None`.
+            # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
             events_per_player = []
             for player, locations_dict in self.multiworld.regions.location_cache.items():
                 filtered_locations = [location for location in locations_dict.values()
@@ -865,12 +867,13 @@ class CollectionState():
             del events_per_player_dict
 
         if yield_each_sweep:
-            # Return the generator.
+            # Return a generator that will yield at the end of each sweep iteration.
             return self._sweep_for_events(events_per_player, True)
         else:
-            # Exhaust the generator.
+            # Create the generator, but tell it not to yield anything, so it will run to completion in zero iterations
+            # once started, then start and exhaust the generator by attempting to iterate it.
             for _ in self._sweep_for_events(events_per_player, False):
-                pass
+                assert False, "Generator yielded when it should have run to completion without yielding"
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
