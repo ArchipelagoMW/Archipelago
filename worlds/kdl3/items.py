@@ -77,9 +77,9 @@ filler_item_weights = {
 }
 
 star_item_weights = {
-    "Little Star": 4,
-    "Medium Star": 2,
-    "Big Star": 1
+    "Little Star": 16,
+    "Medium Star": 8,
+    "Big Star": 4
 }
 
 total_filler_weights = {
@@ -102,4 +102,4 @@ item_names = {
     "Animal Friend": set(animal_friend_table),
 }
 
-lookup_name_to_id: typing.Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}
+lookup_item_to_id: typing.Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}

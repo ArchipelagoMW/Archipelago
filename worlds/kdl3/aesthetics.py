@@ -1,5 +1,9 @@
 import struct
-from .Options import KirbyFlavorPreset, GooeyFlavorPreset
+from .options import KirbyFlavorPreset, GooeyFlavorPreset
+from typing import TYPE_CHECKING, Optional, Dict, List, Tuple
+
+if TYPE_CHECKING:
+    from . import KDL3World
 
 kirby_flavor_presets = {
     1: {
@@ -223,6 +227,23 @@ kirby_flavor_presets = {
         "14": "E6E6FA",
         "15": "976FBD",
     },
+    14: {
+      "1": "373B3E",
+      "2": "98d5d3",
+      "3": "1aa5ab",
+      "4": "168f95",
+      "5": "4f5559",
+      "6": "1dbac2",
+      "7": "137a7f",
+      "8": "093a3c",
+      "9": "86cecb",
+      "10": "a0afbc",
+      "11": "62bfbb",
+      "12": "50b8b4",
+      "13": "bec8d1",
+      "14": "bce4e2",
+      "15": "91a2b1",
+  }
 }
 
 gooey_flavor_presets = {
@@ -398,21 +419,21 @@ gooey_target_palettes = {
 }
 
 
-def get_kirby_palette(world):
+def get_kirby_palette(world: "KDL3World") -> Optional[Dict[str, str]]:
     palette = world.options.kirby_flavor_preset.value
     if palette == KirbyFlavorPreset.option_custom:
         return world.options.kirby_flavor.value
     return kirby_flavor_presets.get(palette, None)
 
 
-def get_gooey_palette(world):
+def get_gooey_palette(world: "KDL3World") -> Optional[Dict[str, str]]:
     palette = world.options.gooey_flavor_preset.value
     if palette == GooeyFlavorPreset.option_custom:
         return world.options.gooey_flavor.value
     return gooey_flavor_presets.get(palette, None)
 
 
-def rgb888_to_bgr555(red, green, blue) -> bytes:
+def rgb888_to_bgr555(red: int, green: int, blue: int) -> bytes:
     red = red >> 3
     green = green >> 3
     blue = blue >> 3
@@ -420,15 +441,15 @@ def rgb888_to_bgr555(red, green, blue) -> bytes:
     return struct.pack("H", outcol)
 
 
-def get_palette_bytes(palette, target, offset, factor):
+def get_palette_bytes(palette: Dict[str, str], target: List[str], offset: int, factor: float) -> bytes:
     output_data = bytearray()
     for color in target:
         hexcol = palette[color]
         if hexcol.startswith("#"):
             hexcol = hexcol.replace("#", "")
         colint = int(hexcol, 16)
-        col = ((colint & 0xFF0000) >> 16, (colint & 0xFF00) >> 8, colint & 0xFF)
+        col: Tuple[int, ...] = ((colint & 0xFF0000) >> 16, (colint & 0xFF00) >> 8, colint & 0xFF)
         col = tuple(int(int(factor*x) + offset) for x in col)
         byte_data = rgb888_to_bgr555(col[0], col[1], col[2])
         output_data.extend(bytearray(byte_data))
-    return output_data
+    return bytes(output_data)
