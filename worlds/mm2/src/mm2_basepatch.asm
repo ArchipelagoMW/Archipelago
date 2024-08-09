@@ -45,6 +45,13 @@ incbin "mm2font.dat"
 %org($A900, $09)
 incbin "mm2titlefont.dat"
 
+%org($807E, $0B)
+FlashFixes:
+    CMP #$FF
+    BEQ $8086
+    CMP #$FF
+    BNE $808D
+
 %org($8015, $0D)
 ClearRefreshHook:
     ; if we're already doing a fresh load of the stage select
