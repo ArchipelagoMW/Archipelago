@@ -4,7 +4,7 @@ from BaseClasses import Region, Entrance, MultiWorld
 from .Locations import location_table, Wargroove2Location
 from worlds.generic.Rules import set_rule
 
-region_names: [str] = ["North 1", "East 1", "South 1", "West 1",
+region_names: List[str] = ["North 1", "East 1", "South 1", "West 1",
                        "North 2A", "North 2B", "North 2C",
                        "East 2A", "East 2B", "East 2C",
                        "South 2A", "South 2B", "South 2C",
