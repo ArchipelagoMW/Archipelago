@@ -177,6 +177,10 @@ class TunicWorld(World):
                     else:
                         player_cxn = cxn
                     for group_cxn in cls.seed_groups[group]["plando"]:
+                        if (cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_direction_pairs
+                                and not verify_plando_directions(cxn)):
+                            raise Exception(f"TUNIC: Conflict between Entrance Layout option and Plando Connection: "
+                                            f"entrance: {cxn.entrance}, exit: {cxn.exit}, direction: {cxn.direction}")
                         # if neither entrance nor exit match anything in the group, add to group
                         if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
                                 # if decoupled is off, the entrance and exit can be swapped
@@ -184,7 +188,7 @@ class TunicWorld(World):
                                     and not tunic.options.decoupled)):
                             new_cxn = False
                             break
-
+                        # todo: decoupled support here
                         # check if this pair is the same as a pair in the group already
                         is_mismatched = (
                             player_cxn.entrance == group_cxn.entrance and player_cxn.exit != group_cxn.exit
