@@ -855,8 +855,7 @@ class ItemDict(OptionDict):
     verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
-        if any(item_count < 1 for item_count in value.values()):
-            raise Exception("Cannot have non-positive item counts.")
+        value = { item_name: value for item_name, value in value.items() if value != 0 }
         super(ItemDict, self).__init__(value)
 
 
