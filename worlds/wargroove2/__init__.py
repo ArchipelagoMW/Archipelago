@@ -70,7 +70,7 @@ class Wargroove2World(World):
     def _get_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             'seed': "".join(
-                self.random.choice(string.ascii_letters) for i in range(16)),
+                self.random.choice(string.ascii_letters) for _ in range(16)),
             'income_boost': self.options.income_boost.value,
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'starting_groove_multiplier': self.options.groove_boost.value,
