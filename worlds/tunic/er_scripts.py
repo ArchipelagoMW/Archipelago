@@ -2,7 +2,7 @@ from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import (Portal, portal_mapping, traversal_requirements, DeadEnd, Direction, RegionInfo,
-                      get_portal_outlet_region, is_dead_end)
+                      get_portal_outlet_region)
 from .er_rules import set_er_region_rules
 from Options import PlandoConnection
 from .options import EntranceRando, EntranceLayout
@@ -607,14 +607,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                                 should_continue = True
                     if should_continue:
                         continue
-
-                # if decoupled is on, we need to make sure you aren't connecting two dead ends together both ways
-                # todo: see if this ever actually gets triggered
-                if decoupled:
-                    if portal1 in portal_pairs.keys() and portal_pairs[portal1] == portal:
-                        if (is_dead_end(portal1, not ice_grappling, world)
-                                and is_dead_end(portal, not ice_grappling, world)):
-                            continue
 
                 portal2 = portal
                 connected_regions.add(get_portal_outlet_region(portal, world))

@@ -544,18 +544,6 @@ def get_portal_outlet_region(portal: Portal, world: "TunicWorld") -> str:
     return world.er_regions[portal.region].outlet_region or portal.region
 
 
-def is_dead_end(portal: Portal, restricted: bool, world: "TunicWorld") -> bool:
-    dead_end_status = world.er_regions[portal.region].dead_end
-    if not dead_end_status:
-        return False
-    # for the purposes of this function, special can be treated as a dead end
-    elif dead_end_status in [DeadEnd.all_cats, DeadEnd.special]:
-        return True
-    # last possibility is DeadEnd.restricted
-    else:
-        return restricted
-
-
 class DeadEnd(IntEnum):
     free = 0  # not a dead end
     all_cats = 1  # dead end in every logic category
