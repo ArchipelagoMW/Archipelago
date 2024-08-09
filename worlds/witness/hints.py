@@ -1,8 +1,9 @@
 import logging
+import math
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Tuple, Union, cast
 
-from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
+from BaseClasses import CollectionState, Item, Location, MultiWorld, Region
 
 from .data import static_logic as static_witness_logic
 from .data.utils import weighted_sample
@@ -11,7 +12,7 @@ from .player_items import WitnessItem
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-CompactItemData = Tuple[str, Union[str, int], int]
+CompactItemData = Tuple[str, Union[str, int], Union[str, int]]
 
 
 @dataclass
@@ -35,137 +36,149 @@ class WitnessWordedHint:
     location: Optional[Location] = None
     area: Optional[str] = None
     area_amount: Optional[int] = None
+    vague_location_hint: bool = False
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
-    always = [
-        "Boat",
-        "Caves Shortcuts",
-        "Progressive Dots",
-    ]
+    always = sorted(world.options.always_hint_items.value)
 
     difficulty = world.options.puzzle_randomization
     discards = world.options.shuffle_discarded_panels
     wincon = world.options.victory_condition
 
-    if discards:
+    if discards and world.options.discard_symbol_hint == "always_hint":
         if difficulty == "sigma_expert":
             always.append("Arrows")
         else:
             always.append("Triangles")
 
-    if wincon == "elevator":
-        always += ["Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"]
+    if world.options.final_door_hint == "always_hint":
+        if wincon == "elevator":
+            always += ["Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"]
 
-    if wincon == "challenge":
-        always += ["Challenge Entry (Panel)", "Caves Panels"]
+        if wincon == "challenge":
+            always += ["Challenge Entry (Panel)", "Caves Panels", "Challenge Entry (Door)", "Caves Doors"]
 
     return always
 
 
 def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
-    always = [
-        "Challenge Vault Box",
-        "Mountain Bottom Floor Discard",
-        "Theater Eclipse EP",
-        "Shipwreck Couch EP",
-        "Mountainside Cloud Cycle EP",
-    ]
+    always = sorted(world.options.always_hint_locations.value)
 
-    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
-    if "0x339B6" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        always.append("Town Obelisk Side 6")  # Eclipse EP
+    # For EPs, also make their obelisk side an always hint
+    for location_name in always:
+        location_obj = static_witness_logic.ENTITIES_BY_NAME[location_name]
+        if location_obj["entityType"] != "EP":
+            continue
+        if location_obj["entity_hex"] in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
+            continue
 
-    if "0x3388F" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        always.append("Treehouse Obelisk Side 4")  # Couch EP
-
-    if "0x335AE" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        always.append("Mountainside Obelisk Side 1")  # Cloud Cycle EP.
+        corresponding_obelisk_side = static_witness_logic.EP_TO_OBELISK_SIDE[location_obj["entity_hex"]]
+        always.append(static_witness_logic.ENTITIES_BY_ID[corresponding_obelisk_side]["checkName"])
 
     return always
 
 
 def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
-    priority = {
-        "Caves Mountain Shortcut (Door)",
-        "Caves Swamp Shortcut (Door)",
-        "Swamp Entry (Panel)",
-        "Swamp Laser Shortcut (Door)",
-    }
+    priority = world.options.priority_hint_items.value
 
-    if world.options.shuffle_symbols:
-        symbols = [
-            "Progressive Dots",
-            "Progressive Stars",
-            "Shapers",
-            "Rotated Shapers",
-            "Negative Shapers",
-            "Arrows",
-            "Triangles",
-            "Eraser",
-            "Black/White Squares",
-            "Colored Squares",
-            "Sound Dots",
-            "Progressive Symmetry"
-        ]
+    difficulty = world.options.puzzle_randomization
+    discards = world.options.shuffle_discarded_panels
+    wincon = world.options.victory_condition
 
-        priority.update(world.random.sample(symbols, 5))
-
-    if world.options.shuffle_lasers:
-        lasers = [
-            "Symmetry Laser",
-            "Town Laser",
-            "Keep Laser",
-            "Swamp Laser",
-            "Treehouse Laser",
-            "Monastery Laser",
-            "Jungle Laser",
-            "Quarry Laser",
-            "Bunker Laser",
-            "Shadows Laser",
-        ]
-
-        if world.options.shuffle_doors >= 2:
-            priority.add("Desert Laser")
-            priority.update(world.random.sample(lasers, 5))
-
+    if discards and world.options.discard_symbol_hint == "priority_hint":
+        if difficulty == "sigma_expert":
+            priority.add("Arrows")
         else:
-            lasers.append("Desert Laser")
-            priority.update(world.random.sample(lasers, 6))
+            priority.add("Triangles")
+
+    if world.options.final_door_hint == "priority_hint":
+        if wincon == "elevator":
+            priority |= {"Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"}
+
+        if wincon == "challenge":
+            priority |= {"Challenge Entry (Panel)", "Caves Panels", "Challenge Entry (Door)", "Caves Doors"}
+
+    # Add symbols and lasers in accordance with Priority Symbols and Priority Lasers options
+
+    number_of_symbols = sum(item in world.item_name_groups["Symbols"] for item in priority)
+    number_of_lasers = sum(item in world.item_name_groups["Lasers"] for item in priority)
+
+    needed_symbols = world.options.priority_symbols - number_of_symbols
+    needed_lasers = world.options.priority_lasers - number_of_lasers
+
+    possible_symbols = sorted(world.item_name_groups["Symbols"] - priority)
+    possible_lasers = sorted(world.item_name_groups["Lasers"] - priority)
+
+    if needed_symbols > 0:
+        priority.update(world.random.sample(possible_symbols, needed_symbols))
+
+    if needed_lasers > 0:
+        priority.update(world.random.sample(possible_lasers, needed_lasers))
 
     return sorted(priority)
 
 
 def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
-    priority = [
-        "Tutorial Patio Floor",
-        "Tutorial Patio Flowers EP",
-        "Swamp Purple Underwater",
-        "Shipwreck Vault Box",
-        "Town RGB House Upstairs Left",
-        "Town RGB House Upstairs Right",
-        "Treehouse Green Bridge 7",
-        "Treehouse Green Bridge Discard",
-        "Shipwreck Discard",
-        "Desert Vault Box",
-        "Mountainside Vault Box",
-        "Mountainside Discard",
-        "Tunnels Theater Flowers EP",
-        "Boat Shipwreck Green EP",
-        "Quarry Stoneworks Control Room Left",
-    ]
+    priority = sorted(world.options.priority_hint_locations.value)
 
-    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
-    if "0x33A20" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        priority.append("Town Obelisk Side 6")  # Theater Flowers EP
+    # For EPs, also make their obelisk side a priority hint
+    for location_name in priority:
+        location_obj = static_witness_logic.ENTITIES_BY_NAME[location_name]
+        if location_obj["entityType"] != "EP":
+            continue
+        if location_obj["entity_hex"] in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
+            continue
 
-    if "0x28B29" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        priority.append("Treehouse Obelisk Side 4")  # Shipwreck Green EP
-
-    if "0x33600" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
-        priority.append("Town Obelisk Side 2")  # Tutorial Patio Flowers EP.
+        corresponding_obelisk_side = static_witness_logic.EP_TO_OBELISK_SIDE[location_obj["entity_hex"]]
+        priority.append(static_witness_logic.ENTITIES_BY_ID[corresponding_obelisk_side]["checkName"])
 
     return priority
+
+
+def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Location) -> Tuple[str, str]:
+    allow_regions = world.options.vague_hints == "experimental"
+
+    possible_location_groups = {
+        group_name: group_locations
+        for group_name, group_locations in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
+        if hint_loc.name in group_locations
+    }
+
+    locations_in_that_world = {
+        location.name for location in world.multiworld.get_locations(hint_loc.player) if not location.is_event
+    }
+
+    valid_location_groups: Dict[str, int] = {}
+
+    # Find valid location groups.
+    for group, locations in possible_location_groups.items():
+        if group == "Everywhere":
+            continue
+        present_locations = sum(location in locations_in_that_world for location in locations)
+        valid_location_groups[group] = present_locations
+
+    # If there are valid location groups, use a random one.
+    if valid_location_groups:
+        # If there are location groups with more than 1 location, remove any that only have 1.
+        if any(num_locs > 1 for num_locs in valid_location_groups.values()):
+            valid_location_groups = {name: num_locs for name, num_locs in valid_location_groups.items() if num_locs > 1}
+
+        location_groups_with_weights = {
+            # Listen. Just don't worry about it. :)))
+            location_group: (x ** 0.6) * math.e ** (- (x / 7) ** 0.6) if x > 6 else x / 6
+            for location_group, x in valid_location_groups.items()
+        }
+
+        location_groups = list(location_groups_with_weights.keys())
+        weights = list(location_groups_with_weights.values())
+
+        return world.random.choices(location_groups, weights, k=1)[0], "Group"
+
+    if allow_regions:
+        return cast(Region, hint_loc.parent_region).name, "Region"
+
+    return "Everywhere", "Everywhere"
 
 
 def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> WitnessWordedHint:
@@ -182,12 +195,37 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
         if item.player != world.player:
             item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
 
-    if hint.hint_came_from_location:
-        hint_text = f"{location_name} contains {item_name}."
-    else:
-        hint_text = f"{item_name} can be found at {location_name}."
+    hint_text = ""
+    area: Optional[str] = None
 
-    return WitnessWordedHint(hint_text, hint.location)
+    if world.options.vague_hints:
+        chosen_group, group_type = try_getting_location_group_for_location(world, hint.location)
+
+        if hint.location.player == world.player:
+            area = chosen_group
+
+            # local locations should only ever return a location group, as Witness defines groups for every location.
+            hint_text = f"{item_name} can be found in the {area} area."
+        else:
+            player_name = world.multiworld.get_player_name(hint.location.player)
+
+            if group_type == "Everywhere":
+                location_name = f"a location in {player_name}'s world"
+            elif group_type == "Group":
+                location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
+            elif group_type == "Region":
+                if chosen_group == "Menu":
+                    location_name = f"a location near the start of {player_name}'s game (\"Menu\" region)"
+                else:
+                    location_name = f"a location in {player_name}'s \"{chosen_group}\" region"
+
+    if hint_text == "":
+        if hint.hint_came_from_location:
+            hint_text = f"{location_name} contains {item_name}."
+        else:
+            hint_text = f"{item_name} can be found at {location_name}."
+
+    return WitnessWordedHint(hint_text, hint.location, area=area, vague_location_hint=bool(world.options.vague_hints))
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str,
@@ -222,44 +260,54 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Witness
     return WitnessLocationHint(world.get_location(location), True)
 
 
-def get_items_and_locations_in_random_order(world: "WitnessWorld",
-                                            own_itempool: List["WitnessItem"]) -> Tuple[List[str], List[str]]:
-    prog_items_in_this_world = sorted(
+def get_item_and_location_names_in_random_order(world: "WitnessWorld",
+                                                own_itempool: List["WitnessItem"]) -> Tuple[List[str], List[str]]:
+    prog_item_names_in_this_world = [
         item.name for item in own_itempool
         if item.advancement and item.code and item.location
-    )
-    locations_in_this_world = sorted(
-        location.name for location in world.multiworld.get_locations(world.player)
-        if location.address and location.progress_type != LocationProgressType.EXCLUDED
-    )
+    ]
+    world.random.shuffle(prog_item_names_in_this_world)
 
-    world.random.shuffle(prog_items_in_this_world)
+    locations_in_this_world = [
+        location for location in world.multiworld.get_locations(world.player)
+        if location.item and not location.is_event
+    ]
     world.random.shuffle(locations_in_this_world)
 
-    return prog_items_in_this_world, locations_in_this_world
+    if world.options.vague_hints:
+        locations_in_this_world.sort(key=lambda location: cast(Item, location.item).advancement)
+
+    location_names_in_this_world = [location.name for location in locations_in_this_world]
+
+    return prog_item_names_in_this_world, location_names_in_this_world
 
 
 def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["WitnessItem"],
                                    already_hinted_locations: Set[Location]
                                    ) -> Tuple[List[WitnessLocationHint], List[WitnessLocationHint]]:
-    prog_items_in_this_world, loc_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
 
-    always_locations = [
-        location for location in get_always_hint_locations(world)
-        if location in loc_in_this_world
-    ]
+    prog_items_in_this_world, loc_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
+
     always_items = [
         item for item in get_always_hint_items(world)
         if item in prog_items_in_this_world
-    ]
-    priority_locations = [
-        location for location in get_priority_hint_locations(world)
-        if location in loc_in_this_world
     ]
     priority_items = [
         item for item in get_priority_hint_items(world)
         if item in prog_items_in_this_world
     ]
+
+    if world.options.vague_hints:
+        always_locations, priority_locations = [], []
+    else:
+        always_locations = [
+            location for location in get_always_hint_locations(world)
+            if location in loc_in_this_world
+        ]
+        priority_locations = [
+            location for location in get_priority_hint_locations(world)
+            if location in loc_in_this_world
+        ]
 
     # Get always and priority location/item hints
     always_location_hints = {hint_from_location(world, location) for location in always_locations}
@@ -289,9 +337,9 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
 def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List["WitnessItem"],
                               already_hinted_locations: Set[Location], hints_to_use_first: List[WitnessLocationHint],
                               unhinted_locations_for_hinted_areas: Dict[str, Set[Location]]) -> List[WitnessWordedHint]:
-    prog_items_in_this_world, locations_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
+    prog_items_in_this_world, locations_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
 
-    next_random_hint_is_location = world.random.randrange(0, 2)
+    next_random_hint_is_location = world.random.randrange(0, 100) >= world.options.random_hints_are_items_weight
 
     hints: List[WitnessWordedHint] = []
 
@@ -382,7 +430,7 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
             for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
             if region in world.player_regions.created_region_names
         ]
-        locations = [location for region in regions for location in region.get_locations() if location.address]
+        locations = [location for region in regions for location in region.get_locations() if not location.is_event]
 
         if locations:
             locations_per_area[area] = locations
@@ -524,7 +572,10 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     # Make up to half of the rest of the location hints priority hints, using up to half of the possibly priority hints
     remaining_location_hints = intended_location_hints - always_hints_to_use
-    priority_hints_to_use = int(max(0.0, min(possible_priority_hints / 2, remaining_location_hints / 2)))
+    priority_hints_to_use = int(max(0.0, min(
+        possible_priority_hints * world.options.priority_hints_percentage_out_of_possible / 100,
+        remaining_location_hints * world.options.priority_hints_percentage_out_of_remaining / 100,
+    )))
 
     for _ in range(always_hints_to_use):
         location_hint = always_hints.pop()
@@ -589,9 +640,15 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
     location = hint.location
     area_amount = hint.area_amount
 
+    player_number = local_player_number
+    if location:
+        player_number = location.player
+    if player_number == local_player_number and hint.vague_location_hint:
+        player_number = -1
+
     # -1 if junk hint, address if location hint, area string if area hint
     arg_1: Union[str, int]
-    if location and location.address is not None:
+    if location and not location.is_event:
         arg_1 = location.address
     elif hint.area is not None:
         arg_1 = hint.area
@@ -599,13 +656,13 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
         arg_1 = -1
 
     # self.player if junk hint, player if location hint, progression amount if area hint
-    arg_2: int
+    arg_2: Union[str, int]
     if area_amount is not None:
         arg_2 = area_amount
-    elif location is not None:
-        arg_2 = location.player
+    elif hint.area:
+        arg_2 = f"containing_area:{hint.area}"
     else:
-        arg_2 = local_player_number
+        arg_2 = player_number
 
     return hint.wording, arg_1, arg_2
 
