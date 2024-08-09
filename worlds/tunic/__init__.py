@@ -90,6 +90,17 @@ class TunicWorld(World):
         self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
+                # flip any that are pointing to exit to point to entrance so I don't have to deal with it
+                if self.options.decoupled and cxn.direction == "exit":
+                    replacement = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="entrance", percentage=cxn.percentage)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
+                # if decoupled is off, just convert these to both
+                if not self.options.decoupled and cxn.direction != "both":
+                    replacement = PlandoConnection(entrance=cxn.entrance, exit=cxn.exit, direction="both", percentage=cxn.percentage)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
+              
                 if (self.options.entrance_layout == EntranceLayout.option_direction_pairs
                         and not verify_plando_directions(cxn)):
                     raise OptionError(f"TUNIC: Player {self.player_name} has invalid plando connections. "
@@ -146,8 +157,9 @@ class TunicWorld(World):
                               has_decoupled_enabled=bool(tunic.options.decoupled),
                               plando=tunic.options.plando_connections)
                 continue
+            # I feel that syncing this one is worse than erroring out
             if bool(tunic.options.decoupled) != cls.seed_groups[group]["has_decoupled_enabled"]:
-                raise OptionError("TUNIC: All players in a seed group must have Decoupled either enabled or disabled.")
+                raise OptionError(f"TUNIC: All players in the seed group {group} must have Decoupled either enabled or disabled.")
             # off is more restrictive
             if not tunic.options.laurels_zips:
                 cls.seed_groups[group]["laurels_zips"] = False
@@ -160,7 +172,7 @@ class TunicWorld(World):
             # laurels at 10 fairies changes logic for secret gathering place placement
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
-            # more restrictive, overrides the option for others in the same group, which is better than failing imo
+            # fixed shop and direction pairs override standard, but conflict with each other
             if tunic.options.entrance_layout:
                 if cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_standard:
                     cls.seed_groups[group]["entrance_layout"] = tunic.options.entrance_layout.value
@@ -169,38 +181,40 @@ class TunicWorld(World):
                                       f"Seed group cannot have both Fixed Shop and Direction Pairs enabled.")
             if tunic.options.plando_connections:
                 # loop through the connections in the player's yaml
-                for cxn in tunic.options.plando_connections:
+                for index, player_cxn in enumerate(tunic.options.plando_connections):
                     new_cxn = True
-                    # if they used the entrance direction, just swap it around so that we don't have to deal with it
-                    if cxn.direction == "exit" and tunic.options.decoupled:
-                        player_cxn = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="entrance", percentage=cxn.percentage)
-                    else:
-                        player_cxn = cxn
                     for group_cxn in cls.seed_groups[group]["plando"]:
+                        # verify that it abides by direction pairs if enabled
                         if (cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_direction_pairs
                                 and not verify_plando_directions(cxn)):
                             raise Exception(f"TUNIC: Conflict between Entrance Layout option and Plando Connection: "
                                             f"entrance: {cxn.entrance}, exit: {cxn.exit}, direction: {cxn.direction}")
-                        # if neither entrance nor exit match anything in the group, add to group
-                        if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
-                                # if decoupled is off, the entrance and exit can be swapped
-                                or (player_cxn.exit == group_cxn.entrance and player_cxn.entrance == group_cxn.exit
-                                    and not tunic.options.decoupled)):
-                            new_cxn = False
-                            break
-                        # todo: decoupled support here
                         # check if this pair is the same as a pair in the group already
+                        if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
+                            or (player_cxn.entrance == group_cxn.exit and player_cxn.exit == group_cxn.entrance
+                                and "both" in [player_cxn.direction, group_cxn.direction])):
+                            new_cxn = False
+                            # if the group's was one-way and the player's was two-way, we replace the group's now
+                            if player_cxn.direction == "both" and group_cxn.direction == "entrance":
+                                cls.seed_groups[group]["plando"].value.remove(group_cxn)
+                                cls.seed_groups[group]["plando"].value.insert(index, player_cxn)
+                            break
                         is_mismatched = (
                             player_cxn.entrance == group_cxn.entrance and player_cxn.exit != group_cxn.exit
-                            or player_cxn.entrance == group_cxn.exit and player_cxn.exit != group_cxn.entrance
-                            or player_cxn.exit == group_cxn.entrance and player_cxn.entrance != group_cxn.exit
                             or player_cxn.exit == group_cxn.exit and player_cxn.entrance != group_cxn.entrance
                         )
+                        if not tunic.options.decoupled:
+                            is_mismatched = is_mismatched or (
+                                or player_cxn.entrance == group_cxn.exit and player_cxn.exit != group_cxn.entrance
+                                or player_cxn.exit == group_cxn.entrance and player_cxn.entrance != group_cxn.exit
+                            )
                         if is_mismatched:
+                            group_dir = "<->" if group_cxn.direction == "both" else "-->"
+                            player_dir = "<->" if player_cxn.direction == "both" else "-->"
                             raise OptionError(f"TUNIC: Conflict between seed group {group}'s plando "
-                                              f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
+                                              f"connection {group_cxn.entrance} {group_dir} {group_cxn.exit} and "
                                               f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
-                                              f"connection {player_cxn.entrance} <-> {player_cxn.exit}")
+                                              f"connection {player_cxn.entrance} {player_dir} {player_cxn.exit}")
                     if new_cxn:
                         cls.seed_groups[group]["plando"].value.append(player_cxn)
 
