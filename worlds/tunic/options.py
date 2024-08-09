@@ -318,7 +318,6 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
-    plando_connections: TunicPlandoConnections
 
     fixed_shop: FixedShop
     logic_rules: Removed  # fully removed in the direction pairs update
