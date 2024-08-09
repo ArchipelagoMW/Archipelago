@@ -110,8 +110,8 @@ class TLoZWorld(World):
         if v is not None:
             location_name_to_id[k] = v + base_id
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.generator_in_use = threading.Event()
         self.rom_name_available_event = threading.Event()
         self.levels = None
