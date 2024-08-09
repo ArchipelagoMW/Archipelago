@@ -110,7 +110,7 @@ location_table: Dict[str, int] = {
     'Wargroove 2: Victory': None
 }
 
-location_id_name: {int, str} = {}
+location_id_name: Dict[int, str] = {}
 for name in location_table.keys():
     id = location_table[name]
     if id is not None:
