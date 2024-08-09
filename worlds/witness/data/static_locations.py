@@ -104,6 +104,8 @@ GENERAL_LOCATIONS = {
     "Town RGB House Upstairs Right",
     "Town RGB House Sound Room Right",
 
+    "Town Pet the Dog",
+
     "Windmill Theater Entry Panel",
     "Theater Exit Left Panel",
     "Theater Exit Right Panel",

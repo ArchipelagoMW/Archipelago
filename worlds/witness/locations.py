@@ -53,10 +53,6 @@ class WitnessPlayerLocations:
             if static_witness_logic.ENTITIES_BY_NAME[ch]["entityType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
-        dog_hex = static_witness_logic.ENTITIES_BY_NAME["Town Pet the Dog"]["entity_hex"]
-        dog_id = static_witness_locations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
-        self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
-
         self.CHECK_PANELHEX_TO_ID = dict(
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
         )
