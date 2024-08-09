@@ -12,7 +12,7 @@ class Wargroove2Logic(LogicMixin):
 def set_rules(multiworld, level_list: [Wargroove2Level],
               first_level: Wargroove2Level,
               final_levels: [Wargroove2Level],
-              player: int):
+              player: int) -> None:
     # Level 0
     first_level.define_access_rules(multiworld)
 
