@@ -798,7 +798,7 @@ item_table = {
     item_names.VALKYRIE_RESOURCE_EFFICIENCY:
         ItemData(391 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 9, SC2Race.TERRAN,
                  parent_item=item_names.VALKYRIE, origin={"ext"}),
-    item_names.PREDATOR_PREDATOR_S_FURY:
+    item_names.PREDATOR_VESPENE_SYNTHESIS:
         ItemData(392 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 10, SC2Race.TERRAN,
                  parent_item=item_names.PREDATOR, origin={"ext"}),
     item_names.BATTLECRUISER_BEHEMOTH_PLATING:
