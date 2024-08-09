@@ -22,7 +22,7 @@ LEVEL_COUNT = 28
 FINAL_LEVEL_COUNT = 4
 
 
-def set_region_exit_rules(region: Region, multiworld: MultiWorld, player: int, locations: List[str], operator: str = "or"):
+def set_region_exit_rules(region: Region, multiworld: MultiWorld, player: int, locations: List[str], operator: str = "or") -> None:
     if operator == "or":
         exit_rule = lambda state, world=multiworld, player=player: any(
             world.get_location(location, player).access_rule(state) for location in locations)
