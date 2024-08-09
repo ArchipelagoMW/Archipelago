@@ -64,7 +64,7 @@ from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -311,7 +311,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = ""
         self.location_text = ""
         self.entrance_text = ""
-        self.found_text = ""
+        self.status_text = ""
+        self.hint = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
 
@@ -326,7 +327,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = data["finding"]["text"]
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
-        self.found_text = data["found"]["text"]
+        self.status_text = data["status"]["text"]
+        self.hint = data["status"]["hint"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
@@ -334,40 +336,58 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
             return True
-        if self.index:  # skip header
-            if self.collide_point(*touch.pos):
-                if self.selected:
-                    self.parent.clear_selection()
+        alt: bool = touch.button == "right" or touch.is_double_tap
+        if self.collide_point(*touch.pos):
+            if self.index:  # skip header
+                if alt:
+                    if self.hint["status"] == HintStatus.HINT_FOUND:
+                        return
+                    ctx = App.get_running_app().ctx
+                    if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                        status_chain: typing.Dict[HintStatus, HintStatus] = {
+                            HintStatus.HINT_UNSPECIFIED: HintStatus.HINT_NO_PRIORITY,
+                            HintStatus.HINT_NO_PRIORITY: HintStatus.HINT_AVOID,
+                            HintStatus.HINT_AVOID: HintStatus.HINT_PRIORITY,
+                            HintStatus.HINT_PRIORITY: HintStatus.HINT_NO_PRIORITY,
+                        }
+                        ctx.update_hint(self.hint["location"],
+                                        self.hint["finding_player"],
+                                        status_chain.get(self.hint["status"], HintStatus.HINT_UNSPECIFIED))
                 else:
-                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
-                                    self.finding_text, "\'s World", (" at " + self.entrance_text)
-                                    if self.entrance_text != "Vanilla"
-                                    else "", ". (", self.found_text.lower(), ")"))
-                    temp = MarkupLabel(text).markup
-                    text = "".join(
-                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
-                    return self.parent.select_with_touch(self.index, touch)
-        else:
-            parent = self.parent
-            parent.clear_selection()
-            parent: HintLog = parent.parent
-            # find correct column
-            for child in self.children:
-                if child.collide_point(*touch.pos):
-                    key = child.sort_key
-                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
-                    if key == parent.sort_key:
-                        # second click reverses order
-                        parent.reversed = not parent.reversed
+                    if self.selected:
+                        self.parent.clear_selection()
                     else:
-                        parent.sort_key = key
-                        parent.reversed = False
-                    break
+                        text = "".join(
+                            (self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                             self.finding_text, "\'s World", (" at " + self.entrance_text)
+                             if self.entrance_text != "Vanilla"
+                             else "", ". (", self.status_text.lower(), ")"))
+                        temp = MarkupLabel(text).markup
+                        text = "".join(
+                            part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                        Clipboard.copy(
+                            escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                        return self.parent.select_with_touch(self.index, touch)
             else:
-                logging.warning("Did not find clicked header for sorting.")
+                parent = self.parent
+                parent.clear_selection()
+                parent: HintLog = parent.parent
+                # find correct column
+                for child in self.children:
+                    if child.collide_point(*touch.pos):
+                        key = child.sort_key
+                        if key == "status":
+                            parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
+                        else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                        if key == parent.sort_key:
+                            # second click reverses order
+                            parent.reversed = not parent.reversed
+                        else:
+                            parent.sort_key = key
+                            parent.reversed = False
+                        break
 
-            App.get_running_app().update_hints()
+                App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
@@ -654,7 +674,7 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
     def update_hints(self):
-        hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
+        hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.log_panels["Hints"].refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
@@ -709,7 +729,20 @@ class UILog(RecycleView):
             if element.height != element.texture_size[1]:
                 element.height = element.texture_size[1]
 
-
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "Found",
+    HintStatus.HINT_UNSPECIFIED: "Unspecified",
+    HintStatus.HINT_NO_PRIORITY: "No Priority",
+    HintStatus.HINT_AVOID: "Avoid",
+    HintStatus.HINT_PRIORITY: "Priority",
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_UNSPECIFIED: "white",
+    HintStatus.HINT_NO_PRIORITY: "cyan",
+    HintStatus.HINT_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY: "plum",
+}
 class HintLog(RecycleView):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
@@ -717,12 +750,13 @@ class HintLog(RecycleView):
         "finding": {"text": "[u]Finding Player[/u]"},
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
-        "found": {"text": "[u]Status[/u]"},
+        "status": {"text": "[u]Status[/u]",
+                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "status": ""}},
         "striped": True,
     }
 
     sort_key: str = ""
-    reversed: bool = False
+    reversed: bool = True
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
@@ -730,8 +764,12 @@ class HintLog(RecycleView):
         self.parser = parser
 
     def refresh_hints(self, hints):
+        if not hints:  # Fix the scrolling looking visually wrong in some edge cases
+            self.scroll_y = 1.0
         data = []
         for hint in hints:
+            if not hint.get("status"): # Allows connecting to old servers
+                hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node({
@@ -749,9 +787,11 @@ class HintLog(RecycleView):
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
-                "found": {
-                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
-                                                     "text": "Found" if hint["found"] else "Not Found"})},
+                "status": {
+                    "text": self.parser.handle_node({"type": "color", "color": status_colors.get(hint["status"], "red"),
+                                                     "text": status_names.get(hint["status"], "Unknown")}),
+                    "hint": hint,
+                },
             })
 
         data.sort(key=self.hint_sorter, reverse=self.reversed)
@@ -762,7 +802,7 @@ class HintLog(RecycleView):
 
     @staticmethod
     def hint_sorter(element: dict) -> str:
-        return ""
+        return element["status"]["hint"]["status"]  # By status by default
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
