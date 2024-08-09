@@ -267,6 +267,12 @@ class LongJumps(Toggle):
     """
     display_name = "Long Jumps"
 
+class LogicHelmetCheckpoints(Toggle):
+    """
+    Makes the "Use Any Checkpoint" feature from the Helmet Upgrade be in logic
+    """
+    display_name = "Helmet Checkpoints In Logic"
+
 class ChillPenguinTweaks(OptionSet):
     """
     Behavior options for Chill Penguin. Everything can be stacked.
@@ -337,6 +343,7 @@ mmx_option_groups = [
         AirDash,
         HadoukenInPool,
         LogicChargedShotgunIce,
+        LogicHelmetCheckpoints,
     ]),
     OptionGroup("Sigma Fortress Options", [
         SigmaOpen,
@@ -384,6 +391,7 @@ class MMXOptions(PerGameCommonOptions):
     logic_boss_weakness: LogicBossWeakness
     logic_leg_sigma: LogicLegSigma
     logic_charged_shotgun_ice: LogicChargedShotgunIce
+    logic_helmet_checkpoints: LogicHelmetCheckpoints
     sigma_all_levels: FortressBundleUnlock
     sigma_open: SigmaOpen
     sigma_medal_count: SigmaMedalCount

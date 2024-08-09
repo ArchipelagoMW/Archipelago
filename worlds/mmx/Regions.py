@@ -74,6 +74,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     sigma_fortress_1_vile = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_1_vile)
     sigma_fortress_1_vertical = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_1_vertical)
     sigma_fortress_1_rematch_1 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_1_rematch_1)
+    sigma_fortress_1_before_boss = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_1_before_boss)
     sigma_fortress_1_boss = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_1_boss)
     
     sigma_fortress_2 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_2)
@@ -81,6 +82,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     sigma_fortress_2_rematch_1 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_2_rematch_1)
     sigma_fortress_2_ride = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_2_ride)
     sigma_fortress_2_rematch_2 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_2_rematch_2)
+    sigma_fortress_2_before_boss = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_2_before_boss)
     sigma_fortress_2_boss = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_2_boss)
 
     sigma_fortress_3 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3)
@@ -89,6 +91,11 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     sigma_fortress_3_rematch_3 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_3)
     sigma_fortress_3_rematch_4 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_4)
     sigma_fortress_3_rematch_5 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5)
+    sigma_fortress_3_after_rematch_1 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_1)
+    sigma_fortress_3_after_rematch_2 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_2)
+    sigma_fortress_3_after_rematch_3 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_3)
+    sigma_fortress_3_after_rematch_4 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_4)
+    sigma_fortress_3_after_rematch_5 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_5)
     sigma_fortress_3_boss = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_boss)
 
     sigma_fortress_4 = create_region(multiworld, player, active_locations, RegionName.sigma_fortress_4)
@@ -151,12 +158,14 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         sigma_fortress_1_vile,
         sigma_fortress_1_vertical,
         sigma_fortress_1_rematch_1,
+        sigma_fortress_1_before_boss,
         sigma_fortress_1_boss,
         sigma_fortress_2,
         sigma_fortress_2_start,
         sigma_fortress_2_rematch_1,
         sigma_fortress_2_ride,
         sigma_fortress_2_rematch_2,
+        sigma_fortress_2_before_boss,
         sigma_fortress_2_boss,
         sigma_fortress_3,
         sigma_fortress_3_rematch_1,
@@ -164,6 +173,11 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         sigma_fortress_3_rematch_3,
         sigma_fortress_3_rematch_4,
         sigma_fortress_3_rematch_5,
+        sigma_fortress_3_after_rematch_1,
+        sigma_fortress_3_after_rematch_2,
+        sigma_fortress_3_after_rematch_3,
+        sigma_fortress_3_after_rematch_4,
+        sigma_fortress_3_after_rematch_5,
         sigma_fortress_3_boss,
         sigma_fortress_4,
         sigma_fortress_4_dog,
@@ -299,14 +313,15 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, RegionName.flame_mammoth_lava_river_1, LocationName.flame_mammoth_1up)
 
         # Sigma's Fortress 3
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_2, LocationName.sigma_fortress_3_hp_1)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_3, LocationName.sigma_fortress_3_hp_2)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_3, LocationName.sigma_fortress_3_energy_1)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_4, LocationName.sigma_fortress_3_hp_3)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_4, LocationName.sigma_fortress_3_energy_2)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5, LocationName.sigma_fortress_3_hp_4)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5, LocationName.sigma_fortress_3_energy_3)
-        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5, LocationName.sigma_fortress_3_1up)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_1, LocationName.sigma_fortress_3_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_2, LocationName.sigma_fortress_3_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_2, LocationName.sigma_fortress_3_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_3, LocationName.sigma_fortress_3_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_3, LocationName.sigma_fortress_3_energy_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_4, LocationName.sigma_fortress_3_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_4, LocationName.sigma_fortress_3_energy_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_4, LocationName.sigma_fortress_3_1up)
+
 
 def connect_regions(world: World):
     connect(world, "Menu", RegionName.intro)
@@ -374,20 +389,27 @@ def connect_regions(world: World):
     connect(world, RegionName.sigma_fortress_1_outside, RegionName.sigma_fortress_1_vile)
     connect(world, RegionName.sigma_fortress_1_vile, RegionName.sigma_fortress_1_vertical)
     connect(world, RegionName.sigma_fortress_1_vertical, RegionName.sigma_fortress_1_rematch_1)
-    connect(world, RegionName.sigma_fortress_1_rematch_1, RegionName.sigma_fortress_1_boss)
+    connect(world, RegionName.sigma_fortress_1_rematch_1, RegionName.sigma_fortress_1_before_boss)
+    connect(world, RegionName.sigma_fortress_1_before_boss, RegionName.sigma_fortress_1_boss)
 
     connect(world, RegionName.sigma_fortress_2, RegionName.sigma_fortress_2_start)
     connect(world, RegionName.sigma_fortress_2_start, RegionName.sigma_fortress_2_rematch_1)
     connect(world, RegionName.sigma_fortress_2_rematch_1, RegionName.sigma_fortress_2_ride)
     connect(world, RegionName.sigma_fortress_2_ride, RegionName.sigma_fortress_2_rematch_2)
-    connect(world, RegionName.sigma_fortress_2_rematch_2, RegionName.sigma_fortress_2_boss)
+    connect(world, RegionName.sigma_fortress_2_rematch_2, RegionName.sigma_fortress_2_before_boss)
+    connect(world, RegionName.sigma_fortress_2_before_boss, RegionName.sigma_fortress_2_boss)
 
     connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_rematch_1)
-    connect(world, RegionName.sigma_fortress_3_rematch_1, RegionName.sigma_fortress_3_rematch_2)
-    connect(world, RegionName.sigma_fortress_3_rematch_2, RegionName.sigma_fortress_3_rematch_3)
-    connect(world, RegionName.sigma_fortress_3_rematch_3, RegionName.sigma_fortress_3_rematch_4)
-    connect(world, RegionName.sigma_fortress_3_rematch_4, RegionName.sigma_fortress_3_rematch_5)
-    connect(world, RegionName.sigma_fortress_3_rematch_5, RegionName.sigma_fortress_3_boss)
+    connect(world, RegionName.sigma_fortress_3_rematch_1, RegionName.sigma_fortress_3_after_rematch_1)
+    connect(world, RegionName.sigma_fortress_3_after_rematch_1, RegionName.sigma_fortress_3_rematch_2)
+    connect(world, RegionName.sigma_fortress_3_rematch_2, RegionName.sigma_fortress_3_after_rematch_2)
+    connect(world, RegionName.sigma_fortress_3_after_rematch_2, RegionName.sigma_fortress_3_rematch_3)
+    connect(world, RegionName.sigma_fortress_3_rematch_3, RegionName.sigma_fortress_3_after_rematch_3)
+    connect(world, RegionName.sigma_fortress_3_after_rematch_3, RegionName.sigma_fortress_3_rematch_4)
+    connect(world, RegionName.sigma_fortress_3_rematch_4, RegionName.sigma_fortress_3_after_rematch_4)
+    connect(world, RegionName.sigma_fortress_3_after_rematch_4, RegionName.sigma_fortress_3_rematch_5)
+    connect(world, RegionName.sigma_fortress_3_rematch_5, RegionName.sigma_fortress_3_after_rematch_5)
+    connect(world, RegionName.sigma_fortress_3_after_rematch_5, RegionName.sigma_fortress_3_boss)
 
     connect(world, RegionName.sigma_fortress_4, RegionName.sigma_fortress_4_dog)
     connect(world, RegionName.sigma_fortress_4_dog, RegionName.sigma_fortress_4_sigma)
@@ -400,6 +422,22 @@ def connect_regions(world: World):
         connect(world, RegionName.sigma_fortress_1_boss, RegionName.sigma_fortress_2)
         connect(world, RegionName.sigma_fortress_2_boss, RegionName.sigma_fortress_3)
         connect(world, RegionName.sigma_fortress_3_boss, RegionName.sigma_fortress_4)
+
+    # Connect checkpoints
+    if world.options.logic_helmet_checkpoints.value:
+        connect(world, RegionName.spark_mandrill, RegionName.spark_mandrill_deep)
+
+        connect(world, RegionName.sigma_fortress_1, RegionName.sigma_fortress_1_vertical)
+        connect(world, RegionName.sigma_fortress_1, RegionName.sigma_fortress_1_before_boss)
+
+        connect(world, RegionName.sigma_fortress_2, RegionName.sigma_fortress_2_ride)
+        connect(world, RegionName.sigma_fortress_2, RegionName.sigma_fortress_2_before_boss)
+
+        connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_after_rematch_1)
+        connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_after_rematch_2)
+        connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_after_rematch_3)
+        connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_after_rematch_4)
+        connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_after_rematch_5)
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

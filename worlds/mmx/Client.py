@@ -930,6 +930,16 @@ class MMXSNIClient(SNIClient):
             }])
             self.save_arsenal = False
 
+        keys = {
+            f"mmx_checkpoints_{ctx.team}_{ctx.slot}",
+            f"mmx_global_timer_{ctx.team}_{ctx.slot}",
+            f"mmx_deaths_{ctx.team}_{ctx.slot}",
+            f"mmx_damage_dealt_{ctx.team}_{ctx.slot}",
+            f"mmx_damage_taken_{ctx.team}_{ctx.slot}",
+        }
+        if not all(key in ctx.stored_data.keys() for key in keys):
+            return
+
         # Checkpoints reached
         checkpoints = list(await snes_read(ctx, MMX_CHECKPOINTS_REACHED, 0xF))
         data_storage_checkpoints = ctx.stored_data[f"mmx_checkpoints_{ctx.team}_{ctx.slot}"] or [0 for _ in range(0xF)]
