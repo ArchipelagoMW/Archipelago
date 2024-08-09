@@ -1,13 +1,19 @@
 from BaseClasses import Region, Entrance
 from worlds.wargroove2 import Wargroove2Level
 from worlds.wargroove2.Levels import region_names, FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import Wargroove2World
 
 
-def create_regions(world, player: int,
-                   level_list: [Wargroove2Level],
-                   first_level: Wargroove2Level,
-                   final_levels: [Wargroove2Level]):
-    menu_region = Region('Menu', player, world)
+def create_regions(world: "Wargroove2World") -> None:
+    multiworld = world.multiworld
+    player = world.player
+    level_list = self.level_list
+    first_level = self.first_level
+    final_levels = self.final_levels
+    
+    menu_region = Region('Menu', player, multiworld)
     menu_region.exits.append(Entrance(player, 'Menu exits to Humble Beginnings Rebirth', menu_region))
     first_level_region = first_level.define_region("Humble Beginnings Rebirth", world,
                                                    exits=[region_names[0], region_names[1],
