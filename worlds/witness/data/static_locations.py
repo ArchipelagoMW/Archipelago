@@ -406,6 +406,10 @@ GENERAL_LOCATIONS = {
     "Mountain Bottom Floor Discard",
 }
 
+GENERAL_LOCATION_HEXES = {
+    static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"] for entity_name in GENERAL_LOCATIONS
+}
+
 OBELISK_SIDES = {
     "Desert Obelisk Side 1",
     "Desert Obelisk Side 2",
