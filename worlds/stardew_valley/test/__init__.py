@@ -256,9 +256,9 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             return False
         return super().run_default_tests
 
-    def collect_lots_of_money(self):
+    def collect_lots_of_money(self, percent: float = 0.25):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.25))
+        required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * percent))
         for i in range(required_prog_items):
             self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
 
