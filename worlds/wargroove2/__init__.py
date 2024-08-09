@@ -158,8 +158,8 @@ class Wargroove2World(World):
     def create_item(self, name: str) -> Item:
         return Wargroove2Item(name, self.player)
 
-    def create_regions(self):
-        create_regions(self.multiworld, self.player, self.level_list, self.first_level, self.final_levels)
+    def create_regions(self) -> None:
+        create_regions(self)
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
