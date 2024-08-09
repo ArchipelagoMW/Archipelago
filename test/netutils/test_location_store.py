@@ -130,9 +130,9 @@ class Base:
 
         def test_get_remaining(self) -> None:
             self.assertEqual(self.store.get_remaining(full_state, 0, 1), [])
-            self.assertEqual(self.store.get_remaining(one_state, 0, 1), [13, 21])
-            self.assertEqual(self.store.get_remaining(empty_state, 0, 1), [13, 21, 22])
-            self.assertEqual(self.store.get_remaining(empty_state, 0, 3), [99])
+            self.assertEqual(self.store.get_remaining(one_state, 0, 1), [(1, 13), (2, 21)])
+            self.assertEqual(self.store.get_remaining(empty_state, 0, 1), [(1, 13), (2, 21), (2, 22)])
+            self.assertEqual(self.store.get_remaining(empty_state, 0, 3), [(4, 99)])
 
         def test_location_set_intersection(self) -> None:
             locations = {10, 11, 12}

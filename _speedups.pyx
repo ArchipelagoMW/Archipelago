@@ -287,15 +287,15 @@ cdef class LocationStore:
                     entry in self.entries[start:start + count] if
                     entry.location not in checked]
 
-    def get_remaining(self, state: State, team: int, slot: int) -> List[int]:
+    def get_remaining(self, state: State, team: int, slot: int) -> List[Tuple[int, int]]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
         cdef set checked = state[team, slot]
-        return sorted([entry.item for
-                       entry in self.entries[start:start+count] if
-                       entry.location not in checked])
+        return sorted([(entry.receiver, entry.item) for
+                        entry in self.entries[start:start+count] if
+                        entry.location not in checked])
 
 
 @cython.auto_pickle(False)

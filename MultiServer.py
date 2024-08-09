@@ -991,7 +991,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[typing.Tuple[int, int]]:
     return ctx.locations.get_remaining(ctx.location_checks, team, slot)
 
 
@@ -1350,10 +1350,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
         if self.ctx.remaining_mode == "enabled":
-            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
-            if remaining_item_ids:
-                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[self.client.slot]][item_id]
-                                                            for item_id in remaining_item_ids))
+            rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
+            if rest_locations:
+                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
+                                                            for slot, item_id in rest_locations))
             else:
                 self.output("No remaining items found.")
             return True
@@ -1363,10 +1363,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
         else:  # is goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
-                if remaining_item_ids:
-                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[self.client.slot]][item_id]
-                                                                for item_id in remaining_item_ids))
+                rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
+                if rest_locations:
+                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
+                                                                for slot, item_id in rest_locations))
                 else:
                     self.output("No remaining items found.")
                 return True
