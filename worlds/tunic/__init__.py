@@ -87,8 +87,7 @@ class TunicWorld(World):
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
     def generate_early(self) -> None:
-        if self.options.entrance_rando:
-            self.er_regions = tunic_er_regions.copy()
+        self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
                 if (self.options.entrance_layout == EntranceLayout.option_direction_pairs
@@ -432,7 +431,7 @@ class TunicWorld(World):
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
-            "decoupled": self.options.decoupled.value,
+            "decoupled": self.options.decoupled.value if self.options.entrance_rando else 0,
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],

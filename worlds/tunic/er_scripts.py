@@ -686,7 +686,7 @@ def create_randomized_entrances(world: "TunicWorld", portal_pairs: Dict[Portal, 
         regions[portal1.region].connect(
             connecting_region=regions[get_portal_outlet_region(portal2, world)],
             name=portal1.name)
-        if not world.options.decoupled:
+        if not world.options.decoupled or not world.options.entrance_rando:
             regions[portal2.region].connect(
                 connecting_region=regions[get_portal_outlet_region(portal1, world)],
                 name=portal2.name)
