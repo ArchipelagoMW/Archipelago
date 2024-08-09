@@ -855,6 +855,10 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     def __len__(self) -> int:
         return self.value.__len__()
 
+    # __getitem__ fallback fails for Counters, so we define this explicitly
+    def __contains__(self, item):
+        return item in self.value
+
 
 class CounterOption(OptionDict):
     def __init__(self, value: typing.Dict[str, int]):
@@ -872,9 +876,6 @@ class ItemDict(CounterOption):
         value = {item_name: amount for item_name, amount in value.items() if amount != 0}
 
         super(ItemDict, self).__init__(value)
-
-    def __contains__(self, item):
-        return item in self.value
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
