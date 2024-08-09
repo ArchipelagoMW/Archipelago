@@ -194,7 +194,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         ladder_storage = seed_group["ladder_storage"]
         entrance_layout = seed_group["entrance_layout"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
-        decoupled = seed_group["decoupled"]
 
     logic_tricks: Tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
 
@@ -377,7 +376,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 two_plus.remove(portal1)
             else:
                 # if not both, they're both dead ends
-                if not portal2:
+                if not portal2 and not decoupled:
                     if world.options.entrance_rando.value not in EntranceRando.options.values():
                         raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
                                         "end to a dead end in their plando connections.")

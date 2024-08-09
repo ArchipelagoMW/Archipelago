@@ -149,7 +149,7 @@ class EntranceLayout(Choice):
 class Decoupled(Toggle):
     """
     Decouple the entrances, so that when you go from one entrance to another, the return trip won't necessarily bring you back to the same place.
-    Note: For seed groups, if any player in a seed group does not have Decoupled enabled, no one in the seed group will have Decoupled entrances.
+    Note: For seed groups, all players in the group must have this option enabled or disabled.
     """
     internal_name = "decoupled"
     display_name = "Decoupled Entrances"

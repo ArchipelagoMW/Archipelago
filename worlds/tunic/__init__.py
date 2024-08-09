@@ -56,7 +56,7 @@ class SeedGroup(TypedDict):
     ladder_storage: int  # ls value
     laurels_at_10_fairies: bool  # laurels location value
     entrance_layout: int  # entrance layout value
-    decoupled: bool
+    has_decoupled_enabled: bool  # for checking that players don't have conflicting options
     plando: TunicPlandoConnections  # consolidated plando connections for the seed group
 
 
@@ -144,10 +144,11 @@ class TunicWorld(World):
                               ladder_storage=tunic.options.ladder_storage.value,
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
                               entrance_layout=tunic.options.entrance_layout.value,
-                              decoupled=bool(tunic.options.decoupled),
+                              has_decoupled_enabled=bool(tunic.options.decoupled),
                               plando=tunic.options.plando_connections)
                 continue
-
+            if bool(tunic.options.decoupled) != cls.seed_groups[group]["has_decoupled_enabled"]:
+                raise OptionError("TUNIC: All players in a seed group must have Decoupled either enabled or disabled.")
             # off is more restrictive
             if not tunic.options.laurels_zips:
                 cls.seed_groups[group]["laurels_zips"] = False
@@ -167,15 +168,12 @@ class TunicWorld(World):
                 elif cls.seed_groups[group]["entrance_layout"] != tunic.options.entrance_layout.value:
                     raise OptionError(f"TUNIC: Conflict between seed group {group}'s Entrance Layout options. "
                                       f"Seed group cannot have both Fixed Shop and Direction Pairs enabled.")
-            # decoupled loses to coupled, I could instead make this fail but eh
-            if not tunic.options.decoupled:
-                cls.seed_groups[group]["decoupled"] = False
             if tunic.options.plando_connections:
                 # loop through the connections in the player's yaml
                 for cxn in tunic.options.plando_connections:
                     new_cxn = True
-                    # if they used the entrance direction, just swap it around so we don't have to deal with it
-                    if cxn.direction == "exit" and cls.seed_groups[group]["decoupled"]:
+                    # if they used the entrance direction, just swap it around so that we don't have to deal with it
+                    if cxn.direction == "exit" and tunic.options.decoupled:
                         player_cxn = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="entrance", percentage=cxn.percentage)
                     else:
                         player_cxn = cxn
@@ -184,7 +182,7 @@ class TunicWorld(World):
                         if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
                                 # if decoupled is off, the entrance and exit can be swapped
                                 or (player_cxn.exit == group_cxn.entrance and player_cxn.entrance == group_cxn.exit
-                                    and not cls.seed_groups[group]["decoupled"])):
+                                    and not tunic.options.decoupled)):
                             new_cxn = False
                             break
 
