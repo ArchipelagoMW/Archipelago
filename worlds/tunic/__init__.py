@@ -205,7 +205,7 @@ class TunicWorld(World):
                         )
                         if not tunic.options.decoupled:
                             is_mismatched = is_mismatched or (
-                                or player_cxn.entrance == group_cxn.exit and player_cxn.exit != group_cxn.entrance
+                                player_cxn.entrance == group_cxn.exit and player_cxn.exit != group_cxn.entrance
                                 or player_cxn.exit == group_cxn.entrance and player_cxn.entrance != group_cxn.exit
                             )
                         if is_mismatched:
