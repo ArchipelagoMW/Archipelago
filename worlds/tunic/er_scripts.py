@@ -609,6 +609,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         continue
 
                 # if decoupled is on, we need to make sure you aren't connecting two dead ends together both ways
+                # todo: see if this ever actually gets triggered
                 if decoupled:
                     if portal1 in portal_pairs.keys() and portal_pairs[portal1] == portal:
                         if (is_dead_end(portal1, not ice_grappling, world)
