@@ -443,6 +443,9 @@ class CMWorld(World):
             if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
                 if loc_data.is_tactic:
                     continue
+            if self.options.enable_tactics.value == self.options.enable_tactics.option_turns:
+                if loc_data.is_tactic == Tactic.Fork:
+                    continue
             region.locations.append(CMLocation(self.player, loc_name, loc_data.code, region))
         self.multiworld.regions.append(region)
 
