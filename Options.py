@@ -864,6 +864,12 @@ class CounterOption(OptionDict):
 class ItemDict(CounterOption):
     verify_item_name = True
 
+    def __init__(self, value: typing.Dict[str, int]):
+        if any(item_count < 0 for item_count in value.values()):
+            raise Exception("Cannot have negative item counts.")
+
+        super(ItemDict, self).__init__(value)
+
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # Supports duplicate entries and ordering.
