@@ -60,7 +60,7 @@ class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
     VICTORY_LOCATION: str
-    
+
     def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
         self.YAML_DISABLED_LOCATIONS: Set[str] = disabled_locations
         self.YAML_ADDED_ITEMS: Dict[str, int] = start_inv
@@ -716,8 +716,7 @@ class WitnessPlayerLogic:
                     # If we are disabling a laser, something has gone wrong.
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         laser_name = static_witness_logic.ENTITIES_BY_HEX[entity]["checkName"]
-                        player_name = world.multiworld.get_player_name(world.player)
-                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {player_name}."
+                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {world.player_name}."
                                            f" This is not allowed to happen, please report to Violet.")
 
                     newly_discovered_disabled_entities.add(entity)
