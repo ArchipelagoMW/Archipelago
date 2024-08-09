@@ -1,8 +1,10 @@
 from dataclasses import dataclass
+from typing import Dict
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility, \
+    ItemDict
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -234,18 +236,19 @@ class TrapPercentage(Range):
     default = 20
 
 
-class TrapWeights(OptionDict):
+class TrapWeights(ItemDict):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
-    If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
+    If you don't want a specific type of trap at all, you can remove the entry for it.
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
     display_name = "Trap Weights"
-    schema = Schema({
-        trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
+
+    valid_keys = {
+        trap_name for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
-    })
+    }
+
     default = {
         trap_name: item_definition.weight
         for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
