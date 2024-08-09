@@ -57,11 +57,11 @@ class Wargroove2Level:
         else:
             self.victory_locations = [name + ': Victory']
 
-    def define_access_rules(self, world: MultiWorld, additional_rule=lambda state: True):
+    def define_access_rules(self, multiworld: MultiWorld, additional_rule=lambda state: True) -> None:
         for location_name, rule in self.location_rules.items():
-            set_rule(world.get_location(location_name, self.player), lambda state, rule=rule:
+            set_rule(multiworld.get_location(location_name, self.player), lambda state, rule=rule:
             state.can_reach(self.region, 'Region', self.player) and rule(state) and additional_rule(state))
-        set_region_exit_rules(self.region, world, self.player, self.victory_locations, operator='and')
+        set_region_exit_rules(self.region, multiworld, self.player, self.victory_locations, operator='and')
 
     def define_region(self, name: str, world: MultiWorld, exits=None) -> Region:
         self.region = Region(name, self.player, world)
