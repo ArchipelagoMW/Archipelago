@@ -197,6 +197,7 @@ class RecipeIngredients(Choice):
     display_name = "Random Recipe Ingredients Level"
     option_rocket = 0
     option_science_pack = 1
+    option_vanilla_automation = 2
 
 
 class RecipeIngredientsOffset(Range):
