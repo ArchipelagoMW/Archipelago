@@ -1,5 +1,4 @@
 import logging
-import typing
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, CollectionState, Item
 from Fill import fill_restrictive
@@ -20,7 +19,7 @@ from .rules import set_rules
 from .rom import KDL3ProcedurePatch, get_base_rom_path, patch_rom, KDL3JHASH, KDL3UHASH
 from .client import KDL3SNIClient
 
-from typing import Dict, TextIO, Optional, List, Any
+from typing import Dict, TextIO, Optional, List, Any, Mapping, ClassVar, Type
 import os
 import math
 import threading
@@ -63,13 +62,13 @@ class KDL3World(World):
     """
 
     game = "Kirby's Dream Land 3"
-    options_dataclass: typing.ClassVar[typing.Type[PerGameCommonOptions]] = KDL3Options
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = KDL3Options
     options: KDL3Options
     item_name_to_id = lookup_item_to_id
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
     web = KDL3WebWorld()
-    settings: typing.ClassVar[KDL3Settings]
+    settings: ClassVar[KDL3Settings]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name: bytes = bytes()
@@ -114,7 +113,7 @@ class KDL3World(World):
                                             self.options.slow_trap_weight.value,
                                             self.options.ability_trap_weight.value])[0]
 
-    def get_restrictive_copy_ability_placement(self, copy_ability: str, enemies_to_set: typing.List[str],
+    def get_restrictive_copy_ability_placement(self, copy_ability: str, enemies_to_set: List[str],
                                                level: int, stage: int) -> Optional[str]:
         valid_rooms = [room for room in self.rooms if (room.level < level)
                        or (room.level == level and room.stage < stage)]  # leave out the stage in question to avoid edge
@@ -350,6 +349,15 @@ class KDL3World(World):
         if rom_name:
             new_name = base64.b64encode(self.rom_name).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        # UT support
+        return {"player_levels": self.player_levels}
+
+    def interpret_slot_data(self, slot_data: Mapping[str, Any]):
+        # UT support
+        player_levels = {int(key): value for key, value in slot_data["player_levels"].items()}
+        return {"player_levels": player_levels}
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         if self.stage_shuffle_enabled:

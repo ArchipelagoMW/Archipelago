@@ -229,9 +229,10 @@ def create_levels(world: "KDL3World") -> None:
         5: level5,
     }
     level_shuffle = world.options.stage_shuffle.value
-    world.player_levels = generate_valid_levels(
-        world,
-        level_shuffle)
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        world.player_levels = getattr(world.multiworld, "re_gen_passthrough")["Kirby's Dream Land 3"]["player_levels"]
+    else:
+        world.player_levels = generate_valid_levels(world, level_shuffle)
 
     generate_rooms(world, levels)
 
