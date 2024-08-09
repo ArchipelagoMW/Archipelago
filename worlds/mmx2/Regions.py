@@ -34,12 +34,16 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     morph_moth_start = create_region(multiworld, player, active_locations, RegionName.morph_moth_start)
     morph_moth_parasite_1 = create_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1)
     morph_moth_parasite_2 = create_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_2)
+    morph_moth_after_parasite_1 = create_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_1)
+    morph_moth_after_parasite_2 = create_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_2)
     morph_moth_boss = create_region(multiworld, player, active_locations, RegionName.morph_moth_boss)
 
     magna_centipede = create_region(multiworld, player, active_locations, RegionName.magna_centipede)
     magna_centipede_start = create_region(multiworld, player, active_locations, RegionName.magna_centipede_start)
     magna_centipede_blade = create_region(multiworld, player, active_locations, RegionName.magna_centipede_blade)
+    magna_centipede_after_blade = create_region(multiworld, player, active_locations, RegionName.magna_centipede_after_blade)
     magna_centipede_security = create_region(multiworld, player, active_locations, RegionName.magna_centipede_security)
+    magna_centipede_after_security = create_region(multiworld, player, active_locations, RegionName.magna_centipede_after_security)
     magna_centipede_boss = create_region(multiworld, player, active_locations, RegionName.magna_centipede_boss)
 
     crystal_snail = create_region(multiworld, player, active_locations, RegionName.crystal_snail)
@@ -109,11 +113,15 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         morph_moth_start,
         morph_moth_parasite_1,
         morph_moth_parasite_2,
+        morph_moth_after_parasite_1,
+        morph_moth_after_parasite_2,
         morph_moth_boss,
         magna_centipede,
         magna_centipede_start,
         magna_centipede_blade,
         magna_centipede_security,
+        magna_centipede_after_blade,
+        magna_centipede_after_security,
         magna_centipede_boss,
         crystal_snail,
         crystal_snail_start,
@@ -300,15 +308,15 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         # Morph Moth
         add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_start, LocationName.morph_moth_1up_1)
         add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_start, LocationName.morph_moth_1up_2)
-        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_1)
-        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_2)
-        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_3)
-        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_4)
-        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_parasite_1, LocationName.morph_moth_hp_5)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_1, LocationName.morph_moth_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_1, LocationName.morph_moth_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_1, LocationName.morph_moth_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_1, LocationName.morph_moth_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.morph_moth_after_parasite_1, LocationName.morph_moth_hp_5)
 
         # Magna Centpiede
-        add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_blade, LocationName.magna_centipede_hp_1)
-        add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_blade, LocationName.magna_centipede_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_after_blade, LocationName.magna_centipede_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.magna_centipede_after_blade, LocationName.magna_centipede_hp_2)
 
         # Crystal Snail
         add_location_to_region(multiworld, player, active_locations, RegionName.crystal_snail_start, LocationName.crystal_snail_hp_1)
@@ -391,14 +399,18 @@ def connect_regions(world: World):
     # Connect Morph Moth
     connect(world, RegionName.morph_moth, RegionName.morph_moth_start)
     connect(world, RegionName.morph_moth_start, RegionName.morph_moth_parasite_1)
-    connect(world, RegionName.morph_moth_parasite_1, RegionName.morph_moth_parasite_2)
-    connect(world, RegionName.morph_moth_parasite_2, RegionName.morph_moth_boss)
+    connect(world, RegionName.morph_moth_parasite_1, RegionName.morph_moth_after_parasite_1)
+    connect(world, RegionName.morph_moth_after_parasite_1, RegionName.morph_moth_parasite_2)
+    connect(world, RegionName.morph_moth_parasite_2, RegionName.morph_moth_after_parasite_2)
+    connect(world, RegionName.morph_moth_after_parasite_2, RegionName.morph_moth_boss)
 
     # Connect Magna Centipede
     connect(world, RegionName.magna_centipede, RegionName.magna_centipede_start)
     connect(world, RegionName.magna_centipede_start, RegionName.magna_centipede_blade)
-    connect(world, RegionName.magna_centipede_blade, RegionName.magna_centipede_security)
-    connect(world, RegionName.magna_centipede_security, RegionName.magna_centipede_boss)
+    connect(world, RegionName.magna_centipede_blade, RegionName.magna_centipede_after_blade)
+    connect(world, RegionName.magna_centipede_after_blade, RegionName.magna_centipede_security)
+    connect(world, RegionName.magna_centipede_security, RegionName.magna_centipede_after_security)
+    connect(world, RegionName.magna_centipede_after_security, RegionName.magna_centipede_boss)
 
     # Connect Crystal Snail
     connect(world, RegionName.crystal_snail, RegionName.crystal_snail_start)
@@ -426,8 +438,8 @@ def connect_regions(world: World):
     connect(world, RegionName.wheel_gator_mid, RegionName.x_hunter_arena)
     connect(world, RegionName.bubble_crab_open, RegionName.x_hunter_arena)
     connect(world, RegionName.flame_stag_volcano, RegionName.x_hunter_arena)
-    connect(world, RegionName.morph_moth_parasite_1, RegionName.x_hunter_arena)
-    connect(world, RegionName.magna_centipede_blade, RegionName.x_hunter_arena)
+    connect(world, RegionName.morph_moth_after_parasite_1, RegionName.x_hunter_arena)
+    connect(world, RegionName.magna_centipede_after_blade, RegionName.x_hunter_arena)
     connect(world, RegionName.crystal_snail_arena, RegionName.x_hunter_arena)
     connect(world, RegionName.overdrive_ostrich_arena, RegionName.x_hunter_arena)
     connect(world, RegionName.wire_sponge_elevator, RegionName.x_hunter_arena)
@@ -465,6 +477,19 @@ def connect_regions(world: World):
         connect(world, RegionName.x_hunter_stage_3_boss, RegionName.x_hunter_stage_4)
         
     connect(world, RegionName.x_hunter_stage_4_voice, RegionName.x_hunter_stage_5)
+
+    # Connect checkpoints
+    if world.options.logic_helmet_checkpoints.value:
+        # Connect Morph Moth
+        connect(world, RegionName.morph_moth, RegionName.morph_moth_after_parasite_1)
+        connect(world, RegionName.morph_moth, RegionName.morph_moth_after_parasite_2)
+
+        # Connect Magna Centipede
+        connect(world, RegionName.magna_centipede, RegionName.magna_centipede_after_blade)
+        connect(world, RegionName.magna_centipede, RegionName.magna_centipede_after_security)
+
+        # Connect Crystal Snail
+        connect(world, RegionName.crystal_snail, RegionName.crystal_snail_downhill)
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

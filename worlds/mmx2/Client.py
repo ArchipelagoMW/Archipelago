@@ -152,6 +152,10 @@ class MMX2SNIClient(SNIClient):
                 ctx.command_processor.commands.pop("heal")
             if "refill" in ctx.command_processor.commands:
                 ctx.command_processor.commands.pop("refill")
+            if "trade" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("trade")
+            if "resync" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("resync")
             return False
         
         ctx.game = self.game
@@ -166,6 +170,8 @@ class MMX2SNIClient(SNIClient):
                 ctx.command_processor.commands["refill"] = cmd_refill
         if "trade" not in ctx.command_processor.commands:
             ctx.command_processor.commands["trade"] = cmd_trade
+        if "resync" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["resync"] = cmd_resync
 
         death_link = await snes_read(ctx, MMX2_DEATH_LINK_ACTIVE, 1)
         if death_link[0]:
@@ -926,8 +932,8 @@ class MMX2SNIClient(SNIClient):
                     arsenal["weapons"][i] |= saved_arsenal["weapons"][i] & 0x40
                 for level in range(0x20):
                     arsenal["levels"][level] |= saved_arsenal["levels"][level]
-                arsenal["base_access"] |= saved_arsenal["base_access"]
-                arsenal["sigma_access"] |= saved_arsenal["sigma_access"]
+                arsenal["base_access"] = min(saved_arsenal["base_access"], arsenal["base_access"])
+                arsenal["sigma_access"] = min(saved_arsenal["sigma_access"], arsenal["sigma_access"])
                     
                 arsenal["upgrades"] |= saved_arsenal["upgrades"]
                 arsenal["unlocked_buster"] |= saved_arsenal["unlocked_buster"]
@@ -941,6 +947,16 @@ class MMX2SNIClient(SNIClient):
                     [{"operation": "replace", "value": arsenal}],
             }])
             self.save_arsenal = False
+
+        keys = {
+            f"mmx2_checkpoints_{ctx.team}_{ctx.slot}",
+            f"mmx2_global_timer_{ctx.team}_{ctx.slot}",
+            f"mmx2_deaths_{ctx.team}_{ctx.slot}",
+            f"mmx2_damage_dealt_{ctx.team}_{ctx.slot}",
+            f"mmx2_damage_taken_{ctx.team}_{ctx.slot}",
+        }
+        if not all(key in ctx.stored_data.keys() for key in keys):
+            return
 
         # Checkpoints reached
         checkpoints = list(await snes_read(ctx, MMX2_CHECKPOINTS_REACHED, 0xF))

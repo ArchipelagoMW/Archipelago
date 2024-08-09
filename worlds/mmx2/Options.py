@@ -268,6 +268,11 @@ class PlandoWeaknesses(OptionDict):
     })
     default = {}
 
+class LogicHelmetCheckpoints(Toggle):
+    """
+    Makes the "Use Any Checkpoint" feature from the Helmet Upgrade be in logic
+    """
+    display_name = "Helmet Checkpoints In Logic"
 
 mmx2_option_groups = [
     OptionGroup("Gameplay Options", [
@@ -279,6 +284,7 @@ mmx2_option_groups = [
         ShoryukenInPool,
         ShoryukenUseHadoukenInput,
         XHuntersMedalCount,
+        LogicHelmetCheckpoints,
     ]),
     OptionGroup("Boss Weakness Options", [
         BossWeaknessRando,
@@ -316,6 +322,7 @@ class MMX2Options(PerGameCommonOptions):
     long_jumps: LongJumps
     shoryuken_in_pool: ShoryukenInPool
     shoryuken_use_hadouken_input: ShoryukenUseHadoukenInput
+    logic_helmet_checkpoints: LogicHelmetCheckpoints
     logic_boss_weakness: LogicBossWeakness
     base_boss_rematch_count: BaseBossRematchCount
     base_all_levels: BaseBundleUnlock

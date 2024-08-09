@@ -32,12 +32,12 @@ bosses = {
         EventName.flame_stag_rematch,
     ],
     "Morph Moth": [
-        f"{RegionName.morph_moth_parasite_2} -> {RegionName.morph_moth_boss}",
+        f"{RegionName.morph_moth_after_parasite_2} -> {RegionName.morph_moth_boss}",
         LocationName.x_hunter_stage_4_morph_moth,
         EventName.morph_moth_rematch,
     ],
     "Magna Centipede": [
-        f"{RegionName.magna_centipede_security} -> {RegionName.magna_centipede_boss}",
+        f"{RegionName.magna_centipede_after_security} -> {RegionName.magna_centipede_boss}",
         LocationName.x_hunter_stage_4_magna_centipede,
         EventName.magna_centipede_rematch,
     ],
@@ -74,11 +74,11 @@ bosses = {
         f"{RegionName.magna_centipede_start} -> {RegionName.magna_centipede_blade}",
     ],
     "Raider Killer": [
-        f"{RegionName.magna_centipede_blade} -> {RegionName.magna_centipede_security}",
+        f"{RegionName.magna_centipede_after_blade} -> {RegionName.magna_centipede_security}",
     ],
     "Pararoid S-38": [
         f"{RegionName.morph_moth_start} -> {RegionName.morph_moth_parasite_1}",
-        f"{RegionName.morph_moth_parasite_1} -> {RegionName.morph_moth_parasite_2}",
+        f"{RegionName.morph_moth_after_parasite_1} -> {RegionName.morph_moth_parasite_2}",
     ],
     "Neo Violen": [
         f"{RegionName.x_hunter_stage_1_start} -> {RegionName.x_hunter_stage_1_boss}",
@@ -189,9 +189,9 @@ def set_rules(world: MMX2World):
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
     set_rule(multiworld.get_entrance(f"{RegionName.flame_stag_volcano} -> {RegionName.x_hunter_arena}", player), 
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
-    set_rule(multiworld.get_entrance(f"{RegionName.morph_moth_parasite_1} -> {RegionName.x_hunter_arena}", player), 
+    set_rule(multiworld.get_entrance(f"{RegionName.morph_moth_after_parasite_1} -> {RegionName.x_hunter_arena}", player), 
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
-    set_rule(multiworld.get_entrance(f"{RegionName.magna_centipede_blade} -> {RegionName.x_hunter_arena}", player), 
+    set_rule(multiworld.get_entrance(f"{RegionName.magna_centipede_after_blade} -> {RegionName.x_hunter_arena}", player), 
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
     set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.x_hunter_arena}", player), 
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
@@ -278,6 +278,10 @@ def set_rules(world: MMX2World):
     # Handle pickupsanity logic
     if world.options.pickupsanity.value:
         add_pickupsanity_logic(world)
+
+    # Handle helmet logic
+    if world.options.logic_helmet_checkpoints.value:
+        add_helmet_logic(world)
 
 
 def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> bool:
@@ -402,3 +406,21 @@ def add_pickupsanity_logic(world: MMX2World):
                     state.has(ItemName.speed_burner, player)
                 )
              ))
+
+
+def add_helmet_logic(world: MMX2World):
+    player = world.player
+    multiworld = world.multiworld
+
+    set_rule(multiworld.get_entrance(f"{RegionName.morph_moth} -> {RegionName.morph_moth_after_parasite_1}", player), 
+             lambda state: state.has(ItemName.helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.morph_moth} -> {RegionName.morph_moth_after_parasite_2}", player), 
+             lambda state: state.has(ItemName.helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.magna_centipede} -> {RegionName.magna_centipede_after_blade}", player), 
+             lambda state: state.has(ItemName.helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.magna_centipede} -> {RegionName.magna_centipede_after_security}", player), 
+             lambda state: state.has(ItemName.helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail} -> {RegionName.crystal_snail_downhill}", player), 
+             lambda state: state.has(ItemName.helmet, player, 1))
