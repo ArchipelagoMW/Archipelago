@@ -9,13 +9,13 @@ location_table: Dict[str, int] = {
     "Nuru's Vengeance: Victory": 253005,
     "Nuru's Vengeance: Spearman Destroys the Gate": 253006,
     "Nuru's Vengeance: Defeat all Dogs": 253007,
-    'Cherrystone Landing: Smacked a Trebuchet': 253008,
-    'Cherrystone Landing: Smacked a Fortified Village': 253009,
-    'Cherrystone Landing: Victory': 253010,
-    'Den-Two-Away: Victory': 253011,
-    'Den-Two-Away: Commander Captures the Lumbermill': 253012,
-    'Skydiving: Victory': 253013,
-    'Skydiving: Dragon Defeats Stronghold': 253014,
+    "Cherrystone Landing: Smacked a Trebuchet": 253008,
+    "Cherrystone Landing: Smacked a Fortified Village": 253009,
+    "Cherrystone Landing: Victory": 253010,
+    "Den-Two-Away: Victory": 253011,
+    "Den-Two-Away: Commander Captures the Lumbermill": 253012,
+    "Skydiving: Victory": 253013,
+    "Skydiving: Dragon Defeats Stronghold": 253014,
     "Terrible Tributaries: Victory": 253015,
     "Terrible Tributaries: Swimming Knights": 253016,
     "Terrible Tributaries: Steal Code Names": 253017,
@@ -44,20 +44,20 @@ location_table: Dict[str, int] = {
     "Bridge Brigade: From the Depths": 253040,
     "Bridge Brigade: Back to the Depths": 253041,
     #########################################################
-    'Slippery Bridge: Victory': 253300,
-    'Slippery Bridge: Control all Sea Villages': 253301,
+    "Slippery Bridge: Victory": 253300,
+    "Slippery Bridge: Control all Sea Villages": 253301,
     #########################################################
-    'Spire Fire: Victory': 253305,
-    'Spire Fire: Kill Enemy Sky Rider': 253306,
-    'Spire Fire: Win without losing your Dragon': 253307,
+    "Spire Fire: Victory": 253305,
+    "Spire Fire: Kill Enemy Sky Rider": 253306,
+    "Spire Fire: Win without losing your Dragon": 253307,
     #########################################################
-    'Sunken Forest: Victory': 253310,
-    'Sunken Forest: High Ground': 253311,
-    'Sunken Forest: Coastal Siege': 253312,
+    "Sunken Forest: Victory": 253310,
+    "Sunken Forest: High Ground": 253311,
+    "Sunken Forest: Coastal Siege": 253312,
     #########################################################
-    'Tenri\'s Mistake: Victory': 253315,
-    'Tenri\'s Mistake: Mighty Barracks': 253316,
-    'Tenri\'s Mistake: Commander Arrives': 253317,
+    "Tenri\'s Mistake: Victory": 253315,
+    "Tenri\'s Mistake: Mighty Barracks": 253316,
+    "Tenri\'s Mistake: Commander Arrives": 253317,
     #########################################################
     "Enmity Cliffs: Victory": 253320,
     "Enmity Cliffs: Spear Flood": 253321,
@@ -103,11 +103,11 @@ location_table: Dict[str, int] = {
     "Split Valley: Longshot": 253371,
     "Split Valley: Ranged Trinity": 253372,
     #########################################################
-    'Disastrous Crossing: Victory': None,
+    "Disastrous Crossing: Victory": None,
     "Dark Mirror: Victory": None,
     "Doomed Metropolis: Victory": None,
     "Dementia Castle: Victory": None,
-    'Wargroove 2: Victory': None
+    "Wargroove 2: Victory": None
 }
 
 location_id_name: Dict[int, str] = {}

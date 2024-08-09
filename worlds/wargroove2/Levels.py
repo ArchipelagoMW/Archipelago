@@ -45,8 +45,6 @@ class Wargroove2Level:
 
     def __init__(self, name: str, file_name: str, location_rules: dict, victory_locations: List[str] = [],
                  low_victory_checks: bool = True, has_ocean: bool = True):
-        if victory_locations is None:
-            victory_locations = []
         self.name = name
         self.file_name = file_name
         self.location_rules = location_rules
@@ -63,8 +61,8 @@ class Wargroove2Level:
             state.can_reach(self.region, 'Region', self.player) and rule(state) and additional_rule(state))
         set_region_exit_rules(self.region, multiworld, self.player, self.victory_locations, operator='and')
 
-    def define_region(self, name: str, multiworld: MultiWorld, exits=None) -> Region:
-        self.region = Region(name, self.player, multiworld)
+    def define_region(self, name: str, world: "Wargroove2World", exits=None) -> Region:
+        self.region = Region(name, self.player, world.multiworld)
         if self.location_rules.keys():
             for location in self.location_rules.keys():
                 loc_id = location_table.get(location, 0)

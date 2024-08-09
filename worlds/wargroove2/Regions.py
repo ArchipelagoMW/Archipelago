@@ -9,21 +9,21 @@ if TYPE_CHECKING:
 def create_regions(world: "Wargroove2World") -> None:
     multiworld = world.multiworld
     player = world.player
-    level_list = self.level_list
-    first_level = self.first_level
-    final_levels = self.final_levels
+    level_list = world.level_list
+    first_level = world.first_level
+    final_levels = world.final_levels
     
     menu_region = Region('Menu', player, multiworld)
     menu_region.exits.append(Entrance(player, 'Menu exits to Humble Beginnings Rebirth', menu_region))
     first_level_region = first_level.define_region("Humble Beginnings Rebirth", world,
                                                    exits=[region_names[0], region_names[1],
                                                           region_names[2], region_names[3]])
-    world.regions += [menu_region, first_level_region]
+    multiworld.regions += [menu_region, first_level_region]
 
     # Define Level 1s
     for level_num in range(0, 4):
         next_level = level_num * 4 + 4 - level_num
-        world.regions += [level_list[level_num].define_region(region_names[level_num], world, exits=[
+        multiworld.regions += [level_list[level_num].define_region(region_names[level_num], world, exits=[
             region_names[next_level],
             region_names[
                 next_level + 1],
@@ -32,7 +32,7 @@ def create_regions(world: "Wargroove2World") -> None:
     # Define Level 2s
     for level_num in range(4, 16):
         next_level = level_num + 12
-        world.regions += [level_list[level_num].define_region(region_names[level_num], world,
+        multiworld.regions += [level_list[level_num].define_region(region_names[level_num], world,
                                                               exits=[region_names[next_level]])]
     # Define Level 3s
     for level_num in range(16, 28):
@@ -43,50 +43,50 @@ def create_regions(world: "Wargroove2World") -> None:
             final_level_name = FINAL_LEVEL_3
         elif level_num >= 19:
             final_level_name = FINAL_LEVEL_2
-        world.regions += [level_list[level_num].define_region(region_names[level_num], world, exits=[final_level_name])]
+        multiworld.regions += [level_list[level_num].define_region(region_names[level_num], world, exits=[final_level_name])]
 
     # Define Final Levels
-    world.regions += [final_levels[0].define_region(FINAL_LEVEL_1, world),
+    multiworld.regions += [final_levels[0].define_region(FINAL_LEVEL_1, world),
                       final_levels[1].define_region(FINAL_LEVEL_2, world),
                       final_levels[2].define_region(FINAL_LEVEL_3, world),
                       final_levels[3].define_region(FINAL_LEVEL_4, world)]
 
     # # link up our regions with the entrances
-    world.get_entrance("Menu exits to Humble Beginnings Rebirth", player).connect(
-        world.get_region('Humble Beginnings Rebirth', player))
-    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[0]}", player).connect(
-        world.get_region(region_names[0], player))
-    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[1]}", player).connect(
-        world.get_region(region_names[1], player))
-    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[2]}", player).connect(
-        world.get_region(region_names[2], player))
-    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[3]}", player).connect(
-        world.get_region(region_names[3], player))
+    world.get_entrance("Menu exits to Humble Beginnings Rebirth").connect(
+        world.get_region('Humble Beginnings Rebirth'))
+    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[0]}").connect(
+        world.get_region(region_names[0]))
+    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[1]}").connect(
+        world.get_region(region_names[1]))
+    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[2]}").connect(
+        world.get_region(region_names[2]))
+    world.get_entrance(f"Humble Beginnings Rebirth exits to {region_names[3]}").connect(
+        world.get_region(region_names[3]))
     # Define Levels 1-4
     for level_num in range(0, 4):
         next_level = level_num * 4 + 4 - level_num
-        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level]}", player).connect(
-            world.get_region(region_names[next_level], player))
-        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level + 1]}", player).connect(
-            world.get_region(region_names[next_level + 1], player))
-        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level + 2]}", player).connect(
-            world.get_region(region_names[next_level + 2], player))
+        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level]}").connect(
+            world.get_region(region_names[next_level]))
+        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level + 1]}").connect(
+            world.get_region(region_names[next_level + 1]))
+        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level + 2]}").connect(
+            world.get_region(region_names[next_level + 2]))
 
     for level_num in range(4, 16):
         next_level = level_num + 12
-        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level]}", player).connect(
-            world.get_region(region_names[next_level], player))
+        world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level]}").connect(
+            world.get_region(region_names[next_level]))
 
     for level_num in range(16, 28):
         if level_num >= 25:
             final_level_name = f"{region_names[level_num]} exits to {FINAL_LEVEL_4}"
-            world.get_entrance(final_level_name, player).connect(world.get_region(FINAL_LEVEL_4, player))
+            world.get_entrance(final_level_name).connect(world.get_region(FINAL_LEVEL_4))
         elif level_num >= 22:
             final_level_name = f"{region_names[level_num]} exits to {FINAL_LEVEL_3}"
-            world.get_entrance(final_level_name, player).connect(world.get_region(FINAL_LEVEL_3, player))
+            world.get_entrance(final_level_name).connect(world.get_region(FINAL_LEVEL_3))
         elif level_num >= 19:
             final_level_name = f"{region_names[level_num]} exits to {FINAL_LEVEL_2}"
-            world.get_entrance(final_level_name, player).connect(world.get_region(FINAL_LEVEL_2, player))
+            world.get_entrance(final_level_name).connect(world.get_region(FINAL_LEVEL_2))
         else:
             final_level_name = f"{region_names[level_num]} exits to {FINAL_LEVEL_1}"
-            world.get_entrance(final_level_name, player).connect(world.get_region(FINAL_LEVEL_1, player))
+            world.get_entrance(final_level_name).connect(world.get_region(FINAL_LEVEL_1))
