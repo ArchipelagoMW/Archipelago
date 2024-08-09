@@ -1052,7 +1052,7 @@ class Location:
                     and (not check_access or self.can_reach(state))))
 
     def can_reach(self, state: CollectionState) -> bool:
-        # region.can_reach is just a cache lookup, so placing it first for faster abort on average
+        # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
         assert self.parent_region, "Can't reach location without region"
         return self.parent_region.can_reach(state) and self.access_rule(state)
 
