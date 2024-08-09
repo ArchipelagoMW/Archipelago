@@ -274,6 +274,25 @@ class HintAmount(Range):
     default = 12
 
 
+class VagueHints(Choice):
+    """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
+    Area Hints will be generated as normal.
+
+    If set to "stable", only location groups will be used. If location groups aren't implemented for the game your item ended up in, your hint will instead only tell you that the item is "somewhere in" that game.
+    If set to "experimental", region names will be eligible as well, and you will never receive a "somewhere in" hint. Keep in mind that region names are not always intended to be comprehensible to players — only turn this on if you are okay with a bit of chaos.
+
+
+    The distinction does not matter in single player, as Witness implements location groups for every location.
+
+    Also, please don't pester any devs about implementing location groups. Bring it up nicely, accept their response even if it is "No".
+    """
+    display_name = "Vague Hints"
+
+    option_off = 0
+    option_stable = 1
+    option_experimental = 2
+
+
 class AreaHintPercentage(Range):
     """
     There are two types of hints for The Witness.
@@ -339,6 +358,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     trap_weights: TrapWeights
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
+    vague_hints: VagueHints
     area_hint_percentage: AreaHintPercentage
     laser_hints: LaserHints
     death_link: DeathLink
@@ -375,6 +395,7 @@ witness_option_groups = [
     ]),
     OptionGroup("Hints", [
         HintAmount,
+        VagueHints,
         AreaHintPercentage,
         LaserHints
     ]),
