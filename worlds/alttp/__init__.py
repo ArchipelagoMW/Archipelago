@@ -13,7 +13,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
-from .Options import alttp_options, small_key_shuffle
+from .Options import alttp_options, small_key_shuffle, ALTTPOptions
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
 from .Client import ALTTPSNIClient
@@ -133,7 +133,9 @@ class ALTTPWorld(World):
     Ganon!
     """
     game = "A Link to the Past"
-    option_definitions = alttp_options
+    # option_definitions = alttp_options
+    options_dataclass = ALTTPOptions
+    options: ALTTPOptions
     settings_key = "lttp_options"
     settings: typing.ClassVar[ALTTPSettings]
     topology_present = True
@@ -296,6 +298,8 @@ class ALTTPWorld(World):
 
         player = self.player
         multiworld = self.multiworld
+        for option_name, option_value in self.options.as_dict():
+            setattr(multiworld, option_name, option_value)
 
         self.fix_trock_doors = (multiworld.entrance_shuffle[player] != 'vanilla'
                                 or multiworld.mode[player] == 'inverted')

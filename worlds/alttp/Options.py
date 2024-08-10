@@ -1,8 +1,9 @@
 import typing
+from dataclasses import make_dataclass
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, DeathLink, DefaultOnToggle, FreeText, ItemsAccessibility, Option, \
-    PlandoBosses, PlandoConnections, PlandoTexts, Removed, StartInventoryPool, Toggle
+    PlandoBosses, PlandoConnections, PlandoTexts, Removed, StartInventoryPool, Toggle, PerGameCommonOptions
 from .EntranceShuffle import default_connections, default_dungeon_connections, \
     inverted_default_connections, inverted_default_dungeon_connections
 from .Text import TextTable
@@ -825,3 +826,5 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "smallkey_shuffle": Removed,
     "bigkey_shuffle": Removed,
 }
+
+ALTTPOptions = make_dataclass("ALTTPOptions", [(name, option) for name, option in alttp_options.items()], bases=(PerGameCommonOptions,))
