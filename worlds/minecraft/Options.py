@@ -1,6 +1,8 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PlandoConnections
+from Options import Choice, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PlandoConnections, \
+    PerGameCommonOptions
 from .Constants import region_info
+from dataclasses import dataclass
 
 
 class AdvancementGoal(Range):
@@ -55,7 +57,7 @@ class StructureCompasses(DefaultOnToggle):
     display_name = "Structure Compasses"
 
 
-class BeeTraps(Range): 
+class BeeTraps(Range):
     """Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when
     received."""
     display_name = "Bee Trap Percentage"
@@ -109,22 +111,21 @@ class MCPlandoConnections(PlandoConnections):
         return True
 
 
-minecraft_options: typing.Dict[str, type(Option)] = {
-    "plando_connections":                   MCPlandoConnections,
-    "advancement_goal":                     AdvancementGoal,
-    "egg_shards_required":                  EggShardsRequired,
-    "egg_shards_available":                 EggShardsAvailable,
-    "required_bosses":                      BossGoal,
+@dataclass
+class MinecraftOptions(PerGameCommonOptions):
+    plando_connections: MCPlandoConnections
+    advancement_goal: AdvancementGoal
+    egg_shards_required: EggShardsRequired
+    egg_shards_available: EggShardsAvailable
+    required_bosses: BossGoal
+    shuffle_structures: ShuffleStructures
+    structure_compasses: StructureCompasses
 
-    "shuffle_structures":                   ShuffleStructures,
-    "structure_compasses":                  StructureCompasses,
-
-    "combat_difficulty":                    CombatDifficulty,
-    "include_hard_advancements":            HardAdvancements,
-    "include_unreasonable_advancements":    UnreasonableAdvancements,
-    "include_postgame_advancements":        PostgameAdvancements,
-    "bee_traps":                            BeeTraps,
-    "send_defeated_mobs":                   SendDefeatedMobs,
-    "death_link":                           DeathLink,
-    "starting_items":                       StartingItems,
-}
+    combat_difficulty: CombatDifficulty
+    include_hard_advancements: HardAdvancements
+    include_unreasonable_advancements: UnreasonableAdvancements
+    include_postgame_advancements: PostgameAdvancements
+    bee_traps: BeeTraps
+    send_defeated_mobs: SendDefeatedMobs
+    death_link: DeathLink
+    starting_items: StartingItems
