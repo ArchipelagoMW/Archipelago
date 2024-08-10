@@ -21,16 +21,16 @@ class BlasRules:
         # BrandenEK/Blasphemous.Randomizer/ItemRando/BlasphemousInventory.cs
         self.string_rules = {
             # Visibility flags
-            "DoubleJump": lambda state: self.world.options.purified_hand,
+            "DoubleJump": lambda state: bool(self.world.options.purified_hand),
             "NormalLogic": lambda state: self.world.options.difficulty >= 1,
             "NormalLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 1 \
-                and self.world.options.purified_hand,
+                and bool(self.world.options.purified_hand),
             "HardLogic": lambda state: self.world.options.difficulty >= 2,
             "HardLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 2 \
-                and self.world.options.purified_hand,
+                and bool(self.world.options.purified_hand),
             "EnemySkips": self.enemy_skips_allowed,
             "EnemySkipsAndDoubleJump": lambda state: self.enemy_skips_allowed(state) \
-                and self.world.options.purified_hand,
+                and bool(self.world.options.purified_hand),
 
             # Relics
             "blood": self.blood,
@@ -493,10 +493,8 @@ class BlasRules:
 
 
     def req_is_region(self, string: str) -> bool:
-        if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
-        or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
-            return True
-        return False
+        return (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
+            or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S")
 
     def load_rule(self, obj_is_region: bool, name: str, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
         clauses = []
@@ -664,6 +662,15 @@ class BlasRules:
             or self.cante(state)
             or self.cantina(state)
             or self.tiento(state)
+            or state.has_any({
+                "Campanillero to the Sons of the Aurora",
+                "Mirabras of the Return to Port",
+                "Romance to the Crimson Mist",
+                "Saeta Dolorosa",
+                "Seguiriya to your Eyes like Stars",
+                "Verdiales of the Forsaken Hamlet",
+                "Zambra to the Resplendent Crown"
+            }, self.player)
         )
     
     def pillar(self, state: CollectionState) -> bool:
@@ -684,8 +691,8 @@ class BlasRules:
     def total_fervour(self, state: CollectionState) -> int:
         return (
             60
-            + (20 * state.count("Fervour Upgrade", self.player))
-            + (10 * state.count("Bead of Blue Wax", self.player))
+            + (20 * min(6, state.count("Fervour Upgrade", self.player)))
+            + (10 * min(3, state.count("Bead of Blue Wax", self.player)))
         )
 
     # Skills
@@ -749,7 +756,7 @@ class BlasRules:
     def ceremony_items(self, state: CollectionState) -> int:
         return state.count_group_unique("egg", self.player)
     
-    def egg(self, state: CollectionState) -> int:
+    def egg(self, state: CollectionState) -> bool:
         return state.has("Egg of Deformity", self.player)
     
     # Redento quest
@@ -781,7 +788,7 @@ class BlasRules:
     def bell(self, state: CollectionState) -> bool:
         return state.has("Petrified Bell", self.player)
     
-    def verses(self, state: CollectionState) -> bool:
+    def verses(self, state: CollectionState) -> int:
         return state.count("Verses Spun from Gold", self.player)
     
     # Movement tech
@@ -850,7 +857,7 @@ class BlasRules:
             self.lung(state)
             or self.world.options.difficulty >= 2
             and self.tiento(state)
-            and self.total_fervour(state >= 120)
+            and self.total_fervour(state) >= 120
         )
     
     # Enemy tech

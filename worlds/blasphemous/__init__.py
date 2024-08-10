@@ -26,11 +26,11 @@ class BlasphemousWeb(WebWorld):
 class BlasphemousWorld(World):
     """
     Blasphemous is a challenging Metroidvania set in the cursed land of Cvstodia. Play as the Penitent One, trapped
-    in an endless cycle of death and rebirth, and free the world from it's terrible fate in your quest to break
+    in an endless cycle of death and rebirth, and free the world from its terrible fate in your quest to break
     your eternal damnation!
     """
 
-    game: str = "Blasphemous"
+    game = "Blasphemous"
     web = BlasphemousWeb()
 
     item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
@@ -61,25 +61,22 @@ class BlasphemousWorld(World):
 
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(tears_set)
+        return self.random.choice(tears_set)
 
 
     def generate_early(self):
-        multiworld = self.multiworld
-        player = self.player
-
         if not self.options.starting_location.randomized:
             if self.options.starting_location == 6 and self.options.difficulty < 2:
-                raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] "
+                raise Exception(f"[Blasphemous - '{self.player_name}'] "
                                 f"{self.options.starting_location} cannot be chosen if Difficulty is lower than Hard.")
 
             if (self.options.starting_location == 0 or self.options.starting_location == 6) \
                 and self.options.dash_shuffle:
-                    raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] "
+                    raise Exception(f"[Blasphemous - '{self.player_name}'] "
                                     f"{self.options.starting_location} cannot be chosen if Shuffle Dash is enabled.")
             
             if self.options.starting_location == 3 and self.options.wall_climb_shuffle:
-                raise Exception(f"[Blasphemous - '{multiworld.get_player_name(player)}'] "
+                raise Exception(f"[Blasphemous - '{self.player_name}'] "
                                 f"{self.options.starting_location} cannot be chosen if Shuffle Wall Climb is enabled.")
         else:
             locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
@@ -111,10 +108,10 @@ class BlasphemousWorld(World):
             
         
         if not self.options.dash_shuffle:
-            multiworld.push_precollected(self.create_item("Dash Ability"))
+            self.multiworld.push_precollected(self.create_item("Dash Ability"))
 
         if not self.options.wall_climb_shuffle:
-            multiworld.push_precollected(self.create_item("Wall Climb Ability"))
+            self.multiworld.push_precollected(self.create_item("Wall Climb Ability"))
 
         if self.options.skip_long_quests:
             for loc in junk_locations:
@@ -130,7 +127,7 @@ class BlasphemousWorld(World):
             6: "D20Z02S09"
         }
 
-        self.start_room = start_rooms[self.options.starting_location]
+        self.start_room = start_rooms[self.options.starting_location.value]
 
 
     def create_items(self):
@@ -208,16 +205,13 @@ class BlasphemousWorld(World):
 
 
     def pre_fill(self):
-        world = self.multiworld
-        player = self.player
-
         self.place_items_from_dict(unrandomized_dict)
 
         if self.options.thorn_shuffle == 2:
             self.place_items_from_set(thorn_set, "Thorn Upgrade")
 
         if self.options.start_wheel:
-            world.get_location("Beginning gift", player)\
+            self.multiworld.get_location("Beginning gift", self.player)\
                 .place_locked_item(self.create_item("The Young Mason's Wheel"))
 
         if not self.options.skill_randomizer:
