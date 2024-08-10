@@ -20,8 +20,12 @@ def has_copper_ingots(self, state: CollectionState, player: int) -> bool:
 
 
 def has_gold_ingots(self, state: CollectionState, player: int) -> bool:
-    return state.has('Progressive Resource Crafting', player) and (
-            state.has('Progressive Tools', player, 2) or state.can_reach('The Nether', 'Region', player))
+    return (state.has('Progressive Resource Crafting', player)
+            and (
+                    state.has('Progressive Tools', player, 2)
+                    or state.can_reach('The Nether', 'Region', player)
+            )
+           )
 
 
 def has_diamond_pickaxe(self, state: CollectionState, player: int) -> bool:
@@ -37,8 +41,10 @@ def has_bottle(self, state: CollectionState, player: int) -> bool:
 
 
 def has_spyglass(self, state: CollectionState, player: int) -> bool:
-    return has_copper_ingots(self, state, player) and state.has('Spyglass', player) and can_adventure(self, state,
-                                                                                                      player)
+    return (has_copper_ingots(self, state, player)
+            and state.has('Spyglass', player)
+            and can_adventure(self, state, player)
+           )
 
 
 def can_enchant(self, state: CollectionState, player: int) -> bool:
@@ -46,8 +52,10 @@ def can_enchant(self, state: CollectionState, player: int) -> bool:
 
 
 def can_use_anvil(self, state: CollectionState, player: int) -> bool:
-    return state.has('Enchanting', player) and state.has('Progressive Resource Crafting', player,
-                                                         2) and has_iron_ingots(self, state, player)
+    return (state.has('Enchanting', player)
+            and state.has('Progressive Resource Crafting', player,2)
+            and has_iron_ingots(self, state, player)
+           )
 
 
 def fortress_loot(self, state: CollectionState, player: int) -> bool:  # saddles, blaze rods, wither skulls
@@ -59,16 +67,21 @@ def can_brew_potions(self, state: CollectionState, player: int) -> bool:
 
 
 def can_piglin_trade(self, state: CollectionState, player: int) -> bool:
-    return has_gold_ingots(self, state, player) and (
-            state.can_reach('The Nether', 'Region', player) or
-            state.can_reach('Bastion Remnant', 'Region', player))
+    return (has_gold_ingots(self, state, player)
+            and (
+                    state.can_reach('The Nether', 'Region', player)
+                    or state.can_reach('Bastion Remnant', 'Region', player)
+            ))
 
 
 def overworld_villager(self, state: CollectionState, player: int) -> bool:
     village_region = state.multiworld.get_region('Village', player).entrances[0].parent_region.name
     if village_region == 'The Nether':  # 2 options: cure zombie villager or build portal in village
-        return (state.can_reach('Zombie Doctor', 'Location', player) or
-                (has_diamond_pickaxe(self, state, player) and state.can_reach('Village', 'Region', player)))
+        return (state.can_reach('Zombie Doctor', 'Location', player)
+                or (
+                        has_diamond_pickaxe(self, state, player)
+                        and state.can_reach('Village', 'Region', player)
+                ))
     elif village_region == 'The End':
         return state.can_reach('Zombie Doctor', 'Location', player)
     return state.can_reach('Village', 'Region', player)
@@ -95,59 +108,103 @@ def can_adventure(self, state: CollectionState, player: int) -> bool:
 
 def basic_combat(self, state: CollectionState, player: int) -> bool:
     if combat_difficulty(self, state, player) == 'easy':
-        return state.has('Progressive Weapons', player, 2) and state.has('Progressive Armor', player) and \
-            state.has('Shield', player) and has_iron_ingots(self, state, player)
+        return (state.has('Progressive Weapons', player, 2)
+                and state.has('Progressive Armor', player)
+                and state.has('Shield', player)
+                and has_iron_ingots(self, state, player)
+               )
     elif combat_difficulty(self, state, player) == 'hard':
         return True
-    return state.has('Progressive Weapons', player) and (
-            state.has('Progressive Armor', player) or state.has('Shield', player)) and has_iron_ingots(self, state,
-                                                                                                       player)
+    return (state.has('Progressive Weapons', player)
+            and (
+                    state.has('Progressive Armor', player)
+                    or state.has('Shield', player)
+            )
+            and has_iron_ingots(self, state, player)
+           )
 
 
 def complete_raid(self, state: CollectionState, player: int) -> bool:
-    reach_regions = state.can_reach('Village', 'Region', player) and state.can_reach('Pillager Outpost', 'Region',
-                                                                                     player)
+    reach_regions = (state.can_reach('Village', 'Region', player)
+                     and state.can_reach('Pillager Outpost', 'Region', player))
     if combat_difficulty(self, state, player) == 'easy':
-        return reach_regions and \
-            state.has('Progressive Weapons', player, 3) and state.has('Progressive Armor', player, 2) and \
-            state.has('Shield', player) and state.has('Archery', player) and \
-            state.has('Progressive Tools', player, 2) and has_iron_ingots(self, state, player)
+        return (reach_regions
+                and state.has('Progressive Weapons', player, 3)
+                and state.has('Progressive Armor', player, 2)
+                and state.has('Shield', player)
+                and state.has('Archery', player)
+                and state.has('Progressive Tools', player, 2)
+                and has_iron_ingots(self, state, player)
+               )
     elif combat_difficulty(self, state, player) == 'hard':  # might be too hard?
-        return reach_regions and state.has('Progressive Weapons', player, 2) and has_iron_ingots(self, state,
-                                                                                                 player) and \
-            (state.has('Progressive Armor', player) or state.has('Shield', player))
-    return reach_regions and state.has('Progressive Weapons', player, 2) and has_iron_ingots(self, state, player) and \
-        state.has('Progressive Armor', player) and state.has('Shield', player)
+        return (reach_regions
+                and state.has('Progressive Weapons', player, 2)
+                and has_iron_ingots(self, state, player)
+                and (
+                        state.has('Progressive Armor', player)
+                        or state.has('Shield', player)
+                )
+               )
+    return (reach_regions
+            and state.has('Progressive Weapons', player, 2)
+            and has_iron_ingots(self, state, player)
+            and state.has('Progressive Armor', player)
+            and state.has('Shield', player)
+           )
 
 
 def can_kill_wither(self, state: CollectionState, player: int) -> bool:
-    normal_kill = state.has("Progressive Weapons", player, 3) and state.has("Progressive Armor", player,
-                                                                            2) and can_brew_potions(self, state,
-                                                                                                    player) and can_enchant(
-        self, state, player)
+    normal_kill = (state.has("Progressive Weapons", player, 3)
+                   and state.has("Progressive Armor", player, 2)
+                   and can_brew_potions(self, state, player)
+                   and can_enchant(self, state, player)
+                  )
     if combat_difficulty(self, state, player) == 'easy':
-        return fortress_loot(self, state, player) and normal_kill and state.has('Archery', player)
+        return (fortress_loot(self, state, player)
+                and normal_kill
+                and state.has('Archery', player)
+               )
     elif combat_difficulty(self, state, player) == 'hard':  # cheese kill using bedrock ceilings
-        return fortress_loot(self, state, player) and (
-                normal_kill or state.can_reach('The Nether', 'Region', player) or state.can_reach('The End',
-                                                                                                  'Region', player))
+        return (fortress_loot(self, state, player)
+                and (
+                        normal_kill
+                        or state.can_reach('The Nether', 'Region', player)
+                        or state.can_reach('The End','Region', player)
+                )
+               )
+
     return fortress_loot(self, state, player) and normal_kill
 
 
 def can_respawn_ender_dragon(self, state: CollectionState, player: int) -> bool:
-    return state.can_reach('The Nether', 'Region', player) and state.can_reach('The End', 'Region', player) and \
-        state.has('Progressive Resource Crafting', player)  # smelt sand into glass
+    return (state.can_reach('The Nether', 'Region', player)
+            and state.can_reach('The End', 'Region', player)
+            and state.has('Progressive Resource Crafting', player)  # smelt sand into glass
+           )
 
 
 def can_kill_ender_dragon(self, state: CollectionState, player: int) -> bool:
     if combat_difficulty(self, state, player) == 'easy':
-        return state.has("Progressive Weapons", player, 3) and state.has("Progressive Armor", player, 2) and \
-            state.has('Archery', player) and can_brew_potions(self, state, player) and can_enchant(self, state, player)
+        return (state.has("Progressive Weapons", player, 3)
+                and state.has("Progressive Armor", player, 2)
+                and state.has('Archery', player)
+                and can_brew_potions(self, state, player)
+                and can_enchant(self, state, player)
+               )
     if combat_difficulty(self, state, player) == 'hard':
-        return (state.has('Progressive Weapons', player, 2) and state.has('Progressive Armor', player)) or \
-            (state.has('Progressive Weapons', player, 1) and state.has('Bed', player))
-    return state.has('Progressive Weapons', player, 2) and state.has('Progressive Armor', player) and state.has(
-        'Archery', player)
+        return (
+                (
+                  state.has('Progressive Weapons', player, 2)
+                  and state.has('Progressive Armor', player)
+                ) or (
+                  state.has('Progressive Weapons', player, 1)
+                  and state.has('Bed', player)  # who needs armor when you can respawn right outside the chamber
+                )
+               )
+    return (state.has('Progressive Weapons', player, 2)
+            and state.has('Progressive Armor', player)
+            and state.has('Archery', player)
+           )
 
 
 def has_structure_compass(self, state: CollectionState, entrance_name: str, player: int) -> bool:
