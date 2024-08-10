@@ -298,9 +298,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     else:
         plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
 
-    testname = "Shop, 47_"
-    print(testname.split(", ")[1].split("_")[0])
-
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
