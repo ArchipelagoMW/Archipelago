@@ -12,7 +12,7 @@ class RLRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(world: "RLWorld", player: int):
+def create_regions(world: "RLWorld"):
     regions: Dict[str, RLRegionData] = {
         "Menu":              RLRegionData(None, ["Castle Hamson"]),
         "The Manor":         RLRegionData([],   []),
@@ -59,7 +59,7 @@ def create_regions(world: "RLWorld", player: int):
     regions["The Fountain Room"].locations.append("Fountain Room")
 
     # Chests
-    chests = int(world.options.chests_per_zone.value)
+    chests = int(world.options.chests_per_zone)
     for i in range(0, chests):
         if world.options.universal_chests:
             regions["Castle Hamson"].locations.append(f"Chest {i + 1}")
@@ -73,7 +73,7 @@ def create_regions(world: "RLWorld", player: int):
             regions["Land of Darkness"].locations.append(f"Land of Darkness - Chest {i + 1}")
 
     # Fairy Chests
-    chests = int(world.options.fairy_chests_per_zone.value)
+    chests = int(world.options.fairy_chests_per_zone)
     for i in range(0, chests):
         if world.options.universal_fairy_chests:
             regions["Castle Hamson"].locations.append(f"Fairy Chest {i + 1}")
@@ -88,7 +88,7 @@ def create_regions(world: "RLWorld", player: int):
 
     # Set up the regions correctly.
     for name, data in regions.items():
-        world.multiworld.regions.append(create_region(world.multiworld, player, name, data))
+        world.multiworld.regions.append(create_region(world.multiworld, world.player, name, data))
 
     world.get_entrance("Castle Hamson").connect(world.get_region("Castle Hamson"))
     world.get_entrance("The Manor").connect(world.get_region("The Manor"))

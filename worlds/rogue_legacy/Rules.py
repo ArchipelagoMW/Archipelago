@@ -1,13 +1,13 @@
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import CollectionState
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import RLWorld
 
 
-def get_upgrade_total(multiworld: MultiWorld, player: int) -> int:
-    return int(multiworld.worlds[player].options.health_pool) + int(multiworld.worlds[player].options.mana_pool) + \
-           int(multiworld.worlds[player].options.attack_pool) + int(multiworld.worlds[player].options.magic_damage_pool)
+def get_upgrade_total(world: "RLWorld") -> int:
+    return int(world.options.health_pool) + int(world.options.mana_pool) + \
+           int(world.options.attack_pool) + int(world.options.magic_damage_pool)
 
 
 def get_upgrade_count(state: CollectionState, player: int) -> int:
@@ -23,8 +23,8 @@ def has_upgrade_amount(state: CollectionState, player: int, amount: int) -> bool
     return get_upgrade_count(state, player) >= amount
 
 
-def has_upgrades_percentage(state: CollectionState, player: int, percentage: float) -> bool:
-    return has_upgrade_amount(state, player, round(get_upgrade_total(state.multiworld, player) * (percentage / 100)))
+def has_upgrades_percentage(state: CollectionState, world: "RLWorld", percentage: float) -> bool:
+    return has_upgrade_amount(state, world.player, round(get_upgrade_total(world) * (percentage / 100)))
 
 
 def has_movement_rune(state: CollectionState, player: int) -> bool:
@@ -102,16 +102,16 @@ def set_rules(world: "RLWorld", player: int):
 
     # Region rules.
     world.get_entrance("Forest Abkhazia").access_rule = \
-        lambda state: has_upgrades_percentage(state, player, 12.5) and has_defeated_castle(state, player)
+        lambda state: has_upgrades_percentage(state, world, 12.5) and has_defeated_castle(state, player)
 
     world.get_entrance("The Maya").access_rule = \
-        lambda state: has_upgrades_percentage(state, player, 25) and has_defeated_forest(state, player)
+        lambda state: has_upgrades_percentage(state, world, 25) and has_defeated_forest(state, player)
 
     world.get_entrance("Land of Darkness").access_rule = \
-        lambda state: has_upgrades_percentage(state, player, 37.5) and has_defeated_tower(state, player)
+        lambda state: has_upgrades_percentage(state, world, 37.5) and has_defeated_tower(state, player)
 
     world.get_entrance("The Fountain Room").access_rule = \
-        lambda state: has_upgrades_percentage(state, player, 50) and has_defeated_dungeon(state, player)
+        lambda state: has_upgrades_percentage(state, world, 50) and has_defeated_dungeon(state, player)
 
     # Win condition.
     world.multiworld.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)

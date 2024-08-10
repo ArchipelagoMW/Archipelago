@@ -1,6 +1,4 @@
-from typing import Dict
-
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
 
 from dataclasses import dataclass
 
@@ -338,7 +336,9 @@ class AvailableClasses(OptionSet):
     The upgraded form of your starting class will be available regardless.
     """
     display_name = "Available Classes"
-    default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    default = frozenset(
+        {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    )
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 
@@ -377,4 +377,3 @@ class RLOptions(PerGameCommonOptions):
     additional_lady_names: AdditionalNames
     additional_sir_names: AdditionalNames
     death_link: DeathLink
-
