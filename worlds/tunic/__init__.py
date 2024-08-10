@@ -92,12 +92,17 @@ class TunicWorld(World):
             for index, cxn in enumerate(self.options.plando_connections):
                 # flip any that are pointing to exit to point to entrance so that I don't have to deal with it
                 if self.options.decoupled and cxn.direction == "exit":
-                    replacement = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="entrance", percentage=cxn.percentage)
+                    replacement = PlandoConnection(cxn.exit, cxn.entrance, "entrance", cxn.percentage)
                     self.options.plando_connections.value.remove(cxn)
                     self.options.plando_connections.value.insert(index, replacement)
                 # if decoupled is off, just convert these to both
                 if not self.options.decoupled and cxn.direction != "both":
-                    replacement = PlandoConnection(entrance=cxn.entrance, exit=cxn.exit, direction="both", percentage=cxn.percentage)
+                    replacement = PlandoConnection(cxn.entrance, cxn.exit, "both", cxn.percentage)
+                    self.options.plando_connections.value.remove(cxn)
+                    self.options.plando_connections.value.insert(index, replacement)
+                # if decoupled is on and you plando'd an entrance to itself but left the direction as both
+                if self.options.decoupled and cxn.direction == "both" and cxn.entrance == cxn.exit:
+                    replacement = PlandoConnection(cxn.entrance, cxn.exit, "entrance")
                     self.options.plando_connections.value.remove(cxn)
                     self.options.plando_connections.value.insert(index, replacement)
               
