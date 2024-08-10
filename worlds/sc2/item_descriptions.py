@@ -842,7 +842,7 @@ item_descriptions = {
     item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS: "Immortals, Annihilators, and Stalwarts can attack air units.",
     item_names.IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION: "Immortals, Annihilators, and Stalwarts deal minor splash damage.",
     item_names.DISRUPTOR_CLOAKING_MODULE: "Disruptors are permanently cloaked.",
-    item_names.DISRUPTOR_PERFECTED_POWER: "Allows Purification Nova to hit air units. Bonus damage to shields is now baseline.",
+    item_names.DISRUPTOR_PERFECTED_POWER: "Allows Purification Nova to hit air units. Bonus damage to shields is now baseline for enemies (friendly damage unaffected).",
     item_names.DISRUPTOR_RESTRAINED_DESTRUCTION: "Purification Nova does 50% reduced damage to friendly units and structures.",
     item_names.COLOSSUS_PACIFICATION_PROTOCOL: "Increases Colossus attack speed.",
     item_names.WRATHWALKER_RAPID_POWER_CYCLING: "Reduces the charging time and increases attack speed of the Wrathwalker's Charged Blast.",
@@ -899,7 +899,7 @@ item_descriptions = {
     # Colossus
     item_names.WRATHWALKER_AERIAL_TRACKING: "Wrathwalker War Council upgrade. Wrathwalkers can now target air units.",
     item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
-    item_names.DISRUPTOR_RESTRUCTURED_THRUSTERS: "Allows the Disruptor to move while casting Purification Nova. Also allows the Disruptor to Blink.",
+    item_names.DISRUPTOR_RESTRUCTURED_THRUSTERS: "Disruptor War Council upgrade. Allows the Disruptor to move while casting Purification Nova. Also allows the Disruptor to Blink.",
     # Warp Prism
     # Observer
     item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: "Phoenix War Council upgrade. Phoenixes can now use Graviton Beam to lift two targets at once.",
