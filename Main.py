@@ -115,9 +115,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Calculating Access Rules.')
 
     for player in multiworld.player_ids:
-        # items can't be both local and non-local, prefer local
+        # items and locations can't be both local and non-local, prefer local
         multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
         multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
+        multiworld.worlds[player].options.non_local_locations.value -= multiworld.worlds[player].options.local_locations.value
 
     AutoWorld.call_all(multiworld, "set_rules")
 

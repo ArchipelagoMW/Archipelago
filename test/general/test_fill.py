@@ -698,6 +698,40 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
             self.assertEqual(item.player, item.location.player)
             self.assertFalse(item.location.advancement, False)
 
+    def test_local_locations(self):
+        """Test that local locations get local items in a multiworld"""
+        multiworld = generate_test_multiworld(2)
+        player1 = generate_player_data(
+            multiworld, 1, location_count=5, basic_item_count=5)
+        player2 = generate_player_data(
+            multiworld, 2, location_count=5, basic_item_count=5)
+
+        multiworld.local_locations[player1.id].value = set(names(player1.locations))
+        multiworld.local_locations[player2.id].value = set(names(player2.locations))
+        locality_rules(multiworld)
+
+        distribute_items_restrictive(multiworld)
+
+        for item in multiworld.get_items():
+            self.assertEqual(item.player, item.location.player)
+
+    def test_non_local_locations(self):
+        """Test that non-local locations get non-local items in a multiworld"""
+        multiworld = generate_test_multiworld(2)
+        player1 = generate_player_data(
+            multiworld, 1, location_count=5, basic_item_count=5)
+        player2 = generate_player_data(
+            multiworld, 2, location_count=5, basic_item_count=5)
+
+        multiworld.non_local_locations[player1.id].value = set(names(player1.locations))
+        multiworld.non_local_locations[player2.id].value = set(names(player2.locations))
+        locality_rules(multiworld)
+
+        distribute_items_restrictive(multiworld)
+
+        for item in multiworld.get_items():
+            self.assertNotEqual(item.player, item.location.player)
+
     def test_early_items(self) -> None:
         """Test that the early items API successfully places items early"""
         mw = generate_test_multiworld(2)
