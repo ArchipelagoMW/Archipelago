@@ -320,7 +320,10 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     portal_name1 = "Shop Portal " + str(portal1).split(", ")[1].split("_")[0]
                 if not portal_name2 and portal2.startswith("Shop"):
                     portal_name2 = "Shop Portal " + str(portal2).split(", ")[1].split("_")[0]
-                plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
+                if world.options.decoupled:
+                    plando_connections.append(PlandoConnection(portal_name1, portal_name2, "entrance"))
+                else:
+                    plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
     # put together the list of non-deadend regions
     non_dead_end_regions = set()
