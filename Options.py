@@ -861,17 +861,42 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
 
 
 class CounterOption(OptionDict):
+    min: typing.Optional[int] = None
+    max: typing.Optional[int] = None
+
     def __init__(self, value: typing.Dict[str, int]):
         super(CounterOption, self).__init__(collections.Counter(value))
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        super(CounterOption, self).verify(world, player_name, plando_options)
+
+        range_errors = []
+
+        if self.max is not None:
+            range_errors += [
+                f"\"{key}: {value}\" is higher than maximum allowed value {self.max}."
+                for key, value in self.value.items() if value > self.max
+            ]
+
+        if self.min is not None:
+            range_errors += [
+                f"\"{key}: {value}\" is lower than minimum allowed value {self.min}."
+                for key, value in self.value.items() if value < self.min
+            ]
+
+        if len(range_errors) == 1:
+            raise OptionError(range_errors[0][:-1] + f" for option {getattr(self, 'display_name', self)}.")
+        elif range_errors:
+            range_errors = [f"For option {getattr(self, 'display_name', self)}:"] + range_errors
+            raise OptionError("\n".join(range_errors))
 
 
 class ItemDict(CounterOption):
     verify_item_name = True
 
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(item_count < 0 for item_count in value.values()):
-            raise Exception("Cannot have negative item counts.")
+    min = 0
 
+    def __init__(self, value: typing.Dict[str, int]):
         # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a CounterOption
         value = {item_name: amount for item_name, amount in value.items() if amount != 0}
 
