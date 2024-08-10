@@ -33,7 +33,7 @@ from .options import (
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild,
 )
 from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
@@ -59,10 +59,9 @@ from .items import (
 )
 from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET
 from .mission_tables import (
-    lookup_id_to_mission, SC2Campaign, lookup_name_to_mission,
-    lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
+    lookup_id_to_mission, SC2Campaign, MissionInfo,
+    lookup_id_to_campaign, SC2Mission, campaign_mission_table, SC2Race
 )
-from .regions import MissionInfo
 
 import colorama
 from .options import Option

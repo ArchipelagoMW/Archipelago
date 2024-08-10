@@ -17,7 +17,6 @@ from . import items
 from . import item_groups
 from . import location_groups
 from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
-from .regions import create_regions
 from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
@@ -27,9 +26,9 @@ from .options import (
 from . import settings
 from .pool_filter import filter_items
 from .mission_tables import (
-    MissionInfo, SC2Campaign, SC2Mission, SC2Race, MissionFlag
+    SC2Campaign, SC2Mission, SC2Race, MissionFlag
 )
-from .mission_order.regions import mission_order_regions
+from .mission_order.regions import create_mission_order
 from .mission_order.structs import SC2MissionOrder
 
 logger = logging.getLogger("Starcraft 2")
@@ -108,9 +107,6 @@ class SC2World(World):
     locked_locations: List[str]
     """Locations locked to contain specific items, such as victory events or forced resources"""
     location_cache: List[Location]
-    # mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {}
-    # final_mission_id: int
-    # victory_item: str
     final_missions: List[int]
     required_client_version = 0, 4, 5
     custom_mission_order: SC2MissionOrder
@@ -125,13 +121,9 @@ class SC2World(World):
         return StarcraftItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
-        self.custom_mission_order = mission_order_regions(
+        self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
-        # TODO mission_req_table needs to be removed from a lot of places
-        # self.mission_req_table, self.final_mission_id, self.victory_item = create_regions(
-        #     self, get_locations(self), self.location_cache
-        # )
 
     def create_items(self):
         # Starcraft 2-specific item setup:
@@ -160,7 +152,6 @@ class SC2World(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
-        # self.multiworld.completion_condition[self.player] = lambda state: state.has(self.victory_item, self.player)
         self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
     def get_filler_item_name(self) -> str:
@@ -172,27 +163,10 @@ class SC2World(World):
             option = get_option_value(self, option_name)
             if type(option) in {str, int}:
                 slot_data[option_name] = int(option)
-        # slot_req_table = {}
-
-        # # Serialize data
-        # for campaign in self.mission_req_table:
-        #     slot_req_table[campaign.id] = {}
-        #     for mission in self.mission_req_table[campaign]:
-        #         slot_req_table[campaign.id][mission] = self.mission_req_table[campaign][mission]._asdict()
-        #         # Replace mission objects with mission IDs
-        #         slot_req_table[campaign.id][mission]["mission"] = slot_req_table[campaign.id][mission]["mission"].id
-
-        #         for index in range(len(slot_req_table[campaign.id][mission]["required_world"])):
-        #             # TODO this is a band-aid, sometimes the mission_req_table already contains dicts
-        #             # as far as I can tell it's related to having multiple vanilla mission orders
-        #             if not isinstance(slot_req_table[campaign.id][mission]["required_world"][index], dict):
-        #                 slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
         enabled_campaigns = get_enabled_campaigns(self)
         slot_data["plando_locations"] = get_plando_locations(self)
         slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
-        # slot_data["mission_req"] = slot_req_table
-        # slot_data["final_mission"] = self.final_mission_id
         slot_data["final_mission_ids"] = self.custom_mission_order.get_final_mission_ids()
         slot_data["custom_mission_order"] = self.custom_mission_order.get_slot_data()
         slot_data["version"] = 4
@@ -281,8 +255,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
 
 def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes items based on if their faction has a mission present where they can be used"""
-    # missions = get_all_missions(world.mission_req_table)
-    missions = get_all_missions_custom_order(world.custom_mission_order)
+    missions = get_all_missions(world.custom_mission_order)
     if world.options.take_over_ai_allies.value:
         terran_missions = [mission for mission in missions if (MissionFlag.Terran|MissionFlag.AiTerranAlly) & mission.flags]
         zerg_missions = [mission for mission in missions if (MissionFlag.Zerg|MissionFlag.AiZergAlly) & mission.flags]
@@ -366,8 +339,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     """
     Excludes items based on mission / campaign presence: Nova Gear, Kerrigan abilities, SOA
     """
-    # missions = get_all_missions(world.mission_req_table)
-    missions = get_all_missions_custom_order(world.custom_mission_order)
+    missions = get_all_missions(world.custom_mission_order)
 
     kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
     kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
@@ -448,8 +420,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
 def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds the `Allowed_Orphan` flag to items that shouldn't be filtered with their parents, like combat shield"""
-    # missions = get_all_missions(world.mission_req_table)
-    missions = get_all_missions_custom_order(world.custom_mission_order)
+    missions = get_all_missions(world.custom_mission_order)
     terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
     for item in item_list:
         if item.name in (
@@ -461,8 +432,7 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
 
 def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds items to start_inventory based on first mission logic and options like `starter_unit` and `start_primary_abilities`"""
-    # first_mission_name = get_first_mission(world.mission_req_table).mission_name
-    first_mission_name = get_first_mission_custom_order(world.custom_mission_order).mission_name
+    first_mission_name = get_first_mission(world.custom_mission_order).mission_name
     starter_unit = int(world.options.starter_unit)
 
     # If starter_unit is off and the first mission doesn't have a no-logic location, force starter_unit on
@@ -483,14 +453,12 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
 
 
 def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: int) -> None:
-    # first_mission = get_first_mission(world.mission_req_table)
-    first_mission = get_first_mission_custom_order(world.custom_mission_order)
+    first_mission = get_first_mission(world.custom_mission_order)
     first_race = first_mission.race
 
     if first_race == SC2Race.ANY:
         # If the first mission is a logic-less no-build
-        # missions = get_all_missions(world.mission_req_table)
-        missions = get_all_missions_custom_order(world.custom_mission_order)
+        missions = get_all_missions(world.custom_mission_order)
         build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
         races = {mission.race for mission in build_missions if mission.race != SC2Race.ANY}
         if races:
@@ -702,25 +670,12 @@ def pad_item_pool_with_filler(self: SC2World, num_items: int, pool: List[Item]):
         pool.append(item)
 
 
-def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> SC2Mission:
-    # The first world should also be the starting world
-    campaigns = mission_req_table.keys()
-    lowest_id = min([campaign.id for campaign in campaigns])
-    first_campaign = [campaign for campaign in campaigns if campaign.id == lowest_id][0]
-    return list(mission_req_table[first_campaign].values())[0].mission
-
-def get_first_mission_custom_order(mission_order: SC2MissionOrder) -> SC2Mission:
+def get_first_mission(mission_order: SC2MissionOrder) -> SC2Mission:
     # Pick an arbitrary available mission
     missions = mission_order.get_starting_missions()
     return list(missions)[0]
 
-def get_all_missions(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> List[SC2Mission]:
-    missions: List[SC2Mission] = []
-    for campaign in mission_req_table.values():
-        missions.extend(mission_info.mission for _, mission_info in campaign.items())
-    return missions
-
-def get_all_missions_custom_order(mission_order: SC2MissionOrder) -> List[SC2Mission]:
+def get_all_missions(mission_order: SC2MissionOrder) -> List[SC2Mission]:
     return list(mission_order.get_used_missions())
 
 
@@ -734,8 +689,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
 
 def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
     total_levels = world.options.kerrigan_level_item_sum.value
-    # missions = get_all_missions(world.mission_req_table)
-    missions = get_all_missions_custom_order(world.custom_mission_order)
+    missions = get_all_missions(world.custom_mission_order)
     kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
     kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
     if (world.options.kerrigan_presence.value not in kerrigan_unit_available

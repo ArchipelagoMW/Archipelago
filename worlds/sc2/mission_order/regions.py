@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List, Dict, Any, Tuple
 from ..locations import LocationData, Location
 from ..mission_tables import SC2Mission, SC2Campaign
 from ..options import (
-    get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns, campaign_depending_orders,
+    get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns, static_mission_orders,
     GridTwoStartPositions
 )
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from .. import SC2World
 
 
-def mission_order_regions(
+def create_mission_order(
     world: 'SC2World', locations: Tuple[LocationData, ...], location_cache: List[Location]
 ):
     # 'locations' contains both actual game locations and beat event locations for all mission regions
@@ -36,7 +36,7 @@ def mission_order_regions(
     if mission_order_type == MissionOrder.option_custom:
         mission_order_dict = get_option_value(world, "custom_mission_order")
     else:
-        mission_order_option = create_mission_order(world, mission_pools)
+        mission_order_option = create_regular_mission_order(world, mission_pools)
         if mission_order_type == MissionOrder.option_vanilla_shuffled:
             # Vanilla Shuffled gets converted early for mission removal, so it can be used as-is
             mission_order_dict = mission_order_option
@@ -102,7 +102,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.A_SINISTER_TURN, Difficulty.MEDIUM, Difficulty.EASY)
     # Prologue's only valid starter is the goal mission
     if enabled_campaigns == {SC2Campaign.PROLOGUE} \
-            or mission_order_type in campaign_depending_orders \
+            or mission_order_type in static_mission_orders \
             and get_option_value(world, "shuffle_campaigns") == ShuffleCampaigns.option_false:
         pools.move_mission(SC2Mission.DARK_WHISPERS, Difficulty.EASY, Difficulty.STARTER)
     # HotS
@@ -140,7 +140,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.FLASHPOINT, Difficulty.HARD, Difficulty.EASY)
 
 
-def create_mission_order(world: 'SC2World', mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
+def create_regular_mission_order(world: 'SC2World', mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
     mission_order_type = get_option_value(world, "mission_order")
 
     if mission_order_type in static_mission_orders:
