@@ -253,7 +253,7 @@ _default_trap_weights = {
 class TrapWeights(CounterOption):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
-    If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
+    If you don't want a specific type of trap, you can set the weight for it to 0.
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
     display_name = "Trap Weights"
