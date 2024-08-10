@@ -911,7 +911,7 @@ item_descriptions = {
     # Carrier
     # Skylord
     # Trireme
-    item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals massive damage to enemy structures over time"),
+    item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     # Scout
     # Arbiter
     # Oracle
