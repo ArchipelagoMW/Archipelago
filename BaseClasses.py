@@ -775,7 +775,14 @@ class CollectionState():
                 player_logic_dependents[dependent_on_player].append(player)
 
         # Optimization for the common case where the only world that logically depends on a world is itself.
+        # If no other worlds are logically dependent on a world, then, if that world does not receive any advancement in
+        # the current sweep iteration, after finding its accessible locations, there is no need to check its locations
+        # in the next sweep iteration.
         sole_dependents = {player for player, dependents in player_logic_dependents.items() if dependents == [player]}
+        # The optimization may skip worlds in the next sweep iteration that received advancement before finding their
+        # accessible locations, but these worlds still received advancement and other code may need to know this, so an
+        # extra set is used to track these worlds.
+        sole_dependents_received_advancement = set()
 
         # If no items logically relevant to a player's world were collected in a sweep iteration, then that world's
         # locations can be skipped in the next sweep iteration because that world should not have any reachable
@@ -808,11 +815,14 @@ class CollectionState():
                 if inaccessible_locations:
                     next_events_per_player.append((player, inaccessible_locations))
 
-                # If no other worlds are logically dependent on this world, then, if this world does not receive any
-                # further advancement in the current sweep iteration, there is no need to check its locations in the
-                # next sweep iteration.
-                if player in sole_dependents:
-                    received_advancement_players.discard(player)
+                if player in sole_dependents and player in received_advancement_players:
+                    # If this world does not receive any further advancement in the current sweep iteration, there is no
+                    # need to check its locations in the next sweep iteration.
+                    received_advancement_players.remove(player)
+                    if yield_each_sweep:
+                        # The player did still receive advancement, which needs to be included when yielding at the end
+                        # of the sweep iteration.
+                        sole_dependents_received_advancement.add(player)
 
                 # Collect all the items from the accessible locations.
                 for location in accessible_locations:
@@ -834,8 +844,8 @@ class CollectionState():
             if yield_each_sweep:
                 # Yielding lets the caller respond to changes in the CollectionState during the sweep and respond to
                 # which players have been logically affected by the current sweep.
-                # Yield the iterator rather than the set itself so that the set cannot be modified.
-                yield iter(players_logically_affected_by_last_sweep)
+                yield players_logically_affected_by_last_sweep.union(sole_dependents_received_advancement)
+                sole_dependents_received_advancement.clear()
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
                          checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[Iterator[int]]]:
