@@ -76,6 +76,8 @@ class WorldSource:
                 if mod.__package__ is not None:
                     mod.__package__ = f"worlds.{mod.__package__}"
                 else:
+                    # load_module does not populate package, we'll have to assume mod.__name__ is correct here
+                    # probably safe to remove with 3.8 support
                     mod.__package__ = f"worlds.{mod.__name__}"
                 mod.__name__ = f"worlds.{mod.__name__}"
                 sys.modules[mod.__name__] = mod
