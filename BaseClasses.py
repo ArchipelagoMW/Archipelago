@@ -774,6 +774,9 @@ class CollectionState():
             for dependent_on_player in worlds[player].player_dependencies:
                 player_logic_dependents[dependent_on_player].append(player)
 
+        # Optimization for the common case where the only world that logically depends on a world is itself.
+        sole_dependents = {player for player, dependents in player_logic_dependents.items() if dependents == [player]}
+
         # If no items logically relevant to a player's world were collected in a sweep iteration, then that world's
         # locations can be skipped in the next sweep iteration because that world should not have any reachable
         # locations at the start of the next sweep iteration.
@@ -804,6 +807,12 @@ class CollectionState():
                         inaccessible_locations.append(location)
                 if inaccessible_locations:
                     next_events_per_player.append((player, inaccessible_locations))
+
+                # If no other worlds are logically dependent on this world, then, if this world does not receive any
+                # further advancement in the current sweep iteration, there is no need to check its locations in the
+                # next sweep iteration.
+                if player in sole_dependents:
+                    received_advancement_players.discard(player)
 
                 # Collect all the items from the accessible locations.
                 for location in accessible_locations:
