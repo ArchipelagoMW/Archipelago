@@ -188,7 +188,7 @@ class RLWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = get_items_by_category("Filler")
         weights = [data.weight for data in fillers.values()]
-        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def create_item(self, name: str) -> RLItem:
         data = item_table[name]
