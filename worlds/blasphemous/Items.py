@@ -739,7 +739,7 @@ group_table: Dict[str, Set[str]] = {
                  "Broken Left Eye of the Traitor"}
 }
 
-tears_set: Set[str] = {
+tears_list: List[str] = [
     "Tears of Atonement (500)",
     "Tears of Atonement (625)",
     "Tears of Atonement (750)",
@@ -760,7 +760,7 @@ tears_set: Set[str] = {
     "Tears of Atonement (11250)",
     "Tears of Atonement (18000)",
     "Tears of Atonement (30000)"
-}
+]
 
 reliquary_set: Set[str] = {
     "Reliquary of the Fervent Heart",

@@ -2,7 +2,7 @@ from typing import Dict, List, Set, Any
 from collections import Counter
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, tears_set, reliquary_set
+from .Items import base_id, item_table, group_table, tears_list, reliquary_set
 from .Locations import location_names
 from .Rules import BlasRules
 from worlds.generic.Rules import set_rule
@@ -61,7 +61,7 @@ class BlasphemousWorld(World):
 
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(tears_set)
+        return self.random.choice(tears_list)
 
 
     def generate_early(self):
@@ -211,8 +211,7 @@ class BlasphemousWorld(World):
             self.place_items_from_set(thorn_set, "Thorn Upgrade")
 
         if self.options.start_wheel:
-            self.multiworld.get_location("Beginning gift", self.player)\
-                .place_locked_item(self.create_item("The Young Mason's Wheel"))
+            self.get_location("Beginning gift").place_locked_item(self.create_item("The Young Mason's Wheel"))
 
         if not self.options.skill_randomizer:
             self.place_items_from_dict(skill_dict)
@@ -223,14 +222,12 @@ class BlasphemousWorld(World):
 
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
-            self.multiworld.get_location(loc, self.player)\
-                .place_locked_item(self.create_item(name))
+            self.get_location(loc).place_locked_item(self.create_item(name))
 
     
     def place_items_from_dict(self, option_dict: Dict[str, str]):
         for loc, item in option_dict.items():
-            self.multiworld.get_location(loc, self.player)\
-                .place_locked_item(self.create_item(item))
+            self.get_location(loc).place_locked_item(self.create_item(item))
 
 
     def create_regions(self) -> None:
