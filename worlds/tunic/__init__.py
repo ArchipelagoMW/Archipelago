@@ -57,7 +57,7 @@ class SeedGroup(TypedDict):
     laurels_at_10_fairies: bool  # laurels location value
     entrance_layout: int  # entrance layout value
     has_decoupled_enabled: bool  # for checking that players don't have conflicting options
-    plando: TunicPlandoConnections  # consolidated plando connections for the seed group
+    plando: List[PlandoConnection]  # consolidated plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -90,7 +90,7 @@ class TunicWorld(World):
         self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
-                # flip any that are pointing to exit to point to entrance so I don't have to deal with it
+                # flip any that are pointing to exit to point to entrance so that I don't have to deal with it
                 if self.options.decoupled and cxn.direction == "exit":
                     replacement = PlandoConnection(entrance=cxn.exit, exit=cxn.entrance, direction="entrance", percentage=cxn.percentage)
                     self.options.plando_connections.value.remove(cxn)
@@ -155,11 +155,12 @@ class TunicWorld(World):
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
                               entrance_layout=tunic.options.entrance_layout.value,
                               has_decoupled_enabled=bool(tunic.options.decoupled),
-                              plando=tunic.options.plando_connections)
+                              plando=tunic.options.plando_connections.value.copy())
                 continue
             # I feel that syncing this one is worse than erroring out
             if bool(tunic.options.decoupled) != cls.seed_groups[group]["has_decoupled_enabled"]:
-                raise OptionError(f"TUNIC: All players in the seed group {group} must have Decoupled either enabled or disabled.")
+                raise OptionError(f"TUNIC: All players in the seed group {group} must "
+                                  f"have Decoupled either enabled or disabled.")
             # off is more restrictive
             if not tunic.options.laurels_zips:
                 cls.seed_groups[group]["laurels_zips"] = False
@@ -197,8 +198,8 @@ class TunicWorld(World):
                             new_cxn = False
                             # if the group's was one-way and the player's was two-way, we replace the group's now
                             if player_cxn.direction == "both" and group_cxn.direction == "entrance":
-                                cls.seed_groups[group]["plando"].value.remove(group_cxn)
-                                cls.seed_groups[group]["plando"].value.insert(index, player_cxn)
+                                cls.seed_groups[group]["plando"].remove(group_cxn)
+                                cls.seed_groups[group]["plando"].insert(index, player_cxn)
                             break
                         is_mismatched = (
                             player_cxn.entrance == group_cxn.entrance and player_cxn.exit != group_cxn.exit
@@ -217,7 +218,7 @@ class TunicWorld(World):
                                               f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
                                               f"connection {player_cxn.entrance} {player_dir} {player_cxn.exit}")
                     if new_cxn:
-                        cls.seed_groups[group]["plando"].value.append(player_cxn)
+                        cls.seed_groups[group]["plando"].append(player_cxn)
 
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]

@@ -337,7 +337,7 @@ tunic_option_groups = [
         EntranceRando,
         EntranceLayout,
         Decoupled,
-        PlandoConnections,
+        TunicPlandoConnections,
     ]),
 ]
 

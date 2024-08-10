@@ -352,9 +352,22 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         two_plus2 = two_plus
 
     if plando_connections:
+        if decoupled:
+            modified_plando_connections = plando_connections.copy()
+            for index, cxn in enumerate(modified_plando_connections):
+                # it's much easier if we split both-direction portals into two one-ways in decoupled
+                if cxn.direction == "both":
+                    replacement1 = PlandoConnection(cxn.entrance, cxn.exit, "entrance")
+                    replacement2 = PlandoConnection(cxn.exit, cxn.entrance, "entrance")
+                    modified_plando_connections.remove(cxn)
+                    modified_plando_connections.insert(index, replacement1)
+                    modified_plando_connections.append(replacement2)
+        else:
+            modified_plando_connections = plando_connections
+
         connected_shop_portal1s: Set[int] = set()
         connected_shop_portal2s: Set[int] = set()
-        for connection in plando_connections:
+        for connection in modified_plando_connections:
             p_entrance = connection.entrance
             p_exit = connection.exit
             # if you plando secret gathering place, need to know that during portal pairing
@@ -457,8 +470,6 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             if decoupled:
                 # we turn any plando that uses "exit" to use "entrance" instead
                 traversal_reqs.setdefault(portal1.region, dict())[get_portal_outlet_region(portal2, world)] = []
-                if connection.direction == "both":
-                    traversal_reqs.setdefault(portal2.region, dict())[get_portal_outlet_region(portal1, world)] = []
             # outside decoupled, we want to use what we were doing before decoupled got added
             else:
                 # update the traversal chart to say you can get from portal1's region to portal2's and vice versa
