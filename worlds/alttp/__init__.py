@@ -293,6 +293,16 @@ class ALTTPWorld(World):
                 break
 
     def generate_early(self):
+        # write old options
+        import dataclasses
+        is_first = self.player == min(self.multiworld.get_game_players(self.game))
+
+        for field in dataclasses.fields(self.options_dataclass):
+            if is_first:
+                setattr(self.multiworld, field.name, {})
+            getattr(self.multiworld, field.name)[self.player] = getattr(self.options, field.name)
+        # end of old options re-establisher
+
         player = self.player
         multiworld = self.multiworld
 
@@ -543,12 +553,10 @@ class ALTTPWorld(World):
 
     @property
     def use_enemizer(self) -> bool:
-        world = self.multiworld
-        player = self.player
-        return bool(world.boss_shuffle[player] or world.enemy_shuffle[player]
-                    or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                    or world.pot_shuffle[player] or world.bush_shuffle[player]
-                    or world.killable_thieves[player])
+        return bool(self.options.boss_shuffle or self.options.enemy_shuffle
+                    or self.options.enemy_health != 'default' or self.options.enemy_damage != 'default'
+                    or self.options.pot_shuffle or self.options.bush_shuffle
+                    or self.options.killable_thieves)
 
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld

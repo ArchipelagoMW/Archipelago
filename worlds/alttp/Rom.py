@@ -782,8 +782,8 @@ def get_nonnative_item_sprite(code: int) -> int:
 
 
 def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
-    local_random = world.per_slot_randoms[player]
     local_world = world.worlds[player]
+    local_random = local_world.random
 
     # patch items
 
@@ -1867,7 +1867,7 @@ def apply_oof_sfx(rom, oof: str):
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
-    local_random = random if not world else world.per_slot_randoms[player]
+    local_random = random if not world else world.worlds[player].random
     disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
@@ -2197,8 +2197,9 @@ def write_string_to_rom(rom, target, string):
 
 def write_strings(rom, world, player):
     from . import ALTTPWorld
-    local_random = world.per_slot_randoms[player]
+
     w: ALTTPWorld = world.worlds[player]
+    local_random = w.random
 
     tt = TextTable()
     tt.removeUnwantedText()
@@ -2425,7 +2426,7 @@ def write_strings(rom, world, player):
     if world.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
             world.swordless[player] or world.glitches_required[player] == 'no_glitches')):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
-        world.per_slot_randoms[player].shuffle(prog_bow_locs)
+        local_random.shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):
