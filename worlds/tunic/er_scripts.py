@@ -298,6 +298,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     else:
         plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
 
+    testname = "Shop, 47_"
+    print(testname.split(", ")[1].split("_")[0])
+
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
@@ -317,9 +320,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 # shops have special handling
                 if not portal_name1 and portal1.startswith("Shop"):
                     # it should show up as "Shop, 1_" for shop 1
-                    portal_name1 = "Shop Portal " + str(portal1).split(", ")[1].split("_", 0)[0]
+                    portal_name1 = "Shop Portal " + str(portal1).split(", ")[1].split("_")[0]
                 if not portal_name2 and portal2.startswith("Shop"):
-                    portal_name2 = "Shop Portal " + str(portal2).split(", ")[1].split("_", 0)[0]
+                    portal_name2 = "Shop Portal " + str(portal2).split(", ")[1].split("_")[0]
                 plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
     # put together the list of non-deadend regions
