@@ -48,9 +48,15 @@ incbin "mm2titlefont.dat"
 %org($807E, $0B)
 FlashFixes:
     CMP #$FF
-    BEQ $8086
+    BEQ FlashFixTarget1
     CMP #$FF
-    BNE $808D
+    BNE FlashFixTarget2
+
+%org($8086, $0B)
+FlashFixTarget1:
+
+%org($808D, $0B)
+FlashFixTarget2:
 
 %org($8015, $0D)
 ClearRefreshHook:
