@@ -807,7 +807,8 @@ item_descriptions = {
     item_names.SCOUT_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
-    item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets.",
+    item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets and +8 cast range.",
+    item_names.TEMPEST_INTERPLANETARY_RANGE: "Tempests gain +8 weapon range against all targets.",
     item_names.PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX: "Increases Phoenix, Mirage, and Skirmisher weapon damage by +2.",
     item_names.PHOENIX_CLASS_ANION_PULSE_CRYSTALS: "Increases Phoenix, Mirage, and Skirmiser range by +2.",
     item_names.CORSAIR_STEALTH_DRIVE: "Corsairs become permanently cloaked.",
@@ -907,6 +908,14 @@ item_descriptions = {
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
     # Warp Ray
     # Dawnbringer
+    # Carrier
+    # Skylord
+    # Trireme
+    item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals massive damage to enemy structures over time"),
+    # Scout
+    # Arbiter
+    # Oracle
+    # Mothership
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

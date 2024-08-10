@@ -637,6 +637,7 @@ SCOUT_RESOURCE_EFFICIENCY                               = "Resource Efficiency (
 TEMPEST_TECTONIC_DESTABILIZERS                          = "Tectonic Destabilizers (Tempest)"
 TEMPEST_QUANTIC_REACTOR                                 = "Quantic Reactor (Tempest)"
 TEMPEST_GRAVITY_SLING                                   = "Gravity Sling (Tempest)"
+TEMPEST_INTERPLANETARY_RANGE                            = "Interplanetary Range (Tempest)"
 PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX                     = "Ionic Wavelength Flux (Phoenix/Mirage/Skirmisher)"
 PHOENIX_CLASS_ANION_PULSE_CRYSTALS                      = "Anion Pulse-Crystals (Phoenix/Mirage/Skirmisher)"
 CORSAIR_STEALTH_DRIVE                                   = "Stealth Drive (Corsair)"
@@ -738,6 +739,14 @@ SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmi
 DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
 # Warp Ray
 # Dawnbringer
+# Carrier
+# Skylord
+# Trireme
+TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempest)"
+# Scout
+# Arbiter
+# Oracle
+# Mothership
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
