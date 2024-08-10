@@ -39,8 +39,8 @@ class RLWorld(World):
     required_client_version = (0, 3, 5)
     web = RLWeb()
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.code for name, data in location_table.items()}
+    item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
+    location_name_to_id = {name: data.code for name, data in location_table.items() if data.code is not None}
 
     def fill_slot_data(self) -> dict:
         return self.options.as_dict(*[name for name in self.options_dataclass.type_hints.keys()])
@@ -157,21 +157,21 @@ class RLWorld(World):
 
             # Skills
             if name == "Health Up":
-                quantity = self.options.health_pool
+                quantity = self.options.health_pool.value
             elif name == "Mana Up":
-                quantity = self.options.mana_pool
+                quantity = self.options.mana_pool.value
             elif name == "Attack Up":
-                quantity = self.options.attack_pool
+                quantity = self.options.attack_pool.value
             elif name == "Magic Damage Up":
-                quantity = self.options.magic_damage_pool
+                quantity = self.options.magic_damage_pool.value
             elif name == "Armor Up":
-                quantity = self.options.armor_pool
+                quantity = self.options.armor_pool.value
             elif name == "Equip Up":
-                quantity = self.options.equip_pool
+                quantity = self.options.equip_pool.value
             elif name == "Crit Chance Up":
-                quantity = self.options.crit_chance_pool
+                quantity = self.options.crit_chance_pool.value
             elif name == "Crit Damage Up":
-                quantity = self.options.crit_damage_pool
+                quantity = self.options.crit_damage_pool.value
 
             # Ignore filler, it will be added in a later stage.
             if data.category == "Filler":
@@ -188,7 +188,7 @@ class RLWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = get_items_by_category("Filler")
         weights = [data.weight for data in fillers.values()]
-        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def create_item(self, name: str) -> RLItem:
         data = item_table[name]
@@ -202,7 +202,7 @@ class RLWorld(World):
         set_rules(self, self.player)
 
     def create_regions(self):
-        create_regions(self, self.player)
+        create_regions(self)
         self._place_events()
 
     def _place_events(self):
