@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from schema import And, Optional, Schema
-
 from Options import (
     Choice,
     CounterOption,
