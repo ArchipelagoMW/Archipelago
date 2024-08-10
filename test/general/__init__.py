@@ -99,7 +99,9 @@ def generate_locations(count: int, player_id: int, region: Region, address: Opti
     for location in locations:
         if location.name not in world.location_name_to_id:
             # +1 to avoid ID 0, which isn't allowed
-            world.location_name_to_id[location.name] = len(world.location_name_to_id) + 1
+            id = len(world.location_name_to_id) + 1
+            world.location_name_to_id[location.name] = id
+            world.location_id_to_name[id] = location.name
 
     return locations
 
