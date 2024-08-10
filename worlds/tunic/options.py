@@ -319,7 +319,7 @@ class TunicOptions(PerGameCommonOptions):
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
 
-    fixed_shop: FixedShop
+    fixed_shop: FixedShop  # will be removed at a later date
     logic_rules: Removed  # fully removed in the direction pairs update
       
 
