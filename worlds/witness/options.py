@@ -1,15 +1,6 @@
 from dataclasses import dataclass
 
-from Options import (
-    Choice,
-    CounterOption,
-    DefaultOnToggle,
-    OptionGroup,
-    PerGameCommonOptions,
-    Range,
-    Toggle,
-    Visibility,
-)
+from Options import Choice, CounterOption, DefaultOnToggle, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
