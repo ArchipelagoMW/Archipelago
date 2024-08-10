@@ -13,12 +13,11 @@ import Utils
 from . import Options
 
 factorio_tech_id = factorio_base_id = 2 ** 17
-# Factorio technologies are imported from a .json document in /data
-source_folder = os.path.join(os.path.dirname(__file__), "data")
 
 pool = ThreadPoolExecutor(1)
 
 
+# Factorio technologies are imported from a .json document in /data
 def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
     return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json"))
 
@@ -99,7 +98,7 @@ class CustomTechnology(Technology):
                            and ((ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
                                 or origin.name == "rocket-silo")
         self.player = player
-        if origin.name not in world.worlds[player].special_nodes:
+        if origin.name not in world.special_nodes:
             if military_allowed:
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)
