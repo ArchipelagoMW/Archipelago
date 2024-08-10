@@ -256,12 +256,11 @@ class TrapWeights(CounterOption):
     If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
+    display_name = "Trap Weights"
     valid_keys = _default_trap_weights.keys()
 
-    display_name = "Trap Weights"
-    schema = Schema({
-        Optional(trap_name): And(int, lambda n: n >= 0) for trap_name in _default_trap_weights
-    })
+    min = 0
+
     default = _default_trap_weights
 
 
