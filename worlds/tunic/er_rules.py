@@ -6,6 +6,7 @@ from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, ha
 from .er_data import Portal, get_portal_outlet_region
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .combat_logic import has_combat_reqs
+from .grass import set_grass_location_rules
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -1494,6 +1495,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
+
+    if world.options.grass_randomizer:
+        set_grass_location_rules(world)
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 

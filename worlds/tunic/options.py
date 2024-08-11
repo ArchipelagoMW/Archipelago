@@ -278,6 +278,32 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
+class GrassRandomizer(Toggle):
+    """
+    Turns all 6,227 pieces of grass and bushes in the game into checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
+
+class GrassFill(Range):
+    """
+    Choose what percentage of your filler/trap items are distributed to TUNIC players with Grass Randomizer enabled.
+    Vanilla TUNIC has 302 locations. Grass randomizer adds 6,227 locations. Therefore, grass makes up ~95% of your items with Grass Randomizer on.
+    If you are playing with people who don't have ridiculous options like Grass Randomizer, we recommend you set this option to at least 95.
+    Setting this to 95 gives you approximately 500 checks (actual amount depends on your other options) that can have progression or useful items.
+    If there are other TUNIC players with Grass Randomizer enabled, this filler will be shuffled among their checks as well.
+    This option ignores items placed in your local_items or non_local_items.
+    There is a host.yaml setting that must be enabled to use values below 95.
+    This option does nothing if Grass Randomizer is not enabled.
+    """
+    internal_name = "grass_fill"
+    display_name = "Grass Fill Percent"
+    range_start = 0
+    range_end = 100
+    default = 95
+
+
 class LogicRules(Choice):
     """
     This option has been superseded by the individual trick options.
@@ -313,6 +339,8 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
+    grass_randomizer: GrassRandomizer
+    grass_fill: GrassFill
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless

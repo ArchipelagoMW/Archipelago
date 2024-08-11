@@ -1,9 +1,10 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from BaseClasses import (Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState,
+                         LocationProgressType)
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
-from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
@@ -12,6 +13,7 @@ from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout)
 from .combat_logic import area_data, CombatState
+from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
 from decimal import Decimal, ROUND_HALF_UP
@@ -22,7 +24,11 @@ class TunicSettings(Group):
     class DisableLocalSpoiler(Bool):
         """Disallows the TUNIC client from creating a local spoiler log."""
 
+    class LimitGrassRando(Bool):
+        """Limits the impact of Grass Randomizer on the multiworld by disallowing grass_fill percentages below 95."""
+
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
+    limit_grass_rando: Union[LimitGrassRando, bool] = True
 
 
 class TunicWeb(WebWorld):
@@ -74,10 +80,13 @@ class TunicWorld(World):
     settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
+    location_name_groups.update(grass_location_name_groups)
 
     item_name_to_id = item_name_to_id
-    location_name_to_id = location_name_to_id
+    location_name_to_id = standard_location_name_to_id.copy()
+    location_name_to_id.update(grass_location_name_to_id)
 
+    player_location_table: Dict[str, int]
     ability_unlocks: Dict[str, int]
     slot_data_items: List[TunicItem]
     tunic_portal_pairs: Dict[str, str]
@@ -85,6 +94,7 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
     used_shop_numbers: Set[int]
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
+    local_filler: List[TunicItem]
 
     # so we only loop the multiworld locations once
     # if these are locations instead of their info, it gives a memory leak error
@@ -141,6 +151,16 @@ class TunicWorld(World):
                 self.options.decoupled = passthrough["decoupled"]
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.combat_logic.value = passthrough["combat_logic"]
+
+        self.player_location_table = standard_location_name_to_id.copy()
+
+        if self.options.grass_randomizer:
+            if self.settings.limit_grass_rando and self.options.grass_fill < 95:
+                raise OptionError(f"TUNIC: Player {self.player_name} has their Grass Fill option set too low. "
+                                  f"They must either bring it above 95% or the host needs to disable limit_grass_rando "
+                                  f"in their host.yaml settings")
+
+            self.player_location_table.update(grass_location_name_to_id)
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -269,6 +289,14 @@ class TunicWorld(World):
                 self.get_location("Secret Gathering Place - 10 Fairy Reward").place_locked_item(laurels)
             items_to_create["Hero's Laurels"] = 0
 
+        if self.options.grass_randomizer:
+            items_to_create["Grass"] = len(grass_location_table)
+            tunic_items.append(
+                self.create_item("Glass Cannon", ItemClassification.progression | ItemClassification.useful))
+            items_to_create["Glass Cannon"] = 0
+            tunic_items.append(self.create_item("Gun", ItemClassification.progression | ItemClassification.useful))
+            items_to_create["Gun"] = 0
+
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
@@ -354,7 +382,44 @@ class TunicWorld(World):
             if tunic_item.name in slot_data_item_names:
                 self.slot_data_items.append(tunic_item)
 
+        # pull out the filler so that we can place it manually during pre_fill
+        self.local_filler = []
+        if self.options.grass_randomizer and self.options.grass_fill > 0:
+            # skip items marked local or non-local, let fill deal with them in its own way
+            all_filler = []
+            non_filler = []
+            for item in tunic_items:
+                if item.classification in [ItemClassification.filler, ItemClassification.trap] and item.name not in self.options.local_items and item.name not in self.options.non_local_items:
+                    all_filler.append(item)
+                else:
+                    non_filler.append(item)
+            amount_to_local_fill = int(self.options.grass_fill.value * len(all_filler) / 100)
+            for _ in range(amount_to_local_fill):
+                self.local_filler.append(all_filler.pop())
+            tunic_items = all_filler + non_filler
+
         self.multiworld.itempool += tunic_items
+
+    @classmethod
+    def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
+        tunic_grass_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
+                                                if world.options.grass_randomizer]
+        tunic_players_with_grass: List[int] = [world.player for world in tunic_grass_worlds]
+        unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
+            location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY]
+        grass_fill: List[TunicItem] = []
+        for world in tunic_grass_worlds:
+            grass_fill.extend(world.local_filler)
+
+        grass_filler_count = len(grass_fill)
+        # in case you plando or priority a bunch of locations
+        if len(unfilled_locations) < grass_filler_count:
+            raise Exception("Not enough locations for TUNIC grass randomizer players to place grass fill into TUNIC "
+                            "locations. This is likely due to excessive priority locations or plando.")
+
+        locations_to_grass_fill = multiworld.random.sample(unfilled_locations, grass_filler_count)
+        for loc in locations_to_grass_fill:
+            multiworld.push_item(loc, grass_fill.pop(), collect=False)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
@@ -370,7 +435,8 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
 
         # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
-        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
+        if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic or
+                self.options.grass_randomizer):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -386,7 +452,7 @@ class TunicWorld(World):
                 region = self.get_region(region_name)
                 region.add_exits(exits)
 
-            for location_name, location_id in self.location_name_to_id.items():
+            for location_name, location_id in self.player_location_table.items():
                 region = self.get_region(location_table[location_name].region)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
@@ -399,7 +465,8 @@ class TunicWorld(World):
 
     def set_rules(self) -> None:
         # same reason as in create_regions, could probably be put into create_regions
-        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
+        if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
+                or self.options.grass_randomizer):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -489,6 +556,7 @@ class TunicWorld(World):
             "decoupled": self.options.decoupled.value if self.options.entrance_rando else 0,
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "combat_logic": self.options.combat_logic.value,
+            "grass_randomizer": self.options.grass_randomizer.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],

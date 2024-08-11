@@ -166,6 +166,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Library": TunicItemData(IC.progression, 0, 148, "Ladders"),
     "Ladders in Lower Quarry": TunicItemData(IC.progression, 0, 149, "Ladders"),
     "Ladders in Swamp": TunicItemData(IC.progression, 0, 150, "Ladders"),
+    "Grass": TunicItemData(IC.filler, 0, 151),
 }
 
 # items to be replaced by fool traps
