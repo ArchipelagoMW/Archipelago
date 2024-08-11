@@ -171,17 +171,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 new_items.append(item)
 
         unfound_items_per_player = {
-            player: {item: count for item, count in remaining_items.items() if count > 0}
+            player: {item: count for item, count in remaining_items.items() if count > 0}  # Cull entries with value 0
             for player, remaining_items in depletion_pool.items()
         }
 
         # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
-        for player, unfound_items in unfound_items_per_player.items():
-            amount_of_unfound_items = sum(unfound_items.values())
-            needed_items = target_per_player[player] - amount_of_unfound_items
+        for player, target in target_per_player.items():
+            unfound_items = unfound_items_per_player[player]
+            needed_items = target_per_player[player] - sum(unfound_items.values())
             new_items += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
 
-            if amount_of_unfound_items:
+            if unfound_items:
                 player_name = multiworld.get_player_name(player)
                 logger.warning(f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}")
 
