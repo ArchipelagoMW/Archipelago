@@ -6,6 +6,7 @@ from typing import *
 from math import floor, ceil
 from dataclasses import dataclass
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
+from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from . import item_names
 from .items import (
@@ -21,7 +22,7 @@ from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-    GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems,
+    GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems, RequiredTactics,
 )
 from . import settings
 from .pool_filter import filter_items
@@ -152,7 +153,12 @@ class SC2World(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
-        self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
+        if self.options.required_tactics == RequiredTactics.option_no_logic:
+            # Forcing completed goal and minimal accessibility on no logic
+            self.options.accessibility.value = Accessibility.option_minimal
+            self.multiworld.completion_condition[self.player] = lambda state: True
+        else:
+            self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)

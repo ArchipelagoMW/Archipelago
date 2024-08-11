@@ -2707,9 +2707,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1600, LocationType.VICTORY,
             lambda state: (
-                logic.zerg_common_unit(state)
-                and ((adv_tactics and logic.zerg_basic_kerriganless_anti_air(state))
-                    or logic.zerg_competent_anti_air(state)
+                logic.protoss_common_unit(state)
+                and ((adv_tactics and logic.protoss_basic_anti_air(state))
+                    or logic.protoss_competent_anti_air(state)
                 ))
         ),
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "First Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1601, LocationType.VANILLA),
@@ -2759,10 +2759,6 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             or location.name in plando_locations
         ]
     for i, location_data in enumerate(location_table):
-        # Removing all item-based logic on No Logic
-        if logic_level == RequiredTactics.option_no_logic:
-            location_data = location_data._replace(rule=Location.access_rule)
-            location_table[i] = location_data
         # Generating Beat event locations
         if location_data.name.endswith((": Victory", ": Defeat")):
             beat_events.append(

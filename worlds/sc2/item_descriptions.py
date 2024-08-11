@@ -65,7 +65,7 @@ resource_efficiency_cost_reduction = {
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
     item_names.SCOUT:         (125, 25, 1),
     item_names.DESTROYER:     (50, 25, 1),
-    DISPLAY_NAME_WORMS:       (75, 75, 0),
+    DISPLAY_NAME_WORMS:       (50, 75, 0),
 
     # War Council
     item_names.CENTURION:     (0, 50, 0),
@@ -737,7 +737,7 @@ item_descriptions = {
     item_names.ROACH_RAVAGER_ASPECT: "Ranged artillery. Can use Corrosive Bile. Can attack ground units. Morphed from the Roach.",
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: "Assault unit. Has an area-damage attack. Regenerates life quickly when burrowed. Can attack ground units. Morphed by merging two Roaches.",
     item_names.NYDUS_WORM: "Long-range transport network. Nydus Worms and Nydus Networks can load friendly ground units to be unloaded to any other Nydus structure on the map.",
-    item_names.OMEGA_WORM: "Long-range deployable base. Can't load and unload units, but can generate creep and Creep Tumors. Can also serve as a dropoff point for resources, like a Hatchery.",
+    item_names.OMEGA_WORM: "Long-range deployable base. Unable to load and unload units, but can generate Creep and Creep Tumors. Can also serve as a dropoff point for resources and can create Drones.",
     item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks.",
     item_names.OBSERVER: "Flying spy. Cloak renders the unit invisible to enemies without detection.",
     item_names.CENTURION: "Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities.",
@@ -807,7 +807,8 @@ item_descriptions = {
     item_names.SCOUT_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
-    item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets.",
+    item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets and +8 cast range.",
+    item_names.TEMPEST_INTERPLANETARY_RANGE: "Tempests gain +8 weapon range against all targets.",
     item_names.PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX: "Increases Phoenix, Mirage, and Skirmisher weapon damage by +2.",
     item_names.PHOENIX_CLASS_ANION_PULSE_CRYSTALS: "Increases Phoenix, Mirage, and Skirmiser range by +2.",
     item_names.CORSAIR_STEALTH_DRIVE: "Corsairs become permanently cloaked.",
@@ -893,20 +894,28 @@ item_descriptions = {
     item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
     item_names.ANNIHILATOR_AERIAL_TRACKING: "Annihilator War Council upgrade. The Annihilator's Shadow Cannon ability can now target air units.",
     item_names.STALWART_DUALITY_CHARGE: "Stalwart War Council upgrade. Stalwarts gain +4 range.",
-    # Colossus
+    item_names.COLOSSUS_FIRE_LANCE: "Colossus War Council upgrade. Colossi set the ground on fire with their attacks, dealing damage to enemies over time.",
     item_names.WRATHWALKER_AERIAL_TRACKING: "Wrathwalker War Council upgrade. Wrathwalkers can now target air units.",
     item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
     # Disruptor
     # Warp Prism
     # Observer
     item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: "Phoenix War Council upgrade. Phoenixes can now use Graviton Beam to lift two targets at once.",
-    # Corsair
+    item_names.CORSAIR_NETWORK_DISRUPTION: "Corsair War Council upgrade. Triples the radius of Disruption Web.",
     item_names.MIRAGE_GRAVITON_BEAM: "Mirage War Council upgrade. Allows Mirages to use Graviton Beam.",
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
-    # Void Ray
+    item_names.VOID_RAY_PRISMATIC_RANGE: "Void Ray War Council upgrade. Void Rays gain increased range as they charge their beam.",
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
     # Warp Ray
     # Dawnbringer
+    # Carrier
+    # Skylord
+    # Trireme
+    item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
+    # Scout
+    # Arbiter
+    # Oracle
+    # Mothership
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.
