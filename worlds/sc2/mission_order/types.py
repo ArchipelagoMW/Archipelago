@@ -8,10 +8,8 @@ if TYPE_CHECKING:
 
 class LayoutType(ABC):
     size: int
-
-    # 0
-    # 1
-    # 2
+    index_functions: List[str] = []
+    """Names of available functions for mission indices. For list member `"my_fn"`, function should be called `idx_my_fn`."""
 
     def __init__(self, size: int):
         self.size = size
@@ -30,8 +28,33 @@ class LayoutType(ABC):
     def parse_index(self, term: str) -> Union[Set[int], None]:
         """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
 
-        If the term cannot be parsed, either raise a descriptive exception or return `None`."""
-        return None
+        If the term cannot be parsed, either raise an exception or return `None`."""
+        return self.parse_index_as_function(term)
+    
+    def parse_index_as_function(self, term: str) -> Union[Set[int], None]:
+        """Helper function to interpret the term as a function call on the layout type, if it is declared in `self.index_functions`.
+        
+        Returns the function's return value if `term` is a valid function call, `None` otherwise."""
+        left = term.find('(')
+        right = term.find(')')
+        if left == -1 and right == -1:
+            # Assume no args are desired
+            fn_name = term.strip()
+            fn_args = []
+        elif left == -1 or right == -1:
+            return None
+        else:
+            fn_name = term[:left].strip()
+            fn_args_str = term[left + 1:right]
+            fn_args = [arg.strip() for arg in fn_args_str.split(',')]
+
+        if fn_name in self.index_functions:
+            try:
+                return getattr(self, "idx_" + fn_name)(*fn_args)
+            except:
+                return None
+        else:
+            return None
 
     @abstractmethod
     def get_visual_layout(self) -> List[List[int]]:
@@ -43,6 +66,10 @@ class LayoutType(ABC):
 
 class Column(LayoutType):
     """Linear layout. Default entrance is index 0 at the top, default exit is index `size - 1` at the bottom."""
+
+    # 0
+    # 1
+    # 2
 
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         missions = [mission_factory() for _ in range(self.size)]
@@ -61,6 +88,10 @@ class Grid(LayoutType):
     height: int
     num_corners_to_remove: int
     two_start_positions: bool
+
+    index_functions = [
+        "point", "rect"
+    ]
 
     # 0 1 2
     # 3 4 5
@@ -118,7 +149,7 @@ class Grid(LayoutType):
             x >= 0 and x < self.width and
             y >= 0 and y < self.height
         )
-
+    
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
         missions = [mission_factory() for _ in range(self.width * self.height)]
         if self.two_start_positions:
@@ -186,14 +217,42 @@ class Grid(LayoutType):
         ]
         return columns
     
-    def parse_index(self, term: str) -> Union[Set[int], None]:
-        raise NotImplementedError
+    def idx_point(self, x: str, y: str) -> Union[Set[int], None]:
+        try:
+            x = int(x)
+            y = int(y)
+        except:
+            return None
+        if self.is_valid_coordinates(x, y):
+            return {self.get_grid_index(x, y)}
+        return None
+    
+    def idx_rect(self, x: str, y: str, width: str, height: str) -> Union[Set[int], None]:
+        try:
+            x = int(x)
+            y = int(y)
+            width = int(width)
+            height = int(height)
+        except:
+            return None
+        indices = {
+            self.get_grid_index(pt_x, pt_y)
+            for pt_y in range(y, y + height)
+            for pt_x in range(x, x + width)
+            if self.is_valid_coordinates(pt_x, pt_y)
+        }
+        return indices
+    
     
 class Hopscotch(LayoutType):
     """Alternating between one and two available missions.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
     width: int
     two_start_positions: bool
+
+    index_functions = [
+        "top", "bottom", "middle", "corner"
+    ]
 
     # 0 2
     # 1 3 5
@@ -272,6 +331,41 @@ class Hopscotch(LayoutType):
 
         return final_cols
 
+    def idx_bottom(self) -> Set[int]:
+        corners = math.ceil(self.size / 3)
+        indices = [num * 3 + 1 for num in range(corners)]
+        return {
+            idx for idx in indices if idx < self.size
+        }
+
+    def idx_top(self) -> Set[int]:
+        corners = math.ceil(self.size / 3)
+        indices = [num * 3 + 2 for num in range(corners)]
+        return {
+            idx for idx in indices if idx < self.size
+        }
+
+    def idx_middle(self) -> Set[int]:
+        corners = math.ceil(self.size / 3)
+        indices = [num * 3 for num in range(corners)]
+        return {
+            idx for idx in indices if idx < self.size
+        }
+
+    def idx_corner(self, number: str) -> Union[Set[int], None]:
+        try:
+            number = int(number)
+        except:
+            return None
+        corners = math.ceil(self.size / 3)
+        if number >= corners:
+            return None
+        indices = [number * 3 + n for n in range(3)]
+        return {
+            idx for idx in indices if idx < self.size
+        }
+
+
 class Gauntlet(LayoutType):
     """Long, linear layout. Goes horizontally and wraps around.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
@@ -309,6 +403,10 @@ class Blitz(LayoutType):
     """Rows of missions, one mission per row required.
     Default entrances are every mission in the top row, default exit is a central mission in the bottom row."""
     width: int
+
+    index_functions = [
+        "row"
+    ]
 
     # 0 1 2 3
     # 4 5 6 7
@@ -357,6 +455,19 @@ class Blitz(LayoutType):
         fill_to_longest(columns)
 
         return columns
+    
+    def idx_row(self, row: str) -> Union[Set[int], None]:
+        try:
+            row = int(row)
+        except:
+            return None
+        rows = math.ceil(self.size / self.width)
+        if row >= rows:
+            return None
+        indices = [row * self.width + col for col in range(self.width)]
+        return {
+            idx for idx in indices if idx < self.size
+        }
     
 def fill_to_longest(columns: List[List[int]]):
     longest = max(len(col) for col in columns)

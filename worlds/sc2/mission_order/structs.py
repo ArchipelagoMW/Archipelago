@@ -555,7 +555,7 @@ class SC2MOGenLayout(MissionOrderNode):
                 else:
                     result = self.layout_type.parse_index(term)
                     if result is None:
-                        raise ValueError(f"Mission index term \"{term}\" did not resolve to any indices.")
+                        raise ValueError(f"Layout \"{self.option_name}\" could not resolve mission index term \"{term}\".")
                     indices.update(result)
             for idx in indices:
                 self.missions[idx].update_with_data(mission_data)
