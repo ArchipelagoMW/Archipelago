@@ -186,6 +186,7 @@ class GauntletLegendsWorld(World):
 
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
+        trap_count = 0
         for item in item_list:
             if item.progression == ItemClassification.filler or item.progression == ItemClassification.trap:
                 if "Key" in item.item_name and self.options.infinite_keys:
@@ -208,17 +209,21 @@ class GauntletLegendsWorld(World):
                     freq = item_frequencies.get(item.item_name, 1)
                 if item.item_name == "Anti-Death Halo" and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_all_active) and self.options.traps_frequency.value == self.options.traps_frequency.option_extreme:
                     freq *= 2
-                filler_items += [item.item_name for _ in range(freq)]
+                if item.item_name == "Death":
+                    trap_count += freq
+                    for i in range(freq):
+                        self.multiworld.itempool.append(self.create_item(item.item_name))
+                else:
+                    filler_items += [item.item_name for _ in range(freq)]
 
-        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - (2 if not self.options.infinite_keys else 0)
+        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - trap_count - (2 if not self.options.infinite_keys else 0)
         if self.options.obelisks == 0:
             remaining -= 7
         if self.options.mirror_shards == 0:
             remaining -= 4
         for i in range(remaining):
             filler_item_name = self.multiworld.random.choice(filler_items)
-            item = self.create_item(filler_item_name)
-            self.multiworld.itempool.append(item)
+            self.multiworld.itempool.append(self.create_item(filler_item_name))
             filler_items.remove(filler_item_name)
 
     def set_rules(self) -> None:
