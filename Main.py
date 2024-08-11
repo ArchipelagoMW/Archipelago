@@ -169,21 +169,19 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             else:
                 new_items.append(item)
 
-        unfound_items = {
+        unfound_items_per_player = {
             player: {item: count for item, count in remaining_items.items() if count > 0}
             for player, remaining_items in depletion_pool.items()
-            if any(remaining_items.values())
         }
 
-        if unfound_items:
-            warning_dict = {multiworld.worlds[player].player_name: items for player, items in unfound_items.items()}
-            logger.warning(
-                f"These start_inventory_from_pool items could not be found in the multiworld itempool: {warning_dict}"
-            )
-
-        for player, target in target_per_player.items():
-            needed_items = target_per_player[player] - sum(unfound_items.get(player, {}).values())
+        for player, unfound_items in unfound_items_per_player.items():
+            amount_of_unfound_items = sum(unfound_items.values())
+            needed_items = target_per_player[player] - amount_of_unfound_items
             new_items += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
+
+            if amount_of_unfound_items:
+                player_name = multiworld.get_player_name(player)
+                logger.warning(f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}")
 
         assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
         multiworld.itempool = new_items
