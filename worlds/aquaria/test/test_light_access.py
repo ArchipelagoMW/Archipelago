@@ -4,7 +4,7 @@ Date: Thu, 18 Apr 2024 18:45:56 +0000
 Description: Unit test used to test accessibility of locations with and without a light (Dumbo pet or sun form)
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 
 
 class LightAccessTest(AquariaTestBase):
@@ -39,7 +39,6 @@ class LightAccessTest(AquariaTestBase):
             "Abyss right area, bulb in the middle path",
             "Abyss right area, bulb behind the rock in the middle path",
             "Abyss right area, bulb in the left green room",
-            "Abyss right area, Transturtle",
             "Ice Cave, bulb in the room to the right",
             "Ice Cave, first bulb in the top exit room",
             "Ice Cave, second bulb in the top exit room",

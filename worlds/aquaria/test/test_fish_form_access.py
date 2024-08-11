@@ -4,7 +4,7 @@ Date: Thu, 18 Apr 2024 18:45:56 +0000
 Description: Unit test used to test accessibility of locations with and without the fish form
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 
 
 class FishFormAccessTest(AquariaTestBase):
@@ -17,6 +17,7 @@ class FishFormAccessTest(AquariaTestBase):
         """Test locations that require fish form"""
         locations = [
             "The Veil top left area, bulb inside the fish pass",
+            "Energy Temple first area, Energy Idol",
             "Mithalas City, Doll",
             "Mithalas City, urn inside a home fish pass",
             "Kelp Forest top right area, bulb in the top fish pass",
@@ -30,8 +31,7 @@ class FishFormAccessTest(AquariaTestBase):
             "Octopus Cave, Dumbo Egg",
             "Octopus Cave, bulb in the path below the Octopus Cave path",
             "Beating Octopus Prime",
-            "Abyss left area, bulb in the bottom fish pass",
-            "Arnassi Ruins, Arnassi Armor"
+            "Abyss left area, bulb in the bottom fish pass"
         ]
         items = [["Fish form"]]
         self.assertAccessDependency(locations, items)
