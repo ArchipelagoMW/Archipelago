@@ -149,45 +149,44 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
+    fallback_inventory = StartInventoryPool({})
+    depletion_pool: Dict[int, Dict[str, int]] = {
+        player: getattr(multiworld.worlds[player].options, "start_inventory_from_pool", fallback_inventory).value.copy()
+        for player in multiworld.player_ids
+    }
+    target_per_player = {player: sum(target_items.values()) for player, target_items in depletion_pool.items()}
+    overall_target = sum(target_per_player.values())
+
+    if any(target_per_player.values()):
         new_items: List[Item] = []
-        old_items: List[Item] = []
-        depletion_pool: Dict[int, Dict[str, int]] = {
-            player: getattr(multiworld.worlds[player].options,
-                            "start_inventory_from_pool",
-                            StartInventoryPool({})).value.copy()
-            for player in multiworld.player_ids
-        }
-        for player, items in depletion_pool.items():
-            player_world: AutoWorld.World = multiworld.worlds[player]
-            for count in items.values():
-                for _ in range(count):
-                    new_items.append(player_world.create_filler())
-        target: int = sum(sum(items.values()) for items in depletion_pool.values())
-        for i, item in enumerate(multiworld.itempool):
+
+        for item in multiworld.itempool:
             if depletion_pool[item.player].get(item.name, 0):
-                target -= 1
                 depletion_pool[item.player][item.name] -= 1
-                # quick abort if we have found all items
-                if not target:
-                    old_items.extend(multiworld.itempool[i+1:])
+                overall_target -= 1
+                if overall_target == 0:
                     break
             else:
-                old_items.append(item)
+                new_items.append(item)
 
-        # leftovers?
-        if target:
-            for player, remaining_items in depletion_pool.items():
-                remaining_items = {name: count for name, count in remaining_items.items() if count}
-                if remaining_items:
-                    logger.warning(f"{multiworld.get_player_name(player)}"
-                                    f" is trying to remove items from their pool that don't exist: {remaining_items}")
-                    # find all filler we generated for the current player and remove until it matches 
-                    removables = [item for item in new_items if item.player == player]
-                    for _ in range(sum(remaining_items.values())):
-                        new_items.remove(removables.pop())
-        assert len(multiworld.itempool) == len(new_items + old_items), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_items + old_items
+        unfound_items = {
+            player: {item: count for item, count in remaining_items.items() if count > 0}
+            for player, remaining_items in depletion_pool.items()
+            if any(remaining_items.values())
+        }
+
+        if unfound_items:
+            logger.warning(
+                "These start_inventory_from_pool items could not be found in the multiworld itempool: "
+                + str({multiworld.worlds[player].player_name: items for player, items in unfound_items.items()})
+            )
+
+        for player, target in target_per_player.items():
+            needed_items = target_per_player[player] - sum(unfound_items.get(player, {}).values())
+            new_items += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
+
+        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
+        multiworld.itempool = new_items
 
     multiworld.link_items()
 
