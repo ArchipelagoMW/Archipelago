@@ -1,6 +1,6 @@
 from typing import Set
 
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World, Visibility
 from .Items import item_table, default_pool
 from .Locations import lookup_name_to_id
 from .Rules import set_rules, location_rules
@@ -10,6 +10,8 @@ from BaseClasses import Region, Item, Location, Entrance, ItemClassification
 
 
 class OriBlindForest(World):
+    visibility = Visibility.disabled
+
     game: str = "Ori and the Blind Forest"
 
     topology_present = True
@@ -19,8 +21,6 @@ class OriBlindForest(World):
     location_name_to_id = lookup_name_to_id
 
     option_definitions = options
-
-    hidden = True
 
     def generate_early(self):
         logic_sets = {"casual-core"}

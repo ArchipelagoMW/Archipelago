@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import enum
 import hashlib
 import logging
 import pathlib
 import sys
 import time
+from enum import Enum
 from random import Random
 from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
@@ -80,10 +82,12 @@ class AutoWorldRegister(type):
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
+        new_class.hidden = dct.get("visibility", Visibility.visible) == Visibility.hidden
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
-            AutoWorldRegister.world_types[dct["game"]] = new_class
+            if dct.get("visibility", Visibility.visible) != Visibility.disabled:
+                AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
@@ -134,7 +138,7 @@ class WebWorldRegister(type):
             else:
                 for option in group.options:
                     assert option not in item_and_loc_options, \
-                           f"{option} cannot be moved out of the \"Item & Location Options\" Group"
+                        f"{option} cannot be moved out of the \"Item & Location Options\" Group"
             assert len(group.options) == len(set(group.options)), f"Duplicate options in option group {group.name}"
             for option in group.options:
                 assert option not in seen_options, f"{option} found in two option groups"
@@ -182,7 +186,7 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
         if __debug__:
             new_items = multiworld.itempool[prev_item_count:]
             for i, item in enumerate(new_items):
-                for other in new_items[i+1:]:
+                for other in new_items[i + 1:]:
                     assert item is not other, (
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
@@ -196,6 +200,15 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
             _timed_call(stage_callable, multiworld, *args)
+
+
+class Visibility(Enum):
+    visible = enum.auto()
+    """The world will be visible/enabled"""
+    hidden = enum.auto()
+    """The world will be enabled, but hidden"""
+    disabled = enum.auto()
+    """The world will not be loaded at all"""
 
 
 class WebWorld(metaclass=WebWorldRegister):
@@ -248,6 +261,8 @@ class WebWorld(metaclass=WebWorldRegister):
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
+    visibility: ClassVar[Visibility] = Visibility.visible
+    """Whether the game will be visible to the generator and webhost"""
 
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""
@@ -285,9 +300,6 @@ class World(metaclass=AutoWorldRegister):
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()
     """any names that should not be hintable"""
-
-    hidden: ClassVar[bool] = False
-    """Hide World Type from various views. Does not remove functionality."""
 
     web: ClassVar[WebWorld] = WebWorld()
     """see WebWorld for options"""

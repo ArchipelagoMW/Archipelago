@@ -56,5 +56,13 @@ date, voting members and final result in the commit message.
 
 ## Handling of Unmaintained Worlds
 
-As long as worlds are known to work for the most part, they can stay included. Once a world becomes broken it shall be
-moved from `worlds/` to `worlds_disabled/`.
+When a world becomes unmaintained, it can stay enabled as long as it is not breaking. At the discretion of the core
+maintainers, unmaintained worlds may also have their tests disabled at which point they will be marked as hidden
+and a warning will be provided when players try to generate with that world. This provides the core maintainers
+a mechanism to "soft disable" a world in order to allow core changes/tests to be merge which would not strictly break 
+the world, but would cause other issues, e.g. failing tests, and would need long-term intervention from a maintainer.
+
+In the case that an unmaintained world is completely broken, the world can be marked as disabled. For each disabled 
+world, a README file can be found detailing when the world was disabled and the reasons that it was disabled. In order 
+to be considered for reactivation, these concerns should be handled at a bare minimum. However, each world may have\
+additional issues that also need to be handled, such as deprecated API calls or missing components.

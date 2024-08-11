@@ -212,7 +212,7 @@
 ## Active Unmaintained Worlds
 
 # The following worlds in this repo are currently unmaintained, but currently still work in core. If any update breaks
-# compatibility, these worlds may be moved to `worlds_disabled`. If you are interested in stepping up as maintainer for
+# compatibility, these worlds may be disabled. If you are interested in stepping up as maintainer for
 # any of these worlds, please review `/docs/world maintainer.md` documentation.
 
 # Final Fantasy (1)
@@ -228,7 +228,7 @@
 # documentation.
 
 # Ori and the Blind Forest
-# /worlds_disabled/oribf/
+# /worlds/oribf/
 
 ###################
 ## Documentation ##

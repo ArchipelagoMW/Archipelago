@@ -1,5 +1,5 @@
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld, Visibility
 from datetime import datetime
 from .Items import item_table
 from .Rules import set_rules
@@ -33,7 +33,7 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
+    visibility = Visibility.visible if (datetime.now().month == 4) else Visibility.hidden
     web = ArchipIDLEWebWorld()
 
     item_name_to_id = {}
