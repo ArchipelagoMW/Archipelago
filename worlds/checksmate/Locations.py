@@ -29,26 +29,27 @@ class CMLocationData(NamedTuple):
 location_table = {
     # capture individual pieces and pawns
     # AI prefers not to use edge pawns early - thus they stay defended longer
-    "Capture Pawn A": CMLocationData(4_902_000, 190, 310),
-    "Capture Pawn B": CMLocationData(4_902_001, 140, 210),
-    "Capture Pawn C": CMLocationData(4_902_002, 100, 160),
-    "Capture Pawn D": CMLocationData(4_902_003, 100, 120),
+    "Capture Pawn A": CMLocationData(4_902_000, 490, 810),
+    "Capture Pawn B": CMLocationData(4_902_001, 340, 610),
+    # AI prefers to open queenside as developing queen has more tempo
+    "Capture Pawn C": CMLocationData(4_902_002, 220, 460),
+    "Capture Pawn D": CMLocationData(4_902_003, 100, 320),
     "Capture Pawn E": CMLocationData(4_902_004, 100, 120),
-    # AI prefers not to open kingside as developing queen has more tempo
-    "Capture Pawn F": CMLocationData(4_902_005, 140, 120),
-    "Capture Pawn G": CMLocationData(4_902_006, 240, 120),
+    "Capture Pawn F": CMLocationData(4_902_005, 340, 120),
+    "Capture Pawn G": CMLocationData(4_902_006, 390, 420),
     # AI prefers not to use edge pawns early - thus they stay defended longer
-    "Capture Pawn H": CMLocationData(4_902_007, 290, 160),
-    "Capture Pawn I": CMLocationData(4_902_101, -1, 310),
-    "Capture Pawn J": CMLocationData(4_902_102, -1, 390),
+    "Capture Pawn H": CMLocationData(4_902_007, 490, 660),
+    "Capture Pawn I": CMLocationData(4_902_101, -1, 810),
+    "Capture Pawn J": CMLocationData(4_902_102, -1, 890),
+    # bishops are less deployable than knights, and rooks are even more stuck back there
     "Capture Piece Queen's Rook": CMLocationData(4_902_008, 900, 1650),
     "Capture Piece Queen's Knight": CMLocationData(4_902_010, 700, 1200),
-    "Capture Piece Queen's Bishop": CMLocationData(4_902_012, 700, 1200),
+    "Capture Piece Queen's Bishop": CMLocationData(4_902_012, 1040, 1200),
     "Capture Piece Queen": CMLocationData(4_902_014, 1300, 1900),
     "Checkmate Minima": CMLocationData(4_902_098, 4020, 4020),  # (this is the game's goal / completion condition)
     "Checkmate Maxima": CMLocationData(4_902_099, -1, 6020),  # (this is the game's goal / completion condition)
     # AI prefers not to open kingside as developing queen has more tempo
-    "Capture Piece King's Bishop": CMLocationData(4_902_013, 1040, 1400),
+    "Capture Piece King's Bishop": CMLocationData(4_902_013, 1140, 1400),
     "Capture Piece King's Knight": CMLocationData(4_902_011, 1040, 1400),
     "Capture Piece King's Rook": CMLocationData(4_902_009, 1240, 2050),
     "Capture Piece Queen's Attendant": CMLocationData(4_902_109, -1, 1950),

@@ -109,7 +109,7 @@ def determine_relaxation(opts: CMOptions):
     if opts.difficulty.value == opts.difficulty.option_bullet:
         return 120
     if opts.difficulty.value == opts.difficulty.option_relaxed:
-        return 200
+        return 240
     return 0
 
 
@@ -161,7 +161,7 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
                          lambda state: meets_chessmen_expectations(
                              state, 18 if super_sized else 14, player, opts.pocket_limit_by_pocket.value))
             else:
-                raise RuntimeError("Unknown location code: " + str(item.code))
+                raise RuntimeError("Unknown location code for custom chessmen: " + str(item.code))
         elif item.chessmen_expectations > 0:
             add_rule(multiworld.get_location(name, player),
                      lambda state, v=item.chessmen_expectations: meets_chessmen_expectations(
@@ -206,8 +206,11 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
         add_rule(multiworld.get_location("Fork, True Royal", player), lambda state: has_pin(state, player))
     add_rule(multiworld.get_location("Threaten Pawn", player), lambda state: count_enemy_pawns(state, player) > 0)
     add_rule(multiworld.get_location("Threaten Minor", player), lambda state: count_enemy_pieces(state, player) > 3)
+    add_rule(multiworld.get_location("Threaten Minor", player), lambda state: has_pin(state, player))
     add_rule(multiworld.get_location("Threaten Major", player), lambda state: count_enemy_pieces(state, player) > 5)
+    add_rule(multiworld.get_location("Threaten Major", player), lambda state: has_pin(state, player))
     add_rule(multiworld.get_location("Threaten Queen", player), lambda state: count_enemy_pieces(state, player) > 6)
+    add_rule(multiworld.get_location("Threaten Queen", player), lambda state: has_pin(state, player))
     add_rule(multiworld.get_location("Threaten King", player), lambda state: has_pin(state, player))
     # special moves
     total_queens = multiworld.worlds[player].items_used[player].get("Progressive Major To Queen", 0)
