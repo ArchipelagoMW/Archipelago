@@ -487,7 +487,7 @@ class Factorio(World):
             sorted(science_pack_pools[self.options.max_science_pack.get_ordered_science_packs()[0]]),
             ingredients_offset=ingredients_offset.value)
         for ingredient_name in new_recipe.ingredients:
-            new_recipe.ingredients[ingredient_name] = self.multiworld.random.randint(50, 500)
+            new_recipe.ingredients[ingredient_name] = self.random.randint(50, 500)
         self.custom_recipes[bridge] = new_recipe
 
         needed_recipes = self.options.max_science_pack.get_allowed_packs() | {"rocket-part"}
@@ -544,7 +544,7 @@ class FactorioScienceLocation(FactorioLocation):
         self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
         for complexity in range(self.complexity):
             if (parent.multiworld.worlds[self.player].options.tech_cost_mix >
-                    parent.multiworld.random.randint(0, 99)):
+                    parent.multiworld.worlds[self.player].random.randint(0, 99)):
                 self.ingredients[Factorio.ordered_science_packs[complexity]] = 1
 
     @property

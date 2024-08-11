@@ -133,7 +133,7 @@ def generate_mod(world: "Factorio", output_directory: str):
         "allowed_science_packs": world.options.max_science_pack.get_allowed_packs(),
         "custom_technologies": world.custom_technologies,
         "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
-        "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
+        "slot_name": world.player_name, "seed_name": multiworld.seed_name,
         "slot_player": player,
         "starting_items": world.options.starting_items, "recipes": recipes,
         "random": random, "flop_random": flop_random,
@@ -166,7 +166,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     template_data["free_sample_blacklist"].update({item: 0 for item in world.options.free_sample_whitelist.value})
 
     zf_path = os.path.join(output_directory, versioned_mod_name + ".zip")
-    mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
+    mod = FactorioModFile(zf_path, player=player, player_name=world.player_name)
 
     if world.zip_path:
         with zipfile.ZipFile(world.zip_path) as zf:
