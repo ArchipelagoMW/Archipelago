@@ -1,9 +1,9 @@
 from .Utils import data_path, __version__
 from .Colors import *
 import logging
-import worlds.oot.Music as music
-import worlds.oot.Sounds as sfx
-import worlds.oot.IconManip as icon
+from . import Music as music
+from . import Sounds as sfx
+from . import IconManip as icon
 from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
 import json
 
@@ -769,7 +769,7 @@ patch_sets[0x1F073FD9] = {
 
 def patch_cosmetics(ootworld, rom):
     # Use the world's slot seed for cosmetics
-    random.seed(ootworld.multiworld.per_slot_randoms[ootworld.player].random())
+    random.seed(ootworld.random.random())
 
     # try to detect the cosmetic patch data format
     versioned_patch_set = None

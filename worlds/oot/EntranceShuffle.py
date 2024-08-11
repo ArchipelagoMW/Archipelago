@@ -675,7 +675,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     all_state, none_state, one_way_entrance_pools, one_way_target_entrance_pools):
 
     avail_pool = list(chain.from_iterable(one_way_entrance_pools[t] for t in allowed_types if t in one_way_entrance_pools))
-    ootworld.multiworld.random.shuffle(avail_pool)
+    ootworld.random.shuffle(avail_pool)
 
     for entrance in avail_pool:
         if entrance.replaces:
@@ -725,11 +725,11 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
     raise EntranceShuffleError(f'Entrance placement attempt count exceeded for world {ootworld.player}')
 
 def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
-    ootworld.multiworld.random.shuffle(entrances)
+    ootworld.random.shuffle(entrances)
     for entrance in entrances:
         if entrance.connected_region != None:
             continue
-        ootworld.multiworld.random.shuffle(target_entrances)
+        ootworld.random.shuffle(target_entrances)
         # Here we deliberately introduce bias by prioritizing certain interiors, i.e. the ones most likely to cause problems.
         # success rate over randomization
         if pool_type in {'InteriorSoft', 'MixedSoft'}:

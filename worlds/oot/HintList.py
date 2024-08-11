@@ -1,5 +1,3 @@
-import random
-
 from BaseClasses import LocationProgressType
 from .Items import OOTItem
 
@@ -28,7 +26,7 @@ class Hint(object):
     text = ""
     type = []
 
-    def __init__(self, name, text, type, choice=None):
+    def __init__(self, name, text, type, rand, choice=None):
         self.name = name
         self.type = [type] if not isinstance(type, list) else type
 
@@ -36,31 +34,31 @@ class Hint(object):
             self.text = text
         else:
             if choice == None:
-                self.text = random.choice(text)
+                self.text = rand.choice(text)
             else:
                 self.text = text[choice]
 
 
-def getHint(item, clearer_hint=False):
+def getHint(item, rand, clearer_hint=False):
     if item in hintTable:
         textOptions, clearText, hintType = hintTable[item]
         if clearer_hint:
             if clearText == None:
-                return Hint(item, textOptions, hintType, 0)
-            return Hint(item, clearText, hintType)
+                return Hint(item, textOptions, hintType, rand, 0)
+            return Hint(item, clearText, hintType, rand)
         else:
-            return Hint(item, textOptions, hintType)
+            return Hint(item, textOptions, hintType, rand)
     elif isinstance(item, str):
-        return Hint(item, item, 'generic')
+        return Hint(item, item, 'generic', rand)
     else: # is an Item
-        return Hint(item.name, item.hint_text, 'item')
+        return Hint(item.name, item.hint_text, 'item', rand)
 
 
 def getHintGroup(group, world):
     ret = []
     for name in hintTable:
 
-        hint = getHint(name, world.clearer_hints)
+        hint = getHint(name, world.random, world.clearer_hints)
 
         if hint.name in world.always_hints and group == 'always':
             hint.type = 'always'
@@ -95,7 +93,7 @@ def getHintGroup(group, world):
 def getRequiredHints(world):
     ret = []
     for name in hintTable:
-        hint = getHint(name)
+        hint = getHint(name, world.random)
         if 'always' in hint.type or hint.name in conditional_always and conditional_always[hint.name](world):
             ret.append(hint)
     return ret
@@ -1689,7 +1687,7 @@ def hintExclusions(world, clear_cache=False):
 
     location_hints = []
     for name in hintTable:
-        hint = getHint(name, world.clearer_hints)
+        hint = getHint(name, world.random, world.clearer_hints)
         if any(item in hint.type for item in 
                 ['always',
                  'dual_always',
