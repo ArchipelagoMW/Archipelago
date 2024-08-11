@@ -176,9 +176,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         }
 
         if unfound_items:
+            warning_dict = {multiworld.worlds[player].player_name: items for player, items in unfound_items.items()}
             logger.warning(
-                "These start_inventory_from_pool items could not be found in the multiworld itempool: "
-                + str({multiworld.worlds[player].player_name: items for player, items in unfound_items.items()})
+                f"These start_inventory_from_pool items could not be found in the multiworld itempool: {warning_dict}"
             )
 
         for player, target in target_per_player.items():
