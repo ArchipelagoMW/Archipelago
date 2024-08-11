@@ -177,11 +177,7 @@ class MinecraftWorld(World):
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_mc_data()
-        for option_name, option_value in self.options.as_dict():
-            if slot_data.get(option_name, None) is None:
-                slot_data[option_name] = option_value
-        return slot_data
+        return self._get_mc_data()
 
     def get_filler_item_name(self) -> str:
         return get_junk_item_names(self.random, 1)[0]

@@ -1,10 +1,14 @@
 from math import ceil
 from typing import List
 
-from BaseClasses import MultiWorld, Item
-from worlds.AutoWorld import World
+from BaseClasses import Item
 
 from . import Constants
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from . import MinecraftWorld
+
 
 def get_junk_item_names(rand, k: int) -> str:
 	junk_weights = Constants.item_info["junk_weights"]
@@ -14,7 +18,7 @@ def get_junk_item_names(rand, k: int) -> str:
 		k=k)
 	return junk
 
-def build_item_pool(self: World) -> List[Item]:
+def build_item_pool(self: "MinecraftWorld") -> List[Item]:
 	multiworld = self.multiworld
 	player = self.player
 
@@ -29,18 +33,18 @@ def build_item_pool(self: World) -> List[Item]:
 		itempool += [self.create_item(item_name) for _ in range(num)]
 
 	# Add structure compasses
-	if self.options.structure_compasses.value:
+	if self.options.structure_compasses:
 		compasses = [name for name in self.item_name_to_id if "Structure Compass" in name]
 		for item_name in compasses:
 			itempool.append(self.create_item(item_name))
 
 	# Dragon egg shards
-	if self.options.egg_shards_required.value > 0:
-		num = self.options.egg_shards_available.value
+	if self.options.egg_shards_required > 0:
+		num = self.options.egg_shards_available
 		itempool += [self.create_item("Dragon Egg Shard") for _ in range(num)]
 
 	# Bee traps
-	bee_trap_percentage = self.options.bee_traps.value * 0.01
+	bee_trap_percentage = self.options.bee_traps * 0.01
 	if bee_trap_percentage > 0:
 		bee_trap_qty = ceil(bee_trap_percentage * (total_location_count - len(itempool)))
 		itempool += [self.create_item("Bee Trap") for _ in range(bee_trap_qty)]

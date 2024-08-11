@@ -1,11 +1,11 @@
-import typing
-from collections.abc import Callable
-
 from BaseClasses import CollectionState
 from worlds.generic.Rules import exclusion_rules
-from worlds.AutoWorld import World
 
 from . import Constants
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from . import MinecraftWorld
 
 
 # Helper functions
@@ -23,7 +23,7 @@ def has_gold_ingots(self, state: CollectionState, player: int) -> bool:
     return (state.has('Progressive Resource Crafting', player)
             and (
                     state.has('Progressive Tools', player, 2)
-                    or state.can_reach('The Nether', 'Region', player)
+                    or state.can_reach_region('The Nether', player)
             )
            )
 
@@ -59,7 +59,7 @@ def can_use_anvil(self, state: CollectionState, player: int) -> bool:
 
 
 def fortress_loot(self, state: CollectionState, player: int) -> bool:  # saddles, blaze rods, wither skulls
-    return state.can_reach('Nether Fortress', 'Region', player) and basic_combat(self, state, player)
+    return state.can_reach_region('Nether Fortress', player) and basic_combat(self, state, player)
 
 
 def can_brew_potions(self, state: CollectionState, player: int) -> bool:
@@ -69,22 +69,22 @@ def can_brew_potions(self, state: CollectionState, player: int) -> bool:
 def can_piglin_trade(self, state: CollectionState, player: int) -> bool:
     return (has_gold_ingots(self, state, player)
             and (
-                    state.can_reach('The Nether', 'Region', player)
-                    or state.can_reach('Bastion Remnant', 'Region', player)
+                    state.can_reach_region('The Nether', player)
+                    or state.can_reach_region('Bastion Remnant', player)
             ))
 
 
 def overworld_villager(self, state: CollectionState, player: int) -> bool:
     village_region = state.multiworld.get_region('Village', player).entrances[0].parent_region.name
     if village_region == 'The Nether':  # 2 options: cure zombie villager or build portal in village
-        return (state.can_reach('Zombie Doctor', 'Location', player)
+        return (state.can_reach_location('Zombie Doctor',  player)
                 or (
                         has_diamond_pickaxe(self, state, player)
-                        and state.can_reach('Village', 'Region', player)
+                        and state.can_reach_region('Village', player)
                 ))
     elif village_region == 'The End':
-        return state.can_reach('Zombie Doctor', 'Location', player)
-    return state.can_reach('Village', 'Region', player)
+        return state.can_reach_location('Zombie Doctor', player)
+    return state.can_reach_region('Village', player)
 
 
 def enter_stronghold(self, state: CollectionState, player: int) -> bool:
@@ -97,7 +97,7 @@ def combat_difficulty(self, state: CollectionState, player: int) -> bool:
 
 
 def can_adventure(self, state: CollectionState, player: int) -> bool:
-    death_link_check = not self.options.death_link.value or state.has('Bed', player)
+    death_link_check = not self.options.death_link or state.has('Bed', player)
     if combat_difficulty(self, state, player) == 'easy':
         return state.has('Progressive Weapons', player, 2) and has_iron_ingots(self, state, player) and death_link_check
     elif combat_difficulty(self, state, player) == 'hard':
@@ -125,8 +125,8 @@ def basic_combat(self, state: CollectionState, player: int) -> bool:
 
 
 def complete_raid(self, state: CollectionState, player: int) -> bool:
-    reach_regions = (state.can_reach('Village', 'Region', player)
-                     and state.can_reach('Pillager Outpost', 'Region', player))
+    reach_regions = (state.can_reach_region('Village', player)
+                     and state.can_reach_region('Pillager Outpost', player))
     if combat_difficulty(self, state, player) == 'easy':
         return (reach_regions
                 and state.has('Progressive Weapons', player, 3)
@@ -168,8 +168,8 @@ def can_kill_wither(self, state: CollectionState, player: int) -> bool:
         return (fortress_loot(self, state, player)
                 and (
                         normal_kill
-                        or state.can_reach('The Nether', 'Region', player)
-                        or state.can_reach('The End','Region', player)
+                        or state.can_reach_region('The Nether', player)
+                        or state.can_reach_region('The End', player)
                 )
                )
 
@@ -177,8 +177,8 @@ def can_kill_wither(self, state: CollectionState, player: int) -> bool:
 
 
 def can_respawn_ender_dragon(self, state: CollectionState, player: int) -> bool:
-    return (state.can_reach('The Nether', 'Region', player)
-            and state.can_reach('The End', 'Region', player)
+    return (state.can_reach_region('The Nether', player)
+            and state.can_reach_region('The End', player)
             and state.has('Progressive Resource Crafting', player)  # smelt sand into glass
            )
 
@@ -208,10 +208,9 @@ def can_kill_ender_dragon(self, state: CollectionState, player: int) -> bool:
 
 
 def has_structure_compass(self, state: CollectionState, entrance_name: str, player: int) -> bool:
-    if not self.options.structure_compasses.value:
+    if not self.options.structure_compasses:
         return True
-    return state.has(
-        f"Structure Compass ({state.multiworld.get_entrance(entrance_name, player).connected_region.name})", player)
+    return state.has(f"Structure Compass ({state.multiworld.get_entrance(entrance_name, player).connected_region.name})", player)
 
 
 def get_rules_lookup(self, player: int):
@@ -255,9 +254,9 @@ def get_rules_lookup(self, player: int):
                                           and can_kill_ender_dragon(self, state, player),
             "A Furious Cocktail": lambda state: (can_brew_potions(self, state, player)
                                                  and state.has("Fishing Rod", player)  # Water Breathing
-                                                 and state.can_reach("The Nether", "Region", player)  # Regeneration, Fire Resistance, gold nuggets
-                                                 and state.can_reach("Village", "Region", player)  # Night Vision, Invisibility
-                                                 and state.can_reach("Bring Home the Beacon", "Location", player)),
+                                                 and state.can_reach_region("The Nether", player)  # Regeneration, Fire Resistance, gold nuggets
+                                                 and state.can_reach_region("Village", player)  # Night Vision, Invisibility
+                                                 and state.can_reach_location("Bring Home the Beacon", player)),
             # Resistance
             "Bring Home the Beacon": lambda state: can_kill_wither(self, state, player)
                                                    and has_diamond_pickaxe(self, state, player)
@@ -280,12 +279,12 @@ def get_rules_lookup(self, player: int):
             "Great View From Up Here": lambda state: basic_combat(self, state, player),
             "How Did We Get Here?": lambda state: (can_brew_potions(self, state, player)
                                                    and has_gold_ingots(self, state, player)  # Absorption
-                                                   and state.can_reach('End City', 'Region', player)  # Levitation
-                                                   and state.can_reach('The Nether', 'Region', player)  # potion ingredients
+                                                   and state.can_reach_region('End City', player)  # Levitation
+                                                   and state.can_reach_region('The Nether', player)  # potion ingredients
                                                    and state.has("Fishing Rod", player)  # Pufferfish, Nautilus Shells; spectral arrows
                                                    and state.has("Archery", player)
-                                                   and state.can_reach("Bring Home the Beacon", "Location", player)  # Haste
-                                                   and state.can_reach("Hero of the Village", "Location", player)),  # Bad Omen, Hero of the Village
+                                                   and state.can_reach_location("Bring Home the Beacon", player)  # Haste
+                                                   and state.can_reach_location("Hero of the Village", player)),  # Bad Omen, Hero of the Village
             "Bullseye": lambda state: state.has("Archery", player)
                                       and state.has("Progressive Tools", player, 2)
                                       and has_iron_ingots(self, state, player),
@@ -324,7 +323,8 @@ def get_rules_lookup(self, player: int):
             "Sky's the Limit": lambda state: basic_combat(self, state, player),
             "Hired Help": lambda state: state.has("Progressive Resource Crafting", player, 2)
                                         and has_iron_ingots(self, state, player),
-            "Sweet Dreams": lambda state: state.has("Bed", player) or state.can_reach('Village', 'Region', player),
+            "Sweet Dreams": lambda state: state.has("Bed", player)
+                                          or state.can_reach_region('Village', player),
             "You Need a Mint": lambda state: can_respawn_ender_dragon(self, state, player)
                                              and has_bottle(self, state, player),
             "Monsters Hunted": lambda state: (can_respawn_ender_dragon(self, state, player)
@@ -351,10 +351,10 @@ def get_rules_lookup(self, player: int):
             "A Balanced Diet": lambda state: (has_bottle(self, state, player)
                                               and has_gold_ingots(self, state, player)
                                               and state.has("Progressive Resource Crafting", player, 2)
-                                              and state.can_reach('The End', 'Region', player)),
+                                              and state.can_reach_region('The End', player)),
             # notch apple, chorus fruit
             "Subspace Bubble": lambda state: has_diamond_pickaxe(self, state, player),
-            "Country Lode, Take Me Home": lambda state: state.can_reach("Hidden in the Depths", "Location", player)
+            "Country Lode, Take Me Home": lambda state: state.can_reach_location("Hidden in the Depths", player)
                                                         and has_gold_ingots(self, state, player),
             "Bee Our Guest": lambda state: state.has("Campfire", player)
                                            and has_bottle(self, state, player),
@@ -388,7 +388,7 @@ def get_rules_lookup(self, player: int):
             "Overkill": lambda state: can_brew_potions(self, state, player)
                                        and (
                                                state.has("Progressive Weapons", player)
-                                               or state.can_reach('The Nether', 'Region', player)
+                                               or state.can_reach_region('The Nether', player)
                                        ),
             "Librarian": lambda state: state.has("Enchanting", player),
             "Overpowered": lambda state: has_iron_ingots(self, state, player)
@@ -435,12 +435,12 @@ def get_rules_lookup(self, player: int):
             "Star Trader": lambda state: has_iron_ingots(self, state, player)
                                          and state.has('Bucket', player)
                                          and (
-                                           state.can_reach("The Nether", 'Region', player)  # soul sand in nether
-                                           or state.can_reach("Nether Fortress", 'Region', player)  # soul sand in fortress if not in nether for water elevator
+                                           state.can_reach_region("The Nether", player)  # soul sand in nether
+                                           or state.can_reach_region("Nether Fortress", player)  # soul sand in fortress if not in nether for water elevator
                                            or can_piglin_trade(self, state, player)  # piglins give soul sand
                                          )
                                          and overworld_villager(self, state, player),
-            "Birthday Song": lambda state: state.can_reach("The Lie", "Location", player)
+            "Birthday Song": lambda state: state.can_reach_location("The Lie", player)
                                            and state.has("Progressive Tools", player, 2)
                                            and has_iron_ingots(self, state, player),
             "Bukkit Bukkit": lambda state: state.has("Bucket", player)
@@ -461,7 +461,7 @@ def get_rules_lookup(self, player: int):
     return rules_lookup
 
 
-def set_rules(self: World) -> None:
+def set_rules(self: "MinecraftWorld") -> None:
     multiworld = self.multiworld
     player = self.player
 
@@ -493,16 +493,16 @@ def set_rules(self: World) -> None:
                 and (not bosses.wither or state.has("Wither", player)))
 
     egg_shards = min(self.options.egg_shards_required.value, self.options.egg_shards_available.value)
-    completion_requirements = lambda state: (location_count(state) >= self.options.advancement_goal.value
+    completion_requirements = lambda state: (location_count(state) >= self.options.advancement_goal
                                              and state.has("Dragon Egg Shard", player, egg_shards))
     multiworld.completion_condition[player] = lambda state: completion_requirements(state) and defeated_bosses(state)
 
     # Set exclusions on hard/unreasonable/postgame
     excluded_advancements = set()
-    if not self.options.include_hard_advancements.value:
+    if not self.options.include_hard_advancements:
         excluded_advancements.update(Constants.exclusion_info["hard"])
-    if not self.options.include_unreasonable_advancements.value:
+    if not self.options.include_unreasonable_advancements:
         excluded_advancements.update(Constants.exclusion_info["unreasonable"])
-    if not self.options.include_postgame_advancements.value:
+    if not self.options.include_postgame_advancements:
         excluded_advancements.update(postgame_advancements)
     exclusion_rules(multiworld, player, excluded_advancements)
