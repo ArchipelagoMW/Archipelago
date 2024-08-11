@@ -350,7 +350,7 @@ class GauntletLegendsContext(CommonContext):
                 added = False
                 for item in self.inventory[player]:
                     if item.name == name:
-                        zero = item.count == 0
+                        zero = (item.count == 0 and "Health" not in name)
                         if name in timers:
                             count *= 96
                         if "Compass" in name:
