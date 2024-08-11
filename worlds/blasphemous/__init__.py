@@ -1,6 +1,7 @@
 from typing import Dict, List, Set, Any
 from collections import Counter
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table, tears_list, reliquary_set
 from .Locations import location_names
@@ -8,7 +9,7 @@ from .Rules import BlasRules
 from worlds.generic.Rules import set_rule
 from .Options import BlasphemousOptions, blas_option_groups
 from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
-from .region_data import regions, locations, transitions
+from .region_data import regions, locations
 
 class BlasphemousWeb(WebWorld):
     theme = "stone"
@@ -46,7 +47,7 @@ class BlasphemousWorld(World):
     def __init__(self, multiworld, player):
         super(BlasphemousWorld, self).__init__(multiworld, player)
         self.start_room: str = "D17Z01S01"
-        self.door_connections: Dict[str, str] = {}
+        self.disabled_locations: List[str] = []
 
 
     def create_item(self, name: str) -> "BlasphemousItem":
@@ -66,21 +67,20 @@ class BlasphemousWorld(World):
 
     def generate_early(self):
         if not self.options.starting_location.randomized:
-            if self.options.starting_location == 6 and self.options.difficulty < 2:
-                raise Exception(f"[Blasphemous - '{self.player_name}'] "
+            if self.options.starting_location == "mourning_havoc" and self.options.difficulty < 2:
+                raise OptionError(f"[Blasphemous - '{self.player_name}'] "
                                 f"{self.options.starting_location} cannot be chosen if Difficulty is lower than Hard.")
 
-            if (self.options.starting_location == 0 or self.options.starting_location == 6) \
+            if (self.options.starting_location == "brotherhood" or self.options.starting_location == "mourning_havoc") \
                 and self.options.dash_shuffle:
-                    raise Exception(f"[Blasphemous - '{self.player_name}'] "
+                    raise OptionError(f"[Blasphemous - '{self.player_name}'] "
                                     f"{self.options.starting_location} cannot be chosen if Shuffle Dash is enabled.")
             
-            if self.options.starting_location == 3 and self.options.wall_climb_shuffle:
-                raise Exception(f"[Blasphemous - '{self.player_name}'] "
+            if self.options.starting_location == "grievance" and self.options.wall_climb_shuffle:
+                raise OptionError(f"[Blasphemous - '{self.player_name}'] "
                                 f"{self.options.starting_location} cannot be chosen if Shuffle Wall Climb is enabled.")
         else:
             locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
-            invalid: bool = False
 
             if self.options.difficulty < 2:
                 locations.remove(6)
@@ -93,17 +93,7 @@ class BlasphemousWorld(World):
             if self.options.wall_climb_shuffle:
                 locations.remove(3)
 
-            if self.options.starting_location == 6 and self.options.difficulty < 2:
-                invalid = True
-
-            if (self.options.starting_location == 0 or self.options.starting_location == 6) \
-                and self.options.dash_shuffle:
-                    invalid = True
-            
-            if self.options.starting_location == 3 and self.options.wall_climb_shuffle:
-                invalid = True
-
-            if invalid:
+            if not self.options.starting_location.value in locations:
                 self.options.starting_location.value = self.random.choice(locations)
             
         
@@ -112,6 +102,12 @@ class BlasphemousWorld(World):
 
         if not self.options.wall_climb_shuffle:
             self.multiworld.push_precollected(self.create_item("Wall Climb Ability"))
+
+        if not self.options.boots_of_pleading:
+            self.disabled_locations.append("RE401")
+
+        if not self.options.purified_hand:
+            self.disabled_locations.append("RE402")
 
         if self.options.skip_long_quests:
             for loc in junk_locations:
@@ -150,7 +146,7 @@ class BlasphemousWorld(World):
 
         skipped_items.extend(unrandomized_dict.values())
 
-        if self.options.thorn_shuffle == 2:
+        if self.options.thorn_shuffle == "vanilla":
             for _ in range(8):
                 skipped_items.append("Thorn Upgrade")
 
@@ -207,7 +203,7 @@ class BlasphemousWorld(World):
     def pre_fill(self):
         self.place_items_from_dict(unrandomized_dict)
 
-        if self.options.thorn_shuffle == 2:
+        if self.options.thorn_shuffle == "vanilla":
             self.place_items_from_set(thorn_set, "Thorn Upgrade")
 
         if self.options.start_wheel:
@@ -216,7 +212,7 @@ class BlasphemousWorld(World):
         if not self.options.skill_randomizer:
             self.place_items_from_dict(skill_dict)
 
-        if self.options.thorn_shuffle == 1:
+        if self.options.thorn_shuffle == "local_only":
             self.options.local_items.value.add("Thorn Upgrade")
         
 
@@ -243,16 +239,12 @@ class BlasphemousWorld(World):
         blas_logic = BlasRules(self)
 
         for r in regions:
-            region = multiworld.get_region(r["name"], player)
+            region = self.get_region(r["name"])
 
             for e in r["exits"]:
                 region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(True, r["name"], e)})
 
-            for l in r["locations"]:
-                if not self.options.boots_of_pleading and l == "RE401":
-                    continue
-                if not self.options.purified_hand and l == "RE402":
-                    continue
+            for l in [l for l in r["locations"] if l not in self.disabled_locations]:
                 region.add_locations({location_names[l]: self.location_name_to_id[location_names[l]]}, BlasphemousLocation)
 
             for t in r["transitions"]:
@@ -265,11 +257,7 @@ class BlasphemousWorld(World):
                     region.add_exits({t})
 
 
-        for l in locations:
-            if not self.options.boots_of_pleading and l["name"] == "RE401":
-                continue
-            if not self.options.purified_hand and l["name"] == "RE402":
-                continue
+        for l in [l for l in locations if l["name"] not in self.disabled_locations]:
             location = self.get_location(location_names[l["name"]])
             set_rule(location, blas_logic.load_rule(False, l["name"], l))
 
@@ -282,9 +270,9 @@ class BlasphemousWorld(World):
         victory.place_locked_item(self.create_event("Victory"))
         self.get_region("D07Z01S03[W]").locations.append(victory)
 
-        if self.options.ending == 1:
+        if self.options.ending == "ending_a":
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))
-        elif self.options.ending == 2:
+        elif self.options.ending == "ending_c":
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8) and
                 state.has("Holy Wound of Abnegation", player))
 
@@ -296,7 +284,7 @@ class BlasphemousWorld(World):
         doors: Dict[str, str] = {}
         thorns: bool = True
 
-        if self.options.thorn_shuffle == 2:
+        if self.options.thorn_shuffle == "vanilla":
             thorns = False
 
         config = {

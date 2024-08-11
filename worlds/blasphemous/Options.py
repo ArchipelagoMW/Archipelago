@@ -97,7 +97,7 @@ class SkipLongQuests(Toggle):
     """
     Ensures that the rewards for long quests will be filler items.
     
-    Affected locations: \"Albero: Donate 50000 Tears\", \"Ossuary: 11th reward\", \"AtTotS: Miriam's gift\", \"TSC: Jocinero's final reward\"
+    Affected locations: "Albero: Donate 50000 Tears", "Ossuary: 11th reward", "AtTotS: Miriam's gift", "TSC: Jocinero's final reward"
     """
     display_name = "Skip Long Quests"
 
@@ -138,7 +138,7 @@ class CustomItem1(Toggle):
     """
     Adds the custom relic Boots of Pleading into the item pool, which grants the ability to fall onto spikes and survive.
     
-    Must have the \"Boots of Pleading\" mod installed to connect to a multiworld.
+    Must have the "Boots of Pleading" mod installed to connect to a multiworld.
     """
     display_name = "Boots of Pleading"
 
@@ -147,7 +147,7 @@ class CustomItem2(Toggle):
     """
     Adds the custom relic Purified Hand of the Nun into the item pool, which grants the ability to jump a second time in mid-air.
     
-    Must have the \"Double Jump\" mod installed to connect to a multiworld.
+    Must have the "Double Jump" mod installed to connect to a multiworld.
     """
     display_name = "Purified Hand of the Nun"
 
