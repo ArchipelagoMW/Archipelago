@@ -954,15 +954,6 @@ def distribute_planned(multiworld: MultiWorld) -> None:
             maxcount = placement["count"]["target"]
             from_pool = placement["from_pool"]
 
-            candidates = list(multiworld.get_unfilled_locations_for_players(locations, sorted(worlds)))
-            if any(location.address is None for location in candidates) \
-               and not all(location.address is None for location in candidates):
-                failed(f"Plando block for player {player} ({multiworld.player_name[player]}) contains both "
-                       f"event locations and non-event locations. "
-                       f"Event locations: {[location for location in candidates if location.address is None]}, "
-                       f"Non-event locations: {[location for location in candidates if location.address is not None]}",
-                       placement["force"])
-                continue
             item_candidates = []
             if from_pool:
                 instances = [item for item in multiworld.itempool if item.player == player and item.name in items]
@@ -987,6 +978,12 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                        f"Non-event items: {[item for item in item_candidates if item.code is not None]}",
                        placement["force"])
                 continue
+            else:
+                is_real = item_candidates[0].code is not None
+            candidates = [candidate for candidate in multiworld.get_unfilled_locations_for_players(locations,
+                                                                                                   sorted(worlds))
+                          if bool(candidate.address) == is_real]
+            multiworld.random.shuffle(candidates)
             allstate = multiworld.get_all_state(False)
             mincount = placement["count"]["min"]
             allowed_margin = len(item_candidates) - mincount
