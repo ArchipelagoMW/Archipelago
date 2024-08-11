@@ -753,7 +753,7 @@ class NamedRange(Range):
         elif value > self.range_end and value not in self.special_range_names.values():
             raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
                             f"and is also not one of the supported named special values: {self.special_range_names}")
-        
+
         # See docstring
         for key in self.special_range_names:
             if key != key.lower():
@@ -1160,7 +1160,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 class Accessibility(Choice):
     """
     Set rules for reachability of your items/locations.
-    
+
     **Full:** ensure everything can be reached and acquired.
 
     **Minimal:** ensure what is needed to reach your goal can be acquired.
@@ -1178,7 +1178,7 @@ class Accessibility(Choice):
 class ItemsAccessibility(Accessibility):
     """
     Set rules for reachability of your items/locations.
-    
+
     **Full:** ensure everything can be reached and acquired.
 
     **Minimal:** ensure what is needed to reach your goal can be acquired.
@@ -1229,7 +1229,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
+    def as_dict(self, *option_names: str, casing: str = "snake", toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
 
@@ -1255,6 +1255,8 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 value = getattr(self, option_name).value
                 if isinstance(value, set):
                     value = sorted(value)
+                if toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                    value = bool(value)
                 option_results[display_name] = value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
