@@ -770,8 +770,18 @@ class CollectionState():
         # Construct a mapping from each player number to the list of player numbers with logic dependent on that player.
         player_logic_dependents: Dict[int, List[int]] = defaultdict(list)
         worlds = self.multiworld.worlds
+
+        # If world A depends on worlds A and B, world A also depends on any worlds that world B depends on.
+        def resolve_recursive_dependencies(player_to_resolve: int, dependencies: Set[int]):
+            player_dependencies = worlds[player_to_resolve].player_dependencies
+            for directly_dependent_on_player in player_dependencies:
+                if directly_dependent_on_player not in dependencies:
+                    dependencies.add(directly_dependent_on_player)
+                    resolve_recursive_dependencies(directly_dependent_on_player, dependencies)
+
         for player in self.multiworld.get_all_ids():
-            for dependent_on_player in worlds[player].player_dependencies:
+            resolve_recursive_dependencies(player, recursive_dependencies := set())
+            for dependent_on_player in recursive_dependencies:
                 player_logic_dependents[dependent_on_player].append(player)
 
         # Optimization for the common case where the only world that logically depends on a world is itself.
