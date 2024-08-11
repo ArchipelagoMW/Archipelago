@@ -132,7 +132,7 @@ class Goal(Choice):
     default = 3
 
 class EndoftheWorldUnlock(Choice):
-    """Determines how End of the World is Unlocked.
+    """Determines how End of the World is unlocked.
     
     Item: You can receive an item called "End of the World" which unlocks the world
     Reports: A certain amount of reports are required to unlock End of the World, which is defined in your options"""
