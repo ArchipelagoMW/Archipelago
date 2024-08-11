@@ -3,7 +3,7 @@ from BaseClasses import  Item, Location
 from .items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
     upgrade_item_types,
 )
-from .options import get_option_value, EnableMorphling
+from .options import get_option_value, EnableMorphling, RequiredTactics
 from . import item_groups, item_names
 
 if TYPE_CHECKING:
