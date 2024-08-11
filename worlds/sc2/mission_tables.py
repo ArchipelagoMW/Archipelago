@@ -349,7 +349,6 @@ class SC2CampaignGoal(NamedTuple):
     location: str
 
 
-# TODO in utter darkness
 campaign_final_mission_locations: Dict[SC2Campaign, Optional[SC2CampaignGoal]] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
     SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),

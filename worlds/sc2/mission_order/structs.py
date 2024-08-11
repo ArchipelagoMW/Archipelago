@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
-from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission
+from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
 from .types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
@@ -130,8 +130,8 @@ class SC2MissionOrder(MissionOrderNode):
 
     def get_completion_condition(self, player: int) -> Callable[[CollectionState], bool]:
         """Returns a lambda to determine whether a state has beaten the mission order's required campaigns."""
-        final_items = [mission.beat_item() for mission in self.get_final_missions()]
-        return lambda state, final_items=final_items: state.has_all(final_items, player)
+        final_locations = [get_goal_location(mission.mission) for mission in self.get_final_missions()]
+        return lambda state, final_locations=final_locations: all(state.can_reach_location(loc, player) for loc in final_locations)
 
     def get_final_mission_ids(self) -> List[int]:
         """Returns the IDs of all missions that are required to beat the mission order."""
@@ -851,7 +851,6 @@ class MissionSlotData:
     def empty() -> MissionSlotData:
         return MissionSlotData(-1, set(), SubRuleRuleData.empty())
     
-# TODO band-aid for ..regions circular import
 def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
