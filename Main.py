@@ -160,6 +160,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if overall_target:
         new_items: List[Item] = []
 
+        # Make new itempool with start_inventory_from_pool items removed
         for item in multiworld.itempool:
             if depletion_pool[item.player].get(item.name, 0):
                 depletion_pool[item.player][item.name] -= 1
@@ -174,6 +175,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for player, remaining_items in depletion_pool.items()
         }
 
+        # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
         for player, unfound_items in unfound_items_per_player.items():
             amount_of_unfound_items = sum(unfound_items.values())
             needed_items = target_per_player[player] - amount_of_unfound_items
