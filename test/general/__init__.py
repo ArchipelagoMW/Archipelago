@@ -94,15 +94,6 @@ def generate_locations(count: int, player_id: int, region: Region, address: Opti
 
     locations = [Location(player_id, f"{prefix}{i}", address, region) for i in range(count)]
     region.locations += locations
-
-    world = region.multiworld.worlds[player_id]
-    for location in locations:
-        if location.name not in world.location_name_to_id:
-            # +1 to avoid ID 0, which isn't allowed
-            id = len(world.location_name_to_id) + 1
-            world.location_name_to_id[location.name] = id
-            world.location_id_to_name[id] = location.name
-
     return locations
 
 

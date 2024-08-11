@@ -706,6 +706,15 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         player2 = generate_player_data(
             multiworld, 2, location_count=5, basic_item_count=5)
 
+
+        for world in multiworld.worlds.values():
+            for location in multiworld.get_locations(world.player):
+                if location.name not in world.location_name_to_id:
+                    # +1 to avoid ID 0, which isn't allowed
+                    id = len(world.location_name_to_id) + 1
+                    world.location_name_to_id[location.name] = id
+                    world.location_id_to_name[id] = location.name
+
         multiworld.local_locations[player1.id].value = set(names(player1.locations))
         multiworld.local_locations[player2.id].value = set(names(player2.locations))
         locality_rules(multiworld)
@@ -722,6 +731,14 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
             multiworld, 1, location_count=5, basic_item_count=5)
         player2 = generate_player_data(
             multiworld, 2, location_count=5, basic_item_count=5)
+
+        for world in multiworld.worlds.values():
+            for location in multiworld.get_locations(world.player):
+                if location.name not in world.location_name_to_id:
+                    # +1 to avoid ID 0, which isn't allowed
+                    id = len(world.location_name_to_id) + 1
+                    world.location_name_to_id[location.name] = id
+                    world.location_id_to_name[id] = location.name
 
         multiworld.non_local_locations[player1.id].value = set(names(player1.locations))
         multiworld.non_local_locations[player2.id].value = set(names(player2.locations))
