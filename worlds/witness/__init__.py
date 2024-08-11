@@ -217,7 +217,7 @@ class WitnessWorld(World):
         needed_size = 3
         needed_size += self.options.puzzle_randomization == "sigma_expert"
         needed_size += self.options.shuffle_symbols
-        needed_size += self.options.shuffle_doors
+        needed_size += self.options.shuffle_doors != "off"
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
