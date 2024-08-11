@@ -54,15 +54,18 @@ class TimespinnerWorld(World):
 
         self.precalculated_weights = PreCalculatedWeights(self.options, self.random)
 
+        # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
+        if self.options.start_inventory.value.pop("Meyef", 0) > 0:
+            self.options.start_with_meyef.value = Toggle.option_true
+        if self.options.start_inventory.value.pop("Talaria Attachment", 0) > 0:
+            self.options.quick_seed.value = Toggle.option_true
+        if self.options.start_inventory.value.pop("Jewelry Box", 0) > 0:
+            self.options.start_with_jewelry_box.value = Toggle.option_true
+
         self.interpret_slot_data(None)
 
-        # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.options.start_inventory.value.pop('Meyef', 0) > 0:
-            self.options.start_with_meyef.value = Toggle.option_true
-        if self.options.start_inventory.value.pop('Talaria Attachment', 0) > 0:
-            self.options.quick_seed.value = Toggle.option_true
-        if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
-            self.options.start_with_jewelry_box.value = Toggle.option_true
+        if self.options.quick_seed:
+            self.multiworld.push_precollected(self.create_item("Talaria Attachment"))
 
     def create_regions(self) -> None: 
         create_regions_and_locations(self.multiworld, self.player, self.options, self.precalculated_weights)
