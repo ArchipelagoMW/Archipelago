@@ -760,7 +760,7 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def _sweep_for_events(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
-                          ) -> Iterable[Iterator[int]]:
+                          ) -> Iterable[Set[int]]:
         """
         The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
         yield statement.
@@ -784,15 +784,14 @@ class CollectionState():
             for dependent_on_player in recursive_dependencies:
                 player_logic_dependents[dependent_on_player].append(player)
 
-        # Optimization for the common case where the only world that logically depends on a world is itself.
-        # If no other worlds are logically dependent on a world, then, if that world does not receive any advancement in
-        # the current sweep iteration, after finding its accessible locations, there is no need to check its locations
-        # in the next sweep iteration.
-        sole_dependents = {player for player, dependents in player_logic_dependents.items() if dependents == [player]}
-        # The optimization may skip worlds in the next sweep iteration that received advancement before finding their
-        # accessible locations, but these worlds still received advancement and other code may need to know this, so an
-        # extra set is used to track these worlds.
-        sole_dependents_received_advancement = set()
+        # Optimization for the common case where a world only logically depends on itself and no other worlds logically
+        # depend on it. If such a world does not receive any advancement in the current sweep iteration after finding
+        # its reachable locations, it should not have any reachable locations at the start of the next sweep iteration.
+        sole_dependents: Set[int] = {player for player, dependents in player_logic_dependents.items()
+                                     if dependents == [player]}
+        # The optimization may cause worlds to be skipped from the next sweep iteration, but these worlds were still
+        # logically affected by the current sweep iteration and need to be included when yielding.
+        logically_affected_sole_dependents: List[int] = []
 
         # If no items logically relevant to a player's world were collected in a sweep iteration, then that world's
         # locations can be skipped in the next sweep iteration because that world should not have any reachable
@@ -826,13 +825,14 @@ class CollectionState():
                     next_events_per_player.append((player, inaccessible_locations))
 
                 if player in sole_dependents and player in received_advancement_players:
-                    # If this world does not receive any further advancement in the current sweep iteration, then it
-                    # should not have any reachable locations at the start of the next sweep iteration.
+                    # Because this player's world only depends on itself and no other worlds depend on it, if their
+                    # world does not receive any further advancement in the current sweep iteration, then it should not
+                    # have any reachable locations at the start of the next sweep iteration.
                     received_advancement_players.remove(player)
                     if yield_each_sweep:
-                        # The player did still receive advancement, which needs to be included when yielding at the end
-                        # of the sweep iteration.
-                        sole_dependents_received_advancement.add(player)
+                        # Even if the world does not receive any further advancement in the current sweep iteration, the
+                        # world has still been logically affected.
+                        logically_affected_sole_dependents.append(player)
 
                 # Collect all the items from the accessible locations.
                 for location in accessible_locations:
@@ -852,21 +852,22 @@ class CollectionState():
             players_that_could_have_reachable_locations = {dependent_player for player in received_advancement_players
                                                            for dependent_player in player_logic_dependents[player]}
             if yield_each_sweep:
+                logically_affected_players = \
+                    players_that_could_have_reachable_locations.union(logically_affected_sole_dependents)
+                logically_affected_sole_dependents.clear()
                 # Yielding lets the caller respond to changes in the CollectionState during the sweep and respond to
                 # which players have been logically affected by the current sweep.
-                yield players_that_could_have_reachable_locations.union(sole_dependents_received_advancement)
-                sole_dependents_received_advancement.clear()
+                yield logically_affected_players
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
-                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[Iterator[int]]]:
+                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[Set[int]]]:
         """
         Sweep through the locations that contain uncollected advancement items, collecting the items into the state
         until there are no more reachable locations that contain uncollected advancement items.
 
         :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
         :param yield_each_sweep: When True, return a generator that yields at the end of each sweep iteration. The
-        yielded value is an iterator of unordered player numbers and group IDs that were logically affected by the sweep
-        iteration.
+        yielded value is the set of player numbers and group IDs that were logically affected by the sweep iteration.
         :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
         self.events when None.
         """
