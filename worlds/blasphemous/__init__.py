@@ -93,7 +93,7 @@ class BlasphemousWorld(World):
             if self.options.wall_climb_shuffle:
                 locations.remove(3)
 
-            if not self.options.starting_location.value in locations:
+            if self.options.starting_location.value not in locations:
                 self.options.starting_location.value = self.random.choice(locations)
             
         
