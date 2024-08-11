@@ -124,8 +124,7 @@ class SC2MissionOrder(MissionOrderNode):
             mission.mission
             for campaign in self.campaigns if campaign.is_always_unlocked()
             for layout in campaign.layouts if layout.is_always_unlocked()
-            for mission in layout.missions if mission.is_always_unlocked()
-            if not mission.option_empty
+            for mission in layout.missions if mission.is_always_unlocked() and not mission.option_empty
         }
 
     def get_completion_condition(self, player: int) -> Callable[[CollectionState], bool]:

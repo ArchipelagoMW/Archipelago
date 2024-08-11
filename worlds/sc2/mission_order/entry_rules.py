@@ -26,6 +26,10 @@ class EntryRule(ABC):
         return False
 
     def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+        if len(beaten_missions) == 0:
+            # Special-cased to avoid the buffer
+            # This is used to determine starting missions
+            return self._is_fulfilled(beaten_missions)
         self.buffer_fulfilled = self.buffer_fulfilled or self._is_fulfilled(beaten_missions)
         return self.buffer_fulfilled
 
