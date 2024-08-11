@@ -903,7 +903,7 @@ item_descriptions = {
     item_names.CORSAIR_NETWORK_DISRUPTION: "Corsair War Council upgrade. Triples the radius of Disruption Web.",
     item_names.MIRAGE_GRAVITON_BEAM: "Mirage War Council upgrade. Allows Mirages to use Graviton Beam.",
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
-    # Void Ray
+    item_names.VOID_RAY_PRISMATIC_RANGE: "Void Ray War Council upgrade. Void Rays gain increased range as they charge their beam.",
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
     # Warp Ray
     # Dawnbringer

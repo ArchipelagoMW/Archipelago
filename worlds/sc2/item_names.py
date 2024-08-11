@@ -734,7 +734,7 @@ PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam 
 CORSAIR_NETWORK_DISRUPTION                              = "Network Disruption (Corsair)"
 MIRAGE_GRAVITON_BEAM                                    = "Graviton Beam (Mirage)"
 SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
-# Void Ray
+VOID_RAY_PRISMATIC_RANGE                                = "Prismatic Range (Void Ray)"
 DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
 # Warp Ray
 # Dawnbringer
