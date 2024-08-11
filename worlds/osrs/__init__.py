@@ -525,6 +525,8 @@ class OSRSWorld(World):
 
     def create_item(self, item_name: str) -> "Item":
         items = [item for item in item_rows if item.name == item_name]
+        if len(items) == 0:
+            raise f"No matching item found for name {item_name} for player {self.player_name}"
         item = items[0]
         index = item_rows.index(item)
         return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
