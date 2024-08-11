@@ -1237,7 +1237,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
         if not option_names:
-            raise Exception("options.as_dict was used without any option names.")
+            raise ValueError("options.as_dict was used without any option names.")
         option_results = {}
         for option_name in option_names:
             if option_name in type(self).type_hints:
