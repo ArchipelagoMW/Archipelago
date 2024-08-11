@@ -615,9 +615,17 @@ class GauntletLegendsContext(CommonContext):
         _id = level[0]
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
-        raw_locations = [
-            location for location in level_locations.get((level[1] << 4) + _id, []) if self.difficulty >= location.difficulty
-        ]
+        raw_locations = []
+        for location in level_locations.get((level[1] << 4) + _id, []):
+            if "Chest" in location.name:
+                if self.glslotdata["chests"]:
+                    raw_locations += [location]
+            elif "Barrel" in location.name and "Barrel of Gold" not in location.name:
+                if self.glslotdata["barrels"]:
+                    raw_locations += [location]
+            else:
+                if self.difficulty >= location.difficulty:
+                    raw_locations += [location]
         await ctx.send_msgs(
             [
                 {
@@ -708,7 +716,7 @@ class GauntletLegendsContext(CommonContext):
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_KILL, 'x')} 1"))
         if (temp[0] & 0xF) == 0x1:
             self.ignore_deathlink = True
-        return (temp[0] & 0xF) == 0x8 or (temp[0] & 0xF) == 0x1
+        return ((temp[0] & 0xF) == 0x8) or ((temp[0] & 0xF) == 0x1)
 
     # Returns a number that tells if the player is fighting a boss currently
     async def boss(self) -> int:
@@ -747,7 +755,8 @@ class GauntletLegendsContext(CommonContext):
                     elif self.ignore_deathlink:
                         self.ignore_deathlink = False
                     else:
-                        await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
+                        if self.deathlink_enabled:
+                            await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
             await self.var_reset()
             return True
         return False

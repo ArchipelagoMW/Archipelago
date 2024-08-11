@@ -2,8 +2,9 @@ import os
 import typing
 
 import settings
-from BaseClasses import ItemClassification, Tutorial
+from BaseClasses import ItemClassification, Tutorial, Item, Location
 from Fill import fast_fill
+from typing import List
 
 from worlds.AutoWorld import WebWorld, World
 
@@ -152,10 +153,13 @@ class GauntletLegendsWorld(World):
             self.options.unlock_character_three.value,
             self.options.unlock_character_four.value,
         ]
+        chests_barrels = self.options.chests_barrels.value
         return {
             "player": self.player,
             "players": self.options.local_players.value,
             "shards": shard_values,
+            "chests": bool(chests_barrels == 3 or chests_barrels == 1),
+            "barrels": bool(chests_barrels == 3 or chests_barrels == 2),
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "characters": characters,
@@ -223,8 +227,12 @@ class GauntletLegendsWorld(World):
             "Gates of the Underworld", "Region", self.player,
         )
 
-    def pre_fill(self) -> None:
-        locations = self.multiworld.get_unfilled_locations(self.player)
+    def fill_hook(self,
+                  progitempool: List["Item"],
+                  usefulitempool: List["Item"],
+                  filleritempool: List["Item"],
+                  fill_locations: List["Location"]) -> None:
+        locations = [location for location in fill_locations if location.player == self.player]
         items = [item for item in self.multiworld.itempool if item.name == "Death" and item.player == self.player]
         self.random.shuffle(locations)
         fast_fill(self.multiworld, items, locations)
