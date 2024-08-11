@@ -158,7 +158,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     overall_target = sum(target_per_player.values())
 
     if overall_target:
-        new_items: List[Item] = []
+        new_itempool: List[Item] = []
 
         # Make new itempool with start_inventory_from_pool items removed
         for item in multiworld.itempool:
@@ -168,7 +168,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 if overall_target == 0:
                     break
             else:
-                new_items.append(item)
+                new_itempool.append(item)
 
         unfound_items_per_player = {
             player: {item: count for item, count in remaining_items.items() if count > 0}  # Cull entries with value 0
@@ -178,15 +178,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
         for player, target in target_per_player.items():
             unfound_items = unfound_items_per_player[player]
-            needed_items = target_per_player[player] - sum(unfound_items.values())
-            new_items += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
 
             if unfound_items:
                 player_name = multiworld.get_player_name(player)
                 logger.warning(f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}")
 
-        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
-        multiworld.itempool = new_items
+            needed_items = target_per_player[player] - sum(unfound_items.values())
+            new_itempool += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
+
+        assert len(multiworld.itempool) == len(new_itempool), "Item Pool amounts should not change."
+        multiworld.itempool = new_itempool
 
     multiworld.link_items()
 
