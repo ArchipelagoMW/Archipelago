@@ -1760,6 +1760,7 @@ item_table = {
     item_names.ORACLE_BOSONIC_CORE: ItemData(378 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 18, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.ORACLE),
     item_names.SCOUT_RESOURCE_EFFICIENCY: ItemData(379 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 19, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.SCOUT),
     item_names.IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION: ItemData(380 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 20, SC2Race.PROTOSS, origin={"ext"}),
+    item_names.TEMPEST_INTERPLANETARY_RANGE: ItemData(384 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 24, SC2Race.PROTOSS, parent_item=item_names.TEMPEST),
 
     # War Council
     item_names.ZEALOT_WHIRLWIND: ItemData(500 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 0, SC2Race.PROTOSS, parent_item=item_names.ZEALOT),
@@ -1800,6 +1801,14 @@ item_table = {
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 5, SC2Race.PROTOSS, parent_item=item_names.DESTROYER),
     # 536 reserved for Warp Ray
     # 537 reserved for Dawnbringer
+    # 538 reserved for Carrier
+    # 539 reserved for Skylord
+    # 540 reserved for Trireme
+    item_names.TEMPEST_DISINTEGRATION: ItemData(541 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 11, SC2Race.PROTOSS, parent_item=item_names.TEMPEST),
+    # 542 reserved for Scout
+    # 543 reserved for Arbiter
+    # 544 reserved for Oracle
+    # 545 reserved for Mothership
 
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS, origin={"lotv"}),
