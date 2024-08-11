@@ -178,6 +178,7 @@ class ShapezWorld(World):
         # Options that are relevant to the mod
         option_data = {
             "goal": self.options.goal.value,
+            "maxlevel": self.maxlevel,
             "finaltier": self.finaltier,
             "required_shapes_multiplier": self.options.required_shapes_multiplier.value,
             "randomize_level_requirements": bool(self.options.randomize_level_requirements.value),

@@ -46,7 +46,6 @@ buildings_wires = {
 }
 
 gameplay_unlocks = {
-    "Upgrades": ItemClassification.progression,
     "Blueprints": ItemClassification.progression
 }
 

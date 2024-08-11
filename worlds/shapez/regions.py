@@ -103,11 +103,8 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                     regions["Levels with 4 Buildings"], regions["Levels with 5 Buildings"],
                     lambda state: state.has(level_logic_buildings[4], player))
 
-    create_entrance(player, "Upgrades Access",
-                    regions["Main"], regions["Upgrades Tier II"],
-                    lambda state: state.has("Upgrades", player))
     create_entrance(player, "First upgrade building needed",
-                    regions["Upgrades Tier II"], regions["Upgrades with 1 Building"],
+                    regions["Main"], regions["Upgrades with 1 Building"],
                     lambda state: state.has(upgrade_logic_buildings[0], player))
     create_entrance(player, "Second upgrade building needed",
                     regions["Upgrades with 1 Building"], regions["Upgrades with 2 Buildings"],

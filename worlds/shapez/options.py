@@ -48,6 +48,13 @@ class RandomizeUpgradeRequirements(Toggle):
     default = True
 
 
+# TODO option to change level requirement checking:
+# vanilla: level 14 throughput, rest amount (default)
+# only_amount
+# only_throughput
+# mixed
+
+
 class RandomizeLevelLogic(Choice):
     """If level requirements are randomized, this sets how those random shapes are generated
     and how logic works for levels.
@@ -70,12 +77,12 @@ class RandomizeLevelLogic(Choice):
 class RandomizeUpgradeLogic(Choice):
     """If upgrade requirements are randomized, this sets how those random shapes are generated
     and how logic works for upgrades. All four categories will have the same logic.
-    Vanilla-like: Tier II requires nothing, III requires up to three random buildings,
+    Vanilla-like: Tier II requires up to two random buildings, III requires up to three random buildings,
                   and IV and onwards require all processing buildings.
     Linear: Tier II requires nothing, III-VI require another random building each,
             and VII and onwards require all buildings.
     Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
-    display_name = "Randomize upgrade logic"
+    display_name = "Randomize upgrade logic"  # TODO more customizable than initially thought
     option_vanilla_like = 0
     option_linear = 1
     option_hardcore = 2

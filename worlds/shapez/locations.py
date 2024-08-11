@@ -201,11 +201,11 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
 
     locations: dict[str, tuple[str, LocationProgressType]] = {}
 
-    # Tier II upgrades are always the same
-    for cat in categories:
-        locations[f"{cat} Upgrade Tier II"] = ("Upgrades Tier II", LocationProgressType.PRIORITY)
-
     if logictype == 0:  # vanilla-like, Tier III is a special case here
+        locations["Routing Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
+        locations["Extracting Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
+        locations["Shape Processing Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
+        locations["Color Processing Upgrade Tier II"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
         locations["Routing Upgrade Tier III"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
         locations["Extracting Upgrade Tier III"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
         locations["Shape Processing Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
@@ -215,6 +215,8 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
                                                                LocationProgressType.DEFAULT)
     elif logictype == 1:  # linear
+        for cat in categories:
+            locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         for cat in categories:
             locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
         for x in range(4, 7):
@@ -226,6 +228,8 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
                                                                LocationProgressType.DEFAULT)
     else: # logictype == 2 aka hardcore
+        for cat in categories:
+            locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         for x in range(3, finaltier+1):
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",

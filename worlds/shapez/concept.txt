@@ -127,52 +127,52 @@ Shapesanity:
 - all upgrades available from receiving upgrades unlock
 
 achievements and conditions:
-- Painter -         paint a shape: always, painted shapes
-- Cutter -          cut a shape: always, cut shapes
-- Rotater -         rotate a shape: always, rotated shapes
-- Wait, they stack?         stack a shape: always, stacked shapes
-- Wires -           complete level 20: always, according levels region
-- Storage -         store a shape in storage: always, stored shapes
-- Freedom -         complete level 26: goal not vanilla, according levels region
-- The logo! -       produce logo: always, all buildings
-- To the moon       produce rocket shape: always, all buildings
-- It's piling up    100k blueprint shapes in hub: always, all buildings
-- I'll use it later 1mil blueprint shapes in hub: always, all buildings
-- Efficiency 1      25 blueprint shapes / sec: always, all buildings
-- Preparing to launch       10 rocket shapes / sec: always, all buildings
-- SpaceY            20 rocket shapes / sec: always, all buildings
-- Stack overflow    produce shape with 4 layers: always, stacked shapes
-- It's a mess       100 different shapes in hub: always, menu
-- Faster            all upgrades on tier 5: always, according upgrades region
-- Even faster       all upgrades on tier 8: always, according upgrades region
-- Get rid of them   1000 shapes trashed: always, trashed shapes
-- It's been a long time     10h playtime: long playtime, menu
-- Addicted          20h playtime: long playtime, menu
-- Can't stop        reach level 50: goal over level 50, according levels region
-- Is this the end?  reach level 100: goal over level 100, according levels region
-- Getting into it   1h playtime: always, menu
-- Now it's easy     place blueprint: always, all buildings
-- Computer Guy      5000 wires: always, wiring
-- Speedrun Master   level 12 under 30 min: softlock, according levels region
-- Speedrun Novice   level 12 under 60 min: softlock, according levels region
-- Not an idle game  level 12 under 120 min: softlock, according levels region
-- Efficiency 2      50 blueprint shapes / sec: always, all buildings
-- Branding specialist 1     25 logo shapes / sec: always, all buildings
-- Branding specialist 2     50 logo shapes / sec: always, all buildings
-- King of Inefficiency      no inverse rotator until level 14: softlock, according levels region
-- It's so slow              level 12 without upgrades: softlock/NEVER? (depends on how game checks condition), according levels region
-- MAM (Make Anything Machine)       level after 26 without modifying factory: goal not vanilla, according minimun levels region
-- Perfectionist             destroy more than 1000 objects at once: always, menu
-- The next dimension        open wires layer: always, wiring
+-< Painter -         paint a shape: always, painted shapes
+-< Cutter -          cut a shape: always, cut shapes
+-< Rotater -         rotate a shape: always, rotated shapes
+-< Wait, they stack?         stack a shape: always, stacked shapes
+-< Wires -           complete level 20: always, according levels region
+-< Storage -         store a shape in storage: always, stored shapes
+-< Freedom -         complete level 26: goal not vanilla, according levels region
+-c The logo! -       produce logo: always, all buildings
+-< To the moon       produce rocket shape: always, all buildings
+-< It's piling up    100k blueprint shapes in hub: always, all buildings
+-< I'll use it later 1mil blueprint shapes in hub: always, all buildings
+-< Efficiency 1      25 blueprint shapes / sec: always, all buildings
+-< Preparing to launch       10 rocket shapes / sec: always, all buildings
+-< SpaceY            20 rocket shapes / sec: always, all buildings
+-< Stack overflow    produce shape with 4 layers: always, stacked shapes
+-< It's a mess       100 different shapes in hub: always, menu
+-< Faster            all upgrades on tier 5: always, according upgrades region
+-< Even faster       all upgrades on tier 8: always, according upgrades region
+-< Get rid of them   1000 shapes trashed: always, trashed shapes
+-c It's been a long time     10h playtime: long playtime, menu
+-c Addicted          20h playtime: long playtime, menu
+-< Can't stop        reach level 50: goal over level 50, according levels region
+-< Is this the end?  reach level 100: goal over level 100, according levels region
+-< Getting into it   1h playtime: always, menu
+-< Now it's easy     place blueprint: always, all buildings
+-< Computer Guy      5000 wires: always, wiring
+-< Speedrun Master   level 12 under 30 min: softlock, according levels region
+-< Speedrun Novice   level 12 under 60 min: softlock, according levels region
+-< Not an idle game  level 12 under 120 min: softlock, according levels region
+-< Efficiency 2      50 blueprint shapes / sec: always, all buildings
+-< Branding specialist 1     25 logo shapes / sec: always, all buildings
+-< Branding specialist 2     50 logo shapes / sec: always, all buildings
+-y King of Inefficiency      no inverse rotator until level 14: softlock, according levels region
+-< It's so slow              level 12 without upgrades: softlock/NEVER? (depends on how game checks condition), according levels region
+-< MAM (Make Anything Machine)       level after 26 without modifying factory: goal not vanilla, according minimun levels region
+-< Perfectionist             destroy more than 1000 objects at once: always, menu
+-< The next dimension        open wires layer: always, wiring
 ### hidden achievements
-- Oops                      deliver not relevant shape: always, menu
-- Copy-Pasta                bluieprint with 1000 buildings: always, all buildings
-- I've seen that before ... RgRyRbRr: always, all buildings
+-< Oops                      deliver not relevant shape: always, menu
+-< Copy-Pasta                bluieprint with 1000 buildings: always, all buildings
+-< I've seen that before ... RgRyRbRr: always, all buildings
 - My eyes no longer hurt    dark mode: NEVER
-- Memories from the past    old level 17 shape: always, all buildings
-- I need trains             500 length belt: always, menu
-- A bit early?              logo shape before level 18: softlock, all buildings
-- GPS                       15 map markers: always, menu
+-< Memories from the past    old level 17 shape: always, all buildings
+-< I need trains             500 length belt: always, menu
+-< A bit early?              logo shape before level 18: softlock, all buildings
+-< GPS                       15 map markers: always, menu
 
 Funny idea: randomize MUSIC
 - unlocking background music shuffled into item pool
