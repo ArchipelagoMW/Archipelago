@@ -93,9 +93,9 @@ location_table = {
     'Monsoon Jungle - Full Health Item Box':              LocationData(LocationType.BOX,   (Passage.EMERALD,  3, ItemFlag.FULL_HEALTH),   'Upper',            _ALL),
 
     'Cractus':                                            LocationData(LocationType.BOSS,  (Passage.EMERALD,  4, ItemFlag.KEYZER),         None,              _ALL),
-    'Cractus - 0:15':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_NE),       None,              _ALL),
+    'Cractus - 0:55':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Cractus - 0:35':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_SE),       None,              _ALL),
-    'Cractus - 0:55':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_SW),       None,              _ALL),
+    'Cractus - 0:15':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_SW),       None,              _ALL),
 
     # Ruby Passage
     # The Curious Factory
@@ -139,9 +139,9 @@ location_table = {
     'Pinball Zone - Rolling Room Full Health Item Box':   LocationData(LocationType.BOX,   (Passage.RUBY,     3, ItemFlag.FULL_HEALTH_2), 'Early Rooms',      _S_HARD),
 
     'Cuckoo Condor':                                      LocationData(LocationType.BOSS,  (Passage.RUBY,     4, ItemFlag.KEYZER),         None,              _ALL),
-    'Cuckoo Condor - 0:15':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_NE),       None,              _ALL),
+    'Cuckoo Condor - 0:55':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Cuckoo Condor - 0:35':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_SE),       None,              _ALL),
-    'Cuckoo Condor - 0:55':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_SW),       None,              _ALL),
+    'Cuckoo Condor - 0:15':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_SW),       None,              _ALL),
 
     # Topaz Passage
     # Toy Block Tower
@@ -189,9 +189,9 @@ location_table = {
     'Domino Row - CD Box':                                LocationData(LocationType.BOX,   (Passage.TOPAZ,    3, ItemFlag.CD),            'After Lake',       _ALL),
 
     'Aerodent':                                           LocationData(LocationType.BOSS,  (Passage.TOPAZ,    4, ItemFlag.KEYZER),         None,              _ALL),
-    'Aerodent - 0:15':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_NE),       None,              _ALL),
+    'Aerodent - 0:55':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Aerodent - 0:35':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_SE),       None,              _ALL),
-    'Aerodent - 0:55':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_SW),       None,              _ALL),
+    'Aerodent - 0:15':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_SW),       None,              _ALL),
 
     # Sapphire Passage
     # Crescent Moon Village
@@ -233,9 +233,9 @@ location_table = {
     'Hotel Horror - CD Box':                              LocationData(LocationType.BOX,   (Passage.SAPPHIRE, 3, ItemFlag.CD),            'Switch Room',      _ALL),
 
     'Catbat':                                             LocationData(LocationType.BOSS,  (Passage.SAPPHIRE, 4, ItemFlag.KEYZER),         None,              _ALL),
-    'Catbat - 0:15':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_NE),       None,              _ALL),
+    'Catbat - 0:55':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Catbat - 0:35':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_SE),       None,              _ALL),
-    'Catbat - 0:55':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_SW),       None,              _ALL),
+    'Catbat - 0:15':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_SW),       None,              _ALL),
 
     # Golden Pyramid
     # Golden Passage
