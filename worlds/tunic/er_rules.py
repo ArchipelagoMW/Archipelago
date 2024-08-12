@@ -210,7 +210,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Upper Overworld"].connect(
         connecting_region=regions["Overworld after Temple Rafters"],
         rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world)
-        or has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
     regions["Overworld after Temple Rafters"].connect(
         connecting_region=regions["Upper Overworld"],
         rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world)
