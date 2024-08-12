@@ -887,7 +887,7 @@ item_descriptions = {
     item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
     item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
     # Signifier
-    # Ascendant
+    item_names.ASCENDANT_ABILITY_EFFICIENCY: "Ascendant War Council upgrade. Ascendant spells cost -25 energy.",
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
     item_names.IMMORTAL_IMPROVED_BARRIER: "Immortal War Council upgrade. The Immortal's Barrier ability absorbs an additional +100 damage.",
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
@@ -909,11 +909,11 @@ item_descriptions = {
     # Warp Ray
     # Dawnbringer
     # Carrier
-    # Skylord
+    item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map."),
     # Trireme
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     # Scout
-    # Arbiter
+    item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
     # Mothership
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
