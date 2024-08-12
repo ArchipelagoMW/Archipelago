@@ -107,9 +107,11 @@ class SC2MOGenMissionPools:
     
     def _add_mission_stats(self, mission: SC2Mission) -> None:
         # Update used flag counts & missions
-        for flag in mission.flags:
-            self._used_flags.setdefault(flag, 0)
-            self._used_flags[flag] += 1
+        # Done weirdly for Python <= 3.10 compatibility
+        for flag in iter(MissionFlag):
+            if flag & mission.flags == flag:
+                self._used_flags.setdefault(flag, 0)
+                self._used_flags[flag] += 1
         self._used_missions.add(mission)
 
     def pull_random_mission(self, world: World, slot: 'SC2MOGenMission') -> SC2Mission:
