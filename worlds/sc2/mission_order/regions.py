@@ -208,13 +208,12 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     if mission_order_type == MissionOrder.option_vanilla_shuffled:
         remove_missions(world, mission_order, mission_pools)
 
-    # Vanilla Shuffled & Mini Campaign get a curated final mission
-    if mission_order_type != MissionOrder.option_vanilla:
-        force_final_missions(world, mission_order)
+    # Curate final missions and goal campaigns
+    force_final_missions(world, mission_order, mission_order_type)
 
     return mission_order
 
-def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]]):
+def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]], mission_order_type: int):
     goal_mission: Optional[SC2Mission] = None
     excluded_missions = get_excluded_missions(world)
     enabled_campaigns = get_enabled_campaigns(world)
@@ -224,25 +223,27 @@ def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, A
     candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
     candidate_campaigns.sort(key=lambda it: it.id)
 
-    for goal_campaign in candidate_campaigns:
-        primary_goal = campaign_final_mission_locations[goal_campaign]
-        if primary_goal is None or primary_goal.mission in excluded_missions:
-            # No primary goal or its mission is excluded
-            candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
-            candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
-            if len(candidate_missions) == 0:
-                raise Exception(f"There are no valid goal missions for campaign {goal_campaign.campaign_name}. Please exclude fewer missions.")
-            goal_mission = world.random.choice(candidate_missions)
-        else:
-            goal_mission = primary_goal.mission
-        
-        # The goal layout for static presets is the layout corresponding to the last key
-        goal_layout = list(mission_order[goal_campaign.campaign_name].keys())[-1]
-        goal_index = mission_order[goal_campaign.campaign_name][goal_layout]["size"] - 1
-        mission_order[goal_campaign.campaign_name][goal_layout]["missions"].append({
-            "index": [goal_index],
-            "mission_pool": [goal_mission.id]
-        })
+    # Vanilla Shuffled & Mini Campaign get a curated final mission
+    if mission_order_type != MissionOrder.option_vanilla:
+        for goal_campaign in candidate_campaigns:
+            primary_goal = campaign_final_mission_locations[goal_campaign]
+            if primary_goal is None or primary_goal.mission in excluded_missions:
+                # No primary goal or its mission is excluded
+                candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+                candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
+                if len(candidate_missions) == 0:
+                    raise Exception(f"There are no valid goal missions for campaign {goal_campaign.campaign_name}. Please exclude fewer missions.")
+                goal_mission = world.random.choice(candidate_missions)
+            else:
+                goal_mission = primary_goal.mission
+            
+            # The goal layout for static presets is the layout corresponding to the last key
+            goal_layout = list(mission_order[goal_campaign.campaign_name].keys())[-1]
+            goal_index = mission_order[goal_campaign.campaign_name][goal_layout]["size"] - 1
+            mission_order[goal_campaign.campaign_name][goal_layout]["missions"].append({
+                "index": [goal_index],
+                "mission_pool": [goal_mission.id]
+            })
 
     # Remove goal status from lower priority campaigns
     for campaign in enabled_campaigns:

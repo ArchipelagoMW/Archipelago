@@ -61,7 +61,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        missions = get_all_missions(self.world.mission_order)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertNotIn(mission_tables.SC2Mission.THE_ESCAPE, missions)
         self.assertNotIn(mission_tables.SC2Mission.IN_THE_ENEMY_S_SHADOW, missions)
         for mission in missions:
@@ -88,7 +88,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         self.assertTrue(world_item_names)
-        missions = get_all_missions(self.world.mission_order)
+        missions = get_all_missions(self.world.custom_mission_order)
         for mission in missions:
             self.assertIn(mission_tables.MissionFlag.Terran, mission.flags)
         self.assertIn(item_names.MARINE, world_item_names)
@@ -148,7 +148,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         self.assertTrue(world_item_names)
-        missions = get_all_missions(self.world.mission_order)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertEqual(len(missions), 7, "Wrong number of missions in free protoss seed")
         for mission in missions:
             self.assertIn(mission.campaign, (mission_tables.SC2Campaign.PROLOGUE, mission_tables.SC2Campaign.PROPHECY))

@@ -110,7 +110,7 @@ class SC2World(World):
     location_cache: List[Location]
     final_missions: List[int]
     required_client_version = 0, 4, 5
-    mission_order: SC2MissionOrder
+    custom_mission_order: SC2MissionOrder
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2World, self).__init__(multiworld, player)
@@ -122,7 +122,7 @@ class SC2World(World):
         return StarcraftItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
-        self.mission_order = create_mission_order(
+        self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
 
@@ -158,7 +158,7 @@ class SC2World(World):
             self.options.accessibility.value = Accessibility.option_minimal
             self.multiworld.completion_condition[self.player] = lambda state: True
         else:
-            self.multiworld.completion_condition[self.player] = self.mission_order.get_completion_condition(self.player)
+            self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
@@ -173,8 +173,8 @@ class SC2World(World):
         enabled_campaigns = get_enabled_campaigns(self)
         slot_data["plando_locations"] = get_plando_locations(self)
         slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
-        slot_data["final_mission_ids"] = self.mission_order.get_final_mission_ids()
-        slot_data["custom_mission_order"] = self.mission_order.get_slot_data()
+        slot_data["final_mission_ids"] = self.custom_mission_order.get_final_mission_ids()
+        slot_data["custom_mission_order"] = self.custom_mission_order.get_slot_data()
         slot_data["version"] = 4
 
         if SC2Campaign.HOTS not in enabled_campaigns:
@@ -261,7 +261,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
 
 def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes items based on if their faction has a mission present where they can be used"""
-    missions = get_all_missions(world.mission_order)
+    missions = get_all_missions(world.custom_mission_order)
     if world.options.take_over_ai_allies.value:
         terran_missions = [mission for mission in missions if (MissionFlag.Terran|MissionFlag.AiTerranAlly) & mission.flags]
         zerg_missions = [mission for mission in missions if (MissionFlag.Zerg|MissionFlag.AiZergAlly) & mission.flags]
@@ -345,7 +345,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     """
     Excludes items based on mission / campaign presence: Nova Gear, Kerrigan abilities, SOA
     """
-    missions = get_all_missions(world.mission_order)
+    missions = get_all_missions(world.custom_mission_order)
 
     kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
     kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
@@ -426,7 +426,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
 def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds the `Allowed_Orphan` flag to items that shouldn't be filtered with their parents, like combat shield"""
-    missions = get_all_missions(world.mission_order)
+    missions = get_all_missions(world.custom_mission_order)
     terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
     for item in item_list:
         if item.name in (
@@ -438,7 +438,7 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
 
 def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds items to start_inventory based on first mission logic and options like `starter_unit` and `start_primary_abilities`"""
-    first_mission_name = get_first_mission(world.mission_order).mission_name
+    first_mission_name = get_first_mission(world.custom_mission_order).mission_name
     starter_unit = int(world.options.starter_unit)
 
     # If starter_unit is off and the first mission doesn't have a no-logic location, force starter_unit on
@@ -459,12 +459,12 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
 
 
 def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: int) -> None:
-    first_mission = get_first_mission(world.mission_order)
+    first_mission = get_first_mission(world.custom_mission_order)
     first_race = first_mission.race
 
     if first_race == SC2Race.ANY:
         # If the first mission is a logic-less no-build
-        missions = get_all_missions(world.mission_order)
+        missions = get_all_missions(world.custom_mission_order)
         build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
         races = {mission.race for mission in build_missions if mission.race != SC2Race.ANY}
         if races:
@@ -695,7 +695,7 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
 
 def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
     total_levels = world.options.kerrigan_level_item_sum.value
-    missions = get_all_missions(world.mission_order)
+    missions = get_all_missions(world.custom_mission_order)
     kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
     kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
     if (world.options.kerrigan_presence.value not in kerrigan_unit_available

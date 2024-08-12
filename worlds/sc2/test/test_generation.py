@@ -106,7 +106,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
         }
         self.generate_world(world_options)
-        missions = get_all_missions(self.world.mission_order)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertTrue(missions)
         self.assertNotIn(mission_tables.SC2Mission.WAKING_THE_ANCIENT, missions)
         self.assertNotIn(mission_tables.SC2Mission.THE_CRUCIBLE, missions)
@@ -373,7 +373,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'grant_story_tech': options.GrantStoryTech.option_true,
         }
         self.generate_world(world_options)
-        missions = get_all_missions(self.world.mission_order)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertIn(mission_tables.SC2Mission.TEMPLE_OF_UNIFICATION, missions)
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertTrue(itempool)

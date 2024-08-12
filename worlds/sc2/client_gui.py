@@ -222,7 +222,7 @@ class SC2Manager(GameManager):
         else:
             self.campaign_scroll_panel.border_on = False
         self.last_data_out_of_date = self.ctx.data_out_of_date
-        if not self.ctx.mission_order:
+        if len(self.ctx.custom_mission_order) == 0:
             self.campaign_panel.add_widget(Label(text="Connect to a world to see a mission layout here."))
             return
 

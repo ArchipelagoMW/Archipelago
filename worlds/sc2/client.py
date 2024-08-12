@@ -528,7 +528,7 @@ class SC2Context(CommonContext):
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
-        self.custom_mission_order: typing.List[CampaignSlotData]
+        self.custom_mission_order: typing.List[CampaignSlotData] = []
         self.mission_id_to_entry_rules: typing.Dict[int, typing.Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]]
         self.final_mission_ids: typing.List[int] = [29]
         self.final_locations: typing.List[int] = []
