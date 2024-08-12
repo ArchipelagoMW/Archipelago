@@ -184,7 +184,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             new_itempool += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
 
         assert len(multiworld.itempool) == len(new_itempool), "Item Pool amounts should not change."
-        multiworld.itempool = new_itempool
+        multiworld.itempool[:] = new_itempool
 
     multiworld.link_items()
 
