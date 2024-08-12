@@ -46,7 +46,7 @@ class SC2MOGenMissionPools:
     master_list: Set[int]
     difficulty_pools: Dict[Difficulty, Set[int]]
     _used_flags: Dict[MissionFlag, int]
-    _used_missions: Set[SC2Mission]
+    _used_missions: List[SC2Mission]
 
     def __init__(self) -> None:
         self.master_list = {mission.id for mission in SC2Mission}
@@ -55,7 +55,7 @@ class SC2MOGenMissionPools:
             for diff in Difficulty if diff != Difficulty.RELATIVE
         }
         self._used_flags = {}
-        self._used_missions = set()
+        self._used_missions = []
 
     def set_exclusions(self, excluded: List[SC2Mission], unexcluded: List[SC2Mission]) -> None:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
@@ -90,7 +90,7 @@ class SC2MOGenMissionPools:
         Flags that don't appear in the mission order also don't appear in this dictionary."""
         return self._used_flags
 
-    def get_used_missions(self) -> Set[SC2Mission]:
+    def get_used_missions(self) -> List[SC2Mission]:
         """Returns a set of all missions used in the mission order."""
         return self._used_missions
 
@@ -112,7 +112,7 @@ class SC2MOGenMissionPools:
             if flag & mission.flags == flag:
                 self._used_flags.setdefault(flag, 0)
                 self._used_flags[flag] += 1
-        self._used_missions.add(mission)
+        self._used_missions.append(mission)
 
     def pull_random_mission(self, world: World, slot: 'SC2MOGenMission') -> SC2Mission:
         """Picks a random mission from the mission pool of the given slot, preferring a mission from `locked_ids` if allowed in the slot,

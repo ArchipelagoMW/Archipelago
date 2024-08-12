@@ -679,10 +679,10 @@ def pad_item_pool_with_filler(self: SC2World, num_items: int, pool: List[Item]):
 def get_first_mission(mission_order: SC2MissionOrder) -> SC2Mission:
     # Pick an arbitrary available mission
     missions = mission_order.get_starting_missions()
-    return list(missions)[0]
+    return missions[0]
 
 def get_all_missions(mission_order: SC2MissionOrder) -> List[SC2Mission]:
-    return list(mission_order.get_used_missions())
+    return mission_order.get_used_missions()
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:

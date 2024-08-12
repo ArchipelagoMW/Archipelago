@@ -106,7 +106,7 @@ class SC2MissionOrder(MissionOrderNode):
         Flags that don't appear in the mission order also don't appear in this dictionary."""
         return self.mission_pools.get_used_flags()
     
-    def get_used_missions(self) -> Set[SC2Mission]:
+    def get_used_missions(self) -> List[SC2Mission]:
         """Returns a set of all missions used in the mission order."""
         return self.mission_pools.get_used_missions()
     
@@ -117,14 +117,14 @@ class SC2MissionOrder(MissionOrderNode):
             for campaign in self.campaigns for layout in campaign.layouts
         )
 
-    def get_starting_missions(self) -> Set[SC2Mission]:
+    def get_starting_missions(self) -> List[SC2Mission]:
         """Returns a set containing all the missions that are accessible without beating any other missions."""
-        return {
+        return [
             mission.mission
             for campaign in self.campaigns if campaign.is_always_unlocked()
             for layout in campaign.layouts if layout.is_always_unlocked()
             for mission in layout.missions if mission.is_always_unlocked() and not mission.option_empty
-        }
+        ]
 
     def get_completion_condition(self, player: int) -> Callable[[CollectionState], bool]:
         """Returns a lambda to determine whether a state has beaten the mission order's required campaigns."""
