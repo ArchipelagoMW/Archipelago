@@ -1236,6 +1236,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
+        assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
             if option_name in type(self).type_hints:
