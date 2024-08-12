@@ -925,9 +925,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
+    # grapple push the enemy by the door down, then grapple to it. Really jank
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Ledge under Cathedral Door"],
-        rule=lambda state: has_ladder("Ladders in Swamp", state, world))
+        rule=lambda state: has_ladder("Ladders in Swamp", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
     # ice grapple enemy standing at the door
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp Mid"],
