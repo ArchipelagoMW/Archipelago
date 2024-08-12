@@ -83,7 +83,7 @@ class MinecraftWorld(World):
     structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
     victory!
     """
-    game: str = "Minecraft"
+    game = "Minecraft"
     options_dataclass = MinecraftOptions
     options: MinecraftOptions
     settings: typing.ClassVar[MinecraftSettings]
@@ -109,7 +109,7 @@ class MinecraftWorld(World):
             'required_bosses': self.options.required_bosses.value,
             'MC35': bool(self.options.send_defeated_mobs.value),
             'death_link': bool(self.options.death_link.value),
-            'starting_items': str(self.options.starting_items.value),
+            'starting_items': json.dumps(self.options.starting_items.value),
             'race': self.multiworld.is_race,
         }
 

@@ -96,7 +96,20 @@ class SendDefeatedMobs(Toggle):
 
 
 class StartingItems(OptionList):
-    """Start with these items. Each entry should be of this format: {item: "item_name", amount: #, nbt: "nbt_string"}"""
+    """Start with these items. Each entry should be of this format: {item: "item_name", amount: #}
+    `item` can include components, and should be in an identical format to a `/give` command with
+    `"` escaped for json reasons.
+
+    `amount` is optional and will default to 1 if omitted.
+
+    example:
+    ```
+    starting_items: [
+        { "item": "minecraft:stick[minecraft:custom_name=\"{'text':'pointy stick'}\"]" },
+        { "item": "minecraft:arrow[minecraft:rarity=epic]", amount: 64 }
+    ]
+    ```
+    """
     display_name = "Starting Items"
 
 
