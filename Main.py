@@ -155,8 +155,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for player in multiworld.player_ids
     }
     target_per_player = {
-        player: sum(target_items.values()) for player, target_items in depletion_pool.items()
-        if target_items
+        player: sum(target_items.values()) for player, target_items in depletion_pool.items() if target_items
     }
     overall_target = sum(target_per_player.values())
 
