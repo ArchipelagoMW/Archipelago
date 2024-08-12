@@ -121,15 +121,9 @@ class ShapezWorld(World):
         # Create list of all included locations based on player options
         self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.value),
                                    **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.value),
-                                   **addachievements(bool(self.options.additional_locations.value in [0, 2]),
-                                                     bool(self.options.exclude_softlock_achievements.value),
-                                                     bool(self.options.exclude_long_playtime_achievements.value),
-                                                     bool(self.options.exclude_progression_unreasonable.value),
-                                                     self.maxlevel, self.options.randomize_level_logic.value,
-                                                     self.options.randomize_upgrade_logic.value,
-                                                     self.options.goal.value),
-                                   **addshapesanity(self.options.shapesanity_amount.value, self.random,
-                                                    bool(self.options.additional_locations.value > 0))}
+                                   # **addachievements
+                                   **addshapesanity(self.options.shapesanity_amount.value, self.random, True)}
+#                                                    bool(self.options.additional_locations.value > 0))}
         self.location_count = len(self.included_locations)
 
         # Create regions and entrances based on included locations and player options
@@ -166,9 +160,6 @@ class ShapezWorld(World):
 
         # Add correct number of items to itempool
         self.multiworld.itempool += included_items
-
-        # Upgrades needs to be in sphere 1 in case of both hardcore logic types
-        self.multiworld.local_early_items[self.player]["Upgrades"] = 1
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # Buildings logic; all buildings as individual parameters

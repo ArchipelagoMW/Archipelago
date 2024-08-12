@@ -126,19 +126,22 @@ for first_shape in ["C", "R", "W", "S"]:
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
 
 
+achievement_locations: list[str] = ["Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage", "Freedom",
+                                    "The logo!", "To the moon", "It's piling up", "I'll use it later",
+                                    "Efficiency 1", "Preparing to launch", "SpaceY", "Stack overflow", "It's a mess",
+                                    "Faster", "Even faster", "Get rid of them", "It's been a long time", "Addicted",
+                                    "Can't stop", "Is this the end?", "Getting into it", "Now it's easy",
+                                    "Computer Guy", "Speedrun Master", "Speedrun Novice", "Not an idle game",
+                                    "Efficiency 2", "Branding specialist 1", "Branding specialist 2",
+                                    "King of Inefficiency", "It's so slow", "MAM (Make Anything Machine)",
+                                    "Perfectionist", "The next dimension", "Oops", "Copy-Pasta",
+                                    "I've seen that before ...", "Memories from the past", "I need trains",
+                                    "A bit early?", "GPS"]
+
 all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
                             + [f"Level {x}" for x in range(1, 1001)]
                             + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
-                            + ["Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage",
-                               "Freedom", "The logo!", "To the moon", "It's piling up", "I'll use it later",
-                               "Efficiency 1", "Preparing to launch", "SpaceY", "Stack overflow", "It's a mess",
-                               "Faster", "Even faster", "Get rid of them", "It's been a long time", "Addicted",
-                               "Can't stop", "Is this the end?", "Getting into it", "Now it's easy", "Computer Guy",
-                               "Speedrun Master", "Speedrun Novice", "Not an idle game", "Efficiency 2",
-                               "Branding specialist 1", "Branding specialist 2", "King of Inefficiency", "It's so slow",
-                               "MAM (Make Anything Machine)", "Perfectionist", "The next dimension", "Oops",
-                               "Copy-Pasta", "I've seen that before ...", "Memories from the past", "I need trains",
-                               "A bit early?", "GPS"]
+                            # + achievement_locations
                             + list(shapesanity_simple)
                             + list(shapesanity_complex))
 

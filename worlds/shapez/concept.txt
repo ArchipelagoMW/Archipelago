@@ -1,7 +1,7 @@
 Items:
 - buildings
 - other game mechanics normally unlocked by levels
-- speed upgrades (x1 as useful, x.1 as filler for additional checks)
+- speed upgrades (x1 as useful, x0.1 as filler for additional checks)
 - Copy paste shapes (filler for additional checks)
 @code: just execute code when package received, look at vanilla code to know how to give those
     items, receiving buildings and other mechanics flips a boolean, speed upgrades add to speed, copy

@@ -2,6 +2,7 @@
 from BaseClasses import Item, ItemClassification
 
 # TODO Don't know at this moment, whether buildings variants need the base variant to be placeable ingame or not.
+# technically not, but would require more overriding
 
 buildings_processing = {
     "Cutter": ItemClassification.progression,
@@ -134,7 +135,6 @@ item_descriptions = {  # TODO
     "Constant Signal": "TODO",
     "Logic Gates": "TODO",
     "Virtual Processing": "TODO",
-    "Upgrades": "TODO",
     "Blueprints": "TODO",
     "Big Routing Upgrade": "An upgrade, that adds 1 to the speed multiplier of belts, distributors, and tunnels",
     "Big Extraction Upgrade": "TODO",
