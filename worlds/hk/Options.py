@@ -405,7 +405,18 @@ class Goal(Choice):
     option_radiance = 3
     option_godhome = 4
     option_godhome_flower = 5
+    option_grub_hunt = 6
     default = 0
+
+
+class GrubHuntGoal(NamedRange):
+    """The amount of grubs required to finish Grub Hunt.
+    On 'All' any grubs from item links replacements etc. will be counted"""
+    display_name = "Grub Hunt Goal"
+    range_start = 1
+    range_end = 46
+    special_range_names = {"all": -1}
+    default = 46
 
 
 class WhitePalace(Choice):
@@ -522,7 +533,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
+            StartLocation, Goal, GrubHuntGoal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
             DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,

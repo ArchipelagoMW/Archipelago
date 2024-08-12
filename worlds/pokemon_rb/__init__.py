@@ -483,7 +483,7 @@ class PokemonRedBlueWorld(World):
         self.options.elite_four_pokedex_condition.total = \
             int((len(reachable_mons) / 100) * self.options.elite_four_pokedex_condition.value)
 
-        if self.options.accessibility == "locations":
+        if self.options.accessibility == "full":
             balls = [self.create_item(ball) for ball in ["Poke Ball", "Great Ball", "Ultra Ball"]]
             traps = [self.create_item(trap) for trap in item_groups["Traps"]]
             locations = [location for location in self.multiworld.get_locations(self.player) if "Pokedex - " in

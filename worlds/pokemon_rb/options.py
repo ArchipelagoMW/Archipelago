@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, Toggle, Choice, Range, NamedRange, FreeText, TextChoice, DeathLink
+from Options import (PerGameCommonOptions, Toggle, Choice, Range, NamedRange, FreeText, TextChoice, DeathLink,
+                     ItemsAccessibility)
 
 
 class GameVersion(Choice):
@@ -295,7 +296,7 @@ class AllPokemonSeen(Toggle):
 class DexSanity(NamedRange):
     """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify the exact number of Dexsanity
     checks to add, and they will be distributed to Pokemon randomly.
-    If Accessibility is set to locations, Dexsanity checks for Pokemon that are not logically reachable will be removed,
+    If Accessibility is set to Full, Dexsanity checks for Pokemon that are not logically reachable will be removed,
     so the number could be lower than you specified.
     If Pokedex is required, the Dexsanity checks for Pokemon you acquired before acquiring the Pokedex can be found by
     talking to Professor Oak or evaluating the Pokedex via Oak's PC."""
@@ -425,10 +426,10 @@ class ExpModifier(NamedRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
     default = 16
-    range_start = default / 4
+    range_start = default // 4
     range_end = 255
     special_range_names = {
-        "half": default / 2,
+        "half": default // 2,
         "normal": default,
         "double": default * 2,
         "triple": default * 3,
@@ -879,6 +880,7 @@ class RandomizePokemonPalettes(Choice):
 
 @dataclass
 class PokemonRBOptions(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
     game_version: GameVersion
     trainer_name: TrainerName
     rival_name: RivalName
