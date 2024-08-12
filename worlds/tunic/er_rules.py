@@ -291,7 +291,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ability(holy_cross, state, world))
 
-    # not including ice grapple through this because we're not including it on the other door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Fountain Cross Door"],
         rule=lambda state: has_ability(holy_cross, state, world)
