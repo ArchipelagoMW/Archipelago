@@ -36,11 +36,11 @@ class MissionOrderNode(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_missions(self) -> Set[SC2MOGenMission]:
+    def get_missions(self) -> List[SC2MOGenMission]:
         raise NotImplementedError
     
     @abstractmethod
-    def get_exits(self) -> Set[SC2MOGenMission]:
+    def get_exits(self) -> List[SC2MOGenMission]:
         raise NotImplementedError
 
     @abstractmethod
@@ -53,17 +53,17 @@ class SC2MissionOrder(MissionOrderNode):
     """
     campaigns: List[SC2MOGenCampaign]
     sorted_missions: Dict[Difficulty, List[SC2MOGenMission]]
-    fixed_missions: Set[SC2MOGenMission]
+    fixed_missions: List[SC2MOGenMission]
     mission_pools: SC2MOGenMissionPools
-    goal_missions: Set[SC2MOGenMission]
+    goal_missions: List[SC2MOGenMission]
     max_depth: int
 
     def __init__(self, world: World, mission_pools: SC2MOGenMissionPools, data: Dict[str, Any]):
         self.campaigns = []
         self.sorted_missions = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
-        self.fixed_missions = set()
+        self.fixed_missions = []
         self.mission_pools = mission_pools
-        self.goal_missions = set()
+        self.goal_missions = []
         self.parent = None
 
         for (campaign_name, campaign_data) in data.items():
@@ -73,18 +73,18 @@ class SC2MissionOrder(MissionOrderNode):
         # Check that the mission order actually has a goal
         for campaign in self.campaigns:
             if campaign.option_goal:
-                self.goal_missions.update(mission for mission in campaign.exits)
+                self.goal_missions.extend(mission for mission in campaign.exits)
             for layout in campaign.layouts:
                 if layout.option_goal:
-                    self.goal_missions.update(layout.exits)
+                    self.goal_missions.extend(layout.exits)
                 for mission in layout.missions:
                     if mission.option_goal and not mission.option_empty:
-                        self.goal_missions.add(mission)
+                        self.goal_missions.append(mission)
 
         # If not, set the last defined campaign as goal
         if len(self.goal_missions) == 0:
             self.campaigns[-1].option_goal = True
-            self.goal_missions.update(mission for mission in self.campaigns[-1].exits)
+            self.goal_missions.extend(mission for mission in self.campaigns[-1].exits)
 
         # Resolve names
         used_names: Set[str] = set()
@@ -137,7 +137,7 @@ class SC2MissionOrder(MissionOrderNode):
 
     def get_final_missions(self) -> List[SC2MOGenMission]:
         """Returns the slots of all missions that are required to beat the mission order."""
-        return list(self.goal_missions)
+        return self.goal_missions
 
     def get_slot_data(self) -> List[Dict[str, Any]]:
         """Parses the mission order into a format usable for slot data."""
@@ -154,11 +154,11 @@ class SC2MissionOrder(MissionOrderNode):
     def child_type_name(self) -> str:
         return "Campaign"
     
-    def get_missions(self) -> Set[SC2MOGenMission]:
-        return {mission for campaign in self.campaigns for layout in campaign.layouts for mission in layout.missions}
+    def get_missions(self) -> List[SC2MOGenMission]:
+        return [mission for campaign in self.campaigns for layout in campaign.layouts for mission in layout.missions]
     
-    def get_exits(self) -> Set[SC2MOGenMission]:
-        return set()
+    def get_exits(self) -> List[SC2MOGenMission]:
+        return []
     
     def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
         return "All Missions"
@@ -206,7 +206,14 @@ class SC2MissionOrder(MissionOrderNode):
                 new_beaten_missions.add(mission)
                 # If the beaten missions at depth X unlock a mission, said mission can be beaten at depth X+1 
                 mission.min_depth = mission.entry_rule.get_depth(beaten_missions) + 1
-                next_missions.update(mission.next.difference(cur_missions, beaten_missions, new_beaten_missions))
+                new_next = [
+                    next_mission for next_mission in mission.next if not (
+                        next_mission in cur_missions or
+                        next_mission in beaten_missions or
+                        next_mission in new_beaten_missions
+                    )
+                ]
+                next_missions.update(new_next)
             
             # Any campaigns/layouts/missions added after this point will be seen in the next iteration at the earliest
             iterations += 1
@@ -256,7 +263,7 @@ class SC2MissionOrder(MissionOrderNode):
     def resolve_difficulties(self) -> None:
         for campaign in self.campaigns:
             (campaign_sorted, campaign_fixed) = campaign.resolve_difficulties(self.max_depth)
-            self.fixed_missions.update(campaign_fixed)
+            self.fixed_missions.extend(campaign_fixed)
             for (diff, missions) in campaign_sorted.items():
                 self.sorted_missions[diff].extend(missions)
     
@@ -299,11 +306,11 @@ class SC2MissionOrder(MissionOrderNode):
                 objects.append((resolved, address))
             visual_reqs = [obj.get_visual_requirement() for (obj, _) in objects]
             if "amount" in data:
-                missions = {mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty}
+                missions = [mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty]
                 if len(missions) == 0:
                     raise ValueError(f"Count rule did not find any missions at scopes: {data['scope']}")
                 return CountMissionsEntryRule(missions, data["amount"], visual_reqs)
-            missions = set()
+            missions: List[SC2MOGenMission] = []
             for (obj, address) in objects:
                 exits = obj.get_exits()
                 if len(exits) == 0:
@@ -311,7 +318,7 @@ class SC2MissionOrder(MissionOrderNode):
                         f"Address \"{address}\" found an unbeatable object. " +
                         "This should mean the address contains \"..\" too often."
                     )
-                missions.update(exits)
+                missions.extend(exits)
             return BeatMissionsEntryRule(missions, visual_reqs)
 
     def resolve_address(self, address: str, searcher: MissionOrderNode) -> MissionOrderNode:
@@ -414,7 +421,7 @@ class SC2MOGenCampaign(MissionOrderNode):
 
     # layouts of this campaign in correct order
     layouts: List[SC2MOGenLayout]
-    exits: Set[SC2MOGenMission] # missions required to beat this campaign (missions marked "exit" in layouts marked "exit")
+    exits: List[SC2MOGenMission] # missions required to beat this campaign (missions marked "exit" in layouts marked "exit")
     entry_rule: SubRuleEntryRule
     display_name: str
 
@@ -432,7 +439,7 @@ class SC2MOGenCampaign(MissionOrderNode):
         self.option_max_difficulty = data["max_difficulty"]
         self.option_single_layout_campaign = data["single_layout_campaign"]
         self.layouts = []
-        self.exits = set()
+        self.exits = []
 
         for (layout_name, layout_data) in data.items():
             if type(layout_data) == dict:
@@ -441,12 +448,12 @@ class SC2MOGenCampaign(MissionOrderNode):
 
                 # Collect required missions (marked layouts' exits)
                 if layout.option_exit:
-                    self.exits.update(layout.exits)
+                    self.exits.extend(layout.exits)
                 
         # If no exits are set, use the last defined layout
         if len(self.exits) == 0:
             self.layouts[-1].option_exit = True
-            self.exits.update(self.layouts[-1].exits)
+            self.exits.extend(self.layouts[-1].exits)
         
     def is_beaten(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return beaten_missions.issuperset(self.exits)
@@ -457,17 +464,17 @@ class SC2MOGenCampaign(MissionOrderNode):
     def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return self.entry_rule.is_fulfilled(beaten_missions)
 
-    def resolve_difficulties(self, max_depth: int) -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
-        sorted_missions: Dict[Difficulty, Set[SC2MOGenMission]] = {diff: set() for diff in Difficulty if diff != Difficulty.RELATIVE}
-        fixed_missions: Set[SC2MOGenMission] = set()
+    def resolve_difficulties(self, max_depth: int) -> Tuple[Dict[Difficulty, List[SC2MOGenMission]], List[SC2MOGenMission]]:
+        sorted_missions: Dict[Difficulty, List[SC2MOGenMission]] = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
+        fixed_missions: List[SC2MOGenMission] = []
         for layout in self.layouts:
             (layout_sorted, layout_fixed) = layout.resolve_difficulties(
                 max_depth, self.min_depth, self.max_depth,
                 self.option_min_difficulty, self.option_max_difficulty
             )
-            fixed_missions.update(layout_fixed)
+            fixed_missions.extend(layout_fixed)
             for (diff, missions) in layout_sorted.items():
-                sorted_missions[diff].update(missions)
+                sorted_missions[diff].extend(missions)
         return (sorted_missions, fixed_missions)
 
     def search(self, term: str) -> Union[List[MissionOrderNode], None]:
@@ -480,10 +487,10 @@ class SC2MOGenCampaign(MissionOrderNode):
     def child_type_name(self) -> str:
         return "Layout"
 
-    def get_missions(self) -> Set[SC2MOGenMission]:
-        return {mission for layout in self.layouts for mission in layout.missions}    
+    def get_missions(self) -> List[SC2MOGenMission]:
+        return [mission for layout in self.layouts for mission in layout.missions]
 
-    def get_exits(self) -> Set[SC2MOGenMission]:
+    def get_exits(self) -> List[SC2MOGenMission]:
         return self.exits
     
     def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
@@ -521,8 +528,8 @@ class SC2MOGenLayout(MissionOrderNode):
 
     missions: List[SC2MOGenMission]
     layout_type: LayoutType
-    entrances: Set[SC2MOGenMission]
-    exits: Set[SC2MOGenMission]
+    entrances: List[SC2MOGenMission]
+    exits: List[SC2MOGenMission]
     entry_rule: SubRuleEntryRule
     display_name: str
 
@@ -544,8 +551,8 @@ class SC2MOGenLayout(MissionOrderNode):
         self.option_min_difficulty = data.pop("min_difficulty")
         self.option_max_difficulty = data.pop("max_difficulty")
         self.missions = []
-        self.entrances = set()
-        self.exits = set()
+        self.entrances = []
+        self.exits = []
 
         # Check for positive size now instead of during YAML validation to actively error with default size
         if self.option_size == 0:
@@ -582,23 +589,23 @@ class SC2MOGenLayout(MissionOrderNode):
 
         for mission in self.missions:
             if mission.option_entrance:
-                self.entrances.add(mission)
+                self.entrances.append(mission)
             if mission.option_exit:
-                self.exits.add(mission)
+                self.exits.append(mission)
             if len(mission.option_next) > 0:
                 mission.next = {self.missions[idx] for idx in mission.option_next}
         
         # Set up missions' prev data
         seen_missions: Set[SC2MOGenMission] = set()
-        cur_missions: Set[SC2MOGenMission] = {mission for mission in self.entrances}
+        cur_missions: List[SC2MOGenMission] = [mission for mission in self.entrances]
         while len(cur_missions) > 0:
             mission = cur_missions.pop()
             seen_missions.add(mission)
             for next_mission in mission.next:
-                next_mission.prev.add(mission)
+                next_mission.prev.append(mission)
                 if next_mission not in seen_missions and \
                    next_mission not in cur_missions:
-                    cur_missions.add(next_mission)
+                    cur_missions.append(next_mission)
         
         # Remove empty missions from access data
         for mission in self.missions:
@@ -632,7 +639,7 @@ class SC2MOGenLayout(MissionOrderNode):
                 # Note that the opposite is not enforced for exits to allow fully optional layouts
                 if len(mission.prev) == 0:
                     mission.option_entrance = True
-                    self.entrances.add(mission)
+                    self.entrances.append(mission)
                 elif mission.option_entrance:
                     for prev_mission in mission.prev:
                         prev_mission.next.remove(mission)
@@ -652,7 +659,7 @@ class SC2MOGenLayout(MissionOrderNode):
     def resolve_difficulties(self,
         order_max_depth: int, parent_min_depth: int, parent_max_depth: int,
         parent_min_diff: Difficulty, parent_max_diff: Difficulty
-    ) -> Tuple[Dict[Difficulty, Set[SC2MOGenMission]], Set[SC2MOGenMission]]:
+    ) -> Tuple[Dict[Difficulty, List[SC2MOGenMission]], List[SC2MOGenMission]]:
         if self.option_min_difficulty == Difficulty.RELATIVE:
             min_diff = parent_min_diff
             if min_diff == Difficulty.RELATIVE:
@@ -679,13 +686,13 @@ class SC2MOGenLayout(MissionOrderNode):
         # If min/max aren't relative, assume the limits are meant to show up
         layout_thresholds = modified_difficulty_thresholds(min_diff, max_diff)
         thresholds = sorted(layout_thresholds.keys())
-        sorted_missions: Dict[Difficulty, Set[SC2MOGenMission]] = {diff: set() for diff in Difficulty if diff != Difficulty.RELATIVE}
-        fixed_missions: Set[SC2MOGenMission] = set()
+        sorted_missions: Dict[Difficulty, List[SC2MOGenMission]] = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
+        fixed_missions: List[SC2MOGenMission] = []
         for mission in self.missions:
             if mission.option_empty:
                 continue
             if len(mission.option_mission_pool) == 1:
-                fixed_missions.add(mission)
+                fixed_missions.append(mission)
                 continue
             if mission.option_difficulty == Difficulty.RELATIVE:
                 mission_thresh = int((mission.min_depth - min_depth) * 100 / depth_range)
@@ -694,7 +701,7 @@ class SC2MOGenLayout(MissionOrderNode):
                         mission.option_difficulty = layout_thresholds[thresholds[i - 1]]
                         break
                     mission.option_difficulty = layout_thresholds[thresholds[-1]]
-            sorted_missions[mission.option_difficulty].add(mission)
+            sorted_missions[mission.option_difficulty].append(mission)
         return (sorted_missions, fixed_missions)
 
     def get_parent(self, _address_so_far: str, _full_address: str) -> MissionOrderNode:
@@ -716,10 +723,10 @@ class SC2MOGenLayout(MissionOrderNode):
     def child_type_name(self) -> str:
         return "Mission"
 
-    def get_missions(self) -> Set[SC2MOGenMission]:
-        return {mission for mission in self.missions}    
+    def get_missions(self) -> List[SC2MOGenMission]:
+        return [mission for mission in self.missions]
 
-    def get_exits(self) -> Set[SC2MOGenMission]:
+    def get_exits(self) -> List[SC2MOGenMission]:
         return self.exits
     
     def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
@@ -759,8 +766,8 @@ class SC2MOGenMission(MissionOrderNode):
     mission: SC2Mission
     region: Region
 
-    next: Set[SC2MOGenMission]
-    prev: Set[SC2MOGenMission]
+    next: List[SC2MOGenMission]
+    prev: List[SC2MOGenMission]
 
     def __init__(self, parent: ReferenceType[SC2MOGenLayout], parent_mission_pool: Set[int]):
         self.parent: ReferenceType[SC2MOGenLayout] = parent
@@ -772,8 +779,8 @@ class SC2MOGenMission(MissionOrderNode):
         self.option_next = []
         self.option_entry_rules = []
         self.option_difficulty = Difficulty.RELATIVE
-        self.next = set()
-        self.prev = set()
+        self.next = []
+        self.prev = []
         self.min_depth = -1
 
     def update_with_data(self, data: Dict):
@@ -812,11 +819,11 @@ class SC2MOGenMission(MissionOrderNode):
     def child_type_name(self) -> str:
         return ""
 
-    def get_missions(self) -> Set[SC2MOGenMission]:
-        return {self}
+    def get_missions(self) -> List[SC2MOGenMission]:
+        return [self]
 
-    def get_exits(self) -> Set[SC2MOGenMission]:
-        return {self}
+    def get_exits(self) -> List[SC2MOGenMission]:
+        return [self]
     
     def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
         return self
@@ -862,12 +869,12 @@ class LayoutSlotData:
 @dataclass
 class MissionSlotData:
     mission_id: int
-    prev_mission_ids: Set[int]
+    prev_mission_ids: List[int]
     entry_rule: SubRuleRuleData
 
     @staticmethod
     def empty() -> MissionSlotData:
-        return MissionSlotData(-1, set(), SubRuleRuleData.empty())
+        return MissionSlotData(-1, [], SubRuleRuleData.empty())
     
 def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:

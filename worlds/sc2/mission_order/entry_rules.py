@@ -69,10 +69,10 @@ class RuleData(ABC):
         return False
 
 class BeatMissionsEntryRule(EntryRule):
-    missions_to_beat: Set[SC2MOGenMission]
+    missions_to_beat: List[SC2MOGenMission]
     visual_reqs: List[Union[str, SC2MOGenMission]]
 
-    def __init__(self, missions_to_beat: Set[SC2MOGenMission], visual_reqs: List[Union[str, SC2MOGenMission]]):
+    def __init__(self, missions_to_beat: List[SC2MOGenMission], visual_reqs: List[Union[str, SC2MOGenMission]]):
         super().__init__()
         self.missions_to_beat = missions_to_beat
         self.visual_reqs = visual_reqs
@@ -88,7 +88,7 @@ class BeatMissionsEntryRule(EntryRule):
     
     def to_slot_data(self) -> RuleData:
         resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
-        mission_ids = {mission.mission.id for mission in self.missions_to_beat}
+        mission_ids = [mission.mission.id for mission in self.missions_to_beat]
         return BeatMissionsRuleData(
             mission_ids,
             resolved_reqs
@@ -96,7 +96,7 @@ class BeatMissionsEntryRule(EntryRule):
 
 @dataclass
 class BeatMissionsRuleData(RuleData):
-    mission_ids: Set[int]
+    mission_ids: List[int]
     visual_reqs: List[Union[str, int]]
 
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
@@ -123,11 +123,11 @@ class BeatMissionsRuleData(RuleData):
         return True
     
 class CountMissionsEntryRule(EntryRule):
-    missions_to_count: Set[SC2MOGenMission]
+    missions_to_count: List[SC2MOGenMission]
     target_amount: int
     visual_reqs: List[Union[str, SC2MOGenMission]]
 
-    def __init__(self, missions_to_count: Set[SC2MOGenMission], target_amount: int, visual_reqs: List[Union[str, SC2MOGenMission]]):
+    def __init__(self, missions_to_count: List[SC2MOGenMission], target_amount: int, visual_reqs: List[Union[str, SC2MOGenMission]]):
         super().__init__()
         self.missions_to_count = missions_to_count
         if target_amount == -1 or target_amount > len(missions_to_count):
@@ -149,7 +149,7 @@ class CountMissionsEntryRule(EntryRule):
     
     def to_slot_data(self) -> RuleData:
         resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
-        mission_ids = {mission.mission.id for mission in self.missions_to_count}
+        mission_ids = [mission.mission.id for mission in self.missions_to_count]
         return CountMissionsRuleData(
             mission_ids,
             self.target_amount,
@@ -158,7 +158,7 @@ class CountMissionsEntryRule(EntryRule):
 
 @dataclass
 class CountMissionsRuleData(RuleData):
-    mission_ids: Set[int]
+    mission_ids: List[int]
     amount: int
     visual_reqs: List[Union[str, int]]
 
@@ -277,7 +277,7 @@ class SubRuleRuleData(RuleData):
         else:
             amount = str(self.amount)
         tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
-        tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 2, missions) for rule in self.sub_rules)
+        tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 4, missions) for rule in self.sub_rules)
         return tooltip
 
     def is_accessible(

@@ -76,7 +76,7 @@ class Column(LayoutType):
         missions[0].option_entrance = True
         missions[-1].option_exit = True
         for i in range(self.size - 1):
-            missions[i].next.add(missions[i + 1])
+            missions[i].next.append(missions[i + 1])
         return missions
     
     def get_visual_layout(self) -> List[List[int]]:
@@ -172,7 +172,7 @@ class Grid(LayoutType):
                     for (nb_x, nb_y) in [(left, y), (right, y), (x, up), (x, down)]
                     if self.is_valid_coordinates(nb_x, nb_y)
                 ]
-                missions[idx].next = {missions[nb] for nb in neighbours}
+                missions[idx].next = [missions[nb] for nb in neighbours]
         
         # Empty corners
         top_corners = math.floor(self.num_corners_to_remove / 2)
@@ -290,7 +290,7 @@ class Hopscotch(LayoutType):
                 cycle -= 1
             for next_idx in indices:
                 if next_idx < self.size:
-                    slots[idx].next.add(slots[next_idx])
+                    slots[idx].next.append(slots[next_idx])
         
         return slots
     
@@ -384,7 +384,7 @@ class Gauntlet(LayoutType):
         missions[0].option_entrance = True
         missions[-1].option_exit = True
         for i in range(self.size - 1):
-            missions[i].next.add(missions[i + 1])
+            missions[i].next.append(missions[i + 1])
         return missions
     
     def get_visual_layout(self) -> List[List[int]]:
@@ -442,7 +442,7 @@ class Blitz(LayoutType):
                 for bot in range(self.width):
                     other = (row + 1) * self.width + bot
                     if other < self.size:
-                        slots[idx].next.add(slots[other])
+                        slots[idx].next.append(slots[other])
         
         return slots
     
