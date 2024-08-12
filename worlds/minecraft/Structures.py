@@ -1,12 +1,10 @@
-from worlds.AutoWorld import World
-
 from . import Constants
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from . import MinecraftWorld
 
 
-def shuffle_structures(self: MinecraftWorld) -> None:
+def shuffle_structures(self: "MinecraftWorld") -> None:
     multiworld = self.multiworld
     player = self.player
 
