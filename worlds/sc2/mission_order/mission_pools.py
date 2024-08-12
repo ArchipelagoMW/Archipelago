@@ -141,7 +141,7 @@ class SC2MOGenMissionPools:
                 final_difficulty = Difficulty(higher_diff)
                 break
             if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
-                raise Exception(f"Slot in layout \"{slot.get_parent("", "").get_visual_requirement()}\" ran out of possible missions to place.")
+                raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
             diff_offset += 1
         
         # Remove the mission from the master list

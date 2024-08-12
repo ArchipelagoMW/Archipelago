@@ -47,7 +47,6 @@ class MissionOrderNode(ABC):
     def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
         raise NotImplementedError
 
-@dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
 class SC2MissionOrder(MissionOrderNode):
     """
     The top-level data structure for mission orders. Contains helper functions for getting data about generated missions.
@@ -399,7 +398,6 @@ class SC2MissionOrder(MissionOrderNode):
 
         world.multiworld.regions += regions
 
-@dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
 class SC2MOGenCampaign(MissionOrderNode):
     option_name: str # name of this campaign
     option_display_name: List[str]
@@ -501,7 +499,6 @@ class SC2MOGenCampaign(MissionOrderNode):
             [asdict(layout.get_slot_data()) for layout in self.layouts]
         )
 
-@dataclass(repr=False, eq=False, match_args=False, slots=True, weakref_slot=True)
 class SC2MOGenLayout(MissionOrderNode):
     option_name: str # name of this layout
     option_display_name: List[str] # visual name of this layout
@@ -746,7 +743,6 @@ class SC2MOGenLayout(MissionOrderNode):
             mission_slots
         )
 
-@dataclass(repr=False, eq=False, match_args=False, slots=True)
 class SC2MOGenMission(MissionOrderNode):
     option_goal: bool # whether this mission is required to beat the game
     option_entrance: bool # whether this mission is unlocked when the layout is unlocked
