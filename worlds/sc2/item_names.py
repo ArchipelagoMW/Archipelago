@@ -718,7 +718,7 @@ ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (E
 HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
 HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
 # Signifier
-# Ascendant
+ASCENDANT_ABILITY_EFFICIENCY                            = "Ability Efficiency (Ascendant)"
 DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
 IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
 VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Vanguard)"
@@ -740,11 +740,11 @@ DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard C
 # Warp Ray
 # Dawnbringer
 # Carrier
-# Skylord
+SKYLORD_HYPERJUMP                                       = "Hyperjump (Skylord)"
 # Trireme
 TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempest)"
 # Scout
-# Arbiter
+ARBITER_ABILITY_EFFICIENCY                              = "Ability Efficiency (Arbiter)"
 # Oracle
 # Mothership
 
