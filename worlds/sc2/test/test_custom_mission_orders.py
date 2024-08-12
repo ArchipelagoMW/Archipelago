@@ -9,6 +9,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
     
    def test_mini_wol_generates(self):
       world_options = {
+         'mission_order': 'custom',
          'custom_mission_order': {
             'Mini Wings of Liberty': {
                'global': {
@@ -24,13 +25,13 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
                'Colonist': {
                   'size': 2,
                   'entry_rules': [{
-                     'scope': 'Mar Sara'
+                     'scope': '../Mar Sara'
                   }]
                },
                'Artifact': {
                   'size': 3,
                   'entry_rules': [{
-                     'scope': 'Mar Sara'
+                     'scope': '../Mar Sara'
                   }],
                   'missions': [
                      {
@@ -52,7 +53,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
                'Prophecy': {
                   'size': 2,
                   'entry_rules': [{
-                     'scope': 'Artifact/1'
+                     'scope': '../Artifact/1'
                      }],
                   'mission_pool': [
                      'protoss missions',
@@ -76,7 +77,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
                'Char': {
                   'size': 3,
                   'entry_rules': [{
-                     'scope': 'Artifact/2'
+                     'scope': '../Artifact/2'
                   }],
                   'missions': [
                      {
@@ -94,9 +95,9 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
       }
 
       self.generate_world(world_options)
-      flags = self.world.custom_mission_order.get_used_flags()
+      flags = self.world.mission_order.get_used_flags()
       self.assertEqual(flags[MissionFlag.Terran], 13)
       self.assertEqual(flags[MissionFlag.Protoss], 2)
       self.assertEqual(flags.get(MissionFlag.Zerg, 0), 0)
       sc2_regions = set(self.multiworld.regions.region_cache[self.player]) - {"Menu"}
-      self.assertEqual(len(self.world.custom_mission_order.get_used_missions()), len(sc2_regions))
+      self.assertEqual(len(self.world.mission_order.get_used_missions()), len(sc2_regions))
