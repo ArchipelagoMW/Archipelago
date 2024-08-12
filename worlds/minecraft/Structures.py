@@ -13,7 +13,7 @@ def shuffle_structures(self: "MinecraftWorld") -> None:
 
     # Get all unpaired exits and all regions without entrances (except the Menu)
     # This function is destructive on these lists. 
-    exits = [exit.name for r in multiworld.regions if r.player == player for exit in r.exits if exit.connected_region == None]
+    exits = [exit.name for r in multiworld.regions if r.player == player for exit in r.exits if exit.connected_region is None]
     structs = [r.name for r in multiworld.regions if r.player == player and r.entrances == [] and r.name != 'Menu']
     exits_spoiler = exits[:] # copy the original order for the spoiler log
 

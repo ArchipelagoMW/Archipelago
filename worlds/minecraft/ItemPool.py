@@ -26,7 +26,6 @@ def build_item_pool(self: "MinecraftWorld") -> List[Item]:
 	total_location_count = len(multiworld.get_unfilled_locations(player))
 
 	required_pool = Constants.item_info["required_pool"]
-	junk_weights = Constants.item_info["junk_weights"]
 
 	# Add required progression items
 	for item_name, num in required_pool.items():
