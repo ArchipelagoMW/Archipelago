@@ -671,6 +671,9 @@ VANGUARD_MATTER_DISPERSION                              = "Matter Dispersion (Va
 IMMORTAL_ANNIHILATOR_STALWART_SINGULARITY_CHARGE        = "Singularity Charge (Immortal/Annihilator/Stalwart)"
 IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS = "Advanced Targeting Mechanics (Immortal/Annihilator/Stalwart)"
 IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION      = "Disruptor Dispersion (Immortal/Annihilator/Stalwart)"
+DISRUPTOR_CLOAKING_MODULE                               = "Cloaking Module (Disruptor)"
+DISRUPTOR_PERFECTED_POWER                               = "Perfected Power (Disruptor)"
+DISRUPTOR_RESTRAINED_DESTRUCTION                        = "Restrained Destruction (Disruptor)"
 COLOSSUS_PACIFICATION_PROTOCOL                          = "Pacification Protocol (Colossus)"
 WRATHWALKER_RAPID_POWER_CYCLING                         = "Rapid Power Cycling (Wrathwalker)"
 WRATHWALKER_EYE_OF_WRATH                                = "Eye of Wrath (Wrathwalker)"
@@ -728,7 +731,7 @@ STALWART_DUALITY_CHARGE                                 = "Duality Charge (Stalw
 COLOSSUS_FIRE_LANCE                                     = "Fire Lance (Colossus)"
 WRATHWALKER_AERIAL_TRACKING                             = "Aerial Tracking (Wrathwalker)"
 REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
-# Disruptor
+DISRUPTOR_RESTRUCTURED_THRUSTERS                        = "Restructured Thrusters (Disruptor)"
 # Warp Prism
 # Observer
 PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam (Phoenix)"
