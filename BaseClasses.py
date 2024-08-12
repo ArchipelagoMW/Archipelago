@@ -907,7 +907,7 @@ class Entrance:
     addresses = None
     target = None
 
-    def __init__(self, player: int, name: str = '', parent: Optional[Region] = None) -> None:
+    def __init__(self, player: int, name: str = "", parent: Optional[Region] = None) -> None:
         self.name = name
         self.parent_region = parent
         self.player = player
