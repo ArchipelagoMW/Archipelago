@@ -157,18 +157,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     target_per_player = {
         player: sum(target_items.values()) for player, target_items in depletion_pool.items() if target_items
     }
-    overall_target = sum(target_per_player.values())
 
-    if overall_target:
+    if target_per_player:
         new_itempool: List[Item] = []
 
         # Make new itempool with start_inventory_from_pool items removed
         for item in multiworld.itempool:
             if depletion_pool[item.player].get(item.name, 0):
                 depletion_pool[item.player][item.name] -= 1
-                overall_target -= 1
-                if overall_target == 0:
-                    break
             else:
                 new_itempool.append(item)
 
