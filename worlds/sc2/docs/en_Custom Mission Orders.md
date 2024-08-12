@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is usage documentation for the `custom_mission_order` YAML option for Starcraft 2. In the future, you might enable this by setting `mission_order: custom` in your YAML, but currently all the options normally affecting mission orders do nothing. As examples, this includes campaign switches, maximum size, disabling Very Hard missions, and excluded missions.
+This is usage documentation for the `custom_mission_order` YAML option for Starcraft 2. You can enable Custom Mission Orders by setting `mission_order: custom` in your YAML.
 
 You will need to know how to write a YAML before engaging with this feature, and should read the [Archipelago YAML documentation](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en) before continuing here.
 
@@ -22,6 +22,8 @@ To illustrate, the following is what the default custom mission order currently 
     Default Campaign:
       # The campaign's name as displayed in the client
       display_name: "null"
+      # Whether this campaign must have a unique name in the client
+      unique_name: false
       # Conditions that must be fulfilled to access this campaign
       entry_rules: []
       # Whether beating this campaign is part of the world's goal
@@ -35,6 +37,8 @@ To illustrate, the following is what the default custom mission order currently 
       global:
         # The layout's name as displayed in the client
         display_name: "null"
+        # Whether this layout must have a unique name in the client
+        unique_name: false
         # Whether beating this layout is part of the world's goal
         goal: false
         # Whether this layout must be beaten to beat the campaign
@@ -140,6 +144,17 @@ However, keep in mind that layout types will set their own options for specific 
             # Which specific difficulty this mission should have
             difficulty: relative
 ```
+## Interactions with other YAML options
+
+Custom Mission Orders respect all the options that change which missions can appear as if the options' relevant missions had been excluded. For example, `selected_races: protoss` is equivalent to excluding all Zerg and Terran missions, and `enable_wol_missions: false` is equivalent to excluding all WoL missions.
+
+This means that if you want total control over available missions in your mission order via `mission_pool`s, you should enable all races and campaigns and leave your `excluded_missions` list empty, but you can also use these options to get rid of particular missions you never want and can then ignore those missions in your `mission_pool`s.
+
+There are, however, three options that are ignored by Custom Mission Orders:
+- `mission_order`, because it has to be `custom` for your Custom Mission Order to apply
+- `maximum_campaign_size`, because you determine the size of the mission order via layout `size` attributes
+- `grid_two_start_positions`, which you can instead determine in individual layouts of the appropriate `type`s (see Grid and Hopscotch sections below)
+
 ## Instructions for building a mission order
 
 Normally when you play a Starcraft 2 world, you have a table of missions in the Archipelago SC2 Client, and hovering over a mission tells you what missions are required to access it. This is still true for custom mission orders, but you now have control over the way missions are visually organized, as well as their access requirements.
@@ -503,14 +518,11 @@ All static presets accept a `missions` option, as shown in the example above. Po
 ### Golden Path
 ```yaml
 preset: golden path
+size: # Required, no default, accepts positive numbers
 ```
 Golden Path aims to create a dynamically-sized campaign with branching paths to create a similar experience to the Wings of Liberty campaign. It accomplishes this by having a main column that requires an increasing number of missions to be beaten to advance, and a number of side columns that require progressing the main column to advance. The exit of a Golden Path campaign is the last mission of the main column.
 
-Golden Path requires one option:
-```yaml
-size: # There is no default
-```
-This option defines the number of missions in the campaign.
+The `size` option defines the number of missions in the campaign.
 
 The columns in a Golden Path get random names from a `display_name` list and have `unique_name: true` set on them. Their definition names for overriding options are `"0"`, `"1"`, `"2"`, etc., with `"0"` always being the main column, `"1"` being the left-most side column, and so on.
 
@@ -574,7 +586,7 @@ The following example shows ways to access and modify missions:
         # Available functions depend on the layout's type
         # In this case the function will return the indices 1 and 3
         # and then mark those two slots as empty
-        - index: rect(1, 0, 1, 1) # TODO
+        - index: rect(1, 0, 1, 1)
           empty: true
         # Indices can be a list of valid values
         # This takes all entrances as well as the mission at index 2
@@ -671,10 +683,13 @@ A `size: 5` column has the following indices:
 ```yaml
 type: grid
 width: 0 # Accepts positive numbers
+two_start_positions: false # Accepts true/false
 ```
 This is a rectangular order. Beating a mission unlocks adjacent missions in cardinal directions.
 
 `width` sets the width of the grid, and height is determined via `size` and `width`. If `width` is set to 0, the width and height are determined automatically.
+
+If `two_start_positions`, the top left corner will be set to `empty: true`, and its two neighbors will be entrances instead.
 
 If `size` is too small for the determined width and height, then slots in the bottom left and top right corners will be removed to fit the given `size`. These empty slots are still accessible by index.
 
@@ -688,31 +703,43 @@ A `size: 25`, `width: 5` grid has the following indices:
 ```
 The top left corner (index `0`) is the default entrance. The bottom right corner (index `size - 1`) is the default exit.
 
+Grid supports the following index functions:
+- `point(x, y)` returns the index at the given zero-based X and Y coordinates. In the above example, `point(2, 4)` is index `22`.
+- `rect(x, y, width, height)` returns the indices within the rectangle defined by the starting point at the X and Y coordinates and the width and height arguments. In the above example, `rect(1, 2, 3, 2)` returns the indices `11, 12, 13, 16, 17, 18`.
+
 ---
 ### Hopscotch
 ```yaml
 type: hopscotch
 width: 7 # Accepts numbers >= 4
+two_start_positions: false # Accepts true/false
 ```
 
 This order alternates between one and two missions becoming available at a time.
 
 `width` determines how many mini columns are allowed to be next to one another before they wrap around the sides.
 
-A `size: 22`, `width: 4` Hopscotch layout has the following indices:
+If `two_start_positions`, the top left corner will be set to `empty: true`, and its two neighbors will be entrances instead.
+
+A `size: 23`, `width: 4` Hopscotch layout has the following indices:
 ```yaml
  0  2
  1  3  5
     4  6  8
-       7  9
-11       10
-12 14 
+11     7  9
+12 14    10
 13 15 17
    16 18 20
       19 21
          22
 ```
 The top left corner (index `0`) is the default entrance. The bottom-most mission of the lowest column (index `size - 1`) is the default exit.
+
+Hopscotch supports the following index functions:
+- `top()` (or `top`) returns the indices of all the top-right corners. In the above example, it returns the indices `2, 5, 8, 11, 14, 17, 20`.
+- `bottom()` (or `bottom`) returns the indices of all the bottom-left corners. In the above example, it returns the indices `1, 4, 7, 10, 13, 16, 19, 22`.
+- `middle()` (or `middle`) returns the indices of all the middle slots. In the above example, it returns the indices `0, 3, 6, 9, 12, 15, 18, 21`.
+- `corner(index)` returns the indices within the given corner. A corner is a slot in the middle and the slots to the bottom and right of it. `corner(0)` would return `0, 1, 2`, `corner(1)` would return `3, 4, 5`, and so on. In the above example, `corner(7)` will only return `21, 22` because it does not have a right mission.
 
 ---
 ### Gauntlet
@@ -752,3 +779,6 @@ A `size: 20`, `width: 5` Blitz layout has the following indices:
 15 16 17 18 19
 ```
 The top left corner (index `0`) is the default entrance. The right-most mission on the bottom row (index `size - 1`) is the default exit.
+
+Blitz supports the following index function:
+- `row(height)` returns the indices of the row at the given zero-based height. In the above example, `row(1)` would return `5, 6, 7, 8, 9`.
