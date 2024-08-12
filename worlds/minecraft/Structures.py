@@ -1,9 +1,12 @@
 from worlds.AutoWorld import World
 
 from . import Constants
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import MinecraftWorld
 
 
-def shuffle_structures(self: World) -> None:
+def shuffle_structures(self: MinecraftWorld) -> None:
     multiworld = self.multiworld
     player = self.player
 
@@ -33,7 +36,7 @@ def shuffle_structures(self: World) -> None:
 
     # The algorithm tries to place the most restrictive structures first. This algorithm always works on the
     # relatively small set of restrictions here, but does not work on all possible inputs with valid configurations. 
-    if self.options.shuffle_structures.value:
+    if self.options.shuffle_structures:
         structs.sort(reverse=True, key=lambda s: len(illegal_connections.get(s, [])))
         for struct in structs[:]: 
             try: 

@@ -1,4 +1,3 @@
-import typing
 from Options import Choice, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PlandoConnections, \
     PerGameCommonOptions
 from .Constants import region_info
