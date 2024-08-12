@@ -154,7 +154,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         player: getattr(multiworld.worlds[player].options, "start_inventory_from_pool", fallback_inventory).value.copy()
         for player in multiworld.player_ids
     }
-    target_per_player = {player: sum(target_items.values()) for player, target_items in depletion_pool.items()}
+    target_per_player = {
+        player: sum(target_items.values()) for player, target_items in depletion_pool.items() if target_items
+        if depletion_pool[player]
+    }
     overall_target = sum(target_per_player.values())
 
     if overall_target:
@@ -170,14 +173,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             else:
                 new_itempool.append(item)
 
-        unfound_items_per_player = {
-            player: {item: count for item, count in remaining_items.items() if count > 0}  # Cull entries with value 0
-            for player, remaining_items in depletion_pool.items()
-        }
-
         # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
         for player, target in target_per_player.items():
-            unfound_items = unfound_items_per_player[player]
+            unfound_items = {item: count for item, count in depletion_pool[player].items() if count}
 
             if unfound_items:
                 player_name = multiworld.get_player_name(player)
