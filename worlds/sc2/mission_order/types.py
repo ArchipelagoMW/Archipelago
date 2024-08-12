@@ -279,16 +279,15 @@ class Hopscotch(LayoutType):
 
         cycle = 0
         for idx in range(self.size):
-            match cycle:
-                case 0:
-                    indices = [idx + 1, idx + 2]
-                    cycle = 2
-                case 1:
-                    indices = [idx + 1]
-                    cycle -= 1
-                case 2:
-                    indices = [idx + 2]
-                    cycle -= 1
+            if cycle == 0:
+                indices = [idx + 1, idx + 2]
+                cycle = 2
+            elif cycle == 1:
+                indices = [idx + 1]
+                cycle -= 1
+            else:
+                indices = [idx + 2]
+                cycle -= 1
             for next_idx in indices:
                 if next_idx < self.size:
                     slots[idx].next.add(slots[next_idx])
