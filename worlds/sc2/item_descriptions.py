@@ -821,7 +821,7 @@ item_descriptions = {
     item_names.ORACLE_BOSONIC_CORE: "Increases starting energy by 150 and maximum energy by 50.",
     item_names.ARBITER_CHRONOSTATIC_REINFORCEMENT: "Arbiters gain +50 maximum life and +1 armor.",
     item_names.ARBITER_KHAYDARIN_CORE: _get_start_and_max_energy_desc("Arbiters"),
-    item_names.ARBITER_SPACETIME_ANCHOR: "Arbiter Stasis Field lasts 50 seconds longer.",
+    item_names.ARBITER_SPACETIME_ANCHOR: "Allows Arbiters to use an alternate version of Stasis field which lasts 50 seconds longer.",
     item_names.ARBITER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.ARBITER),
     item_names.ARBITER_ENHANCED_CLOAK_FIELD: "Increases Arbiter Cloaking Field range.",
     item_names.CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
