@@ -355,7 +355,10 @@ class SC2MissionOrder(MissionOrderNode):
 
         # Resolve slots with set mission names
         for mission_slot in self.fixed_missions:
-            mission = lookup_id_to_mission[mission_slot.option_mission_pool.pop()]
+            mission_id = mission_slot.option_mission_pool.pop()
+            # Remove set mission from locked missions
+            locked_ids = [locked for locked in locked_ids if locked != mission_id]
+            mission = lookup_id_to_mission[mission_id]
             self.mission_pools.pull_specific_mission(mission)
             mission_slot.set_mission(world, mission, locations_per_region, location_cache)
             regions.append(mission_slot.region)
@@ -366,11 +369,31 @@ class SC2MissionOrder(MissionOrderNode):
         all_slots = [slot for diff in sorted(self.sorted_missions.keys()) for slot in self.sorted_missions[diff]]
         all_slots.sort(key = lambda slot: len(slot.option_mission_pool.intersection(self.mission_pools.master_list)))
 
+        # Randomly assign locked missions to appropriate difficulties
+        slots_for_locked: Dict[int, List[SC2MOGenMission]] = {locked: [] for locked in locked_ids}
+        for mission_slot in all_slots:
+            allowed_locked = mission_slot.option_mission_pool.intersection(locked_ids)
+            for locked in allowed_locked:
+                slots_for_locked[locked].append(mission_slot)
+        for (locked, allowed_slots) in slots_for_locked.items():
+            locked_mission = lookup_id_to_mission[locked]
+            allowed_slots = [slot for slot in allowed_slots if slot in all_slots]
+            if len(allowed_slots) == 0:
+                logging.warning(f"SC2: Locked mission \"{locked_mission.mission_name}\" is not allowed in any remaining spot and will not be placed.")
+                continue
+            # This inherits the earlier sorting, but is now sorted again by relative difficulty
+            # The result is a sorting in order of nearest difficulty (preferring lower), then by smallest pool, then randomly
+            allowed_slots.sort(key = lambda slot: abs(slot.option_difficulty - locked_mission.pool + 1))
+            # The first slot should be most appropriate
+            mission_slot = allowed_slots[0]
+            self.mission_pools.pull_specific_mission(locked_mission)
+            mission_slot.set_mission(world, locked_mission, locations_per_region, location_cache)
+            regions.append(mission_slot.region)
+            all_slots.remove(mission_slot)
+
         # Pick random missions
         for mission_slot in all_slots:
-            mission = self.mission_pools.pull_random_mission(world, mission_slot, locked_ids)
-            if mission.id in locked_ids:
-                locked_ids.remove(mission.id)
+            mission = self.mission_pools.pull_random_mission(world, mission_slot)
             mission_slot.set_mission(world, mission, locations_per_region, location_cache)
             regions.append(mission_slot.region)
 

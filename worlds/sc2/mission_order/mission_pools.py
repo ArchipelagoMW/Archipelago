@@ -112,17 +112,11 @@ class SC2MOGenMissionPools:
             self._used_flags[flag] += 1
         self._used_missions.add(mission)
 
-    def pull_random_mission(self, world: World, slot: 'SC2MOGenMission', locked_ids: List[int]) -> SC2Mission:
+    def pull_random_mission(self, world: World, slot: 'SC2MOGenMission') -> SC2Mission:
         """Picks a random mission from the mission pool of the given slot, preferring a mission from `locked_ids` if allowed in the slot,
         and marks it as present in the mission order."""
         # Use a locked mission if possible in this slot
-        base_pool = slot.option_mission_pool.intersection(self.master_list)
-        # TODO: This won't work, it'll almost always put locked missions early into the mission order
-        allowed_locked = base_pool.intersection(locked_ids)
-        if len(allowed_locked) > 0:
-            pool = allowed_locked
-        else:
-            pool = base_pool
+        pool = slot.option_mission_pool.intersection(self.master_list)
         
         difficulty_pools: Dict[int, List[int]] = {
             diff: list(pool.intersection(self.difficulty_pools[diff]))
@@ -147,7 +141,7 @@ class SC2MOGenMissionPools:
                 final_difficulty = Difficulty(higher_diff)
                 break
             if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
-                raise Exception(f"Slot in campaign \"{slot.parent_campaign.option_name}\" and layout \"{slot.parent_layout.option_name}\" ran out of possible missions to place.")
+                raise Exception(f"Slot in layout \"{slot.get_parent("", "").get_visual_requirement()}\" ran out of possible missions to place.")
             diff_offset += 1
         
         # Remove the mission from the master list
