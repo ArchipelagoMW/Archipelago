@@ -257,19 +257,19 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         return super().run_default_tests
 
     def collect_lots_of_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
         real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
         required_prog_items = int(round(real_total_prog_items * 0.25))
         for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
         self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
 
     def collect_all_the_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
         real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
         required_prog_items = int(round(real_total_prog_items * 0.95))
         for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
         self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
 
     def collect_everything(self):
