@@ -336,7 +336,7 @@ def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[str]:
             elif line.startswith("^"):
                 if len(pool) == 0:
                     raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
-                term = line[4:].strip()
+                term = line[1:].strip()
                 missions = _get_target_missions(term)
                 pool.intersection_update(missions)
             else:
