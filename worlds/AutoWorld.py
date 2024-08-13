@@ -503,12 +503,14 @@ class World(metaclass=AutoWorldRegister):
         return True  # Backwards compatibility, this used to denote whether a progression item was picked up
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
+        assert item.advancement, "Remove should no longer be called with non-advancements."
+
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         state.prog_items[self.player][name] -= 1
         if state.prog_items[self.player][name] < 1:
             del (state.prog_items[self.player][name])
-        return True  # Backwards compatibility, this used to denote whether a progression item was picked up
+        return True  # Backwards compatibility, this used to denote whether a progression item was removed
 
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
