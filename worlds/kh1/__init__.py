@@ -268,8 +268,8 @@ class KH1World(World):
         new_report_settings = [self.options.required_reports_eotw.value, self.options.required_reports_door.value, self.options.reports_in_pool.value]
         for i in range(3):
             if initial_report_settings[i] != new_report_settings[i]:
-                logging.info(f"{self.multiworld.get_file_safe_player_name(self.player)}'s value {initial_report_settings[i]} for {value_names[i]} was invalid\n"
-                             f"Setting {value_names[i]} value to {new_report_settings[i]}")
+                logging.info(f"{self.player_name}'s value {initial_report_settings[i]} for \"{value_names[i]}\" was invalid\n"
+                             f"Setting \"{value_names[i]}\" value to {new_report_settings[i]}")
     
     def change_numbers_of_reports_to_consider(self) -> None:
         if self.options.end_of_the_world_unlock == "reports" and self.options.final_rest_door == "reports":
@@ -287,8 +287,7 @@ class KH1World(World):
     def determine_reports_in_pool(self) -> int:
         if self.options.end_of_the_world_unlock == "reports" or self.options.final_rest_door == "reports":
             return self.options.reports_in_pool.value
-        else:
-            return 0
+        return 0
     
     def determine_reports_required_to_open_end_of_the_world(self) -> int:
         if self.options.end_of_the_world_unlock == "reports":
