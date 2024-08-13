@@ -151,6 +151,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
     if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
         new_items: List[Item] = []
+        old_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: getattr(multiworld.worlds[player].options,
                             "start_inventory_from_pool",
@@ -169,20 +170,24 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 depletion_pool[item.player][item.name] -= 1
                 # quick abort if we have found all items
                 if not target:
-                    new_items.extend(multiworld.itempool[i+1:])
+                    old_items.extend(multiworld.itempool[i+1:])
                     break
             else:
-                new_items.append(item)
+                old_items.append(item)
 
         # leftovers?
         if target:
             for player, remaining_items in depletion_pool.items():
                 remaining_items = {name: count for name, count in remaining_items.items() if count}
                 if remaining_items:
-                    raise Exception(f"{multiworld.get_player_name(player)}"
+                    logger.warning(f"{multiworld.get_player_name(player)}"
                                     f" is trying to remove items from their pool that don't exist: {remaining_items}")
-        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_items
+                    # find all filler we generated for the current player and remove until it matches 
+                    removables = [item for item in new_items if item.player == player]
+                    for _ in range(sum(remaining_items.values())):
+                        new_items.remove(removables.pop())
+        assert len(multiworld.itempool) == len(new_items + old_items), "Item Pool amounts should not change."
+        multiworld.itempool[:] = new_items + old_items
 
     multiworld.link_items()
 
