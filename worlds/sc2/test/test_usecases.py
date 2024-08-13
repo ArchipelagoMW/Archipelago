@@ -86,7 +86,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             },
         }
         self.generate_world(world_options)
-        world_item_names = [item.name for item in self.multiworld.itempool]
+        world_item_names = [item.name for item in self.multiworld.itempool + self.multiworld.precollected_items[1]]
         self.assertTrue(world_item_names)
         missions = get_all_missions(self.world.custom_mission_order)
         for mission in missions:

@@ -1932,22 +1932,22 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_fleet
         ),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
-            logic.templars_return_requirement
+            logic.templars_return_phase_3_reach_dts_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Citadel: First Gate", SC2LOTV_LOC_ID_OFFSET + 2001, LocationType.EXTRA),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Citadel: Second Gate", SC2LOTV_LOC_ID_OFFSET + 2002, LocationType.EXTRA),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Citadel: Power Structure", SC2LOTV_LOC_ID_OFFSET + 2003, LocationType.VANILLA),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Temple Grounds: Gather Army", SC2LOTV_LOC_ID_OFFSET + 2004, LocationType.VANILLA,
-            logic.templars_return_requirement
+            logic.templars_return_phase_2_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Temple Grounds: Power Structure", SC2LOTV_LOC_ID_OFFSET + 2005, LocationType.VANILLA,
-            logic.templars_return_requirement
+            logic.templars_return_phase_2_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Caverns: Purifier", SC2LOTV_LOC_ID_OFFSET + 2006, LocationType.EXTRA,
-            logic.templars_return_requirement
+            logic.templars_return_phase_3_reach_colossus_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_RETURN.mission_name, "Caverns: Dark Templar", SC2LOTV_LOC_ID_OFFSET + 2007, LocationType.EXTRA,
-            logic.templars_return_requirement
+            logic.templars_return_phase_3_reach_dts_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
             logic.the_host_requirement

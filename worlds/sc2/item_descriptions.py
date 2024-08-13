@@ -738,7 +738,7 @@ item_descriptions = {
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: "Assault unit. Has an area-damage attack. Regenerates life quickly when burrowed. Can attack ground units. Morphed by merging two Roaches.",
     item_names.NYDUS_WORM: "Long-range transport network. Nydus Worms and Nydus Networks can load friendly ground units to be unloaded to any other Nydus structure on the map.",
     item_names.OMEGA_WORM: "Long-range deployable base. Unable to load and unload units, but can generate Creep and Creep Tumors. Can also serve as a dropoff point for resources and can create Drones.",
-    item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack.  Morphed by merging two Ultralisks.",
+    item_names.ULTRALISK_TYRANNOZOR_ASPECT: "Heavy assault beast. Has a ground-area attack, and powerful anti-air attack. Morphed by merging two Ultralisks.",
     item_names.OBSERVER: "Flying spy. Cloak renders the unit invisible to enemies without detection.",
     item_names.CENTURION: "Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities.",
     item_names.SENTINEL: "Powerful melee warrior. Has the Charge and Reconstruction abilities.",
@@ -759,7 +759,7 @@ item_descriptions = {
     item_names.ANNIHILATOR: "Assault Strider. Can use the Shadow Cannon ability to damage air and ground units.",
     item_names.STALWART: "Assault strider. Has shields that deflect high-damage attacks.",
     item_names.VANGUARD: "Assault Strider. Deals splash damage around the primary target.",
-    item_names.WRATHWALKER: "Battle strider with a powerful single target attack.  Can walk up and down cliffs.",
+    item_names.WRATHWALKER: "Battle strider with a powerful single target attack. Can walk up and down cliffs.",
     item_names.REAVER: "Area damage siege unit. Builds and launches explosive Scarabs for high burst damage.",
     item_names.DISRUPTOR: "Robotic disruption unit. Can use the Purification Nova ability to deal heavy area damage.",
     item_names.MIRAGE: "Air superiority starfighter. Can use Graviton Beam and Phasing Armor abilities.",
@@ -821,7 +821,7 @@ item_descriptions = {
     item_names.ORACLE_BOSONIC_CORE: "Increases starting energy by 150 and maximum energy by 50.",
     item_names.ARBITER_CHRONOSTATIC_REINFORCEMENT: "Arbiters gain +50 maximum life and +1 armor.",
     item_names.ARBITER_KHAYDARIN_CORE: _get_start_and_max_energy_desc("Arbiters"),
-    item_names.ARBITER_SPACETIME_ANCHOR: "Arbiter Stasis Field lasts 50 seconds longer.",
+    item_names.ARBITER_SPACETIME_ANCHOR: "Allows Arbiters to use an alternate version of Stasis Field which lasts 50 seconds longer.",
     item_names.ARBITER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.ARBITER),
     item_names.ARBITER_ENHANCED_CLOAK_FIELD: "Increases Arbiter Cloaking Field range.",
     item_names.CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
@@ -842,6 +842,9 @@ item_descriptions = {
     item_names.IMMORTAL_ANNIHILATOR_STALWART_SINGULARITY_CHARGE: "Increases Immortal, Annihilator, and Stalwart attack range by +2.",
     item_names.IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS: "Immortals, Annihilators, and Stalwarts can attack air units.",
     item_names.IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION: "Immortals, Annihilators, and Stalwarts deal minor splash damage.",
+    item_names.DISRUPTOR_CLOAKING_MODULE: "Disruptors are permanently cloaked.",
+    item_names.DISRUPTOR_PERFECTED_POWER: "Allows Purification Nova to hit air units. Bonus damage to shields is now baseline for enemies (friendly damage unaffected).",
+    item_names.DISRUPTOR_RESTRAINED_DESTRUCTION: "Purification Nova does 50% reduced damage to friendly units and structures.",
     item_names.COLOSSUS_PACIFICATION_PROTOCOL: "Increases Colossus attack speed.",
     item_names.WRATHWALKER_RAPID_POWER_CYCLING: "Reduces the charging time and increases attack speed of the Wrathwalker's Charged Blast.",
     item_names.WRATHWALKER_EYE_OF_WRATH: "Increases Wrathwalker weapon range by +1.",
@@ -886,8 +889,8 @@ item_descriptions = {
     item_names.ENERGIZER_MOBILE_CHRONO_BEAM: "Energizer War Council upgrade. Allows Energizers to use Chrono Beam in Mobile Mode.",
     item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
     item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
-    # Signifier
-    # Ascendant
+    item_names.SIGNIFIER_FEEDBACK: "Signifier War Council upgrade. " + _ability_desc("Signifiers", "Feedback", "drains all energy from a target and deals 1 damage per point of energy drained"),
+    item_names.ASCENDANT_ABILITY_EFFICIENCY: "Ascendant War Council upgrade. Ascendant spells cost -25 energy.",
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
     item_names.IMMORTAL_IMPROVED_BARRIER: "Immortal War Council upgrade. The Immortal's Barrier ability absorbs an additional +100 damage.",
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
@@ -897,7 +900,7 @@ item_descriptions = {
     item_names.COLOSSUS_FIRE_LANCE: "Colossus War Council upgrade. Colossi set the ground on fire with their attacks, dealing damage to enemies over time.",
     item_names.WRATHWALKER_AERIAL_TRACKING: "Wrathwalker War Council upgrade. Wrathwalkers can now target air units.",
     item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
-    # Disruptor
+    item_names.DISRUPTOR_RESTRUCTURED_THRUSTERS: "Disruptor War Council upgrade. Allows the Disruptor to move while casting Purification Nova. Also allows the Disruptor to Blink.",
     # Warp Prism
     # Observer
     item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: "Phoenix War Council upgrade. Phoenixes can now use Graviton Beam to lift two targets at once.",
@@ -909,11 +912,11 @@ item_descriptions = {
     # Warp Ray
     # Dawnbringer
     # Carrier
-    # Skylord
+    item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map."),
     # Trireme
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     # Scout
-    # Arbiter
+    item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
     # Mothership
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
