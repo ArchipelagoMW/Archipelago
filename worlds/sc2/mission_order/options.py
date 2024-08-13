@@ -151,6 +151,8 @@ class CustomMissionOrder(OptionDict):
     })
     
     def __init__(self, yaml_value: Dict[str, Dict[str, Any]]):
+        # This function constructs self.value by parts,
+        # so the parent constructor isn't called
         self.value: Dict[str, Dict[str, Any]] = {}
         if yaml_value == self.default: # If this option is default, it shouldn't mess with its own values
             yaml_value = copy.deepcopy(self.default)
