@@ -18,9 +18,9 @@ def get_junk_item_names(rand, k: int) -> str:
 		k=k)
 	return junk
 
-def build_item_pool(self: "MinecraftWorld") -> List[Item]:
-	multiworld = self.multiworld
-	player = self.player
+def build_item_pool(world: "MinecraftWorld") -> List[Item]:
+	multiworld = world.multiworld
+	player = world.player
 
 	itempool = []
 	total_location_count = len(multiworld.get_unfilled_locations(player))
@@ -29,27 +29,27 @@ def build_item_pool(self: "MinecraftWorld") -> List[Item]:
 
 	# Add required progression items
 	for item_name, num in required_pool.items():
-		itempool += [self.create_item(item_name) for _ in range(num)]
+		itempool += [world.create_item(item_name) for _ in range(num)]
 
 	# Add structure compasses
-	if self.options.structure_compasses:
-		compasses = [name for name in self.item_name_to_id if "Structure Compass" in name]
+	if world.options.structure_compasses:
+		compasses = [name for name in world.item_name_to_id if "Structure Compass" in name]
 		for item_name in compasses:
-			itempool.append(self.create_item(item_name))
+			itempool.append(world.create_item(item_name))
 
 	# Dragon egg shards
-	if self.options.egg_shards_required > 0:
-		num = self.options.egg_shards_available
-		itempool += [self.create_item("Dragon Egg Shard") for _ in range(num)]
+	if world.options.egg_shards_required > 0:
+		num = world.options.egg_shards_available
+		itempool += [world.create_item("Dragon Egg Shard") for _ in range(num)]
 
 	# Bee traps
-	bee_trap_percentage = self.options.bee_traps * 0.01
+	bee_trap_percentage = world.options.bee_traps * 0.01
 	if bee_trap_percentage > 0:
 		bee_trap_qty = ceil(bee_trap_percentage * (total_location_count - len(itempool)))
-		itempool += [self.create_item("Bee Trap") for _ in range(bee_trap_qty)]
+		itempool += [world.create_item("Bee Trap") for _ in range(bee_trap_qty)]
 
 	# Fill remaining itempool with randomly generated junk
-	junk = get_junk_item_names(self.random, total_location_count - len(itempool))
-	itempool += [self.create_item(name) for name in junk]
+	junk = get_junk_item_names(world.random, total_location_count - len(itempool))
+	itempool += [world.create_item(name) for name in junk]
 
 	return itempool
