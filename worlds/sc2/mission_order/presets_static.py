@@ -115,6 +115,7 @@ preset_mini_hots = {
 }
 
 preset_mini_lotv_prologue = {
+    "min_difficulty": "easy",
     "Prologue": {
         "display_name": "",
         "type": "gauntlet",
@@ -173,6 +174,7 @@ preset_mini_lotv = {
 }
 
 preset_mini_lotv_epilogue = {
+    "min_difficulty": "very hard",
     "Epilogue": {
         "display_name": "",
         "type": "gauntlet",
@@ -186,6 +188,7 @@ preset_mini_lotv_epilogue = {
 
 # Entry rules in NCO point at specific missions since the columns don't have visible titles
 preset_mini_nco = {
+    "min_difficulty": "easy",
     "global": {
         "type": "column",
         "mission_pool": [
@@ -394,6 +397,7 @@ preset_hots = {
 }
 
 preset_lotv_prologue = {
+    "min_difficulty": "easy",
     "Prologue": {
         "display_name": "",
         "type": "gauntlet",
@@ -510,6 +514,7 @@ preset_lotv = {
 }
 
 preset_lotv_epilogue = {
+    "min_difficulty": "very hard",
     "Epilogue": {
         "display_name": "",
         "type": "gauntlet",
@@ -528,6 +533,7 @@ preset_lotv_epilogue = {
 
 # Entry rules in NCO point at specific missions since the columns don't have visible titles
 preset_nco = {
+    "min_difficulty": "easy",
     "global": {
         "type": "column",
         "mission_pool": [

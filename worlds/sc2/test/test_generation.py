@@ -527,5 +527,5 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enable_epilogue_missions': False,
         }
         self.generate_world(world_options)
-        self.assertEqual(get_first_mission(self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
+        self.assertEqual(get_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
 

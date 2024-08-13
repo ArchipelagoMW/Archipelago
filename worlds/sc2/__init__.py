@@ -438,7 +438,8 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
 
 def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds items to start_inventory based on first mission logic and options like `starter_unit` and `start_primary_abilities`"""
-    first_mission_name = get_first_mission(world.custom_mission_order).mission_name
+    potential_starters = world.custom_mission_order.get_starting_missions()
+    starter_mission_names = [mission.mission_name for mission in potential_starters]
     starter_unit = int(world.options.starter_unit)
 
     # If starter_unit is off and the first mission doesn't have a no-logic location, force starter_unit on
@@ -446,7 +447,7 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
         start_collection_state = CollectionState(world.multiworld)
         starter_mission_locations = [location.name for location in world.location_cache
                                      if location.parent_region
-                                     and location.parent_region.name == first_mission_name
+                                     and location.parent_region.name in starter_mission_names
                                      and location.access_rule(start_collection_state)]
         if not starter_mission_locations:
             # Force early unit if first mission is impossible without one
@@ -459,7 +460,7 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
 
 
 def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: int) -> None:
-    first_mission = get_first_mission(world.custom_mission_order)
+    first_mission = get_first_mission(world, world.custom_mission_order)
     first_race = first_mission.race
 
     if first_race == SC2Race.ANY:
@@ -676,10 +677,14 @@ def pad_item_pool_with_filler(self: SC2World, num_items: int, pool: List[Item]):
         pool.append(item)
 
 
-def get_first_mission(mission_order: SC2MissionOrder) -> SC2Mission:
-    # Pick an arbitrary available mission
+def get_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
+    # Pick an arbitrary lowest-difficulty starer mission
     missions = mission_order.get_starting_missions()
-    return missions[0]
+    missions = [(mission_order.mission_pools.get_modified_mission_difficulty(mission), mission) for mission in missions]
+    missions.sort()
+    (lowest_difficulty, _) = missions[0]
+    missions = [mission for (difficulty, mission) in missions if difficulty == lowest_difficulty]
+    return world.random.choice(missions)
 
 def get_all_missions(mission_order: SC2MissionOrder) -> List[SC2Mission]:
     return mission_order.get_used_missions()

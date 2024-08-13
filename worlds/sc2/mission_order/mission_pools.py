@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import TYPE_CHECKING, Dict, Set, List
 
-from ..mission_tables import SC2Mission, lookup_id_to_mission, lookup_name_to_mission, MissionFlag, SC2Campaign
+from ..mission_tables import SC2Mission, lookup_id_to_mission, MissionPools, MissionFlag, SC2Campaign
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
@@ -47,6 +47,7 @@ class SC2MOGenMissionPools:
     difficulty_pools: Dict[Difficulty, Set[int]]
     _used_flags: Dict[MissionFlag, int]
     _used_missions: List[SC2Mission]
+    _updated_difficulties: Dict[int, Difficulty]
 
     def __init__(self) -> None:
         self.master_list = {mission.id for mission in SC2Mission}
@@ -56,6 +57,7 @@ class SC2MOGenMissionPools:
         }
         self._used_flags = {}
         self._used_missions = []
+        self._updated_difficulties = {}
 
     def set_exclusions(self, excluded: List[SC2Mission], unexcluded: List[SC2Mission]) -> None:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
@@ -80,6 +82,12 @@ class SC2MOGenMissionPools:
         if mission.id in self.master_list and mission.id in self.difficulty_pools[old_diff]:
             self.difficulty_pools[old_diff].remove(mission.id)
             self.difficulty_pools[new_diff].add(mission.id)
+            self._updated_difficulties[mission.id] = new_diff
+
+    def get_modified_mission_difficulty(self, mission: SC2Mission) -> Difficulty:
+        if mission.id in self._updated_difficulties:
+            return self._updated_difficulties[mission.id]
+        return Difficulty(mission.pool + 1)
 
     def get_pool_size(self, diff: Difficulty) -> int:
         """Returns the amount of missions of the given difficulty that are allowed to appear."""
