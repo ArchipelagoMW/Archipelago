@@ -107,7 +107,7 @@ class SC2MissionOrder(MissionOrderNode):
         return self.mission_pools.get_used_flags()
     
     def get_used_missions(self) -> List[SC2Mission]:
-        """Returns a set of all missions used in the mission order."""
+        """Returns a list of all missions used in the mission order."""
         return self.mission_pools.get_used_missions()
     
     def get_mission_count(self) -> int:
@@ -118,7 +118,7 @@ class SC2MissionOrder(MissionOrderNode):
         )
 
     def get_starting_missions(self) -> List[SC2Mission]:
-        """Returns a set containing all the missions that are accessible without beating any other missions."""
+        """Returns a list containing all the missions that are accessible without beating any other missions."""
         return [
             mission.mission
             for campaign in self.campaigns if campaign.is_always_unlocked()

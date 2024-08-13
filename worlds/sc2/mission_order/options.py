@@ -321,7 +321,7 @@ def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
         # or intended to fall through
         return option_value
 
-def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[str]:
+def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[int]:
     if type(option_value) == str:
         pool = _get_target_missions(option_value)
     else:
