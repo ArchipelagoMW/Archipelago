@@ -882,6 +882,8 @@ class CollectionState():
         if not item.advancement:
             return
 
+        self.multiworld.worlds[item.player].remove(self, item)
+
         # invalidate caches, nothing can be trusted anymore now
         self.reachable_regions[item.player] = set()
         self.blocked_connections[item.player] = set()
