@@ -64,5 +64,5 @@ However, because some games *did* start using things like `region.can_reach` ins
 This keeps almost all of the performance upsides. Even a game making heavy use of indirect conditions (See: The Witness) is still way way faster than if it just blanket "rechecked all entrances until nothing new is found".
 The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is simple: They call `region.can_reach` on their respective parent/source region.
 
-We recognize it's a pretty bad beginner's trap (heck, not even a "beginner's" trap, just a trap - even for experienced AP devs), and some games are very complex with their access rules.
+We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition, and that some games have very complex access rules.
 There is an open Pull Request that makes this behavior optional via a world class attribute: [Core: Region handling customization](https://github.com/ArchipelagoMW/Archipelago/pull/3682).
