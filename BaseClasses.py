@@ -429,7 +429,7 @@ class MultiWorld():
         for player in self.player_ids:
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
-                subworld.collect(ret, item)
+                ret.collect(item, prevent_sweep=True)
         ret.sweep_for_events()
 
         if use_cache:

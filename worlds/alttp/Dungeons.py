@@ -236,7 +236,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
             in_dungeon_player_ids = {item.player for item in in_dungeon_items}
             all_state_base = CollectionState(multiworld)
             for item in multiworld.itempool:
-                multiworld.worlds[item.player].collect(all_state_base, item)
+                all_state_base.collect(item, prevent_sweep=True)
             pre_fill_items = []
             for player in in_dungeon_player_ids:
                 pre_fill_items += multiworld.worlds[player].get_pre_fill_items()
